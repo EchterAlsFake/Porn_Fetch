@@ -9,18 +9,18 @@
 ## Is this legal? 
 
 I don't know about the law in your country. I can only say in Germany it's allowed to download 7 copyright licensed materials.
-Also, you need to be at leas 18+ years old to watch (and have) Porn videos. I am not liable for anything! You know what you do
+Also, you need to be at least 18+ years old to watch (and have) Porn videos. I am not liable for anything! You know what you do
 
 # GUI
 
-The Graphical User Interface is created with PySide6 (Qt for Python)
+The Graphical User Interface was created with PySide6 (Qt for Python)
 # Releases
 
 Some releases are too big for GitHub. In that case, you can find it on [Google Drive](https://drive.google.com/drive/folders/1sGvhAO_qQB87AOfyVDWPJZluVettBwaj?usp=sharing)
 
 # Other Infos
 
-- ###  If Progressbar get's stuck, this is normal. Just wait.
+- ### If Progressbar get's stuck, this is normal. Just wait.
 - ### Output path must contain a slash at the end
 
 # Building from Source
