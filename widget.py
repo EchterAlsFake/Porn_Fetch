@@ -1,8 +1,24 @@
+
+"""
+IMPORTANT INFORMATION
+
+THIS PROJECT IS LICENSED UNDER THE LGPLv3 License
+You should have received a copy of the license along with this program.
+
+The Source code of this program can be found here: https://github.com/EchterAlsFake/Porn_Fetch
+
+API by Egsagon: https://github.com/Egsagon/PHUB
+
+
+
+Author: EchterAlsFake - Johannes Habel
+
+2023
+"""
+
 import sys
 from PySide6.QtWidgets import QApplication, QWidget
-from PySide6.QtGui import QColor, QPalette
 from PySide6.QtWidgets import QMessageBox
-from PySide6.QtCore import Qt
 from ui_form import Ui_Widget
 from phub import Client, Quality
 import os
@@ -10,26 +26,13 @@ import wget
 from configparser import ConfigParser
 from colorama import *
 
-data = """
-[ui]
-mode = native
-"""
-
-
-def config_file():
-    if not os.path.isfile("config.ini"):
-        with open("config.ini", "w") as f:
-            f.write(data)
-
-
 def character_stripping(title):
     disallowed_characters = ["/", "\\", ":", "*", "?", "\"", "<", ">", "|"]
     for char in disallowed_characters:
         title = title.replace(char, "")
 
     title = str(title).lower()
-    title = str(title).encode("utf-8")
-    return title
+    return title.encode("utf-8")
 
 
 def ui_popup():
@@ -52,63 +55,23 @@ class Widget(QWidget):
         self.ui.button_start.clicked.connect(self.start)
         self.ui.button_start_file.clicked.connect(self.url_testing)
         self.ui.button_get_metadata.clicked.connect(self.get_metadata)
-        self.ui.radio_dark.clicked.connect(self.set_dark)
-        self.ui.radio_white.clicked.connect(self.set_white)
-        self.ui.radio_native.clicked.connect(self.set_native)
-
-    def reset_ui(self):
-        self.ui.progressbar_download.setValue(0)
-        self.ui.lineedit_url.clear()
-        self.ui.lineedit_url_file.clear()
-        self.ui.lineedit_title.clear()
-        self.ui.lineedit_author.clear()
-        self.ui.lineedit_date.clear()
-        self.ui.lineedit_duration.clear()
-        self.ui.lineedit_hotspots.clear()
-        self.ui.lineedit_views.clear()
-
-    def set_dark(self):
-
-        self.conf.set("ui", "mode", "dark")
-        with open("config.ini", "w") as config:
-            self.conf.write(config)
-            ui_popup()
-            config.close()
-
-    def set_white(self):
-
-        self.conf.set("ui", "mode", "white")
-        with open("config.ini", "w") as config:
-            self.conf.write(config)
-            ui_popup()
-            config.close()
-
-    def set_native(self):
-
-        self.conf.set("ui", "mode", "native")
-        with open("config.ini", "w") as config:
-            self.conf.write(config)
-            ui_popup()
-            config.close()
 
     def get_quality(self):
 
         if self.ui.radio_highest.isChecked():
-            quality = Quality.BEST
+            return Quality.BEST
 
         elif self.ui.radio_middle.isChecked():
-            quality = Quality.MIDDLE
+            return Quality.MIDDLE
 
         elif self.ui.radio_lowest.isChecked():
-            quality = Quality.WORST
+            return Quality.MIDDLE
 
         else:
             qmsg_box = QMessageBox()
             qmsg_box.setText("No Quality selected..  Using best automatically ")
             qmsg_box.exec()
-            quality = Quality.BEST
-
-        return quality
+            return Quality.BEST
 
     def callback(self, pos, total):
         self.ui.progressbar_download.setMaximum(total)
@@ -121,32 +84,36 @@ class Widget(QWidget):
 
     def download(self, url):
 
-        if self.test_video(url):
+        if not self.test_video(url):
+            return
+        quality = self.get_quality()
+        output = self.ui.lineedit_output.text()
 
-            quality = self.get_quality()
-            output = self.ui.lineedit_output.text()
-
-            if not os.path.exists(output):
-                qmsg_box = QMessageBox()
-                string = """The output path you entered is not valid! Please note, that you also need to include slashes
+        if not os.path.exists(output):
+            qmsg_box = QMessageBox()
+            string = """The output path you entered is not valid! Please note, that you also need to include slashes
                          For an example:  A valid path would be:  /home/USERNAME/videos/, but not /home/USERNAME/videos  
                          as there is missing the slash. Thanks :)."""
-                qmsg_box.setText(string)
-                qmsg_box.exec()
+            qmsg_box.setText(string)
+            qmsg_box.exec()
 
-            else:
-                title = self.video.title
-                title = character_stripping(title=title)
-                final_output = str(output) + str(title) + ".mp4"
-                print(f"""
+        else:
+            self._extracted_from_download_17(output, quality)
+
+    def _extracted_from_download_17(self, output, quality):
+        title = self.video.title
+        self.ui.lineedit_status.setText(f"Downloading: {title}")
+        title = character_stripping(title=title)
+        final_output = str(output) + str(title) + ".mp4"
+        print(f"""
 [DEBUG] {Fore.LIGHTCYAN_EX}
 {Fore.LIGHTGREEN_EX}Downloading: {title}
 {Fore.LIGHTYELLOW_EX}Location: {final_output}
 {Fore.LIGHTMAGENTA_EX}Quality: {quality}""")
 
-                self.video.download(quality=quality, path=final_output, quiet=True, callback=self.callback)
-                if os.path.exists(final_output):
-                    print(f"""
+        self.video.download(quality=quality, path=final_output, callback=self.callback)
+        if os.path.exists(final_output):
+            print(f"""
 {Fore.LIGHTCYAN_EX} Successfully downloaded""")
 
     def url_testing(self):
@@ -161,32 +128,30 @@ class Widget(QWidget):
         else:
 
             with open(url_file, "r") as f:
-                content = f.read().splitlines()
-                qmsg_box = QMessageBox()
-                qmsg_box.exec()
-                current = 0
-                valid_urls = []
-                invalid_urls = []
-                for url in content:
-                    current += 1
-                    length = len(content)
-                    text = f"Testing {current} of {length} URLs....  Please wait "
+                self._extracted_from_url_testing_13(f)
 
-                    if self.test_video(url):
-                        qmsg_box.exec().setText(str(text))
-                        valid_urls.append(url)
+    def _extracted_from_url_testing_13(self, f):
+        content = f.read().splitlines()
+        self.ui.lineedit_status.setText("ATTENTION: Testing URLs before downloading...")
+        valid_urls = []
+        invalid_urls = []
+        counter = 0
 
-                    else:
-                        print(f"Error with: {url}")
-                        invalid_urls.append(url)
+        for url in content:
+            length = len(content)
+            if self.test_video(url):
+                counter += 1
+                text = f"Testing {counter} of {length} URLs....  Please wait "
+                self.ui.lineedit_status.setText(str(text))
+                valid_urls.append(url)
 
-                qmsg_box.close()
-                qmsg_box = QMessageBox()
-                qmsg_box.setText(f"Valid URLs: {len(valid_urls)} : Invalid URLs: {len(invalid_urls)}")
-                qmsg_box.exec()
+            else:
+                invalid_urls.append(url)
+        text = f"Valid URLs: {len(valid_urls)} : Invalid URLs: {len(invalid_urls)}"
+        self.ui.lineedit_status.setText(str(text))
 
-                for url in valid_urls:
-                    self.download(url)
+        for url in valid_urls:
+            self.download(url)
 
     def test_video(self, url):
 
@@ -197,39 +162,39 @@ class Widget(QWidget):
 
         except Exception as e:
             qmsg = QMessageBox()
-            qmsg.setText("The URL you entered is not valid. ERROR: " + str(e))
+            qmsg.setText(f"The URL you entered is not valid. ERROR: {str(e)}")
             qmsg.exec()
-            x = "WW"  # Just don't ask ;)
-            return x
+            return "WW"
 
     def get_metadata(self):
 
         url = self.ui.lineedit_url.text()
         if self.test_video(url):
 
-            title = self.video.title
-            duration = self.video.duration
-            hotspots = self.video.hotspots
-            date = self.video.date
-            author = self.video.author
-
-            duration = duration / 60
-            str(duration).strip(":")
-            str(duration).strip("0")
-
-            self.ui.lineedit_title.setText(str(title))
-            self.ui.lineedit_duration.setText(str(duration) + str(" minutes"))
-            self.ui.lineedit_date.setText(str(date))
-            self.ui.lineedit_author.setText(str(author))
-            self.ui.lineedit_hotspots.setText(str(hotspots))
-
-        elif self.test_video(url) == "WW":
-            pass
-
-        else:
+            self._extracted_from_get_metadata_6()
+        elif self.test_video(url) != "WW":
             qmsg_box = QMessageBox()
             qmsg_box.setText("Unknown Error.  Please still report it and give me the URL you used. Thansk :) ")
             qmsg_box.exec()
+
+    def _extracted_from_get_metadata_6(self):
+        self.ui.lineedit_status.setText("Getting metadata...")
+        title = self.video.title
+        duration = self.video.duration
+        hotspots = self.video.hotspots
+        date = self.video.date
+        author = self.video.author
+
+        duration = duration / 60
+        str(duration).strip(":")
+        str(duration).strip("0")
+
+        self.ui.lineedit_title.setText(str(title))
+        self.ui.lineedit_duration.setText(f"{str(duration)} minutes")
+        self.ui.lineedit_date.setText(str(date))
+        self.ui.lineedit_author.setText(str(author))
+        self.ui.lineedit_hotspots.setText(str(hotspots))
+        self.ui.lineedit_status.setText("Successfully got metadata")
 
     def get_thumbnail(self):
 
@@ -239,69 +204,26 @@ class Widget(QWidget):
         final_output = output + title + ".jpg"
 
         try:
+            self.ui.lineedit_status.setText("Downloading thumbnail...")
             wget.download(url, out=final_output)
 
             if os.path.exists(final_output):
                 print("Downloaded Thumbnail :)")
-                qmsg_box = QMessageBox()
-                qmsg_box.setText("Thumbnail downloaded successfully :)")
-                qmsg_box.exec()
+                self.ui.lineedit_status.setText("Downloaded Thumbnail")
 
             else:
 
                 qmsg_box = QMessageBox()
                 qmsg_box.setText(
-                            """There was an error. Maybe the thumbnail downloaded successfully, but the title is weird, 
-                            and program can't find it. Just search for it :)""")
+"""There was an error. Maybe the thumbnail downloaded successfully, but the title is weird, and program can't find it. 
+Just search for it :)""")
                 qmsg_box.exec()
 
         except Exception as e:
 
             qmsg_box = QMessageBox()
-            qmsg_box.setText("Unhandled Error: " + str(e))
+            qmsg_box.setText(f"Unhandled Error: {str(e)}")
             qmsg_box.exec()
-
-
-def set_dark_theme():
-    palette = QPalette()
-
-    # Set colors for different roles
-    palette.setColor(palette.Window, QColor(53, 53, 53))
-    palette.setColor(palette.WindowText, Qt.white)
-    palette.setColor(palette.Base, QColor(25, 25, 25))
-    palette.setColor(palette.AlternateBase, QColor(53, 53, 53))
-    palette.setColor(palette.ToolTipBase, Qt.white)
-    palette.setColor(palette.ToolTipText, Qt.white)
-    palette.setColor(palette.Text, Qt.white)
-    palette.setColor(palette.Button, QColor(53, 53, 53))
-    palette.setColor(palette.ButtonText, Qt.white)
-    palette.setColor(palette.BrightText, Qt.red)
-    palette.setColor(palette.Link, QColor(42, 130, 218))
-    palette.setColor(palette.Highlight, QColor(42, 130, 218))
-    palette.setColor(palette.HighlightedText, Qt.black)
-
-    # Apply the palette to the application
-    app.setPalette(palette)
-
-
-def set_light_theme():
-    palette = QPalette()
-    palette.setColor(QPalette.Window, QColor(239, 240, 241))
-    palette.setColor(QPalette.WindowText, Qt.black)
-    palette.setColor(QPalette.Base, QColor(255, 255, 255))
-    palette.setColor(QPalette.AlternateBase, QColor(220, 220, 220))
-    palette.setColor(QPalette.ToolTipBase, Qt.black)
-    palette.setColor(QPalette.ToolTipText, Qt.black)
-    palette.setColor(QPalette.Text, Qt.black)
-    palette.setColor(QPalette.Button, QColor(239, 240, 241))
-    palette.setColor(QPalette.ButtonText, Qt.black)
-    palette.setColor(QPalette.BrightText, Qt.red)
-    palette.setColor(QPalette.Disabled, QPalette.WindowText, QColor(127, 127, 127))
-    palette.setColor(QPalette.Disabled, QPalette.Text, QColor(127, 127, 127))
-    palette.setColor(QPalette.Disabled, QPalette.ButtonText, QColor(127, 127, 127))
-    palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
-    palette.setColor(QPalette.HighlightedText, QColor(255, 255, 255))
-
 
 class Themes:
 
@@ -504,61 +426,6 @@ class Themes:
                                                      "Grau, wenn das QLineEdit deaktiviert ist */\n"
                                                      "    border-color: #aaaaaa;\n"
                                                      "}")
-        self.widget.ui.groupbox_settings_ui.setStyleSheet(u"color: rgb(255, 176, 0)")
-        self.widget.ui.radio_native.setStyleSheet(u"QRadioButton {\n"
-                                                  "	color: rgb(0, 255, 250) }\n"
-                                                  "\n"
-                                                  "\n"
-                                                  "QRadioButton::indicator::unchecked {\n"
-                                                  "	border: 1px solid white;\n"
-                                                  "	border-radius: 5px;\n"
-                                                  "}\n"
-                                                  "\n"
-                                                  "\n"
-                                                  "QRadioButton::indicator:checked {\n"
-                                                  "    border : 4px solid;\n"
-                                                  "	border-color: black;\n"
-                                                  "	border-radius: 6px;\n"
-                                                  "	background-color: rgb(0, 255, 183);\n"
-                                                  "\n"
-                                                  "}\n"
-                                                  "")
-        self.widget.ui.radio_dark.setStyleSheet(u"QRadioButton {\n"
-                                                "	color: rgb(81, 0, 255)}\n"
-                                                "\n"
-                                                "\n"
-                                                "QRadioButton::indicator::unchecked {\n"
-                                                "	border: 1px solid white;\n"
-                                                "	border-radius: 5px;\n"
-                                                "}\n"
-                                                "\n"
-                                                "\n"
-                                                "QRadioButton::indicator:checked {\n"
-                                                "    border : 4px solid;\n"
-                                                "	border-color: black;\n"
-                                                "	border-radius: 6px;\n"
-                                                "	background-color: rgb(0, 255, 183);\n"
-                                                "\n"
-                                                "}\n"
-                                                "")
-        self.widget.ui.radio_white.setStyleSheet(u"QRadioButton {\n"
-                                                 "	color: rgb(255, 255, 255)}\n"
-                                                 "\n"
-                                                 "\n"
-                                                 "QRadioButton::indicator::unchecked {\n"
-                                                 "	border: 1px solid white;\n"
-                                                 "	border-radius: 5px;\n"
-                                                 "}\n"
-                                                 "\n"
-                                                 "\n"
-                                                 "QRadioButton::indicator:checked {\n"
-                                                 "    border : 4px solid;\n"
-                                                 "	border-color: black;\n"
-                                                 "	border-radius: 6px;\n"
-                                                 "	background-color: rgb(0, 255, 183);\n"
-                                                 "\n"
-                                                 "}\n"
-                                                 "")
         self.widget.ui.progressbar_download.setStyleSheet(u"QProgressBar {\n"
                                                           "    background-color: #F0F0F0; /* Hellgrauer Hintergrund "
                                                           "*/\n"
@@ -833,22 +700,9 @@ class Themes:
 
 
 if __name__ == "__main__":
-    config_file()
-    conf = ConfigParser()
-    conf.read("config.ini")
 
     app = QApplication(sys.argv)
     widget = Widget()
-
-    if conf["ui"]["mode"] == "dark":
-        app.setStyleSheet("fusion")
-
-    elif conf["ui"]["mode"] == "native":
-        Themes(widget).set_native_theme()
-
-    elif conf["ui"]["mode"] == "white":
-        print("WHITE MODE USER DETECTED.   - 10 Social credit!!!")
-        set_light_theme()
-
+    Themes(widget).set_native_theme()
     widget.show()
     sys.exit(app.exec())
