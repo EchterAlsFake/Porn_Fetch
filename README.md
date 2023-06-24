@@ -39,6 +39,10 @@ Some releases are too big for GitHub. In that case, you can find it on [Google D
 
 ### - Initial Release 
 
+# Contributing
+
+You can contribute literally everything. Typo Errors, code optimization, features... Just make a Pull Request :) <br>
+
 # Credits
 
 - Thanks to Egsagon for creating the PHUB API <br>
