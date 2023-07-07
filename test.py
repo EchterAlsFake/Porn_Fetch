@@ -1,7 +1,9 @@
-from phub import Client
+import phub
 
-c = Client(language="en")
-video = c.get("https://de.pornhub.com/view_video.php?viewkey=648c48bbd0f93")
+user = "https://de.pornhub.com/pornstar/june-liu"
 
-title = video.views
-print(title)
+
+def test_video(url):
+    viewkey = url.split("=")
+    viewkey = viewkey[1]
+    print(viewkey)
