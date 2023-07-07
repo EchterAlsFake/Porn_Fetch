@@ -20,7 +20,7 @@ Some releases are too big for GitHub. In that case, you can find it on [Google D
 
 # Other Infos
 
-- ### If Progressbar get's stuck, this is normal. Just wait.
+- ### If Progressbar gets stuck, this is normal. Just wait.
 - ### Output path must contain a slash at the end
 
 # Building from Source
