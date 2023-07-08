@@ -7,17 +7,17 @@
     <x>0</x>
     <y>0</y>
     <width>1496</width>
-    <height>573</height>
+    <height>586</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Porn Fetch 1.2 (LGPLv3) : https://github.com/EchterAlsFake/Porn_Fetch</string>
+   <string>Porn Fetch 1.4 (LGPLv3) : https://github.com/EchterAlsFake/Porn_Fetch</string>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(0, 0, 0)</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_7">
-   <item row="0" column="0" rowspan="2">
+  <layout class="QGridLayout" name="gridLayout_8">
+   <item row="0" column="0">
     <widget class="QGroupBox" name="groupbox_urls">
      <property name="title">
       <string>Download</string>
@@ -305,31 +305,306 @@ QPushButton:pressed {
      </layout>
     </widget>
    </item>
-   <item row="2" column="1">
-    <widget class="QTextBrowser" name="credits_text">
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(0, 0, 0)</string>
+   <item row="0" column="1">
+    <widget class="QGroupBox" name="groupbox_settings">
+     <property name="title">
+      <string/>
      </property>
-     <property name="html">
-      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Credits:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;API: PHUB by Egsagon.  This project would not be possible without it.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Author: EchterAlsFake&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;License: LGPLv3&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Plugins: Tabnine, Material Theme Icons&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Libraries: colorama, tqdm, PySide6&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Graphical User Interface was created with Qt - PySide6&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Version: 1.3&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QGroupBox" name="groupbox_useless">
+        <property name="title">
+         <string/>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_6">
+         <item row="0" column="0" rowspan="2">
+          <widget class="QGroupBox" name="groupbox_quality">
+           <property name="styleSheet">
+            <string notr="true">color: rgb(122, 0, 255)</string>
+           </property>
+           <property name="title">
+            <string>Quality</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="0" column="0">
+             <widget class="QRadioButton" name="radio_highest">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QRadioButton {
+	color: rgb(0, 255, 152)}
+
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+</string>
+              </property>
+              <property name="text">
+               <string>Highest</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QRadioButton" name="radio_middle">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QRadioButton {
+	color: rgb(255, 171, 0)}
+
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+
+</string>
+              </property>
+              <property name="text">
+               <string>Middle</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QRadioButton" name="radio_lowest">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QRadioButton {
+	color: rgb(255, 0, 0)}
+
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+</string>
+              </property>
+              <property name="text">
+               <string>Lowest</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="1" rowspan="2">
+          <widget class="QGroupBox" name="groupbox_threading">
+           <property name="styleSheet">
+            <string notr="true">color: rgb(122, 0, 255)</string>
+           </property>
+           <property name="title">
+            <string>Threading</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_4">
+            <item row="1" column="0">
+             <widget class="QRadioButton" name="radio_threading_multiple">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QRadioButton {
+	color: rgb(0, 255, 110);}
+
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+
+</string>
+              </property>
+              <property name="text">
+               <string>Multiple</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QRadioButton" name="radio_threading_single">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QRadioButton {
+	color: rgb(246, 0, 255);}
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+</string>
+              </property>
+              <property name="text">
+               <string>Single</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="label_status">
+           <property name="styleSheet">
+            <string notr="true">color: white;</string>
+           </property>
+           <property name="text">
+            <string>Status:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="QLineEdit" name="lineedit_status">
+           <property name="styleSheet">
+            <string notr="true">QLineEdit {
+    border: 2px solid #757575;
+    border-radius: 5px;
+    padding: 0 8px;
+    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */
+    color: #FFFFFF;  /* setzt die Textfarbe auf Weiß */
+    font-size: 16px;
+    height: 20px;
+}
+
+QLineEdit:focus {
+    border-color: rgb(107, 0, 255)
+}
+
+QLineEdit:disabled {
+    background: #444444;  /* setzt den Hintergrund auf ein dunkles Grau, wenn das QLineEdit deaktiviert ist */
+    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */
+    border-color: #aaaaaa;
+}</string>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2" colspan="2">
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QLabel" name="label_output">
+             <property name="styleSheet">
+              <string notr="true">color: rgb(255, 255, 255)</string>
+             </property>
+             <property name="text">
+              <string>Output Path:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineedit_output">
+             <property name="styleSheet">
+              <string notr="true">QLineEdit {
+    border: 2px solid #757575;
+    border-radius: 5px;
+    padding: 0 8px;
+    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */
+    color: #FFFFFF;  /* setzt die Textfarbe auf Weiß */
+    font-size: 16px;
+    height: 20px;
+}
+
+QLineEdit:focus {
+    border-color: rgb(107, 0, 255)
+}
+
+QLineEdit:disabled {
+    background: #444444;  /* setzt den Hintergrund auf ein dunkles Grau, wenn das QLineEdit deaktiviert ist */
+    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */
+    border-color: #aaaaaa;
+}</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QProgressBar" name="progressbar_download">
+        <property name="styleSheet">
+         <string notr="true">QProgressBar {
+    background-color: #F0F0F0; /* Hellgrauer Hintergrund */
+	text-align: center;
+	color: rgb(230, 97, 0);
+	border: color grey;
+	border-width: 6;
+	border-radius: 12px;
+	color: black;
+	
+}
+
+QProgressBar::chunk {
+    background-color: rgb(26, 95, 180); /* Grün als Vordergrundfarbe */
+}</string>
+        </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="1" column="0">
     <widget class="QGroupBox" name="groupbox_metadata">
      <property name="styleSheet">
       <string notr="true">color: rgb(255, 255, 255)</string>
@@ -868,211 +1143,43 @@ QPushButton:pressed {
      </layout>
     </widget>
    </item>
-   <item row="0" column="1" rowspan="2">
-    <widget class="QGroupBox" name="groupbox_settings">
-     <property name="title">
-      <string/>
+   <item row="1" column="1">
+    <widget class="QStackedWidget" name="stackedWidget">
+     <property name="currentIndex">
+      <number>0</number>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QGroupBox" name="groupbox_useless">
-        <property name="title">
-         <string/>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_6">
-         <item row="0" column="0" rowspan="2">
-          <widget class="QGroupBox" name="groupbox_quality">
+     <widget class="QWidget" name="page">
+      <layout class="QGridLayout" name="gridLayout_9">
+       <item row="0" column="0" colspan="2">
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QLabel" name="label_search_query">
            <property name="styleSheet">
-            <string notr="true">color: rgb(122, 0, 255)</string>
-           </property>
-           <property name="title">
-            <string>Quality</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_3">
-            <item row="0" column="0">
-             <widget class="QRadioButton" name="radio_highest">
-              <property name="cursor">
-               <cursorShape>PointingHandCursor</cursorShape>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">QRadioButton {
-	color: rgb(0, 255, 152)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
+            <string notr="true">QLabel {
+    color: white;
+    font-size: 16px;
+	margin-right: 28px;
 }
 
+QLabel#Title {
+    color: #212121;
+    font-size: 24px;
+    font-weight: bold;
+}
 
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
+QLabel#Subtitle {
+    color: #757575;
+    font-size: 20px;
 }
 </string>
-              </property>
-              <property name="text">
-               <string>Highest</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QRadioButton" name="radio_middle">
-              <property name="cursor">
-               <cursorShape>PointingHandCursor</cursorShape>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">QRadioButton {
-	color: rgb(255, 171, 0)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-
-</string>
-              </property>
-              <property name="text">
-               <string>Middle</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QRadioButton" name="radio_lowest">
-              <property name="cursor">
-               <cursorShape>PointingHandCursor</cursorShape>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">QRadioButton {
-	color: rgb(255, 0, 0)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-</string>
-              </property>
-              <property name="text">
-               <string>Lowest</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item row="0" column="1" rowspan="2">
-          <widget class="QGroupBox" name="groupbox_threading">
-           <property name="styleSheet">
-            <string notr="true">color: rgb(122, 0, 255)</string>
-           </property>
-           <property name="title">
-            <string>Threading</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_4">
-            <item row="1" column="0">
-             <widget class="QRadioButton" name="radio_threading_multiple">
-              <property name="cursor">
-               <cursorShape>PointingHandCursor</cursorShape>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">QRadioButton {
-	color: rgb(0, 255, 110);}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-
-</string>
-              </property>
-              <property name="text">
-               <string>Multiple</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QRadioButton" name="radio_threading_single">
-              <property name="cursor">
-               <cursorShape>PointingHandCursor</cursorShape>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">QRadioButton {
-	color: rgb(246, 0, 255);}
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-</string>
-              </property>
-              <property name="text">
-               <string>Single</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <widget class="QLabel" name="label_status">
-           <property name="styleSheet">
-            <string notr="true">color: white;</string>
            </property>
            <property name="text">
-            <string>Status:</string>
+            <string>Search Query:</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="3">
-          <widget class="QLineEdit" name="lineedit_status">
+         <item>
+          <widget class="QLineEdit" name="lineedit_search_query">
            <property name="styleSheet">
             <string notr="true">QLineEdit {
     border: 2px solid #757575;
@@ -1094,27 +1201,74 @@ QLineEdit:disabled {
     border-color: #aaaaaa;
 }</string>
            </property>
-           <property name="readOnly">
-            <bool>true</bool>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="button_start_search">
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+    background-color: #5468ff;
+	border-width: 2px;
+	border-color: rgb(98, 255, 182);
+	border-style: double;
+    border-radius: 6px;
+	text-align: center;
+    color: #fff;
+    font-family: &quot;JetBrains Mono&quot;, monospace;
+    font-size: 15px;
+    padding: 0px 16px 0px 16px;
+    height: 24px;
+}
+
+QPushButton:hover {
+    background-color: #3c4fe0;
+	border-color: rgb(179, 0, 255)
+}
+
+QPushButton:pressed {
+    background-color: #3c4fe0;
+}
+</string>
+           </property>
+           <property name="text">
+            <string>Search</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="2" colspan="2">
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
-           <item>
-            <widget class="QLabel" name="label_output">
-             <property name="styleSheet">
-              <string notr="true">color: rgb(255, 255, 255)</string>
-             </property>
-             <property name="text">
-              <string>Output Path:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="lineedit_output">
-             <property name="styleSheet">
-              <string notr="true">QLineEdit {
+        </layout>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_total_videos">
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    color: white;
+    font-size: 16px;
+}
+
+QLabel#Title {
+    color: #212121;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+QLabel#Subtitle {
+    color: #757575;
+    font-size: 20px;
+}
+</string>
+         </property>
+         <property name="text">
+          <string>Total Videos:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineedit_total_videos">
+         <property name="styleSheet">
+          <string notr="true">QLineEdit {
     border: 2px solid #757575;
     border-radius: 5px;
     padding: 0 8px;
@@ -1133,18 +1287,58 @@ QLineEdit:disabled {
     color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */
     border-color: #aaaaaa;
 }</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QProgressBar" name="progressbar_download">
-        <property name="styleSheet">
-         <string notr="true">QProgressBar {
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QListWidget" name="lidtWidget_search_query">
+         <property name="styleSheet">
+          <string notr="true">color: white;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QPushButton" name="button_download_search_query">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    background-color: #5468ff;
+	border-width: 2px;
+	border-color: rgb(98, 255, 182);
+	border-style: double;
+    border-radius: 6px;
+	text-align: center;
+    color: #fff;
+    font-family: &quot;JetBrains Mono&quot;, monospace;
+    font-size: 15px;
+    padding: 0px 16px 0px 16px;
+    height: 24px;
+}
+
+QPushButton:hover {
+    background-color: #3c4fe0;
+	border-color: rgb(179, 0, 255)
+}
+
+QPushButton:pressed {
+    background-color: #3c4fe0;
+}
+</string>
+         </property>
+         <property name="text">
+          <string>Download</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
+        <widget class="QProgressBar" name="progressbar_search_query">
+         <property name="styleSheet">
+          <string notr="true">QProgressBar {
     background-color: #F0F0F0; /* Hellgrauer Hintergrund */
 	text-align: center;
 	color: rgb(230, 97, 0);
@@ -1157,14 +1351,54 @@ QLineEdit:disabled {
 
 QProgressBar::chunk {
     background-color: rgb(26, 95, 180); /* Grün als Vordergrundfarbe */
-}cc</string>
-        </property>
-        <property name="value">
-         <number>0</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
+}</string>
+         </property>
+         <property name="value">
+          <number>24</number>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="2">
+        <widget class="QLabel" name="label_search_query_progress">
+         <property name="styleSheet">
+          <string notr="true">color: white</string>
+         </property>
+         <property name="text">
+          <string>Downloaded: / of / Videos</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_2">
+      <layout class="QGridLayout" name="gridLayout_7">
+       <item row="0" column="0">
+        <widget class="QTextBrowser" name="credits_text">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(0, 0, 0)</string>
+         </property>
+         <property name="html">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Credits:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;API: PHUB by Egsagon.  This project would not be possible without it.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Author: EchterAlsFake&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;License: LGPLv3&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Plugins: Tabnine, Material Theme Icons&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Libraries: colorama, tqdm, PySide6&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Graphical User Interface was created with Qt - PySide6&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Version: 1.4&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>

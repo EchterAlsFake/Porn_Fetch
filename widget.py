@@ -17,11 +17,12 @@ Version: 1.3
 """
 
 import sys
-from PySide6.QtWidgets import QApplication, QWidget, QMessageBox
+from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QListWidget, QListWidgetItem
 from PySide6.QtCore import QThread, Signal
 from ui_form import Ui_Widget
 from phub import Client, Quality
 import os
+from PySide6 import QtCore
 from configparser import ConfigParser
 from colorama import *
 
@@ -77,11 +78,14 @@ class Widget(QWidget):
         self.client = Client(language="en")
         self.download_thread = None
         self.mode = "single"
+        self.ui.lidtWidget_search_query.SelectionMode(QListWidget.ExtendedSelection)
 
         self.ui.button_start.clicked.connect(self.start)
         self.ui.button_start_file.clicked.connect(self.start_file)
         self.ui.button_get_metadata.clicked.connect(self.get_metadata)
         self.ui.button_start_user_channel.clicked.connect(self.user_channel)
+        self.ui.button_start_search.clicked.connect(self.search_videos)
+        self.ui.button_download_search_query.clicked.connect(self.download_search)
 
     def get_quality(self):
 
@@ -277,6 +281,32 @@ class Widget(QWidget):
 
                 except IndexError as e:
                     ui_popup(text=str(f"Index Error.  (Just ignore this exception.  The download should still be finished)  Exception: {e}"))
+
+    def search_videos(self):
+
+        query = self.ui.lineedit_search_query.text()
+        query_object = self.client.search(query)
+        length = len(query_object)
+        self.ui.lineedit_total_videos.setText(str(length))
+
+        for video in query_object:
+            item = QListWidgetItem(video.title)
+            item.setData(QtCore.Qt.UserRole, video.url)
+            self.ui.lidtWidget_search_query.addItem(item)
+
+    def download_search(self):
+
+        selected_items = self.ui.lidtWidget_search_query.selectedItems()
+        for item in selected_items:
+            video_url = item.data(QtCore.Qt.UserRole)
+            print(video_url)
+            video = self.test_video(video_url)
+            self.download(video)
+
+
+
+
+
 
     def qmsg_box(self, text):
         message_box = QMessageBox()
