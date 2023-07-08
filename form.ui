@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1496</width>
-    <height>569</height>
+    <height>573</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -325,7 +325,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Libraries: colorama, tqdm, PySide6&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Graphical User Interface was created with Qt - PySide6&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Version: 1.2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Version: 1.3&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
    </item>
@@ -873,23 +873,13 @@ QPushButton:pressed {
      <property name="title">
       <string/>
      </property>
-     <layout class="QGridLayout" name="gridLayout_4">
-      <item row="0" column="1">
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
        <widget class="QGroupBox" name="groupbox_useless">
         <property name="title">
          <string/>
         </property>
-        <layout class="QGridLayout" name="gridLayout_2">
-         <item row="0" column="1">
-          <widget class="QLabel" name="label_status">
-           <property name="styleSheet">
-            <string notr="true">color: white;</string>
-           </property>
-           <property name="text">
-            <string>Status:</string>
-           </property>
-          </widget>
-         </item>
+        <layout class="QGridLayout" name="gridLayout_6">
          <item row="0" column="0" rowspan="2">
           <widget class="QGroupBox" name="groupbox_quality">
            <property name="styleSheet">
@@ -926,6 +916,9 @@ QRadioButton::indicator:checked {
               </property>
               <property name="text">
                <string>Highest</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -993,7 +986,92 @@ QRadioButton::indicator:checked {
            </layout>
           </widget>
          </item>
+         <item row="0" column="1" rowspan="2">
+          <widget class="QGroupBox" name="groupbox_threading">
+           <property name="styleSheet">
+            <string notr="true">color: rgb(122, 0, 255)</string>
+           </property>
+           <property name="title">
+            <string>Threading</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_4">
+            <item row="1" column="0">
+             <widget class="QRadioButton" name="radio_threading_multiple">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QRadioButton {
+	color: rgb(0, 255, 110);}
+
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+
+</string>
+              </property>
+              <property name="text">
+               <string>Multiple</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QRadioButton" name="radio_threading_single">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QRadioButton {
+	color: rgb(246, 0, 255);}
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+</string>
+              </property>
+              <property name="text">
+               <string>Single</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
          <item row="0" column="2">
+          <widget class="QLabel" name="label_status">
+           <property name="styleSheet">
+            <string notr="true">color: white;</string>
+           </property>
+           <property name="text">
+            <string>Status:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
           <widget class="QLineEdit" name="lineedit_status">
            <property name="styleSheet">
             <string notr="true">QLineEdit {
@@ -1021,7 +1099,7 @@ QLineEdit:disabled {
            </property>
           </widget>
          </item>
-         <item row="1" column="1" colspan="2">
+         <item row="1" column="2" colspan="2">
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
             <widget class="QLabel" name="label_output">
@@ -1063,7 +1141,7 @@ QLineEdit:disabled {
         </layout>
        </widget>
       </item>
-      <item row="1" column="1" colspan="3">
+      <item row="1" column="0">
        <widget class="QProgressBar" name="progressbar_download">
         <property name="styleSheet">
          <string notr="true">QProgressBar {

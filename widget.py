@@ -12,12 +12,13 @@ API by Egsagon: https://github.com/Egsagon/PHUB
 
 Author: EchterAlsFake - Johannes Habel
 
-Version: 1.1
+Version: 1.3
 2023
 """
 
 import sys
 from PySide6.QtWidgets import QApplication, QWidget, QMessageBox
+from PySide6.QtCore import QThread, Signal
 from ui_form import Ui_Widget
 from phub import Client, Quality
 import os
@@ -42,6 +43,28 @@ def test_path(path):
         return path
 
 
+class DownloadThread(QThread):
+
+    download_progress = Signal(int, int)
+
+    def __init__(self, video, quality, output_path, parent=None):
+        QThread.__init__(self, parent)
+        self.video = video
+        self.quality = quality
+        self.output_path = output_path
+
+    def callback(self, **kwargs):
+        def _update_progress(pos, total):
+            self.download_progress.emit(pos, total)
+
+        return _update_progress
+
+    def run(self):
+
+        self.video.download(callback=self.callback, quality=self.quality, path=self.output_path)
+
+
+
 class Widget(QWidget):
 
     def __init__(self, parent=None):
@@ -52,6 +75,8 @@ class Widget(QWidget):
         self.conf = ConfigParser()
         self.conf.read("config.ini")
         self.client = Client(language="en")
+        self.download_thread = None
+        self.mode = "single"
 
         self.ui.button_start.clicked.connect(self.start)
         self.ui.button_start_file.clicked.connect(self.start_file)
@@ -75,19 +100,11 @@ class Widget(QWidget):
             qmsg_box.exec()
             return False
 
-    def callback(self, **kwargs):
-        def _update_progress(pos, total):
-            self.ui.progressbar_download.setMaximum(total)
-            self.ui.progressbar_download.setValue(pos)
-
-        return _update_progress
-
     def test_video(self, url):
 
         try:
 
             self.video = self.client.get(url)
-            title = self.video.title
             return self.video
 
         except Exception as e:
@@ -103,10 +120,22 @@ class Widget(QWidget):
             debug(f"URL: {url}")
             self.download(video)
 
+    def update_progressbar(self, pos, total):
+        self.ui.progressbar_download.setMaximum(total)
+        self.ui.progressbar_download.setValue(pos)
+
+    def callback(self, **kwargs):
+        def _update_progress(pos, total):
+            self.ui.progressbar_download.setMaximum(total)
+            self.ui.progressbar_download.setValue(pos)
+
+        return _update_progress
+
     def download(self, video):
 
         quality = self.get_quality()
         debug(f"Quality: {quality}")
+        self.get_mode()
         if quality != False:
 
             output_path = self.ui.lineedit_output.text()
@@ -122,7 +151,18 @@ class Widget(QWidget):
                 try:
                     self.ui.lineedit_status.setText(f"Downloading: {title}")
                     debug("Downloading...")
-                    video.download(callback=self.callback, quality=quality, path=output_path)
+                    if self.mode == "multiple":
+
+                        self.download_thread = DownloadThread(video, quality, output_path)
+                        self.download_thread.download_progress.connect(self.update_progressbar)
+                        self.download_thread.start()
+
+
+                    elif self.mode == "single":
+
+                        self.video.download(callback=self.callback, quality=quality, path=output_path)
+
+
 
                 except Exception as e:
                     ui_popup(text=str(f"An unexpected error happened.  Exception: {e}"))
@@ -130,7 +170,7 @@ class Widget(QWidget):
     def start_file(self):
 
         file_path = self.ui.lineedit_url_file.text()
-
+        self.get_mode()
         try:
             with open(file_path, "r") as file:
                 content = file.read().splitlines()
@@ -150,7 +190,7 @@ class Widget(QWidget):
                     video = self.client.get(str(url))
                     try:
 
-                        self.download(video=video)
+                        self.download(video=video, mode=self.mode)
 
                     except Exception as e:
                         ui_popup(text=str(f"An unexpected error happened.  Exception: {e}"))
@@ -197,6 +237,17 @@ class Widget(QWidget):
         else:
             ui_popup(text=str(f"The Video URL is invalid."))
 
+    def get_mode(self):
+
+        if self.ui.radio_threading_single.isChecked():
+            self.mode = "single"
+
+        elif self.ui.radio_threading_multiple.isChecked():
+            self.mode = "multiple"
+
+        else:
+            self.mode = "single"
+
     def user_channel(self):
 
         user = self.ui.lineedit_user_channel.text()
@@ -219,7 +270,7 @@ class Widget(QWidget):
                 url = "https://www.pornhub.com/" + url
                 print(url)
                 video = self.test_video(url)
-                self.download(video)
+                self.download(video, mode=self.mode)
                 counter += 1
                 try:
                     self.ui.lineedit_status.setText(f"Downloaded: {counter}/{length}")

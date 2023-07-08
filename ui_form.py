@@ -23,7 +23,7 @@ class Ui_Widget(object):
     def setupUi(self, Widget):
         if not Widget.objectName():
             Widget.setObjectName(u"Widget")
-        Widget.resize(1496, 569)
+        Widget.resize(1496, 573)
         Widget.setStyleSheet(u"background-color: rgb(0, 0, 0)")
         self.gridLayout_7 = QGridLayout(Widget)
         self.gridLayout_7.setObjectName(u"gridLayout_7")
@@ -749,18 +749,12 @@ class Ui_Widget(object):
 
         self.groupbox_settings = QGroupBox(Widget)
         self.groupbox_settings.setObjectName(u"groupbox_settings")
-        self.gridLayout_4 = QGridLayout(self.groupbox_settings)
-        self.gridLayout_4.setObjectName(u"gridLayout_4")
+        self.gridLayout_2 = QGridLayout(self.groupbox_settings)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.groupbox_useless = QGroupBox(self.groupbox_settings)
         self.groupbox_useless.setObjectName(u"groupbox_useless")
-        self.gridLayout_2 = QGridLayout(self.groupbox_useless)
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.label_status = QLabel(self.groupbox_useless)
-        self.label_status.setObjectName(u"label_status")
-        self.label_status.setStyleSheet(u"color: white;")
-
-        self.gridLayout_2.addWidget(self.label_status, 0, 1, 1, 1)
-
+        self.gridLayout_6 = QGridLayout(self.groupbox_useless)
+        self.gridLayout_6.setObjectName(u"gridLayout_6")
         self.groupbox_quality = QGroupBox(self.groupbox_useless)
         self.groupbox_quality.setObjectName(u"groupbox_quality")
         self.groupbox_quality.setStyleSheet(u"color: rgb(122, 0, 255)")
@@ -787,6 +781,7 @@ class Ui_Widget(object):
 "\n"
 "}\n"
 "")
+        self.radio_highest.setChecked(True)
 
         self.gridLayout_3.addWidget(self.radio_highest, 0, 0, 1, 1)
 
@@ -840,7 +835,70 @@ class Ui_Widget(object):
         self.gridLayout_3.addWidget(self.radio_lowest, 2, 0, 1, 1)
 
 
-        self.gridLayout_2.addWidget(self.groupbox_quality, 0, 0, 2, 1)
+        self.gridLayout_6.addWidget(self.groupbox_quality, 0, 0, 2, 1)
+
+        self.groupbox_threading = QGroupBox(self.groupbox_useless)
+        self.groupbox_threading.setObjectName(u"groupbox_threading")
+        self.groupbox_threading.setStyleSheet(u"color: rgb(122, 0, 255)")
+        self.gridLayout_4 = QGridLayout(self.groupbox_threading)
+        self.gridLayout_4.setObjectName(u"gridLayout_4")
+        self.radio_threading_multiple = QRadioButton(self.groupbox_threading)
+        self.radio_threading_multiple.setObjectName(u"radio_threading_multiple")
+        self.radio_threading_multiple.setCursor(QCursor(Qt.PointingHandCursor))
+        self.radio_threading_multiple.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(0, 255, 110);}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+
+        self.gridLayout_4.addWidget(self.radio_threading_multiple, 1, 0, 1, 1)
+
+        self.radio_threading_single = QRadioButton(self.groupbox_threading)
+        self.radio_threading_single.setObjectName(u"radio_threading_single")
+        self.radio_threading_single.setCursor(QCursor(Qt.PointingHandCursor))
+        self.radio_threading_single.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(246, 0, 255);}\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"")
+        self.radio_threading_single.setChecked(True)
+
+        self.gridLayout_4.addWidget(self.radio_threading_single, 0, 0, 1, 1)
+
+
+        self.gridLayout_6.addWidget(self.groupbox_threading, 0, 1, 2, 1)
+
+        self.label_status = QLabel(self.groupbox_useless)
+        self.label_status.setObjectName(u"label_status")
+        self.label_status.setStyleSheet(u"color: white;")
+
+        self.gridLayout_6.addWidget(self.label_status, 0, 2, 1, 1)
 
         self.lineedit_status = QLineEdit(self.groupbox_useless)
         self.lineedit_status.setObjectName(u"lineedit_status")
@@ -865,7 +923,7 @@ class Ui_Widget(object):
 "}")
         self.lineedit_status.setReadOnly(True)
 
-        self.gridLayout_2.addWidget(self.lineedit_status, 0, 2, 1, 1)
+        self.gridLayout_6.addWidget(self.lineedit_status, 0, 3, 1, 1)
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
@@ -900,10 +958,10 @@ class Ui_Widget(object):
         self.horizontalLayout_3.addWidget(self.lineedit_output)
 
 
-        self.gridLayout_2.addLayout(self.horizontalLayout_3, 1, 1, 1, 2)
+        self.gridLayout_6.addLayout(self.horizontalLayout_3, 1, 2, 1, 2)
 
 
-        self.gridLayout_4.addWidget(self.groupbox_useless, 0, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.groupbox_useless, 0, 0, 1, 1)
 
         self.progressbar_download = QProgressBar(self.groupbox_settings)
         self.progressbar_download.setObjectName(u"progressbar_download")
@@ -923,7 +981,7 @@ class Ui_Widget(object):
 "}cc")
         self.progressbar_download.setValue(0)
 
-        self.gridLayout_4.addWidget(self.progressbar_download, 1, 1, 1, 3)
+        self.gridLayout_2.addWidget(self.progressbar_download, 1, 0, 1, 1)
 
 
         self.gridLayout_7.addWidget(self.groupbox_settings, 0, 1, 2, 1)
@@ -960,7 +1018,7 @@ class Ui_Widget(object):
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;\"><"
                         "br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">Graphical User Interface was created with Qt - PySide6</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">Version: 1.2</span></p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">Version: 1.3</span></p></body></html>", None))
         self.groupbox_metadata.setTitle(QCoreApplication.translate("Widget", u"Metadata", None))
         self.label_title.setText(QCoreApplication.translate("Widget", u"Title:", None))
         self.label_likes.setText(QCoreApplication.translate("Widget", u"Likes:", None))
@@ -974,11 +1032,14 @@ class Ui_Widget(object):
         self.button_get_metadata.setText(QCoreApplication.translate("Widget", u"Get metadata", None))
         self.groupbox_settings.setTitle("")
         self.groupbox_useless.setTitle("")
-        self.label_status.setText(QCoreApplication.translate("Widget", u"Status:", None))
         self.groupbox_quality.setTitle(QCoreApplication.translate("Widget", u"Quality", None))
         self.radio_highest.setText(QCoreApplication.translate("Widget", u"Highest", None))
         self.radio_middle.setText(QCoreApplication.translate("Widget", u"Middle", None))
         self.radio_lowest.setText(QCoreApplication.translate("Widget", u"Lowest", None))
+        self.groupbox_threading.setTitle(QCoreApplication.translate("Widget", u"Threading", None))
+        self.radio_threading_multiple.setText(QCoreApplication.translate("Widget", u"Multiple", None))
+        self.radio_threading_single.setText(QCoreApplication.translate("Widget", u"Single", None))
+        self.label_status.setText(QCoreApplication.translate("Widget", u"Status:", None))
         self.label_output.setText(QCoreApplication.translate("Widget", u"Output Path:", None))
     # retranslateUi
 
