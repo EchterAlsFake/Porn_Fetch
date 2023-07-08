@@ -48,6 +48,10 @@ Some releases are too big for GitHub. In that case, you can find it on [Google D
 - Fixed the output path issue
 - Changed License to LGPLv3  (The reason for this is, that I am stupid and I used the wrong license. Creative Commons is not valid to be used for developing with Qt. I didn't know that, I am sorry...)
 
+## 1.2
+
+- Added additional stuff to the metadata function (Likes, Image URL, Tags)
+- Added border colours for input fields
 
 # Contributing
 
