@@ -81,6 +81,7 @@ class Widget(QWidget):
             self.ui.progressbar_download.setValue(pos)
 
         return _update_progress
+
     def test_video(self, url):
 
         try:
@@ -173,9 +174,19 @@ class Widget(QWidget):
             author = str(video.author.name)
             views = str(video.views)
             date = str(video.date)
-            duration = f"{str(video.duration)}m"
+            duration = video.duration.seconds
+            duration = duration / 60
+            duration = str(f"{duration}m")
             hotspots = str(video.hotspots)
+            likes_up = str(video.like.up)
+            likes_down = str(video.like.down)
+            likes = str(f"Likes: {likes_up} - Dislikes: {likes_down}")
+            image_url = str(video.image_url)
+            tags = str(video.tags)
 
+            self.ui.lineedit_likes.setText(likes)
+            self.ui.lineedit_tags.setText(tags)
+            self.ui.lineedit_image_url.setText(image_url)
             self.ui.lineedit_title.setText(title)
             self.ui.lineedit_author.setText(author)
             self.ui.lineedit_views.setText(views)

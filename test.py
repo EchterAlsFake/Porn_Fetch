@@ -1,9 +1,7 @@
 import phub
 
-user = "https://de.pornhub.com/pornstar/june-liu"
+user = "https://de.pornhub.com/view_video.php?viewkey=ph5e6be719d708c"
 
-
-def test_video(url):
-    viewkey = url.split("=")
-    viewkey = viewkey[1]
-    print(viewkey)
+c = phub.Client(language="en")
+x = c.get(user)
+print(x.like)
