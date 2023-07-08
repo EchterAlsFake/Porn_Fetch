@@ -53,6 +53,17 @@ Some releases are too big for GitHub. In that case, you can find it on [Google D
 - Added additional stuff to the metadata function (Likes, Image URL, Tags)
 - Added border colours for input fields
 
+## 1.3
+
+- Added Threading Modes
+
+Single: Downloads will be executed within the main thread, and the GUI
+won't respond to your actions if the download isn't finished.
+
+Multiple: Download(s) will be executed with separate Threads (QThreads). This is mostly intended for single downloads. You can use that function also for multiple downloads, but that will ruin the progress bar, because it will jump between the different videos. 
+
+Your decision ;)
+
 # Contributing
 
 You can contribute literally everything. Typo Errors, code optimization, features... Just make a Pull Request :) <br>
