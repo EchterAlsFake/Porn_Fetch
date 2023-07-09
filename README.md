@@ -33,6 +33,14 @@ Some releases are too big for GitHub. In that case, you can find it on [Google D
 - pyinstaller -F widget.py
 - In you dist directory, there is the executable file
 
+# What about Android?
+
+It is possible to compile a PySide6 application like mine to Android. There is one official guide from the Qt company about it.
+The problem is, that my Arch is just broken and not working well. Many packages are missing for the compilation and I can not use
+my Python3.11 for it and switching to Python3.10 is (in this case) more than just $ sudo make altinstall ;) 
+If you want to give it a try, here is the guide: https://www.qt.io/blog/taking-qt-for-python-to-android<br>
+I am experimenting with it, and I let you know about the progress.
+
 # Changelog
 
 ## 1.0 
