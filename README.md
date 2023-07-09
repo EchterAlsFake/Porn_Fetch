@@ -41,6 +41,9 @@ my Python3.11 for it and switching to Python3.10 is (in this case) more than jus
 If you want to give it a try, here is the guide: https://www.qt.io/blog/taking-qt-for-python-to-android<br>
 I am experimenting with it, and I let you know about the progress.
 
+## and iOS?
+
+stfu
 # Changelog
 
 ## 1.0 
