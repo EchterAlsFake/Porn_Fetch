@@ -12,12 +12,12 @@ API by Egsagon: https://github.com/Egsagon/PHUB
 
 Author: EchterAlsFake - Johannes Habel
 
-Version: 1.3
+Version: 1.4
 2023
 """
 
 import sys
-from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QListWidget, QListWidgetItem
+from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QListWidget, QListWidgetItem, QTreeWidget, QTreeWidgetItem
 from PySide6.QtCore import QThread, Signal
 from ui_form import Ui_Widget
 from phub import Client, Quality
@@ -78,7 +78,6 @@ class Widget(QWidget):
         self.client = Client(language="en")
         self.download_thread = None
         self.mode = "single"
-        self.ui.lidtWidget_search_query.SelectionMode(QListWidget.ExtendedSelection)
 
         self.ui.button_start.clicked.connect(self.start)
         self.ui.button_start_file.clicked.connect(self.start_file)
@@ -289,23 +288,21 @@ class Widget(QWidget):
         length = len(query_object)
         self.ui.lineedit_total_videos.setText(str(length))
 
-        for video in query_object:
-            item = QListWidgetItem(video.title)
-            item.setData(QtCore.Qt.UserRole, video.url)
-            self.ui.lidtWidget_search_query.addItem(item)
-
+        for i, video in enumerate(query_object, start=1):
+            item = QTreeWidgetItem(self.ui.treeWidget_search_query)
+            item.setText(0, f"{i}) {video.title}")
+            item.setData(0, QtCore.Qt.UserRole, video.url)
+            item.setCheckState(0, QtCore.Qt.Unchecked)  # Adds a checkbox
     def download_search(self):
 
-        selected_items = self.ui.lidtWidget_search_query.selectedItems()
-        for item in selected_items:
-            video_url = item.data(QtCore.Qt.UserRole)
-            print(video_url)
-            video = self.test_video(video_url)
-            self.download(video)
-
-
-
-
+        for i in range(self.ui.treeWidget_search_query.topLevelItemCount()):
+            item = self.ui.treeWidget_search_query.topLevelItem(i)
+            checkState = item.checkState(0)
+            if checkState == QtCore.Qt.Checked:
+                video_url = item.data(0, QtCore.Qt.UserRole)
+                url = "https://www.pornhub.com/" + video_url
+                video = self.test_video(url)
+                self.download(video)
 
 
     def qmsg_box(self, text):
