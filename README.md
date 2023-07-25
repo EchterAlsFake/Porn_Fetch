@@ -1,12 +1,9 @@
 
 # Downloads:
 
-#### The releases are too big for GitHub and I only have 15GB of Google Drive Space.
-#### I don't want to create 20 new Google Accounts, so I decided to switch to 
-#### torrenting instead of providing it via Google Drive. 
-#### I know this is project is not very popular, but don't worry. I've setup
-#### my Laptop for Seeding the files 24/7 so you will always be able to get the
-#### files. You don't have to use a VPN or protect your IP, because as the license says:
+###### The releases are too big for GitHub and I only have 15GB of Google Drive Space I don't want to create 20 new Google Accounts, so I decided to switch to 
+###### torrenting instead of providing it via Google Drive. I know this is project is not very popular, but don't worry. I've setup
+###### my Laptop for Seeding the files 24/7 so you will always be able to get the files. You don't have to use a VPN or protect your IP, because as the license says:
 
 Everyone is able to publish and redistribute :) 
 
