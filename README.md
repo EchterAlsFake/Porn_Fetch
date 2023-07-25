@@ -2,23 +2,23 @@
 # Downloads:
 
 #### The releases are too big for GitHub and I only have 15GB of Google Drive Space.
-#### <br> I don't want to create 20 new Google Accounts, so I decided to switch to 
-#### <br> torrenting instead of providing it via Google Drive. 
-#### <br> I know this is project is not very popular, but don't worry. I've setup
-#### <br> my Laptop for Seeding the files 24/7 so you will always be able to get the
-#### <br> files. You don't have to use a VPN or protect your IP, because as the license says:
+#### I don't want to create 20 new Google Accounts, so I decided to switch to 
+#### torrenting instead of providing it via Google Drive. 
+#### I know this is project is not very popular, but don't worry. I've setup
+#### my Laptop for Seeding the files 24/7 so you will always be able to get the
+#### files. You don't have to use a VPN or protect your IP, because as the license says:
 
 Everyone is able to publish and redistribute :) 
 
 ### Files:
 
-#### 1.0 [Windows_X_Linux_X64_86.torrent](https://drive.google.com/uc?export=download&id=1ZC1e2VcYUZVD-fjEkSpygr5nIvAFjIFr)
-#### 1.1 [Windows_X_Linux_X64_86.torrent](https://drive.google.com/uc?export=download&id=1oD6rfv0zVXkCqwTH7HFyHrdu-u43gByw)
-#### 1.2 [Windows_X_Linux_X64_86.torrent](https://drive.google.com/uc?export=download&id=1sh-tTsg2iCZ1LHnf0z7-l6zaUMsWkf0r)
-#### 1.3 [Windows_X_Linux_X64_86.torrent](https://drive.google.com/uc?export=download&id=1JysvCzToi5KWOkDEXZpRvV_EdxEg9UdU)
+#### - 1.0 [Windows_X_Linux_X64_86.torrent](https://drive.google.com/uc?export=download&id=1ZC1e2VcYUZVD-fjEkSpygr5nIvAFjIFr)
+#### - 1.1 [Windows_X_Linux_X64_86.torrent](https://drive.google.com/uc?export=download&id=1oD6rfv0zVXkCqwTH7HFyHrdu-u43gByw)
+#### - 1.2 [Windows_X_Linux_X64_86.torrent](https://drive.google.com/uc?export=download&id=1sh-tTsg2iCZ1LHnf0z7-l6zaUMsWkf0r)
+#### - 1.3 [Windows_X_Linux_X64_86.torrent](https://drive.google.com/uc?export=download&id=1JysvCzToi5KWOkDEXZpRvV_EdxEg9UdU)
 
 ### You will find them also in the releases on GitHub. I know this is not the best solution,
-### <br> but it's the easiest for me. 
+### but it's the easiest for me. 
 
 
 ### Please Seed if you can :)
