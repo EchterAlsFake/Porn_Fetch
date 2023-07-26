@@ -2,3 +2,4 @@ phub
 PySide6
 colorama
 pyinstaller
+bs4
