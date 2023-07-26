@@ -30,7 +30,7 @@ Source code can be found in the [GitHub Releases](https://github.com/EchterAlsFa
 * [Porn Fetch 1.4](https://drive.google.com/uc?export=download&id=1GkF0vuwxLn1jDaPQoqHdaokqSLjJIXIp) <===========> Torrent: [1.4.torrent](https://drive.google.com/uc?export=download&id=1nm2_NLIUuzBTlzXj6Z63Kdlr3AS9nroi)
 * [Porn Fetch 1.3](https://drive.google.com/uc?export=download&id=1fmKO3HZbddhx1NtKRw2Pexro0jy5t7HP) <===========> Torrent: [1.3.torrent](https://drive.google.com/uc?export=download&id=1jLfg-XPZpkI3SLXUd3hRGJpraDb9KZKT)
 * [Porn Fetch 1.2](https://drive.google.com/uc?export=download&id=1Z_S1F74y8lF9crM1aWus3MiO8Yqt92YQ) <===========> Torrent: [1.2.torrent](https://drive.google.com/uc?export=download&id=1zWLKmbiLocv7UOWHJEWf1Y4-RdJljI1J)
-* [Porn Fetch 1.1](https://drive.google.com/uc?export=download&id=1-fghgnBv1tfkW5z5qY491KvXfWtyj0TP) <===========> Torrent: [1.1.torrent](https://drive.google.com/uc?export=download&id=1zWLKmbiLocv7UOWHJEWf1Y4-RdJljI1J)
+* [Porn Fetch 1.1](https://drive.google.com/uc?export=download&id=1-fghgnBv1tfkW5z5qY491KvXfWtyj0TP) <===========> Torrent: [1.1.torrent](https://drive.google.com/uc?export=download&id=1yTkyoDPr7soLT_wQ6u7D_fa92FL9tGFT)
 * [Porn Fetch 1.0](https://drive.google.com/uc?export=download&id=1l3SMGTdt01yjqFOOwpgiKt029087SWwy) <===========> Torrent: [1.0.torrent](https://drive.google.com/uc?export=download&id=1664ZZa21seGlCq5lgpwZybF_wpsuLPgR)
 * [LICENSE](https://drive.google.com/uc?export=download&id=1V5pgayZB9_cv7nlon55r80-hMKiAwWC2)
 
