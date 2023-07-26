@@ -1,0 +1,3 @@
+phub
+PySide6
+colorama

@@ -17,8 +17,8 @@ Version: 1.4
 """
 
 import sys
-from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QListWidget, QListWidgetItem, QTreeWidget, QTreeWidgetItem
-from PySide6.QtCore import QThread, Signal
+from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem
+from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject
 from ui_form import Ui_Widget
 from phub import Client, Quality
 import os
@@ -44,27 +44,26 @@ def test_path(path):
         return path
 
 
-class DownloadThread(QThread):
+class DownloadProgressSignal(QObject):
+    progress = Signal(int, int)
 
-    download_progress = Signal(int, int)
+class DownloadThread(QRunnable):
 
     def __init__(self, video, quality, output_path, parent=None):
-        QThread.__init__(self, parent)
+        super().__init__(parent)
         self.video = video
         self.quality = quality
         self.output_path = output_path
+        self.signals = DownloadProgressSignal()
 
     def callback(self, **kwargs):
         def _update_progress(pos, total):
-            self.download_progress.emit(pos, total)
+            self.signals.progress.emit(pos, total)
 
         return _update_progress
 
     def run(self):
-
         self.video.download(callback=self.callback, quality=self.quality, path=self.output_path)
-
-
 
 class Widget(QWidget):
 
@@ -78,6 +77,8 @@ class Widget(QWidget):
         self.client = Client(language="en")
         self.download_thread = None
         self.mode = "single"
+        self.threadpool = QThreadPool()
+
 
         self.ui.button_start.clicked.connect(self.start)
         self.ui.button_start_file.clicked.connect(self.start_file)
@@ -85,6 +86,28 @@ class Widget(QWidget):
         self.ui.button_start_user_channel.clicked.connect(self.user_channel)
         self.ui.button_start_search.clicked.connect(self.search_videos)
         self.ui.button_download_search_query.clicked.connect(self.download_search)
+
+        self.ui.button_credits_tab.clicked.connect(self.do_1)
+        self.ui.button_download_tab.clicked.connect(self.do_2)
+        self.ui.button_metadata_tab.clicked.connect(self.do_3)
+        self.ui.button_search_tab.clicked.connect(self.do_4)
+
+    def do_1(self):
+
+        self.ui.stackedWidget.setCurrentIndex(2)
+
+    def do_2(self):
+
+        self.ui.stackedWidget.setCurrentIndex(0)
+
+    def do_3(self):
+
+        self.ui.stackedWidget.setCurrentIndex(1)
+
+    def do_4(self):
+
+        self.ui.stackedWidget.setCurrentIndex(3)
+
 
     def get_quality(self):
 
@@ -106,13 +129,14 @@ class Widget(QWidget):
     def test_video(self, url):
 
         try:
-
+            print(url)
+            url = url.replace("www", "de")
+            print(url)
             self.video = self.client.get(url)
             return self.video
 
         except Exception as e:
-            ui_popup(text=str(f"The Video URL is invalid.  Exception: {e}"))
-            return False
+            ui_popup(text=f"There was an error with the URL.  Here is a detailed error: {e}  Please report it on GitHub :)")
 
     def start(self):
 
@@ -152,14 +176,14 @@ class Widget(QWidget):
                 output_path = str(output_path) + str(title)
 
                 try:
-                    self.ui.lineedit_status.setText(f"Downloading: {title}")
+                    self.ui.label_search_query_progress.setText(f"Downloading: {title}")
                     debug("Downloading...")
                     if self.mode == "multiple":
 
-                        self.download_thread = DownloadThread(video, quality, output_path)
-                        self.download_thread.download_progress.connect(self.update_progressbar)
-                        self.download_thread.start()
-
+                        if self.mode == "multiple":
+                            self.download_thread = DownloadThread(video, quality, output_path)
+                            self.download_thread.signals.progress.connect(self.update_progressbar)
+                            self.threadpool.start(self.download_thread)
 
                     elif self.mode == "single":
 
@@ -193,7 +217,7 @@ class Widget(QWidget):
                     video = self.client.get(str(url))
                     try:
 
-                        self.download(video=video, mode=self.mode)
+                        self.download(video=video)
 
                     except Exception as e:
                         ui_popup(text=str(f"An unexpected error happened.  Exception: {e}"))
@@ -273,10 +297,10 @@ class Widget(QWidget):
                 url = "https://www.pornhub.com/" + url
                 print(url)
                 video = self.test_video(url)
-                self.download(video, mode=self.mode)
+                self.download(video)
                 counter += 1
                 try:
-                    self.ui.lineedit_status.setText(f"Downloaded: {counter}/{length}")
+                    self.ui.label_search_query_progress.setText(f"Downloaded: {counter}/{length}")
 
                 except IndexError as e:
                     ui_popup(text=str(f"Index Error.  (Just ignore this exception.  The download should still be finished)  Exception: {e}"))
@@ -289,14 +313,15 @@ class Widget(QWidget):
         self.ui.lineedit_total_videos.setText(str(length))
 
         for i, video in enumerate(query_object, start=1):
-            item = QTreeWidgetItem(self.ui.treeWidget_search_query)
+            item = QTreeWidgetItem(self.ui.treeWidget)
             item.setText(0, f"{i}) {video.title}")
             item.setData(0, QtCore.Qt.UserRole, video.url)
             item.setCheckState(0, QtCore.Qt.Unchecked)  # Adds a checkbox
+
     def download_search(self):
 
-        for i in range(self.ui.treeWidget_search_query.topLevelItemCount()):
-            item = self.ui.treeWidget_search_query.topLevelItem(i)
+        for i in range(self.ui.treeWidget.topLevelItemCount()):
+            item = self.ui.treeWidget.topLevelItem(i)
             checkState = item.checkState(0)
             if checkState == QtCore.Qt.Checked:
                 video_url = item.data(0, QtCore.Qt.UserRole)
@@ -304,11 +329,6 @@ class Widget(QWidget):
                 video = self.test_video(url)
                 self.download(video)
 
-
-    def qmsg_box(self, text):
-        message_box = QMessageBox()
-        message_box.setText(str(text))
-        message_box.exec()
 
 if __name__ == "__main__":
 

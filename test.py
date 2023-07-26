@@ -31,7 +31,7 @@ Although this won't be easy for me -_-
 
 # Test:
 
-url = "https://www.pornhub.com/view_video.php?viewkey=ph622e6ec378a8e"
+url = "https://de.pornhub.com/view_video.php?viewkey=ph61d03d8fd0d0d"
 url2 = "https://de.pornhub.com/view_video.php?viewkey=64747e4fb4e1e"
 video = client.get(url)
 print(video.title)
