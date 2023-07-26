@@ -16,7 +16,7 @@
 
 ## Windows (X86_64)
 
- * [Porn Fetch 1.4.exe]() <===========> Torrent: [1.4.torrent](https://drive.google.com/uc?export=download&id=1o2zgg40REu4V6hUKYAOHPtNF09OIjMZV) 
+ * [Porn Fetch 1.4.exe](https://drive.google.com/uc?export=download&id=1sur_U5h_j7jjwF_Cj3IaLzz1mRg1YqK6) <===========> Torrent: [1.4.torrent](https://drive.google.com/uc?export=download&id=1o2zgg40REu4V6hUKYAOHPtNF09OIjMZV) 
  * [Porn Fetch 1.3.exe](https://drive.google.com/uc?export=download&id=15pUQDXyqVGOXVMbSIcihYsuu7z6dKRan) <===========> Torrent: [1.3.torrent](https://drive.google.com/uc?export=download&id=1_G63Q_SMg-p1tXXlPP8l7wu1R4v92lQM)
  * [Porn Fetch 1.2.exe](https://drive.google.com/uc?export=download&id=156z1RNcSQSXUPSkO8sXG6U-r_wdmrB2d) <===========> Torrent: [1.2.torrent](https://drive.google.com/uc?export=download&id=1MYBZ6uzYO4pvphCa6P4iAmfUXFnGE-g_)
  * [Porn Fetch 1.1.exe](https://drive.google.com/uc?export=download&id=1Tt-siUB9siSMx4etcNvkZ0e4srbiVlr9) <===========> Torrent: [1.1.torrent](https://drive.google.com/uc?export=download&id=1wbztz8LQUj83qbUwL-0VqEql3TYzlag7)
@@ -27,7 +27,7 @@ Source code can be found in the [GitHub Releases](https://github.com/EchterAlsFa
 
 ## Linux (AppImage)
 
-* [Porn Fetch 1.4]() <===========> Torrent: [1.4.torrent](https://drive.google.com/uc?export=download&id=1nm2_NLIUuzBTlzXj6Z63Kdlr3AS9nroi)
+* [Porn Fetch 1.4](https://drive.google.com/uc?export=download&id=1GkF0vuwxLn1jDaPQoqHdaokqSLjJIXIp) <===========> Torrent: [1.4.torrent](https://drive.google.com/uc?export=download&id=1nm2_NLIUuzBTlzXj6Z63Kdlr3AS9nroi)
 * [Porn Fetch 1.3](https://drive.google.com/uc?export=download&id=1fmKO3HZbddhx1NtKRw2Pexro0jy5t7HP) <===========> Torrent: [1.3.torrent](https://drive.google.com/uc?export=download&id=1jLfg-XPZpkI3SLXUd3hRGJpraDb9KZKT)
 * [Porn Fetch 1.2](https://drive.google.com/uc?export=download&id=1Z_S1F74y8lF9crM1aWus3MiO8Yqt92YQ) <===========> Torrent: [1.2.torrent](https://drive.google.com/uc?export=download&id=1zWLKmbiLocv7UOWHJEWf1Y4-RdJljI1J)
 * [Porn Fetch 1.1](https://drive.google.com/uc?export=download&id=1-fghgnBv1tfkW5z5qY491KvXfWtyj0TP) <===========> Torrent: [1.1.torrent](https://drive.google.com/uc?export=download&id=1zWLKmbiLocv7UOWHJEWf1Y4-RdJljI1J)
