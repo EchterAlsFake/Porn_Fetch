@@ -1,3 +1,4 @@
 phub
 PySide6
 colorama
+pyinstaller
