@@ -3,3 +3,4 @@ PySide6
 colorama
 pyinstaller
 bs4
+tqdm
