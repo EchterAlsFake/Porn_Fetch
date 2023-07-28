@@ -29,7 +29,7 @@ API: PHUB by Egsagon.  This project would not be possible without it.
 Author: EchterAlsFake
 License: LGPLv3
 
-Plugins: Tabnine, Material Theme Icons
+Plugins: Tabnine, Material Theme Icons, Sourcery
 IDE: PyCharm Professional
 Libraries: colorama, tqdm, PySide6, PHUB
 
