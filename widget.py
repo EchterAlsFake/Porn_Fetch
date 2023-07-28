@@ -45,7 +45,6 @@ import logging
 from datetime import datetime
 
 from PySide6 import QtCore
-from configparser import ConfigParser
 from colorama import *
 from tqdm import tqdm
 from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem
@@ -181,7 +180,6 @@ class CLI():
 
         elif options == "8":
             sys.exit(0)
-
 
     def change_quality(self):
 
@@ -323,7 +321,6 @@ Do NOT separate them with commas or anything else. Just with a new line. Should 
             for url in valid_urls:
                 self.download_video(url)
 
-
     def download_channel_user(self):
 
         user = input(f"""
@@ -387,7 +384,6 @@ Hotspots: {hotspots}
 
         input(f"{Fore.RESET}Hit enter to continue...")
 
-
     def search_ext_2(self, search):
 
         urls = []
@@ -413,7 +409,6 @@ Hotspots: {hotspots}
 
         except ConnectionError:
             pass  # This is an issue from PornHub and not from my Application. I can not fix it anyway
-
 
     def search_videos(self):
 
@@ -737,7 +732,6 @@ if __name__ == "__main__":
         print(__license__)
 
     else:
-
         app = QApplication(sys.argv)
         widget = Widget()
         widget.show()

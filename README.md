@@ -1,6 +1,6 @@
 # Porn Fetch - A PornHub Downloader 4 Free & Everyone
 
-## The *only free and Open-Source Downloader without restrictions or ADs
+### The only free and Open-Source GUI Downloader without restrictions or ADs
 
 
 # Features:
@@ -14,6 +14,10 @@
 * CLI for systems without a Graphical User Interface
 * No ADs & restrictions
 * No Login / PornHub Account needed
+* No Data tracking
+* Open-Source
+* Cross Platform
+* Actively maintained
 
 ## Windows (X86_64)
 
@@ -66,9 +70,6 @@ mkdir build output && cd build && git clone https://github.com/EchterAlsFake/Por
 * Unhandled Error: Index out of range
    <br> This is an error caused by the API. Restarting the application usually fixes this.
    <br>
-* Request connection error:
-  <br>You only see this if running in a terminal. This is caused again by the API. This happens when using the Search feature. Some videos won't be listed but in general
-<br>this error can be ignored. Also, I am not able to fix this. This is a problem with PornHub itself!
 * Nothing happens, when I click a button
  <br> I am aware of that. Restarting the Application will fix the error for now, but I am trying to implement a "refresh" feature which would resolve this.
 
@@ -82,9 +83,21 @@ I don't know about the Law in the U.S.
 
 # Support / Contribution
 
-You can always make Pull Requests, Submit Issues and give new ideas in the discussion section :)
-<br>I would really need your help, when it comes to design. I can develop software, but I am terrible in designing something.
-<br>So, If you have ideas, tell me.
+Please make Pull Requests for the following:
+- Typos
+- Functions
+- Code optimization
+
+Submit Issues for the following:
+- Bugs
+- Security Issues
+- Weird design implementations from my side, but please provide an Idea of "how you would implement"
+
+### I need help from someone for this:
+
+- Designing the PySide6 Application with Qt Designer and or Qt Design Studio
+: Please send me a message via E-mail or Discord
+
 
 External Support:
 <br> If you want, you can [donate](paypal.me/EchterAlsFake) me something on PayPal, but please mark the Payment as "for friends and family"
@@ -98,10 +111,9 @@ External Support:
 
 #### And of course the external libraries, that I used within my code:
 * [colorama](https://github.com/tartley/colorama)
+* [tqdm](https://github.com/tqdm/tqdm)
 
 
 # License:
 
 [LGPLv3](https://www.gnu.org/licenses/lgpl-3.0.en.html)
-
-*of course not the only, but you get the point, what I mean
