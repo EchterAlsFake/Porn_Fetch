@@ -1,25 +1,22 @@
-"""
-IMPORTANT INFORMATION
-
-THIS PROJECT IS LICENSED UNDER THE LGPLv3 License
-You should have received a copy of the license along with this program.
-
-The Source code of this program can be found here: https://github.com/EchterAlsFake/Porn_Fetch
-
-API by Egsagon: https://github.com/Egsagon/PHUB
-
-
-
-Author: EchterAlsFake - Johannes Habel
-
-Version: 1.5
-2023
-"""
-
 __author__ = "EchterAlsFake : Johannes Habel"
-__version__ = "1.5"
+__version__ = "1.6"
 __source__ = "https://github.com/EchterAlsFake/Porn_Fetch"
 __license__ = "LGPLv3"
+
+import time
+
+"""
+INFORMATION
+
+This program comes AS IS without any warranty of any kind.
+You are free to copy, modify, redistribute, and/or sell it.
+
+
+The Source Code can be found on GitHub : https://github.com/EchterAlsFake/Porn_Fetch
+
+Author: Johannes Habel | EchterAlsFake
+Co Author: ChatGPT by OpenAI
+"""
 
 credits = f"""
 
@@ -37,15 +34,15 @@ IDE: PyCharm Professional
 Libraries: colorama, tqdm, PySide6, PHUB
 
 Graphical User Interface was created with Qt - PySide6
-Version: {__version__}
-"""
-
+Version: {__version__}"""
 
 import sys
 import threading
 import os
 import argparse
 import webbrowser
+import logging
+from datetime import datetime
 
 from PySide6 import QtCore
 from configparser import ConfigParser
@@ -56,76 +53,79 @@ from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject
 from ui_form import Ui_Widget
 from phub import Client, Quality
 
+log_file = ".porn_fetch_LOG"
+
+def logger_debug(function, message):
+    date = datetime.now()
+    logger = logging.getLogger(f"Date : {date} : Porn Fetch : {function}")
+    logger.debug(f"DEBUG: {message}")
+
+def logger_error(function, message):
+    date = datetime.now()
+    logger = logging.getLogger(f"Date : {date} : Porn Fetch : {function}")
+    logger.error(f"DEBUG: {message}")
 
 def ui_popup(text):
     qmsg_box = QMessageBox()
     qmsg_box.setText(str(text))
     qmsg_box.exec()
 
-def debug(text):
-    print(f"{Fore.LIGHTCYAN_EX}[DEBUG]{Fore.RESET}{text}")
+def clear():
+    os.system("cls")
+    os.system("clear")
 
-def test_path(path):
-
-    if os.path.exists(path) == False:
-
-        ui_popup(text="Path does not exist.  You need to put a / at the end of the path.")
-
-    else:
-        return path
+def check_path(path):
+    return True if os.path.exists(path) else False
 
 
 class CLI():
 
     def __init__(self):
-
-        self.z = Fore.LIGHTGREEN_EX + "[+]" + Fore.RESET
-        self.x = Fore.LIGHTRED_EX + "[~]" + Fore.RESET
-        self.pbar = None
+        self.z =f"{Fore.LIGHTGREEN_EX}[+]{Fore.RESET}"
+        self.x = f"{Fore.LIGHTRED_EX}[~]{Fore.RESET}"
         self.quality = Quality.BEST
         self.output_path = "./"
         self.threading_mode = "multiple"
         self.client = Client(language="en")
-        self.menu()
+        self.video = None
+        self.pbar = None
+        while True:
+            self.menu()
 
     def callback(self, **kwargs):
-        pbar = None
+
         def _update_progress(pos, total):
 
-            pbar = tqdm(total=total, dynamic_ncols=True)
-            pbar.update(pos - pbar.n)
+            self.pbar = tqdm(total=total, dynamic_ncols=True)
+            self.pbar.update(pos - self.pbar.n)
             if pos == total:
-                pbar.close()
-                pbar = None
+                self.pbar.close()
+                self.pbar = None
 
         return _update_progress
-
-    def check_path(self, path):
-        return True if os.path.exists(path) else False
 
     def check_video(self, url):
 
         try:
-            video = self.client.get(url)
-            return video
+            self.video = self.client.get(url)
+            return True
 
         except Exception as e:
             self.exception(e)
 
     def exception(self, e):
-        print(self.z + f"Unhandled Exception: {e}")
-
+        print(f"{self.x}Unhandled Exception: {e}")
 
     def menu(self):
 
         if self.quality == Quality.BEST:
-            quality_ext = Fore.LIGHTCYAN_EX + "Best"
+            quality_ext = f"{Fore.LIGHTCYAN_EX}Best"
 
         elif self.quality == Quality.MIDDLE:
-            quality_ext = Fore.LIGHTMAGENTA_EX + "Middle"
+            quality_ext = f"{Fore.LIGHTMAGENTA_EX}Middle"
 
         elif self.quality == Quality.WORST:
-            quality_ext = Fore.LIGHTRED_EX + "Worst"
+            quality_ext = f"{Fore.LIGHTRED_EX}Worst"
 
         options = input(f"""
 {Fore.LIGHTYELLOW_EX}    Settings:
@@ -144,7 +144,7 @@ class CLI():
 {Fore.LIGHTWHITE_EX}6) Show credits
 {Fore.LIGHTWHITE_EX}7) Submit Issue / Bug / Security vulnerabilities / Typos
 {Fore.LIGHTRED_EX}8) Exit
--------------------->: """)
+{Fore.RESET}-------------------->:{Fore.RESET} """)
 
 
         if options == "99":
@@ -180,44 +180,35 @@ class CLI():
             webbrowser.open("https://github.com/EchterAlsFake/Porn_Fetch/issues")
 
         elif options == "8":
-            exit(0)
-
-
-
-
-
-
-
-
+            sys.exit(0)
 
 
     def change_quality(self):
 
-        options = """
-1) Change Quality to best
-2) Change Quality to middle
-3) Change Quality to worst
-4) Go back
-
-"""
+        options = input(f"""
+{Fore.LIGHTGREEN_EX}1) Change Quality to best
+{Fore.LIGHTMAGENTA_EX}2) Change Quality to middle
+{Fore.LIGHTRED_EX}3) Change Quality to worst
+{Fore.LIGHTWHITE_EX}4) Go back
+{Fore.LIGHTYELLOW_EX}----------->:{Fore.RESET}""")
 
         if options == "1":
             self.quality = Quality.BEST
-            print(self.z + "✓")
+            print(f"{self.z}✓")
 
         elif options == "2":
             self.quality = Quality.MIDDLE
-            print(self.z + "✓")
+            print(f"{self.z}✓")
 
         elif options == "3":
             self.quality = Quality.WORST
-            print(self.z + "✓")
+            print(f"{self.z}✓")
 
         elif options == "4":
             self.menu()
 
         else:
-            print(self.x + "Wrong option. Please enter in range 1-4")
+            print(f"{self.x}Wrong option. Please enter in range 1-4")
             self.change_quality()
 
     def set_output_path(self):
@@ -227,30 +218,37 @@ Please enter the new output path.  Make sure to put a / at the end -->:""")
         print(self.z + "✓")
 
     def set_threading_mode(self):
-        options = input("""
-1) Single threaded mode (downloads everything one by one)
-2) Multiple threaded mode (downloads multiple videos at once)
-3) Go back
------------------------->:""")
+        options = input(f"""
+{Fore.LIGHTMAGENTA_EX}1) Single threaded mode (downloads everything one by one)
+{Fore.LIGHTCYAN_EX}2) Multiple threaded mode (downloads multiple videos at once)
+{Fore.LIGHTWHITE_EX}3) Go back
+{Fore.LIGHTYELLOW_EX}------------------------>:{Fore.RESET}""")
 
-        if options == "1":
-            self.threading_mode = "single"
+        try:
+            if options == "1":
+                self.threading_mode = "single"
 
-        elif options == "2":
-            self.threading_mode = "multiple"
+            elif options == "2":
+                self.threading_mode = "multiple"
 
+            elif options == "3":
+                    self.menu()
 
-        elif options == "3":
-            self.menu()
+            else:
+                print(f"{self.x}Wrong Input. Select in range 1-3")
+                self.set_threading_mode()
+
+        finally:
+            clear()
 
     def raw_download(self, video):
 
         title = video.title
-        print(self.z + Fore.LIGHTMAGENTA_EX + f"Downloading: {title}")
+        print(f"{self.z}{Fore.LIGHTMAGENTA_EX}Downloading: {Fore.RESET}{title}")
 
         try:
             video.download(path=self.output_path, callback=self.callback, quality=self.quality)
-            print(self.z + Fore.LIGHTBLUE_EX + "Download finished :) ")
+            print(f"{self.z}{Fore.LIGHTBLUE_EX}Download finished :) ")
 
         except Exception as e:
             self.exception(e)
@@ -259,16 +257,32 @@ Please enter the new output path.  Make sure to put a / at the end -->:""")
 
         mode = self.threading_mode
         output_path = self.output_path
-        video = self.check_video(url)
+        time.sleep(2) # You can set it to 0 if you want.  Read further down for additional information
+        self.check_video(url) # Video will be assigned in this function. You probably ask why, so here a little explanation:
 
-        if self.check_path(output_path):
+        """
+        The API from Egsagon is not very good optimized. Also he doesn't maintain it actively and PornHub is also a really bad
+        platform for writing an API. So the API video objects are sometimes returning Index Errors, because some 
+        data from PornHub is not returned as it should. The only way to get around this, is to initialize the client from 
+        time to time and refresh the video object. This doesn't prevent the error, but it let's it happen less.
+        If you don't want the delay, you can just remove it from the code. It won't break the program.
+        In case, the API gets more stable, I will also remove it, but this is the only solution for now.
+        """
+
+        if not check_path(output_path):
+            print(f"{self.x}{Fore.RESET}The Output path, you submitted is wrong. You will be redirected to change it!")
+            self.set_output_path()
+
+
+        else:
+            video = self.video
 
             if mode == "single":
                 self.raw_download(video)
 
             elif mode == "multiple":
-
                 t = threading.Thread(target=self.raw_download, args=(video, ))
+                print(f"{self.z}{Fore.RESET}Running Thread: {t.name}")
                 t.start()
 
     def download_from_file(self):
@@ -282,44 +296,38 @@ URL (After the URL, make a new line!
 URL
 URL etc....
 
-Do NOT seperate them with commas or anything else. Just with a new line. Should be easy enough :) 
+Do NOT separate them with commas or anything else. Just with a new line. Should be easy enough :) 
 """)
 
         file = input(f"""
 {self.z}{Fore.LIGHTYELLOW_EX}Path to URL file -->:""")
 
-
         with open(file, "r") as url_file:
             content = url_file.read().encode("utf-8").splitlines()
-            total_urls = len(content)
 
+            total_urls = len(content)
             valid_urls = []
+            counter = 0
 
             print(f"{self.z}{Fore.LIGHTCYAN_EX}Found: {total_urls}")
-            print(self.z + Fore.LIGHTMAGENTA_EX + "Verifying URLs...")
-
-            counter = 0
+            print(f"{self.z}{Fore.LIGHTMAGENTA_EX}Verifying URLs...")
 
             for url in tqdm(content):
 
                 counter += 1
-                try:
-                    self.check_video(url)
-                    valid_urls.append(url)
+                self.check_video(url)
+                valid_urls.append(url)
 
-                except Exception as e:
-                    print(self.x + Fore.RESET + f"URL: {url} is Invalid!")
 
             print(self.z + Fore.LIGHTMAGENTA_EX + f"Downloading: {len(valid_urls)} Videos...")
-
-
             for url in valid_urls:
                 self.download_video(url)
+
 
     def download_channel_user(self):
 
         user = input(f"""
-{self.z}{Fore.LIGHTMAGENTA_EX}Plese enter the URL to the User / Model / Channel Account -->:""")
+{self.z}{Fore.LIGHTMAGENTA_EX}Please enter the URL to the User / Model / Channel Account -->:""")
 
         user_object = self.client.get_user(user)
 
@@ -328,14 +336,13 @@ Do NOT seperate them with commas or anything else. Just with a new line. Should 
         for video in videos:
             url_list.append(video.url)
 
-        print(self.z + Fore.GREEN + f"Found: {len(url_list)} Videos.")
-        x = input(Fore.RESET + "Hit enter to download them all or B to go back")
+        print(f"{self.z}{Fore.GREEN}Found: {len(url_list)} Videos.")
+        x = input(f"{Fore.RESET}Hit enter to download them all or B to go back")
 
         if x == "B" or x == "b":
             self.menu()
 
         else:
-
             for url in url_list:
                 self.download_video(url)
 
@@ -344,20 +351,25 @@ Do NOT seperate them with commas or anything else. Just with a new line. Should 
         url = input(f"""
 {self.z}{Fore.LIGHTBLUE_EX}Please enter the URL of the video:""")
 
-        video = self.check_video(url)
         print(self.z + Fore.LIGHTMAGENTA_EX + "Getting metadata....")
+        self.check_video(url)
 
+        video = self.video
         title = video.title
         likes_up = video.like.up
         likes_down = video.like.down
         image_url = video.image_url
         tags = video.tags
-        author = video.author
+        tag_list = []
+
+        for tag in tags:
+            tag_list.append(tag.name)
+
+        author = video.author.name
         views = video.views
         date = video.date
         duration = video.duration
         hotspots = video.hotspots
-
         likes = f"Likes: {likes_up} | Dislikes: {likes_down}"
 
         print(f"""
@@ -365,57 +377,77 @@ Do NOT seperate them with commas or anything else. Just with a new line. Should 
 Title: {title}
 Rating: {likes}
 Image URL: {image_url}
-Tags: {tags}
+Tags: {str(tag_list).strip("[").strip("]")}
 Author: {author}
 Views: {views}
 Date: {date}
 Duration: {duration}
 Hotspots: {hotspots}
--- END --
-""")
+-- END --""")
+
+        input(f"{Fore.RESET}Hit enter to continue...")
+
+
+    def search_ext_2(self, search):
+
+        urls = []
+        for count, video in enumerate(search):
+            print(f"{count}) {video.title}")
+            urls.append(video.url)
+
+        downloads = input(
+            Fore.RESET + "Enter the number of videos you want to download. Separate by comma e.g 1,7,12-->:")
+        videos = downloads.split(",")
+
+        for number in videos:
+            base_url = "https://www.pornhub.com/"
+            additional_url = urls[int(number)]
+            url = base_url + additional_url
+            self.download_video(url)
+
+    def search_ext(self, search_query):
+
+        try:
+            search = self.client.search(search_query)
+            return search
+
+        except ConnectionError:
+            pass  # This is an issue from PornHub and not from my Application. I can not fix it anyway
+
 
     def search_videos(self):
+
 
         search_query = input(f"""
 {self.z}{Fore.RESET}Please enter your search query -->:""")
 
         print(self.z + Fore.LIGHTMAGENTA_EX + "Searching....")
+        search = self.search_ext(search_query)
 
-        search = self.client.search(search_query)
-        urls = []
+        if len(search) == 0:
+            print(f"{self.x}{Fore.LIGHTWHITE_EX}You got limited by the API! Wait a few minutes or change your IP and try again")
+            print(f"{self.z}{Fore.LIGHTWHITE_EX}Trying a new initialization to the Client Object...")
+            self.client = Client(language="en")
 
-        try:
+            try:
+                search = self.client.search(search_query)
 
-            for count, video in enumerate(search):
-                print(f"{count}) {video.title}")
-                urls.append(video.url)
+            except ConnectionError:
+                pass
 
-        except ConnectionError:
-            print("Got a connection error.  This is more a problem with PornHub, so you can ignore that. Restarting will fix it!")
+            if len(search) == 0:
+                print(f"{self.x}{Fore.LIGHTMAGENTA_EX}Failed.  Sorry, you need to wait or use a VPN.")
+                self.menu()
 
-        downloads = input(Fore.RESET + "Enter the number of videos you want to download. Separate by comma e.g 1,7,12-->:")
-        videos = downloads.split(",")
+            else:
+                self.search_ext_2(search)
 
-        self.client = Client() # Needs a new initialization, because the API won't return data otherwise. I don't know why.
-        for number in videos:
-            base_url = "https://www.pornhub.com/"
-            additional_url = urls[int(number)]
-            url = base_url + additional_url
-            self.download_video(url=url)
-
-
+        else:
+            self.search_ext_2(search)
 
 
 
 
-
-
-    def show_credits(self):
-        pass
-    def exit(self):
-
-        print(Fore.LIGHTCYAN_EX + "Have a nice day :)")
-        exit(0)
 
 
 class DownloadProgressSignal(QObject):
@@ -446,13 +478,11 @@ class Widget(QWidget):
         self.video = None
         self.ui = Ui_Widget()
         self.ui.setupUi(self)
-        self.conf = ConfigParser()
-        self.conf.read("config.ini")
         self.client = Client(language="en")
         self.download_thread = None
         self.mode = "single"
         self.threadpool = QThreadPool()
-
+        self.ui.stackedWidget.setCurrentIndex(0)
 
         self.ui.button_start.clicked.connect(self.start)
         self.ui.button_start_file.clicked.connect(self.start_file)
@@ -467,21 +497,27 @@ class Widget(QWidget):
         self.ui.button_search_tab.clicked.connect(self.do_4)
 
     def do_1(self):
-
         self.ui.stackedWidget.setCurrentIndex(2)
 
     def do_2(self):
-
         self.ui.stackedWidget.setCurrentIndex(0)
 
     def do_3(self):
-
         self.ui.stackedWidget.setCurrentIndex(1)
 
     def do_4(self):
-
         self.ui.stackedWidget.setCurrentIndex(3)
 
+    def get_mode(self):
+
+        if self.ui.radio_threading_single.isChecked():
+            self.mode = "single"
+
+        elif self.ui.radio_threading_multiple.isChecked():
+            self.mode = "multiple"
+
+        else:
+            self.mode = "single"
 
     def get_quality(self):
 
@@ -503,9 +539,6 @@ class Widget(QWidget):
     def test_video(self, url):
 
         try:
-            print(url)
-            url = url.replace("www", "de")
-            print(url)
             self.video = self.client.get(url)
             return self.video
 
@@ -518,7 +551,6 @@ class Widget(QWidget):
         video = self.test_video(url)
 
         if video != False:
-            debug(f"URL: {url}")
             self.download(video)
 
     def update_progressbar(self, pos, total):
@@ -535,38 +567,29 @@ class Widget(QWidget):
     def download(self, video):
 
         quality = self.get_quality()
-        debug(f"Quality: {quality}")
         self.get_mode()
         if quality != False:
 
             output_path = self.ui.lineedit_output.text()
-            output_path = test_path(output_path)
 
-            if output_path != False:
+            title = video.title
+            output_path = str(output_path) + str(title)
 
-                debug(f"Output path: {output_path}")
-                title = video.title
-                debug(f"Title: {title}")
-                output_path = str(output_path) + str(title)
+            try:
+                self.ui.label_search_query_progress.setText(f"Downloading: {title}")
+                if self.mode == "multiple":
 
-                try:
-                    self.ui.label_search_query_progress.setText(f"Downloading: {title}")
-                    debug("Downloading...")
                     if self.mode == "multiple":
+                        self.download_thread = DownloadThread(video, quality, output_path)
+                        self.download_thread.signals.progress.connect(self.update_progressbar)
+                        self.threadpool.start(self.download_thread)
 
-                        if self.mode == "multiple":
-                            self.download_thread = DownloadThread(video, quality, output_path)
-                            self.download_thread.signals.progress.connect(self.update_progressbar)
-                            self.threadpool.start(self.download_thread)
+                elif self.mode == "single":
 
-                    elif self.mode == "single":
+                    self.video.download(callback=self.callback, quality=quality, path=output_path)
 
-                        self.video.download(callback=self.callback, quality=quality, path=output_path)
-
-
-
-                except Exception as e:
-                    ui_popup(text=str(f"An unexpected error happened.  Exception: {e}"))
+            except Exception as e:
+                ui_popup(text=str(f"An unexpected error happened.  Exception: {e}"))
 
     def start_file(self):
 
@@ -637,17 +660,6 @@ class Widget(QWidget):
 
         else:
             ui_popup(text=str(f"The Video URL is invalid."))
-
-    def get_mode(self):
-
-        if self.ui.radio_threading_single.isChecked():
-            self.mode = "single"
-
-        elif self.ui.radio_threading_multiple.isChecked():
-            self.mode = "multiple"
-
-        else:
-            self.mode = "single"
 
     def user_channel(self):
 
