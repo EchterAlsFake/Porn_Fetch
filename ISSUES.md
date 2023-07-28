@@ -7,7 +7,7 @@ This file keeps track of all Issues / Bugs
 # 1.5
 
 - Name Error: name 'exit' is not defined
-- RecursionError: maximum recursion depth exceeded whule calling a Python object
+- RecursionError: maximum recursion depth exceeded while calling a Python object
 - CLI stops after changing the output, so It's impossible to change the output path.
 - Metadata Tags are not showing correctly in CLI
 - Author not showing correctly in CLI
