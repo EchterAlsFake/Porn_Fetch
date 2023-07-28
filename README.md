@@ -11,22 +11,25 @@
 * Downloading multiple videos at once
 * Downloading all videos from a whole Channel / User account
 * Native Dark mode
+* CLI for systems without a Graphical User Interface
 * No ADs & restrictions
 * No Login / PornHub Account needed
 
 ## Windows (X86_64)
 
- * [Porn Fetch 1.4.exe](https://drive.google.com/uc?export=download&id=1sur_U5h_j7jjwF_Cj3IaLzz1mRg1YqK6) <===========> Torrent: [1.4.torrent](https://drive.google.com/uc?export=download&id=1o2zgg40REu4V6hUKYAOHPtNF09OIjMZV) 
- * [Porn Fetch 1.3.exe](https://drive.google.com/uc?export=download&id=15pUQDXyqVGOXVMbSIcihYsuu7z6dKRan) <===========> Torrent: [1.3.torrent](https://drive.google.com/uc?export=download&id=1_G63Q_SMg-p1tXXlPP8l7wu1R4v92lQM)
- * [Porn Fetch 1.2.exe](https://drive.google.com/uc?export=download&id=156z1RNcSQSXUPSkO8sXG6U-r_wdmrB2d) <===========> Torrent: [1.2.torrent](https://drive.google.com/uc?export=download&id=1MYBZ6uzYO4pvphCa6P4iAmfUXFnGE-g_)
- * [Porn Fetch 1.1.exe](https://drive.google.com/uc?export=download&id=1Tt-siUB9siSMx4etcNvkZ0e4srbiVlr9) <===========> Torrent: [1.1.torrent](https://drive.google.com/uc?export=download&id=1wbztz8LQUj83qbUwL-0VqEql3TYzlag7)
- * [Porn Fetch 1.0.exe](https://drive.google.com/uc?export=download&id=19EUh8DgiMnZTa2lQPldIWhuOR6Y3XMiZ)  <===========> Torrent: [1.0.torrent](https://drive.google.com/uc?export=download&id=1CgZqfA6WZWFUB5LO3EnkpPVV6z8vQ6bW)
- * [LICENSE](https://drive.google.com/uc?export=download&id=1V5pgayZB9_cv7nlon55r80-hMKiAwWC2) 
+* [Porn Fetch 1.5.exe](https://drive.google.com/uc?export=download&id=1eCl1xmkMQlqN-moWsqSIcZ16oDB5kaF_) <===========> Torrent: [1.5.torrent](https://drive.google.com/uc?export=download&id=1DmRH41u8fzXj_UUg2Ngad-5C5W6I40vY)
+* [Porn Fetch 1.4.exe](https://drive.google.com/uc?export=download&id=1sur_U5h_j7jjwF_Cj3IaLzz1mRg1YqK6) <===========> Torrent: [1.4.torrent](https://drive.google.com/uc?export=download&id=1o2zgg40REu4V6hUKYAOHPtNF09OIjMZV) 
+* [Porn Fetch 1.3.exe](https://drive.google.com/uc?export=download&id=15pUQDXyqVGOXVMbSIcihYsuu7z6dKRan) <===========> Torrent: [1.3.torrent](https://drive.google.com/uc?export=download&id=1_G63Q_SMg-p1tXXlPP8l7wu1R4v92lQM)
+* [Porn Fetch 1.2.exe](https://drive.google.com/uc?export=download&id=156z1RNcSQSXUPSkO8sXG6U-r_wdmrB2d) <===========> Torrent: [1.2.torrent](https://drive.google.com/uc?export=download&id=1MYBZ6uzYO4pvphCa6P4iAmfUXFnGE-g_)
+* [Porn Fetch 1.1.exe](https://drive.google.com/uc?export=download&id=1Tt-siUB9siSMx4etcNvkZ0e4srbiVlr9) <===========> Torrent: [1.1.torrent](https://drive.google.com/uc?export=download&id=1wbztz8LQUj83qbUwL-0VqEql3TYzlag7)
+* [Porn Fetch 1.0.exe](https://drive.google.com/uc?export=download&id=19EUh8DgiMnZTa2lQPldIWhuOR6Y3XMiZ)  <===========> Torrent: [1.0.torrent](https://drive.google.com/uc?export=download&id=1CgZqfA6WZWFUB5LO3EnkpPVV6z8vQ6bW)
+* [LICENSE](https://drive.google.com/uc?export=download&id=1V5pgayZB9_cv7nlon55r80-hMKiAwWC2) 
     
 Source code can be found in the [GitHub Releases](https://github.com/EchterAlsFake/Porn_Fetch/releases)
 
 ## Linux (AppImage)
 
+* [Porn Fetch 1.5](https://drive.google.com/uc?export=download&id=1t1U_C86p-3AC7GW1HFKWwt4yaTBkEmOR) <===========> Torrent: [1.5.torrent](https://drive.google.com/uc?export=download&id=1k48LSi-2pER4fOCHagc1ArYLydkglQC_)
 * [Porn Fetch 1.4](https://drive.google.com/uc?export=download&id=1GkF0vuwxLn1jDaPQoqHdaokqSLjJIXIp) <===========> Torrent: [1.4.torrent](https://drive.google.com/uc?export=download&id=1nm2_NLIUuzBTlzXj6Z63Kdlr3AS9nroi)
 * [Porn Fetch 1.3](https://drive.google.com/uc?export=download&id=1fmKO3HZbddhx1NtKRw2Pexro0jy5t7HP) <===========> Torrent: [1.3.torrent](https://drive.google.com/uc?export=download&id=1jLfg-XPZpkI3SLXUd3hRGJpraDb9KZKT)
 * [Porn Fetch 1.2](https://drive.google.com/uc?export=download&id=1Z_S1F74y8lF9crM1aWus3MiO8Yqt92YQ) <===========> Torrent: [1.2.torrent](https://drive.google.com/uc?export=download&id=1zWLKmbiLocv7UOWHJEWf1Y4-RdJljI1J)
@@ -38,11 +41,12 @@ Source code can be found in the [GitHub Releases](https://github.com/EchterAlsFa
 
 # Supported Platforms
 
-* Windows (Compiled versions available) (Tested on 11)
-* Linux (Compiled versions available) (Tested on Arch, Kali, Ubuntu)
-* macOS (Needs to be built from source -- I can't compile it, because I don't have a macOS device -- )
-* Android (Can be built from source, but it's tricky.  -- Working on it -- )
-* iOS (Would be possible in theory, but practical No.  You would need to Set up a Linux Distro via iSH and connect to a GUI via VNC, then setup X Window System and launch the GUI with Python, without compiling it.)
+* Windows : Native Support for Windows 10 / 11 for X64 / X86 Systems
+* Linux   : Native Support on all X11 / Wayland systems with Qt Support. Just run the AppImage
+* macOS   : Needs to either be built from source, or run it natively with Python3 from source code
+* Android : Can be run with either VNC for the GUI or within a terminal emulator with Python
+* iOS     : Same as Android.  You can install iSH from the App Store and install Python3 on it. 
+* ARM devices: For all arm devices, the compiled versions won't work. You need to either run it natively or compile it by yourself.
 
 # Building from Source
 
