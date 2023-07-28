@@ -16,10 +16,36 @@ Version: 1.5
 2023
 """
 
+__author__ = "EchterAlsFake : Johannes Habel"
+__version__ = "1.5"
+__source__ = "https://github.com/EchterAlsFake/Porn_Fetch"
+__license__ = "LGPLv3"
+
+credits = f"""
+
+Developer / Maintainer : EchterAlsFake | Johannes Habel
+Official contact E-Mail: EchterAlsFake@proton.me
+
+Credits:
+
+API: PHUB by Egsagon.  This project would not be possible without it.
+Author: EchterAlsFake
+License: LGPLv3
+
+Plugins: Tabnine, Material Theme Icons
+IDE: PyCharm Professional
+Libraries: colorama, tqdm, PySide6, PHUB
+
+Graphical User Interface was created with Qt - PySide6
+Version: {__version__}
+"""
+
+
 import sys
 import threading
 import os
 import argparse
+import webbrowser
 
 from PySide6 import QtCore
 from configparser import ConfigParser
@@ -63,13 +89,14 @@ class CLI():
         self.menu()
 
     def callback(self, **kwargs):
+        pbar = None
         def _update_progress(pos, total):
-            if self.pbar is None:
-                self.pbar = tqdm(total=total, dynamic_ncols=True)
-            self.pbar.update(pos - self.pbar.n)
+
+            pbar = tqdm(total=total, dynamic_ncols=True)
+            pbar.update(pos - pbar.n)
             if pos == total:
-                self.pbar.close()
-                self.pbar = None
+                pbar.close()
+                pbar = None
 
         return _update_progress
 
@@ -109,15 +136,15 @@ class CLI():
 {Fore.RESET}|----------------------|
 
 
-1) Download a single Video
-2) Download videos from a file
-3) Download all videos from a User / Channel
-4) Get metadata from Videos
-5) Search for videos and download them
-6) Show credits
-7) Exit
-
-""")
+{Fore.LIGHTCYAN_EX}1) Download a single Video
+{Fore.LIGHTMAGENTA_EX}2) Download videos from a file
+{Fore.LIGHTYELLOW_EX}3) Download all videos from a User / Channel
+{Fore.LIGHTBLUE_EX}4) Get metadata from Videos
+{Fore.LIGHTMAGENTA_EX}5) Search for videos and download them
+{Fore.LIGHTWHITE_EX}6) Show credits
+{Fore.LIGHTWHITE_EX}7) Submit Issue / Bug / Security vulnerabilities / Typos
+{Fore.LIGHTRED_EX}8) Exit
+-------------------->: """)
 
 
         if options == "99":
@@ -146,14 +173,15 @@ class CLI():
         elif options == "5":
             self.search_videos()
 
-
-
-
         elif options == "6":
-            pass
+            print(Fore.RESET + credits)
 
         elif options == "7":
+            webbrowser.open("https://github.com/EchterAlsFake/Porn_Fetch/issues")
+
+        elif options == "8":
             exit(0)
+
 
 
 
@@ -368,12 +396,11 @@ Hotspots: {hotspots}
         downloads = input(Fore.RESET + "Enter the number of videos you want to download. Separate by comma e.g 1,7,12-->:")
         videos = downloads.split(",")
 
+        self.client = Client() # Needs a new initialization, because the API won't return data otherwise. I don't know why.
         for number in videos:
             base_url = "https://www.pornhub.com/"
             additional_url = urls[int(number)]
             url = base_url + additional_url
-
-            self.client = Client()
             self.download_video(url=url)
 
 
@@ -680,13 +707,26 @@ class Widget(QWidget):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--cli", help="CLI Terminal Version. Intended for advanced users or systems without a Graphical Environment", action="store_true")
+    parser.add_argument("-v", "--version", help="Shows version information", action="store_true")
+    parser.add_argument("-s", "--source", help="Shows the Source of this project", action="store_true")
+    parser.add_argument("-l", "--license", help="Shows License information", action="store_true")
     args = parser.parse_args()
 
     if args.cli:
         CLI()
 
+    elif args.version:
+        print(__version__)
 
-    app = QApplication(sys.argv)
-    widget = Widget()
-    widget.show()
-    sys.exit(app.exec())
+    elif args.source:
+        print(__source__)
+
+    elif args.license:
+        print(__license__)
+
+    else:
+
+        app = QApplication(sys.argv)
+        widget = Widget()
+        widget.show()
+        sys.exit(app.exec())
