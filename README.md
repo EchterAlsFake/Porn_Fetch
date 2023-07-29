@@ -2,6 +2,11 @@
 
 ### The only free and Open-Source GUI Downloader without restrictions or ADs
 
+# Important:
+
+I can not seed the .torrent files, until next week Saturday evening. 
+<br>I am on vacation and the WiFi here is at 200 KB/s speed lmao.
+<br> So please use the Google Drive files until Saturday, Thanks :) 
 
 # Features:
 
