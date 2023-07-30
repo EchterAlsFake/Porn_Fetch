@@ -51,6 +51,15 @@ Source code can be found in the [GitHub Releases](https://github.com/EchterAlsFa
 
 Source code can be found in the [GitHub Releases](https://github.com/EchterAlsFake/Porn_Fetch/releases)
 
+# Data Collection / Privacy
+
+Porn Fetch doesn't collect ANY data by default. <br>
+
+However, you can support the development by allowing Sentry to automatically collect <br>
+error messages and display them to me, So that I can fix the issues immediately. <br>
+Sentry ONLY collects the full Python Traceback and the Values of variables.<br>
+Sentry doesn't collect any System information or anything user specific, which would identify you!
+
 # Supported Platforms
 
 * Windows : Native Support for Windows 10 / 11 for X64 / X86 Systems
