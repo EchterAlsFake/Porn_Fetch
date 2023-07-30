@@ -15,6 +15,7 @@ I can not seed the .torrent files, until next week Saturday evening.
 * Fetching Metadata from Videos
 * Downloading multiple videos at once
 * Downloading all videos from a whole Channel / User account
+* Search for Windows and download them directly in the APP
 * Native Dark mode
 * CLI for systems without a Graphical User Interface
 * No ADs & restrictions
