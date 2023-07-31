@@ -1,16 +1,15 @@
 __author__ = "EchterAlsFake : Johannes Habel"
-__version__ = "1.6"
+__version__ = "1.7"
 __source__ = "https://github.com/EchterAlsFake/Porn_Fetch"
 __license__ = "LGPLv3"
 
-import time
+
 
 """
 INFORMATION
 
 This program comes AS IS without any warranty of any kind.
 You are free to copy, modify, redistribute, and/or sell it.
-
 
 The Source Code can be found on GitHub : https://github.com/EchterAlsFake/Porn_Fetch
 
@@ -41,28 +40,57 @@ import threading
 import os
 import argparse
 import webbrowser
-import logging
-from datetime import datetime
+import socket
+import time
+
 
 from PySide6 import QtCore
 from colorama import *
 from tqdm import tqdm
-from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem
+from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QDialogButtonBox, QVBoxLayout, QLabel, QScrollArea, QMainWindow, QSizePolicy
 from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject
 from ui_form import Ui_Widget
+from license_agreement import Ui_Widget_License
 from phub import Client, Quality
+import sentry_sdk
 
-log_file = ".porn_fetch_LOG"
+sentry_cli = False
 
-def logger_debug(function, message):
-    date = datetime.now()
-    logger = logging.getLogger(f"Date : {date} : Porn Fetch : {function}")
-    logger.debug(f"DEBUG: {message}")
+def enable_error_handling():
+    sentry_sdk.init(
 
-def logger_error(function, message):
-    date = datetime.now()
-    logger = logging.getLogger(f"Date : {date} : Porn Fetch : {function}")
-    logger.error(f"DEBUG: {message}")
+        dsn="https://a2a2b3b26356d92d2797c579a4d6b7df@o4505620073480192.ingest.sentry.io/4505620077805568",
+
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for performance monitoring.
+        # We recommend adjusting this value in production.
+        traces_sample_rate=1.0
+
+    )
+    sentry_cli = True
+
+def internet_test():
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    host = "https://www.pornhub.com"
+    port = 443
+    server_addr = (host, port)
+    
+    try:
+        s.connect(server_addr)
+        return True
+
+    except ConnectionResetError:
+        print(f"{Fore.LIGHTRED_EX}[~]{Fore.RESET}Connection to PornHub was reset. You are probably behind a firewall that blocks your request....")
+        return False
+
+    except ConnectionRefusedError:
+        print(f"{Fore.LIGHTRED_EX}[~]{Fore.RESET}PornHub refused the connection. This can have several issues. Try if you can reach it within your browser and try again.")
+        return False
+
+    except ConnectionError:
+        print(f"{Fore.LIGHTRED_EX}[~]{Fore.RESET}Could not connect to PornHub. Please make sure you are using a stable / secure internet connection.")
+        return False
 
 def ui_popup(text):
     qmsg_box = QMessageBox()
@@ -76,6 +104,39 @@ def clear():
 def check_path(path):
     return True if os.path.exists(path) else False
 
+def ask_for_sentry_cli():
+
+    _ = input("""
+
+Do you allow Sentry.io to collect errors within this program?
+
+The following data are obtained:
+
+- Error message (Python Traceback)
+- Variables and their values
+- In which class / function / line the error occurred.
+
+
+No sensitive data / system data or user specific data that would lead to an identification is collected.
+
+1) Yes I support the developer and allow the automatic data collection through Sentry.
+2) No I don't want Sentry to collect errors.
+""")
+
+    if _ == "1":
+        try:
+            enable_error_handling()
+            print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTBLUE_EX}Enabled")
+
+        finally:
+            pass
+
+    else:
+        print(f"{Fore.LIGHTRED_EX}[!]{Fore.RESET}Disabled")
+
+
+
+
 
 class CLI():
 
@@ -88,8 +149,13 @@ class CLI():
         self.client = Client(language="en")
         self.video = None
         self.pbar = None
-        while True:
-            self.menu()
+        ask_for_sentry_cli()
+
+
+        if internet_test():
+            while True:
+                self.menu()
+
 
     def callback(self, **kwargs):
 
@@ -109,8 +175,27 @@ class CLI():
             self.video = self.client.get(url)
             return True
 
+        except IndexError:
+
+            print(f"{self.x}{Fore.RESET}Video object returned no data. You got probably limited by PornHub. ")
+            print(f"{self.z}{Fore.LIGHTCYAN_EX}Trying automatic reconnect...")
+
+            self.client = Client("en")
+            try:
+                self.check_video(url)
+
+            except IndexError:
+                print(f"{self.x}{Fore.RESET}Didn't work.  Waiting 60 seconds before next attempt...")
+                time.sleep(60)
+                self.check_video(url)
+
         except Exception as e:
-            self.exception(e)
+            print(f"{self.x}{Fore.RESET}Unhandled Error: {e}")
+
+            if sentry_cli:
+                sentry_sdk.capture_exception(e)
+
+
 
     def exception(self, e):
         print(f"{self.x}Unhandled Exception: {e}")
@@ -466,10 +551,27 @@ class DownloadThread(QRunnable):
     def run(self):
         self.video.download(callback=self.callback, quality=self.quality, path=self.output_path)
 
+
+class LicenseAgreement(QMainWindow):
+    def __init__(self):
+        super(LicenseAgreement, self).__init__()
+
+        self.ui = Ui_Widget_License()
+        self.ui.setupUi(self)
+
+        self.ui.button
+
+
+
+
+
+
+
 class Widget(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.sentry_data_collection()
         self.video = None
         self.ui = Ui_Widget()
         self.ui.setupUi(self)
@@ -513,6 +615,21 @@ class Widget(QWidget):
 
         else:
             self.mode = "single"
+
+    def sentry_data_collection(self):
+
+        dlg = QMessageBox(self)
+        dlg.setWindowTitle("I have a question!")
+        dlg.setText("Do you enable automatic error collection by Sentry.io?  This won't include personal information or system information. It will only capture the raw error message, and the values in the affected variables.")
+        dlg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        dlg.setIcon(QMessageBox.Question)
+        button = dlg.exec_()
+
+        if button == QMessageBox.Yes:
+            enable_error_handling()
+        else:
+            pass
+
 
     def get_quality(self):
 
@@ -732,7 +849,14 @@ if __name__ == "__main__":
         print(__license__)
 
     else:
+
+
+
+
         app = QApplication(sys.argv)
+        license = Ui_Widget_License()
+        license.show()
         widget = Widget()
         widget.show()
         sys.exit(app.exec())
+

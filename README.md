@@ -114,8 +114,34 @@ External Support:
 #### And of course the external libraries, that I used within my code:
 * [colorama](https://github.com/tartley/colorama)
 * [tqdm](https://github.com/tqdm/tqdm)
+* [sentry sdk](https://github.com/getsentry/sentry-python) Used in 1.7+ 
 
 
 # License:
 
-[LGPLv3](https://www.gnu.org/licenses/lgpl-3.0.en.html)
+So and here we have a "little" problem. I started this project, when I was 14 years old.
+I licensed it under Creative Commons, but this is of course NOT the right license to be used for Open-Source Software development.
+I did some research and I realized that I need to use either LGPL or GPL license for an Open-Source development with Qt for Python.
+I decided to use the LGPLv3 License. I don't know why, because it was a big mistake. The LGPLv3 License is used by libraries and not
+by a full standalone Application. So I need to change my License to GPL. I talked to ChatGPT about it, because I don't have
+money for a Lawyer and I guess ChatGPT is a bit smarter than some users on reddit. We figured out, that the external libraries that I am using
+within my Project are compatible with the GPL License. 
+
+I am using the following external libraries:
+
+* [tqdm](https://github.com/tqdm/tqdm)
+* [colorama](https://github.com/tartley/colorama)
+* [sentry_sdk](https://github.com/getsentry/sentry-python)
+* [phub](https://github.com/Egsagon/PHUB/blob/master/LICENSE)
+
+tqdm uses the  MPL (Mozilla Public License) 2.0 and the MIT License <br>
+colorama uses the BSD 3 license <br>
+sentry sdk uses the MIT License <br>
+phub uses the GPL license<br>
+
+I can just say: Sorry. <br>
+We all were young and dumb, but I don't delete my mistakes. I stay behind them, and I want to be transparent to everyone.
+
+
+LICENSE: [GPL 3.0](https://www.gnu.org/licenses/gpl-3.0.en.html)
+
