@@ -2,6 +2,11 @@
 
 ### The only free and Open-Source GUI Downloader without restrictions or ADs
 
+# Important:
+
+I can not seed the .torrent files, until next week Saturday evening. 
+<br>I am on vacation and the WiFi here is at 200 KB/s speed lmao.
+<br> So please use the Google Drive files until Saturday, Thanks :) 
 
 # Features:
 
@@ -10,6 +15,7 @@
 * Fetching Metadata from Videos
 * Downloading multiple videos at once
 * Downloading all videos from a whole Channel / User account
+* Search for Videos and download them directly in the APP
 * Native Dark mode
 * CLI for systems without a Graphical User Interface
 * No ADs & restrictions
@@ -44,6 +50,15 @@ Source code can be found in the [GitHub Releases](https://github.com/EchterAlsFa
 * [LICENSE](https://drive.google.com/uc?export=download&id=1V5pgayZB9_cv7nlon55r80-hMKiAwWC2)
 
 Source code can be found in the [GitHub Releases](https://github.com/EchterAlsFake/Porn_Fetch/releases)
+
+# Data Collection / Privacy
+
+Porn Fetch doesn't collect ANY data by default. <br>
+
+However, you can support the development by allowing Sentry to automatically collect <br>
+error messages and display them to me, So that I can fix the issues immediately. <br>
+Sentry ONLY collects the full Python Traceback and the Values of variables.<br>
+Sentry doesn't collect any System information or anything user specific, which would identify you!
 
 # Supported Platforms
 
