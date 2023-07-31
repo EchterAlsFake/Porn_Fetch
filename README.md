@@ -1,12 +1,23 @@
 # Porn Fetch - A PornHub Downloader 4 Free & Everyone
 
-### The only free and Open-Source GUI Downloader without restrictions or ADs
+# Table of Contents
 
-# Important:
+- [What is Porn Fetch?](#what-is-porn-fetch)<br>
+- [Features](#features)
+- [Installation](#installation)
+- [Data collection and Privacy](#data-collection--privacy)
+- [Supported Platforms](#supported-platforms)
+- [Building from source](#building-from-source)
+- [Useful Information](#useful-information)
+- [Lgeal Rights](#lgeal-rights)
+- [Credits](#credits)
+- [License](#license)
 
-I can not seed the .torrent files, until next week Saturday evening. 
-<br>I am on vacation and the WiFi here is at 200 KB/s speed lmao.
-<br> So please use the Google Drive files until Saturday, Thanks :) 
+# What is Porn Fetch?
+
+Porn Fetch is a program, that can download, search and interact with videos from PornHub.
+The goal is to create a free and Open-Source downloader for everyone. 
+There's no need to use shady websites or paid software in 2023.
 
 # Features:
 
@@ -25,30 +36,35 @@ I can not seed the .torrent files, until next week Saturday evening.
 * Cross Platform
 * Actively maintained
 
-## Windows (X86_64)
-
-* [Porn Fetch 1.6.exe](https://drive.google.com/uc?export=download&id=1Ok4iHIBOFlTa0hXifLql0TRy-8JwC39D) -|- Torrent: [1.6.torrent](https://drive.google.com/uc?export=download&id=1BPjfmqEiqmEdAXmsRV2KUktS6GOc8_DK)
-* [LICENSE](https://drive.google.com/uc?export=download&id=1V5pgayZB9_cv7nlon55r80-hMKiAwWC2) 
+# Installation
 
 Source code can be found in the [GitHub Releases](https://github.com/EchterAlsFake/Porn_Fetch/releases)
 <br>Older versions: See [Downloads](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/DOWNLOADS.md)
 
-## Linux (AppImage)
+
+### Windows:
+
+
+* [Porn Fetch 1.6.exe](https://drive.google.com/uc?export=download&id=1Ok4iHIBOFlTa0hXifLql0TRy-8JwC39D) -|- Torrent: [1.6.torrent](https://drive.google.com/uc?export=download&id=1BPjfmqEiqmEdAXmsRV2KUktS6GOc8_DK)
+* [LICENSE](https://drive.google.com/uc?export=download&id=1V5pgayZB9_cv7nlon55r80-hMKiAwWC2) 
+
+### Linux (AppImage)
 
 * [Porn Fetch 1.6](https://drive.google.com/uc?export=download&id=1JMqEIhdLwHtB2c34qZpVDUv1fkIsGE3l) -|- Torrent: [1.6.torrent](https://drive.google.com/uc?export=download&id=1_taHgEy74raRPxKNpNLcm9h4nAtEKDSn)
 * [LICENSE](https://drive.google.com/uc?export=download&id=1V5pgayZB9_cv7nlon55r80-hMKiAwWC2)
 
-<br>Older versions: See [Downloads](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/DOWNLOADS.md)<br>
-Source code can be found in the [GitHub Releases](https://github.com/EchterAlsFake/Porn_Fetch/releases)
-
 # Data Collection / Privacy
 
-Porn Fetch doesn't collect ANY data by default. <br>
+- No Data collection by default!
 
-However, you can support the development by allowing Sentry to automatically collect <br>
-error messages and display them to me, So that I can fix the issues immediately. <br>
-Sentry ONLY collects the full Python Traceback and the Values of variables.<br>
-Sentry doesn't collect any System information or anything user specific, which would identify you!
+If you enable the option to allow Sentry to collect errors, then the following is collected
+
+- Error messages (The full Python Traceback)
+- Variables and the values in it
+- The lines of code, in which the error happened
+
+> Sentry will NOT collect any user specific information or system information!
+
 
 # Supported Platforms
 
@@ -72,20 +88,15 @@ This Process does NOT require root access!
 mkdir build output && cd build && git clone https://github.com/EchterAlsFake/Porn_Fetch && cd Porn_Fetch && python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt && pyinstaller -F widget.py && cd dist && mv widget Porn_Fetch && chmod +x Porn_Fetch && mv Porn_Fetch ../../../output/ && echo "Porn Fetch is now in the output directory!" 
 
 ````
-# Current Issues
-Please refer to [Porn Fetch Issues Documentation](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/ISSUES.md)
 
-# Contribution
-Please refer to [How to contribute](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/CONTRIBUTING.md)
+## Useful Information
 
-# ROADMAP
-Please refer to [Roadmap](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/ROADMAP.md)
 
-# Security
-Please refer to [Security](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/SECURITY.md)
-
-# Changelog
-Please refer to [Changelog](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/CHANGELOG.md)
+- [Porn Fetch Issues Documentation](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/ISSUES.md)
+- [How to contribute](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/CONTRIBUTING.md)
+- [Roadmap](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/ROADMAP.md)
+- [Security](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/SECURITY.md)
+- [Changelog](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/CHANGELOG.md)
 
 # Legal Rights
 
