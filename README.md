@@ -158,5 +158,5 @@ I can just say: Sorry. <br>
 We all were young and dumb, but I don't delete my mistakes. I stay behind them, and I want to be transparent to everyone.
 
 
-LICENSE: [GPL 3.0](https://www.gnu.org/licenses/gpl-3.0.en.html)
+LICENSE: [GPL 3](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
