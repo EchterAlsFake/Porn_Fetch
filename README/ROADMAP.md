@@ -15,8 +15,8 @@
 - [] Create a Discord Bot with some of the functionality (proprietary)
 - [] Translation into other languages
 - [] Transfer the APP Development to Mojo, when it's publicly available
-- [] Support for Android / Termux
-- [] Installation script for Termux
+- [x] Support for Android / Termux
+- [x] Installation script for Termux
 - [] Support for iOS / iSH
 - [] Installation script for iSH
 - [] Create a License Agreement (I know nobody cares, but it makes the app more professional)
