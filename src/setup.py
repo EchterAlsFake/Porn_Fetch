@@ -2,7 +2,6 @@ import os
 import socket
 from colorama import *
 import sentry_sdk
-from PySide6.QtWidgets import QMessageBox
 
 def enable_error_handling():
     sentry_sdk.init(
@@ -89,11 +88,6 @@ def internet_test():
         print(
             f"{Fore.LIGHTRED_EX}[~]{Fore.RESET}Could not connect to PornHub. Please make sure you are using a stable / secure internet connection.")
         return False
-
-def ui_popup(text):
-    qmsg_box = QMessageBox()
-    qmsg_box.setText(str(text))
-    qmsg_box.exec()
 
 def clear():
     os.system("cls")

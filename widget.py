@@ -47,11 +47,15 @@ from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetIte
 from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject
 from src.license_agreement import Ui_Widget_License
 from phub import Client, Quality
-from colorama import *
 from src.ui_main_widget import Ui_Widget
-from src.setup import ui_popup
 from src.setup import enable_error_handling
 from src.cli import CLI
+
+def ui_popup(text):
+    qmsg_box = QMessageBox()
+    qmsg_box.setText(str(text))
+    qmsg_box.exec()
+
 
 class DownloadProgressSignal(QObject):
     progress = Signal(int, int)
