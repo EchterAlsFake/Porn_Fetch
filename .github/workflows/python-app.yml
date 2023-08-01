@@ -34,3 +34,6 @@ jobs:
     - name: Build with Pyinstaller
       run: |
         pyinstaller -F widget.py && cd dist && chmod +x widget && xvfb-run ./widget --version
+    - name: Build CLI (Termux Test)
+      run: | 
+        cd .. && cd src && pyinstaller -F cli.py && cd dist && chmod +x cli
