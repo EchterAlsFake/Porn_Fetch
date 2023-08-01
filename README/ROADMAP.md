@@ -27,7 +27,6 @@ Automatic compile script > Create License Agreement >
 <br> Native Support for macOS > Documentation >  UI Redesign with Qt Design Studio > Let user Login + 
 <br> Start page > Website > Mojo
 
+# Automatic compile script > Create License Agreement
 
-# Currently working on: Debugging - Stability - Exception Handling
-
-## Next release 1.7 will include this.
+# In Version 1.8
