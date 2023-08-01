@@ -23,8 +23,7 @@
 
 Priority:
 
-Support for Termux > Installation Script for Termux > 
-<br> Support for iSH > Installation Script for iSH > Automatic compile script > Create License Agreement >
+Automatic compile script > Create License Agreement >
 <br> Native Support for macOS > Documentation >  UI Redesign with Qt Design Studio > Let user Login + 
 <br> Start page > Website > Mojo
 
