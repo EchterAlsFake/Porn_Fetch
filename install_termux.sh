@@ -15,6 +15,6 @@ cd src
 pip install -r requirements_termux.txt
 pyinstaller -F cli.py
 cd dist
-mv cli.py Porn_Fetch
+mv cli Porn_Fetch
 chmod +x Porn_Fetch
-echo "Porn Fetch is now in the dist directory. Run it with ./Porn_Fetch"
+echo "Porn Fetch is now in the dist directory (Porn_Fetch/src/dist/) Run it with ./Porn_Fetch"

@@ -3,3 +3,4 @@ phub
 sentry-sdk
 colorama
 pyinstaller
+bs4
