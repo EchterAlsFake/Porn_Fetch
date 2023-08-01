@@ -5,11 +5,13 @@ import threading
 import sentry_sdk
 from colorama import *
 from phub import *
-from src.setup import internet_test
 from tqdm import tqdm
-from src.setup import ask_for_sentry_cli
-from src.setup import clear
-from src.setup import check_path
+try:
+    from src.setup import internet_test, ask_for_sentry_cli, clear, check_path
+
+except ImportError:
+    from setup import internet_test, ask_for_sentry_cli, clear, check_path
+
 __license__ = "LGPL 3"
 credits_lol = f"""
 Porn Fetch is created and maintained by EchterAlsFake | Johannes Habel.
@@ -422,4 +424,10 @@ Hotspots: {hotspots}
         else:
             self.search_ext_2(search)
 
+if __name__ == "__main__":
+    try:
+        CLI()
+
+    except KeyboardInterrupt:
+        print("Bye :)")
 

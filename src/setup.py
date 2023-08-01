@@ -3,6 +3,7 @@ import socket
 from colorama import *
 import sentry_sdk
 from PySide6.QtWidgets import QMessageBox
+
 def enable_error_handling():
     sentry_sdk.init(
 
@@ -66,7 +67,7 @@ agb = false
 
 def internet_test():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    host = "https://www.pornhub.com"
+    host = "pornhub.com"
     port = 443
     server_addr = (host, port)
 

@@ -4,8 +4,8 @@
 ## To do list:
 
 
-- [] Debugging and Logging
-- [] Better stability and automatic exception handling
+- [x] Debugging and Logging
+- [x] Better stability and automatic exception handling
 - [] Native support for macOS
 - [] Let the User login with his PornHub Account to give better search results
 - [] Provide a PornHub start page, like you would see on the Website and let the User download videos based on his algorithm
@@ -26,7 +26,7 @@
 
 Priority:
 
-Debugging > Stability > Exception Handling > Support for Termux > Installation Script for Termux > 
+Support for Termux > Installation Script for Termux > 
 <br> Support for iSH > Installation Script for iSH > Automatic compile script > Create License Agreement >
 <br> Native Support for macOS > Documentation >  UI Redesign with Qt Design Studio > Let user Login + 
 <br> Start page > Website > Mojo
