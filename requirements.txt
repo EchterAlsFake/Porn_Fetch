@@ -4,4 +4,4 @@ colorama
 pyinstaller
 bs4
 tqdm
-sentry-python
+sentry-sdk
