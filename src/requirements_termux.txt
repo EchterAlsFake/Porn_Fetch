@@ -2,3 +2,4 @@ tqdm
 phub
 sentry-sdk
 colorama
+pyinstaller

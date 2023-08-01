@@ -12,6 +12,7 @@ apt-get install python3 python-pip git wget
 git clone https://github.com/EchterAlsFake/Porn_Fetch
 cd Porn_Fetch
 cd src
+pip install -r requirements_termux.txt
 pyinstaller -F cli.py
 cd dist
 mv cli.py Porn_Fetch
