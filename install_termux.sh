@@ -8,7 +8,7 @@ sleep 2
 apt-get update
 echo "NOTE: If you get asked some questions, just press N and continue"
 apt-get full-upgrade -y
-apt-get install python3 python-pip git wget
+apt-get install python3 python-pip git wget ldd binutils
 git clone https://github.com/EchterAlsFake/Porn_Fetch
 cd Porn_Fetch
 cd src
