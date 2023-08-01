@@ -8,8 +8,11 @@
 - [Data collection and Privacy](#data-collection--privacy)
 - [Supported platforms](#supported-platforms)
 - [Building from source](#building-from-source)
+  - [Arch Linux](#arch-linux)
+  - [Termux - Android](#termux)
+  - [Windows](#windows)
 - [Useful information](#useful-information)
-- [Legal rights](#lgeal-rights)
+- [Legal rights](#legal-rights)
 - [Credits](#credits)
 - [License](#license)
 
@@ -76,7 +79,7 @@ If you enable the option to allow Sentry to collect errors, then the following i
 * ARM devices: Need to be natively run with Python
 # Building from Source
 
-### Arch Linux:
+## Arch Linux:
 
 ``` 
 sudo pacman -S python-virtualenv
@@ -99,6 +102,30 @@ pyinstaller -F widget.py && cd dist && mv widget Porn_Fetch && chmod +x Porn_Fet
 ```
 $ Porn_Fetch
 ```
+
+## Termux:
+
+Termux NEEDS to be installed from the F-Droid store and NOT the Android Play Store!
+The following script will compile the CLI version for Android. This can take up to 10 minutes!
+```
+apt-get install wget
+```
+```
+wget -qO- https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/install_termux.sh | bash
+```
+## Windows:
+
+Install Python 3.11 and Git
+```
+git clone https://github.com/EchterAlsFake/Porn_Fetch
+```
+```
+cd Porn_Fetch && pip install -r requirements.txt
+```
+```
+pyinstaller -F widget.py
+```
+### .exe is now in the dist folder
 
 
 
