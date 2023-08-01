@@ -559,8 +559,6 @@ class LicenseAgreement(QMainWindow):
         self.ui = Ui_Widget_License()
         self.ui.setupUi(self)
 
-        self.ui.button
-
 
 
 

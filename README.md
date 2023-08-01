@@ -6,39 +6,39 @@
 - [Features](#features)
 - [Installation](#installation)
 - [Data collection and Privacy](#data-collection--privacy)
-- [Supported Platforms](#supported-platforms)
+- [Supported platforms](#supported-platforms)
 - [Building from source](#building-from-source)
-- [Useful Information](#useful-information)
-- [Lgeal Rights](#lgeal-rights)
+- [Useful information](#useful-information)
+- [Legal rights](#lgeal-rights)
 - [Credits](#credits)
 - [License](#license)
 
 # What is Porn Fetch?
 
 Porn Fetch is a program, that can download, search and interact with videos from PornHub.
-The goal is to create a free and Open-Source downloader for everyone. 
+The goal is to create a free and open-source downloader for everyone. 
 There's no need to use shady websites or paid software in 2023.
 
 # Features:
 
 * Downloading directly from PornHub itself
-* Downloading with Max. quality
-* Fetching Metadata from Videos
+* Downloading with selectable quality
+* Fetching metadata from Videos
 * Downloading multiple videos at once
-* Downloading all videos from a whole Channel / User account
-* Search for Videos and download them directly in the APP
-* Native Dark mode
-* CLI for systems without a Graphical User Interface
+* Downloading all videos from a whole Channel / User / Model account
+* Search for videos and download them directly in the application
+* Native dark mode
+* CLI for systems without a graphical user interface
 * No ADs & restrictions
-* No Login / PornHub Account needed
-* No Data tracking
+* No login / PornHub account needed
+* No data tracking
 * Open-Source
-* Cross Platform
+* Cross platform
 * Actively maintained
 
 # Installation
 
-Source code can be found in the [GitHub Releases](https://github.com/EchterAlsFake/Porn_Fetch/releases)
+Source code can be found in the [GitHub releases](https://github.com/EchterAlsFake/Porn_Fetch/releases)
 <br>Older versions: See [Downloads](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/DOWNLOADS.md)
 
 
@@ -55,11 +55,11 @@ Source code can be found in the [GitHub Releases](https://github.com/EchterAlsFa
 
 # Data Collection / Privacy
 
-- No Data collection by default!
+- No data collection by default!
 
 If you enable the option to allow Sentry to collect errors, then the following is collected
 
-- Error messages (The full Python Traceback)
+- Error messages (The full Python traceback)
 - Variables and the values in it
 - The lines of code, in which the error happened
 
@@ -68,26 +68,39 @@ If you enable the option to allow Sentry to collect errors, then the following i
 
 # Supported Platforms
 
-* Windows : Native Support for Windows 10 / 11 for X64 / X86 Systems
-* Linux   : Native Support on all X11 / Wayland systems with Qt Support. Just run the AppImage
-* macOS   : Needs to either be built from source, or run it natively with Python3 from source code
-* Android : Can be run with either VNC for the GUI or within a terminal emulator with Python
-* iOS     : Same as Android.  You can install iSH from the App Store and install Python3 on it. 
-* ARM devices: For all arm devices, the compiled versions won't work. You need to either run it natively or compile it by yourself.
-
+* Windows : Windows 7, 8, 8.1, 9, 10, 11
+* Linux   : X11 / Wayland - X64 
+* macOS   : Needs to be built from source or run it natively with python
+* Android : Can be run with a Linux emulator. (A script for it is in development)
+* iOS     : Can be run with iSH  (A script for it is in development) 
+* ARM devices: Need to be natively run with Python
 # Building from Source
 
-Note, this is for advanced users and is NOT needed for the average guy out there...
+### Arch Linux:
 
-Make sure you are using a Linux Environment and have the following dependencies installed: git python3 python3-pip
-<br>Ubuntu Users also need to have:  python3-venv   installed.
-
-
-This Process does NOT require root access!
+``` 
+sudo pacman -S python-virtualenv
 ```
-mkdir build output && cd build && git clone https://github.com/EchterAlsFake/Porn_Fetch && cd Porn_Fetch && python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt && pyinstaller -F widget.py && cd dist && mv widget Porn_Fetch && chmod +x Porn_Fetch && mv Porn_Fetch ../../../output/ && echo "Porn Fetch is now in the output directory!" 
+```
+mkdir build
+```
+```
+cd build && git clone https://github.com/EchterAlsFake/Porn_Fetch && cd Porn_Fetch
+```
+```
+python3 -m venv venv && source venv/bin/activate
+```
+```
+pip install -r requirements.txt
+```
+```
+pyinstaller -F widget.py && cd dist && mv widget Porn_Fetch && chmod +x Porn_Fetch && sudo mv Porn_Fetch /usr/bin/
+```
+```
+$ Porn_Fetch
+```
 
-````
+
 
 ## Useful Information
 
@@ -100,26 +113,26 @@ mkdir build output && cd build && git clone https://github.com/EchterAlsFake/Por
 
 # Legal Rights
 
-PornHub prohibits downloading videos for unregistered users. <br>
-PornHub prohibits scraping content on their website
+> ! PornHub PROHIBITS downloading videos for unregistered users. <br>
+> ! PornHub PROHIBITS scraping content on their website
 
 So what do we learn from this?  This tool is probably NOT permitted by PornHub.
-<br>I am just the developer. Nobody will get you in jail, because you downloaded a video from PornHub, but
+I am just the developer. Nobody will get you in jail, because you downloaded a video from PornHub, but
 consider using a VPN to be safe.
 
 # Credits
 
-
-####  A BIG thanks to [Egasgon](https://github.com/Egsagon), who created the [PHUB](https://github.com/Egsagon/PHUB) API, which is the API I am using. Without his project, I would not be able to make this program.
-####  Thanks to ChatGPT for helping me with the Threading, Signal and Slots stuff.
-####  Thanks to the Qt Company for giving people like me the opportunity to use some really nice developing Tools like Qt Creator / Designer for free Open-Source developing.
-####  <br>I really appreciate that!
-
-#### And of course the external libraries, that I used within my code:
+### Project API : [PHUB](https://github.com/Egsagon/PHUB)
+### GUI : PySide6 - [Qt](https://qt.io) for Python
+### External libraries:
 * [colorama](https://github.com/tartley/colorama)
 * [tqdm](https://github.com/tqdm/tqdm)
+* [phub](https://github.com/Egsagon/PHUB)
 * [sentry sdk](https://github.com/getsentry/sentry-python) Used in 1.7+ 
 
+#### Contributors:
+
+(Contribute to the project, to have your name listed here :D)
 
 # License:
 
