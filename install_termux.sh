@@ -4,7 +4,7 @@
 # Also compiling for Termux
 
 echo "Please make sure, that you've installed Termux from the F-Droid store. The Playstore version is outdated!"
-sleep(2)
+sleep 2
 apt-get update
 echo "NOTE: If you get asked some questions, just press N and continue"
 apt-get full-upgrade -y
