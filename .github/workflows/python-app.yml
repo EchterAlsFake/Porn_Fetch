@@ -26,11 +26,11 @@ jobs:
     - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libegl1-mesa qt5-default
+        sudo apt-get install -y libegl1-mesa xvfb
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Build with Pyinstaller
       run: |
-        pyinstaller -F widget.py && cd dist && chmod +x widget && ./widget --version
+        pyinstaller -F widget.py && cd dist && chmod +x widget && xvfb-run ./widget --version
