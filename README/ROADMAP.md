@@ -27,6 +27,5 @@ Automatic compile script > Create License Agreement >
 <br> Native Support for macOS > Documentation >  UI Redesign with Qt Design Studio > Let user Login + 
 <br> Start page > Website > Mojo
 
-# Automatic compile script > Create License Agreement
-
+# Create License Agreement > Arch Linux install script > Ubuntu Install script
 # In Version 1.8
