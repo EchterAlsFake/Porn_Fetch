@@ -6,7 +6,6 @@
 
 - [x] Debugging and Logging
 - [x] Better stability and automatic exception handling
-- [] Native support for macOS
 - [] Let the User login with his PornHub Account to give better search results
 - [] Provide a PornHub start page, like you would see on the Website and let the User download videos based on his algorithm
 - [] Crate an Android App with Qt for Android and PySide6 
@@ -17,8 +16,6 @@
 - [] Transfer the APP Development to Mojo, when it's publicly available
 - [x] Support for Android / Termux
 - [x] Installation script for Termux
-- [] Support for iOS / iSH
-- [] Installation script for iSH
 - [] Create a License Agreement (I know nobody cares, but it makes the app more professional)
 - [] Automatic compile script to make it easier with dependencies
 - [] Create a Documentation
