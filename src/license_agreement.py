@@ -61,7 +61,7 @@ class Ui_Widget_License(object):
 
     def retranslateUi(self, Widget):
         Widget.setWindowTitle(QCoreApplication.translate("Widget", u"Widget", None))
-        self.label.setText(QCoreApplication.translate("Widget", u"TextLabel", None))
+        self.label.setText(QCoreApplication.translate("Widget", f"{license}", None))
         self.pushButton.setText(QCoreApplication.translate("Widget", u"Accept License", None))
         self.pushButton_2.setText(QCoreApplication.translate("Widget", u"Deny and Exit", None))
     # retranslateUi

@@ -33,7 +33,7 @@ There's no need to use shady websites or paid software in 2023.
 * No login / PornHub account needed
 * No data tracking
 * Open-Source
-* Cross platform
+* Cross-platform
 * Actively maintained
 
 # Installation
