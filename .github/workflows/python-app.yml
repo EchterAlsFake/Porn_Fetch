@@ -26,7 +26,7 @@ jobs:
     - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libegl1-mesa libqt6core5a libqt6gui5 libqt6widgets5
+        sudo apt-get install -y libegl1-mesa qt5-default
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
