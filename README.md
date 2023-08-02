@@ -164,6 +164,7 @@ consider using a VPN to be safe.
 * [Settings Icon](https://icons8.com/icon/52146/einstellungen)
 * [C Icon](https://icons8.com/icon/Uehg4gyVyrUo/copyright)
 * [M Icon](https://iconscout.com/icons/medium) By [Unicons Font](https://iconscout.com/contributors/unicons) on [Icon Scout](https://iconscout.com)
+* [Checkmark](https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html)
 
 #### Contributors:
 
@@ -185,6 +186,8 @@ I am using the following external libraries:
 * [colorama](https://github.com/tartley/colorama)
 * [sentry_sdk](https://github.com/getsentry/sentry-python)
 * [phub](https://github.com/Egsagon/PHUB/blob/master/LICENSE)
+* [requests](https://github.com/psf/requests)
+* wget - wget no longer has a repository
 
 tqdm uses the  MPL (Mozilla Public License) 2.0 and the MIT License <br>
 colorama uses the BSD 3 license <br>

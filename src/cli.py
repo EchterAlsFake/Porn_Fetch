@@ -12,16 +12,16 @@ try:
 except ImportError:
     from setup import internet_test, ask_for_sentry_cli, clear, check_path
 
-__license__ = "LGPL 3"
+__license__ = "GPL 3"
 credits_lol = f"""
 Porn Fetch is created and maintained by EchterAlsFake | Johannes Habel.
-EchterAalsFake is the internet pseudonym for Johannes Habel.
+EchterAlsFake is the internet pseudonym for Johannes Habel.
 
 Porn Fetch comes 'AS IS' without any warranty or liability. 
 You are responsible for your actions, but you get a few rights in exchange:
 
 You are free to copy, modify, distribute and sell this software.
-The software is licensed under the {__license__}.
+The software is licensed under the GPL 3.
 
 The official Source code is available on GitHub:
 
@@ -37,10 +37,19 @@ phub
 colorama
 sentry sdk
 
+Graphics:
+
+Download Icon : https://icons8.com/icon/104149/herunterladen
+Search Icon : https://icons8.com/icon/aROEUCBo74Il/suche
+Settings Icon : https://icons8.com/icon/52146/einstellungen
+C Icon : https://icons8.com/icon/Uehg4gyVyrUo/copyright
+M Icon By Unicons Font on Icon Scout : https://iconscout.com/icons/medium : https://iconscout.com/contributors/unicons
+: https://iconscout.com
+
 A special thanks to Egsagon for creating PHUB.
 This project would not be possible without his great API and I have much respect for him!
 
-1.7 - 2023
+1.8 - 2023
 """
 
 class CLI():

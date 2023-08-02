@@ -1,18 +1,18 @@
 __author__ = "EchterAlsFake : Johannes Habel"
-__version__ = "1.7"
+__version__ = "1.8"
 __source__ = "https://github.com/EchterAlsFake/Porn_Fetch"
 __license__ = "GPL 3"
 
 sentry = False
 credits_lol = f"""
 Porn Fetch is created and maintained by EchterAlsFake | Johannes Habel.
-EchterAalsFake is the internet pseudonym for Johannes Habel.
+EchterAlsFake is the internet pseudonym for Johannes Habel.
 
 Porn Fetch comes 'AS IS' without any warranty or liability. 
 You are responsible for your actions, but you get a few rights in exchange:
 
 You are free to copy, modify, distribute and sell this software.
-The software is licensed under the {__license__}.
+The software is licensed under the GPL 3.
 
 The official Source code is available on GitHub:
 
@@ -28,10 +28,19 @@ phub
 colorama
 sentry sdk
 
+Graphics:
+
+Download Icon : https://icons8.com/icon/104149/herunterladen
+Search Icon : https://icons8.com/icon/aROEUCBo74Il/suche
+Settings Icon : https://icons8.com/icon/52146/einstellungen
+C Icon : https://icons8.com/icon/Uehg4gyVyrUo/copyright
+M Icon By Unicons Font on Icon Scout : https://iconscout.com/icons/medium : https://iconscout.com/contributors/unicons
+: https://iconscout.com
+
 A special thanks to Egsagon for creating PHUB.
 This project would not be possible without his great API and I have much respect for him!
 
-1.7 - 2023
+1.8 - 2023
 """
 
 import sys
@@ -97,7 +106,6 @@ class License(QWidget):
         self.main_widget.show()
 
 
-
 class DownloadProgressSignal(QObject):
     progress = Signal(int, int)
 
@@ -133,6 +141,8 @@ class Widget(QWidget):
             print("Done")
 
         self.sentry_data_collection()
+        self.conf = ConfigParser()
+        self.conf.read("config.ini")
         self.video = None
         self.ui = Ui_Widget()
         self.ui.setupUi(self)
@@ -208,8 +218,6 @@ class Widget(QWidget):
 
         elif self.ui.radio_lowest.isChecked():
             return Quality.WORST
-
-        # I removed the else statement, because It's impossible to happen.
 
     def test_video(self, url):
 
@@ -411,6 +419,61 @@ class Widget(QWidget):
                 url = "https://www.pornhub.com/" + video_url
                 video = self.test_video(url)
                 self.download(video)
+
+    def settings_tab(self):
+        with open("config.ini", "w") as config_file:
+            if self.ui.settings_radio_best.isChecked():
+                self.conf.set("Porn_Fetch", "default_quality", "best")
+
+            if self.ui.settings_radio_middle.isChecked():
+                self.conf.set("Porn_Fetch", "default_quality", "middle")
+
+            if self.ui.settings_radio_worst.isChecked():
+                self.conf.set("Porn_Fetch", "default_quality", "worst")
+
+            if self.ui.settings_radio_single.isChecked():
+                self.conf.set("Porn_Fetch", "default_threading", "single")
+
+            if self.ui.settings_radio_multiple.isChecked():
+                self.conf.set("Porn_Fetch", "default_threading", "multiple")
+
+            if self.ui.settings_checkbox_sentry.isChecked():
+                self.conf.set("Porn_Fetch", "sentry", "true")
+
+            if not self.ui.settings_checkbox_sentry.isChecked():
+                self.conf.set("Debug", "sentry", "false")
+
+            self.conf.write(config_file)
+            ui_popup("Applied!")
+
+    def load_user_settings(self):
+
+        if self.conf["Porn_Fetch"]["default_quality"] == "best":
+            self.ui.radio_highest.setChecked(True)
+            self.ui.settings_radio_best.setChecked(True)
+
+        if self.conf["Porn_Fetch"]["default_quality"] == "middle":
+            self.ui.radio_middle.setChecked(True)
+            self.ui.settings_radio_middle.setChecked(True)
+
+        if self.conf["Porn_Fetch"]["default_quality"] == "worst":
+            self.ui.radio_lowest.setChecked(True)
+            self.ui.settings_radio_worst.setChecked(True)
+
+        if self.conf["Porn_Fetch"]["default_threading"] == "multiple":
+            self.ui.radio_threading_multiple.setChecked(True)
+            self.ui.settings_radio_multiple.setChecked(True)
+
+        if self.conf["Porn_Fetch"]["default_threading"] == "single":
+            self.ui.radio_threading_single.setChecked(True)
+            self.ui.settings_radio_single.setChecked(True)
+
+        if self.conf["Debug"]["sentry"] == "true":
+            self.ui.settings_checkbox_sentry.setChecked(True)
+
+        elif self.conf["Debug"]["sentry"] == "false":
+            self.ui.settings_checkbox_sentry.setChecked(False)
+
 def main():
     app = QApplication(sys.argv)
     widget = License()
