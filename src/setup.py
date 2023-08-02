@@ -2,6 +2,34 @@ import os
 import socket
 from colorama import *
 import sentry_sdk
+import wget
+from tqdm import tqdm
+
+def get_graphics():
+
+    os.mkdir("graphics")
+    os.path.join("graphics")
+
+    urls = ["https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/graphics/c.ico",
+            "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/graphics/download.ico",
+            "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/graphics/medium.ico",
+            "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/graphics/search.ico",
+            "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/graphics/settings-colorful.ico"]
+
+    for url in tqdm(urls, dynamic_ncols=True):
+        wget.download(url, out="graphics/")
+
+    files = ["c.ico", "download.ico", "medium.ico", "search.ico", "settings-colorful.ico"]
+    
+    for file in files:
+        if os.path.isfile(f"graphics/{file}"):
+            pass
+        
+        else:
+            print("Error with Icon download. Icon's won't be available in the GUI!")
+
+
+
 
 def enable_error_handling():
     sentry_sdk.init(
@@ -53,14 +81,23 @@ No sensitive data / system data or user specific data that would lead to an iden
 
 
 def setup_config_file():
-    sections = ['AGB']
+    sections = ['License', "Porn_Fetch", "Debug"]
     config_file = "config.ini"
 
     if not os.path.exists(config_file):
         with open(config_file, "w") as config:
             config.write(f"""
-[AGB]
-agb = false
+[License]
+accept = nothing_in_here
+
+[Porn_Fetch]
+default_quality = best
+default_path = ./
+default_threading = multiple
+
+[Debug]
+sentry = false
+
 """)
             config.close()
 

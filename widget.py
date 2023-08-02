@@ -3,7 +3,6 @@ __version__ = "1.7"
 __source__ = "https://github.com/EchterAlsFake/Porn_Fetch"
 __license__ = "GPL 3"
 
-
 sentry = False
 credits_lol = f"""
 Porn Fetch is created and maintained by EchterAlsFake | Johannes Habel.
@@ -35,11 +34,12 @@ This project would not be possible without his great API and I have much respect
 1.7 - 2023
 """
 
-
 import sys
 import argparse
 import sentry_sdk
 import time
+import requests
+import os.path
 
 from configparser import ConfigParser
 from PySide6 import QtCore
@@ -48,7 +48,7 @@ from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject
 from src.license_agreement import Ui_Widget_License
 from phub import Client, Quality
 from src.ui_main_widget import Ui_Widget
-from src.setup import enable_error_handling
+from src.setup import enable_error_handling, get_graphics
 from src.cli import CLI
 
 def ui_popup(text):
@@ -57,8 +57,50 @@ def ui_popup(text):
     qmsg_box.exec()
 
 
+class License(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.conf = ConfigParser()
+        self.conf.read("config.ini")
+
+        self.ui = Ui_Widget_License()
+        self.ui.setupUi(self)
+        self.ui.button_accept.clicked.connect(self.accept)
+        self.ui.button_deny.clicked.connect(self.denied)
+
+    def check_license_and_proceed(self):
+        if self.conf["License"]["accept"] == "true":
+            print("License accepted. Continuing...")
+            self.show_main_window()
+        else:
+            print("License was not accepted. Prompting user...")
+            self.show()  # Show the license widget
+
+    def accept(self):
+        self.conf.set("License", "accept", "true")
+        with open("config.ini", "w") as config_file:
+            self.conf.write(config_file)
+            config_file.close()
+
+        self.show_main_window()
+
+    def denied(self):
+        self.conf.set("License", "accept", "false")
+        with open("config.ini", "w") as config_file:
+            self.conf.write(config_file)
+            config_file.close()
+            sys.exit(0)
+
+    def show_main_window(self):
+        self.close()
+        self.main_widget = Widget()
+        self.main_widget.show()
+
+
+
 class DownloadProgressSignal(QObject):
     progress = Signal(int, int)
+
 
 class DownloadThread(QRunnable):
 
@@ -83,6 +125,13 @@ class Widget(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        print("Checking graphics...")
+
+        if not os.path.exists("graphics"):
+            print("Downloading assets...")
+            get_graphics()
+            print("Done")
+
         self.sentry_data_collection()
         self.video = None
         self.ui = Ui_Widget()
@@ -340,7 +389,7 @@ class Widget(QWidget):
                         sentry_sdk.capture_exception(e)
 
     def search_videos(self):
-
+        # Searches videos with query string and lets the user select them
         query = self.ui.lineedit_search_query.text()
         query_object = self.client.search(query)
         length = len(query_object)
@@ -353,7 +402,7 @@ class Widget(QWidget):
             item.setCheckState(0, QtCore.Qt.Unchecked)  # Adds a checkbox
 
     def download_search(self):
-
+        # Downloads all selected videos with a for loop
         for i in range(self.ui.treeWidget.topLevelItemCount()):
             item = self.ui.treeWidget.topLevelItem(i)
             checkState = item.checkState(0)
@@ -362,7 +411,11 @@ class Widget(QWidget):
                 url = "https://www.pornhub.com/" + video_url
                 video = self.test_video(url)
                 self.download(video)
-
+def main():
+    app = QApplication(sys.argv)
+    widget = License()
+    widget.check_license_and_proceed()
+    sys.exit(app.exec())
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -385,8 +438,20 @@ if __name__ == "__main__":
         print(__license__)
 
     else:
-        app = QApplication(sys.argv)
-        widget = Widget()
-        widget.show()
-        sys.exit(app.exec())
+        try:
+            main()
+
+            # Some common exceptions...
+        except requests.exceptions.SSLError:
+            ui_popup("Couldn't establish a secure connection to PornHub. This mostly happens, because your router / ISP / firewall blocks PornHub. Are you currently at a hotel or a university?")
+
+        except requests.exceptions.ConnectionError:
+            ui_popup("There was a connection error. This mostly happens, because PornHub blocks you, or your connection is unstable. Please wait, or change IP and try again")
+
+        except KeyboardInterrupt:
+            print("Bye")
+            sys.exit()
+
+        except PermissionError:
+            ui_popup("You don't have permissions to write / access something. Please give Porn Fetch the appropriate permissions and try again.")
 
