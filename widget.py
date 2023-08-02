@@ -92,7 +92,6 @@ class Widget(QWidget):
         self.mode = "single"
         self.threadpool = QThreadPool()
         self.ui.stackedWidget.setCurrentIndex(0)
-        self.ui.credits_text.setText(credits_lol)
 
         self.ui.button_start.clicked.connect(self.start)
         self.ui.button_start_file.clicked.connect(self.start_file)
@@ -105,6 +104,7 @@ class Widget(QWidget):
         self.ui.button_download_tab.clicked.connect(self.do_2)
         self.ui.button_metadata_tab.clicked.connect(self.do_3)
         self.ui.button_search_tab.clicked.connect(self.do_4)
+        self.ui.button_settings_tab.clicked.connect(self.do_5)
 
     def do_1(self):
         self.ui.stackedWidget.setCurrentIndex(2)
@@ -117,6 +117,9 @@ class Widget(QWidget):
 
     def do_4(self):
         self.ui.stackedWidget.setCurrentIndex(3)
+
+    def do_5(self):
+        self.ui.stackedWidget.setCurrentIndex(4)
 
     def get_mode(self):
 

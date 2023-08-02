@@ -157,6 +157,14 @@ consider using a VPN to be safe.
 * [phub](https://github.com/Egsagon/PHUB)
 * [sentry sdk](https://github.com/getsentry/sentry-python) Used in 1.7+ 
 
+### Graphics:
+
+* [Download Icon](https://icons8.com/icon/104149/herunterladen)
+* [Search Icon](https://icons8.com/icon/aROEUCBo74Il/suche)
+* [Settings Icon](https://icons8.com/icon/52146/einstellungen)
+* [C Icon](https://icons8.com/icon/Uehg4gyVyrUo/copyright)
+* [M Icon](https://iconscout.com/icons/medium) By [Unicons Font](https://iconscout.com/contributors/unicons) on [Icon Scout](https://iconscout.com)
+
 #### Contributors:
 
 (Contribute to the project, to have your name listed here :D)
