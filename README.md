@@ -48,12 +48,12 @@ Source code can be found in the [GitHub releases](https://github.com/EchterAlsFa
 ### Windows:
 
 
-* [Porn Fetch 1.6.exe](https://drive.google.com/uc?export=download&id=1Ok4iHIBOFlTa0hXifLql0TRy-8JwC39D) -|- Torrent: [1.6.torrent](https://drive.google.com/uc?export=download&id=1BPjfmqEiqmEdAXmsRV2KUktS6GOc8_DK)
+* [Porn Fetch 1.7.exe](https://drive.google.com/uc?export=download&id=1Mj67JCLfbZ0yjvJzeoli-_SHRJbNDbZo) -|- Torrent: [1.7.torrent](https://drive.google.com/uc?export=download&id=1ycg19qR94wXchwMbiNtWpUuMnu-sM4OQ)
 * [LICENSE](https://drive.google.com/uc?export=download&id=1V5pgayZB9_cv7nlon55r80-hMKiAwWC2) 
 
 ### Linux (AppImage)
 
-* [Porn Fetch 1.6](https://drive.google.com/uc?export=download&id=1JMqEIhdLwHtB2c34qZpVDUv1fkIsGE3l) -|- Torrent: [1.6.torrent](https://drive.google.com/uc?export=download&id=1_taHgEy74raRPxKNpNLcm9h4nAtEKDSn)
+* [Porn Fetch 1.7](https://drive.google.com/uc?export=download&id=1OaLZM6enAKY8B6M6qjPXi-yy4TKffC0v) -|- Torrent: [1.7.torrent](https://drive.google.com/uc?export=download&id=1pj96FqsiaJjzQ_zpGaDfOZibt2DvyCQ4)
 * [LICENSE](https://drive.google.com/uc?export=download&id=1V5pgayZB9_cv7nlon55r80-hMKiAwWC2)
 
 # Data Collection / Privacy
