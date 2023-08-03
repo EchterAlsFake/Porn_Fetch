@@ -511,9 +511,10 @@ class Widget(QWidget):
 
 def main():
     print("Checking configuration...")
-    setup_config_file()
 
     app = QApplication(sys.argv)
+    setup_config_file()
+
     widget = License()
     widget.check_license_and_proceed()
     sys.exit(app.exec())
