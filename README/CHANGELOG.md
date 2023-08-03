@@ -54,5 +54,15 @@ Initial Release
 - Made the Readme.md A LOT more readable and more professionally
 - Added license agreement script (implemented in 1.8)
 
-Overall 1.7 is the most stable I would recommend now for daily use!
 
+# 1.8
+
+- Implemented final License agreement
+- Persistent settings (untested)
+- Added Ubuntu to Install script
+- Added installation script
+- Added arch linux to install script
+- Typo and grammar fixes
+- Added Icons and images
+- UI redesign
+- Added some basic exceptions

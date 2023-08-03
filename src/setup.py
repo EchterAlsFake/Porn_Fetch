@@ -4,6 +4,7 @@ from colorama import *
 import sentry_sdk
 import wget
 from tqdm import tqdm
+from configparser import ConfigParser
 
 def get_graphics():
 
@@ -14,12 +15,13 @@ def get_graphics():
             "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/graphics/download.ico",
             "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/graphics/medium.ico",
             "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/graphics/search.ico",
-            "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/graphics/settings-colorful.ico"]
+            "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/graphics/settings-colorful.ico",
+            "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/graphics/checkmark.png"]
 
     for url in tqdm(urls, dynamic_ncols=True):
         wget.download(url, out="graphics/")
 
-    files = ["c.ico", "download.ico", "medium.ico", "search.ico", "settings-colorful.ico"]
+    files = ["c.ico", "download.ico", "medium.ico", "search.ico", "settings-colorful.ico", "checkmark.png"]
     
     for file in files:
         if os.path.isfile(f"graphics/{file}"):
@@ -88,7 +90,7 @@ def setup_config_file():
         with open(config_file, "w") as config:
             config.write(f"""
 [License]
-accept = nothing_in_here
+accept = false
 
 [Porn_Fetch]
 default_quality = best
@@ -100,6 +102,29 @@ sentry = false
 
 """)
             config.close()
+
+
+    conf = ConfigParser()
+    conf.read("config.ini")
+    for section in sections:
+        if not conf.has_section(section):
+            print("Config file is corrupted. Updating....")
+            with open(config_file, "w") as config:
+                config.write(f"""
+            [License]
+            accept = nothing_in_here
+
+            [Porn_Fetch]
+            default_quality = best
+            default_path = ./
+            default_threading = multiple
+
+            [Debug]
+            sentry = false
+
+            """)
+                config.close()
+
 
 def internet_test():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

@@ -4,3 +4,5 @@ sentry-sdk
 colorama
 pyinstaller
 bs4
+requests
+wget

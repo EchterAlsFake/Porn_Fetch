@@ -23,7 +23,27 @@ select option in $options; do
 
   elif [ $option = "Ubuntu" ]; then
         echo "You've chosen ubuntu"
-
+        sudo apt-get update
+        sudo apt-get install build-essential cmake python3-dev libssl-dev qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev qt5-default git wget python3-venv -y
+        wget "https://www.python.org/ftp/python/3.11.4/Python-3.11.4.tar.xz"
+        tar -xvf "Python-3.11.4.tar.xz"
+        cd Python-3.11.4
+        ./configure --enable-optimizations
+        make -j 8
+        sudo make altinstall
+        cd ..
+        rm -rf Python-3.11.4
+        git clone https://github.com/EchterAlsFake/Porn_Fetch
+        cd Porn_Fetch
+        python3.11 -m venv venv
+        source venv/bin/activate
+        pip instal -r requirements.txt
+        pyinstaller -F widget.py
+        cd dist
+        chmod +x widget
+        mv widget Porn_Fetch
+        echo "You can run Porn Fetch now in the dist directory with ./Porn_Fetch"
+        echo "Note, at first startup the graphics resources will be downloaded..."
 
   elif [ "Termux" = $option]; then
         echo "You've chosen termux"

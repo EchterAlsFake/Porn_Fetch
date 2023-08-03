@@ -1422,6 +1422,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;C Icon : https://icons8.com/icon/Uehg4gyVyrUo/copyright&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;M Icon By Unicons Font on Icon Scout : https://iconscout.com/icons/medium : https://iconscout.com/contributors/unicons&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;: https://iconscout.com&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Checkmark Icon: &lt;/span&gt;&lt;span style=&quot; font-family:'JetBrains Mono','monospace'; color:#6a8759;&quot;&gt;https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;A special thanks to Egsagon for creating PHUB.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;This project would not be possible without his great API and I have much respect for him!&lt;/span&gt;&lt;/p&gt;
@@ -1887,7 +1888,7 @@ QRadioButton::indicator:checked {
            </widget>
           </item>
           <item row="2" column="0" colspan="3">
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="button_settings_apply">
             <property name="styleSheet">
              <string notr="true">QPushButton {
     background-color: #5468ff;

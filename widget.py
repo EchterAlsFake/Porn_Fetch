@@ -36,6 +36,7 @@ Settings Icon : https://icons8.com/icon/52146/einstellungen
 C Icon : https://icons8.com/icon/Uehg4gyVyrUo/copyright
 M Icon By Unicons Font on Icon Scout : https://iconscout.com/icons/medium : https://iconscout.com/contributors/unicons
 : https://iconscout.com
+Checkmark Icon: https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html
 
 A special thanks to Egsagon for creating PHUB.
 This project would not be possible without his great API and I have much respect for him!
@@ -52,12 +53,13 @@ import os.path
 
 from configparser import ConfigParser
 from PySide6 import QtCore
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem
-from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject
+from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, QSize
 from src.license_agreement import Ui_Widget_License
 from phub import Client, Quality
 from src.ui_main_widget import Ui_Widget
-from src.setup import enable_error_handling, get_graphics
+from src.setup import enable_error_handling, get_graphics, setup_config_file
 from src.cli import CLI
 
 def ui_popup(text):
@@ -134,23 +136,54 @@ class Widget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         print("Checking graphics...")
+        print("Checking configuration...")
+        setup_config_file()
 
         if not os.path.exists("graphics"):
             print("Downloading assets...")
             get_graphics()
             print("Done")
 
-        self.sentry_data_collection()
         self.conf = ConfigParser()
         self.conf.read("config.ini")
+
+        if self.conf["Debug"]["sentry"] == "true":
+            enable_error_handling()
+
+        elif self.conf["Debug"]["sentry"] == "false":
+            self.sentry_data_collection()
+
         self.video = None
         self.ui = Ui_Widget()
         self.ui.setupUi(self)
+
+        # Set correct image path
+        icon_download = QIcon()
+        icon_download.addFile(u"graphics/download.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon_search = QIcon()
+        icon_search.addFile(u"graphics/search.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon_metadata = QIcon()
+        icon_metadata.addFile(u"graphics/medium.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon_settings = QIcon()
+        icon_settings.addFile(u"graphics/settings-colorful.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon_c = QIcon()
+        icon_c.addFile(u"graphics/c.ico", QSize(), QIcon.Normal, QIcon.Off)
+
+        self.ui.button_download_tab.setIcon(icon_download)
+        self.ui.button_settings_tab.setIcon(icon_settings)
+        self.ui.button_search_tab.setIcon(icon_search)
+        self.ui.button_metadata_tab.setIcon(icon_metadata)
+        self.ui.button_credits_tab.setIcon(icon_c)
+
+
+
+        
         self.client = Client(language="en")
         self.download_thread = None
         self.mode = "single"
         self.threadpool = QThreadPool()
         self.ui.stackedWidget.setCurrentIndex(0)
+        self.load_user_settings()
 
         self.ui.button_start.clicked.connect(self.start)
         self.ui.button_start_file.clicked.connect(self.start_file)
@@ -164,6 +197,7 @@ class Widget(QWidget):
         self.ui.button_metadata_tab.clicked.connect(self.do_3)
         self.ui.button_search_tab.clicked.connect(self.do_4)
         self.ui.button_settings_tab.clicked.connect(self.do_5)
+        self.ui.button_settings_apply.clicked.connect(self.settings_tab)
 
     def do_1(self):
         self.ui.stackedWidget.setCurrentIndex(2)
@@ -202,11 +236,14 @@ class Widget(QWidget):
 
         if button == QMessageBox.Yes:
             enable_error_handling()
+            self.conf.set("Debug", "sentry", "true")
+            with open("config.ini", "w") as config_file:
+                self.conf.write(config_file)
+                config_file.close()
             sentry = True
 
         else:
             sentry = False
-            pass
 
     def get_quality(self):
 

@@ -45,6 +45,7 @@ Settings Icon : https://icons8.com/icon/52146/einstellungen
 C Icon : https://icons8.com/icon/Uehg4gyVyrUo/copyright
 M Icon By Unicons Font on Icon Scout : https://iconscout.com/icons/medium : https://iconscout.com/contributors/unicons
 : https://iconscout.com
+Checkmark Icon : https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html
 
 A special thanks to Egsagon for creating PHUB.
 This project would not be possible without his great API and I have much respect for him!

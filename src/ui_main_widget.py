@@ -8,17 +8,14 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QFormLayout, QFrame,
-    QGridLayout, QGroupBox, QHBoxLayout, QHeaderView,
+from PySide6.QtCore import (QCoreApplication,
+    QMetaObject, QRect,
+    QSize, Qt)
+from PySide6.QtGui import QCursor
+from PySide6.QtWidgets import (QCheckBox, QFormLayout, QFrame,
+    QGridLayout, QGroupBox, QHBoxLayout,
     QLabel, QLineEdit, QProgressBar, QPushButton,
-    QRadioButton, QSizePolicy, QStackedWidget, QTextBrowser,
+    QRadioButton, QStackedWidget, QTextBrowser,
     QTreeWidget, QTreeWidgetItem, QWidget)
 
 class Ui_Widget(object):
@@ -50,7 +47,7 @@ class Ui_Widget(object):
 "border-color: rgb(255, 162, 0)\n"
 "}")
         icon = QIcon()
-        icon.addFile(u"graphics/download.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u"../graphics/download.png", QSize(), QIcon.Normal, QIcon.Off)
         self.button_download_tab.setIcon(icon)
         self.button_download_tab.setIconSize(QSize(32, 32))
 
@@ -73,7 +70,7 @@ class Ui_Widget(object):
 "border-color: rgb(255, 162, 0)\n"
 "}")
         icon1 = QIcon()
-        icon1.addFile(u"graphics/search.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon1.addFile(u"../graphics/search.png", QSize(), QIcon.Normal, QIcon.Off)
         self.button_search_tab.setIcon(icon1)
         self.button_search_tab.setIconSize(QSize(32, 32))
 
@@ -96,7 +93,7 @@ class Ui_Widget(object):
 "border-color: rgb(255, 162, 0)\n"
 "}")
         icon2 = QIcon()
-        icon2.addFile(u"graphics/c.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon2.addFile(u"../graphics/c.png", QSize(), QIcon.Normal, QIcon.Off)
         self.button_credits_tab.setIcon(icon2)
         self.button_credits_tab.setIconSize(QSize(32, 32))
 
@@ -119,7 +116,7 @@ class Ui_Widget(object):
 "border-color: rgb(255, 162, 0)\n"
 "}")
         icon3 = QIcon()
-        icon3.addFile(u"graphics/settings-colorful.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon3.addFile(u"../graphics/settings-colorful.png", QSize(), QIcon.Normal, QIcon.Off)
         self.button_settings_tab.setIcon(icon3)
         self.button_settings_tab.setIconSize(QSize(32, 32))
 
@@ -142,7 +139,7 @@ class Ui_Widget(object):
 "border-color: rgb(255, 162, 0)\n"
 "}")
         icon4 = QIcon()
-        icon4.addFile(u"graphics/medium.ico", QSize(), QIcon.Normal, QIcon.Off)
+        icon4.addFile(u"../graphics/medium.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.button_metadata_tab.setIcon(icon4)
 
         self.formLayout.setWidget(2, QFormLayout.SpanningRole, self.button_metadata_tab)
@@ -1556,9 +1553,9 @@ class Ui_Widget(object):
 
         self.gridLayout_15.addWidget(self.groupBox_10, 0, 1, 1, 1)
 
-        self.pushButton = QPushButton(self.groupBox_11)
-        self.pushButton.setObjectName(u"pushButton")
-        self.pushButton.setStyleSheet(u"QPushButton {\n"
+        self.button_settings_apply = QPushButton(self.groupBox_11)
+        self.button_settings_apply.setObjectName(u"button_settings_apply")
+        self.button_settings_apply.setStyleSheet(u"QPushButton {\n"
 "    background-color: #5468ff;\n"
 "	border-width: 2px;\n"
 "	border-color: rgb(98, 255, 182);\n"
@@ -1582,7 +1579,7 @@ class Ui_Widget(object):
 "}\n"
 "")
 
-        self.gridLayout_15.addWidget(self.pushButton, 2, 0, 1, 3)
+        self.gridLayout_15.addWidget(self.button_settings_apply, 2, 0, 1, 3)
 
 
         self.gridLayout_17.addWidget(self.groupBox_11, 0, 0, 1, 1)
@@ -1721,12 +1718,14 @@ class Ui_Widget(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">C Icon : https://icons8.com/icon/Uehg4gyVyrUo/copyright</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">M Icon By Unicons Font on Icon Scout : https://iconscout.com/icons/medium : https://iconscout.com/contributors/unicons</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">: https://iconscout.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">Checkmark Icon: </span><span style=\" font-family:'JetBrains Mono','monospace'; color:#6a8759;\">https://www.iconsdb.com/"
+                        "barbie-pink-icons/checkmark-icon.html</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent"
-                        ":0; text-indent:0px;\"><span style=\" color:#ffffff;\">A special thanks to Egsagon for creating PHUB.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">A special thanks to Egsagon for creating PHUB.</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">This project would not be possible without his great API and I have much respect for him!</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">1.8 - 2023</span></p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffff"
+                        "ff;\">1.8 - 2023</span></p></body></html>", None))
         self.button_download_search_query.setText(QCoreApplication.translate("Widget", u"Download", None))
         self.groupBox_5.setTitle("")
         self.label_total_videos.setText(QCoreApplication.translate("Widget", u"Total Videos:", None))
@@ -1744,7 +1743,7 @@ class Ui_Widget(object):
         self.groupBox_10.setTitle(QCoreApplication.translate("Widget", u"Default threading", None))
         self.settings_radio_multiple.setText(QCoreApplication.translate("Widget", u"Multiple", None))
         self.settings_radio_single.setText(QCoreApplication.translate("Widget", u"Single", None))
-        self.pushButton.setText(QCoreApplication.translate("Widget", u"Apply", None))
+        self.button_settings_apply.setText(QCoreApplication.translate("Widget", u"Apply", None))
         self.groupBox.setTitle("")
         self.label_search_query_progress.setText(QCoreApplication.translate("Widget", u"Downloaded: / of / Videos", None))
     # retranslateUi
