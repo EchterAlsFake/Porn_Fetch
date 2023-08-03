@@ -1,6 +1,6 @@
 # Porn Fetch - A PornHub Downloader 4 Free & Everyone
 
-https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg
+[Build](https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg)
 
 # Table of Contents
 
