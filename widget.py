@@ -306,7 +306,7 @@ class Widget(QWidget):
         output_path = self.ui.lineedit_output.text()
 
         title = video.title
-        output_path = str(output_path) + str(title)
+        output_path = str(output_path) + str(title) + str(".mp4") # Fixes the issue with video playback
 
         try:
             self.ui.label_search_query_progress.setText(f"Downloading: {title}")
