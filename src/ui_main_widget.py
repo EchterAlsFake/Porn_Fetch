@@ -8,14 +8,17 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication,
-    QMetaObject, QRect,
-    QSize, Qt)
-from PySide6.QtGui import QCursor, QIcon
-from PySide6.QtWidgets import (QCheckBox, QFormLayout, QFrame,
-    QGridLayout, QGroupBox, QHBoxLayout,
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QFormLayout, QFrame,
+    QGridLayout, QGroupBox, QHBoxLayout, QHeaderView,
     QLabel, QLineEdit, QProgressBar, QPushButton,
-    QRadioButton, QStackedWidget, QTextBrowser,
+    QRadioButton, QSizePolicy, QStackedWidget, QTextBrowser,
     QTreeWidget, QTreeWidgetItem, QWidget)
 
 class Ui_Widget(object):
@@ -1640,7 +1643,7 @@ class Ui_Widget(object):
     # setupUi
 
     def retranslateUi(self, Widget):
-        Widget.setWindowTitle(QCoreApplication.translate("Widget", u"Porn Fetch 1.6 (LGPLv3) : https://github.com/EchterAlsFake/Porn_Fetch", None))
+        Widget.setWindowTitle(QCoreApplication.translate("Widget", u"Porn Fetch 1.8 (GPL 3) : https://github.com/EchterAlsFake/Porn_Fetch", None))
         self.groupBox_6.setTitle(QCoreApplication.translate("Widget", u"GroupBox", None))
         self.button_download_tab.setText("")
         self.button_search_tab.setText("")
