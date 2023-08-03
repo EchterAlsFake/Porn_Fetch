@@ -10,9 +10,6 @@
 - [Data collection and Privacy](#data-collection--privacy)
 - [Supported platforms](#supported-platforms)
 - [Building from source](#building-from-source)
-  - [Arch Linux](#arch-linux)
-  - [Termux - Android](#termux)
-  - [Windows](#windows)
 - [Useful information](#useful-information)
 - [Legal rights](#legal-rights)
 - [Credits](#credits)
@@ -50,13 +47,13 @@ Source code can be found in the [GitHub releases](https://github.com/EchterAlsFa
 ### Windows:
 
 
-* [Porn Fetch 1.7.exe](https://drive.google.com/uc?export=download&id=1Mj67JCLfbZ0yjvJzeoli-_SHRJbNDbZo) -|- Torrent: [1.7.torrent](https://drive.google.com/uc?export=download&id=1ycg19qR94wXchwMbiNtWpUuMnu-sM4OQ)
-* [LICENSE](https://drive.google.com/uc?export=download&id=1V5pgayZB9_cv7nlon55r80-hMKiAwWC2) 
+* [Porn Fetch 1.8.exe](https://drive.google.com/uc?export=download&id=1IxYPtU2lPqHZIFfSVNDoO3Z3FWMp_UoQ) -|- Torrent: [1.8.torrent](https://drive.google.com/uc?export=download&id=1KTBEgqx2p27x2UY8aNzvlhc0FoimDzkg)
+* [LICENSE](https://drive.google.com/uc?export=download&id=1rqgiitGKkRhqJjTLLAacuQu_5sD5Yn6B) 
 
 ### Linux (AppImage)
 
-* [Porn Fetch 1.7](https://drive.google.com/uc?export=download&id=1OaLZM6enAKY8B6M6qjPXi-yy4TKffC0v) -|- Torrent: [1.7.torrent](https://drive.google.com/uc?export=download&id=1pj96FqsiaJjzQ_zpGaDfOZibt2DvyCQ4)
-* [LICENSE](https://drive.google.com/uc?export=download&id=1V5pgayZB9_cv7nlon55r80-hMKiAwWC2)
+* [Porn Fetch 1.8](https://drive.google.com/uc?export=download&id=11mo-bKMVnJNgVzi6gEP4bcPP42ziULCs) -|- Torrent: [1.8.torrent](https://drive.google.com/uc?export=download&id=1Csq0EYQKKgfGHpOPvUMTjVyb-de5TZa7)
+* [LICENSE](https://drive.google.com/uc?export=download&id=1rqgiitGKkRhqJjTLLAacuQu_5sD5Yn6B)
 
 # Data Collection / Privacy
 
@@ -81,53 +78,17 @@ If you enable the option to allow Sentry to collect errors, then the following i
 * ARM devices: Need to be natively run with Python
 # Building from Source
 
-## Arch Linux:
+This is an automatic build script. Just run the following in your terminal and select your system.
 
-``` 
-sudo pacman -S python-virtualenv
-```
-```
-mkdir build
-```
-```
-cd build && git clone https://github.com/EchterAlsFake/Porn_Fetch && cd Porn_Fetch
-```
-```
-python3 -m venv venv && source venv/bin/activate
-```
-```
-pip install -r requirements.txt
-```
-```
-pyinstaller -F widget.py && cd dist && mv widget Porn_Fetch && chmod +x Porn_Fetch && sudo mv Porn_Fetch /usr/bin/
-```
-```
-$ Porn_Fetch
-```
+### Supported Platforms:
 
-## Termux:
+- Ubuntu
+- Arch Linux
+- Termux
 
-Termux NEEDS to be installed from the F-Droid store and NOT the Android Play Store!
-The following script will compile the CLI version for Android. This can take up to 10 minutes!
 ```
-apt-get install wget
+wget -qO- https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/install.sh | bash
 ```
-```
-wget -qO- https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/install_termux.sh | bash
-```
-## Windows:
-
-Install Python 3.11 and Git
-```
-git clone https://github.com/EchterAlsFake/Porn_Fetch
-```
-```
-cd Porn_Fetch && pip install -r requirements.txt
-```
-```
-pyinstaller -F widget.py
-```
-### .exe is now in the dist folder
 
 
 
