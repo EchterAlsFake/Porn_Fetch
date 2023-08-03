@@ -136,8 +136,6 @@ class Widget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         print("Checking graphics...")
-        print("Checking configuration...")
-        setup_config_file()
 
         if not os.path.exists("graphics"):
             print("Downloading assets...")
@@ -512,6 +510,9 @@ class Widget(QWidget):
             self.ui.settings_checkbox_sentry.setChecked(False)
 
 def main():
+    print("Checking configuration...")
+    setup_config_file()
+
     app = QApplication(sys.argv)
     widget = License()
     widget.check_license_and_proceed()

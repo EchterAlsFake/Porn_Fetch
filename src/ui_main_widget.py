@@ -11,7 +11,7 @@
 from PySide6.QtCore import (QCoreApplication,
     QMetaObject, QRect,
     QSize, Qt)
-from PySide6.QtGui import QCursor
+from PySide6.QtGui import QCursor, QIcon
 from PySide6.QtWidgets import (QCheckBox, QFormLayout, QFrame,
     QGridLayout, QGroupBox, QHBoxLayout,
     QLabel, QLineEdit, QProgressBar, QPushButton,
