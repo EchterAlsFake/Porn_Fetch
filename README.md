@@ -1,8 +1,10 @@
 # Porn Fetch - A PornHub Downloader 4 Free & Everyone
 
+https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg
+
 # Table of Contents
 
-- [What is Porn Fetch?](#what-is-porn-fetch)<br>
+](https://github.com/<OWNER>/<REPOSITORY>/actions/workflows/<WORKFLOW_FILE>/badge.svg)- [What is Porn Fetch?](#what-is-porn-fetch)<br>
 - [Features](#features)
 - [Installation](#installation)
 - [Data collection and Privacy](#data-collection--privacy)
