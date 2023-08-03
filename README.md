@@ -87,7 +87,7 @@ This is an automatic build script. Just run the following in your terminal and s
 - Termux
 
 ```
-wget -qO- https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/install.sh | bash
+wget "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/install.sh" && bash install.sh
 ```
 
 
