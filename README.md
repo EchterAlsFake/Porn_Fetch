@@ -2,6 +2,12 @@
 
 ![Build](https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg)
 
+# Information:
+
+There will be no updates for 2-3 weeks. I need to focus on school. I will still develop on this Application, but only release big updates from time to time.
+This repository is NOT dead, but developing is not my highest priority for now!<br> Issues will still be handled, and Pull Requests will be merged. <br>
+#### Thanks for your patience!
+
 # Table of Contents
 
 - [What is Porn Fetch?](#what-is-porn-fetch)<br>
