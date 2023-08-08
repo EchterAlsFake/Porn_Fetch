@@ -59,13 +59,15 @@ from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, QSize
 from src.license_agreement import Ui_Widget_License
 from phub import Client, Quality
 from src.ui_main_widget import Ui_Widget
-from src.setup import enable_error_handling, get_graphics, setup_config_file
+from src.setup import enable_error_handling, get_graphics, setup_config_file, strip_title
 from src.cli import CLI
 
 def ui_popup(text):
     qmsg_box = QMessageBox()
     qmsg_box.setText(str(text))
     qmsg_box.exec()
+
+
 
 
 class License(QWidget):
@@ -227,7 +229,7 @@ class Widget(QWidget):
 
         dlg = QMessageBox(self)
         dlg.setWindowTitle("I have a question!")
-        dlg.setText("Do you enable automatic error collection by Sentry.io?  This won't include system or user specific information.")
+        dlg.setText("Do you enable automatic error collection by Sentry.io?  (Includes the name of your PC).  Sentry won't collect user / system specific information")
         dlg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
         dlg.setIcon(QMessageBox.Question)
         button = dlg.exec()
@@ -306,7 +308,9 @@ class Widget(QWidget):
         output_path = self.ui.lineedit_output.text()
 
         title = video.title
+        title = strip_title(title) # Fixes OS Error on Windows
         output_path = str(output_path) + str(title) + str(".mp4") # Fixes the issue with video playback
+
 
         try:
             self.ui.label_search_query_progress.setText(f"Downloading: {title}")

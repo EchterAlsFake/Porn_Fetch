@@ -6,6 +6,16 @@ import wget
 from tqdm import tqdm
 from configparser import ConfigParser
 
+
+def strip_title(title):
+    disallowed_chars = ["<", ">", ":", '"', "/", "\\", "|", "*", "0"]
+
+    for disallowed_char in disallowed_chars:
+        title = str(title).replace(disallowed_char,
+                                   "")  # Fixes the OS Error from V1.8.  The error mostly happens on Windows
+
+    return title
+
 def get_graphics():
 
     os.mkdir("graphics")

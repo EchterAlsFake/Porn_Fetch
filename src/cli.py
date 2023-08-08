@@ -7,10 +7,10 @@ from colorama import *
 from phub import *
 from tqdm import tqdm
 try:
-    from src.setup import internet_test, ask_for_sentry_cli, clear, check_path
+    from src.setup import internet_test, ask_for_sentry_cli, clear, check_path, strip_title
 
 except ImportError:
-    from setup import internet_test, ask_for_sentry_cli, clear, check_path
+    from setup import internet_test, ask_for_sentry_cli, clear, check_path, strip_title
 
 __license__ = "GPL 3"
 credits_lol = f"""
@@ -236,6 +236,7 @@ Please enter the new output path.  Make sure to put a / at the end -->:""")
     def raw_download(self, video):
 
         title = video.title
+        title = strip_title(title)
         print(f"{self.z}{Fore.LIGHTMAGENTA_EX}Downloading: {Fore.RESET}{title}")
 
         try:
