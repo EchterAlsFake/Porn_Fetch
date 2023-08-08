@@ -24,3 +24,7 @@ This file keeps track of all Issues / Bugs
 5) Fixed - 1.6
 6) Fixed - 1.6
 7) Fixed - 1.6
+
+# 1.8
+
+1) OS Error    : This error happens, because Windows can not handle ./ as a path. This error will be fixed tonight!
