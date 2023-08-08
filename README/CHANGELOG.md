@@ -66,3 +66,8 @@ Initial Release
 - Added Icons and images
 - UI redesign
 - Added some basic exceptions
+
+# 1.9
+
+- Fixed OS Error issue
+- Added function to strip out special symbols in title, to prevent path issues

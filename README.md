@@ -53,12 +53,12 @@ Source code can be found in the [GitHub releases](https://github.com/EchterAlsFa
 ### Windows:
 
 
-* [Porn Fetch 1.8.exe](https://drive.google.com/uc?export=download&id=1IxYPtU2lPqHZIFfSVNDoO3Z3FWMp_UoQ) -|- Torrent: [1.8.torrent](https://drive.google.com/uc?export=download&id=1KTBEgqx2p27x2UY8aNzvlhc0FoimDzkg)
+* [Porn Fetch 1.9.exe](https://drive.google.com/uc?export=download&id=16rt51EzFY1q_-DrPMRycg9qMoXxzwOSw) -|- Torrent: Not available!
 * [LICENSE](https://drive.google.com/uc?export=download&id=1rqgiitGKkRhqJjTLLAacuQu_5sD5Yn6B) 
 
 ### Linux (AppImage)
 
-* [Porn Fetch 1.8](https://drive.google.com/uc?export=download&id=11mo-bKMVnJNgVzi6gEP4bcPP42ziULCs) -|- Torrent: [1.8.torrent](https://drive.google.com/uc?export=download&id=1Csq0EYQKKgfGHpOPvUMTjVyb-de5TZa7)
+* [Porn Fetch 1.9](https://drive.google.com/uc?export=download&id=1mMUXMPpNOtl4Mu66ELuj4oNRNi3D7yJf) -|- Torrent: Not available!
 * [LICENSE](https://drive.google.com/uc?export=download&id=1rqgiitGKkRhqJjTLLAacuQu_5sD5Yn6B)
 
 # Data Collection / Privacy
