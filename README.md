@@ -70,6 +70,7 @@ If you enable the option to allow Sentry to collect errors, then the following i
 - Error messages (The full Python traceback)
 - Variables and the values in it
 - The lines of code, in which the error happened
+- Your PC name (although I don't care about it, and I don't need it.)
 
 > Sentry will NOT collect any user specific information or system information!
 
