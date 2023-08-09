@@ -203,7 +203,7 @@ QCheckBox::indicator:checked {
 }</string>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_2">
@@ -1427,7 +1427,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;A special thanks to Egsagon for creating PHUB.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;This project would not be possible without his great API and I have much respect for him!&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;1.8 - 2023&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;2.0- 2023&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -1535,16 +1535,13 @@ QLineEdit:disabled {
            </layout>
           </item>
           <item row="3" column="0">
-           <widget class="QTreeWidget" name="treeWidget">
+           <widget class="QLabel" name="label_5">
             <property name="styleSheet">
-             <string notr="true">color: white;
-background-color: rgb(109, 109, 109)</string>
+             <string notr="true">color: white;</string>
             </property>
-            <column>
-             <property name="text">
-              <string notr="true">1</string>
-             </property>
-            </column>
+            <property name="text">
+             <string>If Total videos = 0 or nothing happens, when you click &quot;search&quot;, then you got blocked by PornHub and the API cancelled your request. Restart the program to fix that.</string>
+            </property>
            </widget>
           </item>
           <item row="0" column="0">
@@ -1644,6 +1641,29 @@ QPushButton:pressed {
             </property>
             <property name="text">
              <string>Do not use this feature too much, because you can get blocked by PornHub for a few minutes!</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QTreeWidget" name="treeWidget">
+            <property name="styleSheet">
+             <string notr="true">color: white;
+background-color: rgb(109, 109, 109)</string>
+            </property>
+            <column>
+             <property name="text">
+              <string notr="true">1</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="styleSheet">
+             <string notr="true">color: white;</string>
+            </property>
+            <property name="text">
+             <string>The Table can only display up to 320 selectable videos!</string>
             </property>
            </widget>
           </item>

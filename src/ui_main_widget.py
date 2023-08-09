@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'form.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.5.2
+## Created by: Qt User Interface Compiler version 6.5.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -1261,15 +1261,11 @@ class Ui_Widget(object):
 
         self.gridLayout_10.addLayout(self.horizontalLayout_3, 1, 0, 1, 1)
 
-        self.treeWidget = QTreeWidget(self.groupBox_5)
-        __qtreewidgetitem = QTreeWidgetItem()
-        __qtreewidgetitem.setText(0, u"1");
-        self.treeWidget.setHeaderItem(__qtreewidgetitem)
-        self.treeWidget.setObjectName(u"treeWidget")
-        self.treeWidget.setStyleSheet(u"color: white;\n"
-"background-color: rgb(109, 109, 109)")
+        self.label_5 = QLabel(self.groupBox_5)
+        self.label_5.setObjectName(u"label_5")
+        self.label_5.setStyleSheet(u"color: white;")
 
-        self.gridLayout_10.addWidget(self.treeWidget, 3, 0, 1, 1)
+        self.gridLayout_10.addWidget(self.label_5, 3, 0, 1, 1)
 
         self.horizontalLayout_5 = QHBoxLayout()
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
@@ -1356,6 +1352,22 @@ class Ui_Widget(object):
         self.label.setStyleSheet(u"color: white;")
 
         self.gridLayout_10.addWidget(self.label, 2, 0, 1, 1)
+
+        self.treeWidget = QTreeWidget(self.groupBox_5)
+        __qtreewidgetitem = QTreeWidgetItem()
+        __qtreewidgetitem.setText(0, u"1");
+        self.treeWidget.setHeaderItem(__qtreewidgetitem)
+        self.treeWidget.setObjectName(u"treeWidget")
+        self.treeWidget.setStyleSheet(u"color: white;\n"
+"background-color: rgb(109, 109, 109)")
+
+        self.gridLayout_10.addWidget(self.treeWidget, 5, 0, 1, 1)
+
+        self.label_6 = QLabel(self.groupBox_5)
+        self.label_6.setObjectName(u"label_6")
+        self.label_6.setStyleSheet(u"color: white;")
+
+        self.gridLayout_10.addWidget(self.label_6, 4, 0, 1, 1)
 
 
         self.gridLayout_11.addWidget(self.groupBox_5, 0, 0, 1, 1)
@@ -1636,7 +1648,7 @@ class Ui_Widget(object):
 
         self.retranslateUi(Widget)
 
-        self.stackedWidget.setCurrentIndex(4)
+        self.stackedWidget.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(Widget)
@@ -1728,13 +1740,15 @@ class Ui_Widget(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">This project would not be possible without his great API and I have much respect for him!</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffff"
-                        "ff;\">1.8 - 2023</span></p></body></html>", None))
+                        "ff;\">2.0- 2023</span></p></body></html>", None))
         self.button_download_search_query.setText(QCoreApplication.translate("Widget", u"Download", None))
         self.groupBox_5.setTitle("")
         self.label_total_videos.setText(QCoreApplication.translate("Widget", u"Total Videos:", None))
+        self.label_5.setText(QCoreApplication.translate("Widget", u"If Total videos = 0 or nothing happens, when you click \"search\", then you got blocked by PornHub and the API cancelled your request. Restart the program to fix that.", None))
         self.label_search_query.setText(QCoreApplication.translate("Widget", u"Search Query:", None))
         self.button_start_search.setText(QCoreApplication.translate("Widget", u"Search", None))
         self.label.setText(QCoreApplication.translate("Widget", u"Do not use this feature too much, because you can get blocked by PornHub for a few minutes!", None))
+        self.label_6.setText(QCoreApplication.translate("Widget", u"The Table can only display up to 320 selectable videos!", None))
         self.groupBox_11.setTitle("")
         self.groupBox_8.setTitle(QCoreApplication.translate("Widget", u"Default Quality:", None))
         self.settings_radio_best.setText(QCoreApplication.translate("Widget", u"Best", None))

@@ -50,7 +50,7 @@ Checkmark Icon : https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html
 A special thanks to Egsagon for creating PHUB.
 This project would not be possible without his great API and I have much respect for him!
 
-1.9 - 2023
+2.0 - 2023
 """
 
 class CLI():
@@ -386,8 +386,7 @@ Hotspots: {hotspots}
             print(f"{count}) {video.title}")
             urls.append(video.url)
 
-        downloads = input(
-            Fore.RESET + "Enter the number of videos you want to download. Separate by comma e.g 1,7,12-->:")
+        downloads = input(Fore.RESET + "Enter the number of videos you want to download. Separate by comma e.g 1,7,12-->:")
         videos = downloads.split(",")
 
         for number in videos:

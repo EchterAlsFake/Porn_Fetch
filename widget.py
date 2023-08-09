@@ -41,7 +41,7 @@ Checkmark Icon: https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html
 A special thanks to Egsagon for creating PHUB.
 This project would not be possible without his great API and I have much respect for him!
 
-1.9 - 2023
+2.0 - 2023
 """)
 
 import sys
@@ -445,7 +445,12 @@ class Widget(QWidget):
     def search_videos(self):
         # Searches videos with query string and lets the user select them
         query = self.ui.lineedit_search_query.text()
-        query_object = self.client.search(query)
+        try:
+            query_object = self.client.search(query)
+        except requests.exceptions.ConnectionError:
+            ui_popup("You got blocked by PornHub. Some videos won't show up in the search results. The only option is to wait or change IP address. I can't do anything about it. You can still download the videos, that got returned by PornHub.")
+
+
         length = len(query_object)
         self.ui.lineedit_total_videos.setText(str(length))
 

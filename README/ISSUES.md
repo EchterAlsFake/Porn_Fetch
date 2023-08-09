@@ -28,3 +28,9 @@ This file keeps track of all Issues / Bugs
 # 1.8
 
 1) OS Error    : This error happens, because Windows can not handle ./ as a path. This error will be fixed tonight!
+
+# 1.9
+
+1) Connection Error : This error happens, because you got blocked by PornHub because you made to many requests. The only solution
+                      is to wait or to change your IP address.  I sadly can not do anything about this.
+
