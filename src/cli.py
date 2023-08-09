@@ -50,7 +50,7 @@ Checkmark Icon : https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html
 A special thanks to Egsagon for creating PHUB.
 This project would not be possible without his great API and I have much respect for him!
 
-1.8 - 2023
+1.9 - 2023
 """
 
 class CLI():

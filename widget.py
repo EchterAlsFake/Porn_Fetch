@@ -1,10 +1,10 @@
 __author__ = "EchterAlsFake : Johannes Habel"
-__version__ = "1.8"
+__version__ = "1.9"
 __source__ = "https://github.com/EchterAlsFake/Porn_Fetch"
 __license__ = "GPL 3"
 
-sentry = False
-credits_lol = f"""
+sentry = bool(False)
+credits_lol = str (f"""
 Porn Fetch is created and maintained by EchterAlsFake | Johannes Habel.
 EchterAlsFake is the internet pseudonym for Johannes Habel.
 
@@ -41,8 +41,8 @@ Checkmark Icon: https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html
 A special thanks to Egsagon for creating PHUB.
 This project would not be possible without his great API and I have much respect for him!
 
-1.8 - 2023
-"""
+1.9 - 2023
+""")
 
 import sys
 import argparse
@@ -63,6 +63,7 @@ from src.setup import enable_error_handling, get_graphics, setup_config_file, st
 from src.cli import CLI
 
 def ui_popup(text):
+    """ A simple UI popup that will be used for small messages to the user."""
     qmsg_box = QMessageBox()
     qmsg_box.setText(str(text))
     qmsg_box.exec()
@@ -71,10 +72,12 @@ def ui_popup(text):
 
 
 class License(QWidget):
+    """ License class to display the GPL 3 License to the user."""
     def __init__(self, parent=None):
         super().__init__(parent)
         self.conf = ConfigParser()
         self.conf.read("config.ini")
+
 
         self.ui = Ui_Widget_License()
         self.ui.setupUi(self)
@@ -83,10 +86,10 @@ class License(QWidget):
 
     def check_license_and_proceed(self):
         if self.conf["License"]["accept"] == "true":
-            print("License accepted. Continuing...")
+            print(str("License accepted. Continuing..."))
             self.show_main_window()
         else:
-            print("License was not accepted. Prompting user...")
+            print(str("License was not accepted. Prompting user..."))
             self.show()  # Show the license widget
 
     def accept(self):
@@ -105,18 +108,24 @@ class License(QWidget):
             sys.exit(0)
 
     def show_main_window(self):
+        """ If license is accepted, the License widget is closed and the main widget will be shown."""
         self.close()
         self.main_widget = Widget()
         self.main_widget.show()
 
 
 class DownloadProgressSignal(QObject):
+    """Sends the current download progress to the main UI to update the progressbar."""
     progress = Signal(int, int)
 
 
 class DownloadThread(QRunnable):
+    """
+    Uses threading to download the videos without interfering with the main UI
+    Will be used when the 'multiple' Box is checked in the main UI.
+    """
 
-    def __init__(self, video, quality, output_path, parent=None):
+    def __init__(self, video, quality, output_path):
         super().__init__()
         self.video = video
         self.quality = quality
@@ -124,6 +133,7 @@ class DownloadThread(QRunnable):
         self.signals = DownloadProgressSignal()
 
     def callback(self, **kwargs):
+        """The callback argument from PHUB needs to be extracted. This is the reason why I need to use two functions."""
         def _update_progress(pos, total):
             self.signals.progress.emit(pos, total)
 
@@ -134,7 +144,7 @@ class DownloadThread(QRunnable):
 
 
 class Widget(QWidget):
-
+    """Main UI widget. Design is loaded from the ui_main_widget.py file. Feel free to change things, if you want."""
     def __init__(self, parent=None):
         super().__init__(parent)
         print("Checking graphics...")
@@ -175,15 +185,11 @@ class Widget(QWidget):
         self.ui.button_metadata_tab.setIcon(icon_metadata)
         self.ui.button_credits_tab.setIcon(icon_c)
 
-
-
-        
-        self.client = Client(language="en")
+        self.client = Client(language="en") # Language can be changed. I'll implement this later.
         self.download_thread = None
-        self.mode = "single"
         self.threadpool = QThreadPool()
         self.ui.stackedWidget.setCurrentIndex(0)
-        self.load_user_settings()
+        self.load_user_settings() # Loads the user settings from config.ini to make settings persistent
 
         self.ui.button_start.clicked.connect(self.start)
         self.ui.button_start_file.clicked.connect(self.start_file)
@@ -240,6 +246,7 @@ class Widget(QWidget):
             with open("config.ini", "w") as config_file:
                 self.conf.write(config_file)
                 config_file.close()
+
             sentry = True
 
         else:
@@ -560,4 +567,12 @@ if __name__ == "__main__":
 
         except PermissionError:
             ui_popup("You don't have permissions to write / access something. Please give Porn Fetch the appropriate permissions and try again.")
+
+        except Exception as e:
+            ui_popup(f"Exception: {e}")
+            if sentry:
+                sentry_sdk.capture_exception(e)
+                ui_popup("Exception successfully captured by Sentry.  I am working on it. Have a look on GitHub for a new version :) ")
+
+
 
