@@ -2,6 +2,7 @@
 
 # Windows
 
+* [Porn Fetch 1.9.exe](https://drive.google.com/uc?export=download&id=16rt51EzFY1q_-DrPMRycg9qMoXxzwOSw) -|-  [1.9.torrent](https://drive.google.com/uc?export=download&id=18jIqEWo16DN6JaE9Vb114GZwZhOicRBQ)
 * [Porn Fetch 1.8.exe](https://drive.google.com/uc?export=download&id=1IxYPtU2lPqHZIFfSVNDoO3Z3FWMp_UoQ) -|-  [1.8.torrent](https://drive.google.com/uc?export=download&id=1pt2ulnfA43uZE38r9v_ygm29FTihH4Lg)
 * [Porn Fetch 1.7.exe](https://drive.google.com/uc?export=download&id=1Mj67JCLfbZ0yjvJzeoli-_SHRJbNDbZo) -|-  [1.7.torrent](https://drive.google.com/uc?export=download&id=14tvA3U3Wacu0Hk-VZ_DJoKbUpmlUiRk6)
 * [Porn Fetch 1.6.exe](https://drive.google.com/uc?export=download&id=1Ok4iHIBOFlTa0hXifLql0TRy-8JwC39D) -|-  [1.6.torrent](https://drive.google.com/uc?export=download&id=15XgVFhjVVMGbbiFnK4PJhAa86jVooWEc)
@@ -16,7 +17,7 @@
 
 
 # Linux
-
+* [Porn Fetch 1.9](https://drive.google.com/uc?export=download&id=1mMUXMPpNOtl4Mu66ELuj4oNRNi3D7yJf) -|-  [1.9.torrent](https://drive.google.com/uc?export=download&id=1laHVNRbI7z_FLwX4RB-ToLUxSnVhedKN)
 * [Porn Fetch 1.8](https://drive.google.com/uc?export=download&id=11mo-bKMVnJNgVzi6gEP4bcPP42ziULCs) -|-  [1.8.torrent](https://drive.google.com/uc?export=download&id=1-VkvcAmtkKb0IVeej0a8Rn9CRLiTExp-)
 * [Porn Fetch 1.7](https://drive.google.com/uc?export=download&id=1OaLZM6enAKY8B6M6qjPXi-yy4TKffC0v) -|-  [1.7.torrent](https://drive.google.com/uc?export=download&id=1S2WUhvc-EKwtBNY5CPdKaqnGpCFBV2KV)
 * [Porn Fetch 1.6](https://drive.google.com/uc?export=download&id=1JMqEIhdLwHtB2c34qZpVDUv1fkIsGE3l) -|-  [1.6.torrent](https://drive.google.com/uc?export=download&id=1h2SAv6ZJaafmdclvZJia0bI0az5p_H0y)
