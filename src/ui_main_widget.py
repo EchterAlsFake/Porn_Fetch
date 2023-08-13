@@ -18,14 +18,14 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QCheckBox, QGridLayout, QGroupBox,
     QHBoxLayout, QHeaderView, QLabel, QLineEdit,
     QProgressBar, QPushButton, QRadioButton, QSizePolicy,
-    QStackedWidget, QTextBrowser, QTreeWidget, QTreeWidgetItem,
-    QWidget)
+    QSlider, QStackedWidget, QTextBrowser, QTreeWidget,
+    QTreeWidgetItem, QWidget)
 
 class Ui_Porn_Fetch_Widget(object):
     def setupUi(self, Porn_Fetch_Widget):
         if not Porn_Fetch_Widget.objectName():
             Porn_Fetch_Widget.setObjectName(u"Porn_Fetch_Widget")
-        Porn_Fetch_Widget.resize(1255, 700)
+        Porn_Fetch_Widget.resize(1583, 857)
         Porn_Fetch_Widget.setStyleSheet(u"background-color: rgb(18,18,18);\n"
 "color: white;")
         self.gridLayout_13 = QGridLayout(Porn_Fetch_Widget)
@@ -278,451 +278,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridLayout.addLayout(self.horizontalLayout_20, 3, 0, 1, 1)
 
 
-        self.gridLayout_13.addWidget(self.groupBox, 0, 0, 1, 1)
-
-        self.groupBox_2 = QGroupBox(Porn_Fetch_Widget)
-        self.groupBox_2.setObjectName(u"groupBox_2")
-        self.gridLayout_12 = QGridLayout(self.groupBox_2)
-        self.gridLayout_12.setObjectName(u"gridLayout_12")
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.label_quality = QLabel(self.groupBox_2)
-        self.label_quality.setObjectName(u"label_quality")
-
-        self.horizontalLayout_4.addWidget(self.label_quality)
-
-        self.radio_highest = QRadioButton(self.groupBox_2)
-        self.radio_highest.setObjectName(u"radio_highest")
-        self.radio_highest.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(0, 255, 110);}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"\n"
-"")
-        self.radio_highest.setChecked(True)
-
-        self.horizontalLayout_4.addWidget(self.radio_highest)
-
-        self.radio_middle = QRadioButton(self.groupBox_2)
-        self.radio_middle.setObjectName(u"radio_middle")
-        self.radio_middle.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 162, 0)}\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"\n"
-"")
-
-        self.horizontalLayout_4.addWidget(self.radio_middle)
-
-        self.radio_lowest = QRadioButton(self.groupBox_2)
-        self.radio_lowest.setObjectName(u"radio_lowest")
-        self.radio_lowest.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 0, 0)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"\n"
-"")
-
-        self.horizontalLayout_4.addWidget(self.radio_lowest)
-
-
-        self.gridLayout_12.addLayout(self.horizontalLayout_4, 1, 0, 1, 1)
-
-        self.horizontalLayout_7 = QHBoxLayout()
-        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
-        self.button_settings_apply = QPushButton(self.groupBox_2)
-        self.button_settings_apply.setObjectName(u"button_settings_apply")
-        self.button_settings_apply.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_settings_apply.setStyleSheet(u"QPushButton {\n"
-"        background-color: #5a2a82; /* base violet color */\n"
-"        color: #ffffff; /* white text */\n"
-"        border: none;\n"
-"        border-radius: 10px; /* reduced rounded corner radius */\n"
-"        padding: 5px 10px; /* reduced button padding */\n"
-"        font-size: 12px;\n"
-"        outline: none;\n"
-"    }\n"
-"    \n"
-"    QPushButton:hover {\n"
-"        background-color: #7b3ca3; /* slightly lighter violet when hovered */\n"
-"    }\n"
-"\n"
-"    QPushButton:pressed {\n"
-"        background-color: #481f61; /* darker violet when pressed */\n"
-"    }\n"
-"\n"
-"    QPushButton:disabled {\n"
-"        background-color: #3f1d4d; /* even darker shade when button is disabled */\n"
-"        color: #8a7b9a; /* greyish text */\n"
-"    }")
-
-        self.horizontalLayout_7.addWidget(self.button_settings_apply)
-
-        self.button_settings_help = QPushButton(self.groupBox_2)
-        self.button_settings_help.setObjectName(u"button_settings_help")
-        self.button_settings_help.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_settings_help.setStyleSheet(u"QPushButton {\n"
-"        background-color: #5a2a82; /* base violet color */\n"
-"        color: #ffffff; /* white text */\n"
-"        border: none;\n"
-"        border-radius: 10px; /* reduced rounded corner radius */\n"
-"        padding: 5px 10px; /* reduced button padding */\n"
-"        font-size: 12px;\n"
-"        outline: none;\n"
-"    }\n"
-"    \n"
-"    QPushButton:hover {\n"
-"        background-color: #7b3ca3; /* slightly lighter violet when hovered */\n"
-"    }\n"
-"\n"
-"    QPushButton:pressed {\n"
-"        background-color: #481f61; /* darker violet when pressed */\n"
-"    }\n"
-"\n"
-"    QPushButton:disabled {\n"
-"        background-color: #3f1d4d; /* even darker shade when button is disabled */\n"
-"        color: #8a7b9a; /* greyish text */\n"
-"    }")
-
-        self.horizontalLayout_7.addWidget(self.button_settings_help)
-
-
-        self.gridLayout_12.addLayout(self.horizontalLayout_7, 4, 0, 1, 1)
-
-        self.horizontalLayout_6 = QHBoxLayout()
-        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-        self.label_debug = QLabel(self.groupBox_2)
-        self.label_debug.setObjectName(u"label_debug")
-
-        self.horizontalLayout_6.addWidget(self.label_debug)
-
-        self.settings_checkbox_sentry = QCheckBox(self.groupBox_2)
-        self.settings_checkbox_sentry.setObjectName(u"settings_checkbox_sentry")
-        self.settings_checkbox_sentry.setStyleSheet(u"QCheckBox::indicator {\n"
-"    width: 13px;\n"
-"    height: 13px;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:unchecked {\n"
-"    border: 1px solid white;\n"
-"    background: white;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:checked {\n"
-"    image: url(graphics/checkmark.png);\n"
-"}")
-
-        self.horizontalLayout_6.addWidget(self.settings_checkbox_sentry)
-
-        self.settings_checkbox_logging = QCheckBox(self.groupBox_2)
-        self.settings_checkbox_logging.setObjectName(u"settings_checkbox_logging")
-        self.settings_checkbox_logging.setStyleSheet(u"QCheckBox::indicator {\n"
-"    width: 13px;\n"
-"    height: 13px;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:unchecked {\n"
-"    border: 1px solid white;\n"
-"    background: white;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:checked {\n"
-"    image: url(graphics/checkmark.png);\n"
-"}")
-
-        self.horizontalLayout_6.addWidget(self.settings_checkbox_logging)
-
-
-        self.gridLayout_12.addLayout(self.horizontalLayout_6, 3, 0, 1, 1)
-
-        self.groupBox_9 = QGroupBox(self.groupBox_2)
-        self.groupBox_9.setObjectName(u"groupBox_9")
-        self.groupBox_9.setStyleSheet(u"border: none")
-        self.gridLayout_2 = QGridLayout(self.groupBox_9)
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.horizontalLayout_5 = QHBoxLayout()
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.label_threading_mode = QLabel(self.groupBox_9)
-        self.label_threading_mode.setObjectName(u"label_threading_mode")
-
-        self.horizontalLayout_5.addWidget(self.label_threading_mode)
-
-        self.radio_threading_multiple = QRadioButton(self.groupBox_9)
-        self.radio_threading_multiple.setObjectName(u"radio_threading_multiple")
-        self.radio_threading_multiple.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(178, 0, 255)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"\n"
-"")
-        self.radio_threading_multiple.setChecked(True)
-
-        self.horizontalLayout_5.addWidget(self.radio_threading_multiple)
-
-        self.radio_threading_single = QRadioButton(self.groupBox_9)
-        self.radio_threading_single.setObjectName(u"radio_threading_single")
-        self.radio_threading_single.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 238, 0)}\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"\n"
-"")
-
-        self.horizontalLayout_5.addWidget(self.radio_threading_single)
-
-
-        self.gridLayout_2.addLayout(self.horizontalLayout_5, 0, 0, 1, 1)
-
-
-        self.gridLayout_12.addWidget(self.groupBox_9, 2, 0, 1, 1)
-
-
-        self.gridLayout_13.addWidget(self.groupBox_2, 0, 1, 1, 1)
-
-        self.groupBox_4 = QGroupBox(Porn_Fetch_Widget)
-        self.groupBox_4.setObjectName(u"groupBox_4")
-        self.gridLayout_5 = QGridLayout(self.groupBox_4)
-        self.gridLayout_5.setObjectName(u"gridLayout_5")
-        self.textBrowser = QTextBrowser(self.groupBox_4)
-        self.textBrowser.setObjectName(u"textBrowser")
-
-        self.gridLayout_5.addWidget(self.textBrowser, 0, 0, 1, 1)
-
-
-        self.gridLayout_13.addWidget(self.groupBox_4, 2, 0, 1, 1)
-
-        self.groupBox_5 = QGroupBox(Porn_Fetch_Widget)
-        self.groupBox_5.setObjectName(u"groupBox_5")
-        self.gridLayout_6 = QGridLayout(self.groupBox_5)
-        self.gridLayout_6.setObjectName(u"gridLayout_6")
-        self.groupBox_6 = QGroupBox(self.groupBox_5)
-        self.groupBox_6.setObjectName(u"groupBox_6")
-        self.gridLayout_7 = QGridLayout(self.groupBox_6)
-        self.gridLayout_7.setObjectName(u"gridLayout_7")
-        self.api_radio_de = QRadioButton(self.groupBox_6)
-        self.api_radio_de.setObjectName(u"api_radio_de")
-        self.api_radio_de.setCursor(QCursor(Qt.PointingHandCursor))
-        self.api_radio_de.setStyleSheet(u"QRadioButton {\n"
-"	color: (255,255,255)}\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"\n"
-"")
-
-        self.gridLayout_7.addWidget(self.api_radio_de, 0, 1, 1, 1)
-
-        self.api_radio_en = QRadioButton(self.groupBox_6)
-        self.api_radio_en.setObjectName(u"api_radio_en")
-        self.api_radio_en.setCursor(QCursor(Qt.PointingHandCursor))
-        self.api_radio_en.setStyleSheet(u"QRadioButton {\n"
-"	color: (255,255,255)}\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"\n"
-"")
-        self.api_radio_en.setChecked(True)
-
-        self.gridLayout_7.addWidget(self.api_radio_en, 0, 0, 1, 1)
-
-        self.api_radio_fr = QRadioButton(self.groupBox_6)
-        self.api_radio_fr.setObjectName(u"api_radio_fr")
-        self.api_radio_fr.setCursor(QCursor(Qt.PointingHandCursor))
-        self.api_radio_fr.setStyleSheet(u"QRadioButton {\n"
-"	color: (255,255,255)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"\n"
-"")
-
-        self.gridLayout_7.addWidget(self.api_radio_fr, 0, 2, 1, 1)
-
-        self.api_radio_ru = QRadioButton(self.groupBox_6)
-        self.api_radio_ru.setObjectName(u"api_radio_ru")
-        self.api_radio_ru.setCursor(QCursor(Qt.PointingHandCursor))
-        self.api_radio_ru.setStyleSheet(u"QRadioButton {\n"
-"	color: (255,255,255)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"\n"
-"")
-
-        self.gridLayout_7.addWidget(self.api_radio_ru, 1, 0, 1, 1)
-
-        self.api_radio_es = QRadioButton(self.groupBox_6)
-        self.api_radio_es.setObjectName(u"api_radio_es")
-        self.api_radio_es.setCursor(QCursor(Qt.PointingHandCursor))
-        self.api_radio_es.setStyleSheet(u"QRadioButton {\n"
-"	color: (255,255,255)}\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"\n"
-"")
-
-        self.gridLayout_7.addWidget(self.api_radio_es, 1, 1, 1, 1)
-
-
-        self.gridLayout_6.addWidget(self.groupBox_6, 0, 0, 1, 1)
-
-        self.groupBox_7 = QGroupBox(self.groupBox_5)
-        self.groupBox_7.setObjectName(u"groupBox_7")
-        self.gridLayout_8 = QGridLayout(self.groupBox_7)
-        self.gridLayout_8.setObjectName(u"gridLayout_8")
-        self.application_language_en = QRadioButton(self.groupBox_7)
-        self.application_language_en.setObjectName(u"application_language_en")
-        self.application_language_en.setCursor(QCursor(Qt.PointingHandCursor))
-        self.application_language_en.setStyleSheet(u"QRadioButton {\n"
-"	color: (255,255,255)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"\n"
-"")
-        self.application_language_en.setChecked(True)
-
-        self.gridLayout_8.addWidget(self.application_language_en, 0, 0, 1, 1)
-
-
-        self.gridLayout_6.addWidget(self.groupBox_7, 0, 1, 1, 1)
-
-
-        self.gridLayout_13.addWidget(self.groupBox_5, 2, 1, 1, 1)
+        self.gridLayout_13.addWidget(self.groupBox, 0, 0, 1, 2)
 
         self.groupBox_3 = QGroupBox(Porn_Fetch_Widget)
         self.groupBox_3.setObjectName(u"groupBox_3")
@@ -730,13 +286,13 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.stackedWidget = QStackedWidget(self.groupBox_3)
         self.stackedWidget.setObjectName(u"stackedWidget")
-        self.page = QWidget()
-        self.page.setObjectName(u"page")
-        self.gridLayout_4 = QGridLayout(self.page)
+        self.page_search = QWidget()
+        self.page_search.setObjectName(u"page_search")
+        self.gridLayout_4 = QGridLayout(self.page_search)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.horizontalLayout_9 = QHBoxLayout()
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
-        self.button_download_search_query = QPushButton(self.page)
+        self.button_download_search_query = QPushButton(self.page_search)
         self.button_download_search_query.setObjectName(u"button_download_search_query")
         self.button_download_search_query.setCursor(QCursor(Qt.PointingHandCursor))
         self.button_download_search_query.setStyleSheet(u"QPushButton {\n"
@@ -764,7 +320,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.horizontalLayout_9.addWidget(self.button_download_search_query)
 
-        self.button_search_fix = QPushButton(self.page)
+        self.button_search_fix = QPushButton(self.page_search)
         self.button_search_fix.setObjectName(u"button_search_fix")
         self.button_search_fix.setCursor(QCursor(Qt.PointingHandCursor))
         self.button_search_fix.setStyleSheet(u"QPushButton {\n"
@@ -797,12 +353,12 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.horizontalLayout_8 = QHBoxLayout()
         self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
-        self.label_search_query = QLabel(self.page)
+        self.label_search_query = QLabel(self.page_search)
         self.label_search_query.setObjectName(u"label_search_query")
 
         self.horizontalLayout_8.addWidget(self.label_search_query)
 
-        self.lineedit_search_query = QLineEdit(self.page)
+        self.lineedit_search_query = QLineEdit(self.page_search)
         self.lineedit_search_query.setObjectName(u"lineedit_search_query")
         self.lineedit_search_query.setStyleSheet(u"QLineEdit {\n"
 "    border: 2px solid #757575;\n"
@@ -826,7 +382,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.horizontalLayout_8.addWidget(self.lineedit_search_query)
 
-        self.button_start_search = QPushButton(self.page)
+        self.button_start_search = QPushButton(self.page_search)
         self.button_start_search.setObjectName(u"button_start_search")
         self.button_start_search.setCursor(QCursor(Qt.PointingHandCursor))
         self.button_start_search.setStyleSheet(u"QPushButton {\n"
@@ -857,7 +413,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_4.addLayout(self.horizontalLayout_8, 0, 0, 1, 1)
 
-        self.treeWidget = QTreeWidget(self.page)
+        self.treeWidget = QTreeWidget(self.page_search)
         __qtreewidgetitem = QTreeWidgetItem()
         __qtreewidgetitem.setText(0, u"1");
         self.treeWidget.setHeaderItem(__qtreewidgetitem)
@@ -867,12 +423,12 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_4.addWidget(self.treeWidget, 1, 0, 1, 1)
 
-        self.stackedWidget.addWidget(self.page)
-        self.page_2 = QWidget()
-        self.page_2.setObjectName(u"page_2")
-        self.gridLayout_10 = QGridLayout(self.page_2)
+        self.stackedWidget.addWidget(self.page_search)
+        self.page_metadata = QWidget()
+        self.page_metadata.setObjectName(u"page_metadata")
+        self.gridLayout_10 = QGridLayout(self.page_metadata)
         self.gridLayout_10.setObjectName(u"gridLayout_10")
-        self.groupBox_8 = QGroupBox(self.page_2)
+        self.groupBox_8 = QGroupBox(self.page_metadata)
         self.groupBox_8.setObjectName(u"groupBox_8")
         self.gridLayout_9 = QGridLayout(self.groupBox_8)
         self.gridLayout_9.setObjectName(u"gridLayout_9")
@@ -1410,22 +966,499 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_10.addWidget(self.groupBox_8, 0, 0, 1, 1)
 
-        self.stackedWidget.addWidget(self.page_2)
-        self.page_3 = QWidget()
-        self.page_3.setObjectName(u"page_3")
-        self.gridLayout_11 = QGridLayout(self.page_3)
+        self.stackedWidget.addWidget(self.page_metadata)
+        self.page_credits = QWidget()
+        self.page_credits.setObjectName(u"page_credits")
+        self.gridLayout_11 = QGridLayout(self.page_credits)
         self.gridLayout_11.setObjectName(u"gridLayout_11")
-        self.textBrowser_2 = QTextBrowser(self.page_3)
+        self.textBrowser_2 = QTextBrowser(self.page_credits)
         self.textBrowser_2.setObjectName(u"textBrowser_2")
 
         self.gridLayout_11.addWidget(self.textBrowser_2, 0, 0, 1, 1)
 
-        self.stackedWidget.addWidget(self.page_3)
+        self.stackedWidget.addWidget(self.page_credits)
 
         self.gridLayout_3.addWidget(self.stackedWidget, 0, 0, 1, 1)
 
 
         self.gridLayout_13.addWidget(self.groupBox_3, 1, 0, 1, 2)
+
+        self.groupBox_2 = QGroupBox(Porn_Fetch_Widget)
+        self.groupBox_2.setObjectName(u"groupBox_2")
+        self.gridLayout_8 = QGridLayout(self.groupBox_2)
+        self.gridLayout_8.setObjectName(u"gridLayout_8")
+        self.label_3 = QLabel(self.groupBox_2)
+        self.label_3.setObjectName(u"label_3")
+
+        self.gridLayout_8.addWidget(self.label_3, 2, 0, 1, 1)
+
+        self.gridLayout_12 = QGridLayout()
+        self.gridLayout_12.setObjectName(u"gridLayout_12")
+        self.settings_checkbox_sentry = QCheckBox(self.groupBox_2)
+        self.settings_checkbox_sentry.setObjectName(u"settings_checkbox_sentry")
+        self.settings_checkbox_sentry.setCursor(QCursor(Qt.PointingHandCursor))
+        self.settings_checkbox_sentry.setStyleSheet(u"QCheckBox::indicator {\n"
+"    width: 13px;\n"
+"    height: 13px;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked {\n"
+"    border: 1px solid white;\n"
+"    background: white;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked {\n"
+"    image: url(graphics/checkmark.png);\n"
+"}")
+
+        self.gridLayout_12.addWidget(self.settings_checkbox_sentry, 1, 0, 1, 1)
+
+        self.settings_checkbox_logging = QCheckBox(self.groupBox_2)
+        self.settings_checkbox_logging.setObjectName(u"settings_checkbox_logging")
+        self.settings_checkbox_logging.setCursor(QCursor(Qt.PointingHandCursor))
+        self.settings_checkbox_logging.setStyleSheet(u"QCheckBox::indicator {\n"
+"    width: 13px;\n"
+"    height: 13px;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked {\n"
+"    border: 1px solid white;\n"
+"    background: white;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked {\n"
+"    image: url(graphics/checkmark.png);\n"
+"}")
+
+        self.gridLayout_12.addWidget(self.settings_checkbox_logging, 1, 1, 1, 1)
+
+        self.label_debug = QLabel(self.groupBox_2)
+        self.label_debug.setObjectName(u"label_debug")
+
+        self.gridLayout_12.addWidget(self.label_debug, 0, 0, 1, 2)
+
+
+        self.gridLayout_8.addLayout(self.gridLayout_12, 1, 2, 1, 1)
+
+        self.horizontal_quality = QHBoxLayout()
+        self.horizontal_quality.setObjectName(u"horizontal_quality")
+        self.label_quality = QLabel(self.groupBox_2)
+        self.label_quality.setObjectName(u"label_quality")
+
+        self.horizontal_quality.addWidget(self.label_quality)
+
+        self.radio_highest = QRadioButton(self.groupBox_2)
+        self.radio_highest.setObjectName(u"radio_highest")
+        self.radio_highest.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(0, 255, 110);}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+        self.radio_highest.setChecked(True)
+
+        self.horizontal_quality.addWidget(self.radio_highest)
+
+        self.radio_middle = QRadioButton(self.groupBox_2)
+        self.radio_middle.setObjectName(u"radio_middle")
+        self.radio_middle.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(255, 162, 0)}\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+
+        self.horizontal_quality.addWidget(self.radio_middle)
+
+        self.radio_lowest = QRadioButton(self.groupBox_2)
+        self.radio_lowest.setObjectName(u"radio_lowest")
+        self.radio_lowest.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(255, 0, 0)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+
+        self.horizontal_quality.addWidget(self.radio_lowest)
+
+
+        self.gridLayout_8.addLayout(self.horizontal_quality, 0, 0, 1, 2)
+
+        self.horizontalLayout_7 = QHBoxLayout()
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+        self.button_settings_apply = QPushButton(self.groupBox_2)
+        self.button_settings_apply.setObjectName(u"button_settings_apply")
+        self.button_settings_apply.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_settings_apply.setStyleSheet(u"QPushButton {\n"
+"        background-color: #5a2a82; /* base violet color */\n"
+"        color: #ffffff; /* white text */\n"
+"        border: none;\n"
+"        border-radius: 10px; /* reduced rounded corner radius */\n"
+"        padding: 5px 10px; /* reduced button padding */\n"
+"        font-size: 12px;\n"
+"        outline: none;\n"
+"    }\n"
+"    \n"
+"    QPushButton:hover {\n"
+"        background-color: #7b3ca3; /* slightly lighter violet when hovered */\n"
+"    }\n"
+"\n"
+"    QPushButton:pressed {\n"
+"        background-color: #481f61; /* darker violet when pressed */\n"
+"    }\n"
+"\n"
+"    QPushButton:disabled {\n"
+"        background-color: #3f1d4d; /* even darker shade when button is disabled */\n"
+"        color: #8a7b9a; /* greyish text */\n"
+"    }")
+
+        self.horizontalLayout_7.addWidget(self.button_settings_apply)
+
+        self.button_settings_help = QPushButton(self.groupBox_2)
+        self.button_settings_help.setObjectName(u"button_settings_help")
+        self.button_settings_help.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_settings_help.setStyleSheet(u"QPushButton {\n"
+"        background-color: #5a2a82; /* base violet color */\n"
+"        color: #ffffff; /* white text */\n"
+"        border: none;\n"
+"        border-radius: 10px; /* reduced rounded corner radius */\n"
+"        padding: 5px 10px; /* reduced button padding */\n"
+"        font-size: 12px;\n"
+"        outline: none;\n"
+"    }\n"
+"    \n"
+"    QPushButton:hover {\n"
+"        background-color: #7b3ca3; /* slightly lighter violet when hovered */\n"
+"    }\n"
+"\n"
+"    QPushButton:pressed {\n"
+"        background-color: #481f61; /* darker violet when pressed */\n"
+"    }\n"
+"\n"
+"    QPushButton:disabled {\n"
+"        background-color: #3f1d4d; /* even darker shade when button is disabled */\n"
+"        color: #8a7b9a; /* greyish text */\n"
+"    }")
+
+        self.horizontalLayout_7.addWidget(self.button_settings_help)
+
+
+        self.gridLayout_8.addLayout(self.horizontalLayout_7, 4, 0, 1, 3)
+
+        self.gridlayout_api_language = QGridLayout()
+        self.gridlayout_api_language.setObjectName(u"gridlayout_api_language")
+        self.api_radio_fr = QRadioButton(self.groupBox_2)
+        self.api_radio_fr.setObjectName(u"api_radio_fr")
+        self.api_radio_fr.setCursor(QCursor(Qt.PointingHandCursor))
+        self.api_radio_fr.setStyleSheet(u"QRadioButton {\n"
+"	color: (255,255,255)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+
+        self.gridlayout_api_language.addWidget(self.api_radio_fr, 2, 1, 1, 1)
+
+        self.api_radio_de = QRadioButton(self.groupBox_2)
+        self.api_radio_de.setObjectName(u"api_radio_de")
+        self.api_radio_de.setCursor(QCursor(Qt.PointingHandCursor))
+        self.api_radio_de.setStyleSheet(u"QRadioButton {\n"
+"	color: (255,255,255)}\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+
+        self.gridlayout_api_language.addWidget(self.api_radio_de, 2, 0, 1, 1)
+
+        self.api_radio_ru = QRadioButton(self.groupBox_2)
+        self.api_radio_ru.setObjectName(u"api_radio_ru")
+        self.api_radio_ru.setCursor(QCursor(Qt.PointingHandCursor))
+        self.api_radio_ru.setStyleSheet(u"QRadioButton {\n"
+"	color: (255,255,255)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+
+        self.gridlayout_api_language.addWidget(self.api_radio_ru, 3, 0, 1, 1)
+
+        self.api_radio_es = QRadioButton(self.groupBox_2)
+        self.api_radio_es.setObjectName(u"api_radio_es")
+        self.api_radio_es.setCursor(QCursor(Qt.PointingHandCursor))
+        self.api_radio_es.setStyleSheet(u"QRadioButton {\n"
+"	color: (255,255,255)}\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+
+        self.gridlayout_api_language.addWidget(self.api_radio_es, 1, 1, 1, 1)
+
+        self.api_radio_en = QRadioButton(self.groupBox_2)
+        self.api_radio_en.setObjectName(u"api_radio_en")
+        self.api_radio_en.setCursor(QCursor(Qt.PointingHandCursor))
+        self.api_radio_en.setStyleSheet(u"QRadioButton {\n"
+"	color: (255,255,255)}\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+        self.api_radio_en.setChecked(True)
+
+        self.gridlayout_api_language.addWidget(self.api_radio_en, 1, 0, 1, 1)
+
+        self.label = QLabel(self.groupBox_2)
+        self.label.setObjectName(u"label")
+
+        self.gridlayout_api_language.addWidget(self.label, 0, 0, 1, 2)
+
+
+        self.gridLayout_8.addLayout(self.gridlayout_api_language, 1, 0, 1, 1)
+
+        self.gridlayout_ui_language = QGridLayout()
+        self.gridlayout_ui_language.setObjectName(u"gridlayout_ui_language")
+        self.label_2 = QLabel(self.groupBox_2)
+        self.label_2.setObjectName(u"label_2")
+
+        self.gridlayout_ui_language.addWidget(self.label_2, 0, 0, 1, 1)
+
+        self.application_language_en = QRadioButton(self.groupBox_2)
+        self.application_language_en.setObjectName(u"application_language_en")
+        self.application_language_en.setCursor(QCursor(Qt.PointingHandCursor))
+        self.application_language_en.setStyleSheet(u"QRadioButton {\n"
+"	color: (255,255,255)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+        self.application_language_en.setChecked(True)
+
+        self.gridlayout_ui_language.addWidget(self.application_language_en, 1, 0, 1, 1)
+
+
+        self.gridLayout_8.addLayout(self.gridlayout_ui_language, 1, 1, 1, 1)
+
+        self.horizontal_threading = QHBoxLayout()
+        self.horizontal_threading.setObjectName(u"horizontal_threading")
+        self.label_threading_mode_2 = QLabel(self.groupBox_2)
+        self.label_threading_mode_2.setObjectName(u"label_threading_mode_2")
+
+        self.horizontal_threading.addWidget(self.label_threading_mode_2)
+
+        self.radio_threading_multiple_2 = QRadioButton(self.groupBox_2)
+        self.radio_threading_multiple_2.setObjectName(u"radio_threading_multiple_2")
+        self.radio_threading_multiple_2.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(178, 0, 255)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+        self.radio_threading_multiple_2.setChecked(True)
+
+        self.horizontal_threading.addWidget(self.radio_threading_multiple_2)
+
+        self.radio_threading_single_2 = QRadioButton(self.groupBox_2)
+        self.radio_threading_single_2.setObjectName(u"radio_threading_single_2")
+        self.radio_threading_single_2.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(255, 238, 0)}\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+
+        self.horizontal_threading.addWidget(self.radio_threading_single_2)
+
+
+        self.gridLayout_8.addLayout(self.horizontal_threading, 0, 2, 1, 1)
+
+        self.horizontalSlider = QSlider(self.groupBox_2)
+        self.horizontalSlider.setObjectName(u"horizontalSlider")
+        self.horizontalSlider.setStyleSheet(u"QSlider::groove:horizontal {\n"
+"        border: none;\n"
+"        background: #3f1d4d; /* base groove color to match the button's disabled state */\n"
+"        height: 8px; /* height of the groove */\n"
+"        border-radius: 4px;\n"
+"    }\n"
+"\n"
+"    QSlider::handle:horizontal {\n"
+"        background: #5a2a82; /* base handle color to match the button */\n"
+"        width: 16px; /* width of the handle */\n"
+"        height: 16px; /* height of the handle */\n"
+"        border-radius: 8px; /* make it circular */\n"
+"        margin: -4px 0; /* to center the handle vertically */\n"
+"    }\n"
+"\n"
+"    QSlider::handle:horizontal:hover {\n"
+"        background: #7b3ca3;\n"
+"    }\n"
+"\n"
+"    QSlider::handle:horizontal:pressed {\n"
+"        background: #481f61;\n"
+"    }\n"
+"\n"
+"    QSlider::sub-page:horizontal {\n"
+"        background-color: #5a2a82;\n"
+"        border-radius: 4px;\n"
+"    }")
+        self.horizontalSlider.setMaximum(100)
+        self.horizontalSlider.setPageStep(1)
+        self.horizontalSlider.setOrientation(Qt.Horizontal)
+
+        self.gridLayout_8.addWidget(self.horizontalSlider, 2, 1, 1, 2)
+
+
+        self.gridLayout_13.addWidget(self.groupBox_2, 0, 2, 1, 1)
+
+        self.groupBox_4 = QGroupBox(Porn_Fetch_Widget)
+        self.groupBox_4.setObjectName(u"groupBox_4")
+        self.gridLayout_5 = QGridLayout(self.groupBox_4)
+        self.gridLayout_5.setObjectName(u"gridLayout_5")
+        self.textBrowser = QTextBrowser(self.groupBox_4)
+        self.textBrowser.setObjectName(u"textBrowser")
+
+        self.gridLayout_5.addWidget(self.textBrowser, 0, 0, 1, 1)
+
+
+        self.gridLayout_13.addWidget(self.groupBox_4, 1, 2, 1, 1)
 
 
         self.retranslateUi(Porn_Fetch_Widget)
@@ -1445,45 +1478,8 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_start_user_channel.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
         self.label_url_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u" File:  ", None))
         self.button_start_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
-        self.label_output.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Output path: ", None))
+        self.label_output.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Output path:         ", None))
         self.lineedit_output.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"./", None))
-        self.groupBox_2.setTitle("")
-        self.label_quality.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Quality:", None))
-        self.radio_highest.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Best", None))
-        self.radio_middle.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Middle", None))
-        self.radio_lowest.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Worest", None))
-        self.button_settings_apply.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Apply", None))
-        self.button_settings_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
-        self.label_debug.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Debug:", None))
-        self.settings_checkbox_sentry.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Sentry", None))
-        self.settings_checkbox_logging.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Logging", None))
-        self.label_threading_mode.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Threading:", None))
-        self.radio_threading_multiple.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
-        self.radio_threading_single.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
-        self.groupBox_4.setTitle("")
-        self.textBrowser.setHtml(QCoreApplication.translate("Porn_Fetch_Widget", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:20pt; font-weight:700; color:#ffffff;\">	            Keyboard Shortcuts</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:20pt; font-weight:700; color:#ffffff;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;"
-                        " -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">1) CTRL + W  :  Exit		2) CTRL + S  :  Search Tab</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">3) CTRL + M   :  Meatadata Tab	4) CTRL + C  :  Show credits</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">5) CTRL + R   :  Reset config		6) CTRL + X  :  Re-init UI</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">7) CTRL + L    :  Set custom API language (exp.) </span></p></body></html>", None))
-        self.groupBox_5.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Language", None))
-        self.groupBox_6.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"API (video title etc...)", None))
-        self.api_radio_de.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"DE", None))
-        self.api_radio_en.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"EN", None))
-        self.api_radio_fr.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"FR", None))
-        self.api_radio_ru.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"RU", None))
-        self.api_radio_es.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"ES", None))
-        self.groupBox_7.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Application", None))
-        self.application_language_en.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"EN", None))
         self.groupBox_3.setTitle("")
         self.button_download_search_query.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download", None))
         self.button_search_fix.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Automatically fixing issues (No 100% guarantee)", None))
@@ -1524,30 +1520,67 @@ class Ui_Porn_Fetch_Widget(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">These are:</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;\"><br /><"
                         "/p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">tqdm</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">pyside6</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">phub</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">colorama</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">sentry sdk</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" col"
-                        "or:#ffffff;\">requests</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'JetBrains Mono','monospace'; color:#bcbec4; background-color:#1e1f22;\">phub</span><span style=\" font-family:'JetBrains Mono','monospace'; color:#bcbec4;\"><br />PySide6<br />colorama<br />bs4<br />tqdm<br />sentry-sdk<br />wget<br />requests<br />js2py</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">Graphics:</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">Download Icon : https://icons8.com/icon/104149/herunterladen</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; marg"
+                        "in-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">Download Icon : https://icons8.com/icon/104149/herunterladen</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">Search Icon : https://icons8.com/icon/aROEUCBo74Il/suche</span></p>\n"
-"<p "
-                        "style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">Settings Icon : https://icons8.com/icon/52146/einstellungen</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">Settings Icon : https://icons8.com/icon/52146/einstellungen</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">C Icon : https://icons8.com/icon/Uehg4gyVyrUo/copyright</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">M Icon By Unicons Font on Icon Scout : https://iconscout.com/icons/medium : https://iconscout.com/contributors/unicons</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">M Icon By Unicons Font on Icon Sco"
+                        "ut : https://iconscout.com/icons/medium : https://iconscout.com/contributors/unicons</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">: https://iconscout.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-inden"
-                        "t:0; text-indent:0px;\"><span style=\" color:#ffffff;\">Checkmark Icon: </span><span style=\" font-family:'JetBrains Mono','monospace'; color:#6a8759;\">https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">Checkmark Icon: </span><span style=\" font-family:'JetBrains Mono','monospace'; color:#6a8759;\">https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">A special thanks to Egsagon for creating PHUB.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">This project would not be possible without his great API and I have much respect for him!</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; co"
-                        "lor:#ffffff;\"><br /></p>\n"
+"<p style=\" mar"
+                        "gin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">This project would not be possible without his great API and I have much respect for him!</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">2.1 - 2023</span></p></body></html>", None))
+        self.groupBox_2.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Settings", None))
+        self.label_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"UI Transparency:", None))
+        self.settings_checkbox_sentry.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Sentry", None))
+        self.settings_checkbox_logging.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Logging", None))
+        self.label_debug.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Debug:", None))
+        self.label_quality.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Quality:", None))
+        self.radio_highest.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Best", None))
+        self.radio_middle.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Middle", None))
+        self.radio_lowest.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Worest", None))
+        self.button_settings_apply.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Apply", None))
+        self.button_settings_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
+        self.api_radio_fr.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"FR", None))
+        self.api_radio_de.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"DE", None))
+        self.api_radio_ru.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"RU", None))
+        self.api_radio_es.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"ES", None))
+        self.api_radio_en.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"EN", None))
+        self.label.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Choose API language", None))
+        self.label_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Choose UI language", None))
+        self.application_language_en.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"EN", None))
+        self.label_threading_mode_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Threading:", None))
+        self.radio_threading_multiple_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
+        self.radio_threading_single_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
+#if QT_CONFIG(tooltip)
+        self.horizontalSlider.setToolTip(QCoreApplication.translate("Porn_Fetch_Widget", u"Set transparency for UI in %. Gives a better UX on DEs like Hyprland", None))
+#endif // QT_CONFIG(tooltip)
+        self.groupBox_4.setTitle("")
+        self.textBrowser.setHtml(QCoreApplication.translate("Porn_Fetch_Widget", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:20pt; font-weight:700; color:#ffffff;\">      Keyboard Shortcuts</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:20pt; font-weight:700; color:#ffffff;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-bl"
+                        "ock-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">1) CTRL + W   :   Exit		</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">2) CTRL + S    :   Search Tab</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">3) CTRL + M   :   Meatadata Tab	</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">4) CTRL + C    :  Show credits</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">5) CTRL + R    :  Reset config		</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"
+                        "<span style=\" color:#ffffff;\">6) CTRL + L    :  Set custom API language (exp.) </span></p></body></html>", None))
     # retranslateUi
 

@@ -7,3 +7,4 @@ tqdm
 sentry-sdk
 wget
 requests
+js2py

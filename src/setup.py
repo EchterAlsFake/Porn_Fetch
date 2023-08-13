@@ -6,6 +6,14 @@ import wget
 from tqdm import tqdm
 from configparser import ConfigParser
 
+def logging(msg, level):
+
+    if level == "0":
+        print(f"{Fore.LIGHTCYAN_EX} : DEBUG : {Fore.RESET} : MSG : {msg}")
+
+    elif level == "1":
+        print(f"[{Fore.LIGHTRED_EX} : ERROR : {Fore.RESET} : MSG : {msg} ")
+
 
 def strip_title(title):
     disallowed_chars = ["<", ">", ":", '"', "/", "\\", "|", "*", "0"]
