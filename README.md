@@ -4,9 +4,18 @@
 
 # Information:
 
-There will be no updates for 2-3 weeks. I need to focus on school. I will still develop on this Application, but only release big updates from time to time.
-This repository is NOT dead, but developing is not my highest priority for now!<br> Issues will still be handled, and Pull Requests will be merged. <br>
-#### Thanks for your patience!
+I am experiencing some Issues with the Update for V2.1
+
+I will commit everything now, but not everything will work and there is still
+much left to do. I hope I get it done soon.
+
+Egsagon updated the API to 3.1 which solves a lot of issues.
+V2.1 will be probably the most stable version for then.
+<br>
+
+Thanks for your patience :) 
+
+
 
 # Table of Contents
 
