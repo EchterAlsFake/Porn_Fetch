@@ -1,5 +1,5 @@
 __author__ = "EchterAlsFake : Johannes Habel"
-__version__ = "1.9"
+__version__ = "2.1"
 __source__ = "https://github.com/EchterAlsFake/Porn_Fetch"
 __license__ = "GPL 3"
 
@@ -27,6 +27,7 @@ pyside6
 phub
 colorama
 sentry sdk
+requests
 
 Graphics:
 
@@ -41,7 +42,7 @@ Checkmark Icon: https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html
 A special thanks to Egsagon for creating PHUB.
 This project would not be possible without his great API and I have much respect for him!
 
-2.0 - 2023
+2.1 - 2023
 """)
 
 import sys
@@ -53,12 +54,12 @@ import os.path
 
 from configparser import ConfigParser
 from PySide6 import QtCore
-from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem
-from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, QSize
+from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QInputDialog, QLineEdit
+from PySide6.QtGui import QKeyEvent
+from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Qt, QDir
 from src.license_agreement import Ui_Widget_License
 from phub import Client, Quality
-from src.ui_main_widget import Ui_Widget
+from src.ui_main_widget import Ui_Porn_Fetch_Widget
 from src.setup import enable_error_handling, get_graphics, setup_config_file, strip_title
 from src.cli import CLI
 
@@ -164,28 +165,14 @@ class Widget(QWidget):
             self.sentry_data_collection()
 
         self.video = None
-        self.ui = Ui_Widget()
+        self.api_language = "en"
+        self.custom_language = False
+        self.ui = Ui_Porn_Fetch_Widget()
         self.ui.setupUi(self)
 
-        # Set correct image path
-        icon_download = QIcon()
-        icon_download.addFile(u"graphics/download.ico", QSize(), QIcon.Normal, QIcon.Off)
-        icon_search = QIcon()
-        icon_search.addFile(u"graphics/search.ico", QSize(), QIcon.Normal, QIcon.Off)
-        icon_metadata = QIcon()
-        icon_metadata.addFile(u"graphics/medium.ico", QSize(), QIcon.Normal, QIcon.Off)
-        icon_settings = QIcon()
-        icon_settings.addFile(u"graphics/settings-colorful.ico", QSize(), QIcon.Normal, QIcon.Off)
-        icon_c = QIcon()
-        icon_c.addFile(u"graphics/c.ico", QSize(), QIcon.Normal, QIcon.Off)
 
-        self.ui.button_download_tab.setIcon(icon_download)
-        self.ui.button_settings_tab.setIcon(icon_settings)
-        self.ui.button_search_tab.setIcon(icon_search)
-        self.ui.button_metadata_tab.setIcon(icon_metadata)
-        self.ui.button_credits_tab.setIcon(icon_c)
 
-        self.client = Client(language="en") # Language can be changed. I'll implement this later.
+        self.client = Client(language=self.api_language) # Language can be changed. I'll implement this later.
         self.download_thread = None
         self.threadpool = QThreadPool()
         self.ui.stackedWidget.setCurrentIndex(0)
@@ -197,28 +184,8 @@ class Widget(QWidget):
         self.ui.button_start_user_channel.clicked.connect(self.user_channel)
         self.ui.button_start_search.clicked.connect(self.search_videos)
         self.ui.button_download_search_query.clicked.connect(self.download_search)
-
-        self.ui.button_credits_tab.clicked.connect(self.do_1)
-        self.ui.button_download_tab.clicked.connect(self.do_2)
-        self.ui.button_metadata_tab.clicked.connect(self.do_3)
-        self.ui.button_search_tab.clicked.connect(self.do_4)
-        self.ui.button_settings_tab.clicked.connect(self.do_5)
         self.ui.button_settings_apply.clicked.connect(self.settings_tab)
 
-    def do_1(self):
-        self.ui.stackedWidget.setCurrentIndex(2)
-
-    def do_2(self):
-        self.ui.stackedWidget.setCurrentIndex(0)
-
-    def do_3(self):
-        self.ui.stackedWidget.setCurrentIndex(1)
-
-    def do_4(self):
-        self.ui.stackedWidget.setCurrentIndex(3)
-
-    def do_5(self):
-        self.ui.stackedWidget.setCurrentIndex(4)
 
     def get_mode(self):
 
@@ -320,7 +287,6 @@ class Widget(QWidget):
 
 
         try:
-            self.ui.label_search_query_progress.setText(f"Downloading: {title}")
             if self.mode == "multiple":
 
                 if self.mode == "multiple":
@@ -419,28 +385,13 @@ class Widget(QWidget):
 
             videos = user_object.videos
             counter = 0
-            length = len(videos)
             for video in videos:
 
                 url = video.url
-                print(url)
                 url = "https://www.pornhub.com/" + url
-                print(url)
                 video = self.test_video(url)
                 self.download(video)
                 counter += 1
-                try:
-                    self.ui.label_search_query_progress.setText(f"Downloaded: {counter}/{length}")
-
-                except IndexError as e:
-                    ui_popup("You got blocked by PornHub. I try to fix this, but the best solution is to wait or change IP address")
-                    self.client = Client(language="en")
-
-                except Exception as e:
-                    ui_popup(f"Unexpected Error: {e}")
-
-                    if sentry:
-                        sentry_sdk.capture_exception(e)
 
     def search_videos(self):
         # Searches videos with query string and lets the user select them
@@ -452,7 +403,6 @@ class Widget(QWidget):
 
 
         length = len(query_object)
-        self.ui.lineedit_total_videos.setText(str(length))
 
         for i, video in enumerate(query_object, start=1):
             item = QTreeWidgetItem(self.ui.treeWidget)
@@ -473,19 +423,19 @@ class Widget(QWidget):
 
     def settings_tab(self):
         with open("config.ini", "w") as config_file:
-            if self.ui.settings_radio_best.isChecked():
+            if self.ui.radio_highest.isChecked():
                 self.conf.set("Porn_Fetch", "default_quality", "best")
 
-            if self.ui.settings_radio_middle.isChecked():
+            if self.ui.radio_middle.isChecked():
                 self.conf.set("Porn_Fetch", "default_quality", "middle")
 
-            if self.ui.settings_radio_worst.isChecked():
+            if self.ui.radio_lowest.isChecked():
                 self.conf.set("Porn_Fetch", "default_quality", "worst")
 
-            if self.ui.settings_radio_single.isChecked():
+            if self.ui.radio_threading_single.isChecked():
                 self.conf.set("Porn_Fetch", "default_threading", "single")
 
-            if self.ui.settings_radio_multiple.isChecked():
+            if self.ui.radio_threading_multiple.isChecked():
                 self.conf.set("Porn_Fetch", "default_threading", "multiple")
 
             if self.ui.settings_checkbox_sentry.isChecked():
@@ -501,29 +451,68 @@ class Widget(QWidget):
 
         if self.conf["Porn_Fetch"]["default_quality"] == "best":
             self.ui.radio_highest.setChecked(True)
-            self.ui.settings_radio_best.setChecked(True)
+            self.ui.radio_highest.setChecked(True)
 
         if self.conf["Porn_Fetch"]["default_quality"] == "middle":
             self.ui.radio_middle.setChecked(True)
-            self.ui.settings_radio_middle.setChecked(True)
+            self.ui.radio_middle.setChecked(True)
 
         if self.conf["Porn_Fetch"]["default_quality"] == "worst":
             self.ui.radio_lowest.setChecked(True)
-            self.ui.settings_radio_worst.setChecked(True)
+            self.ui.radio_lowest.setChecked(True)
 
         if self.conf["Porn_Fetch"]["default_threading"] == "multiple":
             self.ui.radio_threading_multiple.setChecked(True)
-            self.ui.settings_radio_multiple.setChecked(True)
+            self.ui.radio_threading_multiple.setChecked(True)
 
         if self.conf["Porn_Fetch"]["default_threading"] == "single":
             self.ui.radio_threading_single.setChecked(True)
-            self.ui.settings_radio_single.setChecked(True)
+            self.ui.radio_threading_single.setChecked(True)
 
         if self.conf["Debug"]["sentry"] == "true":
             self.ui.settings_checkbox_sentry.setChecked(True)
 
         elif self.conf["Debug"]["sentry"] == "false":
             self.ui.settings_checkbox_sentry.setChecked(False)
+
+    def stack_widget_search(self):
+        self.ui.stackedWidget.setCurrentIndex(0)
+
+    def stack_widget_metadata(self):
+        self.ui.stackedWidget.setCurrentIndex(1)
+
+    def stack_widget_credits(self):
+        self.ui.stackedWidget.setCurrentIndex(2)
+
+
+    def keyPressEvent(self, event: QKeyEvent):
+
+        if event.key() == Qt.Key.Key_W and event.modifiers() == Qt.ControlModifier:
+            self.close()
+
+        if event.key() == Qt.Key.Key_M and event.modifiers() == Qt.ControlModifier:
+            self.stack_widget_metadata()
+
+        if event.key() == Qt.Key.Key_S and event.modifiers() == Qt.ControlModifier:
+            self.stack_widget_search()
+
+        if event.key() == Qt.Key.Key_C and event.modifiers() == Qt.ControlModifier:
+            self.stack_widget_credits()
+
+        if event.key() == Qt.Key.Key_R and event.modifiers() == Qt.ControlModifier:
+            setup_config_file(force=True)
+
+        if event.key() == Qt.Key.Key_X and event.modifiers() == Qt.ControlModifier:
+            self.close()
+            License()
+
+        if event.key() == Qt.Key.Key_L and event.modifiers() == Qt.ControlModifier:
+            text, ok = QInputDialog.getText(self, "QInputDialog.getText()",
+                                            "Language Code (e.g: de, en, es):", QLineEdit.Normal,
+                                            QDir.home().dirName())
+            if ok and text:
+                self.api_language = text
+                self.custom_language = True
 
 def main():
     print("Checking configuration...")

@@ -92,11 +92,11 @@ No sensitive data / system data or user specific data that would lead to an iden
         return False
 
 
-def setup_config_file():
+def setup_config_file(force=False):
     sections = ['License', "Porn_Fetch", "Debug"]
     config_file = "config.ini"
 
-    if not os.path.exists(config_file):
+    if force or not os.path.exists(config_file):
         with open(config_file, "w") as config:
             config.write(f"""
 [License]

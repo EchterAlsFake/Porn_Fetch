@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'form.ui'
+## Form generated from reading UI file 'form_redesign.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.5.1
 ##
@@ -15,327 +15,58 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QFormLayout, QFrame,
-    QGridLayout, QGroupBox, QHBoxLayout, QHeaderView,
-    QLabel, QLineEdit, QProgressBar, QPushButton,
-    QRadioButton, QSizePolicy, QStackedWidget, QTextBrowser,
-    QTreeWidget, QTreeWidgetItem, QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QGridLayout, QGroupBox,
+    QHBoxLayout, QHeaderView, QLabel, QLineEdit,
+    QProgressBar, QPushButton, QRadioButton, QSizePolicy,
+    QStackedWidget, QTextBrowser, QTreeWidget, QTreeWidgetItem,
+    QWidget)
 
-class Ui_Widget(object):
-    def setupUi(self, Widget):
-        if not Widget.objectName():
-            Widget.setObjectName(u"Widget")
-        Widget.resize(1192, 532)
-        Widget.setStyleSheet(u"background-color: black;")
-        self.gridLayout_16 = QGridLayout(Widget)
-        self.gridLayout_16.setObjectName(u"gridLayout_16")
-        self.groupBox_6 = QGroupBox(Widget)
-        self.groupBox_6.setObjectName(u"groupBox_6")
-        self.formLayout = QFormLayout(self.groupBox_6)
-        self.formLayout.setObjectName(u"formLayout")
-        self.button_download_tab = QPushButton(self.groupBox_6)
-        self.button_download_tab.setObjectName(u"button_download_tab")
-        self.button_download_tab.setStyleSheet(u"QPushButton {\n"
-"color: rgb(0, 255, 234);\n"
-"border-width: 2px;\n"
-"border-style: double;\n"
-"border-color: rgb(0, 234, 255);\n"
-"padding: 10px, 10px, 10px, 10px;\n"
-"border-radius: 12px;\n"
-"}\n"
-"\n"
-"QPushButton::hover {\n"
-"border-width: 2px;\n"
-"border-style: dotted;\n"
-"border-color: rgb(255, 162, 0)\n"
-"}")
-        icon = QIcon()
-        icon.addFile(u"../graphics/download.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.button_download_tab.setIcon(icon)
-        self.button_download_tab.setIconSize(QSize(32, 32))
-
-        self.formLayout.setWidget(0, QFormLayout.SpanningRole, self.button_download_tab)
-
-        self.button_search_tab = QPushButton(self.groupBox_6)
-        self.button_search_tab.setObjectName(u"button_search_tab")
-        self.button_search_tab.setStyleSheet(u"QPushButton {\n"
-"color: rgb(119, 0, 255);\n"
-"border-width: 2px;\n"
-"border-style: double;\n"
-"border-color: rgb(255, 179, 0);\n"
-"padding: 10px, 10px, 10px, 10px;\n"
-"border-radius: 12px;\n"
-"}\n"
-"\n"
-"QPushButton::hover {\n"
-"border-width: 2px;\n"
-"border-style: dotted;\n"
-"border-color: rgb(255, 162, 0)\n"
-"}")
-        icon1 = QIcon()
-        icon1.addFile(u"../graphics/search.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.button_search_tab.setIcon(icon1)
-        self.button_search_tab.setIconSize(QSize(32, 32))
-
-        self.formLayout.setWidget(1, QFormLayout.SpanningRole, self.button_search_tab)
-
-        self.button_credits_tab = QPushButton(self.groupBox_6)
-        self.button_credits_tab.setObjectName(u"button_credits_tab")
-        self.button_credits_tab.setStyleSheet(u"QPushButton {\n"
-"color: rgb(255, 255, 255);\n"
-"border-width: 2px;\n"
-"border-style: double;\n"
-"border-color: rgb(255, 0, 136); \n"
-"padding: 10px, 10px, 10px, 10px;\n"
-"border-radius: 12px;\n"
-"}\n"
-"\n"
-"QPushButton::hover {\n"
-"border-width: 2px;\n"
-"border-style: dotted;\n"
-"border-color: rgb(255, 162, 0)\n"
-"}")
-        icon2 = QIcon()
-        icon2.addFile(u"../graphics/c.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.button_credits_tab.setIcon(icon2)
-        self.button_credits_tab.setIconSize(QSize(32, 32))
-
-        self.formLayout.setWidget(3, QFormLayout.SpanningRole, self.button_credits_tab)
-
-        self.button_settings_tab = QPushButton(self.groupBox_6)
-        self.button_settings_tab.setObjectName(u"button_settings_tab")
-        self.button_settings_tab.setStyleSheet(u"QPushButton {\n"
-"color: rgb(255, 255, 255);\n"
-"border-width: 2px;\n"
-"border-style: double;\n"
-"border-color: rgb(178, 0, 255);\n"
-"padding: 10px, 10px, 10px, 10px;\n"
-"border-radius: 12px;\n"
-"}\n"
-"\n"
-"QPushButton::hover {\n"
-"border-width: 2px;\n"
-"border-style: dotted;\n"
-"border-color: rgb(255, 162, 0)\n"
-"}")
-        icon3 = QIcon()
-        icon3.addFile(u"../graphics/settings-colorful.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.button_settings_tab.setIcon(icon3)
-        self.button_settings_tab.setIconSize(QSize(32, 32))
-
-        self.formLayout.setWidget(4, QFormLayout.SpanningRole, self.button_settings_tab)
-
-        self.button_metadata_tab = QPushButton(self.groupBox_6)
-        self.button_metadata_tab.setObjectName(u"button_metadata_tab")
-        self.button_metadata_tab.setStyleSheet(u"QPushButton {\n"
-"color: rgb(119, 0, 255);\n"
-"border-width: 2px;\n"
-"border-style: double;\n"
-"border-color: rgb(0, 255, 81);\n"
-"padding: 10px, 10px, 10px, 10px;\n"
-"border-radius: 12px;\n"
-"}\n"
-"\n"
-"QPushButton::hover {\n"
-"border-width: 2px;\n"
-"border-style: dotted;\n"
-"border-color: rgb(255, 162, 0)\n"
-"}")
-        icon4 = QIcon()
-        icon4.addFile(u"../graphics/medium.svg", QSize(), QIcon.Normal, QIcon.Off)
-        self.button_metadata_tab.setIcon(icon4)
-
-        self.formLayout.setWidget(2, QFormLayout.SpanningRole, self.button_metadata_tab)
-
-
-        self.gridLayout_16.addWidget(self.groupBox_6, 0, 0, 1, 1)
-
-        self.stackedWidget = QStackedWidget(Widget)
-        self.stackedWidget.setObjectName(u"stackedWidget")
-        self.stackedWidget.setStyleSheet(u"QCheckBox::indicator {\n"
-"    width: 13px;\n"
-"    height: 13px;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:unchecked {\n"
-"    border: 1px solid white;\n"
-"    background: white;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:checked {\n"
-"    image: url(graphics/checkmark.png);\n"
-"}")
-        self.page = QWidget()
-        self.page.setObjectName(u"page")
-        self.gridLayout_2 = QGridLayout(self.page)
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.groupbox_urls = QGroupBox(self.page)
-        self.groupbox_urls.setObjectName(u"groupbox_urls")
-        self.groupbox_urls.setStyleSheet(u"border: none;")
-        self.gridLayout = QGridLayout(self.groupbox_urls)
+class Ui_Porn_Fetch_Widget(object):
+    def setupUi(self, Porn_Fetch_Widget):
+        if not Porn_Fetch_Widget.objectName():
+            Porn_Fetch_Widget.setObjectName(u"Porn_Fetch_Widget")
+        Porn_Fetch_Widget.resize(1255, 700)
+        Porn_Fetch_Widget.setStyleSheet(u"background-color: rgb(18,18,18);\n"
+"color: white;")
+        self.gridLayout_13 = QGridLayout(Porn_Fetch_Widget)
+        self.gridLayout_13.setObjectName(u"gridLayout_13")
+        self.groupBox = QGroupBox(Porn_Fetch_Widget)
+        self.groupBox.setObjectName(u"groupBox")
+        self.gridLayout = QGridLayout(self.groupBox)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.label_user_channel = QLabel(self.groupbox_urls)
-        self.label_user_channel.setObjectName(u"label_user_channel")
-        self.label_user_channel.setStyleSheet(u"QLabel {\n"
-"    color: white;\n"
-"    font-size: 16px;\n"
-"	margin-right: 0.5px;\n"
+        self.progressbar_download = QProgressBar(self.groupBox)
+        self.progressbar_download.setObjectName(u"progressbar_download")
+        self.progressbar_download.setStyleSheet(u"QProgressBar {\n"
+"    background-color: #F0F0F0; /* Hellgrauer Hintergrund */\n"
+"	text-align: center;\n"
+"	color: rgb(230, 97, 0);\n"
+"	border: color grey;\n"
+"	border-width: 6;\n"
+"	border-radius: 12px;\n"
+"	color: black;\n"
+"	\n"
 "}\n"
 "\n"
-"QLabel#Title {\n"
-"    color: #212121;\n"
-"    font-size: 24px;\n"
-"    font-weight: bold;\n"
-"}\n"
-"\n"
-"QLabel#Subtitle {\n"
-"    color: #757575;\n"
-"    font-size: 20px;\n"
+"QProgressBar::chunk {\n"
+"    background-color: rgb(26, 95, 180); /* Gr\u00fcn als Vordergrundfarbe */\n"
+"	border-radius: 12px;\n"
 "}\n"
 "")
+        self.progressbar_download.setValue(0)
 
-        self.horizontalLayout_4.addWidget(self.label_user_channel)
+        self.gridLayout.addWidget(self.progressbar_download, 4, 0, 1, 1)
 
-        self.lineedit_user_channel = QLineEdit(self.groupbox_urls)
-        self.lineedit_user_channel.setObjectName(u"lineedit_user_channel")
-        self.lineedit_user_channel.setStyleSheet(u"QLineEdit {\n"
-"    border: 2px solid #757575;\n"
-"    border-radius: 12px;\n"
-"	margin-right: 1px;\n"
-"    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
-"    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
-"    font-size: 16px;\n"
-"    height: 20px;\n"
-"}\n"
-"\n"
-"QLineEdit:focus {\n"
-"    border-color: rgb(107, 0, 255)\n"
-"}\n"
-"\n"
-"QLineEdit:disabled {\n"
-"    background: #444444;  /* setzt den Hintergrund auf ein dunkles Grau, wenn das QLineEdit deaktiviert ist */\n"
-"    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */\n"
-"    border-color: #aaaaaa;\n"
-"}")
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.label_url = QLabel(self.groupBox)
+        self.label_url.setObjectName(u"label_url")
 
-        self.horizontalLayout_4.addWidget(self.lineedit_user_channel)
+        self.horizontalLayout.addWidget(self.label_url)
 
-        self.button_start_user_channel = QPushButton(self.groupbox_urls)
-        self.button_start_user_channel.setObjectName(u"button_start_user_channel")
-        self.button_start_user_channel.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_start_user_channel.setStyleSheet(u"QPushButton {\n"
-"    background-color: #5468ff;\n"
-"	border-width: 2px;\n"
-"	border-color: rgb(98, 255, 182);\n"
-"	border-style: double;\n"
-"    border-radius: 12px;\n"
-"    color: #fff;\n"
-"    font-family: \"JetBrains Mono\", monospace;\n"
-"    font-size: 15px;\n"
-"    padding: 0px 16px 0px 16px;\n"
-"    height: 24px;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #3c4fe0;\n"
-"	border-color: rgb(179, 0, 255)\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: #3c4fe0;\n"
-"}\n"
-"")
-
-        self.horizontalLayout_4.addWidget(self.button_start_user_channel)
-
-
-        self.gridLayout.addLayout(self.horizontalLayout_4, 3, 0, 1, 1)
-
-        self.groupBox_2 = QGroupBox(self.groupbox_urls)
-        self.groupBox_2.setObjectName(u"groupBox_2")
-        self.groupBox_2.setStyleSheet(u"color: white;\n"
-"font-size: 14px;\n"
-"border: none;")
-        self.gridLayout_9 = QGridLayout(self.groupBox_2)
-        self.gridLayout_9.setObjectName(u"gridLayout_9")
-        self.groupBox_4 = QGroupBox(self.groupBox_2)
-        self.groupBox_4.setObjectName(u"groupBox_4")
-        self.groupBox_4.setStyleSheet(u"color: white;\n"
-"font-size: 14px;")
-        self.gridLayout_8 = QGridLayout(self.groupBox_4)
-        self.gridLayout_8.setObjectName(u"gridLayout_8")
-        self.radio_threading_multiple = QRadioButton(self.groupBox_4)
-        self.radio_threading_multiple.setObjectName(u"radio_threading_multiple")
-        self.radio_threading_multiple.setCursor(QCursor(Qt.PointingHandCursor))
-        self.radio_threading_multiple.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(0, 255, 110);}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"\n"
-"")
-        self.radio_threading_multiple.setChecked(True)
-
-        self.gridLayout_8.addWidget(self.radio_threading_multiple, 1, 0, 1, 1)
-
-        self.radio_threading_single = QRadioButton(self.groupBox_4)
-        self.radio_threading_single.setObjectName(u"radio_threading_single")
-        self.radio_threading_single.setCursor(QCursor(Qt.PointingHandCursor))
-        self.radio_threading_single.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(246, 0, 255);}\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"")
-        self.radio_threading_single.setChecked(False)
-
-        self.gridLayout_8.addWidget(self.radio_threading_single, 2, 0, 1, 1)
-
-        self.label_4 = QLabel(self.groupBox_4)
-        self.label_4.setObjectName(u"label_4")
-
-        self.gridLayout_8.addWidget(self.label_4, 0, 0, 1, 1)
-
-
-        self.gridLayout_9.addWidget(self.groupBox_4, 0, 1, 1, 1)
-
-        self.horizontalLayout_7 = QHBoxLayout()
-        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
-        self.label_output = QLabel(self.groupBox_2)
-        self.label_output.setObjectName(u"label_output")
-        self.label_output.setStyleSheet(u"color: rgb(255, 255, 255);\n"
-"font-size: 14px;")
-
-        self.horizontalLayout_7.addWidget(self.label_output)
-
-        self.lineedit_output = QLineEdit(self.groupBox_2)
-        self.lineedit_output.setObjectName(u"lineedit_output")
-        self.lineedit_output.setStyleSheet(u"QLineEdit {\n"
+        self.lineedit_url = QLineEdit(self.groupBox)
+        self.lineedit_url.setObjectName(u"lineedit_url")
+        self.lineedit_url.setCursor(QCursor(Qt.IBeamCursor))
+        self.lineedit_url.setStyleSheet(u"QLineEdit {\n"
 "    border: 2px solid #757575;\n"
 "    border-radius: 12px;\n"
 "    padding: 0 8px;\n"
@@ -355,126 +86,109 @@ class Ui_Widget(object):
 "    border-color: #aaaaaa;\n"
 "}")
 
-        self.horizontalLayout_7.addWidget(self.lineedit_output)
+        self.horizontalLayout.addWidget(self.lineedit_url)
+
+        self.button_start = QPushButton(self.groupBox)
+        self.button_start.setObjectName(u"button_start")
+        self.button_start.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_start.setStyleSheet(u"QPushButton {\n"
+"        background-color: #5a2a82; /* base violet color */\n"
+"        color: #ffffff; /* white text */\n"
+"        border: none;\n"
+"        border-radius: 10px; /* reduced rounded corner radius */\n"
+"        padding: 5px 20px; /* reduced button padding */\n"
+"        font-size: 12px;\n"
+"        outline: none;\n"
+"    }\n"
+"    \n"
+"    QPushButton:hover {\n"
+"        background-color: #7b3ca3; /* slightly lighter violet when hovered */\n"
+"    }\n"
+"\n"
+"    QPushButton:pressed {\n"
+"        background-color: #481f61; /* darker violet when pressed */\n"
+"    }\n"
+"\n"
+"    QPushButton:disabled {\n"
+"        background-color: #3f1d4d; /* even darker shade when button is disabled */\n"
+"        color: #8a7b9a; /* greyish text */\n"
+"    }")
+
+        self.horizontalLayout.addWidget(self.button_start)
 
 
-        self.gridLayout_9.addLayout(self.horizontalLayout_7, 1, 0, 1, 2)
+        self.gridLayout.addLayout(self.horizontalLayout, 0, 0, 1, 1)
 
-        self.groupBox_3 = QGroupBox(self.groupBox_2)
-        self.groupBox_3.setObjectName(u"groupBox_3")
-        self.groupBox_3.setStyleSheet(u"color: white;\n"
-"border: none;")
-        self.gridLayout_4 = QGridLayout(self.groupBox_3)
-        self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.radio_lowest = QRadioButton(self.groupBox_3)
-        self.radio_lowest.setObjectName(u"radio_lowest")
-        self.radio_lowest.setCursor(QCursor(Qt.PointingHandCursor))
-        self.radio_lowest.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 0, 0)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"")
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.label_user_channel = QLabel(self.groupBox)
+        self.label_user_channel.setObjectName(u"label_user_channel")
 
-        self.gridLayout_4.addWidget(self.radio_lowest, 3, 0, 1, 1)
+        self.horizontalLayout_3.addWidget(self.label_user_channel)
 
-        self.radio_highest = QRadioButton(self.groupBox_3)
-        self.radio_highest.setObjectName(u"radio_highest")
-        self.radio_highest.setCursor(QCursor(Qt.PointingHandCursor))
-        self.radio_highest.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(0, 255, 136)\n"
-"}\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"")
-        self.radio_highest.setChecked(True)
-
-        self.gridLayout_4.addWidget(self.radio_highest, 1, 0, 1, 1)
-
-        self.radio_middle = QRadioButton(self.groupBox_3)
-        self.radio_middle.setObjectName(u"radio_middle")
-        self.radio_middle.setCursor(QCursor(Qt.PointingHandCursor))
-        self.radio_middle.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 171, 0)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"\n"
-"")
-
-        self.gridLayout_4.addWidget(self.radio_middle, 2, 0, 1, 1)
-
-        self.label_3 = QLabel(self.groupBox_3)
-        self.label_3.setObjectName(u"label_3")
-
-        self.gridLayout_4.addWidget(self.label_3, 0, 0, 1, 1)
-
-
-        self.gridLayout_9.addWidget(self.groupBox_3, 0, 0, 1, 1)
-
-
-        self.gridLayout.addWidget(self.groupBox_2, 0, 0, 1, 1)
-
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.label_url_file = QLabel(self.groupbox_urls)
-        self.label_url_file.setObjectName(u"label_url_file")
-        self.label_url_file.setStyleSheet(u"QLabel {\n"
-"    color: white;\n"
+        self.lineedit_user_channel = QLineEdit(self.groupBox)
+        self.lineedit_user_channel.setObjectName(u"lineedit_user_channel")
+        self.lineedit_user_channel.setStyleSheet(u"QLineEdit {\n"
+"    border: 2px solid #757575;\n"
+"    border-radius: 12px;\n"
+"    padding: 0 8px;\n"
+"    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
+"    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
 "    font-size: 16px;\n"
-"	margin-right: 4px;\n"
+"    height: 20px;\n"
 "}\n"
 "\n"
-"QLabel#Title {\n"
-"    color: #212121;\n"
-"    font-size: 24px;\n"
-"    font-weight: bold;\n"
+"QLineEdit:focus {\n"
+"    border-color: rgb(107, 0, 255)\n"
 "}\n"
 "\n"
-"QLabel#Subtitle {\n"
-"    color: #757575;\n"
-"    font-size: 20px;\n"
+"QLineEdit:disabled {\n"
+"    background: #444444;  /* setzt den Hintergrund auf ein dunkles Grau, wenn das QLineEdit deaktiviert ist */\n"
+"    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */\n"
+"    border-color: #aaaaaa;\n"
 "}")
 
-        self.horizontalLayout.addWidget(self.label_url_file)
+        self.horizontalLayout_3.addWidget(self.lineedit_user_channel)
 
-        self.lineedit_url_file = QLineEdit(self.groupbox_urls)
+        self.button_start_user_channel = QPushButton(self.groupBox)
+        self.button_start_user_channel.setObjectName(u"button_start_user_channel")
+        self.button_start_user_channel.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_start_user_channel.setStyleSheet(u"QPushButton {\n"
+"        background-color: #5a2a82; /* base violet color */\n"
+"        color: #ffffff; /* white text */\n"
+"        border: none;\n"
+"        border-radius: 10px; /* reduced rounded corner radius */\n"
+"        padding: 5px 20px; /* reduced button padding */\n"
+"        font-size: 12px;\n"
+"        outline: none;\n"
+"    }\n"
+"    \n"
+"    QPushButton:hover {\n"
+"        background-color: #7b3ca3; /* slightly lighter violet when hovered */\n"
+"    }\n"
+"\n"
+"    QPushButton:pressed {\n"
+"        background-color: #481f61; /* darker violet when pressed */\n"
+"    }\n"
+"\n"
+"    QPushButton:disabled {\n"
+"        background-color: #3f1d4d; /* even darker shade when button is disabled */\n"
+"        color: #8a7b9a; /* greyish text */\n"
+"    }")
+
+        self.horizontalLayout_3.addWidget(self.button_start_user_channel)
+
+
+        self.gridLayout.addLayout(self.horizontalLayout_3, 2, 0, 1, 1)
+
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.label_url_file = QLabel(self.groupBox)
+        self.label_url_file.setObjectName(u"label_url_file")
+
+        self.horizontalLayout_2.addWidget(self.label_url_file)
+
+        self.lineedit_url_file = QLineEdit(self.groupBox)
         self.lineedit_url_file.setObjectName(u"lineedit_url_file")
         self.lineedit_url_file.setStyleSheet(u"QLineEdit {\n"
 "    border: 2px solid #757575;\n"
@@ -496,66 +210,49 @@ class Ui_Widget(object):
 "    border-color: #aaaaaa;\n"
 "}")
 
-        self.horizontalLayout.addWidget(self.lineedit_url_file)
+        self.horizontalLayout_2.addWidget(self.lineedit_url_file)
 
-        self.button_start_file = QPushButton(self.groupbox_urls)
+        self.button_start_file = QPushButton(self.groupBox)
         self.button_start_file.setObjectName(u"button_start_file")
         self.button_start_file.setCursor(QCursor(Qt.PointingHandCursor))
         self.button_start_file.setStyleSheet(u"QPushButton {\n"
-"    background-color: #5468ff;\n"
-"	border-width: 2px;\n"
-"	border-color: rgb(98, 255, 182);\n"
-"	border-style: double;\n"
-"    border-radius: 12px;\n"
-"    color: #fff;\n"
-"    font-family: \"JetBrains Mono\", monospace;\n"
-"    font-size: 15px;\n"
-"    padding: 0px 16px 0px 16px;\n"
-"    height: 24px;\n"
-"}\n"
+"        background-color: #5a2a82; /* base violet color */\n"
+"        color: #ffffff; /* white text */\n"
+"        border: none;\n"
+"        border-radius: 10px; /* reduced rounded corner radius */\n"
+"        padding: 5px 20px; /* reduced button padding */\n"
+"        font-size: 12px;\n"
+"        outline: none;\n"
+"    }\n"
+"    \n"
+"    QPushButton:hover {\n"
+"        background-color: #7b3ca3; /* slightly lighter violet when hovered */\n"
+"    }\n"
 "\n"
-"QPushButton:hover {\n"
-"    background-color: #3c4fe0;\n"
-"	border-color: rgb(179, 0, 255)\n"
-"}\n"
+"    QPushButton:pressed {\n"
+"        background-color: #481f61; /* darker violet when pressed */\n"
+"    }\n"
 "\n"
-"QPushButton:pressed {\n"
-"    background-color: #3c4fe0;\n"
-"}\n"
-"")
+"    QPushButton:disabled {\n"
+"        background-color: #3f1d4d; /* even darker shade when button is disabled */\n"
+"        color: #8a7b9a; /* greyish text */\n"
+"    }")
 
-        self.horizontalLayout.addWidget(self.button_start_file)
+        self.horizontalLayout_2.addWidget(self.button_start_file)
 
 
-        self.gridLayout.addLayout(self.horizontalLayout, 2, 0, 1, 1)
+        self.gridLayout.addLayout(self.horizontalLayout_2, 1, 0, 1, 1)
 
-        self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.label_url = QLabel(self.groupbox_urls)
-        self.label_url.setObjectName(u"label_url")
-        self.label_url.setStyleSheet(u"QLabel {\n"
-"    color: white;\n"
-"    font-size: 16px;\n"
-"	margin-right: 5px;\n"
-"}\n"
-"\n"
-"QLabel#Title {\n"
-"    color: #212121;\n"
-"    font-size: 24px;\n"
-"    font-weight: bold;\n"
-"}\n"
-"\n"
-"QLabel#Subtitle {\n"
-"    color: #757575;\n"
-"    font-size: 20px;\n"
-"}\n"
-"")
+        self.horizontalLayout_20 = QHBoxLayout()
+        self.horizontalLayout_20.setObjectName(u"horizontalLayout_20")
+        self.label_output = QLabel(self.groupBox)
+        self.label_output.setObjectName(u"label_output")
 
-        self.horizontalLayout_2.addWidget(self.label_url)
+        self.horizontalLayout_20.addWidget(self.label_output)
 
-        self.lineedit_url = QLineEdit(self.groupbox_urls)
-        self.lineedit_url.setObjectName(u"lineedit_url")
-        self.lineedit_url.setStyleSheet(u"QLineEdit {\n"
+        self.lineedit_output = QLineEdit(self.groupBox)
+        self.lineedit_output.setObjectName(u"lineedit_output")
+        self.lineedit_output.setStyleSheet(u"QLineEdit {\n"
 "    border: 2px solid #757575;\n"
 "    border-radius: 12px;\n"
 "    padding: 0 8px;\n"
@@ -575,121 +272,613 @@ class Ui_Widget(object):
 "    border-color: #aaaaaa;\n"
 "}")
 
-        self.horizontalLayout_2.addWidget(self.lineedit_url)
+        self.horizontalLayout_20.addWidget(self.lineedit_output)
 
-        self.button_start = QPushButton(self.groupbox_urls)
-        self.button_start.setObjectName(u"button_start")
-        self.button_start.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_start.setStyleSheet(u"QPushButton {\n"
-"    background-color: #5468ff;\n"
-"	border-width: 2px;\n"
-"	border-color: rgb(98, 255, 182);\n"
-"	border-style: double;\n"
-"    border-radius: 12px;\n"
-"	text-align: center;\n"
-"    color: #fff;\n"
-"    font-family: \"JetBrains Mono\", monospace;\n"
-"    font-size: 15px;\n"
-"    padding: 0px 16px 0px 16px;\n"
-"    height: 24px;\n"
+
+        self.gridLayout.addLayout(self.horizontalLayout_20, 3, 0, 1, 1)
+
+
+        self.gridLayout_13.addWidget(self.groupBox, 0, 0, 1, 1)
+
+        self.groupBox_2 = QGroupBox(Porn_Fetch_Widget)
+        self.groupBox_2.setObjectName(u"groupBox_2")
+        self.gridLayout_12 = QGridLayout(self.groupBox_2)
+        self.gridLayout_12.setObjectName(u"gridLayout_12")
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.label_quality = QLabel(self.groupBox_2)
+        self.label_quality.setObjectName(u"label_quality")
+
+        self.horizontalLayout_4.addWidget(self.label_quality)
+
+        self.radio_highest = QRadioButton(self.groupBox_2)
+        self.radio_highest.setObjectName(u"radio_highest")
+        self.radio_highest.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(0, 255, 110);}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
 "}\n"
 "\n"
-"QPushButton:hover {\n"
-"    background-color: #3c4fe0;\n"
-"	border-color: rgb(179, 0, 255)\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
 "}\n"
 "\n"
-"QPushButton:pressed {\n"
-"    background-color: #3c4fe0;\n"
+"")
+        self.radio_highest.setChecked(True)
+
+        self.horizontalLayout_4.addWidget(self.radio_highest)
+
+        self.radio_middle = QRadioButton(self.groupBox_2)
+        self.radio_middle.setObjectName(u"radio_middle")
+        self.radio_middle.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(255, 162, 0)}\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
 "}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
 "")
 
-        self.horizontalLayout_2.addWidget(self.button_start)
+        self.horizontalLayout_4.addWidget(self.radio_middle)
+
+        self.radio_lowest = QRadioButton(self.groupBox_2)
+        self.radio_lowest.setObjectName(u"radio_lowest")
+        self.radio_lowest.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(255, 0, 0)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+
+        self.horizontalLayout_4.addWidget(self.radio_lowest)
 
 
-        self.gridLayout.addLayout(self.horizontalLayout_2, 1, 0, 1, 1)
+        self.gridLayout_12.addLayout(self.horizontalLayout_4, 1, 0, 1, 1)
+
+        self.horizontalLayout_7 = QHBoxLayout()
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+        self.button_settings_apply = QPushButton(self.groupBox_2)
+        self.button_settings_apply.setObjectName(u"button_settings_apply")
+        self.button_settings_apply.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_settings_apply.setStyleSheet(u"QPushButton {\n"
+"        background-color: #5a2a82; /* base violet color */\n"
+"        color: #ffffff; /* white text */\n"
+"        border: none;\n"
+"        border-radius: 10px; /* reduced rounded corner radius */\n"
+"        padding: 5px 10px; /* reduced button padding */\n"
+"        font-size: 12px;\n"
+"        outline: none;\n"
+"    }\n"
+"    \n"
+"    QPushButton:hover {\n"
+"        background-color: #7b3ca3; /* slightly lighter violet when hovered */\n"
+"    }\n"
+"\n"
+"    QPushButton:pressed {\n"
+"        background-color: #481f61; /* darker violet when pressed */\n"
+"    }\n"
+"\n"
+"    QPushButton:disabled {\n"
+"        background-color: #3f1d4d; /* even darker shade when button is disabled */\n"
+"        color: #8a7b9a; /* greyish text */\n"
+"    }")
+
+        self.horizontalLayout_7.addWidget(self.button_settings_apply)
+
+        self.button_settings_help = QPushButton(self.groupBox_2)
+        self.button_settings_help.setObjectName(u"button_settings_help")
+        self.button_settings_help.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_settings_help.setStyleSheet(u"QPushButton {\n"
+"        background-color: #5a2a82; /* base violet color */\n"
+"        color: #ffffff; /* white text */\n"
+"        border: none;\n"
+"        border-radius: 10px; /* reduced rounded corner radius */\n"
+"        padding: 5px 10px; /* reduced button padding */\n"
+"        font-size: 12px;\n"
+"        outline: none;\n"
+"    }\n"
+"    \n"
+"    QPushButton:hover {\n"
+"        background-color: #7b3ca3; /* slightly lighter violet when hovered */\n"
+"    }\n"
+"\n"
+"    QPushButton:pressed {\n"
+"        background-color: #481f61; /* darker violet when pressed */\n"
+"    }\n"
+"\n"
+"    QPushButton:disabled {\n"
+"        background-color: #3f1d4d; /* even darker shade when button is disabled */\n"
+"        color: #8a7b9a; /* greyish text */\n"
+"    }")
+
+        self.horizontalLayout_7.addWidget(self.button_settings_help)
 
 
-        self.gridLayout_2.addWidget(self.groupbox_urls, 0, 0, 1, 1)
+        self.gridLayout_12.addLayout(self.horizontalLayout_7, 4, 0, 1, 1)
+
+        self.horizontalLayout_6 = QHBoxLayout()
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+        self.label_debug = QLabel(self.groupBox_2)
+        self.label_debug.setObjectName(u"label_debug")
+
+        self.horizontalLayout_6.addWidget(self.label_debug)
+
+        self.settings_checkbox_sentry = QCheckBox(self.groupBox_2)
+        self.settings_checkbox_sentry.setObjectName(u"settings_checkbox_sentry")
+        self.settings_checkbox_sentry.setStyleSheet(u"QCheckBox::indicator {\n"
+"    width: 13px;\n"
+"    height: 13px;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked {\n"
+"    border: 1px solid white;\n"
+"    background: white;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked {\n"
+"    image: url(graphics/checkmark.png);\n"
+"}")
+
+        self.horizontalLayout_6.addWidget(self.settings_checkbox_sentry)
+
+        self.settings_checkbox_logging = QCheckBox(self.groupBox_2)
+        self.settings_checkbox_logging.setObjectName(u"settings_checkbox_logging")
+        self.settings_checkbox_logging.setStyleSheet(u"QCheckBox::indicator {\n"
+"    width: 13px;\n"
+"    height: 13px;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked {\n"
+"    border: 1px solid white;\n"
+"    background: white;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked {\n"
+"    image: url(graphics/checkmark.png);\n"
+"}")
+
+        self.horizontalLayout_6.addWidget(self.settings_checkbox_logging)
+
+
+        self.gridLayout_12.addLayout(self.horizontalLayout_6, 3, 0, 1, 1)
+
+        self.groupBox_9 = QGroupBox(self.groupBox_2)
+        self.groupBox_9.setObjectName(u"groupBox_9")
+        self.groupBox_9.setStyleSheet(u"border: none")
+        self.gridLayout_2 = QGridLayout(self.groupBox_9)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.horizontalLayout_5 = QHBoxLayout()
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.label_threading_mode = QLabel(self.groupBox_9)
+        self.label_threading_mode.setObjectName(u"label_threading_mode")
+
+        self.horizontalLayout_5.addWidget(self.label_threading_mode)
+
+        self.radio_threading_multiple = QRadioButton(self.groupBox_9)
+        self.radio_threading_multiple.setObjectName(u"radio_threading_multiple")
+        self.radio_threading_multiple.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(178, 0, 255)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+        self.radio_threading_multiple.setChecked(True)
+
+        self.horizontalLayout_5.addWidget(self.radio_threading_multiple)
+
+        self.radio_threading_single = QRadioButton(self.groupBox_9)
+        self.radio_threading_single.setObjectName(u"radio_threading_single")
+        self.radio_threading_single.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(255, 238, 0)}\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+
+        self.horizontalLayout_5.addWidget(self.radio_threading_single)
+
+
+        self.gridLayout_2.addLayout(self.horizontalLayout_5, 0, 0, 1, 1)
+
+
+        self.gridLayout_12.addWidget(self.groupBox_9, 2, 0, 1, 1)
+
+
+        self.gridLayout_13.addWidget(self.groupBox_2, 0, 1, 1, 1)
+
+        self.groupBox_4 = QGroupBox(Porn_Fetch_Widget)
+        self.groupBox_4.setObjectName(u"groupBox_4")
+        self.gridLayout_5 = QGridLayout(self.groupBox_4)
+        self.gridLayout_5.setObjectName(u"gridLayout_5")
+        self.textBrowser = QTextBrowser(self.groupBox_4)
+        self.textBrowser.setObjectName(u"textBrowser")
+
+        self.gridLayout_5.addWidget(self.textBrowser, 0, 0, 1, 1)
+
+
+        self.gridLayout_13.addWidget(self.groupBox_4, 2, 0, 1, 1)
+
+        self.groupBox_5 = QGroupBox(Porn_Fetch_Widget)
+        self.groupBox_5.setObjectName(u"groupBox_5")
+        self.gridLayout_6 = QGridLayout(self.groupBox_5)
+        self.gridLayout_6.setObjectName(u"gridLayout_6")
+        self.groupBox_6 = QGroupBox(self.groupBox_5)
+        self.groupBox_6.setObjectName(u"groupBox_6")
+        self.gridLayout_7 = QGridLayout(self.groupBox_6)
+        self.gridLayout_7.setObjectName(u"gridLayout_7")
+        self.api_radio_de = QRadioButton(self.groupBox_6)
+        self.api_radio_de.setObjectName(u"api_radio_de")
+        self.api_radio_de.setCursor(QCursor(Qt.PointingHandCursor))
+        self.api_radio_de.setStyleSheet(u"QRadioButton {\n"
+"	color: (255,255,255)}\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+
+        self.gridLayout_7.addWidget(self.api_radio_de, 0, 1, 1, 1)
+
+        self.api_radio_en = QRadioButton(self.groupBox_6)
+        self.api_radio_en.setObjectName(u"api_radio_en")
+        self.api_radio_en.setCursor(QCursor(Qt.PointingHandCursor))
+        self.api_radio_en.setStyleSheet(u"QRadioButton {\n"
+"	color: (255,255,255)}\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+        self.api_radio_en.setChecked(True)
+
+        self.gridLayout_7.addWidget(self.api_radio_en, 0, 0, 1, 1)
+
+        self.api_radio_fr = QRadioButton(self.groupBox_6)
+        self.api_radio_fr.setObjectName(u"api_radio_fr")
+        self.api_radio_fr.setCursor(QCursor(Qt.PointingHandCursor))
+        self.api_radio_fr.setStyleSheet(u"QRadioButton {\n"
+"	color: (255,255,255)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+
+        self.gridLayout_7.addWidget(self.api_radio_fr, 0, 2, 1, 1)
+
+        self.api_radio_ru = QRadioButton(self.groupBox_6)
+        self.api_radio_ru.setObjectName(u"api_radio_ru")
+        self.api_radio_ru.setCursor(QCursor(Qt.PointingHandCursor))
+        self.api_radio_ru.setStyleSheet(u"QRadioButton {\n"
+"	color: (255,255,255)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+
+        self.gridLayout_7.addWidget(self.api_radio_ru, 1, 0, 1, 1)
+
+        self.api_radio_es = QRadioButton(self.groupBox_6)
+        self.api_radio_es.setObjectName(u"api_radio_es")
+        self.api_radio_es.setCursor(QCursor(Qt.PointingHandCursor))
+        self.api_radio_es.setStyleSheet(u"QRadioButton {\n"
+"	color: (255,255,255)}\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+
+        self.gridLayout_7.addWidget(self.api_radio_es, 1, 1, 1, 1)
+
+
+        self.gridLayout_6.addWidget(self.groupBox_6, 0, 0, 1, 1)
+
+        self.groupBox_7 = QGroupBox(self.groupBox_5)
+        self.groupBox_7.setObjectName(u"groupBox_7")
+        self.gridLayout_8 = QGridLayout(self.groupBox_7)
+        self.gridLayout_8.setObjectName(u"gridLayout_8")
+        self.application_language_en = QRadioButton(self.groupBox_7)
+        self.application_language_en.setObjectName(u"application_language_en")
+        self.application_language_en.setCursor(QCursor(Qt.PointingHandCursor))
+        self.application_language_en.setStyleSheet(u"QRadioButton {\n"
+"	color: (255,255,255)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+        self.application_language_en.setChecked(True)
+
+        self.gridLayout_8.addWidget(self.application_language_en, 0, 0, 1, 1)
+
+
+        self.gridLayout_6.addWidget(self.groupBox_7, 0, 1, 1, 1)
+
+
+        self.gridLayout_13.addWidget(self.groupBox_5, 2, 1, 1, 1)
+
+        self.groupBox_3 = QGroupBox(Porn_Fetch_Widget)
+        self.groupBox_3.setObjectName(u"groupBox_3")
+        self.gridLayout_3 = QGridLayout(self.groupBox_3)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.stackedWidget = QStackedWidget(self.groupBox_3)
+        self.stackedWidget.setObjectName(u"stackedWidget")
+        self.page = QWidget()
+        self.page.setObjectName(u"page")
+        self.gridLayout_4 = QGridLayout(self.page)
+        self.gridLayout_4.setObjectName(u"gridLayout_4")
+        self.horizontalLayout_9 = QHBoxLayout()
+        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
+        self.button_download_search_query = QPushButton(self.page)
+        self.button_download_search_query.setObjectName(u"button_download_search_query")
+        self.button_download_search_query.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_download_search_query.setStyleSheet(u"QPushButton {\n"
+"        background-color: #5a2a82; /* base violet color */\n"
+"        color: #ffffff; /* white text */\n"
+"        border: none;\n"
+"        border-radius: 10px; /* reduced rounded corner radius */\n"
+"        padding: 5px 10px; /* reduced button padding */\n"
+"        font-size: 12px;\n"
+"        outline: none;\n"
+"    }\n"
+"    \n"
+"    QPushButton:hover {\n"
+"        background-color: #7b3ca3; /* slightly lighter violet when hovered */\n"
+"    }\n"
+"\n"
+"    QPushButton:pressed {\n"
+"        background-color: #481f61; /* darker violet when pressed */\n"
+"    }\n"
+"\n"
+"    QPushButton:disabled {\n"
+"        background-color: #3f1d4d; /* even darker shade when button is disabled */\n"
+"        color: #8a7b9a; /* greyish text */\n"
+"    }")
+
+        self.horizontalLayout_9.addWidget(self.button_download_search_query)
+
+        self.button_search_fix = QPushButton(self.page)
+        self.button_search_fix.setObjectName(u"button_search_fix")
+        self.button_search_fix.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_search_fix.setStyleSheet(u"QPushButton {\n"
+"        background-color: #5a2a82; /* base violet color */\n"
+"        color: #ffffff; /* white text */\n"
+"        border: none;\n"
+"        border-radius: 10px; /* reduced rounded corner radius */\n"
+"        padding: 5px 10px; /* reduced button padding */\n"
+"        font-size: 12px;\n"
+"        outline: none;\n"
+"    }\n"
+"    \n"
+"    QPushButton:hover {\n"
+"        background-color: #7b3ca3; /* slightly lighter violet when hovered */\n"
+"    }\n"
+"\n"
+"    QPushButton:pressed {\n"
+"        background-color: #481f61; /* darker violet when pressed */\n"
+"    }\n"
+"\n"
+"    QPushButton:disabled {\n"
+"        background-color: #3f1d4d; /* even darker shade when button is disabled */\n"
+"        color: #8a7b9a; /* greyish text */\n"
+"    }")
+
+        self.horizontalLayout_9.addWidget(self.button_search_fix)
+
+
+        self.gridLayout_4.addLayout(self.horizontalLayout_9, 2, 0, 1, 1)
+
+        self.horizontalLayout_8 = QHBoxLayout()
+        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
+        self.label_search_query = QLabel(self.page)
+        self.label_search_query.setObjectName(u"label_search_query")
+
+        self.horizontalLayout_8.addWidget(self.label_search_query)
+
+        self.lineedit_search_query = QLineEdit(self.page)
+        self.lineedit_search_query.setObjectName(u"lineedit_search_query")
+        self.lineedit_search_query.setStyleSheet(u"QLineEdit {\n"
+"    border: 2px solid #757575;\n"
+"    border-radius: 12px;\n"
+"    padding: 0 8px;\n"
+"    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
+"    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
+"    font-size: 16px;\n"
+"    height: 20px;\n"
+"}\n"
+"\n"
+"QLineEdit:focus {\n"
+"    border-color: rgb(107, 0, 255)\n"
+"}\n"
+"\n"
+"QLineEdit:disabled {\n"
+"    background: #444444;  /* setzt den Hintergrund auf ein dunkles Grau, wenn das QLineEdit deaktiviert ist */\n"
+"    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */\n"
+"    border-color: #aaaaaa;\n"
+"}")
+
+        self.horizontalLayout_8.addWidget(self.lineedit_search_query)
+
+        self.button_start_search = QPushButton(self.page)
+        self.button_start_search.setObjectName(u"button_start_search")
+        self.button_start_search.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_start_search.setStyleSheet(u"QPushButton {\n"
+"        background-color: #5a2a82; /* base violet color */\n"
+"        color: #ffffff; /* white text */\n"
+"        border: none;\n"
+"        border-radius: 10px; /* reduced rounded corner radius */\n"
+"        padding: 5px 10px; /* reduced button padding */\n"
+"        font-size: 12px;\n"
+"        outline: none;\n"
+"    }\n"
+"    \n"
+"    QPushButton:hover {\n"
+"        background-color: #7b3ca3; /* slightly lighter violet when hovered */\n"
+"    }\n"
+"\n"
+"    QPushButton:pressed {\n"
+"        background-color: #481f61; /* darker violet when pressed */\n"
+"    }\n"
+"\n"
+"    QPushButton:disabled {\n"
+"        background-color: #3f1d4d; /* even darker shade when button is disabled */\n"
+"        color: #8a7b9a; /* greyish text */\n"
+"    }")
+
+        self.horizontalLayout_8.addWidget(self.button_start_search)
+
+
+        self.gridLayout_4.addLayout(self.horizontalLayout_8, 0, 0, 1, 1)
+
+        self.treeWidget = QTreeWidget(self.page)
+        __qtreewidgetitem = QTreeWidgetItem()
+        __qtreewidgetitem.setText(0, u"1");
+        self.treeWidget.setHeaderItem(__qtreewidgetitem)
+        self.treeWidget.setObjectName(u"treeWidget")
+        self.treeWidget.setStyleSheet(u"background-color: rgb(94, 94, 94);\n"
+"color: white;")
+
+        self.gridLayout_4.addWidget(self.treeWidget, 1, 0, 1, 1)
 
         self.stackedWidget.addWidget(self.page)
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
-        self.gridLayout_3 = QGridLayout(self.page_2)
-        self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.groupbox_metadata = QGroupBox(self.page_2)
-        self.groupbox_metadata.setObjectName(u"groupbox_metadata")
-        self.groupbox_metadata.setStyleSheet(u"color: rgb(255, 255, 255)")
-        self.horizontalLayoutWidget = QWidget(self.groupbox_metadata)
-        self.horizontalLayoutWidget.setObjectName(u"horizontalLayoutWidget")
-        self.horizontalLayoutWidget.setGeometry(QRect(10, 380, 1051, 41))
-        self.horizontalLayout_6 = QHBoxLayout(self.horizontalLayoutWidget)
-        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-        self.horizontalLayout_6.setContentsMargins(0, 0, 0, 0)
-        self.button_get_metadata = QPushButton(self.horizontalLayoutWidget)
-        self.button_get_metadata.setObjectName(u"button_get_metadata")
-        self.button_get_metadata.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_get_metadata.setStyleSheet(u"QPushButton {\n"
-"    background-color: #5468ff;\n"
-"	text-align: center;\n"
-"	border-width: 2px;\n"
-"    border-radius: 12px;\n"
-"	border-style: double;\n"
-"    color: #fff;\n"
-"    font-family: \"JetBrains Mono\", monospace;\n"
-"    font-size: 15px;\n"
-"    padding: 0px 16px 0px 16px;\n"
-"    height: 24px;\n"
-"	border-color: rgb(73, 255, 167)\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #3c4fe0;\n"
-"	border-color: rgb(179, 0, 255)\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: #3c4fe0;\n"
-"}\n"
-"")
-
-        self.horizontalLayout_6.addWidget(self.button_get_metadata)
-
-        self.button_metadata_refresh = QPushButton(self.horizontalLayoutWidget)
-        self.button_metadata_refresh.setObjectName(u"button_metadata_refresh")
-        self.button_metadata_refresh.setStyleSheet(u"QPushButton {\n"
-"    background-color: #5468ff;\n"
-"	text-align: center;\n"
-"	border-width: 2px;\n"
-"    border-radius: 12px;\n"
-"	border-style: double;\n"
-"    color: #fff;\n"
-"    font-family: \"JetBrains Mono\", monospace;\n"
-"    font-size: 15px;\n"
-"    padding: 0px 16px 0px 16px;\n"
-"    height: 24px;\n"
-"	border-color: rgb(73, 255, 167)\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #3c4fe0;\n"
-"	border-color: rgb(179, 0, 255)\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: #3c4fe0;\n"
-"}")
-
-        self.horizontalLayout_6.addWidget(self.button_metadata_refresh)
-
-        self.groupBox_7 = QGroupBox(self.groupbox_metadata)
-        self.groupBox_7.setObjectName(u"groupBox_7")
-        self.groupBox_7.setGeometry(QRect(0, 0, 1061, 381))
-        self.gridLayout_5 = QGridLayout(self.groupBox_7)
-        self.gridLayout_5.setObjectName(u"gridLayout_5")
+        self.gridLayout_10 = QGridLayout(self.page_2)
+        self.gridLayout_10.setObjectName(u"gridLayout_10")
+        self.groupBox_8 = QGroupBox(self.page_2)
+        self.groupBox_8.setObjectName(u"groupBox_8")
+        self.gridLayout_9 = QGridLayout(self.groupBox_8)
+        self.gridLayout_9.setObjectName(u"gridLayout_9")
         self.horizontalLayout_16 = QHBoxLayout()
         self.horizontalLayout_16.setObjectName(u"horizontalLayout_16")
-        self.label_title = QLabel(self.groupBox_7)
+        self.label_title = QLabel(self.groupBox_8)
         self.label_title.setObjectName(u"label_title")
         self.label_title.setStyleSheet(u"QLabel {\n"
 "    color: white;\n"
@@ -711,11 +900,11 @@ class Ui_Widget(object):
 
         self.horizontalLayout_16.addWidget(self.label_title)
 
-        self.lineedit_title = QLineEdit(self.groupBox_7)
+        self.lineedit_title = QLineEdit(self.groupBox_8)
         self.lineedit_title.setObjectName(u"lineedit_title")
         self.lineedit_title.setStyleSheet(u"QLineEdit {\n"
 "    border: 2px solid #757575;\n"
-"    border-radius: 5px;\n"
+"    border-radius: 12px;\n"
 "    padding: 0 8px;\n"
 "    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
 "    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
@@ -737,63 +926,11 @@ class Ui_Widget(object):
         self.horizontalLayout_16.addWidget(self.lineedit_title)
 
 
-        self.gridLayout_5.addLayout(self.horizontalLayout_16, 0, 0, 1, 1)
-
-        self.horizontalLayout_15 = QHBoxLayout()
-        self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
-        self.label_likes = QLabel(self.groupBox_7)
-        self.label_likes.setObjectName(u"label_likes")
-        self.label_likes.setStyleSheet(u"QLabel {\n"
-"    color: white;\n"
-"    font-size: 16px;\n"
-"	margin-right: 49px;\n"
-"}\n"
-"\n"
-"QLabel#Title {\n"
-"    color: #212121;\n"
-"    font-size: 24px;\n"
-"    font-weight: bold;\n"
-"}\n"
-"\n"
-"QLabel#Subtitle {\n"
-"    color: #757575;\n"
-"    font-size: 20px;\n"
-"}\n"
-"")
-
-        self.horizontalLayout_15.addWidget(self.label_likes)
-
-        self.lineedit_likes = QLineEdit(self.groupBox_7)
-        self.lineedit_likes.setObjectName(u"lineedit_likes")
-        self.lineedit_likes.setStyleSheet(u"QLineEdit {\n"
-"    border: 2px solid #757575;\n"
-"    border-radius: 5px;\n"
-"    padding: 0 8px;\n"
-"    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
-"    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
-"    font-size: 16px;\n"
-"    height: 20px;\n"
-"}\n"
-"\n"
-"QLineEdit:focus {\n"
-"    border-color: rgb(107, 0, 255)\n"
-"}\n"
-"\n"
-"QLineEdit:disabled {\n"
-"    background: #444444;  /* setzt den Hintergrund auf ein dunkles Grau, wenn das QLineEdit deaktiviert ist */\n"
-"    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */\n"
-"    border-color: #aaaaaa;\n"
-"}")
-        self.lineedit_likes.setReadOnly(True)
-
-        self.horizontalLayout_15.addWidget(self.lineedit_likes)
-
-
-        self.gridLayout_5.addLayout(self.horizontalLayout_15, 1, 0, 1, 1)
+        self.gridLayout_9.addLayout(self.horizontalLayout_16, 0, 0, 1, 1)
 
         self.horizontalLayout_14 = QHBoxLayout()
         self.horizontalLayout_14.setObjectName(u"horizontalLayout_14")
-        self.label_image_url = QLabel(self.groupBox_7)
+        self.label_image_url = QLabel(self.groupBox_8)
         self.label_image_url.setObjectName(u"label_image_url")
         self.label_image_url.setStyleSheet(u"QLabel {\n"
 "    color: white;\n"
@@ -815,11 +952,11 @@ class Ui_Widget(object):
 
         self.horizontalLayout_14.addWidget(self.label_image_url)
 
-        self.lineedit_image_url = QLineEdit(self.groupBox_7)
+        self.lineedit_image_url = QLineEdit(self.groupBox_8)
         self.lineedit_image_url.setObjectName(u"lineedit_image_url")
         self.lineedit_image_url.setStyleSheet(u"QLineEdit {\n"
 "    border: 2px solid #757575;\n"
-"    border-radius: 5px;\n"
+"    border-radius: 12px;\n"
 "    padding: 0 8px;\n"
 "    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
 "    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
@@ -840,12 +977,64 @@ class Ui_Widget(object):
 
         self.horizontalLayout_14.addWidget(self.lineedit_image_url)
 
+        self.horizontalLayout_15 = QHBoxLayout()
+        self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
+        self.label_likes = QLabel(self.groupBox_8)
+        self.label_likes.setObjectName(u"label_likes")
+        self.label_likes.setStyleSheet(u"QLabel {\n"
+"    color: white;\n"
+"    font-size: 16px;\n"
+"	margin-right: 49px;\n"
+"}\n"
+"\n"
+"QLabel#Title {\n"
+"    color: #212121;\n"
+"    font-size: 24px;\n"
+"    font-weight: bold;\n"
+"}\n"
+"\n"
+"QLabel#Subtitle {\n"
+"    color: #757575;\n"
+"    font-size: 20px;\n"
+"}\n"
+"")
 
-        self.gridLayout_5.addLayout(self.horizontalLayout_14, 2, 0, 1, 1)
+        self.horizontalLayout_15.addWidget(self.label_likes)
+
+        self.lineedit_likes = QLineEdit(self.groupBox_8)
+        self.lineedit_likes.setObjectName(u"lineedit_likes")
+        self.lineedit_likes.setStyleSheet(u"QLineEdit {\n"
+"    border: 2px solid #757575;\n"
+"    border-radius: 12px;\n"
+"    padding: 0 8px;\n"
+"    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
+"    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
+"    font-size: 16px;\n"
+"    height: 20px;\n"
+"}\n"
+"\n"
+"QLineEdit:focus {\n"
+"    border-color: rgb(107, 0, 255)\n"
+"}\n"
+"\n"
+"QLineEdit:disabled {\n"
+"    background: #444444;  /* setzt den Hintergrund auf ein dunkles Grau, wenn das QLineEdit deaktiviert ist */\n"
+"    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */\n"
+"    border-color: #aaaaaa;\n"
+"}")
+        self.lineedit_likes.setReadOnly(True)
+
+        self.horizontalLayout_15.addWidget(self.lineedit_likes)
+
+
+        self.horizontalLayout_14.addLayout(self.horizontalLayout_15)
+
+
+        self.gridLayout_9.addLayout(self.horizontalLayout_14, 2, 0, 1, 1)
 
         self.horizontalLayout_13 = QHBoxLayout()
         self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
-        self.label_tags = QLabel(self.groupBox_7)
+        self.label_tags = QLabel(self.groupBox_8)
         self.label_tags.setObjectName(u"label_tags")
         self.label_tags.setStyleSheet(u"QLabel {\n"
 "    color: white;\n"
@@ -867,11 +1056,11 @@ class Ui_Widget(object):
 
         self.horizontalLayout_13.addWidget(self.label_tags)
 
-        self.lineedit_tags = QLineEdit(self.groupBox_7)
+        self.lineedit_tags = QLineEdit(self.groupBox_8)
         self.lineedit_tags.setObjectName(u"lineedit_tags")
         self.lineedit_tags.setStyleSheet(u"QLineEdit {\n"
 "    border: 2px solid #757575;\n"
-"    border-radius: 5px;\n"
+"    border-radius: 12px;\n"
 "    padding: 0 8px;\n"
 "    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
 "    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
@@ -892,12 +1081,9 @@ class Ui_Widget(object):
 
         self.horizontalLayout_13.addWidget(self.lineedit_tags)
 
-
-        self.gridLayout_5.addLayout(self.horizontalLayout_13, 3, 0, 1, 1)
-
         self.horizontalLayout_12 = QHBoxLayout()
         self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
-        self.label_author = QLabel(self.groupBox_7)
+        self.label_author = QLabel(self.groupBox_8)
         self.label_author.setObjectName(u"label_author")
         self.label_author.setStyleSheet(u"QLabel {\n"
 "    color: white;\n"
@@ -919,11 +1105,11 @@ class Ui_Widget(object):
 
         self.horizontalLayout_12.addWidget(self.label_author)
 
-        self.lineedit_author = QLineEdit(self.groupBox_7)
+        self.lineedit_author = QLineEdit(self.groupBox_8)
         self.lineedit_author.setObjectName(u"lineedit_author")
         self.lineedit_author.setStyleSheet(u"QLineEdit {\n"
 "    border: 2px solid #757575;\n"
-"    border-radius: 5px;\n"
+"    border-radius: 12px;\n"
 "    padding: 0 8px;\n"
 "    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
 "    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
@@ -945,11 +1131,14 @@ class Ui_Widget(object):
         self.horizontalLayout_12.addWidget(self.lineedit_author)
 
 
-        self.gridLayout_5.addLayout(self.horizontalLayout_12, 4, 0, 1, 1)
+        self.horizontalLayout_13.addLayout(self.horizontalLayout_12)
+
+
+        self.gridLayout_9.addLayout(self.horizontalLayout_13, 3, 0, 1, 1)
 
         self.horizontalLayout_11 = QHBoxLayout()
         self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
-        self.label_views = QLabel(self.groupBox_7)
+        self.label_views = QLabel(self.groupBox_8)
         self.label_views.setObjectName(u"label_views")
         self.label_views.setStyleSheet(u"QLabel {\n"
 "    color: white;\n"
@@ -971,11 +1160,11 @@ class Ui_Widget(object):
 
         self.horizontalLayout_11.addWidget(self.label_views)
 
-        self.lineedit_views = QLineEdit(self.groupBox_7)
+        self.lineedit_views = QLineEdit(self.groupBox_8)
         self.lineedit_views.setObjectName(u"lineedit_views")
         self.lineedit_views.setStyleSheet(u"QLineEdit {\n"
 "    border: 2px solid #757575;\n"
-"    border-radius: 5px;\n"
+"    border-radius: 12px;\n"
 "    padding: 0 8px;\n"
 "    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
 "    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
@@ -996,12 +1185,9 @@ class Ui_Widget(object):
 
         self.horizontalLayout_11.addWidget(self.lineedit_views)
 
-
-        self.gridLayout_5.addLayout(self.horizontalLayout_11, 5, 0, 1, 1)
-
         self.horizontalLayout_10 = QHBoxLayout()
         self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
-        self.label_date = QLabel(self.groupBox_7)
+        self.label_date = QLabel(self.groupBox_8)
         self.label_date.setObjectName(u"label_date")
         self.label_date.setStyleSheet(u"QLabel {\n"
 "    color: white;\n"
@@ -1023,11 +1209,11 @@ class Ui_Widget(object):
 
         self.horizontalLayout_10.addWidget(self.label_date)
 
-        self.lineedit_date = QLineEdit(self.groupBox_7)
+        self.lineedit_date = QLineEdit(self.groupBox_8)
         self.lineedit_date.setObjectName(u"lineedit_date")
         self.lineedit_date.setStyleSheet(u"QLineEdit {\n"
 "    border: 2px solid #757575;\n"
-"    border-radius: 5px;\n"
+"    border-radius: 12px;\n"
 "    padding: 0 8px;\n"
 "    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
 "    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
@@ -1049,11 +1235,14 @@ class Ui_Widget(object):
         self.horizontalLayout_10.addWidget(self.lineedit_date)
 
 
-        self.gridLayout_5.addLayout(self.horizontalLayout_10, 6, 0, 1, 1)
+        self.horizontalLayout_11.addLayout(self.horizontalLayout_10)
 
-        self.horizontalLayout_9 = QHBoxLayout()
-        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
-        self.label_duration = QLabel(self.groupBox_7)
+
+        self.gridLayout_9.addLayout(self.horizontalLayout_11, 5, 0, 1, 1)
+
+        self.horizontalLayout_17 = QHBoxLayout()
+        self.horizontalLayout_17.setObjectName(u"horizontalLayout_17")
+        self.label_duration = QLabel(self.groupBox_8)
         self.label_duration.setObjectName(u"label_duration")
         self.label_duration.setStyleSheet(u"QLabel {\n"
 "    color: white;\n"
@@ -1073,14 +1262,14 @@ class Ui_Widget(object):
 "}\n"
 "")
 
-        self.horizontalLayout_9.addWidget(self.label_duration)
+        self.horizontalLayout_17.addWidget(self.label_duration)
 
-        self.lineedit_duration = QLineEdit(self.groupBox_7)
+        self.lineedit_duration = QLineEdit(self.groupBox_8)
         self.lineedit_duration.setObjectName(u"lineedit_duration")
         self.lineedit_duration.setAutoFillBackground(False)
         self.lineedit_duration.setStyleSheet(u"QLineEdit {\n"
 "    border: 2px solid #757575;\n"
-"    border-radius: 5px;\n"
+"    border-radius: 12px;\n"
 "    padding: 0 8px;\n"
 "    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
 "    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
@@ -1099,14 +1288,11 @@ class Ui_Widget(object):
 "}")
         self.lineedit_duration.setReadOnly(True)
 
-        self.horizontalLayout_9.addWidget(self.lineedit_duration)
+        self.horizontalLayout_17.addWidget(self.lineedit_duration)
 
-
-        self.gridLayout_5.addLayout(self.horizontalLayout_9, 7, 0, 1, 1)
-
-        self.horizontalLayout_8 = QHBoxLayout()
-        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
-        self.label_hotspots = QLabel(self.groupBox_7)
+        self.horizontalLayout_18 = QHBoxLayout()
+        self.horizontalLayout_18.setObjectName(u"horizontalLayout_18")
+        self.label_hotspots = QLabel(self.groupBox_8)
         self.label_hotspots.setObjectName(u"label_hotspots")
         self.label_hotspots.setStyleSheet(u"QLabel {\n"
 "    color: white;\n"
@@ -1126,14 +1312,14 @@ class Ui_Widget(object):
 "}\n"
 "")
 
-        self.horizontalLayout_8.addWidget(self.label_hotspots)
+        self.horizontalLayout_18.addWidget(self.label_hotspots)
 
-        self.lineedit_hotspots = QLineEdit(self.groupBox_7)
+        self.lineedit_hotspots = QLineEdit(self.groupBox_8)
         self.lineedit_hotspots.setObjectName(u"lineedit_hotspots")
         self.lineedit_hotspots.setAutoFillBackground(False)
         self.lineedit_hotspots.setStyleSheet(u"QLineEdit {\n"
 "    border: 2px solid #757575;\n"
-"    border-radius: 5px;\n"
+"    border-radius: 12px;\n"
 "    padding: 0 8px;\n"
 "    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
 "    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
@@ -1152,549 +1338,170 @@ class Ui_Widget(object):
 "}")
         self.lineedit_hotspots.setReadOnly(True)
 
-        self.horizontalLayout_8.addWidget(self.lineedit_hotspots)
+        self.horizontalLayout_18.addWidget(self.lineedit_hotspots)
 
 
-        self.gridLayout_5.addLayout(self.horizontalLayout_8, 8, 0, 1, 1)
+        self.horizontalLayout_17.addLayout(self.horizontalLayout_18)
 
 
-        self.gridLayout_3.addWidget(self.groupbox_metadata, 0, 0, 1, 1)
+        self.gridLayout_9.addLayout(self.horizontalLayout_17, 7, 0, 1, 1)
+
+        self.horizontalLayout_19 = QHBoxLayout()
+        self.horizontalLayout_19.setObjectName(u"horizontalLayout_19")
+        self.button_get_metadata = QPushButton(self.groupBox_8)
+        self.button_get_metadata.setObjectName(u"button_get_metadata")
+        self.button_get_metadata.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_get_metadata.setStyleSheet(u"QPushButton {\n"
+"        background-color: #5a2a82; /* base violet color */\n"
+"        color: #ffffff; /* white text */\n"
+"        border: none;\n"
+"        border-radius: 10px; /* reduced rounded corner radius */\n"
+"        padding: 5px 10px; /* reduced button padding */\n"
+"        font-size: 12px;\n"
+"        outline: none;\n"
+"    }\n"
+"    \n"
+"    QPushButton:hover {\n"
+"        background-color: #7b3ca3; /* slightly lighter violet when hovered */\n"
+"    }\n"
+"\n"
+"    QPushButton:pressed {\n"
+"        background-color: #481f61; /* darker violet when pressed */\n"
+"    }\n"
+"\n"
+"    QPushButton:disabled {\n"
+"        background-color: #3f1d4d; /* even darker shade when button is disabled */\n"
+"        color: #8a7b9a; /* greyish text */\n"
+"    }")
+
+        self.horizontalLayout_19.addWidget(self.button_get_metadata)
+
+        self.button_download_thumbnail = QPushButton(self.groupBox_8)
+        self.button_download_thumbnail.setObjectName(u"button_download_thumbnail")
+        self.button_download_thumbnail.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_download_thumbnail.setStyleSheet(u"QPushButton {\n"
+"        background-color: #5a2a82; /* base violet color */\n"
+"        color: #ffffff; /* white text */\n"
+"        border: none;\n"
+"        border-radius: 10px; /* reduced rounded corner radius */\n"
+"        padding: 5px 10px; /* reduced button padding */\n"
+"        font-size: 12px;\n"
+"        outline: none;\n"
+"    }\n"
+"    \n"
+"    QPushButton:hover {\n"
+"        background-color: #7b3ca3; /* slightly lighter violet when hovered */\n"
+"    }\n"
+"\n"
+"    QPushButton:pressed {\n"
+"        background-color: #481f61; /* darker violet when pressed */\n"
+"    }\n"
+"\n"
+"    QPushButton:disabled {\n"
+"        background-color: #3f1d4d; /* even darker shade when button is disabled */\n"
+"        color: #8a7b9a; /* greyish text */\n"
+"    }")
+
+        self.horizontalLayout_19.addWidget(self.button_download_thumbnail)
+
+
+        self.gridLayout_9.addLayout(self.horizontalLayout_19, 8, 0, 1, 1)
+
+
+        self.gridLayout_10.addWidget(self.groupBox_8, 0, 0, 1, 1)
 
         self.stackedWidget.addWidget(self.page_2)
         self.page_3 = QWidget()
         self.page_3.setObjectName(u"page_3")
-        self.gridLayout_6 = QGridLayout(self.page_3)
-        self.gridLayout_6.setObjectName(u"gridLayout_6")
-        self.credits_text = QTextBrowser(self.page_3)
-        self.credits_text.setObjectName(u"credits_text")
-        self.credits_text.setStyleSheet(u"background-color: rgb(0, 0, 0)")
+        self.gridLayout_11 = QGridLayout(self.page_3)
+        self.gridLayout_11.setObjectName(u"gridLayout_11")
+        self.textBrowser_2 = QTextBrowser(self.page_3)
+        self.textBrowser_2.setObjectName(u"textBrowser_2")
 
-        self.gridLayout_6.addWidget(self.credits_text, 0, 0, 1, 1)
+        self.gridLayout_11.addWidget(self.textBrowser_2, 0, 0, 1, 1)
 
         self.stackedWidget.addWidget(self.page_3)
-        self.page_4 = QWidget()
-        self.page_4.setObjectName(u"page_4")
-        self.gridLayout_11 = QGridLayout(self.page_4)
-        self.gridLayout_11.setObjectName(u"gridLayout_11")
-        self.button_download_search_query = QPushButton(self.page_4)
-        self.button_download_search_query.setObjectName(u"button_download_search_query")
-        self.button_download_search_query.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_download_search_query.setStyleSheet(u"QPushButton {\n"
-"    background-color: #5468ff;\n"
-"	border-width: 2px;\n"
-"	border-color: rgb(98, 255, 182);\n"
-"	border-style: double;\n"
-"    border-radius: 6px;\n"
-"	text-align: center;\n"
-"    color: #fff;\n"
-"    font-family: \"JetBrains Mono\", monospace;\n"
-"    font-size: 15px;\n"
-"    padding: 0px 16px 0px 16px;\n"
-"    height: 24px;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #3c4fe0;\n"
-"	border-color: rgb(179, 0, 255)\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: #3c4fe0;\n"
-"}\n"
-"")
 
-        self.gridLayout_11.addWidget(self.button_download_search_query, 1, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.stackedWidget, 0, 0, 1, 1)
 
-        self.groupBox_5 = QGroupBox(self.page_4)
-        self.groupBox_5.setObjectName(u"groupBox_5")
-        self.gridLayout_10 = QGridLayout(self.groupBox_5)
-        self.gridLayout_10.setObjectName(u"gridLayout_10")
-        self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.label_total_videos = QLabel(self.groupBox_5)
-        self.label_total_videos.setObjectName(u"label_total_videos")
-        self.label_total_videos.setStyleSheet(u"QLabel {\n"
-"    color: white;\n"
-"    font-size: 16px;\n"
-"	margin-right: 11px;\n"
-"}\n"
-"\n"
-"QLabel#Title {\n"
-"    color: #212121;\n"
-"    font-size: 24px;\n"
-"    font-weight: bold;\n"
-"}\n"
-"\n"
-"QLabel#Subtitle {\n"
-"    color: #757575;\n"
-"    font-size: 20px;\n"
-"}\n"
-"")
 
-        self.horizontalLayout_3.addWidget(self.label_total_videos)
+        self.gridLayout_13.addWidget(self.groupBox_3, 1, 0, 1, 2)
 
-        self.lineedit_total_videos = QLineEdit(self.groupBox_5)
-        self.lineedit_total_videos.setObjectName(u"lineedit_total_videos")
-        self.lineedit_total_videos.setStyleSheet(u"QLineEdit {\n"
-"    border: 2px solid #757575;\n"
-"    border-radius: 5px;\n"
-"    padding: 0 8px;\n"
-"    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
-"    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
-"    font-size: 16px;\n"
-"    height: 20px;\n"
-"}\n"
-"\n"
-"QLineEdit:focus {\n"
-"    border-color: rgb(107, 0, 255)\n"
-"}\n"
-"\n"
-"QLineEdit:disabled {\n"
-"    background: #444444;  /* setzt den Hintergrund auf ein dunkles Grau, wenn das QLineEdit deaktiviert ist */\n"
-"    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */\n"
-"    border-color: #aaaaaa;\n"
-"}")
-        self.lineedit_total_videos.setReadOnly(True)
 
-        self.horizontalLayout_3.addWidget(self.lineedit_total_videos)
+        self.retranslateUi(Porn_Fetch_Widget)
 
+        self.stackedWidget.setCurrentIndex(0)
 
-        self.gridLayout_10.addLayout(self.horizontalLayout_3, 1, 0, 1, 1)
 
-        self.label_5 = QLabel(self.groupBox_5)
-        self.label_5.setObjectName(u"label_5")
-        self.label_5.setStyleSheet(u"color: white;")
-
-        self.gridLayout_10.addWidget(self.label_5, 3, 0, 1, 1)
-
-        self.horizontalLayout_5 = QHBoxLayout()
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.label_search_query = QLabel(self.groupBox_5)
-        self.label_search_query.setObjectName(u"label_search_query")
-        self.label_search_query.setStyleSheet(u"QLabel {\n"
-"    color: white;\n"
-"    font-size: 16px;\n"
-"	margin-right: 1px;\n"
-"}\n"
-"\n"
-"QLabel#Title {\n"
-"    color: #212121;\n"
-"    font-size: 24px;\n"
-"    font-weight: bold;\n"
-"}\n"
-"\n"
-"QLabel#Subtitle {\n"
-"    color: #757575;\n"
-"    font-size: 20px;\n"
-"}\n"
-"")
-
-        self.horizontalLayout_5.addWidget(self.label_search_query)
-
-        self.lineedit_search_query = QLineEdit(self.groupBox_5)
-        self.lineedit_search_query.setObjectName(u"lineedit_search_query")
-        self.lineedit_search_query.setStyleSheet(u"QLineEdit {\n"
-"    border: 2px solid #757575;\n"
-"    border-radius: 5px;\n"
-"    padding: 0 8px;\n"
-"    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
-"    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
-"    font-size: 16px;\n"
-"    height: 20px;\n"
-"}\n"
-"\n"
-"QLineEdit:focus {\n"
-"    border-color: rgb(107, 0, 255)\n"
-"}\n"
-"\n"
-"QLineEdit:disabled {\n"
-"    background: #444444;  /* setzt den Hintergrund auf ein dunkles Grau, wenn das QLineEdit deaktiviert ist */\n"
-"    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */\n"
-"    border-color: #aaaaaa;\n"
-"}")
-
-        self.horizontalLayout_5.addWidget(self.lineedit_search_query)
-
-        self.button_start_search = QPushButton(self.groupBox_5)
-        self.button_start_search.setObjectName(u"button_start_search")
-        self.button_start_search.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_start_search.setStyleSheet(u"QPushButton {\n"
-"    background-color: #5468ff;\n"
-"	border-width: 2px;\n"
-"	border-color: rgb(98, 255, 182);\n"
-"	border-style: double;\n"
-"    border-radius: 12px;\n"
-"	text-align: center;\n"
-"    color: #fff;\n"
-"    font-family: \"JetBrains Mono\", monospace;\n"
-"    font-size: 15px;\n"
-"    padding: 0px 16px 0px 16px;\n"
-"    height: 24px;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #3c4fe0;\n"
-"	border-color: rgb(179, 0, 255)\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: #3c4fe0;\n"
-"}\n"
-"")
-
-        self.horizontalLayout_5.addWidget(self.button_start_search)
-
-
-        self.gridLayout_10.addLayout(self.horizontalLayout_5, 0, 0, 1, 1)
-
-        self.label = QLabel(self.groupBox_5)
-        self.label.setObjectName(u"label")
-        self.label.setStyleSheet(u"color: white;")
-
-        self.gridLayout_10.addWidget(self.label, 2, 0, 1, 1)
-
-        self.treeWidget = QTreeWidget(self.groupBox_5)
-        __qtreewidgetitem = QTreeWidgetItem()
-        __qtreewidgetitem.setText(0, u"1");
-        self.treeWidget.setHeaderItem(__qtreewidgetitem)
-        self.treeWidget.setObjectName(u"treeWidget")
-        self.treeWidget.setStyleSheet(u"color: white;\n"
-"background-color: rgb(109, 109, 109)")
-
-        self.gridLayout_10.addWidget(self.treeWidget, 5, 0, 1, 1)
-
-        self.label_6 = QLabel(self.groupBox_5)
-        self.label_6.setObjectName(u"label_6")
-        self.label_6.setStyleSheet(u"color: white;")
-
-        self.gridLayout_10.addWidget(self.label_6, 4, 0, 1, 1)
-
-
-        self.gridLayout_11.addWidget(self.groupBox_5, 0, 0, 1, 1)
-
-        self.stackedWidget.addWidget(self.page_4)
-        self.page_5 = QWidget()
-        self.page_5.setObjectName(u"page_5")
-        self.gridLayout_17 = QGridLayout(self.page_5)
-        self.gridLayout_17.setObjectName(u"gridLayout_17")
-        self.groupBox_11 = QGroupBox(self.page_5)
-        self.groupBox_11.setObjectName(u"groupBox_11")
-        self.gridLayout_15 = QGridLayout(self.groupBox_11)
-        self.gridLayout_15.setObjectName(u"gridLayout_15")
-        self.groupBox_8 = QGroupBox(self.groupBox_11)
-        self.groupBox_8.setObjectName(u"groupBox_8")
-        self.groupBox_8.setStyleSheet(u"color: white;")
-        self.gridLayout_12 = QGridLayout(self.groupBox_8)
-        self.gridLayout_12.setObjectName(u"gridLayout_12")
-        self.settings_radio_best = QRadioButton(self.groupBox_8)
-        self.settings_radio_best.setObjectName(u"settings_radio_best")
-        self.settings_radio_best.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(0, 255, 136)\n"
-"}\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}")
-
-        self.gridLayout_12.addWidget(self.settings_radio_best, 0, 0, 1, 1)
-
-        self.settings_radio_middle = QRadioButton(self.groupBox_8)
-        self.settings_radio_middle.setObjectName(u"settings_radio_middle")
-        self.settings_radio_middle.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 170, 0)\n"
-"}\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}")
-
-        self.gridLayout_12.addWidget(self.settings_radio_middle, 1, 0, 1, 1)
-
-        self.settings_radio_worst = QRadioButton(self.groupBox_8)
-        self.settings_radio_worst.setObjectName(u"settings_radio_worst")
-        self.settings_radio_worst.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 0, 0)\n"
-"}\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}")
-
-        self.gridLayout_12.addWidget(self.settings_radio_worst, 2, 0, 1, 1)
-
-
-        self.gridLayout_15.addWidget(self.groupBox_8, 0, 0, 1, 1)
-
-        self.horizontalLayout_17 = QHBoxLayout()
-        self.horizontalLayout_17.setObjectName(u"horizontalLayout_17")
-        self.label_2 = QLabel(self.groupBox_11)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setStyleSheet(u"color: white;")
-
-        self.horizontalLayout_17.addWidget(self.label_2)
-
-        self.lineEdit = QLineEdit(self.groupBox_11)
-        self.lineEdit.setObjectName(u"lineEdit")
-        self.lineEdit.setStyleSheet(u"QLineEdit {\n"
-"    border: 2px solid #757575;\n"
-"    border-radius: 5px;\n"
-"    padding: 0 8px;\n"
-"    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
-"    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
-"    font-size: 16px;\n"
-"    height: 20px;\n"
-"}\n"
-"\n"
-"QLineEdit:focus {\n"
-"    border-color: rgb(107, 0, 255)\n"
-"}\n"
-"\n"
-"QLineEdit:disabled {\n"
-"    background: #444444;  /* setzt den Hintergrund auf ein dunkles Grau, wenn das QLineEdit deaktiviert ist */\n"
-"    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */\n"
-"    border-color: #aaaaaa;\n"
-"}")
-
-        self.horizontalLayout_17.addWidget(self.lineEdit)
-
-
-        self.gridLayout_15.addLayout(self.horizontalLayout_17, 1, 0, 1, 3)
-
-        self.groupBox_9 = QGroupBox(self.groupBox_11)
-        self.groupBox_9.setObjectName(u"groupBox_9")
-        self.groupBox_9.setStyleSheet(u"color: white;")
-        self.gridLayout_14 = QGridLayout(self.groupBox_9)
-        self.gridLayout_14.setObjectName(u"gridLayout_14")
-        self.settings_checkbox_sentry = QCheckBox(self.groupBox_9)
-        self.settings_checkbox_sentry.setObjectName(u"settings_checkbox_sentry")
-        self.settings_checkbox_sentry.setStyleSheet(u"QCheckBox::indicator {\n"
-"    width: 13px;\n"
-"    height: 13px;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:unchecked {\n"
-"    border: 1px solid white;\n"
-"    background: white;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:checked {\n"
-"    image: url(graphics/checkmark.png);\n"
-"}")
-
-        self.gridLayout_14.addWidget(self.settings_checkbox_sentry, 0, 0, 1, 1)
-
-
-        self.gridLayout_15.addWidget(self.groupBox_9, 0, 2, 1, 1)
-
-        self.groupBox_10 = QGroupBox(self.groupBox_11)
-        self.groupBox_10.setObjectName(u"groupBox_10")
-        self.groupBox_10.setStyleSheet(u"color: white;")
-        self.gridLayout_13 = QGridLayout(self.groupBox_10)
-        self.gridLayout_13.setObjectName(u"gridLayout_13")
-        self.settings_radio_multiple = QRadioButton(self.groupBox_10)
-        self.settings_radio_multiple.setObjectName(u"settings_radio_multiple")
-        self.settings_radio_multiple.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 0, 230)\n"
-"}\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}")
-
-        self.gridLayout_13.addWidget(self.settings_radio_multiple, 0, 0, 1, 1)
-
-        self.settings_radio_single = QRadioButton(self.groupBox_10)
-        self.settings_radio_single.setObjectName(u"settings_radio_single")
-        self.settings_radio_single.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(8, 0, 255)\n"
-"}\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}")
-
-        self.gridLayout_13.addWidget(self.settings_radio_single, 1, 0, 1, 1)
-
-
-        self.gridLayout_15.addWidget(self.groupBox_10, 0, 1, 1, 1)
-
-        self.button_settings_apply = QPushButton(self.groupBox_11)
-        self.button_settings_apply.setObjectName(u"button_settings_apply")
-        self.button_settings_apply.setStyleSheet(u"QPushButton {\n"
-"    background-color: #5468ff;\n"
-"	border-width: 2px;\n"
-"	border-color: rgb(98, 255, 182);\n"
-"	border-style: double;\n"
-"    border-radius: 6px;\n"
-"	text-align: center;\n"
-"    color: #fff;\n"
-"    font-family: \"JetBrains Mono\", monospace;\n"
-"    font-size: 15px;\n"
-"    padding: 0px 16px 0px 16px;\n"
-"    height: 24px;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #3c4fe0;\n"
-"	border-color: rgb(179, 0, 255)\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: #3c4fe0;\n"
-"}\n"
-"")
-
-        self.gridLayout_15.addWidget(self.button_settings_apply, 2, 0, 1, 3)
-
-
-        self.gridLayout_17.addWidget(self.groupBox_11, 0, 0, 1, 1)
-
-        self.frame = QFrame(self.page_5)
-        self.frame.setObjectName(u"frame")
-        self.frame.setFrameShape(QFrame.StyledPanel)
-        self.frame.setFrameShadow(QFrame.Raised)
-
-        self.gridLayout_17.addWidget(self.frame, 1, 0, 1, 1)
-
-        self.stackedWidget.addWidget(self.page_5)
-
-        self.gridLayout_16.addWidget(self.stackedWidget, 0, 1, 1, 1)
-
-        self.groupBox = QGroupBox(Widget)
-        self.groupBox.setObjectName(u"groupBox")
-        self.gridLayout_7 = QGridLayout(self.groupBox)
-        self.gridLayout_7.setObjectName(u"gridLayout_7")
-        self.progressbar_download = QProgressBar(self.groupBox)
-        self.progressbar_download.setObjectName(u"progressbar_download")
-        self.progressbar_download.setStyleSheet(u"QProgressBar {\n"
-"    background-color: #F0F0F0; /* Hellgrauer Hintergrund */\n"
-"	text-align: center;\n"
-"	color: rgb(230, 97, 0);\n"
-"	border: color grey;\n"
-"	border-width: 6;\n"
-"	border-radius: 12px;\n"
-"	color: black;\n"
-"	\n"
-"}\n"
-"\n"
-"QProgressBar::chunk {\n"
-"    background-color: rgb(26, 95, 180); /* Gr\u00fcn als Vordergrundfarbe */\n"
-"	border-radius: 12px;\n"
-"}\n"
-"")
-        self.progressbar_download.setValue(0)
-
-        self.gridLayout_7.addWidget(self.progressbar_download, 0, 0, 1, 1)
-
-        self.label_search_query_progress = QLabel(self.groupBox)
-        self.label_search_query_progress.setObjectName(u"label_search_query_progress")
-        self.label_search_query_progress.setStyleSheet(u"color: white")
-
-        self.gridLayout_7.addWidget(self.label_search_query_progress, 1, 0, 1, 1)
-
-
-        self.gridLayout_16.addWidget(self.groupBox, 1, 0, 1, 2)
-
-
-        self.retranslateUi(Widget)
-
-        self.stackedWidget.setCurrentIndex(3)
-
-
-        QMetaObject.connectSlotsByName(Widget)
+        QMetaObject.connectSlotsByName(Porn_Fetch_Widget)
     # setupUi
 
-    def retranslateUi(self, Widget):
-        Widget.setWindowTitle(QCoreApplication.translate("Widget", u"Porn Fetch 1.8 (GPL 3) : https://github.com/EchterAlsFake/Porn_Fetch", None))
-        self.groupBox_6.setTitle(QCoreApplication.translate("Widget", u"GroupBox", None))
-        self.button_download_tab.setText("")
-        self.button_search_tab.setText("")
-        self.button_credits_tab.setText("")
-        self.button_settings_tab.setText("")
-        self.button_metadata_tab.setText(QCoreApplication.translate("Widget", u"etadata", None))
-        self.groupbox_urls.setTitle("")
-        self.label_user_channel.setText(QCoreApplication.translate("Widget", u"User / Channel:", None))
-        self.button_start_user_channel.setText(QCoreApplication.translate("Widget", u"Start", None))
+    def retranslateUi(self, Porn_Fetch_Widget):
+        Porn_Fetch_Widget.setWindowTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Porn Fetch v2.1", None))
+        self.groupBox.setTitle("")
+        self.label_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u" URL: ", None))
+        self.button_start.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
+        self.label_user_channel.setText(QCoreApplication.translate("Porn_Fetch_Widget", u" Model / Channel: ", None))
+        self.button_start_user_channel.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
+        self.label_url_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u" File:  ", None))
+        self.button_start_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
+        self.label_output.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Output path: ", None))
+        self.lineedit_output.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"./", None))
         self.groupBox_2.setTitle("")
+        self.label_quality.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Quality:", None))
+        self.radio_highest.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Best", None))
+        self.radio_middle.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Middle", None))
+        self.radio_lowest.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Worest", None))
+        self.button_settings_apply.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Apply", None))
+        self.button_settings_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
+        self.label_debug.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Debug:", None))
+        self.settings_checkbox_sentry.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Sentry", None))
+        self.settings_checkbox_logging.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Logging", None))
+        self.label_threading_mode.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Threading:", None))
+        self.radio_threading_multiple.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
+        self.radio_threading_single.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
         self.groupBox_4.setTitle("")
-        self.radio_threading_multiple.setText(QCoreApplication.translate("Widget", u"Multiple", None))
-        self.radio_threading_single.setText(QCoreApplication.translate("Widget", u"Single", None))
-        self.label_4.setText(QCoreApplication.translate("Widget", u"Select Download mode (Threading)", None))
-        self.label_output.setText(QCoreApplication.translate("Widget", u"Output Path:", None))
-        self.lineedit_output.setText(QCoreApplication.translate("Widget", u"./", None))
+        self.textBrowser.setHtml(QCoreApplication.translate("Porn_Fetch_Widget", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:20pt; font-weight:700; color:#ffffff;\">	            Keyboard Shortcuts</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:20pt; font-weight:700; color:#ffffff;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;"
+                        " -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">1) CTRL + W  :  Exit		2) CTRL + S  :  Search Tab</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">3) CTRL + M   :  Meatadata Tab	4) CTRL + C  :  Show credits</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">5) CTRL + R   :  Reset config		6) CTRL + X  :  Re-init UI</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">7) CTRL + L    :  Set custom API language (exp.) </span></p></body></html>", None))
+        self.groupBox_5.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Language", None))
+        self.groupBox_6.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"API (video title etc...)", None))
+        self.api_radio_de.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"DE", None))
+        self.api_radio_en.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"EN", None))
+        self.api_radio_fr.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"FR", None))
+        self.api_radio_ru.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"RU", None))
+        self.api_radio_es.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"ES", None))
+        self.groupBox_7.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Application", None))
+        self.application_language_en.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"EN", None))
         self.groupBox_3.setTitle("")
-        self.radio_lowest.setText(QCoreApplication.translate("Widget", u"Lowest", None))
-        self.radio_highest.setText(QCoreApplication.translate("Widget", u"Highest", None))
-        self.radio_middle.setText(QCoreApplication.translate("Widget", u"Middle", None))
-        self.label_3.setText(QCoreApplication.translate("Widget", u"Select Quality:", None))
-        self.label_url_file.setText(QCoreApplication.translate("Widget", u"File with URLs:", None))
-        self.button_start_file.setText(QCoreApplication.translate("Widget", u"Start", None))
-        self.label_url.setText(QCoreApplication.translate("Widget", u"URL:", None))
-        self.button_start.setText(QCoreApplication.translate("Widget", u"Start", None))
-        self.groupbox_metadata.setTitle("")
-        self.button_get_metadata.setText(QCoreApplication.translate("Widget", u"Get metadata", None))
-        self.button_metadata_refresh.setText(QCoreApplication.translate("Widget", u"Refresh", None))
-        self.groupBox_7.setTitle("")
-        self.label_title.setText(QCoreApplication.translate("Widget", u"Title:", None))
-        self.label_likes.setText(QCoreApplication.translate("Widget", u"Likes:", None))
-        self.label_image_url.setText(QCoreApplication.translate("Widget", u"Image URL", None))
-        self.label_tags.setText(QCoreApplication.translate("Widget", u"Tags:", None))
-        self.label_author.setText(QCoreApplication.translate("Widget", u"Author: ", None))
-        self.label_views.setText(QCoreApplication.translate("Widget", u"Views:", None))
-        self.label_date.setText(QCoreApplication.translate("Widget", u"Date:", None))
-        self.label_duration.setText(QCoreApplication.translate("Widget", u"Duration:", None))
-        self.label_hotspots.setText(QCoreApplication.translate("Widget", u"Hotspots:", None))
-        self.credits_text.setHtml(QCoreApplication.translate("Widget", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        self.button_download_search_query.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download", None))
+        self.button_search_fix.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Automatically fixing issues (No 100% guarantee)", None))
+        self.label_search_query.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Query:", None))
+        self.button_start_search.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search", None))
+        self.groupBox_8.setTitle("")
+        self.label_title.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Title:", None))
+        self.label_image_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Image URL", None))
+        self.label_likes.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Likes:", None))
+        self.label_tags.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Tags:", None))
+        self.label_author.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Author: ", None))
+        self.label_views.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Views:", None))
+        self.label_date.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Date:", None))
+        self.label_duration.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Duration:", None))
+        self.label_hotspots.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Hotspots:", None))
+        self.button_get_metadata.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get metadata", None))
+        self.button_download_thumbnail.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download thumbnail", None))
+        self.textBrowser_2.setHtml(QCoreApplication.translate("Porn_Fetch_Widget", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "hr { height: 1px; border-width: 0; }\n"
@@ -1722,46 +1529,25 @@ class Ui_Widget(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">phub</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">colorama</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">sentry sdk</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:"
-                        "0px; color:#ffffff;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" col"
+                        "or:#ffffff;\">requests</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">Graphics:</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">Download Icon : https://icons8.com/icon/104149/herunterladen</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">Search Icon : https://icons8.com/icon/aROEUCBo74Il/suche</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">Settings Icon : https://ico"
-                        "ns8.com/icon/52146/einstellungen</span></p>\n"
+"<p "
+                        "style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">Settings Icon : https://icons8.com/icon/52146/einstellungen</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">C Icon : https://icons8.com/icon/Uehg4gyVyrUo/copyright</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">M Icon By Unicons Font on Icon Scout : https://iconscout.com/icons/medium : https://iconscout.com/contributors/unicons</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">: https://iconscout.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">Checkmark Icon: </span><span style=\" font-family:'JetBrains Mono','monospace'; color:#6a8759;\">https://www.iconsdb.com/"
-                        "barbie-pink-icons/checkmark-icon.html</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-inden"
+                        "t:0; text-indent:0px;\"><span style=\" color:#ffffff;\">Checkmark Icon: </span><span style=\" font-family:'JetBrains Mono','monospace'; color:#6a8759;\">https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">A special thanks to Egsagon for creating PHUB.</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">This project would not be possible without his great API and I have much respect for him!</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffff"
-                        "ff;\">2.0- 2023</span></p></body></html>", None))
-        self.button_download_search_query.setText(QCoreApplication.translate("Widget", u"Download", None))
-        self.groupBox_5.setTitle("")
-        self.label_total_videos.setText(QCoreApplication.translate("Widget", u"Total Videos:", None))
-        self.label_5.setText(QCoreApplication.translate("Widget", u"If Total videos = 0 or nothing happens, when you click \"search\", then you got blocked by PornHub and the API cancelled your request. Restart the program to fix that.", None))
-        self.label_search_query.setText(QCoreApplication.translate("Widget", u"Search Query:", None))
-        self.button_start_search.setText(QCoreApplication.translate("Widget", u"Search", None))
-        self.label.setText(QCoreApplication.translate("Widget", u"Do not use this feature too much, because you can get blocked by PornHub for a few minutes!", None))
-        self.label_6.setText(QCoreApplication.translate("Widget", u"The Table can only display up to 320 selectable videos!", None))
-        self.groupBox_11.setTitle("")
-        self.groupBox_8.setTitle(QCoreApplication.translate("Widget", u"Default Quality:", None))
-        self.settings_radio_best.setText(QCoreApplication.translate("Widget", u"Best", None))
-        self.settings_radio_middle.setText(QCoreApplication.translate("Widget", u"Middle", None))
-        self.settings_radio_worst.setText(QCoreApplication.translate("Widget", u"Worst", None))
-        self.label_2.setText(QCoreApplication.translate("Widget", u"Set default output path:", None))
-        self.groupBox_9.setTitle(QCoreApplication.translate("Widget", u"Debug Settings", None))
-        self.settings_checkbox_sentry.setText(QCoreApplication.translate("Widget", u"Sentry", None))
-        self.groupBox_10.setTitle(QCoreApplication.translate("Widget", u"Default threading", None))
-        self.settings_radio_multiple.setText(QCoreApplication.translate("Widget", u"Multiple", None))
-        self.settings_radio_single.setText(QCoreApplication.translate("Widget", u"Single", None))
-        self.button_settings_apply.setText(QCoreApplication.translate("Widget", u"Apply", None))
-        self.groupBox.setTitle("")
-        self.label_search_query_progress.setText(QCoreApplication.translate("Widget", u"Downloaded: / of / Videos", None))
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; co"
+                        "lor:#ffffff;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">2.1 - 2023</span></p></body></html>", None))
     # retranslateUi
 
