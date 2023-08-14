@@ -29,17 +29,10 @@ sentry sdk
 requests
 
 Graphics:
-
-Download Icon : https://icons8.com/icon/104149/herunterladen
-Search Icon : https://icons8.com/icon/aROEUCBo74Il/suche
-Settings Icon : https://icons8.com/icon/52146/einstellungen
-C Icon : https://icons8.com/icon/Uehg4gyVyrUo/copyright
-M Icon By Unicons Font on Icon Scout : https://iconscout.com/icons/medium : https://iconscout.com/contributors/unicons
-: https://iconscout.com
 Checkmark Icon: https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html
 
 A special thanks to Egsagon for creating PHUB.
-This project would not be possible without his great API and I have much respect for him!
+This project would not be possible without his great API and I have big respect for him!
 
 2.1 - 2023
 """
@@ -52,7 +45,7 @@ import requests
 
 from configparser import ConfigParser
 from PySide6 import QtCore
-from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QInputDialog, QLineEdit, QGraphicsOpacityEffect
+from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QInputDialog, QLineEdit, QButtonGroup
 from PySide6.QtGui import QKeyEvent, QColor
 from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Qt, QDir
 from src.license_agreement import Ui_Widget_License
@@ -130,12 +123,9 @@ class DownloadThread(QRunnable):
         self.output_path = output_path
         self.signals = DownloadProgressSignal()
 
-    def callback(self, **kwargs):
+    def callback(self, pos, total):
         """The callback argument from PHUB needs to be extracted. This is the reason why I need to use two functions."""
-        def _update_progress(pos, total):
-            self.signals.progress.emit(pos, total)
-
-        return _update_progress
+        self.signals.progress.emit(pos, total)
 
     def run(self):
         self.video.download(callback=self.callback, quality=self.quality, path=self.output_path)
@@ -146,20 +136,28 @@ class Widget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setup()
-
         self.video = None
         self.api_language = "en"
         self.custom_language = False
+        self.logging = None
         self.delay = True
         self.client = None
-        self.ui = Ui_Porn_Fetch_Widget()
-        self.ui.setupUi(self)
-
         self.download_thread = None
         self.threadpool = QThreadPool()
+
+        self.ui = Ui_Porn_Fetch_Widget()
+        self.ui.setupUi(self)
+        self.button_group() # Needs to be called before load_user_settings!
+        self.load_user_settings()  # Loads the user settings from config.ini to make settings persistent
+
+        alpha_value = int((int(self.transparency) / 100) * 255) # Ignore type error, because the int type will be defined in self.load_user_settings().  If config file isn't corrupted, it should be no problem!
+        color = QColor(0, 0, 0, alpha_value)
+        self.setStyleSheet(f"background-color: rgba({color.red()}, {color.green()}, {color.blue()}, {color.alpha()});color: rgb(255,255,255);border: none;")
+
+
         self.ui.stackedWidget.setCurrentIndex(0)
-        self.load_user_settings() # Loads the user settings from config.ini to make settings persistent
         self.button_connectors()
+
 
     def button_connectors(self):
         self.ui.button_start.clicked.connect(self.start)
@@ -169,6 +167,30 @@ class Widget(QWidget):
         self.ui.button_start_search.clicked.connect(self.search_videos)
         self.ui.button_download_search_query.clicked.connect(self.download_search)
         self.ui.button_settings_apply.clicked.connect(self.settings_tab)
+
+    def button_group(self):
+        """Separates the QRadioButtons from the different grid layouts"""
+
+        button_group_quality = QButtonGroup()
+        button_group_quality.addButton(self.ui.radio_highest)
+        button_group_quality.addButton(self.ui.radio_lowest)
+        button_group_quality.addButton(self.ui.radio_middle)
+
+
+        button_group_threading = QButtonGroup()
+        button_group_threading.addButton(self.ui.radio_threading_multiple_2)
+        button_group_threading.addButton(self.ui.radio_threading_single_2)
+
+        button_group_api_language = QButtonGroup()
+        button_group_api_language.addButton(self.ui.api_radio_es)
+        button_group_api_language.addButton(self.ui.api_radio_fr)
+        button_group_api_language.addButton(self.ui.api_radio_en)
+        button_group_api_language.addButton(self.ui.api_radio_de)
+        button_group_api_language.addButton(self.ui.api_radio_ru)
+
+        button_group_ui_language = QButtonGroup()
+        button_group_ui_language.addButton(self.ui.application_language_en)
+        self.buttonGroups = button_group_ui_language, button_group_threading, button_group_quality, button_group_api_language
 
     def setup(self):
         self.conf = ConfigParser()
@@ -215,6 +237,7 @@ class Widget(QWidget):
             self.sentry = False
 
 
+
     def get_client_language(self):
         """Checks the radio button for the language used for the API client"""
 
@@ -238,12 +261,12 @@ class Widget(QWidget):
 
 
     def get_quality(self):
-
+        """Checks the radio button for the quality used for the video object"""
         if self.ui.radio_highest.isChecked():
             return Quality.BEST
 
         elif self.ui.radio_middle.isChecked():
-            return Quality.MIDDLE
+            return Quality.HALF # Changed to half, because the API changed the name in v3.1
 
         elif self.ui.radio_lowest.isChecked():
             return Quality.WORST
@@ -414,9 +437,11 @@ class Widget(QWidget):
             query_object = self.client.search(query)
 
         except requests.exceptions.ConnectionError:
-            ui_popup("You got blocked by PornHub. Some videos won't show up in the search results. The only option is to wait or change IP address. I can't do anything about it. You can still download the videos, that got returned by PornHub.")
+            ui_popup("PornHub had an error. Increasing delay to 3 seconds.  Please don't overuse the search feature!.")
+            self.delay = 3
+            self.search_videos()
 
-        for i, video in enumerate(query_object[:50], start=1): # Limiting search results to 50
+        for i, video in enumerate(query_object, start=1): # Limiting search results to 50
             item = QTreeWidgetItem(self.ui.treeWidget)
             item.setText(0, f"{i}) {video.title}")
             item.setData(0, QtCore.Qt.UserRole, video.url)
@@ -451,41 +476,99 @@ class Widget(QWidget):
                 self.conf.set("Porn_Fetch", "default_threading", "multiple")
 
             if self.ui.settings_checkbox_sentry.isChecked():
-                self.conf.set("Porn_Fetch", "sentry", "true")
+                self.conf.set("Debug", "sentry", "true")
 
-            if not self.ui.settings_checkbox_sentry.isChecked():
+            else:
                 self.conf.set("Debug", "sentry", "false")
 
+            if self.ui.settings_checkbox_logging.isChecked():
+                self.conf.set("Debug", "logging", "true")
+
+            else:
+                self.conf.set("Debug", "logging", "false")
+
+            if self.ui.api_radio_de.isChecked():
+                self.conf.set("Porn_Fetch", "api_language", "de")
+
+            elif self.ui.api_radio_fr.isChecked():
+                self.conf.set("Porn_Fetch", "api_language", "fr")
+
+            elif self.ui.api_radio_es.isChecked():
+                self.conf.set("Porn_Fetch", "api_language", "es")
+
+            elif self.ui.api_radio_ru.isChecked():
+                self.conf.set("Porn_Fetch", "api_language", "ru")
+
+            elif self.ui.api_radio_en.isChecked():
+                self.conf.set("Porn_Fetch", "api_language", "en")
+
+            if self.ui.application_language_en.isChecked():
+                self.conf.set("UI", "language", "en")
+
+            transparency = self.ui.horizontalSlider.value()
+            self.conf.set("UI", "transparency", str(transparency)) # Needs to be a string!
             self.conf.write(config_file)
-            ui_popup("Applied!")
+
+            ui_popup("Applied! (Please restart for changes to take effect)")
 
     def load_user_settings(self):
 
         if self.conf["Porn_Fetch"]["default_quality"] == "best":
             self.ui.radio_highest.setChecked(True)
-            self.ui.radio_highest.setChecked(True)
 
-        if self.conf["Porn_Fetch"]["default_quality"] == "middle":
-            self.ui.radio_middle.setChecked(True)
+        elif self.conf["Porn_Fetch"]["default_quality"] == "middle":
             self.ui.radio_middle.setChecked(True)
 
-        if self.conf["Porn_Fetch"]["default_quality"] == "worst":
-            self.ui.radio_lowest.setChecked(True)
+        elif self.conf["Porn_Fetch"]["default_quality"] == "worst":
             self.ui.radio_lowest.setChecked(True)
 
         if self.conf["Porn_Fetch"]["default_threading"] == "multiple":
             self.ui.radio_threading_multiple_2.setChecked(True)
-            self.ui.radio_threading_multiple_2.setChecked(True)
 
-        if self.conf["Porn_Fetch"]["default_threading"] == "single":
-            self.ui.radio_threading_single_2.setChecked(True)
+        elif self.conf["Porn_Fetch"]["default_threading"] == "single":
             self.ui.radio_threading_single_2.setChecked(True)
 
         if self.conf["Debug"]["sentry"] == "true":
             self.ui.settings_checkbox_sentry.setChecked(True)
 
-        elif self.conf["Debug"]["sentry"] == "false":
+        else:
             self.ui.settings_checkbox_sentry.setChecked(False)
+
+        if self.conf["Debug"]["logging"] == "true":
+            self.ui.settings_checkbox_logging.setChecked(True)
+            self.logging = True
+
+        else:
+            self.ui.settings_checkbox_logging.setChecked(False)
+            self.logging = False
+
+        if self.conf["Porn_Fetch"]["api_language"] == "en":
+            self.ui.api_radio_en.setChecked(True)
+            self.api_language = "en"
+
+        elif self.conf["Porn_Fetch"]["api_language"] == "ru":
+            self.ui.api_radio_ru.setChecked(True)
+            self.api_language = "ru"
+
+        elif self.conf["Porn_Fetch"]["api_language"] == "fr":
+            self.ui.api_radio_fr.setChecked(True)
+            self.api_language = "fr"
+
+        elif self.conf["Porn_Fetch"]["api_language"] == "es":
+            self.ui.api_radio_es.setChecked(True)
+            self.api_language = "es"
+
+        elif self.conf["Porn_Fetch"]["api_language"] == "de":
+            self.ui.api_radio_de.setChecked(True)
+            self.api_language = "de"
+
+        if self.conf["UI"]["language"] == "en":
+            self.ui.application_language_en.setChecked(True)
+            self.application_language = "en"
+
+
+        self.transparency = self.conf["UI"]["transparency"]
+        self.ui.horizontalSlider.setValue(int(self.transparency))
 
     def keyPressEvent(self, event: QKeyEvent):
 
@@ -516,6 +599,47 @@ class Widget(QWidget):
             if ok and text:
                 self.api_language = text
                 self.custom_language = True
+
+    def help(self):
+
+        qmsg_box = QMessageBox()
+        text = """
+
+API Language:
+
+The API handles your requests to PornHub.com   If the API is in english language, then all the titles and video
+attributes are also in english. If the API is for example in German language, then the video titles are (if automatically
+tranlated by PornHub) also in German language.   Not all videos are supported! 
+
+UI Language:
+
+UI language defined the language in the application. See contribution on GitHub how to port it into your language
+
+Quality:
+
+Highest = Best Quality possible, Half = somewhere in the middle, Lowest = Least quality possible
+
+Debug:
+
+Sentry: Captures error logs, which helps me to fix issues faster, and you don't have to report them
+Logging: Creates a log.log file, which may helps to diagnose issues.
+
+UI Transparency: 
+
+Defines the UI background transparency. Please note, that this feature doesn't work well on Hyprland!
+
+Threading: 
+
+Threading uses multiple cores of your CPU to download multiple videos simultaneously. This leads to a broken
+progressbar, but can have a big speed impact if you have a really fast internet connection.
+
+
+If you still have questions, let me know on GitHub in discussions.
+"""
+
+
+
+
 
 def main():
     print("Checking configuration...")

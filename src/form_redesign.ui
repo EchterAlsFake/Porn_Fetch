@@ -1144,6 +1144,173 @@ li.checked::marker { content: &quot;\2612&quot;; }
       <string/>
      </property>
      <layout class="QGridLayout" name="gridLayout_8">
+      <item row="1" column="1" colspan="2">
+       <layout class="QGridLayout" name="gridlayout_ui_language">
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_debug">
+          <property name="text">
+           <string>Debug:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QCheckBox" name="settings_checkbox_sentry">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QCheckBox::indicator {
+    width: 13px;
+    height: 13px;
+}
+
+QCheckBox::indicator:unchecked {
+    border: 1px solid white;
+    background: white;
+}
+
+QCheckBox::indicator:checked {
+    image: url(graphics/checkmark.png);
+}</string>
+          </property>
+          <property name="text">
+           <string>Sentry</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Choose UI language</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QCheckBox" name="settings_checkbox_logging">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QCheckBox::indicator {
+    width: 13px;
+    height: 13px;
+}
+
+QCheckBox::indicator:unchecked {
+    border: 1px solid white;
+    background: white;
+}
+
+QCheckBox::indicator:checked {
+    image: url(graphics/checkmark.png);
+}</string>
+          </property>
+          <property name="text">
+           <string>Logging</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QRadioButton" name="application_language_en">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QRadioButton {
+	color: (255,255,255)}
+
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+
+</string>
+          </property>
+          <property name="text">
+           <string>EN</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QRadioButton" name="radio_threading_single_2">
+          <property name="styleSheet">
+           <string notr="true">QRadioButton {
+	color: rgb(255, 238, 0)}
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+
+</string>
+          </property>
+          <property name="text">
+           <string>No</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QRadioButton" name="radio_threading_multiple_2">
+          <property name="styleSheet">
+           <string notr="true">QRadioButton {
+	color: rgb(178, 0, 255)}
+
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+
+</string>
+          </property>
+          <property name="text">
+           <string>Yes</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_threading_mode_2">
+          <property name="text">
+           <string>Threading:</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
@@ -1151,73 +1318,98 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </property>
        </widget>
       </item>
-      <item row="4" column="0" colspan="3">
-       <layout class="QHBoxLayout" name="horizontalLayout_7">
+      <item row="0" column="0" colspan="3">
+       <layout class="QHBoxLayout" name="horizontal_quality">
         <item>
-         <widget class="QPushButton" name="button_settings_apply">
-          <property name="cursor">
-           <cursorShape>PointingHandCursor</cursorShape>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
-        background-color: #5a2a82; /* base violet color */
-        color: #ffffff; /* white text */
-        border: none;
-        border-radius: 10px; /* reduced rounded corner radius */
-        padding: 5px 10px; /* reduced button padding */
-        font-size: 12px;
-        outline: none;
-    }
-    
-    QPushButton:hover {
-        background-color: #7b3ca3; /* slightly lighter violet when hovered */
-    }
-
-    QPushButton:pressed {
-        background-color: #481f61; /* darker violet when pressed */
-    }
-
-    QPushButton:disabled {
-        background-color: #3f1d4d; /* even darker shade when button is disabled */
-        color: #8a7b9a; /* greyish text */
-    }</string>
-          </property>
+         <widget class="QLabel" name="label_quality">
           <property name="text">
-           <string>Apply</string>
+           <string>Quality:</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="button_settings_help">
-          <property name="cursor">
-           <cursorShape>PointingHandCursor</cursorShape>
-          </property>
+         <widget class="QRadioButton" name="radio_highest">
           <property name="styleSheet">
-           <string notr="true">QPushButton {
-        background-color: #5a2a82; /* base violet color */
-        color: #ffffff; /* white text */
-        border: none;
-        border-radius: 10px; /* reduced rounded corner radius */
-        padding: 5px 10px; /* reduced button padding */
-        font-size: 12px;
-        outline: none;
-    }
-    
-    QPushButton:hover {
-        background-color: #7b3ca3; /* slightly lighter violet when hovered */
-    }
+           <string notr="true">QRadioButton {
+	color: rgb(0, 255, 110);}
 
-    QPushButton:pressed {
-        background-color: #481f61; /* darker violet when pressed */
-    }
 
-    QPushButton:disabled {
-        background-color: #3f1d4d; /* even darker shade when button is disabled */
-        color: #8a7b9a; /* greyish text */
-    }</string>
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+
+</string>
           </property>
           <property name="text">
-           <string>Help</string>
+           <string>Best</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radio_middle">
+          <property name="styleSheet">
+           <string notr="true">QRadioButton {
+	color: rgb(255, 162, 0)}
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+
+</string>
+          </property>
+          <property name="text">
+           <string>Middle</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radio_lowest">
+          <property name="styleSheet">
+           <string notr="true">QRadioButton {
+	color: rgb(255, 0, 0)}
+
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+
+</string>
+          </property>
+          <property name="text">
+           <string>Worest</string>
           </property>
          </widget>
         </item>
@@ -1389,6 +1581,78 @@ QRadioButton::indicator:checked {
         </item>
        </layout>
       </item>
+      <item row="4" column="0" colspan="3">
+       <layout class="QHBoxLayout" name="horizontalLayout_7">
+        <item>
+         <widget class="QPushButton" name="button_settings_apply">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton {
+        background-color: #5a2a82; /* base violet color */
+        color: #ffffff; /* white text */
+        border: none;
+        border-radius: 10px; /* reduced rounded corner radius */
+        padding: 5px 10px; /* reduced button padding */
+        font-size: 12px;
+        outline: none;
+    }
+    
+    QPushButton:hover {
+        background-color: #7b3ca3; /* slightly lighter violet when hovered */
+    }
+
+    QPushButton:pressed {
+        background-color: #481f61; /* darker violet when pressed */
+    }
+
+    QPushButton:disabled {
+        background-color: #3f1d4d; /* even darker shade when button is disabled */
+        color: #8a7b9a; /* greyish text */
+    }</string>
+          </property>
+          <property name="text">
+           <string>Apply</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="button_settings_help">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton {
+        background-color: #5a2a82; /* base violet color */
+        color: #ffffff; /* white text */
+        border: none;
+        border-radius: 10px; /* reduced rounded corner radius */
+        padding: 5px 10px; /* reduced button padding */
+        font-size: 12px;
+        outline: none;
+    }
+    
+    QPushButton:hover {
+        background-color: #7b3ca3; /* slightly lighter violet when hovered */
+    }
+
+    QPushButton:pressed {
+        background-color: #481f61; /* darker violet when pressed */
+    }
+
+    QPushButton:disabled {
+        background-color: #3f1d4d; /* even darker shade when button is disabled */
+        color: #8a7b9a; /* greyish text */
+    }</string>
+          </property>
+          <property name="text">
+           <string>Help</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
       <item row="2" column="1" colspan="2">
        <widget class="QSlider" name="horizontalSlider">
         <property name="toolTip">
@@ -1429,274 +1693,33 @@ QRadioButton::indicator:checked {
         <property name="pageStep">
          <number>1</number>
         </property>
+        <property name="value">
+         <number>0</number>
+        </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
+        <property name="invertedAppearance">
+         <bool>true</bool>
+        </property>
+        <property name="invertedControls">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
-      <item row="1" column="1" colspan="2">
-       <layout class="QGridLayout" name="gridlayout_ui_language">
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_debug">
-          <property name="text">
-           <string>Debug:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QCheckBox" name="settings_checkbox_sentry">
-          <property name="cursor">
-           <cursorShape>PointingHandCursor</cursorShape>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QCheckBox::indicator {
-    width: 13px;
-    height: 13px;
-}
-
-QCheckBox::indicator:unchecked {
-    border: 1px solid white;
-    background: white;
-}
-
-QCheckBox::indicator:checked {
-    image: url(graphics/checkmark.png);
-}</string>
-          </property>
-          <property name="text">
-           <string>Sentry</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Choose UI language</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QCheckBox" name="settings_checkbox_logging">
-          <property name="cursor">
-           <cursorShape>PointingHandCursor</cursorShape>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QCheckBox::indicator {
-    width: 13px;
-    height: 13px;
-}
-
-QCheckBox::indicator:unchecked {
-    border: 1px solid white;
-    background: white;
-}
-
-QCheckBox::indicator:checked {
-    image: url(graphics/checkmark.png);
-}</string>
-          </property>
-          <property name="text">
-           <string>Logging</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QRadioButton" name="application_language_en">
-          <property name="cursor">
-           <cursorShape>PointingHandCursor</cursorShape>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QRadioButton {
-	color: (255,255,255)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-
-</string>
-          </property>
-          <property name="text">
-           <string>EN</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="2">
-         <widget class="QRadioButton" name="radio_threading_single_2">
-          <property name="styleSheet">
-           <string notr="true">QRadioButton {
-	color: rgb(255, 238, 0)}
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-
-</string>
-          </property>
-          <property name="text">
-           <string>No</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QRadioButton" name="radio_threading_multiple_2">
-          <property name="styleSheet">
-           <string notr="true">QRadioButton {
-	color: rgb(178, 0, 255)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-
-</string>
-          </property>
-          <property name="text">
-           <string>Yes</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_threading_mode_2">
-          <property name="text">
-           <string>Threading:</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+      <item row="3" column="1">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>More</string>
+        </property>
+       </widget>
       </item>
-      <item row="0" column="0" colspan="3">
-       <layout class="QHBoxLayout" name="horizontal_quality">
-        <item>
-         <widget class="QLabel" name="label_quality">
-          <property name="text">
-           <string>Quality:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="radio_highest">
-          <property name="styleSheet">
-           <string notr="true">QRadioButton {
-	color: rgb(0, 255, 110);}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-
-</string>
-          </property>
-          <property name="text">
-           <string>Best</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="radio_middle">
-          <property name="styleSheet">
-           <string notr="true">QRadioButton {
-	color: rgb(255, 162, 0)}
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-
-</string>
-          </property>
-          <property name="text">
-           <string>Middle</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="radio_lowest">
-          <property name="styleSheet">
-           <string notr="true">QRadioButton {
-	color: rgb(255, 0, 0)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-
-</string>
-          </property>
-          <property name="text">
-           <string>Worest</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+      <item row="3" column="2">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>                                       Less</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

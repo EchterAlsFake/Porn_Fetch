@@ -36,6 +36,10 @@ pyside6
 phub
 colorama
 sentry sdk
+requests
+js2py
+wget
+bs4
 
 Graphics:
 
@@ -50,7 +54,7 @@ Checkmark Icon : https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html
 A special thanks to Egsagon for creating PHUB.
 This project would not be possible without his great API and I have much respect for him!
 
-2.0 - 2023
+2.1 - 2023
 """
 
 class CLI():

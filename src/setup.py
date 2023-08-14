@@ -5,22 +5,32 @@ import sentry_sdk
 import wget
 from tqdm import tqdm
 from configparser import ConfigParser
+from datetime import datetime
 
 def logging(msg, level):
+    time = datetime.now()
 
-    if level == "0":
-        print(f"{Fore.LIGHTCYAN_EX} : DEBUG : {Fore.RESET} : MSG : {msg}")
+    if not os.path.isfile("log.log"):
+        with open("log.log", "w") as create:
+            create.write("")
+            create.close()
 
-    elif level == "1":
-        print(f"[{Fore.LIGHTRED_EX} : ERROR : {Fore.RESET} : MSG : {msg} ")
+    with open("log.log", "a") as log_file:
 
+        if level == "0":
+            print(f"{Fore.LIGHTCYAN_EX} : DEBUG : {Fore.RESET} : MSG : {msg}")
+            log_file.write(f"{time} : DEBUG : {msg}")
+
+
+        elif level == "1":
+            print(f"[{Fore.LIGHTRED_EX} : ERROR : {Fore.RESET} : MSG : {msg} ")
+            log_file.write(f"{time} : ERROR : {msg}")
 
 def strip_title(title):
-    disallowed_chars = ["<", ">", ":", '"', "/", "\\", "|", "*", "0"]
+    disallowed_chars = ["<", ">", ":", '"', "/", "\\", "|", "*", "0", "(", ")", "!"]
 
     for disallowed_char in disallowed_chars:
-        title = str(title).replace(disallowed_char,
-                                   "")  # Fixes the OS Error from V1.8.  The error mostly happens on Windows
+        title = str(title).replace(disallowed_char,"")  # Fixes the OS Error from V1.8.  The error mostly happens on Windows
 
     return title
 
@@ -29,23 +39,15 @@ def get_graphics():
     os.mkdir("graphics")
     os.path.join("graphics")
 
-    urls = ["https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/graphics/c.ico",
-            "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/graphics/download.ico",
-            "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/graphics/medium.ico",
-            "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/graphics/search.ico",
-            "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/graphics/settings-colorful.ico",
-            "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/graphics/checkmark.png"]
+    urls = ["https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/graphics/checkmark.png"]
 
     for url in tqdm(urls, dynamic_ncols=True):
         wget.download(url, out="graphics/")
 
-    files = ["c.ico", "download.ico", "medium.ico", "search.ico", "settings-colorful.ico", "checkmark.png"]
-    
+    files = ["checkmark.png"]
+
     for file in files:
-        if os.path.isfile(f"graphics/{file}"):
-            pass
-        
-        else:
+        if not os.path.isfile(f"graphics/{file}"):
             print("Error with Icon download. Icon's won't be available in the GUI!")
 
 
@@ -65,7 +67,7 @@ def enable_error_handling():
     sentry_cli = True
 
 def check_path(path):
-    return True if os.path.exists(path) else False
+    return bool(os.path.exists(path))
 
 def ask_for_sentry_cli():
 
@@ -78,7 +80,7 @@ The following data are obtained:
 - Error message (Python Traceback)
 - Variables and their values
 - In which class / function / line the error occurred.
-
+- Your PC name (can't turn it off, I don't care about it)
 
 No sensitive data / system data or user specific data that would lead to an identification is collected.
 
@@ -101,7 +103,7 @@ No sensitive data / system data or user specific data that would lead to an iden
 
 
 def setup_config_file(force=False):
-    sections = ['License', "Porn_Fetch", "Debug"]
+    sections = ['License', "Porn_Fetch", "Debug", "UI"]
     config_file = "config.ini"
 
     if force or not os.path.exists(config_file):
@@ -114,9 +116,15 @@ accept = false
 default_quality = best
 default_path = ./
 default_threading = multiple
+api_language = en
 
 [Debug]
 sentry = false
+logging = false
+
+[UI]
+transparency = 0
+language = en
 
 """)
             config.close()
