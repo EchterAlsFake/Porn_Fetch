@@ -1555,7 +1555,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_quality.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Quality:", None))
         self.radio_highest.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Best", None))
         self.radio_middle.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Middle", None))
-        self.radio_lowest.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Worest", None))
+        self.radio_lowest.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Worst", None))
         self.api_radio_fr.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"FR", None))
         self.api_radio_de.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"DE", None))
         self.api_radio_ru.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"RU", None))
@@ -1567,8 +1567,8 @@ class Ui_Porn_Fetch_Widget(object):
 #if QT_CONFIG(tooltip)
         self.horizontalSlider.setToolTip(QCoreApplication.translate("Porn_Fetch_Widget", u"Set transparency for UI in %. Gives a better UX on DEs like Hyprland", None))
 #endif // QT_CONFIG(tooltip)
-        self.label_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Less", None))
-        self.label_5.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"                                   More", None))
+        self.label_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"More", None))
+        self.label_5.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"                                       Less", None))
         self.groupBox_4.setTitle("")
         self.textBrowser.setHtml(QCoreApplication.translate("Porn_Fetch_Widget", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"

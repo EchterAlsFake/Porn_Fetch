@@ -1409,7 +1409,7 @@ QRadioButton::indicator:checked {
 </string>
           </property>
           <property name="text">
-           <string>Worest</string>
+           <string>Worst</string>
           </property>
          </widget>
         </item>
@@ -1710,14 +1710,14 @@ QRadioButton::indicator:checked {
       <item row="3" column="1">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Less</string>
+         <string>More</string>
         </property>
        </widget>
       </item>
       <item row="3" column="2">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>                                   More</string>
+         <string>                                       Less</string>
         </property>
        </widget>
       </item>

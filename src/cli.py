@@ -122,7 +122,7 @@ class CLI():
         if self.quality == Quality.BEST:
             quality_ext = f"{Fore.LIGHTCYAN_EX}Best"
 
-        elif self.quality == Quality.MIDDLE:
+        elif self.quality == Quality.HALF:
             quality_ext = f"{Fore.LIGHTMAGENTA_EX}Middle"
 
         elif self.quality == Quality.WORST:
@@ -193,7 +193,7 @@ class CLI():
             print(f"{self.z}✓")
 
         elif options == "2":
-            self.quality = Quality.MIDDLE
+            self.quality = Quality.HALF
             print(f"{self.z}✓")
 
         elif options == "3":
