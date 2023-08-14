@@ -2,21 +2,6 @@
 
 ![Build](https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg)
 
-# Information:
-
-I am experiencing some Issues with the Update for V2.1
-
-I will commit everything now, but not everything will work and there is still
-much left to do. I hope I get it done soon.
-
-Egsagon updated the API to 3.1 which solves a lot of issues.
-V2.1 will be probably the most stable version for then.
-<br>
-
-Thanks for your patience :) 
-
-
-
 # Table of Contents
 
 - [What is Porn Fetch?](#what-is-porn-fetch)<br>
