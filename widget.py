@@ -51,7 +51,7 @@ from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Qt, QDir
 from src.license_agreement import Ui_Widget_License
 from phub import Client, Quality
 from src.ui_main_widget import Ui_Porn_Fetch_Widget
-from src.setup import enable_error_handling, setup_config_file, strip_title, logging
+from src.setup import enable_error_handling, setup_config_file, strip_title, logging, get_graphics
 from src.cli import CLI
 
 def ui_popup(text):
@@ -136,6 +136,7 @@ class Widget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setup()
+        get_graphics()
         self.video = None
         self.api_language = "en"
         self.custom_language = False
