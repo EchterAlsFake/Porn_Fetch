@@ -146,8 +146,6 @@ class Widget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setup()
-        import os
-        os.environ['QT_QPA_PLATFORM'] = 'wayland'
 
         self.video = None
         self.api_language = "en"
@@ -157,7 +155,6 @@ class Widget(QWidget):
         self.ui = Ui_Porn_Fetch_Widget()
         self.ui.setupUi(self)
 
-        self.setWindowOpacity(0.6)
         self.download_thread = None
         self.threadpool = QThreadPool()
         self.ui.stackedWidget.setCurrentIndex(0)
