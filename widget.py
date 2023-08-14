@@ -52,7 +52,7 @@ import requests
 
 from configparser import ConfigParser
 from PySide6 import QtCore
-from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QInputDialog, QLineEdit
+from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QInputDialog, QLineEdit, QGraphicsOpacityEffect
 from PySide6.QtGui import QKeyEvent, QColor
 from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Qt, QDir
 from src.license_agreement import Ui_Widget_License
@@ -62,7 +62,7 @@ from src.setup import enable_error_handling, setup_config_file, strip_title, log
 from src.cli import CLI
 
 def ui_popup(text):
-    """ A simple UI popup that will be used for small messages to the user."""
+    """ A simple UI poill be used for small messages to the user."""
     qmsg_box = QMessageBox()
     qmsg_box.setText(str(text))
     qmsg_box.exec()
@@ -146,6 +146,8 @@ class Widget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setup()
+        import os
+        os.environ['QT_QPA_PLATFORM'] = 'wayland'
 
         self.video = None
         self.api_language = "en"
@@ -155,11 +157,7 @@ class Widget(QWidget):
         self.ui = Ui_Porn_Fetch_Widget()
         self.ui.setupUi(self)
 
-        transparency_percent = int(self.conf["UI"]["transparency"])
-        alpha_value = int(transparency_percent // 100 * 255)
-        color = QColor(0, 0, 0, alpha_value)
-        self.setStyleSheet(f"background-color: rgba({color.red()}, {color.green()}, {color.blue()}, {color.alpha()});color: white;")
-
+        self.setWindowOpacity(0.6)
         self.download_thread = None
         self.threadpool = QThreadPool()
         self.ui.stackedWidget.setCurrentIndex(0)
