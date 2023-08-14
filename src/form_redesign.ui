@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1152</width>
-    <height>503</height>
+    <height>518</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1700,24 +1700,24 @@ QRadioButton::indicator:checked {
          <enum>Qt::Horizontal</enum>
         </property>
         <property name="invertedAppearance">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="invertedControls">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>
       <item row="3" column="1">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>More</string>
+         <string>Less</string>
         </property>
        </widget>
       </item>
       <item row="3" column="2">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>                                       Less</string>
+         <string>                                   More</string>
         </property>
        </widget>
       </item>

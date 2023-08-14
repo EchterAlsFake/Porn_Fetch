@@ -167,6 +167,7 @@ class Widget(QWidget):
         self.ui.button_start_search.clicked.connect(self.search_videos)
         self.ui.button_download_search_query.clicked.connect(self.download_search)
         self.ui.button_settings_apply.clicked.connect(self.settings_tab)
+        self.ui.button_settings_help.clicked.connect(self.help)
 
     def button_group(self):
         """Separates the QRadioButtons from the different grid layouts"""
@@ -601,8 +602,6 @@ class Widget(QWidget):
                 self.custom_language = True
 
     def help(self):
-
-        qmsg_box = QMessageBox()
         text = """
 
 API Language:
@@ -636,7 +635,7 @@ progressbar, but can have a big speed impact if you have a really fast internet 
 
 If you still have questions, let me know on GitHub in discussions.
 """
-
+        ui_popup(text)
 
 
 

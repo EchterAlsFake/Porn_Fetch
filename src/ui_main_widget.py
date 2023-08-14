@@ -25,7 +25,7 @@ class Ui_Porn_Fetch_Widget(object):
     def setupUi(self, Porn_Fetch_Widget):
         if not Porn_Fetch_Widget.objectName():
             Porn_Fetch_Widget.setObjectName(u"Porn_Fetch_Widget")
-        Porn_Fetch_Widget.resize(1152, 503)
+        Porn_Fetch_Widget.resize(1152, 518)
         Porn_Fetch_Widget.setStyleSheet(u"background-color: rgb(18,18,18);\n"
 "color: white;")
         self.gridLayout_13 = QGridLayout(Porn_Fetch_Widget)
@@ -1425,7 +1425,7 @@ class Ui_Porn_Fetch_Widget(object):
 "        background: #481f61;\n"
 "    }\n"
 "\n"
-"    QSlider::add-page:horizontal {\n"
+"    QSlider::sub-page:horizontal {\n"
 "        background-color: #5a2a82;\n"
 "        border-radius: 4px;\n"
 "    }")
@@ -1433,8 +1433,8 @@ class Ui_Porn_Fetch_Widget(object):
         self.horizontalSlider.setPageStep(1)
         self.horizontalSlider.setValue(0)
         self.horizontalSlider.setOrientation(Qt.Horizontal)
-        self.horizontalSlider.setInvertedAppearance(True)
-        self.horizontalSlider.setInvertedControls(True)
+        self.horizontalSlider.setInvertedAppearance(False)
+        self.horizontalSlider.setInvertedControls(False)
 
         self.gridLayout_8.addWidget(self.horizontalSlider, 2, 1, 1, 2)
 
@@ -1567,8 +1567,8 @@ class Ui_Porn_Fetch_Widget(object):
 #if QT_CONFIG(tooltip)
         self.horizontalSlider.setToolTip(QCoreApplication.translate("Porn_Fetch_Widget", u"Set transparency for UI in %. Gives a better UX on DEs like Hyprland", None))
 #endif // QT_CONFIG(tooltip)
-        self.label_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"More", None))
-        self.label_5.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"                                       Less", None))
+        self.label_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Less", None))
+        self.label_5.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"                                   More", None))
         self.groupBox_4.setTitle("")
         self.textBrowser.setHtml(QCoreApplication.translate("Porn_Fetch_Widget", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
