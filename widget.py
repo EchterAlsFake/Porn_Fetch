@@ -136,7 +136,9 @@ class Widget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setup()
-        get_graphics()
+
+        if not os.path.exists("graphics"):
+            get_graphics()
         self.video = None
         self.api_language = "en"
         self.custom_language = False
