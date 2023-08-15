@@ -690,6 +690,12 @@ class Widget(QWidget):
                 self.api_language = text
                 self.custom_language = True
 
+        if event.key() == Qt.Key.Key_1 and event.modifiers() == Qt.ControlModifier:
+            self.switch_to_account()
+
+        if event.key() == Qt.Key.Key_2 and event.modifiers() == Qt.ControlModifier:
+            self.switch_to_main()
+
     def help(self):
         text = """
 
