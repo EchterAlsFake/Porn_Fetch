@@ -1,5 +1,5 @@
 __author__ = "EchterAlsFake : Johannes Habel"
-__version__ = "2.1"
+__version__ = "2.2"
 __source__ = "https://github.com/EchterAlsFake/Porn_Fetch"
 __license__ = "GPL 3"
 
@@ -27,6 +27,9 @@ phub
 colorama
 sentry sdk
 requests
+wget
+bs4 # Used by PHUB
+js2py # Used by PHUB
 
 Graphics:
 Checkmark Icon: https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html
@@ -34,7 +37,7 @@ Checkmark Icon: https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html
 A special thanks to Egsagon for creating PHUB.
 This project would not be possible without his great API and I have big respect for him!
 
-2.1 - 2023
+2.2 - 2023
 """
 
 import sys
@@ -55,9 +58,9 @@ from src.setup import enable_error_handling, setup_config_file, strip_title, log
 from src.cli import CLI
 
 def ui_popup(text):
-    """ A simple UI poill be used for small messages to the user."""
+    """ A simple UI popup that will be used for small messages to the user."""
     qmsg_box = QMessageBox()
-    qmsg_box.setText(str(text))
+    qmsg_box.setText(text)
     qmsg_box.exec()
 
 
@@ -124,7 +127,6 @@ class DownloadThread(QRunnable):
         self.signals = DownloadProgressSignal()
 
     def callback(self, pos, total):
-        """The callback argument from PHUB needs to be extracted. This is the reason why I need to use two functions."""
         self.signals.progress.emit(pos, total)
 
     def run(self):
@@ -132,7 +134,7 @@ class DownloadThread(QRunnable):
 
 
 class Widget(QWidget):
-    """Main UI widget. Design is loaded from the ui_main_widget.py file. Feel free to change things, if you want."""
+    """Main UI widget. Design is loaded from the ui_main_widget.py file. Feel free to change things if you want."""
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setup()
@@ -152,6 +154,7 @@ class Widget(QWidget):
         self.ui.setupUi(self)
         self.button_group() # Needs to be called before load_user_settings!
         self.load_user_settings()  # Loads the user settings from config.ini to make settings persistent
+        self.ui.stacked_main_account.setCurrentIndex(1)
 
         alpha_value = int((int(self.transparency) / 100) * 255) # Ignore type error, because the int type will be defined in self.load_user_settings().  If config file isn't corrupted, it should be no problem!
         color = QColor(0, 0, 0, alpha_value)
@@ -171,6 +174,13 @@ class Widget(QWidget):
         self.ui.button_download_search_query.clicked.connect(self.download_search)
         self.ui.button_settings_apply.clicked.connect(self.settings_tab)
         self.ui.button_settings_help.clicked.connect(self.help)
+        self.ui.button_switch_to_account.clicked.connect(self.switch_to_account)
+        self.ui.button_switch_main_page.clicked.connect(self.switch_to_main)
+        self.ui.button_account_login.clicked.connect(self.login)
+        self.ui.button_account_list_liked_videos.clicked.connect(self.get_liked_videos)
+        self.ui.button_account_list_rec_videos.clicked.connect(self.get_recommended_videos)
+        self.ui.button_account_list_watched_videos.clicked.connect(self.get_watched_videos)
+        self.ui.button_account_download.clicked.connect(self.download_tree_widget)
 
     def button_group(self):
         """Separates the QRadioButtons from the different grid layouts"""
@@ -178,7 +188,7 @@ class Widget(QWidget):
         button_group_quality = QButtonGroup()
         button_group_quality.addButton(self.ui.radio_highest)
         button_group_quality.addButton(self.ui.radio_lowest)
-        button_group_quality.addButton(self.ui.radio_middle)
+        button_group_quality.addButton(self.ui.radio_half)
 
 
         button_group_threading = QButtonGroup()
@@ -269,7 +279,7 @@ class Widget(QWidget):
         if self.ui.radio_highest.isChecked():
             return Quality.BEST
 
-        elif self.ui.radio_middle.isChecked():
+        elif self.ui.radio_half.isChecked():
             return Quality.HALF # Changed to half, because the API changed the name in v3.1
 
         elif self.ui.radio_lowest.isChecked():
@@ -314,17 +324,17 @@ class Widget(QWidget):
         url = self.ui.lineedit_url.text()
         video = self.test_video(url)
         logging(msg=f"Downloading: {url}", level="0")
-        self.download(video)
+        self.download(video, progress_bar=self.ui.progressbar_download)
 
-    def update_progressbar(self, pos, total):
-        self.ui.progressbar_download.setMaximum(total)
-        self.ui.progressbar_download.setValue(pos)
+    def update_progressbar(self, pos, total, progress_bar):
+        progress_bar.setMaximum(total)
+        progress_bar.setValue(pos)
 
     def callback(self, pos, total):
         self.ui.progressbar_download.setMaximum(total)
         self.ui.progressbar_download.setValue(pos)
 
-    def download(self, video):
+    def download(self, video, progress_bar):
 
         quality = self.get_quality()
         print(quality)
@@ -338,7 +348,7 @@ class Widget(QWidget):
         try:
             if self.mode == "multiple":
                 self.download_thread = DownloadThread(video, quality, output_path)
-                self.download_thread.signals.progress.connect(self.update_progressbar)
+                self.download_thread.signals.progress.connect(lambda pos, total, pb=progress_bar: self.update_progressbar(pos, total, pb))
                 self.threadpool.start(self.download_thread)
 
             elif self.mode == "single":
@@ -373,7 +383,7 @@ class Widget(QWidget):
                 video = self.client.get(url)
 
                 try:
-                    self.download(video=video)
+                    self.download(video=video, progress_bar=self.ui.progressbar_download)
 
                 except Exception as e:
                     ui_popup(text=str(f"An unexpected error happened.  Exception: {e}"))
@@ -417,7 +427,7 @@ class Widget(QWidget):
             logging(msg=user_object.name, level="0")
 
         except Exception as e:
-            ui_popup(text=str(f"An unexpected error happened.  Exception: {e}  Note, the User must be a URL and NOT a name."))
+            ui_popup(text=f"An unexpected error happened.  Exception: {e}  Note, the User must be a URL and NOT a name.")
             if self.sentry:
                 sentry_sdk.capture_exception(e)
                 ui_popup("Error was captured by Sentry.")
@@ -428,7 +438,7 @@ class Widget(QWidget):
                 url = video.url
                 url = f"https://www.pornhub.com/{url}"
                 video = self.test_video(url)
-                self.download(video)
+                self.download(video, progress_bar=self.ui.progressbar_download)
 
     def search_videos(self):
         # Searches videos with query string and lets the user select them
@@ -460,14 +470,14 @@ class Widget(QWidget):
                 video_url = item.data(0, QtCore.Qt.UserRole)
                 url = f"https://www.pornhub.com/{video_url}"
                 video = self.test_video(url)
-                self.download(video)
+                self.download(video, progress_bar=self.ui.progressbar_download)
 
     def settings_tab(self):
         with open("config.ini", "w") as config_file:
             if self.ui.radio_highest.isChecked():
                 self.conf.set("Porn_Fetch", "default_quality", "best")
 
-            if self.ui.radio_middle.isChecked():
+            if self.ui.radio_half.isChecked():
                 self.conf.set("Porn_Fetch", "default_quality", "middle")
 
             if self.ui.radio_lowest.isChecked():
@@ -521,7 +531,7 @@ class Widget(QWidget):
             self.ui.radio_highest.setChecked(True)
 
         elif self.conf["Porn_Fetch"]["default_quality"] == "middle":
-            self.ui.radio_middle.setChecked(True)
+            self.ui.radio_half.setChecked(True)
 
         elif self.conf["Porn_Fetch"]["default_quality"] == "worst":
             self.ui.radio_lowest.setChecked(True)
@@ -574,6 +584,82 @@ class Widget(QWidget):
         self.transparency = self.conf["UI"]["transparency"]
         self.ui.horizontalSlider.setValue(int(self.transparency))
 
+
+    def switch_to_account(self):
+        self.ui.stacked_main_account.setCurrentIndex(0)
+
+    def switch_to_main(self):
+        self.ui.stacked_main_account.setCurrentIndex(1)
+
+    def login(self):
+
+        username = self.ui.lineedit_account_username.text()
+        password = self.ui.lineedit_account_password.text()
+        self.ui.lineedit_account_status.setText("Logging in...")
+
+        try:
+            if not self.custom_language:
+                self.get_client_language()
+
+            self.client = Client(username=username, password=password, language=self.api_language, delay=self.delay)
+            self.client.login()
+            self.ui.lineedit_account_status.setText(f"Logged in as: {self.client.account.name}")
+
+        except Exception as e:
+            ui_popup(f"An error happened. This error will NOT be sent to sentry, to prevent leaking your account data! ERROR: {e}")
+
+    def add_to_tree_widget(self, iterator, tree_widget):
+        try:
+            for i, video in enumerate(iterator, start=1): # Limiting search results to 50
+                item = QTreeWidgetItem(tree_widget)
+                item.setText(0, f"{i}) {video.title}")
+                item.setData(0, QtCore.Qt.UserRole, video.url)
+                item.setCheckState(0, QtCore.Qt.Unchecked)  # Adds a checkbox
+        except Exception as e:
+            ui_popup(f"An error happened. This error will NOT be sent to sentry, to prevent leaking your account data! ERROR: {e}")
+
+
+    def get_liked_videos(self):
+        try:
+            videos = self.client.account.liked
+            self.add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
+
+        except Exception as e:
+            ui_popup(f"An error happened. This error will NOT be sent to sentry, to prevent leaking your account data! ERROR: {e}")
+
+    def get_watched_videos(self):
+        try:
+            videos = self.client.account.watched
+            self.add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
+
+        except Exception as e:
+            ui_popup(f"An error happened. This error will NOT be sent to sentry, to prevent leaking your account data! ERROR: {e}")
+
+    def get_recommended_videos(self):
+
+        try:
+            videos = self.client.account.recommended
+            self.add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
+
+        except Exception as e:
+            ui_popup(f"An error happened. This error will NOT be sent to sentry, to prevent leaking your account data! ERROR: {e}")
+
+    def download_tree_widget(self):
+        # Downloads all selected videos with a for loop
+        try:
+            for i in range(self.ui.tree_widget_account.topLevelItemCount()):
+                item = self.ui.tree_widget_account.topLevelItem(i)
+                checkState = item.checkState(0)
+                if checkState == QtCore.Qt.Checked:
+                    video_url = item.data(0, QtCore.Qt.UserRole)
+                    url = f"https://www.pornhub.com/{video_url}"
+                    video = self.test_video(url)
+                    self.download(video, progress_bar=self.ui.account_progressbar)
+
+        except Exception as e:
+            ui_popup(f"An error happened. This error will NOT be sent to sentry, to prevent leaking your account data! ERROR: {e}")
+
+
     def keyPressEvent(self, event: QKeyEvent):
 
         if event.key() == Qt.Key.Key_W and event.modifiers() == Qt.ControlModifier:
@@ -611,7 +697,7 @@ API Language:
 
 The API handles your requests to PornHub.com   If the API is in english language, then all the titles and video
 attributes are also in english. If the API is for example in German language, then the video titles are (if automatically
-tranlated by PornHub) also in German language.   Not all videos are supported! 
+translated by PornHub) also in German language.   Not all videos are supported! 
 
 UI Language:
 

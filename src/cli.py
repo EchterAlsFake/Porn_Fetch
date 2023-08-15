@@ -14,7 +14,7 @@ except ImportError:
     from setup import internet_test, ask_for_sentry_cli, clear, check_path, strip_title
 
 __license__ = "GPL 3"
-credits_lol = f"""
+credits_lol = """
 Porn Fetch is created and maintained by EchterAlsFake | Johannes Habel.
 EchterAlsFake is the internet pseudonym for Johannes Habel.
 
@@ -62,12 +62,11 @@ class CLI():
         self.api_language = None
         self.video = None
         self.pbar = None
+        self.conf = ConfigParser()
+        self.conf.read("../config.ini")
+        self.load_user_settings() # Needs to be initialized after the variables
         self.client = Client(language=self.api_language, delay=True)
 
-        self.load_user_settings() # Needs to be initialized after the variables.
-
-        self.conf = ConfigParser()
-        self.conf.read("config.ini")
         self.sentry = ask_for_sentry_cli()
 
 
@@ -209,26 +208,20 @@ fr | French
         self.output_path = self.conf["Porn_Fetch"]["default_path"]
 
 
-    def callback(self, **kwargs):
+    def callback(self, pos, total):
+        self.pbar = tqdm(total=total, dynamic_ncols=True)
+        self.pbar.update(pos - self.pbar.n)
+        if pos == total:
+            self.pbar.close()
+            self.pbar = None
 
-        def _update_progress(pos, total):
-
-            self.pbar = tqdm(total=total, dynamic_ncols=True)
-            self.pbar.update(pos - self.pbar.n)
-            if pos == total:
-                self.pbar.close()
-                self.pbar = None
-
-        return _update_progress
 
     def check_video(self, url):
-
         try:
             self.video = self.client.get(url)
             return True
 
         except IndexError:
-
             print(f"{self.x}{Fore.RESET}Video object returned no data. You got probably limited by PornHub. ")
             print(f"{self.z}{Fore.LIGHTCYAN_EX}Trying automatic reconnect...")
 

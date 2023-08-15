@@ -19,12 +19,12 @@ def logging(msg, level):
 
         if level == "0":
             print(f"{Fore.LIGHTCYAN_EX} : DEBUG : {Fore.RESET} : MSG : {msg}")
-            log_file.write(f"{time} : DEBUG : {msg}")
+            log_file.write(f"{time} : DEBUG : {msg}\n")
 
 
         elif level == "1":
             print(f"[{Fore.LIGHTRED_EX} : ERROR : {Fore.RESET} : MSG : {msg} ")
-            log_file.write(f"{time} : ERROR : {msg}")
+            log_file.write(f"{time} : ERROR : {msg}\n")
 
 def strip_title(title):
     disallowed_chars = ["<", ">", ":", '"', "/", "\\", "|", "*", "0", "(", ")", "!"]
@@ -136,19 +136,23 @@ language = en
         if not conf.has_section(section):
             print("Config file is corrupted. Updating....")
             with open(config_file, "w") as config:
-                config.write(f"""
-            [License]
-            accept = nothing_in_here
+                config.write("""
+[License]
+accept = false
 
-            [Porn_Fetch]
-            default_quality = best
-            default_path = ./
-            default_threading = multiple
+[Porn_Fetch]
+default_quality = best
+default_path = ./
+default_threading = multiple
+api_language = en
 
-            [Debug]
-            sentry = false
+[Debug]
+sentry = false
+logging = false
 
-            """)
+[UI]
+transparency = 0
+language = en""")
                 config.close()
 
 

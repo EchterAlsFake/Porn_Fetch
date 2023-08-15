@@ -12,10 +12,10 @@
 - [x] Automatic compile script to make it easier with dependencies
 - [x] New UI design (minimal changes will still be made)
 - [x] Add persistent settings
-- [] Let the User login with his PornHub Account to give better search results
-- [] Provide a PornHub start page, like you would see on the Website and let the User download videos based on his algorithm
-- [] Create an Android App with Qt for Android and PySide6 
-- [] Better support for Windows
+- [x] Better support for Windows
+- [x] Let the User log in with his PornHub Account to give better search results
+- [x] Provide a PornHub start page, like you would see on the Website and let the User download videos based on his algorithm
+- [] Create an Android App with Qt for Android and PySide6
 - [] Create a Website for better overview, marketing and publicity
 - [] Create a Discord Bot with some of the functionality (proprietary)
 - [] Translation into other languages
@@ -28,9 +28,5 @@
 
 Priority:
 
-Automatic compile script > 
-Documentation > Let user Login + 
-<br> Start page > Website > Mojo
+Translation 
 
-# Create License Agreement > Arch Linux install script > Ubuntu Install script
-# In Version 1.8
