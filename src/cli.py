@@ -1,11 +1,12 @@
+import os.path
 import sys
 import time
 import threading
-
 import sentry_sdk
 from colorama import *
 from phub import *
 from tqdm import tqdm
+from configparser import ConfigParser
 try:
     from src.setup import internet_test, ask_for_sentry_cli, clear, check_path, strip_title
 
@@ -42,38 +43,171 @@ wget
 bs4
 
 Graphics:
-
-Download Icon : https://icons8.com/icon/104149/herunterladen
-Search Icon : https://icons8.com/icon/aROEUCBo74Il/suche
-Settings Icon : https://icons8.com/icon/52146/einstellungen
-C Icon : https://icons8.com/icon/Uehg4gyVyrUo/copyright
-M Icon By Unicons Font on Icon Scout : https://iconscout.com/icons/medium : https://iconscout.com/contributors/unicons
-: https://iconscout.com
 Checkmark Icon : https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html
 
 A special thanks to Egsagon for creating PHUB.
 This project would not be possible without his great API and I have much respect for him!
 
-2.1 - 2023
+2.2 - 2023
 """
 
 class CLI():
 
     def __init__(self):
-        self.z =f"{Fore.LIGHTGREEN_EX}[+]{Fore.RESET}"
+        self.z = f"{Fore.LIGHTGREEN_EX}[+]{Fore.RESET}"
         self.x = f"{Fore.LIGHTRED_EX}[~]{Fore.RESET}"
         self.quality = Quality.BEST
-        self.output_path = "./"
-        self.threading_mode = "multiple"
-        self.client = Client(language="en")
+        self.output_path = None
+        self.threading_mode = None
+        self.api_language = None
         self.video = None
         self.pbar = None
+        self.client = Client(language=self.api_language, delay=True)
+
+        self.load_user_settings() # Needs to be initialized after the variables.
+
+        self.conf = ConfigParser()
+        self.conf.read("config.ini")
         self.sentry = ask_for_sentry_cli()
 
 
         if internet_test():
             while True:
                 self.menu()
+
+
+    def settings(self):
+
+        options = input(f"""
+{Fore.LIGHTCYAN_EX}1) Change API Language
+{Fore.LIGHTMAGENTA_EX}2) Change default output path
+{Fore.LIGHTYELLOW_EX}3) Change default Quality
+{Fore.LIGHTGREEN_EX}4) Change default Threading mode
+{Fore.LIGHTWHITE_EX}5) Back
+---------------------=>:""")
+
+        with open("config.ini", "w") as config_file:
+
+            if options == "1":
+
+                option = input("""
+Please enter your API language:
+de | German
+en | English
+es | Spanish
+ru | Russian
+fr | French
+1) Back
+---------------------=>:""")
+                if option == "de" or "en" or "es" or "ru" or "fr":
+                    self.conf.set("Porn_Fetch", "api_language", option)
+                    self.conf.write(config_file)
+
+                elif option == "1":
+                    self.settings()
+
+                else:
+                    print(f"{self.x}{Fore.LIGHTMAGENTA_EX}Wrong input. Please select the language code!")
+
+
+            elif options == "2":
+                output_path = input(f"{self.z}{Fore.LIGHTBLUE_EX}Please enter the new output path --=>:")
+                if os.path.exists(output_path):
+                    self.conf.set("Porn_Fetch", "default_path", output_path)
+                    self.conf.write(config_file)
+
+                else:
+                    print(f"{self.x}{Fore.RESET}Invalid path.")
+
+                self.settings()
+
+            elif options == "3":
+                option = f"""
+1) Best
+2) Half
+3) Worst
+4) back
+--------------------=>:"""
+
+                if option == "1":
+                    self.conf.set("Porn_Fetch", "default_quality", "best")
+                    self.conf.write(config_file)
+
+                elif option == "2":
+                    self.conf.set("Porn_Fetch", "default_quality", "middle")
+                    self.conf.write(config_file)
+
+                elif option == "3":
+                    self.conf.set("Porn_Fetch", "default_quality", "worst")
+                    self.conf.write(config_file)
+
+                elif option == "4":
+                    self.settings()
+
+                else:
+                    print(f"{self.x}{Fore.RESET}Invalid input. Select in range 1 - 3")
+
+            elif options == "4":
+                option = input(f"""
+1) Yes
+2) No
+3) back""")
+
+                if option == "1":
+                    self.conf.set("Porn_Fetch", "default_threading", "multiple")
+                    self.conf.write(config_file)
+
+                elif option == "2":
+                    self.conf.set("Porn_Fetch", "default_threading", "single")
+                    self.conf.write(config_file)
+
+                elif option == "3":
+                    self.settings()
+
+                else:
+                    print(f"{self.x}{Fore.RESET}Invalid input!")
+                    self.settings()
+
+            elif options == "5":
+                self.menu()
+
+
+
+
+    def load_user_settings(self):
+
+        if self.conf["Porn_Fetch"]["api_language"] == "en":
+            self.api_language = "en"
+
+        elif self.conf["Porn_Fetch"]["api_language"] == "es":
+            self.api_language = "es"
+
+        elif self.conf["Porn_Fetch"]["api_language"] == "ru":
+            self.api_language = "ru"
+
+        elif self.conf["Porn_Fetch"]["api_language"] == "fr":
+            self.api_language = "fr"
+
+        elif self.conf["Porn_Fetch"]["api_language"] == "de":
+            self.api_language = "de"
+
+        if self.conf["Porn_Fetch"]["default_quality"] == "best":
+            self.quality = Quality.BEST
+
+        elif self.conf["Porn_Fetch"]["default_quality"] == "half":
+            self.quality = Quality.HALF
+
+        elif self.conf["Porn_Fetch"]["default_quality"] == "Worst":
+            self.quality = Quality.WORST
+
+        if self.conf["Porn_Fetch"]["default_threading"] == "multiple":
+            self.threading_mode = "multiple"
+
+        elif self.conf["Porn_Fetch"]["default_threading"] == "single":
+            self.threading_mode = "single"
+
+        self.output_path = self.conf["Porn_Fetch"]["default_path"]
+
 
     def callback(self, **kwargs):
 
@@ -134,6 +268,7 @@ class CLI():
 {Fore.LIGHTCYAN_EX}|99) Change Quality     | {Fore.RESET}Currently set to: {quality_ext}
 {Fore.LIGHTMAGENTA_EX}|98) Set output path    {Fore.RESET}| Currently set to: {self.output_path}
 {Fore.LIGHTYELLOW_EX}|97) Set Threading mode | {Fore.RESET}Currently set to: {self.threading_mode}
+{Fore.LIGHTMAGENTA_EX}96 Set API language | {Fore.RESET}Currently set to: 
 {Fore.RESET}|----------------------|
 
 
