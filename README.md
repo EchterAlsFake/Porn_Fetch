@@ -2,6 +2,17 @@
 
 ![Build](https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg)
 
+# Information:
+
+I am aware of the NoneType Error that happens in the Account page.<br>
+This error can happen, when the object returned from PornHub doesn't have the needed data in it.<br>
+
+Make sure you are logged in, and then use the Account page. On the "Status" Line, you should see:<br>
+"Logged in as: {your_username}"
+
+After that, you can use the Account function. If the error still persists, please make sure, <br>
+that you've actually liked and watched some videos. Otherwise, PH won't return anything.
+
 # Table of Contents
 
 - [What is Porn Fetch?](#what-is-porn-fetch)<br>
