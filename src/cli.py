@@ -1,17 +1,24 @@
 import os.path
 import sys
-import time
 import threading
+
+import phub.core
 import sentry_sdk
 from colorama import *
 from phub import *
 from tqdm import tqdm
 from configparser import ConfigParser
+import getpass
+
+
+o = '\033[33m'
+
+
 try:
-    from src.setup import internet_test, ask_for_sentry_cli, clear, check_path, strip_title
+    from src.setup import internet_test, ask_for_sentry_cli, clear, check_path, strip_title, logging
 
 except ImportError:
-    from setup import internet_test, ask_for_sentry_cli, clear, check_path, strip_title
+    from setup import internet_test, ask_for_sentry_cli, clear, check_path, strip_title, logging
 
 __license__ = "GPL 3"
 credits_lol = """
@@ -60,12 +67,14 @@ class CLI():
         self.output_path = None
         self.threading_mode = None
         self.api_language = None
-        self.video = None
+        self.custom_language = False
+        self.login_status = f"{Fore.LIGHTRED_EX}Not logged in{Fore.RESET}"
         self.pbar = None
+        self.delay = True
         self.conf = ConfigParser()
         self.conf.read("../config.ini")
         self.load_user_settings() # Needs to be initialized after the variables
-        self.client = Client(language=self.api_language, delay=True)
+        self.client = Client(language=self.api_language, delay=self.delay)
 
         self.sentry = ask_for_sentry_cli()
 
@@ -74,6 +83,43 @@ class CLI():
             while True:
                 self.menu()
 
+    def callback(self, pos, total):
+        self.pbar = tqdm(total=total, dynamic_ncols=True)
+        self.pbar.update(pos - self.pbar.n)
+        if pos == total:
+            self.pbar.close()
+            self.pbar = None
+
+    def load_user_settings(self):
+
+        if self.conf["Porn_Fetch"]["default_quality"] == "best":
+            self.quality = Quality.BEST
+
+        elif self.conf["Porn_Fetch"]["default_quality"] == "half":
+            self.quality = Quality.HALF
+
+        elif self.conf["Porn_Fetch"]["default_quality"] == "Worst":
+            self.quality = Quality.WORST
+
+        if self.conf["Porn_Fetch"]["delay"] == "False":
+            self.delay = False
+
+        else:
+            self.delay = self.conf["Porn_Fetch"]["delay"]
+
+        self.api_language = self.conf["Porn_Fetch"]["api_language"]
+        self.threading_mode = self.conf["Porn_Fetch"]["default_threading"]
+        self.output_path = self.conf["Porn_Fetch"]["default_path"]
+
+    def check_video(self, url):
+        try:
+            self.client = Client(language=self.api_language, delay=self.delay)
+            return self.client.get(url)
+
+        except Exception as e:
+            print(logging(msg=e, level="1"))
+            if self.sentry:
+                sentry_sdk.capture_exception(e)
 
     def settings(self):
 
@@ -82,32 +128,39 @@ class CLI():
 {Fore.LIGHTMAGENTA_EX}2) Change default output path
 {Fore.LIGHTYELLOW_EX}3) Change default Quality
 {Fore.LIGHTGREEN_EX}4) Change default Threading mode
-{Fore.LIGHTWHITE_EX}5) Back
+{Fore.LIGHTMAGENTA_EX}5) Change API delay
+{Fore.LIGHTWHITE_EX}6) Back
 ---------------------=>:""")
 
         with open("config.ini", "w") as config_file:
 
             if options == "1":
 
-                option = input("""
-Please enter your API language:
-de | German
-en | English
-es | Spanish
-ru | Russian
-fr | French
-1) Back
+                option = input(f"""
+Please enter your API language:     {Fore.LIGHTYELLOW_EX} !!! RESTART FOR CHANGES TO TAKE EFFECT !!!
+{Fore.LIGHTGREEN_EX}de | {Fore.LIGHTBLUE_EX}Ge{Fore.LIGHTRED_EX}rm{Fore.LIGHTYELLOW_EX}n
+{Fore.LIGHTCYAN_EX}en | English
+{Fore.LIGHTYELLOW_EX}es | Spanish
+{Fore.LIGHTMAGENTA_EX}ru | Russian
+{Fore.LIGHTBLUE_EX}fr | French
+{Fore.LIGHTGREEN_EX}1) set a custom language (may not work)
+{Fore.LIGHTRED_EX}2) Back
 ---------------------=>:""")
                 if option == "de" or "en" or "es" or "ru" or "fr":
                     self.conf.set("Porn_Fetch", "api_language", option)
                     self.conf.write(config_file)
 
                 elif option == "1":
+                    api_language = input(f"""
+{self.z}{Fore.LIGHTCYAN_EX}Enter the language code --=>:""")
+                    self.conf.set("Porn_Fetch", "api_language", api_language)
+
+
+                elif option == "2":
                     self.settings()
 
                 else:
                     print(f"{self.x}{Fore.LIGHTMAGENTA_EX}Wrong input. Please select the language code!")
-
 
             elif options == "2":
                 output_path = input(f"{self.z}{Fore.LIGHTBLUE_EX}Please enter the new output path --=>:")
@@ -122,10 +175,10 @@ fr | French
 
             elif options == "3":
                 option = f"""
-1) Best
-2) Half
-3) Worst
-4) back
+{Fore.LIGHTGREEN_EX}1) Best
+{o}2) Half
+{Fore.LIGHTRED_EX}3) Worst
+{Fore.LIGHTWHITE_EX}4) back
 --------------------=>:"""
 
                 if option == "1":
@@ -148,9 +201,9 @@ fr | French
 
             elif options == "4":
                 option = input(f"""
-1) Yes
-2) No
-3) back""")
+{Fore.LIGHTGREEN_EX}1) Yes
+{Fore.LIGHTRED_EX}2) No
+{Fore.LIGHTWHITE_EX}3) back""")
 
                 if option == "1":
                     self.conf.set("Porn_Fetch", "default_threading", "multiple")
@@ -168,101 +221,40 @@ fr | French
                     self.settings()
 
             elif options == "5":
-                self.menu()
+
+                option = input(f"""
+{Fore.LIGHTRED_EX}1) Disable delay  : Can lead to more errors!
+{Fore.LIGHTGREEN_EX}2) Set new delay (Default is 0.5 seconds)
+{Fore.LIGHTYELLOW_EX}3) Back
+{Fore.LIGHTWHITE_EX}-------------=>:""")
 
 
+                if option == "1":
+                    self.conf.set("Porn_Fetch", "delay", "False")
+                    self.conf.write(config_file)
 
+                elif option == "2":
+                    delay = input(f"{self.z}{Fore.RESET}Enter new delay --=>:")
+                    self.conf.set("Porn_Fetch", "delay", delay)
+                    self.conf.write(config_file)
 
-    def load_user_settings(self):
+                elif option == "3":
+                    self.settings()
 
-        if self.conf["Porn_Fetch"]["api_language"] == "en":
-            self.api_language = "en"
-
-        elif self.conf["Porn_Fetch"]["api_language"] == "es":
-            self.api_language = "es"
-
-        elif self.conf["Porn_Fetch"]["api_language"] == "ru":
-            self.api_language = "ru"
-
-        elif self.conf["Porn_Fetch"]["api_language"] == "fr":
-            self.api_language = "fr"
-
-        elif self.conf["Porn_Fetch"]["api_language"] == "de":
-            self.api_language = "de"
-
-        if self.conf["Porn_Fetch"]["default_quality"] == "best":
-            self.quality = Quality.BEST
-
-        elif self.conf["Porn_Fetch"]["default_quality"] == "half":
-            self.quality = Quality.HALF
-
-        elif self.conf["Porn_Fetch"]["default_quality"] == "Worst":
-            self.quality = Quality.WORST
-
-        if self.conf["Porn_Fetch"]["default_threading"] == "multiple":
-            self.threading_mode = "multiple"
-
-        elif self.conf["Porn_Fetch"]["default_threading"] == "single":
-            self.threading_mode = "single"
-
-        self.output_path = self.conf["Porn_Fetch"]["default_path"]
-
-
-    def callback(self, pos, total):
-        self.pbar = tqdm(total=total, dynamic_ncols=True)
-        self.pbar.update(pos - self.pbar.n)
-        if pos == total:
-            self.pbar.close()
-            self.pbar = None
-
-
-    def check_video(self, url):
-        try:
-            self.video = self.client.get(url)
-            return True
-
-        except IndexError:
-            print(f"{self.x}{Fore.RESET}Video object returned no data. You got probably limited by PornHub. ")
-            print(f"{self.z}{Fore.LIGHTCYAN_EX}Trying automatic reconnect...")
-
-            self.client = Client("en")
-            try:
-                self.check_video(url)
-
-            except IndexError:
-                print(f"{self.x}{Fore.RESET}Didn't work.  Waiting 60 seconds before next attempt...")
-                time.sleep(60)
-                self.check_video(url)
-
-        except Exception as e:
-            self.exception(e)
-            if self.sentry:
-                sentry_sdk.capture_exception(e)
-                print(f"{self.z}{Fore.LIGHTCYAN_EX}Sentry successfully captured the exception. I am working on it :) ")
-
-
-    def exception(self, e):
-        print(f"{self.x}Unhandled Exception: {e}")
+                else:
+                    print(f"{self.x}{Fore.RESET}Wrong input. Please select in rage 1 - 2")
 
     def menu(self):
 
-        if self.quality == Quality.BEST:
-            quality_ext = f"{Fore.LIGHTCYAN_EX}Best"
-
-        elif self.quality == Quality.HALF:
-            quality_ext = f"{Fore.LIGHTMAGENTA_EX}Middle"
-
-        elif self.quality == Quality.WORST:
-            quality_ext = f"{Fore.LIGHTRED_EX}Worst"
-
         options = input(f"""
-{Fore.LIGHTYELLOW_EX}    Settings:
-{Fore.LIGHTWHITE_EX}|----------------------|
-{Fore.LIGHTCYAN_EX}|99) Change Quality     | {Fore.RESET}Currently set to: {quality_ext}
-{Fore.LIGHTMAGENTA_EX}|98) Set output path    {Fore.RESET}| Currently set to: {self.output_path}
-{Fore.LIGHTYELLOW_EX}|97) Set Threading mode | {Fore.RESET}Currently set to: {self.threading_mode}
-{Fore.LIGHTMAGENTA_EX}96 Set API language | {Fore.RESET}Currently set to: 
-{Fore.RESET}|----------------------|
+                SETTINGS    
+{Fore.RESET}|---------------------------------------|
+|   {Fore.LIGHTCYAN_EX}Threading{Fore.RESET}  : {self.threading_mode}  |
+|   {Fore.LIGHTGREEN_EX}Quality{Fore.RESET}    : {self.quality}         |
+|   {Fore.LIGHTMAGENTA_EX}API Delay{Fore.RESET}  : {self.delay}           |
+|   {Fore.LIGHTBLUE_EX}API Lang{Fore.RESET}   : {self.api_language}    |
+|   {Fore.LIGHTGREEN_EX}Output Path:{Fore.RESET} {self.output_path}     |
+|---------------------------------------|
 
 
 {Fore.LIGHTCYAN_EX}1) Download a single Video
@@ -270,21 +262,15 @@ fr | French
 {Fore.LIGHTYELLOW_EX}3) Download all videos from a User / Channel
 {Fore.LIGHTBLUE_EX}4) Get metadata from Videos
 {Fore.LIGHTMAGENTA_EX}5) Search for videos and download them
-{Fore.LIGHTWHITE_EX}6) Show credits
-{Fore.LIGHTRED_EX}7) Exit
+{o}6) Account page
+{Fore.LIGHTWHITE_EX}7) Settings
+{Fore.LIGHTRED_EX}8) Credits
+{Fore.LIGHTBLUE_EX}9) Exit
 {Fore.RESET}-------------------->:{Fore.RESET} """)
 
 
-        if options == "99":
-            self.change_quality()
 
-        elif options == "98":
-            self.set_output_path()
-
-        elif options == "97":
-            self.set_threading_mode()
-
-        elif options == "1":
+        if options == "1":
             url = input(f"""
 {self.z}{Fore.LIGHTCYAN_EX}Please enter the video URL --->:""")
             self.download_video(url)
@@ -302,68 +288,16 @@ fr | French
             self.search_videos()
 
         elif options == "6":
-            print(f"{Fore.RESET}{credits_lol}")
+            self.account_menu()
 
         elif options == "7":
+            self.settings()
+
+        elif options == "8":
+            print(f"{Fore.RESET}{credits_lol}")
+
+        elif options == "9":
             sys.exit(0)
-
-    def change_quality(self):
-
-        options = input(f"""
-{Fore.LIGHTGREEN_EX}1) Change Quality to best
-{Fore.LIGHTMAGENTA_EX}2) Change Quality to middle
-{Fore.LIGHTRED_EX}3) Change Quality to worst
-{Fore.LIGHTWHITE_EX}4) Go back
-{Fore.LIGHTYELLOW_EX}----------->:{Fore.RESET}""")
-
-        if options == "1":
-            self.quality = Quality.BEST
-            print(f"{self.z}✓")
-
-        elif options == "2":
-            self.quality = Quality.HALF
-            print(f"{self.z}✓")
-
-        elif options == "3":
-            self.quality = Quality.WORST
-            print(f"{self.z}✓")
-
-        elif options == "4":
-            self.menu()
-
-        else:
-            print(f"{self.x}Wrong option. Please enter in range 1-4")
-            self.change_quality()
-
-    def set_output_path(self):
-        output = input("""
-Please enter the new output path.  Make sure to put a / at the end -->:""")
-        self.output_path = output
-        print(self.z + "✓")
-
-    def set_threading_mode(self):
-        options = input(f"""
-{Fore.LIGHTMAGENTA_EX}1) Single threaded mode (downloads everything one by one)
-{Fore.LIGHTCYAN_EX}2) Multiple threaded mode (downloads multiple videos at once)
-{Fore.LIGHTWHITE_EX}3) Go back
-{Fore.LIGHTYELLOW_EX}------------------------>:{Fore.RESET}""")
-
-        try:
-            if options == "1":
-                self.threading_mode = "single"
-
-            elif options == "2":
-                self.threading_mode = "multiple"
-
-            elif options == "3":
-                    self.menu()
-
-            else:
-                print(f"{self.x}Wrong Input. Select in range 1-3")
-                self.set_threading_mode()
-
-        finally:
-            clear()
 
     def raw_download(self, video):
 
@@ -376,54 +310,24 @@ Please enter the new output path.  Make sure to put a / at the end -->:""")
             print(f"{self.z}{Fore.LIGHTBLUE_EX}Download finished :) ")
 
         except Exception as e:
-            self.exception(e)
+            logging(e, level="1")
+            if self.sentry:
+                sentry_sdk.capture_exception(e)
 
     def download_video(self, url):
 
         mode = self.threading_mode
-        output_path = self.output_path
-        time.sleep(2) # You can set it to 0 if you want.  Read further down for additional information
-        self.check_video(url) # Video will be assigned in this function. You probably ask why, so here a little explanation:
+        video = self.check_video(url)
 
-        """
-        The API from Egsagon is not very good optimized. Also he doesn't maintain it actively and PornHub is also a really bad
-        platform for writing an API. So the API video objects are sometimes returning Index Errors, because some 
-        data from PornHub is not returned as it should. The only way to get around this, is to initialize the client from 
-        time to time and refresh the video object. This doesn't prevent the error, but it let's it happen less.
-        If you don't want the delay, you can just remove it from the code. It won't break the program.
-        In case, the API gets more stable, I will also remove it, but this is the only solution for now.
-        """
+        if mode == "single":
+            self.raw_download(video)
 
-        if not check_path(output_path):
-            print(f"{self.x}{Fore.RESET}The Output path, you submitted is wrong. You will be redirected to change it!")
-            self.set_output_path()
-
-
-        else:
-            video = self.video
-
-            if mode == "single":
-                self.raw_download(video)
-
-            elif mode == "multiple":
-                t = threading.Thread(target=self.raw_download, args=(video, ))
-                print(f"{self.z}{Fore.RESET}Running Thread: {t.name}")
-                t.start()
+        elif mode == "multiple":
+            t = threading.Thread(target=self.raw_download, args=(video, ))
+            print(f"{self.z}{Fore.RESET}Running Thread: {t.name}")
+            t.start()
 
     def download_from_file(self):
-
-        print(f"""
-            {Fore.LIGHTCYAN_EX}INFORMATION
-
-{Fore.LIGHTWHITE_EX}The file needs to be in the following format:
-
-URL (After the URL, make a new line!
-URL
-URL etc....
-
-Do NOT separate them with commas or anything else. Just with a new line. Should be easy enough :) 
-""")
-
         file = input(f"""
 {self.z}{Fore.LIGHTYELLOW_EX}Path to URL file -->:""")
 
@@ -432,21 +336,36 @@ Do NOT separate them with commas or anything else. Just with a new line. Should 
 
             total_urls = len(content)
             valid_urls = []
-            counter = 0
+            titles = []
 
             print(f"{self.z}{Fore.LIGHTCYAN_EX}Found: {total_urls}")
             print(f"{self.z}{Fore.LIGHTMAGENTA_EX}Verifying URLs...")
 
+
             for url in tqdm(content):
+                try:
+                    video = self.check_video(url)
+                    titles.append(video.title)
+                    valid_urls.append(url)
 
-                counter += 1
-                self.check_video(url)
-                valid_urls.append(url)
+                except Exception as e:
+                    print(f"{self.x}{Fore.RESET}URL: {url} is invalid.")
 
+            for counter, title in enumerate(titles, start=1):
+                print(f"{counter}) {title}")
 
-            print(self.z + Fore.LIGHTMAGENTA_EX + f"Downloading: {len(valid_urls)} Videos...")
-            for url in valid_urls:
-                self.download_video(url)
+            chosen_titles = input(f"""
+{self.z}{Fore.RESET}Enter the numbers you want to download (eg 1,2,3,4) --=>:""")
+            chosen_titles = str(chosen_titles).split(",")
+
+            chosen_urls = []
+
+            for url_ in chosen_titles:
+                url = valid_urls[int(url_)]
+                chosen_urls.append(url)
+
+            for _url in chosen_urls:
+                self.download_video(_url)
 
     def download_channel_user(self):
 
@@ -457,28 +376,32 @@ Do NOT separate them with commas or anything else. Just with a new line. Should 
 
         videos = user_object.videos
         url_list = []
-        for video in videos:
-            url_list.append(video.url)
+        titles = []
 
-        print(f"{self.z}{Fore.GREEN}Found: {len(url_list)} Videos.")
-        x = input(f"{Fore.RESET}Hit enter to download them all or B to go back")
+        for counter, title in enumerate(titles, start=1):
+            print(f"{counter}) {title}")
 
-        if x == "B" or x == "b":
-            self.menu()
+        chosen_titles = input(f"""
+        {self.z}{Fore.RESET}Enter the numbers you want to download (eg 1,2,3,4) --=>:""")
+        chosen_titles = str(chosen_titles).split(",")
 
-        else:
-            for url in url_list:
-                self.download_video(url)
+        chosen_urls = []
+
+        for url_ in chosen_titles:
+            url = url_list[int(url_)]
+            chosen_urls.append(url)
+
+
+        for _url in chosen_urls:
+            self.download_video(_url)
 
     def get_metadata(self):
 
         url = input(f"""
 {self.z}{Fore.LIGHTBLUE_EX}Please enter the URL of the video:""")
 
-        print(self.z + Fore.LIGHTMAGENTA_EX + "Getting metadata....")
-        self.check_video(url)
-
-        video = self.video
+        print(f"{self.z}{Fore.LIGHTMAGENTA_EX}Getting metadata....")
+        video = self.check_video(url)
         title = video.title
         likes_up = video.like.up
         likes_down = video.like.down
@@ -509,7 +432,7 @@ Duration: {duration}
 Hotspots: {hotspots}
 -- END --""")
 
-        input(f"{Fore.RESET}Hit enter to continue...")
+        input(f"{Fore.RESET}Press ENTER to continue...")
 
     def search_ext_2(self, search):
 
@@ -546,9 +469,9 @@ Hotspots: {hotspots}
         search = self.search_ext(search_query)
 
         if len(search) == 0:
-            print(f"{self.x}{Fore.LIGHTWHITE_EX}You got limited by the API! Wait a few minutes or change your IP and try again")
+            print(f"{self.x}{Fore.LIGHTWHITE_EX}PornHub didn't return data. Trying automatic resolve.  Please higher the API delay in settings")
             print(f"{self.z}{Fore.LIGHTWHITE_EX}Trying a new initialization to the Client Object...")
-            self.client = Client(language="en")
+            self.client = Client(language=self.api_language, delay=self.delay)
 
             try:
                 search = self.client.search(search_query)
@@ -566,10 +489,121 @@ Hotspots: {hotspots}
         else:
             self.search_ext_2(search)
 
+    def account_menu(self):
+
+        options = input(f"""
+{Fore.LIGHTGREEN_EX}1) Login   :                [ Status: {self.login_status} ]
+{Fore.LIGHTYELLOW_EX}2) Get liked videos
+{Fore.LIGHTCYAN_EX}3) Get watched videos
+{o}4) Get recommendations
+{Fore.LIGHTRED_EX}5) Back
+---------------------------=>:""")
+
+        if options == "1":
+            self.login()
+
+        elif options == "2":
+            self.get_liked_videos()
+
+        elif options == "3":
+            self.get_watched_videos()
+
+        elif options == "4":
+            self.get_recommended_videos()
+
+        elif options == "5":
+            self.menu()
+
+        else:
+            print(f"{self.x}{Fore.RESET}Wrong input. Select in range 1 - 5 ")
+
+    def login(self):
+
+        username = input(f"""
+{self.z}{Fore.RESET}Please enter your PornHub username --=>:""")
+        password = input(getpass.getpass(f"""
+{self.z}{Fore.RESET}Please enter your password --=>:"""))
+
+        try:
+            self.client = Client(username=username, password=password, delay=self.delay, language=self.api_language)
+            name = self.client.account.name
+            self.login_status = f"{Fore.LIGHTGREEN_EX}Logged in as: {name}"
+
+        except Exception as e:
+            if str(e) == "LogginFailed":
+                logging(msg="Login failed. Check your credentials!", level="1")
+                self.login()
+
+            else:
+                logging(msg=e, level="1")
+                if self.sentry:
+                    sentry_sdk.capture_exception(e)
+
+    def get_liked_videos(self):
+
+        liked_videos = self.client.account.liked
+        video_list_url = []
+        video_list_title = []
+
+        for video in tqdm(liked_videos):
+            video_list_title.append(video.title)
+            video_list_url.append(video.url)
+
+        for counter, title in enumerate(video_list_title):
+            print(f"{counter}) {title}")
+
+        chosen_titles = input(f"""
+{self.z}{Fore.RESET}Enter the videos you want to download (eg 1,2,3,4) --=>:""")
+
+        _ = str(chosen_titles).split(",")
+
+        for index in _:
+            url = video_list_url[int(index)]
+            self.download_video(url)
+
+    def get_watched_videos(self):
+
+        watched_videos = self.client.account.watched
+        video_list_url = []
+        video_list_title = []
+
+        for video in tqdm(watched_videos):
+            video_list_title.append(video.title)
+            video_list_url.append(video.url)
+
+        for counter, title in enumerate(video_list_title):
+            print(f"{counter}) {title}")
+
+        chosen_titles = input(f"""
+        {self.z}{Fore.RESET}Enter the videos you want to download (eg 1,2,3,4) --=>:""")
+
+        _ = str(chosen_titles).split(",")
+
+        for index in _:
+            url = video_list_url[int(index)]
+            self.download_video(url)
+
+    def get_recommended_videos(self):
+
+        recommended = self.client.account.recommended
+        video_list_url = []
+        video_list_title = []
+
+        for video in tqdm(recommended):
+            video_list_title.append(video.title)
+            video_list_url.append(video.url)
+
+        for counter, title in enumerate(video_list_title):
+            print(f"{counter}) {title}")
+
+        chosen_titles = input(f"""
+        {self.z}{Fore.RESET}Enter the videos you want to download (eg 1,2,3,4) --=>:""")
+
+        _ = str(chosen_titles).split(",")
+
+        for index in _:
+            url = video_list_url[int(index)]
+            self.download_video(url)
+
 if __name__ == "__main__":
-    try:
-        CLI()
-
-    except KeyboardInterrupt:
-        print("Bye :)")
-
+    CLI()
