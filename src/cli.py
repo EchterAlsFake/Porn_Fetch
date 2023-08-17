@@ -1,8 +1,6 @@
 import os.path
 import sys
 import threading
-
-import phub.core
 import sentry_sdk
 from colorama import *
 from phub import *
@@ -10,9 +8,7 @@ from tqdm import tqdm
 from configparser import ConfigParser
 import getpass
 
-
 o = '\033[33m'
-
 
 try:
     from src.setup import internet_test, ask_for_sentry_cli, clear, check_path, strip_title, logging
@@ -21,6 +17,22 @@ except ImportError:
     from setup import internet_test, ask_for_sentry_cli, clear, check_path, strip_title, logging
 
 __license__ = "GPL 3"
+
+license_agreement = f"""
+{Fore.RESET}GPL License Agreement for Porn Fetch
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+You should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses/.
+NO LIABILITY FOR END USER USE
+Under no circumstances and under no legal theory, whether in tort, contract, or otherwise, shall the copyright holder or contributors be liable to You for any direct, indirect, special, incidental, consequential or exemplary damages of any character including, without limitation, damages for loss of goodwill, work stoppage, computer failure or malfunction, loss of data or any and all other commercial damages or losses, even if such party shall have been informed of the possibility of such damages.
+This limitation of liability shall not apply to liability for death or personal injury resulting from such party’s negligence to the extent applicable law prohibits such limitation. Some jurisdictions do not allow the exclusion or limitation of incidental or consequential damages, so this exclusion and limitation may not apply to You.
+This Agreement represents the complete agreement concerning the subject matter hereof.
+
+1) Accept
+2) Deny
+--------------=>:"""
+
+
 credits_lol = """
 Porn Fetch is created and maintained by EchterAlsFake | Johannes Habel.
 EchterAlsFake is the internet pseudonym for Johannes Habel.
@@ -73,7 +85,13 @@ class CLI():
         self.delay = True
         self.conf = ConfigParser()
         self.conf.read("../config.ini")
-        self.load_user_settings() # Needs to be initialized after the variables
+        try:
+            self.load_user_settings() # Needs to be initialized after the variables
+        except KeyError:
+            self.conf = ConfigParser()
+            self.conf.read("config.ini")
+            self.load_user_settings()
+
         self.client = Client(language=self.api_language, delay=self.delay)
 
         self.sentry = ask_for_sentry_cli()
@@ -92,6 +110,24 @@ class CLI():
 
     def load_user_settings(self):
 
+        if not self.conf["License"]["accept"] == "true":
+            _ = input(license_agreement)
+
+            with open("config.ini", "w") as config_file:
+
+                if _ == "1":
+                    self.conf.set("License", "accept", "true")
+                    self.conf.write(config_file)
+
+                elif _ == "2":
+                    self.conf.set("License", "accept", "false")
+                    self.conf.write(config_file)
+                    exit(0)
+
+                else:
+                    logging(msg="License not accepted...", level="1")
+                    exit(0)
+
         if self.conf["Porn_Fetch"]["default_quality"] == "best":
             self.quality = Quality.BEST
 
@@ -105,7 +141,13 @@ class CLI():
             self.delay = False
 
         else:
-            self.delay = self.conf["Porn_Fetch"]["delay"]
+            delay = self.conf["Porn_Fetch"]["delay"]
+            try:
+                self.delay = int(delay)
+
+            except ValueError:
+                self.delay = round(delay)
+
 
         self.api_language = self.conf["Porn_Fetch"]["api_language"]
         self.threading_mode = self.conf["Porn_Fetch"]["default_threading"]
@@ -234,7 +276,7 @@ Please enter your API language:     {Fore.LIGHTYELLOW_EX} !!! RESTART FOR CHANGE
                     self.conf.write(config_file)
 
                 elif option == "2":
-                    delay = input(f"{self.z}{Fore.RESET}Enter new delay --=>:")
+                    delay = input(f"{self.z}{Fore.RESET}Enter new delay (1,2,3,4 MUST BE AN INTEGER!) --=>:")
                     self.conf.set("Porn_Fetch", "delay", delay)
                     self.conf.write(config_file)
 
@@ -249,11 +291,11 @@ Please enter your API language:     {Fore.LIGHTYELLOW_EX} !!! RESTART FOR CHANGE
         options = input(f"""
                 SETTINGS    
 {Fore.RESET}|---------------------------------------|
-|   {Fore.LIGHTCYAN_EX}Threading{Fore.RESET}  : {self.threading_mode}  |
-|   {Fore.LIGHTGREEN_EX}Quality{Fore.RESET}    : {self.quality}         |
-|   {Fore.LIGHTMAGENTA_EX}API Delay{Fore.RESET}  : {self.delay}           |
-|   {Fore.LIGHTBLUE_EX}API Lang{Fore.RESET}   : {self.api_language}    |
-|   {Fore.LIGHTGREEN_EX}Output Path:{Fore.RESET} {self.output_path}     |
+|   {Fore.LIGHTCYAN_EX}Threading{Fore.RESET}  : {self.threading_mode}  
+|   {Fore.LIGHTGREEN_EX}Quality{Fore.RESET}    : {self.quality}        
+|   {Fore.LIGHTMAGENTA_EX}API Delay{Fore.RESET}  : {self.delay}           
+|   {Fore.LIGHTBLUE_EX}API Lang{Fore.RESET}   : {self.api_language}    
+|   {Fore.LIGHTGREEN_EX}Output Path:{Fore.RESET} {self.output_path}     
 |---------------------------------------|
 
 
@@ -521,13 +563,15 @@ Hotspots: {hotspots}
 
         username = input(f"""
 {self.z}{Fore.RESET}Please enter your PornHub username --=>:""")
-        password = input(getpass.getpass(f"""
-{self.z}{Fore.RESET}Please enter your password --=>:"""))
+        password = getpass.getpass(f"""
+{self.z}{Fore.RESET}Please enter your password --=>:""")
 
         try:
             self.client = Client(username=username, password=password, delay=self.delay, language=self.api_language)
             name = self.client.account.name
             self.login_status = f"{Fore.LIGHTGREEN_EX}Logged in as: {name}"
+            print(f"{self.z}{Fore.LIGHTCYAN_EX}[SUCCESS]")
+            self.account_menu()
 
         except Exception as e:
             if str(e) == "LogginFailed":
@@ -545,7 +589,7 @@ Hotspots: {hotspots}
         video_list_url = []
         video_list_title = []
 
-        for video in tqdm(liked_videos):
+        for video in liked_videos:
             video_list_title.append(video.title)
             video_list_url.append(video.url)
 
@@ -567,7 +611,7 @@ Hotspots: {hotspots}
         video_list_url = []
         video_list_title = []
 
-        for video in tqdm(watched_videos):
+        for video in watched_videos:
             video_list_title.append(video.title)
             video_list_url.append(video.url)
 
@@ -589,7 +633,7 @@ Hotspots: {hotspots}
         video_list_url = []
         video_list_title = []
 
-        for video in tqdm(recommended):
+        for video in recommended:
             video_list_title.append(video.title)
             video_list_url.append(video.url)
 
