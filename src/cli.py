@@ -32,44 +32,6 @@ This Agreement represents the complete agreement concerning the subject matter h
 2) Deny
 --------------=>:"""
 
-
-credits_lol = """
-Porn Fetch is created and maintained by EchterAlsFake | Johannes Habel.
-EchterAlsFake is the internet pseudonym for Johannes Habel.
-
-Porn Fetch comes 'AS IS' without any warranty or liability. 
-You are responsible for your actions, but you get a few rights in exchange:
-
-You are free to copy, modify, distribute and sell this software.
-The software is licensed under the GPL 3.
-
-The official Source code is available on GitHub:
-
-https://github.com/EchterAlsFake/Porn_Fetch
-
-This software uses some external libraries that are out of my control.
-
-These are:
-
-tqdm
-pyside6
-phub
-colorama
-sentry sdk
-requests
-js2py
-wget
-bs4
-
-Graphics:
-Checkmark Icon : https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html
-
-A special thanks to Egsagon for creating PHUB.
-This project would not be possible without his great API and I have much respect for him!
-
-2.2 - 2023
-"""
-
 class CLI():
 
     def __init__(self):

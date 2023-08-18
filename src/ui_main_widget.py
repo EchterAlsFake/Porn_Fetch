@@ -8,13 +8,18 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QMetaObject, QRect,
-                            Qt)
-from PySide6.QtGui import (QCursor)
-from PySide6.QtWidgets import (QCheckBox, QGridLayout, QGroupBox,
-                               QHBoxLayout, QLabel, QLineEdit,
-                               QProgressBar, QPushButton, QRadioButton, QSlider, QStackedWidget, QTextBrowser, QTreeWidget,
-                               QTreeWidgetItem, QWidget)
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QGridLayout, QGroupBox,
+    QHBoxLayout, QHeaderView, QLabel, QLineEdit,
+    QProgressBar, QPushButton, QRadioButton, QSizePolicy,
+    QSlider, QStackedWidget, QTextBrowser, QTreeWidget,
+    QTreeWidgetItem, QWidget)
 
 class Ui_Porn_Fetch_Widget(object):
     def setupUi(self, Porn_Fetch_Widget):
@@ -1427,48 +1432,10 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridlayout_ui_language.addWidget(self.label_debug, 1, 0, 1, 1)
 
-        self.settings_checkbox_sentry = QCheckBox(self.groupBox_2)
-        self.settings_checkbox_sentry.setObjectName(u"settings_checkbox_sentry")
-        self.settings_checkbox_sentry.setCursor(QCursor(Qt.PointingHandCursor))
-        self.settings_checkbox_sentry.setStyleSheet(u"QCheckBox::indicator {\n"
-"    width: 13px;\n"
-"    height: 13px;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:unchecked {\n"
-"    border: 1px solid white;\n"
-"    background: white;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:checked {\n"
-"    image: url(graphics/checkmark.png);\n"
-"}")
-
-        self.gridlayout_ui_language.addWidget(self.settings_checkbox_sentry, 1, 1, 1, 1)
-
         self.label_2 = QLabel(self.groupBox_2)
         self.label_2.setObjectName(u"label_2")
 
         self.gridlayout_ui_language.addWidget(self.label_2, 0, 0, 1, 1)
-
-        self.settings_checkbox_logging = QCheckBox(self.groupBox_2)
-        self.settings_checkbox_logging.setObjectName(u"settings_checkbox_logging")
-        self.settings_checkbox_logging.setCursor(QCursor(Qt.PointingHandCursor))
-        self.settings_checkbox_logging.setStyleSheet(u"QCheckBox::indicator {\n"
-"    width: 13px;\n"
-"    height: 13px;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:unchecked {\n"
-"    border: 1px solid white;\n"
-"    background: white;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:checked {\n"
-"    image: url(graphics/checkmark.png);\n"
-"}")
-
-        self.gridlayout_ui_language.addWidget(self.settings_checkbox_logging, 1, 2, 1, 1)
 
         self.application_language_en = QRadioButton(self.groupBox_2)
         self.application_language_en.setObjectName(u"application_language_en")
@@ -1548,6 +1515,25 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_threading_mode_2.setObjectName(u"label_threading_mode_2")
 
         self.gridlayout_ui_language.addWidget(self.label_threading_mode_2, 2, 0, 1, 1)
+
+        self.settings_checkbox_sentry = QCheckBox(self.groupBox_2)
+        self.settings_checkbox_sentry.setObjectName(u"settings_checkbox_sentry")
+        self.settings_checkbox_sentry.setCursor(QCursor(Qt.PointingHandCursor))
+        self.settings_checkbox_sentry.setStyleSheet(u"QCheckBox::indicator {\n"
+"    width: 13px;\n"
+"    height: 13px;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked {\n"
+"    border: 1px solid white;\n"
+"    background: white;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked {\n"
+"    image: url(graphics/checkmark.png);\n"
+"}")
+
+        self.gridlayout_ui_language.addWidget(self.settings_checkbox_sentry, 1, 1, 1, 1)
 
 
         self.gridLayout_8.addLayout(self.gridlayout_ui_language, 1, 2, 1, 2)
@@ -1941,13 +1927,12 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_half.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Middle", None))
         self.radio_lowest.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Worst", None))
         self.label_debug.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Debug:", None))
-        self.settings_checkbox_sentry.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Sentry", None))
         self.label_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Choose UI language", None))
-        self.settings_checkbox_logging.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Logging", None))
         self.application_language_en.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"EN", None))
         self.radio_threading_single_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
         self.radio_threading_multiple_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
         self.label_threading_mode_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Threading:", None))
+        self.settings_checkbox_sentry.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Sentry", None))
         self.label_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"UI Transparency:", None))
         self.groupBox.setTitle("")
         self.label_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u" URL: ", None))

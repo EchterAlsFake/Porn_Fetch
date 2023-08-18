@@ -2,17 +2,6 @@
 
 ![Build](https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg)
 
-# Information:
-
-I am aware of the NoneType Error that happens in the Account page.<br>
-This error can happen, when the object returned from PornHub doesn't have the needed data in it.<br>
-
-Make sure you are logged in, and then use the Account page. On the "Status" Line, you should see:<br>
-"Logged in as: {your_username}"
-
-After that, you can use the Account function. If the error still persists, please make sure, <br>
-that you've actually liked and watched some videos. Otherwise, PH won't return anything.
-
 # Table of Contents
 
 - [What is Porn Fetch?](#what-is-porn-fetch)<br>
@@ -63,25 +52,26 @@ The goal is to create a free and open-source downloader for everyone. <br>
 
 # Data Collection / Privacy
 
-- No data collection by default!
 
-If you enable the option to allow Sentry to collect errors, then the following is collected
+Sentry is a service which captures errors and displays them to me in a very
+<br>user-friendly form. The problem is, that Sentry captures the full Python Traceback
+<br> and all the variables in it. If you make a request to PornHub when downloading<br>
+something, then even your real IP could get exposed, because it's saved in the url request
+<br> or your user agent could get exposed. 
 
-- Error messages (The full Python traceback)
-- Variables and the values in it
-- The lines of code, in which the error happened
-- Your PC name (although I don't care about it, and I don't need it.)
+##### I of course DON'T need this information for troubleshooting,
 
-> Sentry will NOT collect any user-specific information or system information!
+but I can't turn it off. You can be sure, that your data is safe on me, because I don't 
+<br>care about what you download, I just need the error message to fix stuff.
 
-Note: When using the Account login function, Sentry could eventually include your username <br>
-and password in the error message.<br>
-To prevent this, Sentry won't report any errors related to the Account function.
-<br>If you get an error there, please report it using the "Issues" Tab from GitHub
+If you don't want it, just click on No, when you get asked for it and Sentry
+<br>won't collect anything!
+
+
 
 # Supported Platforms
 
-* Windows : Windows 7, 8, 8.1, 9, 10, 11
+* Windows : Windows 10, 11 (lower versions may be working)
 * Linux: X11 / Wayland - X64 (I am testing on Hyprland - Wayland)
 * macOS: Needs to be built from source or run it natively with python
 * Android can be run with a Linux emulator. (See Building from Source)
@@ -133,7 +123,6 @@ consider using a VPN to be safe.
 * [pyside6](https://wiki.qt.io/Qt_for_Python)
 * wget
 * bs4 (Used by PHUB API)
-* js2py (Used by PHUB API)
 ### Graphics:
 
 * [Download Icon](https://icons8.com/icon/104149/herunterladen) *

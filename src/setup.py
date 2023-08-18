@@ -64,38 +64,46 @@ def enable_error_handling():
         traces_sample_rate=1.0
 
     )
-    sentry_cli = True
+
 
 def check_path(path):
     return bool(os.path.exists(path))
+
 
 def ask_for_sentry_cli():
 
     _ = input("""
 
-Do you allow Sentry.io to collect errors within this program?
+Do you enable automatic error collection by sentry.io?
 
-The following data are obtained:
+This collects the following:
 
-- Error message (Python Traceback)
-- Variables and their values
-- In which class / function / line the error occurred.
-- Your PC name (can't turn it off, I don't care about it)
+- The Python Error (so called Traceback)
+- The lines of code, in which the error happened
+- The values of variables in it.
 
-No sensitive data / system data or user specific data that would lead to an identification is collected.
+(Without your errors, I can't make this program better and more stable)
+
+For an example:
+
+If you get an error while making a request to PornHub, the requests library
+could eventually include your IP address in the user agent or the url itself.
+
+I don't need this information for bug fixing, but I can't turn it off.
+You can be sure, that your information is safe.
+
+If you still don't want it, simply click on No and everything will still be running like if
+you clicked Yes, and you can report errors via the GitHub Issue page just in case you want to.
+
+Thanks :) 
 
 1) Yes I support the developer and allow the automatic data collection through Sentry.
 2) No I don't want Sentry to collect errors.
 """)
 
     if _ == "1":
-        try:
-            enable_error_handling()
-            print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTBLUE_EX}Enabled")
-            return True
-
-        finally:
-            pass
+        enable_error_handling()
+        print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTBLUE_EX}Enabled")
 
     else:
         print(f"{Fore.LIGHTRED_EX}[!]{Fore.RESET}Disabled")
@@ -145,6 +153,7 @@ default_quality = best
 default_path = ./
 default_threading = multiple
 api_language = en
+delay = 1
 
 [Debug]
 sentry = false

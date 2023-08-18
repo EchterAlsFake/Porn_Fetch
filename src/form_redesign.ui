@@ -1758,60 +1758,10 @@ QRadioButton::indicator:checked {
                  </property>
                 </widget>
                </item>
-               <item row="1" column="1">
-                <widget class="QCheckBox" name="settings_checkbox_sentry">
-                 <property name="cursor">
-                  <cursorShape>PointingHandCursor</cursorShape>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">QCheckBox::indicator {
-    width: 13px;
-    height: 13px;
-}
-
-QCheckBox::indicator:unchecked {
-    border: 1px solid white;
-    background: white;
-}
-
-QCheckBox::indicator:checked {
-    image: url(graphics/checkmark.png);
-}</string>
-                 </property>
-                 <property name="text">
-                  <string>Sentry</string>
-                 </property>
-                </widget>
-               </item>
                <item row="0" column="0">
                 <widget class="QLabel" name="label_2">
                  <property name="text">
                   <string>Choose UI language</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="2">
-                <widget class="QCheckBox" name="settings_checkbox_logging">
-                 <property name="cursor">
-                  <cursorShape>PointingHandCursor</cursorShape>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">QCheckBox::indicator {
-    width: 13px;
-    height: 13px;
-}
-
-QCheckBox::indicator:unchecked {
-    border: 1px solid white;
-    background: white;
-}
-
-QCheckBox::indicator:checked {
-    image: url(graphics/checkmark.png);
-}</string>
-                 </property>
-                 <property name="text">
-                  <string>Logging</string>
                  </property>
                 </widget>
                </item>
@@ -1911,6 +1861,31 @@ QRadioButton::indicator:checked {
                 <widget class="QLabel" name="label_threading_mode_2">
                  <property name="text">
                   <string>Threading:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QCheckBox" name="settings_checkbox_sentry">
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QCheckBox::indicator {
+    width: 13px;
+    height: 13px;
+}
+
+QCheckBox::indicator:unchecked {
+    border: 1px solid white;
+    background: white;
+}
+
+QCheckBox::indicator:checked {
+    image: url(graphics/checkmark.png);
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Sentry</string>
                  </property>
                 </widget>
                </item>
