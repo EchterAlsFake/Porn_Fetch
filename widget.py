@@ -1,13 +1,15 @@
 __author__ = "EchterAlsFake : Johannes Habel"
-__version__ = "2.3"
+__version__ = "2.4"
 __source__ = "https://github.com/EchterAlsFake/Porn_Fetch"
 __license__ = "GPL 3"
 
 import sys
 import argparse
+import phub.consts
 import sentry_sdk
 import os
 import requests
+import random
 
 from configparser import ConfigParser
 from PySide6 import QtCore
@@ -98,6 +100,11 @@ class DownloadThread(QRunnable):
         self.video.download(callback=self.callback, quality=self.quality, path=self.output_path)
 
 
+def update_progressbar(pos, total, progress_bar):
+    progress_bar.setMaximum(total)
+    progress_bar.setValue(pos)
+
+
 class Widget(QWidget):
     """Main UI widget. Design is loaded from the ui_main_widget.py file. Feel free to change things if you want."""
 
@@ -107,6 +114,7 @@ class Widget(QWidget):
 
         if not os.path.exists("graphics"):
             get_graphics()
+
         self.video = None
         self.api_language = "en"
         self.custom_language = False
@@ -118,12 +126,11 @@ class Widget(QWidget):
 
         self.ui = Ui_Porn_Fetch_Widget()
         self.ui.setupUi(self)
+        self.ui.groupBox_7.setDisabled(True)
         self.button_group()  # Needs to be called before load_user_settings!
         self.load_user_settings()  # Loads the user settings from config.ini to make settings persistent
         self.ui.stacked_main_account.setCurrentIndex(1)
-
-        alpha_value = int((
-                                      int(self.transparency) / 100) * 255)  # Ignore type error, because the int type will be defined in self.load_user_settings().  If config file isn't corrupted, it should be no problem!
+        alpha_value = int((int(self.transparency) / 100) * 255)
         color = QColor(0, 0, 0, alpha_value)
         self.setStyleSheet(
             f"background-color: rgba({color.red()}, {color.green()}, {color.blue()}, {color.alpha()});color: rgb(255,255,255);border: none;")
@@ -157,8 +164,8 @@ class Widget(QWidget):
         button_group_quality.addButton(self.ui.radio_half)
 
         button_group_threading = QButtonGroup()
-        button_group_threading.addButton(self.ui.radio_threading_multiple_2)
-        button_group_threading.addButton(self.ui.radio_threading_single_2)
+        button_group_threading.addButton(self.ui.radio_threading_yes)
+        button_group_threading.addButton(self.ui.radio_threading_no)
 
         button_group_api_language = QButtonGroup()
         button_group_api_language.addButton(self.ui.api_radio_es)
@@ -185,14 +192,14 @@ class Widget(QWidget):
 
     def get_mode(self):
 
-        if self.ui.radio_threading_single_2.isChecked():
-            self.mode = "single"
+        if self.ui.radio_threading_no.isChecked():
+            self.mode = "no"
 
-        elif self.ui.radio_threading_multiple_2.isChecked():
-            self.mode = "multiple"
+        elif self.ui.radio_threading_yes.isChecked():
+            self.mode = "yes"
 
         else:
-            self.mode = "single"
+            self.mode = "yes"
 
     def sentry_data_collection(self):
 
@@ -203,22 +210,14 @@ Do you enable automatic error collection by sentry.io?
 
 This collects the following:
 
-- The Python Error (so called Traceback)
-- The lines of code, in which the error happened
-- The values of variables in it.
+- The Python error
+- The lines of code in which the error happened
+- may also include your PC name
 
-(Without your errors, I can't make this program better and more stable)
+All other information is stripped out from the reports.
 
-For an example:
+See setup.py : before_send()
 
-If you get an error while making a request to PornHub, the requests library
-could eventually include your IP address in the user agent or the url itself.
-
-I don't need this information for bug fixing, but I can't turn it off.
-You can be sure, that your information is safe.
-
-If you still don't want it, simply click on No and everything will still be running like if
-you clicked Yes, and you can report errors via the GitHub Issue page just in case you want to.
 
 Thanks :) 
 """)
@@ -265,10 +264,13 @@ Thanks :)
             return Quality.BEST
 
         elif self.ui.radio_half.isChecked():
-            return Quality.HALF  # Changed to half, because the API changed the name in v3.1
+            return Quality.HALF
 
         elif self.ui.radio_lowest.isChecked():
             return Quality.WORST
+
+        else:
+            return Quality.BEST
 
     def stack_widget_search(self):
         self.ui.stackedWidget.setCurrentIndex(0)
@@ -285,7 +287,7 @@ Thanks :)
             self.get_client_language()
 
         try:
-            self.client = Client(language=self.api_language, delay=True)  # Fixes most API issues. Valid since PHUB 3.1
+            self.client = Client(language=self.api_language, delay=self.delay)
             self.video = self.client.get(url)
             return self.video
 
@@ -310,34 +312,42 @@ Thanks :)
         logging(msg=f"Downloading: {url}", level="0")
         self.download(video, progress_bar=self.ui.progressbar_download)
 
-    def update_progressbar(self, pos, total, progress_bar):
-        progress_bar.setMaximum(total)
-        progress_bar.setValue(pos)
-
     def callback(self, pos, total):
         self.ui.progressbar_download.setMaximum(total)
         self.ui.progressbar_download.setValue(pos)
 
-    def download(self, video, progress_bar):
+    def download(self, video, progress_bar, os_error_handle=False):
 
         quality = self.get_quality()
-        print(quality)
+        logging(msg=f"Quality: {quality}", level="0")
         self.get_mode()
         output_path = self.ui.lineedit_output.text()
+        logging(msg=f"Output path: {output_path}", level="0")
 
         title = video.title
+        if os_error_handle:
+            title = random.randint(0, 10000)
+
         title = strip_title(title)  # Fixes OS Error on Windows
         output_path = output_path + title + ".mp4"
 
         try:
-            if self.mode == "multiple":
+            if self.mode == "yes":
                 self.download_thread = DownloadThread(video, quality, output_path)
                 self.download_thread.signals.progress.connect(
-                    lambda pos, total, pb=progress_bar: self.update_progressbar(pos, total, pb))
+                    lambda pos, total, pb=progress_bar: update_progressbar(pos, total, pb))
                 self.threadpool.start(self.download_thread)
+                logging(msg="Started download thread...", level="0")
 
-            elif self.mode == "single":
+            elif self.mode == "no":
+                logging(msg="Running in main thread...", level="0")
                 self.video.download(callback=self.callback, quality=quality, path=output_path)
+
+        except OSError:
+            logging(msg="OS Error: The file name is invalid for your system. Recreating a random int name...", level="0")
+            self.download(video, progress_bar, os_error_handle=True)
+
+
 
         except Exception as e:
             ui_popup(text=f"An unexpected error happened.  Exception: {e}")
@@ -345,12 +355,11 @@ Thanks :)
             if self.sentry:
                 sentry_sdk.capture_exception(e)
 
+
+
     def start_file(self):
 
         file_path = self.ui.lineedit_url_file.text()
-        valid_urls = []
-        video_objects = []
-
 
         if not os.path.isfile(file_path):
             ui_popup(f"File does not exist. Please check again!  PATH: {file_path}")
@@ -360,12 +369,16 @@ Thanks :)
             with open(file_path, "r") as file:
                 content = file.read().splitlines()
 
+            valid_urls = []
             for url in content:
                 if self.test_video(url) is None:
                     ui_popup(f"The following URL is invalid: {url}  Please remove it from the file or correct it and try again.")
 
                 else:
                     valid_urls.append(url)
+
+            video_objects = []
+
 
             for url in valid_urls:
                 video_object = self.test_video(url)
@@ -410,37 +423,23 @@ Thanks :)
             self.get_client_language()
 
         self.client = Client(language=self.api_language, delay=self.delay)
-
         user = self.ui.lineedit_user_channel.text()
-        video_objects = []
-        try:
-            user_object = self.client.get_user(url=user)
-            logging(msg=user_object.name, level="0")
+        logging(msg=f"USER: {user}", level="0")
 
-        except Exception as e:
-            ui_popup(
-                text=f"An unexpected error happened.  Exception: {e}  Note, the User must be a URL and NOT a name.")
-            if self.sentry:
-                sentry_sdk.capture_exception(e)
-                ui_popup("Error was captured by Sentry.")
+        videos = self.client.get_user(url=user)
+        total_videos = videos.videos
+        user_objects = []
 
-        else:
-            videos = user_object.videos
-            for video in videos:
-                url = video.url
-                url = f"https://www.pornhub.com/{url}"
-                try:
-                    video = self.test_video(url)
-                    video_objects.append(video)
+        url_string = "https://www.pornhub.com/"
+        for video in total_videos:
+            split_url = video.url
+            url = f"{url_string}{split_url}"
 
-                except Exception as e:
-                    ui_popup(e)
-                    if self.sentry:
-                        sentry_sdk.capture_exception(e)
+            video_object = self.test_video(url)
+            user_objects.append(video_object)
 
-            if not len(video_objects) == 0:
-                self.add_to_download_tree(video_objects)
-                self.download_tree()
+
+        self.add_to_tree_widget(user_objects, tree_widget=self.ui.treeWidget)
 
 
     def search_videos(self):
@@ -450,19 +449,14 @@ Thanks :)
             self.get_client_language()
 
         self.client = Client(language=self.api_language, delay=self.delay)
-        try:
-            query_object = self.client.search(query[:50])
-
-        except requests.exceptions.ConnectionError:
-            ui_popup("PornHub had an error. Increasing delay to 3 seconds.  Please don't overuse the search feature!.")
-            self.delay = 3
-            self.search_videos()
+        query_object = self.client.search(query[:50])
 
         self.add_to_download_tree(query_object)
         self.download_tree()
 
 
     def add_to_download_tree(self, data):
+        self.ui.treeWidget.clear()
         for i, video in enumerate(data, start=1):
             item = QTreeWidgetItem(self.ui.treeWidget)
             item.setText(0, f"{i}) {video.title}")
@@ -471,7 +465,6 @@ Thanks :)
 
 
     def download_tree(self):
-        # Downloads all selected videos with a for loop
         for i in range(self.ui.treeWidget.topLevelItemCount()):
             item = self.ui.treeWidget.topLevelItem(i)
             checkState = item.checkState(0)
@@ -492,11 +485,11 @@ Thanks :)
             if self.ui.radio_lowest.isChecked():
                 self.conf.set("Porn_Fetch", "default_quality", "worst")
 
-            if self.ui.radio_threading_single_2.isChecked():
-                self.conf.set("Porn_Fetch", "default_threading", "single")
+            if self.ui.radio_threading_no.isChecked():
+                self.conf.set("Porn_Fetch", "default_threading", "no")
 
-            if self.ui.radio_threading_multiple_2.isChecked():
-                self.conf.set("Porn_Fetch", "default_threading", "multiple")
+            if self.ui.radio_threading_yes.isChecked():
+                self.conf.set("Porn_Fetch", "default_threading", "yes")
 
             if self.ui.settings_checkbox_sentry.isChecked():
                 self.conf.set("Debug", "sentry", "true")
@@ -504,6 +497,11 @@ Thanks :)
             else:
                 self.conf.set("Debug", "sentry", "false")
 
+            if self.ui.settings_checkbox_delay.isChecked():
+                self.conf.set("Porn_Fetch", "delay", "true")
+
+            elif not self.ui.settings_checkbox_delay.isChecked():
+                self.conf.set("Porn_Fetch", "delay", "false")
 
             if self.ui.api_radio_de.isChecked():
                 self.conf.set("Porn_Fetch", "api_language", "de")
@@ -531,6 +529,15 @@ Thanks :)
 
     def load_user_settings(self):
 
+        if self.conf["Porn_Fetch"]["delay"] == "true":
+            self.ui.settings_checkbox_delay.setChecked(True)
+            self.delay = True
+
+        elif self.conf["Porn_Fetch"]["delay"] == "false":
+            self.ui.settings_checkbox_delay.setChecked(False)
+            self.delay = False
+
+
         if self.conf["Porn_Fetch"]["default_quality"] == "best":
             self.ui.radio_highest.setChecked(True)
 
@@ -541,10 +548,10 @@ Thanks :)
             self.ui.radio_lowest.setChecked(True)
 
         if self.conf["Porn_Fetch"]["default_threading"] == "multiple":
-            self.ui.radio_threading_multiple_2.setChecked(True)
+            self.ui.radio_threading_yes.setChecked(True)
 
         elif self.conf["Porn_Fetch"]["default_threading"] == "single":
-            self.ui.radio_threading_single_2.setChecked(True)
+            self.ui.radio_threading_no.setChecked(True)
 
         if self.conf["Debug"]["sentry"] == "true":
             self.ui.settings_checkbox_sentry.setChecked(True)
@@ -596,14 +603,14 @@ Thanks :)
                 self.get_client_language()
 
             self.client = Client(username=username, password=password, language=self.api_language, delay=self.delay)
-            self.client.login()
             self.ui.lineedit_account_status.setText(f"Logged in as: {self.client.account.name}")
+            self.ui.groupBox_7.setEnabled(True)
 
-        except Exception as e:
-            ui_popup(
-                f"An error happened. This error will NOT be sent to sentry, to prevent leaking your account data! ERROR: {e}")
+        except phub.consts.LogginFailed:
+            ui_popup("Wrong username / password!")
 
     def add_to_tree_widget(self, iterator, tree_widget):
+        tree_widget.clear()
         try:
             for i, video in enumerate(iterator, start=1):  # Limiting search results to 50
                 item = QTreeWidgetItem(tree_widget)
@@ -615,32 +622,31 @@ Thanks :)
                 f"An error happened. This error will NOT be sent to sentry, to prevent leaking your account data! ERROR: {e}")
 
     def get_liked_videos(self):
-        try:
-            videos = self.client.account.liked
-            self.add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
 
-        except Exception as e:
-            ui_popup(
-                f"An error happened. This error will NOT be sent to sentry, to prevent leaking your account data! ERROR: {e}")
+
+        print(self.client.account.name)
+
 
     def get_watched_videos(self):
         try:
             videos = self.client.account.watched
             self.add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
 
+        except AttributeError:
+            ui_popup("A NoneType error probably occurred, because you forgot to log in to your account or you haven't watched any videos.")
+
         except Exception as e:
             ui_popup(
                 f"An error happened. This error will NOT be sent to sentry, to prevent leaking your account data! ERROR: {e}")
+
 
     def get_recommended_videos(self):
 
-        try:
-            videos = self.client.account.recommended
-            self.add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
+        self.login()
+        videos = self.client.account.recommended
+        self.add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
 
-        except Exception as e:
-            ui_popup(
-                f"An error happened. This error will NOT be sent to sentry, to prevent leaking your account data! ERROR: {e}")
+
 
     def download_tree_widget(self):
         # Downloads all selected videos with a for loop
@@ -705,7 +711,7 @@ translated by PornHub) also in German language.   Not all videos are supported!
 
 UI Language:
 
-UI language defined the language in the application. See contribution on GitHub how to port it into your language
+UI language defines the language in the application. See contribution on GitHub how to port it into your language
 
 Quality:
 
@@ -714,7 +720,6 @@ Highest = Best Quality possible, Half = somewhere in the middle, Lowest = Least 
 Debug:
 
 Sentry: Captures error logs, which helps me to fix issues faster, and you don't have to report them
-Logging: Creates a log.log file, which may helps to diagnose issues.
 
 UI Transparency: 
 
@@ -725,6 +730,14 @@ Threading:
 Threading uses multiple cores of your CPU to download multiple videos simultaneously. This leads to a broken
 progressbar, but can have a big speed impact if you have a really fast internet connection.
 
+Delay:
+
+The delay handles how fast the API requests are. By default you should definitely ENABLE this.
+Without the delay, the API will spam the requests as fast as possible. Of course this has a big speed impact and 
+videos will download 10x faster, but it can also lead to a lot more errors. If you just want to download
+one video real quick, you can disable it, but if you plan to download more than that, please enable it!
+
+(DO NOT REPORT ERRORS, IF YOU HAD DELAY DISABLED!) 
 
 If you still have questions, let me know on GitHub in discussions.
 """

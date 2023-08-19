@@ -4,7 +4,6 @@
 ## To do list:
 
 
-- [x] Debugging and Logging
 - [x] Better stability and automatic exception handling
 - [x] Support for Android / Termux
 - [x] Installation script for Termux
@@ -17,11 +16,14 @@
 - [x] Provide a PornHub start page, like you would see on the Website and let the User download videos based on his algorithm
 - [] Create an Android App with Qt for Android and PySide6
 - [] Create a Website for better overview, marketing and publicity
-- [] Create a Discord Bot with some of the functionality (proprietary)
+- [] Create a Discord Bot with some functionality (proprietary)
 - [] Translation into other languages
 - [] Transfer the APP Development to Mojo, when it's publicly available
 - [] Create a Documentation
-- [] Support Fedora in build script
+- [] Support Fedora in a build script
+- [] Support OpenSUSE in a build script
+- [] Testing Windows 7, 8
+- [] Compatibility support for x32
 
 
 # STATUS:

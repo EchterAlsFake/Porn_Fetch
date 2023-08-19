@@ -394,6 +394,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.button_switch_to_account = QPushButton(self.groupBox_4)
         self.button_switch_to_account.setObjectName(u"button_switch_to_account")
+        self.button_switch_to_account.setCursor(QCursor(Qt.PointingHandCursor))
         self.button_switch_to_account.setStyleSheet(u"QPushButton {\n"
 "        background-color: #5a2a82; /* base violet color */\n"
 "        color: #ffffff; /* white text */\n"
@@ -1463,9 +1464,9 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridlayout_ui_language.addWidget(self.application_language_en, 0, 1, 1, 1)
 
-        self.radio_threading_single_2 = QRadioButton(self.groupBox_2)
-        self.radio_threading_single_2.setObjectName(u"radio_threading_single_2")
-        self.radio_threading_single_2.setStyleSheet(u"QRadioButton {\n"
+        self.radio_threading_no = QRadioButton(self.groupBox_2)
+        self.radio_threading_no.setObjectName(u"radio_threading_no")
+        self.radio_threading_no.setStyleSheet(u"QRadioButton {\n"
 "	color: rgb(255, 238, 0)}\n"
 "\n"
 "QRadioButton::indicator::unchecked {\n"
@@ -1484,11 +1485,11 @@ class Ui_Porn_Fetch_Widget(object):
 "\n"
 "")
 
-        self.gridlayout_ui_language.addWidget(self.radio_threading_single_2, 2, 2, 1, 1)
+        self.gridlayout_ui_language.addWidget(self.radio_threading_no, 2, 2, 1, 1)
 
-        self.radio_threading_multiple_2 = QRadioButton(self.groupBox_2)
-        self.radio_threading_multiple_2.setObjectName(u"radio_threading_multiple_2")
-        self.radio_threading_multiple_2.setStyleSheet(u"QRadioButton {\n"
+        self.radio_threading_yes = QRadioButton(self.groupBox_2)
+        self.radio_threading_yes.setObjectName(u"radio_threading_yes")
+        self.radio_threading_yes.setStyleSheet(u"QRadioButton {\n"
 "	color: rgb(178, 0, 255)}\n"
 "\n"
 "\n"
@@ -1507,14 +1508,14 @@ class Ui_Porn_Fetch_Widget(object):
 "}\n"
 "\n"
 "")
-        self.radio_threading_multiple_2.setChecked(True)
+        self.radio_threading_yes.setChecked(True)
 
-        self.gridlayout_ui_language.addWidget(self.radio_threading_multiple_2, 2, 1, 1, 1)
+        self.gridlayout_ui_language.addWidget(self.radio_threading_yes, 2, 1, 1, 1)
 
-        self.label_threading_mode_2 = QLabel(self.groupBox_2)
-        self.label_threading_mode_2.setObjectName(u"label_threading_mode_2")
+        self.label_threading_mode = QLabel(self.groupBox_2)
+        self.label_threading_mode.setObjectName(u"label_threading_mode")
 
-        self.gridlayout_ui_language.addWidget(self.label_threading_mode_2, 2, 0, 1, 1)
+        self.gridlayout_ui_language.addWidget(self.label_threading_mode, 2, 0, 1, 1)
 
         self.settings_checkbox_sentry = QCheckBox(self.groupBox_2)
         self.settings_checkbox_sentry.setObjectName(u"settings_checkbox_sentry")
@@ -1534,6 +1535,24 @@ class Ui_Porn_Fetch_Widget(object):
 "}")
 
         self.gridlayout_ui_language.addWidget(self.settings_checkbox_sentry, 1, 1, 1, 1)
+
+        self.settings_checkbox_delay = QCheckBox(self.groupBox_2)
+        self.settings_checkbox_delay.setObjectName(u"settings_checkbox_delay")
+        self.settings_checkbox_delay.setStyleSheet(u"QCheckBox::indicator {\n"
+"    width: 13px;\n"
+"    height: 13px;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked {\n"
+"    border: 1px solid white;\n"
+"    background: white;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked {\n"
+"    image: url(graphics/checkmark.png);\n"
+"}")
+
+        self.gridlayout_ui_language.addWidget(self.settings_checkbox_delay, 1, 2, 1, 1)
 
 
         self.gridLayout_8.addLayout(self.gridlayout_ui_language, 1, 2, 1, 2)
@@ -1725,6 +1744,34 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.horizontalLayout_2.addWidget(self.lineedit_url_file)
 
+        self.button_file_help = QPushButton(self.groupBox)
+        self.button_file_help.setObjectName(u"button_file_help")
+        self.button_file_help.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_file_help.setStyleSheet(u"QPushButton {\n"
+"        background-color: #5a2a82; /* base violet color */\n"
+"        color: #ffffff; /* white text */\n"
+"        border: none;\n"
+"        border-radius: 10px; /* reduced rounded corner radius */\n"
+"        padding: 5px 20px; /* reduced button padding */\n"
+"        font-size: 12px;\n"
+"        outline: none;\n"
+"    }\n"
+"    \n"
+"    QPushButton:hover {\n"
+"        background-color: #7b3ca3; /* slightly lighter violet when hovered */\n"
+"    }\n"
+"\n"
+"    QPushButton:pressed {\n"
+"        background-color: #481f61; /* darker violet when pressed */\n"
+"    }\n"
+"\n"
+"    QPushButton:disabled {\n"
+"        background-color: #3f1d4d; /* even darker shade when button is disabled */\n"
+"        color: #8a7b9a; /* greyish text */\n"
+"    }#")
+
+        self.horizontalLayout_2.addWidget(self.button_file_help)
+
         self.button_start_file = QPushButton(self.groupBox)
         self.button_start_file.setObjectName(u"button_start_file")
         self.button_start_file.setCursor(QCursor(Qt.PointingHandCursor))
@@ -1806,7 +1853,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.retranslateUi(Porn_Fetch_Widget)
 
-        self.stacked_main_account.setCurrentIndex(1)
+        self.stacked_main_account.setCurrentIndex(0)
         self.stackedWidget.setCurrentIndex(0)
 
 
@@ -1814,7 +1861,7 @@ class Ui_Porn_Fetch_Widget(object):
     # setupUi
 
     def retranslateUi(self, Porn_Fetch_Widget):
-        Porn_Fetch_Widget.setWindowTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Porn Fetch v2.2", None))
+        Porn_Fetch_Widget.setWindowTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Porn Fetch v2.4", None))
         self.groupBox_5.setTitle("")
         self.button_switch_main_page.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Switch to main page", None))
         self.label_6.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"           IMPORTANT!  The API is against Pornhub's ToS. Your Account CAN get banned for using this!!!!", None))
@@ -1929,10 +1976,11 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_debug.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Debug:", None))
         self.label_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Choose UI language", None))
         self.application_language_en.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"EN", None))
-        self.radio_threading_single_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
-        self.radio_threading_multiple_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
-        self.label_threading_mode_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Threading:", None))
+        self.radio_threading_no.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
+        self.radio_threading_yes.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
+        self.label_threading_mode.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Threading:", None))
         self.settings_checkbox_sentry.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Sentry", None))
+        self.settings_checkbox_delay.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Delay", None))
         self.label_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"UI Transparency:", None))
         self.groupBox.setTitle("")
         self.label_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u" URL: ", None))
@@ -1942,6 +1990,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_start_user_channel.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
         self.label_url_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u" File:  ", None))
         self.lineedit_url_file.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"urls need to be separated with new lines", None))
+        self.button_file_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
         self.button_start_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
         self.label_output.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Output path:         ", None))
         self.lineedit_output.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"./", None))

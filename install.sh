@@ -45,7 +45,7 @@ select option in $options; do
         echo "You can run Porn Fetch now in the dist directory with ./Porn_Fetch"
         echo "Note, at first startup the graphics resources will be downloaded..."
 
-  elif [ "Termux" = $option]; then
+  elif [ "Termux" = $option ]; then
         echo "You've chosen termux"
         echo "Please make sure, that you've installed Termux from the F-Droid store. The Playstore version is outdated!"
         sleep 2

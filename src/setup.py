@@ -8,23 +8,14 @@ from configparser import ConfigParser
 from datetime import datetime
 
 def logging(msg, level):
-    time = datetime.now()
-
-    if not os.path.isfile("log.log"):
-        with open("log.log", "w") as create:
-            create.write("")
-            create.close()
 
     with open("log.log", "a") as log_file:
 
         if level == "0":
             print(f"{Fore.LIGHTCYAN_EX} : DEBUG : {Fore.RESET} : MSG : {msg}")
-            log_file.write(f"{time} : DEBUG : {msg}\n")
-
 
         elif level == "1":
             print(f"[{Fore.LIGHTRED_EX} : ERROR : {Fore.RESET} : MSG : {msg} ")
-            log_file.write(f"{time} : ERROR : {msg}\n")
 
 def strip_title(title):
     disallowed_chars = ["<", ">", ":", '"', "/", "\\", "|", "*", "0", "(", ")", "!"]
@@ -48,10 +39,15 @@ def get_graphics():
 
     for file in files:
         if not os.path.isfile(f"graphics/{file}"):
-            print("Error with Icon download. Icon's won't be available in the GUI!")
+            print(logging(msg="Error downloading graphics. They won't show up in UI", level="1"))
 
 
-
+def before_send(event):
+    return {
+        'exception': event.get('exception', {}),
+        'level': event.get('level', 'error'),
+        'platform': event.get('platform'),
+    }
 
 def enable_error_handling():
     sentry_sdk.init(
@@ -61,8 +57,8 @@ def enable_error_handling():
         # Set traces_sample_rate to 1.0 to capture 100%
         # of transactions for performance monitoring.
         # We recommend adjusting this value in production.
-        traces_sample_rate=1.0
-
+        traces_sample_rate=1.0,
+        before_send=before_send,
     )
 
 
@@ -80,22 +76,7 @@ This collects the following:
 
 - The Python Error (so called Traceback)
 - The lines of code, in which the error happened
-- The values of variables in it.
-
-(Without your errors, I can't make this program better and more stable)
-
-For an example:
-
-If you get an error while making a request to PornHub, the requests library
-could eventually include your IP address in the user agent or the url itself.
-
-I don't need this information for bug fixing, but I can't turn it off.
-You can be sure, that your information is safe.
-
-If you still don't want it, simply click on No and everything will still be running like if
-you clicked Yes, and you can report errors via the GitHub Issue page just in case you want to.
-
-Thanks :) 
+- may include your PC name
 
 1) Yes I support the developer and allow the automatic data collection through Sentry.
 2) No I don't want Sentry to collect errors.
@@ -125,6 +106,7 @@ default_quality = best
 default_path = ./
 default_threading = multiple
 api_language = en
+delay = true
 
 [Debug]
 sentry = false

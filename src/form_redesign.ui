@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Porn Fetch v2.2</string>
+   <string>Porn Fetch v2.4</string>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(18,18,18);
@@ -33,7 +33,7 @@ color: white;</string>
          <string notr="true"/>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="page">
          <widget class="QWidget" name="horizontalLayoutWidget">
@@ -508,6 +508,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
              </item>
              <item row="1" column="0">
               <widget class="QPushButton" name="button_switch_to_account">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton {
         background-color: #5a2a82; /* base violet color */
@@ -1800,7 +1803,7 @@ QRadioButton::indicator:checked {
                 </widget>
                </item>
                <item row="2" column="2">
-                <widget class="QRadioButton" name="radio_threading_single_2">
+                <widget class="QRadioButton" name="radio_threading_no">
                  <property name="styleSheet">
                   <string notr="true">QRadioButton {
 	color: rgb(255, 238, 0)}
@@ -1827,7 +1830,7 @@ QRadioButton::indicator:checked {
                 </widget>
                </item>
                <item row="2" column="1">
-                <widget class="QRadioButton" name="radio_threading_multiple_2">
+                <widget class="QRadioButton" name="radio_threading_yes">
                  <property name="styleSheet">
                   <string notr="true">QRadioButton {
 	color: rgb(178, 0, 255)}
@@ -1858,7 +1861,7 @@ QRadioButton::indicator:checked {
                 </widget>
                </item>
                <item row="2" column="0">
-                <widget class="QLabel" name="label_threading_mode_2">
+                <widget class="QLabel" name="label_threading_mode">
                  <property name="text">
                   <string>Threading:</string>
                  </property>
@@ -1886,6 +1889,28 @@ QCheckBox::indicator:checked {
                  </property>
                  <property name="text">
                   <string>Sentry</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QCheckBox" name="settings_checkbox_delay">
+                 <property name="styleSheet">
+                  <string notr="true">QCheckBox::indicator {
+    width: 13px;
+    height: 13px;
+}
+
+QCheckBox::indicator:unchecked {
+    border: 1px solid white;
+    background: white;
+}
+
+QCheckBox::indicator:checked {
+    image: url(graphics/checkmark.png);
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Delay</string>
                  </property>
                 </widget>
                </item>
@@ -2109,6 +2134,40 @@ QLineEdit:disabled {
                     </property>
                     <property name="placeholderText">
                      <string>urls need to be separated with new lines</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="button_file_help">
+                    <property name="cursor">
+                     <cursorShape>PointingHandCursor</cursorShape>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QPushButton {
+        background-color: #5a2a82; /* base violet color */
+        color: #ffffff; /* white text */
+        border: none;
+        border-radius: 10px; /* reduced rounded corner radius */
+        padding: 5px 20px; /* reduced button padding */
+        font-size: 12px;
+        outline: none;
+    }
+    
+    QPushButton:hover {
+        background-color: #7b3ca3; /* slightly lighter violet when hovered */
+    }
+
+    QPushButton:pressed {
+        background-color: #481f61; /* darker violet when pressed */
+    }
+
+    QPushButton:disabled {
+        background-color: #3f1d4d; /* even darker shade when button is disabled */
+        color: #8a7b9a; /* greyish text */
+    }#</string>
+                    </property>
+                    <property name="text">
+                     <string>Help</string>
                     </property>
                    </widget>
                   </item>

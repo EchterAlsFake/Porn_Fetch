@@ -11,10 +11,10 @@ import getpass
 o = '\033[33m'
 
 try:
-    from src.setup import internet_test, ask_for_sentry_cli, clear, check_path, strip_title, logging
+    from src.setup import internet_test, ask_for_sentry_cli, clear, check_path, strip_title, logging, setup_config_file
 
 except ImportError:
-    from setup import internet_test, ask_for_sentry_cli, clear, check_path, strip_title, logging
+    from setup import internet_test, ask_for_sentry_cli, clear, check_path, strip_title, logging, setup_config_file
 
 __license__ = "GPL 3"
 
@@ -31,6 +31,7 @@ This Agreement represents the complete agreement concerning the subject matter h
 1) Accept
 2) Deny
 --------------=>:"""
+setup_config_file()
 
 class CLI():
 
@@ -298,9 +299,6 @@ Please enter your API language:     {Fore.LIGHTYELLOW_EX} !!! RESTART FOR CHANGE
             self.settings()
 
         elif options == "8":
-            print(f"{Fore.RESET}{credits_lol}")
-
-        elif options == "9":
             sys.exit(0)
 
     def raw_download(self, video):
