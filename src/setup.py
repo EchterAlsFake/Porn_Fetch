@@ -5,7 +5,34 @@ import sentry_sdk
 import wget
 from tqdm import tqdm
 from configparser import ConfigParser
-from datetime import datetime
+data = """
+
+[License]
+accept = false
+
+[Porn_Fetch]
+default_quality = best
+default_path = ./
+default_threading = multiple
+api_language = en
+delay = true
+hd = true
+sort = false
+sort_time = false
+production = false
+
+
+[Debug]
+sentry = false
+logging = false
+
+[UI]
+transparency = 0
+language = en
+
+[SelectedCategories]
+categories = 
+"""
 
 def logging(msg, level):
 
@@ -97,26 +124,7 @@ def setup_config_file(force=False):
 
     if force or not os.path.exists(config_file):
         with open(config_file, "w") as config:
-            config.write(f"""
-[License]
-accept = false
-
-[Porn_Fetch]
-default_quality = best
-default_path = ./
-default_threading = multiple
-api_language = en
-delay = true
-
-[Debug]
-sentry = false
-logging = false
-
-[UI]
-transparency = 0
-language = en
-
-""")
+            config.write(data)
             config.close()
 
 
@@ -126,24 +134,7 @@ language = en
         if not conf.has_section(section):
             print("Config file is corrupted. Updating....")
             with open(config_file, "w") as config:
-                config.write("""
-[License]
-accept = false
-
-[Porn_Fetch]
-default_quality = best
-default_path = ./
-default_threading = multiple
-api_language = en
-delay = 1
-
-[Debug]
-sentry = false
-logging = false
-
-[UI]
-transparency = 0
-language = en""")
+                config.write(data)
                 config.close()
 
 

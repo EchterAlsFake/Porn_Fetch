@@ -14,6 +14,7 @@
 - [x] Better support for Windows
 - [x] Let the User log in with his PornHub Account to give better search results
 - [x] Provide a PornHub start page, like you would see on the Website and let the User download videos based on his algorithm
+- [x] Search filters
 - [] Create an Android App with Qt for Android and PySide6
 - [] Create a Website for better overview, marketing and publicity
 - [] Create a Discord Bot with some functionality (proprietary)

@@ -1,5 +1,5 @@
 __author__ = "EchterAlsFake : Johannes Habel"
-__version__ = "2.4"
+__version__ = "2.5"
 __source__ = "https://github.com/EchterAlsFake/Porn_Fetch"
 __license__ = "GPL 3"
 
@@ -10,14 +10,15 @@ import sentry_sdk
 import os
 import requests
 import random
+import wget
 
 from configparser import ConfigParser
 from PySide6 import QtCore
-from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QInputDialog, QLineEdit, QButtonGroup
+from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QInputDialog, QLineEdit, QButtonGroup, QCheckBox, QFrame
 from PySide6.QtGui import QKeyEvent, QColor
 from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Qt, QDir
 from src.license_agreement import Ui_Widget_License
-from phub import Client, Quality
+from phub import Client, Quality, Category
 from src.ui_main_widget import Ui_Porn_Fetch_Widget
 from src.setup import enable_error_handling, setup_config_file, strip_title, logging, get_graphics
 from src.cli import CLI
@@ -121,6 +122,11 @@ class Widget(QWidget):
         self.logging = None
         self.delay = True
         self.client = None
+        self.sort = None
+        self.sort_time = None
+        self.production = None
+        self.hd = None
+        self.category = False
         self.download_thread = None
         self.threadpool = QThreadPool()
 
@@ -137,6 +143,60 @@ class Widget(QWidget):
 
         self.ui.stackedWidget.setCurrentIndex(0)
         self.button_connectors()
+        self.settings_page_categories()
+
+
+    def settings_page_categories(self):
+        # Coded completely by ChatGPT
+        columns = 4
+        categories = [attr for attr in dir(Category) if
+                      not callable(getattr(Category, attr)) and not attr.startswith("__")]
+
+        self.checkboxes = {}
+
+        for i, category in enumerate(categories):
+            row = (i // columns ) + 1
+            col = i % columns
+            checkbox = QCheckBox(category)
+            checkbox.setStyleSheet("QCheckBox::indicator {\n    width: 13px;\n    height: 13px;\n}\n\nQCheckBox::indicator:unchecked {\n    border: 1px solid white;\n    background: white;\n}\n\nQCheckBox::indicator:checked {\n    image: url(graphics/checkmark.png);\n}")
+            self.ui.verticalLayout.addWidget(checkbox, row, col)
+            self.checkboxes[category] = checkbox
+
+        container = QWidget()
+        container.setLayout(self.ui.verticalLayout)
+        self.ui.scroll_area.setWidget(container)
+        self.search_bar = QLineEdit(self)
+        self.search_bar.setStyleSheet("""
+QLineEdit {
+    border: 2px solid #757575;
+    border-radius: 12px;
+    padding: 0 8px;
+    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */
+    color: #FFFFFF;  /* setzt die Textfarbe auf Weiß */
+    font-size: 16px;
+    height: 20px;
+}
+
+QLineEdit:focus {
+    border-color: rgb(107, 0, 255)
+}
+
+QLineEdit:disabled {
+    background: #444444;  /* setzt den Hintergrund auf ein dunkles Grau, wenn das QLineEdit deaktiviert ist */
+    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */
+    border-color: #aaaaaa;
+ }""")
+        self.search_bar.setPlaceholderText("Search category...")
+        self.search_bar.textChanged.connect(self.filter_categories)
+        self.ui.verticalLayout.addWidget(self.search_bar, 0, 0)
+
+    def filter_categories(self, text):
+        # Also coded by ChatGPT
+        for category, checkbox in self.checkboxes.items():
+            if text.lower() in category.lower():
+                checkbox.show()
+            else:
+                checkbox.hide()
 
     def button_connectors(self):
         self.ui.button_start.clicked.connect(self.start)
@@ -154,6 +214,9 @@ class Widget(QWidget):
         self.ui.button_account_list_rec_videos.clicked.connect(self.get_recommended_videos)
         self.ui.button_account_list_watched_videos.clicked.connect(self.get_watched_videos)
         self.ui.button_account_download.clicked.connect(self.download_tree_widget)
+        self.ui.button_switch_to_settings.clicked.connect(self.switch_to_settings)
+        self.ui.button_download_thumbnail.clicked.connect(self.download_thumbnail)
+        self.ui.button_refresh.clicked.connect(self.get_metadata)
 
     def button_group(self):
         """Separates the QRadioButtons from the different grid layouts"""
@@ -174,9 +237,28 @@ class Widget(QWidget):
         button_group_api_language.addButton(self.ui.api_radio_de)
         button_group_api_language.addButton(self.ui.api_radio_ru)
 
+        button_group_sort = QButtonGroup()
+        button_group_sort.addButton(self.ui.radio_most_recent)
+        button_group_sort.addButton(self.ui.radio_most_relevant)
+        button_group_sort.addButton(self.ui.radio_most_viewed)
+        button_group_sort.addButton(self.ui.radio_longest)
+        button_group_sort.addButton(self.ui.radio_nothing)
+
+        button_group_sort_time = QButtonGroup()
+        button_group_sort_time.addButton(self.ui.radio_day)
+        button_group_sort_time.addButton(self.ui.radio_month)
+        button_group_sort_time.addButton(self.ui.radio_year)
+        button_group_sort_time.addButton(self.ui.radio_week)
+        button_group_sort_time.addButton(self.ui.radio_nothing_2)
+
+        button_group_hd = QButtonGroup()
+        button_group_hd.addButton(self.ui.radio_hd_yes)
+        button_group_hd.addButton(self.ui.radio_hd_no)
+
         button_group_ui_language = QButtonGroup()
         button_group_ui_language.addButton(self.ui.application_language_en)
-        self.buttonGroups = button_group_ui_language, button_group_threading, button_group_quality, button_group_api_language
+
+        self.buttonGroups = button_group_ui_language, button_group_threading, button_group_quality, button_group_api_language, button_group_hd, button_group_sort_time, button_group_sort
 
     def setup(self):
         self.conf = ConfigParser()
@@ -348,7 +430,6 @@ Thanks :)
             self.download(video, progress_bar, os_error_handle=True)
 
 
-
         except Exception as e:
             ui_popup(text=f"An unexpected error happened.  Exception: {e}")
             logging(msg=e, level="1")
@@ -379,7 +460,6 @@ Thanks :)
 
             video_objects = []
 
-
             for url in valid_urls:
                 video_object = self.test_video(url)
                 video_objects.append(video_object)
@@ -408,15 +488,17 @@ Thanks :)
             image_url = video.image_url
             tags = video.tags
 
-            self.ui.lineedit_likes.setText(likes)
-            self.ui.lineedit_tags.setText(tags)
-            self.ui.lineedit_image_url.setText(image_url)
-            self.ui.lineedit_title.setText(title)
-            self.ui.lineedit_author.setText(author)
-            self.ui.lineedit_views.setText(views)
-            self.ui.lineedit_date.setText(date)
-            self.ui.lineedit_duration.setText(duration)
-            self.ui.lineedit_hotspots.setText(hotspots)
+            self.ui.lineedit_likes.setText(str(likes))
+            self.ui.lineedit_tags.setText(str(tags))
+            self.ui.lineedit_image_url.setText(str(image_url))
+            self.ui.lineedit_title.setText(str(title))
+            self.ui.lineedit_author.setText(str(author))
+            self.ui.lineedit_views.setText(str(views))
+            self.ui.lineedit_date.setText(str(date))
+            self.ui.lineedit_duration.setText(str(duration))
+            self.ui.lineedit_hotspots.setText(str(hotspots))
+
+        video.refresh()
 
     def user_channel(self):
         if not self.custom_language:
@@ -441,6 +523,21 @@ Thanks :)
 
         self.add_to_tree_widget(user_objects, tree_widget=self.ui.treeWidget)
 
+    def download_thumbnail(self):
+        url = self.ui.lineedit_image_url.text()
+        title = self.ui.lineedit_title.text()
+        name = f"{title}.jpg"
+
+        try:
+            wget.download(url, out=name)
+            logging(msg=f"Downloaded Thumbnail for: {name} Location: {name}", level="0")
+            ui_popup("Download complete")
+
+        except Exception as e:
+            logging(msg=f"Error download thumbnail: {e}", level="1")
+            ui_popup(e)
+            if self.sentry:
+                sentry_sdk.capture_exception(e)
 
     def search_videos(self):
         # Searches videos with query string and lets the user select them
@@ -449,7 +546,7 @@ Thanks :)
             self.get_client_language()
 
         self.client = Client(language=self.api_language, delay=self.delay)
-        query_object = self.client.search(query[:50])
+        query_object = self.client.search(query, category=self.category, time=self.sort_time, sort=self.sort, hd=self.hd, production=self.production)
 
         self.add_to_download_tree(query_object)
         self.download_tree()
@@ -476,6 +573,58 @@ Thanks :)
 
     def settings_tab(self):
         with open("config.ini", "w") as config_file:
+
+            selected_categories = self.search()
+            self.conf['SelectedCategories'] = {'categories': ','.join(selected_categories)}
+
+            if self.ui.radio_hd_yes.isChecked():
+                self.conf.set("Porn_Fetch", "hd", "true")
+
+            elif self.ui.radio_hd_no.isChecked():
+                self.conf.set("Porn_Fetch", "hd", "false")
+
+            if self.ui.radio_day.isChecked():
+                self.conf.set("Porn_Fetch", "sort_time", "day")
+
+            elif self.ui.radio_week.isChecked():
+                self.conf.set("Porn_Fetch", "sort_time", "week")
+
+            elif self.ui.radio_year.isChecked():
+                self.conf.set("Porn_Fetch", "sort_time", "year")
+
+            elif self.ui.radio_month.isChecked():
+                self.conf.set("Porn_Fetch", "sort_time", "month")
+
+            elif self.ui.radio_nothing_2.isChecked():
+                self.conf.set("Porn_Fetch", "sort_time", "false")
+
+            if self.ui.radio_most_recent.isChecked():
+                self.conf.set("Porn_Fetch", "sort", "most_recent")
+
+            elif self.ui.radio_most_viewed.isChecked():
+                self.conf.set("Porn_Fetch", "sort", "most_viewed")
+
+            elif self.ui.radio_most_relevant.isChecked():
+                self.conf.set("Porn_Fetch", "sort", "most_relevant")
+
+            elif self.ui.radio_top_rated.isChecked():
+                self.conf.set("Porn_Fetch", "sort", "top_rated")
+
+            elif self.ui.radio_nothing.isChecked():
+                self.conf.set("Porn_Fetch", "sort", "false")
+
+            elif self.ui.radio_longest.isChecked():
+                self.conf.set("Porn_Fetch", "sort", "longest")
+
+            if self.ui.checkbox_homemade.isChecked():
+                self.conf.set("Porn_Fetch", "production", "homemade")
+
+            elif self.ui.checkbox_professional.isChecked():
+                self.conf.set("Porn_Fetch", "production", "professional")
+
+            if not self.ui.checkbox_professional.isChecked() and not self.ui.checkbox_homemade.isChecked():
+                self.conf.set("Porn_Fetch", "production", "false")
+
             if self.ui.radio_highest.isChecked():
                 self.conf.set("Porn_Fetch", "default_quality", "best")
 
@@ -527,7 +676,16 @@ Thanks :)
 
             ui_popup("Applied! (Please restart for changes to take effect)")
 
+    def search(self):
+       return [name for name, checkbox in self.checkboxes.items() if checkbox.isChecked()]
+
     def load_user_settings(self):
+
+        self.conf.read('config.ini')
+        if ('SelectedCategories' in self.conf and 'categories' in self.conf['SelectedCategories']):
+            selected_categories = self.conf['SelectedCategories']['categories'].split(',')
+            for category in selected_categories:
+                self.categories = getattr(Category, category, None)
 
         if self.conf["Porn_Fetch"]["delay"] == "true":
             self.ui.settings_checkbox_delay.setChecked(True)
@@ -537,6 +695,63 @@ Thanks :)
             self.ui.settings_checkbox_delay.setChecked(False)
             self.delay = False
 
+        if self.conf["Porn_Fetch"]["sort"] == "most_viewed":
+            self.ui.radio_most_viewed.setChecked(True)
+            self.sort = "most viewed"
+
+        elif self.conf["Porn_Fetch"]["sort"] == "most relevant":
+            self.ui.radio_most_relevant.setChecked(True)
+            self.sort = "most relevant"
+
+        elif self.conf["Porn_Fetch"]["sort"] == "top rated":
+            self.ui.radio_top_rated.setChecked(True)
+            self.sort = "top rated"
+
+        elif self.conf["Porn_Fetch"]["sort"] == "longest":
+            self.ui.radio_longest.setChecked(True)
+            self.sort = "longest"
+
+        elif self.conf["Porn_Fetch"]["sort"] == "most recent":
+            self.ui.radio_most_recent.setChecked(True)
+            self.sort = "most recent"
+
+        elif self.conf["Porn_Fetch"]["sort"] == "false":
+            self.sort = None
+
+        if self.conf["Porn_Fetch"]["sort_time"] == "day":
+            self.ui.radio_day.setChecked(True)
+            self.sort_time = "day"
+
+        elif self.conf["Porn_Fetch"]["sort_time"] == "week":
+            self.ui.radio_week.setChecked(True)
+            self.sort_time = "week"
+
+        elif self.conf["Porn_Fetch"]["sort_time"] == "month":
+            self.ui.radio_month.setChecked(True)
+            self.sort_time = "month"
+
+        elif self.conf["Porn_Fetch"]["sort_time"] == "year":
+            self.ui.radio_year.setChecked(True)
+            self.sort_time = "year"
+
+        elif self.conf["Porn_Fetch"]["sort_time"] == "false":
+            self.sort_time = None
+
+        if self.conf["Porn_Fetch"]["production"] == "homemade":
+            self.ui.checkbox_homemade.setChecked(True)
+            self.production = "homemade"
+
+        elif self.conf["Porn_Fetch"]["production"] == "professional":
+            self.ui.checkbox_professional.setChecked(True)
+            self.production = "professional"
+
+        if self.conf["Porn_Fetch"]["hd"] == "true":
+            self.ui.radio_hd_yes.setChecked(True)
+            self.hd = True
+
+        elif self.conf["Porn_Fetch"]["hd"] == "false":
+            self.ui.radio_hd_no.setChecked(True)
+            self.hd = False
 
         if self.conf["Porn_Fetch"]["default_quality"] == "best":
             self.ui.radio_highest.setChecked(True)
@@ -592,6 +807,9 @@ Thanks :)
     def switch_to_main(self):
         self.ui.stacked_main_account.setCurrentIndex(1)
 
+    def switch_to_settings(self):
+        self.ui.stacked_main_account.setCurrentIndex(2)
+
     def login(self):
 
         username = self.ui.lineedit_account_username.text()
@@ -623,9 +841,16 @@ Thanks :)
 
     def get_liked_videos(self):
 
+        try:
+            videos = self.client.account.liked
+            self.add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
 
-        print(self.client.account.name)
+        except AttributeError:
+            ui_popup("A NoneType error probably occurred, because you forgot to log in to your account or you haven't watched any videos.")
 
+        except Exception as e:
+            ui_popup(
+                f"An error happened. This error will NOT be sent to sentry, to prevent leaking your account data! ERROR: {e}")
 
     def get_watched_videos(self):
         try:
@@ -699,6 +924,9 @@ Thanks :)
 
         if event.key() == Qt.Key.Key_2 and event.modifiers() == Qt.ControlModifier:
             self.switch_to_main()
+
+        if event.key() == Qt.Key.Key_3 and event.modifiers() == Qt.ControlModifier:
+            self.switch_to_settings()
 
     def help(self):
         text = """
