@@ -104,12 +104,13 @@ class CLI():
             self.delay = False
 
         else:
-            delay = self.conf["Porn_Fetch"]["delay"]
-            try:
-                self.delay = int(delay)
+            if self.conf["Porn_Fetch"]["delay"] == "true":
+                self.delay = True
 
-            except ValueError:
-                self.delay = round(delay)
+            else:
+                self.delay = False
+
+
 
 
         self.api_language = self.conf["Porn_Fetch"]["api_language"]
