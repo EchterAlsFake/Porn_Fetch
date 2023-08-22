@@ -135,7 +135,8 @@ class CLI():
 {Fore.LIGHTYELLOW_EX}3) Change default Quality
 {Fore.LIGHTGREEN_EX}4) Change default Threading mode
 {Fore.LIGHTMAGENTA_EX}5) Change API delay
-{Fore.LIGHTWHITE_EX}6) Back
+{Fore.LIGHTCYAN_EX}6) Change search filters
+{Fore.LIGHTWHITE_EX}7) Back
 ---------------------=>:""")
 
         with open("config.ini", "w") as config_file:
@@ -234,21 +235,138 @@ Please enter your API language:     {Fore.LIGHTYELLOW_EX} !!! RESTART FOR CHANGE
 {Fore.LIGHTYELLOW_EX}3) Back
 {Fore.LIGHTWHITE_EX}-------------=>:""")
 
+            elif options == "6":
+                search_filter_menu = input(f"""
+1) Change HD filter
+2) Change production filter
+3) Change time sort
+4) Change general sort
+5) Back
+---------------------=>:
+""")
 
-                if option == "1":
-                    self.conf.set("Porn_Fetch", "delay", "False")
-                    self.conf.write(config_file)
+                if search_filter_menu == "1":
+                    hd_filter_options = input(f"""
+1) Enable HD sorting
+2) Disable HD sorting
+3) Back
+---------------------=>:""")
 
-                elif option == "2":
-                    delay = input(f"{self.z}{Fore.RESET}Enter new delay (1,2,3,4 MUST BE AN INTEGER!) --=>:")
-                    self.conf.set("Porn_Fetch", "delay", delay)
-                    self.conf.write(config_file)
+                    if hd_filter_options == "1":
+                        self.conf.set("Porn_Fetch", "hd", "true")
+                        self.conf.write(config_file)
 
-                elif option == "3":
+                    elif hd_filter_options == "2":
+                        self.conf.set("Porn_Fetch", "hd", "false")
+                        self.conf.write(config_file)
+
+                    elif hd_filter_options == "3":
+                        self.settings()
+
+
+                    else:
+                        print(f"{self.x}{Fore.RESET}Invalid input. Select in range 1 - 3")
+
+
+                elif search_filter_menu == "2":
+                    production_filter_options = input(f"""
+1) Enable professional sorting
+2) Enable homemade sorting
+3) Back
+---------------------=>:""")
+
+                    if production_filter_options == "1":
+                        self.conf.set("Porn_Fetch", "production", "professional")
+                        self.conf.write(config_file)
+
+                    elif production_filter_options == "2":
+                        self.conf.set("Porn_Fetch", "production", "homemade")
+                        self.conf.write(config_file)
+
+                    elif production_filter_options == "3":
+                        self.settings()
+
+                    else:
+                        print(f"{self.x}{Fore.RESET}Invalid input. Select in range 1 - 3")
+
+
+                elif search_filter_menu == "3":
+                    time_options = input("""
+1) Sort by Day
+2) Sort by Week
+3) Sort by Month
+4) Sort by Year
+5) Back
+-------------------------=>:""")
+
+                    if time_options == "1":
+                        self.conf.set("Porn_Fetch", "sort_time", "day")
+                        self.conf.write(config_file)
+
+                    elif time_options == "2":
+                        self.conf.set("Porn_Fetch", "sort_time", "week")
+                        self.conf.write(config_file)
+
+                    elif time_options == "3":
+                        self.conf.set("Porn_Fetch", "sort_time", "month")
+                        self.conf.write(config_file)
+
+                    elif time_options == "4":
+                        self.conf.set("Porn_Fetch", "sort_time", "year")
+                        self.conf.write(config_file)
+
+                    elif time_options == "5":
+                        self.settings()
+
+                    else:
+                        print(f"{self.x}{Fore.RESET}Invalid input. Select in range 1 - 5")
+
+
+                elif options == "4":
+                    general_sort_options = input(f"""
+1) Most relevant
+2) Most recent
+3) Most viewed
+4) Top rated
+5) longest
+6) Back
+----------------------=>:""")
+
+                    if general_sort_options == "1":
+                        self.conf.set("Porn_Fetch", "sort", "most relevant")
+                        self.conf.write(config_file)
+
+                    elif general_sort_options == "2":
+                        self.conf.set("Porn_Fetch", "sort", "most recent")
+                        self.conf.write(config_file)
+
+                    elif general_sort_options == "3":
+                        self.conf.set("Porn_Fetch", "sort", "most viewed")
+                        self.conf.write(config_file)
+
+                    elif general_sort_options == "4":
+                        self.conf.set("Porn_Fetch", "sort", "top rated")
+                        self.conf.write(config_file)
+
+                    elif general_sort_options == "5":
+                        self.conf.set("Porn_Fetch", "sort", "longest")
+                        self.conf.write(config_file)
+
+                    elif general_sort_options == "6":
+                        self.settings()
+
+                    else:
+                        print(f"{self.x}{Fore.RESET}Invalid input. Select in range 1 - 6")
+
+                elif options == "5":
                     self.settings()
 
-                else:
-                    print(f"{self.x}{Fore.RESET}Wrong input. Please select in rage 1 - 2")
+
+
+
+            elif options == "7":
+                self.menu()
+
 
     def menu(self):
 
