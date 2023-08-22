@@ -103,19 +103,19 @@ class CLI():
         if self.conf["Porn_Fetch"]["delay"] == "False":
             self.delay = False
 
-        else:
-            if self.conf["Porn_Fetch"]["delay"] == "true":
-                self.delay = True
+        if self.conf["Porn_Fetch"]["hd"] == "true":
+            self.hd = True
 
-            else:
-                self.delay = False
+        elif self.conf["Porn_Fetch"]["hd"] == "false":
+            self.hd = False
 
-
-
-
+        self.production = self.conf["Porn_Fetch"]["production"]
+        self.sort_time = self.conf["Porn_Fetch"]["sort_time"]
+        self.sort = self.conf["Porn_Fetch"]["sort"]
         self.api_language = self.conf["Porn_Fetch"]["api_language"]
         self.threading_mode = self.conf["Porn_Fetch"]["default_threading"]
         self.output_path = self.conf["Porn_Fetch"]["default_path"]
+
 
     def check_video(self, url):
         try:
@@ -574,7 +574,7 @@ Hotspots: {hotspots}
     def search_ext(self, search_query):
 
         try:
-            search = self.client.search(search_query)
+            search = self.client.search(search_query, production=self.production, time=self.sort_time, sort=self.sort, hd=self.hd)
             return search
 
         except ConnectionError:
