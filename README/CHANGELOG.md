@@ -131,3 +131,4 @@ I hope that most issues are now fixed.
 - Added function for downloading the thumbnail
 - Fixed an error with the metadata function
 - Removed file logging
+- Recoded CLI

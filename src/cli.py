@@ -330,12 +330,12 @@ Tags: {tags}
     def login(self):
 
         username = input(f"{self.z}{Fore.LIGHTCYAN_EX}Please enter your username --=>:{Fore.RESET}")
-        password = getpass.getpass(f"{self.z}{Fore.LIGHTMAGENTA_EX}Please enter your password --=>:{Fore.RESET}")
+        password = getpass.getpass("Please enter your password --=>:")
 
         try:
 
             self.client = Client(language=self.api_language, delay=self.delay, username=username, password=password)
-            logging(f"Logged in as: {self.client.account.name}")
+            logging(f"Logged in as: {self.client.account.name}", level="0")
 
         except errors.LogginFailed:
             logging(msg="Login failed. Please try again.", level="1")
