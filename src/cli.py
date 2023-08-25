@@ -1,68 +1,127 @@
+# Rewrite of the CLI, because it was really unstable and I didn't really understand my code lol
 import os.path
-import sys
-import threading
-import sentry_sdk
-from colorama import *
-from phub import *
+from phub import Client, Quality, errors
 from tqdm import tqdm
+import random
 from configparser import ConfigParser
 import getpass
-
-o = '\033[33m'
+from colorama import *
 
 try:
-    from src.setup import internet_test, ask_for_sentry_cli, clear, check_path, strip_title, logging, setup_config_file
-
+    from src.setup import logging, setup_config_file, internet_test
 except ImportError:
-    from setup import internet_test, ask_for_sentry_cli, clear, check_path, strip_title, logging, setup_config_file
+    from setup import logging, setup_config_file, internet_test
 
-__license__ = "GPL 3"
-
-license_agreement = f"""
-{Fore.RESET}GPL License Agreement for Porn Fetch
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-You should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses/.
-NO LIABILITY FOR END USER USE
-Under no circumstances and under no legal theory, whether in tort, contract, or otherwise, shall the copyright holder or contributors be liable to You for any direct, indirect, special, incidental, consequential or exemplary damages of any character including, without limitation, damages for loss of goodwill, work stoppage, computer failure or malfunction, loss of data or any and all other commercial damages or losses, even if such party shall have been informed of the possibility of such damages.
-This limitation of liability shall not apply to liability for death or personal injury resulting from such party’s negligence to the extent applicable law prohibits such limitation. Some jurisdictions do not allow the exclusion or limitation of incidental or consequential damages, so this exclusion and limitation may not apply to You.
-This Agreement represents the complete agreement concerning the subject matter hereof.
-
-1) Accept
-2) Deny
---------------=>:"""
-setup_config_file()
 
 class CLI():
 
     def __init__(self):
-        self.z = f"{Fore.LIGHTGREEN_EX}[+]{Fore.RESET}"
-        self.x = f"{Fore.LIGHTRED_EX}[~]{Fore.RESET}"
-        self.quality = Quality.BEST
-        self.output_path = None
-        self.threading_mode = None
+
+        self.z = f"{Fore.LIGHTCYAN_EX}[+]"
+        self.client = None
+        self.quality = None
+        self.hd = None
+        self.sort = None
+        self.sort_time = None
+        self.delay = None
         self.api_language = None
-        self.custom_language = False
-        self.login_status = f"{Fore.LIGHTRED_EX}Not logged in{Fore.RESET}"
+        self.production = None
         self.pbar = None
-        self.delay = True
+        self.threading = None
+        self.output_path = None
+        setup_config_file()
         self.conf = ConfigParser()
-        self.conf.read("../config.ini")
-        try:
-            self.load_user_settings() # Needs to be initialized after the variables
-        except KeyError:
-            self.conf = ConfigParser()
-            self.conf.read("config.ini")
-            self.load_user_settings()
-
-        self.client = Client(language=self.api_language, delay=self.delay)
-
-        self.sentry = ask_for_sentry_cli()
-
-
+        self.conf.read("config.ini")
+        self.load_variables()
         if internet_test():
             while True:
-                self.menu()
+                self.main_menu()
+
+    def main_menu(self):
+
+        options = input(f"""
+{Fore.LIGHTCYAN_EX}1) Download a video
+{Fore.LIGHTGREEN_EX}2) Download from a file
+{Fore.LIGHTMAGENTA_EX}3) Download a channel / model / user account
+{Fore.LIGHTYELLOW_EX}4) Search for videos
+{Fore.LIGHTRED_EX}5) Get metadata from video
+{Fore.LIGHTCYAN_EX}6) Account page
+{Fore.LIGHTGREEN_EX}7) Settings
+{Fore.LIGHTMAGENTA_EX}8) Exit {Fore.RESET}
+-------------------------=>:""")
+
+        if options == "1":
+            url = input(f"{self.z}{Fore.LIGHTCYAN_EX}Enter the video url --=>:{Fore.RESET}")
+            self.download_prerequisites(url)
+
+        elif options == "2":
+            file = input(f"{self.z}{Fore.LIGHTGREEN_EX}Enter the video file --=>:{Fore.RESET}")
+            self.download_from_file(file)
+
+        elif options == "3":
+            user = input(f"{self.z}{Fore.LIGHTMAGENTA_EX}Enter the URL for User / Channel / Model account --=>:{Fore.RESET}")
+            self.download_from_channel(user)
+
+        elif options == "4":
+            query = input(f"{Fore.LIGHTYELLOW_EX}Enter the search query --=>:{Fore.RESET}")
+            self.search(query)
+
+        elif options == "5":
+            url = input(f"{Fore.LIGHTRED_EX}Enter the video url --=>:{Fore.RESET}")
+            self.get_metadata(url)
+
+        elif options == "6":
+            self.account_page()
+
+        elif options == "7":
+            self.settings()
+
+        elif options == "8":
+            exit(0)
+
+        else:
+            logging(msg="Invalid input. Select in range 1 - 8", level="1")
+
+    def load_variables(self):
+        self.sort_time = self.conf["Porn_Fetch"]["sort_time"]
+        self.sort = self.conf["Porn_Fetch"]["sort"]
+        self.production = self.conf["Porn_Fetch"]["production"]
+        self.output_path = self.conf["Porn_Fetch"]["default_path"]
+
+        if self.conf["Porn_Fetch"]["default_threading"] == "yes":
+            self.threading = True
+
+        else:
+            self.threading = False
+
+        if self.conf["Porn_Fetch"]["delay"] == "true":
+            self.delay = True
+
+        else:
+            self.delay = False
+
+        if self.conf["Porn_Fetch"]["hd"] == "true":
+            self.hd = True
+
+        else:
+            self.hd = False
+
+        if self.conf["Porn_Fetch"]["default_quality"] == "best":
+            self.quality = Quality.BEST
+
+        elif self.conf["Porn_Fetch"]["default_quality"] == "half":
+            self.quality = Quality.HALF
+
+        elif self.conf["Porn_Fetch"]["default_quality"] == "worst":
+            self.quality = Quality.WORST
+
+        else:
+            self.quality = Quality.BEST
+
+    def get_video(self, url):
+
+        self.client = Client(language=self.api_language, delay=self.delay)
+        return self.client.get(url)
 
     def callback(self, pos, total):
         self.pbar = tqdm(total=total, dynamic_ncols=True)
@@ -71,662 +130,515 @@ class CLI():
             self.pbar.close()
             self.pbar = None
 
-    def load_user_settings(self):
+    def download_prerequisites(self, url):
 
-        if not self.conf["License"]["accept"] == "true":
-            _ = input(license_agreement)
+        video = self.get_video(url)
+        if os.path.exists(self.output_path):
+            logging(msg="Started download...", level="0")
+            self.download(video)
 
-            with open("config.ini", "w") as config_file:
+        else:
+            logging(
+                msg="Output path does not exist. Please change it in settings and make sure I have read / write access.",
+                level="1")
 
-                if _ == "1":
-                    self.conf.set("License", "accept", "true")
-                    self.conf.write(config_file)
+    def download(self, video_object, os_error_handler=None):
 
-                elif _ == "2":
-                    self.conf.set("License", "accept", "false")
-                    self.conf.write(config_file)
-                    exit(0)
-
-                else:
-                    logging(msg="License not accepted...", level="1")
-                    exit(0)
-
-        if self.conf["Porn_Fetch"]["default_quality"] == "best":
-            self.quality = Quality.BEST
-
-        elif self.conf["Porn_Fetch"]["default_quality"] == "half":
-            self.quality = Quality.HALF
-
-        elif self.conf["Porn_Fetch"]["default_quality"] == "Worst":
-            self.quality = Quality.WORST
-
-        if self.conf["Porn_Fetch"]["delay"] == "False":
-            self.delay = False
-
-        if self.conf["Porn_Fetch"]["hd"] == "true":
-            self.hd = True
-
-        elif self.conf["Porn_Fetch"]["hd"] == "false":
-            self.hd = False
-
-        self.production = self.conf["Porn_Fetch"]["production"]
-        self.sort_time = self.conf["Porn_Fetch"]["sort_time"]
-        self.sort = self.conf["Porn_Fetch"]["sort"]
-        self.api_language = self.conf["Porn_Fetch"]["api_language"]
-        self.threading_mode = self.conf["Porn_Fetch"]["default_threading"]
-        self.output_path = self.conf["Porn_Fetch"]["default_path"]
-
-
-    def check_video(self, url):
         try:
-            self.client = Client(language=self.api_language, delay=self.delay)
-            return self.client.get(url)
+            if not os_error_handler:
+                logging(msg=f"Starting video download for: {video_object.title}", level="0")
+                video_object.download(path=self.output_path, quality=self.quality, callback=self.callback)
+                logging(msg="Finished :) ", level="0")
 
-        except Exception as e:
-            print(logging(msg=e, level="1"))
-            if self.sentry:
-                sentry_sdk.capture_exception(e)
+            else:
+                logging(msg="Got OSError. Using different integer title.", level="1")
+                random_number = random.randint(0, 1000000)
+                random_number = str(f"{random_number}.mp4")
+                video_object.download(path=self.output_path + random_number, quality=self.quality,
+                                      callback=self.callback)
 
-    def settings(self):
+        except PermissionError:
+            logging(msg=f"Permission denied for: {video_object.title}", level="1")
 
-        options = input(f"""
-{Fore.LIGHTCYAN_EX}1) Change API Language
-{Fore.LIGHTMAGENTA_EX}2) Change default output path
-{Fore.LIGHTYELLOW_EX}3) Change default Quality
-{Fore.LIGHTGREEN_EX}4) Change default Threading mode
-{Fore.LIGHTMAGENTA_EX}5) Change API delay
-{Fore.LIGHTCYAN_EX}6) Change search filters
-{Fore.LIGHTWHITE_EX}7) Back
----------------------=>:""")
+        except OSError:
+            self.download(video_object=video_object, os_error_handler=True)
 
-        with open("config.ini", "w") as config_file:
+    def download_from_file(self, file_path):
 
-            if options == "1":
+        video_objects = []
+        video_urls = []
 
-                option = input(f"""
-Please enter your API language:     {Fore.LIGHTYELLOW_EX} !!! RESTART FOR CHANGES TO TAKE EFFECT !!!
-{Fore.LIGHTGREEN_EX}de | {Fore.LIGHTBLUE_EX}Ge{Fore.LIGHTRED_EX}rm{Fore.LIGHTYELLOW_EX}n
-{Fore.LIGHTCYAN_EX}en | English
-{Fore.LIGHTYELLOW_EX}es | Spanish
-{Fore.LIGHTMAGENTA_EX}ru | Russian
-{Fore.LIGHTBLUE_EX}fr | French
-{Fore.LIGHTGREEN_EX}1) set a custom language (may not work)
-{Fore.LIGHTRED_EX}2) Back
----------------------=>:""")
-                if option == "de" or "en" or "es" or "ru" or "fr":
-                    self.conf.set("Porn_Fetch", "api_language", option)
-                    self.conf.write(config_file)
+        with open(file_path, "r") as file:
+            content = file.read()
+            lines = content.splitlines()
 
-                elif option == "1":
-                    api_language = input(f"""
-{self.z}{Fore.LIGHTCYAN_EX}Enter the language code --=>:""")
-                    self.conf.set("Porn_Fetch", "api_language", api_language)
+            for line in lines:
+                video_urls.append(line)
+
+        for url in video_urls:
+
+            try:
+                video = self.get_video(url)
+                video_objects.append(video)
+                logging(msg=f"Verified: {video.title}", level="0")
+
+            except Exception as e:
+                logging(msg=f"Unexpected error: {e}", level="1")
+
+        print("""
+:-----------------------VIDEOS--------------------------:
 
 
-                elif option == "2":
-                    self.settings()
 
-                else:
-                    print(f"{self.x}{Fore.LIGHTMAGENTA_EX}Wrong input. Please select the language code!")
-
-            elif options == "2":
-                output_path = input(f"{self.z}{Fore.LIGHTBLUE_EX}Please enter the new output path --=>:")
-                if os.path.exists(output_path):
-                    self.conf.set("Porn_Fetch", "default_path", output_path)
-                    self.conf.write(config_file)
-
-                else:
-                    print(f"{self.x}{Fore.RESET}Invalid path.")
-
-                self.settings()
-
-            elif options == "3":
-                option = f"""
-{Fore.LIGHTGREEN_EX}1) Best
-{o}2) Half
-{Fore.LIGHTRED_EX}3) Worst
-{Fore.LIGHTWHITE_EX}4) back
---------------------=>:"""
-
-                if option == "1":
-                    self.conf.set("Porn_Fetch", "default_quality", "best")
-                    self.conf.write(config_file)
-
-                elif option == "2":
-                    self.conf.set("Porn_Fetch", "default_quality", "middle")
-                    self.conf.write(config_file)
-
-                elif option == "3":
-                    self.conf.set("Porn_Fetch", "default_quality", "worst")
-                    self.conf.write(config_file)
-
-                elif option == "4":
-                    self.settings()
-
-                else:
-                    print(f"{self.x}{Fore.RESET}Invalid input. Select in range 1 - 3")
-
-            elif options == "4":
-                option = input(f"""
-{Fore.LIGHTGREEN_EX}1) Yes
-{Fore.LIGHTRED_EX}2) No
-{Fore.LIGHTWHITE_EX}3) back""")
-
-                if option == "1":
-                    self.conf.set("Porn_Fetch", "default_threading", "multiple")
-                    self.conf.write(config_file)
-
-                elif option == "2":
-                    self.conf.set("Porn_Fetch", "default_threading", "single")
-                    self.conf.write(config_file)
-
-                elif option == "3":
-                    self.settings()
-
-                else:
-                    print(f"{self.x}{Fore.RESET}Invalid input!")
-                    self.settings()
-
-            elif options == "5":
-
-                option = input(f"""
-{Fore.LIGHTRED_EX}1) Disable delay  : Can lead to more errors!
-{Fore.LIGHTGREEN_EX}2) Set new delay (Default is 0.5 seconds)
-{Fore.LIGHTYELLOW_EX}3) Back
-{Fore.LIGHTWHITE_EX}-------------=>:""")
-
-            elif options == "6":
-                search_filter_menu = input(f"""
-1) Change HD filter
-2) Change production filter
-3) Change time sort
-4) Change general sort
-5) Back
----------------------=>:
 """)
+        for counter, video in enumerate(video_objects, start=0):
+            print(f"{counter}) {video.title}")
 
-                if search_filter_menu == "1":
-                    hd_filter_options = input(f"""
-1) Enable HD sorting
-2) Disable HD sorting
-3) Back
----------------------=>:""")
+        picked_indexes = input(
+            "Enter the numbers of video you want to download. Separate with comma.  e.g 1,2,3,4 -=>:")
+        numbers = picked_indexes.split(",")
 
-                    if hd_filter_options == "1":
-                        self.conf.set("Porn_Fetch", "hd", "true")
-                        self.conf.write(config_file)
+        for number in numbers:
+            video = video_objects[int(number)]
+            video_id = video.url
+            url_string = "https://www.pornhub.com/"
+            url = f"{url_string}{video_id}"
+            self.download_prerequisites(url)
 
-                    elif hd_filter_options == "2":
-                        self.conf.set("Porn_Fetch", "hd", "false")
-                        self.conf.write(config_file)
+        logging(msg="All videos finished :)", level="0")
 
-                    elif hd_filter_options == "3":
-                        self.settings()
+    def download_from_channel(self, url):
 
+        self.client = Client(language=self.api_language, delay=self.delay)
+        videos = self.client.get_user(url).videos
 
-                    else:
-                        print(f"{self.x}{Fore.RESET}Invalid input. Select in range 1 - 3")
+        for counter, video in enumerate(videos):
+            print(f"{counter}) {video.title}")
 
-
-                elif search_filter_menu == "2":
-                    production_filter_options = input(f"""
-1) Enable professional sorting
-2) Enable homemade sorting
-3) Back
----------------------=>:""")
-
-                    if production_filter_options == "1":
-                        self.conf.set("Porn_Fetch", "production", "professional")
-                        self.conf.write(config_file)
-
-                    elif production_filter_options == "2":
-                        self.conf.set("Porn_Fetch", "production", "homemade")
-                        self.conf.write(config_file)
-
-                    elif production_filter_options == "3":
-                        self.settings()
-
-                    else:
-                        print(f"{self.x}{Fore.RESET}Invalid input. Select in range 1 - 3")
+        picked_indexes = input(""""
 
 
-                elif search_filter_menu == "3":
-                    time_options = input("""
-1) Sort by Day
-2) Sort by Week
-3) Sort by Month
-4) Sort by Year
-5) Back
--------------------------=>:""")
+Enter the numbers of video you want to download. Separate with comma.  e.g 1,2,3,4 -=>:""")
+        numbers = picked_indexes.split(",")
+        for number in numbers:
+            video_id = videos[int(number)].url
+            url_string = "https://www.pornhub.com/"
+            url = f"{url_string}{video_id}"
+            self.download_prerequisites(url)
 
-                    if time_options == "1":
-                        self.conf.set("Porn_Fetch", "sort_time", "day")
-                        self.conf.write(config_file)
+        logging(msg="All videos finished :)", level="0")
 
-                    elif time_options == "2":
-                        self.conf.set("Porn_Fetch", "sort_time", "week")
-                        self.conf.write(config_file)
+    def search(self, query):
 
-                    elif time_options == "3":
-                        self.conf.set("Porn_Fetch", "sort_time", "month")
-                        self.conf.write(config_file)
+        self.client = Client(language=self.api_language, delay=self.delay)
+        search_results = self.client.search(query, hd=self.hd, sort=self.sort, time=self.sort_time,
+                                            production=self.production, category=None, exclude_category=None)
 
-                    elif time_options == "4":
-                        self.conf.set("Porn_Fetch", "sort_time", "year")
-                        self.conf.write(config_file)
+        for counter, video in enumerate(search_results):
+            print(f"{counter}) {video.title}")
 
-                    elif time_options == "5":
-                        self.settings()
+        picked_indexes = input("""
+        
+        
 
-                    else:
-                        print(f"{self.x}{Fore.RESET}Invalid input. Select in range 1 - 5")
+Enter the numbers of video you want to download. Separate with comma. e.g 1,2,3,4 -=>:""")
 
+        numbers = picked_indexes.split(",")
+        for number in numbers:
+            video_id = search_results[int(number)].url
+            url_string = "https://www.pornhub.com/"
+            url = f"{url_string}{video_id}"
+            self.download_prerequisites(url)
 
-                elif options == "4":
-                    general_sort_options = input(f"""
-1) Most relevant
-2) Most recent
-3) Most viewed
-4) Top rated
-5) longest
-6) Back
-----------------------=>:""")
+        logging(msg="All videos finished :)", level="0")
 
-                    if general_sort_options == "1":
-                        self.conf.set("Porn_Fetch", "sort", "most relevant")
-                        self.conf.write(config_file)
+    def get_metadata(self, url):
 
-                    elif general_sort_options == "2":
-                        self.conf.set("Porn_Fetch", "sort", "most recent")
-                        self.conf.write(config_file)
-
-                    elif general_sort_options == "3":
-                        self.conf.set("Porn_Fetch", "sort", "most viewed")
-                        self.conf.write(config_file)
-
-                    elif general_sort_options == "4":
-                        self.conf.set("Porn_Fetch", "sort", "top rated")
-                        self.conf.write(config_file)
-
-                    elif general_sort_options == "5":
-                        self.conf.set("Porn_Fetch", "sort", "longest")
-                        self.conf.write(config_file)
-
-                    elif general_sort_options == "6":
-                        self.settings()
-
-                    else:
-                        print(f"{self.x}{Fore.RESET}Invalid input. Select in range 1 - 6")
-
-                elif options == "5":
-                    self.settings()
-
-
-
-
-            elif options == "7":
-                self.menu()
-
-
-    def menu(self):
-
-        options = input(f"""
-                SETTINGS    
-{Fore.RESET}|---------------------------------------|
-|   {Fore.LIGHTCYAN_EX}Threading{Fore.RESET}  : {self.threading_mode}  
-|   {Fore.LIGHTGREEN_EX}Quality{Fore.RESET}    : {self.quality}        
-|   {Fore.LIGHTMAGENTA_EX}API Delay{Fore.RESET}  : {self.delay}           
-|   {Fore.LIGHTBLUE_EX}API Lang{Fore.RESET}   : {self.api_language}    
-|   {Fore.LIGHTGREEN_EX}Output Path:{Fore.RESET} {self.output_path}     
-|---------------------------------------|
-
-
-{Fore.LIGHTCYAN_EX}1) Download a single Video
-{Fore.LIGHTMAGENTA_EX}2) Download videos from a file
-{Fore.LIGHTYELLOW_EX}3) Download all videos from a User / Channel
-{Fore.LIGHTBLUE_EX}4) Get metadata from Videos
-{Fore.LIGHTMAGENTA_EX}5) Search for videos and download them
-{o}6) Account page
-{Fore.LIGHTWHITE_EX}7) Settings
-{Fore.LIGHTRED_EX}8) Credits
-{Fore.LIGHTBLUE_EX}9) Exit
-{Fore.RESET}-------------------->:{Fore.RESET} """)
-
-
-
-        if options == "1":
-            url = input(f"""
-{self.z}{Fore.LIGHTCYAN_EX}Please enter the video URL --->:""")
-            self.download_video(url)
-
-        elif options == "2":
-            self.download_from_file()
-
-        elif options == "3":
-            self.download_channel_user()
-
-        elif options == "4":
-            self.get_metadata()
-
-        elif options == "5":
-            self.search_videos()
-
-        elif options == "6":
-            self.account_menu()
-
-        elif options == "7":
-            self.settings()
-
-        elif options == "8":
-            sys.exit(0)
-
-    def raw_download(self, video):
+        video = self.get_video(url)
 
         title = video.title
-        title = strip_title(title)
-        print(f"{self.z}{Fore.LIGHTMAGENTA_EX}Downloading: {Fore.RESET}{title}")
+        rating = f"""Likes: {video.like.up} Dislikes: {video.like.down}"""
+        rating = str(rating)
+        views = video.views
+        views = str(views)
+        duration = video.duration
+        duration = str(duration)
+        author = video.author
+        date = video.date
+        date = str(date)
+        hotspots = video.hotspots
+        hotspots = str(hotspots)
+        is_vertical = video.is_vertical
 
-        try:
-            video.download(path=self.output_path, callback=self.callback, quality=self.quality)
-            print(f"{self.z}{Fore.LIGHTBLUE_EX}Download finished :) ")
+        if is_vertical:
+            is_vertical = "Yes"
 
-        except Exception as e:
-            logging(e, level="1")
-            if self.sentry:
-                sentry_sdk.capture_exception(e)
+        else:
+            is_vertical = "No"
 
-    def download_video(self, url):
-
-        mode = self.threading_mode
-        video = self.check_video(url)
-
-        if mode == "single":
-            self.raw_download(video)
-
-        elif mode == "multiple":
-            t = threading.Thread(target=self.raw_download, args=(video, ))
-            print(f"{self.z}{Fore.RESET}Running Thread: {t.name}")
-            t.start()
-
-    def download_from_file(self):
-        file = input(f"""
-{self.z}{Fore.LIGHTYELLOW_EX}Path to URL file -->:""")
-
-        with open(file, "r") as url_file:
-            content = url_file.read().encode("utf-8").splitlines()
-
-            total_urls = len(content)
-            valid_urls = []
-            titles = []
-
-            print(f"{self.z}{Fore.LIGHTCYAN_EX}Found: {total_urls}")
-            print(f"{self.z}{Fore.LIGHTMAGENTA_EX}Verifying URLs...")
-
-
-            for url in tqdm(content):
-                try:
-                    video = self.check_video(url)
-                    titles.append(video.title)
-                    valid_urls.append(url)
-
-                except Exception as e:
-                    print(f"{self.x}{Fore.RESET}URL: {url} is invalid.")
-
-            for counter, title in enumerate(titles, start=1):
-                print(f"{counter}) {title}")
-
-            chosen_titles = input(f"""
-{self.z}{Fore.RESET}Enter the numbers you want to download (eg 1,2,3,4) --=>:""")
-            chosen_titles = str(chosen_titles).split(",")
-
-            chosen_urls = []
-
-            for url_ in chosen_titles:
-                url = valid_urls[int(url_)]
-                chosen_urls.append(url)
-
-            for _url in chosen_urls:
-                self.download_video(_url)
-
-    def download_channel_user(self):
-
-        user = input(f"""
-{self.z}{Fore.LIGHTMAGENTA_EX}Please enter the URL to the User / Model / Channel Account -->:""")
-
-        user_object = self.client.get_user(user)
-
-        videos = user_object.videos
-        url_list = []
-        titles = []
-
-        for counter, title in enumerate(titles, start=1):
-            print(f"{counter}) {title}")
-
-        chosen_titles = input(f"""
-        {self.z}{Fore.RESET}Enter the numbers you want to download (eg 1,2,3,4) --=>:""")
-        chosen_titles = str(chosen_titles).split(",")
-
-        chosen_urls = []
-
-        for url_ in chosen_titles:
-            url = url_list[int(url_)]
-            chosen_urls.append(url)
-
-
-        for _url in chosen_urls:
-            self.download_video(_url)
-
-    def get_metadata(self):
-
-        url = input(f"""
-{self.z}{Fore.LIGHTBLUE_EX}Please enter the URL of the video:""")
-
-        print(f"{self.z}{Fore.LIGHTMAGENTA_EX}Getting metadata....")
-        video = self.check_video(url)
-        title = video.title
-        likes_up = video.like.up
-        likes_down = video.like.down
         image_url = video.image_url
         tags = video.tags
-        tag_list = []
-
-        for tag in tags:
-            tag_list.append(tag.name)
-
-        author = video.author.name
-        views = video.views
-        date = video.date
-        duration = video.duration
-        hotspots = video.hotspots
-        likes = f"Likes: {likes_up} | Dislikes: {likes_down}"
 
         print(f"""
 {Fore.RESET}
 Title: {title}
-Rating: {likes}
-Image URL: {image_url}
-Tags: {str(tag_list).strip("[").strip("]")}
-Author: {author}
+Rating: {rating}
 Views: {views}
-Date: {date}
 Duration: {duration}
+Author: {author}
+Date: {date}
 Hotspots: {hotspots}
--- END --""")
+Is vertical: {is_vertical}
+Image URL: {image_url}
+Tags: {tags}
 
-        input(f"{Fore.RESET}Press ENTER to continue...")
+-- END -- """)
 
-    def search_ext_2(self, search):
-
-        urls = []
-        for count, video in enumerate(search):
-            print(f"{count}) {video.title}")
-            urls.append(video.url)
-
-        downloads = input(Fore.RESET + "Enter the number of videos you want to download. Separate by comma e.g 1,7,12-->:")
-        videos = downloads.split(",")
-
-        for number in videos:
-            base_url = "https://www.pornhub.com/"
-            additional_url = urls[int(number)]
-            url = base_url + additional_url
-            self.download_video(url)
-
-    def search_ext(self, search_query):
-
-        try:
-            search = self.client.search(search_query, production=self.production, time=self.sort_time, sort=self.sort, hd=self.hd)
-            return search
-
-        except ConnectionError:
-            pass  # This is an issue from PornHub and not from my Application. I can not fix it anyway
-
-    def search_videos(self):
-
-
-        search_query = input(f"""
-{self.z}{Fore.RESET}Please enter your search query -->:""")
-
-        print(self.z + Fore.LIGHTMAGENTA_EX + "Searching....")
-        search = self.search_ext(search_query)
-
-        if len(search) == 0:
-            print(f"{self.x}{Fore.LIGHTWHITE_EX}PornHub didn't return data. Trying automatic resolve.  Please higher the API delay in settings")
-            print(f"{self.z}{Fore.LIGHTWHITE_EX}Trying a new initialization to the Client Object...")
-            self.client = Client(language=self.api_language, delay=self.delay)
-
-            try:
-                search = self.client.search(search_query)
-
-            except ConnectionError:
-                pass
-
-            if len(search) == 0:
-                print(f"{self.x}{Fore.LIGHTMAGENTA_EX}Failed.  Sorry, you need to wait or use a VPN.")
-                self.menu()
-
-            else:
-                self.search_ext_2(search)
-
-        else:
-            self.search_ext_2(search)
-
-    def account_menu(self):
-
-        options = input(f"""
-{Fore.LIGHTGREEN_EX}1) Login   :                [ Status: {self.login_status} ]
+    def account_page(self):
+        account_menu = input(f"""
+{Fore.LIGHTGREEN_EX}1) Login
 {Fore.LIGHTYELLOW_EX}2) Get liked videos
-{Fore.LIGHTCYAN_EX}3) Get watched videos
-{o}4) Get recommendations
-{Fore.LIGHTRED_EX}5) Back
----------------------------=>:""")
+{Fore.LIGHTMAGENTA_EX}3) Get watched videos
+{Fore.LIGHTCYAN_EX}4) Get recommended videos
+{Fore.LIGHTRED_EX}5) Back {Fore.RESET}
+-------------------------=>:""")
 
-        if options == "1":
+        if account_menu == "1":
             self.login()
 
-        elif options == "2":
+        elif account_menu == "2":
             self.get_liked_videos()
 
-        elif options == "3":
+        elif account_menu == "3":
             self.get_watched_videos()
 
-        elif options == "4":
+        elif account_menu == "4":
             self.get_recommended_videos()
 
-        elif options == "5":
-            self.menu()
+
+        elif account_menu == "5":
+            self.main_menu()
 
         else:
-            print(f"{self.x}{Fore.RESET}Wrong input. Select in range 1 - 5 ")
+            logging(msg="Please enter a valid number in range 1 - 5 ", level="1")
 
     def login(self):
 
-        username = input(f"""
-{self.z}{Fore.RESET}Please enter your PornHub username --=>:""")
-        password = getpass.getpass(f"""
-{self.z}{Fore.RESET}Please enter your password --=>:""")
+        username = input(f"{self.z}{Fore.LIGHTCYAN_EX}Please enter your username --=>:{Fore.RESET}")
+        password = getpass.getpass(f"{self.z}{Fore.LIGHTMAGENTA_EX}Please enter your password --=>:{Fore.RESET}")
 
         try:
-            self.client = Client(username=username, password=password, delay=self.delay, language=self.api_language)
-            name = self.client.account.name
-            self.login_status = f"{Fore.LIGHTGREEN_EX}Logged in as: {name}"
-            print(f"{self.z}{Fore.LIGHTCYAN_EX}[SUCCESS]")
-            self.account_menu()
 
-        except Exception as e:
-            if str(e) == "LogginFailed":
-                logging(msg="Login failed. Check your credentials!", level="1")
-                self.login()
+            self.client = Client(language=self.api_language, delay=self.delay, username=username, password=password)
+            logging(f"Logged in as: {self.client.account.name}")
 
-            else:
-                logging(msg=e, level="1")
-                if self.sentry:
-                    sentry_sdk.capture_exception(e)
+        except errors.LogginFailed:
+            logging(msg="Login failed. Please try again.", level="1")
+
+        except errors.AlreadyLoggedIn:
+            logging(msg="Already logged in. Please try again.", level="1")
 
     def get_liked_videos(self):
 
-        liked_videos = self.client.account.liked
-        video_list_url = []
-        video_list_title = []
-
-        for video in liked_videos:
-            video_list_title.append(video.title)
-            video_list_url.append(video.url)
-
-        for counter, title in enumerate(video_list_title):
-            print(f"{counter}) {title}")
-
-        chosen_titles = input(f"""
-{self.z}{Fore.RESET}Enter the videos you want to download (eg 1,2,3,4) --=>:""")
-
-        _ = str(chosen_titles).split(",")
-
-        for index in _:
-            url = video_list_url[int(index)]
-            self.download_video(url)
+        liked_object = self.client.account.liked
+        liked_videos = liked_object.videos
+        self.iterate_and_download(liked_videos)
 
     def get_watched_videos(self):
 
-        watched_videos = self.client.account.watched
-        video_list_url = []
-        video_list_title = []
-
-        for video in watched_videos:
-            video_list_title.append(video.title)
-            video_list_url.append(video.url)
-
-        for counter, title in enumerate(video_list_title):
-            print(f"{counter}) {title}")
-
-        chosen_titles = input(f"""
-        {self.z}{Fore.RESET}Enter the videos you want to download (eg 1,2,3,4) --=>:""")
-
-        _ = str(chosen_titles).split(",")
-
-        for index in _:
-            url = video_list_url[int(index)]
-            self.download_video(url)
+        watched_object = self.client.account.watched
+        watched_videos = watched_object.videos
+        self.iterate_and_download(watched_videos)
 
     def get_recommended_videos(self):
 
-        recommended = self.client.account.recommended
-        video_list_url = []
-        video_list_title = []
+        recommended_object = self.client.account.reccomended
+        recommended_videos = recommended_object.videos
+        self.iterate_and_download(recommended_videos)
 
-        for video in recommended:
-            video_list_title.append(video.title)
-            video_list_url.append(video.url)
+    def iterate_and_download(self, iterator):
 
-        for counter, title in enumerate(video_list_title):
-            print(f"{counter}) {title}")
+        urls = []
 
-        chosen_titles = input(f"""
-        {self.z}{Fore.RESET}Enter the videos you want to download (eg 1,2,3,4) --=>:""")
+        for counter, video in enumerate(iterator):
+            print(f"{counter}) {video.title}")
+            urls.append(video.url)
 
-        _ = str(chosen_titles).split(",")
+        selected_indexes = input(
+            f"{self.z}{Fore.LIGHTCYAN_EX}Enter the numbers of video you want to download. Separate with comma e.g 1,"
+            f"2,3,4 -=>:{Fore.RESET}")
 
-        for index in _:
-            url = video_list_url[int(index)]
-            self.download_video(url)
+        numbers = selected_indexes.split(",")
+        for number in numbers:
+            self.download_prerequisites(url=urls[int(number)])
+
+    def settings(self):
+        settings_main_menu = input(f"""
+{Fore.LIGHTCYAN_EX}1) Change API language
+{Fore.LIGHTRED_EX}2) Change delay
+{Fore.LIGHTGREEN_EX}3) Change quality
+{Fore.LIGHTYELLOW_EX}4) Change output path
+{Fore.LIGHTMAGENTA_EX}5) Define search filters
+{Fore.LIGHTBLUE_EX}6) Back {Fore.RESET}
+----------------------=>:""")
+
+        if settings_main_menu == "1":
+            self.settings_api_language()
+
+        elif settings_main_menu == "2":
+            self.settings_delay()
+
+        elif settings_main_menu == "3":
+            self.settings_quality()
+
+        elif settings_main_menu == "4":
+            self.settings_output_path()
+
+        elif settings_main_menu == "5":
+            self.settings_search_filters()
+
+        elif settings_main_menu == "6":
+            self.main_menu()
+
+        else:
+            logging(msg="Please enter a valid number in range 1 - 6", level="1")
+
+    def settings_api_language(self):
+
+        language = input("""
+Please enter the language code.
+You can see the supported list down below. You can also use a custom language code, but this may 
+not work. Please also note, that many videos are only in English. PornHub needs to automatically translate them!
+
+en  : English
+de  : German
+es  : Spanish
+ru  : Russian
+fr  : French
+
+----------------------=>:""")
+
+        with open("config.ini", "w") as config:
+            self.conf.set("Porn_Fetch", "api_language", language)
+            self.conf.write(config)
+            self.settings()
+
+    def settings_delay(self):
+
+        delay = input(f"""
+The default delay is 0.5 seconds per API request. Note: If disabling the delay, you will encounter a lot of errors.
+Do NOT report any errors caused with deactivated delay!
+
+Thanks.
+
+
+{Fore.LIGHTRED_EX}1) Disable delay 
+{Fore.LIGHTGREEN_EX}2) Enable delay {Fore.RESET}
+----------------------------=>:""")
+
+        with open("config.ini", "w") as config:
+
+            if delay == "1":
+                self.conf.set("Porn_Fetch", "delay", "false")
+                self.conf.write(config)
+
+            elif delay == "2":
+                self.conf.set("Porn_Fetch", "delay", "true")
+                self.conf.write(config)
+
+            else:
+                logging(msg="Please enter a valid number.", level="1")
+                self.settings_delay()
+
+            self.settings()
+
+    def settings_quality(self):
+
+        quality = input(f"""
+{Fore.LIGHTGREEN_EX}1) Highest quality possible
+{Fore.LIGHTMAGENTA_EX}2) Medium / half quality
+{Fore.LIGHTRED_EX}3) Lowest quality {Fore.RESET}
+-----------------------------=>:""")
+
+        with open("config.ini", "w") as config:
+
+            if quality == "1":
+                self.conf.set("Porn_Fetch", "default_quality", "best")
+                self.conf.write(config)
+
+            elif quality == "2":
+                self.conf.set("Porn_Fetch", "default_quality", "half")
+                self.conf.write(config)
+
+            elif quality == "3":
+                self.conf.set("Porn_Fetch", "default_quality", "worst")
+                self.conf.write(config)
+
+            else:
+                logging(msg="Please enter a valid number.", level="1")
+                self.settings_quality()
+
+    def settings_output_path(self):
+
+        new_output_path = input(f"""
+{self.z}{Fore.LIGHTWHITE_EX}Please enter the new output path (with a / or \\ at the end!) {Fore.RESET}
+
+-----------------=>:""")
+
+        if not os.path.exists(new_output_path):
+            logging(msg=f"The path {new_output_path} does not exist.", level="1")
+            self.settings_output_path()
+
+        else:
+            with open("config.ini", "w") as config:
+                self.conf.set("Porn_Fetch", "default_path", new_output_path)
+                self.conf.write(config)
+                self.settings()
+
+    def settings_search_filters(self):
+
+        options_menu = input(f"""
+
+{Fore.LIGHTCYAN_EX}1) Change production filter
+{Fore.LIGHTMAGENTA_EX}2) Change time sort filter
+{Fore.LIGHTYELLOW_EX}3) Change general sort filter
+{Fore.LIGHTGREEN_EX}4) Change HD filtering {Fore.RESET}
+-----------------------------=>:""")
+
+        if options_menu == "1":
+            menu = input(f"""
+
+{Fore.LIGHTCYAN_EX}1) filter for only professional videos
+{Fore.LIGHTMAGENTA_EX}2) filter for only homemade videos
+{Fore.LIGHTRED_EX}3) disable filter {Fore.RESET}
+-----------------------------=>:""")
+
+            with open("config.ini", "w") as config:
+
+                if menu == "1":
+                    self.conf.set("Porn_Fetch", "production", "professional")
+                    self.conf.write(config)
+
+                elif menu == "2":
+                    self.conf.set("Porn_Fetch", "production", "homemade")
+                    self.conf.write(config)
+
+                elif menu == "3":
+                    self.conf.set("Porn_Fetch", "production", "none")
+                    self.conf.write(config)
+
+
+                else:
+                    logging(msg="Please enter a valid number.", level="1")
+
+                self.settings_search_filters()
+
+        elif options_menu == "2":
+            menu = input(f"""
+{Fore.LIGHTCYAN_EX}1) Filter by Day
+{Fore.LIGHTMAGENTA_EX}2) Filter by Week
+{Fore.LIGHTYELLOW_EX}3) Filter by Month
+{Fore.LIGHTGREEN_EX}4) Filter by Year
+{Fore.LIGHTBLUE_EX}5) Disable filter {Fore.RESET}
+-----------------------------=>:""")
+
+            with open("config.ini", "w") as config:
+
+                if menu == "1":
+                    self.conf.set("Porn_Fetch", "sort_time", "day")
+                    self.conf.write(config)
+
+                elif menu == "2":
+                    self.conf.set("Porn_Fetch", "sort_time", "week")
+                    self.conf.write(config)
+
+                elif menu == "3":
+                    self.conf.set("Porn_Fetch", "sort_time", "month")
+                    self.conf.write(config)
+
+                elif menu == "4":
+                    self.conf.set("Porn_Fetch", "sort_time", "year")
+                    self.conf.write(config)
+
+                elif menu == "5":
+                    self.conf.set("Porn_Fetch", "sort_time", "none")
+                    self.conf.write(config)
+
+                else:
+                    logging(msg="Please enter a valid number.", level="1")
+
+                self.settings_search_filters()
+
+        elif options_menu == "3":
+            menu = input(f"""
+{Fore.LIGHTCYAN_EX}1) most recent
+{Fore.LIGHTMAGENTA_EX}2) most viewed
+{Fore.LIGHTYELLOW_EX}3) top rated
+{Fore.LIGHTGREEN_EX}4) most relevant
+{Fore.LIGHTBLUE_EX}5) longest
+{Fore.LIGHTRED_EX}6) disable filter
+{Fore.LIGHTWHITE_EX}7) back {Fore.RESET}
+-------------------------------------=>:
+""")
+
+            with open("config.ini", "w") as config:
+
+                if menu == "1":
+                    self.conf.set("Porn_Fetch", "sort", "most recent")
+                    self.conf.write(config)
+
+                elif menu == "2":
+                    self.conf.set("Porn_Fetch", "sort", "most viewed")
+                    self.conf.write(config)
+
+                elif menu == "3":
+                    self.conf.set("Porn_Fetch", "sort", "top rated")
+                    self.conf.write(config)
+
+                elif menu == "4":
+                    self.conf.set("Porn_Fetch", "sort", "most relevant")
+                    self.conf.write(config)
+
+                elif menu == "5":
+                    self.conf.set("Porn_Fetch", "sort", "longest")
+                    self.conf.write(config)
+
+                elif menu == "6":
+                    self.conf.set("Porn_Fetch", "sort", "none")
+                    self.conf.write(config)
+
+                elif menu == "7":
+                    self.settings_search_filters()
+
+                else:
+                    logging(msg="Please enter a valid number.", level="1")
+
+                self.settings_search_filters()
+
+        elif options_menu == "4":
+            menu = input(f"""
+HD = High quality. If enabled, HD videos will be shown first.
+
+{Fore.LIGHTGREEN_EX}1) Enable HD filtering
+{Fore.LIGHTRED_EX}2) Disable HD filtering {Fore.RESET}
+-----------------------------=>:""")
+
+            with open("config.ini", "w") as config:
+
+                if menu == "1":
+                    self.conf.set("Porn_Fetch", "hd", "true")
+                    self.conf.write(config)
+
+                elif menu == "2":
+                    self.conf.set("Porn_Fetch", "hd", "false")
+                    self.conf.write(config)
+
+                else:
+                    logging(msg="Please enter a valid number.", level="1")
+
+                self.settings_search_filters()
+
 
 if __name__ == "__main__":
     CLI()
+

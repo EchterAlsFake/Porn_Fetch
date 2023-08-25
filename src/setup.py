@@ -24,7 +24,6 @@ production = false
 
 [Debug]
 sentry = false
-logging = false
 
 [UI]
 transparency = 0
@@ -34,15 +33,15 @@ language = en
 categories = 
 """
 
+
 def logging(msg, level):
 
-    with open("log.log", "a") as log_file:
+    if level == "0":
+        print(f"{Fore.LIGHTCYAN_EX} : DEBUG : {Fore.RESET} : MSG : {msg}")
 
-        if level == "0":
-            print(f"{Fore.LIGHTCYAN_EX} : DEBUG : {Fore.RESET} : MSG : {msg}")
+    elif level == "1":
+        print(f"[{Fore.LIGHTRED_EX} : ERROR : {Fore.RESET} : MSG : {msg} ")
 
-        elif level == "1":
-            print(f"[{Fore.LIGHTRED_EX} : ERROR : {Fore.RESET} : MSG : {msg} ")
 
 def strip_title(title):
     disallowed_chars = ["<", ">", ":", '"', "/", "\\", "|", "*", "0", "(", ")", "!"]
@@ -51,6 +50,7 @@ def strip_title(title):
         title = str(title).replace(disallowed_char,"")  # Fixes the OS Error from V1.8.  The error mostly happens on Windows
 
     return title
+
 
 def get_graphics():
 
@@ -76,6 +76,7 @@ def before_send(event):
         'platform': event.get('platform'),
     }
 
+
 def enable_error_handling():
     sentry_sdk.init(
 
@@ -87,10 +88,6 @@ def enable_error_handling():
         traces_sample_rate=1.0,
         before_send=before_send,
     )
-
-
-def check_path(path):
-    return bool(os.path.exists(path))
 
 
 def ask_for_sentry_cli():
@@ -119,13 +116,14 @@ This collects the following:
 
 
 def setup_config_file(force=False):
-    sections = ['License', "Porn_Fetch", "Debug", "UI"]
+    sections = ['License', "Porn_Fetch", "Debug", "UI", "SelectedCategories"]
     config_file = "config.ini"
 
     if force or not os.path.exists(config_file):
         with open(config_file, "w") as config:
             config.write(data)
             config.close()
+
 
 
     conf = ConfigParser()
@@ -163,6 +161,3 @@ def internet_test():
             f"{Fore.LIGHTRED_EX}[~]{Fore.RESET}Could not connect to PornHub. Please make sure you are using a stable / secure internet connection.")
         return False
 
-def clear():
-    os.system("cls")
-    os.system("clear")

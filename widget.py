@@ -111,6 +111,7 @@ class Widget(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.sentry = None
         self.setup()
 
         if not os.path.exists("graphics"):
@@ -171,8 +172,8 @@ QLineEdit {
     border: 2px solid #757575;
     border-radius: 12px;
     padding: 0 8px;
-    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */
-    color: #FFFFFF;  /* setzt die Textfarbe auf Weiß */
+    background: rgb(94, 92, 100);
+    color: #FFFFFF;
     font-size: 16px;
     height: 20px;
 }
@@ -182,8 +183,8 @@ QLineEdit:focus {
 }
 
 QLineEdit:disabled {
-    background: #444444;  /* setzt den Hintergrund auf ein dunkles Grau, wenn das QLineEdit deaktiviert ist */
-    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */
+    background: #444444;
+    color: #aaaaaa;
     border-color: #aaaaaa;
  }""")
         self.search_bar.setPlaceholderText("Search category...")
@@ -275,13 +276,13 @@ QLineEdit:disabled {
     def get_mode(self):
 
         if self.ui.radio_threading_no.isChecked():
-            self.mode = "no"
+            self.mode = False
 
         elif self.ui.radio_threading_yes.isChecked():
-            self.mode = "yes"
+            self.mode = True
 
         else:
-            self.mode = "yes"
+            self.mode = True
 
     def sentry_data_collection(self):
 
@@ -373,14 +374,6 @@ Thanks :)
             self.video = self.client.get(url)
             return self.video
 
-
-        except IndexError:
-            print("API Error: Setting delay to 3 seconds.  Please wait a few seconds....")
-            logging(msg="IndexError: Settings delay to 3 seconds....", level="1")
-            self.delay = 3
-            logging(msg="Retrying....", level="0")
-            self.test_video(url)
-
         except Exception as e:
             ui_popup(f"There was an error : {e} ")
             logging(msg=e, level="1")
@@ -414,14 +407,14 @@ Thanks :)
         output_path = output_path + title + ".mp4"
 
         try:
-            if self.mode == "yes":
+            if self.mode:
                 self.download_thread = DownloadThread(video, quality, output_path)
                 self.download_thread.signals.progress.connect(
                     lambda pos, total, pb=progress_bar: update_progressbar(pos, total, pb))
                 self.threadpool.start(self.download_thread)
                 logging(msg="Started download thread...", level="0")
 
-            elif self.mode == "no":
+            elif not self.mode:
                 logging(msg="Running in main thread...", level="0")
                 self.video.download(callback=self.callback, quality=quality, path=output_path)
 
@@ -435,8 +428,6 @@ Thanks :)
             logging(msg=e, level="1")
             if self.sentry:
                 sentry_sdk.capture_exception(e)
-
-
 
     def start_file(self):
 
@@ -508,20 +499,26 @@ Thanks :)
         user = self.ui.lineedit_user_channel.text()
         logging(msg=f"USER: {user}", level="0")
 
-        videos = self.client.get_user(url=user)
-        total_videos = videos.videos
-        user_objects = []
+        try:
+            videos = self.client.get_user(url=user)
 
-        url_string = "https://www.pornhub.com/"
-        for video in total_videos:
-            split_url = video.url
-            url = f"{url_string}{split_url}"
+        except phub.errors.UserNotFoundError:
+            ui_popup("The user was not found. Remember: You need to enter a URL, not a name!")
 
-            video_object = self.test_video(url)
-            user_objects.append(video_object)
+        else:
+            total_videos = videos.videos
+            user_objects = []
+
+            url_string = "https://www.pornhub.com/"
+            for video in total_videos:
+                split_url = video.url
+                url = f"{url_string}{split_url}"
+
+                video_object = self.test_video(url)
+                user_objects.append(video_object)
 
 
-        self.add_to_tree_widget(user_objects, tree_widget=self.ui.treeWidget)
+            self.add_to_tree_widget(user_objects, tree_widget=self.ui.treeWidget)
 
     def download_thumbnail(self):
         url = self.ui.lineedit_image_url.text()
@@ -596,7 +593,7 @@ Thanks :)
                 self.conf.set("Porn_Fetch", "sort_time", "month")
 
             elif self.ui.radio_nothing_2.isChecked():
-                self.conf.set("Porn_Fetch", "sort_time", "false")
+                self.conf.set("Porn_Fetch", "sort_time", "none")
 
             if self.ui.radio_most_recent.isChecked():
                 self.conf.set("Porn_Fetch", "sort", "most_recent")
@@ -611,7 +608,7 @@ Thanks :)
                 self.conf.set("Porn_Fetch", "sort", "top_rated")
 
             elif self.ui.radio_nothing.isChecked():
-                self.conf.set("Porn_Fetch", "sort", "false")
+                self.conf.set("Porn_Fetch", "sort", "none")
 
             elif self.ui.radio_longest.isChecked():
                 self.conf.set("Porn_Fetch", "sort", "longest")
@@ -623,13 +620,13 @@ Thanks :)
                 self.conf.set("Porn_Fetch", "production", "professional")
 
             if not self.ui.checkbox_professional.isChecked() and not self.ui.checkbox_homemade.isChecked():
-                self.conf.set("Porn_Fetch", "production", "false")
+                self.conf.set("Porn_Fetch", "production", "none")
 
             if self.ui.radio_highest.isChecked():
                 self.conf.set("Porn_Fetch", "default_quality", "best")
 
             if self.ui.radio_half.isChecked():
-                self.conf.set("Porn_Fetch", "default_quality", "middle")
+                self.conf.set("Porn_Fetch", "default_quality", "half")
 
             if self.ui.radio_lowest.isChecked():
                 self.conf.set("Porn_Fetch", "default_quality", "worst")
@@ -695,7 +692,7 @@ Thanks :)
             self.ui.settings_checkbox_delay.setChecked(False)
             self.delay = False
 
-        if self.conf["Porn_Fetch"]["sort"] == "most_viewed":
+        if self.conf["Porn_Fetch"]["sort"] == "most viewed":
             self.ui.radio_most_viewed.setChecked(True)
             self.sort = "most viewed"
 
@@ -734,7 +731,7 @@ Thanks :)
             self.ui.radio_year.setChecked(True)
             self.sort_time = "year"
 
-        elif self.conf["Porn_Fetch"]["sort_time"] == "false":
+        elif self.conf["Porn_Fetch"]["sort_time"] == "none":
             self.sort_time = None
 
         if self.conf["Porn_Fetch"]["production"] == "homemade":
@@ -756,7 +753,7 @@ Thanks :)
         if self.conf["Porn_Fetch"]["default_quality"] == "best":
             self.ui.radio_highest.setChecked(True)
 
-        elif self.conf["Porn_Fetch"]["default_quality"] == "middle":
+        elif self.conf["Porn_Fetch"]["default_quality"] == "half":
             self.ui.radio_half.setChecked(True)
 
         elif self.conf["Porn_Fetch"]["default_quality"] == "worst":
@@ -824,8 +821,14 @@ Thanks :)
             self.ui.lineedit_account_status.setText(f"Logged in as: {self.client.account.name}")
             self.ui.groupBox_7.setEnabled(True)
 
-        except phub.consts.LogginFailed:
-            ui_popup("Wrong username / password!")
+        except phub.errors.LogginFailed:
+            logging(msg="Login Failed. Check credentials!", level="1")
+            ui_popup("Login Failed. Check credentials!")
+
+        except phub.errors.AlreadyLoggedIn:
+            logging(msg="Already logged in", level="1")
+            ui_popup("Already logged in.")
+
 
     def add_to_tree_widget(self, iterator, tree_widget):
         tree_widget.clear()
