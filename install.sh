@@ -4,7 +4,7 @@
 # Currently supported: Arch Linux, Ubuntu, Termux
 
 echo "Please select your distribution. If your distribution is not in the list, make an Issue about it!"
-options="Arch-Linux Ubuntu Termux"
+options="Arch-Linux Ubuntu Termux Fedora OpenSUSE"
 select option in $options; do
   if [ "Arch-Linux" = $option ]; then
         echo "You've chosen arch linux"
@@ -63,6 +63,36 @@ select option in $options; do
         chmod +x Porn_Fetch
         echo "Porn Fetch is now in the dist directory (Porn_Fetch/src/dist/) Run it with ./Porn_Fetch"
         exit
+
+  elif [ $option = "Fedora" ]; then
+      echo "You've chosen fedora"
+      sudo dnf install -y git python3-virtualenv qt5-devel
+      git clone https://github.com/EchterAlsFake/Porn_Fetch
+        cd Porn_Fetch
+        cd src
+        pip install -r requirements_termux.txt
+        pyinstaller -F cli.py
+        cd dist
+        mv cli Porn_Fetch
+        chmod +x Porn_Fetch
+        echo "Porn Fetch is now in the dist directory (Porn_Fetch/src/dist/) Run it with ./Porn_Fetch"
+        exit
+
+    elif [ "OpenSUSE" = $option ]; then
+
+      echo "You've chosen OpenSUSE"
+      sudo zypper install -y git python3-virtualenv libqt5-qtbase-devel
+      git clone https://github.com/EchterAlsFake/Porn_Fetch
+        cd Porn_Fetch
+        cd src
+        pip install -r requirements_termux.txt
+        pyinstaller -F cli.py
+        cd dist
+        mv cli Porn_Fetch
+        chmod +x Porn_Fetch
+        echo "Porn Fetch is now in the dist directory (Porn_Fetch/src/dist/) Run it with ./Porn_Fetch"
+        exit
+
   else
         echo "Error"
   fi
