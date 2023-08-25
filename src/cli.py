@@ -6,6 +6,7 @@ import random
 from configparser import ConfigParser
 import getpass
 from colorama import *
+import threading
 
 try:
     from src.setup import logging, setup_config_file, internet_test
@@ -135,8 +136,12 @@ class CLI():
         video = self.get_video(url)
         if os.path.exists(self.output_path):
             logging(msg="Started download...", level="0")
-            self.download(video)
+            if self.threading:
+                download_thread = threading.Thread(target=self.download, args=(video, ))
+                download_thread.start()
 
+            else:
+                self.download(video)
         else:
             logging(
                 msg="Output path does not exist. Please change it in settings and make sure I have read / write access.",
