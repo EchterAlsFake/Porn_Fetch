@@ -2,6 +2,11 @@
 
 ![Build](https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg)
 
+# Information
+
+School takes up my entire energy. Even with 2 Monster Enegry intus, my brain doesn't work.<br>
+I will focus on developing on the weekend. V2.5 will be released on Sunday.
+
 # Table of Contents
 
 - [What is Porn Fetch?](#what-is-porn-fetch)<br>
