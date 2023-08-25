@@ -210,6 +210,7 @@ QLineEdit:disabled {
         self.ui.button_settings_help.clicked.connect(self.help)
         self.ui.button_switch_to_account.clicked.connect(self.switch_to_account)
         self.ui.button_switch_main_page.clicked.connect(self.switch_to_main)
+        self.ui.button_switch_to_main_widget.clicked.connect(self.switch_to_main)
         self.ui.button_account_login.clicked.connect(self.login)
         self.ui.button_account_list_liked_videos.clicked.connect(self.get_liked_videos)
         self.ui.button_account_list_rec_videos.clicked.connect(self.get_recommended_videos)
