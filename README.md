@@ -4,7 +4,7 @@
 
 # Information
 Egsagon updated the API to v4 with the first beta look. I will have a look at it and release a new version
-<br>wheen the API update to v4 is in the stable release. I also try to make the UI more look like an actual
+<br>when the API update to v4 is in the stable release. I also try to make the UI more look like an actual
 <br> UI and not like a black background with buttons lmao
 
 # Table of Contents
