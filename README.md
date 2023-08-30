@@ -60,19 +60,10 @@ The goal is to create a free and open-source downloader for everyone. <br>
 
 
 Sentry is a service which captures errors and displays them to me in a very
-<br>user-friendly form. The problem is, that Sentry captures the full Python Traceback
-<br> and all the variables in it. If you make a request to PornHub when downloading<br>
-something, then even your real IP could get exposed, because it's saved in the url request
-<br> or your user agent could get exposed. 
-
-##### I of course DON'T need this information for troubleshooting,
-
-but I can't turn it off. You can be sure, that your data is safe on me, because I don't 
-<br>care about what you download, I just need the error message to fix stuff.
-
-If you don't want it, just click on No, when you get asked for it and Sentry
-<br>won't collect anything!
-
+<br>user-friendly form. Sentry captures only the Python exception and the
+lines of code in which the error happens. All other information is stripped
+out from the reports. You can see the "strip out" function in "setup.py"
+It's called "before_send" in line 72
 
 
 # Supported Platforms
