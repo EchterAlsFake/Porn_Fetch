@@ -27,6 +27,7 @@ This file keeps track of all Issues / Bugs
 8) Fixed - 1.9
 9) Fixed - 2.0
 10) Fixed - 2.1 (Fixed, because Egsagon made a huge stability update for the API)
+12) Fixed - 2.5 (hotfix in commits)
 # 1.8
 
 8) OS Error: This error happens, because Windows can not handle ./ as a path. This error will be fixed tonight!
