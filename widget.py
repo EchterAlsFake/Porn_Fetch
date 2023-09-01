@@ -268,6 +268,7 @@ QLineEdit:disabled {
 
         if self.conf["Debug"]["sentry"] == "true":
             enable_error_handling()
+            self.sentry = True
 
         elif self.conf["Debug"]["sentry"] == "false":
             self.sentry_data_collection()
@@ -679,11 +680,19 @@ Thanks :)
 
     def load_user_settings(self):
 
+
         self.conf.read('config.ini')
         if ('SelectedCategories' in self.conf and 'categories' in self.conf['SelectedCategories']):
             selected_categories = self.conf['SelectedCategories']['categories'].split(',')
             for category in selected_categories:
                 self.categories = getattr(Category, category, None)
+
+        if self.conf["Debug"]["sentry"] == "true":
+            self.sentry = True
+
+        elif self.conf["Debug"]["sentry"] == "false":
+            self.sentry = False
+
 
         if self.conf["Porn_Fetch"]["delay"] == "true":
             self.ui.settings_checkbox_delay.setChecked(True)
