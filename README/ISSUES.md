@@ -43,3 +43,7 @@ This file keeps track of all Issues / Bugs
 # 2.1
 
 11) ChunkedEncodingError: This error happens when you have a terrible internet. Sorry, but I can't do anything about it.
+
+# 2.5 
+
+12) AttributeError: widget object has no attribute 'sentry'
