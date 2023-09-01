@@ -3,9 +3,9 @@
 ![Build](https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg)
 
 # Information
-
-School takes up my entire energy. Even with 2 Monster Enegry intus, my brain doesn't work.<br>
-I will focus on developing on the weekend. V2.5 will be released on Sunday.
+Egsagon updated the API to v4 with the first beta look. I will have a look at it and release a new version
+<br>when the API update to v4 is in the stable release. I also try to make the UI more look like an actual
+<br> UI and not like a black background with buttons lmao
 
 # Table of Contents
 
@@ -34,6 +34,7 @@ The goal is to create a free and open-source downloader for everyone. <br>
 * Downloading multiple videos at once
 * Downloading all videos from a whole Channel / User / Model account
 * Search for videos and download them directly in the application
+* With search and category filters
 * You can log in with your Account (You don't need to!)
 * Fetch all videos you've liked
 * Fetch all videos you've ever watched
@@ -59,19 +60,10 @@ The goal is to create a free and open-source downloader for everyone. <br>
 
 
 Sentry is a service which captures errors and displays them to me in a very
-<br>user-friendly form. The problem is, that Sentry captures the full Python Traceback
-<br> and all the variables in it. If you make a request to PornHub when downloading<br>
-something, then even your real IP could get exposed, because it's saved in the url request
-<br> or your user agent could get exposed. 
-
-##### I of course DON'T need this information for troubleshooting,
-
-but I can't turn it off. You can be sure, that your data is safe on me, because I don't 
-<br>care about what you download, I just need the error message to fix stuff.
-
-If you don't want it, just click on No, when you get asked for it and Sentry
-<br>won't collect anything!
-
+<br>user-friendly form. Sentry captures only the Python exception and the
+lines of code in which the error happens. All other information is stripped
+out from the reports. You can see the "strip out" function in "setup.py"
+It's called "before_send" in line 72
 
 
 # Supported Platforms
