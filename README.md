@@ -83,6 +83,8 @@ This is an automatic build script. Just run the following in your terminal and s
 - Ubuntu
 - Arch Linux
 - Termux
+- Fedora
+- OpenSUSE
 
 ```
 wget "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/install.sh" && bash install.sh
