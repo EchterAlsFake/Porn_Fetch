@@ -2396,7 +2396,7 @@ class Ui_Porn_Fetch_Widget(object):
     # setupUi
 
     def retranslateUi(self, Porn_Fetch_Widget):
-        Porn_Fetch_Widget.setWindowTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Porn Fetch v2.4", None))
+        Porn_Fetch_Widget.setWindowTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Porn Fetch v2.6", None))
         self.groupBox_5.setTitle("")
         self.button_switch_main_page.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Switch to main page", None))
         self.label_6.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"           IMPORTANT!  The API is against Pornhub's ToS. Your Account CAN get banned for using this!!!!", None))

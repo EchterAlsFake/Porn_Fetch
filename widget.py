@@ -1,5 +1,5 @@
 __author__ = "EchterAlsFake : Johannes Habel"
-__version__ = "2.5"
+__version__ = "2.6"
 __source__ = "https://github.com/EchterAlsFake/Porn_Fetch"
 __license__ = "GPL 3"
 
@@ -56,7 +56,7 @@ class License(QWidget):
         self.conf.set("License", "accept", "true")
         with open("config.ini", "w") as config_file:
             self.conf.write(config_file)
-            config_file.close()  # I know, I don't have to close it manually, but I got some i/o errors, when not doing it.
+            config_file.close()
 
         self.show_main_window()
 
@@ -283,8 +283,6 @@ QLineEdit:disabled {
         elif self.ui.radio_threading_yes.isChecked():
             self.mode = True
 
-        else:
-            self.mode = True
 
     def sentry_data_collection(self):
 
@@ -376,11 +374,15 @@ Thanks :)
             self.video = self.client.get(url)
             return self.video
 
-        except Exception as e:
-            ui_popup(f"There was an error : {e} ")
-            logging(msg=e, level="1")
-            if self.sentry:
-                sentry_sdk.capture_exception(e)
+        except phub.errors.TooManyRequests:
+            ui_popup("To many requests. Slow down a little bit (You should enable delay, if disabled)")
+
+        except phub.errors.Noresult:
+            ui_popup("No result. PornHub had an error, please try again in a few minutes")
+
+        except phub.errors.ParsingError:
+            ui_popup("Parsing error. Please try again in a few minutes")
+
 
     def start(self):
 
@@ -854,35 +856,30 @@ Thanks :)
 
     def get_liked_videos(self):
 
-        try:
-            videos = self.client.account.liked
+        videos = self.client.account.liked
+        if len(videos) == 0:
+            ui_popup("No videos found. If you are sure that this is an error, it's PornHub's fault ;) ")
+
+        else:
             self.add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
 
-        except AttributeError:
-            ui_popup("A NoneType error probably occurred, because you forgot to log in to your account or you haven't watched any videos.")
-
-        except Exception as e:
-            ui_popup(
-                f"An error happened. This error will NOT be sent to sentry, to prevent leaking your account data! ERROR: {e}")
 
     def get_watched_videos(self):
-        try:
-            videos = self.client.account.watched
+        videos = self.client.account.watched
+        if len(videos) == 0:
+            ui_popup("No videos found. If you are sure that this is an error, it's PornHub's fault ;) ")
+
+        else:
             self.add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
-
-        except AttributeError:
-            ui_popup("A NoneType error probably occurred, because you forgot to log in to your account or you haven't watched any videos.")
-
-        except Exception as e:
-            ui_popup(
-                f"An error happened. This error will NOT be sent to sentry, to prevent leaking your account data! ERROR: {e}")
 
 
     def get_recommended_videos(self):
-
-        self.login()
         videos = self.client.account.recommended
-        self.add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
+        if len(videos) == 0:
+            ui_popup("No videos found. If you are sure that this is an error, it's PornHub's fault ;) ")
+
+        else:
+            self.add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
 
 
 
@@ -981,6 +978,11 @@ one video real quick, you can disable it, but if you plan to download more than 
 (DO NOT REPORT ERRORS, IF YOU HAD DELAY DISABLED!) 
 
 If you still have questions, let me know on GitHub in discussions.
+
+Account:
+
+You can log in to PornHub with your Account and fetch all videos you've liked, watched and that are recommended to you.
+This can be useful for downloading more efficiently. Your Account data won't be exposed!
 """
         ui_popup(text)
 
@@ -1019,24 +1021,5 @@ if __name__ == "__main__":
         print(__license__)
 
     else:
-        try:
-            main()
+        main()
 
-            # Some common exceptions...
-        except requests.exceptions.SSLError:
-            ui_popup(
-                "Couldn't establish a secure connection to PornHub. This mostly happens, because your router / ISP / firewall blocks PornHub. Are you currently at a hotel or a university?")
-
-        except requests.exceptions.ConnectionError:
-            ui_popup(
-                "There was a connection error. This mostly happens, because PornHub blocks you, or your connection is unstable. Please wait, or change IP and try again")
-
-        except KeyboardInterrupt:
-            print("Bye")
-            sys.exit()
-
-        except PermissionError:
-            ui_popup(
-                "You don't have permissions to write / access something. Please give Porn Fetch the appropriate permissions and try again.")
-
-# EOF
