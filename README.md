@@ -3,9 +3,11 @@
 ![Build](https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg)
 
 # Information
-Egsagon updated the API to v4 with the first beta look. I will have a look at it and release a new version
-<br>when the API update to v4 is in the stable release. I also try to make the UI more look like an actual
-<br> UI and not like a black background with buttons lmao
+Currently not working!
+
+<br>Waiting for a fix on the API side...
+
+<br>Do not report the Index out of range error
 
 # Table of Contents
 
