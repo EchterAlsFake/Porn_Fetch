@@ -33,7 +33,7 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Build with Pyinstaller
       run: |
-        pyinstaller -F widget.py && cd dist && chmod +x widget && xvfb-run ./widget --version
+        pyinstaller -F Porn_Fetch.py && cd dist && chmod +x widget && xvfb-run ./Porn_Fetch --version
     - name: Build CLI (Termux Test)
       run: | 
         cd src && pyinstaller -F cli.py && cd dist && chmod +x cli

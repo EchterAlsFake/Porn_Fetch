@@ -101,7 +101,7 @@ with build_left:
 git clone https://github.com/EchterAlsFake/Porn_Fetch
 cd Porn_Fetch
 pip install -r requirements.txt
-pyinstaller -F widget.py
+pyinstaller -F Porn_Fetch.py
 ``` 
 """)
 

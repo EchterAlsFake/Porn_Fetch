@@ -132,3 +132,10 @@ I hope that most issues are now fixed.
 - Fixed an error with the metadata function
 - Removed file logging
 - Recoded CLI
+
+# 2.6
+
+- API Updated to v3.2.1
+- Redesign of the settings widget
+- removed some things from the roadmap
+- added a connection error exception

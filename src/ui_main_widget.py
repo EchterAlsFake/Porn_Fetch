@@ -25,11 +25,11 @@ class Ui_Porn_Fetch_Widget(object):
     def setupUi(self, Porn_Fetch_Widget):
         if not Porn_Fetch_Widget.objectName():
             Porn_Fetch_Widget.setObjectName(u"Porn_Fetch_Widget")
-        Porn_Fetch_Widget.resize(1119, 554)
+        Porn_Fetch_Widget.resize(1089, 544)
         Porn_Fetch_Widget.setStyleSheet(u"background-color: rgb(18,18,18);\n"
 "color: white;")
-        self.gridLayout_22 = QGridLayout(Porn_Fetch_Widget)
-        self.gridLayout_22.setObjectName(u"gridLayout_22")
+        self.gridLayout_21 = QGridLayout(Porn_Fetch_Widget)
+        self.gridLayout_21.setObjectName(u"gridLayout_21")
         self.groupBox_5 = QGroupBox(Porn_Fetch_Widget)
         self.groupBox_5.setObjectName(u"groupBox_5")
         self.gridLayout_20 = QGridLayout(self.groupBox_5)
@@ -383,73 +383,6 @@ class Ui_Porn_Fetch_Widget(object):
         self.page_2.setObjectName(u"page_2")
         self.gridLayout_6 = QGridLayout(self.page_2)
         self.gridLayout_6.setObjectName(u"gridLayout_6")
-        self.groupBox_4 = QGroupBox(self.page_2)
-        self.groupBox_4.setObjectName(u"groupBox_4")
-        self.gridLayout_5 = QGridLayout(self.groupBox_4)
-        self.gridLayout_5.setObjectName(u"gridLayout_5")
-        self.textBrowser = QTextBrowser(self.groupBox_4)
-        self.textBrowser.setObjectName(u"textBrowser")
-
-        self.gridLayout_5.addWidget(self.textBrowser, 0, 0, 1, 1)
-
-        self.button_switch_to_account = QPushButton(self.groupBox_4)
-        self.button_switch_to_account.setObjectName(u"button_switch_to_account")
-        self.button_switch_to_account.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_switch_to_account.setStyleSheet(u"QPushButton {\n"
-"        background-color: #5a2a82; /* base violet color */\n"
-"        color: #ffffff; /* white text */\n"
-"        border: none;\n"
-"        border-radius: 10px; /* reduced rounded corner radius */\n"
-"        padding: 5px 10px; /* reduced button padding */\n"
-"        font-size: 12px;\n"
-"        outline: none;\n"
-"    }\n"
-"    \n"
-"    QPushButton:hover {\n"
-"        background-color: #7b3ca3; /* slightly lighter violet when hovered */\n"
-"    }\n"
-"\n"
-"    QPushButton:pressed {\n"
-"        background-color: #481f61; /* darker violet when pressed */\n"
-"    }\n"
-"\n"
-"    QPushButton:disabled {\n"
-"        background-color: #3f1d4d; /* even darker shade when button is disabled */\n"
-"        color: #8a7b9a; /* greyish text */\n"
-"    }")
-
-        self.gridLayout_5.addWidget(self.button_switch_to_account, 2, 0, 1, 1)
-
-        self.button_switch_to_settings = QPushButton(self.groupBox_4)
-        self.button_switch_to_settings.setObjectName(u"button_switch_to_settings")
-        self.button_switch_to_settings.setStyleSheet(u"QPushButton {\n"
-"        background-color: #5a2a82; /* base violet color */\n"
-"        color: #ffffff; /* white text */\n"
-"        border: none;\n"
-"        border-radius: 10px; /* reduced rounded corner radius */\n"
-"        padding: 5px 10px; /* reduced button padding */\n"
-"        font-size: 12px;\n"
-"        outline: none;\n"
-"    }\n"
-"    \n"
-"    QPushButton:hover {\n"
-"        background-color: #7b3ca3; /* slightly lighter violet when hovered */\n"
-"    }\n"
-"\n"
-"    QPushButton:pressed {\n"
-"        background-color: #481f61; /* darker violet when pressed */\n"
-"    }\n"
-"\n"
-"    QPushButton:disabled {\n"
-"        background-color: #3f1d4d; /* even darker shade when button is disabled */\n"
-"        color: #8a7b9a; /* greyish text */\n"
-"    }")
-
-        self.gridLayout_5.addWidget(self.button_switch_to_settings, 1, 0, 1, 1)
-
-
-        self.gridLayout_6.addWidget(self.groupBox_4, 1, 1, 1, 1)
-
         self.groupBox_3 = QGroupBox(self.page_2)
         self.groupBox_3.setObjectName(u"groupBox_3")
         self.gridLayout_3 = QGridLayout(self.groupBox_3)
@@ -1107,9 +1040,39 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.horizontalLayout_19.addWidget(self.button_download_thumbnail)
 
-        self.button_refresh = QPushButton(self.groupBox_8)
-        self.button_refresh.setObjectName(u"button_refresh")
-        self.button_refresh.setStyleSheet(u"QPushButton {\n"
+
+        self.gridLayout_9.addLayout(self.horizontalLayout_19, 8, 0, 1, 1)
+
+
+        self.gridLayout_10.addWidget(self.groupBox_8, 0, 0, 1, 1)
+
+        self.stackedWidget.addWidget(self.page_metadata)
+        self.page_credits = QWidget()
+        self.page_credits.setObjectName(u"page_credits")
+        self.gridLayout_11 = QGridLayout(self.page_credits)
+        self.gridLayout_11.setObjectName(u"gridLayout_11")
+        self.textBrowser_2 = QTextBrowser(self.page_credits)
+        self.textBrowser_2.setObjectName(u"textBrowser_2")
+
+        self.gridLayout_11.addWidget(self.textBrowser_2, 0, 0, 1, 1)
+
+        self.stackedWidget.addWidget(self.page_credits)
+
+        self.gridLayout_3.addWidget(self.stackedWidget, 0, 0, 1, 1)
+
+        self.groupBox_4 = QGroupBox(self.groupBox_3)
+        self.groupBox_4.setObjectName(u"groupBox_4")
+        self.gridLayout_5 = QGridLayout(self.groupBox_4)
+        self.gridLayout_5.setObjectName(u"gridLayout_5")
+        self.textBrowser = QTextBrowser(self.groupBox_4)
+        self.textBrowser.setObjectName(u"textBrowser")
+
+        self.gridLayout_5.addWidget(self.textBrowser, 0, 0, 1, 1)
+
+        self.button_switch_to_account = QPushButton(self.groupBox_4)
+        self.button_switch_to_account.setObjectName(u"button_switch_to_account")
+        self.button_switch_to_account.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_switch_to_account.setStyleSheet(u"QPushButton {\n"
 "        background-color: #5a2a82; /* base violet color */\n"
 "        color: #ffffff; /* white text */\n"
 "        border: none;\n"
@@ -1132,27 +1095,37 @@ class Ui_Porn_Fetch_Widget(object):
 "        color: #8a7b9a; /* greyish text */\n"
 "    }")
 
-        self.horizontalLayout_19.addWidget(self.button_refresh)
+        self.gridLayout_5.addWidget(self.button_switch_to_account, 2, 0, 1, 1)
+
+        self.button_switch_to_settings = QPushButton(self.groupBox_4)
+        self.button_switch_to_settings.setObjectName(u"button_switch_to_settings")
+        self.button_switch_to_settings.setStyleSheet(u"QPushButton {\n"
+"        background-color: #5a2a82; /* base violet color */\n"
+"        color: #ffffff; /* white text */\n"
+"        border: none;\n"
+"        border-radius: 10px; /* reduced rounded corner radius */\n"
+"        padding: 5px 10px; /* reduced button padding */\n"
+"        font-size: 12px;\n"
+"        outline: none;\n"
+"    }\n"
+"    \n"
+"    QPushButton:hover {\n"
+"        background-color: #7b3ca3; /* slightly lighter violet when hovered */\n"
+"    }\n"
+"\n"
+"    QPushButton:pressed {\n"
+"        background-color: #481f61; /* darker violet when pressed */\n"
+"    }\n"
+"\n"
+"    QPushButton:disabled {\n"
+"        background-color: #3f1d4d; /* even darker shade when button is disabled */\n"
+"        color: #8a7b9a; /* greyish text */\n"
+"    }")
+
+        self.gridLayout_5.addWidget(self.button_switch_to_settings, 1, 0, 1, 1)
 
 
-        self.gridLayout_9.addLayout(self.horizontalLayout_19, 8, 0, 1, 1)
-
-
-        self.gridLayout_10.addWidget(self.groupBox_8, 0, 0, 1, 1)
-
-        self.stackedWidget.addWidget(self.page_metadata)
-        self.page_credits = QWidget()
-        self.page_credits.setObjectName(u"page_credits")
-        self.gridLayout_11 = QGridLayout(self.page_credits)
-        self.gridLayout_11.setObjectName(u"gridLayout_11")
-        self.textBrowser_2 = QTextBrowser(self.page_credits)
-        self.textBrowser_2.setObjectName(u"textBrowser_2")
-
-        self.gridLayout_11.addWidget(self.textBrowser_2, 0, 0, 1, 1)
-
-        self.stackedWidget.addWidget(self.page_credits)
-
-        self.gridLayout_3.addWidget(self.stackedWidget, 0, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.groupBox_4, 0, 1, 1, 1)
 
 
         self.gridLayout_6.addWidget(self.groupBox_3, 1, 0, 1, 1)
@@ -1445,35 +1418,378 @@ class Ui_Porn_Fetch_Widget(object):
         self.stacked_main_account.addWidget(self.page_2)
         self.page_3 = QWidget()
         self.page_3.setObjectName(u"page_3")
-        self.gridLayout_18 = QGridLayout(self.page_3)
+        self.gridLayout_22 = QGridLayout(self.page_3)
+        self.gridLayout_22.setObjectName(u"gridLayout_22")
+        self.groupBox_10 = QGroupBox(self.page_3)
+        self.groupBox_10.setObjectName(u"groupBox_10")
+        self.gridLayout_16 = QGridLayout(self.groupBox_10)
+        self.gridLayout_16.setObjectName(u"gridLayout_16")
+        self.groupBox_15 = QGroupBox(self.groupBox_10)
+        self.groupBox_15.setObjectName(u"groupBox_15")
+        self.gridLayout_15 = QGridLayout(self.groupBox_15)
+        self.gridLayout_15.setObjectName(u"gridLayout_15")
+        self.checkbox_professional = QCheckBox(self.groupBox_15)
+        self.checkbox_professional.setObjectName(u"checkbox_professional")
+        self.checkbox_professional.setStyleSheet(u"QCheckBox::indicator {\n"
+"    width: 13px;\n"
+"    height: 13px;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked {\n"
+"    border: 1px solid white;\n"
+"    background: white;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked {\n"
+"    image: url(graphics/checkmark.png);\n"
+"}")
+
+        self.gridLayout_15.addWidget(self.checkbox_professional, 0, 0, 1, 1)
+
+        self.checkbox_homemade = QCheckBox(self.groupBox_15)
+        self.checkbox_homemade.setObjectName(u"checkbox_homemade")
+        self.checkbox_homemade.setStyleSheet(u"QCheckBox::indicator {\n"
+"    width: 13px;\n"
+"    height: 13px;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked {\n"
+"    border: 1px solid white;\n"
+"    background: white;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked {\n"
+"    image: url(graphics/checkmark.png);\n"
+"}")
+
+        self.gridLayout_15.addWidget(self.checkbox_homemade, 1, 0, 1, 1)
+
+
+        self.gridLayout_16.addWidget(self.groupBox_15, 0, 1, 1, 1)
+
+        self.groupBox_14 = QGroupBox(self.groupBox_10)
+        self.groupBox_14.setObjectName(u"groupBox_14")
+        self.gridLayout_18 = QGridLayout(self.groupBox_14)
         self.gridLayout_18.setObjectName(u"gridLayout_18")
-        self.groupBox_9 = QGroupBox(self.page_3)
-        self.groupBox_9.setObjectName(u"groupBox_9")
-        self.gridLayout_2 = QGridLayout(self.groupBox_9)
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.scroll_area = QScrollArea(self.groupBox_9)
-        self.scroll_area.setObjectName(u"scroll_area")
-        self.scroll_area.setWidgetResizable(True)
-        self.scrollAreaWidgetContents = QWidget()
-        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 769, 193))
-        self.gridLayoutWidget_3 = QWidget(self.scrollAreaWidgetContents)
-        self.gridLayoutWidget_3.setObjectName(u"gridLayoutWidget_3")
-        self.gridLayoutWidget_3.setGeometry(QRect(290, 40, 160, 80))
-        self.verticalLayout = QGridLayout(self.gridLayoutWidget_3)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.container_widget = QWidget(self.gridLayoutWidget_3)
-        self.container_widget.setObjectName(u"container_widget")
+        self.radio_hd_yes = QRadioButton(self.groupBox_14)
+        self.radio_hd_yes.setObjectName(u"radio_hd_yes")
+        self.radio_hd_yes.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(255, 255, 255)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"")
 
-        self.verticalLayout.addWidget(self.container_widget, 0, 0, 1, 1)
+        self.gridLayout_18.addWidget(self.radio_hd_yes, 0, 0, 1, 1)
 
-        self.scroll_area.setWidget(self.scrollAreaWidgetContents)
+        self.radio_hd_no = QRadioButton(self.groupBox_14)
+        self.radio_hd_no.setObjectName(u"radio_hd_no")
+        self.radio_hd_no.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(255, 255, 255)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"")
 
-        self.gridLayout_2.addWidget(self.scroll_area, 0, 0, 1, 1)
+        self.gridLayout_18.addWidget(self.radio_hd_no, 1, 0, 1, 1)
 
 
-        self.gridLayout_18.addWidget(self.groupBox_9, 0, 0, 1, 1)
+        self.gridLayout_16.addWidget(self.groupBox_14, 0, 0, 1, 1)
+
+        self.groupBox_13 = QGroupBox(self.groupBox_10)
+        self.groupBox_13.setObjectName(u"groupBox_13")
+        self.gridLayout_14 = QGridLayout(self.groupBox_13)
+        self.gridLayout_14.setObjectName(u"gridLayout_14")
+        self.radio_day = QRadioButton(self.groupBox_13)
+        self.radio_day.setObjectName(u"radio_day")
+        self.radio_day.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(255, 255, 255)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"")
+
+        self.gridLayout_14.addWidget(self.radio_day, 1, 0, 1, 1)
+
+        self.radio_month = QRadioButton(self.groupBox_13)
+        self.radio_month.setObjectName(u"radio_month")
+        self.radio_month.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(255, 255, 255)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0,255, 183);\n"
+"\n"
+"}\n"
+"")
+
+        self.gridLayout_14.addWidget(self.radio_month, 3, 0, 1, 1)
+
+        self.radio_week = QRadioButton(self.groupBox_13)
+        self.radio_week.setObjectName(u"radio_week")
+        self.radio_week.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(255, 255, 255)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"")
+
+        self.gridLayout_14.addWidget(self.radio_week, 2, 0, 1, 1)
+
+        self.radio_nothing_2 = QRadioButton(self.groupBox_13)
+        self.radio_nothing_2.setObjectName(u"radio_nothing_2")
+        self.radio_nothing_2.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(255, 255, 255)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"")
+
+        self.gridLayout_14.addWidget(self.radio_nothing_2, 0, 0, 1, 1)
+
+        self.radio_year = QRadioButton(self.groupBox_13)
+        self.radio_year.setObjectName(u"radio_year")
+        self.radio_year.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(255, 255, 255)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"")
+
+        self.gridLayout_14.addWidget(self.radio_year, 4, 0, 1, 1)
+
+
+        self.gridLayout_16.addWidget(self.groupBox_13, 1, 0, 1, 1)
+
+        self.groupBox_12 = QGroupBox(self.groupBox_10)
+        self.groupBox_12.setObjectName(u"groupBox_12")
+        self.gridLayout_7 = QGridLayout(self.groupBox_12)
+        self.gridLayout_7.setObjectName(u"gridLayout_7")
+        self.radio_longest = QRadioButton(self.groupBox_12)
+        self.radio_longest.setObjectName(u"radio_longest")
+        self.radio_longest.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(255, 255, 255)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"")
+
+        self.gridLayout_7.addWidget(self.radio_longest, 2, 0, 1, 1)
+
+        self.radio_top_rated = QRadioButton(self.groupBox_12)
+        self.radio_top_rated.setObjectName(u"radio_top_rated")
+        self.radio_top_rated.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(255, 255, 255)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"")
+
+        self.gridLayout_7.addWidget(self.radio_top_rated, 4, 0, 1, 1)
+
+        self.radio_most_viewed = QRadioButton(self.groupBox_12)
+        self.radio_most_viewed.setObjectName(u"radio_most_viewed")
+        self.radio_most_viewed.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(255, 255, 255)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"")
+
+        self.gridLayout_7.addWidget(self.radio_most_viewed, 1, 0, 1, 1)
+
+        self.radio_most_relevant = QRadioButton(self.groupBox_12)
+        self.radio_most_relevant.setObjectName(u"radio_most_relevant")
+        self.radio_most_relevant.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(255, 255, 255)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"\n"
+"")
+
+        self.gridLayout_7.addWidget(self.radio_most_relevant, 0, 0, 1, 1)
+
+        self.radio_most_recent = QRadioButton(self.groupBox_12)
+        self.radio_most_recent.setObjectName(u"radio_most_recent")
+        self.radio_most_recent.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(255, 255, 255)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"")
+
+        self.gridLayout_7.addWidget(self.radio_most_recent, 3, 0, 1, 1)
+
+        self.radio_nothing = QRadioButton(self.groupBox_12)
+        self.radio_nothing.setObjectName(u"radio_nothing")
+        self.radio_nothing.setStyleSheet(u"QRadioButton {\n"
+"	color: rgb(255, 255, 255)}\n"
+"\n"
+"\n"
+"QRadioButton::indicator::unchecked {\n"
+"	border: 1px solid white;\n"
+"	border-radius: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    border : 4px solid;\n"
+"	border-color: black;\n"
+"	border-radius: 6px;\n"
+"	background-color: rgb(0, 255, 183);\n"
+"\n"
+"}\n"
+"")
+
+        self.gridLayout_7.addWidget(self.radio_nothing, 5, 0, 1, 1)
+
+
+        self.gridLayout_16.addWidget(self.groupBox_12, 1, 1, 1, 1)
+
+
+        self.gridLayout_22.addWidget(self.groupBox_10, 0, 0, 1, 1)
 
         self.groupBox_11 = QGroupBox(self.page_3)
         self.groupBox_11.setObjectName(u"groupBox_11")
@@ -1925,397 +2241,36 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridLayout_17.addWidget(self.button_switch_to_main_widget, 0, 0, 1, 2)
 
 
-        self.gridLayout_18.addWidget(self.groupBox_11, 0, 1, 2, 1)
+        self.gridLayout_22.addWidget(self.groupBox_11, 0, 1, 1, 1)
 
-        self.groupBox_10 = QGroupBox(self.page_3)
-        self.groupBox_10.setObjectName(u"groupBox_10")
-        self.gridLayout_16 = QGridLayout(self.groupBox_10)
-        self.gridLayout_16.setObjectName(u"gridLayout_16")
-        self.gridLayout_15 = QGridLayout()
-        self.gridLayout_15.setObjectName(u"gridLayout_15")
-        self.radio_nothing_2 = QRadioButton(self.groupBox_10)
-        self.radio_nothing_2.setObjectName(u"radio_nothing_2")
-        self.radio_nothing_2.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 255, 255)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"")
+        self.groupBox_9 = QGroupBox(self.page_3)
+        self.groupBox_9.setObjectName(u"groupBox_9")
+        self.gridLayout_2 = QGridLayout(self.groupBox_9)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.scroll_area = QScrollArea(self.groupBox_9)
+        self.scroll_area.setObjectName(u"scroll_area")
+        self.scroll_area.setWidgetResizable(True)
+        self.scrollAreaWidgetContents = QWidget()
+        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1003, 99))
+        self.gridLayout_23 = QGridLayout(self.scrollAreaWidgetContents)
+        self.gridLayout_23.setObjectName(u"gridLayout_23")
+        self.verticalLayout = QGridLayout()
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.container_widget = QWidget(self.scrollAreaWidgetContents)
+        self.container_widget.setObjectName(u"container_widget")
 
-        self.gridLayout_15.addWidget(self.radio_nothing_2, 0, 1, 1, 1)
-
-        self.radio_day = QRadioButton(self.groupBox_10)
-        self.radio_day.setObjectName(u"radio_day")
-        self.radio_day.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 255, 255)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"")
-
-        self.gridLayout_15.addWidget(self.radio_day, 0, 0, 1, 1)
-
-        self.radio_month = QRadioButton(self.groupBox_10)
-        self.radio_month.setObjectName(u"radio_month")
-        self.radio_month.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 255, 255)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0,255, 183);\n"
-"\n"
-"}\n"
-"")
-
-        self.gridLayout_15.addWidget(self.radio_month, 1, 0, 1, 1)
-
-        self.radio_week = QRadioButton(self.groupBox_10)
-        self.radio_week.setObjectName(u"radio_week")
-        self.radio_week.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 255, 255)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"")
-
-        self.gridLayout_15.addWidget(self.radio_week, 1, 1, 1, 1)
-
-        self.radio_year = QRadioButton(self.groupBox_10)
-        self.radio_year.setObjectName(u"radio_year")
-        self.radio_year.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 255, 255)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"")
-
-        self.gridLayout_15.addWidget(self.radio_year, 2, 0, 1, 1)
+        self.verticalLayout.addWidget(self.container_widget, 0, 0, 1, 1)
 
 
-        self.gridLayout_16.addLayout(self.gridLayout_15, 3, 1, 1, 2)
+        self.gridLayout_23.addLayout(self.verticalLayout, 0, 0, 1, 1)
 
-        self.label_14 = QLabel(self.groupBox_10)
-        self.label_14.setObjectName(u"label_14")
+        self.scroll_area.setWidget(self.scrollAreaWidgetContents)
 
-        self.gridLayout_16.addWidget(self.label_14, 3, 0, 1, 1)
-
-        self.horizontalLayout_24 = QHBoxLayout()
-        self.horizontalLayout_24.setObjectName(u"horizontalLayout_24")
-        self.label_production = QLabel(self.groupBox_10)
-        self.label_production.setObjectName(u"label_production")
-
-        self.horizontalLayout_24.addWidget(self.label_production)
-
-        self.checkbox_professional = QCheckBox(self.groupBox_10)
-        self.checkbox_professional.setObjectName(u"checkbox_professional")
-        self.checkbox_professional.setStyleSheet(u"QCheckBox::indicator {\n"
-"    width: 13px;\n"
-"    height: 13px;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:unchecked {\n"
-"    border: 1px solid white;\n"
-"    background: white;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:checked {\n"
-"    image: url(graphics/checkmark.png);\n"
-"}")
-
-        self.horizontalLayout_24.addWidget(self.checkbox_professional)
-
-        self.checkbox_homemade = QCheckBox(self.groupBox_10)
-        self.checkbox_homemade.setObjectName(u"checkbox_homemade")
-        self.checkbox_homemade.setStyleSheet(u"QCheckBox::indicator {\n"
-"    width: 13px;\n"
-"    height: 13px;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:unchecked {\n"
-"    border: 1px solid white;\n"
-"    background: white;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:checked {\n"
-"    image: url(graphics/checkmark.png);\n"
-"}")
-
-        self.horizontalLayout_24.addWidget(self.checkbox_homemade)
+        self.gridLayout_2.addWidget(self.scroll_area, 0, 0, 1, 1)
 
 
-        self.gridLayout_16.addLayout(self.horizontalLayout_24, 4, 1, 1, 2)
-
-        self.gridLayout_14 = QGridLayout()
-        self.gridLayout_14.setObjectName(u"gridLayout_14")
-        self.radio_top_rated = QRadioButton(self.groupBox_10)
-        self.radio_top_rated.setObjectName(u"radio_top_rated")
-        self.radio_top_rated.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 255, 255)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"")
-
-        self.gridLayout_14.addWidget(self.radio_top_rated, 3, 0, 1, 1)
-
-        self.radio_most_recent = QRadioButton(self.groupBox_10)
-        self.radio_most_recent.setObjectName(u"radio_most_recent")
-        self.radio_most_recent.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 255, 255)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"")
-
-        self.gridLayout_14.addWidget(self.radio_most_recent, 2, 0, 1, 1)
-
-        self.radio_most_relevant = QRadioButton(self.groupBox_10)
-        self.radio_most_relevant.setObjectName(u"radio_most_relevant")
-        self.radio_most_relevant.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 255, 255)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"\n"
-"")
-
-        self.gridLayout_14.addWidget(self.radio_most_relevant, 0, 0, 1, 1)
-
-        self.radio_most_viewed = QRadioButton(self.groupBox_10)
-        self.radio_most_viewed.setObjectName(u"radio_most_viewed")
-        self.radio_most_viewed.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 255, 255)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"")
-
-        self.gridLayout_14.addWidget(self.radio_most_viewed, 0, 1, 1, 1)
-
-        self.radio_longest = QRadioButton(self.groupBox_10)
-        self.radio_longest.setObjectName(u"radio_longest")
-        self.radio_longest.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 255, 255)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"")
-
-        self.gridLayout_14.addWidget(self.radio_longest, 2, 1, 1, 1)
-
-        self.radio_nothing = QRadioButton(self.groupBox_10)
-        self.radio_nothing.setObjectName(u"radio_nothing")
-        self.radio_nothing.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 255, 255)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"")
-
-        self.gridLayout_14.addWidget(self.radio_nothing, 3, 1, 1, 1)
-
-
-        self.gridLayout_16.addLayout(self.gridLayout_14, 0, 1, 2, 2)
-
-        self.label_13 = QLabel(self.groupBox_10)
-        self.label_13.setObjectName(u"label_13")
-
-        self.gridLayout_16.addWidget(self.label_13, 0, 0, 1, 1)
-
-        self.horizontalLayout_25 = QHBoxLayout()
-        self.horizontalLayout_25.setObjectName(u"horizontalLayout_25")
-        self.label_hd = QLabel(self.groupBox_10)
-        self.label_hd.setObjectName(u"label_hd")
-
-        self.horizontalLayout_25.addWidget(self.label_hd)
-
-        self.radio_hd_yes = QRadioButton(self.groupBox_10)
-        self.radio_hd_yes.setObjectName(u"radio_hd_yes")
-        self.radio_hd_yes.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 255, 255)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"")
-
-        self.horizontalLayout_25.addWidget(self.radio_hd_yes)
-
-        self.radio_hd_no = QRadioButton(self.groupBox_10)
-        self.radio_hd_no.setObjectName(u"radio_hd_no")
-        self.radio_hd_no.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 255, 255)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"")
-
-        self.horizontalLayout_25.addWidget(self.radio_hd_no)
-
-
-        self.gridLayout_16.addLayout(self.horizontalLayout_25, 4, 0, 1, 1)
-
-        self.frame_2 = QFrame(self.groupBox_10)
-        self.frame_2.setObjectName(u"frame_2")
-        self.frame_2.setFrameShape(QFrame.StyledPanel)
-        self.frame_2.setFrameShadow(QFrame.Raised)
-
-        self.gridLayout_16.addWidget(self.frame_2, 2, 1, 1, 1)
-
-
-        self.gridLayout_18.addWidget(self.groupBox_10, 1, 0, 1, 1)
+        self.gridLayout_22.addWidget(self.groupBox_9, 1, 0, 1, 2)
 
         self.horizontalLayout_7 = QHBoxLayout()
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
@@ -2376,14 +2331,14 @@ class Ui_Porn_Fetch_Widget(object):
         self.horizontalLayout_7.addWidget(self.button_settings_help)
 
 
-        self.gridLayout_18.addLayout(self.horizontalLayout_7, 2, 0, 1, 2)
+        self.gridLayout_22.addLayout(self.horizontalLayout_7, 2, 0, 1, 2)
 
         self.stacked_main_account.addWidget(self.page_3)
 
-        self.gridLayout_20.addWidget(self.stacked_main_account, 0, 0, 1, 1)
+        self.gridLayout_20.addWidget(self.stacked_main_account, 0, 1, 1, 1)
 
 
-        self.gridLayout_22.addWidget(self.groupBox_5, 0, 0, 1, 1)
+        self.gridLayout_21.addWidget(self.groupBox_5, 0, 0, 1, 1)
 
 
         self.retranslateUi(Porn_Fetch_Widget)
@@ -2411,29 +2366,6 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_account_list_liked_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"List all liked videos", None))
         self.button_account_list_watched_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"List all videos that you've ever watched", None))
         self.button_account_download.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download", None))
-        self.groupBox_4.setTitle("")
-        self.textBrowser.setHtml(QCoreApplication.translate("Porn_Fetch_Widget", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:20pt; font-weight:700; color:#ffffff;\">      Keyboard Shortcuts</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" "
-                        "color:#ffffff;\">1) CTRL + W	:  Exit		</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">2) CTRL + S	:  Search Tab</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">3) CTRL + M	:  Meatadata Tab	</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">4) CTRL + C	:  Show credits</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">5) CTRL + R	:  Reset config		</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">6) CTRL + L	:  Set custom API la"
-                        "nguage (exp.) </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">7) CTRL + 1	:  Switch to Account page </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">8) CTRL + 2	:  Switch back to default page</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">9) CTRL + 3 	:  Switch to Settings</span></p></body></html>", None))
-        self.button_switch_to_account.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Switch to Account page", None))
-        self.button_switch_to_settings.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Switch to Settings", None))
         self.groupBox_3.setTitle("")
         self.button_download_search_query.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download", None))
         self.label_search_query.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Query:", None))
@@ -2451,7 +2383,6 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_hotspots.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Hotspots:", None))
         self.button_get_metadata.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get metadata", None))
         self.button_download_thumbnail.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download thumbnail", None))
-        self.button_refresh.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Refresh", None))
         self.textBrowser_2.setHtml(QCoreApplication.translate("Porn_Fetch_Widget", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -2488,6 +2419,29 @@ class Ui_Porn_Fetch_Widget(object):
                         " respect for him!</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">2.5 - 2023</span></p></body></html>", None))
+        self.groupBox_4.setTitle("")
+        self.textBrowser.setHtml(QCoreApplication.translate("Porn_Fetch_Widget", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:20pt; font-weight:700; color:#ffffff;\">      Keyboard Shortcuts</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" "
+                        "color:#ffffff;\">1) CTRL + W	:  Exit		</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">2) CTRL + S	:  Search Tab</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">3) CTRL + M	:  Meatadata Tab	</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">4) CTRL + C	:  Show credits</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">5) CTRL + R	:  Reset config		</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">6) CTRL + L	:  Set custom API la"
+                        "nguage (exp.) </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">7) CTRL + 1	:  Switch to Account page </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">8) CTRL + 2	:  Switch back to default page</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">9) CTRL + 3 	:  Switch to Settings</span></p></body></html>", None))
+        self.button_switch_to_account.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Switch to Account page", None))
+        self.button_switch_to_settings.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Switch to Settings", None))
         self.groupBox_2.setTitle("")
         self.groupBox.setTitle("")
         self.label_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u" URL: ", None))
@@ -2501,7 +2455,26 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_start_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
         self.label_output.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Output path:         ", None))
         self.lineedit_output.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"./", None))
-        self.groupBox_9.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Filter categories:   NOTE: If you save the settings, the selected categories are applied, even when they are not checked here!", None))
+        self.groupBox_10.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Search filters", None))
+        self.groupBox_15.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Production:", None))
+        self.checkbox_professional.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Professional", None))
+        self.checkbox_homemade.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
+        self.groupBox_14.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"HD Resolution?", None))
+        self.radio_hd_yes.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
+        self.radio_hd_no.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
+        self.groupBox_13.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Time sort filters", None))
+        self.radio_day.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Day", None))
+        self.radio_month.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Month", None))
+        self.radio_week.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Week", None))
+        self.radio_nothing_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Nothing", None))
+        self.radio_year.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Year", None))
+        self.groupBox_12.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Sorting for Search function", None))
+        self.radio_longest.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Longest", None))
+        self.radio_top_rated.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Top rated", None))
+        self.radio_most_viewed.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Most viewed", None))
+        self.radio_most_relevant.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Most relevant", None))
+        self.radio_most_recent.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Most recent", None))
+        self.radio_nothing.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Nothing", None))
         self.groupBox_11.setTitle("")
         self.label_quality.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Quality:", None))
         self.radio_highest.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Best", None))
@@ -2528,26 +2501,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"More", None))
         self.label_5.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"                                       Less", None))
         self.button_switch_to_main_widget.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Switch back to main widget", None))
-        self.groupBox_10.setTitle("")
-        self.radio_nothing_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Nothing", None))
-        self.radio_day.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Day", None))
-        self.radio_month.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Month", None))
-        self.radio_week.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Week", None))
-        self.radio_year.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Year", None))
-        self.label_14.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Time:", None))
-        self.label_production.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Production:", None))
-        self.checkbox_professional.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Professional", None))
-        self.checkbox_homemade.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radio_top_rated.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Top rated", None))
-        self.radio_most_recent.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Most recent", None))
-        self.radio_most_relevant.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Most relevant", None))
-        self.radio_most_viewed.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Most viewed", None))
-        self.radio_longest.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Longest", None))
-        self.radio_nothing.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Nothing", None))
-        self.label_13.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Sort:", None))
-        self.label_hd.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"HD?", None))
-        self.radio_hd_yes.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
-        self.radio_hd_no.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
+        self.groupBox_9.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Filter categories:   NOTE: If you save the settings, the selected categories are applied, even when they are not checked here!", None))
         self.button_settings_apply.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Apply", None))
         self.button_settings_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
     # retranslateUi

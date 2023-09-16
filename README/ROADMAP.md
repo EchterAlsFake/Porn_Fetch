@@ -19,15 +19,10 @@
 - [x] Support OpenSUSE in a build script
 - [] Create an Android App with Qt for Android and PySide6
 - [] Create a Website for better overview, marketing and publicity
-- [] Translation into other languages
-- [] Create a Documentation
-- [] Testing Windows 7, 8
-- [] Compatibility support for x32
-
 
 # STATUS:
 
 Priority:
 
-Translation 
+UI Design
 

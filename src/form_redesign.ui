@@ -6,25 +6,25 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1119</width>
-    <height>554</height>
+    <width>1089</width>
+    <height>544</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Porn Fetch v2.4</string>
+   <string>Porn Fetch v2.6</string>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(18,18,18);
 color: white;</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_22">
+  <layout class="QGridLayout" name="gridLayout_21">
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox_5">
      <property name="title">
       <string/>
      </property>
      <layout class="QGridLayout" name="gridLayout_20">
-      <item row="0" column="0">
+      <item row="0" column="1">
        <widget class="QStackedWidget" name="stacked_main_account">
         <property name="autoFillBackground">
          <bool>false</bool>
@@ -477,104 +477,6 @@ QProgressBar::chunk {
         </widget>
         <widget class="QWidget" name="page_2">
          <layout class="QGridLayout" name="gridLayout_6">
-          <item row="1" column="1">
-           <widget class="QGroupBox" name="groupBox_4">
-            <property name="title">
-             <string/>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_5">
-             <item row="0" column="0">
-              <widget class="QTextBrowser" name="textBrowser">
-               <property name="html">
-                <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:20pt; font-weight:700; color:#ffffff;&quot;&gt;      Keyboard Shortcuts&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;1) CTRL + W	:  Exit		&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;2) CTRL + S	:  Search Tab&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;3) CTRL + M	:  Meatadata Tab	&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;4) CTRL + C	:  Show credits&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;5) CTRL + R	:  Reset config		&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;6) CTRL + L	:  Set custom API language (exp.) &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;7) CTRL + 1	:  Switch to Account page &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;8) CTRL + 2	:  Switch back to default page&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;9) CTRL + 3 	:  Switch to Settings&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QPushButton" name="button_switch_to_account">
-               <property name="cursor">
-                <cursorShape>PointingHandCursor</cursorShape>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">QPushButton {
-        background-color: #5a2a82; /* base violet color */
-        color: #ffffff; /* white text */
-        border: none;
-        border-radius: 10px; /* reduced rounded corner radius */
-        padding: 5px 10px; /* reduced button padding */
-        font-size: 12px;
-        outline: none;
-    }
-    
-    QPushButton:hover {
-        background-color: #7b3ca3; /* slightly lighter violet when hovered */
-    }
-
-    QPushButton:pressed {
-        background-color: #481f61; /* darker violet when pressed */
-    }
-
-    QPushButton:disabled {
-        background-color: #3f1d4d; /* even darker shade when button is disabled */
-        color: #8a7b9a; /* greyish text */
-    }</string>
-               </property>
-               <property name="text">
-                <string>Switch to Account page</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QPushButton" name="button_switch_to_settings">
-               <property name="styleSheet">
-                <string notr="true">QPushButton {
-        background-color: #5a2a82; /* base violet color */
-        color: #ffffff; /* white text */
-        border: none;
-        border-radius: 10px; /* reduced rounded corner radius */
-        padding: 5px 10px; /* reduced button padding */
-        font-size: 12px;
-        outline: none;
-    }
-    
-    QPushButton:hover {
-        background-color: #7b3ca3; /* slightly lighter violet when hovered */
-    }
-
-    QPushButton:pressed {
-        background-color: #481f61; /* darker violet when pressed */
-    }
-
-    QPushButton:disabled {
-        background-color: #3f1d4d; /* even darker shade when button is disabled */
-        color: #8a7b9a; /* greyish text */
-    }</string>
-               </property>
-               <property name="text">
-                <string>Switch to Settings</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
           <item row="1" column="0">
            <widget class="QGroupBox" name="groupBox_3">
             <property name="title">
@@ -1324,37 +1226,6 @@ QLineEdit:disabled {
                         </property>
                        </widget>
                       </item>
-                      <item>
-                       <widget class="QPushButton" name="button_refresh">
-                        <property name="styleSheet">
-                         <string notr="true">QPushButton {
-        background-color: #5a2a82; /* base violet color */
-        color: #ffffff; /* white text */
-        border: none;
-        border-radius: 10px; /* reduced rounded corner radius */
-        padding: 5px 10px; /* reduced button padding */
-        font-size: 12px;
-        outline: none;
-    }
-    
-    QPushButton:hover {
-        background-color: #7b3ca3; /* slightly lighter violet when hovered */
-    }
-
-    QPushButton:pressed {
-        background-color: #481f61; /* darker violet when pressed */
-    }
-
-    QPushButton:disabled {
-        background-color: #3f1d4d; /* even darker shade when button is disabled */
-        color: #8a7b9a; /* greyish text */
-    }</string>
-                        </property>
-                        <property name="text">
-                         <string>Refresh</string>
-                        </property>
-                       </widget>
-                      </item>
                      </layout>
                     </item>
                    </layout>
@@ -1403,6 +1274,104 @@ li.checked::marker { content: &quot;\2612&quot;; }
                  </item>
                 </layout>
                </widget>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QGroupBox" name="groupBox_4">
+               <property name="title">
+                <string/>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_5">
+                <item row="0" column="0">
+                 <widget class="QTextBrowser" name="textBrowser">
+                  <property name="html">
+                   <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:20pt; font-weight:700; color:#ffffff;&quot;&gt;      Keyboard Shortcuts&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;1) CTRL + W	:  Exit		&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;2) CTRL + S	:  Search Tab&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;3) CTRL + M	:  Meatadata Tab	&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;4) CTRL + C	:  Show credits&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;5) CTRL + R	:  Reset config		&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;6) CTRL + L	:  Set custom API language (exp.) &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;7) CTRL + 1	:  Switch to Account page &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;8) CTRL + 2	:  Switch back to default page&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;9) CTRL + 3 	:  Switch to Settings&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QPushButton" name="button_switch_to_account">
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+        background-color: #5a2a82; /* base violet color */
+        color: #ffffff; /* white text */
+        border: none;
+        border-radius: 10px; /* reduced rounded corner radius */
+        padding: 5px 10px; /* reduced button padding */
+        font-size: 12px;
+        outline: none;
+    }
+    
+    QPushButton:hover {
+        background-color: #7b3ca3; /* slightly lighter violet when hovered */
+    }
+
+    QPushButton:pressed {
+        background-color: #481f61; /* darker violet when pressed */
+    }
+
+    QPushButton:disabled {
+        background-color: #3f1d4d; /* even darker shade when button is disabled */
+        color: #8a7b9a; /* greyish text */
+    }</string>
+                  </property>
+                  <property name="text">
+                   <string>Switch to Account page</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QPushButton" name="button_switch_to_settings">
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+        background-color: #5a2a82; /* base violet color */
+        color: #ffffff; /* white text */
+        border: none;
+        border-radius: 10px; /* reduced rounded corner radius */
+        padding: 5px 10px; /* reduced button padding */
+        font-size: 12px;
+        outline: none;
+    }
+    
+    QPushButton:hover {
+        background-color: #7b3ca3; /* slightly lighter violet when hovered */
+    }
+
+    QPushButton:pressed {
+        background-color: #481f61; /* darker violet when pressed */
+    }
+
+    QPushButton:disabled {
+        background-color: #3f1d4d; /* even darker shade when button is disabled */
+        color: #8a7b9a; /* greyish text */
+    }</string>
+                  </property>
+                  <property name="text">
+                   <string>Switch to Settings</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </widget>
              </item>
             </layout>
@@ -1746,49 +1715,449 @@ QLineEdit:disabled {
          </layout>
         </widget>
         <widget class="QWidget" name="page_3">
-         <layout class="QGridLayout" name="gridLayout_18">
+         <layout class="QGridLayout" name="gridLayout_22">
           <item row="0" column="0">
-           <widget class="QGroupBox" name="groupBox_9">
+           <widget class="QGroupBox" name="groupBox_10">
             <property name="title">
-             <string>Filter categories:   NOTE: If you save the settings, the selected categories are applied, even when they are not checked here!</string>
+             <string>Search filters</string>
             </property>
-            <layout class="QGridLayout" name="gridLayout_2">
-             <item row="0" column="0">
-              <widget class="QScrollArea" name="scroll_area">
-               <property name="widgetResizable">
-                <bool>true</bool>
+            <layout class="QGridLayout" name="gridLayout_16">
+             <item row="0" column="1">
+              <widget class="QGroupBox" name="groupBox_15">
+               <property name="title">
+                <string>Production:</string>
                </property>
-               <widget class="QWidget" name="scrollAreaWidgetContents">
-                <property name="geometry">
-                 <rect>
-                  <x>0</x>
-                  <y>0</y>
-                  <width>769</width>
-                  <height>193</height>
-                 </rect>
-                </property>
-                <widget class="QWidget" name="gridLayoutWidget_3">
-                 <property name="geometry">
-                  <rect>
-                   <x>290</x>
-                   <y>40</y>
-                   <width>160</width>
-                   <height>80</height>
-                  </rect>
-                 </property>
-                 <layout class="QGridLayout" name="verticalLayout">
-                  <item row="0" column="0">
-                   <widget class="QWidget" name="container_widget" native="true"/>
-                  </item>
-                 </layout>
-                </widget>
-               </widget>
+               <layout class="QGridLayout" name="gridLayout_15">
+                <item row="0" column="0">
+                 <widget class="QCheckBox" name="checkbox_professional">
+                  <property name="styleSheet">
+                   <string notr="true">QCheckBox::indicator {
+    width: 13px;
+    height: 13px;
+}
+
+QCheckBox::indicator:unchecked {
+    border: 1px solid white;
+    background: white;
+}
+
+QCheckBox::indicator:checked {
+    image: url(graphics/checkmark.png);
+}</string>
+                  </property>
+                  <property name="text">
+                   <string>Professional</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCheckBox" name="checkbox_homemade">
+                  <property name="styleSheet">
+                   <string notr="true">QCheckBox::indicator {
+    width: 13px;
+    height: 13px;
+}
+
+QCheckBox::indicator:unchecked {
+    border: 1px solid white;
+    background: white;
+}
+
+QCheckBox::indicator:checked {
+    image: url(graphics/checkmark.png);
+}</string>
+                  </property>
+                  <property name="text">
+                   <string>Homemade</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QGroupBox" name="groupBox_14">
+               <property name="title">
+                <string>HD Resolution?</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_18">
+                <item row="0" column="0">
+                 <widget class="QRadioButton" name="radio_hd_yes">
+                  <property name="styleSheet">
+                   <string notr="true">QRadioButton {
+	color: rgb(255, 255, 255)}
+
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Yes</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QRadioButton" name="radio_hd_no">
+                  <property name="styleSheet">
+                   <string notr="true">QRadioButton {
+	color: rgb(255, 255, 255)}
+
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>No</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QGroupBox" name="groupBox_13">
+               <property name="title">
+                <string>Time sort filters</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_14">
+                <item row="1" column="0">
+                 <widget class="QRadioButton" name="radio_day">
+                  <property name="styleSheet">
+                   <string notr="true">QRadioButton {
+	color: rgb(255, 255, 255)}
+
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Day</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QRadioButton" name="radio_month">
+                  <property name="styleSheet">
+                   <string notr="true">QRadioButton {
+	color: rgb(255, 255, 255)}
+
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0,255, 183);
+
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Month</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QRadioButton" name="radio_week">
+                  <property name="styleSheet">
+                   <string notr="true">QRadioButton {
+	color: rgb(255, 255, 255)}
+
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Week</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QRadioButton" name="radio_nothing_2">
+                  <property name="styleSheet">
+                   <string notr="true">QRadioButton {
+	color: rgb(255, 255, 255)}
+
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Nothing</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QRadioButton" name="radio_year">
+                  <property name="styleSheet">
+                   <string notr="true">QRadioButton {
+	color: rgb(255, 255, 255)}
+
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Year</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QGroupBox" name="groupBox_12">
+               <property name="title">
+                <string>Sorting for Search function</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_7">
+                <item row="2" column="0">
+                 <widget class="QRadioButton" name="radio_longest">
+                  <property name="styleSheet">
+                   <string notr="true">QRadioButton {
+	color: rgb(255, 255, 255)}
+
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Longest</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QRadioButton" name="radio_top_rated">
+                  <property name="styleSheet">
+                   <string notr="true">QRadioButton {
+	color: rgb(255, 255, 255)}
+
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Top rated</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QRadioButton" name="radio_most_viewed">
+                  <property name="styleSheet">
+                   <string notr="true">QRadioButton {
+	color: rgb(255, 255, 255)}
+
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Most viewed</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QRadioButton" name="radio_most_relevant">
+                  <property name="styleSheet">
+                   <string notr="true">QRadioButton {
+	color: rgb(255, 255, 255)}
+
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Most relevant</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QRadioButton" name="radio_most_recent">
+                  <property name="styleSheet">
+                   <string notr="true">QRadioButton {
+	color: rgb(255, 255, 255)}
+
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Most recent</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QRadioButton" name="radio_nothing">
+                  <property name="styleSheet">
+                   <string notr="true">QRadioButton {
+	color: rgb(255, 255, 255)}
+
+
+QRadioButton::indicator::unchecked {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+
+QRadioButton::indicator:checked {
+    border : 4px solid;
+	border-color: black;
+	border-radius: 6px;
+	background-color: rgb(0, 255, 183);
+
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Nothing</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </widget>
              </item>
             </layout>
            </widget>
           </item>
-          <item row="0" column="1" rowspan="2">
+          <item row="0" column="1">
            <widget class="QGroupBox" name="groupBox_11">
             <property name="title">
              <string/>
@@ -2350,460 +2719,36 @@ QCheckBox::indicator:checked {
             </layout>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QGroupBox" name="groupBox_10">
+          <item row="1" column="0" colspan="2">
+           <widget class="QGroupBox" name="groupBox_9">
             <property name="title">
-             <string/>
+             <string>Filter categories:   NOTE: If you save the settings, the selected categories are applied, even when they are not checked here!</string>
             </property>
-            <layout class="QGridLayout" name="gridLayout_16">
-             <item row="3" column="1" colspan="2">
-              <layout class="QGridLayout" name="gridLayout_15">
-               <item row="0" column="1">
-                <widget class="QRadioButton" name="radio_nothing_2">
-                 <property name="styleSheet">
-                  <string notr="true">QRadioButton {
-	color: rgb(255, 255, 255)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-</string>
-                 </property>
-                 <property name="text">
-                  <string>Nothing</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QRadioButton" name="radio_day">
-                 <property name="styleSheet">
-                  <string notr="true">QRadioButton {
-	color: rgb(255, 255, 255)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-</string>
-                 </property>
-                 <property name="text">
-                  <string>Day</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QRadioButton" name="radio_month">
-                 <property name="styleSheet">
-                  <string notr="true">QRadioButton {
-	color: rgb(255, 255, 255)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0,255, 183);
-
-}
-</string>
-                 </property>
-                 <property name="text">
-                  <string>Month</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QRadioButton" name="radio_week">
-                 <property name="styleSheet">
-                  <string notr="true">QRadioButton {
-	color: rgb(255, 255, 255)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-</string>
-                 </property>
-                 <property name="text">
-                  <string>Week</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QRadioButton" name="radio_year">
-                 <property name="styleSheet">
-                  <string notr="true">QRadioButton {
-	color: rgb(255, 255, 255)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-</string>
-                 </property>
-                 <property name="text">
-                  <string>Year</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="label_14">
-               <property name="text">
-                <string>Time:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="1" colspan="2">
-              <layout class="QHBoxLayout" name="horizontalLayout_24">
-               <item>
-                <widget class="QLabel" name="label_production">
-                 <property name="text">
-                  <string>Production:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QCheckBox" name="checkbox_professional">
-                 <property name="styleSheet">
-                  <string notr="true">QCheckBox::indicator {
-    width: 13px;
-    height: 13px;
-}
-
-QCheckBox::indicator:unchecked {
-    border: 1px solid white;
-    background: white;
-}
-
-QCheckBox::indicator:checked {
-    image: url(graphics/checkmark.png);
-}</string>
-                 </property>
-                 <property name="text">
-                  <string>Professional</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QCheckBox" name="checkbox_homemade">
-                 <property name="styleSheet">
-                  <string notr="true">QCheckBox::indicator {
-    width: 13px;
-    height: 13px;
-}
-
-QCheckBox::indicator:unchecked {
-    border: 1px solid white;
-    background: white;
-}
-
-QCheckBox::indicator:checked {
-    image: url(graphics/checkmark.png);
-}</string>
-                 </property>
-                 <property name="text">
-                  <string>Homemade</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item row="0" column="1" rowspan="2" colspan="2">
-              <layout class="QGridLayout" name="gridLayout_14">
-               <item row="3" column="0">
-                <widget class="QRadioButton" name="radio_top_rated">
-                 <property name="styleSheet">
-                  <string notr="true">QRadioButton {
-	color: rgb(255, 255, 255)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-</string>
-                 </property>
-                 <property name="text">
-                  <string>Top rated</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QRadioButton" name="radio_most_recent">
-                 <property name="styleSheet">
-                  <string notr="true">QRadioButton {
-	color: rgb(255, 255, 255)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-</string>
-                 </property>
-                 <property name="text">
-                  <string>Most recent</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QRadioButton" name="radio_most_relevant">
-                 <property name="styleSheet">
-                  <string notr="true">QRadioButton {
-	color: rgb(255, 255, 255)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-
-</string>
-                 </property>
-                 <property name="text">
-                  <string>Most relevant</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QRadioButton" name="radio_most_viewed">
-                 <property name="styleSheet">
-                  <string notr="true">QRadioButton {
-	color: rgb(255, 255, 255)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-</string>
-                 </property>
-                 <property name="text">
-                  <string>Most viewed</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QRadioButton" name="radio_longest">
-                 <property name="styleSheet">
-                  <string notr="true">QRadioButton {
-	color: rgb(255, 255, 255)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-</string>
-                 </property>
-                 <property name="text">
-                  <string>Longest</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="1">
-                <widget class="QRadioButton" name="radio_nothing">
-                 <property name="styleSheet">
-                  <string notr="true">QRadioButton {
-	color: rgb(255, 255, 255)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-</string>
-                 </property>
-                 <property name="text">
-                  <string>Nothing</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
+            <layout class="QGridLayout" name="gridLayout_2">
              <item row="0" column="0">
-              <widget class="QLabel" name="label_13">
-               <property name="text">
-                <string>Sort:</string>
+              <widget class="QScrollArea" name="scroll_area">
+               <property name="widgetResizable">
+                <bool>true</bool>
                </property>
-              </widget>
-             </item>
-             <item row="4" column="0">
-              <layout class="QHBoxLayout" name="horizontalLayout_25">
-               <item>
-                <widget class="QLabel" name="label_hd">
-                 <property name="text">
-                  <string>HD?</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="radio_hd_yes">
-                 <property name="styleSheet">
-                  <string notr="true">QRadioButton {
-	color: rgb(255, 255, 255)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-</string>
-                 </property>
-                 <property name="text">
-                  <string>Yes</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="radio_hd_no">
-                 <property name="styleSheet">
-                  <string notr="true">QRadioButton {
-	color: rgb(255, 255, 255)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-</string>
-                 </property>
-                 <property name="text">
-                  <string>No</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item row="2" column="1">
-              <widget class="QFrame" name="frame_2">
-               <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Raised</enum>
-               </property>
+               <widget class="QWidget" name="scrollAreaWidgetContents">
+                <property name="geometry">
+                 <rect>
+                  <x>0</x>
+                  <y>0</y>
+                  <width>1003</width>
+                  <height>99</height>
+                 </rect>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_23">
+                 <item row="0" column="0">
+                  <layout class="QGridLayout" name="verticalLayout">
+                   <item row="0" column="0">
+                    <widget class="QWidget" name="container_widget" native="true"/>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
               </widget>
              </item>
             </layout>
