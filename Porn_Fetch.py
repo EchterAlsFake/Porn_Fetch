@@ -14,7 +14,8 @@ import wget
 
 from configparser import ConfigParser
 from PySide6 import QtCore
-from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QInputDialog, QLineEdit, QButtonGroup, QCheckBox, QFrame
+from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QInputDialog, QLineEdit, \
+    QButtonGroup, QCheckBox, QFrame
 from PySide6.QtGui import QKeyEvent, QColor
 from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Qt, QDir
 from src.license_agreement import Ui_Widget_License
@@ -23,6 +24,30 @@ from src.ui_main_widget import Ui_Porn_Fetch_Widget
 from src.setup import enable_error_handling, setup_config_file, strip_title, logging, get_graphics
 from src.cli import CLI
 
+def patch(video: phub.Video) -> dict:
+    '''
+    Monkey patch for phub.parser.resolve.
+    '''
+
+    phub.utils.log('parser', 'Resolving page JS script...', level=6)
+
+    for _ in range(phub.parser.RENEW_MAX_ATTEMPTS):
+        response = phub.consts.regexes.video_flashvar(video.page)
+
+        if not len(response):
+            phub.parser.renew(video)
+            continue
+
+        flash, ctx = response[0]
+        break
+
+    else:
+        raise phub.errors.ParsingError('Max renew attempts exceeded.')
+
+# Load context
+    return phub.parser.json.loads(ctx)
+
+phub.parser.resolve = patch
 
 def ui_popup(text):
     """ A simple UI popup that will be used for small messages to the user."""
@@ -105,6 +130,68 @@ def update_progressbar(pos, total, progress_bar):
     progress_bar.setMaximum(total)
     progress_bar.setValue(pos)
 
+def help_ui_file():
+    text = """
+The URLs in the file needs to be separated with new lines.
+
+e.g.
+
+URL1
+URL2
+URL3
+
+No comma or anything else. Just new lines.
+"""
+    ui_popup(text)
+
+def help():
+    text = """
+
+API Language:
+
+The API handles your requests to PornHub.com   If the API is in english language, then all the titles and video
+attributes are also in english. If the API is for example in German language, then the video titles are (if automatically
+translated by PornHub) also in German language.   Not all videos are supported! 
+
+UI Language:
+
+UI language defines the language in the application.
+
+Quality:
+
+Highest = Best Quality possible, Half = somewhere in the middle, Lowest = Least quality possible
+
+Debug:
+
+Sentry: Captures error logs, which helps me to fix issues faster, and you don't have to report them
+
+UI Transparency: 
+
+Defines the UI background transparency. Please note, that this feature doesn't work well on Hyprland!
+
+Threading: 
+
+Threading uses multiple cores of your CPU to download multiple videos simultaneously. This leads to a broken
+progressbar, but can have a big speed impact if you have a really fast internet connection.
+
+Delay:
+
+The delay handles how fast the API requests are. By default you should definitely ENABLE this.
+Without the delay, the API will spam the requests as fast as possible. Of course this has a big speed impact and 
+videos will download 10x faster, but it can also lead to a lot more errors. If you just want to download
+one video real quick, you can disable it, but if you plan to download more than that, please enable it!
+
+(DO NOT REPORT ERRORS, IF YOU HAD DELAY DISABLED!) 
+
+If you still have questions, let me know on GitHub in discussions.
+
+Account:
+
+You can log in to PornHub with your Account and fetch all videos you've liked, watched and that are recommended to you.
+This can be useful for downloading more efficiently. Your Account data won't be exposed!
+"""
+    ui_popup(text)
+
 
 class Widget(QWidget):
     """Main UI widget. Design is loaded from the ui_main_widget.py file. Feel free to change things if you want."""
@@ -140,12 +227,11 @@ class Widget(QWidget):
         alpha_value = int((int(self.transparency) / 100) * 255)
         color = QColor(0, 0, 0, alpha_value)
         self.setStyleSheet(
-            f"background-color: rgba({color.red()}, {color.green()}, {color.blue()}, {color.alpha()});color: rgb(255,255,255);border: none;")
+            f"background-color: rgba({color.red()}, {color.green()}, {color.blue()}, {color.alpha()});color: rgb(255,255,255);")
 
         self.ui.stackedWidget.setCurrentIndex(0)
         self.button_connectors()
         self.settings_page_categories()
-
 
     def settings_page_categories(self):
         # Coded completely by ChatGPT
@@ -156,16 +242,15 @@ class Widget(QWidget):
         self.checkboxes = {}
 
         for i, category in enumerate(categories):
-            row = (i // columns ) + 1
+            row = (i // columns) + 1
             col = i % columns
             checkbox = QCheckBox(category)
-            checkbox.setStyleSheet("QCheckBox::indicator {\n    width: 13px;\n    height: 13px;\n}\n\nQCheckBox::indicator:unchecked {\n    border: 1px solid white;\n    background: white;\n}\n\nQCheckBox::indicator:checked {\n    image: url(graphics/checkmark.png);\n}")
+            checkbox.setStyleSheet(
+                "QCheckBox::indicator {\n    width: 13px;\n    height: 13px;\n}\n\nQCheckBox::indicator:unchecked {\n    border: 1px solid white;\n    background: white;\n}\n\nQCheckBox::indicator:checked {\n    image: url(graphics/checkmark.png);\n}")
             self.ui.verticalLayout.addWidget(checkbox, row, col)
             self.checkboxes[category] = checkbox
 
-        container = QWidget()
-        container.setLayout(self.ui.verticalLayout)
-        self.ui.scroll_area.setWidget(container)
+
         self.search_bar = QLineEdit(self)
         self.search_bar.setStyleSheet("""
 QLineEdit {
@@ -207,7 +292,7 @@ QLineEdit:disabled {
         self.ui.button_start_search.clicked.connect(self.search_videos)
         self.ui.button_download_search_query.clicked.connect(self.download_tree)
         self.ui.button_settings_apply.clicked.connect(self.settings_tab)
-        self.ui.button_settings_help.clicked.connect(self.help)
+        self.ui.button_settings_help.clicked.connect(help)
         self.ui.button_switch_to_account.clicked.connect(self.switch_to_account)
         self.ui.button_switch_main_page.clicked.connect(self.switch_to_main)
         self.ui.button_switch_to_main_widget.clicked.connect(self.switch_to_main)
@@ -218,7 +303,7 @@ QLineEdit:disabled {
         self.ui.button_account_download.clicked.connect(self.download_tree_widget)
         self.ui.button_switch_to_settings.clicked.connect(self.switch_to_settings)
         self.ui.button_download_thumbnail.clicked.connect(self.download_thumbnail)
-        self.ui.button_refresh.clicked.connect(self.get_metadata)
+        self.ui.button_file_help.clicked.connect(help_ui_file)
 
     def button_group(self):
         """Separates the QRadioButtons from the different grid layouts"""
@@ -282,7 +367,6 @@ QLineEdit:disabled {
 
         elif self.ui.radio_threading_yes.isChecked():
             self.mode = True
-
 
     def sentry_data_collection(self):
 
@@ -383,7 +467,6 @@ Thanks :)
         except phub.errors.ParsingError:
             ui_popup("Parsing error. Please try again in a few minutes")
 
-
     def start(self):
 
         url = self.ui.lineedit_url.text()
@@ -423,9 +506,9 @@ Thanks :)
                 self.video.download(callback=self.callback, quality=quality, path=output_path)
 
         except OSError:
-            logging(msg="OS Error: The file name is invalid for your system. Recreating a random int name...", level="0")
+            logging(msg="OS Error: The file name is invalid for your system. Recreating a random int name...",
+                    level="0")
             self.download(video, progress_bar, os_error_handle=True)
-
 
         except Exception as e:
             ui_popup(text=f"An unexpected error happened.  Exception: {e}")
@@ -448,7 +531,8 @@ Thanks :)
             valid_urls = []
             for url in content:
                 if self.test_video(url) is None:
-                    ui_popup(f"The following URL is invalid: {url}  Please remove it from the file or correct it and try again.")
+                    ui_popup(
+                        f"The following URL is invalid: {url}  Please remove it from the file or correct it and try again.")
 
                 else:
                     valid_urls.append(url)
@@ -461,7 +545,6 @@ Thanks :)
 
             self.add_to_download_tree(video_objects)
             self.download_tree()
-
 
     def get_metadata(self):
 
@@ -521,7 +604,6 @@ Thanks :)
                 video_object = self.test_video(url)
                 user_objects.append(video_object)
 
-
             self.add_to_tree_widget(user_objects, tree_widget=self.ui.treeWidget)
 
     def download_thumbnail(self):
@@ -547,11 +629,11 @@ Thanks :)
             self.get_client_language()
 
         self.client = Client(language=self.api_language, delay=self.delay)
-        query_object = self.client.search(query, category=self.category, time=self.sort_time, sort=self.sort, hd=self.hd, production=self.production)
+        query_object = self.client.search(query, category=self.category, time=self.sort_time, sort=self.sort,
+                                          hd=self.hd, production=self.production)
 
         self.add_to_download_tree(query_object)
         self.download_tree()
-
 
     def add_to_download_tree(self, data):
         self.ui.treeWidget.clear()
@@ -560,7 +642,6 @@ Thanks :)
             item.setText(0, f"{i}) {video.title}")
             item.setData(0, QtCore.Qt.UserRole, video.url)
             item.setCheckState(0, QtCore.Qt.Unchecked)  # Adds a checkbox
-
 
     def download_tree(self):
         for i in range(self.ui.treeWidget.topLevelItemCount()):
@@ -575,113 +656,51 @@ Thanks :)
     def settings_tab(self):
         with open("config.ini", "w") as config_file:
 
+            # Handle selected categories
             selected_categories = self.search()
             self.conf['SelectedCategories'] = {'categories': ','.join(selected_categories)}
 
-            if self.ui.radio_hd_yes.isChecked():
-                self.conf.set("Porn_Fetch", "hd", "true")
+            # Define the mappings between UI states and configurations
+            mappings = {
+                "hd": [("radio_hd_yes", "true"), ("radio_hd_no", "false")],
+                "sort_time": [("radio_day", "day"), ("radio_week", "week"), ("radio_year", "year"),
+                              ("radio_month", "month"), ("radio_nothing_2", "none")],
+                "sort": [("radio_most_recent", "most_recent"), ("radio_most_viewed", "most_viewed"),
+                         ("radio_most_relevant", "most_relevant"), ("radio_top_rated", "top_rated"),
+                         ("radio_nothing", "none"), ("radio_longest", "longest")],
+                "production": [("checkbox_homemade", "homemade"), ("checkbox_professional", "professional")],
+                "default_quality": [("radio_highest", "best"), ("radio_half", "half"), ("radio_lowest", "worst")],
+                "default_threading": [("radio_threading_no", "no"), ("radio_threading_yes", "yes")],
+                "sentry": [("settings_checkbox_sentry", "true")],
+                "delay": [("settings_checkbox_delay", "true")],
+                "api_language": [("api_radio_de", "de"), ("api_radio_fr", "fr"), ("api_radio_es", "es"),
+                                 ("api_radio_ru", "ru"), ("api_radio_en", "en")],
+                "UI_language": [("application_language_en", "en")]
+            }
 
-            elif self.ui.radio_hd_no.isChecked():
-                self.conf.set("Porn_Fetch", "hd", "false")
+            # Apply the mappings
+            for config_key, options in mappings.items():
+                for ui_elem, value in options:
+                    if getattr(self.ui, ui_elem).isChecked():
+                        self.conf.set("Porn_Fetch", config_key, value)
+                        break
+                else:
+                    self.conf.set("Porn_Fetch", config_key, "none")
 
-            if self.ui.radio_day.isChecked():
-                self.conf.set("Porn_Fetch", "sort_time", "day")
-
-            elif self.ui.radio_week.isChecked():
-                self.conf.set("Porn_Fetch", "sort_time", "week")
-
-            elif self.ui.radio_year.isChecked():
-                self.conf.set("Porn_Fetch", "sort_time", "year")
-
-            elif self.ui.radio_month.isChecked():
-                self.conf.set("Porn_Fetch", "sort_time", "month")
-
-            elif self.ui.radio_nothing_2.isChecked():
-                self.conf.set("Porn_Fetch", "sort_time", "none")
-
-            if self.ui.radio_most_recent.isChecked():
-                self.conf.set("Porn_Fetch", "sort", "most_recent")
-
-            elif self.ui.radio_most_viewed.isChecked():
-                self.conf.set("Porn_Fetch", "sort", "most_viewed")
-
-            elif self.ui.radio_most_relevant.isChecked():
-                self.conf.set("Porn_Fetch", "sort", "most_relevant")
-
-            elif self.ui.radio_top_rated.isChecked():
-                self.conf.set("Porn_Fetch", "sort", "top_rated")
-
-            elif self.ui.radio_nothing.isChecked():
-                self.conf.set("Porn_Fetch", "sort", "none")
-
-            elif self.ui.radio_longest.isChecked():
-                self.conf.set("Porn_Fetch", "sort", "longest")
-
-            if self.ui.checkbox_homemade.isChecked():
-                self.conf.set("Porn_Fetch", "production", "homemade")
-
-            elif self.ui.checkbox_professional.isChecked():
-                self.conf.set("Porn_Fetch", "production", "professional")
-
-            if not self.ui.checkbox_professional.isChecked() and not self.ui.checkbox_homemade.isChecked():
-                self.conf.set("Porn_Fetch", "production", "none")
-
-            if self.ui.radio_highest.isChecked():
-                self.conf.set("Porn_Fetch", "default_quality", "best")
-
-            if self.ui.radio_half.isChecked():
-                self.conf.set("Porn_Fetch", "default_quality", "half")
-
-            if self.ui.radio_lowest.isChecked():
-                self.conf.set("Porn_Fetch", "default_quality", "worst")
-
-            if self.ui.radio_threading_no.isChecked():
-                self.conf.set("Porn_Fetch", "default_threading", "no")
-
-            if self.ui.radio_threading_yes.isChecked():
-                self.conf.set("Porn_Fetch", "default_threading", "yes")
-
-            if self.ui.settings_checkbox_sentry.isChecked():
-                self.conf.set("Debug", "sentry", "true")
-
-            else:
-                self.conf.set("Debug", "sentry", "false")
-
-            if self.ui.settings_checkbox_delay.isChecked():
-                self.conf.set("Porn_Fetch", "delay", "true")
-
-            elif not self.ui.settings_checkbox_delay.isChecked():
-                self.conf.set("Porn_Fetch", "delay", "false")
-
-            if self.ui.api_radio_de.isChecked():
-                self.conf.set("Porn_Fetch", "api_language", "de")
-
-            elif self.ui.api_radio_fr.isChecked():
-                self.conf.set("Porn_Fetch", "api_language", "fr")
-
-            elif self.ui.api_radio_es.isChecked():
-                self.conf.set("Porn_Fetch", "api_language", "es")
-
-            elif self.ui.api_radio_ru.isChecked():
-                self.conf.set("Porn_Fetch", "api_language", "ru")
-
-            elif self.ui.api_radio_en.isChecked():
-                self.conf.set("Porn_Fetch", "api_language", "en")
-
-            if self.ui.application_language_en.isChecked():
-                self.conf.set("UI", "language", "en")
-
+            # Handle transparency
             transparency = self.ui.horizontalSlider.value()
             self.conf.set("UI", "transparency", str(transparency))  # Needs to be a string!
+
+            # Write to the config file
             self.conf.write(config_file)
 
+            # Show popup
             ui_popup("Applied! (Please restart for changes to take effect)")
 
     def search(self):
-       return [name for name, checkbox in self.checkboxes.items() if checkbox.isChecked()]
+        return [name for name, checkbox in self.checkboxes.items() if checkbox.isChecked()]
 
     def load_user_settings(self):
-
 
         self.conf.read('config.ini')
         if ('SelectedCategories' in self.conf and 'categories' in self.conf['SelectedCategories']):
@@ -694,7 +713,6 @@ Thanks :)
 
         elif self.conf["Debug"]["sentry"] == "false":
             self.sentry = False
-
 
         if self.conf["Porn_Fetch"]["delay"] == "true":
             self.ui.settings_checkbox_delay.setChecked(True)
@@ -841,7 +859,6 @@ Thanks :)
             logging(msg="Already logged in", level="1")
             ui_popup("Already logged in.")
 
-
     def add_to_tree_widget(self, iterator, tree_widget):
         tree_widget.clear()
         try:
@@ -863,7 +880,6 @@ Thanks :)
         else:
             self.add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
 
-
     def get_watched_videos(self):
         videos = self.client.account.watched
         if len(videos) == 0:
@@ -872,7 +888,6 @@ Thanks :)
         else:
             self.add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
 
-
     def get_recommended_videos(self):
         videos = self.client.account.recommended
         if len(videos) == 0:
@@ -880,8 +895,6 @@ Thanks :)
 
         else:
             self.add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
-
-
 
     def download_tree_widget(self):
         # Downloads all selected videos with a for loop
@@ -938,58 +951,8 @@ Thanks :)
         if event.key() == Qt.Key.Key_3 and event.modifiers() == Qt.ControlModifier:
             self.switch_to_settings()
 
-    def help(self):
-        text = """
-
-API Language:
-
-The API handles your requests to PornHub.com   If the API is in english language, then all the titles and video
-attributes are also in english. If the API is for example in German language, then the video titles are (if automatically
-translated by PornHub) also in German language.   Not all videos are supported! 
-
-UI Language:
-
-UI language defines the language in the application. See contribution on GitHub how to port it into your language
-
-Quality:
-
-Highest = Best Quality possible, Half = somewhere in the middle, Lowest = Least quality possible
-
-Debug:
-
-Sentry: Captures error logs, which helps me to fix issues faster, and you don't have to report them
-
-UI Transparency: 
-
-Defines the UI background transparency. Please note, that this feature doesn't work well on Hyprland!
-
-Threading: 
-
-Threading uses multiple cores of your CPU to download multiple videos simultaneously. This leads to a broken
-progressbar, but can have a big speed impact if you have a really fast internet connection.
-
-Delay:
-
-The delay handles how fast the API requests are. By default you should definitely ENABLE this.
-Without the delay, the API will spam the requests as fast as possible. Of course this has a big speed impact and 
-videos will download 10x faster, but it can also lead to a lot more errors. If you just want to download
-one video real quick, you can disable it, but if you plan to download more than that, please enable it!
-
-(DO NOT REPORT ERRORS, IF YOU HAD DELAY DISABLED!) 
-
-If you still have questions, let me know on GitHub in discussions.
-
-Account:
-
-You can log in to PornHub with your Account and fetch all videos you've liked, watched and that are recommended to you.
-This can be useful for downloading more efficiently. Your Account data won't be exposed!
-"""
-        ui_popup(text)
-
 
 def main():
-    print("Checking configuration...")
-
     app = QApplication(sys.argv)
     setup_config_file()
 
@@ -1001,7 +964,8 @@ def main():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--cli",
-                        help="CLI Terminal Version. Intended for advanced users or systems without a Graphical Environment",
+                        help="CLI Terminal Version. Intended for advanced users or systems without a Graphical "
+                             "Environment",
                         action="store_true")
     parser.add_argument("-v", "--version", help="Shows version information", action="store_true")
     parser.add_argument("-s", "--source", help="Shows the Source of this project", action="store_true")
@@ -1021,5 +985,8 @@ if __name__ == "__main__":
         print(__license__)
 
     else:
-        main()
+        try:
+            main()
 
+        except requests.exceptions.ConnectionError:
+            ui_popup("Connection Error. This error belongs to PornHub. I can't do anything about it.")
