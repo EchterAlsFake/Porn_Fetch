@@ -2,12 +2,6 @@
 
 ![Build](https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg)
 
-# Information
-Currently not working!
-
-<br>Waiting for a fix on the API side...
-
-<br>Do not report the Index out of range error
 
 # Table of Contents
 
