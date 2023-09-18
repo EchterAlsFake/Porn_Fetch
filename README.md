@@ -14,6 +14,6 @@ DO NOT compile this or use it.
 - []  --> Search filters
 - []  --> Account Page
 - []  --> Search users
-- []  --> Stability
+- [x]  --> Stability  : Delay 0.3 worked best
 <br>
 ! More comming...

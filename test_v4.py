@@ -10,7 +10,7 @@ quality_best = Quality.BEST
 quality_half = Quality.HALF
 quality_worst = Quality.WORST
 
-c = Client(language="en")
+c = Client(language="en", delay=0.3)
 video_url = "https://de.pornhub.com/view_video.php?viewkey=64b362c47f543" # Used for the whole testing process
 pbar = None
 
@@ -80,11 +80,22 @@ videos = user.videos
 bio = user.bio
 info = user.info
 
+
 for video in videos:
     print(video.title)
 
 print(bio)
 print(info)
+
+"""
+Stability Stage 1: massive video download
+Status: Worked really good with delay set to 0.3   0.2 crashed after like 20 seconds
+"""
+
+for video in user.videos:
+    print(video.title)
+    video.download(path="./", quality=quality_worst, display=callback)
+
 
 """
 Stage 4: Search with filters and categories
