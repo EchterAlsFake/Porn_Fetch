@@ -2,6 +2,17 @@
 
 ![Build](https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg)
 
+# Information
+
+I am starting now to merge this project into PHUB v4
+<br>I don't how long it takes...
+
+Current issues:
+
+- Connection Error
+- phub.utils attribute error
+
+Will be fixed in v4
 
 # Table of Contents
 

@@ -15,7 +15,7 @@ import wget
 from configparser import ConfigParser
 from PySide6 import QtCore
 from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QInputDialog, QLineEdit, \
-    QButtonGroup, QCheckBox, QFrame
+    QButtonGroup, QCheckBox
 from PySide6.QtGui import QKeyEvent, QColor
 from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Qt, QDir
 from src.license_agreement import Ui_Widget_License
@@ -24,30 +24,6 @@ from src.ui_main_widget import Ui_Porn_Fetch_Widget
 from src.setup import enable_error_handling, setup_config_file, strip_title, logging, get_graphics
 from src.cli import CLI
 
-def patch(video: phub.Video) -> dict:
-    '''
-    Monkey patch for phub.parser.resolve.
-    '''
-
-    phub.utils.log('parser', 'Resolving page JS script...', level=6)
-
-    for _ in range(phub.parser.RENEW_MAX_ATTEMPTS):
-        response = phub.consts.regexes.video_flashvar(video.page)
-
-        if not len(response):
-            phub.parser.renew(video)
-            continue
-
-        flash, ctx = response[0]
-        break
-
-    else:
-        raise phub.errors.ParsingError('Max renew attempts exceeded.')
-
-# Load context
-    return phub.parser.json.loads(ctx)
-
-phub.parser.resolve = patch
 
 def ui_popup(text):
     """ A simple UI popup that will be used for small messages to the user."""
