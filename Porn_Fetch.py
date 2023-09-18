@@ -19,7 +19,8 @@ from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetIte
 from PySide6.QtGui import QKeyEvent, QColor
 from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Qt, QDir
 from src.license_agreement import Ui_Widget_License
-from phub import Client, Quality, Category
+from phub import Client
+from phub.locals import Quality, Category
 from src.ui_main_widget import Ui_Porn_Fetch_Widget
 from src.setup import enable_error_handling, setup_config_file, strip_title, logging, get_graphics
 from src.cli import CLI
