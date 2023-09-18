@@ -5,7 +5,7 @@
 # Information
 
 I am starting now to merge this project into PHUB v4
-<br>I don't how long it takes...
+<br>I don't know how long it takes...
 
 Current issues:
 
