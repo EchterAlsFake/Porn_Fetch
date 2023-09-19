@@ -22,6 +22,7 @@ Will be fixed in v4
 - [Data collection and Privacy](#data-collection--privacy)
 - [Supported platforms](#supported-platforms)
 - [Building from source](#building-from-source)
+- [Android](#android)
 - [Useful information](#useful-information)
 - [Legal rights](#legal-rights)
 - [Credits](#credits)
@@ -96,6 +97,31 @@ This is an automatic build script. Just run the following in your terminal and s
 ```
 wget "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/install.sh" && bash install.sh
 ```
+
+# Android
+
+#### Read carefully to prevent errors!
+
+The development for Android has a separate branch named "android".
+<br>Kivy is a whole new framework for me, so I will need my time to make it look good!
+### DOWNLOAD: [0.1](https://github.com/EchterAlsFake/Porn_Fetch/releases)
+<br>Minimum needed API: 21
+
+Requirements:
+
+- The location /storage/emulated/0/Download needs to be valid. (Mostly default for Android 10+)
+- When you open the APP the above input field needs to say: "Successfully imported PHUB"
+
+Error reporting:
+
+- You can report errors, but please include your Android version, a detailed description of what you 
+  <br>did and if your device is rooted, because if it is, we can get additional logs :)
+
+Manual Building:
+
+A guide / script is in development
+<br>If you want to try by yourself, make sure you are using MY FORK of PHUB, otherwise it WILL FAIL!
+<br>AND USE MY OWN buildozer.spec  (WILL SAVE A LOT OF TIME!!!)
 
 
 
