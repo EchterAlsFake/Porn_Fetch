@@ -2,7 +2,6 @@
 
 ![Build](https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg)
 
-
 # Table of Contents
 
 - [What is Porn Fetch?](#what-is-porn-fetch)<br>
