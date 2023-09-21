@@ -48,3 +48,7 @@ This file keeps track of all Issues / Bugs
 # 2.5 
 
 12) AttributeError: widget object has no attribute 'sentry'
+
+# 2.7
+
+Fixed #4 Connection Error and Model Error

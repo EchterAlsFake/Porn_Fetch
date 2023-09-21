@@ -139,3 +139,10 @@ I hope that most issues are now fixed.
 - Redesign of the settings widget
 - removed some things from the roadmap
 - added a connection error exception
+
+# 2.7
+
+- API Updated to v4
+- Huge stability and performance boost
+- fixed setting Delay not working issue
+- fixed #4 connection error / model error

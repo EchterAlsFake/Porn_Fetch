@@ -17,8 +17,10 @@
 - [x] Search filters
 - [x] Support Fedora in a build script
 - [x] Support OpenSUSE in a build script
-- [] Create an Android App with Qt for Android and PySide6
+- [] Create an Android App with Kivy
 - [] Create a Website for better overview, marketing and publicity
+- [] New APP design with sidebar and a menu
+- [] Implementing new functions from PHUB v4
 
 # STATUS:
 
