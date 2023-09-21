@@ -507,22 +507,20 @@ Thanks :)
         self.client = Client(language=self.api_language, delay=self.delay)
         user = self.ui.lineedit_user_channel.text()
         logging(msg=f"USER: {user}", level="0")
+        videos = self.client.get_user(user)
+
+        total_videos = videos.videos
+        user_objects = []
 
         try:
-            videos = self.client.get_user(user)
-
-        except phub.errors.UserNotFoundError:
-            ui_popup("The user was not found. Remember: You need to enter a URL, not a name!")
-
-        else:
-            total_videos = videos.videos
-            user_objects = []
 
             for video in total_videos:
                 video_object = self.test_video(video.url)
                 user_objects.append(video_object)
+        except IndexError:
+            pass
 
-            self.add_to_tree_widget(user_objects, tree_widget=self.ui.treeWidget)
+        self.add_to_tree_widget(user_objects, tree_widget=self.ui.treeWidget)
 
     def download_thumbnail(self):
         url = self.ui.lineedit_image_url.text()
