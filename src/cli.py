@@ -152,7 +152,7 @@ class CLI():
         try:
             if not os_error_handler:
                 logging(msg=f"Starting video download for: {video_object.title}", level="0")
-                video_object.download(path=self.output_path, quality=self.quality, callback=self.callback)
+                video_object.download(path=self.output_path, quality=self.quality, display=self.callback)
                 logging(msg="Finished :) ", level="0")
 
             else:
@@ -227,17 +227,14 @@ Enter the numbers of video you want to download. Separate with comma.  e.g 1,2,3
         numbers = picked_indexes.split(",")
         for number in numbers:
             video_id = videos[int(number)].url
-            url_string = "https://www.pornhub.com/"
-            url = f"{url_string}{video_id}"
-            self.download_prerequisites(url)
+            self.download_prerequisites(video_id)
 
         logging(msg="All videos finished :)", level="0")
 
     def search(self, query):
 
         self.client = Client(language=self.api_language, delay=self.delay)
-        search_results = self.client.search(query, hd=self.hd, sort=self.sort, time=self.sort_time,
-                                            production=self.production, category=None, exclude_category=None)
+        search_results = self.client.search(query)
 
         for counter, video in enumerate(search_results):
             print(f"{counter}) {video.title}")
@@ -251,9 +248,7 @@ Enter the numbers of video you want to download. Separate with comma. e.g 1,2,3,
         numbers = picked_indexes.split(",")
         for number in numbers:
             video_id = search_results[int(number)].url
-            url_string = "https://www.pornhub.com/"
-            url = f"{url_string}{video_id}"
-            self.download_prerequisites(url)
+            self.download_prerequisites(video_id)
 
         logging(msg="All videos finished :)", level="0")
 

@@ -1,5 +1,5 @@
 __author__ = "EchterAlsFake : Johannes Habel"
-__version__ = "2.6"
+__version__ = "2.7"
 __source__ = "https://github.com/EchterAlsFake/Porn_Fetch"
 __license__ = "GPL 3"
 
@@ -15,11 +15,11 @@ import wget
 from configparser import ConfigParser
 from PySide6 import QtCore
 from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QInputDialog, QLineEdit, \
-    QButtonGroup, QCheckBox
+    QButtonGroup
 from PySide6.QtGui import QKeyEvent, QColor
 from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Qt, QDir
 from src.license_agreement import Ui_Widget_License
-from phub import Client, Quality, Category
+from phub import Client, Quality
 from src.ui_main_widget import Ui_Porn_Fetch_Widget
 from src.setup import enable_error_handling, setup_config_file, strip_title, logging, get_graphics
 from src.cli import CLI
@@ -99,7 +99,7 @@ class DownloadThread(QRunnable):
         self.signals.progress.emit(pos, total)
 
     def run(self):
-        self.video.download(callback=self.callback, quality=self.quality, path=self.output_path)
+        self.video.download(display=self.callback, quality=self.quality, path=self.output_path)
 
 
 def update_progressbar(pos, total, progress_bar):
@@ -199,6 +199,8 @@ class Widget(QWidget):
         self.ui.groupBox_7.setDisabled(True)
         self.button_group()  # Needs to be called before load_user_settings!
         self.load_user_settings()  # Loads the user settings from config.ini to make settings persistent
+        logging(f"Delay Set to: {self.delay}", level="0")
+        logging(f"API Language is: {self.api_language}", level="0")
         self.ui.stacked_main_account.setCurrentIndex(1)
         alpha_value = int((int(self.transparency) / 100) * 255)
         color = QColor(0, 0, 0, alpha_value)
@@ -207,58 +209,7 @@ class Widget(QWidget):
 
         self.ui.stackedWidget.setCurrentIndex(0)
         self.button_connectors()
-        self.settings_page_categories()
 
-    def settings_page_categories(self):
-        # Coded completely by ChatGPT
-        columns = 4
-        categories = [attr for attr in dir(Category) if
-                      not callable(getattr(Category, attr)) and not attr.startswith("__")]
-
-        self.checkboxes = {}
-
-        for i, category in enumerate(categories):
-            row = (i // columns) + 1
-            col = i % columns
-            checkbox = QCheckBox(category)
-            checkbox.setStyleSheet(
-                "QCheckBox::indicator {\n    width: 13px;\n    height: 13px;\n}\n\nQCheckBox::indicator:unchecked {\n    border: 1px solid white;\n    background: white;\n}\n\nQCheckBox::indicator:checked {\n    image: url(graphics/checkmark.png);\n}")
-            self.ui.verticalLayout.addWidget(checkbox, row, col)
-            self.checkboxes[category] = checkbox
-
-
-        self.search_bar = QLineEdit(self)
-        self.search_bar.setStyleSheet("""
-QLineEdit {
-    border: 2px solid #757575;
-    border-radius: 12px;
-    padding: 0 8px;
-    background: rgb(94, 92, 100);
-    color: #FFFFFF;
-    font-size: 16px;
-    height: 20px;
-}
-
-QLineEdit:focus {
-    border-color: rgb(107, 0, 255)
-}
-
-QLineEdit:disabled {
-    background: #444444;
-    color: #aaaaaa;
-    border-color: #aaaaaa;
- }""")
-        self.search_bar.setPlaceholderText("Search category...")
-        self.search_bar.textChanged.connect(self.filter_categories)
-        self.ui.verticalLayout.addWidget(self.search_bar, 0, 0)
-
-    def filter_categories(self, text):
-        # Also coded by ChatGPT
-        for category, checkbox in self.checkboxes.items():
-            if text.lower() in category.lower():
-                checkbox.show()
-            else:
-                checkbox.hide()
 
     def button_connectors(self):
         self.ui.button_start.clicked.connect(self.start)
@@ -434,11 +385,6 @@ Thanks :)
             self.video = self.client.get(url)
             return self.video
 
-        except phub.errors.TooManyRequests:
-            ui_popup("To many requests. Slow down a little bit (You should enable delay, if disabled)")
-
-        except phub.errors.Noresult:
-            ui_popup("No result. PornHub had an error, please try again in a few minutes")
 
         except phub.errors.ParsingError:
             ui_popup("Parsing error. Please try again in a few minutes")
@@ -508,7 +454,7 @@ Thanks :)
             for url in content:
                 if self.test_video(url) is None:
                     ui_popup(
-                        f"The following URL is invalid: {url}  Please remove it from the file or correct it and try again.")
+                        f"The following URL is invalid: {url} Please remove it from the file or correct it and try again.")
 
                 else:
                     valid_urls.append(url)
@@ -539,7 +485,7 @@ Thanks :)
             likes_up = video.like.up
             likes_down = video.like.down
             likes = f"Likes: {likes_up} - Dislikes: {likes_down}"
-            image_url = video.image_url
+            image_url = video.image.url
             tags = video.tags
 
             self.ui.lineedit_likes.setText(str(likes))
@@ -563,7 +509,7 @@ Thanks :)
         logging(msg=f"USER: {user}", level="0")
 
         try:
-            videos = self.client.get_user(url=user)
+            videos = self.client.get_user(user)
 
         except phub.errors.UserNotFoundError:
             ui_popup("The user was not found. Remember: You need to enter a URL, not a name!")
@@ -572,12 +518,8 @@ Thanks :)
             total_videos = videos.videos
             user_objects = []
 
-            url_string = "https://www.pornhub.com/"
             for video in total_videos:
-                split_url = video.url
-                url = f"{url_string}{split_url}"
-
-                video_object = self.test_video(url)
+                video_object = self.test_video(video.url)
                 user_objects.append(video_object)
 
             self.add_to_tree_widget(user_objects, tree_widget=self.ui.treeWidget)
@@ -605,8 +547,7 @@ Thanks :)
             self.get_client_language()
 
         self.client = Client(language=self.api_language, delay=self.delay)
-        query_object = self.client.search(query, category=self.category, time=self.sort_time, sort=self.sort,
-                                          hd=self.hd, production=self.production)
+        query_object = self.client.search(query)
 
         self.add_to_download_tree(query_object)
         self.download_tree()
@@ -625,16 +566,11 @@ Thanks :)
             checkState = item.checkState(0)
             if checkState == QtCore.Qt.Checked:
                 video_url = item.data(0, QtCore.Qt.UserRole)
-                url = f"https://www.pornhub.com/{video_url}"
-                video = self.test_video(url)
+                video = self.test_video(video_url)
                 self.download(video, progress_bar=self.ui.progressbar_download)
 
     def settings_tab(self):
         with open("config.ini", "w") as config_file:
-
-            # Handle selected categories
-            selected_categories = self.search()
-            self.conf['SelectedCategories'] = {'categories': ','.join(selected_categories)}
 
             # Define the mappings between UI states and configurations
             mappings = {
@@ -648,13 +584,18 @@ Thanks :)
                 "default_quality": [("radio_highest", "best"), ("radio_half", "half"), ("radio_lowest", "worst")],
                 "default_threading": [("radio_threading_no", "no"), ("radio_threading_yes", "yes")],
                 "sentry": [("settings_checkbox_sentry", "true")],
-                "delay": [("settings_checkbox_delay", "true")],
                 "api_language": [("api_radio_de", "de"), ("api_radio_fr", "fr"), ("api_radio_es", "es"),
                                  ("api_radio_ru", "ru"), ("api_radio_en", "en")],
                 "UI_language": [("application_language_en", "en")]
             }
+            if not self.ui.settings_checkbox_delay.isChecked():
+                self.conf.set("Porn_Fetch", "delay", "false")
+                logging("Delay disabled!", level="0")
 
-            # Apply the mappings
+            elif self.ui.settings_checkbox_delay.isChecked():
+                logging("Delay Enabled!", level="0")
+                self.conf.set("Porn_Fetch", "delay", "true")
+
             for config_key, options in mappings.items():
                 for ui_elem, value in options:
                     if getattr(self.ui, ui_elem).isChecked():
@@ -663,26 +604,13 @@ Thanks :)
                 else:
                     self.conf.set("Porn_Fetch", config_key, "none")
 
-            # Handle transparency
             transparency = self.ui.horizontalSlider.value()
             self.conf.set("UI", "transparency", str(transparency))  # Needs to be a string!
-
-            # Write to the config file
             self.conf.write(config_file)
-
-            # Show popup
             ui_popup("Applied! (Please restart for changes to take effect)")
 
-    def search(self):
-        return [name for name, checkbox in self.checkboxes.items() if checkbox.isChecked()]
-
     def load_user_settings(self):
-
         self.conf.read('config.ini')
-        if ('SelectedCategories' in self.conf and 'categories' in self.conf['SelectedCategories']):
-            selected_categories = self.conf['SelectedCategories']['categories'].split(',')
-            for category in selected_categories:
-                self.categories = getattr(Category, category, None)
 
         if self.conf["Debug"]["sentry"] == "true":
             self.sentry = True
@@ -803,7 +731,6 @@ Thanks :)
 
         self.transparency = self.conf["UI"]["transparency"]
         self.ui.horizontalSlider.setValue(int(self.transparency))
-
     def switch_to_account(self):
         self.ui.stacked_main_account.setCurrentIndex(0)
 
@@ -827,13 +754,9 @@ Thanks :)
             self.ui.lineedit_account_status.setText(f"Logged in as: {self.client.account.name}")
             self.ui.groupBox_7.setEnabled(True)
 
-        except phub.errors.LogginFailed:
+        except phub.errors.LoginFailed:
             logging(msg="Login Failed. Check credentials!", level="1")
             ui_popup("Login Failed. Check credentials!")
-
-        except phub.errors.AlreadyLoggedIn:
-            logging(msg="Already logged in", level="1")
-            ui_popup("Already logged in.")
 
     def add_to_tree_widget(self, iterator, tree_widget):
         tree_widget.clear()
