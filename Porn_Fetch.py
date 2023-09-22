@@ -759,7 +759,7 @@ Thanks :)
     def add_to_tree_widget(self, iterator, tree_widget):
         tree_widget.clear()
         try:
-            for i, video in enumerate(iterator, start=1):  # Limiting search results to 50
+            for i, video in enumerate(iterator, start=1):
                 item = QTreeWidgetItem(tree_widget)
                 item.setText(0, f"{i}) {video.title}")
                 item.setData(0, QtCore.Qt.UserRole, video.url)
@@ -769,8 +769,13 @@ Thanks :)
                 f"An error happened. This error will NOT be sent to sentry, to prevent leaking your account data! ERROR: {e}")
 
     def get_liked_videos(self):
+        try:
+            videos = self.client.account.liked
 
-        videos = self.client.account.liked
+        except AttributeError:
+            self.login()
+            self.get_liked_videos()
+
         if len(videos) == 0:
             ui_popup("No videos found. If you are sure that this is an error, it's PornHub's fault ;) ")
 
@@ -778,7 +783,13 @@ Thanks :)
             self.add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
 
     def get_watched_videos(self):
-        videos = self.client.account.watched
+        try:
+            videos = self.client.account.watched
+
+        except AttributeError:
+            self.login()
+            self.get_watched_videos()
+
         if len(videos) == 0:
             ui_popup("No videos found. If you are sure that this is an error, it's PornHub's fault ;) ")
 
@@ -786,7 +797,13 @@ Thanks :)
             self.add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
 
     def get_recommended_videos(self):
-        videos = self.client.account.recommended
+        try:
+            videos = self.client.account.recommended
+
+        except AttributeError:
+            self.login()  # Sometimes the Account Session times out. In that case a simple re-initialization is best :)
+            self.get_recommended_videos()
+
         if len(videos) == 0:
             ui_popup("No videos found. If you are sure that this is an error, it's PornHub's fault ;) ")
 
@@ -801,8 +818,7 @@ Thanks :)
                 checkState = item.checkState(0)
                 if checkState == QtCore.Qt.Checked:
                     video_url = item.data(0, QtCore.Qt.UserRole)
-                    url = f"https://www.pornhub.com/{video_url}"
-                    video = self.test_video(url)
+                    video = self.test_video(video_url)
                     self.download(video, progress_bar=self.ui.account_progressbar)
 
         except Exception as e:
