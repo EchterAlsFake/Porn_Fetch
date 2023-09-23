@@ -17,14 +17,18 @@
 - [x] Search filters
 - [x] Support Fedora in a build script
 - [x] Support OpenSUSE in a build script
-- [] Create an Android App with Kivy
-- [] Create a Website for better overview, marketing and publicity
+- [x] Create an Android App with Kivy
+- [x] Create a Website for better overview, marketing and publicity
 - [] New APP design with sidebar and a menu
 - [] Implementing new functions from PHUB v4
-
+- [] Update CLI to v4
+- [] Update Website to v4 and host it
+- [] Work on the basic design of the Android Application
+- [] Automatically manage permissions for the Android Application
+- [] Add some logical useful things like .. / .. videos downloaded, when using multiple downloads etc...
 # STATUS:
 
 Priority:
 
-UI Design
+UI Design / Android App
 

@@ -1,78 +1,55 @@
-# Porn Fetch - A PornHub Downloader 4 Free & Everyone
+# Porn Fetch - A Free & Open-Source PornHub Downloader 
 
 ![Build](https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg)
+### [Download Current Version 2.7](https://github.com/EchterAlsFake/Porn_Fetch/releases)
+## Table of Contents
 
-# Table of Contents
-
-- [What is Porn Fetch?](#what-is-porn-fetch)<br>
+- [What is Porn Fetch?](#what-is-porn-fetch)
 - [Features](#features)
-- [Installation](#installation)
-- [Data collection and Privacy](#data-collection--privacy)
-- [Supported platforms](#supported-platforms)
-- [Building from source](#building-from-source)
+- [Supported Platforms](#supported-platforms)
+- [Building from Source](#building-from-source)
 - [Android](#android)
-- [Useful information](#useful-information)
-- [Legal rights](#legal-rights)
+- [iOS](#ios)
+- [Useful Information](#useful-information)
+- [Legal Rights](#legal-rights)
 - [Credits](#credits)
 - [License](#license)
 
-# What is Porn Fetch?
+## What is Porn Fetch?
 
-Porn Fetch is a program that can download, search and interact with videos from PornHub.<br>
-The goal is to create a free and open-source downloader for everyone. <br>
-#### There's no need to use shady websites or paid software in 2023.
+Porn Fetch allows users to download, search, and interact with videos from PornHub, aiming to provide a free and open-source downloader for everyone. 
 
-# Features:
+#### Avoid shady websites or paid software in 2023.
 
-* Downloading directly from PornHub itself
-* Downloading with selectable quality
-* Fetching metadata from Videos
-* Downloading multiple videos at once
-* Downloading all videos from a whole Channel / User / Model account
-* Search for videos and download them directly in the application
-* With search and category filters
-* You can log in with your Account (You don't need to!)
-* Fetch all videos you've liked
-* Fetch all videos you've ever watched
-* Fetch recommended videos for your account
-* Threaded downloads
-* Native dark mode
-* CLI for systems without a graphical user interface
-* No ADs & restrictions
-* No login / PornHub account needed
-* No data tracking (See Data Collection / Privacy)
-* Open-Source
-* Cross-platform
-* Actively maintained
+## Features:
 
-# Installation
-
- 
-### * Files can be downloaded from [GitHub releases](https://github.com/EchterAlsFake/Porn_Fetch/releases)
-### * Source code can be found in the [GitHub releases](https://github.com/EchterAlsFake/Porn_Fetch/releases)
-##### * A backup download is available [here](https://drive.google.com/drive/folders/1sGvhAO_qQB87AOfyVDWPJZluVettBwaj?usp=drive_link)
-
-# Data Collection / Privacy
+- Downloading directly from PornHub
+- Selectable quality for downloads
+- Fetching metadata from videos
+- Downloading all videos from a whole Channel / User / Model account
+- In-app video search and download
+- Account login
+- Fetch all liked, watched, and recommended videos for your account
+- Threaded downloads
+- Native dark mode
+- CLI for systems without a graphical user interface
+- No ads & restrictions
+- No mandatory login / PornHub account
+- Cross-platform compatibility
 
 
-Sentry is a service which captures errors and displays them to me in a very
-<br>user-friendly form. Sentry captures only the Python exception and the
-lines of code in which the error happens. All other information is stripped
-out from the reports. You can see the "strip out" function in "setup.py"
-It's called "before_send" in line 72
+## Supported Platforms
 
+- Windows: 10, 11 (lower versions may be compatible)
+- Linux: X11 / Wayland - X64 (Testing on Hyprland - Wayland)
+- macOS: Requires building from source or native run with Python
+- Android: Native run with an .apk recommended; CLI available in Termux
+- iOS: Can be run with iSH (script in development)
+- ARM devices: Native run with Python required
 
-# Supported Platforms
+## Building from Source
 
-* Windows : Windows 10, 11 (lower versions may be working)
-* Linux: X11 / Wayland - X64 (I am testing on Hyprland - Wayland)
-* macOS: Needs to be built from source or run it natively with python
-* Android can be run with a Linux emulator. (See Building from Source)
-* iOS: Can be run with iSH (A script for it is in development) 
-* ARM devices need to be natively run with Python
-# Building from Source
-
-This is an automatic build script. Just run the following in your terminal and select your system.
+Automatic build script is available. Run the following in your terminal and select your system.
 
 ### Supported Platforms:
 
@@ -83,41 +60,35 @@ This is an automatic build script. Just run the following in your terminal and s
 - OpenSUSE
 
 ```
-wget "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/install.sh" && bash install.sh
+wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/install.sh" | bash
 ```
-
 # Android
 
 #### Read carefully to prevent errors!
 
 The development for Android has a separate branch named "android".
 <br>Kivy is a whole new framework for me, so I will need my time to make it look good!
+
 ### DOWNLOAD: [0.1](https://github.com/EchterAlsFake/Porn_Fetch/releases)
-<br>Minimum needed API: 21
 
-Requirements:
+Minimum needed API: 21
 
-- The location /storage/emulated/0/Download needs to be valid. (Mostly default for Android 10+)
-- When you open the APP the above input field needs to say: "Successfully imported PHUB"
+**Requirements:**
+- Internet, Read and write to External storage (your internal /emulated/0/ drive)
 
-Error reporting:
+**Error reporting:**
+- You can report errors, but please include your Android version, a detailed description of what you did and if your device is rooted, because if it is, we can get additional logs :)
 
-- You can report errors, but please include your Android version, a detailed description of what you 
-  <br>did and if your device is rooted, because if it is, we can get additional logs :)
+**Manual Building:**
+- A guide/script is in development
 
-Manual Building:
+# iOS
 
-A guide / script is in development
-<br>If you want to try by yourself, make sure you are using MY FORK of PHUB, otherwise it WILL FAIL!
-<br>AND USE MY OWN buildozer.spec  (WILL SAVE A LOT OF TIME!!!)
+It's possible to convert the Kivy created APP for Android easily into an iOS application, but I don't have an Apple device, so I cannot compile or even test it. You can do it by yourself and if you think you got a successful stable build, contact me via Discord: echteralsfake | EchterAlsFake#7164 and we can merge your build into the releases!
 
-
+(Your changes need to be documented in a FORK of my project. A recommendation would be a secondary iOS branch.)
 
 ## Useful Information
-
-
-- [Porn Fetch Issues Documentation](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/ISSUES.md)
-- [How to contribute](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/CONTRIBUTING.md)
 - [Roadmap](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/ROADMAP.md)
 - [Changelog](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/CHANGELOG.md)
 
@@ -126,65 +97,43 @@ A guide / script is in development
 > ! PornHub PROHIBITS downloading videos for unregistered users. <br>
 > ! PornHub PROHIBITS scraping content on their website
 
-So what do we learn from this?  This tool is probably NOT permitted by PornHub.
-I am just the developer. Nobody will get you in jail because you downloaded a video from PornHub, but
-consider using a VPN to be safe.
+So what do we learn from this? This tool is probably NOT permitted by PornHub.
+I am just the developer. Nobody will get you in jail because you downloaded a video from PornHub, but consider using a VPN to be safe.
 
 # Credits
 
-### Project API : [PHUB](https://github.com/Egsagon/PHUB)
-### GUI : PySide6 - [Qt](https://qt.io) for Python
+##### Project API : [PHUB](https://github.com/Egsagon/PHUB)
+##### GUI : PySide6 - [Qt](https://qt.io) for Python
+##### Android : Kivy, KivyMD
 ### External libraries:
-* [colorama](https://github.com/tartley/colorama)
-* [tqdm](https://github.com/tqdm/tqdm)
-* [phub](https://github.com/Egsagon/PHUB)
-* [sentry sdk](https://github.com/getsentry/sentry-python) Used in 1.7+ 
-* [requests](https://github.com/psf/requests)
-* [pyside6](https://wiki.qt.io/Qt_for_Python)
-* wget
-* bs4 (Used by PHUB API)
+- [colorama](https://github.com/tartley/colorama)
+- [tqdm](https://github.com/tqdm/tqdm)
+- [phub](https://github.com/Egsagon/PHUB)
+- [sentry sdk](https://github.com/getsentry/sentry-python) Used in 1.7 - 2.7
+- [requests](https://github.com/psf/requests) *
+- [pyside6](https://wiki.qt.io/Qt_for_Python)
+- wget
+
+### Android Specific:
+- Kivy MD
+- Kivy
+- Buildozer
+- Cython
+
 ### Graphics:
+- [Download Icon](https://icons8.com/icon/104149/herunterladen) *
+- [Search Icon](https://icons8.com/icon/aROEUCBo74Il/suche) *
+- [Settings Icon](https://icons8.com/icon/52146/einstellungen) *
+- [C Icon](https://icons8.com/icon/Uehg4gyVyrUo/copyright) * 
+- [M Icon](https://iconscout.com/icons/medium) By [Unicons Font](https://iconscout.com/contributors/unicons) on [Icon Scout](https://iconscout.com) *
+- [Checkmark](https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html)
 
-* [Download Icon](https://icons8.com/icon/104149/herunterladen) *
-* [Search Icon](https://icons8.com/icon/aROEUCBo74Il/suche) *
-* [Settings Icon](https://icons8.com/icon/52146/einstellungen) * 
-* [C Icon](https://icons8.com/icon/Uehg4gyVyrUo/copyright) * 
-* [M Icon](https://iconscout.com/icons/medium) By [Unicons Font](https://iconscout.com/contributors/unicons) on [Icon Scout](https://iconscout.com) *
-* [Checkmark](https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html)
+*Only used in older versions.
 
-*only used in older versions.
-
-#### Contributors:
-
-(Contribute to the project, to have your name listed here :D)
+## Contributors:
+- [Egsagon](https://github.com/Egsagon)
 
 # License:
-
-So and here we have a "little" problem. I started this project when I was 14 years old.
-I licensed it under Creative Commons, but this is of course NOT the right license to be used for Open-Source Software development.
-I did some research, and I realized that I need to use either LGPL or GPL license for an Open-Source development with Qt for Python.
-I decided to use the LGPLv3 License. I don't know why, because it was a big mistake. The LGPLv3 License is used by libraries and not
-by a full standalone Application. So I need to change my License to GPL. I talked to ChatGPT about it because I don't have
-money for a Lawyer, and I guess ChatGPT is a bit smarter than some users on reddit. We figured out that the external libraries that I am using
-within my Project are compatible with the GPL License. 
-
-I am using the following external libraries:
-
-* [tqdm](https://github.com/tqdm/tqdm)
-* [colorama](https://github.com/tartley/colorama)
-* [sentry_sdk](https://github.com/getsentry/sentry-python)
-* [phub](https://github.com/Egsagon/PHUB/blob/master/LICENSE)
-* [requests](https://github.com/psf/requests)
-* wget - wget no longer has a repository
-
-tqdm uses the MPL (Mozilla Public License) 2.0 and the MIT License <br>
-colorama uses the BSD 3 license <br>
-sentry sdk uses the MIT License <br>
-phub uses the GPL license<br>
-
-I can just say: Sorry. <br>
-We all were young and foolish, but I don't delete my mistakes. I stay behind them, and I want to be transparent to everyone.
-
-
 LICENSE: [GPL 3](https://www.gnu.org/licenses/gpl-3.0.en.html)
+<br>Copyright (C) 2023 Johannes Habel | EchterAlsFake
 

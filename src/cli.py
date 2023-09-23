@@ -1,23 +1,23 @@
-# Rewrite of the CLI, because it was really unstable and I didn't really understand my code lol
 import os.path
-from phub import Client, Quality, errors
-from tqdm import tqdm
 import random
-from configparser import ConfigParser
 import getpass
-from colorama import *
 import threading
 
+from phub import Client, Quality, errors
+from tqdm import tqdm
+from configparser import ConfigParser
+from colorama import *
+
 try:
-    from src.setup import logging, setup_config_file, internet_test
+    from src.setup import logging, setup_config_file
+
 except ImportError:
-    from setup import logging, setup_config_file, internet_test
+    from setup import logging, setup_config_file
 
 
 class CLI():
 
     def __init__(self):
-
         self.z = f"{Fore.LIGHTCYAN_EX}[+]"
         self.client = None
         self.quality = None
@@ -34,9 +34,8 @@ class CLI():
         self.conf = ConfigParser()
         self.conf.read("config.ini")
         self.load_variables()
-        if internet_test():
-            while True:
-                self.main_menu()
+        while True:
+            self.main_menu()
 
     def main_menu(self):
 
@@ -276,7 +275,7 @@ Enter the numbers of video you want to download. Separate with comma. e.g 1,2,3,
         else:
             is_vertical = "No"
 
-        image_url = video.image_url
+        image_url = video.image.url
         tags = video.tags
 
         print(f"""
@@ -315,7 +314,6 @@ Tags: {tags}
         elif account_menu == "4":
             self.get_recommended_videos()
 
-
         elif account_menu == "5":
             self.main_menu()
 
@@ -328,30 +326,24 @@ Tags: {tags}
         password = getpass.getpass("Please enter your password --=>:")
 
         try:
-
             self.client = Client(language=self.api_language, delay=self.delay, username=username, password=password)
             logging(f"Logged in as: {self.client.account.name}", level="0")
 
-        except errors.LogginFailed:
-            logging(msg="Login failed. Please try again.", level="1")
-
-        except errors.AlreadyLoggedIn:
-            logging(msg="Already logged in. Please try again.", level="1")
+        except errors.LoginFailed:
+            logging("Login Failed, check your credentials", level="0")
+            self.login()
 
     def get_liked_videos(self):
-
         liked_object = self.client.account.liked
         liked_videos = liked_object.videos
         self.iterate_and_download(liked_videos)
 
     def get_watched_videos(self):
-
         watched_object = self.client.account.watched
         watched_videos = watched_object.videos
         self.iterate_and_download(watched_videos)
 
     def get_recommended_videos(self):
-
         recommended_object = self.client.account.reccomended
         recommended_videos = recommended_object.videos
         self.iterate_and_download(recommended_videos)

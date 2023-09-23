@@ -1,9 +1,6 @@
 phub
 PySide6
 colorama
-pyinstaller
 bs4
 tqdm
-sentry-sdk
 wget
-requests

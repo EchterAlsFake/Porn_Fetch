@@ -72,6 +72,10 @@ Initial Release
 - Fixed OS Error issue
 - Added function to strip out special symbols in title, to prevent path issues
 
+# 2.0
+
+This release exists, but I don't remember the changes anymore.
+
 # 2.1
 
 - A complete new UI design
@@ -146,3 +150,12 @@ I hope that most issues are now fixed.
 - Huge stability and performance boost
 - fixed setting Delay not working issue
 - fixed #4 connection error / model error
+
+# 2.8 
+
+- removed Sentry from the entire project
+- changed unimportant stuff on some files
+- ChatGPT wrote the Readme a bit more professional
+- Updated Thumbnail download to use PHUB v4
+- Updated CLI to v4
+- removed unnecessary files e.g. DOWNLOADS.md, ISSUES.md

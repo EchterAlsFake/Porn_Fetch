@@ -1,16 +1,13 @@
 __author__ = "EchterAlsFake : Johannes Habel"
-__version__ = "2.7"
+__version__ = "2.8"
 __source__ = "https://github.com/EchterAlsFake/Porn_Fetch"
 __license__ = "GPL 3"
 
 import sys
 import argparse
 import phub.consts
-import sentry_sdk
 import os
-import requests
 import random
-import wget
 
 from configparser import ConfigParser
 from PySide6 import QtCore
@@ -21,7 +18,7 @@ from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Qt, QDir
 from src.license_agreement import Ui_Widget_License
 from phub import Client, Quality
 from src.ui_main_widget import Ui_Porn_Fetch_Widget
-from src.setup import enable_error_handling, setup_config_file, strip_title, logging, get_graphics
+from src.setup import setup_config_file, strip_title, logging, get_graphics
 from src.cli import CLI
 
 
@@ -37,6 +34,7 @@ class License(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.main_widget = None
         self.conf = ConfigParser()
         self.conf.read("config.ini")
 
@@ -106,19 +104,6 @@ def update_progressbar(pos, total, progress_bar):
     progress_bar.setMaximum(total)
     progress_bar.setValue(pos)
 
-def help_ui_file():
-    text = """
-The URLs in the file needs to be separated with new lines.
-
-e.g.
-
-URL1
-URL2
-URL3
-
-No comma or anything else. Just new lines.
-"""
-    ui_popup(text)
 
 def help():
     text = """
@@ -169,13 +154,27 @@ This can be useful for downloading more efficiently. Your Account data won't be 
     ui_popup(text)
 
 
+def add_to_tree_widget(iterator, tree_widget):
+    tree_widget.clear()
+    try:
+        for i, video in enumerate(iterator, start=1):
+            item = QTreeWidgetItem(tree_widget)
+            item.setText(0, f"{i}) {video.title}")
+            item.setData(0, QtCore.Qt.UserRole, video.url)
+            item.setCheckState(0, QtCore.Qt.Unchecked)  # Adds a checkbox
+    except Exception as e:
+        ui_popup(
+            f"An error happened. This error will NOT be sent to sentry, to prevent leaking your account data! ERROR: {e}")
+
+
 class Widget(QWidget):
     """Main UI widget. Design is loaded from the ui_main_widget.py file. Feel free to change things if you want."""
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.sentry = None
-        self.setup()
+        setup_config_file()
+        self.conf = ConfigParser()
+        self.conf.read("config.ini")
 
         if not os.path.exists("graphics"):
             get_graphics()
@@ -189,6 +188,7 @@ class Widget(QWidget):
         self.sort = None
         self.sort_time = None
         self.production = None
+        self.mode = None
         self.hd = None
         self.category = False
         self.download_thread = None
@@ -210,7 +210,6 @@ class Widget(QWidget):
         self.ui.stackedWidget.setCurrentIndex(0)
         self.button_connectors()
 
-
     def button_connectors(self):
         self.ui.button_start.clicked.connect(self.start)
         self.ui.button_start_file.clicked.connect(self.start_file)
@@ -230,7 +229,6 @@ class Widget(QWidget):
         self.ui.button_account_download.clicked.connect(self.download_tree_widget)
         self.ui.button_switch_to_settings.clicked.connect(self.switch_to_settings)
         self.ui.button_download_thumbnail.clicked.connect(self.download_thumbnail)
-        self.ui.button_file_help.clicked.connect(help_ui_file)
 
     def button_group(self):
         """Separates the QRadioButtons from the different grid layouts"""
@@ -272,20 +270,8 @@ class Widget(QWidget):
         button_group_ui_language = QButtonGroup()
         button_group_ui_language.addButton(self.ui.application_language_en)
 
-        self.buttonGroups = button_group_ui_language, button_group_threading, button_group_quality, button_group_api_language, button_group_hd, button_group_sort_time, button_group_sort
-
-    def setup(self):
-        self.conf = ConfigParser()
-        self.conf.read("config.ini")
-
-        if self.conf["Debug"]["sentry"] == "true":
-            enable_error_handling()
-            self.sentry = True
-
-        elif self.conf["Debug"]["sentry"] == "false":
-            self.sentry_data_collection()
-
-        logging(msg="Setup complete", level="0")
+        self.buttonGroups = (button_group_ui_language, button_group_threading, button_group_quality,
+                             button_group_api_language, button_group_hd, button_group_sort_time, button_group_sort)
 
     def get_mode(self):
 
@@ -294,42 +280,6 @@ class Widget(QWidget):
 
         elif self.ui.radio_threading_yes.isChecked():
             self.mode = True
-
-    def sentry_data_collection(self):
-
-        dlg = QMessageBox(self)
-        dlg.setWindowTitle("I have a question!")
-        dlg.setText("""
-Do you enable automatic error collection by sentry.io?
-
-This collects the following:
-
-- The Python error
-- The lines of code in which the error happened
-- may also include your PC name
-
-All other information is stripped out from the reports.
-
-See setup.py : before_send()
-
-
-Thanks :) 
-""")
-        dlg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-        dlg.setIcon(QMessageBox.Question)
-        button = dlg.exec()
-
-        if button == QMessageBox.Yes:
-            enable_error_handling()
-            self.conf.set("Debug", "sentry", "true")
-            with open("config.ini", "w") as config_file:
-                self.conf.write(config_file)
-                config_file.close()
-
-            self.sentry = True
-
-        else:
-            self.sentry = False
 
     def get_client_language(self):
         """Checks the radio button for the language used for the API client"""
@@ -354,6 +304,7 @@ Thanks :)
 
     def get_quality(self):
         """Checks the radio button for the quality used for the video object"""
+
         if self.ui.radio_highest.isChecked():
             return Quality.BEST
 
@@ -376,7 +327,6 @@ Thanks :)
         self.ui.stackedWidget.setCurrentIndex(2)
 
     def test_video(self, url):
-
         if not self.custom_language:
             self.get_client_language()
 
@@ -385,12 +335,10 @@ Thanks :)
             self.video = self.client.get(url)
             return self.video
 
-
         except phub.errors.ParsingError:
             ui_popup("Parsing error. Please try again in a few minutes")
 
     def start(self):
-
         url = self.ui.lineedit_url.text()
         video = self.test_video(url)
         logging(msg=f"Downloading: {url}", level="0")
@@ -401,7 +349,6 @@ Thanks :)
         self.ui.progressbar_download.setValue(pos)
 
     def download(self, video, progress_bar, os_error_handle=False):
-
         quality = self.get_quality()
         logging(msg=f"Quality: {quality}", level="0")
         self.get_mode()
@@ -413,7 +360,7 @@ Thanks :)
             title = random.randint(0, 10000)
 
         title = strip_title(title)  # Fixes OS Error on Windows
-        output_path = output_path + title + ".mp4"
+        output_path = f"{output_path}{title}.mp4"
 
         try:
             if self.mode:
@@ -435,8 +382,6 @@ Thanks :)
         except Exception as e:
             ui_popup(text=f"An unexpected error happened.  Exception: {e}")
             logging(msg=e, level="1")
-            if self.sentry:
-                sentry_sdk.capture_exception(e)
 
     def start_file(self):
 
@@ -454,7 +399,7 @@ Thanks :)
             for url in content:
                 if self.test_video(url) is None:
                     ui_popup(
-                        f"The following URL is invalid: {url} Please remove it from the file or correct it and try again.")
+                        f"The following URL is invalid: {url} It won't be used!.")
 
                 else:
                     valid_urls.append(url)
@@ -498,18 +443,16 @@ Thanks :)
             self.ui.lineedit_duration.setText(str(duration))
             self.ui.lineedit_hotspots.setText(str(hotspots))
 
-        video.refresh()
-
     def user_channel(self):
         if not self.custom_language:
             self.get_client_language()
 
         self.client = Client(language=self.api_language, delay=self.delay)
         user = self.ui.lineedit_user_channel.text()
-        logging(msg=f"USER: {user}", level="0")
-        videos = self.client.get_user(user)
+        user_object = self.client.get_user(user)
+        logging(msg=f"User: {str(user_object.name)}", level="0")
 
-        total_videos = videos.videos
+        total_videos = user_object.videos
         user_objects = []
 
         try:
@@ -520,26 +463,16 @@ Thanks :)
         except IndexError:
             pass
 
-        self.add_to_tree_widget(user_objects, tree_widget=self.ui.treeWidget)
+        add_to_tree_widget(user_objects, tree_widget=self.ui.treeWidget)
 
     def download_thumbnail(self):
-        url = self.ui.lineedit_image_url.text()
-        title = self.ui.lineedit_title.text()
-        name = f"{title}.jpg"
-
-        try:
-            wget.download(url, out=name)
-            logging(msg=f"Downloaded Thumbnail for: {name} Location: {name}", level="0")
-            ui_popup("Download complete")
-
-        except Exception as e:
-            logging(msg=f"Error download thumbnail: {e}", level="1")
-            ui_popup(e)
-            if self.sentry:
-                sentry_sdk.capture_exception(e)
+        url = self.ui.lineedit_url.text()
+        video = self.test_video(url)
+        image = video.image
+        image.download(path="./")
+        ui_popup(f"Downloaded Thumbnail for: {url}")
 
     def search_videos(self):
-        # Searches videos with query string and lets the user select them
         query = self.ui.lineedit_search_query.text()
         if not self.custom_language:
             self.get_client_language()
@@ -739,7 +672,6 @@ Thanks :)
         self.ui.stacked_main_account.setCurrentIndex(2)
 
     def login(self):
-
         username = self.ui.lineedit_account_username.text()
         password = self.ui.lineedit_account_password.text()
         self.ui.lineedit_account_status.setText("Logging in...")
@@ -756,18 +688,6 @@ Thanks :)
             logging(msg="Login Failed. Check credentials!", level="1")
             ui_popup("Login Failed. Check credentials!")
 
-    def add_to_tree_widget(self, iterator, tree_widget):
-        tree_widget.clear()
-        try:
-            for i, video in enumerate(iterator, start=1):
-                item = QTreeWidgetItem(tree_widget)
-                item.setText(0, f"{i}) {video.title}")
-                item.setData(0, QtCore.Qt.UserRole, video.url)
-                item.setCheckState(0, QtCore.Qt.Unchecked)  # Adds a checkbox
-        except Exception as e:
-            ui_popup(
-                f"An error happened. This error will NOT be sent to sentry, to prevent leaking your account data! ERROR: {e}")
-
     def get_liked_videos(self):
         try:
             videos = self.client.account.liked
@@ -780,7 +700,7 @@ Thanks :)
             ui_popup("No videos found. If you are sure that this is an error, it's PornHub's fault ;) ")
 
         else:
-            self.add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
+            add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
 
     def get_watched_videos(self):
         try:
@@ -794,7 +714,7 @@ Thanks :)
             ui_popup("No videos found. If you are sure that this is an error, it's PornHub's fault ;) ")
 
         else:
-            self.add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
+            add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
 
     def get_recommended_videos(self):
         try:
@@ -808,7 +728,7 @@ Thanks :)
             ui_popup("No videos found. If you are sure that this is an error, it's PornHub's fault ;) ")
 
         else:
-            self.add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
+            add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
 
     def download_tree_widget(self):
         # Downloads all selected videos with a for loop
@@ -898,8 +818,4 @@ if __name__ == "__main__":
         print(__license__)
 
     else:
-        try:
-            main()
-
-        except requests.exceptions.ConnectionError:
-            ui_popup("Connection Error. This error belongs to PornHub. I can't do anything about it.")
+        main()

@@ -32,14 +32,7 @@ What you can submit:
 * improvements
 * weird things that you do not understand, or you don't know why they are happening
 * typos
-
-What you should NOT submit:
-
-* errors - Because they are tracked automatically in version 1.7+
-
-(the above doesn't apply if you disabled the data collection. In that case, you can of course submit the error)
-
-
+* Everything else you think it would be useful
 
 # Contact:
 
@@ -48,3 +41,10 @@ please contact me:
 
 - EchterAlsFake@proton.me
 - EchterAlsFake#7164 | echteralsfake
+
+
+# What I currently need:
+
+- Someone who creates a simple Logo for Porn Fetch
+- Someone who tests the stability on other systems
+- Someone who can maybe give me feedback on the UI Design

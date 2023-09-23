@@ -1,28 +1,35 @@
 #!/bin/bash
 
 # Automatic compile script for Porn Fetch
-# Currently supported: Arch Linux, Ubuntu, Termux
+# Currently supported: Arch Linux, Ubuntu, Termux, Fedora, OpenSUSE
 
-echo "Please select your distribution. If your distribution is not in the list, make an Issue about it!"
-options="Arch-Linux Ubuntu Termux Fedora OpenSUSE"
-select option in $options; do
-  if [ "Arch-Linux" = $option ]; then
-        echo "You've chosen arch linux"
+# Detect distribution
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    OS=$ID
+elif type lsb_release >/dev/null 2>&1; then
+    OS=$(lsb_release -si)
+elif [ -f /etc/lsb-release ]; then
+    . /etc/lsb-release
+    OS=$DISTRIB_ID
+elif [ -f /etc/debian_version ]; then
+    OS=Debian
+else
+    OS=$(uname -s)
+fi
+
+# Convert to lowercase
+OS=$(echo $OS | tr '[:upper:]' '[:lower:]')
+
+case $OS in
+    "arch"|"archlinux")
+        # Arch Linux commands
+        echo "Detected Arch Linux"
         sudo pacman -S python-virtualenv git
-        git clone https://github.com/EchterAlsFake/Porn_Fetch
-        cd Porn_Fetch
-        python3 -m venv venv
-        source venv/bin/activate
-        pip install -r requirements.txt
-        pyinstaller -F widget.py
-        cd dist
-        mv widget Porn_Fetch
-        chmod +x Porn_Fetch
-        echo "Porn Fetch is now installed to /Porn_Fetch/dist/"
-        exit
-
-  elif [ $option = "Ubuntu" ]; then
-        echo "You've chosen ubuntu"
+        ;;
+    "ubuntu")
+        # Ubuntu commands
+        echo "Detected Ubuntu"
         sudo apt-get update
         sudo apt-get install build-essential cmake python3-dev libssl-dev qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev qt5-default git wget python3-venv -y
         wget "https://www.python.org/ftp/python/3.11.4/Python-3.11.4.tar.xz"
@@ -33,68 +40,39 @@ select option in $options; do
         sudo make altinstall
         cd ..
         rm -rf Python-3.11.4
-        git clone https://github.com/EchterAlsFake/Porn_Fetch
-        cd Porn_Fetch
-        python3.11 -m venv venv
-        source venv/bin/activate
-        pip instal -r requirements.txt
-        pyinstaller -F widget.py
-        cd dist
-        chmod +x widget
-        mv widget Porn_Fetch
-        echo "You can run Porn Fetch now in the dist directory with ./Porn_Fetch"
-        echo "Note, at first startup the graphics resources will be downloaded..."
-
-  elif [ "Termux" = $option ]; then
-        echo "You've chosen termux"
-        echo "Please make sure, that you've installed Termux from the F-Droid store. The Playstore version is outdated!"
-        sleep 2
+        ;;
+    "termux")
+        # Termux commands
+        echo "Detected Termux"
         apt-get update
-        echo "NOTE: If you get asked some questions, just press N and continue"
         apt-get full-upgrade -y
         apt-get install python3 python-pip git wget ldd binutils
-        git clone https://github.com/EchterAlsFake/Porn_Fetch
-        cd Porn_Fetch
-        cd src
-        pip install -r requirements_termux.txt
-        pyinstaller -F cli.py
-        cd dist
-        mv cli Porn_Fetch
-        chmod +x Porn_Fetch
-        echo "Porn Fetch is now in the dist directory (Porn_Fetch/src/dist/) Run it with ./Porn_Fetch"
-        exit
+        ;;
+    "fedora")
+        # Fedora commands
+        echo "Detected Fedora"
+        sudo dnf install -y git python3-virtualenv qt5-devel
+        ;;
+    "opensuse"|"suse")
+        # OpenSUSE commands
+        echo "Detected OpenSUSE"
+        sudo zypper install -y git python3-virtualenv libqt5-qtbase-devel
+        ;;
+    *)
+        echo "Unsupported distribution: $OS"
+        exit 1
+        ;;
+esac
 
-  elif [ $option = "Fedora" ]; then
-      echo "You've chosen fedora"
-      sudo dnf install -y git python3-virtualenv qt5-devel
-      git clone https://github.com/EchterAlsFake/Porn_Fetch
-        cd Porn_Fetch
-        cd src
-        pip install -r requirements_termux.txt
-        pyinstaller -F cli.py
-        cd dist
-        mv cli Porn_Fetch
-        chmod +x Porn_Fetch
-        echo "Porn Fetch is now in the dist directory (Porn_Fetch/src/dist/) Run it with ./Porn_Fetch"
-        exit
-
-    elif [ "OpenSUSE" = $option ]; then
-
-      echo "You've chosen OpenSUSE"
-      sudo zypper install -y git python3-virtualenv libqt5-qtbase-devel
-      git clone https://github.com/EchterAlsFake/Porn_Fetch
-        cd Porn_Fetch
-        cd src
-        pip install -r requirements_termux.txt
-        pyinstaller -F cli.py
-        cd dist
-        mv cli Porn_Fetch
-        chmod +x Porn_Fetch
-        echo "Porn Fetch is now in the dist directory (Porn_Fetch/src/dist/) Run it with ./Porn_Fetch"
-        exit
-
-  else
-        echo "Error"
-  fi
-
-done
+# Common commands
+git clone https://github.com/EchterAlsFake/Porn_Fetch
+cd Porn_Fetch
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+pip install pyinstaller
+pyinstaller -F widget.py
+cd dist
+mv widget Porn_Fetch
+chmod +x Porn_Fetch
+echo "Porn Fetch is now installed to $(pwd)/"
