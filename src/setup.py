@@ -1,6 +1,5 @@
 import os
 import wget
-import sentry_sdk
 
 from colorama import *
 from tqdm import tqdm

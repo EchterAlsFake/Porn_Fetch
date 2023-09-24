@@ -8,19 +8,24 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QMetaObject, QRect, Qt)
-from PySide6.QtGui import QCursor
-from PySide6.QtWidgets import (QCheckBox, QFrame, QGridLayout,
-    QGroupBox, QHBoxLayout, QLabel,
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QGridLayout,
+    QGroupBox, QHBoxLayout, QHeaderView, QLabel,
     QLineEdit, QProgressBar, QPushButton, QRadioButton,
-    QScrollArea, QSlider, QStackedWidget,
+    QScrollArea, QSizePolicy, QSlider, QStackedWidget,
     QTextBrowser, QTreeWidget, QTreeWidgetItem, QWidget)
 
 class Ui_Porn_Fetch_Widget(object):
     def setupUi(self, Porn_Fetch_Widget):
         if not Porn_Fetch_Widget.objectName():
             Porn_Fetch_Widget.setObjectName(u"Porn_Fetch_Widget")
-        Porn_Fetch_Widget.resize(1089, 544)
+        Porn_Fetch_Widget.resize(1089, 547)
         Porn_Fetch_Widget.setStyleSheet(u"background-color: rgb(18,18,18);\n"
 "color: white;")
         self.gridLayout_21 = QGridLayout(Porn_Fetch_Widget)
@@ -2096,25 +2101,6 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridlayout_ui_language.addWidget(self.label_threading_mode, 2, 0, 1, 1)
 
-        self.settings_checkbox_sentry = QCheckBox(self.groupBox_11)
-        self.settings_checkbox_sentry.setObjectName(u"settings_checkbox_sentry")
-        self.settings_checkbox_sentry.setCursor(QCursor(Qt.PointingHandCursor))
-        self.settings_checkbox_sentry.setStyleSheet(u"QCheckBox::indicator {\n"
-"    width: 13px;\n"
-"    height: 13px;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:unchecked {\n"
-"    border: 1px solid white;\n"
-"    background: white;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:checked {\n"
-"    image: url(graphics/checkmark.png);\n"
-"}")
-
-        self.gridlayout_ui_language.addWidget(self.settings_checkbox_sentry, 1, 1, 1, 1)
-
         self.settings_checkbox_delay = QCheckBox(self.groupBox_11)
         self.settings_checkbox_delay.setObjectName(u"settings_checkbox_delay")
         self.settings_checkbox_delay.setStyleSheet(u"QCheckBox::indicator {\n"
@@ -2131,7 +2117,7 @@ class Ui_Porn_Fetch_Widget(object):
 "    image: url(graphics/checkmark.png);\n"
 "}")
 
-        self.gridlayout_ui_language.addWidget(self.settings_checkbox_delay, 1, 2, 1, 1)
+        self.gridlayout_ui_language.addWidget(self.settings_checkbox_delay, 1, 1, 1, 1)
 
 
         self.gridLayout_17.addLayout(self.gridlayout_ui_language, 1, 0, 1, 2)
@@ -2247,7 +2233,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scroll_area.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1003, 99))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1003, 102))
         self.gridLayout_23 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_23.setObjectName(u"gridLayout_23")
         self.verticalLayout = QGridLayout()
@@ -2346,7 +2332,7 @@ class Ui_Porn_Fetch_Widget(object):
     # setupUi
 
     def retranslateUi(self, Porn_Fetch_Widget):
-        Porn_Fetch_Widget.setWindowTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Porn Fetch v2.6", None))
+        Porn_Fetch_Widget.setWindowTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Porn Fetch v2.8", None))
         self.groupBox_5.setTitle("")
         self.button_switch_main_page.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Switch to main page", None))
         self.label_6.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"           IMPORTANT!  The API is against Pornhub's ToS. Your Account CAN get banned for using this!!!!", None))
@@ -2413,7 +2399,7 @@ class Ui_Porn_Fetch_Widget(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">This project would not be possible without his great API and I have much"
                         " respect for him!</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#ffffff;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">2.5 - 2023</span></p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ffffff;\">2.7 - 2023</span></p></body></html>", None))
         self.groupBox_4.setTitle("")
         self.textBrowser.setHtml(QCoreApplication.translate("Porn_Fetch_Widget", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -2487,7 +2473,6 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_threading_no.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
         self.radio_threading_yes.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
         self.label_threading_mode.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Threading:", None))
-        self.settings_checkbox_sentry.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Sentry", None))
         self.settings_checkbox_delay.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Delay", None))
         self.label_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"UI Transparency:", None))
 #if QT_CONFIG(tooltip)

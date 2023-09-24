@@ -122,9 +122,6 @@ Quality:
 
 Highest = Best Quality possible, Half = somewhere in the middle, Lowest = Least quality possible
 
-Debug:
-
-Sentry: Captures error logs, which helps me to fix issues faster, and you don't have to report them
 
 UI Transparency: 
 
@@ -164,7 +161,7 @@ def add_to_tree_widget(iterator, tree_widget):
             item.setCheckState(0, QtCore.Qt.Unchecked)  # Adds a checkbox
     except Exception as e:
         ui_popup(
-            f"An error happened. This error will NOT be sent to sentry, to prevent leaking your account data! ERROR: {e}")
+            f"An error happened. ERROR: {e}")
 
 
 class Widget(QWidget):
@@ -514,7 +511,6 @@ class Widget(QWidget):
                 "production": [("checkbox_homemade", "homemade"), ("checkbox_professional", "professional")],
                 "default_quality": [("radio_highest", "best"), ("radio_half", "half"), ("radio_lowest", "worst")],
                 "default_threading": [("radio_threading_no", "no"), ("radio_threading_yes", "yes")],
-                "sentry": [("settings_checkbox_sentry", "true")],
                 "api_language": [("api_radio_de", "de"), ("api_radio_fr", "fr"), ("api_radio_es", "es"),
                                  ("api_radio_ru", "ru"), ("api_radio_en", "en")],
                 "UI_language": [("application_language_en", "en")]
@@ -542,12 +538,6 @@ class Widget(QWidget):
 
     def load_user_settings(self):
         self.conf.read('config.ini')
-
-        if self.conf["Debug"]["sentry"] == "true":
-            self.sentry = True
-
-        elif self.conf["Debug"]["sentry"] == "false":
-            self.sentry = False
 
         if self.conf["Porn_Fetch"]["delay"] == "true":
             self.ui.settings_checkbox_delay.setChecked(True)
@@ -630,11 +620,6 @@ class Widget(QWidget):
         elif self.conf["Porn_Fetch"]["default_threading"] == "single":
             self.ui.radio_threading_no.setChecked(True)
 
-        if self.conf["Debug"]["sentry"] == "true":
-            self.ui.settings_checkbox_sentry.setChecked(True)
-
-        else:
-            self.ui.settings_checkbox_sentry.setChecked(False)
 
         if self.conf["Porn_Fetch"]["api_language"] == "en":
             self.ui.api_radio_en.setChecked(True)
@@ -743,7 +728,7 @@ class Widget(QWidget):
 
         except Exception as e:
             ui_popup(
-                f"An error happened. This error will NOT be sent to sentry, to prevent leaking your account data! ERROR: {e}")
+                f"An error happened. ERROR: {e}")
 
     def keyPressEvent(self, event: QKeyEvent):
 
