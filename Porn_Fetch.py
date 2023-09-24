@@ -5,21 +5,71 @@ __license__ = "GPL 3"
 
 import sys
 import argparse
-import phub.consts
 import os
+import re
 import random
+import requests
+import math
+import src.resources_rc  # It's used in Runtime for the icons. Do not remove this requirement!
 
+from phub import Client, Quality, locals, errors
+from bs4 import BeautifulSoup
 from configparser import ConfigParser
 from PySide6 import QtCore
-from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QInputDialog, QLineEdit, \
-    QButtonGroup
-from PySide6.QtGui import QKeyEvent, QColor
-from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Qt, QDir
+from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QButtonGroup
+from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Slot
+from PySide6.QtGui import QIcon
 from src.license_agreement import Ui_Widget_License
-from phub import Client, Quality
-from src.ui_main_widget import Ui_Porn_Fetch_Widget
-from src.setup import setup_config_file, strip_title, logging, get_graphics
+from src.Porn_Fetch_v3 import Ui_Porn_Fetch_widget
+from src.setup import setup_config_file, strip_title, logging
 from src.cli import CLI
+
+headers = {
+        "Referer": "https://hqporner.com/",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36",
+    }  # Use this to prevent detection mechanisms...
+
+
+def extract_title(url):
+    html = requests.get(url, headers=headers).content
+    beautifulsoup = BeautifulSoup(html, "lxml")
+    return beautifulsoup.find("title").text
+
+
+def extract_text_after_double_slash(url):
+    """
+    HQPorner uses an external CDN (Content Delivery Network) to load the videos dynamically. Luckily for us, the video
+    locations are saved in the JS code, and we can just extract them
+    """
+    html = requests.get(url, headers=headers).content
+    beautifulsoup = BeautifulSoup(html, "lxml")
+    url_pattern = re.compile(r"url: '/blocks/altplayer\.php\?i=//(.*?)',")  # This is the URL for the redirection link
+    match = url_pattern.search(str(beautifulsoup))
+
+    if match:
+        url_path = match.group(1)
+        return url_path
+
+
+def get_final_urls(url):
+    """
+    This will extract the .mp4 source urls from the CDN Network. Please note, that these are temporary URLs.
+    They change from time to time.
+    """
+    base_url = extract_text_after_double_slash(url)
+    final_content = requests.get("https://" + base_url).content
+    soup = BeautifulSoup(final_content, "lxml")
+    for script in soup.find_all('script'):
+        if 'do_pl()' in script.text:
+            script_content = script.text
+            break
+
+    video_urls = re.findall(r'//[^\'"]+\.mp4', script_content)  # Direct Download link from the CDN network
+    urls = []
+    for url in video_urls:
+        urls.append(url) if not url in urls else ""
+
+    return urls
 
 
 def ui_popup(text):
@@ -27,6 +77,60 @@ def ui_popup(text):
     qmsg_box = QMessageBox()
     qmsg_box.setText(text)
     qmsg_box.exec()
+
+def update_progressbar(pos, total, progress_bar):
+    progress_bar.setMaximum(total)
+    progress_bar.setValue(pos)
+
+
+def add_to_tree_widget(iterator, tree_widget):
+    tree_widget.clear()
+    try:
+        for i, video in enumerate(iterator, start=1):
+            item = QTreeWidgetItem(tree_widget)
+            item.setText(0, f"{i}) {video.title}")
+            item.setData(0, QtCore.Qt.UserRole, video.url)
+            item.setCheckState(0, QtCore.Qt.Unchecked)  # Adds a checkbox
+    except Exception as e:
+        ui_popup(
+            f"An error happened. ERROR: {e}")
+
+
+def create_button_group(buttons):
+    """Creates a QButtonGroup and adds the given buttons to it."""
+    button_group = QButtonGroup()
+    for button in buttons:
+        button_group.addButton(button)
+    return button_group
+
+
+class DownloadWorker(QRunnable):
+    def __init__(self, video, quality, output_path):
+        super(DownloadWorker, self).__init__()
+        self.video = video
+        self.quality = quality
+        self.output_path = output_path
+        self.signals = WorkerSignals()
+
+    def run(self):
+        urls = get_final_urls(self.video)
+        url = f"http:{urls[self.quality]}"
+        title = extract_title(self.video)
+        final_path = os.path.join(self.output_path, title + ".mp4")
+        response = requests.get(url, stream=True)
+        file_size = int(response.headers.get('content-length', 0))
+
+        if not os.path.exists(final_path):
+            with open(final_path, 'wb') as file:
+                for chunk in response.iter_content(chunk_size=1024):
+                    file.write(chunk)
+                    # emit progress signal here
+                    progress = math.ceil((file.tell() / file_size) * 100)
+                    self.signals.progress.emit(progress)
+
+        # emit completed signal here
+        self.signals.completed.emit()
+        # Thanks to ChatGPT for programming this function. I am just too stupid for math calculations ^^
 
 
 class License(QWidget):
@@ -48,7 +152,7 @@ class License(QWidget):
             self.show_main_window()
 
         else:
-            logging(msg="License was not accepted.", level="0")
+            logging(msg="License was not accepted.")
             self.show()  # Show the license widget
 
     def accept(self):
@@ -70,9 +174,14 @@ class License(QWidget):
     def show_main_window(self):
         """ If license was accepted, the License widget is closed and the main widget will be shown."""
         self.close()
-        logging(msg="Starting Porn Fetch main widget", level="0")
+        logging(msg="Starting Porn Fetch main widget")
         self.main_widget = Widget()
         self.main_widget.show()
+
+
+class WorkerSignals(QObject):
+    progress = Signal(int)
+    completed = Signal()
 
 
 class DownloadProgressSignal(QObject):
@@ -100,70 +209,6 @@ class DownloadThread(QRunnable):
         self.video.download(display=self.callback, quality=self.quality, path=self.output_path)
 
 
-def update_progressbar(pos, total, progress_bar):
-    progress_bar.setMaximum(total)
-    progress_bar.setValue(pos)
-
-
-def help():
-    text = """
-
-API Language:
-
-The API handles your requests to PornHub.com   If the API is in english language, then all the titles and video
-attributes are also in english. If the API is for example in German language, then the video titles are (if automatically
-translated by PornHub) also in German language.   Not all videos are supported! 
-
-UI Language:
-
-UI language defines the language in the application.
-
-Quality:
-
-Highest = Best Quality possible, Half = somewhere in the middle, Lowest = Least quality possible
-
-
-UI Transparency: 
-
-Defines the UI background transparency. Please note, that this feature doesn't work well on Hyprland!
-
-Threading: 
-
-Threading uses multiple cores of your CPU to download multiple videos simultaneously. This leads to a broken
-progressbar, but can have a big speed impact if you have a really fast internet connection.
-
-Delay:
-
-The delay handles how fast the API requests are. By default you should definitely ENABLE this.
-Without the delay, the API will spam the requests as fast as possible. Of course this has a big speed impact and 
-videos will download 10x faster, but it can also lead to a lot more errors. If you just want to download
-one video real quick, you can disable it, but if you plan to download more than that, please enable it!
-
-(DO NOT REPORT ERRORS, IF YOU HAD DELAY DISABLED!) 
-
-If you still have questions, let me know on GitHub in discussions.
-
-Account:
-
-You can log in to PornHub with your Account and fetch all videos you've liked, watched and that are recommended to you.
-This can be useful for downloading more efficiently. Your Account data won't be exposed!
-"""
-    ui_popup(text)
-
-
-def add_to_tree_widget(iterator, tree_widget):
-    tree_widget.clear()
-    try:
-        for i, video in enumerate(iterator, start=1):
-            item = QTreeWidgetItem(tree_widget)
-            item.setText(0, f"{i}) {video.title}")
-            item.setData(0, QtCore.Qt.UserRole, video.url)
-            item.setCheckState(0, QtCore.Qt.Unchecked)  # Adds a checkbox
-    except Exception as e:
-        ui_popup(
-            f"An error happened. ERROR: {e}")
-
-
 class Widget(QWidget):
     """Main UI widget. Design is loaded from the ui_main_widget.py file. Feel free to change things if you want."""
 
@@ -173,13 +218,9 @@ class Widget(QWidget):
         self.conf = ConfigParser()
         self.conf.read("config.ini")
 
-        if not os.path.exists("graphics"):
-            get_graphics()
-
         self.video = None
         self.api_language = "en"
         self.custom_language = False
-        self.logging = None
         self.delay = True
         self.client = None
         self.sort = None
@@ -187,88 +228,80 @@ class Widget(QWidget):
         self.production = None
         self.mode = None
         self.hd = None
-        self.category = False
+        self.buttonGroups = None
         self.download_thread = None
+        self.path = None
         self.threadpool = QThreadPool()
 
-        self.ui = Ui_Porn_Fetch_Widget()
+        self.ui = Ui_Porn_Fetch_widget()
         self.ui.setupUi(self)
-        self.ui.groupBox_7.setDisabled(True)
+        self.ui.button_video.setIcon(QIcon(":/icons/download.svg"))
+        self.ui.button_account.setIcon(QIcon(":/icons/account.svg"))
+        self.ui.button_settings.setIcon(QIcon(":/icons/settings.svg"))
+        logging("Loaded Icons")
+        self.ui.groupBox_3.setDisabled(True)
         self.button_group()  # Needs to be called before load_user_settings!
         self.load_user_settings()  # Loads the user settings from config.ini to make settings persistent
-        logging(f"Delay Set to: {self.delay}", level="0")
-        logging(f"API Language is: {self.api_language}", level="0")
-        self.ui.stacked_main_account.setCurrentIndex(1)
-        alpha_value = int((int(self.transparency) / 100) * 255)
-        color = QColor(0, 0, 0, alpha_value)
-        self.setStyleSheet(
-            f"background-color: rgba({color.red()}, {color.green()}, {color.blue()}, {color.alpha()});color: rgb(255,255,255);")
-
+        self.load_search_filters()  # Must be called before load_user_settings!
+        logging(f"Delay Set to: {self.delay}")
+        logging(f"API Language is: {self.api_language}")
+        self.ui.stackedWidget_3.setCurrentIndex(0)
         self.ui.stackedWidget.setCurrentIndex(0)
         self.button_connectors()
 
     def button_connectors(self):
-        self.ui.button_start.clicked.connect(self.start)
-        self.ui.button_start_file.clicked.connect(self.start_file)
+        self.ui.button_video_url_start.clicked.connect(self.start)
+        self.ui.button_file_start.clicked.connect(self.start_file)
         self.ui.button_get_metadata.clicked.connect(self.get_metadata)
-        self.ui.button_start_user_channel.clicked.connect(self.user_channel)
-        self.ui.button_start_search.clicked.connect(self.search_videos)
-        self.ui.button_download_search_query.clicked.connect(self.download_tree)
+        self.ui.button_model_url_start.clicked.connect(self.user_channel)
+        self.ui.button_search_start.clicked.connect(self.search_videos)
+        self.ui.button_download_tree_widget.clicked.connect(self.download_tree)
         self.ui.button_settings_apply.clicked.connect(self.settings_tab)
-        self.ui.button_settings_help.clicked.connect(help)
-        self.ui.button_switch_to_account.clicked.connect(self.switch_to_account)
-        self.ui.button_switch_main_page.clicked.connect(self.switch_to_main)
-        self.ui.button_switch_to_main_widget.clicked.connect(self.switch_to_main)
-        self.ui.button_account_login.clicked.connect(self.login)
-        self.ui.button_account_list_liked_videos.clicked.connect(self.get_liked_videos)
-        self.ui.button_account_list_rec_videos.clicked.connect(self.get_recommended_videos)
-        self.ui.button_account_list_watched_videos.clicked.connect(self.get_watched_videos)
-        self.ui.button_account_download.clicked.connect(self.download_tree_widget)
-        self.ui.button_switch_to_settings.clicked.connect(self.switch_to_settings)
+        self.ui.button_login.clicked.connect(self.login)
+        self.ui.button_get_liked.clicked.connect(self.get_liked_videos)
+        self.ui.button_get_recommended.clicked.connect(self.get_recommended_videos)
+        self.ui.button_get_watched.clicked.connect(self.get_watched_videos)
         self.ui.button_download_thumbnail.clicked.connect(self.download_thumbnail)
+        self.ui.button_video.clicked.connect(self.switch_video_page)
+        self.ui.button_account.clicked.connect(self.switch_account_page)
+        self.ui.button_settings.clicked.connect(self.switch_to_settings)
+        self.ui.button_miscellaneus.clicked.connect(self.switch_to_miscellaneous)
+        self.ui.button_credits.clicked.connect(self.switch_to_credits)
+
+    def switch_video_page(self):
+        self.ui.stackedWidget_3.setCurrentIndex(0)
+        self.ui.stackedWidget.setCurrentIndex(0)
+
+    def switch_account_page(self):
+        self.ui.stackedWidget_3.setCurrentIndex(0)
+        self.ui.stackedWidget.setCurrentIndex(1)
+
+    def switch_to_settings(self):
+        self.ui.stackedWidget_3.setCurrentIndex(1)
+
+    def switch_to_miscellaneous(self):
+        self.ui.stackedWidget_3.setCurrentIndex(2)
+
+    def switch_to_credits(self):
+        self.ui.stackedWidget_3.setCurrentIndex(3)
 
     def button_group(self):
         """Separates the QRadioButtons from the different grid layouts"""
 
-        button_group_quality = QButtonGroup()
-        button_group_quality.addButton(self.ui.radio_highest)
-        button_group_quality.addButton(self.ui.radio_lowest)
-        button_group_quality.addButton(self.ui.radio_half)
-
-        button_group_threading = QButtonGroup()
-        button_group_threading.addButton(self.ui.radio_threading_yes)
-        button_group_threading.addButton(self.ui.radio_threading_no)
-
-        button_group_api_language = QButtonGroup()
-        button_group_api_language.addButton(self.ui.api_radio_es)
-        button_group_api_language.addButton(self.ui.api_radio_fr)
-        button_group_api_language.addButton(self.ui.api_radio_en)
-        button_group_api_language.addButton(self.ui.api_radio_de)
-        button_group_api_language.addButton(self.ui.api_radio_ru)
-
-        button_group_sort = QButtonGroup()
-        button_group_sort.addButton(self.ui.radio_most_recent)
-        button_group_sort.addButton(self.ui.radio_most_relevant)
-        button_group_sort.addButton(self.ui.radio_most_viewed)
-        button_group_sort.addButton(self.ui.radio_longest)
-        button_group_sort.addButton(self.ui.radio_nothing)
-
-        button_group_sort_time = QButtonGroup()
-        button_group_sort_time.addButton(self.ui.radio_day)
-        button_group_sort_time.addButton(self.ui.radio_month)
-        button_group_sort_time.addButton(self.ui.radio_year)
-        button_group_sort_time.addButton(self.ui.radio_week)
-        button_group_sort_time.addButton(self.ui.radio_nothing_2)
-
-        button_group_hd = QButtonGroup()
-        button_group_hd.addButton(self.ui.radio_hd_yes)
-        button_group_hd.addButton(self.ui.radio_hd_no)
-
-        button_group_ui_language = QButtonGroup()
-        button_group_ui_language.addButton(self.ui.application_language_en)
-
-        self.buttonGroups = (button_group_ui_language, button_group_threading, button_group_quality,
-                             button_group_api_language, button_group_hd, button_group_sort_time, button_group_sort)
+        button_groups = {
+            "quality": [self.ui.radio_quality_best, self.ui.radio_quality_worst, self.ui.radio_quality_middle],
+            "threading": [self.ui.radio_threading_yes, self.ui.radio_threading_no],
+            "api_language": [self.ui.api_radio_es, self.ui.api_radio_fr, self.ui.api_radio_en, self.ui.api_radio_de,
+                             self.ui.api_radio_ru],
+            "sort": [self.ui.radio_most_recent, self.ui.radio_most_relevant, self.ui.radio_most_viewed,
+                     self.ui.radio_longest, self.ui.radio_top_rated, self.ui.radio_sort_ignore],
+            "sort_time": [self.ui.radio_day, self.ui.radio_month, self.ui.radio_year, self.ui.radio_week,
+                          self.ui.radio_time_sort_ignore],
+            "hd": [self.ui.radio_hd_yes, self.ui.radio_hd_no, self.ui.radio_hd_ignore],
+            "production": [self.ui.radio_production_ignore, self.ui.radio_homemade, self.ui.radio_professional],
+            "ui_language": []
+        }
+        self.buttonGroups = tuple(create_button_group(buttons) for buttons in button_groups.values())
 
     def get_mode(self):
 
@@ -276,6 +309,9 @@ class Widget(QWidget):
             self.mode = False
 
         elif self.ui.radio_threading_yes.isChecked():
+            self.mode = True
+
+        else:
             self.mode = True
 
     def get_client_language(self):
@@ -302,26 +338,42 @@ class Widget(QWidget):
     def get_quality(self):
         """Checks the radio button for the quality used for the video object"""
 
-        if self.ui.radio_highest.isChecked():
+        if self.ui.radio_quality_best.isChecked():
             return Quality.BEST
 
-        elif self.ui.radio_half.isChecked():
+        elif self.ui.radio_quality_middle.isChecked():
             return Quality.HALF
 
-        elif self.ui.radio_lowest.isChecked():
+        elif self.ui.radio_quality_worst.isChecked():
             return Quality.WORST
 
         else:
             return Quality.BEST
 
-    def stack_widget_search(self):
-        self.ui.stackedWidget.setCurrentIndex(0)
+    def download_raw(self, video, output_path):
+        # Determine quality based on user selection
+        quality = 0  # Default to low quality
+        if self.ui.radio_quality_middle.isChecked():
+            quality = 1
+        elif self.ui.radio_quality_best.isChecked():
+            quality = -1
 
-    def stack_widget_metadata(self):
-        self.ui.stackedWidget.setCurrentIndex(1)
+        # Create worker and connect signals
+        worker = DownloadWorker(video, quality, output_path)
+        worker.signals.progress.connect(self.update_progressbar)
+        worker.signals.completed.connect(self.download_completed)
 
-    def stack_widget_credits(self):
-        self.ui.stackedWidget.setCurrentIndex(2)
+        # Start the worker in a new thread
+        self.threadpool.start(worker)
+
+    @Slot(int)
+    def update_progressbar(self, value):
+        self.ui.progressbar_download.setValue(value)
+
+    @Slot()
+    def download_completed(self):
+        # Handle completion, e.g., show a message to the user
+        logging("Download Completed!")
 
     def test_video(self, url):
         if not self.custom_language:
@@ -332,14 +384,18 @@ class Widget(QWidget):
             self.video = self.client.get(url)
             return self.video
 
-        except phub.errors.ParsingError:
+        except errors.ParsingError:
             ui_popup("Parsing error. Please try again in a few minutes")
 
     def start(self):
-        url = self.ui.lineedit_url.text()
-        video = self.test_video(url)
-        logging(msg=f"Downloading: {url}", level="0")
-        self.download(video, progress_bar=self.ui.progressbar_download)
+        url = self.ui.lineedit_video_url.text()
+        if url.endswith(".html"):
+            self.download_raw(url, output_path=self.path)
+
+        else:
+            video = self.test_video(url)
+            logging(msg=f"Downloading: {url}", level="0")
+            self.download(video, progress_bar=self.ui.progressbar_download)
 
     def callback(self, pos, total):
         self.ui.progressbar_download.setMaximum(total)
@@ -347,10 +403,10 @@ class Widget(QWidget):
 
     def download(self, video, progress_bar, os_error_handle=False):
         quality = self.get_quality()
-        logging(msg=f"Quality: {quality}", level="0")
+        logging(msg=f"Quality: {quality}")
         self.get_mode()
-        output_path = self.ui.lineedit_output.text()
-        logging(msg=f"Output path: {output_path}", level="0")
+        output_path = self.path
+        logging(msg=f"Output path: {output_path}")
 
         title = video.title
         if os_error_handle:
@@ -365,24 +421,22 @@ class Widget(QWidget):
                 self.download_thread.signals.progress.connect(
                     lambda pos, total, pb=progress_bar: update_progressbar(pos, total, pb))
                 self.threadpool.start(self.download_thread)
-                logging(msg="Started download thread...", level="0")
+                logging(msg="Started download thread...")
 
             elif not self.mode:
-                logging(msg="Running in main thread...", level="0")
-                self.video.download(callback=self.callback, quality=quality, path=output_path)
+                logging(msg="Running in main thread...")
+                self.video.download(display=self.callback, quality=quality, path=output_path)
 
         except OSError:
-            logging(msg="OS Error: The file name is invalid for your system. Recreating a random int name...",
-                    level="0")
+            logging(msg="OS Error: The file name is invalid for your system. Recreating a random int name...", level=1)
             self.download(video, progress_bar, os_error_handle=True)
 
         except Exception as e:
             ui_popup(text=f"An unexpected error happened.  Exception: {e}")
-            logging(msg=e, level="1")
+            logging(msg=e, level=1)
 
     def start_file(self):
-
-        file_path = self.ui.lineedit_url_file.text()
+        file_path = self.ui.lineedit_file.text()
 
         if not os.path.isfile(file_path):
             ui_popup(f"File does not exist. Please check again!  PATH: {file_path}")
@@ -411,8 +465,7 @@ class Widget(QWidget):
             self.download_tree()
 
     def get_metadata(self):
-
-        url = self.ui.lineedit_url.text()
+        url = self.ui.lineedit_metadata_url.text()
         video = self.test_video(url)
 
         if video != False:
@@ -445,25 +498,25 @@ class Widget(QWidget):
             self.get_client_language()
 
         self.client = Client(language=self.api_language, delay=self.delay)
-        user = self.ui.lineedit_user_channel.text()
+        user = self.ui.lineedit_model_url.text()
         user_object = self.client.get_user(user)
-        logging(msg=f"User: {str(user_object.name)}", level="0")
+        logging(msg=f"User: {str(user_object.name)}")
 
         total_videos = user_object.videos
         user_objects = []
 
         try:
-
             for video in total_videos:
                 video_object = self.test_video(video.url)
                 user_objects.append(video_object)
+
         except IndexError:
             pass
 
         add_to_tree_widget(user_objects, tree_widget=self.ui.treeWidget)
 
     def download_thumbnail(self):
-        url = self.ui.lineedit_url.text()
+        url = self.ui.lineedit_metadata_url.text()
         video = self.test_video(url)
         image = video.image
         image.download(path="./")
@@ -498,179 +551,163 @@ class Widget(QWidget):
                 self.download(video, progress_bar=self.ui.progressbar_download)
 
     def settings_tab(self):
+        quality_options = {
+            "radio_quality_best": "best",
+            "radio_quality_middle": "half",
+            "radio_quality_worst": "worst",
+        }
+        threading_options = {
+            "radio_threading_yes": "yes",
+            "radio_threading_no": "no",
+        }
+        speed_options = {
+            "radio_speed_high": "false",
+            "radio_speed_usual": "true",
+        }
+        language_options = {
+            "api_radio_de": "de",
+            "api_radio_en": "en",
+            "api_radio_fr": "fr",
+            "api_radio_ru": "ru",
+            "api_radio_es": "es",
+        }
+        hd_options = {
+            "radio_hd_yes": "yes",
+            "radio_hd_no": "no",
+            "radio_hd_ignore": "false",
+        }
+        time_sort_options = {
+            "radio_day": "day",
+            "radio_week": "week",
+            "radio_month": "month",
+            "radio_year": "year",
+            "radio_time_sort_ignore": "false",
+        }
+        sort_options = {
+            "radio_most_relevant": "relevant",
+            "radio_most_viewed": "most viewed",
+            "radio_longest": "longest",
+            "radio_most_recent": "most recent",
+            "radio_top_rated": "top rated",
+            "radio_sort_ignore": "false",
+        }
+        production_options = {
+            "checkbox_homemade": "homemade",
+            "checkbox_professional": "professional",
+            "checkbox_production_ignore": "false",
+        }
+
+        options_mapping = {
+            "default_quality": quality_options,
+            "default_threading": threading_options,
+            "api_language": language_options,
+            "delay": speed_options,
+            "hd": hd_options,
+            "sort": sort_options,
+            "sort_time": time_sort_options,
+            "production": production_options,
+        }
+
+        for setting, options in options_mapping.items():
+            for attribute, value in options.items():
+                if getattr(self.ui, attribute).isChecked():
+                    self.conf.set("Porn_Fetch", setting, value)
+                    break
+
+        output_path = self.path
+        if os.path.exists(output_path):
+            self.conf.set("Porn_Fetch", "default_path", output_path)
+
+        else:
+            ui_popup("The output path doesn't exist! It won't be applied.")
+
         with open("config.ini", "w") as config_file:
-
-            # Define the mappings between UI states and configurations
-            mappings = {
-                "hd": [("radio_hd_yes", "true"), ("radio_hd_no", "false")],
-                "sort_time": [("radio_day", "day"), ("radio_week", "week"), ("radio_year", "year"),
-                              ("radio_month", "month"), ("radio_nothing_2", "none")],
-                "sort": [("radio_most_recent", "most_recent"), ("radio_most_viewed", "most_viewed"),
-                         ("radio_most_relevant", "most_relevant"), ("radio_top_rated", "top_rated"),
-                         ("radio_nothing", "none"), ("radio_longest", "longest")],
-                "production": [("checkbox_homemade", "homemade"), ("checkbox_professional", "professional")],
-                "default_quality": [("radio_highest", "best"), ("radio_half", "half"), ("radio_lowest", "worst")],
-                "default_threading": [("radio_threading_no", "no"), ("radio_threading_yes", "yes")],
-                "api_language": [("api_radio_de", "de"), ("api_radio_fr", "fr"), ("api_radio_es", "es"),
-                                 ("api_radio_ru", "ru"), ("api_radio_en", "en")],
-                "UI_language": [("application_language_en", "en")]
-            }
-            if not self.ui.settings_checkbox_delay.isChecked():
-                self.conf.set("Porn_Fetch", "delay", "false")
-                logging("Delay disabled!", level="0")
-
-            elif self.ui.settings_checkbox_delay.isChecked():
-                logging("Delay Enabled!", level="0")
-                self.conf.set("Porn_Fetch", "delay", "true")
-
-            for config_key, options in mappings.items():
-                for ui_elem, value in options:
-                    if getattr(self.ui, ui_elem).isChecked():
-                        self.conf.set("Porn_Fetch", config_key, value)
-                        break
-                else:
-                    self.conf.set("Porn_Fetch", config_key, "none")
-
-            transparency = self.ui.horizontalSlider.value()
-            self.conf.set("UI", "transparency", str(transparency))  # Needs to be a string!
             self.conf.write(config_file)
-            ui_popup("Applied! (Please restart for changes to take effect)")
+        ui_popup("Applied, please restart!")
 
     def load_user_settings(self):
-        self.conf.read('config.ini')
+        settings_mapping = {
+            "sort": {
+                "most viewed": self.ui.radio_most_viewed,
+                "most relevant": self.ui.radio_most_relevant,
+                "top rated": self.ui.radio_top_rated,
+                "longest": self.ui.radio_longest,
+                "most recent": self.ui.radio_most_recent,
+                "false": self.ui.radio_sort_ignore,
+            },
+            "sort_time": {
+                "day": self.ui.radio_day,
+                "week": self.ui.radio_week,
+                "month": self.ui.radio_month,
+                "year": self.ui.radio_year,
+                "false": self.ui.radio_time_sort_ignore,
+            },
+            "production": {
+                "homemade": self.ui.radio_homemade,
+                "professional": self.ui.radio_professional,
+                "false": self.ui.radio_production_ignore,
+            },
+            "hd": {
+                "true": self.ui.radio_hd_yes,
+                "false": self.ui.radio_hd_no,
+            },
+            "default_quality": {
+                "best": self.ui.radio_quality_best,
+                "half": self.ui.radio_quality_middle,
+                "worst": self.ui.radio_quality_worst,
+            },
+            "default_threading": {
+                "multiple": self.ui.radio_threading_yes,
+                "single": self.ui.radio_threading_no,
+            },
+            "api_language": {
+                "en": self.ui.api_radio_en,
+                "ru": self.ui.api_radio_ru,
+                "fr": self.ui.api_radio_fr,
+                "es": self.ui.api_radio_es,
+                "de": self.ui.api_radio_de,
+            },
+        }
+
+        for setting, options in settings_mapping.items():
+            value = self.conf["Porn_Fetch"][setting]
+            if value in options:
+                options[value].setChecked(True)
+                setattr(self, setting, value if value != "false" else None)
 
         if self.conf["Porn_Fetch"]["delay"] == "true":
-            self.ui.settings_checkbox_delay.setChecked(True)
+            self.ui.radio_speed_usual.setChecked(True)
             self.delay = True
 
         elif self.conf["Porn_Fetch"]["delay"] == "false":
-            self.ui.settings_checkbox_delay.setChecked(False)
+            self.ui.radio_speed_high.setChecked(True)
             self.delay = False
 
-        if self.conf["Porn_Fetch"]["sort"] == "most viewed":
-            self.ui.radio_most_viewed.setChecked(True)
-            self.sort = "most viewed"
+        self.path = self.conf["Porn_Fetch"]["default_path"]
+        self.ui.lineedit_default_output_path.setText(self.path)
 
-        elif self.conf["Porn_Fetch"]["sort"] == "most relevant":
-            self.ui.radio_most_relevant.setChecked(True)
-            self.sort = "most relevant"
+    def load_search_filters(self):
+        if self.production == "professional":
+            self.production = locals.Production.PROFESSIONAL
 
-        elif self.conf["Porn_Fetch"]["sort"] == "top rated":
-            self.ui.radio_top_rated.setChecked(True)
-            self.sort = "top rated"
-
-        elif self.conf["Porn_Fetch"]["sort"] == "longest":
-            self.ui.radio_longest.setChecked(True)
-            self.sort = "longest"
-
-        elif self.conf["Porn_Fetch"]["sort"] == "most recent":
-            self.ui.radio_most_recent.setChecked(True)
-            self.sort = "most recent"
-
-        elif self.conf["Porn_Fetch"]["sort"] == "false":
-            self.sort = None
-
-        if self.conf["Porn_Fetch"]["sort_time"] == "day":
-            self.ui.radio_day.setChecked(True)
-            self.sort_time = "day"
-
-        elif self.conf["Porn_Fetch"]["sort_time"] == "week":
-            self.ui.radio_week.setChecked(True)
-            self.sort_time = "week"
-
-        elif self.conf["Porn_Fetch"]["sort_time"] == "month":
-            self.ui.radio_month.setChecked(True)
-            self.sort_time = "month"
-
-        elif self.conf["Porn_Fetch"]["sort_time"] == "year":
-            self.ui.radio_year.setChecked(True)
-            self.sort_time = "year"
-
-        elif self.conf["Porn_Fetch"]["sort_time"] == "none":
-            self.sort_time = None
-
-        if self.conf["Porn_Fetch"]["production"] == "homemade":
-            self.ui.checkbox_homemade.setChecked(True)
-            self.production = "homemade"
-
-        elif self.conf["Porn_Fetch"]["production"] == "professional":
-            self.ui.checkbox_professional.setChecked(True)
-            self.production = "professional"
-
-        if self.conf["Porn_Fetch"]["hd"] == "true":
-            self.ui.radio_hd_yes.setChecked(True)
-            self.hd = True
-
-        elif self.conf["Porn_Fetch"]["hd"] == "false":
-            self.ui.radio_hd_no.setChecked(True)
-            self.hd = False
-
-        if self.conf["Porn_Fetch"]["default_quality"] == "best":
-            self.ui.radio_highest.setChecked(True)
-
-        elif self.conf["Porn_Fetch"]["default_quality"] == "half":
-            self.ui.radio_half.setChecked(True)
-
-        elif self.conf["Porn_Fetch"]["default_quality"] == "worst":
-            self.ui.radio_lowest.setChecked(True)
-
-        if self.conf["Porn_Fetch"]["default_threading"] == "multiple":
-            self.ui.radio_threading_yes.setChecked(True)
-
-        elif self.conf["Porn_Fetch"]["default_threading"] == "single":
-            self.ui.radio_threading_no.setChecked(True)
-
-
-        if self.conf["Porn_Fetch"]["api_language"] == "en":
-            self.ui.api_radio_en.setChecked(True)
-            self.api_language = "en"
-
-        elif self.conf["Porn_Fetch"]["api_language"] == "ru":
-            self.ui.api_radio_ru.setChecked(True)
-            self.api_language = "ru"
-
-        elif self.conf["Porn_Fetch"]["api_language"] == "fr":
-            self.ui.api_radio_fr.setChecked(True)
-            self.api_language = "fr"
-
-        elif self.conf["Porn_Fetch"]["api_language"] == "es":
-            self.ui.api_radio_es.setChecked(True)
-            self.api_language = "es"
-
-        elif self.conf["Porn_Fetch"]["api_language"] == "de":
-            self.ui.api_radio_de.setChecked(True)
-            self.api_language = "de"
-
-        if self.conf["UI"]["language"] == "en":
-            self.ui.application_language_en.setChecked(True)
-            self.application_language = "en"
-
-        self.transparency = self.conf["UI"]["transparency"]
-        self.ui.horizontalSlider.setValue(int(self.transparency))
-    def switch_to_account(self):
-        self.ui.stacked_main_account.setCurrentIndex(0)
-
-    def switch_to_main(self):
-        self.ui.stacked_main_account.setCurrentIndex(1)
-
-    def switch_to_settings(self):
-        self.ui.stacked_main_account.setCurrentIndex(2)
+        elif self.production == "homemade":
+            self.production = locals.Production.HOMEMADE
 
     def login(self):
-        username = self.ui.lineedit_account_username.text()
-        password = self.ui.lineedit_account_password.text()
-        self.ui.lineedit_account_status.setText("Logging in...")
+        username = self.ui.lineedit_username.text()
+        password = self.ui.lineedit_password.text()
+        self.ui.lineedit_status.setText("Logging in...")
 
         try:
             if not self.custom_language:
                 self.get_client_language()
 
             self.client = Client(username=username, password=password, language=self.api_language, delay=self.delay)
-            self.ui.lineedit_account_status.setText(f"Logged in as: {self.client.account.name}")
-            self.ui.groupBox_7.setEnabled(True)
+            self.ui.lineedit_status.setText(f"Logged in as: {self.client.account.name}")
+            self.ui.groupBox_3.setEnabled(True)
 
-        except phub.errors.LoginFailed:
-            logging(msg="Login Failed. Check credentials!", level="1")
+        except errors.LoginFailed:
+            logging(msg="Login Failed. Check credentials!", level=1)
             ui_popup("Login Failed. Check credentials!")
 
     def get_liked_videos(self):
@@ -685,7 +722,7 @@ class Widget(QWidget):
             ui_popup("No videos found. If you are sure that this is an error, it's PornHub's fault ;) ")
 
         else:
-            add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
+            add_to_tree_widget(iterator=videos, tree_widget=self.ui.treeWidget)
 
     def get_watched_videos(self):
         try:
@@ -699,7 +736,7 @@ class Widget(QWidget):
             ui_popup("No videos found. If you are sure that this is an error, it's PornHub's fault ;) ")
 
         else:
-            add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
+            add_to_tree_widget(iterator=videos, tree_widget=self.ui.treeWidget)
 
     def get_recommended_videos(self):
         try:
@@ -713,61 +750,22 @@ class Widget(QWidget):
             ui_popup("No videos found. If you are sure that this is an error, it's PornHub's fault ;) ")
 
         else:
-            add_to_tree_widget(iterator=videos, tree_widget=self.ui.tree_widget_account)
+            add_to_tree_widget(iterator=videos, tree_widget=self.ui.treeWidget)
 
     def download_tree_widget(self):
         # Downloads all selected videos with a for loop
         try:
-            for i in range(self.ui.tree_widget_account.topLevelItemCount()):
-                item = self.ui.tree_widget_account.topLevelItem(i)
+            for i in range(self.ui.treeWidget.topLevelItemCount()):
+                item = self.ui.treeWidget.topLevelItem(i)
                 checkState = item.checkState(0)
                 if checkState == QtCore.Qt.Checked:
                     video_url = item.data(0, QtCore.Qt.UserRole)
                     video = self.test_video(video_url)
-                    self.download(video, progress_bar=self.ui.account_progressbar)
+                    self.download(video, progress_bar=self.ui.progressbar_download)
 
         except Exception as e:
             ui_popup(
                 f"An error happened. ERROR: {e}")
-
-    def keyPressEvent(self, event: QKeyEvent):
-
-        if event.key() == Qt.Key.Key_W and event.modifiers() == Qt.ControlModifier:
-            logging(msg="Closing Porn Fetch.  Bye :) ", level="0")
-            self.close()
-
-        if event.key() == Qt.Key.Key_M and event.modifiers() == Qt.ControlModifier:
-            self.stack_widget_metadata()
-            logging(msg="Loaded Metadata page from QStackedWidget", level="0")
-
-        if event.key() == Qt.Key.Key_S and event.modifiers() == Qt.ControlModifier:
-            self.stack_widget_search()
-            logging(msg="Loaded Search page from QStackedWidget", level="0")
-
-        if event.key() == Qt.Key.Key_C and event.modifiers() == Qt.ControlModifier:
-            self.stack_widget_credits()
-            logging(msg="Loaded Credits page from QStackedWidget", level="0")
-
-        if event.key() == Qt.Key.Key_R and event.modifiers() == Qt.ControlModifier:
-            setup_config_file(force=True)
-            logging(msg="Configuration was reset successfully", level="0")
-
-        if event.key() == Qt.Key.Key_L and event.modifiers() == Qt.ControlModifier:
-            text, ok = QInputDialog.getText(self, "QInputDialog.getText()",
-                                            "Language Code (e.g: de, en, es):", QLineEdit.Normal,
-                                            QDir.home().dirName())
-            if ok and text:
-                self.api_language = text
-                self.custom_language = True
-
-        if event.key() == Qt.Key.Key_1 and event.modifiers() == Qt.ControlModifier:
-            self.switch_to_account()
-
-        if event.key() == Qt.Key.Key_2 and event.modifiers() == Qt.ControlModifier:
-            self.switch_to_main()
-
-        if event.key() == Qt.Key.Key_3 and event.modifiers() == Qt.ControlModifier:
-            self.switch_to_settings()
 
 
 def main():

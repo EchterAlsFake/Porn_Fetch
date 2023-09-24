@@ -154,8 +154,17 @@ I hope that most issues are now fixed.
 # 2.8 
 
 - removed Sentry from the entire project
+- added support for HQPorner.com which is another Porn Site
 - changed unimportant stuff on some files
 - ChatGPT wrote the Readme a bit more professional
 - Updated Thumbnail download to use PHUB v4
 - Updated CLI to v4
 - removed unnecessary files e.g. DOWNLOADS.md, ISSUES.md
+- Made The final new app design
+- added qt resource file for better icon handling
+- removed get_graphics funtion, UI starts now faster and doesn't need any setup
+- removed transparency support, as it is useless and doesn't even work on all distros
+- removed category filters (I think they are a bit useless, but if someone wants to have them back, tell me)
+- only one tree widget is now used for everything
+- changed Delay to High speed for better understanding
+- added help buttons for threading and "high speed" aka Delay

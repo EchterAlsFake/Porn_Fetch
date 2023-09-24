@@ -4,3 +4,5 @@ colorama
 bs4
 tqdm
 wget
+requests
+lxml

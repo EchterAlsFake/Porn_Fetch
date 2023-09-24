@@ -127,6 +127,9 @@ I am just the developer. Nobody will get you in jail because you downloaded a vi
 - [C Icon](https://icons8.com/icon/Uehg4gyVyrUo/copyright) * 
 - [M Icon](https://iconscout.com/icons/medium) By [Unicons Font](https://iconscout.com/contributors/unicons) on [Icon Scout](https://iconscout.com) *
 - [Checkmark](https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html)
+- [Download Icon v2](https://iconscout.com/free-icon/download-1754130) by [Kmg Design](https://iconscout.com/contributors/kmgdesignid) on [Icon Scout](https://iconscout.com)
+- [Settings Icon v2](https://iconscout.com/free-icon/settings-2856913) by [Haca Studio](https://iconscout.com/contributors/boosticon) on [Icon Scout](https://iconscout.com)
+- [Account Icon](https://iconscout.com/free-icon/account-6495099) by [Alex Martynov](https://iconscout.com/contributors/rengised) on [Icon Scout](https://iconscout.com)
 
 *Only used in older versions.
 
