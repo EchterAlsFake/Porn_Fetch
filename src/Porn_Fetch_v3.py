@@ -2130,6 +2130,16 @@ class Ui_Porn_Fetch_widget(object):
 
         self.verticalLayout.addLayout(self.horizontalLayout_2)
 
+        self.verticalLayout_2 = QVBoxLayout()
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.lineedit_toal = QLineEdit(self.group_status)
+        self.lineedit_toal.setObjectName(u"lineedit_toal")
+
+        self.verticalLayout_2.addWidget(self.lineedit_toal)
+
+
+        self.verticalLayout.addLayout(self.verticalLayout_2)
+
         self.progressbar_download = QProgressBar(self.group_status)
         self.progressbar_download.setObjectName(u"progressbar_download")
         self.progressbar_download.setValue(0)
@@ -2146,7 +2156,7 @@ class Ui_Porn_Fetch_widget(object):
         self.retranslateUi(Porn_Fetch_widget)
 
         self.stackedWidget_3.setCurrentIndex(0)
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(0)
         self.stackedWidget_2.setCurrentIndex(0)
 
 

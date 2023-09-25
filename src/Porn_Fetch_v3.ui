@@ -28,7 +28,7 @@ background-color: rgb(60, 60, 60)</string>
        <item row="0" column="0">
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="page">
           <layout class="QGridLayout" name="gridLayout_9">
@@ -2507,6 +2507,13 @@ QLineEdit:disabled {
              <bool>true</bool>
             </property>
            </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLineEdit" name="lineedit_toal"/>
           </item>
          </layout>
         </item>

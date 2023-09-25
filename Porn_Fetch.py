@@ -8,6 +8,8 @@ import argparse
 import os
 import re
 import random
+
+import phub.errors
 import requests
 import math
 import src.resources_rc  # It's used in Runtime for the icons. Do not remove this requirement!
@@ -16,6 +18,7 @@ from phub import Client, Quality, locals, errors
 from bs4 import BeautifulSoup
 from configparser import ConfigParser
 from PySide6 import QtCore
+from PySide6.QtCore import QSemaphore
 from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QButtonGroup
 from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Slot
 from PySide6.QtGui import QIcon
@@ -77,6 +80,7 @@ def ui_popup(text):
     qmsg_box = QMessageBox()
     qmsg_box.setText(text)
     qmsg_box.exec()
+
 
 def update_progressbar(pos, total, progress_bar):
     progress_bar.setMaximum(total)
@@ -232,6 +236,7 @@ class Widget(QWidget):
         self.download_thread = None
         self.path = None
         self.threadpool = QThreadPool()
+        self.semaphore = QSemaphore(1)
 
         self.ui = Ui_Porn_Fetch_widget()
         self.ui.setupUi(self)
@@ -351,6 +356,7 @@ class Widget(QWidget):
             return Quality.BEST
 
     def download_raw(self, video, output_path):
+        self.semaphore.acquire()
         # Determine quality based on user selection
         quality = 0  # Default to low quality
         if self.ui.radio_quality_middle.isChecked():
@@ -358,10 +364,11 @@ class Widget(QWidget):
         elif self.ui.radio_quality_best.isChecked():
             quality = -1
 
+
         # Create worker and connect signals
         worker = DownloadWorker(video, quality, output_path)
         worker.signals.progress.connect(self.update_progressbar)
-        worker.signals.completed.connect(self.download_completed)
+        worker.signals.completed.connect(self.download_completed_slot)
 
         # Start the worker in a new thread
         self.threadpool.start(worker)
@@ -374,6 +381,10 @@ class Widget(QWidget):
     def download_completed(self):
         # Handle completion, e.g., show a message to the user
         logging("Download Completed!")
+
+    def download_completed_slot(self):
+        self.download_completed()  # Call your original download_completed logic if any
+        self.semaphore.release()  # Release the semaphore once download is complete
 
     def test_video(self, url):
         if not self.custom_language:
@@ -437,32 +448,27 @@ class Widget(QWidget):
 
     def start_file(self):
         file_path = self.ui.lineedit_file.text()
+        with open(file_path, "r") as file:
+            content = file.read().splitlines()
+            counter = 0
+            length = len(content)
+            text = f"Downloaded {counter} / {length} total videos"
+            self.ui.lineedit_toal.setText(str(text))
 
-        if not os.path.isfile(file_path):
-            ui_popup(f"File does not exist. Please check again!  PATH: {file_path}")
-
-        else:
-            self.get_mode()
-            with open(file_path, "r") as file:
-                content = file.read().splitlines()
-
-            valid_urls = []
             for url in content:
-                if self.test_video(url) is None:
-                    ui_popup(
-                        f"The following URL is invalid: {url} It won't be used!.")
+                self.semaphore = QSemaphore(1)
+                if url.endswith(".html"):
+                    self.download_raw(url, output_path=self.path)
+                    counter += 1
+                    self.ui.lineedit_toal.setText(str(text))
 
                 else:
-                    valid_urls.append(url)
+                    self.get_mode()
+                    self.download(progress_bar=self.ui.progressbar_download, video=self.test_video(url))
 
-            video_objects = []
-
-            for url in valid_urls:
-                video_object = self.test_video(url)
-                video_objects.append(video_object)
-
-            self.add_to_download_tree(video_objects)
-            self.download_tree()
+    def download_completed_slot(self):
+        self.download_completed()  # Call your original download_completed logic if any
+        self.semaphore.release()  # Release the semaphore once download is complete
 
     def get_metadata(self):
         url = self.ui.lineedit_metadata_url.text()
@@ -592,9 +598,9 @@ class Widget(QWidget):
             "radio_sort_ignore": "false",
         }
         production_options = {
-            "checkbox_homemade": "homemade",
-            "checkbox_professional": "professional",
-            "checkbox_production_ignore": "false",
+            "radio_homemade": "homemade",
+            "radio_professional": "professional",
+            "radio_production_ignore": "false",
         }
 
         options_mapping = {
@@ -614,7 +620,7 @@ class Widget(QWidget):
                     self.conf.set("Porn_Fetch", setting, value)
                     break
 
-        output_path = self.path
+        output_path = self.ui.lineedit_default_output_path.text()
         if os.path.exists(output_path):
             self.conf.set("Porn_Fetch", "default_path", output_path)
 
@@ -657,8 +663,8 @@ class Widget(QWidget):
                 "worst": self.ui.radio_quality_worst,
             },
             "default_threading": {
-                "multiple": self.ui.radio_threading_yes,
-                "single": self.ui.radio_threading_no,
+                "yes": self.ui.radio_threading_yes,
+                "no": self.ui.radio_threading_no,
             },
             "api_language": {
                 "en": self.ui.api_radio_en,
@@ -751,21 +757,6 @@ class Widget(QWidget):
 
         else:
             add_to_tree_widget(iterator=videos, tree_widget=self.ui.treeWidget)
-
-    def download_tree_widget(self):
-        # Downloads all selected videos with a for loop
-        try:
-            for i in range(self.ui.treeWidget.topLevelItemCount()):
-                item = self.ui.treeWidget.topLevelItem(i)
-                checkState = item.checkState(0)
-                if checkState == QtCore.Qt.Checked:
-                    video_url = item.data(0, QtCore.Qt.UserRole)
-                    video = self.test_video(video_url)
-                    self.download(video, progress_bar=self.ui.progressbar_download)
-
-        except Exception as e:
-            ui_popup(
-                f"An error happened. ERROR: {e}")
 
 
 def main():
