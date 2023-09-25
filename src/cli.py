@@ -3,7 +3,7 @@ import random
 import getpass
 import threading
 
-from phub import Client, Quality, errors
+from phub import Client, Quality, errors, locals
 from tqdm import tqdm
 from configparser import ConfigParser
 from colorama import *
@@ -117,6 +117,20 @@ class CLI():
 
         else:
             self.quality = Quality.BEST
+
+
+    def load_search_filters(self):
+        if self.production == "professional":
+            self.production = locals.Production.PROFESSIONAL
+
+        elif self.production == "homemade":
+            self.production = locals.Production.HOMEMADE
+
+        else:
+            self.production = False
+
+
+
 
     def get_video(self, url):
 
@@ -233,7 +247,7 @@ Enter the numbers of video you want to download. Separate with comma.  e.g 1,2,3
     def search(self, query):
 
         self.client = Client(language=self.api_language, delay=self.delay)
-        search_results = self.client.search(query)
+        search_results = self.client.search(query, self.production)
 
         for counter, video in enumerate(search_results):
             print(f"{counter}) {video.title}")

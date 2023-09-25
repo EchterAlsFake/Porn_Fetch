@@ -7,6 +7,7 @@
 - [What is Porn Fetch?](#what-is-porn-fetch)
 - [Features](#features)
 - [Supported Platforms](#supported-platforms)
+- [Supported Websites](#supported-websites)
 - [Building from Source](#building-from-source)
 - [Android](#android)
 - [iOS](#ios)
@@ -46,6 +47,18 @@ Porn Fetch allows users to download, search, and interact with videos from PornH
 - Android: Native run with an .apk recommended; CLI available in Termux
 - iOS: Can be run with iSH (script in development)
 - ARM devices: Native run with Python required
+
+## Supported Websites
+
+- PornHub.com
+- HQPorner.com (Supported Since v2.8)
+
+The method for getting the videos for HQPorner.com was developed by myself.
+<br>I am terrible in web requests with Python, so please don't expect much.
+
+PornHub is the Website for which this project is intended. A lot of stuff is
+supported for this, and the API is developed by Egsagon (see more in [Credits](#credits))
+
 
 ## Building from Source
 
