@@ -209,6 +209,31 @@ class DownloadThread(QRunnable):
         self.video.download(display=self.callback, quality=self.quality, path=self.output_path)
 
 
+def help_speed():
+
+    text = """
+Speed (or Delay) is the requests limit per second.
+
+If speed is set to 'usual' then the Delay will be 0.5 which means, that you will download
+1 Segment of a video every 0.5 seconds. A video download can take like 2 minutes (also depends on your internet
+connection). 
+
+I recommend setting speed to 'high' in most use cases, but if you download a lot of videos and with that I mean like 10+
+you should definitely set speed to 'usual' to prevent errors and increase stability."""
+    ui_popup(text)
+
+
+def help_threading():
+    text = """
+Threading means, that multiple cores of your CPU will be used to download multiple videos at once.
+If you have a really fast internet connection, this can save you a lot of time. 
+
+If threading is disabled, the Graphical User Interface won't respond to any actions, during a download.
+That's why it's enabled by default.
+"""
+    ui_popup(text)
+
+
 class Widget(QWidget):
     """Main UI widget. Design is loaded from the ui_main_widget.py file. Feel free to change things if you want."""
 
@@ -267,6 +292,9 @@ class Widget(QWidget):
         self.ui.button_settings.clicked.connect(self.switch_to_settings)
         self.ui.button_miscellaneus.clicked.connect(self.switch_to_miscellaneous)
         self.ui.button_credits.clicked.connect(self.switch_to_credits)
+        self.ui.button_speed_help.clicked.connect(help_speed)
+        self.ui.button_threading_help.clicked.connect(help_threading)
+
 
     def switch_video_page(self):
         self.ui.stackedWidget_3.setCurrentIndex(0)
