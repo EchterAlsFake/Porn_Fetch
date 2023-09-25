@@ -6,3 +6,4 @@ tqdm
 wget
 requests
 lxml
+hqporner_api

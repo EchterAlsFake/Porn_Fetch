@@ -8,14 +8,13 @@ import argparse
 import os
 import re
 import random
-
-import phub.errors
 import requests
 import math
 import src.resources_rc  # It's used in Runtime for the icons. Do not remove this requirement!
 
 from phub import Client, Quality, locals, errors
 from bs4 import BeautifulSoup
+from hqporner_api import API  # Written by myself for hqporner.com support
 from configparser import ConfigParser
 from PySide6 import QtCore
 from PySide6.QtCore import QSemaphore
@@ -31,48 +30,6 @@ headers = {
         "Referer": "https://hqporner.com/",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36",
     }  # Use this to prevent detection mechanisms...
-
-
-def extract_title(url):
-    html = requests.get(url, headers=headers).content
-    beautifulsoup = BeautifulSoup(html, "lxml")
-    return beautifulsoup.find("title").text
-
-
-def extract_text_after_double_slash(url):
-    """
-    HQPorner uses an external CDN (Content Delivery Network) to load the videos dynamically. Luckily for us, the video
-    locations are saved in the JS code, and we can just extract them
-    """
-    html = requests.get(url, headers=headers).content
-    beautifulsoup = BeautifulSoup(html, "lxml")
-    url_pattern = re.compile(r"url: '/blocks/altplayer\.php\?i=//(.*?)',")  # This is the URL for the redirection link
-    match = url_pattern.search(str(beautifulsoup))
-
-    if match:
-        url_path = match.group(1)
-        return url_path
-
-
-def get_final_urls(url):
-    """
-    This will extract the .mp4 source urls from the CDN Network. Please note, that these are temporary URLs.
-    They change from time to time.
-    """
-    base_url = extract_text_after_double_slash(url)
-    final_content = requests.get("https://" + base_url).content
-    soup = BeautifulSoup(final_content, "lxml")
-    for script in soup.find_all('script'):
-        if 'do_pl()' in script.text:
-            script_content = script.text
-            break
-
-    video_urls = re.findall(r'//[^\'"]+\.mp4', script_content)  # Direct Download link from the CDN network
-    urls = []
-    for url in video_urls:
-        urls.append(url) if not url in urls else ""
-
-    return urls
 
 
 def ui_popup(text):
@@ -117,9 +74,9 @@ class DownloadWorker(QRunnable):
         self.signals = WorkerSignals()
 
     def run(self):
-        urls = get_final_urls(self.video)
+        urls = API().get_final_urls(self.video)
         url = f"http:{urls[self.quality]}"
-        title = extract_title(self.video)
+        title = API().extract_title(self.video)
         final_path = os.path.join(self.output_path, title + ".mp4")
         response = requests.get(url, stream=True)
         file_size = int(response.headers.get('content-length', 0))
