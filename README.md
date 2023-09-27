@@ -2,6 +2,7 @@
 
 ![Build](https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg)
 ### [Download Current Version 2.7](https://github.com/EchterAlsFake/Porn_Fetch/releases)
+### [Development Status V2.8](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md)
 ## Table of Contents
 
 - [What is Porn Fetch?](#what-is-porn-fetch)

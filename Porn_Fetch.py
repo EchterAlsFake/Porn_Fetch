@@ -7,14 +7,14 @@ import sys
 import argparse
 import os
 import random
-import requests
+import requests  # See: https://github.com/psf/requests
 import math
 import src.resources_rc  # It's used in Runtime for the icons. Do not remove this requirement!
 
-from phub import Client, Quality, locals, errors
+from phub import Client, Quality, locals, errors  # See https://github.com/Egsagon/PHUB
 from hqporner_api import API  # See: https://github.com/EchterAlsFake/hqporner_api
-from configparser import ConfigParser
-from PySide6 import QtCore
+from configparser import ConfigParser  # See: https://github.com/python/cpython/blob/main/Lib/configparser.py
+from PySide6 import QtCore  # See: https://pypi.org/project/PySide6/
 from PySide6.QtCore import QSemaphore
 from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QButtonGroup
 from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Slot
@@ -23,11 +23,6 @@ from src.license_agreement import Ui_Widget_License
 from src.Porn_Fetch_v3 import Ui_Porn_Fetch_widget
 from src.setup import setup_config_file, strip_title, logging
 from src.cli import CLI
-
-headers = {
-        "Referer": "https://hqporner.com/",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36",
-    }  # Use this to prevent detection mechanisms...
 
 
 def ui_popup(text):
@@ -40,6 +35,31 @@ def ui_popup(text):
 def update_progressbar(pos, total, progress_bar):
     progress_bar.setMaximum(total)
     progress_bar.setValue(pos)
+
+
+def help_speed():
+
+    text = """
+Speed (or Delay) is the requests limit per second.
+
+If speed is set to 'usual' then the Delay will be 0.5 which means, that you will download
+1 Segment of a video every 0.5 seconds. A video download can take like 2 minutes (also depends on your internet
+connection). 
+
+I recommend setting speed to 'high' in most use cases, but if you download a lot of videos and with that I mean like 10+
+you should definitely set speed to 'usual' to prevent errors and increase stability."""
+    ui_popup(text)
+
+
+def help_threading():
+    text = """
+Threading means, that multiple cores of your CPU will be used to download multiple videos at once.
+If you have a really fast internet connection, this can save you a lot of time. 
+
+If threading is disabled, the Graphical User Interface won't respond to any actions, during a download.
+That's why it's enabled by default.
+"""
+    ui_popup(text)
 
 
 def add_to_tree_widget(iterator, tree_widget):
@@ -166,31 +186,6 @@ class DownloadThread(QRunnable):
 
     def run(self):
         self.video.download(display=self.callback, quality=self.quality, path=self.output_path)
-
-
-def help_speed():
-
-    text = """
-Speed (or Delay) is the requests limit per second.
-
-If speed is set to 'usual' then the Delay will be 0.5 which means, that you will download
-1 Segment of a video every 0.5 seconds. A video download can take like 2 minutes (also depends on your internet
-connection). 
-
-I recommend setting speed to 'high' in most use cases, but if you download a lot of videos and with that I mean like 10+
-you should definitely set speed to 'usual' to prevent errors and increase stability."""
-    ui_popup(text)
-
-
-def help_threading():
-    text = """
-Threading means, that multiple cores of your CPU will be used to download multiple videos at once.
-If you have a really fast internet connection, this can save you a lot of time. 
-
-If threading is disabled, the Graphical User Interface won't respond to any actions, during a download.
-That's why it's enabled by default.
-"""
-    ui_popup(text)
 
 
 class Widget(QWidget):
@@ -464,23 +459,26 @@ class Widget(QWidget):
             date = video.date
             duration = video.duration.seconds
             duration = duration / 60
-            duration = f"{duration}m"
-            hotspots = video.hotspots
+            duration = f"{round(duration)}m"
             likes_up = video.like.up
             likes_down = video.like.down
             likes = f"Likes: {likes_up} - Dislikes: {likes_down}"
             image_url = video.image.url
             tags = video.tags
+            tag_names = []
+            for tag in tags:
+                tag_names.append(tag.name)
+
+            tag_names = str(tag_names).strip("[").strip("]")
 
             self.ui.lineedit_likes.setText(str(likes))
-            self.ui.lineedit_tags.setText(str(tags))
+            self.ui.lineedit_tags.setText(str(tag_names))
             self.ui.lineedit_image_url.setText(str(image_url))
             self.ui.lineedit_title.setText(str(title))
             self.ui.lineedit_author.setText(str(author))
             self.ui.lineedit_views.setText(str(views))
             self.ui.lineedit_date.setText(str(date))
             self.ui.lineedit_duration.setText(str(duration))
-            self.ui.lineedit_hotspots.setText(str(hotspots))
 
     def user_channel(self):
         if not self.custom_language:
@@ -501,7 +499,6 @@ class Widget(QWidget):
 
         except IndexError:
             pass
-
         add_to_tree_widget(user_objects, tree_widget=self.ui.treeWidget)
 
     def download_thumbnail(self):
