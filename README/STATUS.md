@@ -20,7 +20,7 @@ Deadline: 29.9.2023
 ### Testing : Android
 
 - [x] Download
-- [] File Dialog : In development
+- [x] File Dialog
 - [] User permissions : In development
 
 Deadline: 28.9.2023
