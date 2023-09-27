@@ -450,9 +450,22 @@ class Widget(QWidget):
 
     def get_metadata(self):
         url = self.ui.lineedit_metadata_url.text()
-        video = self.test_video(url)
 
-        if video != False:
+        if url.endswith(".html"):
+            publish_date = API().get_publish_date(url)
+            title = API().extract_title(url)
+            length = API().get_video_length(url)
+            categories = API().get_categories(url)
+            actress = API().extract_actress(url)
+
+            self.ui.lineedit_actress.setText(str(actress))
+            self.ui.lineedit_duration.setText(str(length))
+            self.ui.lineedit_tags.setText(str(categories))
+            self.ui.lineedit_title.setText(str(title))
+            self.ui.lineedit_date.setText(str(publish_date))
+
+        else:
+            video = self.test_video(url)
             title = video.title
             author = video.author.name
             views = video.views

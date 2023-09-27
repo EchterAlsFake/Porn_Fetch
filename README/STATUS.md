@@ -10,7 +10,7 @@
 - [x] HQPorner Download
 - [x] Search
 - [x] Metadata (PornHub)
-- [] Metadata (HQPorner)
+- [x] Metadata (HQPorner)
 - [] Searching filters
 - [] Downloading from file
 - [] Settings Widget

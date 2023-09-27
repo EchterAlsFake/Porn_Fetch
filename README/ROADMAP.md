@@ -30,5 +30,5 @@
 
 Priority:
 
-UI Design / Android App
+Android App / Implementing new functions
 
