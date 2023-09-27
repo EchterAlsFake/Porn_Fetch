@@ -6,15 +6,13 @@ __license__ = "GPL 3"
 import sys
 import argparse
 import os
-import re
 import random
 import requests
 import math
 import src.resources_rc  # It's used in Runtime for the icons. Do not remove this requirement!
 
 from phub import Client, Quality, locals, errors
-from bs4 import BeautifulSoup
-from hqporner_api import API  # Written by myself for hqporner.com support
+from hqporner_api import API  # See: https://github.com/EchterAlsFake/hqporner_api
 from configparser import ConfigParser
 from PySide6 import QtCore
 from PySide6.QtCore import QSemaphore
@@ -452,8 +450,8 @@ class Widget(QWidget):
                     self.download(progress_bar=self.ui.progressbar_download, video=self.test_video(url))
 
     def download_completed_slot(self):
-        self.download_completed()  # Call your original download_completed logic if any
-        self.semaphore.release()  # Release the semaphore once download is complete
+        self.download_completed()
+        self.semaphore.release()
 
     def get_metadata(self):
         url = self.ui.lineedit_metadata_url.text()
@@ -673,6 +671,14 @@ class Widget(QWidget):
         elif self.conf["Porn_Fetch"]["delay"] == "false":
             self.ui.radio_speed_high.setChecked(True)
             self.delay = False
+
+        if self.conf["Porn_Fetch"]["default_threading"] == "yes":
+            self.ui.radio_threading_yes.setChecked(True)
+            self.mode = True
+
+        elif self.conf["Porn_Fetch"]["default_threading"] == "no":
+            self.ui.radio_threading_no.setChecked(False)
+            self.mode = False
 
         self.path = self.conf["Porn_Fetch"]["default_path"]
         self.ui.lineedit_default_output_path.setText(self.path)
