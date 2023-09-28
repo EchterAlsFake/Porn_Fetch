@@ -18,6 +18,7 @@ sort_time = false
 production = false
 excluded_categories = 
 categories = 
+search_limit = 50
 
 [UI]
 language = en
