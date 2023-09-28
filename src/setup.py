@@ -35,10 +35,10 @@ def logging(msg, level=0):
 
 
 def strip_title(title):
-    disallowed_chars = ["<", ">", ":", '"', "/", "\\", "|", "*", "0", "(", ")", "!"]
+    disallowed_chars = ["<", ">", ":", '"', "/", "\\", "|", "*", "0", "(", ")", "!", "?"]
 
     for disallowed_char in disallowed_chars:
-        title = str(title).strip(disallowed_char)
+        title = str(title.replace(disallowed_char, ""))
 
     return title
 

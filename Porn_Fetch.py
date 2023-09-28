@@ -191,7 +191,13 @@ class DownloadThread(QRunnable):
         self.signals.progress.emit(pos, total)
 
     def run(self):
-        self.video.download(display=self.callback, quality=self.quality, path=self.output_path)
+        try:
+            self.video.download(display=self.callback, quality=self.quality, path=self.output_path)
+
+        except OSError:
+            logging("OS Error in Download Thread!", level=1)
+            self.video.download(display=self.callback, quality=self.quality, path="os_error_fixed_title.mp4")
+
 
 
 class CategoryFilterWindow(QWidget):
@@ -508,6 +514,7 @@ background-color: rgb(60, 60 ,60)
             title = random.randint(0, 10000)
 
         title = strip_title(title)  # Fixes OS Error on Windows
+        logging(f"Stripped title: {title}")
         output_path = f"{output_path}{title}.mp4"
 
         try:
