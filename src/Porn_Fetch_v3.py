@@ -18,8 +18,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QFormLayout, QFrame, QGridLayout,
     QGroupBox, QHBoxLayout, QHeaderView, QLabel,
     QLineEdit, QProgressBar, QPushButton, QRadioButton,
-    QSizePolicy, QStackedWidget, QTextBrowser, QTreeWidget,
-    QTreeWidgetItem, QVBoxLayout, QWidget)
+    QSizePolicy, QSlider, QStackedWidget, QTextBrowser,
+    QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_Porn_Fetch_widget(object):
     def setupUi(self, Porn_Fetch_widget):
@@ -948,6 +948,46 @@ class Ui_Porn_Fetch_widget(object):
         self.label_output_path.setObjectName(u"label_output_path")
 
         self.gridLayout_19.addWidget(self.label_output_path, 1, 0, 1, 1)
+
+        self.label_2 = QLabel(self.frame)
+        self.label_2.setObjectName(u"label_2")
+
+        self.gridLayout_19.addWidget(self.label_2, 2, 0, 1, 1)
+
+        self.pushButton = QPushButton(self.frame)
+        self.pushButton.setObjectName(u"pushButton")
+        self.pushButton.setStyleSheet(u"QPushButton {\n"
+"        background-color: #5a2a82;\n"
+"        color: #ffffff; \n"
+"        border: none;\n"
+"        border-radius: 10px;\n"
+"        padding: 5px 20px; \n"
+"        font-size: 12px;\n"
+"        outline: none;\n"
+"    }\n"
+"    \n"
+"    QPushButton:hover {\n"
+"        background-color: #7b3ca3; \n"
+"    }\n"
+"\n"
+"    QPushButton:pressed {\n"
+"        background-color: #481f61; \n"
+"    }\n"
+"\n"
+"    QPushButton:disabled {\n"
+"        background-color: #3f1d4d; \n"
+"        color: #8a7b9a; \n"
+"    }")
+
+        self.gridLayout_19.addWidget(self.pushButton, 2, 2, 1, 1)
+
+        self.horizontalSlider = QSlider(self.frame)
+        self.horizontalSlider.setObjectName(u"horizontalSlider")
+        self.horizontalSlider.setMaximum(200)
+        self.horizontalSlider.setValue(50)
+        self.horizontalSlider.setOrientation(Qt.Horizontal)
+
+        self.gridLayout_19.addWidget(self.horizontalSlider, 2, 1, 1, 1)
 
 
         self.gridLayout_12.addWidget(self.frame, 2, 0, 1, 1)
@@ -2150,6 +2190,8 @@ class Ui_Porn_Fetch_widget(object):
         self.label_note_speed.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Note: Changing the speed from Usual, can lead to errors!", None))
         self.button_speed_help.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Help", None))
         self.label_output_path.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Output Path: ", None))
+        self.label_2.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Search Limit:", None))
+        self.pushButton.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Help", None))
         self.groupBox_10.setTitle(QCoreApplication.translate("Porn_Fetch_widget", u"Search filters", None))
         self.groupBox_13.setTitle(QCoreApplication.translate("Porn_Fetch_widget", u"Time sort filters", None))
         self.radio_day.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Day", None))

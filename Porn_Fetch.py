@@ -297,6 +297,12 @@ class Widget(QWidget):
         self.buttonGroups = None
         self.download_thread = None
         self.path = None
+        self.search_limit = 50
+        self.excluded_categories_filter = None
+        self.excluded_categories = None
+        self.excluded_categories_str = None
+        self.selected_category_value = None
+        self.selected_category = None
         self.threadpool = QThreadPool()
         self.semaphore = QSemaphore(1)
 
@@ -305,6 +311,7 @@ class Widget(QWidget):
         self.ui.button_video.setIcon(QIcon(":/icons/download.svg"))
         self.ui.button_account.setIcon(QIcon(":/icons/account.svg"))
         self.ui.button_settings.setIcon(QIcon(":/icons/settings.svg"))
+        self.setWindowIcon(QIcon(":/icons/logo.ico"))
         logging("Loaded Icons")
         self.ui.groupBox_3.setDisabled(True)
         self.button_group()  # Needs to be called before load_user_settings!
@@ -556,7 +563,7 @@ class Widget(QWidget):
             length = API().get_video_length(url)
             categories = API().get_categories(url)
             actress = API().extract_actress(url)
-
+            logging("Got metadata for HQPorner")
             self.ui.lineedit_actress.setText(str(actress))
             self.ui.lineedit_duration.setText(str(length))
             self.ui.lineedit_tags.setText(str(categories))
@@ -582,7 +589,7 @@ class Widget(QWidget):
                 tag_names.append(tag.name)
 
             tag_names = str(tag_names).strip("[").strip("]")
-
+            logging("Got metadata for PornHub")
             self.ui.lineedit_likes.setText(str(likes))
             self.ui.lineedit_tags.setText(str(tag_names))
             self.ui.lineedit_image_url.setText(str(image_url))
@@ -599,6 +606,7 @@ class Widget(QWidget):
         self.client = Client(language=self.api_language, delay=self.delay)
         user = self.ui.lineedit_model_url.text()
         user_object = self.client.get_user(user)
+        logging("Got user object")
         logging(msg=f"User: {str(user_object.name)}")
 
         total_videos = user_object.videos
@@ -626,7 +634,8 @@ class Widget(QWidget):
             self.get_client_language()
 
         self.client = Client(language=self.api_language, delay=self.delay)
-        query_object = self.client.search(query, locals.Category.ASIAN + locals.Production.PROFESSIONAL + self.sort + self.sort_time - self.excluded_categories_filter)
+        query_object = self.client.search(query, self.selected_category | self.production | self.sort | self.sort_time - self.excluded_categories_filter)
+        logging("Got query object")
 
         self.add_to_download_tree(query_object)
         self.download_tree()
@@ -706,6 +715,8 @@ class Widget(QWidget):
                     self.conf.set("Porn_Fetch", setting, value)
                     break
 
+        tree_widget_limit = self.ui.horizontalSlider.value()
+        self.conf.set("Porn_Fetch", "search_limit", str(tree_widget_limit))
         output_path = self.ui.lineedit_default_output_path.text()
         if os.path.exists(output_path):
             self.conf.set("Porn_Fetch", "default_path", output_path)
@@ -716,6 +727,7 @@ class Widget(QWidget):
         with open("config.ini", "w") as config_file:
             self.conf.write(config_file)
         ui_popup("Applied, please restart!")
+        logging("Applied settings")
 
     def load_user_settings(self):
         settings_mapping = {
@@ -779,9 +791,11 @@ class Widget(QWidget):
             self.ui.radio_threading_yes.setChecked(True)
             self.mode = True
 
-
+        self.search_limit = self.conf["Porn_Fetch"]["search_limit"]
+        self.ui.horizontalSlider.setValue(int(self.search_limit))
         self.path = self.conf["Porn_Fetch"]["default_path"]
         self.ui.lineedit_default_output_path.setText(self.path)
+        logging("Loaded user settings")
 
     def load_search_filters(self):
         production_mapping = {
@@ -814,6 +828,7 @@ class Widget(QWidget):
         self.excluded_categories_filter = []
         for category in self.excluded_categories:
             self.excluded_categories.append(getattr(locals.Category, category))
+        logging("Loaded search filters")
 
     def login(self):
         username = self.ui.lineedit_username.text()
@@ -825,6 +840,7 @@ class Widget(QWidget):
                 self.get_client_language()
 
             self.client = Client(username=username, password=password, language=self.api_language, delay=self.delay)
+            logging("Login Successful")
             self.ui.lineedit_status.setText(f"Logged in as: {self.client.account.name}")
             self.ui.groupBox_3.setEnabled(True)
 
@@ -835,7 +851,9 @@ class Widget(QWidget):
     def get_liked_videos(self):
         try:
             videos = self.client.account.liked
+            logging("Fetched videos")
             add_to_tree_widget(iterator=videos, tree_widget=self.ui.treeWidget)
+            logging("Added videos to tree widget")
 
         except AttributeError:
             self.login()
@@ -844,7 +862,9 @@ class Widget(QWidget):
     def get_watched_videos(self):
         try:
             videos = self.client.account.watched
+            logging("Fetched videos")
             add_to_tree_widget(iterator=videos, tree_widget=self.ui.treeWidget)
+            logging("Added videos to tree widget")
 
         except AttributeError:
             self.login()
@@ -853,7 +873,9 @@ class Widget(QWidget):
     def get_recommended_videos(self):
         try:
             videos = self.client.account.recommended
+            logging("Fetched videos")
             add_to_tree_widget(iterator=videos, tree_widget=self.ui.treeWidget)
+            logging("Added videos to tree widget")
 
         except AttributeError:
             self.login()  # Sometimes the Account Session times out. In that case a simple re-initialization is best :)

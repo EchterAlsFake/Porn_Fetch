@@ -1101,6 +1101,57 @@ QLineEdit:disabled {
                </property>
               </widget>
              </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string>Search Limit:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QPushButton" name="pushButton">
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+        background-color: #5a2a82;
+        color: #ffffff; 
+        border: none;
+        border-radius: 10px;
+        padding: 5px 20px; 
+        font-size: 12px;
+        outline: none;
+    }
+    
+    QPushButton:hover {
+        background-color: #7b3ca3; 
+    }
+
+    QPushButton:pressed {
+        background-color: #481f61; 
+    }
+
+    QPushButton:disabled {
+        background-color: #3f1d4d; 
+        color: #8a7b9a; 
+    }</string>
+               </property>
+               <property name="text">
+                <string>Help</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QSlider" name="horizontalSlider">
+               <property name="maximum">
+                <number>200</number>
+               </property>
+               <property name="value">
+                <number>50</number>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
             </layout>
            </widget>
           </item>

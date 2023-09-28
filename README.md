@@ -46,7 +46,7 @@ Porn Fetch allows users to download, search, and interact with videos from PornH
 - Linux: X11 / Wayland - X64 (Testing on Hyprland - Wayland)
 - macOS: Requires building from source or native run with Python
 - Android: Native run with an .apk recommended; CLI available in Termux
-- iOS: Can be run with iSH (script in development)
+- iOS: Can be run with iSH ([See Building from Source](#building-from-source))
 - ARM devices: Native run with Python required
 
 ## Supported Websites
@@ -70,6 +70,7 @@ Automatic build script is available. Run the following in your terminal and sele
 - Ubuntu
 - Arch Linux
 - Termux
+- iSH (iOS / Alpine)  (Enter iSH on the App Store, and you'll find it) 
 - Fedora
 - OpenSUSE
 
@@ -105,11 +106,11 @@ It's possible to convert the Kivy created APP for Android easily into an iOS app
 ## Useful Information
 - [Roadmap](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/ROADMAP.md)
 - [Changelog](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/CHANGELOG.md)
-
+- [Development Status](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md)
 # Legal Rights
 
 > ! PornHub PROHIBITS downloading videos for unregistered users. <br>
-> ! PornHub PROHIBITS scraping content on their website
+> ! PornHub PROHIBITS scraping content on their website or usage of any automation tools in general
 
 So what do we learn from this? This tool is probably NOT permitted by PornHub.
 I am just the developer. Nobody will get you in jail because you downloaded a video from PornHub, but consider using a VPN to be safe.
@@ -124,7 +125,8 @@ I am just the developer. Nobody will get you in jail because you downloaded a vi
 - [tqdm](https://github.com/tqdm/tqdm)
 - [phub](https://github.com/Egsagon/PHUB)
 - [sentry sdk](https://github.com/getsentry/sentry-python) Used in 1.7 - 2.7
-- [requests](https://github.com/psf/requests) *
+- [requests](https://github.com/psf/requests)
+- [hqporner_api](https://github.com/EchterAlsFake/hqporner_api)
 - [pyside6](https://wiki.qt.io/Qt_for_Python)
 - wget
 

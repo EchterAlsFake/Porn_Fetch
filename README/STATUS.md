@@ -27,10 +27,8 @@ Deadline: 29.9.2023
 Deadline: 28.9.2023 : Done
 
 ### TODO:
-
-- Implementing metadata for HQPorner.com with API version 0.3
 - Testing everything
-- Working on a new version for Android with file dialog support, for better output path handling
+- finish search filters
 
 ### Production:
 

@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# Automatic compile script for Porn Fetch
-# Currently supported: Arch Linux, Ubuntu, Termux, Fedora, OpenSUSE
-
+# Automatic compile script
 # Detect distribution
 if [ -f /etc/os-release ]; then
     . /etc/os-release
@@ -14,6 +12,8 @@ elif [ -f /etc/lsb-release ]; then
     OS=$DISTRIB_ID
 elif [ -f /etc/debian_version ]; then
     OS=Debian
+elif [ -f /etc/alpine-release ]; then
+    OS=Alpine
 else
     OS=$(uname -s)
 fi
@@ -32,14 +32,6 @@ case $OS in
         echo "Detected Ubuntu"
         sudo apt-get update
         sudo apt-get install build-essential cmake python3-dev libssl-dev qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev qt5-default git wget python3-venv -y
-        wget "https://www.python.org/ftp/python/3.11.4/Python-3.11.4.tar.xz"
-        tar -xvf "Python-3.11.4.tar.xz"
-        cd Python-3.11.4
-        ./configure --enable-optimizations
-        make -j 8
-        sudo make altinstall
-        cd ..
-        rm -rf Python-3.11.4
         ;;
     "termux")
         # Termux commands
@@ -58,6 +50,11 @@ case $OS in
         echo "Detected OpenSUSE"
         sudo zypper install -y git python3-virtualenv libqt5-qtbase-devel
         ;;
+    "alpine")
+        # iSH (Alpine Linux) commands
+        echo "Detected Alpine Linux (iSH)"
+        apk add git python3 py3-pip py3-virtualenv
+        ;;
     *)
         echo "Unsupported distribution: $OS"
         exit 1
@@ -75,4 +72,7 @@ pyinstaller -F widget.py
 cd dist
 mv widget Porn_Fetch
 chmod +x Porn_Fetch
-echo "Porn Fetch is now installed to $(pwd)/"
+echo "Installation is now installed to $(pwd)/"
+
+
+
