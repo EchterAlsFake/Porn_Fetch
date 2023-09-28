@@ -655,10 +655,6 @@ class Widget(QWidget):
                 "half": self.ui.radio_quality_middle,
                 "worst": self.ui.radio_quality_worst,
             },
-            "default_threading": {
-                "yes": self.ui.radio_threading_yes,
-                "no": self.ui.radio_threading_no,
-            },
             "api_language": {
                 "en": self.ui.api_radio_en,
                 "ru": self.ui.api_radio_ru,
@@ -690,15 +686,37 @@ class Widget(QWidget):
             self.ui.radio_threading_no.setChecked(False)
             self.mode = False
 
+        else:
+            self.ui.radio_threading_yes.setChecked(True)
+            self.mode = True
+
+
         self.path = self.conf["Porn_Fetch"]["default_path"]
         self.ui.lineedit_default_output_path.setText(self.path)
 
     def load_search_filters(self):
-        if self.production == "professional":
-            self.production = locals.Production.PROFESSIONAL
+        production_mapping = {
+            "professional": locals.Production.PROFESSIONAL,
+            "homemade": locals.Production.HOMEMADE
+        }
 
-        elif self.production == "homemade":
-            self.production = locals.Production.HOMEMADE
+        sort_mapping = {
+            "most recent": locals.Sort.VIDEO_MOST_RECENT,
+            "most viewed": locals.Sort.VIDEO_MOST_VIEWS,
+            "top rated": locals.Sort.VIDEO_TOP_RATED,
+            "longest": locals.Sort.VIDEO_LONGUEST
+        }
+
+        sort_time_mapping = {
+            "day": locals.Sort.DAYLY,
+            "week": locals.Sort.WEEKLY,
+            "month": locals.Sort.MONTHLY,
+            "year": locals.Sort.YEARLY
+        }
+
+        self.production = production_mapping.get(self.production, self.production)
+        self.sort = sort_mapping.get(self.sort, self.sort)
+        self.sort_time = sort_time_mapping.get(self.sort_time, self.sort_time)
 
     def login(self):
         username = self.ui.lineedit_username.text()
