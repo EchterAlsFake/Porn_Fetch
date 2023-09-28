@@ -835,44 +835,29 @@ class Widget(QWidget):
     def get_liked_videos(self):
         try:
             videos = self.client.account.liked
+            add_to_tree_widget(iterator=videos, tree_widget=self.ui.treeWidget)
 
         except AttributeError:
             self.login()
             self.get_liked_videos()
 
-        if len(videos) == 0:
-            ui_popup("No videos found. If you are sure that this is an error, it's PornHub's fault ;) ")
-
-        else:
-            add_to_tree_widget(iterator=videos, tree_widget=self.ui.treeWidget)
-
     def get_watched_videos(self):
         try:
             videos = self.client.account.watched
+            add_to_tree_widget(iterator=videos, tree_widget=self.ui.treeWidget)
 
         except AttributeError:
             self.login()
             self.get_watched_videos()
 
-        if len(videos) == 0:
-            ui_popup("No videos found. If you are sure that this is an error, it's PornHub's fault ;) ")
-
-        else:
-            add_to_tree_widget(iterator=videos, tree_widget=self.ui.treeWidget)
-
     def get_recommended_videos(self):
         try:
             videos = self.client.account.recommended
+            add_to_tree_widget(iterator=videos, tree_widget=self.ui.treeWidget)
 
         except AttributeError:
             self.login()  # Sometimes the Account Session times out. In that case a simple re-initialization is best :)
             self.get_recommended_videos()
-
-        if len(videos) == 0:
-            ui_popup("No videos found. If you are sure that this is an error, it's PornHub's fault ;) ")
-
-        else:
-            add_to_tree_widget(iterator=videos, tree_widget=self.ui.treeWidget)
 
 
 def main():
