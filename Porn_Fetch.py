@@ -257,8 +257,6 @@ class CategoryFilterWindow(QWidget):
             if checkbox.isChecked():
                 excluded_categories.append(category)
 
-        print("Selected Category:", selected_category)
-        print("Excluded Categories:", excluded_categories)
         self.conf = ConfigParser()
         self.conf.read("config.ini")
 
@@ -312,6 +310,11 @@ class Widget(QWidget):
         self.ui.button_account.setIcon(QIcon(":/icons/account.svg"))
         self.ui.button_settings.setIcon(QIcon(":/icons/settings.svg"))
         self.setWindowIcon(QIcon(":/icons/logo.ico"))
+        self.setStyleSheet("""
+border: none;
+color: white;
+background-color: rgb(60, 60 ,60)
+        """)
         logging("Loaded Icons")
         self.ui.groupBox_3.setDisabled(True)
         self.button_group()  # Needs to be called before load_user_settings!
@@ -822,12 +825,23 @@ class Widget(QWidget):
         self.sort_time = sort_time_mapping.get(self.sort_time, self.sort_time)
 
         self.selected_category_value = self.conf.get('Porn_Fetch', 'categories', fallback=None)
-        self.selected_category = getattr(locals.Category, self.selected_category_value)
         self.excluded_categories_str = self.conf.get('Porn_Fetch', 'excluded_categories', fallback=None)
         self.excluded_categories = self.excluded_categories_str.split(',') if self.excluded_categories_str else []
         self.excluded_categories_filter = []
-        for category in self.excluded_categories:
-            self.excluded_categories.append(getattr(locals.Category, category))
+
+        try:
+            self.selected_category = getattr(locals.Category, self.selected_category_value)
+
+        except AttributeError:
+            self.selected_category = None
+
+        try:
+            for category in self.excluded_categories:
+                self.excluded_categories.append(getattr(locals.Category, category))
+
+        except AttributeError:
+            self.excluded_categories_filter = None
+
         logging("Loaded search filters")
 
     def login(self):

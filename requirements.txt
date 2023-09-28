@@ -1,4 +1,4 @@
-phub
+git+https://github.com/Egsagon/PHUB.git
 PySide6
 colorama
 bs4
