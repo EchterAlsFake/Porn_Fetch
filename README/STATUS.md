@@ -21,9 +21,9 @@ Deadline: 29.9.2023
 
 - [x] Download
 - [x] File Dialog
-- [] User permissions : In development
+- [x] User permissions : In development
 
-Deadline: 28.9.2023
+Deadline: 28.9.2023 : Done
 
 ### TODO:
 
