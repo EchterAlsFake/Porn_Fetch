@@ -20,6 +20,18 @@ background-color: rgb(60, 60, 60)</string>
   <layout class="QGridLayout" name="gridLayout_8">
    <item row="0" column="0">
     <widget class="QStackedWidget" name="stackedWidget_3">
+     <property name="styleSheet">
+      <string>QTreeWidget {
+    background-color: rgb(94, 94, 94);
+    color: white;
+}
+
+QTreeWidget::header {
+    background-color: rgb(94, 94, 94);
+    color: black; /* Set color to black or any other color that you prefer for the header text */
+}
+</string>
+     </property>
      <property name="currentIndex">
       <number>1</number>
      </property>
@@ -425,6 +437,17 @@ QLineEdit:disabled {
            </item>
            <item row="2" column="0">
             <widget class="QGroupBox" name="groupBox_3">
+             <property name="styleSheet">
+              <string notr="true">QGroupBox {
+        border: 0px;
+        margin-top: 2ex; /* Adjust as needed */
+    }
+    QGroupBox::title {
+        subcontrol-origin: margin;
+        subcontrol-position: top center;
+        padding: 0 3px;
+    }</string>
+             </property>
              <property name="title">
               <string/>
              </property>
@@ -545,6 +568,17 @@ QLineEdit:disabled {
           <layout class="QGridLayout" name="gridLayout_4">
            <item row="0" column="0">
             <widget class="QGroupBox" name="groupBox_2">
+             <property name="styleSheet">
+              <string notr="true">QGroupBox {
+        border: 0px;
+        margin-top: 2ex; /* Adjust as needed */
+    }
+    QGroupBox::title {
+        subcontrol-origin: margin;
+        subcontrol-position: top center;
+        padding: 0 3px;
+    }</string>
+             </property>
              <property name="title">
               <string/>
              </property>
@@ -552,8 +586,16 @@ QLineEdit:disabled {
               <item row="0" column="0">
                <widget class="QTreeWidget" name="treeWidget">
                 <property name="styleSheet">
-                 <string notr="true">background-color: rgb(94, 94, 94);
-color: white;</string>
+                 <string notr="true">QTreeWidget {
+    background-color: rgb(94, 94, 94);
+    color: white;
+}
+
+QTreeWidget::header {
+    background-color: rgb(94, 94, 94);
+    color: black; /* Set color to black or any other color that you prefer for the header text */
+}
+</string>
                 </property>
                 <column>
                  <property name="text">
@@ -604,9 +646,34 @@ color: white;</string>
       </layout>
      </widget>
      <widget class="QWidget" name="page_6">
+      <property name="styleSheet">
+       <string notr="true">QProgressBar {
+    border: 2px solid #5a2a82;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #e0e0e0;
+}
+
+QProgressBar::chunk {
+    background-color: #5a2a82;
+    width: 10px; /* You can adjust this to change the width of the 'chunk' */
+}
+</string>
+      </property>
       <layout class="QGridLayout" name="gridLayout_13">
        <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox_4">
+         <property name="styleSheet">
+          <string notr="true">QGroupBox {
+        border: 0px;
+        margin-top: 2ex; /* Adjust as needed */
+    }
+    QGroupBox::title {
+        subcontrol-origin: margin;
+        subcontrol-position: top center;
+        padding: 0 3px;
+    }</string>
+         </property>
          <property name="title">
           <string/>
          </property>
@@ -1069,6 +1136,13 @@ QRadioButton::indicator:checked {
              <enum>QFrame::Raised</enum>
             </property>
             <layout class="QGridLayout" name="gridLayout_19">
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_output_path">
+               <property name="text">
+                <string>Output Path: </string>
+               </property>
+              </widget>
+             </item>
              <item row="1" column="1">
               <widget class="QLineEdit" name="lineedit_default_output_path">
                <property name="styleSheet">
@@ -1094,13 +1168,6 @@ QLineEdit:disabled {
                </property>
               </widget>
              </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_output_path">
-               <property name="text">
-                <string>Output Path: </string>
-               </property>
-              </widget>
-             </item>
              <item row="2" column="0">
               <widget class="QLabel" name="label_2">
                <property name="text">
@@ -1108,8 +1175,15 @@ QLineEdit:disabled {
                </property>
               </widget>
              </item>
+             <item row="3" column="1">
+              <widget class="QLabel" name="label_current_value_slider">
+               <property name="text">
+                <string>Current Limit: </string>
+               </property>
+              </widget>
+             </item>
              <item row="2" column="2">
-              <widget class="QPushButton" name="pushButton">
+              <widget class="QPushButton" name="button_search_limit_help">
                <property name="styleSheet">
                 <string notr="true">QPushButton {
         background-color: #5a2a82;
@@ -1141,6 +1215,31 @@ QLineEdit:disabled {
              </item>
              <item row="2" column="1">
               <widget class="QSlider" name="horizontalSlider">
+               <property name="styleSheet">
+                <string notr="true">QSlider::groove:horizontal {
+    border: 1px solid #5a2a82;
+    height: 8px;
+    background: #e0e0e0;
+    margin: 0px;
+    border-radius: 4px;
+}
+
+QSlider::handle:horizontal {
+    background: #5a2a82;
+    border: 1px solid #5a2a82;
+    width: 18px;
+    margin: -6px 0;
+    border-radius: 9px;
+}
+
+QSlider::add-page:horizontal {
+    background: #e0e0e0;
+}
+
+QSlider::sub-page:horizontal {
+    background: #5a2a82;
+}</string>
+               </property>
                <property name="maximum">
                 <number>200</number>
                </property>
@@ -1160,12 +1259,34 @@ QLineEdit:disabled {
        </item>
        <item row="0" column="1">
         <widget class="QGroupBox" name="groupBox_10">
+         <property name="styleSheet">
+          <string notr="true">QGroupBox {
+        border: 0px;
+        margin-top: 2ex; /* Adjust as needed */
+    }
+    QGroupBox::title {
+        subcontrol-origin: margin;
+        subcontrol-position: top center;
+        padding: 0 3px;
+    }</string>
+         </property>
          <property name="title">
           <string>Search filters</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_16">
           <item row="1" column="0">
            <widget class="QGroupBox" name="groupBox_13">
+            <property name="styleSheet">
+             <string notr="true">QGroupBox {
+        border: 0px;
+        margin-top: 2ex; /* Adjust as needed */
+    }
+    QGroupBox::title {
+        subcontrol-origin: margin;
+        subcontrol-position: top center;
+        padding: 0 3px;
+    }</string>
+            </property>
             <property name="title">
              <string>Time sort filters</string>
             </property>
@@ -1310,6 +1431,17 @@ QRadioButton::indicator:checked {
           </item>
           <item row="1" column="1">
            <widget class="QGroupBox" name="groupBox_12">
+            <property name="styleSheet">
+             <string notr="true">QGroupBox {
+        border: 0px;
+        margin-top: 2ex; /* Adjust as needed */
+    }
+    QGroupBox::title {
+        subcontrol-origin: margin;
+        subcontrol-position: top center;
+        padding: 0 3px;
+    }</string>
+            </property>
             <property name="title">
              <string>Sorting for Search function</string>
             </property>
@@ -1482,6 +1614,17 @@ QRadioButton::indicator:checked {
           </item>
           <item row="0" column="1">
            <widget class="QGroupBox" name="groupBox_15">
+            <property name="styleSheet">
+             <string notr="true">QGroupBox {
+        border: 0px;
+        margin-top: 2ex; /* Adjust as needed */
+    }
+    QGroupBox::title {
+        subcontrol-origin: margin;
+        subcontrol-position: top center;
+        padding: 0 3px;
+    }</string>
+            </property>
             <property name="title">
              <string>Production:</string>
             </property>
@@ -1572,6 +1715,17 @@ QRadioButton::indicator:checked {
           </item>
           <item row="0" column="0">
            <widget class="QGroupBox" name="groupBox">
+            <property name="styleSheet">
+             <string notr="true">QGroupBox {
+        border: 0px;
+        margin-top: 2ex; /* Adjust as needed */
+    }
+    QGroupBox::title {
+        subcontrol-origin: margin;
+        subcontrol-position: top center;
+        padding: 0 3px;
+    }</string>
+            </property>
             <property name="title">
              <string>Category</string>
             </property>
@@ -2504,6 +2658,20 @@ QLineEdit:disabled {
         </item>
         <item>
          <widget class="QProgressBar" name="progressbar_download">
+          <property name="styleSheet">
+           <string notr="true">QProgressBar {
+    border: 2px solid #5a2a82;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #e0e0e0;
+}
+
+QProgressBar::chunk {
+    background-color: #5a2a82;
+    width: 10px; /* You can adjust this to change the width of the 'chunk' */
+}
+</string>
+          </property>
           <property name="value">
            <number>0</number>
           </property>
