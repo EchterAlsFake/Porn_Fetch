@@ -11,6 +11,8 @@ import requests  # See: https://github.com/psf/requests
 import math
 import src.resources_rc  # It's used in Runtime for the icons. Do not remove this requirement!
 
+from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout, QRadioButton,
+    QCheckBox, QPushButton, QScrollArea, QGroupBox)
 from phub import Client, Quality, locals, errors  # See https://github.com/Egsagon/PHUB
 from hqporner_api import API  # See: https://github.com/EchterAlsFake/hqporner_api
 from configparser import ConfigParser  # See: https://github.com/python/cpython/blob/main/Lib/configparser.py
@@ -23,6 +25,10 @@ from src.license_agreement import Ui_Widget_License
 from src.Porn_Fetch_v3 import Ui_Porn_Fetch_widget
 from src.setup import setup_config_file, strip_title, logging
 from src.cli import CLI
+
+
+categories = [attr for attr in dir(locals.Category) if
+              not callable(getattr(locals.Category, attr)) and not attr.startswith("__")]
 
 
 def ui_popup(text):
@@ -188,6 +194,87 @@ class DownloadThread(QRunnable):
         self.video.download(display=self.callback, quality=self.quality, path=self.output_path)
 
 
+class CategoryFilterWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.init_ui()
+
+    def init_ui(self):
+        layout = QVBoxLayout()
+
+        # Left Side
+        self.radio_buttons = {}
+        left_layout = QVBoxLayout()
+        left_group = QGroupBox("Select Category")
+        for category in categories:
+            radio_button = QRadioButton(category)
+            left_layout.addWidget(radio_button)
+            self.radio_buttons[category] = radio_button
+        left_group.setLayout(left_layout)
+
+        left_scroll = QScrollArea()
+        left_scroll.setWidgetResizable(True)
+        left_scroll.setWidget(left_group)
+
+        # Right Side
+        self.checkboxes = {}
+        right_layout = QVBoxLayout()
+        right_group = QGroupBox("Exclude Categories")
+        for category in categories:
+            checkbox = QCheckBox(category)
+            right_layout.addWidget(checkbox)
+            self.checkboxes[category] = checkbox
+        right_group.setLayout(right_layout)
+
+        right_scroll = QScrollArea()
+        right_scroll.setWidgetResizable(True)
+        right_scroll.setWidget(right_group)
+
+        # Apply Button
+        apply_button = QPushButton("Apply")
+        apply_button.clicked.connect(self.on_apply)
+
+        # Main Layout
+        hlayout = QHBoxLayout()
+        hlayout.addWidget(left_scroll)
+        hlayout.addWidget(right_scroll)
+
+        layout.addLayout(hlayout)
+        layout.addWidget(apply_button)
+
+        self.setLayout(layout)
+
+    def on_apply(self):
+        selected_category = None
+        excluded_categories = []
+
+        for category, radio_button in self.radio_buttons.items():
+            if radio_button.isChecked():
+                selected_category = category
+
+        for category, checkbox in self.checkboxes.items():
+            if checkbox.isChecked():
+                excluded_categories.append(category)
+
+        print("Selected Category:", selected_category)
+        print("Excluded Categories:", excluded_categories)
+        self.conf = ConfigParser()
+        self.conf.read("config.ini")
+
+        # Save to config file
+        if selected_category is not None:
+            self.conf.set("Porn_Fetch", "categories", selected_category)
+
+        if excluded_categories:
+            excluded_categories_str = ','.join(excluded_categories)
+            self.conf.set("Porn_Fetch", "excluded_categories", excluded_categories_str)
+
+        # Save the config file
+        with open('config.ini', 'w') as configfile:
+            self.conf.write(configfile)
+
+
 class Widget(QWidget):
     """Main UI widget. Design is loaded from the ui_main_widget.py file. Feel free to change things if you want."""
 
@@ -247,6 +334,7 @@ class Widget(QWidget):
         self.ui.button_settings.clicked.connect(self.switch_to_settings)
         self.ui.button_miscellaneus.clicked.connect(self.switch_to_miscellaneous)
         self.ui.button_credits.clicked.connect(self.switch_to_credits)
+        self.ui.button_category_filters.clicked.connect(self.set_category_filters)
         self.ui.button_speed_help.clicked.connect(help_speed)
         self.ui.button_threading_help.clicked.connect(help_threading)
 
@@ -268,6 +356,15 @@ class Widget(QWidget):
     def switch_to_credits(self):
         self.ui.stackedWidget_3.setCurrentIndex(3)
 
+    def set_category_filters(self):
+        """
+        Starts the external Class for the Category Filters
+        """
+
+        self.window = CategoryFilterWindow()
+        self.window.show()
+        logging("Executed Category Window Widget")
+
     def button_group(self):
         """Separates the QRadioButtons from the different grid layouts"""
 
@@ -280,7 +377,6 @@ class Widget(QWidget):
                      self.ui.radio_longest, self.ui.radio_top_rated, self.ui.radio_sort_ignore],
             "sort_time": [self.ui.radio_day, self.ui.radio_month, self.ui.radio_year, self.ui.radio_week,
                           self.ui.radio_time_sort_ignore],
-            "hd": [self.ui.radio_hd_yes, self.ui.radio_hd_no, self.ui.radio_hd_ignore],
             "production": [self.ui.radio_production_ignore, self.ui.radio_homemade, self.ui.radio_professional],
             "ui_language": []
         }
@@ -435,13 +531,16 @@ class Widget(QWidget):
 
             for url in content:
                 self.semaphore = QSemaphore(1)
+
                 if url.endswith(".html"):
+                    logging(f"Downloading HQPorner.com: {url}")
                     self.download_raw(url, output_path=self.path)
                     counter += 1
                     self.ui.lineedit_toal.setText(str(text))
 
                 else:
                     self.get_mode()
+                    logging(f"Downloading PornHub.com: {url}")
                     self.download(progress_bar=self.ui.progressbar_download, video=self.test_video(url))
 
     def download_completed_slot(self):
@@ -527,7 +626,7 @@ class Widget(QWidget):
             self.get_client_language()
 
         self.client = Client(language=self.api_language, delay=self.delay)
-        query_object = self.client.search(query)
+        query_object = self.client.search(query, locals.Category.ASIAN + locals.Production.PROFESSIONAL + self.sort + self.sort_time - self.excluded_categories_filter)
 
         self.add_to_download_tree(query_object)
         self.download_tree()
@@ -570,11 +669,6 @@ class Widget(QWidget):
             "api_radio_ru": "ru",
             "api_radio_es": "es",
         }
-        hd_options = {
-            "radio_hd_yes": "yes",
-            "radio_hd_no": "no",
-            "radio_hd_ignore": "false",
-        }
         time_sort_options = {
             "radio_day": "day",
             "radio_week": "week",
@@ -601,7 +695,6 @@ class Widget(QWidget):
             "default_threading": threading_options,
             "api_language": language_options,
             "delay": speed_options,
-            "hd": hd_options,
             "sort": sort_options,
             "sort_time": time_sort_options,
             "production": production_options,
@@ -645,10 +738,6 @@ class Widget(QWidget):
                 "homemade": self.ui.radio_homemade,
                 "professional": self.ui.radio_professional,
                 "false": self.ui.radio_production_ignore,
-            },
-            "hd": {
-                "true": self.ui.radio_hd_yes,
-                "false": self.ui.radio_hd_no,
             },
             "default_quality": {
                 "best": self.ui.radio_quality_best,
@@ -717,6 +806,14 @@ class Widget(QWidget):
         self.production = production_mapping.get(self.production, self.production)
         self.sort = sort_mapping.get(self.sort, self.sort)
         self.sort_time = sort_time_mapping.get(self.sort_time, self.sort_time)
+
+        self.selected_category_value = self.conf.get('Porn_Fetch', 'categories', fallback=None)
+        self.selected_category = getattr(locals.Category, self.selected_category_value)
+        self.excluded_categories_str = self.conf.get('Porn_Fetch', 'excluded_categories', fallback=None)
+        self.excluded_categories = self.excluded_categories_str.split(',') if self.excluded_categories_str else []
+        self.excluded_categories_filter = []
+        for category in self.excluded_categories:
+            self.excluded_categories.append(getattr(locals.Category, category))
 
     def login(self):
         username = self.ui.lineedit_username.text()

@@ -959,82 +959,6 @@ class Ui_Porn_Fetch_widget(object):
         self.groupBox_10.setObjectName(u"groupBox_10")
         self.gridLayout_16 = QGridLayout(self.groupBox_10)
         self.gridLayout_16.setObjectName(u"gridLayout_16")
-        self.groupBox_14 = QGroupBox(self.groupBox_10)
-        self.groupBox_14.setObjectName(u"groupBox_14")
-        self.gridLayout_18 = QGridLayout(self.groupBox_14)
-        self.gridLayout_18.setObjectName(u"gridLayout_18")
-        self.radio_hd_no = QRadioButton(self.groupBox_14)
-        self.radio_hd_no.setObjectName(u"radio_hd_no")
-        self.radio_hd_no.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 255, 255)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"")
-
-        self.gridLayout_18.addWidget(self.radio_hd_no, 1, 0, 1, 1)
-
-        self.radio_hd_yes = QRadioButton(self.groupBox_14)
-        self.radio_hd_yes.setObjectName(u"radio_hd_yes")
-        self.radio_hd_yes.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 255, 255)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"")
-
-        self.gridLayout_18.addWidget(self.radio_hd_yes, 0, 0, 1, 1)
-
-        self.radio_hd_ignore = QRadioButton(self.groupBox_14)
-        self.radio_hd_ignore.setObjectName(u"radio_hd_ignore")
-        self.radio_hd_ignore.setStyleSheet(u"QRadioButton {\n"
-"	color: rgb(255, 255, 255)}\n"
-"\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
-"}\n"
-"\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
-"}\n"
-"")
-
-        self.gridLayout_18.addWidget(self.radio_hd_ignore, 2, 0, 1, 1)
-
-
-        self.gridLayout_16.addWidget(self.groupBox_14, 0, 0, 1, 1)
-
         self.groupBox_13 = QGroupBox(self.groupBox_10)
         self.groupBox_13.setObjectName(u"groupBox_13")
         self.gridLayout_14 = QGridLayout(self.groupBox_13)
@@ -1378,6 +1302,40 @@ class Ui_Porn_Fetch_widget(object):
 
 
         self.gridLayout_16.addWidget(self.groupBox_15, 0, 1, 1, 1)
+
+        self.groupBox = QGroupBox(self.groupBox_10)
+        self.groupBox.setObjectName(u"groupBox")
+        self.gridLayout_18 = QGridLayout(self.groupBox)
+        self.gridLayout_18.setObjectName(u"gridLayout_18")
+        self.button_category_filters = QPushButton(self.groupBox)
+        self.button_category_filters.setObjectName(u"button_category_filters")
+        self.button_category_filters.setStyleSheet(u"QPushButton {\n"
+"        background-color: #5a2a82;\n"
+"        color: #ffffff; \n"
+"        border: none;\n"
+"        border-radius: 10px;\n"
+"        padding: 5px 20px; \n"
+"        font-size: 12px;\n"
+"        outline: none;\n"
+"    }\n"
+"    \n"
+"    QPushButton:hover {\n"
+"        background-color: #7b3ca3; \n"
+"    }\n"
+"\n"
+"    QPushButton:pressed {\n"
+"        background-color: #481f61; \n"
+"    }\n"
+"\n"
+"    QPushButton:disabled {\n"
+"        background-color: #3f1d4d; \n"
+"        color: #8a7b9a; \n"
+"    }")
+
+        self.gridLayout_18.addWidget(self.button_category_filters, 0, 0, 1, 1)
+
+
+        self.gridLayout_16.addWidget(self.groupBox, 0, 0, 1, 1)
 
 
         self.gridLayout_13.addWidget(self.groupBox_10, 0, 1, 1, 1)
@@ -2137,7 +2095,7 @@ class Ui_Porn_Fetch_widget(object):
 
         self.retranslateUi(Porn_Fetch_widget)
 
-        self.stackedWidget_3.setCurrentIndex(2)
+        self.stackedWidget_3.setCurrentIndex(1)
         self.stackedWidget.setCurrentIndex(1)
         self.stackedWidget_2.setCurrentIndex(0)
 
@@ -2193,10 +2151,6 @@ class Ui_Porn_Fetch_widget(object):
         self.button_speed_help.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Help", None))
         self.label_output_path.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Output Path: ", None))
         self.groupBox_10.setTitle(QCoreApplication.translate("Porn_Fetch_widget", u"Search filters", None))
-        self.groupBox_14.setTitle(QCoreApplication.translate("Porn_Fetch_widget", u"HD Resolution?", None))
-        self.radio_hd_no.setText(QCoreApplication.translate("Porn_Fetch_widget", u"No", None))
-        self.radio_hd_yes.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Yes", None))
-        self.radio_hd_ignore.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Ignore filter", None))
         self.groupBox_13.setTitle(QCoreApplication.translate("Porn_Fetch_widget", u"Time sort filters", None))
         self.radio_day.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Day", None))
         self.radio_month.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Month", None))
@@ -2214,6 +2168,8 @@ class Ui_Porn_Fetch_widget(object):
         self.radio_professional.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Professional", None))
         self.radio_homemade.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Homemade", None))
         self.radio_production_ignore.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Ignore filter", None))
+        self.groupBox.setTitle(QCoreApplication.translate("Porn_Fetch_widget", u"Category", None))
+        self.button_category_filters.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Category Filters", None))
         self.button_settings_apply.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Apply", None))
         self.button_download_thumbnail.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Download thumbnail", None))
         self.label_author.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Author: ", None))

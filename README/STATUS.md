@@ -11,9 +11,10 @@
 - [x] Search
 - [x] Metadata (PornHub)
 - [x] Metadata (HQPorner)
+- [x] Downloading from file
+- [x] Settings Widget
 - [] Searching filters
-- [] Downloading from file
-- [] Settings Widget
+
 
 Deadline: 29.9.2023
 

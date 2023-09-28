@@ -21,7 +21,7 @@ background-color: rgb(60, 60, 60)</string>
    <item row="0" column="0">
     <widget class="QStackedWidget" name="stackedWidget_3">
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page_5">
       <layout class="QGridLayout" name="gridLayout_6">
@@ -1113,96 +1113,6 @@ QLineEdit:disabled {
           <string>Search filters</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_16">
-          <item row="0" column="0">
-           <widget class="QGroupBox" name="groupBox_14">
-            <property name="title">
-             <string>HD Resolution?</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_18">
-             <item row="1" column="0">
-              <widget class="QRadioButton" name="radio_hd_no">
-               <property name="styleSheet">
-                <string notr="true">QRadioButton {
-	color: rgb(255, 255, 255)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-</string>
-               </property>
-               <property name="text">
-                <string>No</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QRadioButton" name="radio_hd_yes">
-               <property name="styleSheet">
-                <string notr="true">QRadioButton {
-	color: rgb(255, 255, 255)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-</string>
-               </property>
-               <property name="text">
-                <string>Yes</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QRadioButton" name="radio_hd_ignore">
-               <property name="styleSheet">
-                <string notr="true">QRadioButton {
-	color: rgb(255, 255, 255)}
-
-
-QRadioButton::indicator::unchecked {
-	border: 1px solid white;
-	border-radius: 5px;
-}
-
-
-QRadioButton::indicator:checked {
-    border : 4px solid;
-	border-color: black;
-	border-radius: 6px;
-	background-color: rgb(0, 255, 183);
-
-}
-</string>
-               </property>
-               <property name="text">
-                <string>Ignore filter</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
           <item row="1" column="0">
            <widget class="QGroupBox" name="groupBox_13">
             <property name="title">
@@ -1603,6 +1513,46 @@ QRadioButton::indicator:checked {
                </property>
                <property name="text">
                 <string>Ignore filter</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QGroupBox" name="groupBox">
+            <property name="title">
+             <string>Category</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_18">
+             <item row="0" column="0">
+              <widget class="QPushButton" name="button_category_filters">
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+        background-color: #5a2a82;
+        color: #ffffff; 
+        border: none;
+        border-radius: 10px;
+        padding: 5px 20px; 
+        font-size: 12px;
+        outline: none;
+    }
+    
+    QPushButton:hover {
+        background-color: #7b3ca3; 
+    }
+
+    QPushButton:pressed {
+        background-color: #481f61; 
+    }
+
+    QPushButton:disabled {
+        background-color: #3f1d4d; 
+        color: #8a7b9a; 
+    }</string>
+               </property>
+               <property name="text">
+                <string>Category Filters</string>
                </property>
               </widget>
              </item>
