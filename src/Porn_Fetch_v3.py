@@ -379,6 +379,15 @@ class Ui_Porn_Fetch_widget(object):
 
         self.groupBox_3 = QGroupBox(self.page_2)
         self.groupBox_3.setObjectName(u"groupBox_3")
+        self.groupBox_3.setStyleSheet(u"QGroupBox {\n"
+"        border: 0px;\n"
+"        margin-top: 2ex; /* Adjust as needed */\n"
+"    }\n"
+"    QGroupBox::title {\n"
+"        subcontrol-origin: margin;\n"
+"        subcontrol-position: top center;\n"
+"        padding: 0 3px;\n"
+"    }")
         self.gridLayout_5 = QGridLayout(self.groupBox_3)
         self.gridLayout_5.setObjectName(u"gridLayout_5")
         self.horizontalLayout_4 = QHBoxLayout()
@@ -483,6 +492,15 @@ class Ui_Porn_Fetch_widget(object):
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.groupBox_2 = QGroupBox(self.page_3)
         self.groupBox_2.setObjectName(u"groupBox_2")
+        self.groupBox_2.setStyleSheet(u"QGroupBox {\n"
+"        border: 0px;\n"
+"        margin-top: 2ex; /* Adjust as needed */\n"
+"    }\n"
+"    QGroupBox::title {\n"
+"        subcontrol-origin: margin;\n"
+"        subcontrol-position: top center;\n"
+"        padding: 0 3px;\n"
+"    }")
         self.gridLayout_3 = QGridLayout(self.groupBox_2)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.treeWidget = QTreeWidget(self.groupBox_2)
@@ -490,8 +508,16 @@ class Ui_Porn_Fetch_widget(object):
         __qtreewidgetitem.setText(0, u"1");
         self.treeWidget.setHeaderItem(__qtreewidgetitem)
         self.treeWidget.setObjectName(u"treeWidget")
-        self.treeWidget.setStyleSheet(u"background-color: rgb(94, 94, 94);\n"
-"color: white;")
+        self.treeWidget.setStyleSheet(u"QTreeWidget {\n"
+"    background-color: rgb(94, 94, 94);\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QTreeWidget::header {\n"
+"    background-color: rgb(94, 94, 94);\n"
+"    color: black; /* Set color to black or any other color that you prefer for the header text */\n"
+"}\n"
+"")
 
         self.gridLayout_3.addWidget(self.treeWidget, 0, 0, 1, 1)
 
@@ -535,10 +561,31 @@ class Ui_Porn_Fetch_widget(object):
         self.stackedWidget_3.addWidget(self.page_5)
         self.page_6 = QWidget()
         self.page_6.setObjectName(u"page_6")
+        self.page_6.setStyleSheet(u"QProgressBar {\n"
+"    border: 2px solid #5a2a82;\n"
+"    border-radius: 5px;\n"
+"    text-align: center;\n"
+"    background-color: #e0e0e0;\n"
+"}\n"
+"\n"
+"QProgressBar::chunk {\n"
+"    background-color: #5a2a82;\n"
+"    width: 10px; /* You can adjust this to change the width of the 'chunk' */\n"
+"}\n"
+"")
         self.gridLayout_13 = QGridLayout(self.page_6)
         self.gridLayout_13.setObjectName(u"gridLayout_13")
         self.groupBox_4 = QGroupBox(self.page_6)
         self.groupBox_4.setObjectName(u"groupBox_4")
+        self.groupBox_4.setStyleSheet(u"QGroupBox {\n"
+"        border: 0px;\n"
+"        margin-top: 2ex; /* Adjust as needed */\n"
+"    }\n"
+"    QGroupBox::title {\n"
+"        subcontrol-origin: margin;\n"
+"        subcontrol-position: top center;\n"
+"        padding: 0 3px;\n"
+"    }")
         self.gridLayout_12 = QGridLayout(self.groupBox_4)
         self.gridLayout_12.setObjectName(u"gridLayout_12")
         self.gridlayout_api_language = QGridLayout()
@@ -920,6 +967,11 @@ class Ui_Porn_Fetch_widget(object):
         self.frame.setFrameShadow(QFrame.Raised)
         self.gridLayout_19 = QGridLayout(self.frame)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
+        self.label_output_path = QLabel(self.frame)
+        self.label_output_path.setObjectName(u"label_output_path")
+
+        self.gridLayout_19.addWidget(self.label_output_path, 1, 0, 1, 1)
+
         self.lineedit_default_output_path = QLineEdit(self.frame)
         self.lineedit_default_output_path.setObjectName(u"lineedit_default_output_path")
         self.lineedit_default_output_path.setStyleSheet(u"QLineEdit {\n"
@@ -944,19 +996,19 @@ class Ui_Porn_Fetch_widget(object):
 
         self.gridLayout_19.addWidget(self.lineedit_default_output_path, 1, 1, 1, 1)
 
-        self.label_output_path = QLabel(self.frame)
-        self.label_output_path.setObjectName(u"label_output_path")
-
-        self.gridLayout_19.addWidget(self.label_output_path, 1, 0, 1, 1)
-
         self.label_2 = QLabel(self.frame)
         self.label_2.setObjectName(u"label_2")
 
         self.gridLayout_19.addWidget(self.label_2, 2, 0, 1, 1)
 
-        self.pushButton = QPushButton(self.frame)
-        self.pushButton.setObjectName(u"pushButton")
-        self.pushButton.setStyleSheet(u"QPushButton {\n"
+        self.label_current_value_slider = QLabel(self.frame)
+        self.label_current_value_slider.setObjectName(u"label_current_value_slider")
+
+        self.gridLayout_19.addWidget(self.label_current_value_slider, 3, 1, 1, 1)
+
+        self.button_search_limit_help = QPushButton(self.frame)
+        self.button_search_limit_help.setObjectName(u"button_search_limit_help")
+        self.button_search_limit_help.setStyleSheet(u"QPushButton {\n"
 "        background-color: #5a2a82;\n"
 "        color: #ffffff; \n"
 "        border: none;\n"
@@ -979,10 +1031,33 @@ class Ui_Porn_Fetch_widget(object):
 "        color: #8a7b9a; \n"
 "    }")
 
-        self.gridLayout_19.addWidget(self.pushButton, 2, 2, 1, 1)
+        self.gridLayout_19.addWidget(self.button_search_limit_help, 2, 2, 1, 1)
 
         self.horizontalSlider = QSlider(self.frame)
         self.horizontalSlider.setObjectName(u"horizontalSlider")
+        self.horizontalSlider.setStyleSheet(u"QSlider::groove:horizontal {\n"
+"    border: 1px solid #5a2a82;\n"
+"    height: 8px;\n"
+"    background: #e0e0e0;\n"
+"    margin: 0px;\n"
+"    border-radius: 4px;\n"
+"}\n"
+"\n"
+"QSlider::handle:horizontal {\n"
+"    background: #5a2a82;\n"
+"    border: 1px solid #5a2a82;\n"
+"    width: 18px;\n"
+"    margin: -6px 0;\n"
+"    border-radius: 9px;\n"
+"}\n"
+"\n"
+"QSlider::add-page:horizontal {\n"
+"    background: #e0e0e0;\n"
+"}\n"
+"\n"
+"QSlider::sub-page:horizontal {\n"
+"    background: #5a2a82;\n"
+"}")
         self.horizontalSlider.setMaximum(200)
         self.horizontalSlider.setValue(50)
         self.horizontalSlider.setOrientation(Qt.Horizontal)
@@ -997,10 +1072,28 @@ class Ui_Porn_Fetch_widget(object):
 
         self.groupBox_10 = QGroupBox(self.page_6)
         self.groupBox_10.setObjectName(u"groupBox_10")
+        self.groupBox_10.setStyleSheet(u"QGroupBox {\n"
+"        border: 0px;\n"
+"        margin-top: 2ex; /* Adjust as needed */\n"
+"    }\n"
+"    QGroupBox::title {\n"
+"        subcontrol-origin: margin;\n"
+"        subcontrol-position: top center;\n"
+"        padding: 0 3px;\n"
+"    }")
         self.gridLayout_16 = QGridLayout(self.groupBox_10)
         self.gridLayout_16.setObjectName(u"gridLayout_16")
         self.groupBox_13 = QGroupBox(self.groupBox_10)
         self.groupBox_13.setObjectName(u"groupBox_13")
+        self.groupBox_13.setStyleSheet(u"QGroupBox {\n"
+"        border: 0px;\n"
+"        margin-top: 2ex; /* Adjust as needed */\n"
+"    }\n"
+"    QGroupBox::title {\n"
+"        subcontrol-origin: margin;\n"
+"        subcontrol-position: top center;\n"
+"        padding: 0 3px;\n"
+"    }")
         self.gridLayout_14 = QGridLayout(self.groupBox_13)
         self.gridLayout_14.setObjectName(u"gridLayout_14")
         self.radio_day = QRadioButton(self.groupBox_13)
@@ -1123,6 +1216,15 @@ class Ui_Porn_Fetch_widget(object):
 
         self.groupBox_12 = QGroupBox(self.groupBox_10)
         self.groupBox_12.setObjectName(u"groupBox_12")
+        self.groupBox_12.setStyleSheet(u"QGroupBox {\n"
+"        border: 0px;\n"
+"        margin-top: 2ex; /* Adjust as needed */\n"
+"    }\n"
+"    QGroupBox::title {\n"
+"        subcontrol-origin: margin;\n"
+"        subcontrol-position: top center;\n"
+"        padding: 0 3px;\n"
+"    }")
         self.gridLayout_11 = QGridLayout(self.groupBox_12)
         self.gridLayout_11.setObjectName(u"gridLayout_11")
         self.radio_longest = QRadioButton(self.groupBox_12)
@@ -1269,6 +1371,15 @@ class Ui_Porn_Fetch_widget(object):
 
         self.groupBox_15 = QGroupBox(self.groupBox_10)
         self.groupBox_15.setObjectName(u"groupBox_15")
+        self.groupBox_15.setStyleSheet(u"QGroupBox {\n"
+"        border: 0px;\n"
+"        margin-top: 2ex; /* Adjust as needed */\n"
+"    }\n"
+"    QGroupBox::title {\n"
+"        subcontrol-origin: margin;\n"
+"        subcontrol-position: top center;\n"
+"        padding: 0 3px;\n"
+"    }")
         self.gridLayout_15 = QGridLayout(self.groupBox_15)
         self.gridLayout_15.setObjectName(u"gridLayout_15")
         self.radio_professional = QRadioButton(self.groupBox_15)
@@ -1345,6 +1456,15 @@ class Ui_Porn_Fetch_widget(object):
 
         self.groupBox = QGroupBox(self.groupBox_10)
         self.groupBox.setObjectName(u"groupBox")
+        self.groupBox.setStyleSheet(u"QGroupBox {\n"
+"        border: 0px;\n"
+"        margin-top: 2ex; /* Adjust as needed */\n"
+"    }\n"
+"    QGroupBox::title {\n"
+"        subcontrol-origin: margin;\n"
+"        subcontrol-position: top center;\n"
+"        padding: 0 3px;\n"
+"    }")
         self.gridLayout_18 = QGridLayout(self.groupBox)
         self.gridLayout_18.setObjectName(u"gridLayout_18")
         self.button_category_filters = QPushButton(self.groupBox)
@@ -2122,6 +2242,18 @@ class Ui_Porn_Fetch_widget(object):
 
         self.progressbar_download = QProgressBar(self.group_status)
         self.progressbar_download.setObjectName(u"progressbar_download")
+        self.progressbar_download.setStyleSheet(u"QProgressBar {\n"
+"    border: 2px solid #5a2a82;\n"
+"    border-radius: 5px;\n"
+"    text-align: center;\n"
+"    background-color: #e0e0e0;\n"
+"}\n"
+"\n"
+"QProgressBar::chunk {\n"
+"    background-color: #5a2a82;\n"
+"    width: 10px; /* You can adjust this to change the width of the 'chunk' */\n"
+"}\n"
+"")
         self.progressbar_download.setValue(0)
 
         self.verticalLayout.addWidget(self.progressbar_download)
@@ -2145,6 +2277,16 @@ class Ui_Porn_Fetch_widget(object):
 
     def retranslateUi(self, Porn_Fetch_widget):
         Porn_Fetch_widget.setWindowTitle(QCoreApplication.translate("Porn_Fetch_widget", u"Porn Fetch v2.8     GPLv3", None))
+        self.stackedWidget_3.setStyleSheet(QCoreApplication.translate("Porn_Fetch_widget", u"QTreeWidget {\n"
+"    background-color: rgb(94, 94, 94);\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QTreeWidget::header {\n"
+"    background-color: rgb(94, 94, 94);\n"
+"    color: black; /* Set color to black or any other color that you prefer for the header text */\n"
+"}\n"
+"", None))
         self.label_model_url.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Model URL: ", None))
         self.lineedit_search_query.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_widget", u"Enter Search Query for PornHub.com", None))
         self.button_file_start.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Start", None))
@@ -2191,7 +2333,8 @@ class Ui_Porn_Fetch_widget(object):
         self.button_speed_help.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Help", None))
         self.label_output_path.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Output Path: ", None))
         self.label_2.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Search Limit:", None))
-        self.pushButton.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Help", None))
+        self.label_current_value_slider.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Current Limit: ", None))
+        self.button_search_limit_help.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Help", None))
         self.groupBox_10.setTitle(QCoreApplication.translate("Porn_Fetch_widget", u"Search filters", None))
         self.groupBox_13.setTitle(QCoreApplication.translate("Porn_Fetch_widget", u"Time sort filters", None))
         self.radio_day.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Day", None))

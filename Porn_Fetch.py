@@ -67,15 +67,37 @@ That's why it's enabled by default.
 """
     ui_popup(text)
 
+def help_search_limit():
+    text = """
+The search limit defines the maximum videos you can find, when using a search query.
 
-def add_to_tree_widget(iterator, tree_widget):
+If your Limit is for example set to 8, then only the first 8 videos will be shown.
+This can improve speed a lot!
+
+The search limit can have a range of 0 - 200
+"""
+    ui_popup(text)
+
+
+def add_to_tree_widget(iterator, tree_widget, search_limit=False):
     tree_widget.clear()
     try:
-        for i, video in enumerate(iterator, start=1):
-            item = QTreeWidgetItem(tree_widget)
-            item.setText(0, f"{i}) {video.title}")
-            item.setData(0, QtCore.Qt.UserRole, video.url)
-            item.setCheckState(0, QtCore.Qt.Unchecked)  # Adds a checkbox
+        if not search_limit:
+            logging(f"No Search Limit...")
+            for i, video in enumerate(iterator, start=1):
+                item = QTreeWidgetItem(tree_widget)
+                item.setText(0, f"{i}) {video.title}")
+                item.setData(0, QtCore.Qt.UserRole, video.url)
+                item.setCheckState(0, QtCore.Qt.Unchecked)  # Adds a checkbox
+
+        else:
+            logging(f"Search Limit: {search_limit}")
+            for i, video in enumerate(iterator[0:search_limit], start=1):
+                item = QTreeWidgetItem(tree_widget)
+                item.setText(0, f"{i}) {video.title}")
+                item.setData(0, QtCore.Qt.UserRole, video.url)
+                item.setCheckState(0, QtCore.Qt.Unchecked)  # Adds a checkbox
+
     except Exception as e:
         ui_popup(
             f"An error happened. ERROR: {e}")
@@ -353,7 +375,7 @@ background-color: rgb(60, 60 ,60)
         self.ui.button_category_filters.clicked.connect(self.set_category_filters)
         self.ui.button_speed_help.clicked.connect(help_speed)
         self.ui.button_threading_help.clicked.connect(help_threading)
-
+        self.ui.horizontalSlider.valueChanged.connect(self.updateLabel)
 
     def switch_video_page(self):
         self.ui.stackedWidget_3.setCurrentIndex(0)
@@ -371,6 +393,9 @@ background-color: rgb(60, 60 ,60)
 
     def switch_to_credits(self):
         self.ui.stackedWidget_3.setCurrentIndex(3)
+
+    def updateLabel(self, value):
+        self.ui.label_current_value_slider.setText(f"Current Value: {value}")
 
     def set_category_filters(self):
         """
@@ -644,19 +669,11 @@ background-color: rgb(60, 60 ,60)
             self.get_client_language()
 
         self.client = Client(language=self.api_language, delay=self.delay)
-        query_object = self.client.search(query, self.selected_category | self.production | self.sort | self.sort_time - self.excluded_categories_filter)
+        query_object = self.client.search(query, self.selected_category | self.production | self.sort | self.sort_time)
         logging("Got query object")
 
-        self.add_to_download_tree(query_object)
+        add_to_tree_widget(tree_widget=self.ui.treeWidget, iterator=query_object, search_limit=int(self.search_limit))
         self.download_tree()
-
-    def add_to_download_tree(self, data):
-        self.ui.treeWidget.clear()
-        for i, video in enumerate(data, start=1):
-            item = QTreeWidgetItem(self.ui.treeWidget)
-            item.setText(0, f"{i}) {video.title}")
-            item.setData(0, QtCore.Qt.UserRole, video.url)
-            item.setCheckState(0, QtCore.Qt.Unchecked)  # Adds a checkbox
 
     def download_tree(self):
         for i in range(self.ui.treeWidget.topLevelItemCount()):
@@ -802,6 +819,7 @@ background-color: rgb(60, 60 ,60)
             self.mode = True
 
         self.search_limit = self.conf["Porn_Fetch"]["search_limit"]
+        self.updateLabel(self.search_limit)
         self.ui.horizontalSlider.setValue(int(self.search_limit))
         self.path = self.conf["Porn_Fetch"]["default_path"]
         self.ui.lineedit_default_output_path.setText(self.path)
