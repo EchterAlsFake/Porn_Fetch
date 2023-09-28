@@ -16,7 +16,8 @@ hd = true
 sort = false
 sort_time = false
 production = false
-
+excluded_categories = 
+categories = 
 
 [UI]
 language = en
