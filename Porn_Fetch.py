@@ -67,6 +67,7 @@ That's why it's enabled by default.
 """
     ui_popup(text)
 
+
 def help_search_limit():
     text = """
 The search limit defines the maximum videos you can find, when using a search query.
@@ -376,6 +377,7 @@ background-color: rgb(60, 60 ,60)
         self.ui.button_speed_help.clicked.connect(help_speed)
         self.ui.button_threading_help.clicked.connect(help_threading)
         self.ui.horizontalSlider.valueChanged.connect(self.updateLabel)
+        self.ui.button_search_limit_help.clicked.connect(help_search_limit)
 
     def switch_video_page(self):
         self.ui.stackedWidget_3.setCurrentIndex(0)
