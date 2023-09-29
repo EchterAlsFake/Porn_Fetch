@@ -16,8 +16,6 @@
 - [x] Implementing user metadata
 - [x] Adding Icon / Logo
 - [] Searching filters
-- [] Adding comments to code
-- [] Updating CLI to v2.8 desktop
 
 Deadline: 29.9.2023
 

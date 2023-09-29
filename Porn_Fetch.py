@@ -8,7 +8,7 @@ import argparse
 import os
 import random
 
-import phub
+
 import requests  # See: https://github.com/psf/requests
 import math
 import src.icons  # It's used in Runtime for the icons. Do not remove this requirement!
@@ -719,15 +719,58 @@ class Widget(QWidget):
 
 
     def search_videos(self):
+        # Assuming self.client is already defined
+        include_filters = []
+        exclude_filters = []
+
+        # List all filters and specify which should be excluded
+        filter_objects = {
+            'include': [self.selected_category, self.production, self.sort, self.sort_time],
+            'exclude': [self.excluded_categories_filter]
+        }
+
+        # Go through each filter object and check if it's a valid Param
+        for action, filters in filter_objects.items():
+            for filter_object in filters:
+                if isinstance(filter_object, locals.Param):
+                    if action == 'include':
+                        include_filters.append(filter_object)
+                    elif action == 'exclude':
+                        exclude_filters.append(filter_object)
+                else:
+                    # Log or print a warning if a filter is not a valid Param
+                    logging(f"Invalid filter: {filter_object}")
+
+        # Combine all valid inclusion filters using | operator, if any
+        if include_filters:
+            combined_include_filter = include_filters[0]
+            for filter_object in include_filters[1:]:
+                combined_include_filter |= filter_object
+        else:
+            combined_include_filter = None
+
+        # Combine all valid exclusion filters using - operator, if any
+        if exclude_filters:
+            combined_exclude_filter = exclude_filters[0]
+            for filter_object in exclude_filters[1:]:
+                combined_exclude_filter -= filter_object
+        else:
+            combined_exclude_filter = None
+
         query = self.ui.lineedit_search_query.text()
-        if not self.custom_language:
-            self.get_client_language()
+        # Combine inclusion and exclusion filters and perform the search, if any
+        if combined_include_filter and combined_exclude_filter:
+            final_filter = combined_include_filter - combined_exclude_filter
+            query_object = self.client.search(query, final_filter)
+        elif combined_include_filter:
+            query_object = self.client.search(query, combined_include_filter)
+        elif combined_exclude_filter:
+            query_object = self.client.search(query, -combined_exclude_filter)
+        else:
+            # If no filters are applied, perform the search without filters
+            query_object = self.client.search(query)
 
-        self.client = Client(language=self.api_language, delay=self.delay)
-        query_object = self.client.search(query, self.selected_category | self.production | locals.Sort.YEARLY | locals.Sort.VIDEO_TOP_RATED
-                                                                                |- self.excluded_categories_filter)
         logging("Got query object")
-
         add_to_tree_widget(tree_widget=self.ui.treeWidget, iterator=query_object, search_limit=int(self.search_limit))
         self.download_tree()
 
@@ -914,14 +957,14 @@ class Widget(QWidget):
             self.selected_category = getattr(locals.Category, self.selected_category_value)
 
         except AttributeError:
-            self.selected_category = None
+            self.selected_category = False
 
         try:
             for category in self.excluded_categories:
                 self.excluded_categories.append(getattr(locals.Category, category))
 
         except AttributeError:
-            self.excluded_categories_filter = None
+            self.excluded_categories_filter = False
 
         logging("Loaded search filters")
 
@@ -981,7 +1024,7 @@ def main():
     app = QApplication(sys.argv)
     setup_config_file()
 
-    widget = License()
+    widget = License()  # Starts License widget and checks if license was accepted.
     widget.check_license_and_proceed()
     sys.exit(app.exec())
 
