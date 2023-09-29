@@ -33,7 +33,7 @@ case $OS in
         sudo apt-get update
         sudo apt-get install build-essential cmake python3-dev libssl-dev qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev qt5-default git wget python3-venv -y
         ;;
-    "termux")
+    "linux")
         # Termux commands
         echo "Detected Termux"
         apt-get update
