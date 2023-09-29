@@ -13,10 +13,10 @@
 - [x] Metadata (HQPorner)
 - [x] Downloading from file
 - [x] Settings Widget
+- [x] Implementing user metadata
+- [x] Adding Icon / Logo
 - [] Searching filters
-- [] Implementing user metadata
 - [] Adding comments to code
-- [] Adding Icon / Logo
 - [] Updating CLI to v2.8 desktop
 
 Deadline: 29.9.2023

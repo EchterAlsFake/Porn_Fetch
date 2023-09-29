@@ -59,7 +59,8 @@ class CLI():
             self.download_from_file(file)
 
         elif options == "3":
-            user = input(f"{self.z}{Fore.LIGHTMAGENTA_EX}Enter the URL for User / Channel / Model account --=>:{Fore.RESET}")
+            user = input(
+                f"{self.z}{Fore.LIGHTMAGENTA_EX}Enter the URL for User / Channel / Model account --=>:{Fore.RESET}")
             self.download_from_channel(user)
 
         elif options == "4":
@@ -118,7 +119,6 @@ class CLI():
         else:
             self.quality = Quality.BEST
 
-
     def load_search_filters(self):
         if self.production == "professional":
             self.production = locals.Production.PROFESSIONAL
@@ -128,9 +128,6 @@ class CLI():
 
         else:
             self.production = False
-
-
-
 
     def get_video(self, url):
 
@@ -150,7 +147,7 @@ class CLI():
         if os.path.exists(self.output_path):
             logging(msg="Started download...", level="0")
             if self.threading:
-                download_thread = threading.Thread(target=self.download, args=(video, ))
+                download_thread = threading.Thread(target=self.download, args=(video,))
                 download_thread.start()
 
             else:
@@ -253,8 +250,8 @@ Enter the numbers of video you want to download. Separate with comma.  e.g 1,2,3
             print(f"{counter}) {video.title}")
 
         picked_indexes = input("""
-        
-        
+
+
 
 Enter the numbers of video you want to download. Separate with comma. e.g 1,2,3,4 -=>:""")
 
@@ -647,4 +644,3 @@ HD = High quality. If enabled, HD videos will be shown first.
 
 if __name__ == "__main__":
     CLI()
-

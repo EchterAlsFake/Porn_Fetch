@@ -7,9 +7,11 @@ import sys
 import argparse
 import os
 import random
+
+import phub
 import requests  # See: https://github.com/psf/requests
 import math
-import src.resources_rc  # It's used in Runtime for the icons. Do not remove this requirement!
+import src.icons  # It's used in Runtime for the icons. Do not remove this requirement!
 
 from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout, QRadioButton,
     QCheckBox, QPushButton, QScrollArea, QGroupBox)
@@ -338,12 +340,7 @@ class Widget(QWidget):
         self.ui.button_video.setIcon(QIcon(":/icons/download.svg"))
         self.ui.button_account.setIcon(QIcon(":/icons/account.svg"))
         self.ui.button_settings.setIcon(QIcon(":/icons/settings.svg"))
-        self.setWindowIcon(QIcon(":/icons/logo.ico"))
-        self.setStyleSheet("""
-border: none;
-color: white;
-background-color: rgb(60, 60 ,60)
-        """)
+        self.setWindowIcon(QIcon(":/icons/logo.png"))
         logging("Loaded Icons")
         self.ui.groupBox_3.setDisabled(True)
         self.button_group()  # Needs to be called before load_user_settings!
@@ -351,6 +348,7 @@ background-color: rgb(60, 60 ,60)
         self.load_search_filters()  # Must be called before load_user_settings!
         logging(f"Delay Set to: {self.delay}")
         logging(f"API Language is: {self.api_language}")
+        self.client = Client(language=self.api_language, delay=self.delay)
         self.ui.stackedWidget_3.setCurrentIndex(0)
         self.ui.stackedWidget.setCurrentIndex(0)
         self.button_connectors()
@@ -378,6 +376,9 @@ background-color: rgb(60, 60 ,60)
         self.ui.button_threading_help.clicked.connect(help_threading)
         self.ui.horizontalSlider.valueChanged.connect(self.updateLabel)
         self.ui.button_search_limit_help.clicked.connect(help_search_limit)
+        self.ui.button_user_information.clicked.connect(self.get_user_information)
+        self.ui.button_user_biography.clicked.connect(self.get_user_bio)
+
 
     def switch_video_page(self):
         self.ui.stackedWidget_3.setCurrentIndex(0)
@@ -665,13 +666,66 @@ background-color: rgb(60, 60 ,60)
         image.download(path="./")
         ui_popup(f"Downloaded Thumbnail for: {url}")
 
+
+    def get_user_information(self):
+
+        user_object = self.client.get_user("https://www.pornhub.com/model/sofia-simens")
+        logging("Loaded user object")
+        info = user_object.info
+        logging("Loaded user information object... Processing...")
+
+        relationship = info.get("Relationship status")
+        interested_in = info.get("Interested in")
+        gender = info.get("Gender")
+        height = info.get("Height")
+        ethnicity = info.get("Ethnicity")
+        hair_color = info.get("Hair Color")
+        fake_breasts = info.get("Fake Boobs")
+        tattoos = info.get("Tattoos")
+        piercings = info.get("Piercings")
+        hobbies = info.get("Interests and hobbie")
+        turns_on = info.get("Turn Ons")
+        video_views = info.get("Video Views")
+        profile_views = info.get("Profile Views")
+        videos_watched = info.get("Videos Watched")
+
+        self.ui.lineedit_user_name.setText(str(user_object.name))
+        self.ui.lineedit_user_url.setText(str(user_object.url))
+        self.ui.lineedit_user_fake_breasts.setText(str(fake_breasts))
+        self.ui.lineedit_user_avatar.setText(str("Not implemented yet, wait vor v2.9"))
+        self.ui.lineedit_user_gender.setText(str(gender))
+        self.ui.lineedit_user_ethnicity.setText(str(ethnicity))
+        self.ui.lineedit_user_hair_color.setText(str(hair_color))
+        self.ui.lineedit_user_height.setText(str(height))
+        self.ui.lineedit_user_hobbies.setText(str(hobbies))
+        self.ui.lineedit_user_interested.setText(str(interested_in))
+        self.ui.lineedit_user_piercings.setText(str(piercings))
+        self.ui.lineedit_user_profile_views.setText(str(profile_views))
+        self.ui.lineedit_user_video_views.setText(str(video_views))
+        self.ui.lineedit_user_videos_watched.setText(str(videos_watched))
+        self.ui.lineedit_user_relationship.setText(str(relationship))
+        self.ui.lineedit_user_turn_ons.setText(str(turns_on))
+        self.ui.lineedit_user_tattoos.setText(str(tattoos))
+        logging("Loaded User information")
+
+
+    def get_user_bio(self):
+        name = self.ui.lineedit_user_url.text()
+        user_object = self.client.get_user(name)
+
+        bio = user_object.bio
+        ui_popup(bio)
+
+
+
     def search_videos(self):
         query = self.ui.lineedit_search_query.text()
         if not self.custom_language:
             self.get_client_language()
 
         self.client = Client(language=self.api_language, delay=self.delay)
-        query_object = self.client.search(query, self.selected_category | self.production | self.sort | self.sort_time)
+        query_object = self.client.search(query, self.selected_category | self.production | locals.Sort.YEARLY | locals.Sort.VIDEO_TOP_RATED
+                                                                                |- self.excluded_categories_filter)
         logging("Got query object")
 
         add_to_tree_widget(tree_widget=self.ui.treeWidget, iterator=query_object, search_limit=int(self.search_limit))

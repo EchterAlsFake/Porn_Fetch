@@ -159,7 +159,7 @@ I hope that most issues are now fixed.
 - ChatGPT wrote the Readme a bit more professional
 - Updated Thumbnail download to use PHUB v4
 - Updated CLI to v4
-- removed unnecessary files e.g. DOWNLOADS.md, ISSUES.md
+- removed unnecessary files e.g., DOWNLOADS.md, ISSUES.md
 - Made The final new app design
 - added qt resource file for better icon handling
 - removed get_graphics funtion, UI starts now faster and doesn't need any setup
@@ -168,3 +168,15 @@ I hope that most issues are now fixed.
 - only one tree widget is now used for everything
 - changed Delay to High speed for better understanding
 - added help buttons for threading and "high speed" aka Delay
+- improved the logic of stylesheet's being used in the GUI (Reduces code by ~ 1500 lines)
+- added logo
+- created STATUS.md to give a better overview over the coming releases
+- added User metadata and info
+- better logic dependency handling in the build script
+- added support for iSH in the build script
+
+! Android !
+
+- You can now just paste the URL from clipboard
+- You can now choose the output folder without needing to enter it in to the input line
+- improved visual look and progressbar
