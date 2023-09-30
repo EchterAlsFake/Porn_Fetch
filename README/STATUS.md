@@ -15,19 +15,15 @@
 - [x] Settings Widget
 - [x] Implementing user metadata
 - [x] Adding Icon / Logo
-- [] Searching filters
+- [] Android testing (Termux) Report: Not working well. Need to be further developed!
+- [] Searching filters | Maybe unstable, but should work at least a bit
 - [] Last checks / fixes
 - [] Windows optimization
-- [] Android testing (Termux)
 - [] Android testing (Kivy)
-- [] Workflow build for Kivy
+- [] Kivy workflow build
+- [] Add better exception handling for basic stuff
+- [] Add exceptions for HQporner.com results
 
-Deadline: 29.9.2023
-
-(Sorry, but today some unexpected things happened, and I am not able to fix the search filters right now.
-I try it, but I don't think it's going to work out now, so I hope I can get them working tomorrow, but 
-tomorrow is also a really stressful day, but on Sunday I have time... At least it's worth waiting.
-That's what I can say.)
 
 ### Testing : Android
 
@@ -52,4 +48,6 @@ Conditions:
 
 ### Release:
 
-- At 29.9.2023–31.9.2023
+As soon as possible.
+
+If you need the newest functionality now, compile it by yourself.
