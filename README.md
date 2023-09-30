@@ -77,6 +77,11 @@ Automatic build script is available. Run the following in your terminal and sele
 ```
 wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/install.sh" | bash
 ```
+#### Termux:
+```
+wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/install_termux.sh" | bash
+```
+
 # Android
 
 #### Read carefully to prevent errors!

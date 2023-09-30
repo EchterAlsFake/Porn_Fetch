@@ -20,12 +20,12 @@
 - [x] Create an Android App with Kivy
 - [x] Create a Website for better overview, marketing and publicity
 - [x] New APP design with sidebar and a menu
-- [] Implementing new functions from PHUB v4
+- [x] Implementing new functions from PHUB v4
 - [] Update CLI to v4
 - [] Update Website to v4 and host it
-- [] Work on the basic design of the Android Application
-- [] Automatically manage permissions for the Android Application
-- [] Add some logical useful things like .. / .. videos downloaded, when using multiple downloads etc...
+- [x] Work on the basic design of the Android Application
+- [x] Automatically manage permissions for the Android Application
+- [x] Add some logical useful things like .. / .. videos downloaded, when using multiple downloads etc...
 # STATUS:
 
 Priority:
