@@ -5,11 +5,11 @@ git clone https://github.com/EchterAlsFake/Porn_Fetch
 cd Porn_Fetch
 python3 -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
+pip install -r src/requirements_termux.txt
 pip install pyinstaller
-pyinstaller -F widget.py
+pyinstaller -F src/cli.py
 cd dist
-mv widget Porn_Fetch
+mv cli Porn_Fetch
 chmod +x Porn_Fetch
 echo "Installation is now installed to $(pwd)/"
 
