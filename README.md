@@ -2,7 +2,7 @@
 
 ![Build](https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg)
 ### [Download Current Version 2.7](https://github.com/EchterAlsFake/Porn_Fetch/releases)
-### [Development Status V2.8](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md)
+### [Development Syztatus V2.8](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md)
 ## Table of Contents
 
 - [What is Porn Fetch?](#what-is-porn-fetch)
@@ -27,7 +27,7 @@ Porn Fetch allows users to download, search, and interact with videos from PornH
 
 - Downloading directly from PornHub
 - Selectable quality for downloads
-- Fetching metadata from videos
+- Fetching metadata from videos / Users
 - Downloading all videos from a whole Channel / User / Model account
 - In-app video search and download
 - Account login
@@ -51,15 +51,8 @@ Porn Fetch allows users to download, search, and interact with videos from PornH
 
 ## Supported Websites
 
-- PornHub.com
-- HQPorner.com (Supported Since v2.8)
-
-The method for getting the videos for HQPorner.com was developed by myself.
-<br>I am terrible in web requests with Python, so please don't expect much.
-
-PornHub is the Website for which this project is intended. A lot of stuff is
-supported for this, and the API is developed by Egsagon (see more in [Credits](#credits))
-
+- PornHub.com [PHUB](https://github.com/Egsagon/PHUB)
+- HQPorner.com (Supported Since v2.8) [hqporner_api](https://github.com/EchterAlsFake/hqporner_api)
 
 ## Building from Source
 

@@ -1,6 +1,6 @@
 apt-get update
 apt-get full-upgrade -y
-apt-get install python3 python-pip git wget ldd binutils
+apt-get install python3 python-pip git wget ldd binutils -y
 git clone https://github.com/EchterAlsFake/Porn_Fetch
 cd Porn_Fetch
 python3 -m venv venv
