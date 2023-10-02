@@ -11,7 +11,6 @@ import random
 
 import requests  # See: https://github.com/psf/requests
 import math
-import src.icons  # It's used in Runtime for the icons. Do not remove this requirement!
 
 from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout, QRadioButton,
     QCheckBox, QPushButton, QScrollArea, QGroupBox)
@@ -27,7 +26,7 @@ from PySide6.QtGui import QIcon
 from src.license_agreement import Ui_Widget_License
 from src.Porn_Fetch_v3 import Ui_Porn_Fetch_widget
 from src.setup import setup_config_file, strip_title, logging
-from src.cli import CLI
+from cli import CLI
 
 
 categories = [attr for attr in dir(locals.Category) if

@@ -18,7 +18,7 @@
 - [x] Searching filters | Maybe unstable, but should work at least a bit
 - [] Last checks / fixes
 - [] Windows optimization
-- [] rebuild cli
+- [x] rebuild cli
 - [] fix avatar downloading
 - [] better file structure
 - [x] Android testing (Kivy)

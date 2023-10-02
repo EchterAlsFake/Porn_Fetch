@@ -151,32 +151,50 @@ I hope that most issues are now fixed.
 - fixed setting Delay not working issue
 - fixed #4 connection error / model error
 
-# 2.8 
+# Version 2.8 Update Notes
 
-- removed Sentry from the entire project
-- added support for HQPorner.com which is another Porn Site
-- changed unimportant stuff on some files
-- ChatGPT wrote the Readme a bit more professional
-- Updated Thumbnail download to use PHUB v4
-- Updated CLI to v4
-- removed unnecessary files e.g., DOWNLOADS.md, ISSUES.md
-- Made The final new app design
-- added qt resource file for better icon handling
-- removed get_graphics funtion, UI starts now faster and doesn't need any setup
-- removed transparency support, as it is useless and doesn't even work on all distros
-- removed category filters (I think they are a bit useless, but if someone wants to have them back, tell me)
-- only one tree widget is now used for everything
-- changed Delay to High speed for better understanding
-- added help buttons for threading and "high speed" aka Delay
-- improved the logic of stylesheet's being used in the GUI (Reduces code by ~ 1500 lines)
-- added logo
-- created STATUS.md to give a better overview over the coming releases
-- added User metadata and info
-- better logic dependency handling in the build script
-- added support for iSH in the build script
+### New Features:
+- Added support for HQPorner.com.
+- Introduced dynamic colors for CLI.
+- Created STATUS.md for tracking upcoming releases.
+- Implemented help buttons for threading and "high speed" (previously known as Delay).
+- Added user metadata and info functionality.
+- Included a new logo.
 
-! Android !
+#### Interface & Design:
+- Rolled out the final app design.
+- Integrated qt resource file for better icon handling.
+- Improved stylesheet logic in the GUI (reduces code by approx. 1500 lines).
+- Unified to a single tree widget for all functionalities.
 
-- You can now just paste the URL from clipboard
+#### Performance & Efficiency:
+- Removed 'get_graphics' function, enhancing UI start speed and eliminating setup requirement.
+- Adjusted "Delay" to "High Speed" for clearer understanding.
+- Defaulting to maximum api requests possible for faster downloads
+- API updated to v4.1
+
+#### CLI Updates:
+- Updated CLI to version 4.1.
+- Entirely refactored CLI.
+- Fixed issues with Termux CLI build.
+
+#### Build & Integration:
+- Improved dependency handling in the build script.
+- Added support for iSH in the build script.
+- Integrated kivy build with CI/CD.
+
+#### Removals & Deprecations:
+- Eliminated Sentry from the project.
+- Deleted unnecessary files: DOWNLOADS.md, ISSUES.md.
+- Discontinued transparency support.
+- Modified several minor elements in various files.
+
+#### Miscellaneous:
+- Updated thumbnail download to align with PHUB v4.
+- Note: This Readme has been crafted with assistance from ChatGPT for professionalism.
+
+#### Android:
+- API Update to PHUB v4.1 from py-3.9 branch using custom fork
+- You can now just paste the URL from the clipboard
 - You can now choose the output folder without needing to enter it in to the input line
 - improved visual look and progressbar
