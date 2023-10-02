@@ -15,15 +15,15 @@
 - [x] Settings Widget
 - [x] Implementing user metadata
 - [x] Adding Icon / Logo
-- [] Android testing (Termux) Report: Not working well. Need to be further developed!
-- [] Searching filters | Maybe unstable, but should work at least a bit
+- [x] Searching filters | Maybe unstable, but should work at least a bit
 - [] Last checks / fixes
 - [] Windows optimization
-- [] Android testing (Kivy)
-- [] Kivy workflow build
-- [] Add better exception handling for basic stuff
-- [] Add exceptions for HQporner.com results
-
+- [] rebuild cli
+- [] fix avatar downloading
+- [] better file structure
+- [x] Android testing (Kivy)
+- [x] Kivy workflow build
+- [x] Add better exception handling for basic stuff
 
 ### Testing : Android
 

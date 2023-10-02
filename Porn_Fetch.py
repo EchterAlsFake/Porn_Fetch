@@ -681,7 +681,8 @@ class Widget(QWidget):
         ui_popup(f"Downloaded Thumbnail for: {url}")
 
     def get_user_information(self):
-        user_object = self.client.get_user("https://www.pornhub.com/model/sofia-simens")
+        user = self.ui.lineedit_user_url.text()
+        user_object = self.client.get_user(user)
         logging("Loaded user object")
         info = user_object.info
         logging("Loaded user information object... Processing...")
@@ -1026,8 +1027,27 @@ def main():
     app = QApplication(sys.argv)
     setup_config_file()
 
-    widget = License()  # Starts License widget and checks if license was accepted.
-    widget.check_license_and_proceed()
+    try:
+        widget = License()  # Starts License widget and checks if license was accepted.
+        widget.check_license_and_proceed()
+
+    except PermissionError:
+        ui_popup("Insufficient Permissions to access something. Please run Porn Fetch as root / admin")
+
+    except ConnectionResetError:
+        ui_popup("Connection was reset. Are you connected to a public wifi or a university's wifi? ")
+    except ConnectionError:
+        ui_popup("Connection Error, please make sure you have a stable internet connection")
+
+    except KeyboardInterrupt:
+        sys.exit(0)
+
+    except requests.exceptions.SSLError:
+        ui_popup("SSL Error.  Please connect to a VPN!")
+
+    except TypeError:
+        pass
+
     sys.exit(app.exec())
 
 
