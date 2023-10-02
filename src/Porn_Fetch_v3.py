@@ -25,7 +25,7 @@ class Ui_Porn_Fetch_widget(object):
     def setupUi(self, Porn_Fetch_widget):
         if not Porn_Fetch_widget.objectName():
             Porn_Fetch_widget.setObjectName(u"Porn_Fetch_widget")
-        Porn_Fetch_widget.resize(1380, 752)
+        Porn_Fetch_widget.resize(1418, 595)
         Porn_Fetch_widget.setStyleSheet(u"QWidget {\n"
 "color: white;\n"
 "background-color: rgb(60, 60, 60)\n"
@@ -849,9 +849,10 @@ class Ui_Porn_Fetch_widget(object):
         self.stackedWidget_3.addWidget(self.page_6)
         self.page_7 = QWidget()
         self.page_7.setObjectName(u"page_7")
+        self.gridLayout_26 = QGridLayout(self.page_7)
+        self.gridLayout_26.setObjectName(u"gridLayout_26")
         self.stacked_widget_metadata = QStackedWidget(self.page_7)
         self.stacked_widget_metadata.setObjectName(u"stacked_widget_metadata")
-        self.stacked_widget_metadata.setGeometry(QRect(0, 0, 1211, 401))
         self.stacked_widget_metadata.setStyleSheet(u"QPushButton {\n"
 "        background-color: #5a2a82;\n"
 "        color: #ffffff; \n"
@@ -1620,25 +1621,27 @@ class Ui_Porn_Fetch_widget(object):
         self.gridLayout_23.addWidget(self.groupBox_6, 0, 0, 1, 1)
 
         self.stacked_widget_metadata.addWidget(self.page_10)
-        self.horizontalLayoutWidget_3 = QWidget(self.page_7)
-        self.horizontalLayoutWidget_3.setObjectName(u"horizontalLayoutWidget_3")
-        self.horizontalLayoutWidget_3.setGeometry(QRect(10, 390, 1181, 41))
-        self.horizontalLayout_9 = QHBoxLayout(self.horizontalLayoutWidget_3)
+
+        self.gridLayout_26.addWidget(self.stacked_widget_metadata, 0, 0, 1, 1)
+
+        self.horizontalLayout_9 = QHBoxLayout()
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
-        self.horizontalLayout_9.setContentsMargins(0, 0, 0, 0)
-        self.button_switch_video_metadata = QPushButton(self.horizontalLayoutWidget_3)
+        self.button_switch_video_metadata = QPushButton(self.page_7)
         self.button_switch_video_metadata.setObjectName(u"button_switch_video_metadata")
         self.button_switch_video_metadata.setCursor(QCursor(Qt.PointingHandCursor))
         self.button_switch_video_metadata.setStyleSheet(u"")
 
         self.horizontalLayout_9.addWidget(self.button_switch_video_metadata)
 
-        self.button_switch_user_metadata = QPushButton(self.horizontalLayoutWidget_3)
+        self.button_switch_user_metadata = QPushButton(self.page_7)
         self.button_switch_user_metadata.setObjectName(u"button_switch_user_metadata")
         self.button_switch_user_metadata.setCursor(QCursor(Qt.PointingHandCursor))
         self.button_switch_user_metadata.setStyleSheet(u"")
 
         self.horizontalLayout_9.addWidget(self.button_switch_user_metadata)
+
+
+        self.gridLayout_26.addLayout(self.horizontalLayout_9, 1, 0, 1, 1)
 
         self.stackedWidget_3.addWidget(self.page_7)
         self.page_8 = QWidget()
@@ -1743,9 +1746,9 @@ class Ui_Porn_Fetch_widget(object):
 
         self.retranslateUi(Porn_Fetch_widget)
 
-        self.stackedWidget_3.setCurrentIndex(0)
+        self.stackedWidget_3.setCurrentIndex(2)
         self.stackedWidget_2.setCurrentIndex(0)
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(0)
         self.stacked_widget_metadata.setCurrentIndex(1)
 
 

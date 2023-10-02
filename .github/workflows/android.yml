@@ -1,0 +1,42 @@
+name: Build Android (kivy)
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Update System
+        run: |
+          sudo apt update
+
+      - name: Install dependencies
+        run: |
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev git
+
+      - name: Check Java Version
+        run: |
+          java -version
+
+      - name: Clone repository
+        run: |
+          git clone https://github.com/EchterAlsFake/Porn_Fetch -b android
+
+      - name: Navigate to repository and setup environment
+        run: |
+          cd Porn_Fetch
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+
+      - name: Install python dependencies
+        run: |
+          source Porn_Fetch/venv/bin/activate
+          pip install -r Porn_Fetch/requirements.txt
+          pip install buildozer cython==0.29.36
+
+      - name: Build Android package
+        run: |
+          source Porn_Fetch/venv/bin/activate
+          buildozer -v android debug

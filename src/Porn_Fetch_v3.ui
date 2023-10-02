@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1380</width>
-    <height>752</height>
+    <width>1418</width>
+    <height>595</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -141,7 +141,7 @@ QTreeWidget::header {
 </string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page_5">
       <layout class="QGridLayout" name="gridLayout_6">
@@ -244,7 +244,7 @@ QTreeWidget::header {
        <item row="0" column="0">
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="page">
           <layout class="QGridLayout" name="gridLayout_9">
@@ -1122,17 +1122,11 @@ QProgressBar::chunk {
       </layout>
      </widget>
      <widget class="QWidget" name="page_7">
-      <widget class="QStackedWidget" name="stacked_widget_metadata">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>1211</width>
-         <height>401</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
+      <layout class="QGridLayout" name="gridLayout_26">
+       <item row="0" column="0">
+        <widget class="QStackedWidget" name="stacked_widget_metadata">
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
         background-color: #5a2a82;
         color: #ffffff; 
         border: none;
@@ -1154,24 +1148,24 @@ QProgressBar::chunk {
         background-color: #3f1d4d; 
         color: #8a7b9a; 
     }</string>
-       </property>
-       <property name="currentIndex">
-        <number>1</number>
-       </property>
-       <widget class="QWidget" name="page_9">
-        <layout class="QGridLayout" name="gridLayout_22">
-         <item row="0" column="0">
-          <widget class="QGroupBox" name="groupBox_5">
-           <property name="title">
-            <string>Video metadata</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_21">
-            <item row="0" column="0" colspan="2">
-             <layout class="QGridLayout" name="gridLayout_17">
-              <item row="4" column="1">
-               <widget class="QLineEdit" name="lineedit_tags">
-                <property name="styleSheet">
-                 <string notr="true">QLineEdit {
+         </property>
+         <property name="currentIndex">
+          <number>1</number>
+         </property>
+         <widget class="QWidget" name="page_9">
+          <layout class="QGridLayout" name="gridLayout_22">
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="groupBox_5">
+             <property name="title">
+              <string>Video metadata</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_21">
+              <item row="0" column="0" colspan="2">
+               <layout class="QGridLayout" name="gridLayout_17">
+                <item row="4" column="1">
+                 <widget class="QLineEdit" name="lineedit_tags">
+                  <property name="styleSheet">
+                   <string notr="true">QLineEdit {
     border: 2px solid #757575;
     border-radius: 12px;
     padding: 0 8px;
@@ -1190,19 +1184,19 @@ QLineEdit:disabled {
     color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */
     border-color: #aaaaaa;
 }</string>
-                </property>
-                <property name="readOnly">
-                 <bool>true</bool>
-                </property>
-                <property name="placeholderText">
-                 <string>Tags == Categories</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QLineEdit" name="lineedit_title">
-                <property name="styleSheet">
-                 <string notr="true">QLineEdit {
+                  </property>
+                  <property name="readOnly">
+                   <bool>true</bool>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Tags == Categories</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLineEdit" name="lineedit_title">
+                  <property name="styleSheet">
+                   <string notr="true">QLineEdit {
     border: 2px solid #757575;
     border-radius: 12px;
     padding: 0 8px;
@@ -1221,16 +1215,16 @@ QLineEdit:disabled {
     color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */
     border-color: #aaaaaa;
 }</string>
-                </property>
-                <property name="readOnly">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="2">
-               <widget class="QLabel" name="label_author">
-                <property name="styleSheet">
-                 <string notr="true">QLabel {
+                  </property>
+                  <property name="readOnly">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QLabel" name="label_author">
+                  <property name="styleSheet">
+                   <string notr="true">QLabel {
     color: white;
     font-size: 16px;
 	margin-right: 35px;
@@ -1247,16 +1241,16 @@ QLabel#Subtitle {
     font-size: 20px;
 }
 </string>
-                </property>
-                <property name="text">
-                 <string>Author: </string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="0">
-               <widget class="QLabel" name="label_likes">
-                <property name="styleSheet">
-                 <string notr="true">QLabel {
+                  </property>
+                  <property name="text">
+                   <string>Author: </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="label_likes">
+                  <property name="styleSheet">
+                   <string notr="true">QLabel {
     color: white;
     font-size: 16px;
 	margin-right: 49px;
@@ -1273,16 +1267,16 @@ QLabel#Subtitle {
     font-size: 20px;
 }
 </string>
-                </property>
-                <property name="text">
-                 <string>Rating:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="1">
-               <widget class="QLineEdit" name="lineedit_likes">
-                <property name="styleSheet">
-                 <string notr="true">QLineEdit {
+                  </property>
+                  <property name="text">
+                   <string>Rating:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLineEdit" name="lineedit_likes">
+                  <property name="styleSheet">
+                   <string notr="true">QLineEdit {
     border: 2px solid #757575;
     border-radius: 12px;
     padding: 0 8px;
@@ -1301,16 +1295,16 @@ QLineEdit:disabled {
     color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */
     border-color: #aaaaaa;
 }</string>
-                </property>
-                <property name="readOnly">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_title">
-                <property name="styleSheet">
-                 <string notr="true">QLabel {
+                  </property>
+                  <property name="readOnly">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_title">
+                  <property name="styleSheet">
+                   <string notr="true">QLabel {
     color: white;
     font-size: 16px;
 	margin-right: 55px;
@@ -1327,16 +1321,16 @@ QLabel#Subtitle {
     font-size: 20px;
 }
 </string>
-                </property>
-                <property name="text">
-                 <string>Title:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="label_image_url">
-                <property name="styleSheet">
-                 <string notr="true">QLabel {
+                  </property>
+                  <property name="text">
+                   <string>Title:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_image_url">
+                  <property name="styleSheet">
+                   <string notr="true">QLabel {
     color: white;
     font-size: 16px;
 	margin-right: 10px;
@@ -1353,16 +1347,16 @@ QLabel#Subtitle {
     font-size: 20px;
 }
 </string>
-                </property>
-                <property name="text">
-                 <string>Image URL</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QLineEdit" name="lineedit_metadata_url">
-                <property name="styleSheet">
-                 <string notr="true">QLineEdit {
+                  </property>
+                  <property name="text">
+                   <string>Image URL</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLineEdit" name="lineedit_metadata_url">
+                  <property name="styleSheet">
+                   <string notr="true">QLineEdit {
     border: 2px solid #757575;
     border-radius: 12px;
     padding: 0 8px;
@@ -1381,26 +1375,26 @@ QLineEdit:disabled {
     color: #aaaaaa; 
     border-color: #aaaaaa;
 }</string>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="placeholderText">
-                 <string>Enter PornHub or HQPorner Video URL</string>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="0">
-               <widget class="QLabel" name="label">
-                <property name="text">
-                 <string>Actress:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="1">
-               <widget class="QLineEdit" name="lineedit_actress">
-                <property name="styleSheet">
-                 <string notr="true">QLineEdit {
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Enter PornHub or HQPorner Video URL</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QLabel" name="label">
+                  <property name="text">
+                   <string>Actress:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="1">
+                 <widget class="QLineEdit" name="lineedit_actress">
+                  <property name="styleSheet">
+                   <string notr="true">QLineEdit {
     border: 2px solid #757575;
     border-radius: 12px;
     padding: 0 8px;
@@ -1419,26 +1413,26 @@ QLineEdit:disabled {
     color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */
     border-color: #aaaaaa;
 }</string>
-                </property>
-                <property name="readOnly">
-                 <bool>true</bool>
-                </property>
-                <property name="placeholderText">
-                 <string>For HQPorner.com only</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_video_metadata_url">
-                <property name="text">
-                 <string>Video URL:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="0">
-               <widget class="QLabel" name="label_tags">
-                <property name="styleSheet">
-                 <string notr="true">QLabel {
+                  </property>
+                  <property name="readOnly">
+                   <bool>true</bool>
+                  </property>
+                  <property name="placeholderText">
+                   <string>For HQPorner.com only</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_video_metadata_url">
+                  <property name="text">
+                   <string>Video URL:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="label_tags">
+                  <property name="styleSheet">
+                   <string notr="true">QLabel {
     color: white;
     font-size: 16px;
 	margin-right: 53px;
@@ -1455,16 +1449,16 @@ QLabel#Subtitle {
     font-size: 20px;
 }
 </string>
-                </property>
-                <property name="text">
-                 <string>Tags:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QLineEdit" name="lineedit_image_url">
-                <property name="styleSheet">
-                 <string notr="true">QLineEdit {
+                  </property>
+                  <property name="text">
+                   <string>Tags:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLineEdit" name="lineedit_image_url">
+                  <property name="styleSheet">
+                   <string notr="true">QLineEdit {
     border: 2px solid #757575;
     border-radius: 12px;
     padding: 0 8px;
@@ -1483,16 +1477,16 @@ QLineEdit:disabled {
     color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */
     border-color: #aaaaaa;
 }</string>
-                </property>
-                <property name="readOnly">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="3">
-               <widget class="QLineEdit" name="lineedit_author">
-                <property name="styleSheet">
-                 <string notr="true">QLineEdit {
+                  </property>
+                  <property name="readOnly">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="3">
+                 <widget class="QLineEdit" name="lineedit_author">
+                  <property name="styleSheet">
+                   <string notr="true">QLineEdit {
     border: 2px solid #757575;
     border-radius: 12px;
     padding: 0 8px;
@@ -1511,16 +1505,16 @@ QLineEdit:disabled {
     color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */
     border-color: #aaaaaa;
 }</string>
-                </property>
-                <property name="readOnly">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="2">
-               <widget class="QLabel" name="label_views">
-                <property name="styleSheet">
-                 <string notr="true">QLabel {
+                  </property>
+                  <property name="readOnly">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QLabel" name="label_views">
+                  <property name="styleSheet">
+                   <string notr="true">QLabel {
     color: white;
     font-size: 16px;
 	margin-right: 44px;
@@ -1537,16 +1531,16 @@ QLabel#Subtitle {
     font-size: 20px;
 }
 </string>
-                </property>
-                <property name="text">
-                 <string>Views:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="3">
-               <widget class="QLineEdit" name="lineedit_views">
-                <property name="styleSheet">
-                 <string notr="true">QLineEdit {
+                  </property>
+                  <property name="text">
+                   <string>Views:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="3">
+                 <widget class="QLineEdit" name="lineedit_views">
+                  <property name="styleSheet">
+                   <string notr="true">QLineEdit {
     border: 2px solid #757575;
     border-radius: 12px;
     padding: 0 8px;
@@ -1565,16 +1559,16 @@ QLineEdit:disabled {
     color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */
     border-color: #aaaaaa;
 }</string>
-                </property>
-                <property name="readOnly">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="2">
-               <widget class="QLabel" name="label_date">
-                <property name="styleSheet">
-                 <string notr="true">QLabel {
+                  </property>
+                  <property name="readOnly">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="2">
+                 <widget class="QLabel" name="label_date">
+                  <property name="styleSheet">
+                   <string notr="true">QLabel {
     color: white;
     font-size: 16px;
 	margin-right: 53px;
@@ -1591,16 +1585,16 @@ QLabel#Subtitle {
     font-size: 20px;
 }
 </string>
-                </property>
-                <property name="text">
-                 <string>Date:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="3">
-               <widget class="QLineEdit" name="lineedit_date">
-                <property name="styleSheet">
-                 <string notr="true">QLineEdit {
+                  </property>
+                  <property name="text">
+                   <string>Date:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="3">
+                 <widget class="QLineEdit" name="lineedit_date">
+                  <property name="styleSheet">
+                   <string notr="true">QLineEdit {
     border: 2px solid #757575;
     border-radius: 12px;
     padding: 0 8px;
@@ -1619,16 +1613,16 @@ QLineEdit:disabled {
     color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */
     border-color: #aaaaaa;
 }</string>
-                </property>
-                <property name="readOnly">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="2">
-               <widget class="QLabel" name="label_duration">
-                <property name="styleSheet">
-                 <string notr="true">QLabel {
+                  </property>
+                  <property name="readOnly">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="2">
+                 <widget class="QLabel" name="label_duration">
+                  <property name="styleSheet">
+                   <string notr="true">QLabel {
     color: white;
     font-size: 16px;
 	margin-right: 25px;
@@ -1645,19 +1639,19 @@ QLabel#Subtitle {
     font-size: 20px;
 }
 </string>
-                </property>
-                <property name="text">
-                 <string>Duration:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="3">
-               <widget class="QLineEdit" name="lineedit_duration">
-                <property name="autoFillBackground">
-                 <bool>false</bool>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QLineEdit {
+                  </property>
+                  <property name="text">
+                   <string>Duration:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="3">
+                 <widget class="QLineEdit" name="lineedit_duration">
+                  <property name="autoFillBackground">
+                   <bool>false</bool>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QLineEdit {
     border: 2px solid #757575;
     border-radius: 12px;
     padding: 0 8px;
@@ -1676,93 +1670,93 @@ QLineEdit:disabled {
     color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */
     border-color: #aaaaaa;
 }</string>
+                  </property>
+                  <property name="readOnly">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="1" column="0">
+               <widget class="QPushButton" name="button_download_thumbnail">
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
-                <property name="readOnly">
-                 <bool>true</bool>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+        background-color: #5a2a82; /* base violet color */
+        color: #ffffff; /* white text */
+        border: none;
+        border-radius: 10px; /* reduced rounded corner radius */
+        padding: 5px 10px; /* reduced button padding */
+        font-size: 12px;
+        outline: none;
+    }
+    
+    QPushButton:hover {
+        background-color: #7b3ca3; /* slightly lighter violet when hovered */
+    }
+
+    QPushButton:pressed {
+        background-color: #481f61; /* darker violet when pressed */
+    }
+
+    QPushButton:disabled {
+        background-color: #3f1d4d; /* even darker shade when button is disabled */
+        color: #8a7b9a; /* greyish text */
+    }</string>
+                </property>
+                <property name="text">
+                 <string>Download thumbnail</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QPushButton" name="button_get_metadata">
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+        background-color: #5a2a82; /* base violet color */
+        color: #ffffff; /* white text */
+        border: none;
+        border-radius: 10px; /* reduced rounded corner radius */
+        padding: 5px 10px; /* reduced button padding */
+        font-size: 12px;
+        outline: none;
+    }
+    
+    QPushButton:hover {
+        background-color: #7b3ca3; /* slightly lighter violet when hovered */
+    }
+
+    QPushButton:pressed {
+        background-color: #481f61; /* darker violet when pressed */
+    }
+
+    QPushButton:disabled {
+        background-color: #3f1d4d; /* even darker shade when button is disabled */
+        color: #8a7b9a; /* greyish text */
+    }</string>
+                </property>
+                <property name="text">
+                 <string>Get metadata</string>
                 </property>
                </widget>
               </item>
              </layout>
-            </item>
-            <item row="1" column="0">
-             <widget class="QPushButton" name="button_download_thumbnail">
-              <property name="cursor">
-               <cursorShape>PointingHandCursor</cursorShape>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">QPushButton {
-        background-color: #5a2a82; /* base violet color */
-        color: #ffffff; /* white text */
-        border: none;
-        border-radius: 10px; /* reduced rounded corner radius */
-        padding: 5px 10px; /* reduced button padding */
-        font-size: 12px;
-        outline: none;
-    }
-    
-    QPushButton:hover {
-        background-color: #7b3ca3; /* slightly lighter violet when hovered */
-    }
-
-    QPushButton:pressed {
-        background-color: #481f61; /* darker violet when pressed */
-    }
-
-    QPushButton:disabled {
-        background-color: #3f1d4d; /* even darker shade when button is disabled */
-        color: #8a7b9a; /* greyish text */
-    }</string>
-              </property>
-              <property name="text">
-               <string>Download thumbnail</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QPushButton" name="button_get_metadata">
-              <property name="cursor">
-               <cursorShape>PointingHandCursor</cursorShape>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">QPushButton {
-        background-color: #5a2a82; /* base violet color */
-        color: #ffffff; /* white text */
-        border: none;
-        border-radius: 10px; /* reduced rounded corner radius */
-        padding: 5px 10px; /* reduced button padding */
-        font-size: 12px;
-        outline: none;
-    }
-    
-    QPushButton:hover {
-        background-color: #7b3ca3; /* slightly lighter violet when hovered */
-    }
-
-    QPushButton:pressed {
-        background-color: #481f61; /* darker violet when pressed */
-    }
-
-    QPushButton:disabled {
-        background-color: #3f1d4d; /* even darker shade when button is disabled */
-        color: #8a7b9a; /* greyish text */
-    }</string>
-              </property>
-              <property name="text">
-               <string>Get metadata</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="page_10">
-        <layout class="QGridLayout" name="gridLayout_23">
-         <item row="0" column="0">
-          <widget class="QGroupBox" name="groupBox_6">
-           <property name="styleSheet">
-            <string notr="true">QLineEdit {
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="page_10">
+          <layout class="QGridLayout" name="gridLayout_23">
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="groupBox_6">
+             <property name="styleSheet">
+              <string notr="true">QLineEdit {
     border: 2px solid #757575;
     border-radius: 12px;
     padding: 0 8px;
@@ -1781,276 +1775,270 @@ QLineEdit:disabled {
     color: #aaaaaa; 
     border-color: #aaaaaa;
 }</string>
-           </property>
-           <property name="title">
-            <string>User Metadata</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_25">
-            <item row="1" column="0">
-             <layout class="QHBoxLayout" name="horizontalLayout_7">
-              <item>
-               <widget class="QPushButton" name="button_user_information">
-                <property name="cursor">
-                 <cursorShape>PointingHandCursor</cursorShape>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
-                <property name="text">
-                 <string>Get Information</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="button_download_avatar">
-                <property name="cursor">
-                 <cursorShape>PointingHandCursor</cursorShape>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
-                <property name="text">
-                 <string>Download Avatar</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="button_user_biography">
-                <property name="cursor">
-                 <cursorShape>PointingHandCursor</cursorShape>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
-                <property name="text">
-                 <string>Get User's Biography</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="2" column="0">
-             <layout class="QGridLayout" name="gridLayout_24">
+             </property>
+             <property name="title">
+              <string>User Metadata</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_25">
               <item row="1" column="0">
-               <widget class="QLabel" name="label_user_avatar">
-                <property name="text">
-                 <string>Avatar:</string>
-                </property>
-               </widget>
+               <layout class="QHBoxLayout" name="horizontalLayout_7">
+                <item>
+                 <widget class="QPushButton" name="button_user_information">
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="text">
+                   <string>Get Information</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="button_download_avatar">
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="text">
+                   <string>Download Avatar</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="button_user_biography">
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="text">
+                   <string>Get User's Biography</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </item>
               <item row="2" column="0">
-               <widget class="QLabel" name="label_user_relationship">
-                <property name="text">
-                 <string>Relationship: </string>
-                </property>
-               </widget>
-              </item>
-              <item row="7" column="1">
-               <widget class="QLineEdit" name="lineedit_user_fake_breasts"/>
-              </item>
-              <item row="6" column="0">
-               <widget class="QLabel" name="label_user_ethnicity">
-                <property name="text">
-                 <string>Ethnicity: </string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="1">
-               <widget class="QLineEdit" name="lineedit_user_gender"/>
+               <layout class="QGridLayout" name="gridLayout_24">
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_user_avatar">
+                  <property name="text">
+                   <string>Avatar:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_user_relationship">
+                  <property name="text">
+                   <string>Relationship: </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="1">
+                 <widget class="QLineEdit" name="lineedit_user_fake_breasts"/>
+                </item>
+                <item row="6" column="0">
+                 <widget class="QLabel" name="label_user_ethnicity">
+                  <property name="text">
+                   <string>Ethnicity: </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QLineEdit" name="lineedit_user_gender"/>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_user_name">
+                  <property name="text">
+                   <string>Name: </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="2">
+                 <widget class="QLabel" name="label_user_video_views">
+                  <property name="text">
+                   <string>Video views:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QLabel" name="label_user_hair_color">
+                  <property name="text">
+                   <string>Hair color: </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="2">
+                 <widget class="QLabel" name="label_user_videos_watched">
+                  <property name="text">
+                   <string>Videos watched;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="2">
+                 <widget class="QLabel" name="label_user_profile_views">
+                  <property name="text">
+                   <string>Profile views: </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="2">
+                 <widget class="QLabel" name="label_user_hobbies">
+                  <property name="text">
+                   <string>Hobbies:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="label_user_interested_in">
+                  <property name="text">
+                   <string>Interested in: </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QLabel" name="label_user_height">
+                  <property name="text">
+                   <string>Height: </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLineEdit" name="lineedit_user_name"/>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QLabel" name="label_user_piercings">
+                  <property name="text">
+                   <string>Piercings:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="1">
+                 <widget class="QLineEdit" name="lineedit_user_ethnicity"/>
+                </item>
+                <item row="7" column="0">
+                 <widget class="QLabel" name="label_user_fake_breasts">
+                  <property name="text">
+                   <string>Fake breasts:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLineEdit" name="lineedit_user_interested"/>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="label_user_gender">
+                  <property name="text">
+                   <string>Gender:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLineEdit" name="lineedit_user_relationship"/>
+                </item>
+                <item row="2" column="2">
+                 <widget class="QLabel" name="label_user_tattoos">
+                  <property name="text">
+                   <string>Tattoos:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="2">
+                 <widget class="QLabel" name="label_user_turn_ons">
+                  <property name="text">
+                   <string>Turn ons:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLineEdit" name="lineedit_user_avatar"/>
+                </item>
+                <item row="5" column="1">
+                 <widget class="QLineEdit" name="lineedit_user_height"/>
+                </item>
+                <item row="0" column="3">
+                 <widget class="QLineEdit" name="lineedit_user_piercings"/>
+                </item>
+                <item row="1" column="3">
+                 <widget class="QLineEdit" name="lineedit_user_hair_color"/>
+                </item>
+                <item row="2" column="3">
+                 <widget class="QLineEdit" name="lineedit_user_tattoos"/>
+                </item>
+                <item row="3" column="3">
+                 <widget class="QLineEdit" name="lineedit_user_hobbies"/>
+                </item>
+                <item row="4" column="3">
+                 <widget class="QLineEdit" name="lineedit_user_video_views"/>
+                </item>
+                <item row="5" column="3">
+                 <widget class="QLineEdit" name="lineedit_user_profile_views"/>
+                </item>
+                <item row="6" column="3">
+                 <widget class="QLineEdit" name="lineedit_user_turn_ons"/>
+                </item>
+                <item row="7" column="3">
+                 <widget class="QLineEdit" name="lineedit_user_videos_watched"/>
+                </item>
+               </layout>
               </item>
               <item row="0" column="0">
-               <widget class="QLabel" name="label_user_name">
-                <property name="text">
-                 <string>Name: </string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="2">
-               <widget class="QLabel" name="label_user_video_views">
-                <property name="text">
-                 <string>Video views:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="2">
-               <widget class="QLabel" name="label_user_hair_color">
-                <property name="text">
-                 <string>Hair color: </string>
-                </property>
-               </widget>
-              </item>
-              <item row="7" column="2">
-               <widget class="QLabel" name="label_user_videos_watched">
-                <property name="text">
-                 <string>Videos watched;</string>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="2">
-               <widget class="QLabel" name="label_user_profile_views">
-                <property name="text">
-                 <string>Profile views: </string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="2">
-               <widget class="QLabel" name="label_user_hobbies">
-                <property name="text">
-                 <string>Hobbies:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="0">
-               <widget class="QLabel" name="label_user_interested_in">
-                <property name="text">
-                 <string>Interested in: </string>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="0">
-               <widget class="QLabel" name="label_user_height">
-                <property name="text">
-                 <string>Height: </string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QLineEdit" name="lineedit_user_name"/>
-              </item>
-              <item row="0" column="2">
-               <widget class="QLabel" name="label_user_piercings">
-                <property name="text">
-                 <string>Piercings:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="6" column="1">
-               <widget class="QLineEdit" name="lineedit_user_ethnicity"/>
-              </item>
-              <item row="7" column="0">
-               <widget class="QLabel" name="label_user_fake_breasts">
-                <property name="text">
-                 <string>Fake breasts:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="1">
-               <widget class="QLineEdit" name="lineedit_user_interested"/>
-              </item>
-              <item row="4" column="0">
-               <widget class="QLabel" name="label_user_gender">
-                <property name="text">
-                 <string>Gender:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QLineEdit" name="lineedit_user_relationship"/>
-              </item>
-              <item row="2" column="2">
-               <widget class="QLabel" name="label_user_tattoos">
-                <property name="text">
-                 <string>Tattoos:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="6" column="2">
-               <widget class="QLabel" name="label_user_turn_ons">
-                <property name="text">
-                 <string>Turn ons:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QLineEdit" name="lineedit_user_avatar"/>
-              </item>
-              <item row="5" column="1">
-               <widget class="QLineEdit" name="lineedit_user_height"/>
-              </item>
-              <item row="0" column="3">
-               <widget class="QLineEdit" name="lineedit_user_piercings"/>
-              </item>
-              <item row="1" column="3">
-               <widget class="QLineEdit" name="lineedit_user_hair_color"/>
-              </item>
-              <item row="2" column="3">
-               <widget class="QLineEdit" name="lineedit_user_tattoos"/>
-              </item>
-              <item row="3" column="3">
-               <widget class="QLineEdit" name="lineedit_user_hobbies"/>
-              </item>
-              <item row="4" column="3">
-               <widget class="QLineEdit" name="lineedit_user_video_views"/>
-              </item>
-              <item row="5" column="3">
-               <widget class="QLineEdit" name="lineedit_user_profile_views"/>
-              </item>
-              <item row="6" column="3">
-               <widget class="QLineEdit" name="lineedit_user_turn_ons"/>
-              </item>
-              <item row="7" column="3">
-               <widget class="QLineEdit" name="lineedit_user_videos_watched"/>
+               <layout class="QHBoxLayout" name="horizontalLayout_6">
+                <item>
+                 <widget class="QLabel" name="label_user_url">
+                  <property name="text">
+                   <string>User URL: </string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="lineedit_user_url"/>
+                </item>
+               </layout>
               </item>
              </layout>
-            </item>
-            <item row="0" column="0">
-             <layout class="QHBoxLayout" name="horizontalLayout_6">
-              <item>
-               <widget class="QLabel" name="label_user_url">
-                <property name="text">
-                 <string>User URL: </string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="lineedit_user_url"/>
-              </item>
-             </layout>
-            </item>
-           </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <item>
+          <widget class="QPushButton" name="button_switch_video_metadata">
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <property name="text">
+            <string>Video</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="button_switch_user_metadata">
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <property name="text">
+            <string>User</string>
+           </property>
           </widget>
          </item>
         </layout>
-       </widget>
-      </widget>
-      <widget class="QWidget" name="horizontalLayoutWidget_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>390</y>
-         <width>1181</width>
-         <height>41</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_9">
-        <item>
-         <widget class="QPushButton" name="button_switch_video_metadata">
-          <property name="cursor">
-           <cursorShape>PointingHandCursor</cursorShape>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="text">
-           <string>Video</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="button_switch_user_metadata">
-          <property name="cursor">
-           <cursorShape>PointingHandCursor</cursorShape>
-          </property>
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="text">
-           <string>User</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="page_8">
       <layout class="QGridLayout" name="gridLayout_20">
