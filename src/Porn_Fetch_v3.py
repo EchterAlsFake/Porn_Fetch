@@ -25,7 +25,7 @@ class Ui_Porn_Fetch_widget(object):
     def setupUi(self, Porn_Fetch_widget):
         if not Porn_Fetch_widget.objectName():
             Porn_Fetch_widget.setObjectName(u"Porn_Fetch_widget")
-        Porn_Fetch_widget.resize(1222, 610)
+        Porn_Fetch_widget.resize(1380, 752)
         Porn_Fetch_widget.setStyleSheet(u"QWidget {\n"
 "color: white;\n"
 "background-color: rgb(60, 60, 60)\n"
@@ -140,93 +140,93 @@ class Ui_Porn_Fetch_widget(object):
 "")
         self.gridLayout_8 = QGridLayout(Porn_Fetch_widget)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
-        self.group_status = QGroupBox(Porn_Fetch_widget)
-        self.group_status.setObjectName(u"group_status")
-        self.gridLayout_2 = QGridLayout(self.group_status)
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.verticalLayout = QVBoxLayout()
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.button_video = QPushButton(self.group_status)
-        self.button_video.setObjectName(u"button_video")
-        self.button_video.setStyleSheet(u"")
-
-        self.horizontalLayout.addWidget(self.button_video)
-
-        self.button_account = QPushButton(self.group_status)
-        self.button_account.setObjectName(u"button_account")
-        self.button_account.setStyleSheet(u"")
-
-        self.horizontalLayout.addWidget(self.button_account)
-
-        self.button_settings = QPushButton(self.group_status)
-        self.button_settings.setObjectName(u"button_settings")
-        self.button_settings.setStyleSheet(u"")
-
-        self.horizontalLayout.addWidget(self.button_settings)
-
-        self.button_miscellaneus = QPushButton(self.group_status)
-        self.button_miscellaneus.setObjectName(u"button_miscellaneus")
-        self.button_miscellaneus.setStyleSheet(u"")
-
-        self.horizontalLayout.addWidget(self.button_miscellaneus)
-
-        self.button_credits = QPushButton(self.group_status)
-        self.button_credits.setObjectName(u"button_credits")
-        self.button_credits.setStyleSheet(u"")
-
-        self.horizontalLayout.addWidget(self.button_credits)
-
-
-        self.verticalLayout.addLayout(self.horizontalLayout)
-
-        self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.label_status = QLabel(self.group_status)
-        self.label_status.setObjectName(u"label_status")
-
-        self.horizontalLayout_2.addWidget(self.label_status)
-
-        self.lineedit_status = QLineEdit(self.group_status)
-        self.lineedit_status.setObjectName(u"lineedit_status")
-        self.lineedit_status.setStyleSheet(u"")
-        self.lineedit_status.setReadOnly(True)
-
-        self.horizontalLayout_2.addWidget(self.lineedit_status)
-
-
-        self.verticalLayout.addLayout(self.horizontalLayout_2)
-
-        self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.lineedit_toal = QLineEdit(self.group_status)
-        self.lineedit_toal.setObjectName(u"lineedit_toal")
-
-        self.verticalLayout_2.addWidget(self.lineedit_toal)
-
-
-        self.verticalLayout.addLayout(self.verticalLayout_2)
-
-        self.progressbar_download = QProgressBar(self.group_status)
-        self.progressbar_download.setObjectName(u"progressbar_download")
-        self.progressbar_download.setStyleSheet(u"")
-        self.progressbar_download.setValue(0)
-
-        self.verticalLayout.addWidget(self.progressbar_download)
-
-
-        self.gridLayout_2.addLayout(self.verticalLayout, 0, 0, 1, 1)
-
-
-        self.gridLayout_8.addWidget(self.group_status, 1, 0, 1, 1)
-
         self.stackedWidget_3 = QStackedWidget(Porn_Fetch_widget)
         self.stackedWidget_3.setObjectName(u"stackedWidget_3")
         self.page_5 = QWidget()
         self.page_5.setObjectName(u"page_5")
         self.gridLayout_6 = QGridLayout(self.page_5)
         self.gridLayout_6.setObjectName(u"gridLayout_6")
+        self.stackedWidget_2 = QStackedWidget(self.page_5)
+        self.stackedWidget_2.setObjectName(u"stackedWidget_2")
+        self.stackedWidget_2.setStyleSheet(u"border: none;")
+        self.page_3 = QWidget()
+        self.page_3.setObjectName(u"page_3")
+        self.gridLayout_4 = QGridLayout(self.page_3)
+        self.gridLayout_4.setObjectName(u"gridLayout_4")
+        self.groupBox_2 = QGroupBox(self.page_3)
+        self.groupBox_2.setObjectName(u"groupBox_2")
+        self.groupBox_2.setStyleSheet(u"QGroupBox {\n"
+"        border: 0px;\n"
+"        margin-top: 2ex; /* Adjust as needed */\n"
+"    }\n"
+"    QGroupBox::title {\n"
+"        subcontrol-origin: margin;\n"
+"        subcontrol-position: top center;\n"
+"        padding: 0 3px;\n"
+"    }")
+        self.gridLayout_3 = QGridLayout(self.groupBox_2)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.treeWidget = QTreeWidget(self.groupBox_2)
+        __qtreewidgetitem = QTreeWidgetItem()
+        __qtreewidgetitem.setText(0, u"1");
+        self.treeWidget.setHeaderItem(__qtreewidgetitem)
+        self.treeWidget.setObjectName(u"treeWidget")
+        self.treeWidget.setStyleSheet(u"")
+
+        self.gridLayout_3.addWidget(self.treeWidget, 0, 0, 1, 1)
+
+
+        self.gridLayout_4.addWidget(self.groupBox_2, 0, 0, 1, 1)
+
+        self.horizontalLayout_8 = QHBoxLayout()
+        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
+        self.button_download_tree_widget = QPushButton(self.page_3)
+        self.button_download_tree_widget.setObjectName(u"button_download_tree_widget")
+        self.button_download_tree_widget.setStyleSheet(u"QPushButton {\n"
+"        background-color: #5a2a82;\n"
+"        color: #ffffff; \n"
+"        border: none;\n"
+"        border-radius: 10px;\n"
+"        padding: 5px 20px; \n"
+"        font-size: 12px;\n"
+"        outline: none;\n"
+"    }\n"
+"    \n"
+"    QPushButton:hover {\n"
+"        background-color: #7b3ca3; \n"
+"    }\n"
+"\n"
+"    QPushButton:pressed {\n"
+"        background-color: #481f61; \n"
+"    }\n"
+"\n"
+"    QPushButton:disabled {\n"
+"        background-color: #3f1d4d; \n"
+"        color: #8a7b9a; \n"
+"    }")
+
+        self.horizontalLayout_8.addWidget(self.button_download_tree_widget)
+
+        self.button_select_all = QPushButton(self.page_3)
+        self.button_select_all.setObjectName(u"button_select_all")
+
+        self.horizontalLayout_8.addWidget(self.button_select_all)
+
+        self.button_unselect_all = QPushButton(self.page_3)
+        self.button_unselect_all.setObjectName(u"button_unselect_all")
+
+        self.horizontalLayout_8.addWidget(self.button_unselect_all)
+
+
+        self.gridLayout_4.addLayout(self.horizontalLayout_8, 1, 0, 1, 1)
+
+        self.stackedWidget_2.addWidget(self.page_3)
+        self.page_4 = QWidget()
+        self.page_4.setObjectName(u"page_4")
+        self.stackedWidget_2.addWidget(self.page_4)
+
+        self.gridLayout_6.addWidget(self.stackedWidget_2, 1, 0, 1, 1)
+
         self.stackedWidget = QStackedWidget(self.page_5)
         self.stackedWidget.setObjectName(u"stackedWidget")
         self.page = QWidget()
@@ -311,6 +311,45 @@ class Ui_Porn_Fetch_widget(object):
         self.page_2.setObjectName(u"page_2")
         self.gridLayout_7 = QGridLayout(self.page_2)
         self.gridLayout_7.setObjectName(u"gridLayout_7")
+        self.groupBox_3 = QGroupBox(self.page_2)
+        self.groupBox_3.setObjectName(u"groupBox_3")
+        self.groupBox_3.setStyleSheet(u"QGroupBox {\n"
+"        border: 0px;\n"
+"        margin-top: 2ex; /* Adjust as needed */\n"
+"    }\n"
+"    QGroupBox::title {\n"
+"        subcontrol-origin: margin;\n"
+"        subcontrol-position: top center;\n"
+"        padding: 0 3px;\n"
+"    }")
+        self.gridLayout_5 = QGridLayout(self.groupBox_3)
+        self.gridLayout_5.setObjectName(u"gridLayout_5")
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.button_get_liked = QPushButton(self.groupBox_3)
+        self.button_get_liked.setObjectName(u"button_get_liked")
+        self.button_get_liked.setStyleSheet(u"")
+
+        self.horizontalLayout_4.addWidget(self.button_get_liked)
+
+        self.button_get_watched = QPushButton(self.groupBox_3)
+        self.button_get_watched.setObjectName(u"button_get_watched")
+        self.button_get_watched.setStyleSheet(u"")
+
+        self.horizontalLayout_4.addWidget(self.button_get_watched)
+
+        self.button_get_recommended = QPushButton(self.groupBox_3)
+        self.button_get_recommended.setObjectName(u"button_get_recommended")
+        self.button_get_recommended.setStyleSheet(u"")
+
+        self.horizontalLayout_4.addWidget(self.button_get_recommended)
+
+
+        self.gridLayout_5.addLayout(self.horizontalLayout_4, 0, 0, 1, 1)
+
+
+        self.gridLayout_7.addWidget(self.groupBox_3, 2, 0, 1, 1)
+
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.label_disclaimer = QLabel(self.page_2)
@@ -355,114 +394,9 @@ class Ui_Porn_Fetch_widget(object):
 
         self.gridLayout_7.addLayout(self.formLayout, 1, 0, 1, 1)
 
-        self.groupBox_3 = QGroupBox(self.page_2)
-        self.groupBox_3.setObjectName(u"groupBox_3")
-        self.groupBox_3.setStyleSheet(u"QGroupBox {\n"
-"        border: 0px;\n"
-"        margin-top: 2ex; /* Adjust as needed */\n"
-"    }\n"
-"    QGroupBox::title {\n"
-"        subcontrol-origin: margin;\n"
-"        subcontrol-position: top center;\n"
-"        padding: 0 3px;\n"
-"    }")
-        self.gridLayout_5 = QGridLayout(self.groupBox_3)
-        self.gridLayout_5.setObjectName(u"gridLayout_5")
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.button_get_liked = QPushButton(self.groupBox_3)
-        self.button_get_liked.setObjectName(u"button_get_liked")
-        self.button_get_liked.setStyleSheet(u"")
-
-        self.horizontalLayout_4.addWidget(self.button_get_liked)
-
-        self.button_get_watched = QPushButton(self.groupBox_3)
-        self.button_get_watched.setObjectName(u"button_get_watched")
-        self.button_get_watched.setStyleSheet(u"")
-
-        self.horizontalLayout_4.addWidget(self.button_get_watched)
-
-        self.button_get_recommended = QPushButton(self.groupBox_3)
-        self.button_get_recommended.setObjectName(u"button_get_recommended")
-        self.button_get_recommended.setStyleSheet(u"")
-
-        self.horizontalLayout_4.addWidget(self.button_get_recommended)
-
-
-        self.gridLayout_5.addLayout(self.horizontalLayout_4, 0, 0, 1, 1)
-
-
-        self.gridLayout_7.addWidget(self.groupBox_3, 2, 0, 1, 1)
-
         self.stackedWidget.addWidget(self.page_2)
 
         self.gridLayout_6.addWidget(self.stackedWidget, 0, 0, 1, 1)
-
-        self.stackedWidget_2 = QStackedWidget(self.page_5)
-        self.stackedWidget_2.setObjectName(u"stackedWidget_2")
-        self.stackedWidget_2.setStyleSheet(u"border: none;")
-        self.page_3 = QWidget()
-        self.page_3.setObjectName(u"page_3")
-        self.gridLayout_4 = QGridLayout(self.page_3)
-        self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.groupBox_2 = QGroupBox(self.page_3)
-        self.groupBox_2.setObjectName(u"groupBox_2")
-        self.groupBox_2.setStyleSheet(u"QGroupBox {\n"
-"        border: 0px;\n"
-"        margin-top: 2ex; /* Adjust as needed */\n"
-"    }\n"
-"    QGroupBox::title {\n"
-"        subcontrol-origin: margin;\n"
-"        subcontrol-position: top center;\n"
-"        padding: 0 3px;\n"
-"    }")
-        self.gridLayout_3 = QGridLayout(self.groupBox_2)
-        self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.treeWidget = QTreeWidget(self.groupBox_2)
-        __qtreewidgetitem = QTreeWidgetItem()
-        __qtreewidgetitem.setText(0, u"1");
-        self.treeWidget.setHeaderItem(__qtreewidgetitem)
-        self.treeWidget.setObjectName(u"treeWidget")
-        self.treeWidget.setStyleSheet(u"")
-
-        self.gridLayout_3.addWidget(self.treeWidget, 0, 0, 1, 1)
-
-
-        self.gridLayout_4.addWidget(self.groupBox_2, 0, 0, 1, 1)
-
-        self.button_download_tree_widget = QPushButton(self.page_3)
-        self.button_download_tree_widget.setObjectName(u"button_download_tree_widget")
-        self.button_download_tree_widget.setStyleSheet(u"QPushButton {\n"
-"        background-color: #5a2a82;\n"
-"        color: #ffffff; \n"
-"        border: none;\n"
-"        border-radius: 10px;\n"
-"        padding: 5px 20px; \n"
-"        font-size: 12px;\n"
-"        outline: none;\n"
-"    }\n"
-"    \n"
-"    QPushButton:hover {\n"
-"        background-color: #7b3ca3; \n"
-"    }\n"
-"\n"
-"    QPushButton:pressed {\n"
-"        background-color: #481f61; \n"
-"    }\n"
-"\n"
-"    QPushButton:disabled {\n"
-"        background-color: #3f1d4d; \n"
-"        color: #8a7b9a; \n"
-"    }")
-
-        self.gridLayout_4.addWidget(self.button_download_tree_widget, 1, 0, 1, 1)
-
-        self.stackedWidget_2.addWidget(self.page_3)
-        self.page_4 = QWidget()
-        self.page_4.setObjectName(u"page_4")
-        self.stackedWidget_2.addWidget(self.page_4)
-
-        self.gridLayout_6.addWidget(self.stackedWidget_2, 1, 0, 1, 1)
 
         self.stackedWidget_3.addWidget(self.page_5)
         self.page_6 = QWidget()
@@ -1480,18 +1414,21 @@ class Ui_Porn_Fetch_widget(object):
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
         self.button_user_information = QPushButton(self.groupBox_6)
         self.button_user_information.setObjectName(u"button_user_information")
+        self.button_user_information.setCursor(QCursor(Qt.PointingHandCursor))
         self.button_user_information.setStyleSheet(u"")
 
         self.horizontalLayout_7.addWidget(self.button_user_information)
 
         self.button_download_avatar = QPushButton(self.groupBox_6)
         self.button_download_avatar.setObjectName(u"button_download_avatar")
+        self.button_download_avatar.setCursor(QCursor(Qt.PointingHandCursor))
         self.button_download_avatar.setStyleSheet(u"")
 
         self.horizontalLayout_7.addWidget(self.button_download_avatar)
 
         self.button_user_biography = QPushButton(self.groupBox_6)
         self.button_user_biography.setObjectName(u"button_user_biography")
+        self.button_user_biography.setCursor(QCursor(Qt.PointingHandCursor))
         self.button_user_biography.setStyleSheet(u"")
 
         self.horizontalLayout_7.addWidget(self.button_user_biography)
@@ -1689,17 +1626,19 @@ class Ui_Porn_Fetch_widget(object):
         self.horizontalLayout_9 = QHBoxLayout(self.horizontalLayoutWidget_3)
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
         self.horizontalLayout_9.setContentsMargins(0, 0, 0, 0)
-        self.pushButton = QPushButton(self.horizontalLayoutWidget_3)
-        self.pushButton.setObjectName(u"pushButton")
-        self.pushButton.setStyleSheet(u"")
+        self.button_switch_video_metadata = QPushButton(self.horizontalLayoutWidget_3)
+        self.button_switch_video_metadata.setObjectName(u"button_switch_video_metadata")
+        self.button_switch_video_metadata.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_switch_video_metadata.setStyleSheet(u"")
 
-        self.horizontalLayout_9.addWidget(self.pushButton)
+        self.horizontalLayout_9.addWidget(self.button_switch_video_metadata)
 
-        self.pushButton_2 = QPushButton(self.horizontalLayoutWidget_3)
-        self.pushButton_2.setObjectName(u"pushButton_2")
-        self.pushButton_2.setStyleSheet(u"")
+        self.button_switch_user_metadata = QPushButton(self.horizontalLayoutWidget_3)
+        self.button_switch_user_metadata.setObjectName(u"button_switch_user_metadata")
+        self.button_switch_user_metadata.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_switch_user_metadata.setStyleSheet(u"")
 
-        self.horizontalLayout_9.addWidget(self.pushButton_2)
+        self.horizontalLayout_9.addWidget(self.button_switch_user_metadata)
 
         self.stackedWidget_3.addWidget(self.page_7)
         self.page_8 = QWidget()
@@ -1715,12 +1654,98 @@ class Ui_Porn_Fetch_widget(object):
 
         self.gridLayout_8.addWidget(self.stackedWidget_3, 0, 0, 1, 1)
 
+        self.group_status = QGroupBox(Porn_Fetch_widget)
+        self.group_status.setObjectName(u"group_status")
+        self.gridLayout_2 = QGridLayout(self.group_status)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.button_video = QPushButton(self.group_status)
+        self.button_video.setObjectName(u"button_video")
+        self.button_video.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_video.setStyleSheet(u"")
+
+        self.horizontalLayout.addWidget(self.button_video)
+
+        self.button_account = QPushButton(self.group_status)
+        self.button_account.setObjectName(u"button_account")
+        self.button_account.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_account.setStyleSheet(u"")
+
+        self.horizontalLayout.addWidget(self.button_account)
+
+        self.button_settings = QPushButton(self.group_status)
+        self.button_settings.setObjectName(u"button_settings")
+        self.button_settings.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_settings.setStyleSheet(u"")
+
+        self.horizontalLayout.addWidget(self.button_settings)
+
+        self.button_miscellaneus = QPushButton(self.group_status)
+        self.button_miscellaneus.setObjectName(u"button_miscellaneus")
+        self.button_miscellaneus.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_miscellaneus.setStyleSheet(u"")
+
+        self.horizontalLayout.addWidget(self.button_miscellaneus)
+
+        self.button_credits = QPushButton(self.group_status)
+        self.button_credits.setObjectName(u"button_credits")
+        self.button_credits.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_credits.setStyleSheet(u"")
+
+        self.horizontalLayout.addWidget(self.button_credits)
+
+
+        self.verticalLayout.addLayout(self.horizontalLayout)
+
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.label_status = QLabel(self.group_status)
+        self.label_status.setObjectName(u"label_status")
+
+        self.horizontalLayout_2.addWidget(self.label_status)
+
+        self.lineedit_status = QLineEdit(self.group_status)
+        self.lineedit_status.setObjectName(u"lineedit_status")
+        self.lineedit_status.setStyleSheet(u"")
+        self.lineedit_status.setReadOnly(True)
+
+        self.horizontalLayout_2.addWidget(self.lineedit_status)
+
+
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
+
+        self.verticalLayout_2 = QVBoxLayout()
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.lineedit_toal = QLineEdit(self.group_status)
+        self.lineedit_toal.setObjectName(u"lineedit_toal")
+
+        self.verticalLayout_2.addWidget(self.lineedit_toal)
+
+
+        self.verticalLayout.addLayout(self.verticalLayout_2)
+
+        self.progressbar_download = QProgressBar(self.group_status)
+        self.progressbar_download.setObjectName(u"progressbar_download")
+        self.progressbar_download.setStyleSheet(u"")
+        self.progressbar_download.setValue(0)
+
+        self.verticalLayout.addWidget(self.progressbar_download)
+
+
+        self.gridLayout_2.addLayout(self.verticalLayout, 0, 0, 1, 1)
+
+
+        self.gridLayout_8.addWidget(self.group_status, 2, 0, 1, 1)
+
 
         self.retranslateUi(Porn_Fetch_widget)
 
-        self.stackedWidget_3.setCurrentIndex(2)
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget_3.setCurrentIndex(0)
         self.stackedWidget_2.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
         self.stacked_widget_metadata.setCurrentIndex(1)
 
 
@@ -1729,13 +1754,6 @@ class Ui_Porn_Fetch_widget(object):
 
     def retranslateUi(self, Porn_Fetch_widget):
         Porn_Fetch_widget.setWindowTitle(QCoreApplication.translate("Porn_Fetch_widget", u"Porn Fetch v2.8     GPLv3", None))
-        self.group_status.setTitle("")
-        self.button_video.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Video", None))
-        self.button_account.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Account", None))
-        self.button_settings.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Settings", None))
-        self.button_miscellaneus.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Miscellaneous", None))
-        self.button_credits.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Credits", None))
-        self.label_status.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Status:", None))
         self.stackedWidget_3.setStyleSheet(QCoreApplication.translate("Porn_Fetch_widget", u"QTreeWidget {\n"
 "    background-color: rgb(94, 94, 94);\n"
 "    color: white;\n"
@@ -1746,6 +1764,10 @@ class Ui_Porn_Fetch_widget(object):
 "    color: black; /* Set color to black or any other color that you prefer for the header text */\n"
 "}\n"
 "", None))
+        self.groupBox_2.setTitle("")
+        self.button_download_tree_widget.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Download selected videos", None))
+        self.button_select_all.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Select all", None))
+        self.button_unselect_all.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Unselect all", None))
         self.label_model_url.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Model URL: ", None))
         self.lineedit_search_query.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_widget", u"Enter Search Query for PornHub.com", None))
         self.button_file_start.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Start", None))
@@ -1758,18 +1780,16 @@ class Ui_Porn_Fetch_widget(object):
         self.lineedit_video_url.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_widget", u"Enter PornHub or HQPorner URL", None))
         self.lineedit_file.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_widget", u"Enter File with URL's from PornHub or HQPorner. The URL's must be separated with new lines in the file!", None))
         self.label_video_url.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Video URL:", None))
+        self.groupBox_3.setTitle("")
+        self.button_get_liked.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Get liked videos", None))
+        self.button_get_watched.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Get watched videos", None))
+        self.button_get_recommended.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Get recommended videos", None))
         self.label_disclaimer.setText(QCoreApplication.translate("Porn_Fetch_widget", u"IMPORTANT:  Porn Fetch is against the Terms of Services from PornHub.com and HQPorner.com. Logging in with your account can lead to a ban from PornHub.com!", None))
         self.label_username.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Username:", None))
         self.lineedit_username.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_widget", u"Enter your PornHub Username", None))
         self.label_password.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Password:", None))
         self.lineedit_password.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_widget", u"Enter your PornHub Password  (Account data won't be saved, and the Session will be terminated, when you leave Porn Fetch)", None))
         self.button_login.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Login", None))
-        self.groupBox_3.setTitle("")
-        self.button_get_liked.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Get liked videos", None))
-        self.button_get_watched.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Get watched videos", None))
-        self.button_get_recommended.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Get recommended videos", None))
-        self.groupBox_2.setTitle("")
-        self.button_download_tree_widget.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Download selected videos", None))
         self.groupBox_4.setTitle("")
         self.api_radio_fr.setText(QCoreApplication.translate("Porn_Fetch_widget", u"FR", None))
         self.api_radio_de.setText(QCoreApplication.translate("Porn_Fetch_widget", u"DE", None))
@@ -1853,47 +1873,52 @@ class Ui_Porn_Fetch_widget(object):
         self.label_user_tattoos.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Tattoos:", None))
         self.label_user_turn_ons.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Turn ons:", None))
         self.label_user_url.setText(QCoreApplication.translate("Porn_Fetch_widget", u"User URL: ", None))
-        self.pushButton.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Video", None))
-        self.pushButton_2.setText(QCoreApplication.translate("Porn_Fetch_widget", u"User", None))
+        self.button_switch_video_metadata.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Video", None))
+        self.button_switch_user_metadata.setText(QCoreApplication.translate("Porn_Fetch_widget", u"User", None))
         self.textBrowser.setHtml(QCoreApplication.translate("Porn_Fetch_widget", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">Project API: PHUB v4</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text"
-                        "-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">See https://github.com/Egsagon/PHUB</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">Please like his project!</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right"
-                        ":0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">The Graphical User Interface was written in PySide6, which is maintained, by the Qt company:</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">https://qt.io</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;\"><br /></p>\n"
-""
-                        "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">Source of this Project:</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">https://github.com/EchterAlsFake/Porn_Fetch</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">External libraries:<br /><br />1) tqdm</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\""
-                        " font-family:'Cantarell'; font-size:11pt;\">2) PySide6</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">3) BeautifulSoup</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">4) PHUB</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">5) wget</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">6) requests</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-in"
-                        "dent:0px; font-family:'Cantarell'; font-size:11pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">Copyright (C) 2023 EchterAlsFake | Johannes Habel</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">Graphics:<br /><br />Download Icon: by https://iconscout.com/contributors/kmgdesignid on Iconscout.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">Account Icon: by https://iconscout."
-                        "com/contributors/rengised on Iconscout.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">Settings Icon: by https://iconscout.com/contributors/boosticon on Iconscout.com</span></p></body></html>", None))
+"</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Project API: PHUB v4</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">See https://github.com/Egsagon/PHUB</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top"
+                        ":0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Please like his project!</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The Graphical User Interface was written in PySide6, which is maintained, by the Qt company:</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margi"
+                        "n-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">https://qt.io</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Source of this Project:</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">https://github.com/EchterAlsFake/Porn_Fetch</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Exte"
+                        "rnal libraries:<br /><br />1) tqdm</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">2) PySide6</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">3) BeautifulSoup</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">4) PHUB</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">5) wget</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">6) requests</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\""
+                        ">Copyright (C) 2023 EchterAlsFake | Johannes Habel</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Graphics:<br /><br />Download Icon: by https://iconscout.com/contributors/kmgdesignid on Iconscout.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Account Icon: by https://iconscout.com/contributors/rengised on Iconscout.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Settings Icon: by https://iconscout.com/contributors/boosticon on Iconscout.com</p></body></html>", None))
+        self.group_status.setTitle("")
+        self.button_video.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Video", None))
+        self.button_account.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Account", None))
+        self.button_settings.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Settings", None))
+        self.button_miscellaneus.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Miscellaneous", None))
+        self.button_credits.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Credits", None))
+        self.label_status.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Status:", None))
     # retranslateUi
 

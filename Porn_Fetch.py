@@ -16,6 +16,7 @@ import src.icons  # It's used in Runtime for the icons. Do not remove this requi
 from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout, QRadioButton,
     QCheckBox, QPushButton, QScrollArea, QGroupBox)
 from phub import Client, Quality, locals, errors  # See https://github.com/Egsagon/PHUB
+from phub.modules.download import default
 from hqporner_api import API  # See: https://github.com/EchterAlsFake/hqporner_api
 from configparser import ConfigParser  # See: https://github.com/python/cpython/blob/main/Lib/configparser.py
 from PySide6 import QtCore  # See: https://pypi.org/project/PySide6/
@@ -86,7 +87,6 @@ def add_to_tree_widget(iterator, tree_widget, search_limit=False):
     tree_widget.clear()
     try:
         if not search_limit:
-            logging(f"No Search Limit...")
             for i, video in enumerate(iterator, start=1):
                 item = QTreeWidgetItem(tree_widget)
                 item.setText(0, f"{i}) {video.title}")
@@ -217,63 +217,60 @@ class DownloadThread(QRunnable):
 
     def run(self):
         try:
-            self.video.download(display=self.callback, quality=self.quality, path=self.output_path)
+            self.video.download(downloader=default, display=self.callback, quality=self.quality, path=self.output_path)
 
         except OSError:
             logging("OS Error in Download Thread!", level=1)
             self.video.download(display=self.callback, quality=self.quality, path="os_error_fixed_title.mp4")
 
 
-
 class CategoryFilterWindow(QWidget):
+    # Entirely coded by ChatGPT.
     def __init__(self):
         super().__init__()
-
+        self.radio_buttons = {}
+        self.checkboxes = {}
         self.init_ui()
 
     def init_ui(self):
         layout = QVBoxLayout()
-
-        # Left Side
-        self.radio_buttons = {}
         left_layout = QVBoxLayout()
         left_group = QGroupBox("Select Category")
+
         for category in categories:
             radio_button = QRadioButton(category)
             left_layout.addWidget(radio_button)
             self.radio_buttons[category] = radio_button
+
         left_group.setLayout(left_layout)
 
         left_scroll = QScrollArea()
         left_scroll.setWidgetResizable(True)
         left_scroll.setWidget(left_group)
 
-        # Right Side
-        self.checkboxes = {}
         right_layout = QVBoxLayout()
         right_group = QGroupBox("Exclude Categories")
+
         for category in categories:
             checkbox = QCheckBox(category)
             right_layout.addWidget(checkbox)
             self.checkboxes[category] = checkbox
+
         right_group.setLayout(right_layout)
 
         right_scroll = QScrollArea()
         right_scroll.setWidgetResizable(True)
         right_scroll.setWidget(right_group)
 
-        # Apply Button
         apply_button = QPushButton("Apply")
         apply_button.clicked.connect(self.on_apply)
 
-        # Main Layout
         hlayout = QHBoxLayout()
         hlayout.addWidget(left_scroll)
         hlayout.addWidget(right_scroll)
 
         layout.addLayout(hlayout)
         layout.addWidget(apply_button)
-
         self.setLayout(layout)
 
     def on_apply(self):
@@ -291,7 +288,6 @@ class CategoryFilterWindow(QWidget):
         self.conf = ConfigParser()
         self.conf.read("config.ini")
 
-        # Save to config file
         if selected_category is not None:
             self.conf.set("Porn_Fetch", "categories", selected_category)
 
@@ -299,7 +295,6 @@ class CategoryFilterWindow(QWidget):
             excluded_categories_str = ','.join(excluded_categories)
             self.conf.set("Porn_Fetch", "excluded_categories", excluded_categories_str)
 
-        # Save the config file
         with open('config.ini', 'w') as configfile:
             self.conf.write(configfile)
 
@@ -378,7 +373,10 @@ class Widget(QWidget):
         self.ui.button_search_limit_help.clicked.connect(help_search_limit)
         self.ui.button_user_information.clicked.connect(self.get_user_information)
         self.ui.button_user_biography.clicked.connect(self.get_user_bio)
-
+        self.ui.button_switch_user_metadata.clicked.connect(self.switch_to_user_metadata)
+        self.ui.button_switch_video_metadata.clicked.connect(self.switch_to_video_metadata)
+        self.ui.button_select_all.clicked.connect(self.select_all_items)
+        self.ui.button_unselect_all.clicked.connect(self.unselect_all_items)
 
     def switch_video_page(self):
         self.ui.stackedWidget_3.setCurrentIndex(0)
@@ -397,6 +395,12 @@ class Widget(QWidget):
     def switch_to_credits(self):
         self.ui.stackedWidget_3.setCurrentIndex(3)
 
+    def switch_to_video_metadata(self):
+        self.ui.stacked_widget_metadata.setCurrentIndex(0)
+
+    def switch_to_user_metadata(self):
+        self.ui.stacked_widget_metadata.setCurrentIndex(1)
+
     def updateLabel(self, value):
         self.ui.label_current_value_slider.setText(f"Current Value: {value}")
 
@@ -407,7 +411,7 @@ class Widget(QWidget):
 
         self.window = CategoryFilterWindow()
         self.window.show()
-        logging("Executed Category Window Widget")
+        logging("Displaying Category Window Widget")
 
     def button_group(self):
         """Separates the QRadioButtons from the different grid layouts"""
@@ -473,17 +477,28 @@ class Widget(QWidget):
         else:
             return Quality.BEST
 
+    def unselect_all_items(self):
+        root = self.ui.treeWidget.invisibleRootItem()
+        item_count = root.childCount()
+        for i in range(item_count):
+            item = root.child(i)
+            item.setCheckState(0, QtCore.Qt.Unchecked)
+
+    def select_all_items(self):
+        root = self.ui.treeWidget.invisibleRootItem()
+        item_count = root.childCount()
+        for i in range(item_count):
+            item = root.child(i)
+            item.setCheckState(0, QtCore.Qt.Checked)
+
     def download_raw(self, video, output_path):
         self.semaphore.acquire()
-        # Determine quality based on user selection
         quality = 0  # Default to low quality
         if self.ui.radio_quality_middle.isChecked():
             quality = 1
         elif self.ui.radio_quality_best.isChecked():
             quality = -1
 
-
-        # Create worker and connect signals
         worker = DownloadWorker(video, quality, output_path)
         worker.signals.progress.connect(self.update_progressbar)
         worker.signals.completed.connect(self.download_completed_slot)
@@ -497,12 +512,11 @@ class Widget(QWidget):
 
     @Slot()
     def download_completed(self):
-        # Handle completion, e.g., show a message to the user
         logging("Download Completed!")
 
     def download_completed_slot(self):
-        self.download_completed()  # Call your original download_completed logic if any
-        self.semaphore.release()  # Release the semaphore once download is complete
+        self.download_completed()
+        self.semaphore.release()
 
     def test_video(self, url):
         if not self.custom_language:
@@ -555,7 +569,7 @@ class Widget(QWidget):
 
             elif not self.mode:
                 logging(msg="Running in main thread...")
-                self.video.download(display=self.callback, quality=quality, path=output_path)
+                self.video.download.default(display=self.callback, quality=quality, path=output_path)
 
         except OSError:
             logging(msg="OS Error: The file name is invalid for your system. Recreating a random int name...", level=1)
@@ -666,9 +680,7 @@ class Widget(QWidget):
         image.download(path="./")
         ui_popup(f"Downloaded Thumbnail for: {url}")
 
-
     def get_user_information(self):
-
         user_object = self.client.get_user("https://www.pornhub.com/model/sofia-simens")
         logging("Loaded user object")
         info = user_object.info
@@ -708,7 +720,6 @@ class Widget(QWidget):
         self.ui.lineedit_user_tattoos.setText(str(tattoos))
         logging("Loaded User information")
 
-
     def get_user_bio(self):
         name = self.ui.lineedit_user_url.text()
         user_object = self.client.get_user(name)
@@ -716,20 +727,15 @@ class Widget(QWidget):
         bio = user_object.bio
         ui_popup(bio)
 
-
-
     def search_videos(self):
-        # Assuming self.client is already defined
         include_filters = []
         exclude_filters = []
 
-        # List all filters and specify which should be excluded
         filter_objects = {
             'include': [self.selected_category, self.production, self.sort, self.sort_time],
             'exclude': [self.excluded_categories_filter]
         }
 
-        # Go through each filter object and check if it's a valid Param
         for action, filters in filter_objects.items():
             for filter_object in filters:
                 if isinstance(filter_object, locals.Param):
@@ -738,10 +744,8 @@ class Widget(QWidget):
                     elif action == 'exclude':
                         exclude_filters.append(filter_object)
                 else:
-                    # Log or print a warning if a filter is not a valid Param
                     logging(f"Invalid filter: {filter_object}")
 
-        # Combine all valid inclusion filters using | operator, if any
         if include_filters:
             combined_include_filter = include_filters[0]
             for filter_object in include_filters[1:]:
@@ -749,7 +753,6 @@ class Widget(QWidget):
         else:
             combined_include_filter = None
 
-        # Combine all valid exclusion filters using - operator, if any
         if exclude_filters:
             combined_exclude_filter = exclude_filters[0]
             for filter_object in exclude_filters[1:]:
@@ -758,7 +761,7 @@ class Widget(QWidget):
             combined_exclude_filter = None
 
         query = self.ui.lineedit_search_query.text()
-        # Combine inclusion and exclusion filters and perform the search, if any
+
         if combined_include_filter and combined_exclude_filter:
             final_filter = combined_include_filter - combined_exclude_filter
             query_object = self.client.search(query, final_filter)
@@ -767,7 +770,6 @@ class Widget(QWidget):
         elif combined_exclude_filter:
             query_object = self.client.search(query, -combined_exclude_filter)
         else:
-            # If no filters are applied, perform the search without filters
             query_object = self.client.search(query)
 
         logging("Got query object")
