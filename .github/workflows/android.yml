@@ -22,6 +22,7 @@ jobs:
       - name: Clone repository
         run: |
           git clone https://github.com/EchterAlsFake/Porn_Fetch -b android
+          ls
 
       - name: Navigate to repository and setup environment
         run: |
@@ -39,4 +40,5 @@ jobs:
       - name: Build Android package
         run: |
           source Porn_Fetch/venv/bin/activate
+          ls
           buildozer -v android debug
