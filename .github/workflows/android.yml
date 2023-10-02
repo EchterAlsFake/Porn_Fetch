@@ -45,4 +45,5 @@ jobs:
           ls
           cd Porn_Fetch
           ls
+          cat buildozer.spec
           buildozer -v android debug
