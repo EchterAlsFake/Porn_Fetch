@@ -61,6 +61,7 @@ Automatic build script is available. Run the following in your terminal and sele
 ### Supported Platforms:
 
 - Ubuntu
+- Windows 10 / 11
 - Arch Linux
 - Termux
 - iSH (iOS / Alpine)  (Enter iSH on the App Store, and you'll find it) 
@@ -73,6 +74,17 @@ wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/ins
 #### Termux:
 ```
 wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/install_termux.sh" | bash
+```
+#### Windows:
+```
+# Enable powershell script execution:
+
+# Run Powershell ad Administrator and run the following command:
+$ Set-ExecutionPolicy RemoteSigned 
+$ Set-ExecutionPolicy Bypass -Scope Process
+$ Invoke-Expression (Invoke-WebRequest -Uri https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/install_windows.ps1 -UseBasicParsing).Content
+
+This will automatically install Python3 (if not installed) and build the project
 ```
 
 # Android
