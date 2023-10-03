@@ -65,7 +65,7 @@ Automatic build script is available. Run the following in your terminal and sele
 - Windows 10 / 11
 - Arch Linux
 - Termux
-- iSH (iOS / Alpine)  (Enter iSH on the App Store, and you'll find it) 
+- iSH (iOS / Alpine) (Enter iSH on the App Store, and you'll find it) 
 - Fedora
 - OpenSUSE
 
@@ -92,7 +92,7 @@ This will automatically install Python3 (if not installed) and build the project
 
 #### Read carefully to prevent errors!
 
-The development for Android has a separate branch named "android".
+The development for Android has a separate branch named "android."
 <br>Kivy is a whole new framework for me, so I will need my time to make it look good!
 
 ### DOWNLOAD: [0.1](https://github.com/EchterAlsFake/Porn_Fetch/releases)
@@ -109,8 +109,14 @@ Minimum needed API: 21
 - A guide/script is in development
 
 # iOS
+### iSH
+You can use the CLI (Terminal version) of Porn Fetch via the App 'iSH.'
+iSH is a terminal emulator for iOS that launches an Alpine Linux.
+You can use the build script to automatically install everything. It's not 
+the best solution, but it works at least :) 
 
-It's possible to convert the Kivy created APP for Android easily into an iOS application, but I don't have an Apple device, so I cannot compile or even test it. You can do it by yourself and if you think you got a successful stable build, contact me via Discord: echteralsfake | EchterAlsFake#7164 and we can merge your build into the releases!
+### Building
+It's possible to convert the Kivy created APP for Android easily into an iOS application, but I don't have an Apple device, so I cannot compile or even test it. You can do it by yourself, and if you think you got a successful stable build, contact me via Discord: echteralsfake | EchterAlsFake#7164, and we can merge your build into the releases!
 
 (Your changes need to be documented in a FORK of my project. A recommendation would be a secondary iOS branch.)
 
@@ -135,7 +141,7 @@ I am just the developer. Nobody will get you in jail because you downloaded a vi
 - [colorama](https://github.com/tartley/colorama)
 - [tqdm](https://github.com/tqdm/tqdm)
 - [phub](https://github.com/Egsagon/PHUB)
-- [sentry sdk](https://github.com/getsentry/sentry-python) Used in 1.7 - 2.7
+- [sentry sdk](https://github.com/getsentry/sentry-python) Used in 1.7–2.7
 - [requests](https://github.com/psf/requests)
 - [hqporner_api](https://github.com/EchterAlsFake/hqporner_api)
 - [pyside6](https://wiki.qt.io/Qt_for_Python)
