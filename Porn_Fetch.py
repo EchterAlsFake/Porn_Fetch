@@ -11,6 +11,7 @@ import random
 
 import requests  # See: https://github.com/psf/requests
 import math
+import src.icons
 
 from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout, QRadioButton,
     QCheckBox, QPushButton, QScrollArea, QGroupBox)
@@ -101,8 +102,7 @@ def add_to_tree_widget(iterator, tree_widget, search_limit=False):
                 item.setCheckState(0, QtCore.Qt.Unchecked)  # Adds a checkbox
 
     except Exception as e:
-        ui_popup(
-            f"An error happened. ERROR: {e}")
+        ui_popup(f"An error happened. ERROR: {e}")
 
 
 def create_button_group(buttons):

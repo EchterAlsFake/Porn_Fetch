@@ -16,11 +16,11 @@
 - [x] Implementing user metadata
 - [x] Adding Icon / Logo
 - [x] Searching filters | Maybe unstable, but should work at least a bit
-- [] Last checks / fixes
-- [] Windows optimization
+- [x] Last checks / fixes
+- [x] Windows optimization
 - [x] rebuild cli
-- [] fix avatar downloading
-- [] better file structure
+
+- [x] better file structure
 - [x] Android testing (Kivy)
 - [x] Kivy workflow build
 - [x] Add better exception handling for basic stuff
