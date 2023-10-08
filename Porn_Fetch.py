@@ -13,17 +13,17 @@ import requests  # See: https://github.com/psf/requests
 import math
 import src.icons
 
-from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout, QRadioButton,
+from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout, QRadioButton, QInputDialog,
     QCheckBox, QPushButton, QScrollArea, QGroupBox)
 from phub import Client, Quality, locals, errors  # See https://github.com/Egsagon/PHUB
 from phub.modules.download import default
 from hqporner_api import API  # See: https://github.com/EchterAlsFake/hqporner_api
 from configparser import ConfigParser  # See: https://github.com/python/cpython/blob/main/Lib/configparser.py
 from PySide6 import QtCore  # See: https://pypi.org/project/PySide6/
-from PySide6.QtCore import QSemaphore
+from PySide6.QtCore import QSemaphore, Qt
 from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QButtonGroup
 from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Slot
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QIcon, QKeyEvent
 from src.license_agreement import Ui_Widget_License
 from src.Porn_Fetch_v3 import Ui_Porn_Fetch_widget
 from src.setup import setup_config_file, strip_title, logging
@@ -376,6 +376,7 @@ class Widget(QWidget):
         self.ui.button_switch_video_metadata.clicked.connect(self.switch_to_video_metadata)
         self.ui.button_select_all.clicked.connect(self.select_all_items)
         self.ui.button_unselect_all.clicked.connect(self.unselect_all_items)
+        self.ui.button_custom_api.clicked.connect(self.custom_api_language)
 
     def switch_video_page(self):
         self.ui.stackedWidget_3.setCurrentIndex(0)
@@ -419,7 +420,7 @@ class Widget(QWidget):
             "quality": [self.ui.radio_quality_best, self.ui.radio_quality_worst, self.ui.radio_quality_middle],
             "threading": [self.ui.radio_threading_yes, self.ui.radio_threading_no],
             "api_language": [self.ui.api_radio_es, self.ui.api_radio_fr, self.ui.api_radio_en, self.ui.api_radio_de,
-                             self.ui.api_radio_ru],
+                             self.ui.api_radio_ru, self.ui.radio_api_custom],
             "sort": [self.ui.radio_most_recent, self.ui.radio_most_relevant, self.ui.radio_most_viewed,
                      self.ui.radio_longest, self.ui.radio_top_rated, self.ui.radio_sort_ignore],
             "sort_time": [self.ui.radio_day, self.ui.radio_month, self.ui.radio_year, self.ui.radio_week,
@@ -577,6 +578,18 @@ class Widget(QWidget):
         except Exception as e:
             ui_popup(text=f"An unexpected error happened.  Exception: {e}")
             logging(msg=e, level=1)
+
+    def custom_api_language(self):
+        api_language = self.ui.lineedit_custom_api_language.text()
+
+        self.conf.set("Porn_Fetch", "api_language", api_language)
+        with open("config.ini", "w") as config_file:
+            self.conf.write(config_file)
+
+        ui_popup("Applied, please restart Porn Fetch")
+
+
+
 
     def start_file(self):
         file_path = self.ui.lineedit_file.text()
@@ -898,6 +911,13 @@ class Widget(QWidget):
             if value in options:
                 options[value].setChecked(True)
                 setattr(self, setting, value if value != "false" else None)
+        language_codes = ["ru", "de", "fr", "es", "en"]
+        if not self.conf["Porn_Fetch"]["api_language"] in language_codes:
+            self.ui.radio_api_custom.setChecked(True)
+            logging("Applied custom language")
+
+
+
 
         if self.conf["Porn_Fetch"]["delay"] == "true":
             self.ui.radio_speed_usual.setChecked(True)
