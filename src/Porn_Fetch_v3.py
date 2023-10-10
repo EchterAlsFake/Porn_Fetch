@@ -472,7 +472,7 @@ class Ui_Porn_Fetch_widget(object):
         self.api_radio_en.setObjectName(u"api_radio_en")
         self.api_radio_en.setCursor(QCursor(Qt.PointingHandCursor))
         self.api_radio_en.setStyleSheet(u"")
-        self.api_radio_en.setChecked(True)
+        self.api_radio_en.setChecked(False)
 
         self.gridlayout_api_language.addWidget(self.api_radio_en, 1, 0, 1, 1)
 
@@ -480,6 +480,12 @@ class Ui_Porn_Fetch_widget(object):
         self.label_11.setObjectName(u"label_11")
 
         self.gridlayout_api_language.addWidget(self.label_11, 0, 0, 1, 2)
+
+        self.radio_api_custom = QRadioButton(self.groupBox_4)
+        self.radio_api_custom.setObjectName(u"radio_api_custom")
+        self.radio_api_custom.setChecked(True)
+
+        self.gridlayout_api_language.addWidget(self.radio_api_custom, 3, 1, 1, 1)
 
 
         self.gridLayout_12.addLayout(self.gridlayout_api_language, 1, 0, 1, 1)
@@ -646,6 +652,21 @@ class Ui_Porn_Fetch_widget(object):
         self.horizontalSlider.setOrientation(Qt.Horizontal)
 
         self.gridLayout_19.addWidget(self.horizontalSlider, 2, 1, 1, 1)
+
+        self.label_custom_api = QLabel(self.frame)
+        self.label_custom_api.setObjectName(u"label_custom_api")
+
+        self.gridLayout_19.addWidget(self.label_custom_api, 0, 0, 1, 1)
+
+        self.lineedit_custom_api_language = QLineEdit(self.frame)
+        self.lineedit_custom_api_language.setObjectName(u"lineedit_custom_api_language")
+
+        self.gridLayout_19.addWidget(self.lineedit_custom_api_language, 0, 1, 1, 1)
+
+        self.button_custom_api = QPushButton(self.frame)
+        self.button_custom_api.setObjectName(u"button_custom_api")
+
+        self.gridLayout_19.addWidget(self.button_custom_api, 0, 2, 1, 1)
 
 
         self.gridLayout_12.addWidget(self.frame, 2, 0, 1, 1)
@@ -1756,10 +1777,10 @@ class Ui_Porn_Fetch_widget(object):
 
         self.retranslateUi(Porn_Fetch_widget)
 
-        self.stackedWidget_3.setCurrentIndex(2)
+        self.stackedWidget_3.setCurrentIndex(1)
         self.stackedWidget_2.setCurrentIndex(0)
         self.stackedWidget.setCurrentIndex(0)
-        self.stacked_widget_metadata.setCurrentIndex(1)
+        self.stacked_widget_metadata.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(Porn_Fetch_widget)
@@ -1810,6 +1831,7 @@ class Ui_Porn_Fetch_widget(object):
         self.api_radio_es.setText(QCoreApplication.translate("Porn_Fetch_widget", u"ES", None))
         self.api_radio_en.setText(QCoreApplication.translate("Porn_Fetch_widget", u"EN", None))
         self.label_11.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Choose API language", None))
+        self.radio_api_custom.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Custom", None))
         self.radio_speed_high.setText(QCoreApplication.translate("Porn_Fetch_widget", u"High", None))
         self.label_threading.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Threading:", None))
         self.radio_threading_no.setText(QCoreApplication.translate("Porn_Fetch_widget", u"No", None))
@@ -1827,6 +1849,9 @@ class Ui_Porn_Fetch_widget(object):
         self.label_2.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Search Limit:", None))
         self.label_current_value_slider.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Current Limit: ", None))
         self.button_search_limit_help.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Help", None))
+        self.label_custom_api.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Custom API Language:", None))
+        self.lineedit_custom_api_language.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_widget", u"Enter language code e.g.,  zh = Chinese or fi = finnish", None))
+        self.button_custom_api.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Apply", None))
         self.groupBox_10.setTitle(QCoreApplication.translate("Porn_Fetch_widget", u"Search filters", None))
         self.groupBox_13.setTitle(QCoreApplication.translate("Porn_Fetch_widget", u"Time sort filters", None))
         self.radio_day.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Day", None))
@@ -1867,7 +1892,7 @@ class Ui_Porn_Fetch_widget(object):
         self.button_get_metadata.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Get metadata", None))
         self.groupBox_6.setTitle(QCoreApplication.translate("Porn_Fetch_widget", u"User Metadata", None))
         self.button_user_information.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Get Information", None))
-        self.button_download_avatar.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Download Avatar", None))
+        self.button_download_avatar.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Not implemented", None))
         self.button_user_biography.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Get User's Biography", None))
         self.label_user_avatar.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Avatar:", None))
         self.label_user_relationship.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Relationship: ", None))
@@ -1885,6 +1910,7 @@ class Ui_Porn_Fetch_widget(object):
         self.label_user_gender.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Gender:", None))
         self.label_user_tattoos.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Tattoos:", None))
         self.label_user_turn_ons.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Turn ons:", None))
+        self.lineedit_user_avatar.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_widget", u"Not implemented yet", None))
         self.label_user_url.setText(QCoreApplication.translate("Porn_Fetch_widget", u"User URL: ", None))
         self.button_switch_video_metadata.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Video", None))
         self.button_switch_user_metadata.setText(QCoreApplication.translate("Porn_Fetch_widget", u"User", None))
@@ -1894,40 +1920,38 @@ class Ui_Porn_Fetch_widget(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">Project API: PHUB v4</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text"
-                        "-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">See https://github.com/Egsagon/PHUB</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">Please like his project!</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right"
-                        ":0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">The Graphical User Interface was written in PySide6, which is maintained, by the Qt company:</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">https://qt.io</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;\"><br /></p>\n"
-""
-                        "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">Source of this Project:</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">https://github.com/EchterAlsFake/Porn_Fetch</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">External libraries:<br /><br />1) tqdm</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\""
-                        " font-family:'Cantarell'; font-size:11pt;\">2) PySide6</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">3) BeautifulSoup</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">4) PHUB</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">5) wget</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">6) requests</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-in"
-                        "dent:0px; font-family:'Cantarell'; font-size:11pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">Copyright (C) 2023 EchterAlsFake | Johannes Habel</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">Graphics:<br /><br />Download Icon: by https://iconscout.com/contributors/kmgdesignid on Iconscout.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">Account Icon: by https://iconscout."
-                        "com/contributors/rengised on Iconscout.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell'; font-size:11pt;\">Settings Icon: by https://iconscout.com/contributors/boosticon on Iconscout.com</span></p></body></html>", None))
+"</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Project API: PHUB v4</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">See https://github.com/Egsagon/PHUB</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top"
+                        ":0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Please like his project!</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The Graphical User Interface was written in PySide6, which is maintained, by the Qt company:</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margi"
+                        "n-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">https://qt.io</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Source of this Project:</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">https://github.com/EchterAlsFake/Porn_Fetch</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Exte"
+                        "rnal libraries:<br /><br />1) tqdm</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">2) PySide6</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">3) BeautifulSoup</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">4) PHUB</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">5) wget</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">6) requests</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\""
+                        ">Copyright (C) 2023 EchterAlsFake | Johannes Habel</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Graphics:<br /><br />Download Icon: by https://iconscout.com/contributors/kmgdesignid on Iconscout.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Account Icon: by https://iconscout.com/contributors/rengised on Iconscout.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Settings Icon: by https://iconscout.com/contributors/boosticon on Iconscout.com</p></body></html>", None))
         self.group_status.setTitle("")
         self.button_video.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Video", None))
         self.button_account.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Account", None))
