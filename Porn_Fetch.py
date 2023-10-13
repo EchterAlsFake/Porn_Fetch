@@ -16,14 +16,14 @@ import src.icons
 from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout, QRadioButton, QInputDialog,
     QCheckBox, QPushButton, QScrollArea, QGroupBox)
 from phub import Client, Quality, locals, errors  # See https://github.com/Egsagon/PHUB
-from phub.modules.download import default
+from phub.modules.download import default, threaded
 from hqporner_api import API  # See: https://github.com/EchterAlsFake/hqporner_api
 from configparser import ConfigParser  # See: https://github.com/python/cpython/blob/main/Lib/configparser.py
 from PySide6 import QtCore  # See: https://pypi.org/project/PySide6/
-from PySide6.QtCore import QSemaphore, Qt
+from PySide6.QtCore import QSemaphore
 from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QButtonGroup
 from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Slot
-from PySide6.QtGui import QIcon, QKeyEvent
+from PySide6.QtGui import QIcon
 from src.license_agreement import Ui_Widget_License
 from src.Porn_Fetch_v3 import Ui_Porn_Fetch_widget
 from src.setup import setup_config_file, strip_title, logging
@@ -216,11 +216,11 @@ class DownloadThread(QRunnable):
 
     def run(self):
         try:
-            self.video.download(downloader=default, display=self.callback, quality=self.quality, path=self.output_path)
+            self.video.download(downloader=threaded, display=self.callback, quality=self.quality, path=self.output_path)
 
         except OSError:
             logging("OS Error in Download Thread!", level=1)
-            self.video.download(display=self.callback, quality=self.quality, path="os_error_fixed_title.mp4")
+            self.video.download(downloader=threaded, display=self.callback, quality=self.quality, path="os_error_fixed_title.mp4")
 
 
 class CategoryFilterWindow(QWidget):

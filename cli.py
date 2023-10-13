@@ -9,14 +9,9 @@ from phub import Client, Quality, errors, download, display
 from colorama import *
 from hqporner_api import API
 from src.setup import logging, setup_config_file, strip_title
+from hue_shift import return_color
 
-
-def random_colour():
-    colours = [Fore.LIGHTRED_EX, Fore.LIGHTCYAN_EX, Fore.LIGHTYELLOW_EX, Fore.LIGHTMAGENTA_EX, Fore.LIGHTGREEN_EX
-               , Fore.LIGHTWHITE_EX, Fore.LIGHTBLUE_EX, Fore.BLUE, Fore.WHITE, Fore.YELLOW, Fore.CYAN, Fore.MAGENTA,
-               Fore.GREEN]
-
-    return random.choice(colours)
+colour = return_color()
 
 
 class CLI:
@@ -42,13 +37,13 @@ class CLI:
 
     def main_menu(self):
         options = input(f"""
-{random_colour()}1) Download Menu
-{random_colour()}2) Searching
-{random_colour()}3) Account
-{random_colour()}4) Metadata
-{random_colour()}5) Settings
-{random_colour()}6) Exit
-{random_colour()}----------------------=>:
+{colour}1) Download Menu
+{colour}2) Searching
+{colour}3) Account
+{colour}4) Metadata
+{colour}5) Settings
+{colour}6) Exit
+{colour}----------------------=>:
 """)
 
         if options == "1":
@@ -71,14 +66,14 @@ class CLI:
 
     def download_menu(self):
         options = input(f"""
-{random_colour()}1) Download a video
-{random_colour()}2) Download from file
-{random_colour()}3) Download videos from model / channel
-{random_colour()}4) Back
-{random_colour()}----------------------=>:
+{colour}1) Download a video
+{colour}2) Download from file
+{colour}3) Download videos from model / channel
+{colour}4) Back
+{colour}----------------------=>:
 """)
         if options == "1":
-            url = input(f"{random_colour()}Enter video url --=>:")
+            url = input(f"{colour}Enter video url --=>:")
             self.download_raw(url)
 
         elif options == "2":
@@ -91,7 +86,7 @@ class CLI:
             self.main_menu()
 
     def searching_menu(self):
-        search_query = input(f"{random_colour()}Enter search query --=>:")
+        search_query = input(f"{colour}Enter search query --=>:")
         search_object = self.client.search(search_query)
         videos = []
         for video in search_object[0:self.search_limit]:
@@ -101,12 +96,12 @@ class CLI:
 
     def account_menu(self):
         options = input(f"""
-{random_colour()}1) Login
-{random_colour()}2) Get liked videos
-{random_colour()}3) Get watched videos
-{random_colour()}4) Get recommended videos
-{random_colour()}5) Back
-{random_colour()}----------------------=>:
+{colour}1) Login
+{colour}2) Get liked videos
+{colour}3) Get watched videos
+{colour}4) Get recommended videos
+{colour}5) Back
+{colour}----------------------=>:
 """)
 
         if options == "1":
@@ -126,10 +121,10 @@ class CLI:
 
     def metadata_menu(self):
         options = input(f"""
-{random_colour()}1) User metadata
-{random_colour()}2) Video metadata
-{random_colour()}3) Back
-{random_colour()}----------------------=>:""")
+{colour}1) User metadata
+{colour}2) Video metadata
+{colour}3) Back
+{colour}----------------------=>:""")
 
         if options == "1":
             self.metadata_user()
@@ -146,7 +141,7 @@ class CLI:
             return video_object
 
         except errors.URLError:
-            logging(f"{random_colour()}Invalid URL: {url}", level=1)
+            logging(f"{colour}Invalid URL: {url}", level=1)
             return False
 
     def download_hqporner(self, url):
@@ -192,7 +187,7 @@ class CLI:
                 self.download_pornhub(url)
 
     def download_from_file(self):
-        file = input(f"{random_colour()}Please enter the file location --=>:")
+        file = input(f"{colour}Please enter the file location --=>:")
 
         if os.path.exists(file):
             with open(file, "r") as url_file:
@@ -201,11 +196,11 @@ class CLI:
                     self.download_raw(url)
 
         else:
-            logging(f"{random_colour()}File doesn't exist...")
+            logging(f"{colour}File doesn't exist...")
             self.download_from_file()
 
     def download_from_model_channel(self):
-        model_url = input(f"{random_colour()}Please enter the model url --=>:")
+        model_url = input(f"{colour}Please enter the model url --=>:")
         model_object = self.client.get_user(model_url)
 
         videos = model_object.videos
@@ -228,7 +223,7 @@ class CLI:
             logging(counter)
             print(f"{counter}) {selectable_video}")
 
-        choices_input = input(f"{random_colour()}Please enter video you want to download (e.g., 1,2,5,14) -->: ")
+        choices_input = input(f"{colour}Please enter video you want to download (e.g., 1,2,5,14) -->: ")
         choices = choices_input.split(",")
 
         for choice in choices:
@@ -248,7 +243,7 @@ class CLI:
         self.iterator(videos)
 
     def metadata_video(self):
-        url = input(f"{random_colour()}Enter video url --=>:")
+        url = input(f"{colour}Enter video url --=>:")
         video_object = self.test_video(url)
 
         tags_list = []
@@ -267,20 +262,20 @@ class CLI:
             tags_list.append(tag.name)
 
         print(f"""
-{random_colour()}Title: {title}
-{random_colour()}Author: {author}
-{random_colour()}Pornstars: 
-{random_colour()}Date: {date}
-{random_colour()}Views: {views}
-{random_colour()}Rating: Likes: {rating.up} | Dislikes: {rating.down}
-{random_colour()}Duration: {duration}
-{random_colour()}Categories: {categories}
-{random_colour()}Image URL: {image_url}
-{random_colour()}Tags: {tags_list}
+{colour}Title: {title}
+{colour}Author: {author}
+{colour}Pornstars: 
+{colour}Date: {date}
+{colour}Views: {views}
+{colour}Rating: Likes: {rating.up} | Dislikes: {rating.down}
+{colour}Duration: {duration}
+{colour}Categories: {categories}
+{colour}Image URL: {image_url}
+{colour}Tags: {tags_list}
 """)
 
     def metadata_user(self):
-        url = input(f"{random_colour()}Enter user url --=>:")
+        url = input(f"{colour}Enter user url --=>:")
         user_object = self.client.get_user(url)
         info = user_object.info
         bio = user_object.bio
@@ -302,29 +297,29 @@ class CLI:
         videos_watched = info.get("Videos Watched")
 
         print(f"""
-{random_colour()}Gender: {gender}
-{random_colour()}Height: {height}
-{random_colour()}Ethnicity: {ethnicity}
-{random_colour()}Hair color: {hair_color}
-{random_colour()}Fake breasts: {fake_breasts}
-{random_colour()}Tattoos: {tattoos}
-{random_colour()}Piercings: {piercings}
-{random_colour()}Hobbies: {hobbies}
-{random_colour()}Turn ons: {turns_on}
-{random_colour()}Video views: {video_views}
-{random_colour()}Profile views: {profile_views}
-{random_colour()}Videos watched: {videos_watched}
-{random_colour()}Interested in: {interested_in}
-{random_colour()}Relationship: {relationship}
+{colour}Gender: {gender}
+{colour}Height: {height}
+{colour}Ethnicity: {ethnicity}
+{colour}Hair color: {hair_color}
+{colour}Fake breasts: {fake_breasts}
+{colour}Tattoos: {tattoos}
+{colour}Piercings: {piercings}
+{colour}Hobbies: {hobbies}
+{colour}Turn ons: {turns_on}
+{colour}Video views: {video_views}
+{colour}Profile views: {profile_views}
+{colour}Videos watched: {videos_watched}
+{colour}Interested in: {interested_in}
+{colour}Relationship: {relationship}
 
-{random_colour()}Bio: {bio}
+{colour}Bio: {bio}
 
-{random_colour()}Avatar: {avatar}
+{colour}Avatar: {avatar}
 
 """)
 
     def login(self):
-        username = input(f"{random_colour()}Enter your PornHub's Username --=>:")
+        username = input(f"{colour}Enter your PornHub's Username --=>:")
         password = getpass.getpass("Enter your PornHub's Password: --=>:")
 
         try:
@@ -338,40 +333,40 @@ class CLI:
 
     def settings_menu(self):
         options = input(f"""
-{random_colour()}------| Quality |------
-    {random_colour()}Current Value: {self.quality}
+{colour}------| Quality |------
+    {colour}Current Value: {self.quality}
     
-    1{random_colour()}) Change to BEST
-    {random_colour()}2) Change to HALF
-    {random_colour()}3) Change to WORST
+    1{colour}) Change to BEST
+    {colour}2) Change to HALF
+    {colour}3) Change to WORST
 
-{random_colour()}------| Threading |------
-    {random_colour()}Current Value: {self.threading}
+{colour}------| Threading |------
+    {colour}Current Value: {self.threading}
     
-    {random_colour()}4) Enable
-    {random_colour()}5) Disable
+    {colour}4) Enable
+    {colour}5) Disable
 
-{random_colour()}------| Output path |------
-    {random_colour()}Current Path: {self.output_path}
+{colour}------| Output path |------
+    {colour}Current Path: {self.output_path}
     
-    {random_colour()}6) Change path
+    {colour}6) Change path
 
-{random_colour()}------| Search result limit |------
-    {random_colour()}Current Value: {self.search_limit}
+{colour}------| Search result limit |------
+    {colour}Current Value: {self.search_limit}
     
-    {random_colour()}7) Change Limit
+    {colour}7) Change Limit
 
-{random_colour()}------| Change Delay (Speed) |-------
-    {random_colour()}Current Value: {self.delay}
+{colour}------| Change Delay (Speed) |-------
+    {colour}Current Value: {self.delay}
     
-    {random_colour()}8) Enable Delay
-    {random_colour()}9) Disable Delay
+    {colour}8) Enable Delay
+    {colour}9) Disable Delay
 
-{random_colour()}------| Reset |------
+{colour}------| Reset |------
         
-    {random_colour()}99) reset configuration
+    {colour}99) reset configuration
         
-{random_colour()}B) Back
+{colour}B) Back
 """)
 
         if options == "1":
@@ -390,7 +385,7 @@ class CLI:
             self.conf.set("Porn_Fetch", "default_threading", "no")
 
         elif options == "6":
-            new_path = input(f"{random_colour()}Enter new output path --=>:")
+            new_path = input(f"{colour}Enter new output path --=>:")
             if os.path.exists(new_path):
                 self.conf.set("Porn_Fetch", "default_path", new_path)
 
@@ -399,7 +394,7 @@ class CLI:
                 self.settings_menu()
 
         elif options == "7":
-            limit = input(f"{random_colour()}Enter result limit (int) -->:")
+            limit = input(f"{colour}Enter result limit (int) -->:")
             if type(limit) == "int":
                 self.conf.set("Porn_Fetch", "search_limit", limit)
 
@@ -413,7 +408,7 @@ class CLI:
             self.conf.set("Porn_Fetch", "delay", "false")
 
         elif options == "99":
-            confirmation = input(f"{random_colour()}Are you sure? (y/n): ")
+            confirmation = input(f"{colour}Are you sure? (y/n): ")
             if confirmation == "y":
                 setup_config_file(force=True)
 

@@ -1,7 +1,7 @@
 import os
 
-from colorama import *
 from configparser import ConfigParser
+from hue_shift import return_color, reset
 data = """
 [License]
 accept = false
@@ -28,10 +28,10 @@ language = en
 def logging(msg, level=0):
 
     if level == 0:
-        print(f"{Fore.LIGHTCYAN_EX} : DEBUG : {Fore.RESET} : MSG : {msg}")
+        print(f"{return_color()} : DEBUG : {reset()} : {return_color()}MSG :{reset()}{return_color()} {msg}{reset()}")
 
     elif level == 1:
-        print(f"[{Fore.LIGHTRED_EX} : ERROR : {Fore.RESET} : MSG : {msg} ")
+        print(f"{return_color()} : ERROR : {reset()} : {return_color()}MSG :{reset()}{return_color()} {msg}{reset()} ")
 
 
 def strip_title(title):
