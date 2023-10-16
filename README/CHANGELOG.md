@@ -198,3 +198,11 @@ I hope that most issues are now fixed.
 - You can now just paste the URL from the clipboard
 - You can now choose the output folder without needing to enter it in to the input line
 - improved visual look and progressbar
+
+# 2.9
+
+- API updated to 4.1.3
+- Added Enhancement request from #11 (Skips already downloaded videos...)
+- huge Performance increase when downloading (thanks to Egsagon's threaded preset) 
+- Added a Semaphore (only 4 threads at once -- less overload and less CPU burning)
+- Added Avatar downloading 

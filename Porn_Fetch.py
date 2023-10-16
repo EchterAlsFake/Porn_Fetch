@@ -8,15 +8,14 @@ import argparse
 import os
 import random
 
-
 import requests  # See: https://github.com/psf/requests
 import math
 import src.icons
 
 from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout, QRadioButton, QInputDialog,
-    QCheckBox, QPushButton, QScrollArea, QGroupBox)
+                               QCheckBox, QPushButton, QScrollArea, QGroupBox)
 from phub import Client, Quality, locals, errors  # See https://github.com/Egsagon/PHUB
-from phub.modules.download import default, threaded
+from phub.modules.download import threaded
 from hqporner_api import API  # See: https://github.com/EchterAlsFake/hqporner_api
 from configparser import ConfigParser  # See: https://github.com/python/cpython/blob/main/Lib/configparser.py
 from PySide6 import QtCore  # See: https://pypi.org/project/PySide6/
@@ -24,11 +23,11 @@ from PySide6.QtCore import QSemaphore
 from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QButtonGroup
 from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Slot
 from PySide6.QtGui import QIcon
+from moviepy.editor import VideoFileClip
 from src.license_agreement import Ui_Widget_License
 from src.Porn_Fetch_v3 import Ui_Porn_Fetch_widget
 from src.setup import setup_config_file, strip_title, logging
 from cli import CLI
-
 
 categories = [attr for attr in dir(locals.Category) if
               not callable(getattr(locals.Category, attr)) and not attr.startswith("__")]
@@ -47,7 +46,6 @@ def update_progressbar(pos, total, progress_bar):
 
 
 def help_speed():
-
     text = """
 Speed (or Delay) is the requests limit per second.
 
@@ -204,23 +202,29 @@ class DownloadThread(QRunnable):
     Will be used when the 'Yes' Box is checked in the main UI.
     """
 
-    def __init__(self, video, quality, output_path):
+    def __init__(self, video, quality, output_path, semaphore):
         super().__init__()
         self.video = video
         self.quality = quality
         self.output_path = output_path
         self.signals = DownloadProgressSignal()
+        self.semaphore = semaphore
 
     def callback(self, pos, total):
         self.signals.progress.emit(pos, total)
 
     def run(self):
+        self.semaphore.acquire()
         try:
-            self.video.download(downloader=threaded, display=self.callback, quality=self.quality, path=self.output_path)
+            self.video.download(display=self.callback, quality=self.quality, path=self.output_path,
+                                downloader=threaded())
 
         except OSError:
             logging("OS Error in Download Thread!", level=1)
-            self.video.download(downloader=threaded, display=self.callback, quality=self.quality, path="os_error_fixed_title.mp4")
+            self.video.download(display=self.callback, quality=self.quality, path="os_error_fixed_title.mp4",
+                                downloader=threaded())
+        finally:
+            self.semaphore.release()
 
 
 class CategoryFilterWindow(QWidget):
@@ -298,6 +302,41 @@ class CategoryFilterWindow(QWidget):
             self.conf.write(configfile)
 
 
+def approximately_equal(duration1, duration2, tolerance=5):
+    """
+    Check if two durations are approximately equal within a given tolerance.
+
+    Parameters:
+    - duration1, duration2: int or float, durations to compare.
+    - tolerance: int or float, acceptable difference between the durations.
+
+    Returns:
+    - bool, True if durations are approximately equal, False otherwise.
+    """
+    return abs(duration1 - duration2) <= tolerance
+
+
+def check_if_video_exists(video, output_path):
+    if os.path.exists(output_path):
+        logging("Found video... checking length...")
+        with VideoFileClip(output_path) as clip:
+            existing_duration = int(clip.duration)
+            video_duration = video.duration.seconds
+
+            logging(f"Existing video duration: {existing_duration}")
+            logging(f"Video duration: {video_duration}")
+
+            if approximately_equal(existing_duration, video_duration):
+                logging("Video already exists, skipping download...")
+                return True
+
+            else:
+                return False
+
+    else:
+        return False
+
+
 class Widget(QWidget):
     """Main UI widget. Design is loaded from the ui_main_widget.py file. Feel free to change things if you want."""
 
@@ -326,8 +365,8 @@ class Widget(QWidget):
         self.excluded_categories_str = None
         self.selected_category_value = None
         self.selected_category = None
-        self.threadpool = QThreadPool()
-        self.semaphore = QSemaphore(1)
+        self.threadpool = QThreadPool.globalInstance()
+        self.semaphore = QSemaphore(4)
 
         self.ui = Ui_Porn_Fetch_widget()
         self.ui.setupUi(self)
@@ -377,6 +416,7 @@ class Widget(QWidget):
         self.ui.button_select_all.clicked.connect(self.select_all_items)
         self.ui.button_unselect_all.clicked.connect(self.unselect_all_items)
         self.ui.button_custom_api.clicked.connect(self.custom_api_language)
+        self.ui.button_download_avatar.clicked.connect(self.download_avatar)
 
     def switch_video_page(self):
         self.ui.stackedWidget_3.setCurrentIndex(0)
@@ -559,25 +599,29 @@ class Widget(QWidget):
         logging(f"Stripped title: {title}")
         output_path = f"{output_path}{title}.mp4"
 
-        try:
-            if self.mode:
-                self.download_thread = DownloadThread(video, quality, output_path)
-                self.download_thread.signals.progress.connect(
-                    lambda pos, total, pb=progress_bar: update_progressbar(pos, total, pb))
-                self.threadpool.start(self.download_thread)
-                logging(msg="Started download thread...")
+        logging("Checking if video already exists...")
 
-            elif not self.mode:
-                logging(msg="Running in main thread...")
-                self.video.download.default(display=self.callback, quality=quality, path=output_path)
+        if not check_if_video_exists(video, output_path):
+            try:
+                if self.mode:
+                    self.download_thread = DownloadThread(video, quality, output_path, self.semaphore)
+                    self.download_thread.signals.progress.connect(
+                        lambda pos, total, pb=progress_bar: update_progressbar(pos, total, pb))
+                    self.threadpool.start(self.download_thread)
+                    logging(msg="Started download thread...")
 
-        except OSError:
-            logging(msg="OS Error: The file name is invalid for your system. Recreating a random int name...", level=1)
-            self.download(video, progress_bar, os_error_handle=True)
+                elif not self.mode:
+                    logging(msg="Running in main thread...")
+                    self.video.download.default(display=self.callback, quality=quality, path=output_path)
 
-        except Exception as e:
-            ui_popup(text=f"An unexpected error happened.  Exception: {e}")
-            logging(msg=e, level=1)
+            except OSError:
+                logging(msg="OS Error: The file name is invalid for your system. Recreating a random int name...",
+                        level=1)
+                self.download(video, progress_bar, os_error_handle=True)
+
+            except Exception as e:
+                ui_popup(text=f"An unexpected error happened.  Exception: {e}")
+                logging(msg=e, level=1)
 
     def custom_api_language(self):
         api_language = self.ui.lineedit_custom_api_language.text()
@@ -587,9 +631,6 @@ class Widget(QWidget):
             self.conf.write(config_file)
 
         ui_popup("Applied, please restart Porn Fetch")
-
-
-
 
     def start_file(self):
         file_path = self.ui.lineedit_file.text()
@@ -692,6 +733,20 @@ class Widget(QWidget):
         image.download(path="./")
         ui_popup(f"Downloaded Thumbnail for: {url}")
 
+    def download_avatar(self):
+        user_url = self.ui.lineedit_user_url.text()
+        object = self.client.get_user(user_url)
+        avatar = object.avatar
+        name = object.name
+        location = self.path + name + ".jpg"
+        try:
+            avatar.download(path=location)
+            ui_popup(f"Downloaded Avatar for: {name} to: {location}")
+
+        except Exception as e:
+            ui_popup("Error downloading avatar: " + str(e))
+
+
     def get_user_information(self):
         user = self.ui.lineedit_user_url.text()
         user_object = self.client.get_user(user)
@@ -714,10 +769,12 @@ class Widget(QWidget):
         profile_views = info.get("Profile Views")
         videos_watched = info.get("Videos Watched")
 
+        avatar_url = user_object.avatar.url
+
         self.ui.lineedit_user_name.setText(str(user_object.name))
         self.ui.lineedit_user_url.setText(str(user_object.url))
         self.ui.lineedit_user_fake_breasts.setText(str(fake_breasts))
-        self.ui.lineedit_user_avatar.setText(str("Not implemented yet, wait vor v2.9"))
+        self.ui.lineedit_user_avatar.setText(str(avatar_url))
         self.ui.lineedit_user_gender.setText(str(gender))
         self.ui.lineedit_user_ethnicity.setText(str(ethnicity))
         self.ui.lineedit_user_hair_color.setText(str(hair_color))
@@ -915,9 +972,6 @@ class Widget(QWidget):
         if not self.conf["Porn_Fetch"]["api_language"] in language_codes:
             self.ui.radio_api_custom.setChecked(True)
             logging("Applied custom language")
-
-
-
 
         if self.conf["Porn_Fetch"]["delay"] == "true":
             self.ui.radio_speed_usual.setChecked(True)

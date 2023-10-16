@@ -25,10 +25,7 @@
 - [] Update Website to v4 and host it
 - [x] Work on the basic design of the Android Application
 - [x] Automatically manage permissions for the Android Application
-- [x] Add some logical useful things like .. / .. videos downloaded, when using multiple downloads etc...
+- [] Add some logical useful things like .. / .. videos downloaded, when using multiple downloads etc...
 # STATUS:
 
-Priority:
-
-Android App / Implementing new functions
-
+See: [Status](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md)

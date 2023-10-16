@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1418</width>
-    <height>595</height>
+    <height>596</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -151,7 +151,7 @@ QTreeWidget::header {
 </string>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page_5">
       <layout class="QGridLayout" name="gridLayout_6">
@@ -1191,7 +1191,7 @@ QProgressBar::chunk {
     }</string>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="page_9">
           <layout class="QGridLayout" name="gridLayout_22">
@@ -1845,7 +1845,7 @@ QLineEdit:disabled {
                    <string notr="true"/>
                   </property>
                   <property name="text">
-                   <string>Not implemented</string>
+                   <string>Get Avatar</string>
                   </property>
                  </widget>
                 </item>
@@ -1917,7 +1917,7 @@ QLineEdit:disabled {
                 <item row="7" column="2">
                  <widget class="QLabel" name="label_user_videos_watched">
                   <property name="text">
-                   <string>Videos watched;</string>
+                   <string>Videos watched:</string>
                   </property>
                  </widget>
                 </item>
@@ -1999,7 +1999,7 @@ QLineEdit:disabled {
                 <item row="1" column="1">
                  <widget class="QLineEdit" name="lineedit_user_avatar">
                   <property name="placeholderText">
-                   <string>Not implemented yet</string>
+                   <string/>
                   </property>
                  </widget>
                 </item>

@@ -2,8 +2,8 @@
 
 ![Build](https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg)
 ![Build](https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/android.yml/badge.svg)
-### [Download Current Version 2.8](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/2.8)
-### [Development Status V2.9](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md)
+### [Download Current Version 2.9](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/2.9)
+### [Development Status V3.0](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md)
 ## Table of Contents
 
 - [What is Porn Fetch?](#what-is-porn-fetch)
@@ -95,18 +95,18 @@ This will automatically install Python3 (if not installed) and build the project
 The development for Android has a separate branch named "android."
 <br>Kivy is a whole new framework for me, so I will need my time to make it look good!
 
-### DOWNLOAD: [0.1](https://github.com/EchterAlsFake/Porn_Fetch/releases)
+### DOWNLOAD: [0.2](https://github.com/EchterAlsFake/Porn_Fetch/releases)
 
-Minimum needed API: 21
+#### Supported are Android 5-13 (in theory)
 
-**Requirements:**
-- Internet, Read and write to External storage (your internal /emulated/0/ drive)
+If you like to build it by yourself, use [this script](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/build_android.sh) 
 
-**Error reporting:**
-- You can report errors, but please include your Android version, a detailed description of what you did and if your device is rooted, because if it is, we can get additional logs :)
+It will install all dependencies and use the buildozer.spec from my repo.
+<br> YOU NEED UBUNTU 22.04.3 FOR BUILDING AND NOTHING ELSE!!!
 
-**Manual Building:**
-- A guide/script is in development
+
+
+
 
 # iOS
 ### iSH

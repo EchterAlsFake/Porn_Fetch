@@ -25,7 +25,7 @@ class Ui_Porn_Fetch_widget(object):
     def setupUi(self, Porn_Fetch_widget):
         if not Porn_Fetch_widget.objectName():
             Porn_Fetch_widget.setObjectName(u"Porn_Fetch_widget")
-        Porn_Fetch_widget.resize(1418, 595)
+        Porn_Fetch_widget.resize(1418, 596)
         Porn_Fetch_widget.setStyleSheet(u"QWidget {\n"
 "color: white;\n"
 "background-color: rgb(60, 60, 60);\n"
@@ -1777,10 +1777,10 @@ class Ui_Porn_Fetch_widget(object):
 
         self.retranslateUi(Porn_Fetch_widget)
 
-        self.stackedWidget_3.setCurrentIndex(1)
+        self.stackedWidget_3.setCurrentIndex(2)
         self.stackedWidget_2.setCurrentIndex(0)
         self.stackedWidget.setCurrentIndex(0)
-        self.stacked_widget_metadata.setCurrentIndex(0)
+        self.stacked_widget_metadata.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(Porn_Fetch_widget)
@@ -1892,7 +1892,7 @@ class Ui_Porn_Fetch_widget(object):
         self.button_get_metadata.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Get metadata", None))
         self.groupBox_6.setTitle(QCoreApplication.translate("Porn_Fetch_widget", u"User Metadata", None))
         self.button_user_information.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Get Information", None))
-        self.button_download_avatar.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Not implemented", None))
+        self.button_download_avatar.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Get Avatar", None))
         self.button_user_biography.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Get User's Biography", None))
         self.label_user_avatar.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Avatar:", None))
         self.label_user_relationship.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Relationship: ", None))
@@ -1900,7 +1900,7 @@ class Ui_Porn_Fetch_widget(object):
         self.label_user_name.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Name: ", None))
         self.label_user_video_views.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Video views:", None))
         self.label_user_hair_color.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Hair color: ", None))
-        self.label_user_videos_watched.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Videos watched;", None))
+        self.label_user_videos_watched.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Videos watched:", None))
         self.label_user_profile_views.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Profile views: ", None))
         self.label_user_hobbies.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Hobbies:", None))
         self.label_user_interested_in.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Interested in: ", None))
@@ -1910,7 +1910,7 @@ class Ui_Porn_Fetch_widget(object):
         self.label_user_gender.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Gender:", None))
         self.label_user_tattoos.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Tattoos:", None))
         self.label_user_turn_ons.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Turn ons:", None))
-        self.lineedit_user_avatar.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_widget", u"Not implemented yet", None))
+        self.lineedit_user_avatar.setPlaceholderText("")
         self.label_user_url.setText(QCoreApplication.translate("Porn_Fetch_widget", u"User URL: ", None))
         self.button_switch_video_metadata.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Video", None))
         self.button_switch_user_metadata.setText(QCoreApplication.translate("Porn_Fetch_widget", u"User", None))

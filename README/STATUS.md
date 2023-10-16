@@ -1,12 +1,12 @@
-# 2.9
+# 3.0
 
 
 ## TODO:
 
-- [] Add avatar in User metadata
 - [] Update Web application
-- [] Using threaded download method from 4.1.2
-- [x] Colorized logging
-- [] Updating API to v4.1.2
 - [] Working on the translations
-- [x] Automatic Kivy build script (Ubuntu 22.04)
+- [] Updating CLI (make a TUI from it)
+- [] Fixing the script for iOS (will take its time)
+- [] Building for macOS (I don't have an Apple product, so it needs some grey zones to be broken ^^)
+- [] Accent colors for main UI
+- [] Update Android Application

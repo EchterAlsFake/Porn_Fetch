@@ -9,7 +9,7 @@ accept = false
 [Porn_Fetch]
 default_quality = best
 default_path = ./
-default_threading = multiple
+default_threading = yes
 api_language = en
 delay = false
 hd = true
@@ -35,7 +35,7 @@ def logging(msg, level=0):
 
 
 def strip_title(title):
-    disallowed_chars = ["<", ">", ":", '"', "/", "\\", "|", "*", "0", "(", ")", "!", "?"]
+    disallowed_chars = ["<", ">", ":", '"', "/", "\\", "|", "*", "(", ")", "!", "?"]
 
     for disallowed_char in disallowed_chars:
         title = str(title.replace(disallowed_char, ""))
