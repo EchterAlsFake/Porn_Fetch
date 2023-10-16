@@ -1,5 +1,5 @@
 __author__ = "EchterAlsFake : Johannes Habel"
-__version__ = "2.8"
+__version__ = "2.9"
 __source__ = "https://github.com/EchterAlsFake/Porn_Fetch"
 __license__ = "GPL 3"
 
