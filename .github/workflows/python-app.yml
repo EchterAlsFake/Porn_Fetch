@@ -32,10 +32,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install pyinstaller
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        pip install --upgrade git+https://github.com/Egsagon/PHUB.git
     - name: Build with Pyinstaller
       run: |
         pyinstaller -F Porn_Fetch.py && cd dist && chmod +x Porn_Fetch && xvfb-run ./Porn_Fetch --version
     - name: Build CLI (Termux Test)
       run: | 
-        pyinstaller -F cli.py && cd dist && chmod +x cli
+        pyinstaller -F Porn_Fetch_CLI.py && cd dist && chmod +x Porn_Fetch_CLI.py
