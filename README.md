@@ -71,11 +71,11 @@ Automatic build script is available. Run the following in your terminal and sele
 - OpenSUSE
 
 ```
-wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/install.sh" | bash
+wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install.sh" | bash
 ```
 #### Termux:
 ```
-wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/install_termux.sh" | bash
+wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_termux.sh" | bash
 ```
 #### Windows:
 ```
@@ -84,7 +84,7 @@ wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/ins
 # Run Powershell ad Administrator and run the following command:
 $ Set-ExecutionPolicy RemoteSigned 
 $ Set-ExecutionPolicy Bypass -Scope Process
-$ Invoke-Expression (Invoke-WebRequest -Uri https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/install_windows.ps1 -UseBasicParsing).Content
+$ Invoke-Expression (Invoke-WebRequest -Uri https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_windows.ps1 -UseBasicParsing).Content
 
 This will automatically install Python3 (if not installed) and build the project
 ```
@@ -96,11 +96,11 @@ This will automatically install Python3 (if not installed) and build the project
 The development for Android has a separate branch named "android."
 <br>Kivy is a whole new framework for me, so I will need my time to make it look good!
 
-### DOWNLOAD: [0.2](https://github.com/EchterAlsFake/Porn_Fetch/releases)
+### DOWNLOAD: [0.2](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/2.9)
 
 #### Supported are Android 5-13 (in theory)
 
-If you like to build it by yourself, use [this script](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/build_android.sh) 
+If you like to build it by yourself, use [this script](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/scripts/build_android.sh) 
 
 It will install all dependencies and use the buildozer.spec from my repo.
 <br> YOU NEED UBUNTU 22.04.3 FOR BUILDING AND NOTHING ELSE!!!
@@ -181,6 +181,7 @@ I am just the developer. Nobody will get you in jail because you downloaded a vi
 
 ## Contributors:
 - [Egsagon](https://github.com/Egsagon)
+- [RSDCFGVHBJNKML](https://github.com/RSDCFGVHBJNKML)
 
 # License:
 LICENSE: [GPL 3](https://www.gnu.org/licenses/gpl-3.0.en.html)
