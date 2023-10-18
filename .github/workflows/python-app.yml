@@ -37,4 +37,4 @@ jobs:
         pyinstaller -F Porn_Fetch.py && cd dist && chmod +x Porn_Fetch && xvfb-run ./Porn_Fetch --version
     - name: Build CLI (Termux Test)
       run: | 
-        pyinstaller -F Porn_Fetch_CLI.py && cd dist && chmod +x Porn_Fetch_CLI.py
+        pyinstaller -F Porn_Fetch_CLI.py && cd dist && chmod +x Porn_Fetch_CLI
