@@ -1,0 +1,7 @@
+tqdm
+git+https://github.com/Egsagon/PHUB.git
+colorama
+bs4
+requests
+wget
+lxml

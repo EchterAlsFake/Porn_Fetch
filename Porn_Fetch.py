@@ -1,5 +1,5 @@
 __author__ = "EchterAlsFake : Johannes Habel"
-__version__ = "2.9"
+__version__ = "3.0"
 __source__ = "https://github.com/EchterAlsFake/Porn_Fetch"
 __license__ = "GPL 3"
 
@@ -7,13 +7,11 @@ import sys
 import argparse
 import os
 import random
-
 import requests  # See: https://github.com/psf/requests
 import math
-import src.icons
+import src.frontend.resource
 
-from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout, QRadioButton, QInputDialog,
-                               QCheckBox, QPushButton, QScrollArea, QGroupBox)
+from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout, QRadioButton, QCheckBox, QPushButton, QScrollArea, QGroupBox)
 from phub import Client, Quality, locals, errors  # See https://github.com/Egsagon/PHUB
 from phub.modules.download import threaded
 from hqporner_api import API  # See: https://github.com/EchterAlsFake/hqporner_api
@@ -21,13 +19,13 @@ from configparser import ConfigParser  # See: https://github.com/python/cpython/
 from PySide6 import QtCore  # See: https://pypi.org/project/PySide6/
 from PySide6.QtCore import QSemaphore
 from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QButtonGroup
-from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Slot
+from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Slot, QTranslator, QLocale
 from PySide6.QtGui import QIcon
 from moviepy.editor import VideoFileClip
-from src.license_agreement import Ui_Widget_License
-from src.Porn_Fetch_v3 import Ui_Porn_Fetch_widget
-from src.setup import setup_config_file, strip_title, logging
-from cli import CLI
+from src.frontend.license_agreement import Ui_Widget_License
+from src.frontend.Porn_Fetch_v3 import Ui_Porn_Fetch_widget
+from src.frontend.setup import setup_config_file, strip_title, logging
+from Porn_Fetch_CLI import CLI
 
 categories = [attr for attr in dir(locals.Category) if
               not callable(getattr(locals.Category, attr)) and not attr.startswith("__")]
@@ -370,10 +368,10 @@ class Widget(QWidget):
 
         self.ui = Ui_Porn_Fetch_widget()
         self.ui.setupUi(self)
-        self.ui.button_video.setIcon(QIcon(":/icons/download.svg"))
-        self.ui.button_account.setIcon(QIcon(":/icons/account.svg"))
-        self.ui.button_settings.setIcon(QIcon(":/icons/settings.svg"))
-        self.setWindowIcon(QIcon(":/icons/logo.png"))
+        self.ui.button_video.setIcon(QIcon(":/graphics/graphics/download.svg"))
+        self.ui.button_account.setIcon(QIcon(":/graphics/graphics/account.svg"))
+        self.ui.button_settings.setIcon(QIcon(":/graphics/graphics/settings.svg"))
+        self.setWindowIcon(QIcon(":/graphics/graphics/logo.png"))
         logging("Loaded Icons")
         self.ui.groupBox_3.setDisabled(True)
         self.button_group()  # Needs to be called before load_user_settings!
@@ -1101,6 +1099,25 @@ def main():
     setup_config_file()
 
     try:
+        """
+        I had many problems with coding in general where something didn't work but the translations are the hardest
+        thing I've ever done. Now where I've understand it it makes sense but the Qt documentation is a piece of shit...
+        """
+
+        # Obtain the system's locale
+        locale = QLocale.system()
+        # Get the language code (e.g., "de" for German)
+        language_code = locale.name().split('_')[0]
+        # Construct the path to the translation file
+        path = f":/translations/translations/{language_code}.qm"
+
+        translator = QTranslator(app)
+        if translator.load(path):
+            print(f"{language_code} translation loaded")
+            app.installTranslator(translator)
+        else:
+            print(f"Failed to load {language_code} translation")
+
         widget = License()  # Starts License widget and checks if license was accepted.
         widget.check_license_and_proceed()
 

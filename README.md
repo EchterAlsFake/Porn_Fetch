@@ -13,6 +13,7 @@
 - [Building from Source](#building-from-source)
 - [Android](#android)
 - [iOS](#ios)
+- [Translating](#translating)
 - [Useful Information](#useful-information)
 - [Legal Rights](#legal-rights)
 - [Credits](#credits)
@@ -105,9 +106,6 @@ It will install all dependencies and use the buildozer.spec from my repo.
 <br> YOU NEED UBUNTU 22.04.3 FOR BUILDING AND NOTHING ELSE!!!
 
 
-
-
-
 # iOS
 ### iSH
 You can use the CLI (Terminal version) of Porn Fetch via the App 'iSH.'
@@ -119,6 +117,21 @@ the best solution, but it works at least :)
 It's possible to convert the Kivy created APP for Android easily into an iOS application, but I don't have an Apple device, so I cannot compile or even test it. You can do it by yourself, and if you think you got a successful stable build, contact me via Discord: echteralsfake | EchterAlsFake#7164, and we can merge your build into the releases!
 
 (Your changes need to be documented in a FORK of my project. A recommendation would be a secondary iOS branch.)
+
+# Translating
+
+### Supported Languages:
+
+* German (3.0)
+* English
+
+If you want to port Porn Fetch into your language see [this Guide](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/TRANSLATING.md)
+> I appreciate it a lot, and you'll be of course credited in further releases and in the Readme!
+
+
+
+
+
 
 ## Useful Information
 - [Roadmap](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/ROADMAP.md)
