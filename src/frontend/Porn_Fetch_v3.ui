@@ -151,7 +151,7 @@ QTreeWidget::header {
 </string>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page_5">
       <layout class="QGridLayout" name="gridLayout_6">
@@ -254,7 +254,7 @@ QTreeWidget::header {
        <item row="0" column="0">
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>0</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="page">
           <layout class="QGridLayout" name="gridLayout_9">
@@ -492,6 +492,7 @@ QTreeWidget::header {
            </item>
           </layout>
          </widget>
+         <widget class="QWidget" name="page_11"/>
         </widget>
        </item>
       </layout>
@@ -2164,6 +2165,13 @@ li.checked::marker { content: &quot;\2612&quot;; }
             </property>
             <property name="text">
              <string>Account</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton">
+            <property name="text">
+             <string>Search Users / Pornstars</string>
             </property>
            </widget>
           </item>
