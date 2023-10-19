@@ -2,6 +2,8 @@ import os
 
 from configparser import ConfigParser
 from hue_shift import return_color, reset
+from moviepy.editor import VideoFileClip
+
 data = """
 [License]
 accept = false
@@ -23,6 +25,42 @@ search_limit = 50
 [UI]
 language = en
 """
+
+
+def approximately_equal(duration1, duration2, tolerance=5):
+    """
+    Check if two durations are approximately equal within a given tolerance.
+
+    Parameters:
+    - duration1, duration2: int or float, durations to compare.
+    - tolerance: int or float, acceptable difference between the durations.
+
+    Returns:
+    - bool, True if durations are approximately equal, False otherwise.
+    """
+    return abs(duration1 - duration2) <= tolerance
+
+
+def check_if_video_exists(video, output_path):
+    if os.path.exists(output_path):
+        logging("Found video... checking length...")
+        with VideoFileClip(output_path) as clip:
+            existing_duration = int(clip.duration)
+            video_duration = video.duration.seconds
+
+            logging(f"Existing video duration: {existing_duration}")
+            logging(f"Video duration: {video_duration}")
+
+            if approximately_equal(existing_duration, video_duration):
+                logging("Video already exists, skipping download...")
+                return True
+
+            else:
+                return False
+
+    else:
+        return False
+
 
 
 def logging(msg, level=0):

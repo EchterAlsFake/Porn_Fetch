@@ -21,10 +21,9 @@ from PySide6.QtCore import QSemaphore
 from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QButtonGroup
 from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Slot, QTranslator, QLocale
 from PySide6.QtGui import QIcon
-from moviepy.editor import VideoFileClip
 from src.frontend.license_agreement import Ui_Widget_License
 from src.frontend.Porn_Fetch_v3 import Ui_Porn_Fetch_widget
-from src.frontend.setup import setup_config_file, strip_title, logging
+from src.frontend.setup import setup_config_file, strip_title, logging, check_if_video_exists
 from Porn_Fetch_CLI import CLI
 
 categories = [attr for attr in dir(locals.Category) if
@@ -298,41 +297,6 @@ class CategoryFilterWindow(QWidget):
 
         with open('config.ini', 'w') as configfile:
             self.conf.write(configfile)
-
-
-def approximately_equal(duration1, duration2, tolerance=5):
-    """
-    Check if two durations are approximately equal within a given tolerance.
-
-    Parameters:
-    - duration1, duration2: int or float, durations to compare.
-    - tolerance: int or float, acceptable difference between the durations.
-
-    Returns:
-    - bool, True if durations are approximately equal, False otherwise.
-    """
-    return abs(duration1 - duration2) <= tolerance
-
-
-def check_if_video_exists(video, output_path):
-    if os.path.exists(output_path):
-        logging("Found video... checking length...")
-        with VideoFileClip(output_path) as clip:
-            existing_duration = int(clip.duration)
-            video_duration = video.duration.seconds
-
-            logging(f"Existing video duration: {existing_duration}")
-            logging(f"Video duration: {video_duration}")
-
-            if approximately_equal(existing_duration, video_duration):
-                logging("Video already exists, skipping download...")
-                return True
-
-            else:
-                return False
-
-    else:
-        return False
 
 
 class Widget(QWidget):
@@ -914,6 +878,9 @@ class Widget(QWidget):
         tree_widget_limit = self.ui.horizontalSlider.value()
         self.conf.set("Porn_Fetch", "search_limit", str(tree_widget_limit))
         output_path = self.ui.lineedit_default_output_path.text()
+        if not output_path.endswith(os.sep):
+            output_path += os.sep
+
         if os.path.exists(output_path):
             self.conf.set("Porn_Fetch", "default_path", output_path)
 

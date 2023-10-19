@@ -7,10 +7,8 @@ from configparser import ConfigParser
 from phub import Client, Quality, errors, download, display
 from colorama import *
 from hqporner_api import API
-from src.frontend.setup import logging, setup_config_file, strip_title
+from src.frontend.setup import logging, setup_config_file, strip_title, check_if_video_exists
 from hue_shift import return_color
-
-colour = return_color()
 
 
 class CLI:
@@ -36,13 +34,13 @@ class CLI:
 
     def main_menu(self):
         options = input(f"""
-{colour}1) Download Menu
-{colour}2) Searching
-{colour}3) Account
-{colour}4) Metadata
-{colour}5) Settings
-{colour}6) Exit
-{colour}----------------------=>:
+{return_color()}1) Download Menu
+{return_color()}2) Searching
+{return_color()}3) Account
+{return_color()}4) Metadata
+{return_color()}5) Settings
+{return_color()}6) Exit
+{return_color()}----------------------=>:
 """)
 
         if options == "1":
@@ -65,14 +63,14 @@ class CLI:
 
     def download_menu(self):
         options = input(f"""
-{colour}1) Download a video
-{colour}2) Download from file
-{colour}3) Download videos from model / channel
-{colour}4) Back
-{colour}----------------------=>:
+{return_color()}1) Download a video
+{return_color()}2) Download from file
+{return_color()}3) Download videos from model / channel
+{return_color()}4) Back
+{return_color()}----------------------=>:
 """)
         if options == "1":
-            url = input(f"{colour}Enter video url --=>:")
+            url = input(f"{return_color()}Enter video url --=>:")
             self.download_raw(url)
 
         elif options == "2":
@@ -85,7 +83,7 @@ class CLI:
             self.main_menu()
 
     def searching_menu(self):
-        search_query = input(f"{colour}Enter search query --=>:")
+        search_query = input(f"{return_color()}Enter search query --=>:")
         search_object = self.client.search(search_query)
         videos = []
         for video in search_object[0:self.search_limit]:
@@ -95,12 +93,12 @@ class CLI:
 
     def account_menu(self):
         options = input(f"""
-{colour}1) Login
-{colour}2) Get liked videos
-{colour}3) Get watched videos
-{colour}4) Get recommended videos
-{colour}5) Back
-{colour}----------------------=>:
+{return_color()}1) Login
+{return_color()}2) Get liked videos
+{return_color()}3) Get watched videos
+{return_color()}4) Get recommended videos
+{return_color()}5) Back
+{return_color()}----------------------=>:
 """)
 
         if options == "1":
@@ -120,10 +118,10 @@ class CLI:
 
     def metadata_menu(self):
         options = input(f"""
-{colour}1) User metadata
-{colour}2) Video metadata
-{colour}3) Back
-{colour}----------------------=>:""")
+{return_color()}1) User metadata
+{return_color()}2) Video metadata
+{return_color()}3) Back
+{return_color()}----------------------=>:""")
 
         if options == "1":
             self.metadata_user()
@@ -140,7 +138,7 @@ class CLI:
             return video_object
 
         except errors.URLError:
-            logging(f"{colour}Invalid URL: {url}", level=1)
+            logging(f"{return_color()}Invalid URL: {url}", level=1)
             return False
 
     def download_hqporner(self, url):
@@ -165,13 +163,15 @@ class CLI:
         logging("Stripping title")
         title = strip_title(title)
         output_path = self.output_path + title + ".mp4"
-        video.download(path=output_path, quality=self.quality, downloader=download.default,
-                       display=display.progress(color=True))
+
+        if not check_if_video_exists(video, output_path):
+            video.download(path=output_path, quality=self.quality,
+                           display=display.progress(color=True), downloader=download.threaded())
 
     def download_raw(self, url):
         if url.endswith(".html"):
             if self.threading:
-                thread = threading.Thread(target=self.download_hqporner, args=(url, ))
+                thread = threading.Thread(target=self.download_hqporner, args=(url,))
                 thread.start()
 
             else:
@@ -179,14 +179,14 @@ class CLI:
 
         else:
             if self.threading:
-                thread = threading.Thread(target=self.download_pornhub, args=(url, ))
+                thread = threading.Thread(target=self.download_pornhub, args=(url,))
                 thread.start()
 
             else:
                 self.download_pornhub(url)
 
     def download_from_file(self):
-        file = input(f"{colour}Please enter the file location --=>:")
+        file = input(f"{return_color()}Please enter the file location --=>:")
 
         if os.path.exists(file):
             with open(file, "r") as url_file:
@@ -195,11 +195,11 @@ class CLI:
                     self.download_raw(url)
 
         else:
-            logging(f"{colour}File doesn't exist...")
+            logging(f"{return_color()}File doesn't exist...")
             self.download_from_file()
 
     def download_from_model_channel(self):
-        model_url = input(f"{colour}Please enter the model url --=>:")
+        model_url = input(f"{return_color()}Please enter the model url --=>:")
         model_object = self.client.get_user(model_url)
 
         videos = model_object.videos
@@ -222,7 +222,7 @@ class CLI:
             logging(counter)
             print(f"{counter}) {selectable_video}")
 
-        choices_input = input(f"{colour}Please enter video you want to download (e.g., 1,2,5,14) -->: ")
+        choices_input = input(f"{return_color()}Please enter video you want to download (e.g., 1,2,5,14) -->: ")
         choices = choices_input.split(",")
 
         for choice in choices:
@@ -242,7 +242,7 @@ class CLI:
         self.iterator(videos)
 
     def metadata_video(self):
-        url = input(f"{colour}Enter video url --=>:")
+        url = input(f"{return_color()}Enter video url --=>:")
         video_object = self.test_video(url)
 
         tags_list = []
@@ -261,20 +261,20 @@ class CLI:
             tags_list.append(tag.name)
 
         print(f"""
-{colour}Title: {title}
-{colour}Author: {author}
-{colour}Pornstars: 
-{colour}Date: {date}
-{colour}Views: {views}
-{colour}Rating: Likes: {rating.up} | Dislikes: {rating.down}
-{colour}Duration: {duration}
-{colour}Categories: {categories}
-{colour}Image URL: {image_url}
-{colour}Tags: {tags_list}
+{return_color()}Title: {title}
+{return_color()}Author: {author}
+{return_color()}Pornstars: 
+{return_color()}Date: {date}
+{return_color()}Views: {views}
+{return_color()}Rating: Likes: {rating.up} | Dislikes: {rating.down}
+{return_color()}Duration: {duration}
+{return_color()}Categories: {categories}
+{return_color()}Image URL: {image_url}
+{return_color()}Tags: {tags_list}
 """)
 
     def metadata_user(self):
-        url = input(f"{colour}Enter user url --=>:")
+        url = input(f"{return_color()}Enter user url --=>:")
         user_object = self.client.get_user(url)
         info = user_object.info
         bio = user_object.bio
@@ -296,29 +296,29 @@ class CLI:
         videos_watched = info.get("Videos Watched")
 
         print(f"""
-{colour}Gender: {gender}
-{colour}Height: {height}
-{colour}Ethnicity: {ethnicity}
-{colour}Hair color: {hair_color}
-{colour}Fake breasts: {fake_breasts}
-{colour}Tattoos: {tattoos}
-{colour}Piercings: {piercings}
-{colour}Hobbies: {hobbies}
-{colour}Turn ons: {turns_on}
-{colour}Video views: {video_views}
-{colour}Profile views: {profile_views}
-{colour}Videos watched: {videos_watched}
-{colour}Interested in: {interested_in}
-{colour}Relationship: {relationship}
+{return_color()}Gender: {gender}
+{return_color()}Height: {height}
+{return_color()}Ethnicity: {ethnicity}
+{return_color()}Hair color: {hair_color}
+{return_color()}Fake breasts: {fake_breasts}
+{return_color()}Tattoos: {tattoos}
+{return_color()}Piercings: {piercings}
+{return_color()}Hobbies: {hobbies}
+{return_color()}Turn ons: {turns_on}
+{return_color()}Video views: {video_views}
+{return_color()}Profile views: {profile_views}
+{return_color()}Videos watched: {videos_watched}
+{return_color()}Interested in: {interested_in}
+{return_color()}Relationship: {relationship}
 
-{colour}Bio: {bio}
+{return_color()}Bio: {bio}
 
-{colour}Avatar: {avatar}
+{return_color()}Avatar: {avatar.url}
 
 """)
 
     def login(self):
-        username = input(f"{colour}Enter your PornHub's Username --=>:")
+        username = input(f"{return_color()}Enter your PornHub's Username --=>:")
         password = getpass.getpass("Enter your PornHub's Password: --=>:")
 
         try:
@@ -332,40 +332,40 @@ class CLI:
 
     def settings_menu(self):
         options = input(f"""
-{colour}------| Quality |------
-    {colour}Current Value: {self.quality}
+{return_color()}------| Quality |------
+    {return_color()}Current Value: {self.quality}
     
-    1{colour}) Change to BEST
-    {colour}2) Change to HALF
-    {colour}3) Change to WORST
+    1{return_color()}) Change to BEST
+    {return_color()}2) Change to HALF
+    {return_color()}3) Change to WORST
 
-{colour}------| Threading |------
-    {colour}Current Value: {self.threading}
+{return_color()}------| Threading |------
+    {return_color()}Current Value: {self.threading}
     
-    {colour}4) Enable
-    {colour}5) Disable
+    {return_color()}4) Enable
+    {return_color()}5) Disable
 
-{colour}------| Output path |------
-    {colour}Current Path: {self.output_path}
+{return_color()}------| Output path |------
+    {return_color()}Current Path: {self.output_path}
     
-    {colour}6) Change path
+    {return_color()}6) Change path
 
-{colour}------| Search result limit |------
-    {colour}Current Value: {self.search_limit}
+{return_color()}------| Search result limit |------
+    {return_color()}Current Value: {self.search_limit}
     
-    {colour}7) Change Limit
+    {return_color()}7) Change Limit
 
-{colour}------| Change Delay (Speed) |-------
-    {colour}Current Value: {self.delay}
+{return_color()}------| Change Delay (Speed) |-------
+    {return_color()}Current Value: {self.delay}
     
-    {colour}8) Enable Delay
-    {colour}9) Disable Delay
+    {return_color()}8) Enable Delay
+    {return_color()}9) Disable Delay
 
-{colour}------| Reset |------
+{return_color()}------| Reset |------
         
-    {colour}99) reset configuration
+    {return_color()}99) reset configuration
         
-{colour}B) Back
+{return_color()}B) Back
 """)
 
         if options == "1":
@@ -384,7 +384,7 @@ class CLI:
             self.conf.set("Porn_Fetch", "default_threading", "no")
 
         elif options == "6":
-            new_path = input(f"{colour}Enter new output path --=>:")
+            new_path = input(f"{return_color()}Enter new output path --=>:")
             if os.path.exists(new_path):
                 self.conf.set("Porn_Fetch", "default_path", new_path)
 
@@ -393,7 +393,7 @@ class CLI:
                 self.settings_menu()
 
         elif options == "7":
-            limit = input(f"{colour}Enter result limit (int) -->:")
+            limit = input(f"{return_color()}Enter result limit (int) -->:")
             if type(limit) == "int":
                 self.conf.set("Porn_Fetch", "search_limit", limit)
 
@@ -407,7 +407,7 @@ class CLI:
             self.conf.set("Porn_Fetch", "delay", "false")
 
         elif options == "99":
-            confirmation = input(f"{colour}Are you sure? (y/n): ")
+            confirmation = input(f"{return_color()}Are you sure? (y/n): ")
             if confirmation == "y":
                 setup_config_file(force=True)
 
