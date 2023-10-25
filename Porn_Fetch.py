@@ -209,9 +209,10 @@ class DownloadThread(QRunnable):
 
     def callback(self, pos, total):
         self.signals.progress.emit(pos, total)
+        print(f"progress: {pos / total}")
+
 
     def run(self):
-        self.semaphore.acquire()
         try:
             self.video.download(display=self.callback, quality=self.quality, path=self.output_path,
                                 downloader=threaded())
@@ -304,7 +305,6 @@ class Widget(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        setup_config_file()
         self.conf = ConfigParser()
         self.conf.read("config.ini")
 
@@ -328,7 +328,7 @@ class Widget(QWidget):
         self.selected_category_value = None
         self.selected_category = None
         self.threadpool = QThreadPool.globalInstance()
-        self.semaphore = QSemaphore(4)
+        self.semaphore = QSemaphore(1)
 
         self.ui = Ui_Porn_Fetch_widget()
         self.ui.setupUi(self)
@@ -343,6 +343,7 @@ class Widget(QWidget):
         self.load_search_filters()  # Must be called before load_user_settings!
         logging(f"Delay Set to: {self.delay}")
         logging(f"API Language is: {self.api_language}")
+        logging(f"Threading: {self.mode}")
         self.client = Client(language=self.api_language, delay=self.delay)
         self.ui.stackedWidget_3.setCurrentIndex(0)
         self.ui.stackedWidget.setCurrentIndex(0)
@@ -432,16 +433,6 @@ class Widget(QWidget):
         }
         self.buttonGroups = tuple(create_button_group(buttons) for buttons in button_groups.values())
 
-    def get_mode(self):
-
-        if self.ui.radio_threading_no.isChecked():
-            self.mode = False
-
-        elif self.ui.radio_threading_yes.isChecked():
-            self.mode = True
-
-        else:
-            self.mode = True
 
     def get_client_language(self):
         """Checks the radio button for the language used for the API client"""
@@ -549,7 +540,6 @@ class Widget(QWidget):
     def download(self, video, progress_bar, os_error_handle=False):
         quality = self.get_quality()
         logging(msg=f"Quality: {quality}")
-        self.get_mode()
         output_path = self.path
         logging(msg=f"Output path: {output_path}")
 
@@ -565,6 +555,7 @@ class Widget(QWidget):
 
         if not check_if_video_exists(video, output_path):
             try:
+                logging(f"Mode: {self.mode}")
                 if self.mode:
                     self.download_thread = DownloadThread(video, quality, output_path, self.semaphore)
                     self.download_thread.signals.progress.connect(
@@ -574,7 +565,7 @@ class Widget(QWidget):
 
                 elif not self.mode:
                     logging(msg="Running in main thread...")
-                    self.video.download.default(display=self.callback, quality=quality, path=output_path)
+                    self.video.download(downloader=threaded(), display=self.callback, quality=quality, path=output_path)
 
             except OSError:
                 logging(msg="OS Error: The file name is invalid for your system. Recreating a random int name...",
@@ -604,8 +595,7 @@ class Widget(QWidget):
             self.ui.lineedit_toal.setText(str(text))
 
             for url in content:
-                self.semaphore = QSemaphore(1)
-
+                self.semaphore.acquire()
                 if url.endswith(".html"):
                     logging(f"Downloading HQPorner.com: {url}")
                     self.download_raw(url, output_path=self.path)
@@ -613,7 +603,6 @@ class Widget(QWidget):
                     self.ui.lineedit_toal.setText(str(text))
 
                 else:
-                    self.get_mode()
                     logging(f"Downloading PornHub.com: {url}")
                     self.download(progress_bar=self.ui.progressbar_download, video=self.test_video(url))
 

@@ -83,7 +83,7 @@ def strip_title(title):
 
 def setup_config_file(force=False):
     sections = ['License', "Porn_Fetch", "UI"]
-    config_file = "../config.ini"
+    config_file = "config.ini"
 
     if force or not os.path.exists(config_file):
         with open(config_file, "w") as config:
@@ -98,5 +98,6 @@ def setup_config_file(force=False):
             with open(config_file, "w") as config:
                 config.write(data)
                 config.close()
+                print(f"Config written to: {config_file}")
 
     return True
