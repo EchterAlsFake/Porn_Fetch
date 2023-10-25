@@ -327,6 +327,8 @@ class Widget(QWidget):
         self.excluded_categories_str = None
         self.selected_category_value = None
         self.selected_category = None
+        self.videos_total = 0
+        self.video_downloaded = 0
         self.threadpool = QThreadPool.globalInstance()
         self.semaphore = QSemaphore(1)
 
@@ -589,9 +591,9 @@ class Widget(QWidget):
         file_path = self.ui.lineedit_file.text()
         with open(file_path, "r") as file:
             content = file.read().splitlines()
-            counter = 0
-            length = len(content)
-            text = f"Downloaded {counter} / {length} total videos"
+            self.videos_downloaded = 0
+            self.videos_total = len(content)
+            text = f"Downloaded {self.videos_downloaded} / {self.videos_total} total videos"
             self.ui.lineedit_toal.setText(str(text))
 
             for url in content:
@@ -599,8 +601,6 @@ class Widget(QWidget):
                 if url.endswith(".html"):
                     logging(f"Downloading HQPorner.com: {url}")
                     self.download_raw(url, output_path=self.path)
-                    counter += 1
-                    self.ui.lineedit_toal.setText(str(text))
 
                 else:
                     logging(f"Downloading PornHub.com: {url}")
@@ -608,6 +608,8 @@ class Widget(QWidget):
 
     def download_completed_slot(self):
         self.download_completed()
+        self.videos_downloaded += 1
+        self.ui.lineedit_toal.setText(f"Downloaded {self.videos_downloaded} / {self.videos_total} total videos")
         self.semaphore.release()
 
     def get_metadata(self):
