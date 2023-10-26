@@ -3,31 +3,77 @@ __version__ = "3.0"
 __source__ = "https://github.com/EchterAlsFake/Porn_Fetch"
 __license__ = "GPL 3"
 
-import sys
 import argparse
+import math
 import os
 import random
-import requests  # See: https://github.com/psf/requests
-import math
+import sys
 import src.frontend.resource
+from configparser import ConfigParser  # See: https://github.com/python/cpython/blob/main/Lib/configparser.py
 
-from PySide6.QtWidgets import (QVBoxLayout, QHBoxLayout, QRadioButton, QCheckBox, QPushButton, QScrollArea, QGroupBox)
+import requests  # See: https://github.com/psf/requests
+from PySide6 import QtCore  # See: https://pypi.org/project/PySide6/
+from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Slot, QTranslator, QLocale, QSemaphore
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import (QApplication, QWidget, QMessageBox, QTreeWidgetItem, QButtonGroup,
+                               QVBoxLayout, QHBoxLayout, QRadioButton, QCheckBox, QPushButton, QScrollArea, QGroupBox)
+from hqporner_api import API  # See: https://github.com/EchterAlsFake/hqporner_api
 from phub import Client, Quality, locals, errors  # See https://github.com/Egsagon/PHUB
 from phub.modules.download import threaded
-from hqporner_api import API  # See: https://github.com/EchterAlsFake/hqporner_api
-from configparser import ConfigParser  # See: https://github.com/python/cpython/blob/main/Lib/configparser.py
-from PySide6 import QtCore  # See: https://pypi.org/project/PySide6/
-from PySide6.QtCore import QSemaphore
-from PySide6.QtWidgets import QApplication, QWidget, QMessageBox, QTreeWidgetItem, QButtonGroup
-from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Slot, QTranslator, QLocale
-from PySide6.QtGui import QIcon
-from src.frontend.license_agreement import Ui_Widget_License
-from src.frontend.Porn_Fetch_v3 import Ui_Porn_Fetch_widget
-from src.frontend.setup import setup_config_file, strip_title, logging, check_if_video_exists
+
 from Porn_Fetch_CLI import CLI
+from src.frontend.Porn_Fetch_v3 import Ui_Porn_Fetch_widget
+from src.frontend.license_agreement import Ui_Widget_License
+from src.frontend.setup import setup_config_file, strip_title, logging, check_if_video_exists
 
 categories = [attr for attr in dir(locals.Category) if
               not callable(getattr(locals.Category, attr)) and not attr.startswith("__")]
+
+
+class License(QWidget):
+    """ License class to display the GPL 3 License to the user."""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.main_widget = None
+        self.conf = ConfigParser()
+        self.conf.read("config.ini")
+
+        self.ui = Ui_Widget_License()
+        self.ui.setupUi(self)
+        self.ui.button_accept.clicked.connect(self.accept)
+        self.ui.button_deny.clicked.connect(self.denied)
+
+    def check_license_and_proceed(self):
+        if self.conf["License"]["accept"] == "true":
+            self.show_main_window()
+
+        else:
+            logging(msg="License was not accepted.")
+            self.show()  # Show the license widget
+
+    def accept(self):
+        self.conf.set("License", "accept", "true")
+        with open("config.ini", "w") as config_file:
+            self.conf.write(config_file)
+            config_file.close()
+
+        self.show_main_window()
+
+    def denied(self):
+        self.conf.set("License", "accept", "false")
+        with open("config.ini", "w") as config_file:
+            self.conf.write(config_file)
+            config_file.close()
+            self.close()
+            sys.exit(0)
+
+    def show_main_window(self):
+        """ If license was accepted, the License widget is closed and the main widget will be shown."""
+        self.close()
+        logging(msg="Starting Porn Fetch main widget")
+        self.main_widget = Widget()
+        self.main_widget.show()
 
 
 def ui_popup(text):
@@ -108,6 +154,11 @@ def create_button_group(buttons):
     return button_group
 
 
+class WorkerSignals(QObject):
+    progress = Signal(int)
+    completed = Signal()
+
+
 class DownloadWorker(QRunnable):
     def __init__(self, video, quality, output_path):
         super(DownloadWorker, self).__init__()
@@ -128,64 +179,11 @@ class DownloadWorker(QRunnable):
             with open(final_path, 'wb') as file:
                 for chunk in response.iter_content(chunk_size=1024):
                     file.write(chunk)
-                    # emit progress signal here
                     progress = math.ceil((file.tell() / file_size) * 100)
                     self.signals.progress.emit(progress)
 
-        # emit completed signal here
         self.signals.completed.emit()
         # Thanks to ChatGPT for programming this function. I am just too stupid for math calculations ^^
-
-
-class License(QWidget):
-    """ License class to display the GPL 3 License to the user."""
-
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.main_widget = None
-        self.conf = ConfigParser()
-        self.conf.read("config.ini")
-
-        self.ui = Ui_Widget_License()
-        self.ui.setupUi(self)
-        self.ui.button_accept.clicked.connect(self.accept)
-        self.ui.button_deny.clicked.connect(self.denied)
-
-    def check_license_and_proceed(self):
-        if self.conf["License"]["accept"] == "true":
-            self.show_main_window()
-
-        else:
-            logging(msg="License was not accepted.")
-            self.show()  # Show the license widget
-
-    def accept(self):
-        self.conf.set("License", "accept", "true")
-        with open("config.ini", "w") as config_file:
-            self.conf.write(config_file)
-            config_file.close()
-
-        self.show_main_window()
-
-    def denied(self):
-        self.conf.set("License", "accept", "false")
-        with open("config.ini", "w") as config_file:
-            self.conf.write(config_file)
-            config_file.close()
-            self.close()
-            sys.exit(0)
-
-    def show_main_window(self):
-        """ If license was accepted, the License widget is closed and the main widget will be shown."""
-        self.close()
-        logging(msg="Starting Porn Fetch main widget")
-        self.main_widget = Widget()
-        self.main_widget.show()
-
-
-class WorkerSignals(QObject):
-    progress = Signal(int)
-    completed = Signal()
 
 
 class DownloadProgressSignal(QObject):
@@ -205,12 +203,11 @@ class DownloadThread(QRunnable):
         self.quality = quality
         self.output_path = output_path
         self.signals = DownloadProgressSignal()
+        self.signals_completed = WorkerSignals()
         self.semaphore = semaphore
 
     def callback(self, pos, total):
         self.signals.progress.emit(pos, total)
-        print(f"progress: {pos / total}")
-
 
     def run(self):
         try:
@@ -221,8 +218,8 @@ class DownloadThread(QRunnable):
             logging("OS Error in Download Thread!", level=1)
             self.video.download(display=self.callback, quality=self.quality, path="os_error_fixed_title.mp4",
                                 downloader=threaded())
-        finally:
-            self.semaphore.release()
+
+        self.signals_completed.completed.emit()
 
 
 class CategoryFilterWindow(QWidget):
@@ -328,7 +325,7 @@ class Widget(QWidget):
         self.selected_category_value = None
         self.selected_category = None
         self.videos_total = 0
-        self.video_downloaded = 0
+        self.videos_downloaded = 0
         self.threadpool = QThreadPool.globalInstance()
         self.semaphore = QSemaphore(1)
 
@@ -372,7 +369,6 @@ class Widget(QWidget):
         self.ui.button_category_filters.clicked.connect(self.set_category_filters)
         self.ui.button_speed_help.clicked.connect(help_speed)
         self.ui.button_threading_help.clicked.connect(help_threading)
-        self.ui.horizontalSlider.valueChanged.connect(self.updateLabel)
         self.ui.button_search_limit_help.clicked.connect(help_search_limit)
         self.ui.button_user_information.clicked.connect(self.get_user_information)
         self.ui.button_user_biography.clicked.connect(self.get_user_bio)
@@ -406,8 +402,13 @@ class Widget(QWidget):
     def switch_to_user_metadata(self):
         self.ui.stacked_widget_metadata.setCurrentIndex(1)
 
-    def updateLabel(self, value):
-        self.ui.label_current_value_slider.setText(f"Current Value: {value}")
+    def download_completed(self):
+        self.videos_downloaded += 1
+        logging("Download Completed!")
+        text = f"Downloaded: {self.videos_downloaded} / {self.videos_total}"
+        logging(text)
+        self.ui.lineedit_total.setText(str(text))
+        self.semaphore.release()
 
     def set_category_filters(self):
         """
@@ -434,7 +435,6 @@ class Widget(QWidget):
             "ui_language": []
         }
         self.buttonGroups = tuple(create_button_group(buttons) for buttons in button_groups.values())
-
 
     def get_client_language(self):
         """Checks the radio button for the language used for the API client"""
@@ -496,22 +496,13 @@ class Widget(QWidget):
 
         worker = DownloadWorker(video, quality, output_path)
         worker.signals.progress.connect(self.update_progressbar)
-        worker.signals.completed.connect(self.download_completed_slot)
-
+        worker.signals.completed.connect(self.download_completed)
         # Start the worker in a new thread
         self.threadpool.start(worker)
 
     @Slot(int)
     def update_progressbar(self, value):
         self.ui.progressbar_download.setValue(value)
-
-    @Slot()
-    def download_completed(self):
-        logging("Download Completed!")
-
-    def download_completed_slot(self):
-        self.download_completed()
-        self.semaphore.release()
 
     def test_video(self, url):
         if not self.custom_language:
@@ -527,6 +518,7 @@ class Widget(QWidget):
 
     def start(self):
         url = self.ui.lineedit_video_url.text()
+        self.videos_total += 1
         if url.endswith(".html"):
             self.download_raw(url, output_path=self.path)
 
@@ -554,14 +546,22 @@ class Widget(QWidget):
         output_path = f"{output_path}{title}.mp4"
 
         logging("Checking if video already exists...")
+        text = f"Downloaded {self.videos_downloaded} / {self.videos_total} total videos"
+        self.ui.lineedit_total.setText(str(text))
 
-        if not check_if_video_exists(video, output_path):
+        if check_if_video_exists(video, output_path):
+            self.videos_downloaded += 1
+            self.ui.lineedit_total.setText(str(text))
+
+        else:
             try:
+                self.ui.lineedit_total.setText(str(text))
                 logging(f"Mode: {self.mode}")
                 if self.mode:
                     self.download_thread = DownloadThread(video, quality, output_path, self.semaphore)
                     self.download_thread.signals.progress.connect(
                         lambda pos, total, pb=progress_bar: update_progressbar(pos, total, pb))
+                    self.download_thread.signals_completed.completed.connect(self.download_completed)
                     self.threadpool.start(self.download_thread)
                     logging(msg="Started download thread...")
 
@@ -591,10 +591,7 @@ class Widget(QWidget):
         file_path = self.ui.lineedit_file.text()
         with open(file_path, "r") as file:
             content = file.read().splitlines()
-            self.videos_downloaded = 0
-            self.videos_total = len(content)
-            text = f"Downloaded {self.videos_downloaded} / {self.videos_total} total videos"
-            self.ui.lineedit_toal.setText(str(text))
+            self.videos_total += len(content)
 
             for url in content:
                 self.semaphore.acquire()
@@ -605,12 +602,6 @@ class Widget(QWidget):
                 else:
                     logging(f"Downloading PornHub.com: {url}")
                     self.download(progress_bar=self.ui.progressbar_download, video=self.test_video(url))
-
-    def download_completed_slot(self):
-        self.download_completed()
-        self.videos_downloaded += 1
-        self.ui.lineedit_toal.setText(f"Downloaded {self.videos_downloaded} / {self.videos_total} total videos")
-        self.semaphore.release()
 
     def get_metadata(self):
         url = self.ui.lineedit_metadata_url.text()
@@ -797,16 +788,19 @@ class Widget(QWidget):
 
         logging("Got query object")
         add_to_tree_widget(tree_widget=self.ui.treeWidget, iterator=query_object, search_limit=int(self.search_limit))
-        self.download_tree()
 
     def download_tree(self):
+        video_objects = []
         for i in range(self.ui.treeWidget.topLevelItemCount()):
             item = self.ui.treeWidget.topLevelItem(i)
             checkState = item.checkState(0)
             if checkState == QtCore.Qt.Checked:
                 video_url = item.data(0, QtCore.Qt.UserRole)
-                video = self.test_video(video_url)
-                self.download(video, progress_bar=self.ui.progressbar_download)
+                video_objects.append(self.test_video(video_url))
+
+        self.videos_total += len(video_objects)
+        for video_object in video_objects:
+            self.download(video_object, progress_bar=self.ui.progressbar_download)
 
     def settings_tab(self):
         quality_options = {
@@ -868,6 +862,7 @@ class Widget(QWidget):
 
         tree_widget_limit = self.ui.horizontalSlider.value()
         self.conf.set("Porn_Fetch", "search_limit", str(tree_widget_limit))
+        self.conf.set("Porn_Fetch", "semaphore_limit", str(self.ui.slider_simultaneous_downloads.value()))
         output_path = self.ui.lineedit_default_output_path.text()
         if not output_path.endswith(os.sep):
             output_path += os.sep
@@ -950,7 +945,8 @@ class Widget(QWidget):
             self.mode = True
 
         self.search_limit = self.conf["Porn_Fetch"]["search_limit"]
-        self.updateLabel(self.search_limit)
+        self.semaphore = QSemaphore(int(self.conf["Porn_Fetch"]["semaphore_limit"]))
+        self.ui.slider_simultaneous_downloads.setValue(int(self.conf["Porn_Fetch"]["semaphore_limit"]))
         self.ui.horizontalSlider.setValue(int(self.search_limit))
         self.path = self.conf["Porn_Fetch"]["default_path"]
         self.ui.lineedit_default_output_path.setText(self.path)

@@ -21,6 +21,7 @@ production = false
 excluded_categories = 
 categories = 
 search_limit = 50
+semaphore_limit = 2
 
 [UI]
 language = en

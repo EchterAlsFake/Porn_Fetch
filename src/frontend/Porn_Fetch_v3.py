@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'Porn_Fetch_v3.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.5.2
+## Created by: Qt User Interface Compiler version 6.6.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -405,6 +405,9 @@ class Ui_Porn_Fetch_widget(object):
         self.gridLayout_7.addLayout(self.formLayout, 1, 0, 1, 1)
 
         self.stackedWidget.addWidget(self.page_2)
+        self.page_11 = QWidget()
+        self.page_11.setObjectName(u"page_11")
+        self.stackedWidget.addWidget(self.page_11)
 
         self.gridLayout_6.addWidget(self.stackedWidget, 0, 0, 1, 1)
 
@@ -617,6 +620,36 @@ class Ui_Porn_Fetch_widget(object):
         self.frame.setFrameShadow(QFrame.Raised)
         self.gridLayout_19 = QGridLayout(self.frame)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
+        self.label_custom_api = QLabel(self.frame)
+        self.label_custom_api.setObjectName(u"label_custom_api")
+
+        self.gridLayout_19.addWidget(self.label_custom_api, 0, 0, 1, 1)
+
+        self.lanel_simultaneous_min_info = QLabel(self.frame)
+        self.lanel_simultaneous_min_info.setObjectName(u"lanel_simultaneous_min_info")
+
+        self.gridLayout_19.addWidget(self.lanel_simultaneous_min_info, 3, 0, 1, 1)
+
+        self.label_search_limit = QLabel(self.frame)
+        self.label_search_limit.setObjectName(u"label_search_limit")
+
+        self.gridLayout_19.addWidget(self.label_search_limit, 2, 0, 1, 1)
+
+        self.button_search_limit_help = QPushButton(self.frame)
+        self.button_search_limit_help.setObjectName(u"button_search_limit_help")
+        self.button_search_limit_help.setStyleSheet(u"")
+
+        self.gridLayout_19.addWidget(self.button_search_limit_help, 2, 2, 1, 1)
+
+        self.slider_simultaneous_downloads = QSlider(self.frame)
+        self.slider_simultaneous_downloads.setObjectName(u"slider_simultaneous_downloads")
+        self.slider_simultaneous_downloads.setMinimum(1)
+        self.slider_simultaneous_downloads.setMaximum(6)
+        self.slider_simultaneous_downloads.setValue(2)
+        self.slider_simultaneous_downloads.setOrientation(Qt.Horizontal)
+
+        self.gridLayout_19.addWidget(self.slider_simultaneous_downloads, 3, 1, 1, 1)
+
         self.label_output_path = QLabel(self.frame)
         self.label_output_path.setObjectName(u"label_output_path")
 
@@ -628,21 +661,10 @@ class Ui_Porn_Fetch_widget(object):
 
         self.gridLayout_19.addWidget(self.lineedit_default_output_path, 1, 1, 1, 1)
 
-        self.label_2 = QLabel(self.frame)
-        self.label_2.setObjectName(u"label_2")
+        self.button_custom_api = QPushButton(self.frame)
+        self.button_custom_api.setObjectName(u"button_custom_api")
 
-        self.gridLayout_19.addWidget(self.label_2, 2, 0, 1, 1)
-
-        self.label_current_value_slider = QLabel(self.frame)
-        self.label_current_value_slider.setObjectName(u"label_current_value_slider")
-
-        self.gridLayout_19.addWidget(self.label_current_value_slider, 3, 1, 1, 1)
-
-        self.button_search_limit_help = QPushButton(self.frame)
-        self.button_search_limit_help.setObjectName(u"button_search_limit_help")
-        self.button_search_limit_help.setStyleSheet(u"")
-
-        self.gridLayout_19.addWidget(self.button_search_limit_help, 2, 2, 1, 1)
+        self.gridLayout_19.addWidget(self.button_custom_api, 0, 2, 1, 1)
 
         self.horizontalSlider = QSlider(self.frame)
         self.horizontalSlider.setObjectName(u"horizontalSlider")
@@ -653,20 +675,15 @@ class Ui_Porn_Fetch_widget(object):
 
         self.gridLayout_19.addWidget(self.horizontalSlider, 2, 1, 1, 1)
 
-        self.label_custom_api = QLabel(self.frame)
-        self.label_custom_api.setObjectName(u"label_custom_api")
-
-        self.gridLayout_19.addWidget(self.label_custom_api, 0, 0, 1, 1)
-
         self.lineedit_custom_api_language = QLineEdit(self.frame)
         self.lineedit_custom_api_language.setObjectName(u"lineedit_custom_api_language")
 
         self.gridLayout_19.addWidget(self.lineedit_custom_api_language, 0, 1, 1, 1)
 
-        self.button_custom_api = QPushButton(self.frame)
-        self.button_custom_api.setObjectName(u"button_custom_api")
+        self.label_simultaneous_max = QLabel(self.frame)
+        self.label_simultaneous_max.setObjectName(u"label_simultaneous_max")
 
-        self.gridLayout_19.addWidget(self.button_custom_api, 0, 2, 1, 1)
+        self.gridLayout_19.addWidget(self.label_simultaneous_max, 3, 2, 1, 1)
 
 
         self.gridLayout_12.addWidget(self.frame, 2, 0, 1, 1)
@@ -916,9 +933,10 @@ class Ui_Porn_Fetch_widget(object):
         self.gridLayout_21.setObjectName(u"gridLayout_21")
         self.gridLayout_17 = QGridLayout()
         self.gridLayout_17.setObjectName(u"gridLayout_17")
-        self.lineedit_tags = QLineEdit(self.groupBox_5)
-        self.lineedit_tags.setObjectName(u"lineedit_tags")
-        self.lineedit_tags.setStyleSheet(u"QLineEdit {\n"
+        self.lineedit_duration = QLineEdit(self.groupBox_5)
+        self.lineedit_duration.setObjectName(u"lineedit_duration")
+        self.lineedit_duration.setAutoFillBackground(False)
+        self.lineedit_duration.setStyleSheet(u"QLineEdit {\n"
 "    border: 2px solid #757575;\n"
 "    border-radius: 12px;\n"
 "    padding: 0 8px;\n"
@@ -937,41 +955,16 @@ class Ui_Porn_Fetch_widget(object):
 "    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */\n"
 "    border-color: #aaaaaa;\n"
 "}")
-        self.lineedit_tags.setReadOnly(True)
+        self.lineedit_duration.setReadOnly(True)
 
-        self.gridLayout_17.addWidget(self.lineedit_tags, 4, 1, 1, 1)
+        self.gridLayout_17.addWidget(self.lineedit_duration, 3, 3, 1, 1)
 
-        self.lineedit_title = QLineEdit(self.groupBox_5)
-        self.lineedit_title.setObjectName(u"lineedit_title")
-        self.lineedit_title.setStyleSheet(u"QLineEdit {\n"
-"    border: 2px solid #757575;\n"
-"    border-radius: 12px;\n"
-"    padding: 0 8px;\n"
-"    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
-"    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
-"    font-size: 16px;\n"
-"    height: 20px;\n"
-"}\n"
-"\n"
-"QLineEdit:focus {\n"
-"    border-color: rgb(107, 0, 255)\n"
-"}\n"
-"\n"
-"QLineEdit:disabled {\n"
-"    background: #444444;  /* setzt den Hintergrund auf ein dunkles Grau, wenn das QLineEdit deaktiviert ist */\n"
-"    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */\n"
-"    border-color: #aaaaaa;\n"
-"}")
-        self.lineedit_title.setReadOnly(True)
-
-        self.gridLayout_17.addWidget(self.lineedit_title, 1, 1, 1, 1)
-
-        self.label_author = QLabel(self.groupBox_5)
-        self.label_author.setObjectName(u"label_author")
-        self.label_author.setStyleSheet(u"QLabel {\n"
+        self.label_views = QLabel(self.groupBox_5)
+        self.label_views.setObjectName(u"label_views")
+        self.label_views.setStyleSheet(u"QLabel {\n"
 "    color: white;\n"
 "    font-size: 16px;\n"
-"	margin-right: 35px;\n"
+"	margin-right: 44px;\n"
 "}\n"
 "\n"
 "QLabel#Title {\n"
@@ -986,54 +979,7 @@ class Ui_Porn_Fetch_widget(object):
 "}\n"
 "")
 
-        self.gridLayout_17.addWidget(self.label_author, 0, 2, 1, 1)
-
-        self.label_likes = QLabel(self.groupBox_5)
-        self.label_likes.setObjectName(u"label_likes")
-        self.label_likes.setStyleSheet(u"QLabel {\n"
-"    color: white;\n"
-"    font-size: 16px;\n"
-"	margin-right: 49px;\n"
-"}\n"
-"\n"
-"QLabel#Title {\n"
-"    color: #212121;\n"
-"    font-size: 24px;\n"
-"    font-weight: bold;\n"
-"}\n"
-"\n"
-"QLabel#Subtitle {\n"
-"    color: #757575;\n"
-"    font-size: 20px;\n"
-"}\n"
-"")
-
-        self.gridLayout_17.addWidget(self.label_likes, 3, 0, 1, 1)
-
-        self.lineedit_likes = QLineEdit(self.groupBox_5)
-        self.lineedit_likes.setObjectName(u"lineedit_likes")
-        self.lineedit_likes.setStyleSheet(u"QLineEdit {\n"
-"    border: 2px solid #757575;\n"
-"    border-radius: 12px;\n"
-"    padding: 0 8px;\n"
-"    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
-"    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
-"    font-size: 16px;\n"
-"    height: 20px;\n"
-"}\n"
-"\n"
-"QLineEdit:focus {\n"
-"    border-color: rgb(107, 0, 255)\n"
-"}\n"
-"\n"
-"QLineEdit:disabled {\n"
-"    background: #444444;  /* setzt den Hintergrund auf ein dunkles Grau, wenn das QLineEdit deaktiviert ist */\n"
-"    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */\n"
-"    border-color: #aaaaaa;\n"
-"}")
-        self.lineedit_likes.setReadOnly(True)
-
-        self.gridLayout_17.addWidget(self.lineedit_likes, 3, 1, 1, 1)
+        self.gridLayout_17.addWidget(self.label_views, 1, 2, 1, 1)
 
         self.label_title = QLabel(self.groupBox_5)
         self.label_title.setObjectName(u"label_title")
@@ -1079,38 +1025,9 @@ class Ui_Porn_Fetch_widget(object):
 
         self.gridLayout_17.addWidget(self.label_image_url, 2, 0, 1, 1)
 
-        self.lineedit_metadata_url = QLineEdit(self.groupBox_5)
-        self.lineedit_metadata_url.setObjectName(u"lineedit_metadata_url")
-        self.lineedit_metadata_url.setStyleSheet(u"QLineEdit {\n"
-"    border: 2px solid #757575;\n"
-"    border-radius: 12px;\n"
-"    padding: 0 8px;\n"
-"    background: rgb(94, 92, 100); \n"
-"    color: #FFFFFF; \n"
-"    font-size: 16px;\n"
-"    height: 20px;\n"
-"}\n"
-"\n"
-"QLineEdit:focus {\n"
-"    border-color: rgb(107, 0, 255)\n"
-"}\n"
-"\n"
-"QLineEdit:disabled {\n"
-"    background: #444444;  \n"
-"    color: #aaaaaa; \n"
-"    border-color: #aaaaaa;\n"
-"}")
-
-        self.gridLayout_17.addWidget(self.lineedit_metadata_url, 0, 1, 1, 1)
-
-        self.label = QLabel(self.groupBox_5)
-        self.label.setObjectName(u"label")
-
-        self.gridLayout_17.addWidget(self.label, 5, 0, 1, 1)
-
-        self.lineedit_actress = QLineEdit(self.groupBox_5)
-        self.lineedit_actress.setObjectName(u"lineedit_actress")
-        self.lineedit_actress.setStyleSheet(u"QLineEdit {\n"
+        self.lineedit_date = QLineEdit(self.groupBox_5)
+        self.lineedit_date.setObjectName(u"lineedit_date")
+        self.lineedit_date.setStyleSheet(u"QLineEdit {\n"
 "    border: 2px solid #757575;\n"
 "    border-radius: 12px;\n"
 "    padding: 0 8px;\n"
@@ -1129,14 +1046,56 @@ class Ui_Porn_Fetch_widget(object):
 "    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */\n"
 "    border-color: #aaaaaa;\n"
 "}")
-        self.lineedit_actress.setReadOnly(True)
+        self.lineedit_date.setReadOnly(True)
 
-        self.gridLayout_17.addWidget(self.lineedit_actress, 5, 1, 1, 1)
+        self.gridLayout_17.addWidget(self.lineedit_date, 2, 3, 1, 1)
 
-        self.label_video_metadata_url = QLabel(self.groupBox_5)
-        self.label_video_metadata_url.setObjectName(u"label_video_metadata_url")
+        self.lineedit_tags = QLineEdit(self.groupBox_5)
+        self.lineedit_tags.setObjectName(u"lineedit_tags")
+        self.lineedit_tags.setStyleSheet(u"QLineEdit {\n"
+"    border: 2px solid #757575;\n"
+"    border-radius: 12px;\n"
+"    padding: 0 8px;\n"
+"    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
+"    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
+"    font-size: 16px;\n"
+"    height: 20px;\n"
+"}\n"
+"\n"
+"QLineEdit:focus {\n"
+"    border-color: rgb(107, 0, 255)\n"
+"}\n"
+"\n"
+"QLineEdit:disabled {\n"
+"    background: #444444;  /* setzt den Hintergrund auf ein dunkles Grau, wenn das QLineEdit deaktiviert ist */\n"
+"    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */\n"
+"    border-color: #aaaaaa;\n"
+"}")
+        self.lineedit_tags.setReadOnly(True)
 
-        self.gridLayout_17.addWidget(self.label_video_metadata_url, 0, 0, 1, 1)
+        self.gridLayout_17.addWidget(self.lineedit_tags, 4, 1, 1, 1)
+
+        self.label_likes = QLabel(self.groupBox_5)
+        self.label_likes.setObjectName(u"label_likes")
+        self.label_likes.setStyleSheet(u"QLabel {\n"
+"    color: white;\n"
+"    font-size: 16px;\n"
+"	margin-right: 49px;\n"
+"}\n"
+"\n"
+"QLabel#Title {\n"
+"    color: #212121;\n"
+"    font-size: 24px;\n"
+"    font-weight: bold;\n"
+"}\n"
+"\n"
+"QLabel#Subtitle {\n"
+"    color: #757575;\n"
+"    font-size: 20px;\n"
+"}\n"
+"")
+
+        self.gridLayout_17.addWidget(self.label_likes, 3, 0, 1, 1)
 
         self.label_tags = QLabel(self.groupBox_5)
         self.label_tags.setObjectName(u"label_tags")
@@ -1159,78 +1118,6 @@ class Ui_Porn_Fetch_widget(object):
 "")
 
         self.gridLayout_17.addWidget(self.label_tags, 4, 0, 1, 1)
-
-        self.lineedit_image_url = QLineEdit(self.groupBox_5)
-        self.lineedit_image_url.setObjectName(u"lineedit_image_url")
-        self.lineedit_image_url.setStyleSheet(u"QLineEdit {\n"
-"    border: 2px solid #757575;\n"
-"    border-radius: 12px;\n"
-"    padding: 0 8px;\n"
-"    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
-"    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
-"    font-size: 16px;\n"
-"    height: 20px;\n"
-"}\n"
-"\n"
-"QLineEdit:focus {\n"
-"    border-color: rgb(107, 0, 255)\n"
-"}\n"
-"\n"
-"QLineEdit:disabled {\n"
-"    background: #444444;  /* setzt den Hintergrund auf ein dunkles Grau, wenn das QLineEdit deaktiviert ist */\n"
-"    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */\n"
-"    border-color: #aaaaaa;\n"
-"}")
-        self.lineedit_image_url.setReadOnly(True)
-
-        self.gridLayout_17.addWidget(self.lineedit_image_url, 2, 1, 1, 1)
-
-        self.lineedit_author = QLineEdit(self.groupBox_5)
-        self.lineedit_author.setObjectName(u"lineedit_author")
-        self.lineedit_author.setStyleSheet(u"QLineEdit {\n"
-"    border: 2px solid #757575;\n"
-"    border-radius: 12px;\n"
-"    padding: 0 8px;\n"
-"    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
-"    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
-"    font-size: 16px;\n"
-"    height: 20px;\n"
-"}\n"
-"\n"
-"QLineEdit:focus {\n"
-"    border-color: rgb(107, 0, 255)\n"
-"}\n"
-"\n"
-"QLineEdit:disabled {\n"
-"    background: #444444;  /* setzt den Hintergrund auf ein dunkles Grau, wenn das QLineEdit deaktiviert ist */\n"
-"    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */\n"
-"    border-color: #aaaaaa;\n"
-"}")
-        self.lineedit_author.setReadOnly(True)
-
-        self.gridLayout_17.addWidget(self.lineedit_author, 0, 3, 1, 1)
-
-        self.label_views = QLabel(self.groupBox_5)
-        self.label_views.setObjectName(u"label_views")
-        self.label_views.setStyleSheet(u"QLabel {\n"
-"    color: white;\n"
-"    font-size: 16px;\n"
-"	margin-right: 44px;\n"
-"}\n"
-"\n"
-"QLabel#Title {\n"
-"    color: #212121;\n"
-"    font-size: 24px;\n"
-"    font-weight: bold;\n"
-"}\n"
-"\n"
-"QLabel#Subtitle {\n"
-"    color: #757575;\n"
-"    font-size: 20px;\n"
-"}\n"
-"")
-
-        self.gridLayout_17.addWidget(self.label_views, 1, 2, 1, 1)
 
         self.lineedit_views = QLineEdit(self.groupBox_5)
         self.lineedit_views.setObjectName(u"lineedit_views")
@@ -1257,6 +1144,80 @@ class Ui_Porn_Fetch_widget(object):
 
         self.gridLayout_17.addWidget(self.lineedit_views, 1, 3, 1, 1)
 
+        self.lineedit_metadata_url = QLineEdit(self.groupBox_5)
+        self.lineedit_metadata_url.setObjectName(u"lineedit_metadata_url")
+        self.lineedit_metadata_url.setStyleSheet(u"QLineEdit {\n"
+"    border: 2px solid #757575;\n"
+"    border-radius: 12px;\n"
+"    padding: 0 8px;\n"
+"    background: rgb(94, 92, 100); \n"
+"    color: #FFFFFF; \n"
+"    font-size: 16px;\n"
+"    height: 20px;\n"
+"}\n"
+"\n"
+"QLineEdit:focus {\n"
+"    border-color: rgb(107, 0, 255)\n"
+"}\n"
+"\n"
+"QLineEdit:disabled {\n"
+"    background: #444444;  \n"
+"    color: #aaaaaa; \n"
+"    border-color: #aaaaaa;\n"
+"}")
+
+        self.gridLayout_17.addWidget(self.lineedit_metadata_url, 0, 1, 1, 1)
+
+        self.lineedit_likes = QLineEdit(self.groupBox_5)
+        self.lineedit_likes.setObjectName(u"lineedit_likes")
+        self.lineedit_likes.setStyleSheet(u"QLineEdit {\n"
+"    border: 2px solid #757575;\n"
+"    border-radius: 12px;\n"
+"    padding: 0 8px;\n"
+"    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
+"    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
+"    font-size: 16px;\n"
+"    height: 20px;\n"
+"}\n"
+"\n"
+"QLineEdit:focus {\n"
+"    border-color: rgb(107, 0, 255)\n"
+"}\n"
+"\n"
+"QLineEdit:disabled {\n"
+"    background: #444444;  /* setzt den Hintergrund auf ein dunkles Grau, wenn das QLineEdit deaktiviert ist */\n"
+"    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */\n"
+"    border-color: #aaaaaa;\n"
+"}")
+        self.lineedit_likes.setReadOnly(True)
+
+        self.gridLayout_17.addWidget(self.lineedit_likes, 3, 1, 1, 1)
+
+        self.lineedit_title = QLineEdit(self.groupBox_5)
+        self.lineedit_title.setObjectName(u"lineedit_title")
+        self.lineedit_title.setStyleSheet(u"QLineEdit {\n"
+"    border: 2px solid #757575;\n"
+"    border-radius: 12px;\n"
+"    padding: 0 8px;\n"
+"    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
+"    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
+"    font-size: 16px;\n"
+"    height: 20px;\n"
+"}\n"
+"\n"
+"QLineEdit:focus {\n"
+"    border-color: rgb(107, 0, 255)\n"
+"}\n"
+"\n"
+"QLineEdit:disabled {\n"
+"    background: #444444;  /* setzt den Hintergrund auf ein dunkles Grau, wenn das QLineEdit deaktiviert ist */\n"
+"    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */\n"
+"    border-color: #aaaaaa;\n"
+"}")
+        self.lineedit_title.setReadOnly(True)
+
+        self.gridLayout_17.addWidget(self.lineedit_title, 1, 1, 1, 1)
+
         self.label_date = QLabel(self.groupBox_5)
         self.label_date.setObjectName(u"label_date")
         self.label_date.setStyleSheet(u"QLabel {\n"
@@ -1279,9 +1240,36 @@ class Ui_Porn_Fetch_widget(object):
 
         self.gridLayout_17.addWidget(self.label_date, 2, 2, 1, 1)
 
-        self.lineedit_date = QLineEdit(self.groupBox_5)
-        self.lineedit_date.setObjectName(u"lineedit_date")
-        self.lineedit_date.setStyleSheet(u"QLineEdit {\n"
+        self.label_video_metadata_url = QLabel(self.groupBox_5)
+        self.label_video_metadata_url.setObjectName(u"label_video_metadata_url")
+
+        self.gridLayout_17.addWidget(self.label_video_metadata_url, 0, 0, 1, 1)
+
+        self.label_author = QLabel(self.groupBox_5)
+        self.label_author.setObjectName(u"label_author")
+        self.label_author.setStyleSheet(u"QLabel {\n"
+"    color: white;\n"
+"    font-size: 16px;\n"
+"	margin-right: 35px;\n"
+"}\n"
+"\n"
+"QLabel#Title {\n"
+"    color: #212121;\n"
+"    font-size: 24px;\n"
+"    font-weight: bold;\n"
+"}\n"
+"\n"
+"QLabel#Subtitle {\n"
+"    color: #757575;\n"
+"    font-size: 20px;\n"
+"}\n"
+"")
+
+        self.gridLayout_17.addWidget(self.label_author, 0, 2, 1, 1)
+
+        self.lineedit_author = QLineEdit(self.groupBox_5)
+        self.lineedit_author.setObjectName(u"lineedit_author")
+        self.lineedit_author.setStyleSheet(u"QLineEdit {\n"
 "    border: 2px solid #757575;\n"
 "    border-radius: 12px;\n"
 "    padding: 0 8px;\n"
@@ -1300,9 +1288,9 @@ class Ui_Porn_Fetch_widget(object):
 "    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */\n"
 "    border-color: #aaaaaa;\n"
 "}")
-        self.lineedit_date.setReadOnly(True)
+        self.lineedit_author.setReadOnly(True)
 
-        self.gridLayout_17.addWidget(self.lineedit_date, 2, 3, 1, 1)
+        self.gridLayout_17.addWidget(self.lineedit_author, 0, 3, 1, 1)
 
         self.label_duration = QLabel(self.groupBox_5)
         self.label_duration.setObjectName(u"label_duration")
@@ -1326,10 +1314,9 @@ class Ui_Porn_Fetch_widget(object):
 
         self.gridLayout_17.addWidget(self.label_duration, 3, 2, 1, 1)
 
-        self.lineedit_duration = QLineEdit(self.groupBox_5)
-        self.lineedit_duration.setObjectName(u"lineedit_duration")
-        self.lineedit_duration.setAutoFillBackground(False)
-        self.lineedit_duration.setStyleSheet(u"QLineEdit {\n"
+        self.lineedit_image_url = QLineEdit(self.groupBox_5)
+        self.lineedit_image_url.setObjectName(u"lineedit_image_url")
+        self.lineedit_image_url.setStyleSheet(u"QLineEdit {\n"
 "    border: 2px solid #757575;\n"
 "    border-radius: 12px;\n"
 "    padding: 0 8px;\n"
@@ -1348,40 +1335,42 @@ class Ui_Porn_Fetch_widget(object):
 "    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */\n"
 "    border-color: #aaaaaa;\n"
 "}")
-        self.lineedit_duration.setReadOnly(True)
+        self.lineedit_image_url.setReadOnly(True)
 
-        self.gridLayout_17.addWidget(self.lineedit_duration, 3, 3, 1, 1)
+        self.gridLayout_17.addWidget(self.lineedit_image_url, 2, 1, 1, 1)
+
+        self.label_actress = QLabel(self.groupBox_5)
+        self.label_actress.setObjectName(u"label_actress")
+
+        self.gridLayout_17.addWidget(self.label_actress, 4, 2, 1, 1)
+
+        self.lineedit_actress = QLineEdit(self.groupBox_5)
+        self.lineedit_actress.setObjectName(u"lineedit_actress")
+        self.lineedit_actress.setStyleSheet(u"QLineEdit {\n"
+"    border: 2px solid #757575;\n"
+"    border-radius: 12px;\n"
+"    padding: 0 8px;\n"
+"    background: rgb(94, 92, 100);  /* setzt den Hintergrund auf Schwarz */\n"
+"    color: #FFFFFF;  /* setzt die Textfarbe auf Wei\u00df */\n"
+"    font-size: 16px;\n"
+"    height: 20px;\n"
+"}\n"
+"\n"
+"QLineEdit:focus {\n"
+"    border-color: rgb(107, 0, 255)\n"
+"}\n"
+"\n"
+"QLineEdit:disabled {\n"
+"    background: #444444;  /* setzt den Hintergrund auf ein dunkles Grau, wenn das QLineEdit deaktiviert ist */\n"
+"    color: #aaaaaa;  /* setzt die Textfarbe auf ein helles Grau, wenn das QLineEdit deaktiviert ist */\n"
+"    border-color: #aaaaaa;\n"
+"}")
+        self.lineedit_actress.setReadOnly(True)
+
+        self.gridLayout_17.addWidget(self.lineedit_actress, 4, 3, 1, 1)
 
 
         self.gridLayout_21.addLayout(self.gridLayout_17, 0, 0, 1, 2)
-
-        self.button_download_thumbnail = QPushButton(self.groupBox_5)
-        self.button_download_thumbnail.setObjectName(u"button_download_thumbnail")
-        self.button_download_thumbnail.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_download_thumbnail.setStyleSheet(u"QPushButton {\n"
-"        background-color: #5a2a82; /* base violet color */\n"
-"        color: #ffffff; /* white text */\n"
-"        border: none;\n"
-"        border-radius: 10px; /* reduced rounded corner radius */\n"
-"        padding: 5px 10px; /* reduced button padding */\n"
-"        font-size: 12px;\n"
-"        outline: none;\n"
-"    }\n"
-"    \n"
-"    QPushButton:hover {\n"
-"        background-color: #7b3ca3; /* slightly lighter violet when hovered */\n"
-"    }\n"
-"\n"
-"    QPushButton:pressed {\n"
-"        background-color: #481f61; /* darker violet when pressed */\n"
-"    }\n"
-"\n"
-"    QPushButton:disabled {\n"
-"        background-color: #3f1d4d; /* even darker shade when button is disabled */\n"
-"        color: #8a7b9a; /* greyish text */\n"
-"    }")
-
-        self.gridLayout_21.addWidget(self.button_download_thumbnail, 1, 0, 1, 1)
 
         self.button_get_metadata = QPushButton(self.groupBox_5)
         self.button_get_metadata.setObjectName(u"button_get_metadata")
@@ -1410,6 +1399,34 @@ class Ui_Porn_Fetch_widget(object):
 "    }")
 
         self.gridLayout_21.addWidget(self.button_get_metadata, 1, 1, 1, 1)
+
+        self.button_download_thumbnail = QPushButton(self.groupBox_5)
+        self.button_download_thumbnail.setObjectName(u"button_download_thumbnail")
+        self.button_download_thumbnail.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_download_thumbnail.setStyleSheet(u"QPushButton {\n"
+"        background-color: #5a2a82; /* base violet color */\n"
+"        color: #ffffff; /* white text */\n"
+"        border: none;\n"
+"        border-radius: 10px; /* reduced rounded corner radius */\n"
+"        padding: 5px 10px; /* reduced button padding */\n"
+"        font-size: 12px;\n"
+"        outline: none;\n"
+"    }\n"
+"    \n"
+"    QPushButton:hover {\n"
+"        background-color: #7b3ca3; /* slightly lighter violet when hovered */\n"
+"    }\n"
+"\n"
+"    QPushButton:pressed {\n"
+"        background-color: #481f61; /* darker violet when pressed */\n"
+"    }\n"
+"\n"
+"    QPushButton:disabled {\n"
+"        background-color: #3f1d4d; /* even darker shade when button is disabled */\n"
+"        color: #8a7b9a; /* greyish text */\n"
+"    }")
+
+        self.gridLayout_21.addWidget(self.button_download_thumbnail, 1, 0, 1, 1)
 
 
         self.gridLayout_22.addWidget(self.groupBox_5, 0, 0, 1, 1)
@@ -1710,6 +1727,11 @@ class Ui_Porn_Fetch_widget(object):
 
         self.horizontalLayout.addWidget(self.button_account)
 
+        self.pushButton = QPushButton(self.group_status)
+        self.pushButton.setObjectName(u"pushButton")
+
+        self.horizontalLayout.addWidget(self.pushButton)
+
         self.button_settings = QPushButton(self.group_status)
         self.button_settings.setObjectName(u"button_settings")
         self.button_settings.setCursor(QCursor(Qt.PointingHandCursor))
@@ -1753,10 +1775,10 @@ class Ui_Porn_Fetch_widget(object):
 
         self.verticalLayout_2 = QVBoxLayout()
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.lineedit_toal = QLineEdit(self.group_status)
-        self.lineedit_toal.setObjectName(u"lineedit_toal")
+        self.lineedit_total = QLineEdit(self.group_status)
+        self.lineedit_total.setObjectName(u"lineedit_total")
 
-        self.verticalLayout_2.addWidget(self.lineedit_toal)
+        self.verticalLayout_2.addWidget(self.lineedit_total)
 
 
         self.verticalLayout.addLayout(self.verticalLayout_2)
@@ -1777,9 +1799,9 @@ class Ui_Porn_Fetch_widget(object):
 
         self.retranslateUi(Porn_Fetch_widget)
 
-        self.stackedWidget_3.setCurrentIndex(2)
+        self.stackedWidget_3.setCurrentIndex(0)
         self.stackedWidget_2.setCurrentIndex(0)
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(2)
         self.stacked_widget_metadata.setCurrentIndex(1)
 
 
@@ -1845,13 +1867,14 @@ class Ui_Porn_Fetch_widget(object):
         self.radio_quality_best.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Best", None))
         self.label_note_speed.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Note: Changing the speed from Usual, can lead to errors!", None))
         self.button_speed_help.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Help", None))
-        self.label_output_path.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Output Path: ", None))
-        self.label_2.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Search Limit:", None))
-        self.label_current_value_slider.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Current Limit: ", None))
-        self.button_search_limit_help.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Help", None))
         self.label_custom_api.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Custom API Language:", None))
-        self.lineedit_custom_api_language.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_widget", u"Enter language code e.g.,  zh = Chinese or fi = finnish", None))
+        self.lanel_simultaneous_min_info.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Simultaneous downloads   1", None))
+        self.label_search_limit.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Search Limit:  ", None))
+        self.button_search_limit_help.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Help", None))
+        self.label_output_path.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Output Path: ", None))
         self.button_custom_api.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Apply", None))
+        self.lineedit_custom_api_language.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_widget", u"Enter language code e.g.,  zh = Chinese or fi = finnish", None))
+        self.label_simultaneous_max.setText(QCoreApplication.translate("Porn_Fetch_widget", u"6", None))
         self.groupBox_10.setTitle(QCoreApplication.translate("Porn_Fetch_widget", u"Search filters", None))
         self.groupBox_13.setTitle(QCoreApplication.translate("Porn_Fetch_widget", u"Time sort filters", None))
         self.radio_day.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Day", None))
@@ -1874,22 +1897,22 @@ class Ui_Porn_Fetch_widget(object):
         self.button_category_filters.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Category Filters", None))
         self.button_settings_apply.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Apply", None))
         self.groupBox_5.setTitle(QCoreApplication.translate("Porn_Fetch_widget", u"Video metadata", None))
-        self.lineedit_tags.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_widget", u"Tags == Categories", None))
-        self.label_author.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Author: ", None))
-        self.label_likes.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Rating:", None))
+        self.label_views.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Views:", None))
         self.label_title.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Title:", None))
         self.label_image_url.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Image URL", None))
+        self.lineedit_tags.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_widget", u"Tags == Categories", None))
+        self.label_likes.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Rating:", None))
+        self.label_tags.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Tags:", None))
         self.lineedit_metadata_url.setText("")
         self.lineedit_metadata_url.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_widget", u"Enter PornHub or HQPorner Video URL", None))
-        self.label.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Actress:", None))
-        self.lineedit_actress.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_widget", u"For HQPorner.com only", None))
-        self.label_video_metadata_url.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Video URL:", None))
-        self.label_tags.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Tags:", None))
-        self.label_views.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Views:", None))
         self.label_date.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Date:", None))
+        self.label_video_metadata_url.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Video URL:", None))
+        self.label_author.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Author: ", None))
         self.label_duration.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Duration:", None))
-        self.button_download_thumbnail.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Download thumbnail", None))
+        self.label_actress.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Actress:", None))
+        self.lineedit_actress.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_widget", u"For HQPorner.com only", None))
         self.button_get_metadata.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Get metadata", None))
+        self.button_download_thumbnail.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Download thumbnail", None))
         self.groupBox_6.setTitle(QCoreApplication.translate("Porn_Fetch_widget", u"User Metadata", None))
         self.button_user_information.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Get Information", None))
         self.button_download_avatar.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Get Avatar", None))
@@ -1955,6 +1978,7 @@ class Ui_Porn_Fetch_widget(object):
         self.group_status.setTitle("")
         self.button_video.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Video", None))
         self.button_account.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Account", None))
+        self.pushButton.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Search Users / Pornstars", None))
         self.button_settings.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Settings", None))
         self.button_miscellaneus.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Miscellaneous", None))
         self.button_credits.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Credits", None))
