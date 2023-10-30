@@ -76,17 +76,21 @@ class Ui_Porn_Fetch_widget(object):
                         ": #8a7b9a; \n"
 "    }\n"
 "\n"
+"\n"
 "QProgressBar {\n"
+"	color: rgb(255, 153, 0);\n"
 "    border: 2px solid #5a2a82;\n"
 "    border-radius: 5px;\n"
 "    text-align: center;\n"
-"    background-color: #e0e0e0;\n"
+"    background-color: rgb(74, 74, 74);\n"
+"    color: #ffffff;  /* Adding text color for better visibility */\n"
 "}\n"
 "\n"
 "QProgressBar::chunk {\n"
-"    background-color: #5a2a82;\n"
-"    width: 10px; /* You can adjust this to change the width of the 'chunk' */\n"
+"    background-color: rgb(0, 255, 224);\n"
+"    width: 10px; /* Adjust this to change the width of the 'chunk' */\n"
 "}\n"
+"\n"
 "QRadioButton {\n"
 "	color: (255,255,255)}\n"
 "\n"
@@ -113,14 +117,14 @@ class Ui_Porn_Fetch_widget(object):
 "}\n"
 "\n"
 "QSlider::handle:horizontal {\n"
-"    background: #5a2a82;\n"
+"    background: #5a2a"
+                        "82;\n"
 "    border: 1px solid #5a2a82;\n"
 "    width: 18px;\n"
 "    margin: -6px 0;\n"
 "    border-radius: 9px;\n"
 "}\n"
-""
-                        "\n"
+"\n"
 "QSlider::add-page:horizontal {\n"
 "    background: #e0e0e0;\n"
 "}\n"
@@ -635,12 +639,6 @@ class Ui_Porn_Fetch_widget(object):
 
         self.gridLayout_19.addWidget(self.label_search_limit, 2, 0, 1, 1)
 
-        self.button_search_limit_help = QPushButton(self.frame)
-        self.button_search_limit_help.setObjectName(u"button_search_limit_help")
-        self.button_search_limit_help.setStyleSheet(u"")
-
-        self.gridLayout_19.addWidget(self.button_search_limit_help, 2, 2, 1, 1)
-
         self.slider_simultaneous_downloads = QSlider(self.frame)
         self.slider_simultaneous_downloads.setObjectName(u"slider_simultaneous_downloads")
         self.slider_simultaneous_downloads.setMinimum(1)
@@ -684,6 +682,11 @@ class Ui_Porn_Fetch_widget(object):
         self.label_simultaneous_max.setObjectName(u"label_simultaneous_max")
 
         self.gridLayout_19.addWidget(self.label_simultaneous_max, 3, 2, 1, 1)
+
+        self.label = QLabel(self.frame)
+        self.label.setObjectName(u"label")
+
+        self.gridLayout_19.addWidget(self.label, 2, 2, 1, 1)
 
 
         self.gridLayout_12.addWidget(self.frame, 2, 0, 1, 1)
@@ -1799,7 +1802,7 @@ class Ui_Porn_Fetch_widget(object):
 
         self.retranslateUi(Porn_Fetch_widget)
 
-        self.stackedWidget_3.setCurrentIndex(0)
+        self.stackedWidget_3.setCurrentIndex(1)
         self.stackedWidget_2.setCurrentIndex(0)
         self.stackedWidget.setCurrentIndex(2)
         self.stacked_widget_metadata.setCurrentIndex(1)
@@ -1869,12 +1872,12 @@ class Ui_Porn_Fetch_widget(object):
         self.button_speed_help.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Help", None))
         self.label_custom_api.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Custom API Language:", None))
         self.lanel_simultaneous_min_info.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Simultaneous downloads   1", None))
-        self.label_search_limit.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Search Limit:  ", None))
-        self.button_search_limit_help.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Help", None))
+        self.label_search_limit.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Search result limit:                1", None))
         self.label_output_path.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Output Path: ", None))
         self.button_custom_api.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Apply", None))
         self.lineedit_custom_api_language.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_widget", u"Enter language code e.g.,  zh = Chinese or fi = finnish", None))
         self.label_simultaneous_max.setText(QCoreApplication.translate("Porn_Fetch_widget", u"6", None))
+        self.label.setText(QCoreApplication.translate("Porn_Fetch_widget", u"200", None))
         self.groupBox_10.setTitle(QCoreApplication.translate("Porn_Fetch_widget", u"Search filters", None))
         self.groupBox_13.setTitle(QCoreApplication.translate("Porn_Fetch_widget", u"Time sort filters", None))
         self.radio_day.setText(QCoreApplication.translate("Porn_Fetch_widget", u"Day", None))

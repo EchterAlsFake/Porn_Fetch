@@ -55,6 +55,17 @@ case $OS in
         echo "Detected Alpine Linux (iSH)"
         apk add git python3 py3-pip py3-virtualenv
         ;;
+    "darwin")
+        # macOS commands
+        echo "Detected macOS"
+        # Ensure Homebrew is installed
+        which -s brew
+        if [[ $? != 0 ]] ; then
+            echo "Homebrew is not installed. Installing now..."
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        fi
+        brew install python3 git
+        ;;
     *)
         echo "Unsupported distribution: $OS"
         exit 1
@@ -73,6 +84,3 @@ cd dist
 mv widget Porn_Fetch
 chmod +x Porn_Fetch
 echo "Porn Fetch is now installed to $(pwd)/"
-
-
-

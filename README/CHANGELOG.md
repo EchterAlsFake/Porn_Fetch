@@ -206,3 +206,17 @@ I hope that most issues are now fixed.
 - huge Performance increase when downloading (thanks to Egsagon's threaded preset) 
 - Added a Semaphore (only 4 threads at once -- less overload and less CPU burning)
 - Added Avatar downloading 
+
+# 3.0
+
+- Fixed Semaphore
+- Users can now decide how many videos should be downloaded simultaneously (1-6)
+- Fixed the logic of how many videos have already been downloaded
+- Removed all the unnecessary completed signals
+- Progressbar now is a bit more darken ^^
+- License Widget has now the same Stylesheet as the main widget (Especially dark mode)
+- Added translation guide
+- Added translations for German
+- Added Support for macOS in the build script
+- a lot better project structure
+- Fixed config file creation location

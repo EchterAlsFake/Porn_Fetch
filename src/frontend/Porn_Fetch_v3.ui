@@ -63,19 +63,23 @@ QPushButton {
         color: #8a7b9a; 
     }
 
+
 QProgressBar {
+	color: rgb(255, 153, 0);
     border: 2px solid #5a2a82;
     border-radius: 5px;
     text-align: center;
-    background-color: #e0e0e0;
+    background-color: rgb(74, 74, 74);
+    color: #ffffff;  /* Adding text color for better visibility */
 }
 
 QProgressBar::chunk {
-    background-color: #5a2a82;
-    width: 10px; /* You can adjust this to change the width of the 'chunk' */
+    background-color: rgb(0, 255, 224);
+    width: 10px; /* Adjust this to change the width of the 'chunk' */
 }
+
 QRadioButton {
-	color: (255,255,255)}
+	color: rgb(255,255,255)}
 
 QRadioButton::indicator::unchecked {
 	border: 1px solid white;

@@ -23,7 +23,7 @@ from phub.modules.download import threaded
 
 from Porn_Fetch_CLI import CLI
 from src.frontend.Porn_Fetch_v3 import Ui_Porn_Fetch_widget
-from src.frontend.license_agreement import Ui_Widget_License
+from src.frontend.license_agreement import Ui_License_Widget
 from src.frontend.setup import setup_config_file, strip_title, logging, check_if_video_exists
 
 categories = [attr for attr in dir(locals.Category) if
@@ -39,7 +39,7 @@ class License(QWidget):
         self.conf = ConfigParser()
         self.conf.read("config.ini")
 
-        self.ui = Ui_Widget_License()
+        self.ui = Ui_License_Widget()
         self.ui.setupUi(self)
         self.ui.button_accept.clicked.connect(self.accept)
         self.ui.button_deny.clicked.connect(self.denied)
@@ -108,18 +108,6 @@ If you have a really fast internet connection, this can save you a lot of time.
 
 If threading is disabled, the Graphical User Interface won't respond to any actions, during a download.
 That's why it's enabled by default.
-"""
-    ui_popup(text)
-
-
-def help_search_limit():
-    text = """
-The search limit defines the maximum videos you can find, when using a search query.
-
-If your Limit is for example set to 8, then only the first 8 videos will be shown.
-This can improve speed a lot!
-
-The search limit can have a range of 0 - 200
 """
     ui_popup(text)
 
@@ -369,7 +357,6 @@ class Widget(QWidget):
         self.ui.button_category_filters.clicked.connect(self.set_category_filters)
         self.ui.button_speed_help.clicked.connect(help_speed)
         self.ui.button_threading_help.clicked.connect(help_threading)
-        self.ui.button_search_limit_help.clicked.connect(help_search_limit)
         self.ui.button_user_information.clicked.connect(self.get_user_information)
         self.ui.button_user_biography.clicked.connect(self.get_user_bio)
         self.ui.button_switch_user_metadata.clicked.connect(self.switch_to_user_metadata)

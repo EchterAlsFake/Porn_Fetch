@@ -125,12 +125,8 @@ It's possible to convert the Kivy created APP for Android easily into an iOS app
 * German (3.0)
 * English
 
-If you want to port Porn Fetch into your language see [this Guide](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/TRANSLATING.md)
-> I appreciate it a lot, and you'll be of course credited in further releases and in the Readme!
-
-
-
-
+If you want to port Porn Fetch into your language, see [this Guide](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/TRANSLATING.md)
+> I appreciate it a lot, and you'll be credited in further releases and in the Readme!
 
 
 ## Useful Information
@@ -148,7 +144,7 @@ I am just the developer. Nobody will get you in jail because you downloaded a vi
 # Credits
 
 ##### Project API : [PHUB](https://github.com/Egsagon/PHUB)
-##### GUI : PySide6 - [Qt](https://qt.io) for Python
+##### GUI : [Qt](https://qt.io) for Python
 ##### Android : Kivy, KivyMD
 ### External libraries:
 - [colorama](https://github.com/tartley/colorama)
@@ -180,8 +176,11 @@ I am just the developer. Nobody will get you in jail because you downloaded a vi
 *Only used in older versions.
 
 ## Contributors:
+
+> I consider enhancement requests also as a contribution!
+
 - [Egsagon](https://github.com/Egsagon)
-- [RSDCFGVHBJNKML](https://github.com/RSDCFGVHBJNKML)
+- [RSDCFGVHBJNKML](https://github.com/RSDCFGVHBJNKML) : Enhancement #11
 
 # License:
 LICENSE: [GPL 3](https://www.gnu.org/licenses/gpl-3.0.en.html)
