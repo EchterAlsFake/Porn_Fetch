@@ -1,4 +1,5 @@
 import os
+import string
 
 from configparser import ConfigParser
 from hue_shift import return_color, reset
@@ -74,12 +75,12 @@ def logging(msg, level=0):
 
 
 def strip_title(title):
-    disallowed_chars = ["<", ">", ":", '"', "/", "\\", "|", "*", "(", ")", "!", "?"]
+    illegal_chars = '<>:"/\\|?*'
 
-    for disallowed_char in disallowed_chars:
-        title = str(title.replace(disallowed_char, ""))
+    # Only keep characters that are valid UTF-8 and not in the list of illegal characters
+    cleaned_title = ''.join([char for char in title if char in string.printable and char not in illegal_chars])
 
-    return title
+    return cleaned_title
 
 
 def setup_config_file(force=False):

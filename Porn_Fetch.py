@@ -13,7 +13,7 @@ from configparser import ConfigParser  # See: https://github.com/python/cpython/
 
 import requests  # See: https://github.com/psf/requests
 from PySide6 import QtCore  # See: https://pypi.org/project/PySide6/
-from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Slot, QTranslator, QLocale, QSemaphore
+from PySide6.QtCore import Signal, QThreadPool, QRunnable, QObject, Slot, QTranslator, QLocale, QSemaphore, Qt
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (QApplication, QWidget, QMessageBox, QTreeWidgetItem, QButtonGroup,
                                QVBoxLayout, QHBoxLayout, QRadioButton, QCheckBox, QPushButton, QScrollArea, QGroupBox)
@@ -74,6 +74,41 @@ class License(QWidget):
         logging(msg="Starting Porn Fetch main widget")
         self.main_widget = Widget()
         self.main_widget.show()
+
+
+class CustomTitleBar(QWidget):
+    def __init__(self, parent=None):
+        super(CustomTitleBar, self).__init__(parent)
+        self._parent = parent
+
+        self.setAutoFillBackground(True)
+
+        self.close_btn = QPushButton("X", self)
+        self.close_btn.clicked.connect(self._parent.close)
+
+        self.minimize_btn = QPushButton("-", self)
+        self.minimize_btn.clicked.connect(self._parent.showMinimized)
+
+        self.fullscreen_btn = QPushButton("[ ]", self)
+        self.fullscreen_btn.clicked.connect(self.toggle_maximize_restore)
+
+        layout = QHBoxLayout(self)
+        layout.addStretch(1)
+        layout.addWidget(self.minimize_btn)
+        layout.addWidget(self.fullscreen_btn)
+        layout.addWidget(self.close_btn)
+
+        self.setLayout(layout)
+        self.setFixedHeight(30)  # or whatever height you want
+
+    def toggle_maximize_restore(self):
+        if self._parent.isMaximized():
+            self._parent.showNormal()
+        else:
+            self._parent.showMaximized()
+
+
+
 
 
 def ui_popup(text):
@@ -159,6 +194,7 @@ class DownloadWorker(QRunnable):
         urls = API().get_final_urls(self.video)
         url = f"http:{urls[self.quality]}"
         title = API().extract_title(self.video)
+        title = strip_title(title)
         final_path = os.path.join(self.output_path, title + ".mp4")
         response = requests.get(url, stream=True)
         file_size = int(response.headers.get('content-length', 0))
@@ -292,6 +328,10 @@ class Widget(QWidget):
         super().__init__(parent)
         self.conf = ConfigParser()
         self.conf.read("config.ini")
+
+        self.setWindowFlag(Qt.FramelessWindowHint)
+        self.title_bar = CustomTitleBar(self)
+
 
         self.video = None
         self.api_language = "en"
@@ -1054,10 +1094,10 @@ def main():
 
         translator = QTranslator(app)
         if translator.load(path):
-            print(f"{language_code} translation loaded")
+            logging(f"{language_code} translation loaded")
             app.installTranslator(translator)
         else:
-            print(f"Failed to load {language_code} translation")
+            logging(f"Failed to load {language_code} translation")
 
         widget = License()  # Starts License widget and checks if license was accepted.
         widget.check_license_and_proceed()
@@ -1077,6 +1117,13 @@ def main():
         ui_popup("SSL Error.  Please connect to a VPN!")
 
     except TypeError:
+        pass
+
+    except OSError as e:
+        ui_popup(f"This error shouldn't happen. If you still see it it's REALLY important that you report the "
+                 f"following: {e}")
+
+    except ZeroDivisionError:
         pass
 
     sys.exit(app.exec())

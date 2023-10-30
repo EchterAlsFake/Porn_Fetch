@@ -12,9 +12,8 @@
 - [] Update Android Application
 - [x] Fixing the way of handling threading / semaphores
 - [x] Fixing the counter of how many videos are already downloaded
-- [] Creating an own header of the main widget to support dark mode fully on Windows
-- [] Code refactoring / better logical operations
-- [] More and detailed debugging, error logging and error handling
-- [] Encoding titles always in utf-8 to eliminate the OS Error issue on Windows
+- [x] Code refactoring / better logical operations
+- [x] More and detailed debugging, error logging and error handling
+- [x] Encoding titles always in utf-8 to eliminate the OS Error issue on Windows
 - [x] Better way of downloading for HQPorner.com
 - [] Support for xvideos
