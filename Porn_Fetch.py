@@ -213,6 +213,33 @@ class DownloadThread(QRunnable):
         self.signals_completed.completed.emit()
 
 
+class SearchModelThread(QRunnable):
+    def __init__(self, client, user, tree_widget):
+        super().__init__()
+        self.client = client
+        self.username = user
+        self.signals = WorkerSignals()
+        self.treeWidget = tree_widget
+
+    def run(self):
+        user_object = self.client.get_user(self.username)
+        logging("Got user object")
+        logging(msg=f"User: {str(user_object.name)}")
+
+        total_videos = user_object.videos
+        video_objects = []
+
+        try:
+            for video in total_videos:
+                video_objects.append(video)
+
+        except IndexError:
+            pass
+
+        add_to_tree_widget(video_objects, tree_widget=self.treeWidget)
+        self.signals.completed.emit()
+
+
 class CategoryFilterWindow(QWidget):
     # Entirely coded by ChatGPT.
     def __init__(self):
@@ -645,21 +672,19 @@ class Widget(QWidget):
 
         self.client = Client(language=self.api_language, delay=self.delay)
         user = self.ui.lineedit_model_url.text()
-        user_object = self.client.get_user(user)
-        logging("Got user object")
-        logging(msg=f"User: {str(user_object.name)}")
 
-        total_videos = user_object.videos
-        user_objects = []
+        self.ui.progressbar_download.setMaximum(0)
+        self.ui.progressbar_download.setMinimum(0)
 
-        try:
-            for video in total_videos:
-                video_object = self.test_video(video.url)
-                user_objects.append(video_object)
+        self.user_search_thread = SearchModelThread(client=self.client, user=user, tree_widget=self.ui.treeWidget)
+        self.user_search_thread.signals.completed.connect(self.user_search_completed)
+        self.threadpool.start(self.user_search_thread)
 
-        except IndexError:
-            pass
-        add_to_tree_widget(user_objects, tree_widget=self.ui.treeWidget)
+
+    def user_search_completed(self):
+        self.ui.progressbar_download.setMaximum(100)
+        logging("User Thread completed")
+
 
     def download_thumbnail(self):
         url = self.ui.lineedit_metadata_url.text()
