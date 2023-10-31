@@ -76,40 +76,6 @@ class License(QWidget):
         self.main_widget.show()
 
 
-class CustomTitleBar(QWidget):
-    def __init__(self, parent=None):
-        super(CustomTitleBar, self).__init__(parent)
-        self._parent = parent
-
-        self.setAutoFillBackground(True)
-
-        self.close_btn = QPushButton("X", self)
-        self.close_btn.clicked.connect(self._parent.close)
-
-        self.minimize_btn = QPushButton("-", self)
-        self.minimize_btn.clicked.connect(self._parent.showMinimized)
-
-        self.fullscreen_btn = QPushButton("[ ]", self)
-        self.fullscreen_btn.clicked.connect(self.toggle_maximize_restore)
-
-        layout = QHBoxLayout(self)
-        layout.addStretch(1)
-        layout.addWidget(self.minimize_btn)
-        layout.addWidget(self.fullscreen_btn)
-        layout.addWidget(self.close_btn)
-
-        self.setLayout(layout)
-        self.setFixedHeight(30)  # or whatever height you want
-
-    def toggle_maximize_restore(self):
-        if self._parent.isMaximized():
-            self._parent.showNormal()
-        else:
-            self._parent.showMaximized()
-
-
-
-
 
 def ui_popup(text):
     """ A simple UI popup that will be used for small messages to the user."""
@@ -198,16 +164,17 @@ class DownloadWorker(QRunnable):
         final_path = os.path.join(self.output_path, title + ".mp4")
         response = requests.get(url, stream=True)
         file_size = int(response.headers.get('content-length', 0))
-
-        if not os.path.exists(final_path):
+        try:
             with open(final_path, 'wb') as file:
                 for chunk in response.iter_content(chunk_size=1024):
                     file.write(chunk)
                     progress = math.ceil((file.tell() / file_size) * 100)
                     self.signals.progress.emit(progress)
 
-        self.signals.completed.emit()
-        # Thanks to ChatGPT for programming this function. I am just too stupid for math calculations ^^
+        finally:
+            self.signals.completed.emit()
+
+            # Thanks to ChatGPT for programming this function. I am just too stupid for math calculations ^^
 
 
 class DownloadProgressSignal(QObject):
@@ -328,10 +295,6 @@ class Widget(QWidget):
         super().__init__(parent)
         self.conf = ConfigParser()
         self.conf.read("config.ini")
-
-        self.setWindowFlag(Qt.FramelessWindowHint)
-        self.title_bar = CustomTitleBar(self)
-
 
         self.video = None
         self.api_language = "en"
@@ -526,6 +489,7 @@ class Widget(QWidget):
         worker.signals.completed.connect(self.download_completed)
         # Start the worker in a new thread
         self.threadpool.start(worker)
+        logging("Started download thread...")
 
     @Slot(int)
     def update_progressbar(self, value):

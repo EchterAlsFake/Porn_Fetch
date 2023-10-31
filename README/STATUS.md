@@ -1,5 +1,5 @@
 # 3.0
-
+ 
 
 ## TODO:
 
@@ -16,4 +16,3 @@
 - [x] More and detailed debugging, error logging and error handling
 - [x] Encoding titles always in utf-8 to eliminate the OS Error issue on Windows
 - [x] Better way of downloading for HQPorner.com
-- [] Support for xvideos
