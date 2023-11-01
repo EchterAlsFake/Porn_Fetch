@@ -220,3 +220,5 @@ I hope that most issues are now fixed.
 - Added Support for macOS in the build script
 - a lot better project structure
 - Fixed config file creation location
+- header of the QTreeWidget also had Dark mode now
+- Listing model videos had a Threading class 
