@@ -10,6 +10,16 @@
 - [] Searching for Users
 - [] Filters for both (Users, Pornstars)
 - [] Updating both translations
+- [] Supporting feed objects
+- [] OLED night black instead of grey
+- [] Different threading modes, for different use cases
+- [] A new and better layout (some in 1920x1080) See explanation down below
+- [] Better way of getting metadata
+- [] Directory structure system
+- [] Better way of checking if file exists
+- [] A lot better exception handling
+- [] More features for hqporner.com
+- [] Including French translations (will need an update on the .ts)
 - [x] Dark mode for license widget
 - [x] Working on the translations
 - [x] Support for macOS in Build Script (untested)
@@ -33,3 +43,32 @@ of progress for it. It would be so easy for me and I wouldn't need to learn Kivy
 - [] Persistent settings
 - [] Title stripping
 - [] Debugging / Logging
+
+
+
+
+
+# Layout:
+
+
+99% of developers are completely bad at design. Porn Fetch is also not the greatest and 
+most intuitive app, but I'll change that and I got some nice ideas:
+
+The goal is to make the app bigger, but more intuitive by using 3 widgets.
+
+1)  :
+
+The main widget will include the basic Downloading process, progressbars,
+status reports, error logs, explanations and is some kind of "homepage"
+
+2)  :
+
+The account widget will include the account, the feed, information about users, filters, 
+regexes, user search and pornstar search
+
+3) : The third widget will be about the settings and credits for the project.
+
+
+
+I know it maybe sounds weird, but you'll see when it's done :) 
+
