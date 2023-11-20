@@ -1,3 +1,8 @@
+# Dev Information:
+
+I have currently not the time to maintain this. School in Germnay is really hard in October - December.
+I'll make a big update. You can expect it at late December. Thanks everyone for supporting this project!
+
 # Porn Fetch - A Free & Open-Source PornHub Downloader 
 
 ![Build](https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg)
