@@ -133,277 +133,160 @@ QPushButton:pressed {
     background-color: #5599FF;
 }</string>
   </property>
-  <widget class="QWidget" name="widget" native="true">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>30</y>
-     <width>122</width>
-     <height>801</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgb(34, 34, 34)</string>
-   </property>
-   <layout class="QGridLayout" name="gridLayout">
-    <property name="spacing">
-     <number>0</number>
-    </property>
-    <item row="3" column="0">
-     <widget class="QPushButton" name="pushButton_5">
-      <property name="minimumSize">
-       <size>
-        <width>50</width>
-        <height>50</height>
-       </size>
+  <layout class="QGridLayout" name="gridLayout_8">
+   <item row="0" column="0" colspan="3">
+    <layout class="QVBoxLayout" name="HEADER"/>
+   </item>
+   <item row="1" column="0" rowspan="2" colspan="2">
+    <widget class="QWidget" name="widget" native="true">
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(34, 34, 34)</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <property name="spacing">
+       <number>0</number>
       </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                stop:0 white, stop:1 #abcdef); /* Anfang weiß, Ende Farbe */
-}
-</string>
-      </property>
-      <property name="text">
-       <string>Credits</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QPushButton" name="pushButton_3">
-      <property name="minimumSize">
-       <size>
-        <width>50</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                stop:0 white, stop:1 #abcdef); /* Anfang weiß, Ende Farbe */
-}
-</string>
-      </property>
-      <property name="text">
-       <string>Search</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QPushButton" name="pushButton">
-      <property name="minimumSize">
-       <size>
-        <width>50</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                stop:0 white, stop:1 #abcdef); /* Anfang weiß, Ende Farbe */
-}
-</string>
-      </property>
-      <property name="text">
-       <string>Settings</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0">
-     <widget class="QPushButton" name="pushButton_2">
-      <property name="minimumSize">
-       <size>
-        <width>50</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                stop:0 white, stop:1 #abcdef); /* Anfang weiß, Ende Farbe */
-}
-</string>
-      </property>
-      <property name="text">
-       <string>Home</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>30</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="widget_status" native="true">
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>660</y>
-     <width>1641</width>
-     <height>171</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgb(34, 34, 34);
-border-radius: 5px;</string>
-   </property>
-   <layout class="QGridLayout" name="gridLayout_5">
-    <item row="1" column="0">
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Current Progress:</string>
+      <item row="3" column="0">
+       <widget class="QPushButton" name="button_switch_credits">
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>50</height>
+         </size>
         </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QProgressBar" name="progressBar">
-        <property name="value">
-         <number>0</number>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 white, stop:1 #abcdef); /* Anfang weiß, Ende Farbe */
+}
+</string>
+        </property>
+        <property name="text">
+         <string>Credits</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="label_2">
+       <widget class="QPushButton" name="button_switch_search">
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 white, stop:1 #abcdef); /* Anfang weiß, Ende Farbe */
+}
+</string>
+        </property>
         <property name="text">
-         <string>Total:</string>
+         <string>Search</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QProgressBar" name="progressBar_2">
-        <property name="value">
-         <number>0</number>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="button_switch_settings">
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>50</height>
+         </size>
         </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="0" column="0">
-     <layout class="QGridLayout" name="gridlayout_status">
-      <item row="0" column="2">
-       <widget class="QLabel" name="label_5">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 white, stop:1 #abcdef); /* Anfang weiß, Ende Farbe */
+}
+</string>
+        </property>
         <property name="text">
-         <string>Total:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="lineEdit_2">
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Error:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>Debug:</string>
+         <string>Settings</string>
         </property>
        </widget>
       </item>
       <item row="0" column="0">
-       <widget class="QLabel" name="label_3">
+       <widget class="QPushButton" name="button_switch_home">
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 white, stop:1 #abcdef); /* Anfang weiß, Ende Farbe */
+}
+</string>
+        </property>
         <property name="text">
-         <string>Status:</string>
+         <string>Home</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="lineEdit">
-        <property name="readOnly">
-         <bool>true</bool>
+      <item row="4" column="0">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
         </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QLineEdit" name="lineEdit_3">
-        <property name="readOnly">
-         <bool>true</bool>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>30</height>
+         </size>
         </property>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="QLineEdit" name="lineEdit_4">
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
+       </spacer>
       </item>
      </layout>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QStackedWidget" name="stacked_widget_main">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>30</y>
-     <width>1621</width>
-     <height>631</height>
-    </rect>
-   </property>
-   <property name="currentIndex">
-    <number>0</number>
-   </property>
-   <widget class="QWidget" name="page_3">
-    <layout class="QGridLayout" name="gridLayout_7">
-     <item row="0" column="0">
-      <widget class="QStackedWidget" name="stacked_widget_top">
-       <property name="cursor">
-        <cursorShape>ArrowCursor</cursorShape>
-       </property>
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
-       <widget class="QWidget" name="page">
-        <layout class="QGridLayout" name="gridLayout_6">
-         <item row="0" column="0">
-          <layout class="QGridLayout" name="gridLayout_3">
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_9">
-             <property name="text">
-              <string>File:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="2">
-            <widget class="QPushButton" name="pushButton_8">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton {
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QStackedWidget" name="stacked_widget_main">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="page_3">
+      <layout class="QGridLayout" name="gridLayout_7">
+       <item row="0" column="0">
+        <widget class="QStackedWidget" name="stacked_widget_top">
+         <property name="cursor">
+          <cursorShape>ArrowCursor</cursorShape>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="page">
+          <layout class="QGridLayout" name="gridLayout_6">
+           <item row="0" column="0">
+            <layout class="QGridLayout" name="gridLayout_3">
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_file">
+               <property name="text">
+                <string>File:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QPushButton" name="button_open_file">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
     border: 2px solid #444;
     border-radius: 4px;
     padding: 5px;
@@ -423,168 +306,168 @@ QPushButton:pressed {
     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
                                 stop:0 #4444DD, stop:1 #9944DD);
 }</string>
-             </property>
-             <property name="text">
-              <string>Open File</string>
-             </property>
-            </widget>
+               </property>
+               <property name="text">
+                <string>Open File</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="lineedit_url">
+               <property name="placeholderText">
+                <string>Enter PornHub or HQPorner Video URL</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="2">
+              <widget class="QPushButton" name="button_search_videos">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    border: 2px solid #444;
+    border-radius: 4px;
+    padding: 5px;
+    color: #DDD;
+    font-weight: bold;
+    font-size: 14px;
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #5555FF, stop:1 #AA55FF);
+}
+
+QPushButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #6666FF, stop:1 #BB66FF);
+}
+
+QPushButton:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #4444DD, stop:1 #9944DD);
+}</string>
+               </property>
+               <property name="text">
+                <string>Get Videos</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QLineEdit" name="lineedit_file">
+               <property name="placeholderText">
+                <string>Click Open File to select a file, or write the location here and click Open File.    URLs need to be separated with a new line. Supports HQPorner and PornHub</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QLineEdit" name="lineedit_search_query">
+               <property name="placeholderText">
+                <string>Enter a Search Query for PornHub  You can define filters in the settings. The returned videos will be listed down below and you can select them.</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_model_url">
+               <property name="text">
+                <string>Model URL:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QPushButton" name="butgton_download">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    border: 2px solid #444;
+    border-radius: 4px;
+    padding: 5px;
+    color: #DDD;
+    font-weight: bold;
+    font-size: 14px;
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #5555FF, stop:1 #AA55FF);
+}
+
+QPushButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #6666FF, stop:1 #BB66FF);
+}
+
+QPushButton:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #4444DD, stop:1 #9944DD);
+}</string>
+               </property>
+               <property name="text">
+                <string>Download</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="label_search_query">
+               <property name="text">
+                <string>Search Query:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_url">
+               <property name="text">
+                <string>URL:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QPushButton" name="button_model">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    border: 2px solid #444;
+    border-radius: 4px;
+    padding: 5px;
+    color: #DDD;
+    font-weight: bold;
+    font-size: 14px;
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #5555FF, stop:1 #AA55FF);
+}
+
+QPushButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #6666FF, stop:1 #BB66FF);
+}
+
+QPushButton:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #4444DD, stop:1 #9944DD);
+}</string>
+               </property>
+               <property name="text">
+                <string>Get Videos</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QLineEdit" name="lineedit_model_url">
+               <property name="placeholderText">
+                <string>Enter PornHub Model URL. This can be a Pornstar Account or a PornHub Channel. The videos will be listed down in the TreeWidget</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
            <item row="0" column="1">
-            <widget class="QLineEdit" name="lineEdit_5">
-             <property name="placeholderText">
-              <string>Enter PornHub or HQPorner Video URL</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="2">
-            <widget class="QPushButton" name="pushButton_7">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton {
-    border: 2px solid #444;
-    border-radius: 4px;
-    padding: 5px;
-    color: #DDD;
-    font-weight: bold;
-    font-size: 14px;
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #5555FF, stop:1 #AA55FF);
-}
-
-QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #6666FF, stop:1 #BB66FF);
-}
-
-QPushButton:pressed {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #4444DD, stop:1 #9944DD);
-}</string>
-             </property>
-             <property name="text">
-              <string>Get Videos</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QLineEdit" name="lineEdit_7">
-             <property name="placeholderText">
-              <string>Click Open File to select a file, or write the location here and click Open File.    URLs need to be separated with a new line. Supports HQPorner and PornHub</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="1">
-            <widget class="QLineEdit" name="lineEdit_8">
-             <property name="placeholderText">
-              <string>Enter a Search Query for PornHub  You can define filters in the settings. The returned videos will be listed down below and you can select them.</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_8">
-             <property name="text">
-              <string>Model URL:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QPushButton" name="pushButton_4">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton {
-    border: 2px solid #444;
-    border-radius: 4px;
-    padding: 5px;
-    color: #DDD;
-    font-weight: bold;
-    font-size: 14px;
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #5555FF, stop:1 #AA55FF);
-}
-
-QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #6666FF, stop:1 #BB66FF);
-}
-
-QPushButton:pressed {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #4444DD, stop:1 #9944DD);
-}</string>
-             </property>
-             <property name="text">
-              <string>Download</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="label_10">
-             <property name="text">
-              <string>Search Query:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_7">
-             <property name="text">
-              <string>URL:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QPushButton" name="pushButton_6">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton {
-    border: 2px solid #444;
-    border-radius: 4px;
-    padding: 5px;
-    color: #DDD;
-    font-weight: bold;
-    font-size: 14px;
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #5555FF, stop:1 #AA55FF);
-}
-
-QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #6666FF, stop:1 #BB66FF);
-}
-
-QPushButton:pressed {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #4444DD, stop:1 #9944DD);
-}</string>
-             </property>
-             <property name="text">
-              <string>Get Videos</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QLineEdit" name="lineEdit_6">
-             <property name="placeholderText">
-              <string>Enter PornHub Model URL. This can be a Pornstar Account or a PornHub Channel. The videos will be listed down in the TreeWidget</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item row="0" column="1">
-          <layout class="QGridLayout" name="gridLayout_4">
-           <item row="3" column="2">
-            <widget class="QPushButton" name="pushButton_12">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton {
+            <layout class="QGridLayout" name="gridLayout_4">
+             <item row="3" column="2">
+              <widget class="QPushButton" name="button_get_recommended_videos">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
     border: 2px solid #444;
     border-radius: 4px;
     padding: 5px;
@@ -594,26 +477,26 @@ QPushButton:pressed {
     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
                                 stop:0 #78909C, stop:1 #90A4AE);
 }</string>
-             </property>
-             <property name="text">
-              <string>Get recommended videos</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_11">
-             <property name="text">
-              <string>Password:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QPushButton" name="pushButton_9">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton {
+               </property>
+               <property name="text">
+                <string>Get recommended videos</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_password">
+               <property name="text">
+                <string>Password:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QPushButton" name="button_get_liked_videos">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
     border: 2px solid #444;
     border-radius: 4px;
     padding: 5px;
@@ -623,26 +506,26 @@ QPushButton:pressed {
     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
                                 stop:0 #78909C, stop:1 #90A4AE);
 }</string>
-             </property>
-             <property name="text">
-              <string>Get Liked videos</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_12">
-             <property name="text">
-              <string>Username:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QPushButton" name="pushButton_11">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton {
+               </property>
+               <property name="text">
+                <string>Get Liked videos</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_username">
+               <property name="text">
+                <string>Username:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QPushButton" name="button_get_watched_videos">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
     border: 2px solid #444;
     border-radius: 4px;
     padding: 5px;
@@ -652,19 +535,19 @@ QPushButton:pressed {
     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
                                 stop:0 #78909C, stop:1 #90A4AE);
 }</string>
-             </property>
-             <property name="text">
-              <string>Get watched videos</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0" colspan="4">
-            <widget class="QPushButton" name="pushButton_10">
-             <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton {
+               </property>
+               <property name="text">
+                <string>Get watched videos</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0" colspan="4">
+              <widget class="QPushButton" name="button_login">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
     border: 2px solid #444;
     border-radius: 8px;
     padding: 5px;
@@ -684,73 +567,166 @@ QPushButton:pressed {
     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
                                 stop:0 #4444DD, stop:1 #9944DD);
 }</string>
-             </property>
-             <property name="text">
-              <string>Login</string>
-             </property>
-            </widget>
+               </property>
+               <property name="text">
+                <string>Login</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1" colspan="3">
+              <widget class="QLineEdit" name="lineedit_password">
+               <property name="echoMode">
+                <enum>QLineEdit::Password</enum>
+               </property>
+               <property name="placeholderText">
+                <string>Enter your PornHub Password</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1" colspan="3">
+              <widget class="QLineEdit" name="lineedit_username">
+               <property name="placeholderText">
+                <string>Enter your PornHub Username</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
-           <item row="1" column="1" colspan="3">
-            <widget class="QLineEdit" name="lineEdit_10">
-             <property name="echoMode">
-              <enum>QLineEdit::Password</enum>
+           <item row="1" column="0" colspan="2">
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
              </property>
-             <property name="placeholderText">
-              <string>Enter your PornHub Password</string>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
              </property>
-            </widget>
-           </item>
-           <item row="0" column="1" colspan="3">
-            <widget class="QLineEdit" name="lineEdit_9">
-             <property name="placeholderText">
-              <string>Enter your PornHub Username</string>
-             </property>
-            </widget>
+            </spacer>
            </item>
           </layout>
-         </item>
-         <item row="1" column="0" colspan="2">
-          <spacer name="verticalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="page_2"/>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QTreeWidget" name="treeWidget">
-       <column>
-        <property name="text">
-         <string notr="true">1</string>
-        </property>
-       </column>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="page_4"/>
-  </widget>
-  <widget class="QWidget" name="verticalLayoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1761</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="HEADER"/>
-  </widget>
+         </widget>
+         <widget class="QWidget" name="page_2"/>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QTreeWidget" name="treeWidget">
+         <column>
+          <property name="text">
+           <string notr="true">1</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_4"/>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QWidget" name="widget_status" native="true">
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(34, 34, 34);
+border-radius: 5px;</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_5">
+      <item row="1" column="0">
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_current_progress">
+          <property name="text">
+           <string>Current Progress:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QProgressBar" name="progressbar_current">
+          <property name="value">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_total_progress">
+          <property name="text">
+           <string>Total:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QProgressBar" name="progressbar_total">
+          <property name="value">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="0">
+       <layout class="QGridLayout" name="gridlayout_status">
+        <item row="0" column="2">
+         <widget class="QLabel" name="label_total">
+          <property name="text">
+           <string>Total:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="lineedit_error">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_error">
+          <property name="text">
+           <string>Error:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLabel" name="label_debug">
+          <property name="text">
+           <string>Debug:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_status">
+          <property name="text">
+           <string>Status:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="lineedit_status">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QLineEdit" name="lineedit_total">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QLineEdit" name="lineedit_debug">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>
