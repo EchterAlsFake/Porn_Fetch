@@ -137,9 +137,9 @@ QPushButton:pressed {
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>0</y>
+     <y>30</y>
      <width>122</width>
-     <height>831</height>
+     <height>801</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -368,9 +368,9 @@ border-radius: 5px;</string>
    <property name="geometry">
     <rect>
      <x>130</x>
-     <y>0</y>
+     <y>30</y>
      <width>1621</width>
-     <height>661</height>
+     <height>631</height>
     </rect>
    </property>
    <property name="currentIndex">
@@ -739,6 +739,17 @@ QPushButton:pressed {
     </layout>
    </widget>
    <widget class="QWidget" name="page_4"/>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1761</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="HEADER"/>
   </widget>
  </widget>
  <resources/>

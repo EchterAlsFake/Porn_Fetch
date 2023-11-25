@@ -18,7 +18,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QGridLayout, QHeaderView, QLabel,
     QLineEdit, QProgressBar, QPushButton, QSizePolicy,
     QSpacerItem, QStackedWidget, QTreeWidget, QTreeWidgetItem,
-    QWidget)
+    QVBoxLayout, QWidget)
 
 class Ui_Porn_Fetch_Widget(object):
     def setupUi(self, Porn_Fetch_Widget):
@@ -147,7 +147,7 @@ class Ui_Porn_Fetch_Widget(object):
 "}")
         self.widget = QWidget(Porn_Fetch_Widget)
         self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(0, 0, 122, 831))
+        self.widget.setGeometry(QRect(0, 30, 122, 801))
         self.widget.setStyleSheet(u"background-color: rgb(34, 34, 34)")
         self.gridLayout = QGridLayout(self.widget)
         self.gridLayout.setSpacing(0)
@@ -289,7 +289,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.stacked_widget_main = QStackedWidget(Porn_Fetch_Widget)
         self.stacked_widget_main.setObjectName(u"stacked_widget_main")
-        self.stacked_widget_main.setGeometry(QRect(130, 0, 1621, 661))
+        self.stacked_widget_main.setGeometry(QRect(130, 30, 1621, 631))
         self.page_3 = QWidget()
         self.page_3.setObjectName(u"page_3")
         self.gridLayout_7 = QGridLayout(self.page_3)
@@ -573,6 +573,12 @@ class Ui_Porn_Fetch_Widget(object):
         self.page_4 = QWidget()
         self.page_4.setObjectName(u"page_4")
         self.stacked_widget_main.addWidget(self.page_4)
+        self.verticalLayoutWidget = QWidget(Porn_Fetch_Widget)
+        self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
+        self.verticalLayoutWidget.setGeometry(QRect(0, 0, 1761, 31))
+        self.HEADER = QVBoxLayout(self.verticalLayoutWidget)
+        self.HEADER.setObjectName(u"HEADER")
+        self.HEADER.setContentsMargins(0, 0, 0, 0)
 
         self.retranslateUi(Porn_Fetch_Widget)
 
