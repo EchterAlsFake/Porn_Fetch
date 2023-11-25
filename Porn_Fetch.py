@@ -9,6 +9,7 @@ from PySide6.QtWidgets import QApplication, QWidget
 #     pyside2-uic form.ui -o ui_form.py
 from src.frontend.ui_form import Ui_Porn_Fetch_Widget
 
+
 class Porn_Fetch_Widget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
