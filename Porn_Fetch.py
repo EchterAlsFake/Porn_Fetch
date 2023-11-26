@@ -83,9 +83,7 @@ class CategoryFilterWindow(QWidget):
         self.close()
 
 
-
-
-class Porn_Fetch_Widget(QWidget):
+class PornFetch(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_Porn_Fetch_Widget()
@@ -151,7 +149,6 @@ class Porn_Fetch_Widget(QWidget):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setStyle("Fusion")  # Fixes the stupid Windows app header being white.....
-    widget = Porn_Fetch_Widget()
-
+    widget = PornFetch()
     widget.show()
     sys.exit(app.exec())

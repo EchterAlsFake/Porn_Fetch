@@ -141,6 +141,34 @@ QPushButton:hover {
 
 QPushButton:pressed {
     background-color: #5599FF;
+}
+
+QCheckBox {
+    color: #dcdcdc; /* Light grey text */
+    spacing: 5px; /* Space between the checkbox and its label */
+}
+
+QCheckBox::indicator {
+    width: 15px;
+    height: 15px;
+    border: 2px solid #777; /* Border color */
+}
+
+QCheckBox::indicator:unchecked {
+    background-color: #555; /* Dark background for unchecked state */
+}
+
+QCheckBox::indicator:checked {
+    background-color: #7a7aff; /* Bright color for checked state */
+    /* Here you can add your custom icon */
+}
+
+QCheckBox::indicator:hover {
+    border-color: #9a9aff; /* Change border color on hover */
+}
+
+QCheckBox::indicator:checked:hover {
+    background-color: #8a8aff; /* Slightly lighter background on hover */
 }</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_8">
@@ -264,6 +292,108 @@ QPushButton:pressed {
      </layout>
     </widget>
    </item>
+   <item row="2" column="2">
+    <widget class="QWidget" name="widget_status" native="true">
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(34, 34, 34);
+border-radius: 5px;</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_5">
+      <item row="1" column="0">
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_current_progress">
+          <property name="text">
+           <string>Current Progress:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QProgressBar" name="progressbar_current">
+          <property name="value">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_total_progress">
+          <property name="text">
+           <string>Total:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QProgressBar" name="progressbar_total">
+          <property name="value">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="0">
+       <layout class="QGridLayout" name="gridlayout_status">
+        <item row="0" column="2">
+         <widget class="QLabel" name="label_total">
+          <property name="text">
+           <string>Total:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="lineedit_error">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_error">
+          <property name="text">
+           <string>Error:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLabel" name="label_debug">
+          <property name="text">
+           <string>Debug:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_status">
+          <property name="text">
+           <string>Status:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="lineedit_status">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QLineEdit" name="lineedit_total">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QLineEdit" name="lineedit_debug">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
    <item row="1" column="2">
     <widget class="QStackedWidget" name="stacked_widget_main">
      <property name="currentIndex">
@@ -271,7 +401,146 @@ QPushButton:pressed {
      </property>
      <widget class="QWidget" name="page_3">
       <layout class="QGridLayout" name="gridLayout_7">
-       <item row="0" column="0">
+       <item row="2" column="0">
+        <widget class="QTreeWidget" name="treeWidget">
+         <property name="styleSheet">
+          <string>QWidget {
+color: white;
+background-color: rgb(60, 60, 60);
+border: none;
+}
+
+QLineEdit {
+    border: 2px solid #444;
+    border-radius: 4px;
+    padding: 5px;
+    background-color: #333;
+    color: #DDD;
+}
+QLineEdit:focus {
+    border: 2px solid #5599FF;
+}
+
+
+QProgressBar {
+	color: rgb(255, 153, 0);
+    border: 2px solid #5a2a82;
+    border-radius: 5px;
+    text-align: center;
+    background-color: rgb(74, 74, 74);
+    color: #ffffff;  /* Adding text color for better visibility */
+}
+
+QProgressBar::chunk {
+    background-color: rgb(0, 255, 224);
+    width: 10px; /* Adjust this to change the width of the 'chunk' */
+}
+
+QRadioButton {
+    color: #dcdcdc; /* Light grey text */
+    spacing: 5px; /* Space between the radio button and its label */
+}
+
+QRadioButton::indicator {
+    width: 13px;
+    height: 13px;
+    border-radius: 7px; /* Circular indicator */
+}
+
+QRadioButton::indicator:unchecked {
+    background-color: #555; /* Dark background for unchecked state */
+    border: 2px solid #777; /* Slightly lighter border */
+}
+
+QRadioButton::indicator:checked {
+    background-color: #7a7aff; /* Bright color for checked state */
+    border: 2px solid #5a5aff; /* Border slightly darker than the background */
+}
+
+QRadioButton::indicator:checked:hover,
+QRadioButton::indicator:unchecked:hover {
+    border-color: #9a9aff; /* Change border color on hover */
+}
+
+
+QSlider::groove:horizontal {
+    border: 1px solid #5a2a82;
+    height: 8px;
+    background: #e0e0e0;
+    margin: 0px;
+    border-radius: 4px;
+}
+
+QSlider::handle:horizontal {
+    background: #5a2a82;
+    border: 1px solid #5a2a82;
+    width: 18px;
+    margin: -6px 0;
+    border-radius: 9px;
+}
+
+QSlider::add-page:horizontal {
+    background: #e0e0e0;
+}
+
+QSlider::sub-page:horizontal {
+    background: #5a2a82;
+}
+
+QTreeWidget {
+    background-color: rgb(94, 94, 94);
+    color: white;
+}
+
+QTreeWidget QHeaderView::section {
+    background-color: rgb(94, 94, 94);
+    color: black; 
+    border: 1px solid #5a2a82;
+    padding: 4px;
+}
+
+QGroupBox {
+        border: 0px;
+        margin-top: 1ex; /* Adjust as needed */
+    }
+    QGroupBox::title {
+        subcontrol-origin: margin;
+        subcontrol-position: top center;
+        padding: 0 3px;
+    }
+
+QLabel {
+    color: #DDD;
+    padding: 2px;
+    font-size: 14px;
+}
+
+QPushButton {
+    border: 2px solid #444;
+    border-radius: 4px;
+    padding: 5px;
+    background-color: #333;
+    color: #DDD;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: #555;
+}
+
+QPushButton:pressed {
+    background-color: #5599FF;
+}</string>
+         </property>
+         <column>
+          <property name="text">
+           <string notr="true">1</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+       <item row="1" column="0">
         <widget class="QStackedWidget" name="stacked_widget_top">
          <property name="cursor">
           <cursorShape>ArrowCursor</cursorShape>
@@ -621,9 +890,9 @@ QPushButton:pressed {
           <widget class="QWidget" name="gridLayoutWidget">
            <property name="geometry">
             <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>931</width>
+             <x>9</x>
+             <y>9</y>
+             <width>791</width>
              <height>113</height>
             </rect>
            </property>
@@ -631,7 +900,7 @@ QPushButton:pressed {
             <item row="1" column="2">
              <widget class="QPushButton" name="pushButton_2">
               <property name="text">
-               <string>PushButton</string>
+               <string>Search</string>
               </property>
              </widget>
             </item>
@@ -651,7 +920,7 @@ QPushButton:pressed {
             <item row="0" column="2">
              <widget class="QPushButton" name="pushButton">
               <property name="text">
-               <string>PushButton</string>
+               <string>Search</string>
               </property>
              </widget>
             </item>
@@ -675,14 +944,14 @@ QPushButton:pressed {
             <item row="2" column="2">
              <widget class="QPushButton" name="pushButton_3">
               <property name="text">
-               <string>PushButton</string>
+               <string>Search</string>
               </property>
              </widget>
             </item>
             <item row="0" column="3">
              <widget class="QPushButton" name="button_filter_videos">
               <property name="text">
-               <string>Filters</string>
+               <string>Category Filter</string>
               </property>
              </widget>
             </item>
@@ -693,309 +962,437 @@ QPushButton:pressed {
               </property>
              </widget>
             </item>
-            <item row="2" column="3">
-             <widget class="QPushButton" name="button_filter_pornstars">
+           </layout>
+          </widget>
+          <widget class="QGroupBox" name="groupBox">
+           <property name="geometry">
+            <rect>
+             <x>800</x>
+             <y>0</y>
+             <width>821</width>
+             <height>131</height>
+            </rect>
+           </property>
+           <property name="title">
+            <string/>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_12">
+            <item row="0" column="0">
+             <layout class="QGridLayout" name="gridLayout_10">
+              <item row="2" column="2">
+               <widget class="QRadioButton" name="radioButton_2">
+                <property name="text">
+                 <string>None</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" colspan="3">
+               <widget class="QLabel" name="label_4">
+                <property name="styleSheet">
+                 <string notr="true">padding-left: 40px;</string>
+                </property>
+                <property name="text">
+                 <string>Production Filters (for Videos)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QRadioButton" name="radioButton_4">
+                <property name="text">
+                 <string>Professional</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QRadioButton" name="radioButton">
+                <property name="text">
+                 <string>Homemade</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="0" column="1">
+             <layout class="QGridLayout" name="gridLayout_11">
+              <item row="2" column="2">
+               <widget class="QCheckBox" name="checkBox_6">
+                <property name="text">
+                 <string>Weekly</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="3">
+               <widget class="QCheckBox" name="checkBox_4">
+                <property name="text">
+                 <string>Yearly</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QCheckBox" name="checkBox_11">
+                <property name="text">
+                 <string>Recent</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" colspan="4">
+               <widget class="QLabel" name="label_5">
+                <property name="styleSheet">
+                 <string notr="true">padding-left: 180px;</string>
+                </property>
+                <property name="text">
+                 <string>Sorting filters (for Videos)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QCheckBox" name="checkBox">
+                <property name="text">
+                 <string>HD</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QCheckBox" name="checkBox_8">
+                <property name="text">
+                 <string>Daily</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QCheckBox" name="checkBox_9">
+                <property name="text">
+                 <string>All Time</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="3">
+               <widget class="QCheckBox" name="checkBox_3">
+                <property name="text">
+                 <string>Longest</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QCheckBox" name="checkBox_12">
+                <property name="text">
+                 <string>Top rated</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="2">
+               <widget class="QCheckBox" name="checkBox_10">
+                <property name="text">
+                 <string>Views</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="gridLayoutWidget_4">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>130</y>
+             <width>301</width>
+             <height>80</height>
+            </rect>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_13">
+            <item row="1" column="1">
+             <widget class="QRadioButton" name="radioButton_9">
               <property name="text">
-               <string>Filters</string>
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QRadioButton" name="radioButton_7">
+              <property name="text">
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QRadioButton" name="radioButton_8">
+              <property name="text">
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0" colspan="3">
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>Member Type</string>
               </property>
              </widget>
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="gridLayoutWidget_2">
+          <widget class="QWidget" name="gridLayoutWidget_5">
            <property name="geometry">
             <rect>
-             <x>30</x>
-             <y>150</y>
-             <width>212</width>
+             <x>10</x>
+             <y>220</y>
+             <width>297</width>
              <height>80</height>
             </rect>
            </property>
-           <layout class="QGridLayout" name="gridLayout_10">
-            <item row="2" column="1">
-             <widget class="QRadioButton" name="radioButton_3">
+           <layout class="QGridLayout" name="gridLayout_14">
+            <item row="1" column="2">
+             <widget class="QRadioButton" name="radioButton_15">
               <property name="text">
-               <string>RadioButton</string>
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QRadioButton" name="radioButton_14">
+              <property name="text">
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QRadioButton" name="radioButton_11">
+              <property name="text">
+               <string>Homemade</string>
               </property>
              </widget>
             </item>
             <item row="2" column="0">
-             <widget class="QRadioButton" name="radioButton_2">
+             <widget class="QRadioButton" name="radioButton_12">
               <property name="text">
-               <string>RadioButton</string>
+               <string>Homemade</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
-             <widget class="QRadioButton" name="radioButton_4">
+            <item row="2" column="1">
+             <widget class="QRadioButton" name="radioButton_10">
               <property name="text">
-               <string>RadioButton</string>
+               <string>Homemade</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
-             <widget class="QRadioButton" name="radioButton">
+            <item row="2" column="2">
+             <widget class="QRadioButton" name="radioButton_13">
               <property name="text">
-               <string>RadioButton</string>
+               <string>Homemade</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="0" colspan="2">
-             <widget class="QLabel" name="label_4">
+            <item row="0" column="0" colspan="3">
+             <widget class="QLabel" name="label_7">
               <property name="text">
-               <string>Production Filters</string>
+               <string>Member content</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="gridLayoutWidget_6">
+           <property name="geometry">
+            <rect>
+             <x>350</x>
+             <y>220</y>
+             <width>323</width>
+             <height>80</height>
+            </rect>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_15">
+            <item row="1" column="0">
+             <widget class="QRadioButton" name="radioButton_17">
+              <property name="text">
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QRadioButton" name="radioButton_16">
+              <property name="text">
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QRadioButton" name="radioButton_18">
+              <property name="text">
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0" colspan="3">
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>Member relationship</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="gridLayoutWidget_7">
+           <property name="geometry">
+            <rect>
+             <x>730</x>
+             <y>210</y>
+             <width>389</width>
+             <height>80</height>
+            </rect>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_16">
+            <item row="0" column="1">
+             <widget class="QLabel" name="label_12">
+              <property name="text">
+               <string>Member Gender</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QRadioButton" name="radioButton_22">
+              <property name="text">
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QRadioButton" name="radioButton_26">
+              <property name="text">
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="3">
+             <widget class="QRadioButton" name="radioButton_21">
+              <property name="text">
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QRadioButton" name="radioButton_25">
+              <property name="text">
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QRadioButton" name="radioButton_20">
+              <property name="text">
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QRadioButton" name="radioButton_19">
+              <property name="text">
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QRadioButton" name="radioButton_24">
+              <property name="text">
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="3">
+             <widget class="QRadioButton" name="radioButton_23">
+              <property name="text">
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="gridLayoutWidget_8">
+           <property name="geometry">
+            <rect>
+             <x>1160</x>
+             <y>180</y>
+             <width>212</width>
+             <height>80</height>
+            </rect>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_17">
+            <item row="1" column="0">
+             <widget class="QRadioButton" name="radioButton_27">
+              <property name="text">
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_11">
+              <property name="text">
+               <string>Member interests</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QRadioButton" name="radioButton_30">
+              <property name="text">
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QRadioButton" name="radioButton_29">
+              <property name="text">
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QRadioButton" name="radioButton_28">
+              <property name="text">
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="gridLayoutWidget_9">
+           <property name="geometry">
+            <rect>
+             <x>1410</x>
+             <y>190</y>
+             <width>205</width>
+             <height>80</height>
+            </rect>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_18">
+            <item row="1" column="0">
+             <widget class="QRadioButton" name="radioButton_32">
+              <property name="text">
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QRadioButton" name="radioButton_31">
+              <property name="text">
+               <string>Homemade</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0" colspan="2">
+             <widget class="QLabel" name="label_10">
+              <property name="text">
+               <string>Other filters</string>
               </property>
              </widget>
             </item>
            </layout>
           </widget>
          </widget>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QTreeWidget" name="treeWidget">
-         <property name="styleSheet">
-          <string>QWidget {
-color: white;
-background-color: rgb(60, 60, 60);
-border: none;
-}
-
-QLineEdit {
-    border: 2px solid #444;
-    border-radius: 4px;
-    padding: 5px;
-    background-color: #333;
-    color: #DDD;
-}
-QLineEdit:focus {
-    border: 2px solid #5599FF;
-}
-
-
-QProgressBar {
-	color: rgb(255, 153, 0);
-    border: 2px solid #5a2a82;
-    border-radius: 5px;
-    text-align: center;
-    background-color: rgb(74, 74, 74);
-    color: #ffffff;  /* Adding text color for better visibility */
-}
-
-QProgressBar::chunk {
-    background-color: rgb(0, 255, 224);
-    width: 10px; /* Adjust this to change the width of the 'chunk' */
-}
-
-QRadioButton {
-    color: #dcdcdc; /* Light grey text */
-    spacing: 5px; /* Space between the radio button and its label */
-}
-
-QRadioButton::indicator {
-    width: 13px;
-    height: 13px;
-    border-radius: 7px; /* Circular indicator */
-}
-
-QRadioButton::indicator:unchecked {
-    background-color: #555; /* Dark background for unchecked state */
-    border: 2px solid #777; /* Slightly lighter border */
-}
-
-QRadioButton::indicator:checked {
-    background-color: #7a7aff; /* Bright color for checked state */
-    border: 2px solid #5a5aff; /* Border slightly darker than the background */
-}
-
-QRadioButton::indicator:checked:hover,
-QRadioButton::indicator:unchecked:hover {
-    border-color: #9a9aff; /* Change border color on hover */
-}
-
-
-QSlider::groove:horizontal {
-    border: 1px solid #5a2a82;
-    height: 8px;
-    background: #e0e0e0;
-    margin: 0px;
-    border-radius: 4px;
-}
-
-QSlider::handle:horizontal {
-    background: #5a2a82;
-    border: 1px solid #5a2a82;
-    width: 18px;
-    margin: -6px 0;
-    border-radius: 9px;
-}
-
-QSlider::add-page:horizontal {
-    background: #e0e0e0;
-}
-
-QSlider::sub-page:horizontal {
-    background: #5a2a82;
-}
-
-QTreeWidget {
-    background-color: rgb(94, 94, 94);
-    color: white;
-}
-
-QTreeWidget QHeaderView::section {
-    background-color: rgb(94, 94, 94);
-    color: black; 
-    border: 1px solid #5a2a82;
-    padding: 4px;
-}
-
-QGroupBox {
-        border: 0px;
-        margin-top: 1ex; /* Adjust as needed */
-    }
-    QGroupBox::title {
-        subcontrol-origin: margin;
-        subcontrol-position: top center;
-        padding: 0 3px;
-    }
-
-QLabel {
-    color: #DDD;
-    padding: 2px;
-    font-size: 14px;
-}
-
-QPushButton {
-    border: 2px solid #444;
-    border-radius: 4px;
-    padding: 5px;
-    background-color: #333;
-    color: #DDD;
-    font-weight: bold;
-    font-size: 14px;
-}
-
-QPushButton:hover {
-    background-color: #555;
-}
-
-QPushButton:pressed {
-    background-color: #5599FF;
-}</string>
-         </property>
-         <column>
-          <property name="text">
-           <string notr="true">1</string>
-          </property>
-         </column>
         </widget>
        </item>
       </layout>
      </widget>
      <widget class="QWidget" name="page_4"/>
-    </widget>
-   </item>
-   <item row="2" column="2">
-    <widget class="QWidget" name="widget_status" native="true">
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(34, 34, 34);
-border-radius: 5px;</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_5">
-      <item row="1" column="0">
-       <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_current_progress">
-          <property name="text">
-           <string>Current Progress:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QProgressBar" name="progressbar_current">
-          <property name="value">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_total_progress">
-          <property name="text">
-           <string>Total:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QProgressBar" name="progressbar_total">
-          <property name="value">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="0" column="0">
-       <layout class="QGridLayout" name="gridlayout_status">
-        <item row="0" column="2">
-         <widget class="QLabel" name="label_total">
-          <property name="text">
-           <string>Total:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="lineedit_error">
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_error">
-          <property name="text">
-           <string>Error:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QLabel" name="label_debug">
-          <property name="text">
-           <string>Debug:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_status">
-          <property name="text">
-           <string>Status:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="lineedit_status">
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3">
-         <widget class="QLineEdit" name="lineedit_total">
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="3">
-         <widget class="QLineEdit" name="lineedit_debug">
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
     </widget>
    </item>
   </layout>
