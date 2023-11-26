@@ -3,9 +3,11 @@ import sys
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QRadioButton, QCheckBox, QPushButton,
                                QScrollArea, QGroupBox, QApplication, QLabel, QMainWindow)
 
-from PySide6.QtCore import Signal, Qt, QPoint, QRect
+from PySide6.QtCore import QFile, QTextStream, Signal
+from PySide6.QtGui import QIcon
 
 from src.frontend.ui_form import Ui_Porn_Fetch_Widget
+from src.frontend import ressources_rc
 from phub import locals
 
 categories = [attr for attr in dir(locals.Category) if
@@ -91,20 +93,21 @@ class PornFetch(QWidget):
         self.ui = Ui_Porn_Fetch_Widget()
         self.ui.setupUi(self)
         self.button_connectors()
+        self.load_icons()
+
+
+    def load_icons(self):
+        self.ui.button_switch_search.setIcon(QIcon(":/images/graphics/search.svg"))
+        self.ui.button_switch_home.setIcon(QIcon(":/images/graphics/download.svg"))
+        self.ui.button_switch_settings.setIcon(QIcon(":/images/graphics/settings.svg"))
+        self.ui.button_switch_credits.setIcon(QIcon(":/images/graphics/information.svg"))
+
 
     def button_connectors(self):
         """a function to link the buttons to their functions"""
 
         self.ui.button_switch_home.clicked.connect(self.switch_to_home)
         self.ui.button_switch_search.clicked.connect(self.switch_to_search)
-
-
-
-
-
-    """
-    The following functions are used to switch between the different widgets
-    """
 
 
     def switch_to_home(self):
@@ -174,7 +177,12 @@ class PornFetch(QWidget):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    app.setStyle("Fusion")  # Fixes the stupid Windows app header being white.....
+    file = QFile(":/style/stylesheet.qss")
+    file.open(QFile.ReadOnly | QFile.Text)
+    stream = QTextStream(file)
+    app.setStyleSheet(stream.readAll())
+
+
     widget = PornFetch()
     widget.show()
     sys.exit(app.exec())

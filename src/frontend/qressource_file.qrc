@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>graphics/download.svg</file>
+        <file>graphics/information.svg</file>
+        <file>graphics/search.svg</file>
+        <file>graphics/settings.svg</file>
+        <file>graphics/tick.svg</file>
+    </qresource>
+    <qresource prefix="/style">
+        <file>stylesheet.qss</file>
+    </qresource>
+</RCC>

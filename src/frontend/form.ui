@@ -198,6 +198,7 @@ QCheckBox::indicator:unchecked {
 QCheckBox::indicator:checked {
     background-color: #7a7aff; /* Bright color for checked state */
     /* Here you can add your custom icon */
+	background-image: url('C:UsershabelPycharmProjectsPorn_Fetchsrcgraphicstick.svg');
 }
 
 QCheckBox::indicator:hover {
@@ -1339,12 +1340,26 @@ QGroupBox QComboBox {
    <item row="0" column="0" rowspan="2" colspan="2">
     <widget class="QWidget" name="widget" native="true">
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(34, 34, 34)</string>
+      <string notr="true">background-color: rgb(34, 34, 34);
+border-radius: 10px;</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <property name="spacing">
        <number>0</number>
       </property>
+      <item row="4" column="0">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>30</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
       <item row="3" column="0">
        <widget class="QPushButton" name="button_switch_credits">
         <property name="minimumSize">
@@ -1357,60 +1372,20 @@ QGroupBox QComboBox {
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="styleSheet">
-         <string notr="true">QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                stop:0 white, stop:1 #abcdef); /* Anfang weiß, Ende Farbe */
-}
-</string>
+         <string notr="true">border: none;</string>
         </property>
         <property name="text">
-         <string>Credits</string>
+         <string/>
         </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QPushButton" name="button_switch_search">
-        <property name="minimumSize">
+        <property name="icon">
+         <iconset>
+          <normaloff>../graphics/information.svg</normaloff>../graphics/information.svg</iconset>
+        </property>
+        <property name="iconSize">
          <size>
-          <width>50</width>
-          <height>50</height>
+          <width>32</width>
+          <height>32</height>
          </size>
-        </property>
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                stop:0 white, stop:1 #abcdef); /* Anfang weiß, Ende Farbe */
-}
-</string>
-        </property>
-        <property name="text">
-         <string>Search</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QPushButton" name="button_switch_settings">
-        <property name="minimumSize">
-         <size>
-          <width>50</width>
-          <height>50</height>
-         </size>
-        </property>
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                stop:0 white, stop:1 #abcdef); /* Anfang weiß, Ende Farbe */
-}
-</string>
-        </property>
-        <property name="text">
-         <string>Settings</string>
         </property>
        </widget>
       </item>
@@ -1426,29 +1401,80 @@ QGroupBox QComboBox {
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="styleSheet">
-         <string notr="true">QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                stop:0 white, stop:1 #abcdef); /* Anfang weiß, Ende Farbe */
-}
-</string>
+         <string notr="true">border: none</string>
         </property>
         <property name="text">
-         <string>Home</string>
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>../graphics/download.svg</normaloff>../graphics/download.svg</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
+      <item row="2" column="0">
+       <widget class="QPushButton" name="button_switch_settings">
+        <property name="minimumSize">
          <size>
-          <width>20</width>
-          <height>30</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
-       </spacer>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: none;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>../graphics/settings.svg</normaloff>../graphics/settings.svg</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QPushButton" name="button_switch_search">
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: none;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>../graphics/search.svg</normaloff>../graphics/search.svg</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

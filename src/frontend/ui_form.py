@@ -25,204 +25,7 @@ class Ui_Porn_Fetch_Widget(object):
         if not Porn_Fetch_Widget.objectName():
             Porn_Fetch_Widget.setObjectName(u"Porn_Fetch_Widget")
         Porn_Fetch_Widget.resize(1758, 829)
-        Porn_Fetch_Widget.setStyleSheet(u"QWidget {\n"
-"color: white;\n"
-"background-color: rgb(60, 60, 60);\n"
-"border: none;\n"
-"}\n"
-"\n"
-"QLineEdit {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 4px;\n"
-"    padding: 5px;\n"
-"    background-color: #333;\n"
-"    color: #DDD;\n"
-"}\n"
-"QLineEdit:focus {\n"
-"    border: 2px solid #5599FF;\n"
-"}\n"
-"\n"
-"\n"
-"QProgressBar {\n"
-"	color: rgb(255, 153, 0);\n"
-"    border: 2px solid #5a2a82;\n"
-"    border-radius: 5px;\n"
-"    text-align: center;\n"
-"    background-color: rgb(74, 74, 74);\n"
-"    color: #ffffff;  /* Adding text color for better visibility */\n"
-"}\n"
-"\n"
-"QProgressBar::chunk {\n"
-"    background-color: rgb(0, 255, 224);\n"
-"    width: 10px; /* Adjust this to change the width of the 'chunk' */\n"
-"}\n"
-"\n"
-"QRadioButton {\n"
-"    color: #dcdcdc; /* Light grey text */\n"
-"    spacing: 5px; /* Space between the radio button and its label */\n"
-"}\n"
-"\n"
-"QRadioButton::indicator {\n"
-"    width: 13px;\n"
-"    height: 13px;\n"
-"    border-radius: 7px; /* Circular indicator */\n"
-""
-                        "}\n"
-"\n"
-"QRadioButton::indicator:unchecked {\n"
-"    background-color: #555; /* Dark background for unchecked state */\n"
-"    border: 2px solid #777; /* Slightly lighter border */\n"
-"}\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    background-color: #7a7aff; /* Bright color for checked state */\n"
-"    border: 2px solid #5a5aff; /* Border slightly darker than the background */\n"
-"}\n"
-"\n"
-"QRadioButton::indicator:checked:hover,\n"
-"QRadioButton::indicator:unchecked:hover {\n"
-"    border-color: #9a9aff; /* Change border color on hover */\n"
-"}\n"
-"\n"
-"\n"
-"QSlider::groove:horizontal {\n"
-"    border: 1px solid #5a2a82;\n"
-"    height: 8px;\n"
-"    background: #e0e0e0;\n"
-"    margin: 0px;\n"
-"    border-radius: 4px;\n"
-"}\n"
-"\n"
-"QSlider::handle:horizontal {\n"
-"    background: #5a2a82;\n"
-"    border: 1px solid #5a2a82;\n"
-"    width: 18px;\n"
-"    margin: -6px 0;\n"
-"    border-radius: 9px;\n"
-"}\n"
-"\n"
-"QSlider::add-page:horizontal {\n"
-"    background: #e0e0e0;\n"
-"}\n"
-"\n"
-"QSlider::sub-page"
-                        ":horizontal {\n"
-"    background: #5a2a82;\n"
-"}\n"
-"\n"
-"QTreeWidget {\n"
-"    background-color: rgb(94, 94, 94);\n"
-"    color: white;\n"
-"}\n"
-"\n"
-"QTreeWidget QHeaderView::section {\n"
-"    background-color: rgb(94, 94, 94);\n"
-"    color: black; \n"
-"    border: 1px solid #5a2a82;\n"
-"    padding: 4px;\n"
-"}\n"
-"\n"
-"/* QGroupBox */\n"
-"QGroupBox {\n"
-"    border: 2px solid #4CAF50; /* Border color for the group box */\n"
-"    border-radius: 5px;\n"
-"    margin-top: 10px; /* Adjust top margin as needed */\n"
-"    padding: 10px; /* Add some padding inside the group box */\n"
-"}\n"
-"\n"
-"/* Title text of the QGroupBox */\n"
-"QGroupBox::title {\n"
-"    subcontrol-origin: margin;\n"
-"    subcontrol-position: top center;\n"
-"    padding: 0 5px; /* Add padding for title text */\n"
-"    background-color: #4CAF50; /* Background color for the title bar */\n"
-"    color: white; /* Title text color */\n"
-"    border: 1px solid #4CAF50; /* Border color for the title bar */\n"
-"    border-top-left-radius: 3px;\n"
-"  "
-                        "  border-top-right-radius: 3px;\n"
-"}\n"
-"\n"
-"/* Apply style to all child widgets within the QGroupBox */\n"
-"QGroupBox QWidget {\n"
-"    margin: 5px; /* Adjust margin for child widgets */\n"
-"}\n"
-"\n"
-"/* Style for child QLabel elements within the QGroupBox */\n"
-"QGroupBox QLabel {\n"
-"    font-weight: bold; /* Make text bold for labels */\n"
-"}\n"
-"\n"
-"/* Style for child QPushButton elements within the QGroupBox */\n"
-"QGroupBox QPushButton {\n"
-"    background-color: #4CAF50; /* Background color for buttons */\n"
-"    color: white; /* Button text color */\n"
-"    border: 1px solid #4CAF50; /* Button border color */\n"
-"    border-radius: 3px; /* Button border radius */\n"
-"    padding: 5px 10px; /* Add padding to buttons */\n"
-"}\n"
-"\n"
-"/* Style for child QComboBox elements within the QGroupBox */\n"
-"QGroupBox QComboBox {\n"
-"    border: 1px solid #4CAF50; /* Border color for combo boxes */\n"
-"    border-radius: 3px; /* Combo box border radius */\n"
-"    padding: 3px; /* Add padding to combo boxes *"
-                        "/\n"
-"}\n"
-"\n"
-"QLabel {\n"
-"    color: #DDD;\n"
-"    padding: 2px;\n"
-"    font-size: 14px;\n"
-"}\n"
-"QPushButton {\n"
-"    color: #dcdcdc; /* Light grey text */\n"
-"    padding: 5px; /* Space inside the button */\n"
-"    border-radius: 7px; /* Rounded corners like the circular indicator */\n"
-"    border: 2px solid #777; /* Slightly lighter border */\n"
-"    background-color: #555; /* Dark background for unchecked state */\n"
-"}\n"
-"\n"
-"QPushButton:checked {\n"
-"    background-color: #7a7aff; /* Bright color for checked state */\n"
-"    border: 2px solid #5a5aff; /* Border slightly darker than the background */\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    border-color: #9a9aff; /* Change border color on hover */\n"
-"}\n"
-"\n"
-"QPushButton:checked:hover {\n"
-"    border-color: #9a9aff; /* Keep consistent hover effect when checked */\n"
-"}\n"
-"QCheckBox {\n"
-"    color: #dcdcdc; /* Light grey text */\n"
-"    spacing: 5px; /* Space between the checkbox and its label */\n"
-"}\n"
-"\n"
-"QCheckBox::indicator {\n"
-""
-                        "    width: 15px;\n"
-"    height: 15px;\n"
-"    border: 2px solid #777; /* Border color */\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:unchecked {\n"
-"    background-color: #555; /* Dark background for unchecked state */\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:checked {\n"
-"    background-color: #7a7aff; /* Bright color for checked state */\n"
-"    /* Here you can add your custom icon */\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:hover {\n"
-"    border-color: #9a9aff; /* Change border color on hover */\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:checked:hover {\n"
-"    background-color: #8a8aff; /* Slightly lighter background on hover */\n"
-"}")
+        Porn_Fetch_Widget.setStyleSheet(u"")
         self.gridLayout_8 = QGridLayout(Porn_Fetch_Widget)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
         self.widget_status = QWidget(Porn_Fetch_Widget)
@@ -1151,61 +954,62 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.widget = QWidget(Porn_Fetch_Widget)
         self.widget.setObjectName(u"widget")
-        self.widget.setStyleSheet(u"background-color: rgb(34, 34, 34)")
+        self.widget.setStyleSheet(u"background-color: rgb(34, 34, 34);\n"
+"border-radius: 10px;")
         self.gridLayout = QGridLayout(self.widget)
         self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName(u"gridLayout")
+        self.verticalSpacer = QSpacerItem(20, 30, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout.addItem(self.verticalSpacer, 4, 0, 1, 1)
+
         self.button_switch_credits = QPushButton(self.widget)
         self.button_switch_credits.setObjectName(u"button_switch_credits")
         self.button_switch_credits.setMinimumSize(QSize(50, 50))
         self.button_switch_credits.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_switch_credits.setStyleSheet(u"QPushButton:hover {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
-"                                stop:0 white, stop:1 #abcdef); /* Anfang wei\u00df, Ende Farbe */\n"
-"}\n"
-"")
+        self.button_switch_credits.setStyleSheet(u"border: none;")
+        icon = QIcon()
+        icon.addFile(u"../graphics/information.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.button_switch_credits.setIcon(icon)
+        self.button_switch_credits.setIconSize(QSize(32, 32))
 
         self.gridLayout.addWidget(self.button_switch_credits, 3, 0, 1, 1)
-
-        self.button_switch_search = QPushButton(self.widget)
-        self.button_switch_search.setObjectName(u"button_switch_search")
-        self.button_switch_search.setMinimumSize(QSize(50, 50))
-        self.button_switch_search.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_switch_search.setStyleSheet(u"QPushButton:hover {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
-"                                stop:0 white, stop:1 #abcdef); /* Anfang wei\u00df, Ende Farbe */\n"
-"}\n"
-"")
-
-        self.gridLayout.addWidget(self.button_switch_search, 1, 0, 1, 1)
-
-        self.button_switch_settings = QPushButton(self.widget)
-        self.button_switch_settings.setObjectName(u"button_switch_settings")
-        self.button_switch_settings.setMinimumSize(QSize(50, 50))
-        self.button_switch_settings.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_switch_settings.setStyleSheet(u"QPushButton:hover {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
-"                                stop:0 white, stop:1 #abcdef); /* Anfang wei\u00df, Ende Farbe */\n"
-"}\n"
-"")
-
-        self.gridLayout.addWidget(self.button_switch_settings, 2, 0, 1, 1)
 
         self.button_switch_home = QPushButton(self.widget)
         self.button_switch_home.setObjectName(u"button_switch_home")
         self.button_switch_home.setMinimumSize(QSize(50, 50))
         self.button_switch_home.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_switch_home.setStyleSheet(u"QPushButton:hover {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
-"                                stop:0 white, stop:1 #abcdef); /* Anfang wei\u00df, Ende Farbe */\n"
-"}\n"
-"")
+        self.button_switch_home.setStyleSheet(u"border: none")
+        icon1 = QIcon()
+        icon1.addFile(u"../graphics/download.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.button_switch_home.setIcon(icon1)
+        self.button_switch_home.setIconSize(QSize(32, 32))
 
         self.gridLayout.addWidget(self.button_switch_home, 0, 0, 1, 1)
 
-        self.verticalSpacer = QSpacerItem(20, 30, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.button_switch_settings = QPushButton(self.widget)
+        self.button_switch_settings.setObjectName(u"button_switch_settings")
+        self.button_switch_settings.setMinimumSize(QSize(50, 50))
+        self.button_switch_settings.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_switch_settings.setStyleSheet(u"border: none;")
+        icon2 = QIcon()
+        icon2.addFile(u"../graphics/settings.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.button_switch_settings.setIcon(icon2)
+        self.button_switch_settings.setIconSize(QSize(32, 32))
 
-        self.gridLayout.addItem(self.verticalSpacer, 4, 0, 1, 1)
+        self.gridLayout.addWidget(self.button_switch_settings, 2, 0, 1, 1)
+
+        self.button_switch_search = QPushButton(self.widget)
+        self.button_switch_search.setObjectName(u"button_switch_search")
+        self.button_switch_search.setMinimumSize(QSize(50, 50))
+        self.button_switch_search.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_switch_search.setStyleSheet(u"border: none;")
+        icon3 = QIcon()
+        icon3.addFile(u"../graphics/search.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.button_switch_search.setIcon(icon3)
+        self.button_switch_search.setIconSize(QSize(32, 32))
+
+        self.gridLayout.addWidget(self.button_switch_search, 1, 0, 1, 1)
 
 
         self.gridLayout_8.addWidget(self.widget, 0, 0, 2, 2)
@@ -1308,9 +1112,9 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_memberContent_custom_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Offers custom Videos", None))
         self.radio_memberContent_has_photos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Has Photos", None))
         self.radio_memberContent_offers_fan_club.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Offers Fan Club", None))
-        self.button_switch_credits.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Credits", None))
-        self.button_switch_search.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search", None))
-        self.button_switch_settings.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Settings", None))
-        self.button_switch_home.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Home", None))
+        self.button_switch_credits.setText("")
+        self.button_switch_home.setText("")
+        self.button_switch_settings.setText("")
+        self.button_switch_search.setText("")
     # retranslateUi
 

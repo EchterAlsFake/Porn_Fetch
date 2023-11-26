@@ -168,17 +168,11 @@ I am just the developer. Nobody will get you in jail because you downloaded a vi
 - Cython
 
 ### Graphics:
-- [Download Icon](https://icons8.com/icon/104149/herunterladen) *
-- [Search Icon](https://icons8.com/icon/aROEUCBo74Il/suche) *
-- [Settings Icon](https://icons8.com/icon/52146/einstellungen) *
-- [C Icon](https://icons8.com/icon/Uehg4gyVyrUo/copyright) * 
-- [M Icon](https://iconscout.com/icons/medium) By [Unicons Font](https://iconscout.com/contributors/unicons) on [Icon Scout](https://iconscout.com) *
-- [Checkmark](https://www.iconsdb.com/barbie-pink-icons/checkmark-icon.html)
-- [Download Icon v2](https://iconscout.com/free-icon/download-1754130) by [Kmg Design](https://iconscout.com/contributors/kmgdesignid) on [Icon Scout](https://iconscout.com)
-- [Settings Icon v2](https://iconscout.com/free-icon/settings-2856913) by [Haca Studio](https://iconscout.com/contributors/boosticon) on [Icon Scout](https://iconscout.com)
-- [Account Icon](https://iconscout.com/free-icon/account-6495099) by [Alex Martynov](https://iconscout.com/contributors/rengised) on [Icon Scout](https://iconscout.com)
-- <a href="https://iconscout.com/icons/house" class="text-underline font-size-sm" target="_blank">House</a> by <a href="https://iconscout.com/contributors/unicons" class="text-underline font-size-sm">Unicons Font</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
-*Only used in older versions.
+
+- <a href="https://iconscout.com/icons/information" class="text-underline font-size-sm" target="_blank">Information</a> by <a href="https://iconscout.com/contributors/petai-jantrapoon" class="text-underline font-size-sm">Petai Jantrapoon</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
+- <a href="https://iconscout.com/icons/tick" class="text-underline font-size-sm" target="_blank">Tick</a> by <a href="https://iconscout.com/contributors/endesignz" class="text-underline font-size-sm">Jessiey Sahana</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
+
+All other Icons are also from Icon Scout, but I wasn't given the author's name, so I can't credit them.
 
 ## Contributors:
 
