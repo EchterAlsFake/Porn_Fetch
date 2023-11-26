@@ -8,18 +8,18 @@ from PySide6.QtCore import Signal, Qt, QPoint, QRect
 from src.frontend.ui_form import Ui_Porn_Fetch_Widget
 from phub import locals
 
-
 categories = [attr for attr in dir(locals.Category) if
               not callable(getattr(locals.Category, attr)) and not attr.startswith("__")]
 
+
 class CategoryFilterWindow(QWidget):
     data_selected = Signal((str, list))
+
     def __init__(self, categories):
         super().__init__()
         self.radio_buttons = {}
         self.checkboxes = {}
         self.categories = categories
-
 
         self.init_ui()
 
@@ -86,17 +86,44 @@ class CategoryFilterWindow(QWidget):
 class PornFetch(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.selected_category = None
+        self.excluded_categories_filter = None
         self.ui = Ui_Porn_Fetch_Widget()
         self.ui.setupUi(self)
+        self.button_connectors()
+
+    def button_connectors(self):
+        """a function to link the buttons to their functions"""
+
+        self.ui.button_switch_home.clicked.connect(self.switch_to_home)
+        self.ui.button_switch_search.clicked.connect(self.switch_to_search)
+
+
+
+
+
+    """
+    The following functions are used to switch between the different widgets
+    """
+
+
+    def switch_to_home(self):
+        print("Changed Index to 0")
+        self.ui.stacked_widget_top.setCurrentIndex(0)
+
+    def switch_to_search(self):
+        print("Changed Index to 1")
+        self.ui.stacked_widget_top.setCurrentIndex(1)
+
+
+
+
 
     def handle_selected_data(self, selected_category, excluded_categories):
         self.selected_category = selected_category
         self.excluded_categories_filter = excluded_categories
 
-
     def search_videos(self):
-
-        print("Search")
         include_filters = []
         exclude_filters = []
 
@@ -140,7 +167,6 @@ class PornFetch(QWidget):
             query_object = self.client.search(query, -combined_exclude_filter)
         else:
             query_object = self.client.search(query)
-
 
         for video in query_object:
             print(video.title)

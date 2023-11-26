@@ -109,40 +109,77 @@ QTreeWidget QHeaderView::section {
     padding: 4px;
 }
 
+/* QGroupBox */
 QGroupBox {
-        border: 0px;
-        margin-top: 1ex; /* Adjust as needed */
-    }
-    QGroupBox::title {
-        subcontrol-origin: margin;
-        subcontrol-position: top center;
-        padding: 0 3px;
-    }
+    border: 2px solid #4CAF50; /* Border color for the group box */
+    border-radius: 5px;
+    margin-top: 10px; /* Adjust top margin as needed */
+    padding: 10px; /* Add some padding inside the group box */
+}
+
+/* Title text of the QGroupBox */
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 0 5px; /* Add padding for title text */
+    background-color: #4CAF50; /* Background color for the title bar */
+    color: white; /* Title text color */
+    border: 1px solid #4CAF50; /* Border color for the title bar */
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+/* Apply style to all child widgets within the QGroupBox */
+QGroupBox QWidget {
+    margin: 5px; /* Adjust margin for child widgets */
+}
+
+/* Style for child QLabel elements within the QGroupBox */
+QGroupBox QLabel {
+    font-weight: bold; /* Make text bold for labels */
+}
+
+/* Style for child QPushButton elements within the QGroupBox */
+QGroupBox QPushButton {
+    background-color: #4CAF50; /* Background color for buttons */
+    color: white; /* Button text color */
+    border: 1px solid #4CAF50; /* Button border color */
+    border-radius: 3px; /* Button border radius */
+    padding: 5px 10px; /* Add padding to buttons */
+}
+
+/* Style for child QComboBox elements within the QGroupBox */
+QGroupBox QComboBox {
+    border: 1px solid #4CAF50; /* Border color for combo boxes */
+    border-radius: 3px; /* Combo box border radius */
+    padding: 3px; /* Add padding to combo boxes */
+}
 
 QLabel {
     color: #DDD;
     padding: 2px;
     font-size: 14px;
 }
-
 QPushButton {
-    border: 2px solid #444;
-    border-radius: 4px;
-    padding: 5px;
-    background-color: #333;
-    color: #DDD;
-    font-weight: bold;
-    font-size: 14px;
+    color: #dcdcdc; /* Light grey text */
+    padding: 5px; /* Space inside the button */
+    border-radius: 7px; /* Rounded corners like the circular indicator */
+    border: 2px solid #777; /* Slightly lighter border */
+    background-color: #555; /* Dark background for unchecked state */
+}
+
+QPushButton:checked {
+    background-color: #7a7aff; /* Bright color for checked state */
+    border: 2px solid #5a5aff; /* Border slightly darker than the background */
 }
 
 QPushButton:hover {
-    background-color: #555;
+    border-color: #9a9aff; /* Change border color on hover */
 }
 
-QPushButton:pressed {
-    background-color: #5599FF;
+QPushButton:checked:hover {
+    border-color: #9a9aff; /* Keep consistent hover effect when checked */
 }
-
 QCheckBox {
     color: #dcdcdc; /* Light grey text */
     spacing: 5px; /* Space between the checkbox and its label */
@@ -172,127 +209,7 @@ QCheckBox::indicator:checked:hover {
 }</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_8">
-   <item row="0" column="0" colspan="3">
-    <layout class="QVBoxLayout" name="HEADER"/>
-   </item>
-   <item row="1" column="0" rowspan="2" colspan="2">
-    <widget class="QWidget" name="widget" native="true">
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(34, 34, 34)</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <property name="spacing">
-       <number>0</number>
-      </property>
-      <item row="3" column="0">
-       <widget class="QPushButton" name="button_switch_credits">
-        <property name="minimumSize">
-         <size>
-          <width>50</width>
-          <height>50</height>
-         </size>
-        </property>
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                stop:0 white, stop:1 #abcdef); /* Anfang weiß, Ende Farbe */
-}
-</string>
-        </property>
-        <property name="text">
-         <string>Credits</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QPushButton" name="button_switch_search">
-        <property name="minimumSize">
-         <size>
-          <width>50</width>
-          <height>50</height>
-         </size>
-        </property>
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                stop:0 white, stop:1 #abcdef); /* Anfang weiß, Ende Farbe */
-}
-</string>
-        </property>
-        <property name="text">
-         <string>Search</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QPushButton" name="button_switch_settings">
-        <property name="minimumSize">
-         <size>
-          <width>50</width>
-          <height>50</height>
-         </size>
-        </property>
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                stop:0 white, stop:1 #abcdef); /* Anfang weiß, Ende Farbe */
-}
-</string>
-        </property>
-        <property name="text">
-         <string>Settings</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QPushButton" name="button_switch_home">
-        <property name="minimumSize">
-         <size>
-          <width>50</width>
-          <height>50</height>
-         </size>
-        </property>
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                stop:0 white, stop:1 #abcdef); /* Anfang weiß, Ende Farbe */
-}
-</string>
-        </property>
-        <property name="text">
-         <string>Home</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>30</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="2" column="2">
+   <item row="1" column="2">
     <widget class="QWidget" name="widget_status" native="true">
      <property name="styleSheet">
       <string notr="true">background-color: rgb(34, 34, 34);
@@ -394,17 +311,160 @@ border-radius: 5px;</string>
      </layout>
     </widget>
    </item>
-   <item row="1" column="2">
+   <item row="0" column="2">
     <widget class="QStackedWidget" name="stacked_widget_main">
      <property name="currentIndex">
       <number>0</number>
      </property>
      <widget class="QWidget" name="page_3">
       <layout class="QGridLayout" name="gridLayout_7">
-       <item row="2" column="0">
-        <widget class="QTreeWidget" name="treeWidget">
-         <property name="styleSheet">
-          <string>QWidget {
+       <item row="0" column="0">
+        <widget class="QStackedWidget" name="stacked_widget_top">
+         <property name="cursor">
+          <cursorShape>ArrowCursor</cursorShape>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="page">
+          <layout class="QGridLayout" name="gridLayout_6">
+           <item row="0" column="1">
+            <layout class="QGridLayout" name="gridlayout_login_box">
+             <item row="3" column="2">
+              <widget class="QPushButton" name="button_get_recommended_videos">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    border: 2px solid #444;
+    border-radius: 4px;
+    padding: 5px;
+    color: #DDD;
+    font-weight: bold;
+    font-size: 14px;
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #78909C, stop:1 #90A4AE);
+}</string>
+               </property>
+               <property name="text">
+                <string>Get recommended videos</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_password">
+               <property name="text">
+                <string>Password:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QPushButton" name="button_get_liked_videos">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    border: 2px solid #444;
+    border-radius: 4px;
+    padding: 5px;
+    color: #DDD;
+    font-weight: bold;
+    font-size: 14px;
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #78909C, stop:1 #90A4AE);
+}</string>
+               </property>
+               <property name="text">
+                <string>Get Liked videos</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_username">
+               <property name="text">
+                <string>Username:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QPushButton" name="button_get_watched_videos">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    border: 2px solid #444;
+    border-radius: 4px;
+    padding: 5px;
+    color: #DDD;
+    font-weight: bold;
+    font-size: 14px;
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #78909C, stop:1 #90A4AE);
+}</string>
+               </property>
+               <property name="text">
+                <string>Get watched videos</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0" colspan="4">
+              <widget class="QPushButton" name="button_login">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    border: 2px solid #444;
+    border-radius: 8px;
+    padding: 5px;
+    color: #DDD;
+    font-weight: bold;
+    font-size: 14px;
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #5555FF, stop:1 #AA55FF);
+}
+
+QPushButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #6666FF, stop:1 #BB66FF);
+}
+
+QPushButton:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #4444DD, stop:1 #9944DD);
+}</string>
+               </property>
+               <property name="text">
+                <string>Login</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1" colspan="3">
+              <widget class="QLineEdit" name="lineedit_password">
+               <property name="echoMode">
+                <enum>QLineEdit::Password</enum>
+               </property>
+               <property name="placeholderText">
+                <string>Enter your PornHub Password</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1" colspan="3">
+              <widget class="QLineEdit" name="lineedit_username">
+               <property name="placeholderText">
+                <string>Enter your PornHub Username</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="1" column="0" colspan="2">
+            <widget class="QTreeWidget" name="treeWidget">
+             <property name="styleSheet">
+              <string notr="true">QWidget {
 color: white;
 background-color: rgb(60, 60, 60);
 border: none;
@@ -486,17 +546,44 @@ QSlider::add-page:horizontal {
 QSlider::sub-page:horizontal {
     background: #5a2a82;
 }
-
 QTreeWidget {
-    background-color: rgb(94, 94, 94);
-    color: white;
+    show-decoration-selected: 1; /* Show selection as a border when the widget is out of focus. */
+    color: #dcdcdc; /* Light grey text */
+    background-color: #555; /* Dark background for the tree */
+    border: 2px solid #777; /* Slightly lighter border for the tree */
+    padding: 5px; /* Space inside the tree */
 }
 
-QTreeWidget QHeaderView::section {
-    background-color: rgb(94, 94, 94);
-    color: black; 
-    border: 1px solid #5a2a82;
-    padding: 4px;
+QTreeWidget::item {
+    border-radius: 7px; /* Rounded corners for each item */
+    border: 2px solid transparent; /* No border by default */
+    padding: 5px; /* Space inside each item */
+    margin: 2px; /* Space between items */
+}
+
+QTreeWidget::item:selected {
+    background-color: #7a7aff; /* Bright color for selected item */
+    border: 2px solid #5a5aff; /* Border slightly darker than the background for selected item */
+}
+
+QTreeWidget::item:hover {
+    border-color: #9a9aff; /* Change border color on hover */
+}
+
+QTreeWidget::branch {
+    background: #555; /* Background color for branch lines */
+}
+
+QTreeWidget::branch:has-siblings:!adjoins-item {
+    border-image: url(:/images/branch-more.png) 0; /* Custom image for branch lines with more siblings */
+}
+
+QTreeWidget::branch:has-siblings:adjoins-item {
+    border-image: url(:/images/branch-end.png) 0; /* Custom image for last branch line */
+}
+
+QTreeWidget::branch:!has-children:!has-siblings:adjoins-item {
+    border-image: url(:/images/branch-end.png) 0; /* Custom image for a lone branch line */
 }
 
 QGroupBox {
@@ -532,26 +619,16 @@ QPushButton:hover {
 QPushButton:pressed {
     background-color: #5599FF;
 }</string>
-         </property>
-         <column>
-          <property name="text">
-           <string notr="true">1</string>
-          </property>
-         </column>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QStackedWidget" name="stacked_widget_top">
-         <property name="cursor">
-          <cursorShape>ArrowCursor</cursorShape>
-         </property>
-         <property name="currentIndex">
-          <number>1</number>
-         </property>
-         <widget class="QWidget" name="page">
-          <layout class="QGridLayout" name="gridLayout_6">
+             </property>
+             <column>
+              <property name="text">
+               <string notr="true">1</string>
+              </property>
+             </column>
+            </widget>
+           </item>
            <item row="0" column="0">
-            <layout class="QGridLayout" name="gridLayout_3">
+            <layout class="QGridLayout" name="gridlayout_start_download_box">
              <item row="3" column="0">
               <widget class="QLabel" name="label_file">
                <property name="text">
@@ -738,661 +815,642 @@ QPushButton:pressed {
              </item>
             </layout>
            </item>
-           <item row="0" column="1">
-            <layout class="QGridLayout" name="gridLayout_4">
-             <item row="3" column="2">
-              <widget class="QPushButton" name="button_get_recommended_videos">
-               <property name="cursor">
-                <cursorShape>PointingHandCursor</cursorShape>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">QPushButton {
-    border: 2px solid #444;
-    border-radius: 4px;
-    padding: 5px;
-    color: #DDD;
-    font-weight: bold;
-    font-size: 14px;
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #78909C, stop:1 #90A4AE);
-}</string>
-               </property>
-               <property name="text">
-                <string>Get recommended videos</string>
-               </property>
-              </widget>
-             </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="page_2">
+          <layout class="QGridLayout" name="gridLayout_17">
+           <item row="0" column="0">
+            <layout class="QGridLayout" name="gridlayout_search_videos">
              <item row="1" column="0">
-              <widget class="QLabel" name="label_password">
+              <widget class="QLabel" name="label_search_users">
                <property name="text">
-                <string>Password:</string>
+                <string>Search Users</string>
                </property>
               </widget>
              </item>
-             <item row="3" column="0">
-              <widget class="QPushButton" name="button_get_liked_videos">
-               <property name="cursor">
-                <cursorShape>PointingHandCursor</cursorShape>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">QPushButton {
-    border: 2px solid #444;
-    border-radius: 4px;
-    padding: 5px;
-    color: #DDD;
-    font-weight: bold;
-    font-size: 14px;
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #78909C, stop:1 #90A4AE);
-}</string>
-               </property>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_search_pornstars">
                <property name="text">
-                <string>Get Liked videos</string>
+                <string>Search Pornstars</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="lineedit_search_users_query"/>
+             </item>
+             <item row="0" column="3">
+              <widget class="QPushButton" name="button_search_category_filters">
+               <property name="text">
+                <string>Category Filter</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="lineedit_search_videos_query"/>
+             </item>
+             <item row="1" column="3">
+              <widget class="QPushButton" name="button_filter_users">
+               <property name="text">
+                <string>Filters</string>
                </property>
               </widget>
              </item>
              <item row="0" column="0">
-              <widget class="QLabel" name="label_username">
+              <widget class="QLabel" name="label_search_videos">
                <property name="text">
-                <string>Username:</string>
+                <string>Search Videos</string>
                </property>
               </widget>
              </item>
-             <item row="3" column="1">
-              <widget class="QPushButton" name="button_get_watched_videos">
-               <property name="cursor">
-                <cursorShape>PointingHandCursor</cursorShape>
+             <item row="2" column="2" colspan="2">
+              <widget class="QPushButton" name="button_search_pornstar">
+               <property name="text">
+                <string>Search</string>
                </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QPushButton" name="button_search_users">
+               <property name="text">
+                <string>Search</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QPushButton" name="button_search_filters">
+               <property name="text">
+                <string>Search</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QLineEdit" name="lineedit_search_pornstar_query"/>
+             </item>
+            </layout>
+           </item>
+           <item row="0" column="1">
+            <layout class="QGridLayout" name="gridLayout_16">
+             <item row="0" column="0">
+              <widget class="QGroupBox" name="groupBox_7">
+               <property name="title">
+                <string>Member Interests</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_13">
+                <item row="2" column="1">
+                 <widget class="QRadioButton" name="radio_memberInterests_into_none">
+                  <property name="text">
+                   <string>Into None</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QRadioButton" name="radio_memberInterests_into_male">
+                  <property name="text">
+                   <string>Into Male</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QRadioButton" name="radio_memberInterests_none">
+                  <property name="text">
+                   <string>None</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QRadioButton" name="radio_memberInterests_into_female">
+                  <property name="text">
+                   <string>Into Female</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QRadioButton" name="radio_memberInterests_into_all">
+                  <property name="text">
+                   <string>Into All</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QGroupBox" name="groupBox_3">
                <property name="styleSheet">
-                <string notr="true">QPushButton {
-    border: 2px solid #444;
-    border-radius: 4px;
-    padding: 5px;
-    color: #DDD;
-    font-weight: bold;
-    font-size: 14px;
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #78909C, stop:1 #90A4AE);
-}</string>
+                <string notr="true"/>
                </property>
-               <property name="text">
-                <string>Get watched videos</string>
+               <property name="title">
+                <string>Other Filters</string>
                </property>
-              </widget>
-             </item>
-             <item row="2" column="0" colspan="4">
-              <widget class="QPushButton" name="button_login">
-               <property name="cursor">
-                <cursorShape>PointingHandCursor</cursorShape>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">QPushButton {
-    border: 2px solid #444;
-    border-radius: 8px;
-    padding: 5px;
-    color: #DDD;
-    font-weight: bold;
-    font-size: 14px;
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #5555FF, stop:1 #AA55FF);
-}
-
-QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #6666FF, stop:1 #BB66FF);
-}
-
-QPushButton:pressed {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #4444DD, stop:1 #9944DD);
-}</string>
-               </property>
-               <property name="text">
-                <string>Login</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1" colspan="3">
-              <widget class="QLineEdit" name="lineedit_password">
-               <property name="echoMode">
-                <enum>QLineEdit::Password</enum>
-               </property>
-               <property name="placeholderText">
-                <string>Enter your PornHub Password</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1" colspan="3">
-              <widget class="QLineEdit" name="lineedit_username">
-               <property name="placeholderText">
-                <string>Enter your PornHub Username</string>
-               </property>
+               <layout class="QGridLayout" name="gridLayout_15">
+                <item row="0" column="1">
+                 <widget class="QRadioButton" name="radio_otherFilters_none">
+                  <property name="text">
+                   <string>None</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QRadioButton" name="radio_otherFilters_user_popular">
+                  <property name="text">
+                   <string>User Popular</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QRadioButton" name="radio_otherFilters_user_newest">
+                  <property name="text">
+                   <string>User Newest</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </widget>
              </item>
             </layout>
            </item>
            <item row="1" column="0" colspan="2">
-            <spacer name="verticalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
+            <layout class="QGridLayout" name="gridLayout_14">
+             <item row="0" column="1">
+              <widget class="QGroupBox" name="groupBox_2">
+               <property name="title">
+                <string>Production Filters (Videos)</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_3">
+                <item row="1" column="1">
+                 <widget class="QRadioButton" name="radio_production_none">
+                  <property name="text">
+                   <string>None</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QRadioButton" name="radio_production_homemade">
+                  <property name="text">
+                   <string>Homemade</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QRadioButton" name="radio_production_professional">
+                  <property name="text">
+                   <string>Professional</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QGroupBox" name="groupbox_member_relationship">
+               <property name="title">
+                <string>Member Relationship</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_4">
+                <item row="0" column="3">
+                 <widget class="QRadioButton" name="radio_memberRelation_single">
+                  <property name="text">
+                   <string>Single</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QRadioButton" name="radio_memberRelation_open">
+                  <property name="text">
+                   <string>Open Relation</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QRadioButton" name="radio_memberRelation_taken">
+                  <property name="text">
+                   <string>Taken</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="4">
+                 <widget class="QRadioButton" name="radio_memberRelation_none">
+                  <property name="text">
+                   <string>None</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QGroupBox" name="groupBox_4">
+               <property name="title">
+                <string>Member Type</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_9">
+                <item row="1" column="0">
+                 <widget class="QRadioButton" name="radio_memberType_is_staff">
+                  <property name="text">
+                   <string>Is Staff</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QRadioButton" name="radio_memberType_none">
+                  <property name="text">
+                   <string>None</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QRadioButton" name="radio_memberType_is_model">
+                  <property name="text">
+                   <string>Is Model</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QRadioButton" name="radio_memberType_is_online">
+                  <property name="text">
+                   <string>Is Online</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QGroupBox" name="groupBox_6">
+               <property name="styleSheet">
+                <string notr="true">/* QGroupBox */
+QGroupBox {
+    border: 2px solid #4CAF50; /* Border color for the group box */
+    border-radius: 5px;
+    margin-top: 10px; /* Adjust top margin as needed */
+    padding: 0px; /* Add some padding inside the group box */
+}
+
+/* Title text of the QGroupBox */
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 0 5px; /* Add padding for title text */
+    background-color: #4CAF50; /* Background color for the title bar */
+    color: white; /* Title text color */
+    border: 1px solid #4CAF50; /* Border color for the title bar */
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+/* Apply style to all child widgets within the QGroupBox */
+QGroupBox QWidget {
+    margin: 5px; /* Adjust margin for child widgets */
+}
+
+/* Style for child QLabel elements within the QGroupBox */
+QGroupBox QLabel {
+    font-weight: bold; /* Make text bold for labels */
+}
+
+/* Style for child QPushButton elements within the QGroupBox */
+QGroupBox QPushButton {
+    background-color: #4CAF50; /* Background color for buttons */
+    color: white; /* Button text color */
+    border: 1px solid #4CAF50; /* Button border color */
+    border-radius: 3px; /* Button border radius */
+    padding: 5px 10px; /* Add padding to buttons */
+}
+
+/* Style for child QComboBox elements within the QGroupBox */
+QGroupBox QComboBox {
+    border: 1px solid #4CAF50; /* Border color for combo boxes */
+    border-radius: 3px; /* Combo box border radius */
+    padding: 3px; /* Add padding to combo boxes */
+}
+</string>
+               </property>
+               <property name="title">
+                <string>Member Gender</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_11">
+                <item row="1" column="4">
+                 <widget class="QRadioButton" name="radio_memberGender_trans_male">
+                  <property name="text">
+                   <string>Trans Male</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="4">
+                 <widget class="QRadioButton" name="radio_memberGender_none">
+                  <property name="text">
+                   <string>None</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QRadioButton" name="radio_memberGender_female_couple">
+                  <property name="text">
+                   <string>Female Couple</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QRadioButton" name="radio_memberGender_female">
+                  <property name="text">
+                   <string>Female</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="3">
+                 <widget class="QRadioButton" name="radio_memberGender_other">
+                  <property name="text">
+                   <string>Other</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QRadioButton" name="radio_memberGender_couple">
+                  <property name="text">
+                   <string>Couple</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="3">
+                 <widget class="QRadioButton" name="radio_memberGender_male">
+                  <property name="text">
+                   <string>Male</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QRadioButton" name="radio_memberGender_trans_female">
+                  <property name="text">
+                   <string>Trans Female</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="5">
+                 <widget class="QRadioButton" name="radio_memberGender_non_binary">
+                  <property name="text">
+                   <string>Non Binary</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QGroupBox" name="groupBox">
+               <property name="title">
+                <string>Sorting Filters (Videos)</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_12">
+                <item row="2" column="0">
+                 <widget class="QCheckBox" name="checkbox_sorting_top_rated">
+                  <property name="text">
+                   <string>Top rated</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCheckBox" name="checkbox_sorting_yearly">
+                  <property name="text">
+                   <string>Yearly</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="3">
+                 <widget class="QCheckBox" name="checkbox_sorting_views">
+                  <property name="text">
+                   <string>Views</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="4">
+                 <widget class="QCheckBox" name="checkbox_sorting_all_time">
+                  <property name="text">
+                   <string>All Time</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="4">
+                 <widget class="QCheckBox" name="checkbox_sorting_hd">
+                  <property name="text">
+                   <string>HD</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QCheckBox" name="checkbox_sorting_weekly">
+                  <property name="text">
+                   <string>Weekly</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="3">
+                 <widget class="QCheckBox" name="checkbox_sorting_longest">
+                  <property name="text">
+                   <string>Longest</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="2">
+                 <widget class="QCheckBox" name="checkbox_sorting_recent">
+                  <property name="text">
+                   <string>Recent</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="5">
+                 <widget class="QCheckBox" name="checkbox_sorting_daily">
+                  <property name="text">
+                   <string>Daily</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QGroupBox" name="groupBox_5">
+               <property name="title">
+                <string>Member Content</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_10">
+                <item row="1" column="2">
+                 <widget class="QRadioButton" name="radio_memberContent_has_playlists">
+                  <property name="text">
+                   <string>Has Playlists</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QRadioButton" name="radio_memberContent_none">
+                  <property name="text">
+                   <string>None</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QRadioButton" name="radio_memberContent_has_videos">
+                  <property name="text">
+                   <string>Has Videos</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QRadioButton" name="radio_memberContent_has_avatar">
+                  <property name="text">
+                   <string>Has Avatar</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QRadioButton" name="radio_memberContent_custom_videos">
+                  <property name="text">
+                   <string>Offers custom Videos</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QRadioButton" name="radio_memberContent_has_photos">
+                  <property name="text">
+                   <string>Has Photos</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="3">
+                 <widget class="QRadioButton" name="radio_memberContent_offers_fan_club">
+                  <property name="text">
+                   <string>Offers Fan Club</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
            </item>
           </layout>
-         </widget>
-         <widget class="QWidget" name="page_2">
-          <widget class="QWidget" name="gridLayoutWidget">
-           <property name="geometry">
-            <rect>
-             <x>9</x>
-             <y>9</y>
-             <width>791</width>
-             <height>113</height>
-            </rect>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_9">
-            <item row="1" column="2">
-             <widget class="QPushButton" name="pushButton_2">
-              <property name="text">
-               <string>Search</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLineEdit" name="lineEdit"/>
-            </item>
-            <item row="2" column="1">
-             <widget class="QLineEdit" name="lineEdit_3"/>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>Search Videos</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2">
-             <widget class="QPushButton" name="pushButton">
-              <property name="text">
-               <string>Search</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string>Search Users</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>Search Pornstars</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QLineEdit" name="lineEdit_2"/>
-            </item>
-            <item row="2" column="2">
-             <widget class="QPushButton" name="pushButton_3">
-              <property name="text">
-               <string>Search</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="3">
-             <widget class="QPushButton" name="button_filter_videos">
-              <property name="text">
-               <string>Category Filter</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="3">
-             <widget class="QPushButton" name="button_filter_users">
-              <property name="text">
-               <string>Filters</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QGroupBox" name="groupBox">
-           <property name="geometry">
-            <rect>
-             <x>800</x>
-             <y>0</y>
-             <width>821</width>
-             <height>131</height>
-            </rect>
-           </property>
-           <property name="title">
-            <string/>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_12">
-            <item row="0" column="0">
-             <layout class="QGridLayout" name="gridLayout_10">
-              <item row="2" column="2">
-               <widget class="QRadioButton" name="radioButton_2">
-                <property name="text">
-                 <string>None</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0" colspan="3">
-               <widget class="QLabel" name="label_4">
-                <property name="styleSheet">
-                 <string notr="true">padding-left: 40px;</string>
-                </property>
-                <property name="text">
-                 <string>Production Filters (for Videos)</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QRadioButton" name="radioButton_4">
-                <property name="text">
-                 <string>Professional</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="0">
-               <widget class="QRadioButton" name="radioButton">
-                <property name="text">
-                 <string>Homemade</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="0" column="1">
-             <layout class="QGridLayout" name="gridLayout_11">
-              <item row="2" column="2">
-               <widget class="QCheckBox" name="checkBox_6">
-                <property name="text">
-                 <string>Weekly</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="3">
-               <widget class="QCheckBox" name="checkBox_4">
-                <property name="text">
-                 <string>Yearly</string>
-                </property>
-               </widget>
-              </item>
-              <item row="4" column="0">
-               <widget class="QCheckBox" name="checkBox_11">
-                <property name="text">
-                 <string>Recent</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0" colspan="4">
-               <widget class="QLabel" name="label_5">
-                <property name="styleSheet">
-                 <string notr="true">padding-left: 180px;</string>
-                </property>
-                <property name="text">
-                 <string>Sorting filters (for Videos)</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="0">
-               <widget class="QCheckBox" name="checkBox">
-                <property name="text">
-                 <string>HD</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QCheckBox" name="checkBox_8">
-                <property name="text">
-                 <string>Daily</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="0">
-               <widget class="QCheckBox" name="checkBox_9">
-                <property name="text">
-                 <string>All Time</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="3">
-               <widget class="QCheckBox" name="checkBox_3">
-                <property name="text">
-                 <string>Longest</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="1">
-               <widget class="QCheckBox" name="checkBox_12">
-                <property name="text">
-                 <string>Top rated</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="2">
-               <widget class="QCheckBox" name="checkBox_10">
-                <property name="text">
-                 <string>Views</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="gridLayoutWidget_4">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>130</y>
-             <width>301</width>
-             <height>80</height>
-            </rect>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_13">
-            <item row="1" column="1">
-             <widget class="QRadioButton" name="radioButton_9">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QRadioButton" name="radioButton_7">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QRadioButton" name="radioButton_8">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0" colspan="3">
-             <widget class="QLabel" name="label_6">
-              <property name="text">
-               <string>Member Type</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="gridLayoutWidget_5">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>220</y>
-             <width>297</width>
-             <height>80</height>
-            </rect>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_14">
-            <item row="1" column="2">
-             <widget class="QRadioButton" name="radioButton_15">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QRadioButton" name="radioButton_14">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QRadioButton" name="radioButton_11">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QRadioButton" name="radioButton_12">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QRadioButton" name="radioButton_10">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="2">
-             <widget class="QRadioButton" name="radioButton_13">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0" colspan="3">
-             <widget class="QLabel" name="label_7">
-              <property name="text">
-               <string>Member content</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="gridLayoutWidget_6">
-           <property name="geometry">
-            <rect>
-             <x>350</x>
-             <y>220</y>
-             <width>323</width>
-             <height>80</height>
-            </rect>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_15">
-            <item row="1" column="0">
-             <widget class="QRadioButton" name="radioButton_17">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QRadioButton" name="radioButton_16">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QRadioButton" name="radioButton_18">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0" colspan="3">
-             <widget class="QLabel" name="label_8">
-              <property name="text">
-               <string>Member relationship</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="gridLayoutWidget_7">
-           <property name="geometry">
-            <rect>
-             <x>730</x>
-             <y>210</y>
-             <width>389</width>
-             <height>80</height>
-            </rect>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_16">
-            <item row="0" column="1">
-             <widget class="QLabel" name="label_12">
-              <property name="text">
-               <string>Member Gender</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QRadioButton" name="radioButton_22">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QRadioButton" name="radioButton_26">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="3">
-             <widget class="QRadioButton" name="radioButton_21">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QRadioButton" name="radioButton_25">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QRadioButton" name="radioButton_20">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QRadioButton" name="radioButton_19">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="2">
-             <widget class="QRadioButton" name="radioButton_24">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="3">
-             <widget class="QRadioButton" name="radioButton_23">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="gridLayoutWidget_8">
-           <property name="geometry">
-            <rect>
-             <x>1160</x>
-             <y>180</y>
-             <width>212</width>
-             <height>80</height>
-            </rect>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_17">
-            <item row="1" column="0">
-             <widget class="QRadioButton" name="radioButton_27">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_11">
-              <property name="text">
-               <string>Member interests</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QRadioButton" name="radioButton_30">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QRadioButton" name="radioButton_29">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QRadioButton" name="radioButton_28">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="gridLayoutWidget_9">
-           <property name="geometry">
-            <rect>
-             <x>1410</x>
-             <y>190</y>
-             <width>205</width>
-             <height>80</height>
-            </rect>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_18">
-            <item row="1" column="0">
-             <widget class="QRadioButton" name="radioButton_32">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QRadioButton" name="radioButton_31">
-              <property name="text">
-               <string>Homemade</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0" colspan="2">
-             <widget class="QLabel" name="label_10">
-              <property name="text">
-               <string>Other filters</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
          </widget>
         </widget>
        </item>
       </layout>
      </widget>
      <widget class="QWidget" name="page_4"/>
+    </widget>
+   </item>
+   <item row="0" column="0" rowspan="2" colspan="2">
+    <widget class="QWidget" name="widget" native="true">
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(34, 34, 34)</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="3" column="0">
+       <widget class="QPushButton" name="button_switch_credits">
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 white, stop:1 #abcdef); /* Anfang weiß, Ende Farbe */
+}
+</string>
+        </property>
+        <property name="text">
+         <string>Credits</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QPushButton" name="button_switch_search">
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 white, stop:1 #abcdef); /* Anfang weiß, Ende Farbe */
+}
+</string>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="button_switch_settings">
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 white, stop:1 #abcdef); /* Anfang weiß, Ende Farbe */
+}
+</string>
+        </property>
+        <property name="text">
+         <string>Settings</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QPushButton" name="button_switch_home">
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 white, stop:1 #abcdef); /* Anfang weiß, Ende Farbe */
+}
+</string>
+        </property>
+        <property name="text">
+         <string>Home</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>30</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>

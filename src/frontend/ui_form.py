@@ -18,8 +18,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QCheckBox, QGridLayout, QGroupBox,
     QHeaderView, QLabel, QLineEdit, QProgressBar,
     QPushButton, QRadioButton, QSizePolicy, QSpacerItem,
-    QStackedWidget, QTreeWidget, QTreeWidgetItem, QVBoxLayout,
-    QWidget)
+    QStackedWidget, QTreeWidget, QTreeWidgetItem, QWidget)
 
 class Ui_Porn_Fetch_Widget(object):
     def setupUi(self, Porn_Fetch_Widget):
@@ -123,48 +122,87 @@ class Ui_Porn_Fetch_Widget(object):
 "    padding: 4px;\n"
 "}\n"
 "\n"
+"/* QGroupBox */\n"
 "QGroupBox {\n"
-"        border: 0px;\n"
-"        margin-top: 1ex; /* Adjust as needed */\n"
-"    }\n"
-"    QGroupBox::title {\n"
-"        subcontrol-origin: margin;\n"
-"        subcontrol-position: top center;\n"
-"        padding: 0 3px;\n"
-"    }\n"
+"    border: 2px solid #4CAF50; /* Border color for the group box */\n"
+"    border-radius: 5px;\n"
+"    margin-top: 10px; /* Adjust top margin as needed */\n"
+"    padding: 10px; /* Add some padding inside the group box */\n"
+"}\n"
+"\n"
+"/* Title text of the QGroupBox */\n"
+"QGroupBox::title {\n"
+"    subcontrol-origin: margin;\n"
+"    subcontrol-position: top center;\n"
+"    padding: 0 5px; /* Add padding for title text */\n"
+"    background-color: #4CAF50; /* Background color for the title bar */\n"
+"    color: white; /* Title text color */\n"
+"    border: 1px solid #4CAF50; /* Border color for the title bar */\n"
+"    border-top-left-radius: 3px;\n"
+"  "
+                        "  border-top-right-radius: 3px;\n"
+"}\n"
+"\n"
+"/* Apply style to all child widgets within the QGroupBox */\n"
+"QGroupBox QWidget {\n"
+"    margin: 5px; /* Adjust margin for child widgets */\n"
+"}\n"
+"\n"
+"/* Style for child QLabel elements within the QGroupBox */\n"
+"QGroupBox QLabel {\n"
+"    font-weight: bold; /* Make text bold for labels */\n"
+"}\n"
+"\n"
+"/* Style for child QPushButton elements within the QGroupBox */\n"
+"QGroupBox QPushButton {\n"
+"    background-color: #4CAF50; /* Background color for buttons */\n"
+"    color: white; /* Button text color */\n"
+"    border: 1px solid #4CAF50; /* Button border color */\n"
+"    border-radius: 3px; /* Button border radius */\n"
+"    padding: 5px 10px; /* Add padding to buttons */\n"
+"}\n"
+"\n"
+"/* Style for child QComboBox elements within the QGroupBox */\n"
+"QGroupBox QComboBox {\n"
+"    border: 1px solid #4CAF50; /* Border color for combo boxes */\n"
+"    border-radius: 3px; /* Combo box border radius */\n"
+"    padding: 3px; /* Add padding to combo boxes *"
+                        "/\n"
+"}\n"
 "\n"
 "QLabel {\n"
 "    color: #DDD;\n"
 "    padding: 2px;\n"
 "    font-size: 14px;\n"
 "}\n"
-"\n"
 "QPushButton {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 4px;\n"
-"    padding: 5px;\n"
-"    background-color: #333;\n"
-"    color: #DDD;\n"
-"    font-weight: bold;\n"
-"    font-size: 14px;\n"
+"    color: #dcdcdc; /* Light grey text */\n"
+"    padding: 5px; /* Space inside the button */\n"
+"    border-radius: 7px; /* Rounded corners like the circular indicator */\n"
+"    border: 2px solid #777; /* Slightly lighter border */\n"
+"    background-color: #555; /* Dark background for unchecked state */\n"
+"}\n"
+"\n"
+"QPushButton:checked {\n"
+"    background-color: #7a7aff; /* Bright color for checked state */\n"
+"    border: 2px solid #5a5aff; /* Border slightly darker than the background */\n"
 "}\n"
 "\n"
 "QPushButton:hover {\n"
-"    background-color: #555;\n"
+"    border-color: #9a9aff; /* Change border color on hover */\n"
 "}\n"
 "\n"
-"QPushButton:pressed {\n"
-"    background-color: #5599FF;\n"
+"QPushButton:checked:hover {\n"
+"    border-color: #9a9aff; /* Keep consistent hover effect when checked */\n"
 "}\n"
-"\n"
-""
-                        "QCheckBox {\n"
+"QCheckBox {\n"
 "    color: #dcdcdc; /* Light grey text */\n"
 "    spacing: 5px; /* Space between the checkbox and its label */\n"
 "}\n"
 "\n"
 "QCheckBox::indicator {\n"
-"    width: 15px;\n"
+""
+                        "    width: 15px;\n"
 "    height: 15px;\n"
 "    border: 2px solid #777; /* Border color */\n"
 "}\n"
@@ -187,72 +225,6 @@ class Ui_Porn_Fetch_Widget(object):
 "}")
         self.gridLayout_8 = QGridLayout(Porn_Fetch_Widget)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
-        self.HEADER = QVBoxLayout()
-        self.HEADER.setObjectName(u"HEADER")
-
-        self.gridLayout_8.addLayout(self.HEADER, 0, 0, 1, 3)
-
-        self.widget = QWidget(Porn_Fetch_Widget)
-        self.widget.setObjectName(u"widget")
-        self.widget.setStyleSheet(u"background-color: rgb(34, 34, 34)")
-        self.gridLayout = QGridLayout(self.widget)
-        self.gridLayout.setSpacing(0)
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.button_switch_credits = QPushButton(self.widget)
-        self.button_switch_credits.setObjectName(u"button_switch_credits")
-        self.button_switch_credits.setMinimumSize(QSize(50, 50))
-        self.button_switch_credits.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_switch_credits.setStyleSheet(u"QPushButton:hover {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
-"                                stop:0 white, stop:1 #abcdef); /* Anfang wei\u00df, Ende Farbe */\n"
-"}\n"
-"")
-
-        self.gridLayout.addWidget(self.button_switch_credits, 3, 0, 1, 1)
-
-        self.button_switch_search = QPushButton(self.widget)
-        self.button_switch_search.setObjectName(u"button_switch_search")
-        self.button_switch_search.setMinimumSize(QSize(50, 50))
-        self.button_switch_search.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_switch_search.setStyleSheet(u"QPushButton:hover {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
-"                                stop:0 white, stop:1 #abcdef); /* Anfang wei\u00df, Ende Farbe */\n"
-"}\n"
-"")
-
-        self.gridLayout.addWidget(self.button_switch_search, 1, 0, 1, 1)
-
-        self.button_switch_settings = QPushButton(self.widget)
-        self.button_switch_settings.setObjectName(u"button_switch_settings")
-        self.button_switch_settings.setMinimumSize(QSize(50, 50))
-        self.button_switch_settings.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_switch_settings.setStyleSheet(u"QPushButton:hover {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
-"                                stop:0 white, stop:1 #abcdef); /* Anfang wei\u00df, Ende Farbe */\n"
-"}\n"
-"")
-
-        self.gridLayout.addWidget(self.button_switch_settings, 2, 0, 1, 1)
-
-        self.button_switch_home = QPushButton(self.widget)
-        self.button_switch_home.setObjectName(u"button_switch_home")
-        self.button_switch_home.setMinimumSize(QSize(50, 50))
-        self.button_switch_home.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_switch_home.setStyleSheet(u"QPushButton:hover {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
-"                                stop:0 white, stop:1 #abcdef); /* Anfang wei\u00df, Ende Farbe */\n"
-"}\n"
-"")
-
-        self.gridLayout.addWidget(self.button_switch_home, 0, 0, 1, 1)
-
-        self.verticalSpacer = QSpacerItem(20, 30, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.gridLayout.addItem(self.verticalSpacer, 4, 0, 1, 1)
-
-
-        self.gridLayout_8.addWidget(self.widget, 1, 0, 2, 2)
-
         self.widget_status = QWidget(Porn_Fetch_Widget)
         self.widget_status.setObjectName(u"widget_status")
         self.widget_status.setStyleSheet(u"background-color: rgb(34, 34, 34);\n"
@@ -336,7 +308,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridLayout_5.addLayout(self.gridlayout_status, 0, 0, 1, 1)
 
 
-        self.gridLayout_8.addWidget(self.widget_status, 2, 2, 1, 1)
+        self.gridLayout_8.addWidget(self.widget_status, 1, 2, 1, 1)
 
         self.stacked_widget_main = QStackedWidget(Porn_Fetch_Widget)
         self.stacked_widget_main.setObjectName(u"stacked_widget_main")
@@ -344,14 +316,6 @@ class Ui_Porn_Fetch_Widget(object):
         self.page_3.setObjectName(u"page_3")
         self.gridLayout_7 = QGridLayout(self.page_3)
         self.gridLayout_7.setObjectName(u"gridLayout_7")
-        self.treeWidget = QTreeWidget(self.page_3)
-        __qtreewidgetitem = QTreeWidgetItem()
-        __qtreewidgetitem.setText(0, u"1");
-        self.treeWidget.setHeaderItem(__qtreewidgetitem)
-        self.treeWidget.setObjectName(u"treeWidget")
-
-        self.gridLayout_7.addWidget(self.treeWidget, 2, 0, 1, 1)
-
         self.stacked_widget_top = QStackedWidget(self.page_3)
         self.stacked_widget_top.setObjectName(u"stacked_widget_top")
         self.stacked_widget_top.setCursor(QCursor(Qt.ArrowCursor))
@@ -359,157 +323,8 @@ class Ui_Porn_Fetch_Widget(object):
         self.page.setObjectName(u"page")
         self.gridLayout_6 = QGridLayout(self.page)
         self.gridLayout_6.setObjectName(u"gridLayout_6")
-        self.gridLayout_3 = QGridLayout()
-        self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.label_file = QLabel(self.page)
-        self.label_file.setObjectName(u"label_file")
-
-        self.gridLayout_3.addWidget(self.label_file, 3, 0, 1, 1)
-
-        self.button_open_file = QPushButton(self.page)
-        self.button_open_file.setObjectName(u"button_open_file")
-        self.button_open_file.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_open_file.setStyleSheet(u"QPushButton {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 4px;\n"
-"    padding: 5px;\n"
-"    color: #DDD;\n"
-"    font-weight: bold;\n"
-"    font-size: 14px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #5555FF, stop:1 #AA55FF);\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #6666FF, stop:1 #BB66FF);\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #4444DD, stop:1 #9944DD);\n"
-"}")
-
-        self.gridLayout_3.addWidget(self.button_open_file, 3, 2, 1, 1)
-
-        self.lineedit_url = QLineEdit(self.page)
-        self.lineedit_url.setObjectName(u"lineedit_url")
-
-        self.gridLayout_3.addWidget(self.lineedit_url, 0, 1, 1, 1)
-
-        self.button_search_videos = QPushButton(self.page)
-        self.button_search_videos.setObjectName(u"button_search_videos")
-        self.button_search_videos.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_search_videos.setStyleSheet(u"QPushButton {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 4px;\n"
-"    padding: 5px;\n"
-"    color: #DDD;\n"
-"    font-weight: bold;\n"
-"    font-size: 14px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #5555FF, stop:1 #AA55FF);\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #6666FF, stop:1 #BB66FF);\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #4444DD, stop:1 #9944DD);\n"
-"}")
-
-        self.gridLayout_3.addWidget(self.button_search_videos, 4, 2, 1, 1)
-
-        self.lineedit_file = QLineEdit(self.page)
-        self.lineedit_file.setObjectName(u"lineedit_file")
-
-        self.gridLayout_3.addWidget(self.lineedit_file, 3, 1, 1, 1)
-
-        self.lineedit_search_query = QLineEdit(self.page)
-        self.lineedit_search_query.setObjectName(u"lineedit_search_query")
-
-        self.gridLayout_3.addWidget(self.lineedit_search_query, 4, 1, 1, 1)
-
-        self.label_model_url = QLabel(self.page)
-        self.label_model_url.setObjectName(u"label_model_url")
-
-        self.gridLayout_3.addWidget(self.label_model_url, 2, 0, 1, 1)
-
-        self.butgton_download = QPushButton(self.page)
-        self.butgton_download.setObjectName(u"butgton_download")
-        self.butgton_download.setCursor(QCursor(Qt.PointingHandCursor))
-        self.butgton_download.setStyleSheet(u"QPushButton {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 4px;\n"
-"    padding: 5px;\n"
-"    color: #DDD;\n"
-"    font-weight: bold;\n"
-"    font-size: 14px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #5555FF, stop:1 #AA55FF);\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #6666FF, stop:1 #BB66FF);\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #4444DD, stop:1 #9944DD);\n"
-"}")
-
-        self.gridLayout_3.addWidget(self.butgton_download, 0, 2, 1, 1)
-
-        self.label_search_query = QLabel(self.page)
-        self.label_search_query.setObjectName(u"label_search_query")
-
-        self.gridLayout_3.addWidget(self.label_search_query, 4, 0, 1, 1)
-
-        self.label_url = QLabel(self.page)
-        self.label_url.setObjectName(u"label_url")
-
-        self.gridLayout_3.addWidget(self.label_url, 0, 0, 1, 1)
-
-        self.button_model = QPushButton(self.page)
-        self.button_model.setObjectName(u"button_model")
-        self.button_model.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_model.setStyleSheet(u"QPushButton {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 4px;\n"
-"    padding: 5px;\n"
-"    color: #DDD;\n"
-"    font-weight: bold;\n"
-"    font-size: 14px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #5555FF, stop:1 #AA55FF);\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #6666FF, stop:1 #BB66FF);\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #4444DD, stop:1 #9944DD);\n"
-"}")
-
-        self.gridLayout_3.addWidget(self.button_model, 2, 2, 1, 1)
-
-        self.lineedit_model_url = QLineEdit(self.page)
-        self.lineedit_model_url.setObjectName(u"lineedit_model_url")
-
-        self.gridLayout_3.addWidget(self.lineedit_model_url, 2, 1, 1, 1)
-
-
-        self.gridLayout_6.addLayout(self.gridLayout_3, 0, 0, 1, 1)
-
-        self.gridLayout_4 = QGridLayout()
-        self.gridLayout_4.setObjectName(u"gridLayout_4")
+        self.gridlayout_login_box = QGridLayout()
+        self.gridlayout_login_box.setObjectName(u"gridlayout_login_box")
         self.button_get_recommended_videos = QPushButton(self.page)
         self.button_get_recommended_videos.setObjectName(u"button_get_recommended_videos")
         self.button_get_recommended_videos.setCursor(QCursor(Qt.PointingHandCursor))
@@ -524,12 +339,12 @@ class Ui_Porn_Fetch_Widget(object):
 "                                stop:0 #78909C, stop:1 #90A4AE);\n"
 "}")
 
-        self.gridLayout_4.addWidget(self.button_get_recommended_videos, 3, 2, 1, 1)
+        self.gridlayout_login_box.addWidget(self.button_get_recommended_videos, 3, 2, 1, 1)
 
         self.label_password = QLabel(self.page)
         self.label_password.setObjectName(u"label_password")
 
-        self.gridLayout_4.addWidget(self.label_password, 1, 0, 1, 1)
+        self.gridlayout_login_box.addWidget(self.label_password, 1, 0, 1, 1)
 
         self.button_get_liked_videos = QPushButton(self.page)
         self.button_get_liked_videos.setObjectName(u"button_get_liked_videos")
@@ -545,12 +360,12 @@ class Ui_Porn_Fetch_Widget(object):
 "                                stop:0 #78909C, stop:1 #90A4AE);\n"
 "}")
 
-        self.gridLayout_4.addWidget(self.button_get_liked_videos, 3, 0, 1, 1)
+        self.gridlayout_login_box.addWidget(self.button_get_liked_videos, 3, 0, 1, 1)
 
         self.label_username = QLabel(self.page)
         self.label_username.setObjectName(u"label_username")
 
-        self.gridLayout_4.addWidget(self.label_username, 0, 0, 1, 1)
+        self.gridlayout_login_box.addWidget(self.label_username, 0, 0, 1, 1)
 
         self.button_get_watched_videos = QPushButton(self.page)
         self.button_get_watched_videos.setObjectName(u"button_get_watched_videos")
@@ -566,7 +381,7 @@ class Ui_Porn_Fetch_Widget(object):
 "                                stop:0 #78909C, stop:1 #90A4AE);\n"
 "}")
 
-        self.gridLayout_4.addWidget(self.button_get_watched_videos, 3, 1, 1, 1)
+        self.gridlayout_login_box.addWidget(self.button_get_watched_videos, 3, 1, 1, 1)
 
         self.button_login = QPushButton(self.page)
         self.button_login.setObjectName(u"button_login")
@@ -592,407 +407,28 @@ class Ui_Porn_Fetch_Widget(object):
 "                                stop:0 #4444DD, stop:1 #9944DD);\n"
 "}")
 
-        self.gridLayout_4.addWidget(self.button_login, 2, 0, 1, 4)
+        self.gridlayout_login_box.addWidget(self.button_login, 2, 0, 1, 4)
 
         self.lineedit_password = QLineEdit(self.page)
         self.lineedit_password.setObjectName(u"lineedit_password")
         self.lineedit_password.setEchoMode(QLineEdit.Password)
 
-        self.gridLayout_4.addWidget(self.lineedit_password, 1, 1, 1, 3)
+        self.gridlayout_login_box.addWidget(self.lineedit_password, 1, 1, 1, 3)
 
         self.lineedit_username = QLineEdit(self.page)
         self.lineedit_username.setObjectName(u"lineedit_username")
 
-        self.gridLayout_4.addWidget(self.lineedit_username, 0, 1, 1, 3)
+        self.gridlayout_login_box.addWidget(self.lineedit_username, 0, 1, 1, 3)
 
 
-        self.gridLayout_6.addLayout(self.gridLayout_4, 0, 1, 1, 1)
+        self.gridLayout_6.addLayout(self.gridlayout_login_box, 0, 1, 1, 1)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.gridLayout_6.addItem(self.verticalSpacer_2, 1, 0, 1, 2)
-
-        self.stacked_widget_top.addWidget(self.page)
-        self.page_2 = QWidget()
-        self.page_2.setObjectName(u"page_2")
-        self.gridLayoutWidget = QWidget(self.page_2)
-        self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
-        self.gridLayoutWidget.setGeometry(QRect(9, 9, 791, 113))
-        self.gridLayout_9 = QGridLayout(self.gridLayoutWidget)
-        self.gridLayout_9.setObjectName(u"gridLayout_9")
-        self.gridLayout_9.setContentsMargins(0, 0, 0, 0)
-        self.pushButton_2 = QPushButton(self.gridLayoutWidget)
-        self.pushButton_2.setObjectName(u"pushButton_2")
-
-        self.gridLayout_9.addWidget(self.pushButton_2, 1, 2, 1, 1)
-
-        self.lineEdit = QLineEdit(self.gridLayoutWidget)
-        self.lineEdit.setObjectName(u"lineEdit")
-
-        self.gridLayout_9.addWidget(self.lineEdit, 0, 1, 1, 1)
-
-        self.lineEdit_3 = QLineEdit(self.gridLayoutWidget)
-        self.lineEdit_3.setObjectName(u"lineEdit_3")
-
-        self.gridLayout_9.addWidget(self.lineEdit_3, 2, 1, 1, 1)
-
-        self.label_2 = QLabel(self.gridLayoutWidget)
-        self.label_2.setObjectName(u"label_2")
-
-        self.gridLayout_9.addWidget(self.label_2, 0, 0, 1, 1)
-
-        self.pushButton = QPushButton(self.gridLayoutWidget)
-        self.pushButton.setObjectName(u"pushButton")
-
-        self.gridLayout_9.addWidget(self.pushButton, 0, 2, 1, 1)
-
-        self.label = QLabel(self.gridLayoutWidget)
-        self.label.setObjectName(u"label")
-
-        self.gridLayout_9.addWidget(self.label, 1, 0, 1, 1)
-
-        self.label_3 = QLabel(self.gridLayoutWidget)
-        self.label_3.setObjectName(u"label_3")
-
-        self.gridLayout_9.addWidget(self.label_3, 2, 0, 1, 1)
-
-        self.lineEdit_2 = QLineEdit(self.gridLayoutWidget)
-        self.lineEdit_2.setObjectName(u"lineEdit_2")
-
-        self.gridLayout_9.addWidget(self.lineEdit_2, 1, 1, 1, 1)
-
-        self.pushButton_3 = QPushButton(self.gridLayoutWidget)
-        self.pushButton_3.setObjectName(u"pushButton_3")
-
-        self.gridLayout_9.addWidget(self.pushButton_3, 2, 2, 1, 1)
-
-        self.button_filter_videos = QPushButton(self.gridLayoutWidget)
-        self.button_filter_videos.setObjectName(u"button_filter_videos")
-
-        self.gridLayout_9.addWidget(self.button_filter_videos, 0, 3, 1, 1)
-
-        self.button_filter_users = QPushButton(self.gridLayoutWidget)
-        self.button_filter_users.setObjectName(u"button_filter_users")
-
-        self.gridLayout_9.addWidget(self.button_filter_users, 1, 3, 1, 1)
-
-        self.groupBox = QGroupBox(self.page_2)
-        self.groupBox.setObjectName(u"groupBox")
-        self.groupBox.setGeometry(QRect(800, 0, 821, 131))
-        self.gridLayout_12 = QGridLayout(self.groupBox)
-        self.gridLayout_12.setObjectName(u"gridLayout_12")
-        self.gridLayout_10 = QGridLayout()
-        self.gridLayout_10.setObjectName(u"gridLayout_10")
-        self.radioButton_2 = QRadioButton(self.groupBox)
-        self.radioButton_2.setObjectName(u"radioButton_2")
-
-        self.gridLayout_10.addWidget(self.radioButton_2, 2, 2, 1, 1)
-
-        self.label_4 = QLabel(self.groupBox)
-        self.label_4.setObjectName(u"label_4")
-        self.label_4.setStyleSheet(u"padding-left: 40px;")
-
-        self.gridLayout_10.addWidget(self.label_4, 1, 0, 1, 3)
-
-        self.radioButton_4 = QRadioButton(self.groupBox)
-        self.radioButton_4.setObjectName(u"radioButton_4")
-
-        self.gridLayout_10.addWidget(self.radioButton_4, 2, 1, 1, 1)
-
-        self.radioButton = QRadioButton(self.groupBox)
-        self.radioButton.setObjectName(u"radioButton")
-
-        self.gridLayout_10.addWidget(self.radioButton, 2, 0, 1, 1)
-
-
-        self.gridLayout_12.addLayout(self.gridLayout_10, 0, 0, 1, 1)
-
-        self.gridLayout_11 = QGridLayout()
-        self.gridLayout_11.setObjectName(u"gridLayout_11")
-        self.checkBox_6 = QCheckBox(self.groupBox)
-        self.checkBox_6.setObjectName(u"checkBox_6")
-
-        self.gridLayout_11.addWidget(self.checkBox_6, 2, 2, 1, 1)
-
-        self.checkBox_4 = QCheckBox(self.groupBox)
-        self.checkBox_4.setObjectName(u"checkBox_4")
-
-        self.gridLayout_11.addWidget(self.checkBox_4, 2, 3, 1, 1)
-
-        self.checkBox_11 = QCheckBox(self.groupBox)
-        self.checkBox_11.setObjectName(u"checkBox_11")
-
-        self.gridLayout_11.addWidget(self.checkBox_11, 4, 0, 1, 1)
-
-        self.label_5 = QLabel(self.groupBox)
-        self.label_5.setObjectName(u"label_5")
-        self.label_5.setStyleSheet(u"padding-left: 180px;")
-
-        self.gridLayout_11.addWidget(self.label_5, 1, 0, 1, 4)
-
-        self.checkBox = QCheckBox(self.groupBox)
-        self.checkBox.setObjectName(u"checkBox")
-
-        self.gridLayout_11.addWidget(self.checkBox, 2, 0, 1, 1)
-
-        self.checkBox_8 = QCheckBox(self.groupBox)
-        self.checkBox_8.setObjectName(u"checkBox_8")
-
-        self.gridLayout_11.addWidget(self.checkBox_8, 2, 1, 1, 1)
-
-        self.checkBox_9 = QCheckBox(self.groupBox)
-        self.checkBox_9.setObjectName(u"checkBox_9")
-
-        self.gridLayout_11.addWidget(self.checkBox_9, 3, 0, 1, 1)
-
-        self.checkBox_3 = QCheckBox(self.groupBox)
-        self.checkBox_3.setObjectName(u"checkBox_3")
-
-        self.gridLayout_11.addWidget(self.checkBox_3, 3, 3, 1, 1)
-
-        self.checkBox_12 = QCheckBox(self.groupBox)
-        self.checkBox_12.setObjectName(u"checkBox_12")
-
-        self.gridLayout_11.addWidget(self.checkBox_12, 3, 1, 1, 1)
-
-        self.checkBox_10 = QCheckBox(self.groupBox)
-        self.checkBox_10.setObjectName(u"checkBox_10")
-
-        self.gridLayout_11.addWidget(self.checkBox_10, 3, 2, 1, 1)
-
-
-        self.gridLayout_12.addLayout(self.gridLayout_11, 0, 1, 1, 1)
-
-        self.gridLayoutWidget_4 = QWidget(self.page_2)
-        self.gridLayoutWidget_4.setObjectName(u"gridLayoutWidget_4")
-        self.gridLayoutWidget_4.setGeometry(QRect(10, 130, 301, 80))
-        self.gridLayout_13 = QGridLayout(self.gridLayoutWidget_4)
-        self.gridLayout_13.setObjectName(u"gridLayout_13")
-        self.gridLayout_13.setContentsMargins(0, 0, 0, 0)
-        self.radioButton_9 = QRadioButton(self.gridLayoutWidget_4)
-        self.radioButton_9.setObjectName(u"radioButton_9")
-
-        self.gridLayout_13.addWidget(self.radioButton_9, 1, 1, 1, 1)
-
-        self.radioButton_7 = QRadioButton(self.gridLayoutWidget_4)
-        self.radioButton_7.setObjectName(u"radioButton_7")
-
-        self.gridLayout_13.addWidget(self.radioButton_7, 1, 0, 1, 1)
-
-        self.radioButton_8 = QRadioButton(self.gridLayoutWidget_4)
-        self.radioButton_8.setObjectName(u"radioButton_8")
-
-        self.gridLayout_13.addWidget(self.radioButton_8, 1, 2, 1, 1)
-
-        self.label_6 = QLabel(self.gridLayoutWidget_4)
-        self.label_6.setObjectName(u"label_6")
-
-        self.gridLayout_13.addWidget(self.label_6, 0, 0, 1, 3)
-
-        self.gridLayoutWidget_5 = QWidget(self.page_2)
-        self.gridLayoutWidget_5.setObjectName(u"gridLayoutWidget_5")
-        self.gridLayoutWidget_5.setGeometry(QRect(10, 220, 297, 80))
-        self.gridLayout_14 = QGridLayout(self.gridLayoutWidget_5)
-        self.gridLayout_14.setObjectName(u"gridLayout_14")
-        self.gridLayout_14.setContentsMargins(0, 0, 0, 0)
-        self.radioButton_15 = QRadioButton(self.gridLayoutWidget_5)
-        self.radioButton_15.setObjectName(u"radioButton_15")
-
-        self.gridLayout_14.addWidget(self.radioButton_15, 1, 2, 1, 1)
-
-        self.radioButton_14 = QRadioButton(self.gridLayoutWidget_5)
-        self.radioButton_14.setObjectName(u"radioButton_14")
-
-        self.gridLayout_14.addWidget(self.radioButton_14, 1, 1, 1, 1)
-
-        self.radioButton_11 = QRadioButton(self.gridLayoutWidget_5)
-        self.radioButton_11.setObjectName(u"radioButton_11")
-
-        self.gridLayout_14.addWidget(self.radioButton_11, 1, 0, 1, 1)
-
-        self.radioButton_12 = QRadioButton(self.gridLayoutWidget_5)
-        self.radioButton_12.setObjectName(u"radioButton_12")
-
-        self.gridLayout_14.addWidget(self.radioButton_12, 2, 0, 1, 1)
-
-        self.radioButton_10 = QRadioButton(self.gridLayoutWidget_5)
-        self.radioButton_10.setObjectName(u"radioButton_10")
-
-        self.gridLayout_14.addWidget(self.radioButton_10, 2, 1, 1, 1)
-
-        self.radioButton_13 = QRadioButton(self.gridLayoutWidget_5)
-        self.radioButton_13.setObjectName(u"radioButton_13")
-
-        self.gridLayout_14.addWidget(self.radioButton_13, 2, 2, 1, 1)
-
-        self.label_7 = QLabel(self.gridLayoutWidget_5)
-        self.label_7.setObjectName(u"label_7")
-
-        self.gridLayout_14.addWidget(self.label_7, 0, 0, 1, 3)
-
-        self.gridLayoutWidget_6 = QWidget(self.page_2)
-        self.gridLayoutWidget_6.setObjectName(u"gridLayoutWidget_6")
-        self.gridLayoutWidget_6.setGeometry(QRect(350, 220, 323, 80))
-        self.gridLayout_15 = QGridLayout(self.gridLayoutWidget_6)
-        self.gridLayout_15.setObjectName(u"gridLayout_15")
-        self.gridLayout_15.setContentsMargins(0, 0, 0, 0)
-        self.radioButton_17 = QRadioButton(self.gridLayoutWidget_6)
-        self.radioButton_17.setObjectName(u"radioButton_17")
-
-        self.gridLayout_15.addWidget(self.radioButton_17, 1, 0, 1, 1)
-
-        self.radioButton_16 = QRadioButton(self.gridLayoutWidget_6)
-        self.radioButton_16.setObjectName(u"radioButton_16")
-
-        self.gridLayout_15.addWidget(self.radioButton_16, 1, 1, 1, 1)
-
-        self.radioButton_18 = QRadioButton(self.gridLayoutWidget_6)
-        self.radioButton_18.setObjectName(u"radioButton_18")
-
-        self.gridLayout_15.addWidget(self.radioButton_18, 1, 2, 1, 1)
-
-        self.label_8 = QLabel(self.gridLayoutWidget_6)
-        self.label_8.setObjectName(u"label_8")
-
-        self.gridLayout_15.addWidget(self.label_8, 0, 0, 1, 3)
-
-        self.gridLayoutWidget_7 = QWidget(self.page_2)
-        self.gridLayoutWidget_7.setObjectName(u"gridLayoutWidget_7")
-        self.gridLayoutWidget_7.setGeometry(QRect(730, 210, 389, 80))
-        self.gridLayout_16 = QGridLayout(self.gridLayoutWidget_7)
-        self.gridLayout_16.setObjectName(u"gridLayout_16")
-        self.gridLayout_16.setContentsMargins(0, 0, 0, 0)
-        self.label_12 = QLabel(self.gridLayoutWidget_7)
-        self.label_12.setObjectName(u"label_12")
-
-        self.gridLayout_16.addWidget(self.label_12, 0, 1, 1, 1)
-
-        self.radioButton_22 = QRadioButton(self.gridLayoutWidget_7)
-        self.radioButton_22.setObjectName(u"radioButton_22")
-
-        self.gridLayout_16.addWidget(self.radioButton_22, 1, 0, 1, 1)
-
-        self.radioButton_26 = QRadioButton(self.gridLayoutWidget_7)
-        self.radioButton_26.setObjectName(u"radioButton_26")
-
-        self.gridLayout_16.addWidget(self.radioButton_26, 1, 1, 1, 1)
-
-        self.radioButton_21 = QRadioButton(self.gridLayoutWidget_7)
-        self.radioButton_21.setObjectName(u"radioButton_21")
-
-        self.gridLayout_16.addWidget(self.radioButton_21, 1, 3, 1, 1)
-
-        self.radioButton_25 = QRadioButton(self.gridLayoutWidget_7)
-        self.radioButton_25.setObjectName(u"radioButton_25")
-
-        self.gridLayout_16.addWidget(self.radioButton_25, 1, 2, 1, 1)
-
-        self.radioButton_20 = QRadioButton(self.gridLayoutWidget_7)
-        self.radioButton_20.setObjectName(u"radioButton_20")
-
-        self.gridLayout_16.addWidget(self.radioButton_20, 2, 0, 1, 1)
-
-        self.radioButton_19 = QRadioButton(self.gridLayoutWidget_7)
-        self.radioButton_19.setObjectName(u"radioButton_19")
-
-        self.gridLayout_16.addWidget(self.radioButton_19, 2, 1, 1, 1)
-
-        self.radioButton_24 = QRadioButton(self.gridLayoutWidget_7)
-        self.radioButton_24.setObjectName(u"radioButton_24")
-
-        self.gridLayout_16.addWidget(self.radioButton_24, 2, 2, 1, 1)
-
-        self.radioButton_23 = QRadioButton(self.gridLayoutWidget_7)
-        self.radioButton_23.setObjectName(u"radioButton_23")
-
-        self.gridLayout_16.addWidget(self.radioButton_23, 2, 3, 1, 1)
-
-        self.gridLayoutWidget_8 = QWidget(self.page_2)
-        self.gridLayoutWidget_8.setObjectName(u"gridLayoutWidget_8")
-        self.gridLayoutWidget_8.setGeometry(QRect(1160, 180, 212, 80))
-        self.gridLayout_17 = QGridLayout(self.gridLayoutWidget_8)
-        self.gridLayout_17.setObjectName(u"gridLayout_17")
-        self.gridLayout_17.setContentsMargins(0, 0, 0, 0)
-        self.radioButton_27 = QRadioButton(self.gridLayoutWidget_8)
-        self.radioButton_27.setObjectName(u"radioButton_27")
-
-        self.gridLayout_17.addWidget(self.radioButton_27, 1, 0, 1, 1)
-
-        self.label_11 = QLabel(self.gridLayoutWidget_8)
-        self.label_11.setObjectName(u"label_11")
-
-        self.gridLayout_17.addWidget(self.label_11, 0, 0, 1, 1)
-
-        self.radioButton_30 = QRadioButton(self.gridLayoutWidget_8)
-        self.radioButton_30.setObjectName(u"radioButton_30")
-
-        self.gridLayout_17.addWidget(self.radioButton_30, 1, 1, 1, 1)
-
-        self.radioButton_29 = QRadioButton(self.gridLayoutWidget_8)
-        self.radioButton_29.setObjectName(u"radioButton_29")
-
-        self.gridLayout_17.addWidget(self.radioButton_29, 2, 0, 1, 1)
-
-        self.radioButton_28 = QRadioButton(self.gridLayoutWidget_8)
-        self.radioButton_28.setObjectName(u"radioButton_28")
-
-        self.gridLayout_17.addWidget(self.radioButton_28, 2, 1, 1, 1)
-
-        self.gridLayoutWidget_9 = QWidget(self.page_2)
-        self.gridLayoutWidget_9.setObjectName(u"gridLayoutWidget_9")
-        self.gridLayoutWidget_9.setGeometry(QRect(1410, 190, 205, 80))
-        self.gridLayout_18 = QGridLayout(self.gridLayoutWidget_9)
-        self.gridLayout_18.setObjectName(u"gridLayout_18")
-        self.gridLayout_18.setContentsMargins(0, 0, 0, 0)
-        self.radioButton_32 = QRadioButton(self.gridLayoutWidget_9)
-        self.radioButton_32.setObjectName(u"radioButton_32")
-
-        self.gridLayout_18.addWidget(self.radioButton_32, 1, 0, 1, 1)
-
-        self.radioButton_31 = QRadioButton(self.gridLayoutWidget_9)
-        self.radioButton_31.setObjectName(u"radioButton_31")
-
-        self.gridLayout_18.addWidget(self.radioButton_31, 1, 1, 1, 1)
-
-        self.label_10 = QLabel(self.gridLayoutWidget_9)
-        self.label_10.setObjectName(u"label_10")
-
-        self.gridLayout_18.addWidget(self.label_10, 0, 0, 1, 2)
-
-        self.stacked_widget_top.addWidget(self.page_2)
-
-        self.gridLayout_7.addWidget(self.stacked_widget_top, 1, 0, 1, 1)
-
-        self.stacked_widget_main.addWidget(self.page_3)
-        self.page_4 = QWidget()
-        self.page_4.setObjectName(u"page_4")
-        self.stacked_widget_main.addWidget(self.page_4)
-
-        self.gridLayout_8.addWidget(self.stacked_widget_main, 1, 2, 1, 1)
-
-
-        self.retranslateUi(Porn_Fetch_Widget)
-
-        self.stacked_widget_main.setCurrentIndex(0)
-        self.stacked_widget_top.setCurrentIndex(1)
-
-
-        QMetaObject.connectSlotsByName(Porn_Fetch_Widget)
-    # setupUi
-
-    def retranslateUi(self, Porn_Fetch_Widget):
-        Porn_Fetch_Widget.setWindowTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Porn_Fetch_Widget", None))
-        self.button_switch_credits.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Credits", None))
-        self.button_switch_search.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search", None))
-        self.button_switch_settings.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Settings", None))
-        self.button_switch_home.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Home", None))
-        self.label_current_progress.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Current Progress:", None))
-        self.label_total_progress.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
-        self.label_total.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
-        self.label_error.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Error:", None))
-        self.label_debug.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Debug:", None))
-        self.label_status.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Status:", None))
-        self.treeWidget.setStyleSheet(QCoreApplication.translate("Porn_Fetch_Widget", u"QWidget {\n"
+        self.treeWidget = QTreeWidget(self.page)
+        __qtreewidgetitem = QTreeWidgetItem()
+        __qtreewidgetitem.setText(0, u"1");
+        self.treeWidget.setHeaderItem(__qtreewidgetitem)
+        self.treeWidget.setObjectName(u"treeWidget")
+        self.treeWidget.setStyleSheet(u"QWidget {\n"
 "color: white;\n"
 "background-color: rgb(60, 60, 60);\n"
 "border: none;\n"
@@ -1076,17 +512,45 @@ class Ui_Porn_Fetch_Widget(object):
                         ":horizontal {\n"
 "    background: #5a2a82;\n"
 "}\n"
-"\n"
 "QTreeWidget {\n"
-"    background-color: rgb(94, 94, 94);\n"
-"    color: white;\n"
+"    show-decoration-selected: 1; /* Show selection as a border when the widget is out of focus. */\n"
+"    color: #dcdcdc; /* Light grey text */\n"
+"    background-color: #555; /* Dark background for the tree */\n"
+"    border: 2px solid #777; /* Slightly lighter border for the tree */\n"
+"    padding: 5px; /* Space inside the tree */\n"
 "}\n"
 "\n"
-"QTreeWidget QHeaderView::section {\n"
-"    background-color: rgb(94, 94, 94);\n"
-"    color: black; \n"
-"    border: 1px solid #5a2a82;\n"
-"    padding: 4px;\n"
+"QTreeWidget::item {\n"
+"    border-radius: 7px; /* Rounded corners for each item */\n"
+"    border: 2px solid transparent; /* No border by default */\n"
+"    padding: 5px; /* Space inside each item */\n"
+"    margin: 2px; /* Space between items */\n"
+"}\n"
+"\n"
+"QTreeWidget::item:selected {\n"
+"    background-color: #7a7aff; /* Bright color for selected item */\n"
+"    border: 2px solid #5a5aff; /* Border slightly darker than the background for selected item */\n"
+"}\n"
+"\n"
+"QTreeWidget::item:hover {\n"
+"    border-color: #9a9aff; /* Change border color on hover */\n"
+"}\n"
+"\n"
+"QTreeWidget::b"
+                        "ranch {\n"
+"    background: #555; /* Background color for branch lines */\n"
+"}\n"
+"\n"
+"QTreeWidget::branch:has-siblings:!adjoins-item {\n"
+"    border-image: url(:/images/branch-more.png) 0; /* Custom image for branch lines with more siblings */\n"
+"}\n"
+"\n"
+"QTreeWidget::branch:has-siblings:adjoins-item {\n"
+"    border-image: url(:/images/branch-end.png) 0; /* Custom image for last branch line */\n"
+"}\n"
+"\n"
+"QTreeWidget::branch:!has-children:!has-siblings:adjoins-item {\n"
+"    border-image: url(:/images/branch-end.png) 0; /* Custom image for a lone branch line */\n"
 "}\n"
 "\n"
 "QGroupBox {\n"
@@ -1108,7 +572,8 @@ class Ui_Porn_Fetch_Widget(object):
 "QPushButton {\n"
 "    border: 2px solid #444;\n"
 "    border-radius: 4px;\n"
-"    padding: 5px;\n"
+"    "
+                        "padding: 5px;\n"
 "    background-color: #333;\n"
 "    color: #DDD;\n"
 "    font-weight: bold;\n"
@@ -1121,7 +586,656 @@ class Ui_Porn_Fetch_Widget(object):
 "\n"
 "QPushButton:pressed {\n"
 "    background-color: #5599FF;\n"
-"}", None))
+"}")
+
+        self.gridLayout_6.addWidget(self.treeWidget, 1, 0, 1, 2)
+
+        self.gridlayout_start_download_box = QGridLayout()
+        self.gridlayout_start_download_box.setObjectName(u"gridlayout_start_download_box")
+        self.label_file = QLabel(self.page)
+        self.label_file.setObjectName(u"label_file")
+
+        self.gridlayout_start_download_box.addWidget(self.label_file, 3, 0, 1, 1)
+
+        self.button_open_file = QPushButton(self.page)
+        self.button_open_file.setObjectName(u"button_open_file")
+        self.button_open_file.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_open_file.setStyleSheet(u"QPushButton {\n"
+"    border: 2px solid #444;\n"
+"    border-radius: 4px;\n"
+"    padding: 5px;\n"
+"    color: #DDD;\n"
+"    font-weight: bold;\n"
+"    font-size: 14px;\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #5555FF, stop:1 #AA55FF);\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #6666FF, stop:1 #BB66FF);\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #4444DD, stop:1 #9944DD);\n"
+"}")
+
+        self.gridlayout_start_download_box.addWidget(self.button_open_file, 3, 2, 1, 1)
+
+        self.lineedit_url = QLineEdit(self.page)
+        self.lineedit_url.setObjectName(u"lineedit_url")
+
+        self.gridlayout_start_download_box.addWidget(self.lineedit_url, 0, 1, 1, 1)
+
+        self.button_search_videos = QPushButton(self.page)
+        self.button_search_videos.setObjectName(u"button_search_videos")
+        self.button_search_videos.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_search_videos.setStyleSheet(u"QPushButton {\n"
+"    border: 2px solid #444;\n"
+"    border-radius: 4px;\n"
+"    padding: 5px;\n"
+"    color: #DDD;\n"
+"    font-weight: bold;\n"
+"    font-size: 14px;\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #5555FF, stop:1 #AA55FF);\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #6666FF, stop:1 #BB66FF);\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #4444DD, stop:1 #9944DD);\n"
+"}")
+
+        self.gridlayout_start_download_box.addWidget(self.button_search_videos, 4, 2, 1, 1)
+
+        self.lineedit_file = QLineEdit(self.page)
+        self.lineedit_file.setObjectName(u"lineedit_file")
+
+        self.gridlayout_start_download_box.addWidget(self.lineedit_file, 3, 1, 1, 1)
+
+        self.lineedit_search_query = QLineEdit(self.page)
+        self.lineedit_search_query.setObjectName(u"lineedit_search_query")
+
+        self.gridlayout_start_download_box.addWidget(self.lineedit_search_query, 4, 1, 1, 1)
+
+        self.label_model_url = QLabel(self.page)
+        self.label_model_url.setObjectName(u"label_model_url")
+
+        self.gridlayout_start_download_box.addWidget(self.label_model_url, 2, 0, 1, 1)
+
+        self.butgton_download = QPushButton(self.page)
+        self.butgton_download.setObjectName(u"butgton_download")
+        self.butgton_download.setCursor(QCursor(Qt.PointingHandCursor))
+        self.butgton_download.setStyleSheet(u"QPushButton {\n"
+"    border: 2px solid #444;\n"
+"    border-radius: 4px;\n"
+"    padding: 5px;\n"
+"    color: #DDD;\n"
+"    font-weight: bold;\n"
+"    font-size: 14px;\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #5555FF, stop:1 #AA55FF);\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #6666FF, stop:1 #BB66FF);\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #4444DD, stop:1 #9944DD);\n"
+"}")
+
+        self.gridlayout_start_download_box.addWidget(self.butgton_download, 0, 2, 1, 1)
+
+        self.label_search_query = QLabel(self.page)
+        self.label_search_query.setObjectName(u"label_search_query")
+
+        self.gridlayout_start_download_box.addWidget(self.label_search_query, 4, 0, 1, 1)
+
+        self.label_url = QLabel(self.page)
+        self.label_url.setObjectName(u"label_url")
+
+        self.gridlayout_start_download_box.addWidget(self.label_url, 0, 0, 1, 1)
+
+        self.button_model = QPushButton(self.page)
+        self.button_model.setObjectName(u"button_model")
+        self.button_model.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_model.setStyleSheet(u"QPushButton {\n"
+"    border: 2px solid #444;\n"
+"    border-radius: 4px;\n"
+"    padding: 5px;\n"
+"    color: #DDD;\n"
+"    font-weight: bold;\n"
+"    font-size: 14px;\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #5555FF, stop:1 #AA55FF);\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #6666FF, stop:1 #BB66FF);\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #4444DD, stop:1 #9944DD);\n"
+"}")
+
+        self.gridlayout_start_download_box.addWidget(self.button_model, 2, 2, 1, 1)
+
+        self.lineedit_model_url = QLineEdit(self.page)
+        self.lineedit_model_url.setObjectName(u"lineedit_model_url")
+
+        self.gridlayout_start_download_box.addWidget(self.lineedit_model_url, 2, 1, 1, 1)
+
+
+        self.gridLayout_6.addLayout(self.gridlayout_start_download_box, 0, 0, 1, 1)
+
+        self.stacked_widget_top.addWidget(self.page)
+        self.page_2 = QWidget()
+        self.page_2.setObjectName(u"page_2")
+        self.gridLayout_17 = QGridLayout(self.page_2)
+        self.gridLayout_17.setObjectName(u"gridLayout_17")
+        self.gridlayout_search_videos = QGridLayout()
+        self.gridlayout_search_videos.setObjectName(u"gridlayout_search_videos")
+        self.label_search_users = QLabel(self.page_2)
+        self.label_search_users.setObjectName(u"label_search_users")
+
+        self.gridlayout_search_videos.addWidget(self.label_search_users, 1, 0, 1, 1)
+
+        self.label_search_pornstars = QLabel(self.page_2)
+        self.label_search_pornstars.setObjectName(u"label_search_pornstars")
+
+        self.gridlayout_search_videos.addWidget(self.label_search_pornstars, 2, 0, 1, 1)
+
+        self.lineedit_search_users_query = QLineEdit(self.page_2)
+        self.lineedit_search_users_query.setObjectName(u"lineedit_search_users_query")
+
+        self.gridlayout_search_videos.addWidget(self.lineedit_search_users_query, 1, 1, 1, 1)
+
+        self.button_search_category_filters = QPushButton(self.page_2)
+        self.button_search_category_filters.setObjectName(u"button_search_category_filters")
+
+        self.gridlayout_search_videos.addWidget(self.button_search_category_filters, 0, 3, 1, 1)
+
+        self.lineedit_search_videos_query = QLineEdit(self.page_2)
+        self.lineedit_search_videos_query.setObjectName(u"lineedit_search_videos_query")
+
+        self.gridlayout_search_videos.addWidget(self.lineedit_search_videos_query, 0, 1, 1, 1)
+
+        self.button_filter_users = QPushButton(self.page_2)
+        self.button_filter_users.setObjectName(u"button_filter_users")
+
+        self.gridlayout_search_videos.addWidget(self.button_filter_users, 1, 3, 1, 1)
+
+        self.label_search_videos = QLabel(self.page_2)
+        self.label_search_videos.setObjectName(u"label_search_videos")
+
+        self.gridlayout_search_videos.addWidget(self.label_search_videos, 0, 0, 1, 1)
+
+        self.button_search_pornstar = QPushButton(self.page_2)
+        self.button_search_pornstar.setObjectName(u"button_search_pornstar")
+
+        self.gridlayout_search_videos.addWidget(self.button_search_pornstar, 2, 2, 1, 2)
+
+        self.button_search_users = QPushButton(self.page_2)
+        self.button_search_users.setObjectName(u"button_search_users")
+
+        self.gridlayout_search_videos.addWidget(self.button_search_users, 1, 2, 1, 1)
+
+        self.button_search_filters = QPushButton(self.page_2)
+        self.button_search_filters.setObjectName(u"button_search_filters")
+
+        self.gridlayout_search_videos.addWidget(self.button_search_filters, 0, 2, 1, 1)
+
+        self.lineedit_search_pornstar_query = QLineEdit(self.page_2)
+        self.lineedit_search_pornstar_query.setObjectName(u"lineedit_search_pornstar_query")
+
+        self.gridlayout_search_videos.addWidget(self.lineedit_search_pornstar_query, 2, 1, 1, 1)
+
+
+        self.gridLayout_17.addLayout(self.gridlayout_search_videos, 0, 0, 1, 1)
+
+        self.gridLayout_16 = QGridLayout()
+        self.gridLayout_16.setObjectName(u"gridLayout_16")
+        self.groupBox_7 = QGroupBox(self.page_2)
+        self.groupBox_7.setObjectName(u"groupBox_7")
+        self.gridLayout_13 = QGridLayout(self.groupBox_7)
+        self.gridLayout_13.setObjectName(u"gridLayout_13")
+        self.radio_memberInterests_into_none = QRadioButton(self.groupBox_7)
+        self.radio_memberInterests_into_none.setObjectName(u"radio_memberInterests_into_none")
+
+        self.gridLayout_13.addWidget(self.radio_memberInterests_into_none, 2, 1, 1, 1)
+
+        self.radio_memberInterests_into_male = QRadioButton(self.groupBox_7)
+        self.radio_memberInterests_into_male.setObjectName(u"radio_memberInterests_into_male")
+
+        self.gridLayout_13.addWidget(self.radio_memberInterests_into_male, 1, 1, 1, 1)
+
+        self.radio_memberInterests_none = QRadioButton(self.groupBox_7)
+        self.radio_memberInterests_none.setObjectName(u"radio_memberInterests_none")
+
+        self.gridLayout_13.addWidget(self.radio_memberInterests_none, 0, 1, 1, 1)
+
+        self.radio_memberInterests_into_female = QRadioButton(self.groupBox_7)
+        self.radio_memberInterests_into_female.setObjectName(u"radio_memberInterests_into_female")
+
+        self.gridLayout_13.addWidget(self.radio_memberInterests_into_female, 0, 2, 1, 1)
+
+        self.radio_memberInterests_into_all = QRadioButton(self.groupBox_7)
+        self.radio_memberInterests_into_all.setObjectName(u"radio_memberInterests_into_all")
+
+        self.gridLayout_13.addWidget(self.radio_memberInterests_into_all, 1, 2, 1, 1)
+
+
+        self.gridLayout_16.addWidget(self.groupBox_7, 0, 0, 1, 1)
+
+        self.groupBox_3 = QGroupBox(self.page_2)
+        self.groupBox_3.setObjectName(u"groupBox_3")
+        self.groupBox_3.setStyleSheet(u"")
+        self.gridLayout_15 = QGridLayout(self.groupBox_3)
+        self.gridLayout_15.setObjectName(u"gridLayout_15")
+        self.radio_otherFilters_none = QRadioButton(self.groupBox_3)
+        self.radio_otherFilters_none.setObjectName(u"radio_otherFilters_none")
+
+        self.gridLayout_15.addWidget(self.radio_otherFilters_none, 0, 1, 1, 1)
+
+        self.radio_otherFilters_user_popular = QRadioButton(self.groupBox_3)
+        self.radio_otherFilters_user_popular.setObjectName(u"radio_otherFilters_user_popular")
+
+        self.gridLayout_15.addWidget(self.radio_otherFilters_user_popular, 0, 2, 1, 1)
+
+        self.radio_otherFilters_user_newest = QRadioButton(self.groupBox_3)
+        self.radio_otherFilters_user_newest.setObjectName(u"radio_otherFilters_user_newest")
+
+        self.gridLayout_15.addWidget(self.radio_otherFilters_user_newest, 1, 1, 1, 1)
+
+
+        self.gridLayout_16.addWidget(self.groupBox_3, 0, 1, 1, 1)
+
+
+        self.gridLayout_17.addLayout(self.gridLayout_16, 0, 1, 1, 1)
+
+        self.gridLayout_14 = QGridLayout()
+        self.gridLayout_14.setObjectName(u"gridLayout_14")
+        self.groupBox_2 = QGroupBox(self.page_2)
+        self.groupBox_2.setObjectName(u"groupBox_2")
+        self.gridLayout_3 = QGridLayout(self.groupBox_2)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.radio_production_none = QRadioButton(self.groupBox_2)
+        self.radio_production_none.setObjectName(u"radio_production_none")
+
+        self.gridLayout_3.addWidget(self.radio_production_none, 1, 1, 1, 1)
+
+        self.radio_production_homemade = QRadioButton(self.groupBox_2)
+        self.radio_production_homemade.setObjectName(u"radio_production_homemade")
+
+        self.gridLayout_3.addWidget(self.radio_production_homemade, 0, 1, 1, 1)
+
+        self.radio_production_professional = QRadioButton(self.groupBox_2)
+        self.radio_production_professional.setObjectName(u"radio_production_professional")
+
+        self.gridLayout_3.addWidget(self.radio_production_professional, 0, 2, 1, 1)
+
+
+        self.gridLayout_14.addWidget(self.groupBox_2, 0, 1, 1, 1)
+
+        self.groupbox_member_relationship = QGroupBox(self.page_2)
+        self.groupbox_member_relationship.setObjectName(u"groupbox_member_relationship")
+        self.gridLayout_4 = QGridLayout(self.groupbox_member_relationship)
+        self.gridLayout_4.setObjectName(u"gridLayout_4")
+        self.radio_memberRelation_single = QRadioButton(self.groupbox_member_relationship)
+        self.radio_memberRelation_single.setObjectName(u"radio_memberRelation_single")
+
+        self.gridLayout_4.addWidget(self.radio_memberRelation_single, 0, 3, 1, 1)
+
+        self.radio_memberRelation_open = QRadioButton(self.groupbox_member_relationship)
+        self.radio_memberRelation_open.setObjectName(u"radio_memberRelation_open")
+
+        self.gridLayout_4.addWidget(self.radio_memberRelation_open, 0, 2, 1, 1)
+
+        self.radio_memberRelation_taken = QRadioButton(self.groupbox_member_relationship)
+        self.radio_memberRelation_taken.setObjectName(u"radio_memberRelation_taken")
+
+        self.gridLayout_4.addWidget(self.radio_memberRelation_taken, 0, 1, 1, 1)
+
+        self.radio_memberRelation_none = QRadioButton(self.groupbox_member_relationship)
+        self.radio_memberRelation_none.setObjectName(u"radio_memberRelation_none")
+
+        self.gridLayout_4.addWidget(self.radio_memberRelation_none, 0, 4, 1, 1)
+
+
+        self.gridLayout_14.addWidget(self.groupbox_member_relationship, 1, 1, 1, 1)
+
+        self.groupBox_4 = QGroupBox(self.page_2)
+        self.groupBox_4.setObjectName(u"groupBox_4")
+        self.gridLayout_9 = QGridLayout(self.groupBox_4)
+        self.gridLayout_9.setObjectName(u"gridLayout_9")
+        self.radio_memberType_is_staff = QRadioButton(self.groupBox_4)
+        self.radio_memberType_is_staff.setObjectName(u"radio_memberType_is_staff")
+
+        self.gridLayout_9.addWidget(self.radio_memberType_is_staff, 1, 0, 1, 1)
+
+        self.radio_memberType_none = QRadioButton(self.groupBox_4)
+        self.radio_memberType_none.setObjectName(u"radio_memberType_none")
+
+        self.gridLayout_9.addWidget(self.radio_memberType_none, 0, 0, 1, 1)
+
+        self.radio_memberType_is_model = QRadioButton(self.groupBox_4)
+        self.radio_memberType_is_model.setObjectName(u"radio_memberType_is_model")
+
+        self.gridLayout_9.addWidget(self.radio_memberType_is_model, 0, 1, 1, 1)
+
+        self.radio_memberType_is_online = QRadioButton(self.groupBox_4)
+        self.radio_memberType_is_online.setObjectName(u"radio_memberType_is_online")
+
+        self.gridLayout_9.addWidget(self.radio_memberType_is_online, 1, 1, 1, 1)
+
+
+        self.gridLayout_14.addWidget(self.groupBox_4, 0, 2, 1, 1)
+
+        self.groupBox_6 = QGroupBox(self.page_2)
+        self.groupBox_6.setObjectName(u"groupBox_6")
+        self.groupBox_6.setStyleSheet(u"/* QGroupBox */\n"
+"QGroupBox {\n"
+"    border: 2px solid #4CAF50; /* Border color for the group box */\n"
+"    border-radius: 5px;\n"
+"    margin-top: 10px; /* Adjust top margin as needed */\n"
+"    padding: 0px; /* Add some padding inside the group box */\n"
+"}\n"
+"\n"
+"/* Title text of the QGroupBox */\n"
+"QGroupBox::title {\n"
+"    subcontrol-origin: margin;\n"
+"    subcontrol-position: top center;\n"
+"    padding: 0 5px; /* Add padding for title text */\n"
+"    background-color: #4CAF50; /* Background color for the title bar */\n"
+"    color: white; /* Title text color */\n"
+"    border: 1px solid #4CAF50; /* Border color for the title bar */\n"
+"    border-top-left-radius: 3px;\n"
+"    border-top-right-radius: 3px;\n"
+"}\n"
+"\n"
+"/* Apply style to all child widgets within the QGroupBox */\n"
+"QGroupBox QWidget {\n"
+"    margin: 5px; /* Adjust margin for child widgets */\n"
+"}\n"
+"\n"
+"/* Style for child QLabel elements within the QGroupBox */\n"
+"QGroupBox QLabel {\n"
+"    font-weight: bold; /* Make text"
+                        " bold for labels */\n"
+"}\n"
+"\n"
+"/* Style for child QPushButton elements within the QGroupBox */\n"
+"QGroupBox QPushButton {\n"
+"    background-color: #4CAF50; /* Background color for buttons */\n"
+"    color: white; /* Button text color */\n"
+"    border: 1px solid #4CAF50; /* Button border color */\n"
+"    border-radius: 3px; /* Button border radius */\n"
+"    padding: 5px 10px; /* Add padding to buttons */\n"
+"}\n"
+"\n"
+"/* Style for child QComboBox elements within the QGroupBox */\n"
+"QGroupBox QComboBox {\n"
+"    border: 1px solid #4CAF50; /* Border color for combo boxes */\n"
+"    border-radius: 3px; /* Combo box border radius */\n"
+"    padding: 3px; /* Add padding to combo boxes */\n"
+"}\n"
+"")
+        self.gridLayout_11 = QGridLayout(self.groupBox_6)
+        self.gridLayout_11.setObjectName(u"gridLayout_11")
+        self.radio_memberGender_trans_male = QRadioButton(self.groupBox_6)
+        self.radio_memberGender_trans_male.setObjectName(u"radio_memberGender_trans_male")
+
+        self.gridLayout_11.addWidget(self.radio_memberGender_trans_male, 1, 4, 1, 1)
+
+        self.radio_memberGender_none = QRadioButton(self.groupBox_6)
+        self.radio_memberGender_none.setObjectName(u"radio_memberGender_none")
+
+        self.gridLayout_11.addWidget(self.radio_memberGender_none, 0, 4, 1, 1)
+
+        self.radio_memberGender_female_couple = QRadioButton(self.groupBox_6)
+        self.radio_memberGender_female_couple.setObjectName(u"radio_memberGender_female_couple")
+
+        self.gridLayout_11.addWidget(self.radio_memberGender_female_couple, 0, 1, 1, 1)
+
+        self.radio_memberGender_female = QRadioButton(self.groupBox_6)
+        self.radio_memberGender_female.setObjectName(u"radio_memberGender_female")
+
+        self.gridLayout_11.addWidget(self.radio_memberGender_female, 0, 2, 1, 1)
+
+        self.radio_memberGender_other = QRadioButton(self.groupBox_6)
+        self.radio_memberGender_other.setObjectName(u"radio_memberGender_other")
+
+        self.gridLayout_11.addWidget(self.radio_memberGender_other, 0, 3, 1, 1)
+
+        self.radio_memberGender_couple = QRadioButton(self.groupBox_6)
+        self.radio_memberGender_couple.setObjectName(u"radio_memberGender_couple")
+
+        self.gridLayout_11.addWidget(self.radio_memberGender_couple, 1, 2, 1, 1)
+
+        self.radio_memberGender_male = QRadioButton(self.groupBox_6)
+        self.radio_memberGender_male.setObjectName(u"radio_memberGender_male")
+
+        self.gridLayout_11.addWidget(self.radio_memberGender_male, 1, 3, 1, 1)
+
+        self.radio_memberGender_trans_female = QRadioButton(self.groupBox_6)
+        self.radio_memberGender_trans_female.setObjectName(u"radio_memberGender_trans_female")
+
+        self.gridLayout_11.addWidget(self.radio_memberGender_trans_female, 1, 1, 1, 1)
+
+        self.radio_memberGender_non_binary = QRadioButton(self.groupBox_6)
+        self.radio_memberGender_non_binary.setObjectName(u"radio_memberGender_non_binary")
+
+        self.gridLayout_11.addWidget(self.radio_memberGender_non_binary, 0, 5, 1, 1)
+
+
+        self.gridLayout_14.addWidget(self.groupBox_6, 1, 2, 1, 1)
+
+        self.groupBox = QGroupBox(self.page_2)
+        self.groupBox.setObjectName(u"groupBox")
+        self.gridLayout_12 = QGridLayout(self.groupBox)
+        self.gridLayout_12.setObjectName(u"gridLayout_12")
+        self.checkbox_sorting_top_rated = QCheckBox(self.groupBox)
+        self.checkbox_sorting_top_rated.setObjectName(u"checkbox_sorting_top_rated")
+
+        self.gridLayout_12.addWidget(self.checkbox_sorting_top_rated, 2, 0, 1, 1)
+
+        self.checkbox_sorting_yearly = QCheckBox(self.groupBox)
+        self.checkbox_sorting_yearly.setObjectName(u"checkbox_sorting_yearly")
+
+        self.gridLayout_12.addWidget(self.checkbox_sorting_yearly, 1, 0, 1, 1)
+
+        self.checkbox_sorting_views = QCheckBox(self.groupBox)
+        self.checkbox_sorting_views.setObjectName(u"checkbox_sorting_views")
+
+        self.gridLayout_12.addWidget(self.checkbox_sorting_views, 1, 3, 1, 1)
+
+        self.checkbox_sorting_all_time = QCheckBox(self.groupBox)
+        self.checkbox_sorting_all_time.setObjectName(u"checkbox_sorting_all_time")
+
+        self.gridLayout_12.addWidget(self.checkbox_sorting_all_time, 2, 4, 1, 1)
+
+        self.checkbox_sorting_hd = QCheckBox(self.groupBox)
+        self.checkbox_sorting_hd.setObjectName(u"checkbox_sorting_hd")
+
+        self.gridLayout_12.addWidget(self.checkbox_sorting_hd, 1, 4, 1, 1)
+
+        self.checkbox_sorting_weekly = QCheckBox(self.groupBox)
+        self.checkbox_sorting_weekly.setObjectName(u"checkbox_sorting_weekly")
+
+        self.gridLayout_12.addWidget(self.checkbox_sorting_weekly, 1, 2, 1, 1)
+
+        self.checkbox_sorting_longest = QCheckBox(self.groupBox)
+        self.checkbox_sorting_longest.setObjectName(u"checkbox_sorting_longest")
+
+        self.gridLayout_12.addWidget(self.checkbox_sorting_longest, 2, 3, 1, 1)
+
+        self.checkbox_sorting_recent = QCheckBox(self.groupBox)
+        self.checkbox_sorting_recent.setObjectName(u"checkbox_sorting_recent")
+
+        self.gridLayout_12.addWidget(self.checkbox_sorting_recent, 2, 2, 1, 1)
+
+        self.checkbox_sorting_daily = QCheckBox(self.groupBox)
+        self.checkbox_sorting_daily.setObjectName(u"checkbox_sorting_daily")
+
+        self.gridLayout_12.addWidget(self.checkbox_sorting_daily, 1, 5, 1, 1)
+
+
+        self.gridLayout_14.addWidget(self.groupBox, 1, 0, 1, 1)
+
+        self.groupBox_5 = QGroupBox(self.page_2)
+        self.groupBox_5.setObjectName(u"groupBox_5")
+        self.gridLayout_10 = QGridLayout(self.groupBox_5)
+        self.gridLayout_10.setObjectName(u"gridLayout_10")
+        self.radio_memberContent_has_playlists = QRadioButton(self.groupBox_5)
+        self.radio_memberContent_has_playlists.setObjectName(u"radio_memberContent_has_playlists")
+
+        self.gridLayout_10.addWidget(self.radio_memberContent_has_playlists, 1, 2, 1, 1)
+
+        self.radio_memberContent_none = QRadioButton(self.groupBox_5)
+        self.radio_memberContent_none.setObjectName(u"radio_memberContent_none")
+
+        self.gridLayout_10.addWidget(self.radio_memberContent_none, 0, 2, 1, 1)
+
+        self.radio_memberContent_has_videos = QRadioButton(self.groupBox_5)
+        self.radio_memberContent_has_videos.setObjectName(u"radio_memberContent_has_videos")
+
+        self.gridLayout_10.addWidget(self.radio_memberContent_has_videos, 0, 0, 1, 1)
+
+        self.radio_memberContent_has_avatar = QRadioButton(self.groupBox_5)
+        self.radio_memberContent_has_avatar.setObjectName(u"radio_memberContent_has_avatar")
+
+        self.gridLayout_10.addWidget(self.radio_memberContent_has_avatar, 1, 1, 1, 1)
+
+        self.radio_memberContent_custom_videos = QRadioButton(self.groupBox_5)
+        self.radio_memberContent_custom_videos.setObjectName(u"radio_memberContent_custom_videos")
+
+        self.gridLayout_10.addWidget(self.radio_memberContent_custom_videos, 1, 0, 1, 1)
+
+        self.radio_memberContent_has_photos = QRadioButton(self.groupBox_5)
+        self.radio_memberContent_has_photos.setObjectName(u"radio_memberContent_has_photos")
+
+        self.gridLayout_10.addWidget(self.radio_memberContent_has_photos, 0, 1, 1, 1)
+
+        self.radio_memberContent_offers_fan_club = QRadioButton(self.groupBox_5)
+        self.radio_memberContent_offers_fan_club.setObjectName(u"radio_memberContent_offers_fan_club")
+
+        self.gridLayout_10.addWidget(self.radio_memberContent_offers_fan_club, 0, 3, 1, 1)
+
+
+        self.gridLayout_14.addWidget(self.groupBox_5, 0, 0, 1, 1)
+
+
+        self.gridLayout_17.addLayout(self.gridLayout_14, 1, 0, 1, 2)
+
+        self.stacked_widget_top.addWidget(self.page_2)
+
+        self.gridLayout_7.addWidget(self.stacked_widget_top, 0, 0, 1, 1)
+
+        self.stacked_widget_main.addWidget(self.page_3)
+        self.page_4 = QWidget()
+        self.page_4.setObjectName(u"page_4")
+        self.stacked_widget_main.addWidget(self.page_4)
+
+        self.gridLayout_8.addWidget(self.stacked_widget_main, 0, 2, 1, 1)
+
+        self.widget = QWidget(Porn_Fetch_Widget)
+        self.widget.setObjectName(u"widget")
+        self.widget.setStyleSheet(u"background-color: rgb(34, 34, 34)")
+        self.gridLayout = QGridLayout(self.widget)
+        self.gridLayout.setSpacing(0)
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.button_switch_credits = QPushButton(self.widget)
+        self.button_switch_credits.setObjectName(u"button_switch_credits")
+        self.button_switch_credits.setMinimumSize(QSize(50, 50))
+        self.button_switch_credits.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_switch_credits.setStyleSheet(u"QPushButton:hover {\n"
+"    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
+"                                stop:0 white, stop:1 #abcdef); /* Anfang wei\u00df, Ende Farbe */\n"
+"}\n"
+"")
+
+        self.gridLayout.addWidget(self.button_switch_credits, 3, 0, 1, 1)
+
+        self.button_switch_search = QPushButton(self.widget)
+        self.button_switch_search.setObjectName(u"button_switch_search")
+        self.button_switch_search.setMinimumSize(QSize(50, 50))
+        self.button_switch_search.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_switch_search.setStyleSheet(u"QPushButton:hover {\n"
+"    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
+"                                stop:0 white, stop:1 #abcdef); /* Anfang wei\u00df, Ende Farbe */\n"
+"}\n"
+"")
+
+        self.gridLayout.addWidget(self.button_switch_search, 1, 0, 1, 1)
+
+        self.button_switch_settings = QPushButton(self.widget)
+        self.button_switch_settings.setObjectName(u"button_switch_settings")
+        self.button_switch_settings.setMinimumSize(QSize(50, 50))
+        self.button_switch_settings.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_switch_settings.setStyleSheet(u"QPushButton:hover {\n"
+"    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
+"                                stop:0 white, stop:1 #abcdef); /* Anfang wei\u00df, Ende Farbe */\n"
+"}\n"
+"")
+
+        self.gridLayout.addWidget(self.button_switch_settings, 2, 0, 1, 1)
+
+        self.button_switch_home = QPushButton(self.widget)
+        self.button_switch_home.setObjectName(u"button_switch_home")
+        self.button_switch_home.setMinimumSize(QSize(50, 50))
+        self.button_switch_home.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_switch_home.setStyleSheet(u"QPushButton:hover {\n"
+"    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
+"                                stop:0 white, stop:1 #abcdef); /* Anfang wei\u00df, Ende Farbe */\n"
+"}\n"
+"")
+
+        self.gridLayout.addWidget(self.button_switch_home, 0, 0, 1, 1)
+
+        self.verticalSpacer = QSpacerItem(20, 30, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout.addItem(self.verticalSpacer, 4, 0, 1, 1)
+
+
+        self.gridLayout_8.addWidget(self.widget, 0, 0, 2, 2)
+
+
+        self.retranslateUi(Porn_Fetch_Widget)
+
+        self.stacked_widget_main.setCurrentIndex(0)
+        self.stacked_widget_top.setCurrentIndex(0)
+
+
+        QMetaObject.connectSlotsByName(Porn_Fetch_Widget)
+    # setupUi
+
+    def retranslateUi(self, Porn_Fetch_Widget):
+        Porn_Fetch_Widget.setWindowTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Porn_Fetch_Widget", None))
+        self.label_current_progress.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Current Progress:", None))
+        self.label_total_progress.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
+        self.label_total.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
+        self.label_error.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Error:", None))
+        self.label_debug.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Debug:", None))
+        self.label_status.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Status:", None))
+        self.button_get_recommended_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get recommended videos", None))
+        self.label_password.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Password:", None))
+        self.button_get_liked_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Liked videos", None))
+        self.label_username.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Username:", None))
+        self.button_get_watched_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get watched videos", None))
+        self.button_login.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Login", None))
+        self.lineedit_password.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter your PornHub Password", None))
+        self.lineedit_username.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter your PornHub Username", None))
         self.label_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"File:", None))
         self.button_open_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Open File", None))
         self.lineedit_url.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter PornHub or HQPorner Video URL", None))
@@ -1134,68 +1248,69 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"URL:", None))
         self.button_model.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Videos", None))
         self.lineedit_model_url.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter PornHub Model URL. This can be a Pornstar Account or a PornHub Channel. The videos will be listed down in the TreeWidget", None))
-        self.button_get_recommended_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get recommended videos", None))
-        self.label_password.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Password:", None))
-        self.button_get_liked_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Liked videos", None))
-        self.label_username.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Username:", None))
-        self.button_get_watched_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get watched videos", None))
-        self.button_login.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Login", None))
-        self.lineedit_password.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter your PornHub Password", None))
-        self.lineedit_username.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter your PornHub Username", None))
-        self.pushButton_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search", None))
-        self.label_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Videos", None))
-        self.pushButton.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search", None))
-        self.label.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Users", None))
-        self.label_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Pornstars", None))
-        self.pushButton_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search", None))
-        self.button_filter_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Category Filter", None))
+        self.label_search_users.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Users", None))
+        self.label_search_pornstars.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Pornstars", None))
+        self.button_search_category_filters.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Category Filter", None))
         self.button_filter_users.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Filters", None))
-        self.groupBox.setTitle("")
-        self.radioButton_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"None", None))
-        self.label_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Production Filters (for Videos)", None))
-        self.radioButton_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Professional", None))
-        self.radioButton.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.checkBox_6.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Weekly", None))
-        self.checkBox_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yearly", None))
-        self.checkBox_11.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Recent", None))
-        self.label_5.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Sorting filters (for Videos)", None))
-        self.checkBox.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"HD", None))
-        self.checkBox_8.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Daily", None))
-        self.checkBox_9.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"All Time", None))
-        self.checkBox_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Longest", None))
-        self.checkBox_12.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Top rated", None))
-        self.checkBox_10.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Views", None))
-        self.radioButton_9.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radioButton_7.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radioButton_8.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.label_6.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Member Type", None))
-        self.radioButton_15.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radioButton_14.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radioButton_11.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radioButton_12.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radioButton_10.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radioButton_13.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.label_7.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Member content", None))
-        self.radioButton_17.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radioButton_16.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radioButton_18.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.label_8.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Member relationship", None))
-        self.label_12.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Member Gender", None))
-        self.radioButton_22.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radioButton_26.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radioButton_21.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radioButton_25.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radioButton_20.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radioButton_19.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radioButton_24.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radioButton_23.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radioButton_27.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.label_11.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Member interests", None))
-        self.radioButton_30.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radioButton_29.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radioButton_28.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radioButton_32.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.radioButton_31.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
-        self.label_10.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Other filters", None))
+        self.label_search_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Videos", None))
+        self.button_search_pornstar.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search", None))
+        self.button_search_users.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search", None))
+        self.button_search_filters.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search", None))
+        self.groupBox_7.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Member Interests", None))
+        self.radio_memberInterests_into_none.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Into None", None))
+        self.radio_memberInterests_into_male.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Into Male", None))
+        self.radio_memberInterests_none.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"None", None))
+        self.radio_memberInterests_into_female.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Into Female", None))
+        self.radio_memberInterests_into_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Into All", None))
+        self.groupBox_3.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Other Filters", None))
+        self.radio_otherFilters_none.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"None", None))
+        self.radio_otherFilters_user_popular.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"User Popular", None))
+        self.radio_otherFilters_user_newest.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"User Newest", None))
+        self.groupBox_2.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Production Filters (Videos)", None))
+        self.radio_production_none.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"None", None))
+        self.radio_production_homemade.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
+        self.radio_production_professional.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Professional", None))
+        self.groupbox_member_relationship.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Member Relationship", None))
+        self.radio_memberRelation_single.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Single", None))
+        self.radio_memberRelation_open.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Open Relation", None))
+        self.radio_memberRelation_taken.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Taken", None))
+        self.radio_memberRelation_none.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"None", None))
+        self.groupBox_4.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Member Type", None))
+        self.radio_memberType_is_staff.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Is Staff", None))
+        self.radio_memberType_none.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"None", None))
+        self.radio_memberType_is_model.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Is Model", None))
+        self.radio_memberType_is_online.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Is Online", None))
+        self.groupBox_6.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Member Gender", None))
+        self.radio_memberGender_trans_male.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Trans Male", None))
+        self.radio_memberGender_none.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"None", None))
+        self.radio_memberGender_female_couple.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Female Couple", None))
+        self.radio_memberGender_female.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Female", None))
+        self.radio_memberGender_other.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Other", None))
+        self.radio_memberGender_couple.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Couple", None))
+        self.radio_memberGender_male.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Male", None))
+        self.radio_memberGender_trans_female.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Trans Female", None))
+        self.radio_memberGender_non_binary.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Non Binary", None))
+        self.groupBox.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Sorting Filters (Videos)", None))
+        self.checkbox_sorting_top_rated.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Top rated", None))
+        self.checkbox_sorting_yearly.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yearly", None))
+        self.checkbox_sorting_views.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Views", None))
+        self.checkbox_sorting_all_time.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"All Time", None))
+        self.checkbox_sorting_hd.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"HD", None))
+        self.checkbox_sorting_weekly.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Weekly", None))
+        self.checkbox_sorting_longest.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Longest", None))
+        self.checkbox_sorting_recent.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Recent", None))
+        self.checkbox_sorting_daily.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Daily", None))
+        self.groupBox_5.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Member Content", None))
+        self.radio_memberContent_has_playlists.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Has Playlists", None))
+        self.radio_memberContent_none.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"None", None))
+        self.radio_memberContent_has_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Has Videos", None))
+        self.radio_memberContent_has_avatar.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Has Avatar", None))
+        self.radio_memberContent_custom_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Offers custom Videos", None))
+        self.radio_memberContent_has_photos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Has Photos", None))
+        self.radio_memberContent_offers_fan_club.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Offers Fan Club", None))
+        self.button_switch_credits.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Credits", None))
+        self.button_switch_search.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search", None))
+        self.button_switch_settings.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Settings", None))
+        self.button_switch_home.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Home", None))
     # retranslateUi
 
