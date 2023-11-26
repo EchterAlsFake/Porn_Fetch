@@ -16,9 +16,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QGridLayout, QHeaderView, QLabel,
-    QLineEdit, QProgressBar, QPushButton, QSizePolicy,
-    QSpacerItem, QStackedWidget, QTreeWidget, QTreeWidgetItem,
-    QVBoxLayout, QWidget)
+    QLineEdit, QProgressBar, QPushButton, QRadioButton,
+    QSizePolicy, QSpacerItem, QStackedWidget, QTreeWidget,
+    QTreeWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_Porn_Fetch_Widget(object):
     def setupUi(self, Porn_Fetch_Widget):
@@ -58,22 +58,32 @@ class Ui_Porn_Fetch_Widget(object):
 "}\n"
 "\n"
 "QRadioButton {\n"
-"	color: rgb(255,255,255)}\n"
-"\n"
-"QRadioButton::indicator::unchecked {\n"
-"	border: 1px solid white;\n"
-"	border-radius: 5px;\n"
+"    color: #dcdcdc; /* Light grey text */\n"
+"    spacing: 5px; /* Space between the radio button and its label */\n"
 "}\n"
 "\n"
+"QRadioButton::indicator {\n"
+"    width: 13px;\n"
+"    height: 13px;\n"
+"    border-radius: 7px; /* Circular indicator */\n"
+""
+                        "}\n"
+"\n"
+"QRadioButton::indicator:unchecked {\n"
+"    background-color: #555; /* Dark background for unchecked state */\n"
+"    border: 2px solid #777; /* Slightly lighter border */\n"
+"}\n"
 "\n"
 "QRadioButton::indicator:checked {\n"
-"    border : 4px solid;\n"
-"	border-color: black;\n"
-"	border-radius: 6"
-                        "px;\n"
-"	background-color: rgb(0, 255, 183);\n"
-"\n"
+"    background-color: #7a7aff; /* Bright color for checked state */\n"
+"    border: 2px solid #5a5aff; /* Border slightly darker than the background */\n"
 "}\n"
+"\n"
+"QRadioButton::indicator:checked:hover,\n"
+"QRadioButton::indicator:unchecked:hover {\n"
+"    border-color: #9a9aff; /* Change border color on hover */\n"
+"}\n"
+"\n"
 "\n"
 "QSlider::groove:horizontal {\n"
 "    border: 1px solid #5a2a82;\n"
@@ -95,7 +105,8 @@ class Ui_Porn_Fetch_Widget(object):
 "    background: #e0e0e0;\n"
 "}\n"
 "\n"
-"QSlider::sub-page:horizontal {\n"
+"QSlider::sub-page"
+                        ":horizontal {\n"
 "    background: #5a2a82;\n"
 "}\n"
 "\n"
@@ -117,8 +128,7 @@ class Ui_Porn_Fetch_Widget(object):
 "    }\n"
 "    QGroupBox::title {\n"
 "        subcontrol-origin: margin;\n"
-"        subcont"
-                        "rol-position: top center;\n"
+"        subcontrol-position: top center;\n"
 "        padding: 0 3px;\n"
 "    }\n"
 "\n"
@@ -482,6 +492,103 @@ class Ui_Porn_Fetch_Widget(object):
         self.stacked_widget_top.addWidget(self.page)
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
+        self.gridLayoutWidget = QWidget(self.page_2)
+        self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
+        self.gridLayoutWidget.setGeometry(QRect(0, 0, 931, 113))
+        self.gridLayout_9 = QGridLayout(self.gridLayoutWidget)
+        self.gridLayout_9.setObjectName(u"gridLayout_9")
+        self.gridLayout_9.setContentsMargins(0, 0, 0, 0)
+        self.pushButton_2 = QPushButton(self.gridLayoutWidget)
+        self.pushButton_2.setObjectName(u"pushButton_2")
+
+        self.gridLayout_9.addWidget(self.pushButton_2, 1, 2, 1, 1)
+
+        self.lineEdit = QLineEdit(self.gridLayoutWidget)
+        self.lineEdit.setObjectName(u"lineEdit")
+
+        self.gridLayout_9.addWidget(self.lineEdit, 0, 1, 1, 1)
+
+        self.lineEdit_3 = QLineEdit(self.gridLayoutWidget)
+        self.lineEdit_3.setObjectName(u"lineEdit_3")
+
+        self.gridLayout_9.addWidget(self.lineEdit_3, 2, 1, 1, 1)
+
+        self.label_2 = QLabel(self.gridLayoutWidget)
+        self.label_2.setObjectName(u"label_2")
+
+        self.gridLayout_9.addWidget(self.label_2, 0, 0, 1, 1)
+
+        self.pushButton = QPushButton(self.gridLayoutWidget)
+        self.pushButton.setObjectName(u"pushButton")
+
+        self.gridLayout_9.addWidget(self.pushButton, 0, 2, 1, 1)
+
+        self.label = QLabel(self.gridLayoutWidget)
+        self.label.setObjectName(u"label")
+
+        self.gridLayout_9.addWidget(self.label, 1, 0, 1, 1)
+
+        self.label_3 = QLabel(self.gridLayoutWidget)
+        self.label_3.setObjectName(u"label_3")
+
+        self.gridLayout_9.addWidget(self.label_3, 2, 0, 1, 1)
+
+        self.lineEdit_2 = QLineEdit(self.gridLayoutWidget)
+        self.lineEdit_2.setObjectName(u"lineEdit_2")
+
+        self.gridLayout_9.addWidget(self.lineEdit_2, 1, 1, 1, 1)
+
+        self.pushButton_3 = QPushButton(self.gridLayoutWidget)
+        self.pushButton_3.setObjectName(u"pushButton_3")
+
+        self.gridLayout_9.addWidget(self.pushButton_3, 2, 2, 1, 1)
+
+        self.button_filter_videos = QPushButton(self.gridLayoutWidget)
+        self.button_filter_videos.setObjectName(u"button_filter_videos")
+
+        self.gridLayout_9.addWidget(self.button_filter_videos, 0, 3, 1, 1)
+
+        self.button_filter_users = QPushButton(self.gridLayoutWidget)
+        self.button_filter_users.setObjectName(u"button_filter_users")
+
+        self.gridLayout_9.addWidget(self.button_filter_users, 1, 3, 1, 1)
+
+        self.button_filter_pornstars = QPushButton(self.gridLayoutWidget)
+        self.button_filter_pornstars.setObjectName(u"button_filter_pornstars")
+
+        self.gridLayout_9.addWidget(self.button_filter_pornstars, 2, 3, 1, 1)
+
+        self.gridLayoutWidget_2 = QWidget(self.page_2)
+        self.gridLayoutWidget_2.setObjectName(u"gridLayoutWidget_2")
+        self.gridLayoutWidget_2.setGeometry(QRect(30, 150, 212, 80))
+        self.gridLayout_10 = QGridLayout(self.gridLayoutWidget_2)
+        self.gridLayout_10.setObjectName(u"gridLayout_10")
+        self.gridLayout_10.setContentsMargins(0, 0, 0, 0)
+        self.radioButton_3 = QRadioButton(self.gridLayoutWidget_2)
+        self.radioButton_3.setObjectName(u"radioButton_3")
+
+        self.gridLayout_10.addWidget(self.radioButton_3, 2, 1, 1, 1)
+
+        self.radioButton_2 = QRadioButton(self.gridLayoutWidget_2)
+        self.radioButton_2.setObjectName(u"radioButton_2")
+
+        self.gridLayout_10.addWidget(self.radioButton_2, 2, 0, 1, 1)
+
+        self.radioButton_4 = QRadioButton(self.gridLayoutWidget_2)
+        self.radioButton_4.setObjectName(u"radioButton_4")
+
+        self.gridLayout_10.addWidget(self.radioButton_4, 3, 1, 1, 1)
+
+        self.radioButton = QRadioButton(self.gridLayoutWidget_2)
+        self.radioButton.setObjectName(u"radioButton")
+
+        self.gridLayout_10.addWidget(self.radioButton, 3, 0, 1, 1)
+
+        self.label_4 = QLabel(self.gridLayoutWidget_2)
+        self.label_4.setObjectName(u"label_4")
+
+        self.gridLayout_10.addWidget(self.label_4, 1, 0, 1, 2)
+
         self.stacked_widget_top.addWidget(self.page_2)
 
         self.gridLayout_7.addWidget(self.stacked_widget_top, 0, 0, 1, 1)
@@ -590,7 +697,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.retranslateUi(Porn_Fetch_Widget)
 
         self.stacked_widget_main.setCurrentIndex(0)
-        self.stacked_widget_top.setCurrentIndex(0)
+        self.stacked_widget_top.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(Porn_Fetch_Widget)
@@ -622,6 +729,150 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_login.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Login", None))
         self.lineedit_password.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter your PornHub Password", None))
         self.lineedit_username.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter your PornHub Username", None))
+        self.pushButton_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"PushButton", None))
+        self.label_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Videos", None))
+        self.pushButton.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"PushButton", None))
+        self.label.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Users", None))
+        self.label_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Pornstars", None))
+        self.pushButton_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"PushButton", None))
+        self.button_filter_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Filters", None))
+        self.button_filter_users.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Filters", None))
+        self.button_filter_pornstars.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Filters", None))
+        self.radioButton_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"RadioButton", None))
+        self.radioButton_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"RadioButton", None))
+        self.radioButton_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"RadioButton", None))
+        self.radioButton.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"RadioButton", None))
+        self.label_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Production Filters", None))
+        self.treeWidget.setStyleSheet(QCoreApplication.translate("Porn_Fetch_Widget", u"QWidget {\n"
+"color: white;\n"
+"background-color: rgb(60, 60, 60);\n"
+"border: none;\n"
+"}\n"
+"\n"
+"QLineEdit {\n"
+"    border: 2px solid #444;\n"
+"    border-radius: 4px;\n"
+"    padding: 5px;\n"
+"    background-color: #333;\n"
+"    color: #DDD;\n"
+"}\n"
+"QLineEdit:focus {\n"
+"    border: 2px solid #5599FF;\n"
+"}\n"
+"\n"
+"\n"
+"QProgressBar {\n"
+"	color: rgb(255, 153, 0);\n"
+"    border: 2px solid #5a2a82;\n"
+"    border-radius: 5px;\n"
+"    text-align: center;\n"
+"    background-color: rgb(74, 74, 74);\n"
+"    color: #ffffff;  /* Adding text color for better visibility */\n"
+"}\n"
+"\n"
+"QProgressBar::chunk {\n"
+"    background-color: rgb(0, 255, 224);\n"
+"    width: 10px; /* Adjust this to change the width of the 'chunk' */\n"
+"}\n"
+"\n"
+"QRadioButton {\n"
+"    color: #dcdcdc; /* Light grey text */\n"
+"    spacing: 5px; /* Space between the radio button and its label */\n"
+"}\n"
+"\n"
+"QRadioButton::indicator {\n"
+"    width: 13px;\n"
+"    height: 13px;\n"
+"    border-radius: 7px; /* Circular indicator */\n"
+""
+                        "}\n"
+"\n"
+"QRadioButton::indicator:unchecked {\n"
+"    background-color: #555; /* Dark background for unchecked state */\n"
+"    border: 2px solid #777; /* Slightly lighter border */\n"
+"}\n"
+"\n"
+"QRadioButton::indicator:checked {\n"
+"    background-color: #7a7aff; /* Bright color for checked state */\n"
+"    border: 2px solid #5a5aff; /* Border slightly darker than the background */\n"
+"}\n"
+"\n"
+"QRadioButton::indicator:checked:hover,\n"
+"QRadioButton::indicator:unchecked:hover {\n"
+"    border-color: #9a9aff; /* Change border color on hover */\n"
+"}\n"
+"\n"
+"\n"
+"QSlider::groove:horizontal {\n"
+"    border: 1px solid #5a2a82;\n"
+"    height: 8px;\n"
+"    background: #e0e0e0;\n"
+"    margin: 0px;\n"
+"    border-radius: 4px;\n"
+"}\n"
+"\n"
+"QSlider::handle:horizontal {\n"
+"    background: #5a2a82;\n"
+"    border: 1px solid #5a2a82;\n"
+"    width: 18px;\n"
+"    margin: -6px 0;\n"
+"    border-radius: 9px;\n"
+"}\n"
+"\n"
+"QSlider::add-page:horizontal {\n"
+"    background: #e0e0e0;\n"
+"}\n"
+"\n"
+"QSlider::sub-page"
+                        ":horizontal {\n"
+"    background: #5a2a82;\n"
+"}\n"
+"\n"
+"QTreeWidget {\n"
+"    background-color: rgb(94, 94, 94);\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QTreeWidget QHeaderView::section {\n"
+"    background-color: rgb(94, 94, 94);\n"
+"    color: black; \n"
+"    border: 1px solid #5a2a82;\n"
+"    padding: 4px;\n"
+"}\n"
+"\n"
+"QGroupBox {\n"
+"        border: 0px;\n"
+"        margin-top: 1ex; /* Adjust as needed */\n"
+"    }\n"
+"    QGroupBox::title {\n"
+"        subcontrol-origin: margin;\n"
+"        subcontrol-position: top center;\n"
+"        padding: 0 3px;\n"
+"    }\n"
+"\n"
+"QLabel {\n"
+"    color: #DDD;\n"
+"    padding: 2px;\n"
+"    font-size: 14px;\n"
+"}\n"
+"\n"
+"QPushButton {\n"
+"    border: 2px solid #444;\n"
+"    border-radius: 4px;\n"
+"    padding: 5px;\n"
+"    background-color: #333;\n"
+"    color: #DDD;\n"
+"    font-weight: bold;\n"
+"    font-size: 14px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #555;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #5599FF;\n"
+"}", None))
         self.label_current_progress.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Current Progress:", None))
         self.label_total_progress.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
         self.label_total.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
