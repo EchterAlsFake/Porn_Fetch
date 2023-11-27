@@ -1,3 +1,9 @@
+<p align="center">
+  <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/V3.0/src/frontend/graphics/logo_transparent.png" alt="Logo"/>
+</p>
+
+
+
 # Dev Information:
 
 I have currently not the time to maintain this. School in Germnay is really hard in October - December.
