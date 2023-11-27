@@ -4,8 +4,10 @@
         <file>graphics/information.svg</file>
         <file>graphics/search.svg</file>
         <file>graphics/settings.svg</file>
-        <file>graphics/tick.svg</file>
         <file>graphics/logo_transparent.ico</file>
+        <file>graphics/top-arrow.ico</file>
+        <file>graphics/down-arrow.ico</file>
+        <file>graphics/tick.ico</file>
     </qresource>
     <qresource prefix="/style">
         <file>stylesheet.qss</file>

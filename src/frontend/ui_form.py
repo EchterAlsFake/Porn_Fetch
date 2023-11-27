@@ -29,218 +29,6 @@ class Ui_Porn_Fetch_Widget(object):
         icon = QIcon()
         icon.addFile(u"graphics/logo_transparent.png", QSize(), QIcon.Normal, QIcon.Off)
         Porn_Fetch_Widget.setWindowIcon(icon)
-        Porn_Fetch_Widget.setStyleSheet(u"QWidget {\n"
-"color: white;\n"
-"background-color: rgb(60, 60, 60);\n"
-"border: none;\n"
-"}\n"
-"\n"
-"QLineEdit {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 4px;\n"
-"    padding: 5px;\n"
-"    background-color: #333;\n"
-"    color: #DDD;\n"
-"}\n"
-"QLineEdit:focus {\n"
-"    border: 2px solid #5599FF;\n"
-"}\n"
-"\n"
-"\n"
-"QProgressBar {\n"
-"	color: rgb(255, 153, 0);\n"
-"    border: 2px solid #5a2a82;\n"
-"    border-radius: 5px;\n"
-"    text-align: center;\n"
-"    background-color: rgb(74, 74, 74);\n"
-"    color: #ffffff;  /* Adding text color for better visibility */\n"
-"}\n"
-"\n"
-"QProgressBar::chunk {\n"
-"    background-color: rgb(0, 255, 224);\n"
-"    width: 10px; /* Adjust this to change the width of the 'chunk' */\n"
-"}\n"
-"\n"
-"QRadioButton {\n"
-"    color: #dcdcdc; /* Light grey text */\n"
-"    spacing: 5px; /* Space between the radio button and its label */\n"
-"}\n"
-"\n"
-"QRadioButton::indicator {\n"
-"    width: 13px;\n"
-"    height: 13px;\n"
-"    border-radius: 7px; /* Circular indicator */\n"
-""
-                        "}\n"
-"\n"
-"QRadioButton::indicator:unchecked {\n"
-"    background-color: #555; /* Dark background for unchecked state */\n"
-"    border: 2px solid #777; /* Slightly lighter border */\n"
-"}\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    background-color: #7a7aff; /* Bright color for checked state */\n"
-"    border: 2px solid #5a5aff; /* Border slightly darker than the background */\n"
-"}\n"
-"\n"
-"QRadioButton::indicator:checked:hover,\n"
-"QRadioButton::indicator:unchecked:hover {\n"
-"    border-color: #9a9aff; /* Change border color on hover */\n"
-"}\n"
-"\n"
-"\n"
-"QSlider::groove:horizontal {\n"
-"    border: 1px solid #5a2a82;\n"
-"    height: 8px;\n"
-"    background: #e0e0e0;\n"
-"    margin: 0px;\n"
-"    border-radius: 4px;\n"
-"}\n"
-"\n"
-"QSlider::handle:horizontal {\n"
-"    background: #5a2a82;\n"
-"    border: 1px solid #5a2a82;\n"
-"    width: 18px;\n"
-"    margin: -6px 0;\n"
-"    border-radius: 9px;\n"
-"}\n"
-"\n"
-"QSlider::add-page:horizontal {\n"
-"    background: #e0e0e0;\n"
-"}\n"
-"\n"
-"QSlider::sub-page"
-                        ":horizontal {\n"
-"    background: #5a2a82;\n"
-"}\n"
-"\n"
-"QTreeWidget {\n"
-"    background-color: rgb(94, 94, 94);\n"
-"    color: white;\n"
-"}\n"
-"\n"
-"QTreeWidget QHeaderView::section {\n"
-"    background-color: rgb(94, 94, 94);\n"
-"    color: black;\n"
-"    border: 1px solid #5a2a82;\n"
-"    padding: 4px;\n"
-"}\n"
-"\n"
-"/* QGroupBox */\n"
-"QGroupBox {\n"
-"    border: 2px solid #4CAF50; /* Border color for the group box */\n"
-"    border-radius: 5px;\n"
-"    margin-top: 10px; /* Adjust top margin as needed */\n"
-"    padding: 5px; /* Add some padding inside the group box */\n"
-"}\n"
-"\n"
-"/* Title text of the QGroupBox */\n"
-"QGroupBox::title {\n"
-"    subcontrol-origin: margin;\n"
-"    subcontrol-position: top center;\n"
-"    padding: 0 5px; /* Add padding for title text */\n"
-"    background-color: #4CAF50; /* Background color for the title bar */\n"
-"    color: white; /* Title text color */\n"
-"    border: 1px solid #4CAF50; /* Border color for the title bar */\n"
-"    border-top-left-radius: 3px;\n"
-"    "
-                        "border-top-right-radius: 3px;\n"
-"}\n"
-"\n"
-"/* Apply style to all child widgets within the QGroupBox */\n"
-"QGroupBox QWidget {\n"
-"    margin: 3px; /* Adjust margin for child widgets */\n"
-"}\n"
-"\n"
-"/* Style for child QLabel elements within the QGroupBox */\n"
-"QGroupBox QLabel {\n"
-"    font-weight: bold; /* Make text bold for labels */\n"
-"}\n"
-"\n"
-"/* Style for child QPushButton elements within the QGroupBox */\n"
-"QGroupBox QPushButton {\n"
-"    background-color: #4CAF50; /* Background color for buttons */\n"
-"    color: white; /* Button text color */\n"
-"    border: 1px solid #4CAF50; /* Button border color */\n"
-"    border-radius: 3px; /* Button border radius */\n"
-"    padding: 5px 10px; /* Add padding to buttons */\n"
-"}\n"
-"\n"
-"/* Hover effect for QPushButton */\n"
-"QGroupBox QPushButton:hover {\n"
-"    background-color: #66BB6A; /* Lighter green color on hover */\n"
-"    border-color: #66BB6A; /* Border color changes on hover */\n"
-"}\n"
-"\n"
-"/* Pressed effect for QPushButton */\n"
-"QGroupBox"
-                        " QPushButton:pressed {\n"
-"    background-color: #388E3C; /* Darker green color when pressed */\n"
-"    border-color: #388E3C; /* Border color changes when pressed */\n"
-"}\n"
-"\n"
-"/* Style for child QComboBox elements within the QGroupBox */\n"
-"QGroupBox QComboBox {\n"
-"    border: 1px solid #4CAF50; /* Border color for combo boxes */\n"
-"    border-radius: 3px; /* Combo box border radius */\n"
-"    padding: 3px; /* Add padding to combo boxes */\n"
-"}\n"
-"\n"
-"QLabel {\n"
-"    color: #DDD;\n"
-"    padding: 2px;\n"
-"    font-size: 14px;\n"
-"}\n"
-"QPushButton {\n"
-"    color: #dcdcdc; /* Light grey text */\n"
-"    padding: 5px; /* Space inside the button */\n"
-"    border-radius: 7px; /* Rounded corners like the circular indicator */\n"
-"    border: 2px solid #777; /* Slightly lighter border */\n"
-"    background-color: #555; /* Dark background for unchecked state */\n"
-"}\n"
-"\n"
-"QPushButton:checked {\n"
-"    background-color: #7a7aff; /* Bright color for checked state */\n"
-"    border: 2px solid #5a5aff; "
-                        "/* Border slightly darker than the background */\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    border-color: #9a9aff; /* Change border color on hover */\n"
-"}\n"
-"\n"
-"QPushButton:checked:hover {\n"
-"    border-color: #9a9aff; /* Keep consistent hover effect when checked */\n"
-"}\n"
-"QCheckBox {\n"
-"    color: #dcdcdc; /* Light grey text */\n"
-"    spacing: 5px; /* Space between the checkbox and its label */\n"
-"}\n"
-"\n"
-"QCheckBox::indicator {\n"
-"    width: 15px;\n"
-"    height: 15px;\n"
-"    border: 2px solid #777; /* Border color */\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:unchecked {\n"
-"    background-color: #555; /* Dark background for unchecked state */\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:checked {\n"
-"    background-color: #7a7aff; /* Bright color for checked state */\n"
-"    /* Here you can add your custom icon */\n"
-"    image: url(':/images/tick.svg');\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:hover {\n"
-"    border-color: #9a9aff; /* Change border color on hover */\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:checked:h"
-                        "over {\n"
-"    background-color: #8a8aff; /* Slightly lighter background on hover */\n"
-"}")
         self.gridLayout_8 = QGridLayout(Porn_Fetch_Widget)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
         self.widget = QWidget(Porn_Fetch_Widget)
@@ -1217,205 +1005,227 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridLayout_28.setObjectName(u"gridLayout_28")
         self.gridLayout_27 = QGridLayout()
         self.gridLayout_27.setObjectName(u"gridLayout_27")
-        self.groupBox_15 = QGroupBox(self.page_4)
-        self.groupBox_15.setObjectName(u"groupBox_15")
-        self.gridLayout_25 = QGridLayout(self.groupBox_15)
+        self.groupbox_PERFORMANCE = QGroupBox(self.page_4)
+        self.groupbox_PERFORMANCE.setObjectName(u"groupbox_PERFORMANCE")
+        self.gridLayout_25 = QGridLayout(self.groupbox_PERFORMANCE)
         self.gridLayout_25.setObjectName(u"gridLayout_25")
-        self.groupBox_9 = QGroupBox(self.groupBox_15)
-        self.groupBox_9.setObjectName(u"groupBox_9")
-        self.gridLayout_19 = QGridLayout(self.groupBox_9)
-        self.gridLayout_19.setObjectName(u"gridLayout_19")
-        self.radioButton_5 = QRadioButton(self.groupBox_9)
-        self.radioButton_5.setObjectName(u"radioButton_5")
-
-        self.gridLayout_19.addWidget(self.radioButton_5, 0, 0, 1, 1)
-
-        self.radioButton_6 = QRadioButton(self.groupBox_9)
-        self.radioButton_6.setObjectName(u"radioButton_6")
-
-        self.gridLayout_19.addWidget(self.radioButton_6, 0, 2, 1, 1)
-
-        self.radioButton_4 = QRadioButton(self.groupBox_9)
-        self.radioButton_4.setObjectName(u"radioButton_4")
-
-        self.gridLayout_19.addWidget(self.radioButton_4, 0, 1, 1, 1)
-
-        self.pushButton = QPushButton(self.groupBox_9)
-        self.pushButton.setObjectName(u"pushButton")
-
-        self.gridLayout_19.addWidget(self.pushButton, 0, 3, 1, 1)
-
-
-        self.gridLayout_25.addWidget(self.groupBox_9, 1, 0, 1, 1)
-
-        self.groupBox_12 = QGroupBox(self.groupBox_15)
-        self.groupBox_12.setObjectName(u"groupBox_12")
-        self.gridLayout_22 = QGridLayout(self.groupBox_12)
+        self.groupbox_performance_semaphore = QGroupBox(self.groupbox_PERFORMANCE)
+        self.groupbox_performance_semaphore.setObjectName(u"groupbox_performance_semaphore")
+        self.gridLayout_22 = QGridLayout(self.groupbox_performance_semaphore)
         self.gridLayout_22.setObjectName(u"gridLayout_22")
-        self.spinBox = QSpinBox(self.groupBox_12)
-        self.spinBox.setObjectName(u"spinBox")
-        self.spinBox.setMaximum(10)
+        self.label_semaphore = QLabel(self.groupbox_performance_semaphore)
+        self.label_semaphore.setObjectName(u"label_semaphore")
 
-        self.gridLayout_22.addWidget(self.spinBox, 0, 1, 1, 1)
+        self.gridLayout_22.addWidget(self.label_semaphore, 0, 0, 1, 1)
 
-        self.label_3 = QLabel(self.groupBox_12)
-        self.label_3.setObjectName(u"label_3")
+        self.button_semaphore_help = QPushButton(self.groupbox_performance_semaphore)
+        self.button_semaphore_help.setObjectName(u"button_semaphore_help")
 
-        self.gridLayout_22.addWidget(self.label_3, 0, 0, 1, 1)
+        self.gridLayout_22.addWidget(self.button_semaphore_help, 1, 0, 1, 2)
 
-        self.pushButton_4 = QPushButton(self.groupBox_12)
-        self.pushButton_4.setObjectName(u"pushButton_4")
+        self.spinbox_semaphore = QSpinBox(self.groupbox_performance_semaphore)
+        self.spinbox_semaphore.setObjectName(u"spinbox_semaphore")
+        self.spinbox_semaphore.setMaximum(10)
 
-        self.gridLayout_22.addWidget(self.pushButton_4, 1, 0, 1, 2)
+        self.gridLayout_22.addWidget(self.spinbox_semaphore, 0, 1, 1, 1)
 
 
-        self.gridLayout_25.addWidget(self.groupBox_12, 1, 1, 1, 1)
+        self.gridLayout_25.addWidget(self.groupbox_performance_semaphore, 1, 1, 1, 1)
 
-        self.groupBox_10 = QGroupBox(self.groupBox_15)
-        self.groupBox_10.setObjectName(u"groupBox_10")
-        self.gridLayout_20 = QGridLayout(self.groupBox_10)
+        self.groupbox_performance_threading_mode = QGroupBox(self.groupbox_PERFORMANCE)
+        self.groupbox_performance_threading_mode.setObjectName(u"groupbox_performance_threading_mode")
+        self.gridLayout_19 = QGridLayout(self.groupbox_performance_threading_mode)
+        self.gridLayout_19.setObjectName(u"gridLayout_19")
+        self.radio_threading_mode_high_performance = QRadioButton(self.groupbox_performance_threading_mode)
+        self.radio_threading_mode_high_performance.setObjectName(u"radio_threading_mode_high_performance")
+
+        self.gridLayout_19.addWidget(self.radio_threading_mode_high_performance, 0, 0, 1, 1)
+
+        self.radio_threading_mode_default = QRadioButton(self.groupbox_performance_threading_mode)
+        self.radio_threading_mode_default.setObjectName(u"radio_threading_mode_default")
+
+        self.gridLayout_19.addWidget(self.radio_threading_mode_default, 0, 2, 1, 1)
+
+        self.radio_threading_mode_ffmpeg = QRadioButton(self.groupbox_performance_threading_mode)
+        self.radio_threading_mode_ffmpeg.setObjectName(u"radio_threading_mode_ffmpeg")
+
+        self.gridLayout_19.addWidget(self.radio_threading_mode_ffmpeg, 0, 1, 1, 1)
+
+        self.button_threading_mode_help = QPushButton(self.groupbox_performance_threading_mode)
+        self.button_threading_mode_help.setObjectName(u"button_threading_mode_help")
+
+        self.gridLayout_19.addWidget(self.button_threading_mode_help, 0, 3, 1, 1)
+
+
+        self.gridLayout_25.addWidget(self.groupbox_performance_threading_mode, 1, 0, 1, 1)
+
+        self.groupbox_performance_threading = QGroupBox(self.groupbox_PERFORMANCE)
+        self.groupbox_performance_threading.setObjectName(u"groupbox_performance_threading")
+        self.gridLayout_20 = QGridLayout(self.groupbox_performance_threading)
         self.gridLayout_20.setObjectName(u"gridLayout_20")
-        self.radioButton_7 = QRadioButton(self.groupBox_10)
-        self.radioButton_7.setObjectName(u"radioButton_7")
+        self.radio_threading_no = QRadioButton(self.groupbox_performance_threading)
+        self.radio_threading_no.setObjectName(u"radio_threading_no")
 
-        self.gridLayout_20.addWidget(self.radioButton_7, 0, 0, 1, 1)
+        self.gridLayout_20.addWidget(self.radio_threading_no, 0, 1, 1, 1)
 
-        self.radioButton_8 = QRadioButton(self.groupBox_10)
-        self.radioButton_8.setObjectName(u"radioButton_8")
+        self.radio_threading_yes = QRadioButton(self.groupbox_performance_threading)
+        self.radio_threading_yes.setObjectName(u"radio_threading_yes")
 
-        self.gridLayout_20.addWidget(self.radioButton_8, 0, 1, 1, 1)
+        self.gridLayout_20.addWidget(self.radio_threading_yes, 0, 0, 1, 1)
 
 
-        self.gridLayout_25.addWidget(self.groupBox_10, 0, 0, 1, 2)
+        self.gridLayout_25.addWidget(self.groupbox_performance_threading, 0, 0, 1, 2)
 
-        self.groupBox_16 = QGroupBox(self.groupBox_15)
-        self.groupBox_16.setObjectName(u"groupBox_16")
-        self.gridLayout_26 = QGridLayout(self.groupBox_16)
+        self.groupbox_VIDEO = QGroupBox(self.groupbox_PERFORMANCE)
+        self.groupbox_VIDEO.setObjectName(u"groupbox_VIDEO")
+        self.gridLayout_26 = QGridLayout(self.groupbox_VIDEO)
         self.gridLayout_26.setObjectName(u"gridLayout_26")
-        self.groupBox_11 = QGroupBox(self.groupBox_16)
-        self.groupBox_11.setObjectName(u"groupBox_11")
-        self.gridLayout_21 = QGridLayout(self.groupBox_11)
+        self.groupbox_video_output = QGroupBox(self.groupbox_VIDEO)
+        self.groupbox_video_output.setObjectName(u"groupbox_video_output")
+        self.gridLayout_21 = QGridLayout(self.groupbox_video_output)
         self.gridLayout_21.setObjectName(u"gridLayout_21")
-        self.label_2 = QLabel(self.groupBox_11)
-        self.label_2.setObjectName(u"label_2")
+        self.label_directory_system = QLabel(self.groupbox_video_output)
+        self.label_directory_system.setObjectName(u"label_directory_system")
 
-        self.gridLayout_21.addWidget(self.label_2, 1, 0, 1, 1)
+        self.gridLayout_21.addWidget(self.label_directory_system, 1, 0, 1, 1)
 
-        self.radioButton_9 = QRadioButton(self.groupBox_11)
-        self.radioButton_9.setObjectName(u"radioButton_9")
+        self.radio_directory_system_yes = QRadioButton(self.groupbox_video_output)
+        self.radio_directory_system_yes.setObjectName(u"radio_directory_system_yes")
 
-        self.gridLayout_21.addWidget(self.radioButton_9, 1, 1, 1, 1)
+        self.gridLayout_21.addWidget(self.radio_directory_system_yes, 1, 1, 1, 1)
 
-        self.radioButton_10 = QRadioButton(self.groupBox_11)
-        self.radioButton_10.setObjectName(u"radioButton_10")
+        self.radio_directory_system_no = QRadioButton(self.groupbox_video_output)
+        self.radio_directory_system_no.setObjectName(u"radio_directory_system_no")
 
-        self.gridLayout_21.addWidget(self.radioButton_10, 1, 2, 1, 1)
+        self.gridLayout_21.addWidget(self.radio_directory_system_no, 1, 2, 1, 1)
 
-        self.lineEdit = QLineEdit(self.groupBox_11)
-        self.lineEdit.setObjectName(u"lineEdit")
+        self.lineedit_output_path = QLineEdit(self.groupbox_video_output)
+        self.lineedit_output_path.setObjectName(u"lineedit_output_path")
 
-        self.gridLayout_21.addWidget(self.lineEdit, 0, 1, 1, 3)
+        self.gridLayout_21.addWidget(self.lineedit_output_path, 0, 1, 1, 3)
 
-        self.label = QLabel(self.groupBox_11)
-        self.label.setObjectName(u"label")
+        self.label_output_path = QLabel(self.groupbox_video_output)
+        self.label_output_path.setObjectName(u"label_output_path")
 
-        self.gridLayout_21.addWidget(self.label, 0, 0, 1, 1)
+        self.gridLayout_21.addWidget(self.label_output_path, 0, 0, 1, 1)
 
-        self.pushButton_3 = QPushButton(self.groupBox_11)
+        self.pushButton_3 = QPushButton(self.groupbox_video_output)
         self.pushButton_3.setObjectName(u"pushButton_3")
 
         self.gridLayout_21.addWidget(self.pushButton_3, 0, 4, 1, 1)
 
-        self.pushButton_2 = QPushButton(self.groupBox_11)
+        self.pushButton_2 = QPushButton(self.groupbox_video_output)
         self.pushButton_2.setObjectName(u"pushButton_2")
 
         self.gridLayout_21.addWidget(self.pushButton_2, 1, 4, 1, 1)
 
 
-        self.gridLayout_26.addWidget(self.groupBox_11, 1, 0, 1, 1)
+        self.gridLayout_26.addWidget(self.groupbox_video_output, 1, 0, 1, 1)
 
-        self.groupBox_14 = QGroupBox(self.groupBox_16)
-        self.groupBox_14.setObjectName(u"groupBox_14")
-        self.gridLayout_24 = QGridLayout(self.groupBox_14)
+        self.groupbox_video_language = QGroupBox(self.groupbox_VIDEO)
+        self.groupbox_video_language.setObjectName(u"groupbox_video_language")
+        self.gridLayout_24 = QGridLayout(self.groupbox_video_language)
         self.gridLayout_24.setObjectName(u"gridLayout_24")
-        self.radioButton_12 = QRadioButton(self.groupBox_14)
-        self.radioButton_12.setObjectName(u"radioButton_12")
+        self.radio_api_language_german = QRadioButton(self.groupbox_video_language)
+        self.radio_api_language_german.setObjectName(u"radio_api_language_german")
 
-        self.gridLayout_24.addWidget(self.radioButton_12, 1, 0, 1, 1)
+        self.gridLayout_24.addWidget(self.radio_api_language_german, 1, 0, 1, 1)
 
-        self.radioButton_13 = QRadioButton(self.groupBox_14)
-        self.radioButton_13.setObjectName(u"radioButton_13")
+        self.radio_api_language_french = QRadioButton(self.groupbox_video_language)
+        self.radio_api_language_french.setObjectName(u"radio_api_language_french")
 
-        self.gridLayout_24.addWidget(self.radioButton_13, 2, 0, 1, 1)
+        self.gridLayout_24.addWidget(self.radio_api_language_french, 2, 0, 1, 1)
 
-        self.radioButton_11 = QRadioButton(self.groupBox_14)
-        self.radioButton_11.setObjectName(u"radioButton_11")
+        self.radio_api_language_english = QRadioButton(self.groupbox_video_language)
+        self.radio_api_language_english.setObjectName(u"radio_api_language_english")
 
-        self.gridLayout_24.addWidget(self.radioButton_11, 0, 0, 1, 1)
+        self.gridLayout_24.addWidget(self.radio_api_language_english, 0, 0, 1, 1)
 
-        self.radioButton_14 = QRadioButton(self.groupBox_14)
-        self.radioButton_14.setObjectName(u"radioButton_14")
+        self.radio_api_language_chinese = QRadioButton(self.groupbox_video_language)
+        self.radio_api_language_chinese.setObjectName(u"radio_api_language_chinese")
 
-        self.gridLayout_24.addWidget(self.radioButton_14, 0, 1, 1, 1)
+        self.gridLayout_24.addWidget(self.radio_api_language_chinese, 0, 1, 1, 1)
 
-        self.radioButton_15 = QRadioButton(self.groupBox_14)
-        self.radioButton_15.setObjectName(u"radioButton_15")
+        self.radio_api_language_russian = QRadioButton(self.groupbox_video_language)
+        self.radio_api_language_russian.setObjectName(u"radio_api_language_russian")
 
-        self.gridLayout_24.addWidget(self.radioButton_15, 1, 1, 1, 1)
+        self.gridLayout_24.addWidget(self.radio_api_language_russian, 1, 1, 1, 1)
 
-        self.radioButton_16 = QRadioButton(self.groupBox_14)
-        self.radioButton_16.setObjectName(u"radioButton_16")
+        self.radio_language_custom = QRadioButton(self.groupbox_video_language)
+        self.radio_language_custom.setObjectName(u"radio_language_custom")
 
-        self.gridLayout_24.addWidget(self.radioButton_16, 2, 1, 1, 1)
+        self.gridLayout_24.addWidget(self.radio_language_custom, 2, 1, 1, 1)
 
 
-        self.gridLayout_26.addWidget(self.groupBox_14, 0, 1, 2, 1)
+        self.gridLayout_26.addWidget(self.groupbox_video_language, 0, 1, 2, 1)
 
-        self.groupBox_8 = QGroupBox(self.groupBox_16)
-        self.groupBox_8.setObjectName(u"groupBox_8")
-        self.gridLayout_18 = QGridLayout(self.groupBox_8)
+        self.groupbox_video_quality = QGroupBox(self.groupbox_VIDEO)
+        self.groupbox_video_quality.setObjectName(u"groupbox_video_quality")
+        self.gridLayout_18 = QGridLayout(self.groupbox_video_quality)
         self.gridLayout_18.setObjectName(u"gridLayout_18")
-        self.radioButton_2 = QRadioButton(self.groupBox_8)
-        self.radioButton_2.setObjectName(u"radioButton_2")
+        self.radio_quality_half = QRadioButton(self.groupbox_video_quality)
+        self.radio_quality_half.setObjectName(u"radio_quality_half")
 
-        self.gridLayout_18.addWidget(self.radioButton_2, 0, 1, 1, 1)
+        self.gridLayout_18.addWidget(self.radio_quality_half, 0, 1, 1, 1)
 
-        self.radioButton = QRadioButton(self.groupBox_8)
-        self.radioButton.setObjectName(u"radioButton")
+        self.radio_quality_best = QRadioButton(self.groupbox_video_quality)
+        self.radio_quality_best.setObjectName(u"radio_quality_best")
 
-        self.gridLayout_18.addWidget(self.radioButton, 0, 0, 1, 1)
+        self.gridLayout_18.addWidget(self.radio_quality_best, 0, 0, 1, 1)
 
-        self.radioButton_3 = QRadioButton(self.groupBox_8)
-        self.radioButton_3.setObjectName(u"radioButton_3")
+        self.radio_quality_least = QRadioButton(self.groupbox_video_quality)
+        self.radio_quality_least.setObjectName(u"radio_quality_least")
 
-        self.gridLayout_18.addWidget(self.radioButton_3, 0, 2, 1, 1)
+        self.gridLayout_18.addWidget(self.radio_quality_least, 0, 2, 1, 1)
 
 
-        self.gridLayout_26.addWidget(self.groupBox_8, 0, 0, 1, 1)
+        self.gridLayout_26.addWidget(self.groupbox_video_quality, 0, 0, 1, 1)
 
-        self.groupBox_13 = QGroupBox(self.groupBox_16)
-        self.groupBox_13.setObjectName(u"groupBox_13")
-        self.gridLayout_23 = QGridLayout(self.groupBox_13)
+
+        self.gridLayout_25.addWidget(self.groupbox_VIDEO, 2, 0, 1, 2)
+
+        self.groupbox_searching = QGroupBox(self.groupbox_PERFORMANCE)
+        self.groupbox_searching.setObjectName(u"groupbox_searching")
+        self.gridLayout_23 = QGridLayout(self.groupbox_searching)
         self.gridLayout_23.setObjectName(u"gridLayout_23")
-        self.label_4 = QLabel(self.groupBox_13)
-        self.label_4.setObjectName(u"label_4")
+        self.spinbox_searching = QSpinBox(self.groupbox_searching)
+        self.spinbox_searching.setObjectName(u"spinbox_searching")
+        self.spinbox_searching.setMaximum(10)
 
-        self.gridLayout_23.addWidget(self.label_4, 0, 0, 1, 1)
+        self.gridLayout_23.addWidget(self.spinbox_searching, 0, 1, 1, 1)
 
-        self.spinBox_2 = QSpinBox(self.groupBox_13)
-        self.spinBox_2.setObjectName(u"spinBox_2")
-        self.spinBox_2.setMaximum(10)
+        self.label_searching_limit = QLabel(self.groupbox_searching)
+        self.label_searching_limit.setObjectName(u"label_searching_limit")
 
-        self.gridLayout_23.addWidget(self.spinBox_2, 0, 1, 1, 1)
-
-
-        self.gridLayout_26.addWidget(self.groupBox_13, 2, 0, 1, 2)
+        self.gridLayout_23.addWidget(self.label_searching_limit, 0, 0, 1, 1)
 
 
-        self.gridLayout_25.addWidget(self.groupBox_16, 2, 0, 1, 2)
+        self.gridLayout_25.addWidget(self.groupbox_searching, 3, 0, 1, 1)
+
+        self.groupbox_GUI_language = QGroupBox(self.groupbox_PERFORMANCE)
+        self.groupbox_GUI_language.setObjectName(u"groupbox_GUI_language")
+        self.gridLayout_29 = QGridLayout(self.groupbox_GUI_language)
+        self.gridLayout_29.setObjectName(u"gridLayout_29")
+        self.radio_ui_language_french = QRadioButton(self.groupbox_GUI_language)
+        self.radio_ui_language_french.setObjectName(u"radio_ui_language_french")
+
+        self.gridLayout_29.addWidget(self.radio_ui_language_french, 0, 2, 1, 1)
+
+        self.radio_ui_language_german = QRadioButton(self.groupbox_GUI_language)
+        self.radio_ui_language_german.setObjectName(u"radio_ui_language_german")
+
+        self.gridLayout_29.addWidget(self.radio_ui_language_german, 0, 1, 1, 1)
+
+        self.radio_ui_language_english = QRadioButton(self.groupbox_GUI_language)
+        self.radio_ui_language_english.setObjectName(u"radio_ui_language_english")
+
+        self.gridLayout_29.addWidget(self.radio_ui_language_english, 0, 0, 1, 1)
 
 
-        self.gridLayout_27.addWidget(self.groupBox_15, 0, 0, 1, 1)
+        self.gridLayout_25.addWidget(self.groupbox_GUI_language, 3, 1, 1, 1)
+
+
+        self.gridLayout_27.addWidget(self.groupbox_PERFORMANCE, 0, 0, 1, 1)
 
 
         self.gridLayout_28.addLayout(self.gridLayout_27, 0, 0, 1, 1)
@@ -1427,7 +1237,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.retranslateUi(Porn_Fetch_Widget)
 
-        self.stacked_widget_main.setCurrentIndex(0)
+        self.stacked_widget_main.setCurrentIndex(1)
         self.stacked_widget_top.setCurrentIndex(0)
 
 
@@ -1526,39 +1336,43 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_memberContent_custom_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Offers custom Videos", None))
         self.radio_memberContent_has_photos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Has Photos", None))
         self.radio_memberContent_offers_fan_club.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Offers Fan Club", None))
-        self.groupBox_15.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Performance Settings", None))
-        self.groupBox_9.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Threading Mode", None))
-        self.radioButton_5.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"High Performance", None))
-        self.radioButton_6.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Default", None))
-        self.radioButton_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"FFMPEG", None))
-        self.pushButton.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
-        self.groupBox_12.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Semaphore", None))
-        self.label_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Semaphore:", None))
-        self.pushButton_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
-        self.groupBox_10.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Threading?", None))
-        self.radioButton_7.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
-        self.radioButton_8.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
-        self.groupBox_16.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Video Settings", None))
-        self.groupBox_11.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Output", None))
-        self.label_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Use Directory system? ", None))
-        self.radioButton_9.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
-        self.radioButton_10.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
-        self.lineEdit.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter \"./\" for current directory", None))
-        self.label.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Output path:", None))
+        self.groupbox_PERFORMANCE.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Performance Settings", None))
+        self.groupbox_performance_semaphore.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Semaphore", None))
+        self.label_semaphore.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Semaphore:", None))
+        self.button_semaphore_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
+        self.groupbox_performance_threading_mode.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Threading Mode", None))
+        self.radio_threading_mode_high_performance.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"High Performance", None))
+        self.radio_threading_mode_default.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Default", None))
+        self.radio_threading_mode_ffmpeg.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"FFMPEG", None))
+        self.button_threading_mode_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
+        self.groupbox_performance_threading.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Threading?", None))
+        self.radio_threading_no.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
+        self.radio_threading_yes.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
+        self.groupbox_VIDEO.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Video Settings", None))
+        self.groupbox_video_output.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Output", None))
+        self.label_directory_system.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Use Directory system? ", None))
+        self.radio_directory_system_yes.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
+        self.radio_directory_system_no.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
+        self.lineedit_output_path.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter \"./\" for current directory", None))
+        self.label_output_path.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Output path:", None))
         self.pushButton_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Select", None))
         self.pushButton_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
-        self.groupBox_14.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Language", None))
-        self.radioButton_12.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
-        self.radioButton_13.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))
-        self.radioButton_11.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"English", None))
-        self.radioButton_14.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Chinese", None))
-        self.radioButton_15.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Russian", None))
-        self.radioButton_16.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Custom", None))
-        self.groupBox_8.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Quality", None))
-        self.radioButton_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Half", None))
-        self.radioButton.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Best", None))
-        self.radioButton_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Least", None))
-        self.groupBox_13.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Searching", None))
-        self.label_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Limit:", None))
+        self.groupbox_video_language.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Language", None))
+        self.radio_api_language_german.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
+        self.radio_api_language_french.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))
+        self.radio_api_language_english.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"English", None))
+        self.radio_api_language_chinese.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Chinese", None))
+        self.radio_api_language_russian.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Russian", None))
+        self.radio_language_custom.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Custom", None))
+        self.groupbox_video_quality.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Quality", None))
+        self.radio_quality_half.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Half", None))
+        self.radio_quality_best.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Best", None))
+        self.radio_quality_least.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Least", None))
+        self.groupbox_searching.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Searching", None))
+        self.label_searching_limit.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Limit:", None))
+        self.groupbox_GUI_language.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface Language", None))
+        self.radio_ui_language_french.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))
+        self.radio_ui_language_german.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
+        self.radio_ui_language_english.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"English", None))
     # retranslateUi
 

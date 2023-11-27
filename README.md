@@ -13,6 +13,7 @@ I'll make a big update. You can expect it at late December. Thanks everyone for 
 
 ![Build](https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg)
 ![Build](https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/android.yml/badge.svg)
+![CodeQL](https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL/badge.svg)
 ### [Download Current Version 2.9](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/2.9)
 ### [Development Status V3.0](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md)
 ## Table of Contents
@@ -177,6 +178,9 @@ I am just the developer. Nobody will get you in jail because you downloaded a vi
 
 - <a href="https://iconscout.com/icons/information" class="text-underline font-size-sm" target="_blank">Information</a> by <a href="https://iconscout.com/contributors/petai-jantrapoon" class="text-underline font-size-sm">Petai Jantrapoon</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
 - <a href="https://iconscout.com/icons/tick" class="text-underline font-size-sm" target="_blank">Tick</a> by <a href="https://iconscout.com/contributors/endesignz" class="text-underline font-size-sm">Jessiey Sahana</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
+- <a href="https://iconscout.com/icons/top-arrow" class="text-underline font-size-sm" target="_blank">Top Arrow</a> by <a href="https://iconscout.com/contributors/creative-studio" class="text-underline font-size-sm" target="_blank">Mian Saab</a>
+- <a href="https://iconscout.com/icons/down-arrow" class="text-underline font-size-sm" target="_blank">Down Arrow</a> by <a href="https://iconscout.com/contributors/adamicons" class="text-underline font-size-sm">Adam Dicons</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
+- <a href="https://iconscout.com/icons/tick" class="text-underline font-size-sm" target="_blank">Tick</a> by <a href="https://iconscout.com/contributors/kolo-design" class="text-underline font-size-sm" target="_blank">Kalash</a>
 
 All other Icons are also from Icon Scout, but I wasn't given the author's name, so I can't credit them.
 

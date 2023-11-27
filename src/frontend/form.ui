@@ -17,214 +17,6 @@
    <iconset>
     <normaloff>graphics/logo_transparent.png</normaloff>graphics/logo_transparent.png</iconset>
   </property>
-  <property name="styleSheet">
-   <string notr="true">QWidget {
-color: white;
-background-color: rgb(60, 60, 60);
-border: none;
-}
-
-QLineEdit {
-    border: 2px solid #444;
-    border-radius: 4px;
-    padding: 5px;
-    background-color: #333;
-    color: #DDD;
-}
-QLineEdit:focus {
-    border: 2px solid #5599FF;
-}
-
-
-QProgressBar {
-	color: rgb(255, 153, 0);
-    border: 2px solid #5a2a82;
-    border-radius: 5px;
-    text-align: center;
-    background-color: rgb(74, 74, 74);
-    color: #ffffff;  /* Adding text color for better visibility */
-}
-
-QProgressBar::chunk {
-    background-color: rgb(0, 255, 224);
-    width: 10px; /* Adjust this to change the width of the 'chunk' */
-}
-
-QRadioButton {
-    color: #dcdcdc; /* Light grey text */
-    spacing: 5px; /* Space between the radio button and its label */
-}
-
-QRadioButton::indicator {
-    width: 13px;
-    height: 13px;
-    border-radius: 7px; /* Circular indicator */
-}
-
-QRadioButton::indicator:unchecked {
-    background-color: #555; /* Dark background for unchecked state */
-    border: 2px solid #777; /* Slightly lighter border */
-}
-
-QRadioButton::indicator:checked {
-    background-color: #7a7aff; /* Bright color for checked state */
-    border: 2px solid #5a5aff; /* Border slightly darker than the background */
-}
-
-QRadioButton::indicator:checked:hover,
-QRadioButton::indicator:unchecked:hover {
-    border-color: #9a9aff; /* Change border color on hover */
-}
-
-
-QSlider::groove:horizontal {
-    border: 1px solid #5a2a82;
-    height: 8px;
-    background: #e0e0e0;
-    margin: 0px;
-    border-radius: 4px;
-}
-
-QSlider::handle:horizontal {
-    background: #5a2a82;
-    border: 1px solid #5a2a82;
-    width: 18px;
-    margin: -6px 0;
-    border-radius: 9px;
-}
-
-QSlider::add-page:horizontal {
-    background: #e0e0e0;
-}
-
-QSlider::sub-page:horizontal {
-    background: #5a2a82;
-}
-
-QTreeWidget {
-    background-color: rgb(94, 94, 94);
-    color: white;
-}
-
-QTreeWidget QHeaderView::section {
-    background-color: rgb(94, 94, 94);
-    color: black;
-    border: 1px solid #5a2a82;
-    padding: 4px;
-}
-
-/* QGroupBox */
-QGroupBox {
-    border: 2px solid #4CAF50; /* Border color for the group box */
-    border-radius: 5px;
-    margin-top: 10px; /* Adjust top margin as needed */
-    padding: 5px; /* Add some padding inside the group box */
-}
-
-/* Title text of the QGroupBox */
-QGroupBox::title {
-    subcontrol-origin: margin;
-    subcontrol-position: top center;
-    padding: 0 5px; /* Add padding for title text */
-    background-color: #4CAF50; /* Background color for the title bar */
-    color: white; /* Title text color */
-    border: 1px solid #4CAF50; /* Border color for the title bar */
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-}
-
-/* Apply style to all child widgets within the QGroupBox */
-QGroupBox QWidget {
-    margin: 3px; /* Adjust margin for child widgets */
-}
-
-/* Style for child QLabel elements within the QGroupBox */
-QGroupBox QLabel {
-    font-weight: bold; /* Make text bold for labels */
-}
-
-/* Style for child QPushButton elements within the QGroupBox */
-QGroupBox QPushButton {
-    background-color: #4CAF50; /* Background color for buttons */
-    color: white; /* Button text color */
-    border: 1px solid #4CAF50; /* Button border color */
-    border-radius: 3px; /* Button border radius */
-    padding: 5px 10px; /* Add padding to buttons */
-}
-
-/* Hover effect for QPushButton */
-QGroupBox QPushButton:hover {
-    background-color: #66BB6A; /* Lighter green color on hover */
-    border-color: #66BB6A; /* Border color changes on hover */
-}
-
-/* Pressed effect for QPushButton */
-QGroupBox QPushButton:pressed {
-    background-color: #388E3C; /* Darker green color when pressed */
-    border-color: #388E3C; /* Border color changes when pressed */
-}
-
-/* Style for child QComboBox elements within the QGroupBox */
-QGroupBox QComboBox {
-    border: 1px solid #4CAF50; /* Border color for combo boxes */
-    border-radius: 3px; /* Combo box border radius */
-    padding: 3px; /* Add padding to combo boxes */
-}
-
-QLabel {
-    color: #DDD;
-    padding: 2px;
-    font-size: 14px;
-}
-QPushButton {
-    color: #dcdcdc; /* Light grey text */
-    padding: 5px; /* Space inside the button */
-    border-radius: 7px; /* Rounded corners like the circular indicator */
-    border: 2px solid #777; /* Slightly lighter border */
-    background-color: #555; /* Dark background for unchecked state */
-}
-
-QPushButton:checked {
-    background-color: #7a7aff; /* Bright color for checked state */
-    border: 2px solid #5a5aff; /* Border slightly darker than the background */
-}
-
-QPushButton:hover {
-    border-color: #9a9aff; /* Change border color on hover */
-}
-
-QPushButton:checked:hover {
-    border-color: #9a9aff; /* Keep consistent hover effect when checked */
-}
-QCheckBox {
-    color: #dcdcdc; /* Light grey text */
-    spacing: 5px; /* Space between the checkbox and its label */
-}
-
-QCheckBox::indicator {
-    width: 15px;
-    height: 15px;
-    border: 2px solid #777; /* Border color */
-}
-
-QCheckBox::indicator:unchecked {
-    background-color: #555; /* Dark background for unchecked state */
-}
-
-QCheckBox::indicator:checked {
-    background-color: #7a7aff; /* Bright color for checked state */
-    /* Here you can add your custom icon */
-    image: url(':/images/tick.svg');
-}
-
-QCheckBox::indicator:hover {
-    border-color: #9a9aff; /* Change border color on hover */
-}
-
-QCheckBox::indicator:checked:hover {
-    background-color: #8a8aff; /* Slightly lighter background on hover */
-}</string>
-  </property>
   <layout class="QGridLayout" name="gridLayout_8">
    <item row="0" column="0" rowspan="3" colspan="2">
     <widget class="QWidget" name="widget" native="true">
@@ -457,7 +249,7 @@ border-radius: 5px;</string>
    <item row="0" column="2">
     <widget class="QStackedWidget" name="stacked_widget_main">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page_3">
       <layout class="QGridLayout" name="gridLayout_7">
@@ -1481,70 +1273,70 @@ QGroupBox QComboBox {
        <item row="0" column="0">
         <layout class="QGridLayout" name="gridLayout_27">
          <item row="0" column="0">
-          <widget class="QGroupBox" name="groupBox_15">
+          <widget class="QGroupBox" name="groupbox_PERFORMANCE">
            <property name="title">
             <string>Performance Settings</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_25">
-            <item row="1" column="0">
-             <widget class="QGroupBox" name="groupBox_9">
-              <property name="title">
-               <string>Threading Mode</string>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_19">
-               <item row="0" column="0">
-                <widget class="QRadioButton" name="radioButton_5">
-                 <property name="text">
-                  <string>High Performance</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="2">
-                <widget class="QRadioButton" name="radioButton_6">
-                 <property name="text">
-                  <string>Default</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QRadioButton" name="radioButton_4">
-                 <property name="text">
-                  <string>FFMPEG</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="3">
-                <widget class="QPushButton" name="pushButton">
-                 <property name="text">
-                  <string>Help</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
             <item row="1" column="1">
-             <widget class="QGroupBox" name="groupBox_12">
+             <widget class="QGroupBox" name="groupbox_performance_semaphore">
               <property name="title">
                <string>Semaphore</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_22">
-               <item row="0" column="1">
-                <widget class="QSpinBox" name="spinBox">
-                 <property name="maximum">
-                  <number>10</number>
-                 </property>
-                </widget>
-               </item>
                <item row="0" column="0">
-                <widget class="QLabel" name="label_3">
+                <widget class="QLabel" name="label_semaphore">
                  <property name="text">
                   <string>Semaphore:</string>
                  </property>
                 </widget>
                </item>
                <item row="1" column="0" colspan="2">
-                <widget class="QPushButton" name="pushButton_4">
+                <widget class="QPushButton" name="button_semaphore_help">
+                 <property name="text">
+                  <string>Help</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QSpinBox" name="spinbox_semaphore">
+                 <property name="maximum">
+                  <number>10</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QGroupBox" name="groupbox_performance_threading_mode">
+              <property name="title">
+               <string>Threading Mode</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_19">
+               <item row="0" column="0">
+                <widget class="QRadioButton" name="radio_threading_mode_high_performance">
+                 <property name="text">
+                  <string>High Performance</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QRadioButton" name="radio_threading_mode_default">
+                 <property name="text">
+                  <string>Default</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QRadioButton" name="radio_threading_mode_ffmpeg">
+                 <property name="text">
+                  <string>FFMPEG</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <widget class="QPushButton" name="button_threading_mode_help">
                  <property name="text">
                   <string>Help</string>
                  </property>
@@ -1554,22 +1346,22 @@ QGroupBox QComboBox {
              </widget>
             </item>
             <item row="0" column="0" colspan="2">
-             <widget class="QGroupBox" name="groupBox_10">
+             <widget class="QGroupBox" name="groupbox_performance_threading">
               <property name="title">
                <string>Threading?</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_20">
-               <item row="0" column="0">
-                <widget class="QRadioButton" name="radioButton_7">
+               <item row="0" column="1">
+                <widget class="QRadioButton" name="radio_threading_no">
                  <property name="text">
-                  <string>Yes</string>
+                  <string>No</string>
                  </property>
                 </widget>
                </item>
-               <item row="0" column="1">
-                <widget class="QRadioButton" name="radioButton_8">
+               <item row="0" column="0">
+                <widget class="QRadioButton" name="radio_threading_yes">
                  <property name="text">
-                  <string>No</string>
+                  <string>Yes</string>
                  </property>
                 </widget>
                </item>
@@ -1577,47 +1369,47 @@ QGroupBox QComboBox {
              </widget>
             </item>
             <item row="2" column="0" colspan="2">
-             <widget class="QGroupBox" name="groupBox_16">
+             <widget class="QGroupBox" name="groupbox_VIDEO">
               <property name="title">
                <string>Video Settings</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_26">
                <item row="1" column="0">
-                <widget class="QGroupBox" name="groupBox_11">
+                <widget class="QGroupBox" name="groupbox_video_output">
                  <property name="title">
                   <string>Output</string>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_21">
                   <item row="1" column="0">
-                   <widget class="QLabel" name="label_2">
+                   <widget class="QLabel" name="label_directory_system">
                     <property name="text">
                      <string>Use Directory system? </string>
                     </property>
                    </widget>
                   </item>
                   <item row="1" column="1">
-                   <widget class="QRadioButton" name="radioButton_9">
+                   <widget class="QRadioButton" name="radio_directory_system_yes">
                     <property name="text">
                      <string>Yes</string>
                     </property>
                    </widget>
                   </item>
                   <item row="1" column="2">
-                   <widget class="QRadioButton" name="radioButton_10">
+                   <widget class="QRadioButton" name="radio_directory_system_no">
                     <property name="text">
                      <string>No</string>
                     </property>
                    </widget>
                   </item>
                   <item row="0" column="1" colspan="3">
-                   <widget class="QLineEdit" name="lineEdit">
+                   <widget class="QLineEdit" name="lineedit_output_path">
                     <property name="placeholderText">
                      <string>Enter &quot;./&quot; for current directory</string>
                     </property>
                    </widget>
                   </item>
                   <item row="0" column="0">
-                   <widget class="QLabel" name="label">
+                   <widget class="QLabel" name="label_output_path">
                     <property name="text">
                      <string>Output path:</string>
                     </property>
@@ -1641,48 +1433,48 @@ QGroupBox QComboBox {
                 </widget>
                </item>
                <item row="0" column="1" rowspan="2">
-                <widget class="QGroupBox" name="groupBox_14">
+                <widget class="QGroupBox" name="groupbox_video_language">
                  <property name="title">
                   <string>Language</string>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_24">
                   <item row="1" column="0">
-                   <widget class="QRadioButton" name="radioButton_12">
+                   <widget class="QRadioButton" name="radio_api_language_german">
                     <property name="text">
                      <string>German</string>
                     </property>
                    </widget>
                   </item>
                   <item row="2" column="0">
-                   <widget class="QRadioButton" name="radioButton_13">
+                   <widget class="QRadioButton" name="radio_api_language_french">
                     <property name="text">
                      <string>French</string>
                     </property>
                    </widget>
                   </item>
                   <item row="0" column="0">
-                   <widget class="QRadioButton" name="radioButton_11">
+                   <widget class="QRadioButton" name="radio_api_language_english">
                     <property name="text">
                      <string>English</string>
                     </property>
                    </widget>
                   </item>
                   <item row="0" column="1">
-                   <widget class="QRadioButton" name="radioButton_14">
+                   <widget class="QRadioButton" name="radio_api_language_chinese">
                     <property name="text">
                      <string>Chinese</string>
                     </property>
                    </widget>
                   </item>
                   <item row="1" column="1">
-                   <widget class="QRadioButton" name="radioButton_15">
+                   <widget class="QRadioButton" name="radio_api_language_russian">
                     <property name="text">
                      <string>Russian</string>
                     </property>
                    </widget>
                   </item>
                   <item row="2" column="1">
-                   <widget class="QRadioButton" name="radioButton_16">
+                   <widget class="QRadioButton" name="radio_language_custom">
                     <property name="text">
                      <string>Custom</string>
                     </property>
@@ -1692,27 +1484,27 @@ QGroupBox QComboBox {
                 </widget>
                </item>
                <item row="0" column="0">
-                <widget class="QGroupBox" name="groupBox_8">
+                <widget class="QGroupBox" name="groupbox_video_quality">
                  <property name="title">
                   <string>Quality</string>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_18">
                   <item row="0" column="1">
-                   <widget class="QRadioButton" name="radioButton_2">
+                   <widget class="QRadioButton" name="radio_quality_half">
                     <property name="text">
                      <string>Half</string>
                     </property>
                    </widget>
                   </item>
                   <item row="0" column="0">
-                   <widget class="QRadioButton" name="radioButton">
+                   <widget class="QRadioButton" name="radio_quality_best">
                     <property name="text">
                      <string>Best</string>
                     </property>
                    </widget>
                   </item>
                   <item row="0" column="2">
-                   <widget class="QRadioButton" name="radioButton_3">
+                   <widget class="QRadioButton" name="radio_quality_least">
                     <property name="text">
                      <string>Least</string>
                     </property>
@@ -1721,27 +1513,57 @@ QGroupBox QComboBox {
                  </layout>
                 </widget>
                </item>
-               <item row="2" column="0" colspan="2">
-                <widget class="QGroupBox" name="groupBox_13">
-                 <property name="title">
-                  <string>Searching</string>
+              </layout>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QGroupBox" name="groupbox_searching">
+              <property name="title">
+               <string>Searching</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_23">
+               <item row="0" column="1">
+                <widget class="QSpinBox" name="spinbox_searching">
+                 <property name="maximum">
+                  <number>10</number>
                  </property>
-                 <layout class="QGridLayout" name="gridLayout_23">
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="label_4">
-                    <property name="text">
-                     <string>Search Limit:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="1">
-                   <widget class="QSpinBox" name="spinBox_2">
-                    <property name="maximum">
-                     <number>10</number>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_searching_limit">
+                 <property name="text">
+                  <string>Search Limit:</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QGroupBox" name="groupbox_GUI_language">
+              <property name="title">
+               <string>Graphical User Interface Language</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_29">
+               <item row="0" column="2">
+                <widget class="QRadioButton" name="radio_ui_language_french">
+                 <property name="text">
+                  <string>French</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QRadioButton" name="radio_ui_language_german">
+                 <property name="text">
+                  <string>German</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QRadioButton" name="radio_ui_language_english">
+                 <property name="text">
+                  <string>English</string>
+                 </property>
                 </widget>
                </item>
               </layout>

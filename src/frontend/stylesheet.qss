@@ -98,7 +98,7 @@ QGroupBox {
     border: 2px solid #4CAF50; /* Border color for the group box */
     border-radius: 5px;
     margin-top: 10px; /* Adjust top margin as needed */
-    padding: 10px; /* Add some padding inside the group box */
+    padding: 5px; /* Add some padding inside the group box */
 }
 
 /* Title text of the QGroupBox */
@@ -115,7 +115,7 @@ QGroupBox::title {
 
 /* Apply style to all child widgets within the QGroupBox */
 QGroupBox QWidget {
-    margin: 5px; /* Adjust margin for child widgets */
+    margin: 3px; /* Adjust margin for child widgets */
 }
 
 /* Style for child QLabel elements within the QGroupBox */
@@ -130,6 +130,18 @@ QGroupBox QPushButton {
     border: 1px solid #4CAF50; /* Button border color */
     border-radius: 3px; /* Button border radius */
     padding: 5px 10px; /* Add padding to buttons */
+}
+
+/* Hover effect for QPushButton */
+QGroupBox QPushButton:hover {
+    background-color: #66BB6A; /* Lighter green color on hover */
+    border-color: #66BB6A; /* Border color changes on hover */
+}
+
+/* Pressed effect for QPushButton */
+QGroupBox QPushButton:pressed {
+    background-color: #388E3C; /* Darker green color when pressed */
+    border-color: #388E3C; /* Border color changes when pressed */
 }
 
 /* Style for child QComboBox elements within the QGroupBox */
@@ -180,7 +192,9 @@ QCheckBox::indicator:unchecked {
 }
 
 QCheckBox::indicator:checked {
-    image: url(':/images/graphics/tick.svg');
+    image: url(':/images/graphics/tick.ico');
+    background-color: #7a7aff; /* Bright color for checked state */
+    /* Here you can add your custom icon */
 }
 
 QCheckBox::indicator:hover {
@@ -190,3 +204,49 @@ QCheckBox::indicator:hover {
 QCheckBox::indicator:checked:hover {
     background-color: #8a8aff; /* Slightly lighter background on hover */
 }
+
+QSpinBox {
+    color: #DDD; /* Text color */
+    background-color: #333; /* Background color */
+    border: 2px solid #444; /* Border color */
+    border-radius: 4px; /* Rounded corners */
+    padding: 5px; /* Padding inside the spin box */
+}
+
+QSpinBox::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: top right; /* Position on the top right */
+    width: 15px; /* Width of the button */
+    border-left: 1px solid #444; /* Border to separate from the down button */
+    background-color: #555; /* Background color */
+}
+
+QSpinBox::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: bottom right; /* Position on the bottom right */
+    width: 15px; /* Width of the button */
+    background-color: #555; /* Background color */
+}
+
+QSpinBox::up-arrow {
+    image: url(':/images/graphics/top-arrow.ico'); /* Custom up arrow icon */
+    width: 7px; /* Width of the arrow */
+    height: 7px; /* Height of the arrow */
+}
+
+QSpinBox::down-arrow {
+    image: url(':/images/graphics/down-arrow.ico'); /* Custom down arrow icon */
+    width: 7px; /* Width of the arrow */
+    height: 7px; /* Height of the arrow */
+}
+
+QSpinBox::up-button:hover, QSpinBox::down-button:hover {
+    background-color: #666; /* Slightly lighter background on hover */
+}
+
+QSpinBox::up-button:pressed, QSpinBox::down-button:pressed {
+    background-color: #777; /* Slightly darker background when pressed */
+}
+
+QSpinBox:focus {
+    border: 2px solid #5599FF; /* Focus border color */}

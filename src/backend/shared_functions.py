@@ -3,29 +3,73 @@ This file contains functions which are needed for the Graphical User Interface, 
 If you know what you do, you can change a few things here :)
 """
 
-
 import os
-import sys
 import string
-
 import phub.errors
-from phub import Client, locals, errors
+
+from phub import Client
 from colorama import Fore
 from hue_shift import return_color, reset
-from time import sleep
 from datetime import datetime
 from moviepy.editor import VideoFileClip
-
+from configparser import ConfigParser
 
 """
 The following are the sections and options for the configuration file. Please don't change anything here, 
 as they are indeed needed for the main applications!
 """
 
-sections = []
-options = []
+sections = ["Performance", "License", "Video", "UI"]
+options_performance = ["threading", "semaphore", "threading_mode"]
+options_video = ["quality", "language", "output_path", "directory_system", "search_limit"]
+options_license = ["accepted"]
+options_ui = ["language"]
+
+"""
+Explanation:
+
+Threading Mode:
+
+2 = High Performance
+1 = FFMPEG
+0 = Default
+
+Directory System:
+
+1 = Yes
+0 = No
+
+Semaphore:
+
+Integer value.
+
+If you set it to 3, three videos will be downloaded at the same time (You get the point)
+
+"""
+
+default_configuration = f"""
+
+[License]
+accepted = no
+
+[Performance]
+threading = yes
+threading_mode = 2
+semaphore = 1
+
+[Video]
+quality = best
+language = en
+output_path = ./
+directory_system = 0
+search_limit = 50
+
+[UI]
+language = en
 
 
+
+"""
 
 
 def logger_error(e):
@@ -89,13 +133,62 @@ def strip_title(title):
 
     return cleaned_title
 
+
 def setup_config_file(force=False):
+    if os.path.isfile("config.ini") == False or force:
+        logger_error("Configuration file is broken / not found. Automatically creating a new one with default "
+                     "configuration")
 
-    for idx, section in sections:
-        ""
+        try:
+            with open("config.ini", "w") as config_file:
+                config_file.write(default_configuration)
 
-        # Need to finish settings widget first
+        except PermissionError:
+            logger_error("Can't write to config.ini due to permission issues.")
+            exit(1)
 
 
+    else:
+        config = ConfigParser()
+        config.read("config.ini")
 
+        try:
+            for idx, section in sections:
 
+                if config.has_section(section) and idx == 0:
+                    for option in options_performance:
+                        if config.has_option(section=section, option=option):
+                            pass
+
+                        else:
+                            setup_config_file(force=True)
+
+                if config.has_section(section) and idx == 1:
+                    for option in options_license:
+                        if config.has_option(section=section, option=option):
+                            pass
+
+                        else:
+                            setup_config_file(force=True)
+
+                if config.has_section(section) and idx == 2:
+                    for option in options_video:
+                        if config.has_option(section=section, option=option):
+                            pass
+
+                        else:
+                            setup_config_file(force=True)
+
+                if config.has_section(section) and idx == 3:
+                    for option in options_ui:
+                        if config.has_option(section=section, option=option):
+                            pass
+
+                        else:
+                            setup_config_file(force=True)
+
+                else:
+                    setup_config_file(force=True)
+
+        except KeyError:
+            setup_config_file(force=True)

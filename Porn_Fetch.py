@@ -1,4 +1,5 @@
 import sys
+import requests
 
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QRadioButton, QCheckBox, QPushButton,
                                QScrollArea, QGroupBox, QApplication, QMessageBox)
@@ -9,12 +10,19 @@ from configparser import ConfigParser
 
 from src.frontend.ui_form import Ui_Porn_Fetch_Widget
 from src.frontend.License import Ui_License
-from src.frontend import ressources_rc
+from src.frontend import ressources_rc  # This is needed for the Stylesheet and Icons
 from phub import locals
-import requests
+
 
 categories = [attr for attr in dir(locals.Category) if
               not callable(getattr(locals.Category, attr)) and not attr.startswith("__")]
+
+
+def ui_popup(text):
+    """ A simple UI popup that will be used for small messages to the user."""
+    qmsg_box = QMessageBox()
+    qmsg_box.setText(text)
+    qmsg_box.exec()
 
 
 class License(QWidget):
@@ -61,19 +69,13 @@ class License(QWidget):
         self.main_widget.show()
 
 
-def ui_popup(text):
-    """ A simple UI popup that will be used for small messages to the user."""
-    qmsg_box = QMessageBox()
-    qmsg_box.setText(text)
-    qmsg_box.exec()
-
-
-
 class CategoryFilterWindow(QWidget):
     data_selected = Signal((str, list))
 
     def __init__(self, categories):
         super().__init__()
+        self.excluded_categories = None
+        self.selected_category = None
         self.radio_buttons = {}
         self.checkboxes = {}
         self.categories = categories
@@ -133,7 +135,6 @@ class CategoryFilterWindow(QWidget):
             if checkbox.isChecked():
                 excluded_categories.append(category)
 
-        # Instead of writing to a file, emit a signal or return the values
         self.selected_category = selected_category
         self.excluded_categories = excluded_categories
         self.data_selected.emit(self.selected_category, self.excluded_categories)
@@ -143,15 +144,25 @@ class CategoryFilterWindow(QWidget):
 class PornFetch(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
+
+        # Variable initialization:
+
         self.selected_category = None
         self.excluded_categories_filter = None
+        self.client = None
+        self.api_language = None
+        self.delay = None
+        self.search_limit = None
+        self.semaphore_limit = None
+
+        # UI relevant initialization:
         self.ui = Ui_Porn_Fetch_Widget()
         self.ui.setupUi(self)
         self.button_connectors()
         self.load_icons()
 
-
     def load_icons(self):
+        """a simple function to load the icons for the buttons"""
         self.ui.button_switch_search.setIcon(QIcon(":/images/graphics/search.svg"))
         self.ui.button_switch_home.setIcon(QIcon(":/images/graphics/download.svg"))
         self.ui.button_switch_settings.setIcon(QIcon(":/images/graphics/settings.svg"))
@@ -161,10 +172,13 @@ class PornFetch(QWidget):
     def button_connectors(self):
         """a function to link the buttons to their functions"""
 
+        # Menu Bar Switch Button Connections
         self.ui.button_switch_home.clicked.connect(self.switch_to_home)
         self.ui.button_switch_search.clicked.connect(self.switch_to_search)
         self.ui.button_switch_settings.clicked.connect(self.switch_to_settings)
+        self.ui.button_switch_credits.clicked.connect(self.switch_to_credits)
 
+        # Video Download Button Connections
 
     def switch_to_home(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
@@ -177,15 +191,24 @@ class PornFetch(QWidget):
     def switch_to_settings(self):
         self.ui.stacked_widget_main.setCurrentIndex(1)
 
+    def switch_to_credits(self):
+        self.ui.stacked_widget_main.setCurrentIndex(2)
 
-
-
+    """
+    The following are functions used by different other functions to handle data over different classes / threads.
+    Mostly by using signals and slot connectors. I don't recommend anyone to change stuff here!
+    (It's already complicated enough, even with the Documentation)
+    """
 
     def handle_selected_data(self, selected_category, excluded_categories):
+        """
+        Receives the selected and excluded categories from the Category class. Needed for video searching.
+        """
         self.selected_category = selected_category
         self.excluded_categories_filter = excluded_categories
 
     def search_videos(self):
+        """I don't know how this function even works. Ask ChatGPT about it. No joke, I don't understand it."""
         include_filters = []
         exclude_filters = []
 
@@ -229,9 +252,6 @@ class PornFetch(QWidget):
             query_object = self.client.search(query, -combined_exclude_filter)
         else:
             query_object = self.client.search(query)
-
-        for video in query_object:
-            print(video.title)
 
 
 def main():
@@ -278,7 +298,8 @@ def main():
         sys.exit(0)
 
     except requests.exceptions.SSLError:
-        ui_popup("SSL Error.  Please connect to a VPN!")
+        ui_popup("SSLError: Your connection is blocked by your ISP / IT administrator (Firewall). If you are in a "
+                 "University or at school, please connect to a VPN / Proxy")
 
     except TypeError:
         pass
