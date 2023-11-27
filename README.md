@@ -96,6 +96,15 @@ This will automatically install Python3 (if not installed) and build the project
 
 # Android
 
+#### PySide6 to Android:
+
+I will try to compile my PySide6 application for Android. The Qt Company already works hard on making this possible.
+<br>See their blog post [here](https://www.qt.io/blog/qt-for-python-6.6) It's currently still unstable and not very well explained,
+but they said, they try to make it better with Qt 6.7, so I'll wait for that and see what I can do.
+
+If I get that working I could port Porn Fetch to Android with all features (and translations) without using Kivy which would
+speed up this process a lot.
+
 #### Read carefully to prevent errors!
 
 The development for Android has a separate branch named "android."
