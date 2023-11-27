@@ -108,6 +108,7 @@ class PornFetch(QWidget):
 
         self.ui.button_switch_home.clicked.connect(self.switch_to_home)
         self.ui.button_switch_search.clicked.connect(self.switch_to_search)
+        self.ui.button_switch_settings.clicked.connect(self.switch_to_settings)
 
 
     def switch_to_home(self):
@@ -117,6 +118,9 @@ class PornFetch(QWidget):
     def switch_to_search(self):
         print("Changed Index to 1")
         self.ui.stacked_widget_top.setCurrentIndex(1)
+
+    def switch_to_settings(self):
+        self.ui.stacked_widget_main.setCurrentIndex(1)
 
 
 
