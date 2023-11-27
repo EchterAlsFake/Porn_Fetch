@@ -1424,7 +1424,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.retranslateUi(Porn_Fetch_Widget)
 
-        self.stacked_widget_main.setCurrentIndex(1)
+        self.stacked_widget_main.setCurrentIndex(0)
         self.stacked_widget_top.setCurrentIndex(0)
 
 

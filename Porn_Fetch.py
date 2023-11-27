@@ -1,17 +1,72 @@
 import sys
 
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QRadioButton, QCheckBox, QPushButton,
-                               QScrollArea, QGroupBox, QApplication, QLabel, QMainWindow)
+                               QScrollArea, QGroupBox, QApplication, QMessageBox)
 
 from PySide6.QtCore import QFile, QTextStream, Signal
 from PySide6.QtGui import QIcon
+from configparser import ConfigParser
 
 from src.frontend.ui_form import Ui_Porn_Fetch_Widget
+from src.frontend.License import Ui_License
 from src.frontend import ressources_rc
 from phub import locals
+import requests
 
 categories = [attr for attr in dir(locals.Category) if
               not callable(getattr(locals.Category, attr)) and not attr.startswith("__")]
+
+
+class License(QWidget):
+    """ License class to display the GPL 3 License to the user."""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.main_widget = None
+        self.conf = ConfigParser()
+        self.conf.read("config.ini")
+
+        self.ui = Ui_License()
+        self.ui.setupUi(self)
+        self.ui.button_accept.clicked.connect(self.accept)
+        self.ui.button_deny.clicked.connect(self.denied)
+
+    def check_license_and_proceed(self):
+        if self.conf["License"]["accept"] == "true":
+            self.show_main_window()
+
+        else:
+            self.show()  # Show the license widget
+
+    def accept(self):
+        self.conf.set("License", "accept", "true")
+        with open("config.ini", "w") as config_file:
+            self.conf.write(config_file)
+            config_file.close()
+
+        self.show_main_window()
+
+    def denied(self):
+        self.conf.set("License", "accept", "false")
+        with open("config.ini", "w") as config_file:
+            self.conf.write(config_file)
+            config_file.close()
+            self.close()
+            sys.exit(0)
+
+    def show_main_window(self):
+        """ If license was accepted, the License widget is closed and the main widget will be shown."""
+        self.close()
+        self.main_widget = PornFetch()
+        self.main_widget.show()
+
+
+def ui_popup(text):
+    """ A simple UI popup that will be used for small messages to the user."""
+    qmsg_box = QMessageBox()
+    qmsg_box.setText(text)
+    qmsg_box.exec()
+
 
 
 class CategoryFilterWindow(QWidget):
@@ -112,11 +167,11 @@ class PornFetch(QWidget):
 
 
     def switch_to_home(self):
-        print("Changed Index to 0")
+        self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(0)
 
     def switch_to_search(self):
-        print("Changed Index to 1")
+        self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(1)
 
     def switch_to_settings(self):
@@ -179,14 +234,64 @@ class PornFetch(QWidget):
             print(video.title)
 
 
-if __name__ == "__main__":
+def main():
     app = QApplication(sys.argv)
-    file = QFile(":/style/stylesheet.qss")
-    file.open(QFile.ReadOnly | QFile.Text)
-    stream = QTextStream(file)
-    app.setStyleSheet(stream.readAll())
+    app.setStyle("Fusion")
 
+    try:
+        """
+        I had many problems with coding in general where something didn't work but the translations are the hardest
+        thing I've ever done. Now where I've understand it it makes sense but the Qt documentation is a piece of shit...
+        """
 
-    widget = PornFetch()
-    widget.show()
+        """# Obtain the system's locale
+        locale = QLocale.system()
+        # Get the language code (e.g., "de" for German)
+        language_code = locale.name().split('_')[0]
+        # Construct the path to the translation file
+        path = f":/translations/translations/{language_code}.qm"
+
+        translator = QTranslator(app)
+        if translator.load(path):
+            logging(f"{language_code} translation loaded")
+            app.installTranslator(translator)
+        else:
+            logging(f"Failed to load {language_code} translation")
+        """
+        file = QFile(":/style/stylesheet.qss")
+        file.open(QFile.ReadOnly | QFile.Text)
+        stream = QTextStream(file)
+        app.setStyleSheet(stream.readAll())
+
+        widget = License()  # Starts License widget and checks if license was accepted.
+        widget.check_license_and_proceed()
+
+    except PermissionError:
+        ui_popup("Insufficient Permissions to access something. Please run Porn Fetch as root / admin")
+
+    except ConnectionResetError:
+        ui_popup("Connection was reset. Are you connected to a public wifi or a university's wifi? ")
+    except ConnectionError:
+        ui_popup("Connection Error, please make sure you have a stable internet connection")
+
+    except KeyboardInterrupt:
+        sys.exit(0)
+
+    except requests.exceptions.SSLError:
+        ui_popup("SSL Error.  Please connect to a VPN!")
+
+    except TypeError:
+        pass
+
+    except OSError as e:
+        ui_popup(f"This error shouldn't happen. If you still see it it's REALLY important that you report the "
+                 f"following: {e}")
+
+    except ZeroDivisionError:
+        pass
+
     sys.exit(app.exec())
+
+
+if __name__ == "__main__":
+    main()
