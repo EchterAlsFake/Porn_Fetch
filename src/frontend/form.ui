@@ -450,7 +450,7 @@ border-radius: 5px;</string>
      </layout>
     </widget>
    </item>
-   <item row="1" column="2">
+   <item row="0" column="2">
     <widget class="QStackedWidget" name="stacked_widget_main">
      <property name="currentIndex">
       <number>1</number>
@@ -1473,300 +1473,282 @@ QGroupBox QComboBox {
       </layout>
      </widget>
      <widget class="QWidget" name="page_4">
-      <widget class="QGroupBox" name="groupBox_8">
-       <property name="geometry">
-        <rect>
-         <x>120</x>
-         <y>210</y>
-         <width>411</width>
-         <height>71</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Quality</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_18">
-        <item row="0" column="1">
-         <widget class="QRadioButton" name="radioButton_2">
-          <property name="text">
-           <string>Half</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QRadioButton" name="radioButton">
-          <property name="text">
-           <string>Best</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QRadioButton" name="radioButton_3">
-          <property name="text">
-           <string>Least</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QGroupBox" name="groupBox_9">
-       <property name="geometry">
-        <rect>
-         <x>70</x>
-         <y>80</y>
-         <width>571</width>
-         <height>91</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Threading Mode</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_19">
-        <item row="0" column="0">
-         <widget class="QRadioButton" name="radioButton_5">
-          <property name="text">
-           <string>High Performance</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QRadioButton" name="radioButton_6">
-          <property name="text">
-           <string>Default</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QRadioButton" name="radioButton_4">
-          <property name="text">
-           <string>FFMPEG</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3">
-         <widget class="QPushButton" name="pushButton">
-          <property name="text">
-           <string>Help</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QGroupBox" name="groupBox_10">
-       <property name="geometry">
-        <rect>
-         <x>540</x>
-         <y>210</y>
-         <width>211</width>
-         <height>71</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Threading?</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_20">
-        <item row="0" column="0">
-         <widget class="QRadioButton" name="radioButton_7">
-          <property name="text">
-           <string>Yes</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QRadioButton" name="radioButton_8">
-          <property name="text">
-           <string>No</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QGroupBox" name="groupBox_11">
-       <property name="geometry">
-        <rect>
-         <x>140</x>
-         <y>320</y>
-         <width>651</width>
-         <height>151</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Output</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_21">
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Use Directory system? </string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QRadioButton" name="radioButton_9">
-          <property name="text">
-           <string>Yes</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QRadioButton" name="radioButton_10">
-          <property name="text">
-           <string>No</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1" colspan="3">
-         <widget class="QLineEdit" name="lineEdit">
-          <property name="placeholderText">
-           <string>Enter &quot;./&quot; for current directory</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>Output path:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="4">
-         <widget class="QPushButton" name="pushButton_3">
-          <property name="text">
-           <string>Select</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="4">
-         <widget class="QPushButton" name="pushButton_2">
-          <property name="text">
-           <string>Help</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QGroupBox" name="groupBox_12">
-       <property name="geometry">
-        <rect>
-         <x>700</x>
-         <y>70</y>
-         <width>391</width>
-         <height>131</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Semaphore</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_22">
-        <item row="0" column="1">
-         <widget class="QSpinBox" name="spinBox">
-          <property name="maximum">
-           <number>10</number>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_3">
-          <property name="text">
-           <string>Semaphore:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0" colspan="2">
-         <widget class="QPushButton" name="pushButton_4">
-          <property name="text">
-           <string>Help</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QGroupBox" name="groupBox_13">
-       <property name="geometry">
-        <rect>
-         <x>420</x>
-         <y>500</y>
-         <width>351</width>
-         <height>101</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Searching</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_23">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>Search Limit:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QSpinBox" name="spinBox_2">
-          <property name="maximum">
-           <number>10</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QGroupBox" name="groupBox_14">
-       <property name="geometry">
-        <rect>
-         <x>820</x>
-         <y>310</y>
-         <width>291</width>
-         <height>181</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Language</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_24">
-        <item row="1" column="0">
-         <widget class="QRadioButton" name="radioButton_12">
-          <property name="text">
-           <string>German</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QRadioButton" name="radioButton_13">
-          <property name="text">
-           <string>French</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QRadioButton" name="radioButton_11">
-          <property name="text">
-           <string>English</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QRadioButton" name="radioButton_14">
-          <property name="text">
-           <string>Chinese</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QRadioButton" name="radioButton_15">
-          <property name="text">
-           <string>Russian</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QRadioButton" name="radioButton_16">
-          <property name="text">
-           <string>Custom</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
+      <layout class="QGridLayout" name="gridLayout_28">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_27">
+         <item row="0" column="0">
+          <widget class="QGroupBox" name="groupBox_15">
+           <property name="title">
+            <string>Performance Settings</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_25">
+            <item row="1" column="0">
+             <widget class="QGroupBox" name="groupBox_9">
+              <property name="title">
+               <string>Threading Mode</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_19">
+               <item row="0" column="0">
+                <widget class="QRadioButton" name="radioButton_5">
+                 <property name="text">
+                  <string>High Performance</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QRadioButton" name="radioButton_6">
+                 <property name="text">
+                  <string>Default</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QRadioButton" name="radioButton_4">
+                 <property name="text">
+                  <string>FFMPEG</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <widget class="QPushButton" name="pushButton">
+                 <property name="text">
+                  <string>Help</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QGroupBox" name="groupBox_12">
+              <property name="title">
+               <string>Semaphore</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_22">
+               <item row="0" column="1">
+                <widget class="QSpinBox" name="spinBox">
+                 <property name="maximum">
+                  <number>10</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_3">
+                 <property name="text">
+                  <string>Semaphore:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0" colspan="2">
+                <widget class="QPushButton" name="pushButton_4">
+                 <property name="text">
+                  <string>Help</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="0" column="0" colspan="2">
+             <widget class="QGroupBox" name="groupBox_10">
+              <property name="title">
+               <string>Threading?</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_20">
+               <item row="0" column="0">
+                <widget class="QRadioButton" name="radioButton_7">
+                 <property name="text">
+                  <string>Yes</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QRadioButton" name="radioButton_8">
+                 <property name="text">
+                  <string>No</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="2" column="0" colspan="2">
+             <widget class="QGroupBox" name="groupBox_16">
+              <property name="title">
+               <string>Video Settings</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_26">
+               <item row="1" column="0">
+                <widget class="QGroupBox" name="groupBox_11">
+                 <property name="title">
+                  <string>Output</string>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_21">
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_2">
+                    <property name="text">
+                     <string>Use Directory system? </string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QRadioButton" name="radioButton_9">
+                    <property name="text">
+                     <string>Yes</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="2">
+                   <widget class="QRadioButton" name="radioButton_10">
+                    <property name="text">
+                     <string>No</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1" colspan="3">
+                   <widget class="QLineEdit" name="lineEdit">
+                    <property name="placeholderText">
+                     <string>Enter &quot;./&quot; for current directory</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label">
+                    <property name="text">
+                     <string>Output path:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="4">
+                   <widget class="QPushButton" name="pushButton_3">
+                    <property name="text">
+                     <string>Select</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="4">
+                   <widget class="QPushButton" name="pushButton_2">
+                    <property name="text">
+                     <string>Help</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="0" column="1" rowspan="2">
+                <widget class="QGroupBox" name="groupBox_14">
+                 <property name="title">
+                  <string>Language</string>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_24">
+                  <item row="1" column="0">
+                   <widget class="QRadioButton" name="radioButton_12">
+                    <property name="text">
+                     <string>German</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QRadioButton" name="radioButton_13">
+                    <property name="text">
+                     <string>French</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QRadioButton" name="radioButton_11">
+                    <property name="text">
+                     <string>English</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QRadioButton" name="radioButton_14">
+                    <property name="text">
+                     <string>Chinese</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QRadioButton" name="radioButton_15">
+                    <property name="text">
+                     <string>Russian</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QRadioButton" name="radioButton_16">
+                    <property name="text">
+                     <string>Custom</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QGroupBox" name="groupBox_8">
+                 <property name="title">
+                  <string>Quality</string>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_18">
+                  <item row="0" column="1">
+                   <widget class="QRadioButton" name="radioButton_2">
+                    <property name="text">
+                     <string>Half</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QRadioButton" name="radioButton">
+                    <property name="text">
+                     <string>Best</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="2">
+                   <widget class="QRadioButton" name="radioButton_3">
+                    <property name="text">
+                     <string>Least</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="2" column="0" colspan="2">
+                <widget class="QGroupBox" name="groupBox_13">
+                 <property name="title">
+                  <string>Searching</string>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_23">
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_4">
+                    <property name="text">
+                     <string>Search Limit:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QSpinBox" name="spinBox_2">
+                    <property name="maximum">
+                     <number>10</number>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>

@@ -1210,29 +1210,16 @@ class Ui_Porn_Fetch_Widget(object):
         self.stacked_widget_main.addWidget(self.page_3)
         self.page_4 = QWidget()
         self.page_4.setObjectName(u"page_4")
-        self.groupBox_8 = QGroupBox(self.page_4)
-        self.groupBox_8.setObjectName(u"groupBox_8")
-        self.groupBox_8.setGeometry(QRect(120, 210, 411, 71))
-        self.gridLayout_18 = QGridLayout(self.groupBox_8)
-        self.gridLayout_18.setObjectName(u"gridLayout_18")
-        self.radioButton_2 = QRadioButton(self.groupBox_8)
-        self.radioButton_2.setObjectName(u"radioButton_2")
-
-        self.gridLayout_18.addWidget(self.radioButton_2, 0, 1, 1, 1)
-
-        self.radioButton = QRadioButton(self.groupBox_8)
-        self.radioButton.setObjectName(u"radioButton")
-
-        self.gridLayout_18.addWidget(self.radioButton, 0, 0, 1, 1)
-
-        self.radioButton_3 = QRadioButton(self.groupBox_8)
-        self.radioButton_3.setObjectName(u"radioButton_3")
-
-        self.gridLayout_18.addWidget(self.radioButton_3, 0, 2, 1, 1)
-
-        self.groupBox_9 = QGroupBox(self.page_4)
+        self.gridLayout_28 = QGridLayout(self.page_4)
+        self.gridLayout_28.setObjectName(u"gridLayout_28")
+        self.gridLayout_27 = QGridLayout()
+        self.gridLayout_27.setObjectName(u"gridLayout_27")
+        self.groupBox_15 = QGroupBox(self.page_4)
+        self.groupBox_15.setObjectName(u"groupBox_15")
+        self.gridLayout_25 = QGridLayout(self.groupBox_15)
+        self.gridLayout_25.setObjectName(u"gridLayout_25")
+        self.groupBox_9 = QGroupBox(self.groupBox_15)
         self.groupBox_9.setObjectName(u"groupBox_9")
-        self.groupBox_9.setGeometry(QRect(70, 80, 571, 91))
         self.gridLayout_19 = QGridLayout(self.groupBox_9)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.radioButton_5 = QRadioButton(self.groupBox_9)
@@ -1255,9 +1242,34 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_19.addWidget(self.pushButton, 0, 3, 1, 1)
 
-        self.groupBox_10 = QGroupBox(self.page_4)
+
+        self.gridLayout_25.addWidget(self.groupBox_9, 1, 0, 1, 1)
+
+        self.groupBox_12 = QGroupBox(self.groupBox_15)
+        self.groupBox_12.setObjectName(u"groupBox_12")
+        self.gridLayout_22 = QGridLayout(self.groupBox_12)
+        self.gridLayout_22.setObjectName(u"gridLayout_22")
+        self.spinBox = QSpinBox(self.groupBox_12)
+        self.spinBox.setObjectName(u"spinBox")
+        self.spinBox.setMaximum(10)
+
+        self.gridLayout_22.addWidget(self.spinBox, 0, 1, 1, 1)
+
+        self.label_3 = QLabel(self.groupBox_12)
+        self.label_3.setObjectName(u"label_3")
+
+        self.gridLayout_22.addWidget(self.label_3, 0, 0, 1, 1)
+
+        self.pushButton_4 = QPushButton(self.groupBox_12)
+        self.pushButton_4.setObjectName(u"pushButton_4")
+
+        self.gridLayout_22.addWidget(self.pushButton_4, 1, 0, 1, 2)
+
+
+        self.gridLayout_25.addWidget(self.groupBox_12, 1, 1, 1, 1)
+
+        self.groupBox_10 = QGroupBox(self.groupBox_15)
         self.groupBox_10.setObjectName(u"groupBox_10")
-        self.groupBox_10.setGeometry(QRect(540, 210, 211, 71))
         self.gridLayout_20 = QGridLayout(self.groupBox_10)
         self.gridLayout_20.setObjectName(u"gridLayout_20")
         self.radioButton_7 = QRadioButton(self.groupBox_10)
@@ -1270,9 +1282,15 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_20.addWidget(self.radioButton_8, 0, 1, 1, 1)
 
-        self.groupBox_11 = QGroupBox(self.page_4)
+
+        self.gridLayout_25.addWidget(self.groupBox_10, 0, 0, 1, 2)
+
+        self.groupBox_16 = QGroupBox(self.groupBox_15)
+        self.groupBox_16.setObjectName(u"groupBox_16")
+        self.gridLayout_26 = QGridLayout(self.groupBox_16)
+        self.gridLayout_26.setObjectName(u"gridLayout_26")
+        self.groupBox_11 = QGroupBox(self.groupBox_16)
         self.groupBox_11.setObjectName(u"groupBox_11")
-        self.groupBox_11.setGeometry(QRect(140, 320, 651, 151))
         self.gridLayout_21 = QGridLayout(self.groupBox_11)
         self.gridLayout_21.setObjectName(u"gridLayout_21")
         self.label_2 = QLabel(self.groupBox_11)
@@ -1310,46 +1328,11 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_21.addWidget(self.pushButton_2, 1, 4, 1, 1)
 
-        self.groupBox_12 = QGroupBox(self.page_4)
-        self.groupBox_12.setObjectName(u"groupBox_12")
-        self.groupBox_12.setGeometry(QRect(700, 70, 391, 131))
-        self.gridLayout_22 = QGridLayout(self.groupBox_12)
-        self.gridLayout_22.setObjectName(u"gridLayout_22")
-        self.spinBox = QSpinBox(self.groupBox_12)
-        self.spinBox.setObjectName(u"spinBox")
-        self.spinBox.setMaximum(10)
 
-        self.gridLayout_22.addWidget(self.spinBox, 0, 1, 1, 1)
+        self.gridLayout_26.addWidget(self.groupBox_11, 1, 0, 1, 1)
 
-        self.label_3 = QLabel(self.groupBox_12)
-        self.label_3.setObjectName(u"label_3")
-
-        self.gridLayout_22.addWidget(self.label_3, 0, 0, 1, 1)
-
-        self.pushButton_4 = QPushButton(self.groupBox_12)
-        self.pushButton_4.setObjectName(u"pushButton_4")
-
-        self.gridLayout_22.addWidget(self.pushButton_4, 1, 0, 1, 2)
-
-        self.groupBox_13 = QGroupBox(self.page_4)
-        self.groupBox_13.setObjectName(u"groupBox_13")
-        self.groupBox_13.setGeometry(QRect(420, 500, 351, 101))
-        self.gridLayout_23 = QGridLayout(self.groupBox_13)
-        self.gridLayout_23.setObjectName(u"gridLayout_23")
-        self.label_4 = QLabel(self.groupBox_13)
-        self.label_4.setObjectName(u"label_4")
-
-        self.gridLayout_23.addWidget(self.label_4, 0, 0, 1, 1)
-
-        self.spinBox_2 = QSpinBox(self.groupBox_13)
-        self.spinBox_2.setObjectName(u"spinBox_2")
-        self.spinBox_2.setMaximum(10)
-
-        self.gridLayout_23.addWidget(self.spinBox_2, 0, 1, 1, 1)
-
-        self.groupBox_14 = QGroupBox(self.page_4)
+        self.groupBox_14 = QGroupBox(self.groupBox_16)
         self.groupBox_14.setObjectName(u"groupBox_14")
-        self.groupBox_14.setGeometry(QRect(820, 310, 291, 181))
         self.gridLayout_24 = QGridLayout(self.groupBox_14)
         self.gridLayout_24.setObjectName(u"gridLayout_24")
         self.radioButton_12 = QRadioButton(self.groupBox_14)
@@ -1382,9 +1365,61 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_24.addWidget(self.radioButton_16, 2, 1, 1, 1)
 
+
+        self.gridLayout_26.addWidget(self.groupBox_14, 0, 1, 2, 1)
+
+        self.groupBox_8 = QGroupBox(self.groupBox_16)
+        self.groupBox_8.setObjectName(u"groupBox_8")
+        self.gridLayout_18 = QGridLayout(self.groupBox_8)
+        self.gridLayout_18.setObjectName(u"gridLayout_18")
+        self.radioButton_2 = QRadioButton(self.groupBox_8)
+        self.radioButton_2.setObjectName(u"radioButton_2")
+
+        self.gridLayout_18.addWidget(self.radioButton_2, 0, 1, 1, 1)
+
+        self.radioButton = QRadioButton(self.groupBox_8)
+        self.radioButton.setObjectName(u"radioButton")
+
+        self.gridLayout_18.addWidget(self.radioButton, 0, 0, 1, 1)
+
+        self.radioButton_3 = QRadioButton(self.groupBox_8)
+        self.radioButton_3.setObjectName(u"radioButton_3")
+
+        self.gridLayout_18.addWidget(self.radioButton_3, 0, 2, 1, 1)
+
+
+        self.gridLayout_26.addWidget(self.groupBox_8, 0, 0, 1, 1)
+
+        self.groupBox_13 = QGroupBox(self.groupBox_16)
+        self.groupBox_13.setObjectName(u"groupBox_13")
+        self.gridLayout_23 = QGridLayout(self.groupBox_13)
+        self.gridLayout_23.setObjectName(u"gridLayout_23")
+        self.label_4 = QLabel(self.groupBox_13)
+        self.label_4.setObjectName(u"label_4")
+
+        self.gridLayout_23.addWidget(self.label_4, 0, 0, 1, 1)
+
+        self.spinBox_2 = QSpinBox(self.groupBox_13)
+        self.spinBox_2.setObjectName(u"spinBox_2")
+        self.spinBox_2.setMaximum(10)
+
+        self.gridLayout_23.addWidget(self.spinBox_2, 0, 1, 1, 1)
+
+
+        self.gridLayout_26.addWidget(self.groupBox_13, 2, 0, 1, 2)
+
+
+        self.gridLayout_25.addWidget(self.groupBox_16, 2, 0, 1, 2)
+
+
+        self.gridLayout_27.addWidget(self.groupBox_15, 0, 0, 1, 1)
+
+
+        self.gridLayout_28.addLayout(self.gridLayout_27, 0, 0, 1, 1)
+
         self.stacked_widget_main.addWidget(self.page_4)
 
-        self.gridLayout_8.addWidget(self.stacked_widget_main, 1, 2, 1, 1)
+        self.gridLayout_8.addWidget(self.stacked_widget_main, 0, 2, 1, 1)
 
 
         self.retranslateUi(Porn_Fetch_Widget)
@@ -1488,18 +1523,19 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_memberContent_custom_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Offers custom Videos", None))
         self.radio_memberContent_has_photos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Has Photos", None))
         self.radio_memberContent_offers_fan_club.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Offers Fan Club", None))
-        self.groupBox_8.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Quality", None))
-        self.radioButton_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Half", None))
-        self.radioButton.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Best", None))
-        self.radioButton_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Least", None))
+        self.groupBox_15.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Performance Settings", None))
         self.groupBox_9.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Threading Mode", None))
         self.radioButton_5.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"High Performance", None))
         self.radioButton_6.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Default", None))
         self.radioButton_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"FFMPEG", None))
         self.pushButton.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
+        self.groupBox_12.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Semaphore", None))
+        self.label_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Semaphore:", None))
+        self.pushButton_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
         self.groupBox_10.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Threading?", None))
         self.radioButton_7.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
         self.radioButton_8.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
+        self.groupBox_16.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Video Settings", None))
         self.groupBox_11.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Output", None))
         self.label_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Use Directory system? ", None))
         self.radioButton_9.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
@@ -1508,11 +1544,6 @@ class Ui_Porn_Fetch_Widget(object):
         self.label.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Output path:", None))
         self.pushButton_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Select", None))
         self.pushButton_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
-        self.groupBox_12.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Semaphore", None))
-        self.label_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Semaphore:", None))
-        self.pushButton_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
-        self.groupBox_13.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Searching", None))
-        self.label_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Limit:", None))
         self.groupBox_14.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Language", None))
         self.radioButton_12.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
         self.radioButton_13.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))
@@ -1520,5 +1551,11 @@ class Ui_Porn_Fetch_Widget(object):
         self.radioButton_14.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Chinese", None))
         self.radioButton_15.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Russian", None))
         self.radioButton_16.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Custom", None))
+        self.groupBox_8.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Quality", None))
+        self.radioButton_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Half", None))
+        self.radioButton.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Best", None))
+        self.radioButton_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Least", None))
+        self.groupBox_13.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Searching", None))
+        self.label_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Limit:", None))
     # retranslateUi
 
