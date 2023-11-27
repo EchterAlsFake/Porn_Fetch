@@ -26,6 +26,9 @@ class Ui_Porn_Fetch_Widget(object):
         if not Porn_Fetch_Widget.objectName():
             Porn_Fetch_Widget.setObjectName(u"Porn_Fetch_Widget")
         Porn_Fetch_Widget.resize(1758, 829)
+        icon = QIcon()
+        icon.addFile(u"graphics/logo_transparent.png", QSize(), QIcon.Normal, QIcon.Off)
+        Porn_Fetch_Widget.setWindowIcon(icon)
         Porn_Fetch_Widget.setStyleSheet(u"QWidget {\n"
 "color: white;\n"
 "background-color: rgb(60, 60, 60);\n"

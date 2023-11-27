@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Porn_Fetch_Widget</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>graphics/logo_transparent.png</normaloff>graphics/logo_transparent.png</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">QWidget {
 color: white;

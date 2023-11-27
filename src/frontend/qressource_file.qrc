@@ -5,6 +5,7 @@
         <file>graphics/search.svg</file>
         <file>graphics/settings.svg</file>
         <file>graphics/tick.svg</file>
+        <file>graphics/logo_transparent.ico</file>
     </qresource>
     <qresource prefix="/style">
         <file>stylesheet.qss</file>

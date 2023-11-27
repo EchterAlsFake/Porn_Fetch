@@ -156,7 +156,7 @@ class PornFetch(QWidget):
         self.ui.button_switch_home.setIcon(QIcon(":/images/graphics/download.svg"))
         self.ui.button_switch_settings.setIcon(QIcon(":/images/graphics/settings.svg"))
         self.ui.button_switch_credits.setIcon(QIcon(":/images/graphics/information.svg"))
-
+        self.setWindowIcon(QIcon(":/images/graphics/logo_transparent.ico"))
 
     def button_connectors(self):
         """a function to link the buttons to their functions"""
