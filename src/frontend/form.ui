@@ -1255,6 +1255,9 @@ QPushButton:pressed {
                </item>
                <item row="0" column="1">
                 <widget class="QSpinBox" name="spinbox_semaphore">
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
                  <property name="maximum">
                   <number>10</number>
                  </property>
@@ -1371,14 +1374,14 @@ QPushButton:pressed {
                    </widget>
                   </item>
                   <item row="0" column="4">
-                   <widget class="QPushButton" name="pushButton_3">
+                   <widget class="QPushButton" name="button_directory_system_select">
                     <property name="text">
                      <string>Select</string>
                     </property>
                    </widget>
                   </item>
                   <item row="1" column="4">
-                   <widget class="QPushButton" name="pushButton_2">
+                   <widget class="QPushButton" name="button_directory_system_help">
                     <property name="text">
                      <string>Help</string>
                     </property>
@@ -1479,8 +1482,11 @@ QPushButton:pressed {
               <layout class="QGridLayout" name="gridLayout_23">
                <item row="0" column="1">
                 <widget class="QSpinBox" name="spinbox_searching">
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
                  <property name="maximum">
-                  <number>10</number>
+                  <number>200</number>
                  </property>
                 </widget>
                </item>

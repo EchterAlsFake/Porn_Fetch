@@ -979,6 +979,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.spinbox_semaphore = QSpinBox(self.groupbox_performance_semaphore)
         self.spinbox_semaphore.setObjectName(u"spinbox_semaphore")
+        self.spinbox_semaphore.setMinimum(1)
         self.spinbox_semaphore.setMaximum(10)
 
         self.gridLayout_22.addWidget(self.spinbox_semaphore, 0, 1, 1, 1)
@@ -1063,15 +1064,15 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_21.addWidget(self.label_output_path, 0, 0, 1, 1)
 
-        self.pushButton_3 = QPushButton(self.groupbox_video_output)
-        self.pushButton_3.setObjectName(u"pushButton_3")
+        self.button_directory_system_select = QPushButton(self.groupbox_video_output)
+        self.button_directory_system_select.setObjectName(u"button_directory_system_select")
 
-        self.gridLayout_21.addWidget(self.pushButton_3, 0, 4, 1, 1)
+        self.gridLayout_21.addWidget(self.button_directory_system_select, 0, 4, 1, 1)
 
-        self.pushButton_2 = QPushButton(self.groupbox_video_output)
-        self.pushButton_2.setObjectName(u"pushButton_2")
+        self.button_directory_system_help = QPushButton(self.groupbox_video_output)
+        self.button_directory_system_help.setObjectName(u"button_directory_system_help")
 
-        self.gridLayout_21.addWidget(self.pushButton_2, 1, 4, 1, 1)
+        self.gridLayout_21.addWidget(self.button_directory_system_help, 1, 4, 1, 1)
 
 
         self.gridLayout_26.addWidget(self.groupbox_video_output, 1, 0, 1, 1)
@@ -1144,7 +1145,8 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridLayout_23.setObjectName(u"gridLayout_23")
         self.spinbox_searching = QSpinBox(self.groupbox_searching)
         self.spinbox_searching.setObjectName(u"spinbox_searching")
-        self.spinbox_searching.setMaximum(10)
+        self.spinbox_searching.setMinimum(1)
+        self.spinbox_searching.setMaximum(200)
 
         self.gridLayout_23.addWidget(self.spinbox_searching, 0, 1, 1, 1)
 
@@ -1309,8 +1311,8 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_directory_system_no.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
         self.lineedit_output_path.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter \"./\" for current directory", None))
         self.label_output_path.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Output path:", None))
-        self.pushButton_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Select", None))
-        self.pushButton_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
+        self.button_directory_system_select.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Select", None))
+        self.button_directory_system_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
         self.groupbox_video_language.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Language", None))
         self.radio_api_language_german.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
         self.radio_api_language_french.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))

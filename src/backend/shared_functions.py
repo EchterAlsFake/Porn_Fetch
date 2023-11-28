@@ -48,7 +48,6 @@ If you set it to 3, three videos will be downloaded at the same time (You get th
 """
 
 default_configuration = f"""
-
 [License]
 accepted = no
 
@@ -66,9 +65,6 @@ search_limit = 50
 
 [UI]
 language = en
-
-
-
 """
 
 
@@ -152,43 +148,53 @@ def setup_config_file(force=False):
         config = ConfigParser()
         config.read("config.ini")
 
-        try:
-            for idx, section in sections:
+        for idx, section in enumerate(sections):
+            section_processed = False
+            if config.has_section(section) and idx == 0:
+                for option in options_performance:
+                    if config.has_option(section=section, option=option):
+                        pass
 
-                if config.has_section(section) and idx == 0:
-                    for option in options_performance:
-                        if config.has_option(section=section, option=option):
-                            pass
-
-                        else:
-                            setup_config_file(force=True)
-
-                if config.has_section(section) and idx == 1:
-                    for option in options_license:
-                        if config.has_option(section=section, option=option):
-                            pass
-
-                        else:
-                            setup_config_file(force=True)
-
-                if config.has_section(section) and idx == 2:
-                    for option in options_video:
-                        if config.has_option(section=section, option=option):
-                            pass
-
-                        else:
-                            setup_config_file(force=True)
-
-                if config.has_section(section) and idx == 3:
-                    for option in options_ui:
-                        if config.has_option(section=section, option=option):
-                            pass
-
-                        else:
-                            setup_config_file(force=True)
+                    else:
+                        setup_config_file(force=True)
+                        break
 
                 else:
-                    setup_config_file(force=True)
+                    section_processed = True
 
-        except KeyError:
-            setup_config_file(force=True)
+            if config.has_section(section) and idx == 1:
+                for option in options_license:
+                    if config.has_option(section=section, option=option):
+                        pass
+
+                    else:
+                        setup_config_file(force=True)
+                        break
+
+                else:
+                    section_processed = True
+
+            if config.has_section(section) and idx == 2:
+                for option in options_video:
+                    if config.has_option(section=section, option=option):
+                        pass
+
+                    else:
+                        setup_config_file(force=True)
+                        break
+
+                else:
+                    section_processed = True
+
+            if config.has_section(section) and idx == 3:
+                for option in options_ui:
+                    if config.has_option(section=section, option=option):
+                        pass
+
+                    else:
+                        setup_config_file(force=True)
+                        break
+
+                else:
+                    section_processed = True
+

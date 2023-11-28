@@ -9,6 +9,9 @@ from PySide6.QtCore import QFile, QTextStream, Signal
 from PySide6.QtGui import QIcon
 from configparser import ConfigParser
 
+from src.backend.shared_functions import (strip_title, check_video, check_if_video_exists, setup_config_file,
+                                          logger_error, logger_debug)
+
 from src.frontend.ui_form import Ui_Porn_Fetch_Widget
 from src.frontend.License import Ui_License
 from src.frontend import ressources_rc  # This is needed for the Stylesheet and Icons
@@ -45,14 +48,14 @@ class License(QWidget):
         self.ui.button_deny.clicked.connect(self.denied)
 
     def check_license_and_proceed(self):
-        if self.conf["License"]["accept"] == "true":
+        if self.conf["License"]["accepted"] == "true":
             self.show_main_window()
 
         else:
             self.show()  # Show the license widget
 
     def accept(self):
-        self.conf.set("License", "accept", "true")
+        self.conf.set("License", "accepted", "true")
         with open("config.ini", "w") as config_file:
             self.conf.write(config_file)
             config_file.close()
@@ -60,7 +63,7 @@ class License(QWidget):
         self.show_main_window()
 
     def denied(self):
-        self.conf.set("License", "accept", "false")
+        self.conf.set("License", "accepted", "false")
         with open("config.ini", "w") as config_file:
             self.conf.write(config_file)
             config_file.close()
@@ -152,6 +155,11 @@ class PornFetch(QWidget):
 
         # Variable initialization:
 
+        self.directory_system_map = None
+        self.threading_mode_map = None
+        self.threading_map = None
+        self.language_map = None
+        self.quality_map = None
         self.selected_category = None
         self.excluded_categories_filter = None
         self.client = None
@@ -163,12 +171,19 @@ class PornFetch(QWidget):
         self.output_path = None
         self.threading_mode = None
         self.threading = None
+        self.directory_system = None
+
+        # Configuration file:
+        self.conf = ConfigParser()
+        self.conf.read("config.ini")
 
         # UI relevant initialization:
         self.ui = Ui_Porn_Fetch_Widget()
         self.ui.setupUi(self)
         self.button_connectors()
         self.load_icons()
+        self.settings_maps_initialization()
+        self.load_user_settings()
 
     def load_icons(self):
         """a simple function to load the icons for the buttons"""
@@ -177,6 +192,7 @@ class PornFetch(QWidget):
         self.ui.button_switch_settings.setIcon(QIcon(":/images/graphics/settings.svg"))
         self.ui.button_switch_credits.setIcon(QIcon(":/images/graphics/information.svg"))
         self.setWindowIcon(QIcon(":/images/graphics/logo_transparent.ico"))
+        logger_debug("Loaded Icons!")
 
     def button_connectors(self):
         """a function to link the buttons to their functions"""
@@ -189,6 +205,13 @@ class PornFetch(QWidget):
         self.ui.button_login.clicked.connect(self.select_output_path)
 
         # Video Download Button Connections
+
+        # Help Buttons Connections
+        self.ui.button_semaphore_help.clicked.connect(self.button_semaphore_help)
+        self.ui.button_threading_mode_help.clicked.connect(self.button_threading_mode_help)
+        self.ui.button_directory_system_help.clicked.connect(self.button_directory_system_help)
+
+        logger_debug("Connected Buttons!")
 
     def switch_to_home(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
@@ -297,6 +320,7 @@ class PornFetch(QWidget):
             self.api_language = "ru"
 
     def get_output_path(self):
+        """Returns the output path for the videos selected by the user"""
         output_path = self.ui.lineedit_output_path.text()
         if not os.path.exists(output_path):
             ui_popup("The specified output path doesn't exist. If you think, this is an error, please report it!")
@@ -304,18 +328,14 @@ class PornFetch(QWidget):
         else:
             self.output_path = output_path
 
-    def select_output_path(self):
-        directory = QFileDialog.getExistingDirectory()
-        if os.path.exists(directory):  # Should always be the case hopefully
-            self.ui.lineedit_output_path.setText(directory)
-            self.output_path = directory
-
     def get_semaphore_limit(self):
+        """Returns the semaphore limit selected by the user"""
         value = self.ui.spinbox_semaphore.value()
         if value >= 1:
             self.semaphore_limit = value
 
     def get_threading_mode(self):
+        """Returns the threading mode selected by the user"""
         if self.ui.radio_threading_mode_default.isChecked():
             self.threading_mode = 0
 
@@ -326,6 +346,7 @@ class PornFetch(QWidget):
             self.threading_mode = 2
 
     def get_threading(self):
+        """Checks if threading should be used or not"""
         if self.ui.radio_threading_yes.isChecked():
             self.threading = True
 
@@ -333,10 +354,20 @@ class PornFetch(QWidget):
             self.threading = False
 
     def get_search_limit(self):
+        """Returns the search limit selected by the user"""
         search_limit = self.ui.spinbox_searching.value() if self.ui.spinbox_searching.value() >= 1 else 50
         self.search_limit = search_limit
 
+    def is_directory_system(self):
+        """Checks if the directory system was enabled"""
+        if self.ui.radio_directory_system_yes.isChecked():
+            self.directory_system = True
+
+        elif self.ui.radio_directory_system_no.isChecked():
+            self.directory_system = False
+
     def update_settings(self):
+        """Updates all settings, so that the cache gets reloaded."""
         self.get_threading()
         self.get_search_limit()
         self.get_threading_mode()
@@ -345,8 +376,143 @@ class PornFetch(QWidget):
         self.get_output_path()
         self.get_semaphore_limit()
 
+    def settings_maps_initialization(self):
+        # Maps for settings and corresponding UI elements
+        self.quality_map = {
+            "best": self.ui.radio_quality_best,
+            "half": self.ui.radio_quality_half,
+            "worst": self.ui.radio_quality_worst
+        }
+
+        self.language_map = {
+            "en": self.ui.radio_api_language_english,
+            "ru": self.ui.radio_api_language_russian,
+            "fr": self.ui.radio_api_language_french,
+            "de": self.ui.radio_api_language_german,
+            "zh": self.ui.radio_api_language_chinese
+        }
+
+        self.threading_map = {
+            "yes": self.ui.radio_threading_yes,
+            "no": self.ui.radio_threading_no
+        }
+
+        self.threading_mode_map = {
+            "2": self.ui.radio_threading_mode_high_performance,
+            "1": self.ui.radio_threading_mode_ffmpeg,
+            "0": self.ui.radio_threading_mode_default
+        }
+
+        self.directory_system_map = {
+            "1": self.ui.radio_directory_system_yes,
+            "0": self.ui.radio_directory_system_no
+        }
+
     def load_user_settings(self):
-        """Loads the user settings from the configuration file and applies them"""
+        """Loads the user settings from the configuration file and applies them."""
+
+        # Apply settings
+        self.quality_map.get(self.conf.get("Video", "quality")).setChecked(True)
+        self.language_map.get(self.conf.get("Video", "language")).setChecked(True)
+        self.threading_map.get(self.conf.get("Performance", "threading")).setChecked(True)
+        self.threading_mode_map.get(self.conf.get("Performance", "threading_mode")).setChecked(True)
+        self.directory_system_map.get(self.conf.get("Video", "directory_system")).setChecked(True)
+
+        self.ui.spinbox_semaphore.setValue(int(self.conf.get("Performance", "semaphore")))
+        self.ui.spinbox_searching.setValue(int(self.conf.get("Video", "search_limit")))
+        self.ui.lineedit_output_path.setText(self.conf.get("Video", "output_path"))
+
+        logger_debug("Loaded User Settings!")
+
+    def save_user_settings(self):
+        """Saves the user settings to the configuration file based on the UI state."""
+
+        # Save quality setting
+        for quality, radio_button in self.quality_map.items():
+            if radio_button.isChecked():
+                self.conf.set("Video", "quality", quality)
+
+        # Save language setting
+        for language, radio_button in self.language_map.items():
+            if radio_button.isChecked():
+                self.conf.set("Video", "language", language)
+
+        # Save threading setting
+        for threading, radio_button in self.threading_map.items():
+            if radio_button.isChecked():
+                self.conf.set("Performance", "threading", threading)
+
+        # Save threading mode
+        for mode, radio_button in self.threading_mode_map.items():
+            if radio_button.isChecked():
+                self.conf.set("Performance", "threading_mode", mode)
+
+        # Save directory system setting
+        for system, radio_button in self.directory_system_map.items():
+            if radio_button.isChecked():
+                self.conf.set("Video", "directory_system", system)
+
+        # Save other settings
+        self.conf.set("Performance", "semaphore", str(self.ui.spinbox_semaphore.value()))
+        self.conf.set("Video", "search_limit", str(self.ui.spinbox_searching.value()))
+        self.conf.set("Video", "output_path", self.ui.lineedit_output_path.text())
+
+        with open("config.ini", "w") as config_file:
+            self.conf.write(config_file)
+
+        logger_debug("Saved User Settings!")
+
+    """
+    The following are functions used by different buttons from the main ui. They are important, but shouldn't need any
+    rework in the future, so I place them here, to make the code more clear    
+    """
+
+    def select_output_path(self):
+        """User can select the directory from a pop-up (QFileDialog) list"""
+        directory = QFileDialog.getExistingDirectory()
+        if os.path.exists(directory):  # Should always be the case hopefully
+            self.ui.lineedit_output_path.setText(directory)
+            self.output_path = directory
+
+    def button_semaphore_help(self):
+        text = f"""
+The Semaphore is a tool to limit the number of simultaneous actions / downloads.
+
+For example: If the semaphore is set to 1, only 1 video will be downloaded at the same time.
+If the semaphore is set to 4, 4 videos will be downloaded at the same time. Changing this is only useful, if
+you have a really good internet connection and a good system.
+"""
+        ui_popup(text)
+
+    def button_threading_mode_help(self):
+        text = """
+The different threading modes are used for different scenarios. 
+
+1) High Performance:  Uses a class of workers to download multiple video segments at a time. Can be really fast if you
+have a very strong internet connection. Maybe not great for low end systems.
+
+2) FFMPEG:  ffmpeg is a tool for converting media files. ffmpeg will download every video segment and merge it directly
+into the video file. This removes an extra step from the default method and is therefore a lot faster, but still not as 
+good as high performance.
+
+3) Default:  The default download mode will just download one video segment after the next one. If you get a lot of 
+timeouts this can really slow down the process, as we need to wait for PornHub to return the video segments.
+With the High Performance method, we can just download other segments while waiting which makes it so fast.
+"""
+        ui_popup(text)
+
+    def button_directory_system_help(self):
+        text = """
+The directory system will save videos in an intelligent way. If you download 3 videos form one Pornstar and 5 videos 
+from another, Porn Fetch will automatically make folders for it and move the 3 videos into that one folder and the other
+5 into the other. (This will still apply with your selected output path)
+
+This can be helpful for organizing stuff, but is a more advanced feature, so the majority of users won't use it probably.
+"""
+
+        ui_popup(text)
+
+
 
 
 
@@ -423,4 +589,5 @@ def main():
 
 
 if __name__ == "__main__":
+    setup_config_file()
     main()
