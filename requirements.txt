@@ -9,3 +9,4 @@ lxml
 hqporner_api
 hue_shift
 moviepy
+ffmpeg-progress-yield
