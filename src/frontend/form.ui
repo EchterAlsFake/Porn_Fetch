@@ -249,7 +249,7 @@ border-radius: 5px;</string>
    <item row="0" column="2">
     <widget class="QStackedWidget" name="stacked_widget_main">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page_3">
       <layout class="QGridLayout" name="gridLayout_7">
@@ -259,7 +259,7 @@ border-radius: 5px;</string>
           <cursorShape>ArrowCursor</cursorShape>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="page">
           <layout class="QGridLayout" name="gridLayout_6">
@@ -664,7 +664,7 @@ QPushButton:pressed {
               </widget>
              </item>
              <item row="0" column="2">
-              <widget class="QPushButton" name="butgton_download">
+              <widget class="QPushButton" name="button_download">
                <property name="cursor">
                 <cursorShape>PointingHandCursor</cursorShape>
                </property>
@@ -1233,39 +1233,6 @@ QPushButton:pressed {
             <string>Performance Settings</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_25">
-            <item row="1" column="1">
-             <widget class="QGroupBox" name="groupbox_performance_semaphore">
-              <property name="title">
-               <string>Semaphore</string>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_22">
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_semaphore">
-                 <property name="text">
-                  <string>Semaphore:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0" colspan="2">
-                <widget class="QPushButton" name="button_semaphore_help">
-                 <property name="text">
-                  <string>Help</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QSpinBox" name="spinbox_semaphore">
-                 <property name="minimum">
-                  <number>1</number>
-                 </property>
-                 <property name="maximum">
-                  <number>10</number>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
             <item row="1" column="0">
              <widget class="QGroupBox" name="groupbox_performance_threading_mode">
               <property name="title">
@@ -1303,6 +1270,39 @@ QPushButton:pressed {
               </layout>
              </widget>
             </item>
+            <item row="1" column="1">
+             <widget class="QGroupBox" name="groupbox_performance_semaphore">
+              <property name="title">
+               <string>Semaphore</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_22">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_semaphore">
+                 <property name="text">
+                  <string>Semaphore:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0" colspan="2">
+                <widget class="QPushButton" name="button_semaphore_help">
+                 <property name="text">
+                  <string>Help</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QSpinBox" name="spinbox_semaphore">
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>10</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
             <item row="0" column="0" colspan="2">
              <widget class="QGroupBox" name="groupbox_performance_threading">
               <property name="title">
@@ -1320,6 +1320,62 @@ QPushButton:pressed {
                 <widget class="QRadioButton" name="radio_threading_yes">
                  <property name="text">
                   <string>Yes</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QGroupBox" name="groupbox_GUI_language">
+              <property name="title">
+               <string>Graphical User Interface Language (Neeeds restart)</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_29">
+               <item row="0" column="1">
+                <widget class="QRadioButton" name="radio_ui_language_german">
+                 <property name="text">
+                  <string>German</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QRadioButton" name="radio_ui_language_english">
+                 <property name="text">
+                  <string>English</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QRadioButton" name="radio_ui_language_french">
+                 <property name="text">
+                  <string>French</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QGroupBox" name="groupbox_searching">
+              <property name="title">
+               <string>Searching</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_23">
+               <item row="0" column="1">
+                <widget class="QSpinBox" name="spinbox_searching">
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>200</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_searching_limit">
+                 <property name="text">
+                  <string>Search Limit:</string>
                  </property>
                 </widget>
                </item>
@@ -1474,60 +1530,11 @@ QPushButton:pressed {
               </layout>
              </widget>
             </item>
-            <item row="3" column="0">
-             <widget class="QGroupBox" name="groupbox_searching">
-              <property name="title">
-               <string>Searching</string>
+            <item row="4" column="0" colspan="2">
+             <widget class="QPushButton" name="button_settings_apply">
+              <property name="text">
+               <string>Apply / Reload</string>
               </property>
-              <layout class="QGridLayout" name="gridLayout_23">
-               <item row="0" column="1">
-                <widget class="QSpinBox" name="spinbox_searching">
-                 <property name="minimum">
-                  <number>1</number>
-                 </property>
-                 <property name="maximum">
-                  <number>200</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_searching_limit">
-                 <property name="text">
-                  <string>Search Limit:</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QGroupBox" name="groupbox_GUI_language">
-              <property name="title">
-               <string>Graphical User Interface Language</string>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_29">
-               <item row="0" column="2">
-                <widget class="QRadioButton" name="radio_ui_language_french">
-                 <property name="text">
-                  <string>French</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QRadioButton" name="radio_ui_language_german">
-                 <property name="text">
-                  <string>German</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QRadioButton" name="radio_ui_language_english">
-                 <property name="text">
-                  <string>English</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
              </widget>
             </item>
            </layout>

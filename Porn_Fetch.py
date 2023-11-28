@@ -5,17 +5,17 @@ import requests
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QRadioButton, QCheckBox, QPushButton,
                                QScrollArea, QGroupBox, QApplication, QMessageBox, QInputDialog, QFileDialog)
 
-from PySide6.QtCore import QFile, QTextStream, Signal
+from PySide6.QtCore import QFile, QTextStream, Signal, QRunnable, QThread, QThreadPool, QObject, Slot, QSemaphore
 from PySide6.QtGui import QIcon
 from configparser import ConfigParser
 
 from src.backend.shared_functions import (strip_title, check_video, check_if_video_exists, setup_config_file,
-                                          logger_error, logger_debug)
+                                          logger_error, logger_debug, correct_output_path)
 
 from src.frontend.ui_form import Ui_Porn_Fetch_Widget
 from src.frontend.License import Ui_License
 from src.frontend import ressources_rc  # This is needed for the Stylesheet and Icons
-from phub import Quality, Client, locals, errors
+from phub import Quality, Client, locals, errors, download
 
 categories = [attr for attr in dir(locals.Category) if
               not callable(getattr(locals.Category, attr)) and not attr.startswith("__")]
@@ -27,10 +27,56 @@ def ui_popup(text):
     qmsg_box.setText(text)
     qmsg_box.exec()
 
+
 def show_get_text_dialog(self, title, text):
     name, ok = QInputDialog.getText(self, f'{title}', f'{text}:')
     if ok:
         return name
+
+
+class WorkerSignals(QObject):
+    progress = Signal(int)
+    completed = Signal()
+
+
+class DownloadProgressSignal(QObject):
+    """Sends the current download progress to the main UI to update the progressbar."""
+    progress = Signal(int, int)
+
+
+class DownloadThread(QRunnable):
+    signal = Signal()
+
+    def __init__(self, video, quality, output_path, threading_mode):
+        super(DownloadThread, self).__init__()
+
+        self.video = video
+        self.quality = quality
+        self.output_path = output_path
+        self.threading_mode = threading_mode
+        self.downloader = None
+        self.signals = DownloadProgressSignal()
+        self.signals_completed = WorkerSignals()
+
+    def callback(self, pos, total):
+        self.signals.progress.emit(pos, total)
+
+    def run(self):
+        try:
+            if self.threading_mode == 2:
+                self.downloader = download.threaded()
+
+            elif self.threading_mode == 1:
+                self.downloader = download.FFMPEG
+
+            elif self.threading_mode == 0:
+                self.downloader = download.default
+
+            self.video.download(downloader=self.downloader, path=self.output_path, quality=self.quality,
+                                display=self.callback)
+
+        finally:
+            self.signals_completed.completed.emit()
 
 
 class License(QWidget):
@@ -155,6 +201,8 @@ class PornFetch(QWidget):
 
         # Variable initialization:
 
+        self.semaphore = None
+        self.native_languages = None
         self.directory_system_map = None
         self.threading_mode_map = None
         self.threading_map = None
@@ -172,6 +220,8 @@ class PornFetch(QWidget):
         self.threading_mode = None
         self.threading = None
         self.directory_system = None
+
+        self.threadpool = QThreadPool()
 
         # Configuration file:
         self.conf = ConfigParser()
@@ -205,11 +255,15 @@ class PornFetch(QWidget):
         self.ui.button_login.clicked.connect(self.select_output_path)
 
         # Video Download Button Connections
+        self.ui.button_download.clicked.connect(self.start_single_video)
 
         # Help Buttons Connections
         self.ui.button_semaphore_help.clicked.connect(self.button_semaphore_help)
         self.ui.button_threading_mode_help.clicked.connect(self.button_threading_mode_help)
         self.ui.button_directory_system_help.clicked.connect(self.button_directory_system_help)
+
+        # Settings
+        self.ui.button_settings_apply.clicked.connect(self.save_user_settings)
 
         logger_debug("Connected Buttons!")
 
@@ -299,10 +353,12 @@ class PornFetch(QWidget):
 
     def get_api_language(self):
         """Returns the API Language. Will be used by the API to return correct video titles etc..."""
+
         if self.ui.radio_api_language_custom.isChecked():
-            language = show_get_text_dialog(title="API Language", text="""
-            Please enter the language code for your language.  Example: en, de, fr, ru --=>:""")
-            self.api_language = language
+            if self.api_language in self.native_languages:
+                language = show_get_text_dialog(title="API Language", text="""
+                Please enter the language code for your language.  Example: en, de, fr, ru --=>:""", self=self)
+                self.api_language = language
 
         elif self.ui.radio_api_language_chinese.isChecked():
             self.api_language = "zh"
@@ -322,6 +378,7 @@ class PornFetch(QWidget):
     def get_output_path(self):
         """Returns the output path for the videos selected by the user"""
         output_path = self.ui.lineedit_output_path.text()
+        logger_debug(f"Output Path: {output_path}")
         if not os.path.exists(output_path):
             ui_popup("The specified output path doesn't exist. If you think, this is an error, please report it!")
 
@@ -374,9 +431,12 @@ class PornFetch(QWidget):
         self.get_quality()
         self.get_api_language()
         self.get_output_path()
+        self.is_directory_system()
         self.get_semaphore_limit()
 
     def settings_maps_initialization(self):
+        self.native_languages = ["en", "de", "fr", "ru", "zh"]
+
         # Maps for settings and corresponding UI elements
         self.quality_map = {
             "best": self.ui.radio_quality_best,
@@ -422,6 +482,11 @@ class PornFetch(QWidget):
         self.ui.spinbox_searching.setValue(int(self.conf.get("Video", "search_limit")))
         self.ui.lineedit_output_path.setText(self.conf.get("Video", "output_path"))
 
+        self.semaphore_limit = self.conf.get("Performance", "semaphore")
+        self.search_limit = self.conf.get("Video", "search_limit")
+        self.output_path = self.conf.get("Video", "output_path")
+
+        self.semaphore = QSemaphore(int(self.semaphore_limit))
         logger_debug("Loaded User Settings!")
 
     def save_user_settings(self):
@@ -456,6 +521,11 @@ class PornFetch(QWidget):
         self.conf.set("Performance", "semaphore", str(self.ui.spinbox_semaphore.value()))
         self.conf.set("Video", "search_limit", str(self.ui.spinbox_searching.value()))
         self.conf.set("Video", "output_path", self.ui.lineedit_output_path.text())
+
+        if self.ui.radio_api_language_custom.isChecked() and self.api_language not in self.native_languages:
+            self.conf.set("Video", "language", self.api_language)
+
+        self.update_settings()
 
         with open("config.ini", "w") as config_file:
             self.conf.write(config_file)
@@ -512,20 +582,61 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
         ui_popup(text)
 
+    def start_single_video(self):
+        url = self.ui.lineedit_url.text()
+        self.load_video(url)
 
+    def load_video(self, url):
+        self.semaphore.acquire()
+        self.update_settings()
+        output_path = self.output_path
+        api_language = self.api_language
+        threading_mode = self.threading_mode
+        directory_system = self.directory_system
+        quality = self.quality
+        video = check_video(url, api_language)
 
+        output_path = correct_output_path(output_path)
+        title = video.title
+        stripped_title = strip_title(title)
 
+        logger_debug(f"Loading Video: {stripped_title}")
 
+        if directory_system:
+            author = video.author
+            output_path = f"{output_path}{author}{os.sep}{stripped_title}"
 
+        else:
+            output_path = f"{output_path}{stripped_title}"
 
+        if not check_if_video_exists(video, output_path):
+            if self.threading:
+                logger_debug("Processing Thread")
+                self.process_video_thread(output_path=output_path, video=video, threading_mode=threading_mode,
+                                          quality=quality)
 
+            elif not self.threading:
+                self.process_video_without_thread(output_path, video, quality)
 
+    def update_progressbar(self, value, maximum):
+        self.ui.progressbar_current.setMaximum(maximum)
+        self.ui.progressbar_current.setValue(value)
 
+    def download_completed(self):
+        logger_debug("Download Completed!")
+        self.semaphore.release()
 
+    def process_video_thread(self, output_path, video, threading_mode, quality):
+        """Checks which of the three types of threading the user selected and handles them."""
+        self.download_thread = DownloadThread(video=video, output_path=output_path, quality=quality,
+                                              threading_mode=threading_mode)
+        self.download_thread.signals.progress.connect(self.update_progressbar)
+        self.download_thread.signals_completed.completed.connect(self.download_completed)
+        self.threadpool.start(self.download_thread)
+        logger_debug("Started Download Thread!")
 
-
-
-
+    def process_video_without_thread(self, output_path, video):
+        """Downloads the video without any threading.  (NOT RECOMMENDED!)"""
 
 
 def main():

@@ -73,13 +73,13 @@ def logger_error(e):
 
 
 def logger_debug(e):
-    print(f"{datetime.now()} : {Fore.LIGHTCYAN_EX}[DEBUG] : {return_color()} : {e}")
+    print(f"{datetime.now()} : {Fore.LIGHTCYAN_EX}[DEBUG] : {return_color()} : {e} {reset()}")
 
 
-def check_video(url, language, delay):
-    if type(url) == "str":
+def check_video(url, language):
+    if isinstance(url, str):
         try:
-            return Client(language=language, delay=delay).get(url)
+            return Client(language=language).get(url)
 
         except phub.errors.URLError:
             logger_error(f"Invalid URL! : {url}")
@@ -198,3 +198,11 @@ def setup_config_file(force=False):
                 else:
                     section_processed = True
 
+
+def correct_output_path(output_path):
+    if not str(output_path).endswith(os.sep):
+        output_path += os.sep
+        return output_path
+
+    else:
+        return output_path
