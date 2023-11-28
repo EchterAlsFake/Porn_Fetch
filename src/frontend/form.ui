@@ -259,7 +259,7 @@ border-radius: 5px;</string>
           <cursorShape>ArrowCursor</cursorShape>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="page">
           <layout class="QGridLayout" name="gridLayout_6">
@@ -826,7 +826,7 @@ QPushButton:pressed {
            <item row="0" column="1">
             <layout class="QGridLayout" name="gridLayout_16">
              <item row="0" column="0">
-              <widget class="QGroupBox" name="groupBox_7">
+              <widget class="QGroupBox" name="groupbox_memberInterests">
                <property name="title">
                 <string>Member Interests</string>
                </property>
@@ -870,7 +870,7 @@ QPushButton:pressed {
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QGroupBox" name="groupBox_3">
+              <widget class="QGroupBox" name="groupbox_otherFilters">
                <property name="styleSheet">
                 <string notr="true"/>
                </property>
@@ -907,7 +907,7 @@ QPushButton:pressed {
            <item row="1" column="0" colspan="2">
             <layout class="QGridLayout" name="gridLayout_14">
              <item row="0" column="1">
-              <widget class="QGroupBox" name="groupBox_2">
+              <widget class="QGroupBox" name="groupbox_productionFilters">
                <property name="title">
                 <string>Production Filters (Videos)</string>
                </property>
@@ -937,7 +937,7 @@ QPushButton:pressed {
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QGroupBox" name="groupbox_member_relationship">
+              <widget class="QGroupBox" name="groupbox_memberRelatoonship">
                <property name="title">
                 <string>Member Relationship</string>
                </property>
@@ -974,11 +974,18 @@ QPushButton:pressed {
               </widget>
              </item>
              <item row="0" column="2">
-              <widget class="QGroupBox" name="groupBox_4">
+              <widget class="QGroupBox" name="groupbox_memberType">
                <property name="title">
                 <string>Member Type</string>
                </property>
                <layout class="QGridLayout" name="gridLayout_9">
+                <item row="0" column="1">
+                 <widget class="QRadioButton" name="radio_memberType_is_model">
+                  <property name="text">
+                   <string>Is Model</string>
+                  </property>
+                 </widget>
+                </item>
                 <item row="1" column="0">
                  <widget class="QRadioButton" name="radio_memberType_is_staff">
                   <property name="text">
@@ -987,23 +994,16 @@ QPushButton:pressed {
                  </widget>
                 </item>
                 <item row="0" column="0">
-                 <widget class="QRadioButton" name="radio_memberType_none">
+                 <widget class="QRadioButton" name="radio_memberType_is_online">
                   <property name="text">
-                   <string>None</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QRadioButton" name="radio_memberType_is_model">
-                  <property name="text">
-                   <string>Is Model</string>
+                   <string>Is Online</string>
                   </property>
                  </widget>
                 </item>
                 <item row="1" column="1">
-                 <widget class="QRadioButton" name="radio_memberType_is_online">
+                 <widget class="QRadioButton" name="radio_memberType_none">
                   <property name="text">
-                   <string>Is Online</string>
+                   <string>None</string>
                   </property>
                  </widget>
                 </item>
@@ -1011,84 +1011,39 @@ QPushButton:pressed {
               </widget>
              </item>
              <item row="1" column="2">
-              <widget class="QGroupBox" name="groupBox_6">
+              <widget class="QGroupBox" name="groupbox_memberGender">
                <property name="styleSheet">
-                <string notr="true">/* QGroupBox */
-QGroupBox {
-    border: 2px solid #4CAF50; /* Border color for the group box */
-    border-radius: 5px;
-    margin-top: 10px; /* Adjust top margin as needed */
-    padding: 0px; /* Add some padding inside the group box */
-}
-
-/* Title text of the QGroupBox */
-QGroupBox::title {
-    subcontrol-origin: margin;
-    subcontrol-position: top center;
-    padding: 0 5px; /* Add padding for title text */
-    background-color: #4CAF50; /* Background color for the title bar */
-    color: white; /* Title text color */
-    border: 1px solid #4CAF50; /* Border color for the title bar */
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-}
-
-/* Apply style to all child widgets within the QGroupBox */
-QGroupBox QWidget {
-    margin: 5px; /* Adjust margin for child widgets */
-}
-
-/* Style for child QLabel elements within the QGroupBox */
-QGroupBox QLabel {
-    font-weight: bold; /* Make text bold for labels */
-}
-
-/* Style for child QPushButton elements within the QGroupBox */
-QGroupBox QPushButton {
-    background-color: #4CAF50; /* Background color for buttons */
-    color: white; /* Button text color */
-    border: 1px solid #4CAF50; /* Button border color */
-    border-radius: 3px; /* Button border radius */
-    padding: 5px 10px; /* Add padding to buttons */
-}
-
-/* Style for child QComboBox elements within the QGroupBox */
-QGroupBox QComboBox {
-    border: 1px solid #4CAF50; /* Border color for combo boxes */
-    border-radius: 3px; /* Combo box border radius */
-    padding: 3px; /* Add padding to combo boxes */
-}
-</string>
+                <string notr="true"/>
                </property>
                <property name="title">
                 <string>Member Gender</string>
                </property>
                <layout class="QGridLayout" name="gridLayout_11">
-                <item row="1" column="4">
-                 <widget class="QRadioButton" name="radio_memberGender_trans_male">
+                <item row="0" column="2">
+                 <widget class="QRadioButton" name="radio_memberGender_female">
                   <property name="text">
-                   <string>Trans Male</string>
+                   <string>Female</string>
                   </property>
                  </widget>
                 </item>
                 <item row="0" column="4">
-                 <widget class="QRadioButton" name="radio_memberGender_none">
-                  <property name="text">
-                   <string>None</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
                  <widget class="QRadioButton" name="radio_memberGender_female_couple">
                   <property name="text">
                    <string>Female Couple</string>
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="2">
-                 <widget class="QRadioButton" name="radio_memberGender_female">
+                <item row="2" column="1">
+                 <widget class="QRadioButton" name="radio_memberGender_trans_female">
                   <property name="text">
-                   <string>Female</string>
+                   <string>Trans Female</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QRadioButton" name="radio_memberGender_male">
+                  <property name="text">
+                   <string>Male</string>
                   </property>
                  </widget>
                 </item>
@@ -1099,27 +1054,6 @@ QGroupBox QComboBox {
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="2">
-                 <widget class="QRadioButton" name="radio_memberGender_couple">
-                  <property name="text">
-                   <string>Couple</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="3">
-                 <widget class="QRadioButton" name="radio_memberGender_male">
-                  <property name="text">
-                   <string>Male</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QRadioButton" name="radio_memberGender_trans_female">
-                  <property name="text">
-                   <string>Trans Female</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="0" column="5">
                  <widget class="QRadioButton" name="radio_memberGender_non_binary">
                   <property name="text">
@@ -1127,15 +1061,78 @@ QGroupBox QComboBox {
                   </property>
                  </widget>
                 </item>
+                <item row="2" column="3">
+                 <widget class="QRadioButton" name="radio_memberGender_couple">
+                  <property name="text">
+                   <string>Couple</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="2">
+                 <widget class="QRadioButton" name="radio_memberGender_trans_male">
+                  <property name="text">
+                   <string>Trans Male</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="4">
+                 <widget class="QRadioButton" name="radio_memberGender_none">
+                  <property name="text">
+                   <string>None</string>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="QGroupBox" name="groupBox">
+              <widget class="QGroupBox" name="groupbox_sortingFilters">
                <property name="title">
                 <string>Sorting Filters (Videos)</string>
                </property>
                <layout class="QGridLayout" name="gridLayout_12">
+                <item row="2" column="2">
+                 <widget class="QCheckBox" name="checkbox_sorting_recent">
+                  <property name="text">
+                   <string>Recent</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QCheckBox" name="checkbox_sorting_weekly">
+                  <property name="text">
+                   <string>Weekly</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="3">
+                 <widget class="QCheckBox" name="checkbox_sorting_yearly">
+                  <property name="text">
+                   <string>Yearly</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="5">
+                 <widget class="QCheckBox" name="checkbox_sorting_hd">
+                  <property name="text">
+                   <string>HD</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="3">
+                 <widget class="QCheckBox" name="checkbox_sorting_longest">
+                  <property name="text">
+                   <string>Longest</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCheckBox" name="checkbox_sorting_daily">
+                  <property name="text">
+                   <string>Daily</string>
+                  </property>
+                 </widget>
+                </item>
                 <item row="2" column="0">
                  <widget class="QCheckBox" name="checkbox_sorting_top_rated">
                   <property name="text">
@@ -1143,14 +1140,7 @@ QGroupBox QComboBox {
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="0">
-                 <widget class="QCheckBox" name="checkbox_sorting_yearly">
-                  <property name="text">
-                   <string>Yearly</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="3">
+                <item row="1" column="4">
                  <widget class="QCheckBox" name="checkbox_sorting_views">
                   <property name="text">
                    <string>Views</string>
@@ -1164,61 +1154,19 @@ QGroupBox QComboBox {
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="4">
-                 <widget class="QCheckBox" name="checkbox_sorting_hd">
-                  <property name="text">
-                   <string>HD</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="2">
-                 <widget class="QCheckBox" name="checkbox_sorting_weekly">
-                  <property name="text">
-                   <string>Weekly</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="3">
-                 <widget class="QCheckBox" name="checkbox_sorting_longest">
-                  <property name="text">
-                   <string>Longest</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="2">
-                 <widget class="QCheckBox" name="checkbox_sorting_recent">
-                  <property name="text">
-                   <string>Recent</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="5">
-                 <widget class="QCheckBox" name="checkbox_sorting_daily">
-                  <property name="text">
-                   <string>Daily</string>
-                  </property>
-                 </widget>
-                </item>
                </layout>
               </widget>
              </item>
              <item row="0" column="0">
-              <widget class="QGroupBox" name="groupBox_5">
+              <widget class="QGroupBox" name="groupbox_memberContent">
                <property name="title">
                 <string>Member Content</string>
                </property>
                <layout class="QGridLayout" name="gridLayout_10">
-                <item row="1" column="2">
+                <item row="0" column="2">
                  <widget class="QRadioButton" name="radio_memberContent_has_playlists">
                   <property name="text">
                    <string>Has Playlists</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QRadioButton" name="radio_memberContent_none">
-                  <property name="text">
-                   <string>None</string>
                   </property>
                  </widget>
                 </item>
@@ -1229,17 +1177,10 @@ QGroupBox QComboBox {
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="1">
-                 <widget class="QRadioButton" name="radio_memberContent_has_avatar">
+                <item row="0" column="3">
+                 <widget class="QRadioButton" name="radio_memberContent_offers_fan_club">
                   <property name="text">
-                   <string>Has Avatar</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QRadioButton" name="radio_memberContent_custom_videos">
-                  <property name="text">
-                   <string>Offers custom Videos</string>
+                   <string>Offers Fan Club</string>
                   </property>
                  </widget>
                 </item>
@@ -1250,10 +1191,24 @@ QGroupBox QComboBox {
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="3">
-                 <widget class="QRadioButton" name="radio_memberContent_offers_fan_club">
+                <item row="2" column="0">
+                 <widget class="QRadioButton" name="radio_memberContent_custom_videos">
                   <property name="text">
-                   <string>Offers Fan Club</string>
+                   <string>Offers custom Videos</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QRadioButton" name="radio_memberContent_has_avatar">
+                  <property name="text">
+                   <string>Has Avatar</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="2">
+                 <widget class="QRadioButton" name="radio_memberContent_none">
+                  <property name="text">
+                   <string>None</string>
                   </property>
                  </widget>
                 </item>
@@ -1474,7 +1429,7 @@ QGroupBox QComboBox {
                    </widget>
                   </item>
                   <item row="2" column="1">
-                   <widget class="QRadioButton" name="radio_language_custom">
+                   <widget class="QRadioButton" name="radio_api_language_custom">
                     <property name="text">
                      <string>Custom</string>
                     </property>
@@ -1504,9 +1459,9 @@ QGroupBox QComboBox {
                    </widget>
                   </item>
                   <item row="0" column="2">
-                   <widget class="QRadioButton" name="radio_quality_least">
+                   <widget class="QRadioButton" name="radio_quality_worst">
                     <property name="text">
-                     <string>Least</string>
+                     <string>Worst</string>
                     </property>
                    </widget>
                   </item>

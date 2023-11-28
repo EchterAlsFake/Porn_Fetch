@@ -662,334 +662,288 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_16 = QGridLayout()
         self.gridLayout_16.setObjectName(u"gridLayout_16")
-        self.groupBox_7 = QGroupBox(self.page_2)
-        self.groupBox_7.setObjectName(u"groupBox_7")
-        self.gridLayout_13 = QGridLayout(self.groupBox_7)
+        self.groupbox_memberInterests = QGroupBox(self.page_2)
+        self.groupbox_memberInterests.setObjectName(u"groupbox_memberInterests")
+        self.gridLayout_13 = QGridLayout(self.groupbox_memberInterests)
         self.gridLayout_13.setObjectName(u"gridLayout_13")
-        self.radio_memberInterests_into_none = QRadioButton(self.groupBox_7)
+        self.radio_memberInterests_into_none = QRadioButton(self.groupbox_memberInterests)
         self.radio_memberInterests_into_none.setObjectName(u"radio_memberInterests_into_none")
 
         self.gridLayout_13.addWidget(self.radio_memberInterests_into_none, 2, 1, 1, 1)
 
-        self.radio_memberInterests_into_male = QRadioButton(self.groupBox_7)
+        self.radio_memberInterests_into_male = QRadioButton(self.groupbox_memberInterests)
         self.radio_memberInterests_into_male.setObjectName(u"radio_memberInterests_into_male")
 
         self.gridLayout_13.addWidget(self.radio_memberInterests_into_male, 1, 1, 1, 1)
 
-        self.radio_memberInterests_none = QRadioButton(self.groupBox_7)
+        self.radio_memberInterests_none = QRadioButton(self.groupbox_memberInterests)
         self.radio_memberInterests_none.setObjectName(u"radio_memberInterests_none")
 
         self.gridLayout_13.addWidget(self.radio_memberInterests_none, 0, 1, 1, 1)
 
-        self.radio_memberInterests_into_female = QRadioButton(self.groupBox_7)
+        self.radio_memberInterests_into_female = QRadioButton(self.groupbox_memberInterests)
         self.radio_memberInterests_into_female.setObjectName(u"radio_memberInterests_into_female")
 
         self.gridLayout_13.addWidget(self.radio_memberInterests_into_female, 0, 2, 1, 1)
 
-        self.radio_memberInterests_into_all = QRadioButton(self.groupBox_7)
+        self.radio_memberInterests_into_all = QRadioButton(self.groupbox_memberInterests)
         self.radio_memberInterests_into_all.setObjectName(u"radio_memberInterests_into_all")
 
         self.gridLayout_13.addWidget(self.radio_memberInterests_into_all, 1, 2, 1, 1)
 
 
-        self.gridLayout_16.addWidget(self.groupBox_7, 0, 0, 1, 1)
+        self.gridLayout_16.addWidget(self.groupbox_memberInterests, 0, 0, 1, 1)
 
-        self.groupBox_3 = QGroupBox(self.page_2)
-        self.groupBox_3.setObjectName(u"groupBox_3")
-        self.groupBox_3.setStyleSheet(u"")
-        self.gridLayout_15 = QGridLayout(self.groupBox_3)
+        self.groupbox_otherFilters = QGroupBox(self.page_2)
+        self.groupbox_otherFilters.setObjectName(u"groupbox_otherFilters")
+        self.groupbox_otherFilters.setStyleSheet(u"")
+        self.gridLayout_15 = QGridLayout(self.groupbox_otherFilters)
         self.gridLayout_15.setObjectName(u"gridLayout_15")
-        self.radio_otherFilters_none = QRadioButton(self.groupBox_3)
+        self.radio_otherFilters_none = QRadioButton(self.groupbox_otherFilters)
         self.radio_otherFilters_none.setObjectName(u"radio_otherFilters_none")
 
         self.gridLayout_15.addWidget(self.radio_otherFilters_none, 0, 1, 1, 1)
 
-        self.radio_otherFilters_user_popular = QRadioButton(self.groupBox_3)
+        self.radio_otherFilters_user_popular = QRadioButton(self.groupbox_otherFilters)
         self.radio_otherFilters_user_popular.setObjectName(u"radio_otherFilters_user_popular")
 
         self.gridLayout_15.addWidget(self.radio_otherFilters_user_popular, 0, 2, 1, 1)
 
-        self.radio_otherFilters_user_newest = QRadioButton(self.groupBox_3)
+        self.radio_otherFilters_user_newest = QRadioButton(self.groupbox_otherFilters)
         self.radio_otherFilters_user_newest.setObjectName(u"radio_otherFilters_user_newest")
 
         self.gridLayout_15.addWidget(self.radio_otherFilters_user_newest, 1, 1, 1, 1)
 
 
-        self.gridLayout_16.addWidget(self.groupBox_3, 0, 1, 1, 1)
+        self.gridLayout_16.addWidget(self.groupbox_otherFilters, 0, 1, 1, 1)
 
 
         self.gridLayout_17.addLayout(self.gridLayout_16, 0, 1, 1, 1)
 
         self.gridLayout_14 = QGridLayout()
         self.gridLayout_14.setObjectName(u"gridLayout_14")
-        self.groupBox_2 = QGroupBox(self.page_2)
-        self.groupBox_2.setObjectName(u"groupBox_2")
-        self.gridLayout_3 = QGridLayout(self.groupBox_2)
+        self.groupbox_productionFilters = QGroupBox(self.page_2)
+        self.groupbox_productionFilters.setObjectName(u"groupbox_productionFilters")
+        self.gridLayout_3 = QGridLayout(self.groupbox_productionFilters)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.radio_production_none = QRadioButton(self.groupBox_2)
+        self.radio_production_none = QRadioButton(self.groupbox_productionFilters)
         self.radio_production_none.setObjectName(u"radio_production_none")
 
         self.gridLayout_3.addWidget(self.radio_production_none, 1, 1, 1, 1)
 
-        self.radio_production_homemade = QRadioButton(self.groupBox_2)
+        self.radio_production_homemade = QRadioButton(self.groupbox_productionFilters)
         self.radio_production_homemade.setObjectName(u"radio_production_homemade")
 
         self.gridLayout_3.addWidget(self.radio_production_homemade, 0, 1, 1, 1)
 
-        self.radio_production_professional = QRadioButton(self.groupBox_2)
+        self.radio_production_professional = QRadioButton(self.groupbox_productionFilters)
         self.radio_production_professional.setObjectName(u"radio_production_professional")
 
         self.gridLayout_3.addWidget(self.radio_production_professional, 0, 2, 1, 1)
 
 
-        self.gridLayout_14.addWidget(self.groupBox_2, 0, 1, 1, 1)
+        self.gridLayout_14.addWidget(self.groupbox_productionFilters, 0, 1, 1, 1)
 
-        self.groupbox_member_relationship = QGroupBox(self.page_2)
-        self.groupbox_member_relationship.setObjectName(u"groupbox_member_relationship")
-        self.gridLayout_4 = QGridLayout(self.groupbox_member_relationship)
+        self.groupbox_memberRelatoonship = QGroupBox(self.page_2)
+        self.groupbox_memberRelatoonship.setObjectName(u"groupbox_memberRelatoonship")
+        self.gridLayout_4 = QGridLayout(self.groupbox_memberRelatoonship)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
-        self.radio_memberRelation_single = QRadioButton(self.groupbox_member_relationship)
+        self.radio_memberRelation_single = QRadioButton(self.groupbox_memberRelatoonship)
         self.radio_memberRelation_single.setObjectName(u"radio_memberRelation_single")
 
         self.gridLayout_4.addWidget(self.radio_memberRelation_single, 0, 3, 1, 1)
 
-        self.radio_memberRelation_open = QRadioButton(self.groupbox_member_relationship)
+        self.radio_memberRelation_open = QRadioButton(self.groupbox_memberRelatoonship)
         self.radio_memberRelation_open.setObjectName(u"radio_memberRelation_open")
 
         self.gridLayout_4.addWidget(self.radio_memberRelation_open, 0, 2, 1, 1)
 
-        self.radio_memberRelation_taken = QRadioButton(self.groupbox_member_relationship)
+        self.radio_memberRelation_taken = QRadioButton(self.groupbox_memberRelatoonship)
         self.radio_memberRelation_taken.setObjectName(u"radio_memberRelation_taken")
 
         self.gridLayout_4.addWidget(self.radio_memberRelation_taken, 0, 1, 1, 1)
 
-        self.radio_memberRelation_none = QRadioButton(self.groupbox_member_relationship)
+        self.radio_memberRelation_none = QRadioButton(self.groupbox_memberRelatoonship)
         self.radio_memberRelation_none.setObjectName(u"radio_memberRelation_none")
 
         self.gridLayout_4.addWidget(self.radio_memberRelation_none, 0, 4, 1, 1)
 
 
-        self.gridLayout_14.addWidget(self.groupbox_member_relationship, 1, 1, 1, 1)
+        self.gridLayout_14.addWidget(self.groupbox_memberRelatoonship, 1, 1, 1, 1)
 
-        self.groupBox_4 = QGroupBox(self.page_2)
-        self.groupBox_4.setObjectName(u"groupBox_4")
-        self.gridLayout_9 = QGridLayout(self.groupBox_4)
+        self.groupbox_memberType = QGroupBox(self.page_2)
+        self.groupbox_memberType.setObjectName(u"groupbox_memberType")
+        self.gridLayout_9 = QGridLayout(self.groupbox_memberType)
         self.gridLayout_9.setObjectName(u"gridLayout_9")
-        self.radio_memberType_is_staff = QRadioButton(self.groupBox_4)
-        self.radio_memberType_is_staff.setObjectName(u"radio_memberType_is_staff")
-
-        self.gridLayout_9.addWidget(self.radio_memberType_is_staff, 1, 0, 1, 1)
-
-        self.radio_memberType_none = QRadioButton(self.groupBox_4)
-        self.radio_memberType_none.setObjectName(u"radio_memberType_none")
-
-        self.gridLayout_9.addWidget(self.radio_memberType_none, 0, 0, 1, 1)
-
-        self.radio_memberType_is_model = QRadioButton(self.groupBox_4)
+        self.radio_memberType_is_model = QRadioButton(self.groupbox_memberType)
         self.radio_memberType_is_model.setObjectName(u"radio_memberType_is_model")
 
         self.gridLayout_9.addWidget(self.radio_memberType_is_model, 0, 1, 1, 1)
 
-        self.radio_memberType_is_online = QRadioButton(self.groupBox_4)
+        self.radio_memberType_is_staff = QRadioButton(self.groupbox_memberType)
+        self.radio_memberType_is_staff.setObjectName(u"radio_memberType_is_staff")
+
+        self.gridLayout_9.addWidget(self.radio_memberType_is_staff, 1, 0, 1, 1)
+
+        self.radio_memberType_is_online = QRadioButton(self.groupbox_memberType)
         self.radio_memberType_is_online.setObjectName(u"radio_memberType_is_online")
 
-        self.gridLayout_9.addWidget(self.radio_memberType_is_online, 1, 1, 1, 1)
+        self.gridLayout_9.addWidget(self.radio_memberType_is_online, 0, 0, 1, 1)
+
+        self.radio_memberType_none = QRadioButton(self.groupbox_memberType)
+        self.radio_memberType_none.setObjectName(u"radio_memberType_none")
+
+        self.gridLayout_9.addWidget(self.radio_memberType_none, 1, 1, 1, 1)
 
 
-        self.gridLayout_14.addWidget(self.groupBox_4, 0, 2, 1, 1)
+        self.gridLayout_14.addWidget(self.groupbox_memberType, 0, 2, 1, 1)
 
-        self.groupBox_6 = QGroupBox(self.page_2)
-        self.groupBox_6.setObjectName(u"groupBox_6")
-        self.groupBox_6.setStyleSheet(u"/* QGroupBox */\n"
-"QGroupBox {\n"
-"    border: 2px solid #4CAF50; /* Border color for the group box */\n"
-"    border-radius: 5px;\n"
-"    margin-top: 10px; /* Adjust top margin as needed */\n"
-"    padding: 0px; /* Add some padding inside the group box */\n"
-"}\n"
-"\n"
-"/* Title text of the QGroupBox */\n"
-"QGroupBox::title {\n"
-"    subcontrol-origin: margin;\n"
-"    subcontrol-position: top center;\n"
-"    padding: 0 5px; /* Add padding for title text */\n"
-"    background-color: #4CAF50; /* Background color for the title bar */\n"
-"    color: white; /* Title text color */\n"
-"    border: 1px solid #4CAF50; /* Border color for the title bar */\n"
-"    border-top-left-radius: 3px;\n"
-"    border-top-right-radius: 3px;\n"
-"}\n"
-"\n"
-"/* Apply style to all child widgets within the QGroupBox */\n"
-"QGroupBox QWidget {\n"
-"    margin: 5px; /* Adjust margin for child widgets */\n"
-"}\n"
-"\n"
-"/* Style for child QLabel elements within the QGroupBox */\n"
-"QGroupBox QLabel {\n"
-"    font-weight: bold; /* Make text"
-                        " bold for labels */\n"
-"}\n"
-"\n"
-"/* Style for child QPushButton elements within the QGroupBox */\n"
-"QGroupBox QPushButton {\n"
-"    background-color: #4CAF50; /* Background color for buttons */\n"
-"    color: white; /* Button text color */\n"
-"    border: 1px solid #4CAF50; /* Button border color */\n"
-"    border-radius: 3px; /* Button border radius */\n"
-"    padding: 5px 10px; /* Add padding to buttons */\n"
-"}\n"
-"\n"
-"/* Style for child QComboBox elements within the QGroupBox */\n"
-"QGroupBox QComboBox {\n"
-"    border: 1px solid #4CAF50; /* Border color for combo boxes */\n"
-"    border-radius: 3px; /* Combo box border radius */\n"
-"    padding: 3px; /* Add padding to combo boxes */\n"
-"}\n"
-"")
-        self.gridLayout_11 = QGridLayout(self.groupBox_6)
+        self.groupbox_memberGender = QGroupBox(self.page_2)
+        self.groupbox_memberGender.setObjectName(u"groupbox_memberGender")
+        self.groupbox_memberGender.setStyleSheet(u"")
+        self.gridLayout_11 = QGridLayout(self.groupbox_memberGender)
         self.gridLayout_11.setObjectName(u"gridLayout_11")
-        self.radio_memberGender_trans_male = QRadioButton(self.groupBox_6)
-        self.radio_memberGender_trans_male.setObjectName(u"radio_memberGender_trans_male")
-
-        self.gridLayout_11.addWidget(self.radio_memberGender_trans_male, 1, 4, 1, 1)
-
-        self.radio_memberGender_none = QRadioButton(self.groupBox_6)
-        self.radio_memberGender_none.setObjectName(u"radio_memberGender_none")
-
-        self.gridLayout_11.addWidget(self.radio_memberGender_none, 0, 4, 1, 1)
-
-        self.radio_memberGender_female_couple = QRadioButton(self.groupBox_6)
-        self.radio_memberGender_female_couple.setObjectName(u"radio_memberGender_female_couple")
-
-        self.gridLayout_11.addWidget(self.radio_memberGender_female_couple, 0, 1, 1, 1)
-
-        self.radio_memberGender_female = QRadioButton(self.groupBox_6)
+        self.radio_memberGender_female = QRadioButton(self.groupbox_memberGender)
         self.radio_memberGender_female.setObjectName(u"radio_memberGender_female")
 
         self.gridLayout_11.addWidget(self.radio_memberGender_female, 0, 2, 1, 1)
 
-        self.radio_memberGender_other = QRadioButton(self.groupBox_6)
+        self.radio_memberGender_female_couple = QRadioButton(self.groupbox_memberGender)
+        self.radio_memberGender_female_couple.setObjectName(u"radio_memberGender_female_couple")
+
+        self.gridLayout_11.addWidget(self.radio_memberGender_female_couple, 0, 4, 1, 1)
+
+        self.radio_memberGender_trans_female = QRadioButton(self.groupbox_memberGender)
+        self.radio_memberGender_trans_female.setObjectName(u"radio_memberGender_trans_female")
+
+        self.gridLayout_11.addWidget(self.radio_memberGender_trans_female, 2, 1, 1, 1)
+
+        self.radio_memberGender_male = QRadioButton(self.groupbox_memberGender)
+        self.radio_memberGender_male.setObjectName(u"radio_memberGender_male")
+
+        self.gridLayout_11.addWidget(self.radio_memberGender_male, 0, 1, 1, 1)
+
+        self.radio_memberGender_other = QRadioButton(self.groupbox_memberGender)
         self.radio_memberGender_other.setObjectName(u"radio_memberGender_other")
 
         self.gridLayout_11.addWidget(self.radio_memberGender_other, 0, 3, 1, 1)
 
-        self.radio_memberGender_couple = QRadioButton(self.groupBox_6)
-        self.radio_memberGender_couple.setObjectName(u"radio_memberGender_couple")
-
-        self.gridLayout_11.addWidget(self.radio_memberGender_couple, 1, 2, 1, 1)
-
-        self.radio_memberGender_male = QRadioButton(self.groupBox_6)
-        self.radio_memberGender_male.setObjectName(u"radio_memberGender_male")
-
-        self.gridLayout_11.addWidget(self.radio_memberGender_male, 1, 3, 1, 1)
-
-        self.radio_memberGender_trans_female = QRadioButton(self.groupBox_6)
-        self.radio_memberGender_trans_female.setObjectName(u"radio_memberGender_trans_female")
-
-        self.gridLayout_11.addWidget(self.radio_memberGender_trans_female, 1, 1, 1, 1)
-
-        self.radio_memberGender_non_binary = QRadioButton(self.groupBox_6)
+        self.radio_memberGender_non_binary = QRadioButton(self.groupbox_memberGender)
         self.radio_memberGender_non_binary.setObjectName(u"radio_memberGender_non_binary")
 
         self.gridLayout_11.addWidget(self.radio_memberGender_non_binary, 0, 5, 1, 1)
 
+        self.radio_memberGender_couple = QRadioButton(self.groupbox_memberGender)
+        self.radio_memberGender_couple.setObjectName(u"radio_memberGender_couple")
 
-        self.gridLayout_14.addWidget(self.groupBox_6, 1, 2, 1, 1)
+        self.gridLayout_11.addWidget(self.radio_memberGender_couple, 2, 3, 1, 1)
 
-        self.groupBox = QGroupBox(self.page_2)
-        self.groupBox.setObjectName(u"groupBox")
-        self.gridLayout_12 = QGridLayout(self.groupBox)
+        self.radio_memberGender_trans_male = QRadioButton(self.groupbox_memberGender)
+        self.radio_memberGender_trans_male.setObjectName(u"radio_memberGender_trans_male")
+
+        self.gridLayout_11.addWidget(self.radio_memberGender_trans_male, 2, 2, 1, 1)
+
+        self.radio_memberGender_none = QRadioButton(self.groupbox_memberGender)
+        self.radio_memberGender_none.setObjectName(u"radio_memberGender_none")
+
+        self.gridLayout_11.addWidget(self.radio_memberGender_none, 2, 4, 1, 1)
+
+
+        self.gridLayout_14.addWidget(self.groupbox_memberGender, 1, 2, 1, 1)
+
+        self.groupbox_sortingFilters = QGroupBox(self.page_2)
+        self.groupbox_sortingFilters.setObjectName(u"groupbox_sortingFilters")
+        self.gridLayout_12 = QGridLayout(self.groupbox_sortingFilters)
         self.gridLayout_12.setObjectName(u"gridLayout_12")
-        self.checkbox_sorting_top_rated = QCheckBox(self.groupBox)
-        self.checkbox_sorting_top_rated.setObjectName(u"checkbox_sorting_top_rated")
-
-        self.gridLayout_12.addWidget(self.checkbox_sorting_top_rated, 2, 0, 1, 1)
-
-        self.checkbox_sorting_yearly = QCheckBox(self.groupBox)
-        self.checkbox_sorting_yearly.setObjectName(u"checkbox_sorting_yearly")
-
-        self.gridLayout_12.addWidget(self.checkbox_sorting_yearly, 1, 0, 1, 1)
-
-        self.checkbox_sorting_views = QCheckBox(self.groupBox)
-        self.checkbox_sorting_views.setObjectName(u"checkbox_sorting_views")
-
-        self.gridLayout_12.addWidget(self.checkbox_sorting_views, 1, 3, 1, 1)
-
-        self.checkbox_sorting_all_time = QCheckBox(self.groupBox)
-        self.checkbox_sorting_all_time.setObjectName(u"checkbox_sorting_all_time")
-
-        self.gridLayout_12.addWidget(self.checkbox_sorting_all_time, 2, 4, 1, 1)
-
-        self.checkbox_sorting_hd = QCheckBox(self.groupBox)
-        self.checkbox_sorting_hd.setObjectName(u"checkbox_sorting_hd")
-
-        self.gridLayout_12.addWidget(self.checkbox_sorting_hd, 1, 4, 1, 1)
-
-        self.checkbox_sorting_weekly = QCheckBox(self.groupBox)
-        self.checkbox_sorting_weekly.setObjectName(u"checkbox_sorting_weekly")
-
-        self.gridLayout_12.addWidget(self.checkbox_sorting_weekly, 1, 2, 1, 1)
-
-        self.checkbox_sorting_longest = QCheckBox(self.groupBox)
-        self.checkbox_sorting_longest.setObjectName(u"checkbox_sorting_longest")
-
-        self.gridLayout_12.addWidget(self.checkbox_sorting_longest, 2, 3, 1, 1)
-
-        self.checkbox_sorting_recent = QCheckBox(self.groupBox)
+        self.checkbox_sorting_recent = QCheckBox(self.groupbox_sortingFilters)
         self.checkbox_sorting_recent.setObjectName(u"checkbox_sorting_recent")
 
         self.gridLayout_12.addWidget(self.checkbox_sorting_recent, 2, 2, 1, 1)
 
-        self.checkbox_sorting_daily = QCheckBox(self.groupBox)
+        self.checkbox_sorting_weekly = QCheckBox(self.groupbox_sortingFilters)
+        self.checkbox_sorting_weekly.setObjectName(u"checkbox_sorting_weekly")
+
+        self.gridLayout_12.addWidget(self.checkbox_sorting_weekly, 1, 2, 1, 1)
+
+        self.checkbox_sorting_yearly = QCheckBox(self.groupbox_sortingFilters)
+        self.checkbox_sorting_yearly.setObjectName(u"checkbox_sorting_yearly")
+
+        self.gridLayout_12.addWidget(self.checkbox_sorting_yearly, 1, 3, 1, 1)
+
+        self.checkbox_sorting_hd = QCheckBox(self.groupbox_sortingFilters)
+        self.checkbox_sorting_hd.setObjectName(u"checkbox_sorting_hd")
+
+        self.gridLayout_12.addWidget(self.checkbox_sorting_hd, 1, 5, 1, 1)
+
+        self.checkbox_sorting_longest = QCheckBox(self.groupbox_sortingFilters)
+        self.checkbox_sorting_longest.setObjectName(u"checkbox_sorting_longest")
+
+        self.gridLayout_12.addWidget(self.checkbox_sorting_longest, 2, 3, 1, 1)
+
+        self.checkbox_sorting_daily = QCheckBox(self.groupbox_sortingFilters)
         self.checkbox_sorting_daily.setObjectName(u"checkbox_sorting_daily")
 
-        self.gridLayout_12.addWidget(self.checkbox_sorting_daily, 1, 5, 1, 1)
+        self.gridLayout_12.addWidget(self.checkbox_sorting_daily, 1, 0, 1, 1)
+
+        self.checkbox_sorting_top_rated = QCheckBox(self.groupbox_sortingFilters)
+        self.checkbox_sorting_top_rated.setObjectName(u"checkbox_sorting_top_rated")
+
+        self.gridLayout_12.addWidget(self.checkbox_sorting_top_rated, 2, 0, 1, 1)
+
+        self.checkbox_sorting_views = QCheckBox(self.groupbox_sortingFilters)
+        self.checkbox_sorting_views.setObjectName(u"checkbox_sorting_views")
+
+        self.gridLayout_12.addWidget(self.checkbox_sorting_views, 1, 4, 1, 1)
+
+        self.checkbox_sorting_all_time = QCheckBox(self.groupbox_sortingFilters)
+        self.checkbox_sorting_all_time.setObjectName(u"checkbox_sorting_all_time")
+
+        self.gridLayout_12.addWidget(self.checkbox_sorting_all_time, 2, 4, 1, 1)
 
 
-        self.gridLayout_14.addWidget(self.groupBox, 1, 0, 1, 1)
+        self.gridLayout_14.addWidget(self.groupbox_sortingFilters, 1, 0, 1, 1)
 
-        self.groupBox_5 = QGroupBox(self.page_2)
-        self.groupBox_5.setObjectName(u"groupBox_5")
-        self.gridLayout_10 = QGridLayout(self.groupBox_5)
+        self.groupbox_memberContent = QGroupBox(self.page_2)
+        self.groupbox_memberContent.setObjectName(u"groupbox_memberContent")
+        self.gridLayout_10 = QGridLayout(self.groupbox_memberContent)
         self.gridLayout_10.setObjectName(u"gridLayout_10")
-        self.radio_memberContent_has_playlists = QRadioButton(self.groupBox_5)
+        self.radio_memberContent_has_playlists = QRadioButton(self.groupbox_memberContent)
         self.radio_memberContent_has_playlists.setObjectName(u"radio_memberContent_has_playlists")
 
-        self.gridLayout_10.addWidget(self.radio_memberContent_has_playlists, 1, 2, 1, 1)
+        self.gridLayout_10.addWidget(self.radio_memberContent_has_playlists, 0, 2, 1, 1)
 
-        self.radio_memberContent_none = QRadioButton(self.groupBox_5)
-        self.radio_memberContent_none.setObjectName(u"radio_memberContent_none")
-
-        self.gridLayout_10.addWidget(self.radio_memberContent_none, 0, 2, 1, 1)
-
-        self.radio_memberContent_has_videos = QRadioButton(self.groupBox_5)
+        self.radio_memberContent_has_videos = QRadioButton(self.groupbox_memberContent)
         self.radio_memberContent_has_videos.setObjectName(u"radio_memberContent_has_videos")
 
         self.gridLayout_10.addWidget(self.radio_memberContent_has_videos, 0, 0, 1, 1)
 
-        self.radio_memberContent_has_avatar = QRadioButton(self.groupBox_5)
-        self.radio_memberContent_has_avatar.setObjectName(u"radio_memberContent_has_avatar")
-
-        self.gridLayout_10.addWidget(self.radio_memberContent_has_avatar, 1, 1, 1, 1)
-
-        self.radio_memberContent_custom_videos = QRadioButton(self.groupBox_5)
-        self.radio_memberContent_custom_videos.setObjectName(u"radio_memberContent_custom_videos")
-
-        self.gridLayout_10.addWidget(self.radio_memberContent_custom_videos, 1, 0, 1, 1)
-
-        self.radio_memberContent_has_photos = QRadioButton(self.groupBox_5)
-        self.radio_memberContent_has_photos.setObjectName(u"radio_memberContent_has_photos")
-
-        self.gridLayout_10.addWidget(self.radio_memberContent_has_photos, 0, 1, 1, 1)
-
-        self.radio_memberContent_offers_fan_club = QRadioButton(self.groupBox_5)
+        self.radio_memberContent_offers_fan_club = QRadioButton(self.groupbox_memberContent)
         self.radio_memberContent_offers_fan_club.setObjectName(u"radio_memberContent_offers_fan_club")
 
         self.gridLayout_10.addWidget(self.radio_memberContent_offers_fan_club, 0, 3, 1, 1)
 
+        self.radio_memberContent_has_photos = QRadioButton(self.groupbox_memberContent)
+        self.radio_memberContent_has_photos.setObjectName(u"radio_memberContent_has_photos")
 
-        self.gridLayout_14.addWidget(self.groupBox_5, 0, 0, 1, 1)
+        self.gridLayout_10.addWidget(self.radio_memberContent_has_photos, 0, 1, 1, 1)
+
+        self.radio_memberContent_custom_videos = QRadioButton(self.groupbox_memberContent)
+        self.radio_memberContent_custom_videos.setObjectName(u"radio_memberContent_custom_videos")
+
+        self.gridLayout_10.addWidget(self.radio_memberContent_custom_videos, 2, 0, 1, 1)
+
+        self.radio_memberContent_has_avatar = QRadioButton(self.groupbox_memberContent)
+        self.radio_memberContent_has_avatar.setObjectName(u"radio_memberContent_has_avatar")
+
+        self.gridLayout_10.addWidget(self.radio_memberContent_has_avatar, 2, 1, 1, 1)
+
+        self.radio_memberContent_none = QRadioButton(self.groupbox_memberContent)
+        self.radio_memberContent_none.setObjectName(u"radio_memberContent_none")
+
+        self.gridLayout_10.addWidget(self.radio_memberContent_none, 2, 2, 1, 1)
+
+
+        self.gridLayout_14.addWidget(self.groupbox_memberContent, 0, 0, 1, 1)
 
 
         self.gridLayout_17.addLayout(self.gridLayout_14, 1, 0, 1, 2)
@@ -1151,10 +1105,10 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_24.addWidget(self.radio_api_language_russian, 1, 1, 1, 1)
 
-        self.radio_language_custom = QRadioButton(self.groupbox_video_language)
-        self.radio_language_custom.setObjectName(u"radio_language_custom")
+        self.radio_api_language_custom = QRadioButton(self.groupbox_video_language)
+        self.radio_api_language_custom.setObjectName(u"radio_api_language_custom")
 
-        self.gridLayout_24.addWidget(self.radio_language_custom, 2, 1, 1, 1)
+        self.gridLayout_24.addWidget(self.radio_api_language_custom, 2, 1, 1, 1)
 
 
         self.gridLayout_26.addWidget(self.groupbox_video_language, 0, 1, 2, 1)
@@ -1173,10 +1127,10 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_18.addWidget(self.radio_quality_best, 0, 0, 1, 1)
 
-        self.radio_quality_least = QRadioButton(self.groupbox_video_quality)
-        self.radio_quality_least.setObjectName(u"radio_quality_least")
+        self.radio_quality_worst = QRadioButton(self.groupbox_video_quality)
+        self.radio_quality_worst.setObjectName(u"radio_quality_worst")
 
-        self.gridLayout_18.addWidget(self.radio_quality_least, 0, 2, 1, 1)
+        self.gridLayout_18.addWidget(self.radio_quality_worst, 0, 2, 1, 1)
 
 
         self.gridLayout_26.addWidget(self.groupbox_video_quality, 0, 0, 1, 1)
@@ -1238,7 +1192,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.retranslateUi(Porn_Fetch_Widget)
 
         self.stacked_widget_main.setCurrentIndex(1)
-        self.stacked_widget_top.setCurrentIndex(0)
+        self.stacked_widget_top.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(Porn_Fetch_Widget)
@@ -1284,58 +1238,58 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_search_pornstar.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search", None))
         self.button_search_users.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search", None))
         self.button_search_filters.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search", None))
-        self.groupBox_7.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Member Interests", None))
+        self.groupbox_memberInterests.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Member Interests", None))
         self.radio_memberInterests_into_none.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Into None", None))
         self.radio_memberInterests_into_male.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Into Male", None))
         self.radio_memberInterests_none.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"None", None))
         self.radio_memberInterests_into_female.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Into Female", None))
         self.radio_memberInterests_into_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Into All", None))
-        self.groupBox_3.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Other Filters", None))
+        self.groupbox_otherFilters.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Other Filters", None))
         self.radio_otherFilters_none.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"None", None))
         self.radio_otherFilters_user_popular.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"User Popular", None))
         self.radio_otherFilters_user_newest.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"User Newest", None))
-        self.groupBox_2.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Production Filters (Videos)", None))
+        self.groupbox_productionFilters.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Production Filters (Videos)", None))
         self.radio_production_none.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"None", None))
         self.radio_production_homemade.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Homemade", None))
         self.radio_production_professional.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Professional", None))
-        self.groupbox_member_relationship.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Member Relationship", None))
+        self.groupbox_memberRelatoonship.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Member Relationship", None))
         self.radio_memberRelation_single.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Single", None))
         self.radio_memberRelation_open.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Open Relation", None))
         self.radio_memberRelation_taken.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Taken", None))
         self.radio_memberRelation_none.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"None", None))
-        self.groupBox_4.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Member Type", None))
-        self.radio_memberType_is_staff.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Is Staff", None))
-        self.radio_memberType_none.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"None", None))
+        self.groupbox_memberType.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Member Type", None))
         self.radio_memberType_is_model.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Is Model", None))
+        self.radio_memberType_is_staff.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Is Staff", None))
         self.radio_memberType_is_online.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Is Online", None))
-        self.groupBox_6.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Member Gender", None))
+        self.radio_memberType_none.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"None", None))
+        self.groupbox_memberGender.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Member Gender", None))
+        self.radio_memberGender_female.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Female", None))
+        self.radio_memberGender_female_couple.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Female Couple", None))
+        self.radio_memberGender_trans_female.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Trans Female", None))
+        self.radio_memberGender_male.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Male", None))
+        self.radio_memberGender_other.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Other", None))
+        self.radio_memberGender_non_binary.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Non Binary", None))
+        self.radio_memberGender_couple.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Couple", None))
         self.radio_memberGender_trans_male.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Trans Male", None))
         self.radio_memberGender_none.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"None", None))
-        self.radio_memberGender_female_couple.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Female Couple", None))
-        self.radio_memberGender_female.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Female", None))
-        self.radio_memberGender_other.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Other", None))
-        self.radio_memberGender_couple.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Couple", None))
-        self.radio_memberGender_male.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Male", None))
-        self.radio_memberGender_trans_female.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Trans Female", None))
-        self.radio_memberGender_non_binary.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Non Binary", None))
-        self.groupBox.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Sorting Filters (Videos)", None))
-        self.checkbox_sorting_top_rated.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Top rated", None))
+        self.groupbox_sortingFilters.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Sorting Filters (Videos)", None))
+        self.checkbox_sorting_recent.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Recent", None))
+        self.checkbox_sorting_weekly.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Weekly", None))
         self.checkbox_sorting_yearly.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yearly", None))
+        self.checkbox_sorting_hd.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"HD", None))
+        self.checkbox_sorting_longest.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Longest", None))
+        self.checkbox_sorting_daily.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Daily", None))
+        self.checkbox_sorting_top_rated.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Top rated", None))
         self.checkbox_sorting_views.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Views", None))
         self.checkbox_sorting_all_time.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"All Time", None))
-        self.checkbox_sorting_hd.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"HD", None))
-        self.checkbox_sorting_weekly.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Weekly", None))
-        self.checkbox_sorting_longest.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Longest", None))
-        self.checkbox_sorting_recent.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Recent", None))
-        self.checkbox_sorting_daily.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Daily", None))
-        self.groupBox_5.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Member Content", None))
+        self.groupbox_memberContent.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Member Content", None))
         self.radio_memberContent_has_playlists.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Has Playlists", None))
-        self.radio_memberContent_none.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"None", None))
         self.radio_memberContent_has_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Has Videos", None))
-        self.radio_memberContent_has_avatar.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Has Avatar", None))
-        self.radio_memberContent_custom_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Offers custom Videos", None))
-        self.radio_memberContent_has_photos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Has Photos", None))
         self.radio_memberContent_offers_fan_club.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Offers Fan Club", None))
+        self.radio_memberContent_has_photos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Has Photos", None))
+        self.radio_memberContent_custom_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Offers custom Videos", None))
+        self.radio_memberContent_has_avatar.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Has Avatar", None))
+        self.radio_memberContent_none.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"None", None))
         self.groupbox_PERFORMANCE.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Performance Settings", None))
         self.groupbox_performance_semaphore.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Semaphore", None))
         self.label_semaphore.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Semaphore:", None))
@@ -1363,11 +1317,11 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_api_language_english.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"English", None))
         self.radio_api_language_chinese.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Chinese", None))
         self.radio_api_language_russian.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Russian", None))
-        self.radio_language_custom.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Custom", None))
+        self.radio_api_language_custom.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Custom", None))
         self.groupbox_video_quality.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Quality", None))
         self.radio_quality_half.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Half", None))
         self.radio_quality_best.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Best", None))
-        self.radio_quality_least.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Least", None))
+        self.radio_quality_worst.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Worst", None))
         self.groupbox_searching.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Searching", None))
         self.label_searching_limit.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Limit:", None))
         self.groupbox_GUI_language.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface Language", None))

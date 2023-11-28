@@ -1,8 +1,9 @@
+import os.path
 import sys
 import requests
 
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QRadioButton, QCheckBox, QPushButton,
-                               QScrollArea, QGroupBox, QApplication, QMessageBox)
+                               QScrollArea, QGroupBox, QApplication, QMessageBox, QInputDialog, QFileDialog)
 
 from PySide6.QtCore import QFile, QTextStream, Signal
 from PySide6.QtGui import QIcon
@@ -11,8 +12,7 @@ from configparser import ConfigParser
 from src.frontend.ui_form import Ui_Porn_Fetch_Widget
 from src.frontend.License import Ui_License
 from src.frontend import ressources_rc  # This is needed for the Stylesheet and Icons
-from phub import locals
-
+from phub import Quality, Client, locals, errors
 
 categories = [attr for attr in dir(locals.Category) if
               not callable(getattr(locals.Category, attr)) and not attr.startswith("__")]
@@ -23,6 +23,11 @@ def ui_popup(text):
     qmsg_box = QMessageBox()
     qmsg_box.setText(text)
     qmsg_box.exec()
+
+def show_get_text_dialog(self, title, text):
+    name, ok = QInputDialog.getText(self, f'{title}', f'{text}:')
+    if ok:
+        return name
 
 
 class License(QWidget):
@@ -154,6 +159,10 @@ class PornFetch(QWidget):
         self.delay = None
         self.search_limit = None
         self.semaphore_limit = None
+        self.quality = None
+        self.output_path = None
+        self.threading_mode = None
+        self.threading = None
 
         # UI relevant initialization:
         self.ui = Ui_Porn_Fetch_Widget()
@@ -177,6 +186,7 @@ class PornFetch(QWidget):
         self.ui.button_switch_search.clicked.connect(self.switch_to_search)
         self.ui.button_switch_settings.clicked.connect(self.switch_to_settings)
         self.ui.button_switch_credits.clicked.connect(self.switch_to_credits)
+        self.ui.button_login.clicked.connect(self.select_output_path)
 
         # Video Download Button Connections
 
@@ -252,6 +262,104 @@ class PornFetch(QWidget):
             query_object = self.client.search(query, -combined_exclude_filter)
         else:
             query_object = self.client.search(query)
+
+    def get_quality(self):
+        """Returns the quality selected by the user"""
+        if self.ui.radio_quality_best.isChecked():
+            self.quality = Quality.BEST
+
+        elif self.ui.radio_quality_half.isChecked():
+            self.quality = Quality.HALF
+
+        elif self.ui.radio_quality_worst.isChecked():
+            self.quality = Quality.WORST
+
+    def get_api_language(self):
+        """Returns the API Language. Will be used by the API to return correct video titles etc..."""
+        if self.ui.radio_api_language_custom.isChecked():
+            language = show_get_text_dialog(title="API Language", text="""
+            Please enter the language code for your language.  Example: en, de, fr, ru --=>:""")
+            self.api_language = language
+
+        elif self.ui.radio_api_language_chinese.isChecked():
+            self.api_language = "zh"
+
+        elif self.ui.radio_api_language_english.isChecked():
+            self.api_language = "en"
+
+        elif self.ui.radio_api_language_french.isChecked():
+            self.api_language = "fr"
+
+        elif self.ui.radio_api_language_german.isChecked():
+            self.api_language = "de"
+
+        elif self.ui.radio_api_language_russian.isChecked():
+            self.api_language = "ru"
+
+    def get_output_path(self):
+        output_path = self.ui.lineedit_output_path.text()
+        if not os.path.exists(output_path):
+            ui_popup("The specified output path doesn't exist. If you think, this is an error, please report it!")
+
+        else:
+            self.output_path = output_path
+
+    def select_output_path(self):
+        directory = QFileDialog.getExistingDirectory()
+        if os.path.exists(directory):  # Should always be the case hopefully
+            self.ui.lineedit_output_path.setText(directory)
+            self.output_path = directory
+
+    def get_semaphore_limit(self):
+        value = self.ui.spinbox_semaphore.value()
+        if value >= 1:
+            self.semaphore_limit = value
+
+    def get_threading_mode(self):
+        if self.ui.radio_threading_mode_default.isChecked():
+            self.threading_mode = 0
+
+        elif self.ui.radio_threading_mode_ffmpeg.isChecked():
+            self.threading_mode = 1
+
+        elif self.ui.radio_threading_mode_high_performance.isChecked():
+            self.threading_mode = 2
+
+    def get_threading(self):
+        if self.ui.radio_threading_yes.isChecked():
+            self.threading = True
+
+        elif self.ui.radio_threading_no.isChecked():
+            self.threading = False
+
+    def get_search_limit(self):
+        search_limit = self.ui.spinbox_searching.value() if self.ui.spinbox_searching.value() >= 1 else 50
+        self.search_limit = search_limit
+
+    def update_settings(self):
+        self.get_threading()
+        self.get_search_limit()
+        self.get_threading_mode()
+        self.get_quality()
+        self.get_api_language()
+        self.get_output_path()
+        self.get_semaphore_limit()
+
+    def load_user_settings(self):
+        """Loads the user settings from the configuration file and applies them"""
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def main():

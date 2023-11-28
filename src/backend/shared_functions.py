@@ -135,7 +135,7 @@ def strip_title(title):
 
 
 def setup_config_file(force=False):
-    if os.path.isfile("config.ini") == False or force:
+    if os.path.isfile("config.ini") is False or force:
         logger_error("Configuration file is broken / not found. Automatically creating a new one with default "
                      "configuration")
 
