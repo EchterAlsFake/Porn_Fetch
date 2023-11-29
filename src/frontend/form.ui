@@ -249,7 +249,7 @@ border-radius: 5px;</string>
    <item row="0" column="2">
     <widget class="QStackedWidget" name="stacked_widget_main">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page_3">
       <layout class="QGridLayout" name="gridLayout_7">
@@ -1298,7 +1298,7 @@ QPushButton:pressed {
                    </widget>
                   </item>
                   <item row="0" column="4">
-                   <widget class="QPushButton" name="button_directory_system_select">
+                   <widget class="QPushButton" name="button_output_path_select">
                     <property name="text">
                      <string>Select</string>
                     </property>

@@ -21,6 +21,10 @@ from phub import Quality, Client, locals, errors, download
 categories = [attr for attr in dir(locals.Category) if
               not callable(getattr(locals.Category, attr)) and not attr.startswith("__")]
 
+total_segments = 0
+downloaded_segments = 0
+
+
 
 def ui_popup(text):
     """ A simple UI popup that will be used for small messages to the user."""
@@ -43,6 +47,12 @@ class WorkerSignals(QObject):
 class DownloadProgressSignal(QObject):
     """Sends the current download progress to the main UI to update the progressbar."""
     progress = Signal(int, int)
+    total_progress = Signal(int, int)
+
+
+class QTreeWidgetSignal(QObject):
+    progress = Signal(str)
+    get_total = Signal(str, Quality)
 
 
 class DownloadThread(QRunnable):
@@ -62,10 +72,14 @@ class DownloadThread(QRunnable):
     def callback(self, pos, total):
         self.signals.progress.emit(pos, total)
 
+        global downloaded_segments
+        downloaded_segments += 1  # Assuming each call represents one segment
+        self.signals.total_progress.emit(downloaded_segments, total_segments)
+
     def run(self):
         try:
             if self.threading_mode == 2:
-                self.downloader = download.threaded()
+                self.downloader = download.threaded(max_workers=20, timeout=15)
 
             elif self.threading_mode == 1:
                 self.downloader = download.FFMPEG
@@ -78,6 +92,39 @@ class DownloadThread(QRunnable):
 
         finally:
             self.signals_completed.completed.emit()
+
+
+class QTreeWidgetDownloadThread(QRunnable):
+
+    def __init__(self, treeWidget, semaphore, quality):
+        super(QTreeWidgetDownloadThread, self).__init__()
+        self.treeWidget = treeWidget
+        self.semaphore = semaphore
+        self.signals = QTreeWidgetSignal()
+        self.quality = quality
+
+    def run(self):
+        video_urls = []
+        video_objects = []
+        for i in range(self.treeWidget.topLevelItemCount()):
+            item = self.treeWidget.topLevelItem(i)
+            checkState = item.checkState(0)
+            if checkState == Qt.Checked:
+                video_urls.append(item.data(0, Qt.UserRole))
+
+        global total_segments, downloaded_segments
+        for url in video_urls:
+            video_objects.append(check_video(url, language="en"))  # Not used for downloading, so language doesn't matter
+
+        total_segments = sum(
+            [len(list(video.get_segments(quality=self.quality))) for video in video_objects])  # Replace 'videos' with your list of videos
+        downloaded_segments = 0
+
+        for video_url in video_urls:
+            logger_debug(f"Downloading: {video_url}")
+            self.semaphore.acquire()
+            logger_debug("Semaphore Acquired")
+            self.signals.progress.emit(video_url)
 
 
 class License(QWidget):
@@ -221,6 +268,7 @@ class PornFetch(QWidget):
         self.threading_mode = None
         self.threading = None
         self.directory_system = None
+        self.total_progress = 0
 
         self.threadpool = QThreadPool()
 
@@ -235,6 +283,7 @@ class PornFetch(QWidget):
         self.load_icons()
         self.settings_maps_initialization()
         self.load_user_settings()
+        self.update_settings()
 
     def load_icons(self):
         """a simple function to load the icons for the buttons"""
@@ -253,12 +302,14 @@ class PornFetch(QWidget):
         self.ui.button_switch_search.clicked.connect(self.switch_to_search)
         self.ui.button_switch_settings.clicked.connect(self.switch_to_settings)
         self.ui.button_switch_credits.clicked.connect(self.switch_to_credits)
-        self.ui.button_login.clicked.connect(self.select_output_path)
+        self.ui.button_output_path_select.clicked.connect(self.select_output_path)
 
         # Video Download Button Connections
         self.ui.button_download.clicked.connect(self.start_single_video)
         self.ui.button_model.clicked.connect(self.start_model)
         self.ui.button_tree_download.clicked.connect(self.download_tree_widget)
+        self.ui.button_tree_select_all.clicked.connect(self.select_all_items)
+        self.ui.button_tree_unselect_all.clicked.connect(self.unselect_all_items)
 
         # Help Buttons Connections
         self.ui.button_semaphore_help.clicked.connect(self.button_semaphore_help)
@@ -554,17 +605,30 @@ class PornFetch(QWidget):
             pass
 
     def download_tree_widget(self):
-        video_urls = []
-        print("Executed")
-        for i in range(self.ui.treeWidget.topLevelItemCount()):
-            item = self.ui.treeWidget.topLevelItem(i)
-            checkState = item.checkState(0)
-            if checkState == Qt.Checked:
-                video_urls.append(item.data(0, Qt.UserRole))
+        semaphore = self.semaphore
+        treeWidget = self.ui.treeWidget
+        quality = self.quality
+        download_tree_thread = QTreeWidgetDownloadThread(treeWidget=treeWidget, semaphore=semaphore, quality=quality)
+        download_tree_thread.signals.progress.connect(self.tree_widget_completed)
+        self.threadpool.start(download_tree_thread)
 
-        for video_url in video_urls:
-            logger_debug(f"Downloading: {video_url}")
-            self.load_video(video_url)
+    def tree_widget_completed(self, url):
+        print("Connected")
+        self.load_video(url, semaphore_acquire=False)
+
+    def unselect_all_items(self):
+        root = self.ui.treeWidget.invisibleRootItem()
+        item_count = root.childCount()
+        for i in range(item_count):
+            item = root.child(i)
+            item.setCheckState(0, Qt.Unchecked)
+
+    def select_all_items(self):
+        root = self.ui.treeWidget.invisibleRootItem()
+        item_count = root.childCount()
+        for i in range(item_count):
+            item = root.child(i)
+            item.setCheckState(0, Qt.Checked)
 
     def select_output_path(self):
         """User can select the directory from a pop-up (QFileDialog) list"""
@@ -624,11 +688,11 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         videos = model_object.videos
         self.add_to_tree_widget(videos, search_limit=search_limit)
 
+    def load_video(self, url, semaphore_acquire=True):
+        if semaphore_acquire:
+            logger_debug("Acquiring Semaphore")
+            self.semaphore.acquire()
 
-
-
-    def load_video(self, url):
-        self.semaphore.acquire()
         self.update_settings()
         output_path = self.output_path
         api_language = self.api_language
@@ -644,11 +708,17 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         logger_debug(f"Loading Video: {stripped_title}")
 
         if directory_system:
-            author = video.author
-            output_path = f"{output_path}{author}{os.sep}{stripped_title}"
+            author = video.author.name
+
+            if not os.path.exists(f"{output_path}{author}"):
+                os.mkdir(output_path + author)
+
+            output_path = f"{output_path}{author}{os.sep}{stripped_title}.mp4"
+            output_path.strip("'")
 
         else:
-            output_path = f"{output_path}{stripped_title}"
+            output_path = f"{output_path}{stripped_title}.mp4"
+            output_path.strip("'")
 
         if not check_if_video_exists(video, output_path):
             if self.threading:
@@ -658,6 +728,15 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
             elif not self.threading:
                 self.process_video_without_thread(output_path, video, quality)
+
+        else:
+            self.semaphore.release()
+            global downloaded_segments
+            downloaded_segments += len(list(video.get_segments(quality=quality)))
+
+    def update_total_progressbar(self, value, maximum):
+        self.ui.progressbar_total.setMaximum(maximum)
+        self.ui.progressbar_total.setValue(value)
 
     def update_progressbar(self, value, maximum):
         self.ui.progressbar_current.setMaximum(maximum)
@@ -672,6 +751,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         self.download_thread = DownloadThread(video=video, output_path=output_path, quality=quality,
                                               threading_mode=threading_mode)
         self.download_thread.signals.progress.connect(self.update_progressbar)
+        self.download_thread.signals.total_progress.connect(self.update_total_progressbar)
         self.download_thread.signals_completed.completed.connect(self.download_completed)
         self.threadpool.start(self.download_thread)
         logger_debug("Started Download Thread!")

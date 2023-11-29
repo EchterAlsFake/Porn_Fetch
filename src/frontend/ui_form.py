@@ -966,10 +966,10 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_21.addWidget(self.label_output_path, 0, 0, 1, 1)
 
-        self.button_directory_system_select = QPushButton(self.groupbox_video_output)
-        self.button_directory_system_select.setObjectName(u"button_directory_system_select")
+        self.button_output_path_select = QPushButton(self.groupbox_video_output)
+        self.button_output_path_select.setObjectName(u"button_output_path_select")
 
-        self.gridLayout_21.addWidget(self.button_directory_system_select, 0, 4, 1, 1)
+        self.gridLayout_21.addWidget(self.button_output_path_select, 0, 4, 1, 1)
 
         self.button_directory_system_help = QPushButton(self.groupbox_video_output)
         self.button_directory_system_help.setObjectName(u"button_directory_system_help")
@@ -1059,7 +1059,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.retranslateUi(Porn_Fetch_Widget)
 
-        self.stacked_widget_main.setCurrentIndex(0)
+        self.stacked_widget_main.setCurrentIndex(1)
         self.stacked_widget_top.setCurrentIndex(0)
 
 
@@ -1186,7 +1186,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_directory_system_no.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
         self.lineedit_output_path.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter \"./\" for current directory", None))
         self.label_output_path.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Output path:", None))
-        self.button_directory_system_select.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Select", None))
+        self.button_output_path_select.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Select", None))
         self.button_directory_system_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
         self.groupbox_video_language.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Language", None))
         self.radio_api_language_german.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
