@@ -1,3 +1,12 @@
+Due to some stupid issues I had to revert back my changes to old commits. That menas, that I lost a lot of progress and need to do it again. 
+
+This project will still take a lot of time. Lucky for me I can stay home for some days and don't have to go to school for some reasons and that means
+I have more time for coding, but there's so much to do in other projects not just this one and my whole life is currently a hustle. 
+
+It will take time, but I promise, when it's done, it's better than ever.
+
+
+
 <p align="center">
   <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/V3.0/src/frontend/graphics/logo_transparent.png" alt="Logo"/>
 </p>
