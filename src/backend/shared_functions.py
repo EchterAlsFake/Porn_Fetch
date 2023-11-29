@@ -13,6 +13,7 @@ from hue_shift import return_color, reset
 from datetime import datetime
 from moviepy.editor import VideoFileClip
 from configparser import ConfigParser
+from hqporner_api.api import API
 
 """
 The following are the sections and options for the configuration file. Please don't change anything here, 
@@ -105,7 +106,12 @@ def check_if_video_exists(video, output_path):
         logger_debug("Found video... checking length...")
         with VideoFileClip(output_path) as clip:
             existing_duration = int(clip.duration)
-            video_duration = video.duration.seconds
+
+            if isinstance(video, str):
+                video_duration = API().get_video_length(video)
+
+            else:
+                video_duration = video.duration.seconds
 
             logger_debug(f"Existing video duration: {existing_duration}")
             logger_debug(f"Video duration: {video_duration}")

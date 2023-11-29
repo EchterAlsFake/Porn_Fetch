@@ -17,12 +17,13 @@ from src.frontend.ui_form import Ui_Porn_Fetch_Widget
 from src.frontend.License import Ui_License
 from src.frontend import ressources_rc  # This is needed for the Stylesheet and Icons
 from phub import Quality, Client, locals, errors, download
+from hqporner_api.api import API
 
 categories = [attr for attr in dir(locals.Category) if
               not callable(getattr(locals.Category, attr)) and not attr.startswith("__")]
 
-total_segments = 0
-downloaded_segments = 0
+total_file_size = 0
+downloaded_size = 0
 
 
 
@@ -53,6 +54,8 @@ class DownloadProgressSignal(QObject):
 class QTreeWidgetSignal(QObject):
     progress = Signal(str)
     get_total = Signal(str, Quality)
+    start_undefined_range = Signal()
+    stop_undefined_range = Signal(int)
 
 
 class DownloadThread(QRunnable):
@@ -69,12 +72,18 @@ class DownloadThread(QRunnable):
         self.signals = DownloadProgressSignal()
         self.signals_completed = WorkerSignals()
 
-    def callback(self, pos, total):
-        self.signals.progress.emit(pos, total)
+    def callback(self, pos, total, website="pornhub"):
 
-        global downloaded_segments
-        downloaded_segments += 1  # Assuming each call represents one segment
-        self.signals.total_progress.emit(downloaded_segments, total_segments)
+        global downloaded_size, total_file_size
+
+        if website == "pornhub":
+            print("PornHub")
+            downloaded_size += 1  # or some calculation based on segments
+        elif website == "hqporner":
+            downloaded_size = pos  # For the second website, use the current downloaded size
+
+        self.signals.progress.emit(downloaded_size, total_file_size)
+        self.signals.total_progress.emit(downloaded_size, total_file_size)
 
     def run(self):
         try:
@@ -87,8 +96,13 @@ class DownloadThread(QRunnable):
             elif self.threading_mode == 0:
                 self.downloader = download.default
 
-            self.video.download(downloader=self.downloader, path=self.output_path, quality=self.quality,
-                                display=self.callback)
+            if str(self.video).endswith(".html"):
+                API().download(url=self.video, quality="highest", output_path=self.output_path, callback=self.callback,
+                               no_title=True)
+
+            else:
+                self.video.download(downloader=self.downloader, path=self.output_path, quality=self.quality,
+                                    display=self.callback)
 
         finally:
             self.signals_completed.completed.emit()
@@ -105,25 +119,44 @@ class QTreeWidgetDownloadThread(QRunnable):
 
     def run(self):
         video_urls = []
-        video_objects = []
+        video_urls_pornhub = []
+        video_urls_hqporner = []
+        video_objects_pornhub = []
+
         for i in range(self.treeWidget.topLevelItemCount()):
             item = self.treeWidget.topLevelItem(i)
             checkState = item.checkState(0)
             if checkState == Qt.Checked:
                 video_urls.append(item.data(0, Qt.UserRole))
 
-        global total_segments, downloaded_segments
+        self.signals.start_undefined_range.emit()
+
+        global total_file_size, downloaded_size
         for url in video_urls:
-            video_objects.append(check_video(url, language="en"))  # Not used for downloading, so language doesn't matter
+            if str(url).endswith(".html"):
+                video_urls_hqporner.append(url)
 
-        total_segments = sum(
-            [len(list(video.get_segments(quality=self.quality))) for video in video_objects])  # Replace 'videos' with your list of videos
-        downloaded_segments = 0
+            else:
+                video_objects_pornhub.append(check_video(url, language="en"))  # Not used for downloading, so language doesn't matter
 
-        for video_url in video_urls:
+        total_file_size = sum(
+            [len(list(video.get_segments(quality=self.quality))) for video in video_objects_pornhub]
+        )
+        total_file_size += sum(
+            [API().get_total_size(url, "highest") for url in video_urls_hqporner]
+        )
+
+        self.signals.stop_undefined_range.emit(total_file_size)
+
+        for video_url in video_urls_pornhub:
             logger_debug(f"Downloading: {video_url}")
             self.semaphore.acquire()
             logger_debug("Semaphore Acquired")
+            self.signals.progress.emit(video_url)
+
+        for video_url in video_urls_hqporner:
+            logger_debug(f"Downloading: {video_url}")
+            self.semaphore.acquire()
             self.signals.progress.emit(video_url)
 
 
@@ -260,7 +293,6 @@ class PornFetch(QWidget):
         self.excluded_categories_filter = None
         self.client = None
         self.api_language = None
-        self.delay = None
         self.search_limit = None
         self.semaphore_limit = None
         self.quality = None
@@ -268,7 +300,6 @@ class PornFetch(QWidget):
         self.threading_mode = None
         self.threading = None
         self.directory_system = None
-        self.total_progress = 0
 
         self.threadpool = QThreadPool()
 
@@ -283,6 +314,7 @@ class PornFetch(QWidget):
         self.load_icons()
         self.settings_maps_initialization()
         self.load_user_settings()
+        self.ui.stacked_widget_main.setCurrentIndex(0)
         self.update_settings()
 
     def load_icons(self):
@@ -310,8 +342,15 @@ class PornFetch(QWidget):
         self.ui.button_tree_download.clicked.connect(self.download_tree_widget)
         self.ui.button_tree_select_all.clicked.connect(self.select_all_items)
         self.ui.button_tree_unselect_all.clicked.connect(self.unselect_all_items)
+        self.ui.button_open_file.clicked.connect(self.select_url_file)
 
-        # Help Buttons Connections
+        # Account Button Connections
+        self.ui.button_login.clicked.connect(self.login)
+        self.ui.button_get_recommended_videos.clicked.connect(self.get_recommended_videos)
+        self.ui.button_get_watched_videos.clicked.connect(self.get_watched_videos)
+        self.ui.button_get_liked_videos.clicked.connect(self.get_liked_videos)
+
+        # Help Button Connections
         self.ui.button_semaphore_help.clicked.connect(self.button_semaphore_help)
         self.ui.button_threading_mode_help.clicked.connect(self.button_threading_mode_help)
         self.ui.button_directory_system_help.clicked.connect(self.button_directory_system_help)
@@ -348,51 +387,27 @@ class PornFetch(QWidget):
         self.selected_category = selected_category
         self.excluded_categories_filter = excluded_categories
 
-    def search_videos(self):
-        """I don't know how this function even works. Ask ChatGPT about it. No joke, I don't understand it."""
-        include_filters = []
-        exclude_filters = []
+    def update_total_progressbar(self, value, maximum):
+        self.ui.progressbar_total.setMaximum(maximum)
+        self.ui.progressbar_total.setValue(value)
 
-        filter_objects = {
-            'include': [self.selected_category],
-            'exclude': [self.excluded_categories_filter]
-        }
+    def update_progressbar(self, value, maximum):
+        self.ui.progressbar_current.setMaximum(maximum)
+        self.ui.progressbar_current.setValue(value)
 
-        for action, filters in filter_objects.items():
-            for filter_object in filters:
-                if isinstance(filter_object, locals.Param):
-                    if action == 'include':
-                        include_filters.append(filter_object)
-                    elif action == 'exclude':
-                        exclude_filters.append(filter_object)
-                else:
-                    print(f"Invalid filter")
+    def download_completed(self):
+        logger_debug("Download Completed!")
+        self.semaphore.release()
 
-        if include_filters:
-            combined_include_filter = include_filters[0]
-            for filter_object in include_filters[1:]:
-                combined_include_filter |= filter_object
-        else:
-            combined_include_filter = None
+    def start_undefined_progress(self):
+        self.ui.progressbar_total.setRange(0, 0)
 
-        if exclude_filters:
-            combined_exclude_filter = exclude_filters[0]
-            for filter_object in exclude_filters[1:]:
-                combined_exclude_filter -= filter_object
-        else:
-            combined_exclude_filter = None
+    def stop_undefined_progress(self, maximum):
+        self.ui.progressbar_total.setRange(0, maximum)
 
-        query = self.ui.lineedit_search_query.text()
-
-        if combined_include_filter and combined_exclude_filter:
-            final_filter = combined_include_filter - combined_exclude_filter
-            query_object = self.client.search(query, final_filter)
-        elif combined_include_filter:
-            query_object = self.client.search(query, combined_include_filter)
-        elif combined_exclude_filter:
-            query_object = self.client.search(query, -combined_exclude_filter)
-        else:
-            query_object = self.client.search(query)
+    """
+    The following functions are needed for the settings. They apply, load, and save user settings.
+    """
 
     def get_quality(self):
         """Returns the quality selected by the user"""
@@ -539,6 +554,10 @@ class PornFetch(QWidget):
         self.semaphore_limit = self.conf.get("Performance", "semaphore")
         self.search_limit = self.conf.get("Video", "search_limit")
         self.output_path = self.conf.get("Video", "output_path")
+        self.api_language = self.conf.get("Video", "language")
+
+        if not self.api_language in self.native_languages:
+            self.ui.radio_api_language_custom.setChecked(True)
 
         self.semaphore = QSemaphore(int(self.semaphore_limit))
         logger_debug("Loaded User Settings!")
@@ -575,9 +594,7 @@ class PornFetch(QWidget):
         self.conf.set("Performance", "semaphore", str(self.ui.spinbox_semaphore.value()))
         self.conf.set("Video", "search_limit", str(self.ui.spinbox_searching.value()))
         self.conf.set("Video", "output_path", self.ui.lineedit_output_path.text())
-
-        if self.ui.radio_api_language_custom.isChecked() and self.api_language not in self.native_languages:
-            self.conf.set("Video", "language", self.api_language)
+        self.conf.set("Video", "language", self.api_language)
 
         self.update_settings()
 
@@ -587,18 +604,25 @@ class PornFetch(QWidget):
         logger_debug("Saved User Settings!")
 
     """
-    The following are functions used by different buttons from the main ui. They are important, but shouldn't need any
-    rework in the future, so I place them here, to make the code more clear    
+    The following are functions used by the treeWidget.
     """
 
     def add_to_tree_widget(self, iterator, search_limit):
         self.ui.treeWidget.clear()
+
         try:
             logger_debug(f"Search Limit: {str(search_limit)}")
             for i, video in enumerate(iterator[0:int(search_limit)], start=1):
                 item = QTreeWidgetItem(self.ui.treeWidget)
-                item.setText(0, f"{i}) {video.title}")
-                item.setData(0, Qt.UserRole, video.url)
+
+                if str(video).endswith(".html"):
+                    item.setText(0, f"{i}) {API().extract_title(video)}")
+                    item.setData(0, Qt.UserRole, video)
+
+                else:
+                    item.setText(0, f"{i}) {video.title}")
+                    item.setData(0, Qt.UserRole, video.url)
+
                 item.setCheckState(0, Qt.Unchecked)  # Adds a checkbox
 
         except errors.NoResult:
@@ -610,10 +634,11 @@ class PornFetch(QWidget):
         quality = self.quality
         download_tree_thread = QTreeWidgetDownloadThread(treeWidget=treeWidget, semaphore=semaphore, quality=quality)
         download_tree_thread.signals.progress.connect(self.tree_widget_completed)
+        download_tree_thread.signals.start_undefined_range.connect(self.start_undefined_progress)
+        download_tree_thread.signals.stop_undefined_range.connect(self.stop_undefined_progress)
         self.threadpool.start(download_tree_thread)
 
     def tree_widget_completed(self, url):
-        print("Connected")
         self.load_video(url, semaphore_acquire=False)
 
     def unselect_all_items(self):
@@ -630,12 +655,26 @@ class PornFetch(QWidget):
             item = root.child(i)
             item.setCheckState(0, Qt.Checked)
 
+    """
+    The following functions are used by the QFileDialog in order to let the user select directories / files.
+    """
+
     def select_output_path(self):
         """User can select the directory from a pop-up (QFileDialog) list"""
         directory = QFileDialog.getExistingDirectory()
         if os.path.exists(directory):  # Should always be the case hopefully
             self.ui.lineedit_output_path.setText(directory)
             self.output_path = directory
+
+    def select_url_file(self):
+        file = QFileDialog.getOpenFileUrl(self, "Select the URL file")
+        file_path = file[0].toLocalFile()
+        self.ui.lineedit_file.setText(file_path)
+        logger_debug(f"Processing file: {file_path}")
+        self.process_url_file()
+    """
+    The following functions are used by the help buttons in order to show help messages.
+    """
 
     def button_semaphore_help(self):
         text = f"""
@@ -675,6 +714,43 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
         ui_popup(text)
 
+    """
+    The following functions are used for the Account
+    """
+
+    def login(self):
+
+        username = self.ui.lineedit_username.text()
+        password = self.ui.lineedit_password.text()
+
+        try:
+            self.get_api_language()
+            self.client = Client(username=username, password=password, language=self.api_language)
+            logger_debug("Login Successful!")
+
+        except errors.LoginFailed:
+            logger_error("Login Failed!")
+            ui_popup("Login Failed, please check your credentials and try again!")
+
+    def get_watched_videos(self):
+        if not self.client.logged:
+            self.add_to_tree_widget(self.client.account.watched, search_limit=500)
+
+    def get_liked_videos(self):
+        if not self.client.logged:
+            self.add_to_tree_widget(self.client.account.liked, search_limit=500)
+
+    def get_recommended_videos(self):
+        if not self.client.logged:
+            self.add_to_tree_widget(self.client.account.recommended, search_limit=500)
+
+    """
+    The following functions are used to start special processes.
+    Downloading and Searching. So this is actually the core or most important stuff,
+    But I have my focus at the smaller functions to work as 'backend' so that I don't need to code so much
+    and the whole process is more efficient with it.
+    """
+
     def start_single_video(self):
         url = self.ui.lineedit_url.text()
         self.load_video(url)
@@ -688,6 +764,26 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         videos = model_object.videos
         self.add_to_tree_widget(videos, search_limit=search_limit)
 
+    def process_url_file(self):
+        self.get_api_language()
+        api_language = self.api_language
+        file = self.ui.lineedit_file.text()
+        hqporner_urls = []
+        pornhub_objects = []
+
+        with open(file, "r") as url_file:
+            content = url_file.read().splitlines()
+
+        for url in content:
+            if url.endswith(".html"):
+                hqporner_urls.append(url)
+
+            else:
+                pornhub_objects.append(check_video(url, language=api_language))
+
+        iterator = hqporner_urls + pornhub_objects
+        self.add_to_tree_widget(iterator, search_limit=len(iterator))
+
     def load_video(self, url, semaphore_acquire=True):
         if semaphore_acquire:
             logger_debug("Acquiring Semaphore")
@@ -699,21 +795,35 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         threading_mode = self.threading_mode
         directory_system = self.directory_system
         quality = self.quality
-        video = check_video(url, api_language)
+
+        if url.endswith(".html"):
+            title = API().extract_title(url)
+            video = url
+
+        else:
+            video = check_video(url, api_language)
+            title = video.title
 
         output_path = correct_output_path(output_path)
-        title = video.title
         stripped_title = strip_title(title)
-
         logger_debug(f"Loading Video: {stripped_title}")
 
         if directory_system:
-            author = video.author.name
+            if url.endswith(".html"):
+                author = API().extract_actress(url)[0]
+
+            else:
+                author = video.author.name
 
             if not os.path.exists(f"{output_path}{author}"):
                 os.mkdir(output_path + author)
 
+            print(f"old out: {output_path}")
+            print(f"Author: {author}")
+            print(f"Sep: {os.sep}")
+            print(f"Stripped_title: {stripped_title}")
             output_path = f"{output_path}{author}{os.sep}{stripped_title}.mp4"
+            print(output_path)
             output_path.strip("'")
 
         else:
@@ -722,6 +832,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
         if not check_if_video_exists(video, output_path):
             if self.threading:
+                print(logger_debug(f"OUT: {output_path}"))
                 logger_debug("Processing Thread")
                 self.process_video_thread(output_path=output_path, video=video, threading_mode=threading_mode,
                                           quality=quality)
@@ -734,17 +845,6 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
             global downloaded_segments
             downloaded_segments += len(list(video.get_segments(quality=quality)))
 
-    def update_total_progressbar(self, value, maximum):
-        self.ui.progressbar_total.setMaximum(maximum)
-        self.ui.progressbar_total.setValue(value)
-
-    def update_progressbar(self, value, maximum):
-        self.ui.progressbar_current.setMaximum(maximum)
-        self.ui.progressbar_current.setValue(value)
-
-    def download_completed(self):
-        logger_debug("Download Completed!")
-        self.semaphore.release()
 
     def process_video_thread(self, output_path, video, threading_mode, quality):
         """Checks which of the three types of threading the user selected and handles them."""
@@ -762,6 +862,51 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         video.download(path=output_path, quality=quality, downloader=download.default)
         logger_debug("Download Completed!")
 
+    def search_videos(self):
+        """I don't know how this function even works. Ask ChatGPT about it. No joke, I don't understand it."""
+        include_filters = []
+        exclude_filters = []
+
+        filter_objects = {
+            'include': [self.selected_category],
+            'exclude': [self.excluded_categories_filter]
+        }
+
+        for action, filters in filter_objects.items():
+            for filter_object in filters:
+                if isinstance(filter_object, locals.Param):
+                    if action == 'include':
+                        include_filters.append(filter_object)
+                    elif action == 'exclude':
+                        exclude_filters.append(filter_object)
+                else:
+                    print(f"Invalid filter")
+
+        if include_filters:
+            combined_include_filter = include_filters[0]
+            for filter_object in include_filters[1:]:
+                combined_include_filter |= filter_object
+        else:
+            combined_include_filter = None
+
+        if exclude_filters:
+            combined_exclude_filter = exclude_filters[0]
+            for filter_object in exclude_filters[1:]:
+                combined_exclude_filter -= filter_object
+        else:
+            combined_exclude_filter = None
+
+        query = self.ui.lineedit_search_query.text()
+
+        if combined_include_filter and combined_exclude_filter:
+            final_filter = combined_include_filter - combined_exclude_filter
+            query_object = self.client.search(query, final_filter)
+        elif combined_include_filter:
+            query_object = self.client.search(query, combined_include_filter)
+        elif combined_exclude_filter:
+            query_object = self.client.search(query, -combined_exclude_filter)
+        else:
+            query_object = self.client.search(query)
 
 
 def main():
