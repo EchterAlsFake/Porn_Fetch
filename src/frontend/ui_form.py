@@ -177,275 +177,8 @@ class Ui_Porn_Fetch_Widget(object):
         self.stacked_widget_top.setCursor(QCursor(Qt.ArrowCursor))
         self.page = QWidget()
         self.page.setObjectName(u"page")
-        self.gridLayout_6 = QGridLayout(self.page)
-        self.gridLayout_6.setObjectName(u"gridLayout_6")
-        self.gridlayout_login_box = QGridLayout()
-        self.gridlayout_login_box.setObjectName(u"gridlayout_login_box")
-        self.button_get_recommended_videos = QPushButton(self.page)
-        self.button_get_recommended_videos.setObjectName(u"button_get_recommended_videos")
-        self.button_get_recommended_videos.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_get_recommended_videos.setStyleSheet(u"QPushButton {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 4px;\n"
-"    padding: 5px;\n"
-"    color: #DDD;\n"
-"    font-weight: bold;\n"
-"    font-size: 14px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #78909C, stop:1 #90A4AE);\n"
-"}")
-
-        self.gridlayout_login_box.addWidget(self.button_get_recommended_videos, 3, 2, 1, 1)
-
-        self.label_password = QLabel(self.page)
-        self.label_password.setObjectName(u"label_password")
-
-        self.gridlayout_login_box.addWidget(self.label_password, 1, 0, 1, 1)
-
-        self.button_get_liked_videos = QPushButton(self.page)
-        self.button_get_liked_videos.setObjectName(u"button_get_liked_videos")
-        self.button_get_liked_videos.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_get_liked_videos.setStyleSheet(u"QPushButton {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 4px;\n"
-"    padding: 5px;\n"
-"    color: #DDD;\n"
-"    font-weight: bold;\n"
-"    font-size: 14px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #78909C, stop:1 #90A4AE);\n"
-"}")
-
-        self.gridlayout_login_box.addWidget(self.button_get_liked_videos, 3, 0, 1, 1)
-
-        self.label_username = QLabel(self.page)
-        self.label_username.setObjectName(u"label_username")
-
-        self.gridlayout_login_box.addWidget(self.label_username, 0, 0, 1, 1)
-
-        self.button_get_watched_videos = QPushButton(self.page)
-        self.button_get_watched_videos.setObjectName(u"button_get_watched_videos")
-        self.button_get_watched_videos.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_get_watched_videos.setStyleSheet(u"QPushButton {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 4px;\n"
-"    padding: 5px;\n"
-"    color: #DDD;\n"
-"    font-weight: bold;\n"
-"    font-size: 14px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #78909C, stop:1 #90A4AE);\n"
-"}")
-
-        self.gridlayout_login_box.addWidget(self.button_get_watched_videos, 3, 1, 1, 1)
-
-        self.button_login = QPushButton(self.page)
-        self.button_login.setObjectName(u"button_login")
-        self.button_login.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_login.setStyleSheet(u"QPushButton {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 8px;\n"
-"    padding: 5px;\n"
-"    color: #DDD;\n"
-"    font-weight: bold;\n"
-"    font-size: 14px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #5555FF, stop:1 #AA55FF);\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #6666FF, stop:1 #BB66FF);\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #4444DD, stop:1 #9944DD);\n"
-"}")
-
-        self.gridlayout_login_box.addWidget(self.button_login, 2, 0, 1, 4)
-
-        self.lineedit_password = QLineEdit(self.page)
-        self.lineedit_password.setObjectName(u"lineedit_password")
-        self.lineedit_password.setEchoMode(QLineEdit.Password)
-
-        self.gridlayout_login_box.addWidget(self.lineedit_password, 1, 1, 1, 3)
-
-        self.lineedit_username = QLineEdit(self.page)
-        self.lineedit_username.setObjectName(u"lineedit_username")
-
-        self.gridlayout_login_box.addWidget(self.lineedit_username, 0, 1, 1, 3)
-
-
-        self.gridLayout_6.addLayout(self.gridlayout_login_box, 0, 1, 1, 1)
-
-        self.treeWidget = QTreeWidget(self.page)
-        __qtreewidgetitem = QTreeWidgetItem()
-        __qtreewidgetitem.setText(0, u"1");
-        self.treeWidget.setHeaderItem(__qtreewidgetitem)
-        self.treeWidget.setObjectName(u"treeWidget")
-        self.treeWidget.setStyleSheet(u"QWidget {\n"
-"color: white;\n"
-"background-color: rgb(60, 60, 60);\n"
-"border: none;\n"
-"}\n"
-"\n"
-"QLineEdit {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 4px;\n"
-"    padding: 5px;\n"
-"    background-color: #333;\n"
-"    color: #DDD;\n"
-"}\n"
-"QLineEdit:focus {\n"
-"    border: 2px solid #5599FF;\n"
-"}\n"
-"\n"
-"\n"
-"QProgressBar {\n"
-"	color: rgb(255, 153, 0);\n"
-"    border: 2px solid #5a2a82;\n"
-"    border-radius: 5px;\n"
-"    text-align: center;\n"
-"    background-color: rgb(74, 74, 74);\n"
-"    color: #ffffff;  /* Adding text color for better visibility */\n"
-"}\n"
-"\n"
-"QProgressBar::chunk {\n"
-"    background-color: rgb(0, 255, 224);\n"
-"    width: 10px; /* Adjust this to change the width of the 'chunk' */\n"
-"}\n"
-"\n"
-"QRadioButton {\n"
-"    color: #dcdcdc; /* Light grey text */\n"
-"    spacing: 5px; /* Space between the radio button and its label */\n"
-"}\n"
-"\n"
-"QRadioButton::indicator {\n"
-"    width: 13px;\n"
-"    height: 13px;\n"
-"    border-radius: 7px; /* Circular indicator */\n"
-""
-                        "}\n"
-"\n"
-"QRadioButton::indicator:unchecked {\n"
-"    background-color: #555; /* Dark background for unchecked state */\n"
-"    border: 2px solid #777; /* Slightly lighter border */\n"
-"}\n"
-"\n"
-"QRadioButton::indicator:checked {\n"
-"    background-color: #7a7aff; /* Bright color for checked state */\n"
-"    border: 2px solid #5a5aff; /* Border slightly darker than the background */\n"
-"}\n"
-"\n"
-"QRadioButton::indicator:checked:hover,\n"
-"QRadioButton::indicator:unchecked:hover {\n"
-"    border-color: #9a9aff; /* Change border color on hover */\n"
-"}\n"
-"\n"
-"\n"
-"QSlider::groove:horizontal {\n"
-"    border: 1px solid #5a2a82;\n"
-"    height: 8px;\n"
-"    background: #e0e0e0;\n"
-"    margin: 0px;\n"
-"    border-radius: 4px;\n"
-"}\n"
-"\n"
-"QSlider::handle:horizontal {\n"
-"    background: #5a2a82;\n"
-"    border: 1px solid #5a2a82;\n"
-"    width: 18px;\n"
-"    margin: -6px 0;\n"
-"    border-radius: 9px;\n"
-"}\n"
-"\n"
-"QSlider::add-page:horizontal {\n"
-"    background: #e0e0e0;\n"
-"}\n"
-"\n"
-"QSlider::sub-page"
-                        ":horizontal {\n"
-"    background: #5a2a82;\n"
-"}\n"
-"QTreeWidget {\n"
-"    show-decoration-selected: 1; /* Show selection as a border when the widget is out of focus. */\n"
-"    color: #dcdcdc; /* Light grey text */\n"
-"    background-color: #555; /* Dark background for the tree */\n"
-"    border: 2px solid #777; /* Slightly lighter border for the tree */\n"
-"    padding: 5px; /* Space inside the tree */\n"
-"}\n"
-"\n"
-"QTreeWidget::item {\n"
-"    border-radius: 7px; /* Rounded corners for each item */\n"
-"    border: 2px solid transparent; /* No border by default */\n"
-"    padding: 5px; /* Space inside each item */\n"
-"    margin: 2px; /* Space between items */\n"
-"}\n"
-"\n"
-"QTreeWidget::item:selected {\n"
-"    background-color: #7a7aff; /* Bright color for selected item */\n"
-"    border: 2px solid #5a5aff; /* Border slightly darker than the background for selected item */\n"
-"}\n"
-"\n"
-"QTreeWidget::item:hover {\n"
-"    border-color: #9a9aff; /* Change border color on hover */\n"
-"}\n"
-"\n"
-"QTreeWidget::b"
-                        "ranch {\n"
-"    background: #555; /* Background color for branch lines */\n"
-"}\n"
-"\n"
-"QTreeWidget::branch:has-siblings:!adjoins-item {\n"
-"    border-image: url(:/images/branch-more.png) 0; /* Custom image for branch lines with more siblings */\n"
-"}\n"
-"\n"
-"QTreeWidget::branch:has-siblings:adjoins-item {\n"
-"    border-image: url(:/images/branch-end.png) 0; /* Custom image for last branch line */\n"
-"}\n"
-"\n"
-"QTreeWidget::branch:!has-children:!has-siblings:adjoins-item {\n"
-"    border-image: url(:/images/branch-end.png) 0; /* Custom image for a lone branch line */\n"
-"}\n"
-"\n"
-"QGroupBox {\n"
-"        border: 0px;\n"
-"        margin-top: 1ex; /* Adjust as needed */\n"
-"    }\n"
-"    QGroupBox::title {\n"
-"        subcontrol-origin: margin;\n"
-"        subcontrol-position: top center;\n"
-"        padding: 0 3px;\n"
-"    }\n"
-"\n"
-"QLabel {\n"
-"    color: #DDD;\n"
-"    padding: 2px;\n"
-"    font-size: 14px;\n"
-"}\n"
-"\n"
-"QPushButton {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 4px;\n"
-"    "
-                        "padding: 5px;\n"
-"    background-color: #333;\n"
-"    color: #DDD;\n"
-"    font-weight: bold;\n"
-"    font-size: 14px;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #555;\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: #5599FF;\n"
-"}")
-
-        self.gridLayout_6.addWidget(self.treeWidget, 1, 0, 1, 2)
-
+        self.gridLayout_30 = QGridLayout(self.page)
+        self.gridLayout_30.setObjectName(u"gridLayout_30")
         self.gridlayout_start_download_box = QGridLayout()
         self.gridlayout_start_download_box.setObjectName(u"gridlayout_start_download_box")
         self.label_file = QLabel(self.page)
@@ -593,7 +326,135 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridlayout_start_download_box.addWidget(self.lineedit_model_url, 2, 1, 1, 1)
 
 
-        self.gridLayout_6.addLayout(self.gridlayout_start_download_box, 0, 0, 1, 1)
+        self.gridLayout_30.addLayout(self.gridlayout_start_download_box, 0, 0, 1, 1)
+
+        self.gridlayout_login_box = QGridLayout()
+        self.gridlayout_login_box.setObjectName(u"gridlayout_login_box")
+        self.button_get_recommended_videos = QPushButton(self.page)
+        self.button_get_recommended_videos.setObjectName(u"button_get_recommended_videos")
+        self.button_get_recommended_videos.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_get_recommended_videos.setStyleSheet(u"QPushButton {\n"
+"    border: 2px solid #444;\n"
+"    border-radius: 4px;\n"
+"    padding: 5px;\n"
+"    color: #DDD;\n"
+"    font-weight: bold;\n"
+"    font-size: 14px;\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #78909C, stop:1 #90A4AE);\n"
+"}")
+
+        self.gridlayout_login_box.addWidget(self.button_get_recommended_videos, 3, 2, 1, 1)
+
+        self.label_password = QLabel(self.page)
+        self.label_password.setObjectName(u"label_password")
+
+        self.gridlayout_login_box.addWidget(self.label_password, 1, 0, 1, 1)
+
+        self.button_get_liked_videos = QPushButton(self.page)
+        self.button_get_liked_videos.setObjectName(u"button_get_liked_videos")
+        self.button_get_liked_videos.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_get_liked_videos.setStyleSheet(u"QPushButton {\n"
+"    border: 2px solid #444;\n"
+"    border-radius: 4px;\n"
+"    padding: 5px;\n"
+"    color: #DDD;\n"
+"    font-weight: bold;\n"
+"    font-size: 14px;\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #78909C, stop:1 #90A4AE);\n"
+"}")
+
+        self.gridlayout_login_box.addWidget(self.button_get_liked_videos, 3, 0, 1, 1)
+
+        self.label_username = QLabel(self.page)
+        self.label_username.setObjectName(u"label_username")
+
+        self.gridlayout_login_box.addWidget(self.label_username, 0, 0, 1, 1)
+
+        self.button_get_watched_videos = QPushButton(self.page)
+        self.button_get_watched_videos.setObjectName(u"button_get_watched_videos")
+        self.button_get_watched_videos.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_get_watched_videos.setStyleSheet(u"QPushButton {\n"
+"    border: 2px solid #444;\n"
+"    border-radius: 4px;\n"
+"    padding: 5px;\n"
+"    color: #DDD;\n"
+"    font-weight: bold;\n"
+"    font-size: 14px;\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #78909C, stop:1 #90A4AE);\n"
+"}")
+
+        self.gridlayout_login_box.addWidget(self.button_get_watched_videos, 3, 1, 1, 1)
+
+        self.button_login = QPushButton(self.page)
+        self.button_login.setObjectName(u"button_login")
+        self.button_login.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_login.setStyleSheet(u"QPushButton {\n"
+"    border: 2px solid #444;\n"
+"    border-radius: 8px;\n"
+"    padding: 5px;\n"
+"    color: #DDD;\n"
+"    font-weight: bold;\n"
+"    font-size: 14px;\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #5555FF, stop:1 #AA55FF);\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #6666FF, stop:1 #BB66FF);\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #4444DD, stop:1 #9944DD);\n"
+"}")
+
+        self.gridlayout_login_box.addWidget(self.button_login, 2, 0, 1, 4)
+
+        self.lineedit_password = QLineEdit(self.page)
+        self.lineedit_password.setObjectName(u"lineedit_password")
+        self.lineedit_password.setEchoMode(QLineEdit.Password)
+
+        self.gridlayout_login_box.addWidget(self.lineedit_password, 1, 1, 1, 3)
+
+        self.lineedit_username = QLineEdit(self.page)
+        self.lineedit_username.setObjectName(u"lineedit_username")
+
+        self.gridlayout_login_box.addWidget(self.lineedit_username, 0, 1, 1, 3)
+
+
+        self.gridLayout_30.addLayout(self.gridlayout_login_box, 0, 1, 1, 1)
+
+        self.gridLayout_6 = QGridLayout()
+        self.gridLayout_6.setObjectName(u"gridLayout_6")
+        self.button_tree_download = QPushButton(self.page)
+        self.button_tree_download.setObjectName(u"button_tree_download")
+
+        self.gridLayout_6.addWidget(self.button_tree_download, 1, 0, 1, 1)
+
+        self.button_tree_select_all = QPushButton(self.page)
+        self.button_tree_select_all.setObjectName(u"button_tree_select_all")
+
+        self.gridLayout_6.addWidget(self.button_tree_select_all, 1, 1, 1, 1)
+
+        self.button_tree_unselect_all = QPushButton(self.page)
+        self.button_tree_unselect_all.setObjectName(u"button_tree_unselect_all")
+
+        self.gridLayout_6.addWidget(self.button_tree_unselect_all, 1, 2, 1, 1)
+
+        self.treeWidget = QTreeWidget(self.page)
+        __qtreewidgetitem = QTreeWidgetItem()
+        __qtreewidgetitem.setText(0, u"1");
+        self.treeWidget.setHeaderItem(__qtreewidgetitem)
+        self.treeWidget.setObjectName(u"treeWidget")
+
+        self.gridLayout_6.addWidget(self.treeWidget, 0, 0, 1, 3)
+
+
+        self.gridLayout_30.addLayout(self.gridLayout_6, 1, 0, 1, 2)
 
         self.stacked_widget_top.addWidget(self.page)
         self.page_2 = QWidget()
@@ -1217,14 +1078,6 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_error.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Error:", None))
         self.label_debug.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Debug:", None))
         self.label_status.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Status:", None))
-        self.button_get_recommended_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get recommended videos", None))
-        self.label_password.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Password:", None))
-        self.button_get_liked_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Liked videos", None))
-        self.label_username.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Username:", None))
-        self.button_get_watched_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get watched videos", None))
-        self.button_login.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Login", None))
-        self.lineedit_password.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter your PornHub Password", None))
-        self.lineedit_username.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter your PornHub Username", None))
         self.label_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"File:", None))
         self.button_open_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Open File", None))
         self.lineedit_url.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter PornHub or HQPorner Video URL", None))
@@ -1237,6 +1090,17 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"URL:", None))
         self.button_model.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Videos", None))
         self.lineedit_model_url.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter PornHub Model URL. This can be a Pornstar Account or a PornHub Channel. The videos will be listed down in the TreeWidget", None))
+        self.button_get_recommended_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get recommended videos", None))
+        self.label_password.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Password:", None))
+        self.button_get_liked_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Liked videos", None))
+        self.label_username.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Username:", None))
+        self.button_get_watched_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get watched videos", None))
+        self.button_login.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Login", None))
+        self.lineedit_password.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter your PornHub Password", None))
+        self.lineedit_username.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter your PornHub Username", None))
+        self.button_tree_download.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download Selected Videos", None))
+        self.button_tree_select_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Select all", None))
+        self.button_tree_unselect_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Unselect all", None))
         self.label_search_users.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Users", None))
         self.label_search_pornstars.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Pornstars", None))
         self.button_search_category_filters.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Category Filter", None))

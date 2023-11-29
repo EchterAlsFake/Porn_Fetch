@@ -3,9 +3,10 @@ import sys
 import requests
 
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QRadioButton, QCheckBox, QPushButton,
-                               QScrollArea, QGroupBox, QApplication, QMessageBox, QInputDialog, QFileDialog)
+                               QScrollArea, QGroupBox, QApplication, QMessageBox, QInputDialog, QFileDialog,
+                               QTreeWidgetItem)
 
-from PySide6.QtCore import QFile, QTextStream, Signal, QRunnable, QThread, QThreadPool, QObject, Slot, QSemaphore
+from PySide6.QtCore import QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt
 from PySide6.QtGui import QIcon
 from configparser import ConfigParser
 
@@ -256,6 +257,8 @@ class PornFetch(QWidget):
 
         # Video Download Button Connections
         self.ui.button_download.clicked.connect(self.start_single_video)
+        self.ui.button_model.clicked.connect(self.start_model)
+        self.ui.button_tree_download.clicked.connect(self.download_tree_widget)
 
         # Help Buttons Connections
         self.ui.button_semaphore_help.clicked.connect(self.button_semaphore_help)
@@ -537,6 +540,32 @@ class PornFetch(QWidget):
     rework in the future, so I place them here, to make the code more clear    
     """
 
+    def add_to_tree_widget(self, iterator, search_limit):
+        self.ui.treeWidget.clear()
+        try:
+            logger_debug(f"Search Limit: {str(search_limit)}")
+            for i, video in enumerate(iterator[0:int(search_limit)], start=1):
+                item = QTreeWidgetItem(self.ui.treeWidget)
+                item.setText(0, f"{i}) {video.title}")
+                item.setData(0, Qt.UserRole, video.url)
+                item.setCheckState(0, Qt.Unchecked)  # Adds a checkbox
+
+        except errors.NoResult:
+            pass
+
+    def download_tree_widget(self):
+        video_urls = []
+        print("Executed")
+        for i in range(self.ui.treeWidget.topLevelItemCount()):
+            item = self.ui.treeWidget.topLevelItem(i)
+            checkState = item.checkState(0)
+            if checkState == Qt.Checked:
+                video_urls.append(item.data(0, Qt.UserRole))
+
+        for video_url in video_urls:
+            logger_debug(f"Downloading: {video_url}")
+            self.load_video(video_url)
+
     def select_output_path(self):
         """User can select the directory from a pop-up (QFileDialog) list"""
         directory = QFileDialog.getExistingDirectory()
@@ -585,6 +614,18 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
     def start_single_video(self):
         url = self.ui.lineedit_url.text()
         self.load_video(url)
+
+    def start_model(self):
+        model = self.ui.lineedit_model_url.text()
+        api_language = self.api_language
+        search_limit = self.search_limit
+        client = Client(language=api_language)
+        model_object = client.get_user(model)
+        videos = model_object.videos
+        self.add_to_tree_widget(videos, search_limit=search_limit)
+
+
+
 
     def load_video(self, url):
         self.semaphore.acquire()
@@ -635,8 +676,12 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         self.threadpool.start(self.download_thread)
         logger_debug("Started Download Thread!")
 
-    def process_video_without_thread(self, output_path, video):
+    def process_video_without_thread(self, output_path, video, quality):
         """Downloads the video without any threading.  (NOT RECOMMENDED!)"""
+        logger_debug("Downloading without threading! Note, the GUI will freeze until the video is downloaded!!!")
+        video.download(path=output_path, quality=quality, downloader=download.default)
+        logger_debug("Download Completed!")
+
 
 
 def main():
