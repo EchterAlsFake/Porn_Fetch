@@ -87,33 +87,6 @@ class Ui_Porn_Fetch_Widget(object):
 "border-radius: 5px;")
         self.gridLayout_5 = QGridLayout(self.widget_status)
         self.gridLayout_5.setObjectName(u"gridLayout_5")
-        self.gridLayout_2 = QGridLayout()
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.label_current_progress = QLabel(self.widget_status)
-        self.label_current_progress.setObjectName(u"label_current_progress")
-
-        self.gridLayout_2.addWidget(self.label_current_progress, 0, 0, 1, 1)
-
-        self.progressbar_current = QProgressBar(self.widget_status)
-        self.progressbar_current.setObjectName(u"progressbar_current")
-        self.progressbar_current.setValue(0)
-
-        self.gridLayout_2.addWidget(self.progressbar_current, 0, 1, 1, 1)
-
-        self.label_total_progress = QLabel(self.widget_status)
-        self.label_total_progress.setObjectName(u"label_total_progress")
-
-        self.gridLayout_2.addWidget(self.label_total_progress, 1, 0, 1, 1)
-
-        self.progressbar_total = QProgressBar(self.widget_status)
-        self.progressbar_total.setObjectName(u"progressbar_total")
-        self.progressbar_total.setValue(0)
-
-        self.gridLayout_2.addWidget(self.progressbar_total, 1, 1, 1, 1)
-
-
-        self.gridLayout_5.addLayout(self.gridLayout_2, 1, 0, 1, 1)
-
         self.gridlayout_status = QGridLayout()
         self.gridlayout_status.setObjectName(u"gridlayout_status")
         self.label_total = QLabel(self.widget_status)
@@ -162,6 +135,49 @@ class Ui_Porn_Fetch_Widget(object):
 
 
         self.gridLayout_5.addLayout(self.gridlayout_status, 0, 0, 1, 1)
+
+        self.gridLayout_2 = QGridLayout()
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.label_current_progress = QLabel(self.widget_status)
+        self.label_current_progress.setObjectName(u"label_current_progress")
+
+        self.gridLayout_2.addWidget(self.label_current_progress, 0, 0, 1, 1)
+
+        self.label_total_progress = QLabel(self.widget_status)
+        self.label_total_progress.setObjectName(u"label_total_progress")
+
+        self.gridLayout_2.addWidget(self.label_total_progress, 2, 0, 1, 1)
+
+        self.progressbar_total = QProgressBar(self.widget_status)
+        self.progressbar_total.setObjectName(u"progressbar_total")
+        self.progressbar_total.setValue(0)
+
+        self.gridLayout_2.addWidget(self.progressbar_total, 2, 1, 1, 1)
+
+        self.progressbar_current = QProgressBar(self.widget_status)
+        self.progressbar_current.setObjectName(u"progressbar_current")
+        self.progressbar_current.setValue(0)
+
+        self.gridLayout_2.addWidget(self.progressbar_current, 0, 1, 1, 1)
+
+        self.progressbar_hqporner = QProgressBar(self.widget_status)
+        self.progressbar_hqporner.setObjectName(u"progressbar_hqporner")
+        self.progressbar_hqporner.setValue(0)
+
+        self.gridLayout_2.addWidget(self.progressbar_hqporner, 1, 1, 1, 1)
+
+        self.label_hqporner_progress = QLabel(self.widget_status)
+        self.label_hqporner_progress.setObjectName(u"label_hqporner_progress")
+
+        self.gridLayout_2.addWidget(self.label_hqporner_progress, 1, 0, 1, 1)
+
+
+        self.gridLayout_5.addLayout(self.gridLayout_2, 1, 0, 1, 1)
+
+        self.label_total_information = QLabel(self.widget_status)
+        self.label_total_information.setObjectName(u"label_total_information")
+
+        self.gridLayout_5.addWidget(self.label_total_information, 2, 0, 1, 1)
 
 
         self.gridLayout_8.addWidget(self.widget_status, 2, 2, 1, 1)
@@ -1072,12 +1088,14 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_switch_home.setText("")
         self.button_switch_settings.setText("")
         self.button_switch_search.setText("")
-        self.label_current_progress.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Current Progress:", None))
-        self.label_total_progress.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
         self.label_total.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
         self.label_error.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Error:", None))
         self.label_debug.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Debug:", None))
         self.label_status.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Status:", None))
+        self.label_current_progress.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"PornHub:", None))
+        self.label_total_progress.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
+        self.label_hqporner_progress.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"HQPorner:", None))
+        self.label_total_information.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Information:  The Total doesn't include the progress from HQPorner. This has some reasons I can't explain here. I know it gets confusing but it is how it is", None))
         self.label_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"File:", None))
         self.button_open_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Open File", None))
         self.lineedit_url.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter PornHub or HQPorner Video URL", None))

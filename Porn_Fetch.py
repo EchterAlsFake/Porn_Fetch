@@ -22,9 +22,8 @@ from hqporner_api.api import API
 categories = [attr for attr in dir(locals.Category) if
               not callable(getattr(locals.Category, attr)) and not attr.startswith("__")]
 
-total_file_size = 0
-downloaded_size = 0
-
+total_segments = 0
+downloaded_segments = 0
 
 
 def ui_popup(text):
@@ -72,18 +71,12 @@ class DownloadThread(QRunnable):
         self.signals = DownloadProgressSignal()
         self.signals_completed = WorkerSignals()
 
-    def callback(self, pos, total, website="pornhub"):
+    def callback(self, pos, total):
+        self.signals.progress.emit(pos, total)
 
-        global downloaded_size, total_file_size
-
-        if website == "pornhub":
-            print("PornHub")
-            downloaded_size += 1  # or some calculation based on segments
-        elif website == "hqporner":
-            downloaded_size = pos  # For the second website, use the current downloaded size
-
-        self.signals.progress.emit(downloaded_size, total_file_size)
-        self.signals.total_progress.emit(downloaded_size, total_file_size)
+        global downloaded_segments
+        downloaded_segments += 1  # Assuming each call represents one segment
+        self.signals.total_progress.emit(downloaded_segments, total_segments)
 
     def run(self):
         try:
@@ -96,13 +89,8 @@ class DownloadThread(QRunnable):
             elif self.threading_mode == 0:
                 self.downloader = download.default
 
-            if str(self.video).endswith(".html"):
-                API().download(url=self.video, quality="highest", output_path=self.output_path, callback=self.callback,
-                               no_title=True)
-
-            else:
-                self.video.download(downloader=self.downloader, path=self.output_path, quality=self.quality,
-                                    display=self.callback)
+            self.video.download(downloader=self.downloader, path=self.output_path, quality=self.quality,
+                                display=self.callback)
 
         finally:
             self.signals_completed.completed.emit()
@@ -118,46 +106,26 @@ class QTreeWidgetDownloadThread(QRunnable):
         self.quality = quality
 
     def run(self):
+        global total_segments, downloaded_segments
         video_urls = []
-        video_urls_pornhub = []
-        video_urls_hqporner = []
-        video_objects_pornhub = []
 
+        # Collect video URLs and calculate total segments
         for i in range(self.treeWidget.topLevelItemCount()):
             item = self.treeWidget.topLevelItem(i)
             checkState = item.checkState(0)
             if checkState == Qt.Checked:
-                video_urls.append(item.data(0, Qt.UserRole))
+                video_url = item.data(0, Qt.UserRole)
+                video_urls.append(video_url)
+                video = check_video(video_url, language="en")  # Replace 'api_language' as needed
+                total_segments += len(video.get_segments())
 
-        self.signals.start_undefined_range.emit()
-
-        global total_file_size, downloaded_size
-        for url in video_urls:
-            if str(url).endswith(".html"):
-                video_urls_hqporner.append(url)
-
-            else:
-                video_objects_pornhub.append(check_video(url, language="en"))  # Not used for downloading, so language doesn't matter
-
-        total_file_size = sum(
-            [len(list(video.get_segments(quality=self.quality))) for video in video_objects_pornhub]
-        )
-        total_file_size += sum(
-            [API().get_total_size(url, "highest") for url in video_urls_hqporner]
-        )
-
-        self.signals.stop_undefined_range.emit(total_file_size)
-
-        for video_url in video_urls_pornhub:
+        downloaded_segments = 0  # Reset downloaded segments
+        for video_url in video_urls:
             logger_debug(f"Downloading: {video_url}")
             self.semaphore.acquire()
             logger_debug("Semaphore Acquired")
             self.signals.progress.emit(video_url)
 
-        for video_url in video_urls_hqporner:
-            logger_debug(f"Downloading: {video_url}")
-            self.semaphore.acquire()
-            self.signals.progress.emit(video_url)
 
 
 class License(QWidget):
@@ -403,6 +371,7 @@ class PornFetch(QWidget):
         self.ui.progressbar_total.setRange(0, 0)
 
     def stop_undefined_progress(self, maximum):
+        logger_debug(f"Stopping undefined Range: {maximum}")
         self.ui.progressbar_total.setRange(0, maximum)
 
     """
