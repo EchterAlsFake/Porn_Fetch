@@ -153,29 +153,43 @@ border-radius: 5px;</string>
      <layout class="QGridLayout" name="gridLayout_5">
       <item row="1" column="0">
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_current_progress">
-          <property name="text">
-           <string>Current Progress:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QProgressBar" name="progressbar_current">
-          <property name="value">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
+        <item row="2" column="0">
          <widget class="QLabel" name="label_total_progress">
           <property name="text">
            <string>Total:</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
+        <item row="0" column="1">
+         <widget class="QProgressBar" name="progressbar_pornhub">
+          <property name="value">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_progress_pornhub">
+          <property name="text">
+           <string>PornHub:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
          <widget class="QProgressBar" name="progressbar_total">
+          <property name="value">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_progress_hqporner">
+          <property name="text">
+           <string>HQPorner:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QProgressBar" name="progressbar_hqporner">
           <property name="value">
            <number>0</number>
           </property>
@@ -243,13 +257,20 @@ border-radius: 5px;</string>
         </item>
        </layout>
       </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_progress_information">
+        <property name="text">
+         <string>Information: The total progressbar only counts the total progress of all PornHub videos being downloaded. I can't add it for HQPorner due to some differences in how the progress is being handled across the different websites!</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
    <item row="0" column="2">
     <widget class="QStackedWidget" name="stacked_widget_main">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page_3">
       <layout class="QGridLayout" name="gridLayout_7">

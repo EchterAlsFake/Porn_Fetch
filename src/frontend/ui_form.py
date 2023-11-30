@@ -89,27 +89,38 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridLayout_5.setObjectName(u"gridLayout_5")
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.label_current_progress = QLabel(self.widget_status)
-        self.label_current_progress.setObjectName(u"label_current_progress")
-
-        self.gridLayout_2.addWidget(self.label_current_progress, 0, 0, 1, 1)
-
-        self.progressbar_current = QProgressBar(self.widget_status)
-        self.progressbar_current.setObjectName(u"progressbar_current")
-        self.progressbar_current.setValue(0)
-
-        self.gridLayout_2.addWidget(self.progressbar_current, 0, 1, 1, 1)
-
         self.label_total_progress = QLabel(self.widget_status)
         self.label_total_progress.setObjectName(u"label_total_progress")
 
-        self.gridLayout_2.addWidget(self.label_total_progress, 1, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.label_total_progress, 2, 0, 1, 1)
+
+        self.progressbar_pornhub = QProgressBar(self.widget_status)
+        self.progressbar_pornhub.setObjectName(u"progressbar_pornhub")
+        self.progressbar_pornhub.setValue(0)
+
+        self.gridLayout_2.addWidget(self.progressbar_pornhub, 0, 1, 1, 1)
+
+        self.label_progress_pornhub = QLabel(self.widget_status)
+        self.label_progress_pornhub.setObjectName(u"label_progress_pornhub")
+
+        self.gridLayout_2.addWidget(self.label_progress_pornhub, 0, 0, 1, 1)
 
         self.progressbar_total = QProgressBar(self.widget_status)
         self.progressbar_total.setObjectName(u"progressbar_total")
         self.progressbar_total.setValue(0)
 
-        self.gridLayout_2.addWidget(self.progressbar_total, 1, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.progressbar_total, 2, 1, 1, 1)
+
+        self.label_progress_hqporner = QLabel(self.widget_status)
+        self.label_progress_hqporner.setObjectName(u"label_progress_hqporner")
+
+        self.gridLayout_2.addWidget(self.label_progress_hqporner, 1, 0, 1, 1)
+
+        self.progressbar_hqporner = QProgressBar(self.widget_status)
+        self.progressbar_hqporner.setObjectName(u"progressbar_hqporner")
+        self.progressbar_hqporner.setValue(0)
+
+        self.gridLayout_2.addWidget(self.progressbar_hqporner, 1, 1, 1, 1)
 
 
         self.gridLayout_5.addLayout(self.gridLayout_2, 1, 0, 1, 1)
@@ -1072,8 +1083,9 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_switch_home.setText("")
         self.button_switch_settings.setText("")
         self.button_switch_search.setText("")
-        self.label_current_progress.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Current Progress:", None))
         self.label_total_progress.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
+        self.label_progress_pornhub.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"PornHub:", None))
+        self.label_progress_hqporner.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"HQPorner:", None))
         self.label_total.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
         self.label_error.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Error:", None))
         self.label_debug.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Debug:", None))
