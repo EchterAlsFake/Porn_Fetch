@@ -174,6 +174,11 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_5.addLayout(self.gridlayout_status, 0, 0, 1, 1)
 
+        self.label_progress_information = QLabel(self.widget_status)
+        self.label_progress_information.setObjectName(u"label_progress_information")
+
+        self.gridLayout_5.addWidget(self.label_progress_information, 2, 0, 1, 1)
+
 
         self.gridLayout_8.addWidget(self.widget_status, 2, 2, 1, 1)
 
@@ -1070,7 +1075,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.retranslateUi(Porn_Fetch_Widget)
 
-        self.stacked_widget_main.setCurrentIndex(1)
+        self.stacked_widget_main.setCurrentIndex(0)
         self.stacked_widget_top.setCurrentIndex(0)
 
 
@@ -1090,6 +1095,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_error.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Error:", None))
         self.label_debug.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Debug:", None))
         self.label_status.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Status:", None))
+        self.label_progress_information.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Information: The total progressbar only counts the total progress of all PornHub videos being downloaded. I can't add it for HQPorner due to some differences in how the progress is being handled across the different websites!", None))
         self.label_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"File:", None))
         self.button_open_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Open File", None))
         self.lineedit_url.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter PornHub or HQPorner Video URL", None))
