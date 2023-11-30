@@ -284,6 +284,7 @@ class PornFetch(QWidget):
         self.settings_maps_initialization()
         self.load_user_settings()
         self.update_settings()
+        self.ui.stacked_widget_main.setCurrentIndex(0)
 
     def load_icons(self):
         """a simple function to load the icons for the buttons"""
@@ -318,6 +319,12 @@ class PornFetch(QWidget):
 
         # Settings
         self.ui.button_settings_apply.clicked.connect(self.save_user_settings)
+
+        # Account
+        self.ui.button_login.clicked.connect(self.login)
+        self.ui.button_get_watched_videos.clicked.connect(self.get_watched_videos)
+        self.ui.button_get_liked_videos.clicked.connect(self.get_liked_videos)
+        self.ui.button_get_recommended_videos.clicked.connect(self.get_recommended_videos)
 
         logger_debug("Connected Buttons!")
 
@@ -676,8 +683,13 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         ui_popup(text)
 
     def start_single_video(self):
+        self.update_settings()
         url = self.ui.lineedit_url.text()
-        self.load_video(url)
+        api_language = self.api_language
+        one_time_iterator = []
+        one_time_iterator.append(check_video(url=url, language=api_language))
+        self.add_to_tree_widget(iterator=one_time_iterator, search_limit=self.search_limit)
+
 
     def start_model(self):
         model = self.ui.lineedit_model_url.text()
@@ -739,8 +751,8 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         self.ui.progressbar_total.setValue(value)
 
     def update_progressbar(self, value, maximum):
-        self.ui.progressbar_current.setMaximum(maximum)
-        self.ui.progressbar_current.setValue(value)
+        self.ui.progressbar_pornhub.setMaximum(maximum)
+        self.ui.progressbar_pornhub.setValue(value)
 
     def download_completed(self):
         logger_debug("Download Completed!")
@@ -761,6 +773,37 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         logger_debug("Downloading without threading! Note, the GUI will freeze until the video is downloaded!!!")
         video.download(path=output_path, quality=quality, downloader=download.default)
         logger_debug("Download Completed!")
+
+    """
+    The following functions are related to the User's account
+    """
+
+    def login(self):
+        username = self.ui.lineedit_username.text()
+        password = self.ui.lineedit_password.text()
+        self.update_settings()
+
+        try:
+            self.client = Client(username, password, language=self.api_language)
+            logger_debug("Login Successful!")
+
+        except errors.LoginFailed:
+            ui_popup("Login Failed, please check your credentials and try again!")
+
+    def get_watched_videos(self):
+        """Returns the videos watched by the user"""
+        watched = self.client.account.watched
+        self.add_to_tree_widget(watched, search_limit=500)
+
+    def get_liked_videos(self):
+        """Returns the videos liked by the user"""
+        liked = self.client.account.liked
+        self.add_to_tree_widget(liked, search_limit=500)
+
+    def get_recommended_videos(self):
+        """Returns the videos recommended for the user"""
+        recommended = self.client.account.recommended
+        self.add_to_tree_widget(recommended, search_limit=500)
 
 
 
@@ -798,6 +841,7 @@ def main():
 
     except PermissionError:
         ui_popup("Insufficient Permissions to access something. Please run Porn Fetch as root / admin")
+
 
     except ConnectionResetError:
         ui_popup("Connection was reset. Are you connected to a public wifi or a university's wifi? ")
