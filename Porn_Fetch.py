@@ -133,7 +133,6 @@ class QTreeWidgetDownloadThread(QRunnable):
                 video_urls_hqporner.append(url)
 
             else:
-                print("Appended Video PornHub: 132")
                 video_objects.append(check_video(url, language="en"))  # Not used for downloading, so language doesn't matter
 
         total_segments = sum(
