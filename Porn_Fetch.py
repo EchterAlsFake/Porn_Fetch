@@ -347,6 +347,10 @@ class PornFetch(QWidget):
         self.ui.button_get_liked_videos.clicked.connect(self.get_liked_videos)
         self.ui.button_get_recommended_videos.clicked.connect(self.get_recommended_videos)
 
+        # Search
+        self.ui.button_search_videos.clicked.connect(self.basic_search)
+        self.ui.button_search_filters.clicked.connect(self.search_videos)
+
         logger_debug("Connected Buttons!")
 
     def switch_to_home(self):
@@ -375,52 +379,6 @@ class PornFetch(QWidget):
         """
         self.selected_category = selected_category
         self.excluded_categories_filter = excluded_categories
-
-    def search_videos(self):
-        """I don't know how this function even works. Ask ChatGPT about it. No joke, I don't understand it."""
-        include_filters = []
-        exclude_filters = []
-
-        filter_objects = {
-            'include': [self.selected_category],
-            'exclude': [self.excluded_categories_filter]
-        }
-
-        for action, filters in filter_objects.items():
-            for filter_object in filters:
-                if isinstance(filter_object, locals.Param):
-                    if action == 'include':
-                        include_filters.append(filter_object)
-                    elif action == 'exclude':
-                        exclude_filters.append(filter_object)
-                else:
-                    print(f"Invalid filter")
-
-        if include_filters:
-            combined_include_filter = include_filters[0]
-            for filter_object in include_filters[1:]:
-                combined_include_filter |= filter_object
-        else:
-            combined_include_filter = None
-
-        if exclude_filters:
-            combined_exclude_filter = exclude_filters[0]
-            for filter_object in exclude_filters[1:]:
-                combined_exclude_filter -= filter_object
-        else:
-            combined_exclude_filter = None
-
-        query = self.ui.lineedit_search_query.text()
-
-        if combined_include_filter and combined_exclude_filter:
-            final_filter = combined_include_filter - combined_exclude_filter
-            query_object = self.client.search(query, final_filter)
-        elif combined_include_filter:
-            query_object = self.client.search(query, combined_include_filter)
-        elif combined_exclude_filter:
-            query_object = self.client.search(query, -combined_exclude_filter)
-        else:
-            query_object = self.client.search(query)
 
     def get_quality(self):
         """Returns the quality selected by the user"""
@@ -615,8 +573,7 @@ class PornFetch(QWidget):
         logger_debug("Saved User Settings!")
 
     """
-    The following are functions used by different buttons from the main ui. They are important, but shouldn't need any
-    rework in the future, so I place them here, to make the code more clear    
+    The following functions are related to the tree widget    
     """
 
     def add_to_tree_widget(self, iterator, search_limit):
@@ -667,12 +624,9 @@ class PornFetch(QWidget):
             item = root.child(i)
             item.setCheckState(0, Qt.Checked)
 
-    def select_output_path(self):
-        """User can select the directory from a pop-up (QFileDialog) list"""
-        directory = QFileDialog.getExistingDirectory()
-        if os.path.exists(directory):  # Should always be the case hopefully
-            self.ui.lineedit_output_path.setText(directory)
-            self.output_path = directory
+    """
+    The following functions are used for the help messages
+    """
 
     def button_semaphore_help(self):
         text = f"""
@@ -711,6 +665,10 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 """
 
         ui_popup(text)
+
+    """
+    Starting video download processes
+    """
 
     def start_single_video(self):
         self.update_settings()
@@ -788,8 +746,14 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
         else:
             self.semaphore.release()
-            global downloaded_segments
-            downloaded_segments += len(list(video.get_segments(quality=quality)))
+            if not isinstance(video, str):
+
+                global downloaded_segments
+                downloaded_segments += len(list(video.get_segments(quality=quality)))
+
+    """
+    The following functions are used to connect data between Threads and the Main UI
+    """
 
     def update_total_progressbar(self, value, maximum):
         self.ui.progressbar_total.setMaximum(maximum)
@@ -813,6 +777,11 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
     def stop_undefined_range(self):
         self.ui.progressbar_total.setRange(0, total_segments)
 
+
+    """
+    The following functions are related to the QFileDialog
+    """
+
     def open_file(self):
         file = QFileDialog().getOpenFileUrl(self, "Select URL file")
         file_path = file[0].toLocalFile()
@@ -831,6 +800,17 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
                 pornhub_objects.append(check_video(url, language=self.api_language))
 
         self.add_to_tree_widget(iterator=hqporner_urls + pornhub_objects, search_limit=len(hqporner_urls + pornhub_objects))
+
+    def select_output_path(self):
+        """User can select the directory from a pop-up (QFileDialog) list"""
+        directory = QFileDialog.getExistingDirectory()
+        if os.path.exists(directory):  # Should always be the case hopefully
+            self.ui.lineedit_output_path.setText(directory)
+            self.output_path = directory
+
+    """
+    The following functions are related to threading connections
+    """
 
     def process_video_thread(self, output_path, video, threading_mode, quality):
         """Checks which of the three types of threading the user selected and handles them."""
@@ -880,6 +860,71 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         recommended = self.client.account.recommended
         self.add_to_tree_widget(recommended, search_limit=500)
 
+    """
+    The following functions are related to the search functionality
+    """
+
+    def basic_search(self):
+        self.update_settings()
+        query = self.ui.lineedit_search_query.text()
+        language = self.api_language
+        search_limit = self.search_limit
+        client = Client(language=language)
+        search = client.search(query)
+        self.add_to_tree_widget(search, search_limit=search_limit)
+
+    def search_videos(self):
+        """I don't know how this function even works. Ask ChatGPT about it. No joke, I don't understand it."""
+        include_filters = []
+        exclude_filters = []
+        self.update_settings()
+        language = self.api_language
+        search_limit = self.search_limit
+
+        self.client = Client(language=language)
+
+        filter_objects = {
+            'include': [self.selected_category],
+            'exclude': [self.excluded_categories_filter]
+        }
+
+        for action, filters in filter_objects.items():
+            for filter_object in filters:
+                if isinstance(filter_object, locals.Param):
+                    if action == 'include':
+                        include_filters.append(filter_object)
+                    elif action == 'exclude':
+                        exclude_filters.append(filter_object)
+                else:
+                    print(f"Invalid filter")
+
+        if include_filters:
+            combined_include_filter = include_filters[0]
+            for filter_object in include_filters[1:]:
+                combined_include_filter |= filter_object
+        else:
+            combined_include_filter = None
+
+        if exclude_filters:
+            combined_exclude_filter = exclude_filters[0]
+            for filter_object in exclude_filters[1:]:
+                combined_exclude_filter -= filter_object
+        else:
+            combined_exclude_filter = None
+
+        query = self.ui.lineedit_search_query.text()
+
+        if combined_include_filter and combined_exclude_filter:
+            final_filter = combined_include_filter - combined_exclude_filter
+            query_object = self.client.search(query, final_filter)
+        elif combined_include_filter:
+            query_object = self.client.search(query, combined_include_filter)
+        elif combined_exclude_filter:
+            query_object = self.client.search(query, -combined_exclude_filter)
+        else:
+            query_object = self.client.search(query)
+
+        self.add_to_tree_widget(iterator=query, search_limit=search_limit)
 
 
 def main():
@@ -917,9 +962,9 @@ def main():
     except PermissionError:
         ui_popup("Insufficient Permissions to access something. Please run Porn Fetch as root / admin")
 
-
     except ConnectionResetError:
         ui_popup("Connection was reset. Are you connected to a public wifi or a university's wifi? ")
+
     except ConnectionError:
         ui_popup("Connection Error, please make sure you have a stable internet connection")
 

@@ -98,7 +98,33 @@ def approximately_equal(duration1, duration2, tolerance=5):
     Returns:
     - bool, True if durations are approximately equal, False otherwise.
     """
-    return abs(duration1 - duration2) <= tolerance
+    return abs(duration1 - int(duration2)) <= tolerance
+
+
+def convert_to_seconds(duration_str):
+    """
+    Convert a duration string in the format 'Xh Ym Zs' to seconds.
+
+    :param duration_str: A string representing the duration, e.g., "1h 2m 43s"
+    :return: Total duration in seconds as an integer
+    """
+    # Split the string into its components
+    parts = duration_str.split()
+
+    # Initialize total seconds
+    total_seconds = 0
+
+    # Process each part
+    for part in parts:
+        # Check if the part is hours, minutes, or seconds and convert accordingly
+        if 'h' in part:
+            total_seconds += int(part.replace('h', '')) * 3600
+        elif 'm' in part:
+            total_seconds += int(part.replace('m', '')) * 60
+        elif 's' in part:
+            total_seconds += int(part.replace('s', ''))
+
+    return total_seconds
 
 
 def check_if_video_exists(video, output_path):
@@ -108,6 +134,7 @@ def check_if_video_exists(video, output_path):
             existing_duration = int(clip.duration)
             if str(video).endswith(".html"):
                 video_duration = API().get_video_length(str(video))
+                video_duration = convert_to_seconds(video_duration)
 
             else:
                 video_duration = video.duration.seconds

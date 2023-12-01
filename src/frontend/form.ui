@@ -280,7 +280,7 @@ border-radius: 5px;</string>
           <cursorShape>ArrowCursor</cursorShape>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="page">
           <layout class="QGridLayout" name="gridLayout_30">
