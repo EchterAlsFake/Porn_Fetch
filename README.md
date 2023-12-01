@@ -16,16 +16,16 @@
 </p>
 
 ## 🚀 Quick Links
-- [Features](#features)
-- [Supported Platforms](#supported-platforms)
-- [How to Build](#building-from-source)
-- [Android Version](#android)
-- [iOS Instructions](#ios)
-- [Translation](#translating)
-- [Useful Resources](#useful-information)
-- [Legal Disclaimer](#legal-rights)
-- [Acknowledgements](#credits)
-- [License Details](#license)
+- [Features](#-features)
+- [Supported Platforms](#-supported-platforms)
+- [How to Build](#-building-from-source)
+- [Android Version](#-android)
+- [iOS Instructions](#-ios)
+- [Translation](#-translating)
+- [Useful Resources](#-useful-information)
+- [Legal Disclaimer](#-legal-rights)
+- [Acknowledgements](#-credits)
+- [License Details](#-license)
 
 ## 🌟 Features
 - Direct downloads from PornHub

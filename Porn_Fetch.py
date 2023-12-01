@@ -1,23 +1,22 @@
 import os.path
 import sys
-import requests
-
-from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QRadioButton, QCheckBox, QPushButton,
-                               QScrollArea, QGroupBox, QApplication, QMessageBox, QInputDialog, QFileDialog,
-                               QTreeWidgetItem)
-
-from PySide6.QtCore import QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt
-from PySide6.QtGui import QIcon
+import src.frontend.resources
 from configparser import ConfigParser
 
-from src.backend.shared_functions import (strip_title, check_video, check_if_video_exists, setup_config_file,
-                                          logger_error, logger_debug, correct_output_path)
-
-from src.frontend.ui_form import Ui_Porn_Fetch_Widget
-from src.frontend.License import Ui_License
-from src.frontend import ressources_rc  # This is needed for the Stylesheet and Icons
-from phub import Quality, Client, locals, errors, download, Video
+import requests
+from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
+                            QTranslator, QCoreApplication)
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QFileDialog,
+                               QTreeWidgetItem)
 from hqporner_api.api import API
+from phub import Quality, Client, locals, errors, download, Video
+
+from src.backend.shared_functions import (strip_title, check_video, check_if_video_exists, setup_config_file,
+                                          logger_debug, correct_output_path)
+from src.frontend.License import Ui_License
+from src.frontend.ui_form import Ui_Porn_Fetch_Widget
+
 
 categories = [attr for attr in dir(locals.Category) if
               not callable(getattr(locals.Category, attr)) and not attr.startswith("__")]
@@ -188,78 +187,6 @@ class License(QWidget):
         self.close()
         self.main_widget = PornFetch()
         self.main_widget.show()
-
-
-class CategoryFilterWindow(QWidget):
-    data_selected = Signal((str, list))
-
-    def __init__(self, categories):
-        super().__init__()
-        self.excluded_categories = None
-        self.selected_category = None
-        self.radio_buttons = {}
-        self.checkboxes = {}
-        self.categories = categories
-
-        self.init_ui()
-
-    def init_ui(self):
-        layout = QVBoxLayout()
-        left_layout = QVBoxLayout()
-        left_group = QGroupBox("Select Category")
-
-        for category in self.categories:
-            radio_button = QRadioButton(category)
-            left_layout.addWidget(radio_button)
-            self.radio_buttons[category] = radio_button
-
-        left_group.setLayout(left_layout)
-
-        left_scroll = QScrollArea()
-        left_scroll.setWidgetResizable(True)
-        left_scroll.setWidget(left_group)
-
-        right_layout = QVBoxLayout()
-        right_group = QGroupBox("Exclude Categories")
-
-        for category in self.categories:
-            checkbox = QCheckBox(category)
-            right_layout.addWidget(checkbox)
-            self.checkboxes[category] = checkbox
-
-        right_group.setLayout(right_layout)
-
-        right_scroll = QScrollArea()
-        right_scroll.setWidgetResizable(True)
-        right_scroll.setWidget(right_group)
-
-        apply_button = QPushButton("Apply")
-        apply_button.clicked.connect(self.on_apply)
-
-        hlayout = QHBoxLayout()
-        hlayout.addWidget(left_scroll)
-        hlayout.addWidget(right_scroll)
-
-        layout.addLayout(hlayout)
-        layout.addWidget(apply_button)
-        self.setLayout(layout)
-
-    def on_apply(self):
-        selected_category = None
-        excluded_categories = []
-
-        for category, radio_button in self.radio_buttons.items():
-            if radio_button.isChecked():
-                selected_category = category
-
-        for category, checkbox in self.checkboxes.items():
-            if checkbox.isChecked():
-                excluded_categories.append(category)
-
-        self.selected_category = selected_category
-        self.excluded_categories = excluded_categories
-        self.data_selected.emit(self.selected_category, self.excluded_categories)
-        self.close()
 
 
 class PornFetch(QWidget):
@@ -629,17 +556,17 @@ class PornFetch(QWidget):
     """
 
     def button_semaphore_help(self):
-        text = f"""
+        text = QCoreApplication.tr(f"""
 The Semaphore is a tool to limit the number of simultaneous actions / downloads.
 
 For example: If the semaphore is set to 1, only 1 video will be downloaded at the same time.
 If the semaphore is set to 4, 4 videos will be downloaded at the same time. Changing this is only useful, if
 you have a really good internet connection and a good system.
-"""
+""")
         ui_popup(text)
 
     def button_threading_mode_help(self):
-        text = """
+        text = QCoreApplication.tr("""
 The different threading modes are used for different scenarios. 
 
 1) High Performance:  Uses a class of workers to download multiple video segments at a time. Can be really fast if you
@@ -652,17 +579,17 @@ good as high performance.
 3) Default:  The default download mode will just download one video segment after the next one. If you get a lot of 
 timeouts this can really slow down the process, as we need to wait for PornHub to return the video segments.
 With the High Performance method, we can just download other segments while waiting which makes it so fast.
-"""
+""")
         ui_popup(text)
 
     def button_directory_system_help(self):
-        text = """
+        text = QCoreApplication.tr("""
 The directory system will save videos in an intelligent way. If you download 3 videos form one Pornstar and 5 videos 
 from another, Porn Fetch will automatically make folders for it and move the 3 videos into that one folder and the other
 5 into the other. (This will still apply with your selected output path)
 
 This can be helpful for organizing stuff, but is a more advanced feature, so the majority of users won't use it probably.
-"""
+""")
 
         ui_popup(text)
 
@@ -908,7 +835,7 @@ def main():
         thing I've ever done. Now where I've understand it it makes sense but the Qt documentation is a piece of shit...
         """
 
-        """# Obtain the system's locale
+        # Obtain the system's locale
         locale = QLocale.system()
         # Get the language code (e.g., "de" for German)
         language_code = locale.name().split('_')[0]
@@ -917,11 +844,11 @@ def main():
 
         translator = QTranslator(app)
         if translator.load(path):
-            logging(f"{language_code} translation loaded")
+            logger_debug(f"{language_code} translation loaded")
             app.installTranslator(translator)
         else:
-            logging(f"Failed to load {language_code} translation")
-        """
+            logger_debug(f"Failed to load {language_code} translation")
+
         file = QFile(":/style/stylesheet.qss")
         file.open(QFile.ReadOnly | QFile.Text)
         stream = QTextStream(file)
