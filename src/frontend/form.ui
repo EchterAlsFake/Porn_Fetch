@@ -645,463 +645,54 @@ QPushButton:pressed {
           <layout class="QGridLayout" name="gridLayout_17">
            <item row="0" column="0">
             <layout class="QGridLayout" name="gridlayout_search_videos">
-             <item row="1" column="0">
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="lineedit_search_pornstar_query"/>
+             </item>
+             <item row="0" column="0">
               <widget class="QLabel" name="label_search_users">
                <property name="text">
                 <string>Search Users</string>
                </property>
               </widget>
              </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="label_search_pornstars">
-               <property name="text">
-                <string>Search Pornstars</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QLineEdit" name="lineedit_search_users_query"/>
-             </item>
-             <item row="0" column="3">
-              <widget class="QPushButton" name="button_search_category_filters">
-               <property name="text">
-                <string>Category Filter</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLineEdit" name="lineedit_search_videos_query"/>
-             </item>
-             <item row="1" column="3">
-              <widget class="QPushButton" name="button_filter_users">
-               <property name="text">
-                <string>Filters</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_search_videos">
-               <property name="text">
-                <string>Search Videos</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="2" colspan="2">
+             <item row="1" column="2" colspan="2">
               <widget class="QPushButton" name="button_search_pornstar">
                <property name="text">
                 <string>Search</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="2">
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="lineedit_search_users_query"/>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_search_pornstars">
+               <property name="text">
+                <string>Search Pornstars</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
               <widget class="QPushButton" name="button_search_users">
                <property name="text">
                 <string>Search</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="2">
-              <widget class="QPushButton" name="button_search_filters">
-               <property name="text">
-                <string>Search</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QLineEdit" name="lineedit_search_pornstar_query"/>
-             </item>
             </layout>
            </item>
            <item row="0" column="1">
-            <layout class="QGridLayout" name="gridLayout_16">
-             <item row="0" column="0">
-              <widget class="QGroupBox" name="groupbox_memberInterests">
-               <property name="title">
-                <string>Member Interests</string>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_13">
-                <item row="2" column="1">
-                 <widget class="QRadioButton" name="radio_memberInterests_into_none">
-                  <property name="text">
-                   <string>Into None</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QRadioButton" name="radio_memberInterests_into_male">
-                  <property name="text">
-                   <string>Into Male</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QRadioButton" name="radio_memberInterests_none">
-                  <property name="text">
-                   <string>None</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QRadioButton" name="radio_memberInterests_into_female">
-                  <property name="text">
-                   <string>Into Female</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="2">
-                 <widget class="QRadioButton" name="radio_memberInterests_into_all">
-                  <property name="text">
-                   <string>Into All</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QGroupBox" name="groupbox_otherFilters">
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="title">
-                <string>Other Filters</string>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_15">
-                <item row="0" column="1">
-                 <widget class="QRadioButton" name="radio_otherFilters_none">
-                  <property name="text">
-                   <string>None</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QRadioButton" name="radio_otherFilters_user_popular">
-                  <property name="text">
-                   <string>User Popular</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QRadioButton" name="radio_otherFilters_user_newest">
-                  <property name="text">
-                   <string>User Newest</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-            </layout>
+            <layout class="QGridLayout" name="gridLayout_16"/>
            </item>
            <item row="1" column="0" colspan="2">
             <layout class="QGridLayout" name="gridLayout_14">
-             <item row="0" column="1">
-              <widget class="QGroupBox" name="groupbox_productionFilters">
-               <property name="title">
-                <string>Production Filters (Videos)</string>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_3">
-                <item row="1" column="1">
-                 <widget class="QRadioButton" name="radio_production_none">
-                  <property name="text">
-                   <string>None</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QRadioButton" name="radio_production_homemade">
-                  <property name="text">
-                   <string>Homemade</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QRadioButton" name="radio_production_professional">
-                  <property name="text">
-                   <string>Professional</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QGroupBox" name="groupbox_memberRelatoonship">
-               <property name="title">
-                <string>Member Relationship</string>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_4">
-                <item row="0" column="3">
-                 <widget class="QRadioButton" name="radio_memberRelation_single">
-                  <property name="text">
-                   <string>Single</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QRadioButton" name="radio_memberRelation_open">
-                  <property name="text">
-                   <string>Open Relation</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QRadioButton" name="radio_memberRelation_taken">
-                  <property name="text">
-                   <string>Taken</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="4">
-                 <widget class="QRadioButton" name="radio_memberRelation_none">
-                  <property name="text">
-                   <string>None</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <widget class="QGroupBox" name="groupbox_memberType">
-               <property name="title">
-                <string>Member Type</string>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_9">
-                <item row="0" column="1">
-                 <widget class="QRadioButton" name="radio_memberType_is_model">
-                  <property name="text">
-                   <string>Is Model</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QRadioButton" name="radio_memberType_is_staff">
-                  <property name="text">
-                   <string>Is Staff</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QRadioButton" name="radio_memberType_is_online">
-                  <property name="text">
-                   <string>Is Online</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QRadioButton" name="radio_memberType_none">
-                  <property name="text">
-                   <string>None</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QGroupBox" name="groupbox_memberGender">
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="title">
-                <string>Member Gender</string>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_11">
-                <item row="0" column="2">
-                 <widget class="QRadioButton" name="radio_memberGender_female">
-                  <property name="text">
-                   <string>Female</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="4">
-                 <widget class="QRadioButton" name="radio_memberGender_female_couple">
-                  <property name="text">
-                   <string>Female Couple</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QRadioButton" name="radio_memberGender_trans_female">
-                  <property name="text">
-                   <string>Trans Female</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QRadioButton" name="radio_memberGender_male">
-                  <property name="text">
-                   <string>Male</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="3">
-                 <widget class="QRadioButton" name="radio_memberGender_other">
-                  <property name="text">
-                   <string>Other</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="5">
-                 <widget class="QRadioButton" name="radio_memberGender_non_binary">
-                  <property name="text">
-                   <string>Non Binary</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="3">
-                 <widget class="QRadioButton" name="radio_memberGender_couple">
-                  <property name="text">
-                   <string>Couple</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="2">
-                 <widget class="QRadioButton" name="radio_memberGender_trans_male">
-                  <property name="text">
-                   <string>Trans Male</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="4">
-                 <widget class="QRadioButton" name="radio_memberGender_none">
-                  <property name="text">
-                   <string>None</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QGroupBox" name="groupbox_sortingFilters">
-               <property name="title">
-                <string>Sorting Filters (Videos)</string>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_12">
-                <item row="2" column="2">
-                 <widget class="QCheckBox" name="checkbox_sorting_recent">
-                  <property name="text">
-                   <string>Recent</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="2">
-                 <widget class="QCheckBox" name="checkbox_sorting_weekly">
-                  <property name="text">
-                   <string>Weekly</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="3">
-                 <widget class="QCheckBox" name="checkbox_sorting_yearly">
-                  <property name="text">
-                   <string>Yearly</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="5">
-                 <widget class="QCheckBox" name="checkbox_sorting_hd">
-                  <property name="text">
-                   <string>HD</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="3">
-                 <widget class="QCheckBox" name="checkbox_sorting_longest">
-                  <property name="text">
-                   <string>Longest</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QCheckBox" name="checkbox_sorting_daily">
-                  <property name="text">
-                   <string>Daily</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QCheckBox" name="checkbox_sorting_top_rated">
-                  <property name="text">
-                   <string>Top rated</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="4">
-                 <widget class="QCheckBox" name="checkbox_sorting_views">
-                  <property name="text">
-                   <string>Views</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="4">
-                 <widget class="QCheckBox" name="checkbox_sorting_all_time">
-                  <property name="text">
-                   <string>All Time</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
              <item row="0" column="0">
-              <widget class="QGroupBox" name="groupbox_memberContent">
-               <property name="title">
-                <string>Member Content</string>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_10">
-                <item row="0" column="2">
-                 <widget class="QRadioButton" name="radio_memberContent_has_playlists">
-                  <property name="text">
-                   <string>Has Playlists</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QRadioButton" name="radio_memberContent_has_videos">
-                  <property name="text">
-                   <string>Has Videos</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="3">
-                 <widget class="QRadioButton" name="radio_memberContent_offers_fan_club">
-                  <property name="text">
-                   <string>Offers Fan Club</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QRadioButton" name="radio_memberContent_has_photos">
-                  <property name="text">
-                   <string>Has Photos</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QRadioButton" name="radio_memberContent_custom_videos">
-                  <property name="text">
-                   <string>Offers custom Videos</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QRadioButton" name="radio_memberContent_has_avatar">
-                  <property name="text">
-                   <string>Has Avatar</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="2">
-                 <widget class="QRadioButton" name="radio_memberContent_none">
-                  <property name="text">
-                   <string>None</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
+              <widget class="QTreeWidget" name="tree_widget_search">
+               <column>
+                <property name="text">
+                 <string notr="true">1</string>
+                </property>
+               </column>
               </widget>
              </item>
             </layout>

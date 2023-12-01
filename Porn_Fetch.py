@@ -348,7 +348,8 @@ class PornFetch(QWidget):
 
         # Search
         self.ui.button_search_videos.clicked.connect(self.basic_search)
-        self.ui.button_search_filters.clicked.connect(self.search_videos)
+        self.ui.button_search_users.clicked.connect(self.search_users)
+        self.ui.button_search_pornstar.clicked.connect(self.search_pornstars)
 
         logger_debug("Connected Buttons!")
 
@@ -872,58 +873,29 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         search = client.search(query)
         self.add_to_tree_widget(search, search_limit=search_limit)
 
-    def search_videos(self):
-        """I don't know how this function even works. Ask ChatGPT about it. No joke, I don't understand it."""
-        include_filters = []
-        exclude_filters = []
+    def search_pornstars(self):
+        query = self.ui.lineedit_search_pornstar_query.text()
         self.update_settings()
-        language = self.api_language
+        api_language = self.api_language
         search_limit = self.search_limit
+        client = Client(language=api_language)
+        search = client.search_pornstar(name=query)
+        self.add_to_treewWidget_SEARCH(search, search_limit=search_limit)
 
-        self.client = Client(language=language)
+    def search_users(self):
+        query = self.ui.lineedit_search_users_query.text()
+        self.update_settings()
+        api_language = self.api_language
+        search_limit = self.search_limit
+        client = Client(language=api_language)
+        search = client.search_user(username=query)
+        self.add_to_treewWidget_SEARCH(search, search_limit=search_limit)
 
-        filter_objects = {
-            'include': [self.selected_category],
-            'exclude': [self.excluded_categories_filter]
-        }
+    def add_to_treewWidget_SEARCH(self, search, search_limit):
+        ""
+        for x in search:
+            print(x.videos)
 
-        for action, filters in filter_objects.items():
-            for filter_object in filters:
-                if isinstance(filter_object, locals.Param):
-                    if action == 'include':
-                        include_filters.append(filter_object)
-                    elif action == 'exclude':
-                        exclude_filters.append(filter_object)
-                else:
-                    print(f"Invalid filter")
-
-        if include_filters:
-            combined_include_filter = include_filters[0]
-            for filter_object in include_filters[1:]:
-                combined_include_filter |= filter_object
-        else:
-            combined_include_filter = None
-
-        if exclude_filters:
-            combined_exclude_filter = exclude_filters[0]
-            for filter_object in exclude_filters[1:]:
-                combined_exclude_filter -= filter_object
-        else:
-            combined_exclude_filter = None
-
-        query = self.ui.lineedit_search_query.text()
-
-        if combined_include_filter and combined_exclude_filter:
-            final_filter = combined_include_filter - combined_exclude_filter
-            query_object = self.client.search(query, final_filter)
-        elif combined_include_filter:
-            query_object = self.client.search(query, combined_include_filter)
-        elif combined_exclude_filter:
-            query_object = self.client.search(query, -combined_exclude_filter)
-        else:
-            query_object = self.client.search(query)
-
-        self.add_to_tree_widget(iterator=query, search_limit=search_limit)
 
 
 def main():
