@@ -30,56 +30,6 @@ class Ui_Porn_Fetch_Widget(object):
         Porn_Fetch_Widget.setWindowIcon(icon)
         self.gridLayout_8 = QGridLayout(Porn_Fetch_Widget)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
-        self.widget = QWidget(Porn_Fetch_Widget)
-        self.widget.setObjectName(u"widget")
-        self.widget.setStyleSheet(u"background-color: rgb(34, 34, 34);\n"
-"border-radius: 10px;")
-        self.gridLayout = QGridLayout(self.widget)
-        self.gridLayout.setSpacing(0)
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.verticalSpacer = QSpacerItem(20, 30, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.gridLayout.addItem(self.verticalSpacer, 4, 0, 1, 1)
-
-        self.button_switch_credits = QPushButton(self.widget)
-        self.button_switch_credits.setObjectName(u"button_switch_credits")
-        self.button_switch_credits.setMinimumSize(QSize(50, 50))
-        self.button_switch_credits.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_switch_credits.setStyleSheet(u"border: none;")
-        self.button_switch_credits.setIconSize(QSize(32, 32))
-
-        self.gridLayout.addWidget(self.button_switch_credits, 3, 0, 1, 1)
-
-        self.button_switch_home = QPushButton(self.widget)
-        self.button_switch_home.setObjectName(u"button_switch_home")
-        self.button_switch_home.setMinimumSize(QSize(50, 50))
-        self.button_switch_home.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_switch_home.setStyleSheet(u"border: none")
-        self.button_switch_home.setIconSize(QSize(32, 32))
-
-        self.gridLayout.addWidget(self.button_switch_home, 0, 0, 1, 1)
-
-        self.button_switch_settings = QPushButton(self.widget)
-        self.button_switch_settings.setObjectName(u"button_switch_settings")
-        self.button_switch_settings.setMinimumSize(QSize(50, 50))
-        self.button_switch_settings.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_switch_settings.setStyleSheet(u"border: none;")
-        self.button_switch_settings.setIconSize(QSize(32, 32))
-
-        self.gridLayout.addWidget(self.button_switch_settings, 2, 0, 1, 1)
-
-        self.button_switch_search = QPushButton(self.widget)
-        self.button_switch_search.setObjectName(u"button_switch_search")
-        self.button_switch_search.setMinimumSize(QSize(50, 50))
-        self.button_switch_search.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_switch_search.setStyleSheet(u"border: none;")
-        self.button_switch_search.setIconSize(QSize(32, 32))
-
-        self.gridLayout.addWidget(self.button_switch_search, 1, 0, 1, 1)
-
-
-        self.gridLayout_8.addWidget(self.widget, 0, 0, 3, 2)
-
         self.widget_status = QWidget(Porn_Fetch_Widget)
         self.widget_status.setObjectName(u"widget_status")
         self.widget_status.setStyleSheet(u"background-color: rgb(34, 34, 34);\n"
@@ -180,6 +130,56 @@ class Ui_Porn_Fetch_Widget(object):
 
 
         self.gridLayout_8.addWidget(self.widget_status, 2, 2, 1, 1)
+
+        self.widget = QWidget(Porn_Fetch_Widget)
+        self.widget.setObjectName(u"widget")
+        self.widget.setStyleSheet(u"background-color: rgb(34, 34, 34);\n"
+"border-radius: 10px;")
+        self.gridLayout = QGridLayout(self.widget)
+        self.gridLayout.setSpacing(0)
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.verticalSpacer = QSpacerItem(20, 30, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout.addItem(self.verticalSpacer, 4, 0, 1, 1)
+
+        self.button_switch_credits = QPushButton(self.widget)
+        self.button_switch_credits.setObjectName(u"button_switch_credits")
+        self.button_switch_credits.setMinimumSize(QSize(50, 50))
+        self.button_switch_credits.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_switch_credits.setStyleSheet(u"border: none;")
+        self.button_switch_credits.setIconSize(QSize(32, 32))
+
+        self.gridLayout.addWidget(self.button_switch_credits, 3, 0, 1, 1)
+
+        self.button_switch_home = QPushButton(self.widget)
+        self.button_switch_home.setObjectName(u"button_switch_home")
+        self.button_switch_home.setMinimumSize(QSize(50, 50))
+        self.button_switch_home.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_switch_home.setStyleSheet(u"border: none")
+        self.button_switch_home.setIconSize(QSize(32, 32))
+
+        self.gridLayout.addWidget(self.button_switch_home, 0, 0, 1, 1)
+
+        self.button_switch_settings = QPushButton(self.widget)
+        self.button_switch_settings.setObjectName(u"button_switch_settings")
+        self.button_switch_settings.setMinimumSize(QSize(50, 50))
+        self.button_switch_settings.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_switch_settings.setStyleSheet(u"border: none;")
+        self.button_switch_settings.setIconSize(QSize(32, 32))
+
+        self.gridLayout.addWidget(self.button_switch_settings, 2, 0, 1, 1)
+
+        self.button_switch_search = QPushButton(self.widget)
+        self.button_switch_search.setObjectName(u"button_switch_search")
+        self.button_switch_search.setMinimumSize(QSize(50, 50))
+        self.button_switch_search.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_switch_search.setStyleSheet(u"border: none;")
+        self.button_switch_search.setIconSize(QSize(32, 32))
+
+        self.gridLayout.addWidget(self.button_switch_search, 1, 0, 1, 1)
+
+
+        self.gridLayout_8.addWidget(self.widget, 0, 0, 3, 2)
 
         self.stacked_widget_main = QStackedWidget(Porn_Fetch_Widget)
         self.stacked_widget_main.setObjectName(u"stacked_widget_main")
@@ -773,13 +773,162 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridLayout_28.addLayout(self.gridLayout_27, 0, 0, 1, 1)
 
         self.stacked_widget_main.addWidget(self.page_4)
+        self.page_5 = QWidget()
+        self.page_5.setObjectName(u"page_5")
+        self.gridLayoutWidget = QWidget(self.page_5)
+        self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
+        self.gridLayoutWidget.setGeometry(QRect(370, -10, 851, 111))
+        self.gridLayout_3 = QGridLayout(self.gridLayoutWidget)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.gridLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.lineEdit = QLineEdit(self.gridLayoutWidget)
+        self.lineEdit.setObjectName(u"lineEdit")
+
+        self.gridLayout_3.addWidget(self.lineEdit, 0, 1, 1, 1)
+
+        self.label = QLabel(self.gridLayoutWidget)
+        self.label.setObjectName(u"label")
+
+        self.gridLayout_3.addWidget(self.label, 0, 0, 1, 1)
+
+        self.pushButton = QPushButton(self.gridLayoutWidget)
+        self.pushButton.setObjectName(u"pushButton")
+
+        self.gridLayout_3.addWidget(self.pushButton, 0, 2, 1, 1)
+
+        self.label_2 = QLabel(self.gridLayoutWidget)
+        self.label_2.setObjectName(u"label_2")
+
+        self.gridLayout_3.addWidget(self.label_2, 1, 0, 1, 1)
+
+        self.label_3 = QLabel(self.gridLayoutWidget)
+        self.label_3.setObjectName(u"label_3")
+
+        self.gridLayout_3.addWidget(self.label_3, 2, 0, 1, 1)
+
+        self.lineEdit_2 = QLineEdit(self.gridLayoutWidget)
+        self.lineEdit_2.setObjectName(u"lineEdit_2")
+
+        self.gridLayout_3.addWidget(self.lineEdit_2, 1, 1, 1, 1)
+
+        self.lineEdit_3 = QLineEdit(self.gridLayoutWidget)
+        self.lineEdit_3.setObjectName(u"lineEdit_3")
+
+        self.gridLayout_3.addWidget(self.lineEdit_3, 2, 1, 1, 1)
+
+        self.pushButton_3 = QPushButton(self.gridLayoutWidget)
+        self.pushButton_3.setObjectName(u"pushButton_3")
+
+        self.gridLayout_3.addWidget(self.pushButton_3, 1, 2, 1, 1)
+
+        self.pushButton_2 = QPushButton(self.gridLayoutWidget)
+        self.pushButton_2.setObjectName(u"pushButton_2")
+
+        self.gridLayout_3.addWidget(self.pushButton_2, 2, 2, 1, 1)
+
+        self.groupBox = QGroupBox(self.page_5)
+        self.groupBox.setObjectName(u"groupBox")
+        self.groupBox.setGeometry(QRect(400, 130, 731, 211))
+        self.gridLayout_9 = QGridLayout(self.groupBox)
+        self.gridLayout_9.setObjectName(u"gridLayout_9")
+        self.gridLayout_4 = QGridLayout()
+        self.gridLayout_4.setObjectName(u"gridLayout_4")
+        self.label_9 = QLabel(self.groupBox)
+        self.label_9.setObjectName(u"label_9")
+
+        self.gridLayout_4.addWidget(self.label_9, 0, 2, 1, 1)
+
+        self.label_11 = QLabel(self.groupBox)
+        self.label_11.setObjectName(u"label_11")
+
+        self.gridLayout_4.addWidget(self.label_11, 3, 2, 1, 1)
+
+        self.label_5 = QLabel(self.groupBox)
+        self.label_5.setObjectName(u"label_5")
+
+        self.gridLayout_4.addWidget(self.label_5, 3, 0, 1, 1)
+
+        self.label_4 = QLabel(self.groupBox)
+        self.label_4.setObjectName(u"label_4")
+
+        self.gridLayout_4.addWidget(self.label_4, 0, 0, 1, 1)
+
+        self.lineEdit_6 = QLineEdit(self.groupBox)
+        self.lineEdit_6.setObjectName(u"lineEdit_6")
+
+        self.gridLayout_4.addWidget(self.lineEdit_6, 2, 1, 1, 1)
+
+        self.label_6 = QLabel(self.groupBox)
+        self.label_6.setObjectName(u"label_6")
+
+        self.gridLayout_4.addWidget(self.label_6, 2, 0, 1, 1)
+
+        self.label_7 = QLabel(self.groupBox)
+        self.label_7.setObjectName(u"label_7")
+
+        self.gridLayout_4.addWidget(self.label_7, 1, 0, 1, 1)
+
+        self.label_10 = QLabel(self.groupBox)
+        self.label_10.setObjectName(u"label_10")
+
+        self.gridLayout_4.addWidget(self.label_10, 2, 2, 1, 1)
+
+        self.lineEdit_10 = QLineEdit(self.groupBox)
+        self.lineEdit_10.setObjectName(u"lineEdit_10")
+
+        self.gridLayout_4.addWidget(self.lineEdit_10, 0, 1, 1, 1)
+
+        self.label_8 = QLabel(self.groupBox)
+        self.label_8.setObjectName(u"label_8")
+
+        self.gridLayout_4.addWidget(self.label_8, 1, 2, 1, 1)
+
+        self.lineEdit_8 = QLineEdit(self.groupBox)
+        self.lineEdit_8.setObjectName(u"lineEdit_8")
+
+        self.gridLayout_4.addWidget(self.lineEdit_8, 3, 1, 1, 1)
+
+        self.lineEdit_5 = QLineEdit(self.groupBox)
+        self.lineEdit_5.setObjectName(u"lineEdit_5")
+
+        self.gridLayout_4.addWidget(self.lineEdit_5, 1, 1, 1, 1)
+
+        self.lineEdit_4 = QLineEdit(self.groupBox)
+        self.lineEdit_4.setObjectName(u"lineEdit_4")
+
+        self.gridLayout_4.addWidget(self.lineEdit_4, 0, 3, 1, 1)
+
+        self.lineEdit_9 = QLineEdit(self.groupBox)
+        self.lineEdit_9.setObjectName(u"lineEdit_9")
+
+        self.gridLayout_4.addWidget(self.lineEdit_9, 1, 3, 1, 1)
+
+        self.lineEdit_7 = QLineEdit(self.groupBox)
+        self.lineEdit_7.setObjectName(u"lineEdit_7")
+
+        self.gridLayout_4.addWidget(self.lineEdit_7, 2, 3, 1, 1)
+
+        self.lineEdit_11 = QLineEdit(self.groupBox)
+        self.lineEdit_11.setObjectName(u"lineEdit_11")
+
+        self.gridLayout_4.addWidget(self.lineEdit_11, 3, 3, 1, 1)
+
+
+        self.gridLayout_9.addLayout(self.gridLayout_4, 0, 0, 1, 1)
+
+        self.pushButton_4 = QPushButton(self.groupBox)
+        self.pushButton_4.setObjectName(u"pushButton_4")
+
+        self.gridLayout_9.addWidget(self.pushButton_4, 1, 0, 1, 1)
+
+        self.stacked_widget_main.addWidget(self.page_5)
 
         self.gridLayout_8.addWidget(self.stacked_widget_main, 0, 2, 1, 1)
 
 
         self.retranslateUi(Porn_Fetch_Widget)
 
-        self.stacked_widget_main.setCurrentIndex(0)
+        self.stacked_widget_main.setCurrentIndex(2)
         self.stacked_widget_top.setCurrentIndex(1)
 
 
@@ -788,10 +937,6 @@ class Ui_Porn_Fetch_Widget(object):
 
     def retranslateUi(self, Porn_Fetch_Widget):
         Porn_Fetch_Widget.setWindowTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Porn_Fetch_Widget", None))
-        self.button_switch_credits.setText("")
-        self.button_switch_home.setText("")
-        self.button_switch_settings.setText("")
-        self.button_switch_search.setText("")
         self.label_total_progress.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
         self.label_progress_pornhub.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"PornHub:", None))
         self.label_progress_hqporner.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"HQPorner:", None))
@@ -800,6 +945,10 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_debug.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Debug:", None))
         self.label_status.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Status:", None))
         self.label_progress_information.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Information: The total progressbar only counts the total progress of all PornHub videos being downloaded. I can't add it for HQPorner due to some differences in how the progress is being handled across the different websites!", None))
+        self.button_switch_credits.setText("")
+        self.button_switch_home.setText("")
+        self.button_switch_settings.setText("")
+        self.button_switch_search.setText("")
         self.label_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"File:", None))
         self.button_open_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Open File", None))
         self.lineedit_url.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter PornHub or HQPorner Video URL", None))
@@ -866,5 +1015,21 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_quality_best.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Best", None))
         self.radio_quality_worst.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Worst", None))
         self.button_settings_apply.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Apply / Reload", None))
+        self.label.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Video URL:", None))
+        self.pushButton.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"PushButton", None))
+        self.label_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Video URL:", None))
+        self.label_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Video URL:", None))
+        self.pushButton_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"PushButton", None))
+        self.pushButton_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"PushButton", None))
+        self.groupBox.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Video Information:", None))
+        self.label_9.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Hotspots:", None))
+        self.label_11.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Orientation:", None))
+        self.label_5.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Pornstars:", None))
+        self.label_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Title:", None))
+        self.label_6.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Duration:", None))
+        self.label_7.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Views:", None))
+        self.label_10.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Rating:", None))
+        self.label_8.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Tags:", None))
+        self.pushButton_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download Thumbnail", None))
     # retranslateUi
 

@@ -1,7 +1,5 @@
 from phub import Client
-from phub.locals import *
-from phub import locals
-c = Client()
-c.search
 
-locals.Member.
+c = Client(language="en")
+url = ""
+c.get(url).
