@@ -28,21 +28,8 @@ border-radius: 10px;</string>
       <property name="spacing">
        <number>0</number>
       </property>
-      <item row="4" column="0">
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>30</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="3" column="0">
-       <widget class="QPushButton" name="button_switch_credits">
+      <item row="1" column="0">
+       <widget class="QPushButton" name="button_switch_search">
         <property name="minimumSize">
          <size>
           <width>50</width>
@@ -54,31 +41,6 @@ border-radius: 10px;</string>
         </property>
         <property name="styleSheet">
          <string notr="true">border: none;</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>32</width>
-          <height>32</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QPushButton" name="button_switch_home">
-        <property name="minimumSize">
-         <size>
-          <width>50</width>
-          <height>50</height>
-         </size>
-        </property>
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">border: none</string>
         </property>
         <property name="text">
          <string/>
@@ -116,8 +78,71 @@ border-radius: 10px;</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QPushButton" name="button_switch_search">
+      <item row="5" column="0">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>30</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="0">
+       <widget class="QPushButton" name="button_switch_home">
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: none</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QPushButton" name="button_switch_credits">
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: none;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QPushButton" name="button_switch_metadata">
         <property name="minimumSize">
          <size>
           <width>50</width>
@@ -1025,380 +1050,359 @@ QPushButton:pressed {
       </layout>
      </widget>
      <widget class="QWidget" name="page_5">
-      <widget class="QWidget" name="gridLayoutWidget">
-       <property name="geometry">
-        <rect>
-         <x>370</x>
-         <y>-10</y>
-         <width>851</width>
-         <height>111</height>
-        </rect>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_3">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_metadata_video_url">
-          <property name="text">
-           <string>Video URL:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QPushButton" name="button_metadata_user_start">
-          <property name="text">
-           <string>Start</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="lineedit_metadata_video_url"/>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="lineedit_metadata_user_url"/>
-        </item>
-        <item row="0" column="2">
-         <widget class="QPushButton" name="button_metadata_video_start">
-          <property name="text">
-           <string>Start</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_metadata_user_url">
-          <property name="text">
-           <string>User URL:</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QGroupBox" name="groupBox">
-       <property name="geometry">
-        <rect>
-         <x>780</x>
-         <y>390</y>
-         <width>731</width>
-         <height>211</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Video Information:</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_9">
-        <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout_4">
-          <item row="0" column="2">
-           <widget class="QLabel" name="label_9">
-            <property name="text">
-             <string>Hotspots:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_5">
-            <property name="text">
-             <string>Pornstars:</string>
-            </property>
-           </widget>
-          </item>
+      <layout class="QGridLayout" name="gridLayout_15">
+       <item row="0" column="0" colspan="2">
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_metadata_video_url">
+           <property name="text">
+            <string>Video URL:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QPushButton" name="button_metadata_user_start">
+           <property name="text">
+            <string>Start</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="lineedit_metadata_video_url"/>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="lineedit_metadata_user_url"/>
+         </item>
+         <item row="0" column="2">
+          <widget class="QPushButton" name="button_metadata_video_start">
+           <property name="text">
+            <string>Start</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_metadata_user_url">
+           <property name="text">
+            <string>User URL:</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupbox_advanced_user_information">
+         <property name="title">
+          <string>Advanced User Information</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_13">
           <item row="0" column="0">
-           <widget class="QLabel" name="label_4">
-            <property name="text">
-             <string>Title:</string>
-            </property>
-           </widget>
+           <layout class="QGridLayout" name="gridLayout_12">
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_height">
+              <property name="text">
+               <string>Height:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <widget class="QLabel" name="label_hair_color">
+              <property name="text">
+               <string>Hair Color:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="2">
+             <widget class="QLabel" name="label_videos_watched">
+              <property name="text">
+               <string>Videos Watched:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QLabel" name="label_turn_ons">
+              <property name="text">
+               <string>Turn Ons:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="QLineEdit" name="lineedit_user_hair_color"/>
+            </item>
+            <item row="5" column="0">
+             <widget class="QLabel" name="label_ethnicity">
+              <property name="text">
+               <string>Ethnicity:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_interested_in">
+              <property name="text">
+               <string>Interested in:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_gender">
+              <property name="text">
+               <string>Gender:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="lineedit_user_gender"/>
+            </item>
+            <item row="4" column="2">
+             <widget class="QLabel" name="label_video_views">
+              <property name="text">
+               <string>Video Views:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QLineEdit" name="lineedit_user_height"/>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="label_widght">
+              <property name="text">
+               <string>Weight:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="lineedit_user_interested_in"/>
+            </item>
+            <item row="3" column="2">
+             <widget class="QLabel" name="label_turn_offs">
+              <property name="text">
+               <string>Turn Offs:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="QLineEdit" name="lineedit_user_ethnicity"/>
+            </item>
+            <item row="5" column="2">
+             <widget class="QLabel" name="label_profile_views">
+              <property name="text">
+               <string>Profile Views:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="label_piercings">
+              <property name="text">
+               <string>Piercings:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QLineEdit" name="lineedit_user_weight"/>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_relationship">
+              <property name="text">
+               <string>Relationship:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="lineedit_user_relationship"/>
+            </item>
+            <item row="0" column="3">
+             <widget class="QLineEdit" name="lineedit_user_piercings"/>
+            </item>
+            <item row="1" column="3">
+             <widget class="QLineEdit" name="lineedit_user_fake_boobs"/>
+            </item>
+            <item row="2" column="3">
+             <widget class="QLineEdit" name="lineedit_user_turn_ons"/>
+            </item>
+            <item row="3" column="3">
+             <widget class="QLineEdit" name="lineedit_user_turn_offs"/>
+            </item>
+            <item row="4" column="3">
+             <widget class="QLineEdit" name="lineedit_user_video_views"/>
+            </item>
+            <item row="5" column="3">
+             <widget class="QLineEdit" name="lineedit_user_profile_views"/>
+            </item>
+            <item row="6" column="3">
+             <widget class="QLineEdit" name="lineedit_user_videos_watched"/>
+            </item>
+            <item row="7" column="1" colspan="3">
+             <widget class="QLineEdit" name="lineedit_user_interests_hobbies"/>
+            </item>
+            <item row="7" column="0">
+             <widget class="QLabel" name="label_interests_hobbies">
+              <property name="text">
+               <string>Interests / Hobbies:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLabel" name="label_fake_boobs">
+              <property name="text">
+               <string>Fake Boobs:</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
-          <item row="2" column="1">
-           <widget class="QLineEdit" name="lineEdit_6"/>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Basic User Information</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_11">
+          <item row="0" column="0">
+           <layout class="QGridLayout" name="gridLayout_10">
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="lineedit_user_name"/>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="lineedit_user_type"/>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_12">
+              <property name="text">
+               <string>Name:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QPushButton" name="button_user_download_avatar">
+              <property name="text">
+               <string>Download User Avatar</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_13">
+              <property name="text">
+               <string>User Type:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QPushButton" name="button_user_get_bio">
+              <property name="text">
+               <string>Get User's Bio</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_6">
-            <property name="text">
-             <string>Duration:</string>
-            </property>
-           </widget>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Video Information:</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_9">
+          <item row="0" column="0">
+           <layout class="QGridLayout" name="gridLayout_4">
+            <item row="0" column="2">
+             <widget class="QLabel" name="label_video_hotspots">
+              <property name="text">
+               <string>Hotspots:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_video_pornstars">
+              <property name="text">
+               <string>Pornstars:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_video_title">
+              <property name="text">
+               <string>Title:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="lineedit_video_duration"/>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_video_duration">
+              <property name="text">
+               <string>Duration:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_video_views_2">
+              <property name="text">
+               <string>Views:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QLabel" name="label_video_rating">
+              <property name="text">
+               <string>Rating:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="lineedit_video_title"/>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLabel" name="label_video_tags">
+              <property name="text">
+               <string>Tags:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QLineEdit" name="lineedit_video_pornstars"/>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="lineedit_video_views"/>
+            </item>
+            <item row="0" column="3">
+             <widget class="QLineEdit" name="lineedit_video_hotspots"/>
+            </item>
+            <item row="1" column="3">
+             <widget class="QLineEdit" name="lineedit_video_tags"/>
+            </item>
+            <item row="2" column="3">
+             <widget class="QLineEdit" name="lineedit_video_rating"/>
+            </item>
+            <item row="3" column="3">
+             <widget class="QLineEdit" name="lineedit_video_orientation"/>
+            </item>
+            <item row="3" column="2">
+             <widget class="QLabel" name="label_video_orientation">
+              <property name="text">
+               <string>Orientation:</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_7">
+           <widget class="QPushButton" name="button_video_thumbnail_download">
             <property name="text">
-             <string>Views:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QLabel" name="label_10">
-            <property name="text">
-             <string>Rating:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEdit_10"/>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLabel" name="label_8">
-            <property name="text">
-             <string>Tags:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLineEdit" name="lineEdit_8"/>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_5"/>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLineEdit" name="lineEdit_4"/>
-          </item>
-          <item row="1" column="3">
-           <widget class="QLineEdit" name="lineEdit_9"/>
-          </item>
-          <item row="2" column="3">
-           <widget class="QLineEdit" name="lineEdit_7"/>
-          </item>
-          <item row="3" column="3">
-           <widget class="QLineEdit" name="lineEdit_11"/>
-          </item>
-          <item row="3" column="2">
-           <widget class="QLabel" name="label_11">
-            <property name="text">
-             <string>Orientation:</string>
+             <string>Download Thumbnail</string>
             </property>
            </widget>
           </item>
          </layout>
-        </item>
-        <item row="1" column="0">
-         <widget class="QPushButton" name="pushButton_4">
-          <property name="text">
-           <string>Download Thumbnail</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="geometry">
-        <rect>
-         <x>220</x>
-         <y>370</y>
-         <width>551</width>
-         <height>241</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Basic User Information</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_11">
-        <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout_10">
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEdit_12"/>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_15"/>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_12">
-            <property name="text">
-             <string>Name:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QPushButton" name="pushButton_5">
-            <property name="text">
-             <string>Download User Avatar</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_13">
-            <property name="text">
-             <string>User Type:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QPushButton" name="pushButton_6">
-            <property name="text">
-             <string>Get User's Bio</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QGroupBox" name="groupbox_advanced_user_information">
-       <property name="geometry">
-        <rect>
-         <x>610</x>
-         <y>140</y>
-         <width>691</width>
-         <height>251</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Advanced User Information</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_13">
-        <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout_12">
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_24">
-            <property name="text">
-             <string>Height:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0">
-           <widget class="QLabel" name="label_23">
-            <property name="text">
-             <string>Hair Color:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="2">
-           <widget class="QLabel" name="label_17">
-            <property name="text">
-             <string>Videos Watched:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QLabel" name="label_20">
-            <property name="text">
-             <string>Turn Ons:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="1">
-           <widget class="QLineEdit" name="lineEdit_21"/>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="label_26">
-            <property name="text">
-             <string>Ethnicity:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_19">
-            <property name="text">
-             <string>Interested in:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_22">
-            <property name="text">
-             <string>Gender:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLineEdit" name="lineEdit_19"/>
-          </item>
-          <item row="4" column="2">
-           <widget class="QLabel" name="label_18">
-            <property name="text">
-             <string>Video Views:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLineEdit" name="lineEdit_18"/>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="label_27">
-            <property name="text">
-             <string>Weight:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_16"/>
-          </item>
-          <item row="3" column="2">
-           <widget class="QLabel" name="label_25">
-            <property name="text">
-             <string>Turn Offs:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QLineEdit" name="lineEdit_23"/>
-          </item>
-          <item row="5" column="2">
-           <widget class="QLabel" name="label_16">
-            <property name="text">
-             <string>Profile Views:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="label_21">
-            <property name="text">
-             <string>Piercings:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QLineEdit" name="lineEdit_17"/>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_28">
-            <property name="text">
-             <string>Relationship:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEdit_13"/>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLineEdit" name="lineEdit_14"/>
-          </item>
-          <item row="1" column="3">
-           <widget class="QLineEdit" name="lineEdit_20"/>
-          </item>
-          <item row="2" column="3">
-           <widget class="QLineEdit" name="lineEdit_29"/>
-          </item>
-          <item row="3" column="3">
-           <widget class="QLineEdit" name="lineEdit_28"/>
-          </item>
-          <item row="4" column="3">
-           <widget class="QLineEdit" name="lineEdit_27"/>
-          </item>
-          <item row="5" column="3">
-           <widget class="QLineEdit" name="lineEdit_26"/>
-          </item>
-          <item row="6" column="3">
-           <widget class="QLineEdit" name="lineEdit_25"/>
-          </item>
-          <item row="7" column="1" colspan="3">
-           <widget class="QLineEdit" name="lineEdit_22"/>
-          </item>
-          <item row="7" column="0">
-           <widget class="QLabel" name="label_15">
-            <property name="text">
-             <string>Interests / Hobbies:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLabel" name="label_14">
-            <property name="text">
-             <string>Fake Boobs:</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_6">
+      <layout class="QGridLayout" name="gridLayout_31"/>
      </widget>
     </widget>
    </item>

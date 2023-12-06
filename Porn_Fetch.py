@@ -1,6 +1,6 @@
 import os.path
 import sys
-# import src.frontend.resources
+import src.frontend.resources
 from configparser import ConfigParser
 
 import requests
@@ -56,6 +56,11 @@ class QTreeWidgetSignal(QObject):
     get_total = Signal(str, Quality)
     start_undefined_range = Signal()
     stop_undefined_range = Signal()
+
+
+class MetadataSignals(QObject):
+    data = Signal(list)
+    start_undefined = Signal()
 
 
 class DownloadThread(QRunnable):
@@ -143,6 +148,57 @@ class QTreeWidgetDownloadThread(QRunnable):
             self.semaphore.acquire()
             logger_debug("Semaphore Acquired")
             self.signals.progress.emit(video_url)
+
+
+class MetadataVideos(QRunnable):
+    def __init__(self, client, url):
+        super(MetadataVideos, self).__init__()
+        self.signals = MetadataSignals()
+        self.client = client
+        self.url = url
+
+    def run(self):
+        self.signals.start_undefined.emit()
+
+        self.client = Client()
+        video = self.client.get(self.url)
+
+        title = video.title
+        views = video.views
+        duration = round(video.duration.seconds / 60)
+        pornstar_generator = video.pornstars
+        tags_generator = video.tags
+        rating = video.like
+        orientation = video.orientation
+        hotspots = video.hotspots
+
+        pornstar_list = []
+        tags_list = []
+        hotspots_list = []
+
+        for hotspot in hotspots:
+            hotspots_list.append(str(hotspot))
+
+        for pornstar in pornstar_generator:
+            pornstar_list.append(pornstar.name)
+
+        for tag in tags_generator:
+            tags_list.append(tag.name)
+
+        pornstars = "".join(pornstar_list)
+        tags = "".join(tags_list)
+        hotspots = "".join(hotspots_list)
+
+        like_string = QCoreApplication.tr("Likes")
+        dislike_string = QCoreApplication.tr("Dislikes")
+
+        rating = f"{like_string}: {rating.up} | {dislike_string}: {rating.down}"
+
+        data = [title, views, duration, orientation, pornstars, tags, rating, hotspots]
+        self.signals.data.emit(data)
+
+
+
 
 
 class License(QWidget):
@@ -238,6 +294,7 @@ class PornFetch(QWidget):
         self.ui.button_switch_home.setIcon(QIcon(":/images/graphics/download.svg"))
         self.ui.button_switch_settings.setIcon(QIcon(":/images/graphics/settings.svg"))
         self.ui.button_switch_credits.setIcon(QIcon(":/images/graphics/information.svg"))
+        self.ui.button_switch_metadata.setIcon(QIcon(":/images/graphics/list.svg"))
         self.setWindowIcon(QIcon(":/images/graphics/logo_transparent.ico"))
         logger_debug("Loaded Icons!")
 
@@ -250,6 +307,7 @@ class PornFetch(QWidget):
         self.ui.button_switch_settings.clicked.connect(self.switch_to_settings)
         self.ui.button_switch_credits.clicked.connect(self.switch_to_credits)
         self.ui.button_output_path_select.clicked.connect(self.select_output_path)
+        self.ui.button_switch_metadata.clicked.connect(self.switch_to_metadata)
 
         # Video Download Button Connections
         self.ui.button_download.clicked.connect(self.start_single_video)
@@ -278,6 +336,9 @@ class PornFetch(QWidget):
         self.ui.button_search_users.clicked.connect(self.search_users)
         self.ui.button_search_pornstar.clicked.connect(self.search_pornstars)
 
+        # Metadata
+        self.ui.button_metadata_video_start.clicked.connect(self.get_metadata_video)
+
         logger_debug("Connected Buttons!")
 
     def switch_to_home(self):
@@ -291,8 +352,11 @@ class PornFetch(QWidget):
     def switch_to_settings(self):
         self.ui.stacked_widget_main.setCurrentIndex(1)
 
-    def switch_to_credits(self):
+    def switch_to_metadata(self):
         self.ui.stacked_widget_main.setCurrentIndex(2)
+
+    def switch_to_credits(self):
+        self.ui.stacked_widget_main.setCurrentIndex(3)
 
     """
     The following are functions used by different other functions to handle data over different classes / threads.
@@ -702,7 +766,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         self.ui.progressbar_total.setRange(0, 0)
 
     def stop_undefined_range(self):
-        self.ui.progressbar_total.setRange(0, total_segments)
+        self.ui.progressbar_total.setRange(0, 1)
 
 
     """
@@ -822,6 +886,43 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         ""
         for x in search:
             print(x.videos)
+
+
+    def get_metadata_video(self):
+        api_language = self.api_language
+        video = self.ui.lineedit_metadata_video_url.text()
+
+        if check_video(url=video, language=api_language):
+            client = Client(language=api_language)
+
+            self.metadata_thread = MetadataVideos(client=client, url=video)
+            self.metadata_thread.signals.start_undefined.connect(self.start_undefined_range)
+            self.metadata_thread.signals.data.connect(self.apply_metadata_video)
+            self.threadpool.start(self.metadata_thread)
+
+    def apply_metadata_video(self, data):
+        title = data[0]
+        views = data[1]
+        duration = data[2]
+        orientation = data[3]
+        pornstars = data[4]
+        tags = data[5]
+        rating = data[6]
+        hotspots = data[7]
+
+        self.ui.lineedit_video_title.setText(title)
+        self.ui.lineedit_video_views.setText(str(views))
+        self.ui.lineedit_video_duration.setText(str(duration))
+        self.ui.lineedit_video_orientation.setText(orientation)
+        self.ui.lineedit_video_pornstars.setText(pornstars)
+        self.ui.lineedit_video_tags.setText(tags)
+        self.ui.lineedit_video_rating.setText(rating)
+        self.ui.lineedit_video_hotspots.setText(str(hotspots))
+        self.stop_undefined_range()
+
+    def get_metadata_user(self):
+        ""
+
 
 
 

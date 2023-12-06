@@ -1,9 +1,7 @@
 from phub import Client
 
 c = Client(language="en")
-url = "https://de.pornhub.com/model/candy-love"
-type_one = c.get_user(url).info
-for key in type_one:
-    print(key)
+url = "https://de.pornhub.com/view_video.php?viewkey=655c5f7ab4deb"
+video = c.get(url)
+print(video.orientation)
 
-print(len(type_one))
