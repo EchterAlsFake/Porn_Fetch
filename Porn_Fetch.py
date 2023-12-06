@@ -1,6 +1,6 @@
 import os.path
 import sys
-import src.frontend.resources
+# import src.frontend.resources
 from configparser import ConfigParser
 
 import requests
