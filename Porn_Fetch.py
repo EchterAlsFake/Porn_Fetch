@@ -141,7 +141,9 @@ class QTreeWidgetDownloadThread(QRunnable):
 
         total_segments = sum(
             [len(list(video.get_segments(quality=self.quality))) for video in video_objects])
+
         downloaded_segments = 0
+
         self.signals.stop_undefined_range.emit()
         for video_url in video_urls:
             logger_debug(f"Downloading: {video_url}")
@@ -224,6 +226,7 @@ class MetadataUser(QRunnable):
 
         self.signals.data.emit(data)
 
+
 class License(QWidget):
     """ License class to display the GPL 3 License to the user."""
 
@@ -274,6 +277,7 @@ class PornFetch(QWidget):
 
         # Variable initialization:
 
+        self.gui_language = None
         self.semaphore = None
         self.native_languages = None
         self.directory_system_map = None
@@ -362,6 +366,9 @@ class PornFetch(QWidget):
         # Metadata
         self.ui.button_metadata_video_start.clicked.connect(self.get_metadata_video)
         self.ui.button_metadata_user_start.clicked.connect(self.get_metadata_user)
+        self.ui.button_user_get_bio.clicked.connect(self.get_user_bio)
+        self.ui.button_user_download_avatar.clicked.connect(self.get_user_avatar)
+        self.ui.button_video_thumbnail_download.clicked.connect(self.get_video_thumbnail)
 
         logger_debug("Connected Buttons!")
 
@@ -541,6 +548,20 @@ class PornFetch(QWidget):
         self.search_limit = self.conf.get("Video", "search_limit")
         self.output_path = self.conf.get("Video", "output_path")
 
+        self.gui_language = self.conf.get("UI", "language")
+        
+        if self.gui_language == "en":
+            self.ui.radio_ui_language_english.setChecked(True)
+        
+        elif self.gui_language == "de":
+            self.ui.radio_ui_language_german.setChecked(True)
+        
+        elif self.gui_language == "fr":
+            self.ui.radio_ui_language_french.setChecked(True)
+        
+        elif self.gui_language == "system":
+            self.ui.radio_ui_language_system.setChecked(True)
+
         self.semaphore = QSemaphore(int(self.semaphore_limit))
         logger_debug("Loaded User Settings!")
 
@@ -580,11 +601,25 @@ class PornFetch(QWidget):
         if self.ui.radio_api_language_custom.isChecked() and self.api_language not in self.native_languages:
             self.conf.set("Video", "language", self.api_language)
 
+        if self.ui.radio_ui_language_french.isChecked():
+            self.conf.set("UI", "language", "fr")
+
+        elif self.ui.radio_ui_language_german.isChecked():
+            self.conf.set("UI", "language", "de")
+
+        elif self.ui.radio_ui_language_english.isChecked():
+            self.conf.set("UI", "language", "en")
+
+        elif self.ui.radio_ui_language_system.isChecked():
+            self.conf.set("UI", "language", "system")
+
         self.update_settings()
 
         with open("config.ini", "w") as config_file:
             self.conf.write(config_file)
 
+        language_string = QCoreApplication.tr("Saved User Settings!")
+        ui_popup(language_string)
         logger_debug("Saved User Settings!")
 
     """
@@ -765,6 +800,11 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
                 global downloaded_segments
                 downloaded_segments += len(list(video.get_segments(quality=quality)))
+
+    def return_client(self):
+        self.update_settings()
+        api_language = self.api_language
+        return Client(language=api_language)
 
     """
     The following functions are used to connect data between Threads and the Main UI
@@ -1000,8 +1040,33 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
         self.stop_undefined_range()
 
+    def get_user_bio(self):
+        url = self.ui.lineedit_metadata_user_url.text()
+        client = self.return_client()
+        user = client.get_user(url)
+        bio = user.bio
+        ui_popup(bio)
+
+    def get_user_avatar(self):
+        url = self.ui.lineedit_metadata_user_url.text()
+        client = self.return_client()
+        user = client.get_user(url)
+        avatar = user.avatar
+        avatar.download("./")
+        user_string = QCoreApplication.tr("User Avatar saved in current directory...")
+        ui_popup(user_string)
+
+    def get_video_thumbnail(self):
+        api_language = self.api_language
+        url = self.ui.lineedit_metadata_video_url.text()
+        video = check_video(url=url, language=api_language)
+        video.image.download("./")
+        user_string = QCoreApplication.tr("Video thumbnail saved in current directory")
+        ui_popup(user_string)
+
 
 def main():
+    setup_config_file()
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
 
@@ -1010,12 +1075,21 @@ def main():
         I had many problems with coding in general where something didn't work but the translations are the hardest
         thing I've ever done. Now where I've understand it it makes sense but the Qt documentation is a piece of shit...
         """
+        conf = ConfigParser()
+        conf.read("config.ini")
 
-        # Obtain the system's locale
-        locale = QLocale.system()
-        # Get the language code (e.g., "de" for German)
-        language_code = locale.name().split('_')[0]
-        # Construct the path to the translation file
+        language = conf["UI"]["language"]
+
+        if language == "system":
+
+            # Obtain the system's locale
+            locale = QLocale.system()
+            # Get the language code (e.g., "de" for German)
+            language_code = locale.name().split('_')[0]
+            # Construct the path to the translation file
+
+        else:
+            language_code = language
         path = f":/translations/translations/{language_code}.qm"
 
         translator = QTranslator(app)

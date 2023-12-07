@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1758</width>
-    <height>829</height>
+    <height>839</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -231,15 +231,8 @@ border-radius: 5px;</string>
       </item>
       <item row="0" column="0">
        <layout class="QGridLayout" name="gridlayout_status">
-        <item row="0" column="2">
-         <widget class="QLabel" name="label_total">
-          <property name="text">
-           <string>Total:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="lineedit_error">
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="lineedit_status">
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -252,24 +245,10 @@ border-radius: 5px;</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="2">
-         <widget class="QLabel" name="label_debug">
-          <property name="text">
-           <string>Debug:</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label_status">
           <property name="text">
            <string>Status:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="lineedit_status">
-          <property name="readOnly">
-           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -287,6 +266,27 @@ border-radius: 5px;</string>
           </property>
          </widget>
         </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="lineedit_error">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="label_total">
+          <property name="text">
+           <string>Total:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLabel" name="label_debug">
+          <property name="text">
+           <string>Debug:</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
      </layout>
@@ -295,7 +295,7 @@ border-radius: 5px;</string>
    <item row="0" column="2">
     <widget class="QStackedWidget" name="stacked_widget_main">
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page_3">
       <layout class="QGridLayout" name="gridLayout_7">
@@ -855,6 +855,13 @@ QPushButton:pressed {
                 <widget class="QRadioButton" name="radio_ui_language_french">
                  <property name="text">
                   <string>French</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <widget class="QRadioButton" name="radio_ui_language_system">
+                 <property name="text">
+                  <string>System Default</string>
                  </property>
                 </widget>
                </item>

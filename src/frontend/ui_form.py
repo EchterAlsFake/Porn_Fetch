@@ -24,7 +24,7 @@ class Ui_Porn_Fetch_Widget(object):
     def setupUi(self, Porn_Fetch_Widget):
         if not Porn_Fetch_Widget.objectName():
             Porn_Fetch_Widget.setObjectName(u"Porn_Fetch_Widget")
-        Porn_Fetch_Widget.resize(1758, 829)
+        Porn_Fetch_Widget.resize(1758, 839)
         icon = QIcon()
         icon.addFile(u"graphics/logo_transparent.png", QSize(), QIcon.Normal, QIcon.Off)
         Porn_Fetch_Widget.setWindowIcon(icon)
@@ -140,37 +140,21 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridlayout_status = QGridLayout()
         self.gridlayout_status.setObjectName(u"gridlayout_status")
-        self.label_total = QLabel(self.widget_status)
-        self.label_total.setObjectName(u"label_total")
+        self.lineedit_status = QLineEdit(self.widget_status)
+        self.lineedit_status.setObjectName(u"lineedit_status")
+        self.lineedit_status.setReadOnly(True)
 
-        self.gridlayout_status.addWidget(self.label_total, 0, 2, 1, 1)
-
-        self.lineedit_error = QLineEdit(self.widget_status)
-        self.lineedit_error.setObjectName(u"lineedit_error")
-        self.lineedit_error.setReadOnly(True)
-
-        self.gridlayout_status.addWidget(self.lineedit_error, 1, 1, 1, 1)
+        self.gridlayout_status.addWidget(self.lineedit_status, 0, 1, 1, 1)
 
         self.label_error = QLabel(self.widget_status)
         self.label_error.setObjectName(u"label_error")
 
         self.gridlayout_status.addWidget(self.label_error, 1, 0, 1, 1)
 
-        self.label_debug = QLabel(self.widget_status)
-        self.label_debug.setObjectName(u"label_debug")
-
-        self.gridlayout_status.addWidget(self.label_debug, 1, 2, 1, 1)
-
         self.label_status = QLabel(self.widget_status)
         self.label_status.setObjectName(u"label_status")
 
         self.gridlayout_status.addWidget(self.label_status, 0, 0, 1, 1)
-
-        self.lineedit_status = QLineEdit(self.widget_status)
-        self.lineedit_status.setObjectName(u"lineedit_status")
-        self.lineedit_status.setReadOnly(True)
-
-        self.gridlayout_status.addWidget(self.lineedit_status, 0, 1, 1, 1)
 
         self.lineedit_total = QLineEdit(self.widget_status)
         self.lineedit_total.setObjectName(u"lineedit_total")
@@ -183,6 +167,22 @@ class Ui_Porn_Fetch_Widget(object):
         self.lineedit_debug.setReadOnly(True)
 
         self.gridlayout_status.addWidget(self.lineedit_debug, 1, 3, 1, 1)
+
+        self.lineedit_error = QLineEdit(self.widget_status)
+        self.lineedit_error.setObjectName(u"lineedit_error")
+        self.lineedit_error.setReadOnly(True)
+
+        self.gridlayout_status.addWidget(self.lineedit_error, 1, 1, 1, 1)
+
+        self.label_total = QLabel(self.widget_status)
+        self.label_total.setObjectName(u"label_total")
+
+        self.gridlayout_status.addWidget(self.label_total, 0, 2, 1, 1)
+
+        self.label_debug = QLabel(self.widget_status)
+        self.label_debug.setObjectName(u"label_debug")
+
+        self.gridlayout_status.addWidget(self.label_debug, 1, 2, 1, 1)
 
 
         self.gridLayout_5.addLayout(self.gridlayout_status, 0, 0, 1, 1)
@@ -639,6 +639,11 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_ui_language_french.setObjectName(u"radio_ui_language_french")
 
         self.gridLayout_29.addWidget(self.radio_ui_language_french, 0, 2, 1, 1)
+
+        self.radio_ui_language_system = QRadioButton(self.groupbox_GUI_language)
+        self.radio_ui_language_system.setObjectName(u"radio_ui_language_system")
+
+        self.gridLayout_29.addWidget(self.radio_ui_language_system, 0, 3, 1, 1)
 
 
         self.gridLayout_25.addWidget(self.groupbox_GUI_language, 3, 1, 1, 1)
@@ -1174,7 +1179,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.retranslateUi(Porn_Fetch_Widget)
 
-        self.stacked_widget_main.setCurrentIndex(2)
+        self.stacked_widget_main.setCurrentIndex(1)
         self.stacked_widget_top.setCurrentIndex(1)
 
 
@@ -1192,10 +1197,10 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_total_progress.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
         self.label_progress_pornhub.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"PornHub:", None))
         self.label_progress_hqporner.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"HQPorner:", None))
-        self.label_total.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
         self.label_error.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Error:", None))
-        self.label_debug.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Debug:", None))
         self.label_status.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Status:", None))
+        self.label_total.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
+        self.label_debug.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Debug:", None))
         self.label_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"File:", None))
         self.button_open_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Open File", None))
         self.lineedit_url.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter PornHub or HQPorner Video URL", None))
@@ -1239,6 +1244,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_ui_language_german.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
         self.radio_ui_language_english.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"English", None))
         self.radio_ui_language_french.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))
+        self.radio_ui_language_system.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"System Default", None))
         self.groupbox_searching.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Searching", None))
         self.label_searching_limit.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Limit:", None))
         self.groupbox_VIDEO.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Video Settings", None))
