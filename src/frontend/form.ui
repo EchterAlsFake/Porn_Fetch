@@ -1097,6 +1097,12 @@ QPushButton:pressed {
          <layout class="QGridLayout" name="gridLayout_13">
           <item row="0" column="0">
            <layout class="QGridLayout" name="gridLayout_12">
+            <item row="1" column="3">
+             <widget class="QLineEdit" name="lineedit_user_fake_boobs"/>
+            </item>
+            <item row="0" column="3">
+             <widget class="QLineEdit" name="lineedit_user_piercings"/>
+            </item>
             <item row="3" column="0">
              <widget class="QLabel" name="label_height">
               <property name="text">
@@ -1104,19 +1110,43 @@ QPushButton:pressed {
               </property>
              </widget>
             </item>
-            <item row="6" column="0">
-             <widget class="QLabel" name="label_hair_color">
+            <item row="7" column="1">
+             <widget class="QLineEdit" name="lineedit_user_interests_hobbies"/>
+            </item>
+            <item row="4" column="1">
+             <widget class="QLineEdit" name="lineedit_user_weight"/>
+            </item>
+            <item row="8" column="2">
+             <widget class="QLabel" name="label_tattoos">
               <property name="text">
-               <string>Hair Color:</string>
+               <string>Tattoos:</string>
               </property>
              </widget>
             </item>
-            <item row="6" column="2">
-             <widget class="QLabel" name="label_videos_watched">
+            <item row="8" column="3">
+             <widget class="QLineEdit" name="lineedit_user_tattoos"/>
+            </item>
+            <item row="6" column="1">
+             <widget class="QLineEdit" name="lineedit_user_hair_color"/>
+            </item>
+            <item row="7" column="3">
+             <widget class="QLineEdit" name="lineedit_user_city_country"/>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="lineedit_user_relationship"/>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_relationship">
               <property name="text">
-               <string>Videos Watched:</string>
+               <string>Relationship:</string>
               </property>
              </widget>
+            </item>
+            <item row="2" column="3">
+             <widget class="QLineEdit" name="lineedit_user_turn_ons"/>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="lineedit_user_interested_in"/>
             </item>
             <item row="2" column="2">
              <widget class="QLabel" name="label_turn_ons">
@@ -1125,67 +1155,16 @@ QPushButton:pressed {
               </property>
              </widget>
             </item>
-            <item row="6" column="1">
-             <widget class="QLineEdit" name="lineedit_user_hair_color"/>
+            <item row="4" column="3">
+             <widget class="QLineEdit" name="lineedit_user_video_views"/>
             </item>
-            <item row="5" column="0">
-             <widget class="QLabel" name="label_ethnicity">
-              <property name="text">
-               <string>Ethnicity:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_interested_in">
-              <property name="text">
-               <string>Interested in:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_gender">
-              <property name="text">
-               <string>Gender:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QLineEdit" name="lineedit_user_gender"/>
-            </item>
-            <item row="4" column="2">
-             <widget class="QLabel" name="label_video_views">
-              <property name="text">
-               <string>Video Views:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QLineEdit" name="lineedit_user_height"/>
+            <item row="3" column="3">
+             <widget class="QLineEdit" name="lineedit_user_turn_offs"/>
             </item>
             <item row="4" column="0">
              <widget class="QLabel" name="label_widght">
               <property name="text">
                <string>Weight:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QLineEdit" name="lineedit_user_interested_in"/>
-            </item>
-            <item row="3" column="2">
-             <widget class="QLabel" name="label_turn_offs">
-              <property name="text">
-               <string>Turn Offs:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="1">
-             <widget class="QLineEdit" name="lineedit_user_ethnicity"/>
-            </item>
-            <item row="5" column="2">
-             <widget class="QLabel" name="label_profile_views">
-              <property name="text">
-               <string>Profile Views:</string>
               </property>
              </widget>
             </item>
@@ -1196,42 +1175,36 @@ QPushButton:pressed {
               </property>
              </widget>
             </item>
-            <item row="4" column="1">
-             <widget class="QLineEdit" name="lineedit_user_weight"/>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_relationship">
+            <item row="1" column="2">
+             <widget class="QLabel" name="label_fake_boobs">
               <property name="text">
-               <string>Relationship:</string>
+               <string>Fake Boobs:</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QLineEdit" name="lineedit_user_relationship"/>
+            <item row="6" column="2">
+             <widget class="QLabel" name="label_videos_watched">
+              <property name="text">
+               <string>Videos Watched:</string>
+              </property>
+             </widget>
             </item>
-            <item row="0" column="3">
-             <widget class="QLineEdit" name="lineedit_user_piercings"/>
+            <item row="5" column="0">
+             <widget class="QLabel" name="label_ethnicity">
+              <property name="text">
+               <string>Ethnicity:</string>
+              </property>
+             </widget>
             </item>
-            <item row="1" column="3">
-             <widget class="QLineEdit" name="lineedit_user_fake_boobs"/>
+            <item row="3" column="1">
+             <widget class="QLineEdit" name="lineedit_user_height"/>
             </item>
-            <item row="2" column="3">
-             <widget class="QLineEdit" name="lineedit_user_turn_ons"/>
-            </item>
-            <item row="3" column="3">
-             <widget class="QLineEdit" name="lineedit_user_turn_offs"/>
-            </item>
-            <item row="4" column="3">
-             <widget class="QLineEdit" name="lineedit_user_video_views"/>
-            </item>
-            <item row="5" column="3">
-             <widget class="QLineEdit" name="lineedit_user_profile_views"/>
-            </item>
-            <item row="6" column="3">
-             <widget class="QLineEdit" name="lineedit_user_videos_watched"/>
-            </item>
-            <item row="7" column="1" colspan="3">
-             <widget class="QLineEdit" name="lineedit_user_interests_hobbies"/>
+            <item row="4" column="2">
+             <widget class="QLabel" name="label_video_views">
+              <property name="text">
+               <string>Video Views:</string>
+              </property>
+             </widget>
             </item>
             <item row="7" column="0">
              <widget class="QLabel" name="label_interests_hobbies">
@@ -1240,12 +1213,79 @@ QPushButton:pressed {
               </property>
              </widget>
             </item>
-            <item row="1" column="2">
-             <widget class="QLabel" name="label_fake_boobs">
+            <item row="8" column="1">
+             <widget class="QLineEdit" name="lineedit_user_birth_place"/>
+            </item>
+            <item row="6" column="3">
+             <widget class="QLineEdit" name="lineedit_user_videos_watched"/>
+            </item>
+            <item row="3" column="2">
+             <widget class="QLabel" name="label_turn_offs">
               <property name="text">
-               <string>Fake Boobs:</string>
+               <string>Turn Offs:</string>
               </property>
              </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_gender">
+              <property name="text">
+               <string>Gender:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="3">
+             <widget class="QLineEdit" name="lineedit_user_profile_views"/>
+            </item>
+            <item row="6" column="0">
+             <widget class="QLabel" name="label_hair_color">
+              <property name="text">
+               <string>Hair Color:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="2">
+             <widget class="QLabel" name="label_profile_views">
+              <property name="text">
+               <string>Profile Views:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="2">
+             <widget class="QLabel" name="label_city_country">
+              <property name="text">
+               <string>City / Country:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_interested_in">
+              <property name="text">
+               <string>Interested in:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="0">
+             <widget class="QLabel" name="label_birth_place">
+              <property name="text">
+               <string>Birth Place:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="lineedit_user_gender"/>
+            </item>
+            <item row="5" column="1">
+             <widget class="QLineEdit" name="lineedit_user_ethnicity"/>
+            </item>
+            <item row="9" column="0">
+             <widget class="QLabel" name="label_home_town">
+              <property name="text">
+               <string>Home Town</string>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="1">
+             <widget class="QLineEdit" name="lineedit_user_home_town"/>
             </item>
            </layout>
           </item>

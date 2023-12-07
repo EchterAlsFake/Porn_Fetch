@@ -827,155 +827,195 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridLayout_13.setObjectName(u"gridLayout_13")
         self.gridLayout_12 = QGridLayout()
         self.gridLayout_12.setObjectName(u"gridLayout_12")
-        self.label_height = QLabel(self.groupbox_advanced_user_information)
-        self.label_height.setObjectName(u"label_height")
+        self.lineedit_user_fake_boobs = QLineEdit(self.groupbox_advanced_user_information)
+        self.lineedit_user_fake_boobs.setObjectName(u"lineedit_user_fake_boobs")
 
-        self.gridLayout_12.addWidget(self.label_height, 3, 0, 1, 1)
-
-        self.label_hair_color = QLabel(self.groupbox_advanced_user_information)
-        self.label_hair_color.setObjectName(u"label_hair_color")
-
-        self.gridLayout_12.addWidget(self.label_hair_color, 6, 0, 1, 1)
-
-        self.label_videos_watched = QLabel(self.groupbox_advanced_user_information)
-        self.label_videos_watched.setObjectName(u"label_videos_watched")
-
-        self.gridLayout_12.addWidget(self.label_videos_watched, 6, 2, 1, 1)
-
-        self.label_turn_ons = QLabel(self.groupbox_advanced_user_information)
-        self.label_turn_ons.setObjectName(u"label_turn_ons")
-
-        self.gridLayout_12.addWidget(self.label_turn_ons, 2, 2, 1, 1)
-
-        self.lineedit_user_hair_color = QLineEdit(self.groupbox_advanced_user_information)
-        self.lineedit_user_hair_color.setObjectName(u"lineedit_user_hair_color")
-
-        self.gridLayout_12.addWidget(self.lineedit_user_hair_color, 6, 1, 1, 1)
-
-        self.label_ethnicity = QLabel(self.groupbox_advanced_user_information)
-        self.label_ethnicity.setObjectName(u"label_ethnicity")
-
-        self.gridLayout_12.addWidget(self.label_ethnicity, 5, 0, 1, 1)
-
-        self.label_interested_in = QLabel(self.groupbox_advanced_user_information)
-        self.label_interested_in.setObjectName(u"label_interested_in")
-
-        self.gridLayout_12.addWidget(self.label_interested_in, 1, 0, 1, 1)
-
-        self.label_gender = QLabel(self.groupbox_advanced_user_information)
-        self.label_gender.setObjectName(u"label_gender")
-
-        self.gridLayout_12.addWidget(self.label_gender, 2, 0, 1, 1)
-
-        self.lineedit_user_gender = QLineEdit(self.groupbox_advanced_user_information)
-        self.lineedit_user_gender.setObjectName(u"lineedit_user_gender")
-
-        self.gridLayout_12.addWidget(self.lineedit_user_gender, 2, 1, 1, 1)
-
-        self.label_video_views = QLabel(self.groupbox_advanced_user_information)
-        self.label_video_views.setObjectName(u"label_video_views")
-
-        self.gridLayout_12.addWidget(self.label_video_views, 4, 2, 1, 1)
-
-        self.lineedit_user_height = QLineEdit(self.groupbox_advanced_user_information)
-        self.lineedit_user_height.setObjectName(u"lineedit_user_height")
-
-        self.gridLayout_12.addWidget(self.lineedit_user_height, 3, 1, 1, 1)
-
-        self.label_widght = QLabel(self.groupbox_advanced_user_information)
-        self.label_widght.setObjectName(u"label_widght")
-
-        self.gridLayout_12.addWidget(self.label_widght, 4, 0, 1, 1)
-
-        self.lineedit_user_interested_in = QLineEdit(self.groupbox_advanced_user_information)
-        self.lineedit_user_interested_in.setObjectName(u"lineedit_user_interested_in")
-
-        self.gridLayout_12.addWidget(self.lineedit_user_interested_in, 1, 1, 1, 1)
-
-        self.label_turn_offs = QLabel(self.groupbox_advanced_user_information)
-        self.label_turn_offs.setObjectName(u"label_turn_offs")
-
-        self.gridLayout_12.addWidget(self.label_turn_offs, 3, 2, 1, 1)
-
-        self.lineedit_user_ethnicity = QLineEdit(self.groupbox_advanced_user_information)
-        self.lineedit_user_ethnicity.setObjectName(u"lineedit_user_ethnicity")
-
-        self.gridLayout_12.addWidget(self.lineedit_user_ethnicity, 5, 1, 1, 1)
-
-        self.label_profile_views = QLabel(self.groupbox_advanced_user_information)
-        self.label_profile_views.setObjectName(u"label_profile_views")
-
-        self.gridLayout_12.addWidget(self.label_profile_views, 5, 2, 1, 1)
-
-        self.label_piercings = QLabel(self.groupbox_advanced_user_information)
-        self.label_piercings.setObjectName(u"label_piercings")
-
-        self.gridLayout_12.addWidget(self.label_piercings, 0, 2, 1, 1)
-
-        self.lineedit_user_weight = QLineEdit(self.groupbox_advanced_user_information)
-        self.lineedit_user_weight.setObjectName(u"lineedit_user_weight")
-
-        self.gridLayout_12.addWidget(self.lineedit_user_weight, 4, 1, 1, 1)
-
-        self.label_relationship = QLabel(self.groupbox_advanced_user_information)
-        self.label_relationship.setObjectName(u"label_relationship")
-
-        self.gridLayout_12.addWidget(self.label_relationship, 0, 0, 1, 1)
-
-        self.lineedit_user_relationship = QLineEdit(self.groupbox_advanced_user_information)
-        self.lineedit_user_relationship.setObjectName(u"lineedit_user_relationship")
-
-        self.gridLayout_12.addWidget(self.lineedit_user_relationship, 0, 1, 1, 1)
+        self.gridLayout_12.addWidget(self.lineedit_user_fake_boobs, 1, 3, 1, 1)
 
         self.lineedit_user_piercings = QLineEdit(self.groupbox_advanced_user_information)
         self.lineedit_user_piercings.setObjectName(u"lineedit_user_piercings")
 
         self.gridLayout_12.addWidget(self.lineedit_user_piercings, 0, 3, 1, 1)
 
-        self.lineedit_user_fake_boobs = QLineEdit(self.groupbox_advanced_user_information)
-        self.lineedit_user_fake_boobs.setObjectName(u"lineedit_user_fake_boobs")
+        self.label_height = QLabel(self.groupbox_advanced_user_information)
+        self.label_height.setObjectName(u"label_height")
 
-        self.gridLayout_12.addWidget(self.lineedit_user_fake_boobs, 1, 3, 1, 1)
+        self.gridLayout_12.addWidget(self.label_height, 3, 0, 1, 1)
+
+        self.lineedit_user_interests_hobbies = QLineEdit(self.groupbox_advanced_user_information)
+        self.lineedit_user_interests_hobbies.setObjectName(u"lineedit_user_interests_hobbies")
+
+        self.gridLayout_12.addWidget(self.lineedit_user_interests_hobbies, 7, 1, 1, 1)
+
+        self.lineedit_user_weight = QLineEdit(self.groupbox_advanced_user_information)
+        self.lineedit_user_weight.setObjectName(u"lineedit_user_weight")
+
+        self.gridLayout_12.addWidget(self.lineedit_user_weight, 4, 1, 1, 1)
+
+        self.label_tattoos = QLabel(self.groupbox_advanced_user_information)
+        self.label_tattoos.setObjectName(u"label_tattoos")
+
+        self.gridLayout_12.addWidget(self.label_tattoos, 8, 2, 1, 1)
+
+        self.lineedit_user_tattoos = QLineEdit(self.groupbox_advanced_user_information)
+        self.lineedit_user_tattoos.setObjectName(u"lineedit_user_tattoos")
+
+        self.gridLayout_12.addWidget(self.lineedit_user_tattoos, 8, 3, 1, 1)
+
+        self.lineedit_user_hair_color = QLineEdit(self.groupbox_advanced_user_information)
+        self.lineedit_user_hair_color.setObjectName(u"lineedit_user_hair_color")
+
+        self.gridLayout_12.addWidget(self.lineedit_user_hair_color, 6, 1, 1, 1)
+
+        self.lineedit_user_city_country = QLineEdit(self.groupbox_advanced_user_information)
+        self.lineedit_user_city_country.setObjectName(u"lineedit_user_city_country")
+
+        self.gridLayout_12.addWidget(self.lineedit_user_city_country, 7, 3, 1, 1)
+
+        self.lineedit_user_relationship = QLineEdit(self.groupbox_advanced_user_information)
+        self.lineedit_user_relationship.setObjectName(u"lineedit_user_relationship")
+
+        self.gridLayout_12.addWidget(self.lineedit_user_relationship, 0, 1, 1, 1)
+
+        self.label_relationship = QLabel(self.groupbox_advanced_user_information)
+        self.label_relationship.setObjectName(u"label_relationship")
+
+        self.gridLayout_12.addWidget(self.label_relationship, 0, 0, 1, 1)
 
         self.lineedit_user_turn_ons = QLineEdit(self.groupbox_advanced_user_information)
         self.lineedit_user_turn_ons.setObjectName(u"lineedit_user_turn_ons")
 
         self.gridLayout_12.addWidget(self.lineedit_user_turn_ons, 2, 3, 1, 1)
 
-        self.lineedit_user_turn_offs = QLineEdit(self.groupbox_advanced_user_information)
-        self.lineedit_user_turn_offs.setObjectName(u"lineedit_user_turn_offs")
+        self.lineedit_user_interested_in = QLineEdit(self.groupbox_advanced_user_information)
+        self.lineedit_user_interested_in.setObjectName(u"lineedit_user_interested_in")
 
-        self.gridLayout_12.addWidget(self.lineedit_user_turn_offs, 3, 3, 1, 1)
+        self.gridLayout_12.addWidget(self.lineedit_user_interested_in, 1, 1, 1, 1)
+
+        self.label_turn_ons = QLabel(self.groupbox_advanced_user_information)
+        self.label_turn_ons.setObjectName(u"label_turn_ons")
+
+        self.gridLayout_12.addWidget(self.label_turn_ons, 2, 2, 1, 1)
 
         self.lineedit_user_video_views = QLineEdit(self.groupbox_advanced_user_information)
         self.lineedit_user_video_views.setObjectName(u"lineedit_user_video_views")
 
         self.gridLayout_12.addWidget(self.lineedit_user_video_views, 4, 3, 1, 1)
 
-        self.lineedit_user_profile_views = QLineEdit(self.groupbox_advanced_user_information)
-        self.lineedit_user_profile_views.setObjectName(u"lineedit_user_profile_views")
+        self.lineedit_user_turn_offs = QLineEdit(self.groupbox_advanced_user_information)
+        self.lineedit_user_turn_offs.setObjectName(u"lineedit_user_turn_offs")
 
-        self.gridLayout_12.addWidget(self.lineedit_user_profile_views, 5, 3, 1, 1)
+        self.gridLayout_12.addWidget(self.lineedit_user_turn_offs, 3, 3, 1, 1)
 
-        self.lineedit_user_videos_watched = QLineEdit(self.groupbox_advanced_user_information)
-        self.lineedit_user_videos_watched.setObjectName(u"lineedit_user_videos_watched")
+        self.label_widght = QLabel(self.groupbox_advanced_user_information)
+        self.label_widght.setObjectName(u"label_widght")
 
-        self.gridLayout_12.addWidget(self.lineedit_user_videos_watched, 6, 3, 1, 1)
+        self.gridLayout_12.addWidget(self.label_widght, 4, 0, 1, 1)
 
-        self.lineedit_user_interests_hobbies = QLineEdit(self.groupbox_advanced_user_information)
-        self.lineedit_user_interests_hobbies.setObjectName(u"lineedit_user_interests_hobbies")
+        self.label_piercings = QLabel(self.groupbox_advanced_user_information)
+        self.label_piercings.setObjectName(u"label_piercings")
 
-        self.gridLayout_12.addWidget(self.lineedit_user_interests_hobbies, 7, 1, 1, 3)
+        self.gridLayout_12.addWidget(self.label_piercings, 0, 2, 1, 1)
+
+        self.label_fake_boobs = QLabel(self.groupbox_advanced_user_information)
+        self.label_fake_boobs.setObjectName(u"label_fake_boobs")
+
+        self.gridLayout_12.addWidget(self.label_fake_boobs, 1, 2, 1, 1)
+
+        self.label_videos_watched = QLabel(self.groupbox_advanced_user_information)
+        self.label_videos_watched.setObjectName(u"label_videos_watched")
+
+        self.gridLayout_12.addWidget(self.label_videos_watched, 6, 2, 1, 1)
+
+        self.label_ethnicity = QLabel(self.groupbox_advanced_user_information)
+        self.label_ethnicity.setObjectName(u"label_ethnicity")
+
+        self.gridLayout_12.addWidget(self.label_ethnicity, 5, 0, 1, 1)
+
+        self.lineedit_user_height = QLineEdit(self.groupbox_advanced_user_information)
+        self.lineedit_user_height.setObjectName(u"lineedit_user_height")
+
+        self.gridLayout_12.addWidget(self.lineedit_user_height, 3, 1, 1, 1)
+
+        self.label_video_views = QLabel(self.groupbox_advanced_user_information)
+        self.label_video_views.setObjectName(u"label_video_views")
+
+        self.gridLayout_12.addWidget(self.label_video_views, 4, 2, 1, 1)
 
         self.label_interests_hobbies = QLabel(self.groupbox_advanced_user_information)
         self.label_interests_hobbies.setObjectName(u"label_interests_hobbies")
 
         self.gridLayout_12.addWidget(self.label_interests_hobbies, 7, 0, 1, 1)
 
-        self.label_fake_boobs = QLabel(self.groupbox_advanced_user_information)
-        self.label_fake_boobs.setObjectName(u"label_fake_boobs")
+        self.lineedit_user_birth_place = QLineEdit(self.groupbox_advanced_user_information)
+        self.lineedit_user_birth_place.setObjectName(u"lineedit_user_birth_place")
 
-        self.gridLayout_12.addWidget(self.label_fake_boobs, 1, 2, 1, 1)
+        self.gridLayout_12.addWidget(self.lineedit_user_birth_place, 8, 1, 1, 1)
+
+        self.lineedit_user_videos_watched = QLineEdit(self.groupbox_advanced_user_information)
+        self.lineedit_user_videos_watched.setObjectName(u"lineedit_user_videos_watched")
+
+        self.gridLayout_12.addWidget(self.lineedit_user_videos_watched, 6, 3, 1, 1)
+
+        self.label_turn_offs = QLabel(self.groupbox_advanced_user_information)
+        self.label_turn_offs.setObjectName(u"label_turn_offs")
+
+        self.gridLayout_12.addWidget(self.label_turn_offs, 3, 2, 1, 1)
+
+        self.label_gender = QLabel(self.groupbox_advanced_user_information)
+        self.label_gender.setObjectName(u"label_gender")
+
+        self.gridLayout_12.addWidget(self.label_gender, 2, 0, 1, 1)
+
+        self.lineedit_user_profile_views = QLineEdit(self.groupbox_advanced_user_information)
+        self.lineedit_user_profile_views.setObjectName(u"lineedit_user_profile_views")
+
+        self.gridLayout_12.addWidget(self.lineedit_user_profile_views, 5, 3, 1, 1)
+
+        self.label_hair_color = QLabel(self.groupbox_advanced_user_information)
+        self.label_hair_color.setObjectName(u"label_hair_color")
+
+        self.gridLayout_12.addWidget(self.label_hair_color, 6, 0, 1, 1)
+
+        self.label_profile_views = QLabel(self.groupbox_advanced_user_information)
+        self.label_profile_views.setObjectName(u"label_profile_views")
+
+        self.gridLayout_12.addWidget(self.label_profile_views, 5, 2, 1, 1)
+
+        self.label_city_country = QLabel(self.groupbox_advanced_user_information)
+        self.label_city_country.setObjectName(u"label_city_country")
+
+        self.gridLayout_12.addWidget(self.label_city_country, 7, 2, 1, 1)
+
+        self.label_interested_in = QLabel(self.groupbox_advanced_user_information)
+        self.label_interested_in.setObjectName(u"label_interested_in")
+
+        self.gridLayout_12.addWidget(self.label_interested_in, 1, 0, 1, 1)
+
+        self.label_birth_place = QLabel(self.groupbox_advanced_user_information)
+        self.label_birth_place.setObjectName(u"label_birth_place")
+
+        self.gridLayout_12.addWidget(self.label_birth_place, 8, 0, 1, 1)
+
+        self.lineedit_user_gender = QLineEdit(self.groupbox_advanced_user_information)
+        self.lineedit_user_gender.setObjectName(u"lineedit_user_gender")
+
+        self.gridLayout_12.addWidget(self.lineedit_user_gender, 2, 1, 1, 1)
+
+        self.lineedit_user_ethnicity = QLineEdit(self.groupbox_advanced_user_information)
+        self.lineedit_user_ethnicity.setObjectName(u"lineedit_user_ethnicity")
+
+        self.gridLayout_12.addWidget(self.lineedit_user_ethnicity, 5, 1, 1, 1)
+
+        self.label_home_town = QLabel(self.groupbox_advanced_user_information)
+        self.label_home_town.setObjectName(u"label_home_town")
+
+        self.gridLayout_12.addWidget(self.label_home_town, 9, 0, 1, 1)
+
+        self.lineedit_user_home_town = QLineEdit(self.groupbox_advanced_user_information)
+        self.lineedit_user_home_town.setObjectName(u"lineedit_user_home_town")
+
+        self.gridLayout_12.addWidget(self.lineedit_user_home_town, 9, 1, 1, 1)
 
 
         self.gridLayout_13.addLayout(self.gridLayout_12, 0, 0, 1, 1)
@@ -1228,20 +1268,24 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_metadata_user_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"User URL:", None))
         self.groupbox_advanced_user_information.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Advanced User Information", None))
         self.label_height.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Height:", None))
-        self.label_hair_color.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Hair Color:", None))
-        self.label_videos_watched.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Videos Watched:", None))
-        self.label_turn_ons.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Turn Ons:", None))
-        self.label_ethnicity.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Ethnicity:", None))
-        self.label_interested_in.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Interested in:", None))
-        self.label_gender.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Gender:", None))
-        self.label_video_views.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Video Views:", None))
-        self.label_widght.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Weight:", None))
-        self.label_turn_offs.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Turn Offs:", None))
-        self.label_profile_views.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Profile Views:", None))
-        self.label_piercings.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Piercings:", None))
+        self.label_tattoos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Tattoos:", None))
         self.label_relationship.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Relationship:", None))
-        self.label_interests_hobbies.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Interests / Hobbies:", None))
+        self.label_turn_ons.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Turn Ons:", None))
+        self.label_widght.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Weight:", None))
+        self.label_piercings.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Piercings:", None))
         self.label_fake_boobs.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Fake Boobs:", None))
+        self.label_videos_watched.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Videos Watched:", None))
+        self.label_ethnicity.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Ethnicity:", None))
+        self.label_video_views.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Video Views:", None))
+        self.label_interests_hobbies.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Interests / Hobbies:", None))
+        self.label_turn_offs.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Turn Offs:", None))
+        self.label_gender.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Gender:", None))
+        self.label_hair_color.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Hair Color:", None))
+        self.label_profile_views.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Profile Views:", None))
+        self.label_city_country.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"City / Country:", None))
+        self.label_interested_in.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Interested in:", None))
+        self.label_birth_place.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Birth Place:", None))
+        self.label_home_town.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Home Town", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Basic User Information", None))
         self.label_12.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Name:", None))
         self.button_user_download_avatar.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download User Avatar", None))

@@ -151,31 +151,27 @@ class QTreeWidgetDownloadThread(QRunnable):
 
 
 class MetadataVideos(QRunnable):
-    def __init__(self, client, url):
+    def __init__(self, video):
         super(MetadataVideos, self).__init__()
         self.signals = MetadataSignals()
-        self.client = client
-        self.url = url
+        self.video = video
 
     def run(self):
         self.signals.start_undefined.emit()
-
-        self.client = Client()
-        video = self.client.get(self.url)
 
         like_string = QCoreApplication.tr("Likes")
         dislike_string = QCoreApplication.tr("Dislikes")
         duration_string = QCoreApplication.tr("minutes")
 
-        title = video.title
-        views = video.views
-        duration = round(video.duration.seconds / 60, 2)
+        title = self.video.title
+        views = self.video.views
+        duration = round(self.video.duration.seconds / 60, 2)
         duration = f"{duration} {duration_string}"
-        pornstar_generator = video.pornstars
-        tags_generator = video.tags
-        rating = video.like
-        orientation = video.orientation
-        hotspots = video.hotspots
+        pornstar_generator = self.video.pornstars
+        tags_generator = self.video.tags
+        rating = self.video.like
+        orientation = self.video.orientation
+        hotspots = self.video.hotspots
 
         pornstar_list = [pornstar.name for pornstar in pornstar_generator]
         tags_list = [tag.name for tag in tags_generator]
@@ -190,8 +186,43 @@ class MetadataVideos(QRunnable):
         self.signals.data.emit(data)
 
 
+class MetadataUser(QRunnable):
+    def __init__(self, user):
+        super(MetadataUser, self).__init__()
+        self.user = user
+        self.signals = MetadataSignals()
 
+    def run(self):
+        self.signals.start_undefined.emit()
+        info = self.user.info
 
+        interested_in = info.get("Interested in")
+        relationship_status = info.get("Relationship status")
+        city_country = info.get("City and Country")
+        gender = info.get("Gender")
+        birth_place = info.get("Birth Place")
+        height = info.get("Height")
+        weight = info.get("Weight")
+        ethnicity = info.get("Ethnicity")
+        hair_color = info.get("Hair Color")
+        fake_boobs = info.get("Fake Boobs")
+        tattoos = info.get("Tattoos")
+        piercings = info.get("Piercings")
+        hometown = info.get("Hometown")
+        interests_hobbies = info.get("Interests and hobbie")
+        turn_ons = info.get("Turn Ons")
+        turn_offs = info.get("Turn Offs")
+        video_views = info.get("Video Views")
+        profile_views = info.get("Profile Views")
+        videos_watched = info.get("Videos Watched")
+        type = self.user.type
+        name = self.user.name
+
+        data = [interested_in, relationship_status, city_country, gender, birth_place, height, weight, ethnicity,
+                hair_color, fake_boobs, tattoos, piercings, hometown, interests_hobbies, turn_ons, turn_offs,
+                video_views, profile_views, videos_watched, type, name]
+
+        self.signals.data.emit(data)
 
 class License(QWidget):
     """ License class to display the GPL 3 License to the user."""
@@ -330,6 +361,7 @@ class PornFetch(QWidget):
 
         # Metadata
         self.ui.button_metadata_video_start.clicked.connect(self.get_metadata_video)
+        self.ui.button_metadata_user_start.clicked.connect(self.get_metadata_user)
 
         logger_debug("Connected Buttons!")
 
@@ -879,15 +911,13 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         for x in search:
             print(x.videos)
 
-
     def get_metadata_video(self):
         api_language = self.api_language
         video = self.ui.lineedit_metadata_video_url.text()
+        video = check_video(url=video, language=api_language)
 
-        if check_video(url=video, language=api_language):
-            client = Client(language=api_language)
-
-            self.metadata_thread = MetadataVideos(client=client, url=video)
+        if not video is False:
+            self.metadata_thread = MetadataVideos(video)
             self.metadata_thread.signals.start_undefined.connect(self.start_undefined_range)
             self.metadata_thread.signals.data.connect(self.apply_metadata_video)
             self.threadpool.start(self.metadata_thread)
@@ -913,9 +943,62 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         self.stop_undefined_range()
 
     def get_metadata_user(self):
-        ""
+        api_language = self.api_language
+        user = self.ui.lineedit_metadata_user_url.text()
+        client = Client(language=api_language)
+        user_object = client.get_user(user)
 
+        self.user_metadata_thread = MetadataUser(user_object)
+        self.user_metadata_thread.signals.start_undefined.connect(self.start_undefined_range)
+        self.user_metadata_thread.signals.data.connect(self.apply_metadata_user)
+        self.threadpool.start(self.user_metadata_thread)
 
+    def apply_metadata_user(self, data):
+        interested_in = data[0]
+        relationship = data[1]
+        city_and_country = data[2]
+        gender = data[3]
+        birth_place = data[4]
+        height = data[5]
+        weight = data[6]
+        ethnicity = data[7]
+        hair_color = data[8]
+        fake_boobs = data[9]
+        tattoos = data[10]
+        piercings = data[11]
+        hometown = data[12]
+        interests_and_hobbies = data[13]
+        turn_ons = data[14]
+        turn_offs = data[15]
+        video_views = data[16]
+        profile_views = data[17]
+        videos_watched = data[18]
+        type = data[19]
+        name = data[20]
+
+        self.ui.lineedit_user_interested_in.setText(str(interested_in))
+        self.ui.lineedit_user_relationship.setText(str(relationship))
+        self.ui.lineedit_user_city_country.setText(str(city_and_country))
+        self.ui.lineedit_user_gender.setText(str(gender))
+        self.ui.lineedit_user_birth_place.setText(str(birth_place))
+        self.ui.lineedit_user_height.setText(str(height))
+        self.ui.lineedit_user_weight.setText(str(weight))
+        self.ui.lineedit_user_ethnicity.setText(str(ethnicity))
+        self.ui.lineedit_user_hair_color.setText(str(hair_color))
+        self.ui.lineedit_user_fake_boobs.setText(str(fake_boobs))
+        self.ui.lineedit_user_tattoos.setText(str(tattoos))
+        self.ui.lineedit_user_piercings.setText(str(piercings))
+        self.ui.lineedit_user_home_town.setText(str(hometown))
+        self.ui.lineedit_user_interests_hobbies.setText(str(interests_and_hobbies))
+        self.ui.lineedit_user_turn_ons.setText(str(turn_ons))
+        self.ui.lineedit_user_turn_offs.setText(str(turn_offs))
+        self.ui.lineedit_user_video_views.setText(str(video_views))
+        self.ui.lineedit_user_profile_views.setText(str(profile_views))
+        self.ui.lineedit_user_videos_watched.setText(str(videos_watched))
+        self.ui.lineedit_user_type.setText(str(type))
+        self.ui.lineedit_user_name.setText(str(name))
+
+        self.stop_undefined_range()
 
 
 def main():
