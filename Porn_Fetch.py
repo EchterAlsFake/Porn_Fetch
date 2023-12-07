@@ -163,38 +163,30 @@ class MetadataVideos(QRunnable):
         self.client = Client()
         video = self.client.get(self.url)
 
+        like_string = QCoreApplication.tr("Likes")
+        dislike_string = QCoreApplication.tr("Dislikes")
+        duration_string = QCoreApplication.tr("minutes")
+
         title = video.title
         views = video.views
-        duration = round(video.duration.seconds / 60)
+        duration = round(video.duration.seconds / 60, 2)
+        duration = f"{duration} {duration_string}"
         pornstar_generator = video.pornstars
         tags_generator = video.tags
         rating = video.like
         orientation = video.orientation
         hotspots = video.hotspots
 
-        pornstar_list = []
-        tags_list = []
-        hotspots_list = []
+        pornstar_list = [pornstar.name for pornstar in pornstar_generator]
+        tags_list = [tag.name for tag in tags_generator]
+        hotspots_list = [str(hotspot) for hotspot in hotspots]
 
-        for hotspot in hotspots:
-            hotspots_list.append(str(hotspot))
-
-        for pornstar in pornstar_generator:
-            pornstar_list.append(pornstar.name)
-
-        for tag in tags_generator:
-            tags_list.append(tag.name)
-
-        pornstars = "".join(pornstar_list)
-        tags = "".join(tags_list)
-        hotspots = "".join(hotspots_list)
-
-        like_string = QCoreApplication.tr("Likes")
-        dislike_string = QCoreApplication.tr("Dislikes")
-
+        pornstars = ", ".join(pornstar_list)
+        tags = ", ".join(tags_list)
+        hotspots_x = ", ".join(hotspots_list)
         rating = f"{like_string}: {rating.up} | {dislike_string}: {rating.down}"
 
-        data = [title, views, duration, orientation, pornstars, tags, rating, hotspots]
+        data = [title, views, duration, orientation, pornstars, tags, rating, hotspots_x]
         self.signals.data.emit(data)
 
 
@@ -622,7 +614,7 @@ class PornFetch(QWidget):
     def button_semaphore_help(self):
         text = QCoreApplication.tr(f"""
 The Semaphore is a tool to limit the number of simultaneous actions / downloads.
-
+y12
 For example: If the semaphore is set to 1, only 1 video will be downloaded at the same time.
 If the semaphore is set to 4, 4 videos will be downloaded at the same time. Changing this is only useful, if
 you have a really good internet connection and a good system.
