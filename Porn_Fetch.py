@@ -313,7 +313,9 @@ class PornFetch(QWidget):
         self.settings_maps_initialization()
         self.load_user_settings()
         self.update_settings()
+        self.language_strings()
         self.ui.stacked_widget_main.setCurrentIndex(0)
+        self.ui.stacked_widget_top.setCurrentIndex(0)
 
     def load_icons(self):
         """a simple function to load the icons for the buttons"""
@@ -324,6 +326,22 @@ class PornFetch(QWidget):
         self.ui.button_switch_metadata.setIcon(QIcon(":/images/graphics/list.svg"))
         self.setWindowIcon(QIcon(":/images/graphics/logo_transparent.ico"))
         logger_debug("Loaded Icons!")
+
+    def language_strings(self):
+        self.get_api_language_string_dialog = QCoreApplication.tr("Please enter the language code for your "
+                                                                  "language.  Example: en, de, fr, ru --=>:")
+
+        self.get_output_path_string_ui_popup = QCoreApplication.tr("""The specified output path doesn't exist.
+        If you think, this is an error, please report it!""")
+
+        self.save_user_settings_language_string = QCoreApplication.tr("Saved User Settings!")
+        self.open_file_language_string = QCoreApplication.tr("Select URL file")
+        self.language_string_login_failed = QCoreApplication.tr("Login Failed, please check your credentials and try "
+                                                                "again!")
+
+        self.language_string_login_successful = QCoreApplication.tr("Login Successful!")
+        self.get_user_avatar_language_string = QCoreApplication.tr("User Avatar saved in current directory...")
+        self.get_video_thumbnail_language_string = QCoreApplication.tr("Video thumbnail saved in current directory")
 
     def button_connectors(self):
         """a function to link the buttons to their functions"""
@@ -418,8 +436,8 @@ class PornFetch(QWidget):
 
         if self.ui.radio_api_language_custom.isChecked():
             if self.api_language in self.native_languages:
-                language = show_get_text_dialog(title="API Language", text="""
-                Please enter the language code for your language.  Example: en, de, fr, ru --=>:""", self=self)
+                language = show_get_text_dialog(title="API Language", text=f"""
+                {self.get_api_language_string_dialog}""", self=self)
                 self.api_language = language
 
         elif self.ui.radio_api_language_chinese.isChecked():
@@ -442,7 +460,7 @@ class PornFetch(QWidget):
         output_path = self.ui.lineedit_output_path.text()
         logger_debug(f"Output Path: {output_path}")
         if not os.path.exists(output_path):
-            ui_popup("The specified output path doesn't exist. If you think, this is an error, please report it!")
+            ui_popup(self.get_output_path_string_ui_popup)
 
         else:
             self.output_path = output_path
@@ -618,8 +636,7 @@ class PornFetch(QWidget):
         with open("config.ini", "w") as config_file:
             self.conf.write(config_file)
 
-        language_string = QCoreApplication.tr("Saved User Settings!")
-        ui_popup(language_string)
+        ui_popup(self.save_user_settings_language_string)
         logger_debug("Saved User Settings!")
 
     """
@@ -838,7 +855,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
     """
 
     def open_file(self):
-        file = QFileDialog().getOpenFileUrl(self, "Select URL file")
+        file = QFileDialog().getOpenFileUrl(self, self.open_file_language_string)
         file_path = file[0].toLocalFile()
         hqporner_urls = []
         pornhub_objects = []
@@ -896,9 +913,10 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         try:
             self.client = Client(username, password, language=self.api_language)
             logger_debug("Login Successful!")
+            ui_popup(self.language_string_login_successful)
 
         except errors.LoginFailed:
-            ui_popup("Login Failed, please check your credentials and try again!")
+            ui_popup(self.language_string_login_failed)
 
     def get_watched_videos(self):
         """Returns the videos watched by the user"""
@@ -1053,7 +1071,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         user = client.get_user(url)
         avatar = user.avatar
         avatar.download("./")
-        user_string = QCoreApplication.tr("User Avatar saved in current directory...")
+        user_string = self.get_user_avatar_language_string
         ui_popup(user_string)
 
     def get_video_thumbnail(self):
@@ -1061,7 +1079,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         url = self.ui.lineedit_metadata_video_url.text()
         video = check_video(url=url, language=api_language)
         video.image.download("./")
-        user_string = QCoreApplication.tr("Video thumbnail saved in current directory")
+        user_string = self.get_video_thumbnail_language_string
         ui_popup(user_string)
 
 
@@ -1108,27 +1126,27 @@ def main():
         widget.check_license_and_proceed()
 
     except PermissionError:
-        ui_popup("Insufficient Permissions to access something. Please run Porn Fetch as root / admin")
+        ui_popup(QCoreApplication.tr("Insufficient Permissions to access something. Please run Porn Fetch as root / admin"))
 
     except ConnectionResetError:
-        ui_popup("Connection was reset. Are you connected to a public wifi or a university's wifi? ")
+        ui_popup(QCoreApplication.tr("Connection was reset. Are you connected to a public wifi or a university's wifi? "))
 
     except ConnectionError:
-        ui_popup("Connection Error, please make sure you have a stable internet connection")
+        ui_popup(QCoreApplication.tr("Connection Error, please make sure you have a stable internet connection"))
 
     except KeyboardInterrupt:
         sys.exit(0)
 
     except requests.exceptions.SSLError:
-        ui_popup("SSLError: Your connection is blocked by your ISP / IT administrator (Firewall). If you are in a "
-                 "University or at school, please connect to a VPN / Proxy")
+        ui_popup(QCoreApplication.tr("SSLError: Your connection is blocked by your ISP / IT administrator (Firewall). If you are in a "
+                 "University or at school, please connect to a VPN / Proxy"))
 
     except TypeError:
         pass
 
     except OSError as e:
-        ui_popup(f"This error shouldn't happen. If you still see it it's REALLY important that you report the "
-                 f"following: {e}")
+        ui_popup(QCoreApplication.tr(f"This error shouldn't happen. If you still see it it's REALLY important that you report the "
+                 f"following: {e}"))
 
     except ZeroDivisionError:
         pass
