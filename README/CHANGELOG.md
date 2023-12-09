@@ -222,3 +222,12 @@ I hope that most issues are now fixed.
 - Fixed config file creation location
 - header of the QTreeWidget also had Dark mode now
 - Listing model videos had a Threading class 
+- All Metadata methods now using threading
+- More lightweight way of check_if_video_exists function
+- Logic of integrity checking of the config file is a lot more robust now
+- New (better) Icons
+- tree Widget is now used globally
+- Q Resource file is a lot better structured
+- Stylesheets are now partially split into multiple parts
+- Multiple threading variants (3) for downloading videos
+- Directory system to save videos from models in their own folder

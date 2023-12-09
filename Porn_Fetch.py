@@ -10,6 +10,7 @@ Version 3.0
 import sys
 import os.path
 import requests
+import markdown
 import src.frontend.resources
 
 from configparser import ConfigParser
@@ -22,10 +23,10 @@ from src.frontend.License import Ui_License
 from src.frontend.ui_form import Ui_Porn_Fetch_Widget
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
-                            QTranslator, QCoreApplication)
+                            QTranslator, QCoreApplication, QUrl)
 from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QFileDialog,
-                               QTreeWidgetItem)
-from PySide6.QtGui import QIcon
+                               QTreeWidgetItem, QTextBrowser)
+from PySide6.QtGui import QIcon, QDesktopServices
 
 
 categories = [attr for attr in dir(locals.Category) if
@@ -423,6 +424,7 @@ class PornFetch(QWidget):
 
     def switch_to_credits(self):
         self.ui.stacked_widget_main.setCurrentIndex(3)
+        self.show_credits()
 
     """
     The following are functions used by different other functions to handle data over different classes / threads.
@@ -1097,6 +1099,13 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         video.image.download("./")
         user_string = self.get_video_thumbnail_language_string
         ui_popup(user_string)
+
+    def show_credits(self):
+        self.ui.textBrowser.setOpenExternalLinks(True)
+        file = QFile(":/credits/README/CREDITS.md")
+        file.open(QFile.ReadOnly | QFile.Text)
+        stream = QTextStream(file)
+        self.ui.textBrowser.setHtml(markdown.markdown(stream.readAll()))
 
 
 def main():

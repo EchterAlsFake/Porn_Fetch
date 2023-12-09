@@ -18,7 +18,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QGridLayout, QGroupBox, QHeaderView,
     QLabel, QLineEdit, QProgressBar, QPushButton,
     QRadioButton, QSizePolicy, QSpacerItem, QSpinBox,
-    QStackedWidget, QTreeWidget, QTreeWidgetItem, QWidget)
+    QStackedWidget, QTextBrowser, QTreeWidget, QTreeWidgetItem,
+    QWidget)
 
 class Ui_Porn_Fetch_Widget(object):
     def setupUi(self, Porn_Fetch_Widget):
@@ -1172,6 +1173,11 @@ class Ui_Porn_Fetch_Widget(object):
         self.page_6.setObjectName(u"page_6")
         self.gridLayout_31 = QGridLayout(self.page_6)
         self.gridLayout_31.setObjectName(u"gridLayout_31")
+        self.textBrowser = QTextBrowser(self.page_6)
+        self.textBrowser.setObjectName(u"textBrowser")
+
+        self.gridLayout_31.addWidget(self.textBrowser, 0, 0, 1, 1)
+
         self.stacked_widget_main.addWidget(self.page_6)
 
         self.gridLayout_8.addWidget(self.stacked_widget_main, 0, 2, 1, 1)
@@ -1179,7 +1185,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.retranslateUi(Porn_Fetch_Widget)
 
-        self.stacked_widget_main.setCurrentIndex(1)
+        self.stacked_widget_main.setCurrentIndex(3)
         self.stacked_widget_top.setCurrentIndex(1)
 
 

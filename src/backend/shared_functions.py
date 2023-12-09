@@ -11,7 +11,7 @@ from phub import Client
 from colorama import Fore
 from hue_shift import return_color, reset
 from datetime import datetime
-from moviepy.editor import VideoFileClip
+from pymediainfo import MediaInfo
 from configparser import ConfigParser
 from hqporner_api.api import API
 
@@ -130,25 +130,25 @@ def convert_to_seconds(duration_str):
 def check_if_video_exists(video, output_path):
     if os.path.exists(output_path):
         logger_debug("Found video... checking length...")
-        with VideoFileClip(output_path) as clip:
-            existing_duration = int(clip.duration)
-            if str(video).endswith(".html"):
-                video_duration = API().get_video_length(str(video))
-                video_duration = convert_to_seconds(video_duration)
+        media_info = MediaInfo.parse(output_path)
 
-            else:
-                video_duration = video.duration.seconds
+        if str(video).endswith(".html"):
+            video_duration = API().get_video_length(str(video))
+            video_duration = convert_to_seconds(video_duration)
 
+        else:
+            video_duration = video.duration.seconds
+
+        for track in media_info.tracks:
+            existing_duration = int(
+                float(track.duration)) // 1000  # Convert from string to float, then to int, and finally to seconds
             logger_debug(f"Existing video duration: {existing_duration}")
             logger_debug(f"Video duration: {video_duration}")
-
             if approximately_equal(existing_duration, video_duration):
                 logger_debug(f"Video already exists, skipping download...")
                 return True
-
             else:
                 return False
-
     else:
         return False
 

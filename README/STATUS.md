@@ -12,13 +12,13 @@
 - [] Updating both translations
 - [] Supporting feed objects
 - [] OLED night black instead of grey
-- [] Different threading modes, for different use cases
-- [] A new and better layout (some in 1920x1080) See explanation down below
-- [] Better way of getting metadata
-- [] Directory structure system
-- [] Better way of checking if file exists
+- [x] Different threading modes, for different use cases
+- [x] A new and better layout (some in 1920x1080) See explanation down below
+- [x] Better way of getting metadata
+- [x] Directory structure system
+- [x] Better way of checking if file exists
 - [] A lot better exception handling
-- [] More features for hqporner.com
+- [x] More features for hqporner.com
 - [] Including French translations (will need an update on the .ts)
 - [x] Dark mode for license widget
 - [x] Working on the translations

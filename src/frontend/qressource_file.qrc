@@ -13,6 +13,9 @@
     <qresource prefix="/style">
         <file>stylesheet.qss</file>
     </qresource>
+    <qresource prefix="/credits">
+        <file>../../README/CREDITS.md</file>
+    </qresource>
     <qresource prefix="/translations">
         <file>translations/de.qm</file>
         <file>translations/en.qm</file>

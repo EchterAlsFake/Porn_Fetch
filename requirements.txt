@@ -1,7 +1,8 @@
 phub
 colorama
-moviepy
 PySide6
 requests
 hqporner_api
 hue_shift
+pymediainfo
+Markdown
