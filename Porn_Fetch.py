@@ -1,14 +1,18 @@
-import os.path
-import sys
-import src.frontend.resources
-from configparser import ConfigParser
+"""
+Porn Fetch CLI
 
+Licensed under GPL 3
+Copyright (C) 2023 Johannes Habel (EchterAlsFake)
+
+Version 3.0
+"""
+
+import sys
+import os.path
 import requests
-from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
-                            QTranslator, QCoreApplication)
-from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QFileDialog,
-                               QTreeWidgetItem)
+import src.frontend.resources
+
+from configparser import ConfigParser
 from hqporner_api.api import API
 from phub import Quality, Client, locals, errors, download, Video
 
@@ -17,13 +21,18 @@ from src.backend.shared_functions import (strip_title, check_video, check_if_vid
 from src.frontend.License import Ui_License
 from src.frontend.ui_form import Ui_Porn_Fetch_Widget
 
+from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
+                            QTranslator, QCoreApplication)
+from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QFileDialog,
+                               QTreeWidgetItem)
+from PySide6.QtGui import QIcon
+
 
 categories = [attr for attr in dir(locals.Category) if
               not callable(getattr(locals.Category, attr)) and not attr.startswith("__")]
 
 total_segments = 0
 downloaded_segments = 0
-
 
 
 def ui_popup(text):
@@ -52,6 +61,7 @@ class DownloadProgressSignal(QObject):
 
 
 class QTreeWidgetSignal(QObject):
+    """Signals needed across the QTreeWidget"""
     progress = Signal(str)
     get_total = Signal(str, Quality)
     start_undefined_range = Signal()
@@ -59,11 +69,13 @@ class QTreeWidgetSignal(QObject):
 
 
 class MetadataSignals(QObject):
+    """Signals needed to emit data from the metadata class"""
     data = Signal(list)
     start_undefined = Signal()
 
 
 class DownloadThread(QRunnable):
+    """Threading class to download videos."""
     signal = Signal()
 
     def __init__(self, video, quality, output_path, threading_mode):
@@ -112,7 +124,7 @@ class DownloadThread(QRunnable):
 
 
 class QTreeWidgetDownloadThread(QRunnable):
-
+    """Threading class for the QTreeWidget (sends objects to the download class defined above)"""
     def __init__(self, treeWidget, semaphore, quality):
         super(QTreeWidgetDownloadThread, self).__init__()
         self.treeWidget = treeWidget
@@ -137,7 +149,8 @@ class QTreeWidgetDownloadThread(QRunnable):
                 video_urls_hqporner.append(url)
 
             else:
-                video_objects.append(check_video(url, language="en"))  # Not used for downloading, so language doesn't matter
+                video_objects.append(
+                    check_video(url, language="en"))  # Not used for downloading, so language doesn't matter
 
         total_segments = sum(
             [len(list(video.get_segments(quality=self.quality))) for video in video_objects])
@@ -153,6 +166,7 @@ class QTreeWidgetDownloadThread(QRunnable):
 
 
 class MetadataVideos(QRunnable):
+    """Threading class for the video metadata"""
     def __init__(self, video):
         super(MetadataVideos, self).__init__()
         self.signals = MetadataSignals()
@@ -189,6 +203,7 @@ class MetadataVideos(QRunnable):
 
 
 class MetadataUser(QRunnable):
+    """Threading class for the user metadata"""
     def __init__(self, user):
         super(MetadataUser, self).__init__()
         self.user = user
@@ -228,7 +243,7 @@ class MetadataUser(QRunnable):
 
 
 class License(QWidget):
-    """ License class to display the GPL 3 License to the user."""
+    """License class to display the GPL 3 License to the user."""
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -272,6 +287,7 @@ class License(QWidget):
 
 
 class PornFetch(QWidget):
+    """Porn Fetch widget (Main Application)"""
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -328,6 +344,7 @@ class PornFetch(QWidget):
         logger_debug("Loaded Icons!")
 
     def language_strings(self):
+        """Contains the language strings. Needed for translation"""
         self.get_api_language_string_dialog = QCoreApplication.tr("Please enter the language code for your "
                                                                   "language.  Example: en, de, fr, ru --=>:")
 
@@ -567,16 +584,16 @@ class PornFetch(QWidget):
         self.output_path = self.conf.get("Video", "output_path")
 
         self.gui_language = self.conf.get("UI", "language")
-        
+
         if self.gui_language == "en":
             self.ui.radio_ui_language_english.setChecked(True)
-        
+
         elif self.gui_language == "de":
             self.ui.radio_ui_language_german.setChecked(True)
-        
+
         elif self.gui_language == "fr":
             self.ui.radio_ui_language_french.setChecked(True)
-        
+
         elif self.gui_language == "system":
             self.ui.radio_ui_language_system.setChecked(True)
 
@@ -814,7 +831,6 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         else:
             self.semaphore.release()
             if not isinstance(video, str):
-
                 global downloaded_segments
                 downloaded_segments += len(list(video.get_segments(quality=quality)))
 
@@ -849,7 +865,6 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
     def stop_undefined_range(self):
         self.ui.progressbar_total.setRange(0, 1)
 
-
     """
     The following functions are related to the QFileDialog
     """
@@ -871,7 +886,8 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
             else:
                 pornhub_objects.append(check_video(url, language=self.api_language))
 
-        self.add_to_tree_widget(iterator=hqporner_urls + pornhub_objects, search_limit=len(hqporner_urls + pornhub_objects))
+        self.add_to_tree_widget(iterator=hqporner_urls + pornhub_objects,
+                                search_limit=len(hqporner_urls + pornhub_objects))
 
     def select_output_path(self):
         """User can select the directory from a pop-up (QFileDialog) list"""
@@ -1125,11 +1141,18 @@ def main():
         widget = License()  # Starts License widget and checks if license was accepted.
         widget.check_license_and_proceed()
 
+        """
+        The following exceptions are just general exceptions to handle some basic errors. They are not so relevant for
+        most cases.
+        """
+
     except PermissionError:
-        ui_popup(QCoreApplication.tr("Insufficient Permissions to access something. Please run Porn Fetch as root / admin"))
+        ui_popup(
+            QCoreApplication.tr("Insufficient Permissions to access something. Please run Porn Fetch as root / admin"))
 
     except ConnectionResetError:
-        ui_popup(QCoreApplication.tr("Connection was reset. Are you connected to a public wifi or a university's wifi? "))
+        ui_popup(
+            QCoreApplication.tr("Connection was reset. Are you connected to a public wifi or a university's wifi? "))
 
     except ConnectionError:
         ui_popup(QCoreApplication.tr("Connection Error, please make sure you have a stable internet connection"))
@@ -1138,15 +1161,17 @@ def main():
         sys.exit(0)
 
     except requests.exceptions.SSLError:
-        ui_popup(QCoreApplication.tr("SSLError: Your connection is blocked by your ISP / IT administrator (Firewall). If you are in a "
-                 "University or at school, please connect to a VPN / Proxy"))
+        ui_popup(QCoreApplication.tr(
+            "SSLError: Your connection is blocked by your ISP / IT administrator (Firewall). If you are in a "
+            "University or at school, please connect to a VPN / Proxy"))
 
     except TypeError:
         pass
 
     except OSError as e:
-        ui_popup(QCoreApplication.tr(f"This error shouldn't happen. If you still see it it's REALLY important that you report the "
-                 f"following: {e}"))
+        ui_popup(QCoreApplication.tr(
+            f"This error shouldn't happen. If you still see it it's REALLY important that you report the "
+            f"following: {e}"))
 
     except ZeroDivisionError:
         pass
