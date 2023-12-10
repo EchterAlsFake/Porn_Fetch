@@ -295,7 +295,7 @@ border-radius: 5px;</string>
    <item row="0" column="2">
     <widget class="QStackedWidget" name="stacked_widget_main">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page_3">
       <layout class="QGridLayout" name="gridLayout_7">
@@ -305,7 +305,7 @@ border-radius: 5px;</string>
           <cursorShape>ArrowCursor</cursorShape>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="page">
           <layout class="QGridLayout" name="gridLayout_30">
@@ -657,7 +657,17 @@ QPushButton:pressed {
               <widget class="QTreeWidget" name="treeWidget">
                <column>
                 <property name="text">
-                 <string notr="true">1</string>
+                 <string notr="true">Title</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Author</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Duration</string>
                 </property>
                </column>
               </widget>

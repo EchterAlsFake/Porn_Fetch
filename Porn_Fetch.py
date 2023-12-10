@@ -23,10 +23,10 @@ from src.frontend.License import Ui_License
 from src.frontend.ui_form import Ui_Porn_Fetch_Widget
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
-                            QTranslator, QCoreApplication, QUrl)
+                            QTranslator, QCoreApplication)
 from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QFileDialog,
-                               QTreeWidgetItem, QTextBrowser)
-from PySide6.QtGui import QIcon, QDesktopServices
+                               QTreeWidgetItem)
+from PySide6.QtGui import QIcon
 
 
 categories = [attr for attr in dir(locals.Category) if
@@ -75,6 +75,48 @@ class MetadataSignals(QObject):
     start_undefined = Signal()
 
 
+class TreeWidgetSignals(QObject):
+    """Signals to send data to the tree Widget"""
+    clear_signal = Signal()
+    text_data = Signal(list)
+    progress = Signal(int, int)
+
+
+class AddToTreeWidget(QRunnable):
+    def __init__(self, iterator, search_limit):
+        super(AddToTreeWidget, self).__init__()
+        self.signals = TreeWidgetSignals()
+        self.iterator = iterator
+        self.search_limit = search_limit
+
+    def run(self):
+        self.signals.clear_signal.emit()
+
+        try:
+            logger_debug(f"Search Limit: {str(self.search_limit)}")
+            total = len(self.iterator)
+            for i, video in enumerate(self.iterator, start=1):
+                if str(video).endswith(".html"):
+                    title = API().extract_title(url=str(video))
+                    duration = API().get_video_length(url=str(video))
+                    author = API().extract_actress(url=str(video))
+                    author = "".join(author)
+                    text_data = [str(title), str(author), str(duration), str(i), str(video)]
+
+                else:
+                    title = video.title
+                    url = video.url
+                    duration = round(video.duration.seconds / 60)
+                    author = video.author.name
+                    text_data = [str(title), str(author), str(duration), str(i), str(url)]
+
+                self.signals.progress.emit(total, i)
+                self.signals.text_data.emit(text_data)
+
+        except errors.NoResult:
+            pass
+
+
 class DownloadThread(QRunnable):
     """Threading class to download videos."""
     signal = Signal()
@@ -105,7 +147,7 @@ class DownloadThread(QRunnable):
             if isinstance(self.video, Video):
                 print(self.video)
                 if self.threading_mode == 2:
-                    self.downloader = download.threaded(max_workers=20, timeout=15)
+                    self.downloader = download.threaded(max_workers=20, timeout=5)
 
                 elif self.threading_mode == 1:
                     self.downloader = download.FFMPEG
@@ -331,6 +373,8 @@ class PornFetch(QWidget):
         self.load_user_settings()
         self.update_settings()
         self.language_strings()
+        self.ui.treeWidget.setColumnWidth(0, 600)
+        self.ui.treeWidget.setColumnWidth(1, 200)
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(0)
 
@@ -662,25 +706,34 @@ class PornFetch(QWidget):
     The following functions are related to the tree widget    
     """
 
-    def add_to_tree_widget(self, iterator, search_limit):
+    def add_to_tree_widget_thread(self, iterator, search_limit):
+        self.thread = AddToTreeWidget(iterator, search_limit=1)
+        self.thread.signals.text_data.connect(self.add_to_tree_widget_signal)
+        self.thread.signals.progress.connect(self.progress_tree_widget)
+        self.thread.signals.clear_signal.connect(self.clear_tree_widget)
+        self.threadpool.start(self.thread)
+
+    def clear_tree_widget(self):
         self.ui.treeWidget.clear()
-        try:
-            logger_debug(f"Search Limit: {str(search_limit)}")
-            for i, video in enumerate(iterator[0:int(search_limit)], start=1):
-                item = QTreeWidgetItem(self.ui.treeWidget)
-                if str(video).endswith(".html"):
 
-                    item.setText(0, f"{i}) {API().extract_title(str(video))}")
-                    item.setData(0, Qt.UserRole, str(video))
+    def progress_tree_widget(self, total, current):
+        self.ui.progressbar_total.setMaximum(total)
+        self.ui.progressbar_total.setValue(current)
 
-                else:
-                    item.setText(0, f"{i}) {video.title}")
-                    item.setData(0, Qt.UserRole, video.url)
+    def add_to_tree_widget_signal(self, data):
+        title = data[0]
+        author = data[1]
+        duration = data[2]
+        index = data[3]
+        video = data[4]
 
-                item.setCheckState(0, Qt.Unchecked)  # Adds a checkbox
+        item = QTreeWidgetItem(self.ui.treeWidget)
+        item.setText(0, f"{index}) {title}")
+        item.setText(1, author)
+        item.setText(2, str(duration))
+        item.setData(0, Qt.UserRole, str(video))
+        item.setCheckState(0, Qt.Unchecked)  # Adds a checkbox
 
-        except errors.NoResult:
-            pass
 
     def download_tree_widget(self):
         semaphore = self.semaphore
@@ -767,7 +820,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         else:
             one_time_iterator.append(check_video(url=url, language=api_language))
 
-        self.add_to_tree_widget(iterator=one_time_iterator, search_limit=self.search_limit)
+        self.add_to_tree_widget_thread(iterator=one_time_iterator, search_limit=self.search_limit)
 
     def start_model(self):
         model = self.ui.lineedit_model_url.text()
@@ -776,7 +829,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         client = Client(language=api_language)
         model_object = client.get_user(model)
         videos = model_object.videos
-        self.add_to_tree_widget(videos, search_limit=search_limit)
+        self.add_to_tree_widget_thread(videos, search_limit=search_limit)
 
     def load_video(self, url):
         self.update_settings()
@@ -888,7 +941,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
             else:
                 pornhub_objects.append(check_video(url, language=self.api_language))
 
-        self.add_to_tree_widget(iterator=hqporner_urls + pornhub_objects,
+        self.add_to_tree_widget_thread(iterator=hqporner_urls + pornhub_objects,
                                 search_limit=len(hqporner_urls + pornhub_objects))
 
     def select_output_path(self):
@@ -939,17 +992,17 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
     def get_watched_videos(self):
         """Returns the videos watched by the user"""
         watched = self.client.account.watched
-        self.add_to_tree_widget(watched, search_limit=500)
+        self.add_to_tree_widget_thread(watched, search_limit=500)
 
     def get_liked_videos(self):
         """Returns the videos liked by the user"""
         liked = self.client.account.liked
-        self.add_to_tree_widget(liked, search_limit=500)
+        self.add_to_tree_widget_thread(liked, search_limit=500)
 
     def get_recommended_videos(self):
         """Returns the videos recommended for the user"""
         recommended = self.client.account.recommended
-        self.add_to_tree_widget(recommended, search_limit=500)
+        self.add_to_tree_widget_thread(recommended, search_limit=500)
 
     """
     The following functions are related to the search functionality
@@ -962,7 +1015,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         search_limit = self.search_limit
         client = Client(language=language)
         search = client.search(query)
-        self.add_to_tree_widget(search, search_limit=search_limit)
+        self.add_to_tree_widget_thread(search, search_limit=search_limit)
 
     def search_pornstars(self):
         query = self.ui.lineedit_search_pornstar_query.text()
