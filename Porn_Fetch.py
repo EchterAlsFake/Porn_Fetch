@@ -28,7 +28,6 @@ from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog,
                                QTreeWidgetItem)
 from PySide6.QtGui import QIcon
 
-
 categories = [attr for attr in dir(locals.Category) if
               not callable(getattr(locals.Category, attr)) and not attr.startswith("__")]
 
@@ -80,6 +79,7 @@ class TreeWidgetSignals(QObject):
     clear_signal = Signal()
     text_data = Signal(list)
     progress = Signal(int, int)
+    finished = Signal()
 
 
 class AddToTreeWidget(QRunnable):
@@ -110,12 +110,16 @@ class AddToTreeWidget(QRunnable):
                     author = video.author.name
                     text_data = [str(title), str(author), str(duration), str(i), str(url)]
 
+                logger_debug(f"Total Length: {total}")
+                logger_debug(f"Current Index: {i}")
                 self.signals.progress.emit(total, i)
                 self.signals.text_data.emit(text_data)
 
         except errors.NoResult:
             pass
 
+        finally:
+            self.signals.finished.emit()
 
 class DownloadThread(QRunnable):
     """Threading class to download videos."""
@@ -168,6 +172,7 @@ class DownloadThread(QRunnable):
 
 class QTreeWidgetDownloadThread(QRunnable):
     """Threading class for the QTreeWidget (sends objects to the download class defined above)"""
+
     def __init__(self, treeWidget, semaphore, quality):
         super(QTreeWidgetDownloadThread, self).__init__()
         self.treeWidget = treeWidget
@@ -210,6 +215,7 @@ class QTreeWidgetDownloadThread(QRunnable):
 
 class MetadataVideos(QRunnable):
     """Threading class for the video metadata"""
+
     def __init__(self, video):
         super(MetadataVideos, self).__init__()
         self.signals = MetadataSignals()
@@ -247,6 +253,7 @@ class MetadataVideos(QRunnable):
 
 class MetadataUser(QRunnable):
     """Threading class for the user metadata"""
+
     def __init__(self, user):
         super(MetadataUser, self).__init__()
         self.user = user
@@ -331,6 +338,7 @@ class License(QWidget):
 
 class PornFetch(QWidget):
     """Porn Fetch widget (Main Application)"""
+
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -707,10 +715,11 @@ class PornFetch(QWidget):
     """
 
     def add_to_tree_widget_thread(self, iterator, search_limit):
-        self.thread = AddToTreeWidget(iterator, search_limit=1)
+        self.thread = AddToTreeWidget(iterator, search_limit)
         self.thread.signals.text_data.connect(self.add_to_tree_widget_signal)
         self.thread.signals.progress.connect(self.progress_tree_widget)
         self.thread.signals.clear_signal.connect(self.clear_tree_widget)
+        self.thread.signals.finished.connect(self.stop_undefined_range)
         self.threadpool.start(self.thread)
 
     def clear_tree_widget(self):
@@ -733,7 +742,6 @@ class PornFetch(QWidget):
         item.setText(2, str(duration))
         item.setData(0, Qt.UserRole, str(video))
         item.setCheckState(0, Qt.Unchecked)  # Adds a checkbox
-
 
     def download_tree_widget(self):
         semaphore = self.semaphore
@@ -826,7 +834,12 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         model = self.ui.lineedit_model_url.text()
         api_language = self.api_language
         search_limit = self.search_limit
-        client = Client(language=api_language)
+        if not isinstance(self.client, Client):
+            client = Client(language=api_language)
+
+        else:
+            client = self.client
+
         model_object = client.get_user(model)
         videos = model_object.videos
         self.add_to_tree_widget_thread(videos, search_limit=search_limit)
@@ -842,57 +855,65 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         if str(url).endswith(".html"):
             video = url
 
+        if not isinstance(url, Video):
+            video = check_video(url, language=api_language)
+
+        if not isinstance(url, Video) and not isinstance(url, str):
+            text = QCoreApplication.tr("Video is not from PornHub or HQPorner!")
+            ui_popup(text)
+
         else:
-            video = check_video(url, api_language)
+            output_path = correct_output_path(output_path)
 
-        output_path = correct_output_path(output_path)
-
-        if str(url).endswith(".html"):
-            title = API().extract_title(url)
-
-        else:
-            title = video.title
-
-        stripped_title = strip_title(title)
-
-        logger_debug(f"Loading Video: {stripped_title}")
-
-        if directory_system:
             if str(url).endswith(".html"):
-                author = API().extract_actress(url)[0]
+                title = API().extract_title(url)
 
             else:
-                author = video.author.name
+                title = video.title
 
-            if not os.path.exists(f"{output_path}{author}"):
-                os.mkdir(output_path + author)
+            stripped_title = strip_title(title)
+            logger_debug(f"Loading Video: {stripped_title}")
 
-            output_path = f"{output_path}{author}{os.sep}{stripped_title}.mp4"
-            output_path.strip("'")
+            if directory_system:
+                if str(url).endswith(".html"):
+                    author = API().extract_actress(url)[0]
 
-        else:
-            output_path = f"{output_path}{stripped_title}.mp4"
-            output_path.strip("'")
+                else:
+                    author = video.author.name
 
-        if not check_if_video_exists(video, output_path):
-            if self.threading:
-                logger_debug("Processing Thread")
-                self.process_video_thread(output_path=output_path, video=video, threading_mode=threading_mode,
-                                          quality=quality)
+                if not os.path.exists(f"{output_path}{author}"):
+                    os.mkdir(output_path + author)
 
-            elif not self.threading:
-                self.process_video_without_thread(output_path, video, quality)
+                output_path = f"{output_path}{author}{os.sep}{stripped_title}.mp4"
+                output_path.strip("'")
 
-        else:
-            self.semaphore.release()
-            if not isinstance(video, str):
-                global downloaded_segments
-                downloaded_segments += len(list(video.get_segments(quality=quality)))
+            else:
+                output_path = f"{output_path}{stripped_title}.mp4"
+                output_path.strip("'")
+
+            if not check_if_video_exists(video, output_path):
+                if self.threading:
+                    logger_debug("Processing Thread")
+                    self.process_video_thread(output_path=output_path, video=video, threading_mode=threading_mode,
+                                              quality=quality)
+
+                elif not self.threading:
+                    self.process_video_without_thread(output_path, video, quality)
+
+            else:
+                self.semaphore.release()
+                if not isinstance(video, str):
+                    global downloaded_segments
+                    downloaded_segments += len(list(video.get_segments(quality=quality)))
 
     def return_client(self):
-        self.update_settings()
-        api_language = self.api_language
-        return Client(language=api_language)
+        if isinstance(self.client, Client):
+            return self.client
+
+        else:
+            self.update_settings()
+            api_language = self.api_language
+            return Client(language=api_language)
 
     """
     The following functions are used to connect data between Threads and the Main UI
@@ -942,7 +963,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
                 pornhub_objects.append(check_video(url, language=self.api_language))
 
         self.add_to_tree_widget_thread(iterator=hqporner_urls + pornhub_objects,
-                                search_limit=len(hqporner_urls + pornhub_objects))
+                                       search_limit=len(hqporner_urls + pornhub_objects))
 
     def select_output_path(self):
         """User can select the directory from a pop-up (QFileDialog) list"""
@@ -989,20 +1010,38 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         except errors.LoginFailed:
             ui_popup(self.language_string_login_failed)
 
+    def check_login(self):
+        if self.client.logged:
+            return True
+
+        elif not self.client.logged:
+            self.login()
+            if not self.client.logged:
+                text = QCoreApplication.tr("There's a problem with the login. Please make sure you login first "
+                                           "and then you try to get videos based on your account.")
+                ui_popup(text)
+                return False
+
+            else:
+                return True
+
     def get_watched_videos(self):
         """Returns the videos watched by the user"""
-        watched = self.client.account.watched
-        self.add_to_tree_widget_thread(watched, search_limit=500)
+        if self.check_login():
+            watched = self.client.account.watched
+            self.add_to_tree_widget_thread(watched, search_limit=500)
 
     def get_liked_videos(self):
         """Returns the videos liked by the user"""
-        liked = self.client.account.liked
-        self.add_to_tree_widget_thread(liked, search_limit=500)
+        if self.check_login():
+            liked = self.client.account.liked
+            self.add_to_tree_widget_thread(liked, search_limit=500)
 
     def get_recommended_videos(self):
         """Returns the videos recommended for the user"""
-        recommended = self.client.account.recommended
-        self.add_to_tree_widget_thread(recommended, search_limit=500)
+        if self.check_login():
+            recommended = self.client.account.recommended
+            self.add_to_tree_widget_thread(recommended, search_limit=500)
 
     """
     The following functions are related to the search functionality

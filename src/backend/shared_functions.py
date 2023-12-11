@@ -5,9 +5,8 @@ If you know what you do, you can change a few things here :)
 
 import os
 import string
-import phub.errors
 
-from phub import Client
+from phub import Client, errors, Video
 from colorama import Fore
 from hue_shift import return_color, reset
 from datetime import datetime
@@ -78,11 +77,15 @@ def logger_debug(e):
 
 
 def check_video(url, language):
+
+    if isinstance(url, Video):
+        return url
+
     if isinstance(url, str):
         try:
             return Client(language=language).get(url)
 
-        except phub.errors.URLError:
+        except errors.URLError:
             logger_error(f"Invalid URL! : {url}")
             return False
 
@@ -175,7 +178,6 @@ def setup_config_file(force=False):
         except PermissionError:
             logger_error("Can't write to config.ini due to permission issues.")
             exit(1)
-
 
     else:
         config = ConfigParser()
