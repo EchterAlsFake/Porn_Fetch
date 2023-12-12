@@ -10,7 +10,7 @@ import os.path
 import threading
 
 
-from phub import *
+from phub import Video, Client, errors, download, display, Quality
 from configparser import ConfigParser
 from hqporner_api import API
 
@@ -20,6 +20,7 @@ from src.backend.shared_functions import (strip_title, check_video, check_if_vid
 
 downloaded_segments = 0
 total_segments = 0
+
 
 class CLI():
     def __init__(self):
@@ -34,6 +35,9 @@ class CLI():
         self.search_limit = None
         self.output_path = None
         self.api_language = None
+        self.quality = None
+
+        self.load_user_settings()
 
         if self.license():
             self.main_menu()
@@ -52,17 +56,6 @@ NO LIABILITY FOR END USER USE
 Under no circumstances and under no legal theory, whether in tort, contract, or otherwise, shall the copyright holder or contributors be liable to You for any direct, indirect, special, incidental, consequential or exemplary damages of any character including, without limitation, damages for loss of goodwill, work stoppage, computer failure or malfunction, loss of data or any and all other commercial damages or losses, even if such party shall have been informed of the possibility of such damages.
 This limitation of liability shall not apply to liability for death or personal injury resulting from such party’s negligence to the extent applicable law prohibits such limitation. Some jurisdictions do not allow the exclusion or limitation of incidental or consequential damages, so this exclusion and limitation may not apply to You.
 This Agreement represents the complete agreement concerning the subject matter hereof.
-
-
-
-
-
-
-
-
-
-
-
 """
 
             x = input(f"""
@@ -80,6 +73,9 @@ Do you accept the License? [yes,no]""")
             else:
                 exit()
 
+        else:
+            return True
+
     def main_menu(self):
         options = input(f"""
 1) Download a Video (PornHub / HQPorner)
@@ -92,6 +88,30 @@ Do you accept the License? [yes,no]""")
 8) Credits / Information
 
 -------------------------------=>:""")
+
+        if options == "1":
+            self.start_single_video()
+
+        elif options == "2":
+            self.start_model_user_channel()
+
+        elif options == "3":
+            ""
+
+        elif options == "4":
+            self.start_from_file()
+
+        elif options == "5":
+            ""
+
+        elif options == "6":
+            self.save_user_settings()
+
+        elif options == "7":
+            self.help()
+
+        elif options == "8":
+            self.credits()
 
     def start_single_video(self):
         url = input(f"""Enter PornHub / HQPorner URL --=>: """)
@@ -153,26 +173,66 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
             logger_error("File doesn't exist! Please try again.")
             self.start_from_file()
 
-    def download_video(self, video, output_path):
+    def pre_setup_video(self, url):
+        if isinstance(url, str):
+            title = API().extract_title(url)
+            author = API().extract_actress(url)
+            video = str(url)
 
-        if str(video).endswith(".html"):
-            API().download(url=video, output_path=output_path, no_title=True, quality="highest")
+        elif isinstance(url, Video):
+            language = self.api_language
+            video = check_video(url, language)
+            title = video.title
+            author = video.author
+            quality = self.quality
 
         else:
+            logger_error("URL isn't a PornHub or a HQPorner URL!")
 
-            if self.threading_mode == "0":
-                video.download()
+        title = strip_title(title)
+        output_path = self.output_path
+        if not output_path.endswith(os.sep):
+            output_path = f"{output_path}{os.sep}"
 
+        if self.directory_system:
+            output_path = f"{output_path}{author}{os.sep}{title}"
 
+        else:
+            output_path = f"{output_path}{title}"
 
+        if not check_if_video_exists(video=video, output_path=output_path):
+            if isinstance(url, str):
+                if self.threading:
+                    hqporner_thread = threading.Thread(target=self.download_video_hqporner, args=(url, output_path))
+                    hqporner_thread.start()
 
+                else:
+                    self.download_video_hqporner(url=url, output_path=output_path)
 
+            elif isinstance(url, Video):
+                if self.threading:
+                    pornhub_thread = threading.Thread(target=self.download_video_pornhub,
+                                                      args=(video, output_path, quality))
+                    pornhub_thread.start()
 
-    def pre_setup_video(self, url):
+                else:
+                    self.download_video_pornhub(video=video, output_path=output_path, quality=quality)
 
-    def download_video_hqporner(self):
+    def download_video_pornhub(self, video, output_path, quality):
 
-    def settings(self):
+        if self.threading_mode == "2":
+            threading_X = download.threaded()
+
+        elif self.threading_mode == "1":
+            threading_X = download.FFMPEG
+
+        elif self.threading_mode == "0":
+            threading_X = download.default
+
+        video.download(downloader=threading_X, quality=quality, path=output_path, display=display.progress())
+
+    def download_video_hqporner(self, url, output_path):
+        API().download(url=url, no_title=True, output_path=output_path, quality="highest")
 
     def load_user_settings(self):
         self.api_language = self.conf["Video"]["language"]
@@ -181,25 +241,118 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
         self.threading = self.conf["Performance"]["threading"]
         self.threading_mode = self.conf["Performance"]["threading_mode"]
         self.directory_system = self.conf["Video"]["directory_system"]
+        quality = self.conf["Video"]["quality"]
+
+        if quality == "best":
+            self.quality = Quality.BEST
+
+        elif quality == "half":
+            self.quality = Quality.HALF
+
+        elif quality == "worst":
+            self.quality = Quality.WORST
 
         if self.threading == "yes":
             self.threading = True
 
         if self.directory_system == "1":
             self.directory_system = True
-
+        ""
 
     def save_user_settings(self):
+        quality_ext = self.quality
+        threading_ext = self.threading_mode
+        api_language_ext = self.api_language
+        output_path_ext = self.output_path
+        directory_system_ext = self.directory_system
 
+        options = input(f"""
+--------------QUALITY-------------|
+|>  Current: {quality_ext}
+|>  1) Best
+|>  2) Half
+|>  3) Worst
+|-------------Threading-----------|
+|>  Current: {threading_ext}
+|>  4) High Performance
+|>  5) FFMPEG (needs ffmpeg installed on your system)
+|>  6) Default
+|>  7) Disable Threading for the whole application
+|--------------API Language--------|
+|>  Current: {api_language_ext}
+|>  8) Enter custom language code... e.g. de for german or es for espanol
+|--------------Output Path----------|
+|>  Current: {output_path_ext}
+|>  9) Change Output Path
+|--------------Directory System-----|
+|>  Current: {directory_system_ext}
+|>  10) Enable
+|>  11) Disable
+|--------------------------=>:""")
+        if options == "1":
+            self.conf.set("Video", "quality", "best")
+
+        elif options == "2":
+            self.conf.set("Video", "quality", "half")
+
+        elif options == "3":
+            self.conf.set("Video", "quality", "worst")
+
+        elif options == "4":
+            self.conf.set("Performance", "threading_mode", "2")
+            self.conf.set("Performance", "threading", "1")
+
+        elif options == "5":
+            self.conf.set("Performance", "threading_mode", "1")
+            self.conf.set("Performance", "threading", "1")
+
+        elif options == "6":
+            self.conf.set("Performance", "threading_mode", "0")
+            self.conf.set("Performance", "threading", "1")
+
+        elif options == "7":
+            self.conf.set("Performance", "threading", "0")
+
+        elif options == "8":
+            language_code = input(f"""
+Please enter the language code -->:""")
+            self.conf.set("Video", "language", language_code)
+
+        elif options == "9":
+            output_path = input(f"""
+Please enter the new output path -->:""")
+            if not os.path.exists(output_path):
+                logger_error("The specified output path doesn't exist!")
+
+            else:
+                output_path = correct_output_path(output_path)
+
+            self.conf.set("Video", "output_path", output_path)
+
+        elif options == "10":
+            self.conf.set("Video", "directory_system", "1")
+
+        elif options == "11":
+            self.conf.set("Video", "directory_system", "0")
+
+        with open("config.ini", "w") as config_file:
+            self.conf.write(config_file)
+
+        logger_debug("Applied new settings!")
+        self.load_user_settings()
+        logger_debug("Reloaded User settings. You may continue now :) ")
 
     def help(self):
+        options = input(f"""
+
+""")
 
     def credits(self):
+        ""
 
 
 
-
-
+CLI()
 
 
 
