@@ -24,6 +24,7 @@ total_segments = 0
 
 class CLI():
     def __init__(self):
+        self.client = None
         setup_config_file()
         self.conf = ConfigParser()
         self.conf.read("config.ini")
@@ -102,7 +103,7 @@ Do you accept the License? [yes,no]""")
             self.start_from_file()
 
         elif options == "5":
-            ""
+            self.get_metadat_options()
 
         elif options == "6":
             self.save_user_settings()
@@ -341,6 +342,80 @@ Please enter the new output path -->:""")
         logger_debug("Applied new settings!")
         self.load_user_settings()
         logger_debug("Reloaded User settings. You may continue now :) ")
+
+    def get_metadat_options(self):
+        options = input(f"""
+1) Get Video metadata
+2) Get User metadata
+3) Back
+------------------=>:""")
+        if options == "1":
+            self.get_video_metadata()
+
+        elif options == "2":
+            self.get_user_metadata()
+
+        elif options == "3":
+            self.main_menu()
+
+    def get_video_metadata(self):
+        language = self.api_language
+        url = input(f"""
+Please enter the video url (PornHub) --=>:""")
+
+        video = check_video(url, language=language)
+
+        author = video.author
+        duration = video.duration.seconds
+        duration = round(duration) / 60
+        title = strip_title(video.title)
+        date = video.date
+        views = video.views
+        pornstar_list = [pornstar for pornstar in video.pornstars]
+        hotspots_list = [hotspots for hotspots in video.hotspots]
+
+        tags_list = [tag for tag in video.tags]
+        categories_list = [category for category in video.categories]
+        tags = ", ".join(tags_list)
+        categories = ", ".join(categories_list)
+        hotspots = ", ".join(hotspots_list)
+        pornstars = "".join(pornstar_list)
+        rating = f"Likes: {video.like.up} | Dislikes: {video.like.down}"
+
+        input(f"""
+Title: {title}
+Author: {author}
+Duration: {duration}
+Date: {date}
+Views: {views}
+Pornstars: {pornstars}
+Rating: {rating}
+Tags: {tags}
+Categories: {categories}
+Hotspots: {hotspots}
+
+Press ENTER to continue
+""")
+
+
+    def get_user_metadata(self):
+        api_language = self.api_language
+        url = input(f"""
+Enter the User URL (PornHub) --=>:""")
+
+        if not isinstance(self.client, Client):
+            self.client = Client(language=api_language)
+
+        user = self.client.get_user(url)
+
+        name = user.name
+        type = user.type
+
+        info = user.info
+
+        print(info)
+
+
 
     def help(self):
         options = input(f"""
