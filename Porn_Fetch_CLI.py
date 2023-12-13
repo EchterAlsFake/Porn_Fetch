@@ -359,8 +359,9 @@ Please enter the new output path -->:""")
     def search_options(self):
         options = input(f"""
 1) Search for Videos
-2) Search for Users / Pornstars / Channels
-3) Back
+2) Search for Users
+3) Search for Pornstars
+4) Back
 ! search filters aren't working yet. 
 
 ------------------=>:""")
@@ -372,6 +373,9 @@ Please enter the new output path -->:""")
             self.search_users()
 
         elif options == "3":
+            self.search_pornstars()
+
+        elif options == "4":
             self.main_menu()
 
     def search_videos(self):
@@ -384,16 +388,45 @@ Please enter your search query ---=>:""")
             self.client = Client(language=language)
 
         generator = self.client.search(query)
+        self.start_generator(generator)
+
+    def search_users(self):
+        video_objects = []
+        query = input(f"""
+Enter a query to search for users --=>:""")
+
+        if not isinstance(self.client, Client):
+            language = self.api_language
+            self.client = Client(language=language)
+
+        generator = self.client.search_user()
+        self.start_generator(generator)
+
+    def search_pornstars(self):
+
+        query = input(f"""
+        Enter a query to search for Pornstars --=>:""")
+
+        if not isinstance(self.client, Client):
+            language = self.api_language
+            self.client = Client(language=language)
+
+        generator = self.client.search_pornstar(query)
+        self.start_generator(generator)
+
+    def start_generator(self, generator):
+        video_objects = []
+
         for idx, video in enumerate(generator[0:100]):
             print(f"{idx}) {video.title}")
             video_objects.append(video)
 
         index = input(f"""
-Please enter the number for the videos you want to download. Separate with a comma
-e.g 1,6,92 
+        Please enter the number for the videos you want to download. Separate with a comma
+        e.g 1,6,92 
 
-! Enter 'ALL' to download all videos
------------------------=>:""")
+        ! Enter 'ALL' to download all videos
+        -----------------------=>:""")
 
         if index.lower() == "all":
             for video in video_objects:
@@ -404,19 +437,6 @@ e.g 1,6,92
             for idx in chosen_videos:
                 video = video_objects[int(idx)]
                 self.pre_setup_video(url=video)
-
-
-    def search_users(self):
-        query = input(f"""
-Enter a query to search for users --=>:""")
-
-        if not isinstance(self.client, Client):
-            language = self.api_language
-            self.client = Client(language=language)
-
-        generator = self.client.search_user()
-        # TODO
-
 
     def get_video_metadata(self):
         language = self.api_language
