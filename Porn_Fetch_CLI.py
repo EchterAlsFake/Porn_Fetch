@@ -8,11 +8,13 @@ Version 3.0
 """
 import os.path
 import threading
-
+import markdown
 
 from phub import Video, Client, errors, download, display, Quality
 from configparser import ConfigParser
 from hqporner_api import API
+from rich import print as rprint
+from rich.markdown import Markdown
 
 from src.backend.shared_functions import (strip_title, check_video, check_if_video_exists, setup_config_file,
                                           logger_debug, logger_error, return_color, reset, correct_output_path)
@@ -24,6 +26,7 @@ total_segments = 0
 
 class CLI():
     def __init__(self):
+        self.client = None
         setup_config_file()
         self.conf = ConfigParser()
         self.conf.read("config.ini")
@@ -85,7 +88,6 @@ Do you accept the License? [yes,no]""")
 4) Download from a file with URLs
 5) Metadata
 6) Settings
-7) Help
 8) Credits / Information
 
 -------------------------------=>:""")
@@ -97,21 +99,18 @@ Do you accept the License? [yes,no]""")
             self.start_model_user_channel()
 
         elif options == "3":
-            ""
+            self.search_options()
 
         elif options == "4":
             self.start_from_file()
 
         elif options == "5":
-            ""
+            self.get_metadat_options()
 
         elif options == "6":
             self.save_user_settings()
 
         elif options == "7":
-            self.help()
-
-        elif options == "8":
             self.credits()
 
     def start_single_video(self):
@@ -340,15 +339,260 @@ Please enter the new output path -->:""")
         self.load_user_settings()
         logger_debug("Reloaded User settings. You may continue now :) ")
 
-    def help(self):
+    def get_metadat_options(self):
         options = input(f"""
+1) Get Video metadata
+2) Get User metadata
+3) Back
+------------------=>:""")
+        if options == "1":
+            self.get_video_metadata()
 
-""")
+        elif options == "2":
+            self.get_user_metadata()
+
+        elif options == "3":
+            self.main_menu()
+
+    def search_options(self):
+        options = input(f"""
+1) Search for Videos
+2) Search for Users
+3) Search for Pornstars
+4) Back
+! search filters aren't working yet. 
+
+------------------=>:""")
+
+        if options == "1":
+            self.search_videos()
+
+        elif options == "2":
+            self.search_users()
+
+        elif options == "3":
+            self.search_pornstars()
+
+        elif options == "4":
+            self.main_menu()
+
+    def search_videos(self):
+        video_objects = []
+        query = input(f"""
+Please enter your search query ---=>:""")
+
+        if not isinstance(self.client, Client):
+            language = self.api_language
+            self.client = Client(language=language)
+
+        generator = self.client.search(query)
+        self.start_generator(generator)
+
+    def search_users(self):
+        video_objects = []
+        query = input(f"""
+Enter a query to search for users --=>:""")
+
+        if not isinstance(self.client, Client):
+            language = self.api_language
+            self.client = Client(language=language)
+
+        generator = self.client.search_user()
+        self.start_generator(generator)
+
+    def search_pornstars(self):
+
+        query = input(f"""
+        Enter a query to search for Pornstars --=>:""")
+
+        if not isinstance(self.client, Client):
+            language = self.api_language
+            self.client = Client(language=language)
+
+        generator = self.client.search_pornstar(query)
+        self.start_generator(generator)
+
+    def start_generator(self, generator):
+        video_objects = []
+
+        for idx, video in enumerate(generator[0:100]):
+            print(f"{idx}) {video.title}")
+            video_objects.append(video)
+
+        index = input(f"""
+        Please enter the number for the videos you want to download. Separate with a comma
+        e.g 1,6,92 
+
+        ! Enter 'ALL' to download all videos
+        -----------------------=>:""")
+
+        if index.lower() == "all":
+            for video in video_objects:
+                self.pre_setup_video(url=video)
+
+        else:
+            chosen_videos = index.split(",")
+            for idx in chosen_videos:
+                video = video_objects[int(idx)]
+                self.pre_setup_video(url=video)
+
+    def get_video_metadata(self):
+        language = self.api_language
+        url = input(f"""
+Please enter the video url (PornHub) --=>:""")
+
+        video = check_video(url, language=language)
+
+        author = video.author
+        duration = video.duration.seconds
+        duration = round(duration, 2) / 60
+        title = strip_title(video.title)
+        date = video.date
+        views = video.views
+        pornstar_list = [pornstar.name for pornstar in video.pornstars]
+        hotspots_list = [str(hotspots) for hotspots in video.hotspots]
+
+        tags_list = [tag.name for tag in video.tags]
+        tags = ", ".join(tags_list)
+        hotspots = ", ".join(hotspots_list)
+        pornstars = "".join(pornstar_list)
+        rating = f"Likes: {video.like.up} | Dislikes: {video.like.down}"
+
+        input(f"""
+Title: {title}
+Author: {author}
+Duration: {duration}
+Date: {date}
+Views: {views}
+Pornstars: {pornstars}
+Rating: {rating}
+Tags: {tags}
+Hotspots: {hotspots}
+
+Press ENTER to continue""")
+        self.main_m
+
+    def get_user_metadata(self):
+        api_language = self.api_language
+        url = input(f"""
+Enter the User URL (PornHub) --=>:""")
+
+        if not isinstance(self.client, Client):
+            self.client = Client(language=api_language)
+
+        user = self.client.get_user(url)
+        info = user.info
+        name = user.name
+        type = user.type
+
+        relationship_status = "Relationship status"
+        interested_in = info.get("Interested in")
+        city_and_country = info.get("City and Country")
+        gender = info.get("Gender")
+        birth_place = info.get("Birth Place")
+        height = info.get("Height")
+        weight = info.get("Weight")
+        ethnicity = info.get("Ethnicity")
+        hair_color = info.get("Hair Color")
+        fake_boobs = info.get("Fake Boobs")
+        tattoos = info.get("Tattoos")
+        piercings = info.get("Piercings")
+        hometown = info.get("Hometown")
+        interests_and_hobbies = info.get("Interests and hobbie")
+        turn_ons = info.get("Turn Ons")
+        turn_offs = info.get("Turn Offs")
+        video_views = info.get("Video Views")
+        profile_views = info.get("Profile Views")
+        videos_watched = info.get("Videos Watched")
+
+        input(f"""
+Name: {name}
+Type: {type}
+
+Relationship Status: {relationship_status}
+Interested In: {interested_in}
+City and Country: {city_and_country}
+Gender: {gender}
+Birth Place: {birth_place}
+Height: {height}
+Weight: {weight}
+Ethnicity: {ethnicity}
+Hair Color: {hair_color}
+Fake Boobs: {fake_boobs}
+Tattoos: {tattoos}
+Piercings: {piercings}
+Hometown: {hometown}
+Interests and Hobbies: {interests_and_hobbies}
+Turn Ons: {turn_ons}
+Turn Offs: {turn_offs}
+Video Views: {video_views}
+Profile views: {profile_views}
+Videos Watched: {videos_watched}
+
+Press ENTER to continue...""")
+        self.main_menu()
 
     def credits(self):
-        ""
+        text_markdown = f"""
+# Porn Fetch V3
+
+Copyright (C) 2023 Johannes Habel (EchterAlsFake)
 
 
+### This Project is only possible thanks to Egsagon's [PHUB](https://github.com/Egsagon/PHUB) API
+
+## Please check out his project and give it a star!
+
+# Development
+
+- Language: [Python](https://www.python.org/)
+- IDE: Jetbrains [PyCharm Professional](https://www.jetbrains.com/pycharm/)
+- Platform: [GitHub](https://github.com)
+- Graphical User Interface: [PySide6](https://doc.qt.io/qtforpython-6/)
+- Framework: [Qt](https://qt.io)
+
+
+# Graphics
+
+- <a href="https://iconscout.com/icons/list" class="text-underline font-size-sm" target="_blank">List</a> by <a href="https://iconscout.com/contributors/iyikon" class="text-underline font-size-sm" target="_blank">Iyikon ...</a>
+- <a href="https://iconscout.com/icons/information" class="text-underline font-size-sm" target="_blank">Information</a> by <a href="https://iconscout.com/contributors/petai-jantrapoon" class="text-underline font-size-sm">Petai Jantrapoon</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
+- <a href="https://iconscout.com/icons/tick" class="text-underline font-size-sm" target="_blank">Tick</a> by <a href="https://iconscout.com/contributors/endesignz" class="text-underline font-size-sm">Jessiey Sahana</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
+- <a href="https://iconscout.com/icons/top-arrow" class="text-underline font-size-sm" target="_blank">Top Arrow</a> by <a href="https://iconscout.com/contributors/creative-studio" class="text-underline font-size-sm" target="_blank">Mian Saab</a>
+- <a href="https://iconscout.com/icons/down-arrow" class="text-underline font-size-sm" target="_blank">Down Arrow</a> by <a href="https://iconscout.com/contributors/adamicons" class="text-underline font-size-sm">Adam Dicons</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
+- <a href="https://iconscout.com/icons/tick" class="text-underline font-size-sm" target="_blank">Tick</a> by <a href="https://iconscout.com/contributors/kolo-design" class="text-underline font-size-sm" target="_blank">Kalash</a>
+- Download Icon by [Tutukof](https://iconscout.com/contributors/fersusart)
+- Search Icon by [Kmg Design](https://iconscout.com/contributors/kmgdesignid)
+
+Logo was generated by DALL-E (ChatGPT)
+
+## Contributors (as in V3 and before)
+
+- [Egsagon](https://github.com/Egsagon)
+- [RSDCFGVHBJNKML](https://github.com/RSDCFGVHBJNKML) : Enhancement [#11](https://github.com/EchterAlsFake/Porn_Fetch/issues/11)
+
+# Libraries
+
+- [PHUB](https://github.com/EchterAlsFake/PHUB)
+- [requests](https://github.com/psf/requests)
+- [hqporner_api](https://github.com/EchterAlsFake/hqporner_api)
+- [hue_shift](https://github.com/EchterAlsFake/hue_shift)
+- [PySide6](https://doc.qt.io/qtforpython-6/)
+- [pymediainfo](https://github.com/sbraz/pymediainfo)
+- [colorama](https://github.com/tartley/colorama)
+- [markdown](https://github.com/Python-Markdown/markdown)
+- [rich](https://github.com/Textualize/rich)
+<br>ANDROID:
+- [Kivy MD](https://github.com/kivymd/KivyMD)
+- [Kivy](https://kivy.org/)
+- [Buildozer](https://github.com/kivy/buildozer)
+- [Cython](https://github.com/cython/cython)
+
+** All other libraries are built in to Python.
+
+
+"""
+        md = Markdown(text_markdown)
+        rprint(md)
 
 CLI()
 
