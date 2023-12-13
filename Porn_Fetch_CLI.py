@@ -40,7 +40,8 @@ class CLI():
         self.load_user_settings()
 
         if self.license():
-            self.main_menu()
+            while True:
+                self.main_menu()
 
     def license(self):
         license_accept = self.conf["License"]["accepted"]
@@ -174,20 +175,17 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
             self.start_from_file()
 
     def pre_setup_video(self, url):
-        if isinstance(url, str):
+        if str(url).endswith(".html"):
             title = API().extract_title(url)
             author = API().extract_actress(url)
             video = str(url)
 
-        elif isinstance(url, Video):
+        else:
             language = self.api_language
             video = check_video(url, language)
             title = video.title
-            author = video.author
+            author = video.author.name
             quality = self.quality
-
-        else:
-            logger_error("URL isn't a PornHub or a HQPorner URL!")
 
         title = strip_title(title)
         output_path = self.output_path
@@ -201,7 +199,7 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
             output_path = f"{output_path}{title}"
 
         if not check_if_video_exists(video=video, output_path=output_path):
-            if isinstance(url, str):
+            if isinstance(video, str):
                 if self.threading:
                     hqporner_thread = threading.Thread(target=self.download_video_hqporner, args=(url, output_path))
                     hqporner_thread.start()
@@ -209,7 +207,7 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
                 else:
                     self.download_video_hqporner(url=url, output_path=output_path)
 
-            elif isinstance(url, Video):
+            elif isinstance(video, Video):
                 if self.threading:
                     pornhub_thread = threading.Thread(target=self.download_video_pornhub,
                                                       args=(video, output_path, quality))
