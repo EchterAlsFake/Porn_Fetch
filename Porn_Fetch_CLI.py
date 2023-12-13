@@ -8,11 +8,13 @@ Version 3.0
 """
 import os.path
 import threading
-
+import markdown
 
 from phub import Video, Client, errors, download, display, Quality
 from configparser import ConfigParser
 from hqporner_api import API
+from rich import print as rprint
+from rich.markdown import Markdown
 
 from src.backend.shared_functions import (strip_title, check_video, check_if_video_exists, setup_config_file,
                                           logger_debug, logger_error, return_color, reset, correct_output_path)
@@ -85,7 +87,6 @@ Do you accept the License? [yes,no]""")
 4) Download from a file with URLs
 5) Metadata
 6) Settings
-7) Help
 8) Credits / Information
 
 -------------------------------=>:""")
@@ -109,9 +110,6 @@ Do you accept the License? [yes,no]""")
             self.save_user_settings()
 
         elif options == "7":
-            self.help()
-
-        elif options == "8":
             self.credits()
 
     def start_single_video(self):
@@ -367,17 +365,15 @@ Please enter the video url (PornHub) --=>:""")
 
         author = video.author
         duration = video.duration.seconds
-        duration = round(duration) / 60
+        duration = round(duration, 2) / 60
         title = strip_title(video.title)
         date = video.date
         views = video.views
-        pornstar_list = [pornstar for pornstar in video.pornstars]
-        hotspots_list = [hotspots for hotspots in video.hotspots]
+        pornstar_list = [pornstar.name for pornstar in video.pornstars]
+        hotspots_list = [str(hotspots) for hotspots in video.hotspots]
 
-        tags_list = [tag for tag in video.tags]
-        categories_list = [category for category in video.categories]
+        tags_list = [tag.name for tag in video.tags]
         tags = ", ".join(tags_list)
-        categories = ", ".join(categories_list)
         hotspots = ", ".join(hotspots_list)
         pornstars = "".join(pornstar_list)
         rating = f"Likes: {video.like.up} | Dislikes: {video.like.down}"
@@ -391,12 +387,10 @@ Views: {views}
 Pornstars: {pornstars}
 Rating: {rating}
 Tags: {tags}
-Categories: {categories}
 Hotspots: {hotspots}
 
-Press ENTER to continue
-""")
-
+Press ENTER to continue""")
+        self.main_m
 
     def get_user_metadata(self):
         api_language = self.api_language
@@ -407,25 +401,118 @@ Enter the User URL (PornHub) --=>:""")
             self.client = Client(language=api_language)
 
         user = self.client.get_user(url)
-
+        info = user.info
         name = user.name
         type = user.type
 
-        info = user.info
+        relationship_status = "Relationship status"
+        interested_in = info.get("Interested in")
+        city_and_country = info.get("City and Country")
+        gender = info.get("Gender")
+        birth_place = info.get("Birth Place")
+        height = info.get("Height")
+        weight = info.get("Weight")
+        ethnicity = info.get("Ethnicity")
+        hair_color = info.get("Hair Color")
+        fake_boobs = info.get("Fake Boobs")
+        tattoos = info.get("Tattoos")
+        piercings = info.get("Piercings")
+        hometown = info.get("Hometown")
+        interests_and_hobbies = info.get("Interests and hobbie")
+        turn_ons = info.get("Turn Ons")
+        turn_offs = info.get("Turn Offs")
+        video_views = info.get("Video Views")
+        profile_views = info.get("Profile Views")
+        videos_watched = info.get("Videos Watched")
 
-        print(info)
+        input(f"""
+Name: {name}
+Type: {type}
 
+Relationship Status: {relationship_status}
+Interested In: {interested_in}
+City and Country: {city_and_country}
+Gender: {gender}
+Birth Place: {birth_place}
+Height: {height}
+Weight: {weight}
+Ethnicity: {ethnicity}
+Hair Color: {hair_color}
+Fake Boobs: {fake_boobs}
+Tattoos: {tattoos}
+Piercings: {piercings}
+Hometown: {hometown}
+Interests and Hobbies: {interests_and_hobbies}
+Turn Ons: {turn_ons}
+Turn Offs: {turn_offs}
+Video Views: {video_views}
+Profile views: {profile_views}
+Videos Watched: {videos_watched}
 
-
-    def help(self):
-        options = input(f"""
-
-""")
+Press ENTER to continue...""")
+        self.main_menu()
 
     def credits(self):
-        ""
+        text_markdown = f"""
+# Porn Fetch V3
+
+Copyright (C) 2023 Johannes Habel (EchterAlsFake)
 
 
+### This Project is only possible thanks to Egsagon's [PHUB](https://github.com/Egsagon/PHUB) API
+
+## Please check out his project and give it a star!
+
+# Development
+
+- Language: [Python](https://www.python.org/)
+- IDE: Jetbrains [PyCharm Professional](https://www.jetbrains.com/pycharm/)
+- Platform: [GitHub](https://github.com)
+- Graphical User Interface: [PySide6](https://doc.qt.io/qtforpython-6/)
+- Framework: [Qt](https://qt.io)
+
+
+# Graphics
+
+- <a href="https://iconscout.com/icons/list" class="text-underline font-size-sm" target="_blank">List</a> by <a href="https://iconscout.com/contributors/iyikon" class="text-underline font-size-sm" target="_blank">Iyikon ...</a>
+- <a href="https://iconscout.com/icons/information" class="text-underline font-size-sm" target="_blank">Information</a> by <a href="https://iconscout.com/contributors/petai-jantrapoon" class="text-underline font-size-sm">Petai Jantrapoon</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
+- <a href="https://iconscout.com/icons/tick" class="text-underline font-size-sm" target="_blank">Tick</a> by <a href="https://iconscout.com/contributors/endesignz" class="text-underline font-size-sm">Jessiey Sahana</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
+- <a href="https://iconscout.com/icons/top-arrow" class="text-underline font-size-sm" target="_blank">Top Arrow</a> by <a href="https://iconscout.com/contributors/creative-studio" class="text-underline font-size-sm" target="_blank">Mian Saab</a>
+- <a href="https://iconscout.com/icons/down-arrow" class="text-underline font-size-sm" target="_blank">Down Arrow</a> by <a href="https://iconscout.com/contributors/adamicons" class="text-underline font-size-sm">Adam Dicons</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
+- <a href="https://iconscout.com/icons/tick" class="text-underline font-size-sm" target="_blank">Tick</a> by <a href="https://iconscout.com/contributors/kolo-design" class="text-underline font-size-sm" target="_blank">Kalash</a>
+- Download Icon by [Tutukof](https://iconscout.com/contributors/fersusart)
+- Search Icon by [Kmg Design](https://iconscout.com/contributors/kmgdesignid)
+
+Logo was generated by DALL-E (ChatGPT)
+
+## Contributors (as in V3 and before)
+
+- [Egsagon](https://github.com/Egsagon)
+- [RSDCFGVHBJNKML](https://github.com/RSDCFGVHBJNKML) : Enhancement [#11](https://github.com/EchterAlsFake/Porn_Fetch/issues/11)
+
+# Libraries
+
+- [PHUB](https://github.com/EchterAlsFake/PHUB)
+- [requests](https://github.com/psf/requests)
+- [hqporner_api](https://github.com/EchterAlsFake/hqporner_api)
+- [hue_shift](https://github.com/EchterAlsFake/hue_shift)
+- [PySide6](https://doc.qt.io/qtforpython-6/)
+- [pymediainfo](https://github.com/sbraz/pymediainfo)
+- [colorama](https://github.com/tartley/colorama)
+- [markdown](https://github.com/Python-Markdown/markdown)
+- [rich](https://github.com/Textualize/rich)
+<br>ANDROID:
+- [Kivy MD](https://github.com/kivymd/KivyMD)
+- [Kivy](https://kivy.org/)
+- [Buildozer](https://github.com/kivy/buildozer)
+- [Cython](https://github.com/cython/cython)
+
+** All other libraries are built in to Python.
+
+
+"""
+        md = Markdown(text_markdown)
+        rprint(md)
 
 CLI()
 
