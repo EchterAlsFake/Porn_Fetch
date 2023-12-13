@@ -98,7 +98,7 @@ Do you accept the License? [yes,no]""")
             self.start_model_user_channel()
 
         elif options == "3":
-            ""
+            self.search_options()
 
         elif options == "4":
             self.start_from_file()
@@ -355,6 +355,68 @@ Please enter the new output path -->:""")
 
         elif options == "3":
             self.main_menu()
+
+    def search_options(self):
+        options = input(f"""
+1) Search for Videos
+2) Search for Users / Pornstars / Channels
+3) Back
+! search filters aren't working yet. 
+
+------------------=>:""")
+
+        if options == "1":
+            self.search_videos()
+
+        elif options == "2":
+            self.search_users()
+
+        elif options == "3":
+            self.main_menu()
+
+    def search_videos(self):
+        video_objects = []
+        query = input(f"""
+Please enter your search query ---=>:""")
+
+        if not isinstance(self.client, Client):
+            language = self.api_language
+            self.client = Client(language=language)
+
+        generator = self.client.search(query)
+        for idx, video in enumerate(generator[0:100]):
+            print(f"{idx}) {video.title}")
+            video_objects.append(video)
+
+        index = input(f"""
+Please enter the number for the videos you want to download. Separate with a comma
+e.g 1,6,92 
+
+! Enter 'ALL' to download all videos
+-----------------------=>:""")
+
+        if index.lower() == "all":
+            for video in video_objects:
+                self.pre_setup_video(url=video)
+
+        else:
+            chosen_videos = index.split(",")
+            for idx in chosen_videos:
+                video = video_objects[int(idx)]
+                self.pre_setup_video(url=video)
+
+
+    def search_users(self):
+        query = input(f"""
+Enter a query to search for users --=>:""")
+
+        if not isinstance(self.client, Client):
+            language = self.api_language
+            self.client = Client(language=language)
+
+        generator = self.client.search_user()
+        # TODO
+
 
     def get_video_metadata(self):
         language = self.api_language
