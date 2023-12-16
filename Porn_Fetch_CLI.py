@@ -6,6 +6,7 @@ Copyright (C) 2023 Johannes Habel (EchterAlsFake)
 
 Version 3.0
 """
+import getpass
 import os.path
 import threading
 import markdown
@@ -15,6 +16,7 @@ from configparser import ConfigParser
 from hqporner_api import API
 from rich import print as rprint
 from rich.markdown import Markdown
+from tqdm import tqdm
 
 from src.backend.shared_functions import (strip_title, check_video, check_if_video_exists, setup_config_file,
                                           logger_debug, logger_error, return_color, reset, correct_output_path)
@@ -86,8 +88,9 @@ Do you accept the License? [yes,no]""")
 2) Download videos from a Model / Channel / User
 3) Search Users / Models / Channels
 4) Download from a file with URLs
-5) Metadata
-6) Settings
+5) Account
+6) Metadata
+7) Settings
 8) Credits / Information
 
 -------------------------------=>:""")
@@ -105,12 +108,15 @@ Do you accept the License? [yes,no]""")
             self.start_from_file()
 
         elif options == "5":
-            self.get_metadat_options()
+            self.account_options()
 
         elif options == "6":
-            self.save_user_settings()
+            self.get_metadat_options()
 
         elif options == "7":
+            self.save_user_settings()
+
+        elif options == "8":
             self.credits()
 
     def start_single_video(self):
@@ -377,7 +383,6 @@ Please enter the new output path -->:""")
             self.main_menu()
 
     def search_videos(self):
-        video_objects = []
         query = input(f"""
 Please enter your search query ---=>:""")
 
@@ -389,7 +394,6 @@ Please enter your search query ---=>:""")
         self.start_generator(generator)
 
     def search_users(self):
-        video_objects = []
         query = input(f"""
 Enter a query to search for users --=>:""")
 
@@ -397,7 +401,7 @@ Enter a query to search for users --=>:""")
             language = self.api_language
             self.client = Client(language=language)
 
-        generator = self.client.search_user()
+        generator = self.client.search_user(query)
         self.start_generator(generator)
 
     def search_pornstars(self):
@@ -415,7 +419,7 @@ Enter a query to search for users --=>:""")
     def start_generator(self, generator):
         video_objects = []
 
-        for idx, video in enumerate(generator[0:100]):
+        for idx, video in enumerate(generator):
             print(f"{idx}) {video.title}")
             video_objects.append(video)
 
@@ -470,7 +474,7 @@ Tags: {tags}
 Hotspots: {hotspots}
 
 Press ENTER to continue""")
-        self.main_m
+        self.main_menu()
 
     def get_user_metadata(self):
         api_language = self.api_language
@@ -531,6 +535,92 @@ Videos Watched: {videos_watched}
 
 Press ENTER to continue...""")
         self.main_menu()
+
+    def account_options(self):
+        options = input(f"""
+1) Login
+2) Get watched videos
+3) Get liked videos
+4) Get recommended videos
+5) Back
+---------------------------=>:
+""")
+
+        if options == "1":
+            self.login()
+            self.account_options()
+
+        elif options == "2":
+            self.get_watched_videos()
+            self.account_options()
+
+        elif options == "3":
+            self.get_liked_videos()
+            self.account_options()
+
+        elif options == "4":
+            self.get_recommended_videos()
+            self.account_options()
+
+        elif options == "5":
+            self.main_menu()
+            self.account_options()
+
+        else:
+            self.account_options()
+
+    def login(self):
+        username = input(f"Please enter your PornHub Username --=>:")
+        password = getpass.getpass("Please enter your PornHub Password --=>:")
+        self.client = Client(username=username, password=password, language=self.api_language)
+        return True
+
+    def check_login(self):
+        if not self.client.logged:
+            self.login()
+
+        else:
+            return True
+
+    def get_watched_videos(self):
+        self.check_login()
+        iterator = self.client.account.watched
+        self.start_generator(iterator)
+
+    def get_liked_videos(self):
+        self.check_login()
+        iterator = self.client.account.liked
+        self.start_generator(iterator)
+
+    def get_recommended_videos(self):
+        self.check_login()
+        iterator = self.client.account.recommended
+        self.start_generator(iterator)
+
+    def progress(self, desc: str = 'Downloading'):
+        '''
+        Simple progress display using tqdm.
+
+        Args:
+            desc (str): Description to display.
+
+        Returns:
+            Callable: A wrapper to pass to a downloader.
+        '''
+
+        def wrapper(total: int) -> tqdm:
+            """
+            Initializes and returns a tqdm progress bar object.
+
+            Args:
+                total (int): The total number of iterations (e.g., the size of the file to be downloaded).
+
+            Returns:
+                tqdm: A tqdm progress bar object.
+            """
+            return tqdm(total=total, desc=desc, unit='i', ncols=100)
+
+        return wrapper
 
     def credits(self):
         text_markdown = f"""
