@@ -1,5 +1,5 @@
 """
-Porn Fetch CLI
+Porn Fetch GUI (Graphical User Interface)
 
 Licensed under GPL 3
 Copyright (C) 2023 Johannes Habel (EchterAlsFake)
@@ -83,14 +83,16 @@ class TreeWidgetSignals(QObject):
 
 
 class AddToTreeWidget(QRunnable):
-    def __init__(self, iterator, search_limit):
+    def __init__(self, iterator, search_limit, data_mode):
         super(AddToTreeWidget, self).__init__()
         self.signals = TreeWidgetSignals()
         self.iterator = iterator
         self.search_limit = search_limit
+        self.data_mode = data_mode
 
     def run(self):
         self.signals.clear_signal.emit()
+        disabled = QCoreApplication.tr("Disabled")
 
         try:
             logger_debug(f"Search Limit: {str(self.search_limit)}")
@@ -98,16 +100,28 @@ class AddToTreeWidget(QRunnable):
             for i, video in enumerate(self.iterator, start=1):
                 if str(video).endswith(".html"):
                     title = API().extract_title(url=str(video))
-                    duration = API().get_video_length(url=str(video))
-                    author = API().extract_actress(url=str(video))
-                    author = "".join(author)
+                    if self.data_mode == 1:
+                        duration = API().get_video_length(url=str(video))
+                        author = API().extract_actress(url=str(video))
+                        author = "".join(author)
+
+                    else:
+                        duration = disabled
+                        author = disabled
+
                     text_data = [str(title), str(author), str(duration), str(i), str(video)]
 
                 else:
                     title = video.title
                     url = video.url
-                    duration = round(video.duration.seconds / 60)
-                    author = video.author.name
+                    if self.data_mode == 1:
+                        duration = round(video.duration.seconds / 60)
+                        author = video.author.name
+
+                    else:
+                        duration = disabled
+                        author = disabled
+
                     text_data = [str(title), str(author), str(duration), str(i), str(url)]
 
                 logger_debug(f"Total Length: {total}")
@@ -120,6 +134,7 @@ class AddToTreeWidget(QRunnable):
 
         finally:
             self.signals.finished.emit()
+
 
 class DownloadThread(QRunnable):
     """Threading class to download videos."""
@@ -715,7 +730,16 @@ class PornFetch(QWidget):
     """
 
     def add_to_tree_widget_thread(self, iterator, search_limit):
-        self.thread = AddToTreeWidget(iterator, search_limit)
+        if self.ui.radio_tree_show_title.isChecked():
+            data_mode = 0
+
+        elif self.ui.radio_tree_show_all.isChecked():
+            data_mode = 1
+
+        else:
+            data_mode = 0
+
+        self.thread = AddToTreeWidget(iterator, search_limit, data_mode)
         self.thread.signals.text_data.connect(self.add_to_tree_widget_signal)
         self.thread.signals.progress.connect(self.progress_tree_widget)
         self.thread.signals.clear_signal.connect(self.clear_tree_widget)

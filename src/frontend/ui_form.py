@@ -204,6 +204,148 @@ class Ui_Porn_Fetch_Widget(object):
         self.page.setObjectName(u"page")
         self.gridLayout_30 = QGridLayout(self.page)
         self.gridLayout_30.setObjectName(u"gridLayout_30")
+        self.gridLayout_6 = QGridLayout()
+        self.gridLayout_6.setObjectName(u"gridLayout_6")
+        self.button_tree_download = QPushButton(self.page)
+        self.button_tree_download.setObjectName(u"button_tree_download")
+
+        self.gridLayout_6.addWidget(self.button_tree_download, 2, 0, 1, 1)
+
+        self.button_tree_unselect_all = QPushButton(self.page)
+        self.button_tree_unselect_all.setObjectName(u"button_tree_unselect_all")
+
+        self.gridLayout_6.addWidget(self.button_tree_unselect_all, 2, 2, 1, 1)
+
+        self.button_tree_select_all = QPushButton(self.page)
+        self.button_tree_select_all.setObjectName(u"button_tree_select_all")
+
+        self.gridLayout_6.addWidget(self.button_tree_select_all, 2, 1, 1, 1)
+
+        self.treeWidget = QTreeWidget(self.page)
+        __qtreewidgetitem = QTreeWidgetItem()
+        __qtreewidgetitem.setText(0, u"Title");
+        self.treeWidget.setHeaderItem(__qtreewidgetitem)
+        self.treeWidget.setObjectName(u"treeWidget")
+
+        self.gridLayout_6.addWidget(self.treeWidget, 1, 0, 1, 3)
+
+        self.radio_tree_show_title = QRadioButton(self.page)
+        self.radio_tree_show_title.setObjectName(u"radio_tree_show_title")
+
+        self.gridLayout_6.addWidget(self.radio_tree_show_title, 0, 0, 1, 1)
+
+        self.radio_tree_show_all = QRadioButton(self.page)
+        self.radio_tree_show_all.setObjectName(u"radio_tree_show_all")
+
+        self.gridLayout_6.addWidget(self.radio_tree_show_all, 0, 1, 1, 1)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout_6.addItem(self.horizontalSpacer, 0, 2, 1, 1)
+
+
+        self.gridLayout_30.addLayout(self.gridLayout_6, 1, 0, 1, 2)
+
+        self.gridlayout_login_box = QGridLayout()
+        self.gridlayout_login_box.setObjectName(u"gridlayout_login_box")
+        self.button_get_recommended_videos = QPushButton(self.page)
+        self.button_get_recommended_videos.setObjectName(u"button_get_recommended_videos")
+        self.button_get_recommended_videos.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_get_recommended_videos.setStyleSheet(u"QPushButton {\n"
+"    border: 2px solid #444;\n"
+"    border-radius: 4px;\n"
+"    padding: 5px;\n"
+"    color: #DDD;\n"
+"    font-weight: bold;\n"
+"    font-size: 14px;\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #78909C, stop:1 #90A4AE);\n"
+"}")
+
+        self.gridlayout_login_box.addWidget(self.button_get_recommended_videos, 3, 2, 1, 1)
+
+        self.label_password = QLabel(self.page)
+        self.label_password.setObjectName(u"label_password")
+
+        self.gridlayout_login_box.addWidget(self.label_password, 1, 0, 1, 1)
+
+        self.button_get_liked_videos = QPushButton(self.page)
+        self.button_get_liked_videos.setObjectName(u"button_get_liked_videos")
+        self.button_get_liked_videos.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_get_liked_videos.setStyleSheet(u"QPushButton {\n"
+"    border: 2px solid #444;\n"
+"    border-radius: 4px;\n"
+"    padding: 5px;\n"
+"    color: #DDD;\n"
+"    font-weight: bold;\n"
+"    font-size: 14px;\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #78909C, stop:1 #90A4AE);\n"
+"}")
+
+        self.gridlayout_login_box.addWidget(self.button_get_liked_videos, 3, 0, 1, 1)
+
+        self.label_username = QLabel(self.page)
+        self.label_username.setObjectName(u"label_username")
+
+        self.gridlayout_login_box.addWidget(self.label_username, 0, 0, 1, 1)
+
+        self.button_get_watched_videos = QPushButton(self.page)
+        self.button_get_watched_videos.setObjectName(u"button_get_watched_videos")
+        self.button_get_watched_videos.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_get_watched_videos.setStyleSheet(u"QPushButton {\n"
+"    border: 2px solid #444;\n"
+"    border-radius: 4px;\n"
+"    padding: 5px;\n"
+"    color: #DDD;\n"
+"    font-weight: bold;\n"
+"    font-size: 14px;\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #78909C, stop:1 #90A4AE);\n"
+"}")
+
+        self.gridlayout_login_box.addWidget(self.button_get_watched_videos, 3, 1, 1, 1)
+
+        self.button_login = QPushButton(self.page)
+        self.button_login.setObjectName(u"button_login")
+        self.button_login.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_login.setStyleSheet(u"QPushButton {\n"
+"    border: 2px solid #444;\n"
+"    border-radius: 8px;\n"
+"    padding: 5px;\n"
+"    color: #DDD;\n"
+"    font-weight: bold;\n"
+"    font-size: 14px;\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #5555FF, stop:1 #AA55FF);\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #6666FF, stop:1 #BB66FF);\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
+"                                stop:0 #4444DD, stop:1 #9944DD);\n"
+"}")
+
+        self.gridlayout_login_box.addWidget(self.button_login, 2, 0, 1, 4)
+
+        self.lineedit_password = QLineEdit(self.page)
+        self.lineedit_password.setObjectName(u"lineedit_password")
+        self.lineedit_password.setEchoMode(QLineEdit.Password)
+
+        self.gridlayout_login_box.addWidget(self.lineedit_password, 1, 1, 1, 3)
+
+        self.lineedit_username = QLineEdit(self.page)
+        self.lineedit_username.setObjectName(u"lineedit_username")
+
+        self.gridlayout_login_box.addWidget(self.lineedit_username, 0, 1, 1, 3)
+
+
+        self.gridLayout_30.addLayout(self.gridlayout_login_box, 0, 1, 1, 1)
+
         self.gridlayout_start_download_box = QGridLayout()
         self.gridlayout_start_download_box.setObjectName(u"gridlayout_start_download_box")
         self.label_file = QLabel(self.page)
@@ -353,134 +495,6 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_30.addLayout(self.gridlayout_start_download_box, 0, 0, 1, 1)
 
-        self.gridlayout_login_box = QGridLayout()
-        self.gridlayout_login_box.setObjectName(u"gridlayout_login_box")
-        self.button_get_recommended_videos = QPushButton(self.page)
-        self.button_get_recommended_videos.setObjectName(u"button_get_recommended_videos")
-        self.button_get_recommended_videos.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_get_recommended_videos.setStyleSheet(u"QPushButton {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 4px;\n"
-"    padding: 5px;\n"
-"    color: #DDD;\n"
-"    font-weight: bold;\n"
-"    font-size: 14px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #78909C, stop:1 #90A4AE);\n"
-"}")
-
-        self.gridlayout_login_box.addWidget(self.button_get_recommended_videos, 3, 2, 1, 1)
-
-        self.label_password = QLabel(self.page)
-        self.label_password.setObjectName(u"label_password")
-
-        self.gridlayout_login_box.addWidget(self.label_password, 1, 0, 1, 1)
-
-        self.button_get_liked_videos = QPushButton(self.page)
-        self.button_get_liked_videos.setObjectName(u"button_get_liked_videos")
-        self.button_get_liked_videos.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_get_liked_videos.setStyleSheet(u"QPushButton {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 4px;\n"
-"    padding: 5px;\n"
-"    color: #DDD;\n"
-"    font-weight: bold;\n"
-"    font-size: 14px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #78909C, stop:1 #90A4AE);\n"
-"}")
-
-        self.gridlayout_login_box.addWidget(self.button_get_liked_videos, 3, 0, 1, 1)
-
-        self.label_username = QLabel(self.page)
-        self.label_username.setObjectName(u"label_username")
-
-        self.gridlayout_login_box.addWidget(self.label_username, 0, 0, 1, 1)
-
-        self.button_get_watched_videos = QPushButton(self.page)
-        self.button_get_watched_videos.setObjectName(u"button_get_watched_videos")
-        self.button_get_watched_videos.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_get_watched_videos.setStyleSheet(u"QPushButton {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 4px;\n"
-"    padding: 5px;\n"
-"    color: #DDD;\n"
-"    font-weight: bold;\n"
-"    font-size: 14px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #78909C, stop:1 #90A4AE);\n"
-"}")
-
-        self.gridlayout_login_box.addWidget(self.button_get_watched_videos, 3, 1, 1, 1)
-
-        self.button_login = QPushButton(self.page)
-        self.button_login.setObjectName(u"button_login")
-        self.button_login.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_login.setStyleSheet(u"QPushButton {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 8px;\n"
-"    padding: 5px;\n"
-"    color: #DDD;\n"
-"    font-weight: bold;\n"
-"    font-size: 14px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #5555FF, stop:1 #AA55FF);\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #6666FF, stop:1 #BB66FF);\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #4444DD, stop:1 #9944DD);\n"
-"}")
-
-        self.gridlayout_login_box.addWidget(self.button_login, 2, 0, 1, 4)
-
-        self.lineedit_password = QLineEdit(self.page)
-        self.lineedit_password.setObjectName(u"lineedit_password")
-        self.lineedit_password.setEchoMode(QLineEdit.Password)
-
-        self.gridlayout_login_box.addWidget(self.lineedit_password, 1, 1, 1, 3)
-
-        self.lineedit_username = QLineEdit(self.page)
-        self.lineedit_username.setObjectName(u"lineedit_username")
-
-        self.gridlayout_login_box.addWidget(self.lineedit_username, 0, 1, 1, 3)
-
-
-        self.gridLayout_30.addLayout(self.gridlayout_login_box, 0, 1, 1, 1)
-
-        self.gridLayout_6 = QGridLayout()
-        self.gridLayout_6.setObjectName(u"gridLayout_6")
-        self.button_tree_download = QPushButton(self.page)
-        self.button_tree_download.setObjectName(u"button_tree_download")
-
-        self.gridLayout_6.addWidget(self.button_tree_download, 1, 0, 1, 1)
-
-        self.button_tree_select_all = QPushButton(self.page)
-        self.button_tree_select_all.setObjectName(u"button_tree_select_all")
-
-        self.gridLayout_6.addWidget(self.button_tree_select_all, 1, 1, 1, 1)
-
-        self.button_tree_unselect_all = QPushButton(self.page)
-        self.button_tree_unselect_all.setObjectName(u"button_tree_unselect_all")
-
-        self.gridLayout_6.addWidget(self.button_tree_unselect_all, 1, 2, 1, 1)
-
-        self.treeWidget = QTreeWidget(self.page)
-        __qtreewidgetitem = QTreeWidgetItem()
-        __qtreewidgetitem.setText(0, u"Title");
-        self.treeWidget.setHeaderItem(__qtreewidgetitem)
-        self.treeWidget.setObjectName(u"treeWidget")
-
-        self.gridLayout_6.addWidget(self.treeWidget, 0, 0, 1, 3)
-
-
-        self.gridLayout_30.addLayout(self.gridLayout_6, 1, 0, 1, 2)
-
         self.stacked_widget_top.addWidget(self.page)
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
@@ -581,30 +595,6 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_25.addWidget(self.groupbox_performance_threading_mode, 1, 0, 1, 1)
 
-        self.groupbox_performance_semaphore = QGroupBox(self.groupbox_PERFORMANCE)
-        self.groupbox_performance_semaphore.setObjectName(u"groupbox_performance_semaphore")
-        self.gridLayout_22 = QGridLayout(self.groupbox_performance_semaphore)
-        self.gridLayout_22.setObjectName(u"gridLayout_22")
-        self.label_semaphore = QLabel(self.groupbox_performance_semaphore)
-        self.label_semaphore.setObjectName(u"label_semaphore")
-
-        self.gridLayout_22.addWidget(self.label_semaphore, 0, 0, 1, 1)
-
-        self.button_semaphore_help = QPushButton(self.groupbox_performance_semaphore)
-        self.button_semaphore_help.setObjectName(u"button_semaphore_help")
-
-        self.gridLayout_22.addWidget(self.button_semaphore_help, 1, 0, 1, 2)
-
-        self.spinbox_semaphore = QSpinBox(self.groupbox_performance_semaphore)
-        self.spinbox_semaphore.setObjectName(u"spinbox_semaphore")
-        self.spinbox_semaphore.setMinimum(1)
-        self.spinbox_semaphore.setMaximum(10)
-
-        self.gridLayout_22.addWidget(self.spinbox_semaphore, 0, 1, 1, 1)
-
-
-        self.gridLayout_25.addWidget(self.groupbox_performance_semaphore, 1, 1, 1, 1)
-
         self.groupbox_performance_threading = QGroupBox(self.groupbox_PERFORMANCE)
         self.groupbox_performance_threading.setObjectName(u"groupbox_performance_threading")
         self.gridLayout_20 = QGridLayout(self.groupbox_performance_threading)
@@ -621,6 +611,25 @@ class Ui_Porn_Fetch_Widget(object):
 
 
         self.gridLayout_25.addWidget(self.groupbox_performance_threading, 0, 0, 1, 2)
+
+        self.groupbox_searching = QGroupBox(self.groupbox_PERFORMANCE)
+        self.groupbox_searching.setObjectName(u"groupbox_searching")
+        self.gridLayout_23 = QGridLayout(self.groupbox_searching)
+        self.gridLayout_23.setObjectName(u"gridLayout_23")
+        self.label_searching_limit = QLabel(self.groupbox_searching)
+        self.label_searching_limit.setObjectName(u"label_searching_limit")
+
+        self.gridLayout_23.addWidget(self.label_searching_limit, 0, 0, 1, 1)
+
+        self.spinbox_searching = QSpinBox(self.groupbox_searching)
+        self.spinbox_searching.setObjectName(u"spinbox_searching")
+        self.spinbox_searching.setMinimum(1)
+        self.spinbox_searching.setMaximum(200)
+
+        self.gridLayout_23.addWidget(self.spinbox_searching, 0, 1, 1, 1)
+
+
+        self.gridLayout_25.addWidget(self.groupbox_searching, 3, 0, 1, 1)
 
         self.groupbox_GUI_language = QGroupBox(self.groupbox_PERFORMANCE)
         self.groupbox_GUI_language.setObjectName(u"groupbox_GUI_language")
@@ -649,24 +658,10 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_25.addWidget(self.groupbox_GUI_language, 3, 1, 1, 1)
 
-        self.groupbox_searching = QGroupBox(self.groupbox_PERFORMANCE)
-        self.groupbox_searching.setObjectName(u"groupbox_searching")
-        self.gridLayout_23 = QGridLayout(self.groupbox_searching)
-        self.gridLayout_23.setObjectName(u"gridLayout_23")
-        self.spinbox_searching = QSpinBox(self.groupbox_searching)
-        self.spinbox_searching.setObjectName(u"spinbox_searching")
-        self.spinbox_searching.setMinimum(1)
-        self.spinbox_searching.setMaximum(200)
+        self.button_settings_apply = QPushButton(self.groupbox_PERFORMANCE)
+        self.button_settings_apply.setObjectName(u"button_settings_apply")
 
-        self.gridLayout_23.addWidget(self.spinbox_searching, 0, 1, 1, 1)
-
-        self.label_searching_limit = QLabel(self.groupbox_searching)
-        self.label_searching_limit.setObjectName(u"label_searching_limit")
-
-        self.gridLayout_23.addWidget(self.label_searching_limit, 0, 0, 1, 1)
-
-
-        self.gridLayout_25.addWidget(self.groupbox_searching, 3, 0, 1, 1)
+        self.gridLayout_25.addWidget(self.button_settings_apply, 4, 0, 1, 2)
 
         self.groupbox_VIDEO = QGroupBox(self.groupbox_PERFORMANCE)
         self.groupbox_VIDEO.setObjectName(u"groupbox_VIDEO")
@@ -776,10 +771,29 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_25.addWidget(self.groupbox_VIDEO, 2, 0, 1, 2)
 
-        self.button_settings_apply = QPushButton(self.groupbox_PERFORMANCE)
-        self.button_settings_apply.setObjectName(u"button_settings_apply")
+        self.groupbox_performance_semaphore = QGroupBox(self.groupbox_PERFORMANCE)
+        self.groupbox_performance_semaphore.setObjectName(u"groupbox_performance_semaphore")
+        self.gridLayout_22 = QGridLayout(self.groupbox_performance_semaphore)
+        self.gridLayout_22.setObjectName(u"gridLayout_22")
+        self.label_semaphore = QLabel(self.groupbox_performance_semaphore)
+        self.label_semaphore.setObjectName(u"label_semaphore")
 
-        self.gridLayout_25.addWidget(self.button_settings_apply, 4, 0, 1, 2)
+        self.gridLayout_22.addWidget(self.label_semaphore, 0, 0, 1, 1)
+
+        self.button_semaphore_help = QPushButton(self.groupbox_performance_semaphore)
+        self.button_semaphore_help.setObjectName(u"button_semaphore_help")
+
+        self.gridLayout_22.addWidget(self.button_semaphore_help, 1, 0, 1, 2)
+
+        self.spinbox_semaphore = QSpinBox(self.groupbox_performance_semaphore)
+        self.spinbox_semaphore.setObjectName(u"spinbox_semaphore")
+        self.spinbox_semaphore.setMinimum(1)
+        self.spinbox_semaphore.setMaximum(10)
+
+        self.gridLayout_22.addWidget(self.spinbox_semaphore, 0, 1, 1, 1)
+
+
+        self.gridLayout_25.addWidget(self.groupbox_performance_semaphore, 1, 1, 1, 1)
 
 
         self.gridLayout_27.addWidget(self.groupbox_PERFORMANCE, 0, 0, 1, 1)
@@ -1207,6 +1221,22 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_status.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Status:", None))
         self.label_total.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
         self.label_debug.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Debug:", None))
+        self.button_tree_download.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download Selected Videos", None))
+        self.button_tree_unselect_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Unselect all", None))
+        self.button_tree_select_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Select all", None))
+        ___qtreewidgetitem = self.treeWidget.headerItem()
+        ___qtreewidgetitem.setText(2, QCoreApplication.translate("Porn_Fetch_Widget", u"Duration", None));
+        ___qtreewidgetitem.setText(1, QCoreApplication.translate("Porn_Fetch_Widget", u"Author", None));
+        self.radio_tree_show_title.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Only Title (a lot faster)", None))
+        self.radio_tree_show_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Title, Author, Duration", None))
+        self.button_get_recommended_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get recommended videos", None))
+        self.label_password.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Password:", None))
+        self.button_get_liked_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Liked videos", None))
+        self.label_username.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Username:", None))
+        self.button_get_watched_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get watched videos", None))
+        self.button_login.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Login", None))
+        self.lineedit_password.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter your PornHub Password", None))
+        self.lineedit_username.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter your PornHub Username", None))
         self.label_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"File:", None))
         self.button_open_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Open File", None))
         self.lineedit_url.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter PornHub or HQPorner Video URL", None))
@@ -1219,20 +1249,6 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"URL:", None))
         self.button_model.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Videos", None))
         self.lineedit_model_url.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter PornHub Model URL. This can be a Pornstar Account or a PornHub Channel. The videos will be listed down in the TreeWidget", None))
-        self.button_get_recommended_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get recommended videos", None))
-        self.label_password.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Password:", None))
-        self.button_get_liked_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Liked videos", None))
-        self.label_username.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Username:", None))
-        self.button_get_watched_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get watched videos", None))
-        self.button_login.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Login", None))
-        self.lineedit_password.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter your PornHub Password", None))
-        self.lineedit_username.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter your PornHub Username", None))
-        self.button_tree_download.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download Selected Videos", None))
-        self.button_tree_select_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Select all", None))
-        self.button_tree_unselect_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Unselect all", None))
-        ___qtreewidgetitem = self.treeWidget.headerItem()
-        ___qtreewidgetitem.setText(2, QCoreApplication.translate("Porn_Fetch_Widget", u"Duration", None));
-        ___qtreewidgetitem.setText(1, QCoreApplication.translate("Porn_Fetch_Widget", u"Author", None));
         self.label_search_users.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Users", None))
         self.button_search_pornstar.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search", None))
         self.label_search_pornstars.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Pornstars", None))
@@ -1243,19 +1259,17 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_threading_mode_default.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Default", None))
         self.radio_threading_mode_ffmpeg.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"FFMPEG", None))
         self.button_threading_mode_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
-        self.groupbox_performance_semaphore.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Semaphore", None))
-        self.label_semaphore.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Semaphore:", None))
-        self.button_semaphore_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
         self.groupbox_performance_threading.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Threading?", None))
         self.radio_threading_no.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
         self.radio_threading_yes.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
+        self.groupbox_searching.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Searching", None))
+        self.label_searching_limit.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Limit:", None))
         self.groupbox_GUI_language.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface Language (Neeeds restart)", None))
         self.radio_ui_language_german.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
         self.radio_ui_language_english.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"English", None))
         self.radio_ui_language_french.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))
         self.radio_ui_language_system.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"System Default", None))
-        self.groupbox_searching.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Searching", None))
-        self.label_searching_limit.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Limit:", None))
+        self.button_settings_apply.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Apply / Reload", None))
         self.groupbox_VIDEO.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Video Settings", None))
         self.groupbox_video_output.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Output", None))
         self.label_directory_system.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Use Directory system? ", None))
@@ -1276,7 +1290,9 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_quality_half.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Half", None))
         self.radio_quality_best.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Best", None))
         self.radio_quality_worst.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Worst", None))
-        self.button_settings_apply.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Apply / Reload", None))
+        self.groupbox_performance_semaphore.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Semaphore", None))
+        self.label_semaphore.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Semaphore:", None))
+        self.button_semaphore_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
         self.label_metadata_video_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Video URL:", None))
         self.button_metadata_user_start.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
         self.button_metadata_video_start.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))

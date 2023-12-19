@@ -309,6 +309,210 @@ border-radius: 5px;</string>
          </property>
          <widget class="QWidget" name="page">
           <layout class="QGridLayout" name="gridLayout_30">
+           <item row="1" column="0" colspan="2">
+            <layout class="QGridLayout" name="gridLayout_6">
+             <item row="2" column="0">
+              <widget class="QPushButton" name="button_tree_download">
+               <property name="text">
+                <string>Download Selected Videos</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QPushButton" name="button_tree_unselect_all">
+               <property name="text">
+                <string>Unselect all</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QPushButton" name="button_tree_select_all">
+               <property name="text">
+                <string>Select all</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0" colspan="3">
+              <widget class="QTreeWidget" name="treeWidget">
+               <column>
+                <property name="text">
+                 <string notr="true">Title</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Author</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Duration</string>
+                </property>
+               </column>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QRadioButton" name="radio_tree_show_title">
+               <property name="text">
+                <string>Only Title (a lot faster)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QRadioButton" name="radio_tree_show_all">
+               <property name="text">
+                <string>Get Title, Author, Duration</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item row="0" column="1">
+            <layout class="QGridLayout" name="gridlayout_login_box">
+             <item row="3" column="2">
+              <widget class="QPushButton" name="button_get_recommended_videos">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    border: 2px solid #444;
+    border-radius: 4px;
+    padding: 5px;
+    color: #DDD;
+    font-weight: bold;
+    font-size: 14px;
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #78909C, stop:1 #90A4AE);
+}</string>
+               </property>
+               <property name="text">
+                <string>Get recommended videos</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_password">
+               <property name="text">
+                <string>Password:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QPushButton" name="button_get_liked_videos">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    border: 2px solid #444;
+    border-radius: 4px;
+    padding: 5px;
+    color: #DDD;
+    font-weight: bold;
+    font-size: 14px;
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #78909C, stop:1 #90A4AE);
+}</string>
+               </property>
+               <property name="text">
+                <string>Get Liked videos</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_username">
+               <property name="text">
+                <string>Username:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QPushButton" name="button_get_watched_videos">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    border: 2px solid #444;
+    border-radius: 4px;
+    padding: 5px;
+    color: #DDD;
+    font-weight: bold;
+    font-size: 14px;
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #78909C, stop:1 #90A4AE);
+}</string>
+               </property>
+               <property name="text">
+                <string>Get watched videos</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0" colspan="4">
+              <widget class="QPushButton" name="button_login">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    border: 2px solid #444;
+    border-radius: 8px;
+    padding: 5px;
+    color: #DDD;
+    font-weight: bold;
+    font-size: 14px;
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #5555FF, stop:1 #AA55FF);
+}
+
+QPushButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #6666FF, stop:1 #BB66FF);
+}
+
+QPushButton:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #4444DD, stop:1 #9944DD);
+}</string>
+               </property>
+               <property name="text">
+                <string>Login</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1" colspan="3">
+              <widget class="QLineEdit" name="lineedit_password">
+               <property name="echoMode">
+                <enum>QLineEdit::Password</enum>
+               </property>
+               <property name="placeholderText">
+                <string>Enter your PornHub Password</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1" colspan="3">
+              <widget class="QLineEdit" name="lineedit_username">
+               <property name="placeholderText">
+                <string>Enter your PornHub Username</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
            <item row="0" column="0">
             <layout class="QGridLayout" name="gridlayout_start_download_box">
              <item row="3" column="0">
@@ -497,183 +701,6 @@ QPushButton:pressed {
              </item>
             </layout>
            </item>
-           <item row="0" column="1">
-            <layout class="QGridLayout" name="gridlayout_login_box">
-             <item row="3" column="2">
-              <widget class="QPushButton" name="button_get_recommended_videos">
-               <property name="cursor">
-                <cursorShape>PointingHandCursor</cursorShape>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">QPushButton {
-    border: 2px solid #444;
-    border-radius: 4px;
-    padding: 5px;
-    color: #DDD;
-    font-weight: bold;
-    font-size: 14px;
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #78909C, stop:1 #90A4AE);
-}</string>
-               </property>
-               <property name="text">
-                <string>Get recommended videos</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_password">
-               <property name="text">
-                <string>Password:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QPushButton" name="button_get_liked_videos">
-               <property name="cursor">
-                <cursorShape>PointingHandCursor</cursorShape>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">QPushButton {
-    border: 2px solid #444;
-    border-radius: 4px;
-    padding: 5px;
-    color: #DDD;
-    font-weight: bold;
-    font-size: 14px;
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #78909C, stop:1 #90A4AE);
-}</string>
-               </property>
-               <property name="text">
-                <string>Get Liked videos</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_username">
-               <property name="text">
-                <string>Username:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QPushButton" name="button_get_watched_videos">
-               <property name="cursor">
-                <cursorShape>PointingHandCursor</cursorShape>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">QPushButton {
-    border: 2px solid #444;
-    border-radius: 4px;
-    padding: 5px;
-    color: #DDD;
-    font-weight: bold;
-    font-size: 14px;
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #78909C, stop:1 #90A4AE);
-}</string>
-               </property>
-               <property name="text">
-                <string>Get watched videos</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0" colspan="4">
-              <widget class="QPushButton" name="button_login">
-               <property name="cursor">
-                <cursorShape>PointingHandCursor</cursorShape>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">QPushButton {
-    border: 2px solid #444;
-    border-radius: 8px;
-    padding: 5px;
-    color: #DDD;
-    font-weight: bold;
-    font-size: 14px;
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #5555FF, stop:1 #AA55FF);
-}
-
-QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #6666FF, stop:1 #BB66FF);
-}
-
-QPushButton:pressed {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #4444DD, stop:1 #9944DD);
-}</string>
-               </property>
-               <property name="text">
-                <string>Login</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1" colspan="3">
-              <widget class="QLineEdit" name="lineedit_password">
-               <property name="echoMode">
-                <enum>QLineEdit::Password</enum>
-               </property>
-               <property name="placeholderText">
-                <string>Enter your PornHub Password</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1" colspan="3">
-              <widget class="QLineEdit" name="lineedit_username">
-               <property name="placeholderText">
-                <string>Enter your PornHub Username</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item row="1" column="0" colspan="2">
-            <layout class="QGridLayout" name="gridLayout_6">
-             <item row="1" column="0">
-              <widget class="QPushButton" name="button_tree_download">
-               <property name="text">
-                <string>Download Selected Videos</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QPushButton" name="button_tree_select_all">
-               <property name="text">
-                <string>Select all</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QPushButton" name="button_tree_unselect_all">
-               <property name="text">
-                <string>Unselect all</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0" colspan="3">
-              <widget class="QTreeWidget" name="treeWidget">
-               <column>
-                <property name="text">
-                 <string notr="true">Title</string>
-                </property>
-               </column>
-               <column>
-                <property name="text">
-                 <string>Author</string>
-                </property>
-               </column>
-               <column>
-                <property name="text">
-                 <string>Duration</string>
-                </property>
-               </column>
-              </widget>
-             </item>
-            </layout>
-           </item>
           </layout>
          </widget>
          <widget class="QWidget" name="page_2">
@@ -785,39 +812,6 @@ QPushButton:pressed {
               </layout>
              </widget>
             </item>
-            <item row="1" column="1">
-             <widget class="QGroupBox" name="groupbox_performance_semaphore">
-              <property name="title">
-               <string>Semaphore</string>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_22">
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_semaphore">
-                 <property name="text">
-                  <string>Semaphore:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0" colspan="2">
-                <widget class="QPushButton" name="button_semaphore_help">
-                 <property name="text">
-                  <string>Help</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QSpinBox" name="spinbox_semaphore">
-                 <property name="minimum">
-                  <number>1</number>
-                 </property>
-                 <property name="maximum">
-                  <number>10</number>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
             <item row="0" column="0" colspan="2">
              <widget class="QGroupBox" name="groupbox_performance_threading">
               <property name="title">
@@ -835,6 +829,32 @@ QPushButton:pressed {
                 <widget class="QRadioButton" name="radio_threading_yes">
                  <property name="text">
                   <string>Yes</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QGroupBox" name="groupbox_searching">
+              <property name="title">
+               <string>Searching</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_23">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_searching_limit">
+                 <property name="text">
+                  <string>Search Limit:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QSpinBox" name="spinbox_searching">
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>200</number>
                  </property>
                 </widget>
                </item>
@@ -878,30 +898,11 @@ QPushButton:pressed {
               </layout>
              </widget>
             </item>
-            <item row="3" column="0">
-             <widget class="QGroupBox" name="groupbox_searching">
-              <property name="title">
-               <string>Searching</string>
+            <item row="4" column="0" colspan="2">
+             <widget class="QPushButton" name="button_settings_apply">
+              <property name="text">
+               <string>Apply / Reload</string>
               </property>
-              <layout class="QGridLayout" name="gridLayout_23">
-               <item row="0" column="1">
-                <widget class="QSpinBox" name="spinbox_searching">
-                 <property name="minimum">
-                  <number>1</number>
-                 </property>
-                 <property name="maximum">
-                  <number>200</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_searching_limit">
-                 <property name="text">
-                  <string>Search Limit:</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
              </widget>
             </item>
             <item row="2" column="0" colspan="2">
@@ -1052,11 +1053,37 @@ QPushButton:pressed {
               </layout>
              </widget>
             </item>
-            <item row="4" column="0" colspan="2">
-             <widget class="QPushButton" name="button_settings_apply">
-              <property name="text">
-               <string>Apply / Reload</string>
+            <item row="1" column="1">
+             <widget class="QGroupBox" name="groupbox_performance_semaphore">
+              <property name="title">
+               <string>Semaphore</string>
               </property>
+              <layout class="QGridLayout" name="gridLayout_22">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_semaphore">
+                 <property name="text">
+                  <string>Semaphore:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0" colspan="2">
+                <widget class="QPushButton" name="button_semaphore_help">
+                 <property name="text">
+                  <string>Help</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QSpinBox" name="spinbox_semaphore">
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>10</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </widget>
             </item>
            </layout>
