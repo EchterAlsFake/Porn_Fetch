@@ -3,6 +3,11 @@
 I have currently not the time to maintain this. School in Germnay is really hard in October - December.
 I'll make a big update. You can expect it at late December. Thanks everyone for supporting this project!
 
+Update:
+
+Something negative happened in my life (my fault), and my brain is some kind of shocked. I don't know
+when I'll be back. Maybe tomorrow I feel great again, or it takes a month.
+
 # Porn Fetch - A Free & Open-Source PornHub Downloader 
 
 ![Build](https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg)
