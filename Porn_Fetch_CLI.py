@@ -272,13 +272,13 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
             elif self.quality == Quality.WORST:
                 quality_ext = "Worst"
 
-            if self.threading_mode == 2:
+            if self.threading_mode == "2":
                 threading_ext = "High Performance"
 
-            elif self.threading_mode == 1:
+            elif self.threading_mode == "1":
                 threading_ext = "FFMPEG"
 
-            elif self.threading_mode == 0:
+            elif self.threading_mode == "0":
                 threading_ext = "Default"
 
             api_language_ext = self.api_language
@@ -358,6 +358,9 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
 
             elif options == "11":
                 self.conf.set("Video", "directory_system", "0")
+
+            elif options == "99":
+                self.main_menu()
 
             with open("config.ini", "w") as config_file:
                 self.conf.write(config_file)
