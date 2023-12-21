@@ -521,10 +521,10 @@ class PornFetch(QWidget):
         self.ui.stacked_widget_main.setCurrentIndex(1)
 
     def switch_to_metadata(self):
-        self.ui.stacked_widget_main.setCurrentIndex(2)
+        self.ui.stacked_widget_main.setCurrentIndex(3)
 
     def switch_to_credits(self):
-        self.ui.stacked_widget_main.setCurrentIndex(3)
+        self.ui.stacked_widget_main.setCurrentIndex(2)
         self.show_credits()
         time.sleep(0.3)
         self.show_credits()
