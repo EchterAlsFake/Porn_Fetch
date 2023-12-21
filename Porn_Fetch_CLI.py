@@ -19,7 +19,7 @@ from configparser import ConfigParser
 from phub import Video, Client, errors, download, Quality
 
 from src.backend.shared_functions import (strip_title, check_video, check_if_video_exists, setup_config_file,
-                                          logger_debug, logger_error, correct_output_path)
+                                          logger_debug, logger_error, return_color, reset, correct_output_path)
 
 
 class CLI():
@@ -81,16 +81,16 @@ Do you accept the License? [yes,no]""")
 
     def main_menu(self):
         options = input(f"""
-1) Download a Video (PornHub / HQPorner)
-2) Download videos from a Model / Channel / User
-3) Search Users / Models / Channels
-4) Download from a file with URLs
-5) Account
-6) Metadata
-7) Settings
-8) Credits / Information
+{return_color()}1) Download a Video (PornHub / HQPorner)
+{return_color()}2) Download videos from a Model / Channel / User
+{return_color()}3) Search Users / Models / Channels
+{return_color()}4) Download from a file with URLs
+{return_color()}5) Account
+{return_color()}6) Metadata
+{return_color()}7) Settings
+{return_color()}8) Credits / Information
 
--------------------------------=>:""")
+{return_color()}-------------------------------=>:{reset()}""")
 
         if options == "1":
             self.start_single_video()
@@ -117,16 +117,16 @@ Do you accept the License? [yes,no]""")
             self.credits()
 
     def start_single_video(self):
-        url = input(f"""Enter PornHub / HQPorner URL --=>: """)
+        url = input(f"{return_color()}Enter PornHub / HQPorner URL --=>:{reset()}")
         self.pre_setup_video(url)
 
     def start_model_user_channel(self):
-        url = input(f"""
+        url = input(f"""{reset()}
 Please enter the URL to the PornHub User / Model / Channel account.
 
 Hint: You can select the videos to be downloaded later!
 
-----------------------------=>:""")
+{return_color()}----------------------------=>:{reset()}""")
 
         client = Client(language=self.api_language)
         model = client.get_user(url)
@@ -134,12 +134,12 @@ Hint: You can select the videos to be downloaded later!
         self.start_generator(videos)
 
     def start_from_file(self):
-        file = input(f"""
+        file = input(f"""{reset()}
 Enter the (exact) location of the file.
 
 Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
 
----------------------------------=>:""")
+{return_color()}---------------------------------=>:{reset()}""")
 
         if os.path.exists(file):
             with open(file, "r") as url_file:
@@ -263,36 +263,56 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
 
     def save_user_settings(self):
         while True:
-            quality_ext = self.quality
-            threading_ext = self.threading_mode
+            if self.quality == Quality.BEST:
+                quality_ext = "Best"
+
+            elif self.quality == Quality.HALF:
+                quality_ext = "Half"
+
+            elif self.quality == Quality.WORST:
+                quality_ext = "Worst"
+
+            if self.threading_mode == 2:
+                threading_ext = "High Performance"
+
+            elif self.threading_mode == 1:
+                threading_ext = "FFMPEG"
+
+            elif self.threading_mode == 0:
+                threading_ext = "Default"
+
             api_language_ext = self.api_language
             output_path_ext = self.output_path
-            directory_system_ext = self.directory_system
+            if self.directory_system == 1:
+                directory_system_ext = "Yes"
+
+            elif self.directory_system == 0:
+                directory_system_ext = "No"
 
             options = input(f"""
-    --------------QUALITY-------------|
-    |>  Current: {quality_ext}
-    |>  1) Best
-    |>  2) Half
-    |>  3) Worst
-    |-------------Threading-----------|
-    |>  Current: {threading_ext}
-    |>  4) High Performance
-    |>  5) FFMPEG (needs ffmpeg installed on your system)
-    |>  6) Default
-    |>  7) Disable Threading for the whole application
-    |--------------API Language--------|
-    |>  Current: {api_language_ext}
-    |>  8) Enter custom language code... e.g. de for german or es for espanol
-    |--------------Output Path----------|
-    |>  Current: {output_path_ext}
-    |>  9) Change Output Path
-    |--------------Directory System-----|
-    |>  Current: {directory_system_ext}
-    |>  10) Enable
-    |>  11) Disable
-    |---------PRESS 99 TO STOP----------|
-    |--------------------------=>:""")
+{reset()}--------------{return_color()}QUALITY{reset()}-------------|
+{return_color()}|>  Current: {quality_ext}
+{return_color()}|>  1) Best
+{return_color()}|>  2) Half
+{return_color()}|>  3) Worst
+{reset()}|-------------{return_color()}Threading{reset()}-----------|
+{return_color()}|>  Current: {threading_ext}
+{return_color()}|>  4) High Performance
+{return_color()}|>  5) FFMPEG (needs ffmpeg installed on your system)
+{return_color()}|>  6) Default
+{return_color()}|>  7) Disable Threading for the whole application
+{reset()}|--------------{return_color()}API Language{reset()}--------|
+{return_color()}|>  Current: {api_language_ext}
+{return_color()}|>  8) Enter custom language code... e.g. de for german or es for espanol
+{reset()}|--------------{return_color()}Output Path{reset()}----------|
+{return_color()}|>  Current: {output_path_ext}
+{return_color()}|>  9) Change Output Path
+{reset()}|--------------{return_color()}Directory System{reset()}-----|
+{return_color()}|>  Current: {directory_system_ext}
+{return_color()}|>  10) Enable
+{return_color()}|>  11) Disable
+{return_color()}|---------{return_color()}PRESS 99 TO STOP{reset()}----------|
+{return_color()}|--------------------------=>:{reset()}""")
             if options == "1":
                 self.conf.set("Video", "quality", "best")
 
@@ -319,12 +339,12 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
 
             elif options == "8":
                 language_code = input(f"""
-    Please enter the language code -->:""")
+{return_color()}Please enter the language code -->:{reset()}""")
                 self.conf.set("Video", "language", language_code)
 
             elif options == "9":
                 output_path = input(f"""
-    Please enter the new output path -->:""")
+{return_color()}Please enter the new output path -->:{reset()}""")
                 if not os.path.exists(output_path):
                     logger_error("The specified output path doesn't exist!")
 
@@ -348,10 +368,10 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
 
     def get_metadat_options(self):
         options = input(f"""
-1) Get Video metadata
-2) Get User metadata
-3) Back
-------------------=>:""")
+{return_color()}1) Get Video metadata
+{return_color()}2) Get User metadata
+{return_color()}3) Back
+{return_color()}------------------=>:{reset()}""")
         if options == "1":
             self.get_video_metadata()
 
@@ -363,13 +383,13 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
 
     def search_options(self):
         options = input(f"""
-1) Search for Videos
-2) Search for Users
-3) Search for Pornstars
-4) Back
-! search filters aren't working yet. 
+{return_color()}1) Search for Videos
+{return_color()}2) Search for Users
+{return_color()}3) Search for Pornstars
+{return_color()}4) Back
+{reset()}! search filters aren't working yet. 
 
-------------------=>:""")
+{return_color()}------------------=>:{reset()}""")
 
         if options == "1":
             self.search_videos()
@@ -385,7 +405,7 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
 
     def search_videos(self):
         query = input(f"""
-Please enter your search query ---=>:""")
+{return_color()}Please enter your search query ---=>:{reset()}""")
 
         if not isinstance(self.client, Client):
             language = self.api_language
@@ -396,7 +416,7 @@ Please enter your search query ---=>:""")
 
     def search_users(self):
         query = input(f"""
-Enter a query to search for users --=>:""")
+{return_color()}Enter a query to search for users --=>:{reset()}""")
 
         if not isinstance(self.client, Client):
             language = self.api_language
@@ -408,7 +428,7 @@ Enter a query to search for users --=>:""")
     def search_pornstars(self):
 
         query = input(f"""
-        Enter a query to search for Pornstars --=>:""")
+{return_color()}Enter a query to search for Pornstars --=>:{reset()}""")
 
         if not isinstance(self.client, Client):
             language = self.api_language
@@ -424,12 +444,12 @@ Enter a query to search for users --=>:""")
             print(f"{idx}) {video.title}")
             video_objects.append(video)
 
-        index = input(f"""
-        Please enter the number for the videos you want to download. Separate with a comma
-        e.g 1,6,92 
+        index = input(f"""{reset()}
+Please enter the number for the videos you want to download. Separate with a comma
+e.g 1,6,92 
 
-        ! Enter 'ALL' to download all videos
-        -----------------------=>:""")
+! Enter 'ALL' to download all videos
+{return_color()}-----------------------=>:{reset()}""")
 
         if index.lower() == "all":
             for video in video_objects:
@@ -439,21 +459,16 @@ Enter a query to search for users --=>:""")
             chosen_videos = index.split(",")
             for idx in chosen_videos:
                 video = video_objects[int(idx)]
-                logger_debug("Calculating total segments... Please be patient!")
-                self.total_segments = sum(
-                    [len(list(video.get_segments(quality=self.quality))) for video in video_objects])
-                self.downloaded_segments = 0
-
                 self.pre_setup_video(url=video)
 
     def get_video_metadata(self):
         language = self.api_language
         url = input(f"""
-Please enter the video url (PornHub) --=>:""")
+{return_color()}Please enter the video url (PornHub) --=>:{reset()}""")
 
         video = check_video(url, language=language)
 
-        author = video.author
+        author = video.author.name
         duration = video.duration.seconds
         duration = round(duration, 2) / 60
         title = strip_title(video.title)
@@ -469,23 +484,23 @@ Please enter the video url (PornHub) --=>:""")
         rating = f"Likes: {video.like.up} | Dislikes: {video.like.down}"
 
         input(f"""
-Title: {title}
-Author: {author}
-Duration: {duration}
-Date: {date}
-Views: {views}
-Pornstars: {pornstars}
-Rating: {rating}
-Tags: {tags}
-Hotspots: {hotspots}
-
+{return_color()}Title: {title}
+{return_color()}Author: {author}
+{return_color()}Duration: {duration}
+{return_color()}Date: {date}
+{return_color()}Views: {views}
+{return_color()}Pornstars: {pornstars}
+{return_color()}Rating: {rating}
+{return_color()}Tags: {tags}
+{return_color()}Hotspots: {hotspots}
+{reset()}
 Press ENTER to continue""")
         self.main_menu()
 
     def get_user_metadata(self):
         api_language = self.api_language
         url = input(f"""
-Enter the User URL (PornHub) --=>:""")
+{return_color()}Enter the User URL (PornHub) --=>:{reset()}""")
 
         if not isinstance(self.client, Client):
             self.client = Client(language=api_language)
@@ -516,40 +531,40 @@ Enter the User URL (PornHub) --=>:""")
         videos_watched = info.get("Videos Watched")
 
         input(f"""
-Name: {name}
-Type: {type}
+{return_color()}Name: {reset()}{name}
+{return_color()}Type: {reset()}{type}
 
-Relationship Status: {relationship_status}
-Interested In: {interested_in}
-City and Country: {city_and_country}
-Gender: {gender}
-Birth Place: {birth_place}
-Height: {height}
-Weight: {weight}
-Ethnicity: {ethnicity}
-Hair Color: {hair_color}
-Fake Boobs: {fake_boobs}
-Tattoos: {tattoos}
-Piercings: {piercings}
-Hometown: {hometown}
-Interests and Hobbies: {interests_and_hobbies}
-Turn Ons: {turn_ons}
-Turn Offs: {turn_offs}
-Video Views: {video_views}
-Profile views: {profile_views}
-Videos Watched: {videos_watched}
+{return_color()}Relationship Status: {reset()}{relationship_status}
+{return_color()}Interested In: {reset()}{interested_in}
+{return_color()}City and Country: {reset()}{city_and_country}
+{return_color()}Gender: {reset()}{gender}
+{return_color()}Birth Place: {reset()}{birth_place}
+{return_color()}Height: {reset()}{height}
+{return_color()}Weight: {reset()}{weight}
+{return_color()}Ethnicity: {reset()}{ethnicity}
+{return_color()}Hair Color: {reset()}{hair_color}
+{return_color()}Fake Boobs: {reset()}{fake_boobs}
+{return_color()}Tattoos: {reset()}{tattoos}
+{return_color()}Piercings: {reset()}{piercings}
+{return_color()}Hometown: {reset()}{hometown}
+{return_color()}Interests and Hobbies: {reset()}{interests_and_hobbies}
+{return_color()}Turn Ons: {reset()}{turn_ons}
+{return_color()}Turn Offs: {reset()}{turn_offs}
+{return_color()}Video Views: {reset()}{video_views}
+{return_color()}Profile views: {reset()}{profile_views}
+{return_color()}Videos Watched: {reset()}{videos_watched}
 
 Press ENTER to continue...""")
         self.main_menu()
 
     def account_options(self):
         options = input(f"""
-1) Login
-2) Get watched videos
-3) Get liked videos
-4) Get recommended videos
-5) Back
----------------------------=>:
+{return_color()}1) Login
+{return_color()}2) Get watched videos
+{return_color()}3) Get liked videos
+{return_color()}4) Get recommended videos
+{return_color()}5) Back
+{return_color()}---------------------------=>:{reset()}
 """)
 
         if options == "1":
@@ -576,7 +591,7 @@ Press ENTER to continue...""")
             self.account_options()
 
     def login(self):
-        username = input(f"Please enter your PornHub Username --=>:")
+        username = input(f"{return_color()}Please enter your PornHub Username --=>:{reset()}")
         password = getpass.getpass("Please enter your PornHub Password --=>:")
         self.client = Client(username=username, password=password, language=self.api_language)
         return True
