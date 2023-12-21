@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1758</width>
-    <height>839</height>
+    <height>851</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -305,167 +305,11 @@ border-radius: 5px;</string>
           <cursorShape>ArrowCursor</cursorShape>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="page">
           <layout class="QGridLayout" name="gridLayout_30">
-           <item row="1" column="0" colspan="2">
-            <layout class="QGridLayout" name="gridLayout_6">
-             <item row="1" column="0" colspan="7">
-              <widget class="QTreeWidget" name="treeWidget">
-               <column>
-                <property name="text">
-                 <string notr="true">Title</string>
-                </property>
-               </column>
-               <column>
-                <property name="text">
-                 <string>Author</string>
-                </property>
-               </column>
-               <column>
-                <property name="text">
-                 <string>Duration</string>
-                </property>
-               </column>
-              </widget>
-             </item>
-             <item row="2" column="6">
-              <widget class="QPushButton" name="button_tree_unselect_all">
-               <property name="styleSheet">
-                <string notr="true">QPushButton {
-    /* Base style */
-    background-color: rgb(0, 208, 255); /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}
-</string>
-               </property>
-               <property name="text">
-                <string>Unselect all</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QRadioButton" name="radio_tree_show_title">
-               <property name="text">
-                <string>Only Title (a lot faster)</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="6">
-              <spacer name="horizontalSpacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item row="0" column="4">
-              <widget class="QRadioButton" name="radio_tree_show_all">
-               <property name="text">
-                <string>Get Title, Author, Duration</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QPushButton" name="button_tree_download">
-               <property name="styleSheet">
-                <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #7B1FA2; /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}
-</string>
-               </property>
-               <property name="text">
-                <string>Download Selected Videos</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1" colspan="5">
-              <widget class="QPushButton" name="button_tree_select_all">
-               <property name="styleSheet">
-                <string notr="true">QPushButton {
-    /* Base style */
-    background-color: rgba(255, 162, 0, 170); /* Purple background */
-	color: rgb(255, 162, 0);
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}
-</string>
-               </property>
-               <property name="text">
-                <string>Select all</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item row="0" column="1">
+           <item row="0" column="2">
             <layout class="QGridLayout" name="gridlayout_login_box">
              <item row="3" column="2">
               <widget class="QPushButton" name="button_get_recommended_videos">
@@ -605,112 +449,10 @@ QPushButton:pressed {
            </item>
            <item row="0" column="0">
             <layout class="QGridLayout" name="gridlayout_start_download_box">
-             <item row="3" column="0">
-              <widget class="QLabel" name="label_file">
-               <property name="text">
-                <string>File:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="2">
-              <widget class="QPushButton" name="button_open_file">
-               <property name="cursor">
-                <cursorShape>PointingHandCursor</cursorShape>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #7B1FA2; /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}</string>
-               </property>
-               <property name="text">
-                <string>Open File</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLineEdit" name="lineedit_url">
-               <property name="placeholderText">
-                <string>Enter PornHub or HQPorner Video URL</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="2">
-              <widget class="QPushButton" name="button_search_videos">
-               <property name="cursor">
-                <cursorShape>PointingHandCursor</cursorShape>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #7B1FA2; /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}</string>
-               </property>
-               <property name="text">
-                <string>Get Videos</string>
-               </property>
-              </widget>
-             </item>
              <item row="3" column="1">
               <widget class="QLineEdit" name="lineedit_file">
                <property name="placeholderText">
                 <string>Click Open File to select a file, or write the location here and click Open File.    URLs need to be separated with a new line. Supports HQPorner and PornHub</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="1">
-              <widget class="QLineEdit" name="lineedit_search_query">
-               <property name="placeholderText">
-                <string>Enter a Search Query for PornHub  You can define filters in the settings. The returned videos will be listed down below and you can select them.</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="label_model_url">
-               <property name="text">
-                <string>Model URL:</string>
                </property>
               </widget>
              </item>
@@ -751,6 +493,57 @@ QPushButton:pressed {
                </property>
               </widget>
              </item>
+             <item row="4" column="1">
+              <widget class="QLineEdit" name="lineedit_search_query">
+               <property name="placeholderText">
+                <string>Enter a Search Query for PornHub  You can define filters in the settings. The returned videos will be listed down below and you can select them.</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="lineedit_url">
+               <property name="placeholderText">
+                <string>Enter PornHub or HQPorner Video URL</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QPushButton" name="button_open_file">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}</string>
+               </property>
+               <property name="text">
+                <string>Open File</string>
+               </property>
+              </widget>
+             </item>
              <item row="4" column="0">
               <widget class="QLabel" name="label_search_query">
                <property name="text">
@@ -762,6 +555,13 @@ QPushButton:pressed {
               <widget class="QLabel" name="label_url">
                <property name="text">
                 <string>URL:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QLineEdit" name="lineedit_model_url">
+               <property name="placeholderText">
+                <string>Enter PornHub Model URL. This can be a Pornstar Account or a PornHub Channel. The videos will be listed down in the TreeWidget</string>
                </property>
               </widget>
              </item>
@@ -802,11 +602,220 @@ QPushButton:pressed {
                </property>
               </widget>
              </item>
-             <item row="2" column="1">
-              <widget class="QLineEdit" name="lineedit_model_url">
-               <property name="placeholderText">
-                <string>Enter PornHub Model URL. This can be a Pornstar Account or a PornHub Channel. The videos will be listed down in the TreeWidget</string>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_file">
+               <property name="text">
+                <string>File:</string>
                </property>
+              </widget>
+             </item>
+             <item row="4" column="2">
+              <widget class="QPushButton" name="button_search_videos">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}</string>
+               </property>
+               <property name="text">
+                <string>Get Videos</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_model_url">
+               <property name="text">
+                <string>Model URL:</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="1" column="0" colspan="3">
+            <layout class="QGridLayout" name="gridLayout_6">
+             <item row="1" column="0" colspan="7">
+              <widget class="QTreeWidget" name="treeWidget">
+               <column>
+                <property name="text">
+                 <string notr="true">Title</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Author</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Duration</string>
+                </property>
+               </column>
+              </widget>
+             </item>
+             <item row="0" column="6">
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="4">
+              <widget class="QRadioButton" name="radio_tree_show_all">
+               <property name="text">
+                <string>Get Title, Author, Duration</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" colspan="4">
+              <widget class="QRadioButton" name="radio_tree_show_title">
+               <property name="text">
+                <string>Only Title (a lot faster)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0" colspan="7">
+              <widget class="QGroupBox" name="groupBox_3">
+               <property name="title">
+                <string/>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_32">
+                <item row="0" column="2">
+                 <widget class="QPushButton" name="button_tree_unselect_all">
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+    /* Base style */
+    background-color: rgb(0, 208, 255); /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Unselect all</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QPushButton" name="button_tree_download">
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Download Selected Videos</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QPushButton" name="button_tree_select_all">
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+    /* Base style */
+    background-color: rgba(255, 162, 0, 170); /* Purple background */
+	color: rgb(255, 162, 0);
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Select all</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </widget>
              </item>
             </layout>

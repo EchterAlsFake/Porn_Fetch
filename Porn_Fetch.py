@@ -107,7 +107,7 @@ class AddToTreeWidget(QRunnable):
                 logger_debug("Can't get length of the iterator. Progress won't be available!")
                 total = None
 
-            for i, video in enumerate(self.iterator[0:self.search_limit], start=1):
+            for i, video in enumerate(self.iterator, start=1):
                 if str(video).endswith(".html"):
                     title = API().extract_title(url=str(video))
                     if self.data_mode == 1:
@@ -527,6 +527,42 @@ class PornFetch(QWidget):
     def switch_to_credits(self):
         self.ui.stacked_widget_main.setCurrentIndex(3)
         self.show_credits()
+
+    def switch_login_button_state(self):
+        stylesheet = """
+QPushButton {
+    /* Base style */
+    background-color: #FFA500; /* Orange background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #FFA500;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #40E0D0; /* Turquoise for hover */
+    border-color: #40E0D0;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #FF6347; /* Darker shade of orange when pressed */
+    border-color: #FF6347;
+    border-style: inset; /* Changes the style to look "pressed" */
+}
+
+
+"""
+
+        self.ui.button_get_liked_videos.setStyleSheet(stylesheet)
+        self.ui.button_get_watched_videos.setStyleSheet(stylesheet)
+        self.ui.button_get_recommended_videos.setStyleSheet(stylesheet)
+
 
     """
     The following are functions used by different other functions to handle data over different classes / threads.
@@ -1065,6 +1101,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
             self.client = Client(username, password, language=self.api_language)
             self.logger_debug("Login Successful!")
             ui_popup(self.language_string_login_successful)
+            self.switch_login_button_state()
 
         except errors.LoginFailed:
             ui_popup(self.language_string_login_failed)
