@@ -4,7 +4,7 @@
 ## TODO:
 
 - [] Update Web application
-- [] Updating CLI
+- [x] Updating CLI
 - [] Fixing the script for iOS (will take its time)
 - [] Searching for Pornstars
 - [] Searching for Users

@@ -11,7 +11,10 @@
         <file>graphics/list.svg</file>
     </qresource>
     <qresource prefix="/style">
-        <file>stylesheet.qss</file>
+        <file>stylesheets/stylesheet.qss</file>
+        <file>stylesheets/progressbar_hqporner.qss</file>
+        <file>stylesheets/progressbar_pornhub.qss</file>
+        <file>stylesheets/progressbar_total.qss</file>
     </qresource>
     <qresource prefix="/credits">
         <file>../../README/CREDITS.md</file>

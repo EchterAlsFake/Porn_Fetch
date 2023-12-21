@@ -9,31 +9,28 @@ Version 3.0
 import getpass
 import os.path
 import threading
-import markdown
 
-from phub import Video, Client, errors, download, display, Quality
-from configparser import ConfigParser
+from tqdm import tqdm
 from hqporner_api import API
+from threading import Semaphore
 from rich import print as rprint
 from rich.markdown import Markdown
-from tqdm import tqdm
+from configparser import ConfigParser
+from phub import Video, Client, errors, download, Quality
 
 from src.backend.shared_functions import (strip_title, check_video, check_if_video_exists, setup_config_file,
-                                          logger_debug, logger_error, return_color, reset, correct_output_path)
-
-
-downloaded_segments = 0
-total_segments = 0
+                                          logger_debug, logger_error, correct_output_path)
 
 
 class CLI():
     def __init__(self):
-        self.client = None
         setup_config_file()
         self.conf = ConfigParser()
         self.conf.read("config.ini")
 
         # Variable initialization
+        self.semaphore_limit = None
+        self.client = None
         self.directory_system = None
         self.threading = None
         self.threading_mode = None
@@ -41,7 +38,7 @@ class CLI():
         self.output_path = None
         self.api_language = None
         self.quality = None
-
+        self.progress_bars = {}
         self.load_user_settings()
 
         if self.license():
@@ -134,32 +131,7 @@ Hint: You can select the videos to be downloaded later!
         client = Client(language=self.api_language)
         model = client.get_user(url)
         videos = model.videos
-
-        videos_list = []
-
-        for idx, video in enumerate(videos, start=0):
-            print(f"{idx}) {video.title}")
-            videos_list.append(video)
-
-        to_be_downloaded = input(f"""
-Enter the numbers of videos you want to download (separate with comma)
-
-e.g. 1,5,20,6,7 
-
-Hint: Enter ALL to download all videos
-
-------------------------=>:
-
-""")
-        if to_be_downloaded.lower() == "all":
-            for video in videos_list:
-                self.pre_setup_video(video)
-
-        else:
-            split = to_be_downloaded.split(",")
-            for index in split:
-                video = videos_list[int(index)]
-                self.pre_setup_video(video)
+        self.start_generator(videos)
 
     def start_from_file(self):
         file = input(f"""
@@ -180,9 +152,10 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
             self.start_from_file()
 
     def pre_setup_video(self, url):
+        self.semaphore.acquire()
         if str(url).endswith(".html"):
             title = API().extract_title(url)
-            author = API().extract_actress(url)
+            author = API().extract_actress(url)[0]
             video = str(url)
 
         else:
@@ -198,6 +171,9 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
             output_path = f"{output_path}{os.sep}"
 
         if self.directory_system:
+            if not os.path.exists(f"{output_path}{author}"):
+                os.mkdir(f"{output_path}{author}")
+
             output_path = f"{output_path}{author}{os.sep}{title}"
 
         else:
@@ -221,6 +197,24 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
                 else:
                     self.download_video_pornhub(video=video, output_path=output_path, quality=quality)
 
+    def download_callback(self, pos, total):
+        """
+        Callback function for the video download progress.
+        It updates or creates a tqdm progress bar for each download and updates the total progress.
+        """
+        # Get the thread ID to uniquely identify each download
+        thread_id = threading.get_ident()
+
+        # If this is the first time this thread calls the callback, create a new progress bar
+        if thread_id not in self.progress_bars:
+            self.progress_bars[thread_id] = tqdm(total=total, desc=f"Download {thread_id}",
+                                                 bar_format="{l_bar}{bar:20}{r_bar}{bar:-20b}",
+                                                 colour='blue')
+
+        # Update the individual progress bar
+        self.progress_bars[thread_id].n = pos
+        self.progress_bars[thread_id].refresh()
+
     def download_video_pornhub(self, video, output_path, quality):
 
         if self.threading_mode == "2":
@@ -232,10 +226,14 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
         elif self.threading_mode == "0":
             threading_X = download.default
 
-        video.download(downloader=threading_X, quality=quality, path=output_path, display=display.progress())
+        video.download(downloader=threading_X, quality=quality, path=output_path, display=self.download_callback)
+        logger_debug("Download Complete, releasing semaphore")
+        self.semaphore.release()
 
     def download_video_hqporner(self, url, output_path):
         API().download(url=url, no_title=True, output_path=output_path, quality="highest")
+        logger_debug("Download Complete, releasing semaphore")
+        self.semaphore.release()
 
     def load_user_settings(self):
         self.api_language = self.conf["Video"]["language"]
@@ -244,6 +242,8 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
         self.threading = self.conf["Performance"]["threading"]
         self.threading_mode = self.conf["Performance"]["threading_mode"]
         self.directory_system = self.conf["Video"]["directory_system"]
+        self.semaphore_limit = int(self.conf["Performance"]["semaphore"])
+        self.semaphore = Semaphore(self.semaphore_limit)
         quality = self.conf["Video"]["quality"]
 
         if quality == "best":
@@ -260,90 +260,91 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
 
         if self.directory_system == "1":
             self.directory_system = True
-        ""
 
     def save_user_settings(self):
-        quality_ext = self.quality
-        threading_ext = self.threading_mode
-        api_language_ext = self.api_language
-        output_path_ext = self.output_path
-        directory_system_ext = self.directory_system
+        while True:
+            quality_ext = self.quality
+            threading_ext = self.threading_mode
+            api_language_ext = self.api_language
+            output_path_ext = self.output_path
+            directory_system_ext = self.directory_system
 
-        options = input(f"""
---------------QUALITY-------------|
-|>  Current: {quality_ext}
-|>  1) Best
-|>  2) Half
-|>  3) Worst
-|-------------Threading-----------|
-|>  Current: {threading_ext}
-|>  4) High Performance
-|>  5) FFMPEG (needs ffmpeg installed on your system)
-|>  6) Default
-|>  7) Disable Threading for the whole application
-|--------------API Language--------|
-|>  Current: {api_language_ext}
-|>  8) Enter custom language code... e.g. de for german or es for espanol
-|--------------Output Path----------|
-|>  Current: {output_path_ext}
-|>  9) Change Output Path
-|--------------Directory System-----|
-|>  Current: {directory_system_ext}
-|>  10) Enable
-|>  11) Disable
-|--------------------------=>:""")
-        if options == "1":
-            self.conf.set("Video", "quality", "best")
+            options = input(f"""
+    --------------QUALITY-------------|
+    |>  Current: {quality_ext}
+    |>  1) Best
+    |>  2) Half
+    |>  3) Worst
+    |-------------Threading-----------|
+    |>  Current: {threading_ext}
+    |>  4) High Performance
+    |>  5) FFMPEG (needs ffmpeg installed on your system)
+    |>  6) Default
+    |>  7) Disable Threading for the whole application
+    |--------------API Language--------|
+    |>  Current: {api_language_ext}
+    |>  8) Enter custom language code... e.g. de for german or es for espanol
+    |--------------Output Path----------|
+    |>  Current: {output_path_ext}
+    |>  9) Change Output Path
+    |--------------Directory System-----|
+    |>  Current: {directory_system_ext}
+    |>  10) Enable
+    |>  11) Disable
+    |---------PRESS 99 TO STOP----------|
+    |--------------------------=>:""")
+            if options == "1":
+                self.conf.set("Video", "quality", "best")
 
-        elif options == "2":
-            self.conf.set("Video", "quality", "half")
+            elif options == "2":
+                self.conf.set("Video", "quality", "half")
 
-        elif options == "3":
-            self.conf.set("Video", "quality", "worst")
+            elif options == "3":
+                self.conf.set("Video", "quality", "worst")
 
-        elif options == "4":
-            self.conf.set("Performance", "threading_mode", "2")
-            self.conf.set("Performance", "threading", "1")
+            elif options == "4":
+                self.conf.set("Performance", "threading_mode", "2")
+                self.conf.set("Performance", "threading", "1")
 
-        elif options == "5":
-            self.conf.set("Performance", "threading_mode", "1")
-            self.conf.set("Performance", "threading", "1")
+            elif options == "5":
+                self.conf.set("Performance", "threading_mode", "1")
+                self.conf.set("Performance", "threading", "1")
 
-        elif options == "6":
-            self.conf.set("Performance", "threading_mode", "0")
-            self.conf.set("Performance", "threading", "1")
+            elif options == "6":
+                self.conf.set("Performance", "threading_mode", "0")
+                self.conf.set("Performance", "threading", "1")
 
-        elif options == "7":
-            self.conf.set("Performance", "threading", "0")
+            elif options == "7":
+                self.conf.set("Performance", "threading", "0")
 
-        elif options == "8":
-            language_code = input(f"""
-Please enter the language code -->:""")
-            self.conf.set("Video", "language", language_code)
+            elif options == "8":
+                language_code = input(f"""
+    Please enter the language code -->:""")
+                self.conf.set("Video", "language", language_code)
 
-        elif options == "9":
-            output_path = input(f"""
-Please enter the new output path -->:""")
-            if not os.path.exists(output_path):
-                logger_error("The specified output path doesn't exist!")
+            elif options == "9":
+                output_path = input(f"""
+    Please enter the new output path -->:""")
+                if not os.path.exists(output_path):
+                    logger_error("The specified output path doesn't exist!")
 
-            else:
-                output_path = correct_output_path(output_path)
+                else:
+                    output_path = correct_output_path(output_path)
 
-            self.conf.set("Video", "output_path", output_path)
+                self.conf.set("Video", "output_path", output_path)
 
-        elif options == "10":
-            self.conf.set("Video", "directory_system", "1")
+            elif options == "10":
+                self.conf.set("Video", "directory_system", "1")
 
-        elif options == "11":
-            self.conf.set("Video", "directory_system", "0")
+            elif options == "11":
+                self.conf.set("Video", "directory_system", "0")
 
-        with open("config.ini", "w") as config_file:
-            self.conf.write(config_file)
+            with open("config.ini", "w") as config_file:
+                self.conf.write(config_file)
 
-        logger_debug("Applied new settings!")
-        self.load_user_settings()
-        logger_debug("Reloaded User settings. You may continue now :) ")
+            logger_debug("Applied new settings!")
+            self.load_user_settings()
+            logger_debug("Reloaded User settings. You may continue now :) ")
 
     def get_metadat_options(self):
         options = input(f"""
@@ -438,6 +439,11 @@ Enter a query to search for users --=>:""")
             chosen_videos = index.split(",")
             for idx in chosen_videos:
                 video = video_objects[int(idx)]
+                logger_debug("Calculating total segments... Please be patient!")
+                self.total_segments = sum(
+                    [len(list(video.get_segments(quality=self.quality))) for video in video_objects])
+                self.downloaded_segments = 0
+
                 self.pre_setup_video(url=video)
 
     def get_video_metadata(self):
@@ -597,31 +603,6 @@ Press ENTER to continue...""")
         iterator = self.client.account.recommended
         self.start_generator(iterator)
 
-    def progress(self, desc: str = 'Downloading'):
-        '''
-        Simple progress display using tqdm.
-
-        Args:
-            desc (str): Description to display.
-
-        Returns:
-            Callable: A wrapper to pass to a downloader.
-        '''
-
-        def wrapper(total: int) -> tqdm:
-            """
-            Initializes and returns a tqdm progress bar object.
-
-            Args:
-                total (int): The total number of iterations (e.g., the size of the file to be downloaded).
-
-            Returns:
-                tqdm: A tqdm progress bar object.
-            """
-            return tqdm(total=total, desc=desc, unit='i', ncols=100)
-
-        return wrapper
-
     def credits(self):
         text_markdown = f"""
 # Porn Fetch V3
@@ -683,6 +664,7 @@ Logo was generated by DALL-E (ChatGPT)
 """
         md = Markdown(text_markdown)
         rprint(md)
+
 
 CLI()
 

@@ -6,3 +6,5 @@ hqporner_api
 hue_shift
 pymediainfo
 Markdown
+rich
+tqdm

@@ -13,9 +13,12 @@ import requests
 import markdown
 import src.frontend.resources
 
-from configparser import ConfigParser
+from colorama import *
+from datetime import datetime
 from hqporner_api.api import API
-from phub import Quality, Client, locals, errors, download, Video
+from configparser import ConfigParser
+from hue_shift import return_color, reset
+from phub import Quality, Client, locals, errors, download, Video, HTMLQuery
 
 from src.backend.shared_functions import (strip_title, check_video, check_if_video_exists, setup_config_file,
                                           logger_debug, correct_output_path)
@@ -92,12 +95,19 @@ class AddToTreeWidget(QRunnable):
 
     def run(self):
         self.signals.clear_signal.emit()
-        disabled = QCoreApplication.tr("Disabled")
+        disabled = QCoreApplication.tr("Disabled", disambiguation="It means, that the displaying of the"
+                                                                  "author and duration in the tree widget is disabled")
 
         try:
             logger_debug(f"Search Limit: {str(self.search_limit)}")
-            total = len(self.iterator)
-            for i, video in enumerate(self.iterator, start=1):
+            try:
+                total = len(self.iterator)
+
+            except IndexError:
+                logger_debug("Can't get length of the iterator. Progress won't be available!")
+                total = None
+
+            for i, video in enumerate(self.iterator[0:self.search_limit], start=1):
                 if str(video).endswith(".html"):
                     title = API().extract_title(url=str(video))
                     if self.data_mode == 1:
@@ -124,8 +134,6 @@ class AddToTreeWidget(QRunnable):
 
                     text_data = [str(title), str(author), str(duration), str(i), str(url)]
 
-                logger_debug(f"Total Length: {total}")
-                logger_debug(f"Current Index: {i}")
                 self.signals.progress.emit(total, i)
                 self.signals.text_data.emit(text_data)
 
@@ -239,9 +247,9 @@ class MetadataVideos(QRunnable):
     def run(self):
         self.signals.start_undefined.emit()
 
-        like_string = QCoreApplication.tr("Likes")
-        dislike_string = QCoreApplication.tr("Dislikes")
-        duration_string = QCoreApplication.tr("minutes")
+        like_string = QCoreApplication.tr("Likes", disambiguation="The Likes of the video")
+        dislike_string = QCoreApplication.tr("Dislikes", disambiguation="The dislikes of the video")
+        duration_string = QCoreApplication.tr("minutes", disambiguation="The duration of the video")
 
         title = self.video.title
         views = self.video.views
@@ -409,24 +417,43 @@ class PornFetch(QWidget):
         self.ui.button_switch_credits.setIcon(QIcon(":/images/graphics/information.svg"))
         self.ui.button_switch_metadata.setIcon(QIcon(":/images/graphics/list.svg"))
         self.setWindowIcon(QIcon(":/images/graphics/logo_transparent.ico"))
-        logger_debug("Loaded Icons!")
+
+        file_progress_pornhub = QFile(":/style/stylesheets/progressbar_pornhub.qss")
+        file_progress_pornhub.open(QFile.ReadOnly | QFile.Text)
+        stream_progress_pornhub = QTextStream(file_progress_pornhub)
+
+        file_progress_hqporner = QFile(":/style/stylesheets/progressbar_hqporner.qss")
+        file_progress_hqporner.open(QFile.ReadOnly | QFile.Text)
+        stream_progress_hqporner = QTextStream(file_progress_hqporner)
+
+        file_progressbar_total = QFile(":/style/stylesheets/progressbar_total.qss")
+        file_progressbar_total.open(QFile.ReadOnly | QFile.Text)
+        stream_progress_total = QTextStream(file_progressbar_total)
+
+        self.ui.progressbar_pornhub.setStyleSheet(stream_progress_pornhub.readAll())
+        self.ui.progressbar_hqporner.setStyleSheet(stream_progress_hqporner.readAll())
+        self.ui.progressbar_total.setStyleSheet(stream_progress_total.readAll())
+        self.logger_debug("Loaded Icons!")
 
     def language_strings(self):
         """Contains the language strings. Needed for translation"""
         self.get_api_language_string_dialog = QCoreApplication.tr("Please enter the language code for your "
-                                                                  "language.  Example: en, de, fr, ru --=>:")
+                                                                  "language.  Example: en, de, fr, ru --=>:",
+                                                                  disambiguation=None)
 
         self.get_output_path_string_ui_popup = QCoreApplication.tr("""The specified output path doesn't exist.
-        If you think, this is an error, please report it!""")
+        If you think, this is an error, please report it!""", disambiguation=None)
 
-        self.save_user_settings_language_string = QCoreApplication.tr("Saved User Settings!")
-        self.open_file_language_string = QCoreApplication.tr("Select URL file")
+        self.save_user_settings_language_string = QCoreApplication.tr("Saved User Settings!", disambiguation=None)
+        self.open_file_language_string = QCoreApplication.tr("Select URL file", disambiguation=None)
         self.language_string_login_failed = QCoreApplication.tr("Login Failed, please check your credentials and try "
-                                                                "again!")
+                                                                "again!", disambiguation=None)
 
-        self.language_string_login_successful = QCoreApplication.tr("Login Successful!")
-        self.get_user_avatar_language_string = QCoreApplication.tr("User Avatar saved in current directory...")
-        self.get_video_thumbnail_language_string = QCoreApplication.tr("Video thumbnail saved in current directory")
+        self.language_string_login_successful = QCoreApplication.tr("Login Successful!", disambiguation=None)
+        self.get_user_avatar_language_string = QCoreApplication.tr("User Avatar saved in current directory...",
+                                                                   disambiguation=None)
+        self.get_video_thumbnail_language_string = QCoreApplication.tr("Video thumbnail saved in current directory",
+                                                                       disambiguation=None)
 
     def button_connectors(self):
         """a function to link the buttons to their functions"""
@@ -473,7 +500,15 @@ class PornFetch(QWidget):
         self.ui.button_user_download_avatar.clicked.connect(self.get_user_avatar)
         self.ui.button_video_thumbnail_download.clicked.connect(self.get_video_thumbnail)
 
-        logger_debug("Connected Buttons!")
+        self.logger_debug("Connected Buttons!")
+
+    def logger_error(self, e):
+        print(f"{datetime.now()} : {Fore.LIGHTRED_EX}[ERROR] : {reset()} : {e}")
+        self.ui.lineedit_error.setText(e)
+
+    def logger_debug(self, e):
+        print(f"{datetime.now()} : {Fore.LIGHTCYAN_EX}[DEBUG] : {return_color()} : {e} {reset()}")
+        self.ui.lineedit_debug.setText(e)
 
     def switch_to_home(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
@@ -544,7 +579,7 @@ class PornFetch(QWidget):
     def get_output_path(self):
         """Returns the output path for the videos selected by the user"""
         output_path = self.ui.lineedit_output_path.text()
-        logger_debug(f"Output Path: {output_path}")
+        self.logger_debug(f"Output Path: {output_path}")
         if not os.path.exists(output_path):
             ui_popup(self.get_output_path_string_ui_popup)
 
@@ -667,7 +702,7 @@ class PornFetch(QWidget):
             self.ui.radio_ui_language_system.setChecked(True)
 
         self.semaphore = QSemaphore(int(self.semaphore_limit))
-        logger_debug("Loaded User Settings!")
+        self.logger_debug("Loaded User Settings!")
 
     def save_user_settings(self):
         """Saves the user settings to the configuration file based on the UI state."""
@@ -723,7 +758,7 @@ class PornFetch(QWidget):
             self.conf.write(config_file)
 
         ui_popup(self.save_user_settings_language_string)
-        logger_debug("Saved User Settings!")
+        self.logger_debug("Saved User Settings!")
 
     """
     The following functions are related to the tree widget    
@@ -802,11 +837,11 @@ class PornFetch(QWidget):
     def button_semaphore_help(self):
         text = QCoreApplication.tr(f"""
 The Semaphore is a tool to limit the number of simultaneous actions / downloads.
-y12
+
 For example: If the semaphore is set to 1, only 1 video will be downloaded at the same time.
 If the semaphore is set to 4, 4 videos will be downloaded at the same time. Changing this is only useful, if
 you have a really good internet connection and a good system.
-""")
+""", disambiguation=None)
         ui_popup(text)
 
     def button_threading_mode_help(self):
@@ -823,7 +858,7 @@ good as high performance.
 3) Default:  The default download mode will just download one video segment after the next one. If you get a lot of 
 timeouts this can really slow down the process, as we need to wait for PornHub to return the video segments.
 With the High Performance method, we can just download other segments while waiting which makes it so fast.
-""")
+""", disambiguation=None)
         ui_popup(text)
 
     def button_directory_system_help(self):
@@ -833,7 +868,7 @@ from another, Porn Fetch will automatically make folders for it and move the 3 v
 5 into the other. (This will still apply with your selected output path)
 
 This can be helpful for organizing stuff, but is a more advanced feature, so the majority of users won't use it probably.
-""")
+""", disambiguation=None)
 
         ui_popup(text)
 
@@ -956,7 +991,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         self.ui.progressbar_hqporner.setValue(value)
 
     def download_completed(self):
-        logger_debug("Download Completed!")
+        self.logger_debug("Download Completed!")
         self.semaphore.release()
 
     def start_undefined_range(self):
@@ -1009,13 +1044,13 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         self.download_thread.signals.progress_hqporner.connect(self.update_progressbar_hqporner)
         self.download_thread.signals_completed.completed.connect(self.download_completed)
         self.threadpool.start(self.download_thread)
-        logger_debug("Started Download Thread!")
+        self.logger_debug("Started Download Thread!")
 
     def process_video_without_thread(self, output_path, video, quality):
         """Downloads the video without any threading.  (NOT RECOMMENDED!)"""
-        logger_debug("Downloading without threading! Note, the GUI will freeze until the video is downloaded!!!")
+        self.logger_debug("Downloading without threading! Note, the GUI will freeze until the video is downloaded!!!")
         video.download(path=output_path, quality=quality, downloader=download.default)
-        logger_debug("Download Completed!")
+        self.logger_debug("Download Completed!")
 
     """
     The following functions are related to the User's account
@@ -1028,7 +1063,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
         try:
             self.client = Client(username, password, language=self.api_language)
-            logger_debug("Login Successful!")
+            self.logger_debug("Login Successful!")
             ui_popup(self.language_string_login_successful)
 
         except errors.LoginFailed:
@@ -1077,7 +1112,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         language = self.api_language
         search_limit = self.search_limit
         client = Client(language=language)
-        search = client.search(query)
+        search = client.search(query, feature=HTMLQuery)
         self.add_to_tree_widget_thread(search, search_limit=search_limit)
 
     def search_pornstars(self):
@@ -1258,7 +1293,7 @@ def main():
         else:
             logger_debug(f"Failed to load {language_code} translation")
 
-        file = QFile(":/style/stylesheet.qss")
+        file = QFile(":/style/stylesheets/stylesheet.qss")
         file.open(QFile.ReadOnly | QFile.Text)
         stream = QTextStream(file)
         app.setStyleSheet(stream.readAll())

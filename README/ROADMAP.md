@@ -22,7 +22,6 @@
 - [x] New APP design with sidebar and a menu
 - [x] Implementing new functions from PHUB v4
 - [x] Update CLI to v4
-- [] Update Website to v4 and host it
 - [x] Work on the basic design of the Android Application
 - [x] Automatically manage permissions for the Android Application
 - [x] Add some logical useful things like .. / .. videos downloaded, when using multiple downloads etc...

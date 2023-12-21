@@ -206,42 +206,121 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridLayout_30.setObjectName(u"gridLayout_30")
         self.gridLayout_6 = QGridLayout()
         self.gridLayout_6.setObjectName(u"gridLayout_6")
-        self.button_tree_download = QPushButton(self.page)
-        self.button_tree_download.setObjectName(u"button_tree_download")
-
-        self.gridLayout_6.addWidget(self.button_tree_download, 2, 0, 1, 1)
-
-        self.button_tree_unselect_all = QPushButton(self.page)
-        self.button_tree_unselect_all.setObjectName(u"button_tree_unselect_all")
-
-        self.gridLayout_6.addWidget(self.button_tree_unselect_all, 2, 2, 1, 1)
-
-        self.button_tree_select_all = QPushButton(self.page)
-        self.button_tree_select_all.setObjectName(u"button_tree_select_all")
-
-        self.gridLayout_6.addWidget(self.button_tree_select_all, 2, 1, 1, 1)
-
         self.treeWidget = QTreeWidget(self.page)
         __qtreewidgetitem = QTreeWidgetItem()
         __qtreewidgetitem.setText(0, u"Title");
         self.treeWidget.setHeaderItem(__qtreewidgetitem)
         self.treeWidget.setObjectName(u"treeWidget")
 
-        self.gridLayout_6.addWidget(self.treeWidget, 1, 0, 1, 3)
+        self.gridLayout_6.addWidget(self.treeWidget, 1, 0, 1, 7)
+
+        self.button_tree_unselect_all = QPushButton(self.page)
+        self.button_tree_unselect_all.setObjectName(u"button_tree_unselect_all")
+        self.button_tree_unselect_all.setStyleSheet(u"QPushButton {\n"
+"    /* Base style */\n"
+"    background-color: rgb(0, 208, 255); /* Purple background */\n"
+"    border-style: outset;\n"
+"    border-width: 2px;\n"
+"    border-radius: 8px; /* Slightly smaller radius for a smaller look */\n"
+"    border-color: #7B1FA2;\n"
+"    font: bold 12px; /* Smaller font size */\n"
+"    min-width: 8em; /* Smaller width */\n"
+"    padding: 4px; /* Less padding for a more compact look */\n"
+"    color: white; /* White text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    /* Hover effect */\n"
+"    background-color: #9575CD; /* Lighter violet for hover */\n"
+"    border-color: #9575CD;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    /* Pressed effect */\n"
+"    background-color: #303F9F; /* Dark blue when pressed */\n"
+"    border-color: #303F9F;\n"
+"    border-style: inset; /* Changes the style to look \"pressed\" */\n"
+"}\n"
+"")
+
+        self.gridLayout_6.addWidget(self.button_tree_unselect_all, 2, 6, 1, 1)
 
         self.radio_tree_show_title = QRadioButton(self.page)
         self.radio_tree_show_title.setObjectName(u"radio_tree_show_title")
 
         self.gridLayout_6.addWidget(self.radio_tree_show_title, 0, 0, 1, 1)
 
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout_6.addItem(self.horizontalSpacer, 0, 6, 1, 1)
+
         self.radio_tree_show_all = QRadioButton(self.page)
         self.radio_tree_show_all.setObjectName(u"radio_tree_show_all")
 
-        self.gridLayout_6.addWidget(self.radio_tree_show_all, 0, 1, 1, 1)
+        self.gridLayout_6.addWidget(self.radio_tree_show_all, 0, 4, 1, 1)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.button_tree_download = QPushButton(self.page)
+        self.button_tree_download.setObjectName(u"button_tree_download")
+        self.button_tree_download.setStyleSheet(u"QPushButton {\n"
+"    /* Base style */\n"
+"    background-color: #7B1FA2; /* Purple background */\n"
+"    border-style: outset;\n"
+"    border-width: 2px;\n"
+"    border-radius: 8px; /* Slightly smaller radius for a smaller look */\n"
+"    border-color: #7B1FA2;\n"
+"    font: bold 12px; /* Smaller font size */\n"
+"    min-width: 8em; /* Smaller width */\n"
+"    padding: 4px; /* Less padding for a more compact look */\n"
+"    color: white; /* White text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    /* Hover effect */\n"
+"    background-color: #9575CD; /* Lighter violet for hover */\n"
+"    border-color: #9575CD;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    /* Pressed effect */\n"
+"    background-color: #303F9F; /* Dark blue when pressed */\n"
+"    border-color: #303F9F;\n"
+"    border-style: inset; /* Changes the style to look \"pressed\" */\n"
+"}\n"
+"")
 
-        self.gridLayout_6.addItem(self.horizontalSpacer, 0, 2, 1, 1)
+        self.gridLayout_6.addWidget(self.button_tree_download, 2, 0, 1, 1)
+
+        self.button_tree_select_all = QPushButton(self.page)
+        self.button_tree_select_all.setObjectName(u"button_tree_select_all")
+        self.button_tree_select_all.setStyleSheet(u"QPushButton {\n"
+"    /* Base style */\n"
+"    background-color: rgba(255, 162, 0, 170); /* Purple background */\n"
+"	color: rgb(255, 162, 0);\n"
+"    border-style: outset;\n"
+"    border-width: 2px;\n"
+"    border-radius: 8px; /* Slightly smaller radius for a smaller look */\n"
+"    border-color: #7B1FA2;\n"
+"    font: bold 12px; /* Smaller font size */\n"
+"    min-width: 8em; /* Smaller width */\n"
+"    padding: 4px; /* Less padding for a more compact look */\n"
+"    color: white; /* White text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    /* Hover effect */\n"
+"    background-color: #9575CD; /* Lighter violet for hover */\n"
+"    border-color: #9575CD;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    /* Pressed effect */\n"
+"    background-color: #303F9F; /* Dark blue when pressed */\n"
+"    border-color: #303F9F;\n"
+"    border-style: inset; /* Changes the style to look \"pressed\" */\n"
+"}\n"
+"")
+
+        self.gridLayout_6.addWidget(self.button_tree_select_all, 2, 1, 1, 5)
 
 
         self.gridLayout_30.addLayout(self.gridLayout_6, 1, 0, 1, 2)
@@ -310,24 +389,29 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_login.setObjectName(u"button_login")
         self.button_login.setCursor(QCursor(Qt.PointingHandCursor))
         self.button_login.setStyleSheet(u"QPushButton {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 8px;\n"
-"    padding: 5px;\n"
-"    color: #DDD;\n"
-"    font-weight: bold;\n"
-"    font-size: 14px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #5555FF, stop:1 #AA55FF);\n"
+"    /* Base style */\n"
+"    background-color: #4CAF50; /* Green background */\n"
+"    border-style: outset;\n"
+"    border-width: 2px;\n"
+"    border-radius: 10px;\n"
+"    border-color: #4CAF50;\n"
+"    font: bold 14px;\n"
+"    min-width: 10em;\n"
+"    padding: 6px;\n"
+"    color: white; /* White text */\n"
 "}\n"
 "\n"
 "QPushButton:hover {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #6666FF, stop:1 #BB66FF);\n"
+"    /* Hover effect */\n"
+"    background-color: #66BB6A;\n"
+"    border-color: #66BB6A;\n"
 "}\n"
 "\n"
 "QPushButton:pressed {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #4444DD, stop:1 #9944DD);\n"
+"    /* Pressed effect */\n"
+"    background-color: #388E3C;\n"
+"    border-color: #388E3C;\n"
+"    border-style: inset; /* Changes the style to look \"pressed\" */\n"
 "}")
 
         self.gridlayout_login_box.addWidget(self.button_login, 2, 0, 1, 4)
@@ -357,24 +441,29 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_open_file.setObjectName(u"button_open_file")
         self.button_open_file.setCursor(QCursor(Qt.PointingHandCursor))
         self.button_open_file.setStyleSheet(u"QPushButton {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 4px;\n"
-"    padding: 5px;\n"
-"    color: #DDD;\n"
-"    font-weight: bold;\n"
-"    font-size: 14px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #5555FF, stop:1 #AA55FF);\n"
+"    /* Base style */\n"
+"    background-color: #7B1FA2; /* Purple background */\n"
+"    border-style: outset;\n"
+"    border-width: 2px;\n"
+"    border-radius: 8px; /* Slightly smaller radius for a smaller look */\n"
+"    border-color: #7B1FA2;\n"
+"    font: bold 12px; /* Smaller font size */\n"
+"    min-width: 8em; /* Smaller width */\n"
+"    padding: 4px; /* Less padding for a more compact look */\n"
+"    color: white; /* White text */\n"
 "}\n"
 "\n"
 "QPushButton:hover {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #6666FF, stop:1 #BB66FF);\n"
+"    /* Hover effect */\n"
+"    background-color: #9575CD; /* Lighter violet for hover */\n"
+"    border-color: #9575CD;\n"
 "}\n"
 "\n"
 "QPushButton:pressed {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #4444DD, stop:1 #9944DD);\n"
+"    /* Pressed effect */\n"
+"    background-color: #303F9F; /* Dark blue when pressed */\n"
+"    border-color: #303F9F;\n"
+"    border-style: inset; /* Changes the style to look \"pressed\" */\n"
 "}")
 
         self.gridlayout_start_download_box.addWidget(self.button_open_file, 3, 2, 1, 1)
@@ -388,24 +477,29 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_search_videos.setObjectName(u"button_search_videos")
         self.button_search_videos.setCursor(QCursor(Qt.PointingHandCursor))
         self.button_search_videos.setStyleSheet(u"QPushButton {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 4px;\n"
-"    padding: 5px;\n"
-"    color: #DDD;\n"
-"    font-weight: bold;\n"
-"    font-size: 14px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #5555FF, stop:1 #AA55FF);\n"
+"    /* Base style */\n"
+"    background-color: #7B1FA2; /* Purple background */\n"
+"    border-style: outset;\n"
+"    border-width: 2px;\n"
+"    border-radius: 8px; /* Slightly smaller radius for a smaller look */\n"
+"    border-color: #7B1FA2;\n"
+"    font: bold 12px; /* Smaller font size */\n"
+"    min-width: 8em; /* Smaller width */\n"
+"    padding: 4px; /* Less padding for a more compact look */\n"
+"    color: white; /* White text */\n"
 "}\n"
 "\n"
 "QPushButton:hover {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #6666FF, stop:1 #BB66FF);\n"
+"    /* Hover effect */\n"
+"    background-color: #9575CD; /* Lighter violet for hover */\n"
+"    border-color: #9575CD;\n"
 "}\n"
 "\n"
 "QPushButton:pressed {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #4444DD, stop:1 #9944DD);\n"
+"    /* Pressed effect */\n"
+"    background-color: #303F9F; /* Dark blue when pressed */\n"
+"    border-color: #303F9F;\n"
+"    border-style: inset; /* Changes the style to look \"pressed\" */\n"
 "}")
 
         self.gridlayout_start_download_box.addWidget(self.button_search_videos, 4, 2, 1, 1)
@@ -429,24 +523,29 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_download.setObjectName(u"button_download")
         self.button_download.setCursor(QCursor(Qt.PointingHandCursor))
         self.button_download.setStyleSheet(u"QPushButton {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 4px;\n"
-"    padding: 5px;\n"
-"    color: #DDD;\n"
-"    font-weight: bold;\n"
-"    font-size: 14px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #5555FF, stop:1 #AA55FF);\n"
+"    /* Base style */\n"
+"    background-color: #7B1FA2; /* Purple background */\n"
+"    border-style: outset;\n"
+"    border-width: 2px;\n"
+"    border-radius: 8px; /* Slightly smaller radius for a smaller look */\n"
+"    border-color: #7B1FA2;\n"
+"    font: bold 12px; /* Smaller font size */\n"
+"    min-width: 8em; /* Smaller width */\n"
+"    padding: 4px; /* Less padding for a more compact look */\n"
+"    color: white; /* White text */\n"
 "}\n"
 "\n"
 "QPushButton:hover {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #6666FF, stop:1 #BB66FF);\n"
+"    /* Hover effect */\n"
+"    background-color: #9575CD; /* Lighter violet for hover */\n"
+"    border-color: #9575CD;\n"
 "}\n"
 "\n"
 "QPushButton:pressed {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #4444DD, stop:1 #9944DD);\n"
+"    /* Pressed effect */\n"
+"    background-color: #303F9F; /* Dark blue when pressed */\n"
+"    border-color: #303F9F;\n"
+"    border-style: inset; /* Changes the style to look \"pressed\" */\n"
 "}")
 
         self.gridlayout_start_download_box.addWidget(self.button_download, 0, 2, 1, 1)
@@ -465,24 +564,29 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_model.setObjectName(u"button_model")
         self.button_model.setCursor(QCursor(Qt.PointingHandCursor))
         self.button_model.setStyleSheet(u"QPushButton {\n"
-"    border: 2px solid #444;\n"
-"    border-radius: 4px;\n"
-"    padding: 5px;\n"
-"    color: #DDD;\n"
-"    font-weight: bold;\n"
-"    font-size: 14px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #5555FF, stop:1 #AA55FF);\n"
+"    /* Base style */\n"
+"    background-color: #7B1FA2; /* Purple background */\n"
+"    border-style: outset;\n"
+"    border-width: 2px;\n"
+"    border-radius: 8px; /* Slightly smaller radius for a smaller look */\n"
+"    border-color: #7B1FA2;\n"
+"    font: bold 12px; /* Smaller font size */\n"
+"    min-width: 8em; /* Smaller width */\n"
+"    padding: 4px; /* Less padding for a more compact look */\n"
+"    color: white; /* White text */\n"
 "}\n"
 "\n"
 "QPushButton:hover {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #6666FF, stop:1 #BB66FF);\n"
+"    /* Hover effect */\n"
+"    background-color: #9575CD; /* Lighter violet for hover */\n"
+"    border-color: #9575CD;\n"
 "}\n"
 "\n"
 "QPushButton:pressed {\n"
-"    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,\n"
-"                                stop:0 #4444DD, stop:1 #9944DD);\n"
+"    /* Pressed effect */\n"
+"    background-color: #303F9F; /* Dark blue when pressed */\n"
+"    border-color: #303F9F;\n"
+"    border-style: inset; /* Changes the style to look \"pressed\" */\n"
 "}")
 
         self.gridlayout_start_download_box.addWidget(self.button_model, 2, 2, 1, 1)
@@ -514,6 +618,32 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.button_search_pornstar = QPushButton(self.page_2)
         self.button_search_pornstar.setObjectName(u"button_search_pornstar")
+        self.button_search_pornstar.setStyleSheet(u"QPushButton {\n"
+"    /* Base style */\n"
+"    background-color: #7B1FA2; /* Purple background */\n"
+"    border-style: outset;\n"
+"    border-width: 2px;\n"
+"    border-radius: 8px; /* Slightly smaller radius for a smaller look */\n"
+"    border-color: #7B1FA2;\n"
+"    font: bold 12px; /* Smaller font size */\n"
+"    min-width: 8em; /* Smaller width */\n"
+"    padding: 4px; /* Less padding for a more compact look */\n"
+"    color: white; /* White text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    /* Hover effect */\n"
+"    background-color: #9575CD; /* Lighter violet for hover */\n"
+"    border-color: #9575CD;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    /* Pressed effect */\n"
+"    background-color: #303F9F; /* Dark blue when pressed */\n"
+"    border-color: #303F9F;\n"
+"    border-style: inset; /* Changes the style to look \"pressed\" */\n"
+"}\n"
+"")
 
         self.gridlayout_search_videos.addWidget(self.button_search_pornstar, 1, 2, 1, 2)
 
@@ -529,8 +659,34 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.button_search_users = QPushButton(self.page_2)
         self.button_search_users.setObjectName(u"button_search_users")
+        self.button_search_users.setStyleSheet(u"QPushButton {\n"
+"    /* Base style */\n"
+"    background-color: #7B1FA2; /* Purple background */\n"
+"    border-style: outset;\n"
+"    border-width: 2px;\n"
+"    border-radius: 8px; /* Slightly smaller radius for a smaller look */\n"
+"    border-color: #7B1FA2;\n"
+"    font: bold 12px; /* Smaller font size */\n"
+"    min-width: 8em; /* Smaller width */\n"
+"    padding: 4px; /* Less padding for a more compact look */\n"
+"    color: white; /* White text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    /* Hover effect */\n"
+"    background-color: #9575CD; /* Lighter violet for hover */\n"
+"    border-color: #9575CD;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    /* Pressed effect */\n"
+"    background-color: #303F9F; /* Dark blue when pressed */\n"
+"    border-color: #303F9F;\n"
+"    border-style: inset; /* Changes the style to look \"pressed\" */\n"
+"}\n"
+"")
 
-        self.gridlayout_search_videos.addWidget(self.button_search_users, 0, 2, 1, 1)
+        self.gridlayout_search_videos.addWidget(self.button_search_users, 0, 2, 1, 2)
 
 
         self.gridLayout_17.addLayout(self.gridlayout_search_videos, 0, 0, 1, 1)
@@ -815,6 +971,32 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.button_metadata_user_start = QPushButton(self.page_5)
         self.button_metadata_user_start.setObjectName(u"button_metadata_user_start")
+        self.button_metadata_user_start.setStyleSheet(u"QPushButton {\n"
+"    /* Base style */\n"
+"    background-color: #7B1FA2; /* Purple background */\n"
+"    border-style: outset;\n"
+"    border-width: 2px;\n"
+"    border-radius: 8px; /* Slightly smaller radius for a smaller look */\n"
+"    border-color: #7B1FA2;\n"
+"    font: bold 12px; /* Smaller font size */\n"
+"    min-width: 8em; /* Smaller width */\n"
+"    padding: 4px; /* Less padding for a more compact look */\n"
+"    color: white; /* White text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    /* Hover effect */\n"
+"    background-color: #9575CD; /* Lighter violet for hover */\n"
+"    border-color: #9575CD;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    /* Pressed effect */\n"
+"    background-color: #303F9F; /* Dark blue when pressed */\n"
+"    border-color: #303F9F;\n"
+"    border-style: inset; /* Changes the style to look \"pressed\" */\n"
+"}\n"
+"")
 
         self.gridLayout_3.addWidget(self.button_metadata_user_start, 1, 2, 1, 1)
 
@@ -830,6 +1012,32 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.button_metadata_video_start = QPushButton(self.page_5)
         self.button_metadata_video_start.setObjectName(u"button_metadata_video_start")
+        self.button_metadata_video_start.setStyleSheet(u"QPushButton {\n"
+"    /* Base style */\n"
+"    background-color: #7B1FA2; /* Purple background */\n"
+"    border-style: outset;\n"
+"    border-width: 2px;\n"
+"    border-radius: 8px; /* Slightly smaller radius for a smaller look */\n"
+"    border-color: #7B1FA2;\n"
+"    font: bold 12px; /* Smaller font size */\n"
+"    min-width: 8em; /* Smaller width */\n"
+"    padding: 4px; /* Less padding for a more compact look */\n"
+"    color: white; /* White text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    /* Hover effect */\n"
+"    background-color: #9575CD; /* Lighter violet for hover */\n"
+"    border-color: #9575CD;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    /* Pressed effect */\n"
+"    background-color: #303F9F; /* Dark blue when pressed */\n"
+"    border-color: #303F9F;\n"
+"    border-style: inset; /* Changes the style to look \"pressed\" */\n"
+"}\n"
+"")
 
         self.gridLayout_3.addWidget(self.button_metadata_video_start, 0, 2, 1, 1)
 
@@ -1066,6 +1274,32 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.button_user_download_avatar = QPushButton(self.groupBox_2)
         self.button_user_download_avatar.setObjectName(u"button_user_download_avatar")
+        self.button_user_download_avatar.setStyleSheet(u"QPushButton {\n"
+"    /* Base style */\n"
+"    background-color: #7B1FA2; /* Purple background */\n"
+"    border-style: outset;\n"
+"    border-width: 2px;\n"
+"    border-radius: 8px; /* Slightly smaller radius for a smaller look */\n"
+"    border-color: #7B1FA2;\n"
+"    font: bold 12px; /* Smaller font size */\n"
+"    min-width: 8em; /* Smaller width */\n"
+"    padding: 4px; /* Less padding for a more compact look */\n"
+"    color: white; /* White text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    /* Hover effect */\n"
+"    background-color: #9575CD; /* Lighter violet for hover */\n"
+"    border-color: #9575CD;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    /* Pressed effect */\n"
+"    background-color: #303F9F; /* Dark blue when pressed */\n"
+"    border-color: #303F9F;\n"
+"    border-style: inset; /* Changes the style to look \"pressed\" */\n"
+"}\n"
+"")
 
         self.gridLayout_10.addWidget(self.button_user_download_avatar, 2, 0, 1, 1)
 
@@ -1076,6 +1310,32 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.button_user_get_bio = QPushButton(self.groupBox_2)
         self.button_user_get_bio.setObjectName(u"button_user_get_bio")
+        self.button_user_get_bio.setStyleSheet(u"QPushButton {\n"
+"    /* Base style */\n"
+"    background-color: #7B1FA2; /* Purple background */\n"
+"    border-style: outset;\n"
+"    border-width: 2px;\n"
+"    border-radius: 8px; /* Slightly smaller radius for a smaller look */\n"
+"    border-color: #7B1FA2;\n"
+"    font: bold 12px; /* Smaller font size */\n"
+"    min-width: 8em; /* Smaller width */\n"
+"    padding: 4px; /* Less padding for a more compact look */\n"
+"    color: white; /* White text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    /* Hover effect */\n"
+"    background-color: #9575CD; /* Lighter violet for hover */\n"
+"    border-color: #9575CD;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    /* Pressed effect */\n"
+"    background-color: #303F9F; /* Dark blue when pressed */\n"
+"    border-color: #303F9F;\n"
+"    border-style: inset; /* Changes the style to look \"pressed\" */\n"
+"}\n"
+"")
 
         self.gridLayout_10.addWidget(self.button_user_get_bio, 2, 1, 1, 1)
 
@@ -1176,6 +1436,32 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.button_video_thumbnail_download = QPushButton(self.groupBox)
         self.button_video_thumbnail_download.setObjectName(u"button_video_thumbnail_download")
+        self.button_video_thumbnail_download.setStyleSheet(u"QPushButton {\n"
+"    /* Base style */\n"
+"    background-color: #7B1FA2; /* Purple background */\n"
+"    border-style: outset;\n"
+"    border-width: 2px;\n"
+"    border-radius: 8px; /* Slightly smaller radius for a smaller look */\n"
+"    border-color: #7B1FA2;\n"
+"    font: bold 12px; /* Smaller font size */\n"
+"    min-width: 8em; /* Smaller width */\n"
+"    padding: 4px; /* Less padding for a more compact look */\n"
+"    color: white; /* White text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    /* Hover effect */\n"
+"    background-color: #9575CD; /* Lighter violet for hover */\n"
+"    border-color: #9575CD;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    /* Pressed effect */\n"
+"    background-color: #303F9F; /* Dark blue when pressed */\n"
+"    border-color: #303F9F;\n"
+"    border-style: inset; /* Changes the style to look \"pressed\" */\n"
+"}\n"
+"")
 
         self.gridLayout_9.addWidget(self.button_video_thumbnail_download, 1, 0, 1, 1)
 
@@ -1200,7 +1486,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.retranslateUi(Porn_Fetch_Widget)
 
         self.stacked_widget_main.setCurrentIndex(0)
-        self.stacked_widget_top.setCurrentIndex(0)
+        self.stacked_widget_top.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(Porn_Fetch_Widget)
@@ -1221,14 +1507,14 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_status.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Status:", None))
         self.label_total.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
         self.label_debug.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Debug:", None))
-        self.button_tree_download.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download Selected Videos", None))
-        self.button_tree_unselect_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Unselect all", None))
-        self.button_tree_select_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Select all", None))
         ___qtreewidgetitem = self.treeWidget.headerItem()
         ___qtreewidgetitem.setText(2, QCoreApplication.translate("Porn_Fetch_Widget", u"Duration", None));
         ___qtreewidgetitem.setText(1, QCoreApplication.translate("Porn_Fetch_Widget", u"Author", None));
+        self.button_tree_unselect_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Unselect all", None))
         self.radio_tree_show_title.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Only Title (a lot faster)", None))
         self.radio_tree_show_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Title, Author, Duration", None))
+        self.button_tree_download.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download Selected Videos", None))
+        self.button_tree_select_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Select all", None))
         self.button_get_recommended_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get recommended videos", None))
         self.label_password.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Password:", None))
         self.button_get_liked_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Liked videos", None))

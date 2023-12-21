@@ -305,34 +305,13 @@ border-radius: 5px;</string>
           <cursorShape>ArrowCursor</cursorShape>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="page">
           <layout class="QGridLayout" name="gridLayout_30">
            <item row="1" column="0" colspan="2">
             <layout class="QGridLayout" name="gridLayout_6">
-             <item row="2" column="0">
-              <widget class="QPushButton" name="button_tree_download">
-               <property name="text">
-                <string>Download Selected Videos</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="2">
-              <widget class="QPushButton" name="button_tree_unselect_all">
-               <property name="text">
-                <string>Unselect all</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QPushButton" name="button_tree_select_all">
-               <property name="text">
-                <string>Select all</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0" colspan="3">
+             <item row="1" column="0" colspan="7">
               <widget class="QTreeWidget" name="treeWidget">
                <column>
                 <property name="text">
@@ -351,6 +330,41 @@ border-radius: 5px;</string>
                </column>
               </widget>
              </item>
+             <item row="2" column="6">
+              <widget class="QPushButton" name="button_tree_unselect_all">
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    /* Base style */
+    background-color: rgb(0, 208, 255); /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}
+</string>
+               </property>
+               <property name="text">
+                <string>Unselect all</string>
+               </property>
+              </widget>
+             </item>
              <item row="0" column="0">
               <widget class="QRadioButton" name="radio_tree_show_title">
                <property name="text">
@@ -358,14 +372,7 @@ border-radius: 5px;</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
-              <widget class="QRadioButton" name="radio_tree_show_all">
-               <property name="text">
-                <string>Get Title, Author, Duration</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
+             <item row="0" column="6">
               <spacer name="horizontalSpacer">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
@@ -377,6 +384,84 @@ border-radius: 5px;</string>
                 </size>
                </property>
               </spacer>
+             </item>
+             <item row="0" column="4">
+              <widget class="QRadioButton" name="radio_tree_show_all">
+               <property name="text">
+                <string>Get Title, Author, Duration</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QPushButton" name="button_tree_download">
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}
+</string>
+               </property>
+               <property name="text">
+                <string>Download Selected Videos</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1" colspan="5">
+              <widget class="QPushButton" name="button_tree_select_all">
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    /* Base style */
+    background-color: rgba(255, 162, 0, 170); /* Purple background */
+	color: rgb(255, 162, 0);
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}
+</string>
+               </property>
+               <property name="text">
+                <string>Select all</string>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -469,24 +554,29 @@ border-radius: 5px;</string>
                </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton {
-    border: 2px solid #444;
-    border-radius: 8px;
-    padding: 5px;
-    color: #DDD;
-    font-weight: bold;
-    font-size: 14px;
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #5555FF, stop:1 #AA55FF);
+    /* Base style */
+    background-color: #4CAF50; /* Green background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    border-color: #4CAF50;
+    font: bold 14px;
+    min-width: 10em;
+    padding: 6px;
+    color: white; /* White text */
 }
 
 QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #6666FF, stop:1 #BB66FF);
+    /* Hover effect */
+    background-color: #66BB6A;
+    border-color: #66BB6A;
 }
 
 QPushButton:pressed {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #4444DD, stop:1 #9944DD);
+    /* Pressed effect */
+    background-color: #388E3C;
+    border-color: #388E3C;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
 }</string>
                </property>
                <property name="text">
@@ -529,24 +619,29 @@ QPushButton:pressed {
                </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton {
-    border: 2px solid #444;
-    border-radius: 4px;
-    padding: 5px;
-    color: #DDD;
-    font-weight: bold;
-    font-size: 14px;
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #5555FF, stop:1 #AA55FF);
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
 }
 
 QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #6666FF, stop:1 #BB66FF);
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
 }
 
 QPushButton:pressed {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #4444DD, stop:1 #9944DD);
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
 }</string>
                </property>
                <property name="text">
@@ -568,24 +663,29 @@ QPushButton:pressed {
                </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton {
-    border: 2px solid #444;
-    border-radius: 4px;
-    padding: 5px;
-    color: #DDD;
-    font-weight: bold;
-    font-size: 14px;
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #5555FF, stop:1 #AA55FF);
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
 }
 
 QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #6666FF, stop:1 #BB66FF);
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
 }
 
 QPushButton:pressed {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #4444DD, stop:1 #9944DD);
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
 }</string>
                </property>
                <property name="text">
@@ -621,24 +721,29 @@ QPushButton:pressed {
                </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton {
-    border: 2px solid #444;
-    border-radius: 4px;
-    padding: 5px;
-    color: #DDD;
-    font-weight: bold;
-    font-size: 14px;
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #5555FF, stop:1 #AA55FF);
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
 }
 
 QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #6666FF, stop:1 #BB66FF);
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
 }
 
 QPushButton:pressed {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #4444DD, stop:1 #9944DD);
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
 }</string>
                </property>
                <property name="text">
@@ -667,24 +772,29 @@ QPushButton:pressed {
                </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton {
-    border: 2px solid #444;
-    border-radius: 4px;
-    padding: 5px;
-    color: #DDD;
-    font-weight: bold;
-    font-size: 14px;
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #5555FF, stop:1 #AA55FF);
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
 }
 
 QPushButton:hover {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #6666FF, stop:1 #BB66FF);
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
 }
 
 QPushButton:pressed {
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #4444DD, stop:1 #9944DD);
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
 }</string>
                </property>
                <property name="text">
@@ -719,6 +829,34 @@ QPushButton:pressed {
              </item>
              <item row="1" column="2" colspan="2">
               <widget class="QPushButton" name="button_search_pornstar">
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}
+</string>
+               </property>
                <property name="text">
                 <string>Search</string>
                </property>
@@ -734,8 +872,36 @@ QPushButton:pressed {
                </property>
               </widget>
              </item>
-             <item row="0" column="2">
+             <item row="0" column="2" colspan="2">
               <widget class="QPushButton" name="button_search_users">
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}
+</string>
+               </property>
                <property name="text">
                 <string>Search</string>
                </property>
@@ -1106,6 +1272,34 @@ QPushButton:pressed {
          </item>
          <item row="1" column="2">
           <widget class="QPushButton" name="button_metadata_user_start">
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}
+</string>
+           </property>
            <property name="text">
             <string>Start</string>
            </property>
@@ -1119,6 +1313,34 @@ QPushButton:pressed {
          </item>
          <item row="0" column="2">
           <widget class="QPushButton" name="button_metadata_video_start">
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}
+</string>
+           </property>
            <property name="text">
             <string>Start</string>
            </property>
@@ -1359,6 +1581,34 @@ QPushButton:pressed {
             </item>
             <item row="2" column="0">
              <widget class="QPushButton" name="button_user_download_avatar">
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}
+</string>
+              </property>
               <property name="text">
                <string>Download User Avatar</string>
               </property>
@@ -1373,6 +1623,34 @@ QPushButton:pressed {
             </item>
             <item row="2" column="1">
              <widget class="QPushButton" name="button_user_get_bio">
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}
+</string>
+              </property>
               <property name="text">
                <string>Get User's Bio</string>
               </property>
@@ -1475,6 +1753,34 @@ QPushButton:pressed {
           </item>
           <item row="1" column="0">
            <widget class="QPushButton" name="button_video_thumbnail_download">
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}
+</string>
+            </property>
             <property name="text">
              <string>Download Thumbnail</string>
             </property>

@@ -77,17 +77,20 @@ def logger_debug(e):
 
 
 def check_video(url, language):
-
-    if isinstance(url, Video):
+    if str(url).endswith(".html"):
         return url
 
-    if isinstance(url, str):
-        try:
-            return Client(language=language).get(url)
+    else:
+        if isinstance(url, Video):
+            return url
 
-        except errors.URLError:
-            logger_error(f"Invalid URL! : {url}")
-            return False
+        if isinstance(url, str):
+            try:
+                return Client(language=language).get(url)
+
+            except errors.URLError:
+                logger_error(f"Invalid URL! : {url}")
+                return False
 
 
 def approximately_equal(duration1, duration2, tolerance=5):

@@ -1,6 +1,8 @@
-from phub import Client
+from phub import Client, HTMLQuery, JSONQuery, SubQuery, PSQuery
 
 c = Client(language="en")
-user = c.get_user("https://de.pornhub.com/model/alina-rai")
-print(user.info.keys())
+search = c.search("Mia Khalifa", feature=HTMLQuery)
 
+
+for video in search[0:10]:
+    print(video.title)
