@@ -1,6 +1,7 @@
 <p align="center">
-  <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/V3.0/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo"/>
+  <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/V3.0/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="400"/>
 </p>
+
 
 <h1 align="center">Porn Fetch - The Ultimate Open-Source PornHub Downloader</h1>
 
