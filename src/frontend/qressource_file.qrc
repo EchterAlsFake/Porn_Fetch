@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>graphics/download.svg</file>
+        <file>graphics/information.svg</file>
+        <file>graphics/search.svg</file>
+        <file>graphics/settings.svg</file>
+        <file>graphics/logo_transparent.ico</file>
+        <file>graphics/top-arrow.ico</file>
+        <file>graphics/down-arrow.ico</file>
+        <file>graphics/tick.ico</file>
+        <file>graphics/list.svg</file>
+    </qresource>
+    <qresource prefix="/style">
+        <file>stylesheets/stylesheet.qss</file>
+        <file>stylesheets/progressbar_hqporner.qss</file>
+        <file>stylesheets/progressbar_pornhub.qss</file>
+        <file>stylesheets/progressbar_total.qss</file>
+        <file>stylesheets/stylesheet_ui_popup.qss</file>
+    </qresource>
+    <qresource prefix="/credits">
+        <file>../../README/CREDITS.md</file>
+    </qresource>
+    <qresource prefix="/translations">
+        <file>translations/de.qm</file>
+        <file>translations/en.qm</file>
+    </qresource>
+</RCC>

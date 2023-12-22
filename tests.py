@@ -1,10 +1,8 @@
-from phub import Client
+from phub import Client, HTMLQuery, JSONQuery, SubQuery, PSQuery
 
-user = "layla" # random name, just ignore
-pornstar = "mia"
+c = Client(language="en")
+search = c.search("Mia Khalifa", feature=HTMLQuery)
 
-user_object = Client().search_user(user)
-pornstar_object = Client().search_pornstar(pornstar)
 
-for user_x in pornstar_object:
-    print(user_x)
+for video in search[0:10]:
+    print(video.title)

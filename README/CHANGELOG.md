@@ -209,16 +209,27 @@ I hope that most issues are now fixed.
 
 # 3.0
 
-- Fixed Semaphore
-- Users can now decide how many videos should be downloaded simultaneously (1-6)
-- Fixed the logic of how many videos have already been downloaded
-- Removed all the unnecessary completed signals
-- Progressbar now is a bit more darken ^^
-- License Widget has now the same Stylesheet as the main widget (Especially dark mode)
-- Added translation guide
-- Added translations for German
-- Added Support for macOS in the build script
-- a lot better project structure
-- Fixed config file creation location
-- header of the QTreeWidget also had Dark mode now
-- Listing model videos had a Threading class 
+- Improved Semaphore functionality.
+- Users now have the option to select the number of videos to download simultaneously (ranging from 1 to 6).
+- Enhanced the logic for tracking the count of downloaded videos.
+- Eliminated redundant 'completed' signals.
+- The progress bar now features a slightly darker design.
+- The License Widget has been updated to match the main widget's stylesheet, particularly in Dark Mode.
+- Included a translation guide.
+- German language translations added.
+- Introduced support for macOS in the build script.
+- Significantly improved project structure.
+- Resolved issues with the configuration file creation location.
+- The header of the QTreeWidget now supports Dark Mode.
+- Implemented a Threading class for listing model videos.
+- Transitioned all Metadata methods to use threading.
+- Optimized the 'check_if_video_exists' function for greater efficiency.
+- Strengthened the robustness of the config file integrity checking logic.
+- Updated to new, improved icons.
+- Global usage of the tree Widget.
+- Enhanced structure of the Q Resource file.
+- Stylesheets have been reorganized and divided into multiple sections for better management.
+- Added multiple threading options (three variants) for video downloading.
+- New directory system to organize videos by model in separate folders.
+- Comprehensive rewrite of the Command Line Interface (CLI).
+- Significant enhancements to the overall user interface for a better visual experience.

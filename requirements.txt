@@ -1,1 +1,10 @@
-
+phub
+colorama
+PySide6
+requests
+hqporner_api
+hue_shift
+pymediainfo
+Markdown
+rich
+tqdm

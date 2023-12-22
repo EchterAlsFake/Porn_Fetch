@@ -1,458 +1,692 @@
-import os.path
+"""
+Porn Fetch CLI
+
+Licensed under GPL 3
+Copyright (C) 2023 Johannes Habel (EchterAlsFake)
+
+Version 3.0
+"""
 import getpass
-import sys
+import os.path
 import threading
 
-from configparser import ConfigParser
-from phub import Client, Quality, errors, download, display
-from colorama import *
+from tqdm import tqdm
 from hqporner_api import API
-from src.frontend.setup import logging, setup_config_file, strip_title, check_if_video_exists
-from hue_shift import return_color
+from threading import Semaphore
+from rich import print as rprint
+from rich.markdown import Markdown
+from configparser import ConfigParser
+from phub import Video, Client, errors, download, Quality
+
+from src.backend.shared_functions import (strip_title, check_video, check_if_video_exists, setup_config_file,
+                                          logger_debug, logger_error, return_color, reset, correct_output_path)
 
 
-class CLI:
+class CLI():
     def __init__(self):
-        logging("Initialization...")
         setup_config_file()
         self.conf = ConfigParser()
         self.conf.read("config.ini")
 
-        self.z = f"{Fore.LIGHTGREEN_EX}[+]{Fore.RESET}"
-        self.x = f"{Fore.LIGHTRED_EX}[~]{Fore.RESET}"
-        self.pbar = None
-        self.api_language = "en"
-        self.delay = False
-        self.output_path = "./"
-        self.quality = Quality.BEST
-        self.threading = True
-        self.search_limit = 50
+        # Variable initialization
+        self.semaphore_limit = None
+        self.client = None
+        self.directory_system = None
+        self.threading = None
+        self.threading_mode = None
+        self.search_limit = None
+        self.output_path = None
+        self.api_language = None
+        self.quality = None
+        self.progress_bars = {}
         self.load_user_settings()
-        self.client = Client(language=self.api_language, delay=self.delay)
-        while True:
-            self.main_menu()
+
+        if self.license():
+            while True:
+                self.main_menu()
+
+    def license(self):
+        license_accept = self.conf["License"]["accepted"]
+
+        if license_accept != "true":
+            license_text = """
+GPL License Agreement for Porn Fetch
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+You should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses/.
+NO LIABILITY FOR END USER USE
+
+Under no circumstances and under no legal theory, whether in tort, contract, or otherwise, shall the copyright holder or contributors be liable to You for any direct, indirect, special, incidental, consequential or exemplary damages of any character including, without limitation, damages for loss of goodwill, work stoppage, computer failure or malfunction, loss of data or any and all other commercial damages or losses, even if such party shall have been informed of the possibility of such damages.
+This limitation of liability shall not apply to liability for death or personal injury resulting from such party’s negligence to the extent applicable law prohibits such limitation. Some jurisdictions do not allow the exclusion or limitation of incidental or consequential damages, so this exclusion and limitation may not apply to You.
+This Agreement represents the complete agreement concerning the subject matter hereof.
+"""
+
+            x = input(f"""
+{license_text}
+
+
+Do you accept the License? [yes,no]""")
+
+            if x.lower() == "yes":
+                self.conf.set("License", "accepted", "true")
+                with open("config.ini", "w") as config_file:
+                    self.conf.write(config_file)
+                    return True
+
+            else:
+                exit()
+
+        else:
+            return True
 
     def main_menu(self):
         options = input(f"""
-{return_color()}1) Download Menu
-{return_color()}2) Searching
-{return_color()}3) Account
-{return_color()}4) Metadata
-{return_color()}5) Settings
-{return_color()}6) Exit
-{return_color()}----------------------=>:
-""")
+{return_color()}1) Download a Video (PornHub / HQPorner)
+{return_color()}2) Download videos from a Model / Channel / User
+{return_color()}3) Search Users / Models / Channels
+{return_color()}4) Download from a file with URLs
+{return_color()}5) Account
+{return_color()}6) Metadata
+{return_color()}7) Settings
+{return_color()}8) Credits / Information
+
+{return_color()}-------------------------------=>:{reset()}""")
 
         if options == "1":
-            self.download_menu()
+            self.start_single_video()
 
         elif options == "2":
-            self.searching_menu()
+            self.start_model_user_channel()
 
         elif options == "3":
-            self.account_menu()
+            self.search_options()
 
         elif options == "4":
-            self.metadata_menu()
+            self.start_from_file()
 
         elif options == "5":
-            self.settings_menu()
+            self.account_options()
 
         elif options == "6":
-            sys.exit(0)
+            self.get_metadat_options()
 
-    def download_menu(self):
-        options = input(f"""
-{return_color()}1) Download a video
-{return_color()}2) Download from file
-{return_color()}3) Download videos from model / channel
-{return_color()}4) Back
-{return_color()}----------------------=>:
-""")
-        if options == "1":
-            url = input(f"{return_color()}Enter video url --=>:")
-            self.download_raw(url)
+        elif options == "7":
+            self.save_user_settings()
 
-        elif options == "2":
-            self.download_from_file()
+        elif options == "8":
+            self.credits()
 
-        elif options == "3":
-            self.download_from_model_channel()
+    def start_single_video(self):
+        url = input(f"{return_color()}Enter PornHub / HQPorner URL --=>:{reset()}")
+        self.pre_setup_video(url)
 
-        elif options == "4":
-            self.main_menu()
+    def start_model_user_channel(self):
+        url = input(f"""{reset()}
+Please enter the URL to the PornHub User / Model / Channel account.
 
-    def searching_menu(self):
-        search_query = input(f"{return_color()}Enter search query --=>:")
-        search_object = self.client.search(search_query)
-        videos = []
-        for video in search_object[0:self.search_limit]:
-            videos.append(video)
+Hint: You can select the videos to be downloaded later!
 
-        self.iterator(videos)
+{return_color()}----------------------------=>:{reset()}""")
 
-    def account_menu(self):
-        options = input(f"""
-{return_color()}1) Login
-{return_color()}2) Get liked videos
-{return_color()}3) Get watched videos
-{return_color()}4) Get recommended videos
-{return_color()}5) Back
-{return_color()}----------------------=>:
-""")
+        client = Client(language=self.api_language)
+        model = client.get_user(url)
+        videos = model.videos
+        self.start_generator(videos)
 
-        if options == "1":
-            self.login()
+    def start_from_file(self):
+        file = input(f"""{reset()}
+Enter the (exact) location of the file.
 
-        elif options == "2":
-            self.get_liked_videos()
+Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
 
-        elif options == "3":
-            self.get_watched_videos()
-
-        elif options == "4":
-            self.get_recommended_videos()
-
-        elif options == "5":
-            self.main_menu()
-
-    def metadata_menu(self):
-        options = input(f"""
-{return_color()}1) User metadata
-{return_color()}2) Video metadata
-{return_color()}3) Back
-{return_color()}----------------------=>:""")
-
-        if options == "1":
-            self.metadata_user()
-
-        elif options == "2":
-            self.metadata_video()
-
-        elif options == "3":
-            self.main_menu()
-
-    def test_video(self, url):
-        try:
-            video_object = self.client.get(url)
-            return video_object
-
-        except errors.URLError:
-            logging(f"{return_color()}Invalid URL: {url}", level=1)
-            return False
-
-    def download_hqporner(self, url):
-
-        if self.quality == Quality.BEST:
-            quality = "highest"
-
-        elif self.quality == Quality.HALF:
-            quality = "720"
-
-        elif self.quality == Quality.WORST:
-            quality = "360"
-
-        else:
-            quality = "highest"
-
-        API().download(url, output_path=self.output_path, quality=quality)
-
-    def download_pornhub(self, url):
-        video = self.test_video(url)
-        title = video.title
-        logging("Stripping title")
-        title = strip_title(title)
-        output_path = self.output_path + title + ".mp4"
-
-        if not check_if_video_exists(video, output_path):
-            video.download(path=output_path, quality=self.quality,
-                           display=display.progress(color=True), downloader=download.threaded())
-
-    def download_raw(self, url):
-        if url.endswith(".html"):
-            if self.threading:
-                thread = threading.Thread(target=self.download_hqporner, args=(url,))
-                thread.start()
-
-            else:
-                self.download_hqporner(url)
-
-        else:
-            if self.threading:
-                thread = threading.Thread(target=self.download_pornhub, args=(url,))
-                thread.start()
-
-            else:
-                self.download_pornhub(url)
-
-    def download_from_file(self):
-        file = input(f"{return_color()}Please enter the file location --=>:")
+{return_color()}---------------------------------=>:{reset()}""")
 
         if os.path.exists(file):
             with open(file, "r") as url_file:
                 content = url_file.read().splitlines()
                 for url in content:
-                    self.download_raw(url)
+                    self.pre_setup_video(url)
 
         else:
-            logging(f"{return_color()}File doesn't exist...")
-            self.download_from_file()
+            logger_error("File doesn't exist! Please try again.")
+            self.start_from_file()
 
-    def download_from_model_channel(self):
-        model_url = input(f"{return_color()}Please enter the model url --=>:")
-        model_object = self.client.get_user(model_url)
+    def pre_setup_video(self, url):
+        self.semaphore.acquire()
+        if str(url).endswith(".html"):
+            title = API().extract_title(url)
+            author = API().extract_actress(url)[0]
+            video = str(url)
 
-        videos = model_object.videos
-        self.iterator(videos)
+        else:
+            language = self.api_language
+            video = check_video(url, language)
+            title = video.title
+            author = video.author.name
+            quality = self.quality
 
-    def iterator(self, iterator_object):
+        title = strip_title(title)
+        output_path = self.output_path
+        if not output_path.endswith(os.sep):
+            output_path = f"{output_path}{os.sep}"
+
+        if self.directory_system:
+            if not os.path.exists(f"{output_path}{author}"):
+                os.mkdir(f"{output_path}{author}")
+
+            output_path = f"{output_path}{author}{os.sep}{title}"
+
+        else:
+            output_path = f"{output_path}{title}"
+
+        if not check_if_video_exists(video=video, output_path=output_path):
+            if isinstance(video, str):
+                if self.threading:
+                    hqporner_thread = threading.Thread(target=self.download_video_hqporner, args=(url, output_path))
+                    hqporner_thread.start()
+
+                else:
+                    self.download_video_hqporner(url=url, output_path=output_path)
+
+            elif isinstance(video, Video):
+                if self.threading:
+                    pornhub_thread = threading.Thread(target=self.download_video_pornhub,
+                                                      args=(video, output_path, quality))
+                    pornhub_thread.start()
+
+                else:
+                    self.download_video_pornhub(video=video, output_path=output_path, quality=quality)
+
+    def download_callback(self, pos, total):
         """
-        Iterator object must be a list of video objects
+        Callback function for the video download progress.
+        It updates or creates a tqdm progress bar for each download and updates the total progress.
         """
-        logging("Starting iteration...")
-        videos_raw = []
-        titles = []
+        # Get the thread ID to uniquely identify each download
+        thread_id = threading.get_ident()
 
-        for video in iterator_object:
-            logging(video)
-            videos_raw.append(video.url)
-            titles.append(titles)
+        # If this is the first time this thread calls the callback, create a new progress bar
+        if thread_id not in self.progress_bars:
+            self.progress_bars[thread_id] = tqdm(total=total, desc=f"Download {thread_id}",
+                                                 bar_format="{l_bar}{bar:20}{r_bar}{bar:-20b}",
+                                                 colour='blue')
 
-        for counter, selectable_video in enumerate(titles):
-            logging(counter)
-            print(f"{counter}) {selectable_video}")
+        # Update the individual progress bar
+        self.progress_bars[thread_id].n = pos
+        self.progress_bars[thread_id].refresh()
 
-        choices_input = input(f"{return_color()}Please enter video you want to download (e.g., 1,2,5,14) -->: ")
-        choices = choices_input.split(",")
+    def download_video_pornhub(self, video, output_path, quality):
 
-        for choice in choices:
-            self.download_raw(url=videos_raw[int(choice)])
+        if self.threading_mode == "2":
+            threading_X = download.threaded()
 
-    def get_liked_videos(self):
-        videos = self.client.account.liked
-        logging("Got video object")
-        self.iterator(videos)
+        elif self.threading_mode == "1":
+            threading_X = download.FFMPEG
 
-    def get_watched_videos(self):
-        videos = self.client.account.watched
-        self.iterator(videos)
+        elif self.threading_mode == "0":
+            threading_X = download.default
 
-    def get_recommended_videos(self):
-        videos = self.client.account.recommended
-        self.iterator(videos)
+        video.download(downloader=threading_X, quality=quality, path=output_path, display=self.download_callback)
+        logger_debug("Download Complete, releasing semaphore")
+        self.semaphore.release()
 
-    def metadata_video(self):
-        url = input(f"{return_color()}Enter video url --=>:")
-        video_object = self.test_video(url)
+    def download_video_hqporner(self, url, output_path):
+        API().download(url=url, no_title=True, output_path=output_path, quality="highest")
+        logger_debug("Download Complete, releasing semaphore")
+        self.semaphore.release()
 
-        tags_list = []
+    def load_user_settings(self):
+        self.api_language = self.conf["Video"]["language"]
+        self.output_path = self.conf["Video"]["output_path"]
+        self.search_limit = int(self.conf["Video"]["search_limit"])
+        self.threading = self.conf["Performance"]["threading"]
+        self.threading_mode = self.conf["Performance"]["threading_mode"]
+        self.directory_system = self.conf["Video"]["directory_system"]
+        self.semaphore_limit = int(self.conf["Performance"]["semaphore"])
+        self.semaphore = Semaphore(self.semaphore_limit)
+        quality = self.conf["Video"]["quality"]
 
-        tags = video_object.tags
-        title = video_object.title
-        image_url = video_object.image.url
-        date = video_object.date
-        views = video_object.views
-        rating = video_object.like
-        duration = video_object.duration
-        author = video_object.author
-        categories = video_object.categories
+        if quality == "best":
+            self.quality = Quality.BEST
 
-        for tag in tags:
-            tags_list.append(tag.name)
+        elif quality == "half":
+            self.quality = Quality.HALF
 
-        print(f"""
+        elif quality == "worst":
+            self.quality = Quality.WORST
+
+        if self.threading == "yes":
+            self.threading = True
+
+        if self.directory_system == "1":
+            self.directory_system = True
+
+    def save_user_settings(self):
+        while True:
+            if self.quality == Quality.BEST:
+                quality_ext = "Best"
+
+            elif self.quality == Quality.HALF:
+                quality_ext = "Half"
+
+            elif self.quality == Quality.WORST:
+                quality_ext = "Worst"
+
+            if self.threading_mode == "2":
+                threading_ext = "High Performance"
+
+            elif self.threading_mode == "1":
+                threading_ext = "FFMPEG"
+
+            elif self.threading_mode == "0":
+                threading_ext = "Default"
+
+            api_language_ext = self.api_language
+            output_path_ext = self.output_path
+            if self.directory_system == 1:
+                directory_system_ext = "Yes"
+
+            elif self.directory_system == 0:
+                directory_system_ext = "No"
+
+            options = input(f"""
+{reset()}--------------{return_color()}QUALITY{reset()}-------------|
+{return_color()}|>  Current: {quality_ext}
+{return_color()}|>  1) Best
+{return_color()}|>  2) Half
+{return_color()}|>  3) Worst
+{reset()}|-------------{return_color()}Threading{reset()}-----------|
+{return_color()}|>  Current: {threading_ext}
+{return_color()}|>  4) High Performance
+{return_color()}|>  5) FFMPEG (needs ffmpeg installed on your system)
+{return_color()}|>  6) Default
+{return_color()}|>  7) Disable Threading for the whole application
+{reset()}|--------------{return_color()}API Language{reset()}--------|
+{return_color()}|>  Current: {api_language_ext}
+{return_color()}|>  8) Enter custom language code... e.g. de for german or es for espanol
+{reset()}|--------------{return_color()}Output Path{reset()}----------|
+{return_color()}|>  Current: {output_path_ext}
+{return_color()}|>  9) Change Output Path
+{reset()}|--------------{return_color()}Directory System{reset()}-----|
+{return_color()}|>  Current: {directory_system_ext}
+{return_color()}|>  10) Enable
+{return_color()}|>  11) Disable
+{return_color()}|---------{return_color()}PRESS 99 TO STOP{reset()}----------|
+{return_color()}|--------------------------=>:{reset()}""")
+            if options == "1":
+                self.conf.set("Video", "quality", "best")
+
+            elif options == "2":
+                self.conf.set("Video", "quality", "half")
+
+            elif options == "3":
+                self.conf.set("Video", "quality", "worst")
+
+            elif options == "4":
+                self.conf.set("Performance", "threading_mode", "2")
+                self.conf.set("Performance", "threading", "1")
+
+            elif options == "5":
+                self.conf.set("Performance", "threading_mode", "1")
+                self.conf.set("Performance", "threading", "1")
+
+            elif options == "6":
+                self.conf.set("Performance", "threading_mode", "0")
+                self.conf.set("Performance", "threading", "1")
+
+            elif options == "7":
+                self.conf.set("Performance", "threading", "0")
+
+            elif options == "8":
+                language_code = input(f"""
+{return_color()}Please enter the language code -->:{reset()}""")
+                self.conf.set("Video", "language", language_code)
+
+            elif options == "9":
+                output_path = input(f"""
+{return_color()}Please enter the new output path -->:{reset()}""")
+                if not os.path.exists(output_path):
+                    logger_error("The specified output path doesn't exist!")
+
+                else:
+                    output_path = correct_output_path(output_path)
+
+                self.conf.set("Video", "output_path", output_path)
+
+            elif options == "10":
+                self.conf.set("Video", "directory_system", "1")
+
+            elif options == "11":
+                self.conf.set("Video", "directory_system", "0")
+
+            elif options == "99":
+                self.main_menu()
+
+            with open("config.ini", "w") as config_file:
+                self.conf.write(config_file)
+
+            logger_debug("Applied new settings!")
+            self.load_user_settings()
+            logger_debug("Reloaded User settings. You may continue now :) ")
+
+    def get_metadat_options(self):
+        options = input(f"""
+{return_color()}1) Get Video metadata
+{return_color()}2) Get User metadata
+{return_color()}3) Back
+{return_color()}------------------=>:{reset()}""")
+        if options == "1":
+            self.get_video_metadata()
+
+        elif options == "2":
+            self.get_user_metadata()
+
+        elif options == "3":
+            self.main_menu()
+
+    def search_options(self):
+        options = input(f"""
+{return_color()}1) Search for Videos
+{return_color()}2) Search for Users
+{return_color()}3) Search for Pornstars
+{return_color()}4) Back
+{reset()}! search filters aren't working yet. 
+
+{return_color()}------------------=>:{reset()}""")
+
+        if options == "1":
+            self.search_videos()
+
+        elif options == "2":
+            self.search_users()
+
+        elif options == "3":
+            self.search_pornstars()
+
+        elif options == "4":
+            self.main_menu()
+
+    def search_videos(self):
+        query = input(f"""
+{return_color()}Please enter your search query ---=>:{reset()}""")
+
+        if not isinstance(self.client, Client):
+            language = self.api_language
+            self.client = Client(language=language)
+
+        generator = self.client.search(query)
+        self.start_generator(generator)
+
+    def search_users(self):
+        query = input(f"""
+{return_color()}Enter a query to search for users --=>:{reset()}""")
+
+        if not isinstance(self.client, Client):
+            language = self.api_language
+            self.client = Client(language=language)
+
+        generator = self.client.search_user(query)
+        self.start_generator(generator)
+
+    def search_pornstars(self):
+
+        query = input(f"""
+{return_color()}Enter a query to search for Pornstars --=>:{reset()}""")
+
+        if not isinstance(self.client, Client):
+            language = self.api_language
+            self.client = Client(language=language)
+
+        generator = self.client.search_pornstar(query)
+        self.start_generator(generator)
+
+    def start_generator(self, generator):
+        video_objects = []
+
+        for idx, video in enumerate(generator):
+            print(f"{idx}) {video.title}")
+            video_objects.append(video)
+
+        index = input(f"""{reset()}
+Please enter the number for the videos you want to download. Separate with a comma
+e.g 1,6,92 
+
+! Enter 'ALL' to download all videos
+{return_color()}-----------------------=>:{reset()}""")
+
+        if index.lower() == "all":
+            for video in video_objects:
+                self.pre_setup_video(url=video)
+
+        else:
+            chosen_videos = index.split(",")
+            for idx in chosen_videos:
+                video = video_objects[int(idx)]
+                self.pre_setup_video(url=video)
+
+    def get_video_metadata(self):
+        language = self.api_language
+        url = input(f"""
+{return_color()}Please enter the video url (PornHub) --=>:{reset()}""")
+
+        video = check_video(url, language=language)
+
+        author = video.author.name
+        duration = video.duration.seconds
+        duration = round(duration, 2) / 60
+        title = strip_title(video.title)
+        date = video.date
+        views = video.views
+        pornstar_list = [pornstar.name for pornstar in video.pornstars]
+        hotspots_list = [str(hotspots) for hotspots in video.hotspots]
+
+        tags_list = [tag.name for tag in video.tags]
+        tags = ", ".join(tags_list)
+        hotspots = ", ".join(hotspots_list)
+        pornstars = "".join(pornstar_list)
+        rating = f"Likes: {video.like.up} | Dislikes: {video.like.down}"
+
+        input(f"""
 {return_color()}Title: {title}
 {return_color()}Author: {author}
-{return_color()}Pornstars: 
+{return_color()}Duration: {duration}
 {return_color()}Date: {date}
 {return_color()}Views: {views}
-{return_color()}Rating: Likes: {rating.up} | Dislikes: {rating.down}
-{return_color()}Duration: {duration}
-{return_color()}Categories: {categories}
-{return_color()}Image URL: {image_url}
-{return_color()}Tags: {tags_list}
-""")
+{return_color()}Pornstars: {pornstars}
+{return_color()}Rating: {rating}
+{return_color()}Tags: {tags}
+{return_color()}Hotspots: {hotspots}
+{reset()}
+Press ENTER to continue""")
+        self.main_menu()
 
-    def metadata_user(self):
-        url = input(f"{return_color()}Enter user url --=>:")
-        user_object = self.client.get_user(url)
-        info = user_object.info
-        bio = user_object.bio
-        avatar = user_object.avatar
+    def get_user_metadata(self):
+        api_language = self.api_language
+        url = input(f"""
+{return_color()}Enter the User URL (PornHub) --=>:{reset()}""")
 
-        relationship = info.get("Relationship status")
+        if not isinstance(self.client, Client):
+            self.client = Client(language=api_language)
+
+        user = self.client.get_user(url)
+        info = user.info
+        name = user.name
+        type = user.type
+
+        relationship_status = "Relationship status"
         interested_in = info.get("Interested in")
+        city_and_country = info.get("City and Country")
         gender = info.get("Gender")
+        birth_place = info.get("Birth Place")
         height = info.get("Height")
+        weight = info.get("Weight")
         ethnicity = info.get("Ethnicity")
         hair_color = info.get("Hair Color")
-        fake_breasts = info.get("Fake Boobs")
+        fake_boobs = info.get("Fake Boobs")
         tattoos = info.get("Tattoos")
         piercings = info.get("Piercings")
-        hobbies = info.get("Interests and hobbie")
-        turns_on = info.get("Turn Ons")
+        hometown = info.get("Hometown")
+        interests_and_hobbies = info.get("Interests and hobbie")
+        turn_ons = info.get("Turn Ons")
+        turn_offs = info.get("Turn Offs")
         video_views = info.get("Video Views")
         profile_views = info.get("Profile Views")
         videos_watched = info.get("Videos Watched")
 
-        print(f"""
-{return_color()}Gender: {gender}
-{return_color()}Height: {height}
-{return_color()}Ethnicity: {ethnicity}
-{return_color()}Hair color: {hair_color}
-{return_color()}Fake breasts: {fake_breasts}
-{return_color()}Tattoos: {tattoos}
-{return_color()}Piercings: {piercings}
-{return_color()}Hobbies: {hobbies}
-{return_color()}Turn ons: {turns_on}
-{return_color()}Video views: {video_views}
-{return_color()}Profile views: {profile_views}
-{return_color()}Videos watched: {videos_watched}
-{return_color()}Interested in: {interested_in}
-{return_color()}Relationship: {relationship}
+        input(f"""
+{return_color()}Name: {reset()}{name}
+{return_color()}Type: {reset()}{type}
 
-{return_color()}Bio: {bio}
+{return_color()}Relationship Status: {reset()}{relationship_status}
+{return_color()}Interested In: {reset()}{interested_in}
+{return_color()}City and Country: {reset()}{city_and_country}
+{return_color()}Gender: {reset()}{gender}
+{return_color()}Birth Place: {reset()}{birth_place}
+{return_color()}Height: {reset()}{height}
+{return_color()}Weight: {reset()}{weight}
+{return_color()}Ethnicity: {reset()}{ethnicity}
+{return_color()}Hair Color: {reset()}{hair_color}
+{return_color()}Fake Boobs: {reset()}{fake_boobs}
+{return_color()}Tattoos: {reset()}{tattoos}
+{return_color()}Piercings: {reset()}{piercings}
+{return_color()}Hometown: {reset()}{hometown}
+{return_color()}Interests and Hobbies: {reset()}{interests_and_hobbies}
+{return_color()}Turn Ons: {reset()}{turn_ons}
+{return_color()}Turn Offs: {reset()}{turn_offs}
+{return_color()}Video Views: {reset()}{video_views}
+{return_color()}Profile views: {reset()}{profile_views}
+{return_color()}Videos Watched: {reset()}{videos_watched}
 
-{return_color()}Avatar: {avatar.url}
+Press ENTER to continue...""")
+        self.main_menu()
 
-""")
-
-    def login(self):
-        username = input(f"{return_color()}Enter your PornHub's Username --=>:")
-        password = getpass.getpass("Enter your PornHub's Password: --=>:")
-
-        try:
-            self.client = Client(language=self.api_language, delay=self.delay, username=username, password=password)
-            logging("Logged in successfully :)")
-            self.account_menu()
-
-        except errors.LoginFailed:
-            logging("Login failed, probably an incorrect password. Please try again...")
-            self.login()
-
-    def settings_menu(self):
+    def account_options(self):
         options = input(f"""
-{return_color()}------| Quality |------
-    {return_color()}Current Value: {self.quality}
-    
-    1{return_color()}) Change to BEST
-    {return_color()}2) Change to HALF
-    {return_color()}3) Change to WORST
-
-{return_color()}------| Threading |------
-    {return_color()}Current Value: {self.threading}
-    
-    {return_color()}4) Enable
-    {return_color()}5) Disable
-
-{return_color()}------| Output path |------
-    {return_color()}Current Path: {self.output_path}
-    
-    {return_color()}6) Change path
-
-{return_color()}------| Search result limit |------
-    {return_color()}Current Value: {self.search_limit}
-    
-    {return_color()}7) Change Limit
-
-{return_color()}------| Change Delay (Speed) |-------
-    {return_color()}Current Value: {self.delay}
-    
-    {return_color()}8) Enable Delay
-    {return_color()}9) Disable Delay
-
-{return_color()}------| Reset |------
-        
-    {return_color()}99) reset configuration
-        
-{return_color()}B) Back
+{return_color()}1) Login
+{return_color()}2) Get watched videos
+{return_color()}3) Get liked videos
+{return_color()}4) Get recommended videos
+{return_color()}5) Back
+{return_color()}---------------------------=>:{reset()}
 """)
 
         if options == "1":
-            self.conf.set("Porn_Fetch", "default_quality", "best")
+            self.login()
+            self.account_options()
 
         elif options == "2":
-            self.conf.set("Porn_Fetch", "default_quality", "half")
+            self.get_watched_videos()
+            self.account_options()
 
         elif options == "3":
-            self.conf.set("Porn_Fetch", "default_quality", "worst")
+            self.get_liked_videos()
+            self.account_options()
 
         elif options == "4":
-            self.conf.set("Porn_Fetch", "default_threading", "yes")
+            self.get_recommended_videos()
+            self.account_options()
 
         elif options == "5":
-            self.conf.set("Porn_Fetch", "default_threading", "no")
-
-        elif options == "6":
-            new_path = input(f"{return_color()}Enter new output path --=>:")
-            if os.path.exists(new_path):
-                self.conf.set("Porn_Fetch", "default_path", new_path)
-
-            else:
-                logging("Invalid path...", level=1)
-                self.settings_menu()
-
-        elif options == "7":
-            limit = input(f"{return_color()}Enter result limit (int) -->:")
-            if type(limit) == "int":
-                self.conf.set("Porn_Fetch", "search_limit", limit)
-
-            else:
-                logging("Limit needs to be an integer (1,2,3 or 50 but not 30.3 or a string)")
-
-        elif options == "8":
-            self.conf.set("Porn_Fetch", "delay", "true")
-
-        elif options == "9":
-            self.conf.set("Porn_Fetch", "delay", "false")
-
-        elif options == "99":
-            confirmation = input(f"{return_color()}Are you sure? (y/n): ")
-            if confirmation == "y":
-                setup_config_file(force=True)
-
-        elif options == "B":
             self.main_menu()
+            self.account_options()
 
-        with open("config.ini", "w") as config_file:
-            self.conf.write(config_file)
-            logging("Applied new configuration, please restart!")
+        else:
+            self.account_options()
 
-    def load_user_settings(self):
-        self.output_path = self.conf["Porn_Fetch"]["default_path"]
-        self.search_limit = int(self.conf["Porn_Fetch"]["search_limit"])
+    def login(self):
+        username = input(f"{return_color()}Please enter your PornHub Username --=>:{reset()}")
+        password = getpass.getpass("Please enter your PornHub Password --=>:")
+        self.client = Client(username=username, password=password, language=self.api_language)
+        return True
 
-        if self.conf["Porn_Fetch"]["default_threading"] == "yes":
-            self.threading = True
+    def check_login(self):
+        if not self.client.logged:
+            self.login()
 
-        elif self.conf["Porn_Fetch"]["default_threading"] == "no":
-            self.threading = False
+        else:
+            return True
 
-        if self.conf["Porn_Fetch"]["delay"] == "true":
-            self.delay = True
+    def get_watched_videos(self):
+        self.check_login()
+        iterator = self.client.account.watched
+        self.start_generator(iterator)
 
-        elif self.conf["Porn_Fetch"]["delay"] == "false":
-            self.delay = False
+    def get_liked_videos(self):
+        self.check_login()
+        iterator = self.client.account.liked
+        self.start_generator(iterator)
 
-        if self.conf["Porn_Fetch"]["default_quality"] == "best":
-            self.quality = Quality.BEST
+    def get_recommended_videos(self):
+        self.check_login()
+        iterator = self.client.account.recommended
+        self.start_generator(iterator)
 
-        elif self.conf["Porn_Fetch"]["default_quality"] == "half":
-            self.quality = Quality.HALF
+    def credits(self):
+        text_markdown = f"""
+# Porn Fetch V3
 
-        elif self.conf["Porn_Fetch"]["default_quality"] == "worst":
-            self.quality = Quality.WORST
+Copyright (C) 2023 Johannes Habel (EchterAlsFake)
 
 
-if __name__ == "__main__":
-    try:
-        CLI()
+### This Project is only possible thanks to Egsagon's [PHUB](https://github.com/Egsagon/PHUB) API
 
-    except errors.URLError:
-        logging("Invalid URL", level=1)
+## Please check out his project and give it a star!
 
-    except errors.UserNotFound:
-        logging("User not found", level=1)
+# Development
 
-    except errors.MaxRetriesExceeded:
-        logging("Max retries exceeded", level=1)
+- Language: [Python](https://www.python.org/)
+- IDE: Jetbrains [PyCharm Professional](https://www.jetbrains.com/pycharm/)
+- Platform: [GitHub](https://github.com)
+- Graphical User Interface: [PySide6](https://doc.qt.io/qtforpython-6/)
+- Framework: [Qt](https://qt.io)
+
+
+# Graphics
+
+- <a href="https://iconscout.com/icons/list" class="text-underline font-size-sm" target="_blank">List</a> by <a href="https://iconscout.com/contributors/iyikon" class="text-underline font-size-sm" target="_blank">Iyikon ...</a>
+- <a href="https://iconscout.com/icons/information" class="text-underline font-size-sm" target="_blank">Information</a> by <a href="https://iconscout.com/contributors/petai-jantrapoon" class="text-underline font-size-sm">Petai Jantrapoon</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
+- <a href="https://iconscout.com/icons/tick" class="text-underline font-size-sm" target="_blank">Tick</a> by <a href="https://iconscout.com/contributors/endesignz" class="text-underline font-size-sm">Jessiey Sahana</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
+- <a href="https://iconscout.com/icons/top-arrow" class="text-underline font-size-sm" target="_blank">Top Arrow</a> by <a href="https://iconscout.com/contributors/creative-studio" class="text-underline font-size-sm" target="_blank">Mian Saab</a>
+- <a href="https://iconscout.com/icons/down-arrow" class="text-underline font-size-sm" target="_blank">Down Arrow</a> by <a href="https://iconscout.com/contributors/adamicons" class="text-underline font-size-sm">Adam Dicons</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
+- <a href="https://iconscout.com/icons/tick" class="text-underline font-size-sm" target="_blank">Tick</a> by <a href="https://iconscout.com/contributors/kolo-design" class="text-underline font-size-sm" target="_blank">Kalash</a>
+- Download Icon by [Tutukof](https://iconscout.com/contributors/fersusart)
+- Search Icon by [Kmg Design](https://iconscout.com/contributors/kmgdesignid)
+
+Logo was generated by DALL-E (ChatGPT)
+
+## Contributors (as in V3 and before)
+
+- [Egsagon](https://github.com/Egsagon)
+- [RSDCFGVHBJNKML](https://github.com/RSDCFGVHBJNKML) : Enhancement [#11](https://github.com/EchterAlsFake/Porn_Fetch/issues/11)
+
+# Libraries
+
+- [PHUB](https://github.com/EchterAlsFake/PHUB)
+- [requests](https://github.com/psf/requests)
+- [hqporner_api](https://github.com/EchterAlsFake/hqporner_api)
+- [hue_shift](https://github.com/EchterAlsFake/hue_shift)
+- [PySide6](https://doc.qt.io/qtforpython-6/)
+- [pymediainfo](https://github.com/sbraz/pymediainfo)
+- [colorama](https://github.com/tartley/colorama)
+- [markdown](https://github.com/Python-Markdown/markdown)
+- [rich](https://github.com/Textualize/rich)
+<br>ANDROID:
+- [Kivy MD](https://github.com/kivymd/KivyMD)
+- [Kivy](https://kivy.org/)
+- [Buildozer](https://github.com/kivy/buildozer)
+- [Cython](https://github.com/cython/cython)
+
+** All other libraries are built in to Python.
+
+
+"""
+        md = Markdown(text_markdown)
+        rprint(md)
+
+
+CLI()
+
+
+
+
+
