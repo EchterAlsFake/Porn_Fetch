@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href=="https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.0"><strong>Download Version 3.0 (BETA)</strong></a> ·
+  <a href="https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/beta-3.0"><strong>Download Version 3.0 (BETA)</strong></a> ·
   <a href="https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/2.9"><strong>Download Version 2.9</strong></a> ·
   <a href="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md"><strong>Development Update V3.0</strong></a>
 </p>
@@ -105,7 +105,7 @@ Important: Usage of Porn Fetch may not be in compliance with PornHub's terms of 
 ## 👏 Credits
 - API: [PHUB](https://github.com/Egsagon/PHUB)
 - GUI: [Qt](https://qt.io) for Python
-### See [Credits]()
+### See [Credits](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/CREDITS.md)
 
 ## 📚 License
 Licensed under [GPL 3](https://www.gnu.org/licenses/gpl-3.0.en.html).
