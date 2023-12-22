@@ -23,7 +23,7 @@ from phub import Quality, Client, locals, errors, download, Video, HTMLQuery
 from src.backend.shared_functions import (strip_title, check_video, check_if_video_exists, setup_config_file,
                                           logger_debug, correct_output_path)
 from src.frontend.License import Ui_License
-from src.frontend.ui_form_v3 import Ui_Porn_Fetch_Widget
+from src.frontend.ui_form import Ui_Porn_Fetch_Widget
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                             QTranslator, QCoreApplication)
@@ -404,8 +404,8 @@ class PornFetch(QWidget):
         self.load_user_settings()
         self.update_settings()
         self.language_strings()
-        self.ui.treeWidget_2.setColumnWidth(0, 600)
-        self.ui.treeWidget_2.setColumnWidth(1, 200)
+        self.ui.treeWidget.setColumnWidth(0, 600)
+        self.ui.treeWidget.setColumnWidth(1, 200)
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(0)
 
@@ -467,12 +467,12 @@ class PornFetch(QWidget):
         self.ui.button_switch_metadata.clicked.connect(self.switch_to_metadata)
 
         # Video Download Button Connections
-        self.ui.button_download_2.clicked.connect(self.start_single_video)
-        self.ui.button_model_2.clicked.connect(self.start_model)
-        self.ui.button_tree_download_2.clicked.connect(self.download_tree_widget)
-        self.ui.button_tree_select_all_2.clicked.connect(self.select_all_items)
-        self.ui.button_tree_unselect_all_2.clicked.connect(self.unselect_all_items)
-        self.ui.button_open_file_2.clicked.connect(self.open_file)
+        self.ui.button_download.clicked.connect(self.start_single_video)
+        self.ui.button_model.clicked.connect(self.start_model)
+        self.ui.button_tree_download.clicked.connect(self.download_tree_widget)
+        self.ui.button_tree_select_all.clicked.connect(self.select_all_items)
+        self.ui.button_tree_unselect_all.clicked.connect(self.unselect_all_items)
+        self.ui.button_open_file.clicked.connect(self.open_file)
 
         # Help Buttons Connections
         self.ui.button_semaphore_help.clicked.connect(self.button_semaphore_help)
@@ -483,10 +483,10 @@ class PornFetch(QWidget):
         self.ui.button_settings_apply.clicked.connect(self.save_user_settings)
 
         # Account
-        self.ui.button_login_2.clicked.connect(self.login)
-        self.ui.button_get_watched_videos_2.clicked.connect(self.get_watched_videos)
-        self.ui.button_get_liked_videos_2.clicked.connect(self.get_liked_videos)
-        self.ui.button_get_recommended_videos_2.clicked.connect(self.get_recommended_videos)
+        self.ui.button_login.clicked.connect(self.login)
+        self.ui.button_get_watched_videos.clicked.connect(self.get_watched_videos)
+        self.ui.button_get_liked_videos.clicked.connect(self.get_liked_videos)
+        self.ui.button_get_recommended_videos.clicked.connect(self.get_recommended_videos)
 
         # Search
 
@@ -556,9 +556,9 @@ QPushButton:pressed {
 
 """
 
-        self.ui.button_get_liked_videos_2.setStyleSheet(stylesheet)
-        self.ui.button_get_watched_videos_2.setStyleSheet(stylesheet)
-        self.ui.button_get_recommended_videos_2.setStyleSheet(stylesheet)
+        self.ui.button_get_liked_videos.setStyleSheet(stylesheet)
+        self.ui.button_get_watched_videos.setStyleSheet(stylesheet)
+        self.ui.button_get_recommended_videos.setStyleSheet(stylesheet)
 
 
     """
@@ -798,10 +798,10 @@ QPushButton:pressed {
     """
 
     def add_to_tree_widget_thread(self, iterator, search_limit):
-        if self.ui.radio_tree_show_title_2.isChecked():
+        if self.ui.radio_tree_show_title.isChecked():
             data_mode = 0
 
-        elif self.ui.radio_tree_show_all_2.isChecked():
+        elif self.ui.radio_tree_show_all.isChecked():
             data_mode = 1
 
         else:
@@ -815,7 +815,7 @@ QPushButton:pressed {
         self.threadpool.start(self.thread)
 
     def clear_tree_widget(self):
-        self.ui.treeWidget_2.clear()
+        self.ui.treeWidget.clear()
 
     def progress_tree_widget(self, total, current):
         self.ui.progressbar_total.setMaximum(total)
@@ -828,7 +828,7 @@ QPushButton:pressed {
         index = data[3]
         video = data[4]
 
-        item = QTreeWidgetItem(self.ui.treeWidget_2)
+        item = QTreeWidgetItem(self.ui.treeWidget)
         item.setText(0, f"{index}) {title}")
         item.setText(1, author)
         item.setText(2, str(duration))
@@ -837,7 +837,7 @@ QPushButton:pressed {
 
     def download_tree_widget(self):
         semaphore = self.semaphore
-        treeWidget = self.ui.treeWidget_2
+        treeWidget = self.ui.treeWidget
         quality = self.quality
         download_tree_thread = QTreeWidgetDownloadThread(treeWidget=treeWidget, semaphore=semaphore, quality=quality)
         download_tree_thread.signals.progress.connect(self.tree_widget_completed)
@@ -850,14 +850,14 @@ QPushButton:pressed {
         self.load_video(url)
 
     def unselect_all_items(self):
-        root = self.ui.treeWidget_2.invisibleRootItem()
+        root = self.ui.treeWidget.invisibleRootItem()
         item_count = root.childCount()
         for i in range(item_count):
             item = root.child(i)
             item.setCheckState(0, Qt.Unchecked)
 
     def select_all_items(self):
-        root = self.ui.treeWidget_2.invisibleRootItem()
+        root = self.ui.treeWidget.invisibleRootItem()
         item_count = root.childCount()
         for i in range(item_count):
             item = root.child(i)
@@ -911,7 +911,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
     def start_single_video(self):
         self.update_settings()
-        url = self.ui.lineedit_url_2.text()
+        url = self.ui.lineedit_url.text()
         api_language = self.api_language
         one_time_iterator = []
         if url.endswith(".html"):
@@ -923,7 +923,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         self.add_to_tree_widget_thread(iterator=one_time_iterator, search_limit=self.search_limit)
 
     def start_model(self):
-        model = self.ui.lineedit_model_url_2.text()
+        model = self.ui.lineedit_model_url.text()
         api_language = self.api_language
         search_limit = self.search_limit
         if not isinstance(self.client, Client):
@@ -1090,8 +1090,8 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
     """
 
     def login(self):
-        username = self.ui.lineedit_username_2.text()
-        password = self.ui.lineedit_password_2.text()
+        username = self.ui.lineedit_username.text()
+        password = self.ui.lineedit_password.text()
         self.update_settings()
 
         try:
