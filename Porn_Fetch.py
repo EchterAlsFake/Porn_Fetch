@@ -10,11 +10,12 @@ Version 3.0
 import sys
 import os.path
 import time
-
+print("1")
 import requests
 import markdown
 import src.frontend.resources
 
+print("2")
 from colorama import *
 from datetime import datetime
 from hqporner_api.api import API
@@ -22,6 +23,7 @@ from configparser import ConfigParser
 from hue_shift import return_color, reset
 from phub import Quality, Client, locals, errors, download, Video, HTMLQuery
 
+print("3")
 from src.backend.shared_functions import (strip_title, check_video, check_if_video_exists, setup_config_file,
                                           logger_debug, correct_output_path)
 from src.frontend.License import Ui_License
@@ -32,6 +34,7 @@ from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, 
 from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QFileDialog,
                                QTreeWidgetItem)
 from PySide6.QtGui import QIcon
+print("4")
 
 categories = [attr for attr in dir(locals.Category) if
               not callable(getattr(locals.Category, attr)) and not attr.startswith("__")]
@@ -397,9 +400,11 @@ class PornFetch(QWidget):
         self.conf = ConfigParser()
         self.conf.read("config.ini")
 
+        print("6")
         # UI relevant initialization:
         self.ui = Ui_Porn_Fetch_Widget()
         self.ui.setupUi(self)
+        print("7")
         self.button_connectors()
         self.load_icons()
         self.settings_maps_initialization()
@@ -1378,5 +1383,7 @@ def main():
 
 
 if __name__ == "__main__":
+    print("0")
     setup_config_file()
+    print("5")
     main()
