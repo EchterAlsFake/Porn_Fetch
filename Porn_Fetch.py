@@ -9,6 +9,8 @@ Version 3.0
 
 import sys
 import os.path
+import time
+
 import requests
 import markdown
 import src.frontend.resources
@@ -523,6 +525,8 @@ class PornFetch(QWidget):
 
     def switch_to_credits(self):
         self.ui.stacked_widget_main.setCurrentIndex(3)
+        self.show_credits()
+        time.sleep(0.3)
         self.show_credits()
 
     def switch_login_button_state(self):
