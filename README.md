@@ -61,7 +61,8 @@ Easy-to-use build scripts are available for various platforms. Run these in your
 
 ### For Ubuntu, Windows, Arch Linux, Termux, iSH, Fedora, OpenSUSE:
 ```bash
-wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install.sh" | bash
+wget "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install.sh" -O install.sh
+bash install.sh
 ```
 ### For Termux:
 ```bash

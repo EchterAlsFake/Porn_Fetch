@@ -81,6 +81,5 @@ pip install -r requirements.txt
 pip install pyinstaller
 pyinstaller -F Porn_Fetch.py
 cd dist
-mv widget Porn_Fetch
 chmod +x Porn_Fetch
 echo "Porn Fetch is now installed to $(pwd)/"

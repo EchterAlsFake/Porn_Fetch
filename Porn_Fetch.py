@@ -10,6 +10,7 @@ Version 3.0
 import sys
 import os.path
 import time
+import argparse
 
 import markdown
 import src.frontend.resources
@@ -36,6 +37,7 @@ from PySide6.QtGui import QIcon
 total_segments = 0
 downloaded_segments = 0
 
+__version__ = "beta-3.0"
 
 def ui_popup(text):
     """ A simple UI popup that will be used for small messages to the user."""
@@ -1380,5 +1382,14 @@ def main():
 
 
 if __name__ == "__main__":
-    setup_config_file()
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-v", "--version", help="Shows the version information", action="store_true")
+
+    args = parser.parse_args()
+
+    if args.version:
+        print(__version__)
+
+    else:
+        setup_config_file()
+        main()
