@@ -11,9 +11,12 @@
 </p>
 
 <p align="center">
+  <a href=="https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.0"><strong>Download Version 3.0 (BETA)</strong></a> ·
   <a href="https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/2.9"><strong>Download Version 2.9</strong></a> ·
   <a href="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md"><strong>Development Update V3.0</strong></a>
 </p>
+
+![Alt text](/relative/path/to/img.jpg?raw=true "Optional Title")
 
 ## 🚀 Quick Links
 - [Features](#-features)
@@ -50,7 +53,7 @@
 
 ## 🌐 Supported Websites
 - [PornHub.com](https://github.com/Egsagon/PHUB)
-- [HQPorner.com](https://github.com/EchterAlsFake/hqporner_api) (Since v2.8)
+- [HQPorner.com](https://github.com/EchterAlsFake/hqporner_api)
 
 ## 🔨 Building from Source
 Easy-to-use build scripts are available for various platforms. Run these in your terminal:
@@ -101,10 +104,8 @@ Important: Usage of Porn Fetch may not be in compliance with PornHub's terms of 
 ## 👏 Credits
 - API: [PHUB](https://github.com/Egsagon/PHUB)
 - GUI: [Qt](https://qt.io) for Python
-- Android: Kivy, KivyMD
-- [Other Libraries](#external-libraries)
+### See [Credits]()
 
 ## 📚 License
 Licensed under [GPL 3](https://www.gnu.org/licenses/gpl-3.0.en.html).
-
-<a href="https://iconscout.com/icons/list" class="text-underline font-size-sm" target="_blank">List</a> by <a href="https://iconscout.com/contributors/iyikon" class="text-underline font-size-sm" target="_blank">Iyikon ...</a>
+ 

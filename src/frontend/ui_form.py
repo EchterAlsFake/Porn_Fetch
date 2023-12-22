@@ -691,30 +691,6 @@ class Ui_Porn_Fetch_Widget(object):
         self.groupBox.setObjectName(u"groupBox")
         self.gridLayout_11 = QGridLayout(self.groupBox)
         self.gridLayout_11.setObjectName(u"gridLayout_11")
-        self.groupbox_performance_semaphore = QGroupBox(self.groupBox)
-        self.groupbox_performance_semaphore.setObjectName(u"groupbox_performance_semaphore")
-        self.gridLayout_22 = QGridLayout(self.groupbox_performance_semaphore)
-        self.gridLayout_22.setObjectName(u"gridLayout_22")
-        self.label_semaphore = QLabel(self.groupbox_performance_semaphore)
-        self.label_semaphore.setObjectName(u"label_semaphore")
-
-        self.gridLayout_22.addWidget(self.label_semaphore, 0, 0, 1, 1)
-
-        self.button_semaphore_help = QPushButton(self.groupbox_performance_semaphore)
-        self.button_semaphore_help.setObjectName(u"button_semaphore_help")
-
-        self.gridLayout_22.addWidget(self.button_semaphore_help, 1, 0, 1, 2)
-
-        self.spinbox_semaphore = QSpinBox(self.groupbox_performance_semaphore)
-        self.spinbox_semaphore.setObjectName(u"spinbox_semaphore")
-        self.spinbox_semaphore.setMinimum(1)
-        self.spinbox_semaphore.setMaximum(10)
-
-        self.gridLayout_22.addWidget(self.spinbox_semaphore, 0, 1, 1, 1)
-
-
-        self.gridLayout_11.addWidget(self.groupbox_performance_semaphore, 1, 0, 1, 1)
-
         self.groupbox_performance_threading = QGroupBox(self.groupBox)
         self.groupbox_performance_threading.setObjectName(u"groupbox_performance_threading")
         self.gridLayout_20 = QGridLayout(self.groupbox_performance_threading)
@@ -758,40 +734,6 @@ class Ui_Porn_Fetch_Widget(object):
 
 
         self.gridLayout_11.addWidget(self.groupbox_performance_threading_mode, 1, 1, 1, 1)
-
-        self.groupBox_6 = QGroupBox(self.groupBox)
-        self.groupBox_6.setObjectName(u"groupBox_6")
-        self.gridLayout_13 = QGridLayout(self.groupBox_6)
-        self.gridLayout_13.setObjectName(u"gridLayout_13")
-        self.groupbox_GUI_language = QGroupBox(self.groupBox_6)
-        self.groupbox_GUI_language.setObjectName(u"groupbox_GUI_language")
-        self.gridLayout_29 = QGridLayout(self.groupbox_GUI_language)
-        self.gridLayout_29.setObjectName(u"gridLayout_29")
-        self.radio_ui_language_german = QRadioButton(self.groupbox_GUI_language)
-        self.radio_ui_language_german.setObjectName(u"radio_ui_language_german")
-
-        self.gridLayout_29.addWidget(self.radio_ui_language_german, 0, 1, 1, 1)
-
-        self.radio_ui_language_english = QRadioButton(self.groupbox_GUI_language)
-        self.radio_ui_language_english.setObjectName(u"radio_ui_language_english")
-
-        self.gridLayout_29.addWidget(self.radio_ui_language_english, 0, 0, 1, 1)
-
-        self.radio_ui_language_french = QRadioButton(self.groupbox_GUI_language)
-        self.radio_ui_language_french.setObjectName(u"radio_ui_language_french")
-
-        self.gridLayout_29.addWidget(self.radio_ui_language_french, 0, 2, 1, 1)
-
-        self.radio_ui_language_system = QRadioButton(self.groupbox_GUI_language)
-        self.radio_ui_language_system.setObjectName(u"radio_ui_language_system")
-
-        self.gridLayout_29.addWidget(self.radio_ui_language_system, 0, 3, 1, 1)
-
-
-        self.gridLayout_13.addWidget(self.groupbox_GUI_language, 0, 0, 1, 1)
-
-
-        self.gridLayout_11.addWidget(self.groupBox_6, 3, 0, 1, 2)
 
         self.groupBox_2 = QGroupBox(self.groupBox)
         self.groupBox_2.setObjectName(u"groupBox_2")
@@ -920,13 +862,67 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_11.addWidget(self.groupBox_2, 2, 0, 1, 2)
 
+        self.groupbox_performance_semaphore = QGroupBox(self.groupBox)
+        self.groupbox_performance_semaphore.setObjectName(u"groupbox_performance_semaphore")
+        self.gridLayout_22 = QGridLayout(self.groupbox_performance_semaphore)
+        self.gridLayout_22.setObjectName(u"gridLayout_22")
+        self.label_semaphore = QLabel(self.groupbox_performance_semaphore)
+        self.label_semaphore.setObjectName(u"label_semaphore")
 
-        self.gridLayout_15.addWidget(self.groupBox, 0, 0, 1, 1)
+        self.gridLayout_22.addWidget(self.label_semaphore, 0, 0, 1, 1)
 
-        self.button_settings_apply = QPushButton(self.page_2)
+        self.button_semaphore_help = QPushButton(self.groupbox_performance_semaphore)
+        self.button_semaphore_help.setObjectName(u"button_semaphore_help")
+
+        self.gridLayout_22.addWidget(self.button_semaphore_help, 1, 0, 1, 2)
+
+        self.spinbox_semaphore = QSpinBox(self.groupbox_performance_semaphore)
+        self.spinbox_semaphore.setObjectName(u"spinbox_semaphore")
+        self.spinbox_semaphore.setMinimum(1)
+        self.spinbox_semaphore.setMaximum(10)
+
+        self.gridLayout_22.addWidget(self.spinbox_semaphore, 0, 1, 1, 1)
+
+
+        self.gridLayout_11.addWidget(self.groupbox_performance_semaphore, 1, 0, 1, 1)
+
+        self.groupBox_6 = QGroupBox(self.groupBox)
+        self.groupBox_6.setObjectName(u"groupBox_6")
+        self.gridLayout_13 = QGridLayout(self.groupBox_6)
+        self.gridLayout_13.setObjectName(u"gridLayout_13")
+        self.groupbox_GUI_language = QGroupBox(self.groupBox_6)
+        self.groupbox_GUI_language.setObjectName(u"groupbox_GUI_language")
+        self.gridLayout_29 = QGridLayout(self.groupbox_GUI_language)
+        self.gridLayout_29.setObjectName(u"gridLayout_29")
+        self.radio_ui_language_english = QRadioButton(self.groupbox_GUI_language)
+        self.radio_ui_language_english.setObjectName(u"radio_ui_language_english")
+
+        self.gridLayout_29.addWidget(self.radio_ui_language_english, 0, 0, 1, 1)
+
+        self.radio_ui_language_german = QRadioButton(self.groupbox_GUI_language)
+        self.radio_ui_language_german.setObjectName(u"radio_ui_language_german")
+
+        self.gridLayout_29.addWidget(self.radio_ui_language_german, 0, 1, 1, 1)
+
+        self.radio_ui_language_french = QRadioButton(self.groupbox_GUI_language)
+        self.radio_ui_language_french.setObjectName(u"radio_ui_language_french")
+        self.radio_ui_language_french.setEnabled(False)
+
+        self.gridLayout_29.addWidget(self.radio_ui_language_french, 0, 2, 1, 1)
+
+
+        self.gridLayout_13.addWidget(self.groupbox_GUI_language, 0, 0, 1, 1)
+
+
+        self.gridLayout_11.addWidget(self.groupBox_6, 3, 0, 1, 2)
+
+        self.button_settings_apply = QPushButton(self.groupBox)
         self.button_settings_apply.setObjectName(u"button_settings_apply")
 
-        self.gridLayout_15.addWidget(self.button_settings_apply, 1, 0, 1, 1)
+        self.gridLayout_11.addWidget(self.button_settings_apply, 4, 0, 1, 2)
+
+
+        self.gridLayout_15.addWidget(self.groupBox, 0, 0, 1, 1)
 
 
         self.gridLayout_25.addLayout(self.gridLayout_15, 0, 0, 1, 1)
@@ -1474,7 +1470,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.retranslateUi(Porn_Fetch_Widget)
 
-        self.stacked_widget_main.setCurrentIndex(0)
+        self.stacked_widget_main.setCurrentIndex(1)
         self.stacked_widget_top.setCurrentIndex(0)
 
 
@@ -1526,9 +1522,6 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_model_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Model URL:", None))
         self.label_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"URL:", None))
         self.groupBox.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Performance Settings", None))
-        self.groupbox_performance_semaphore.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Semaphore", None))
-        self.label_semaphore.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Semaphore:", None))
-        self.button_semaphore_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
         self.groupbox_performance_threading.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Threading?", None))
         self.radio_threading_no.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
         self.radio_threading_yes.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
@@ -1537,12 +1530,6 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_threading_mode_default.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Default", None))
         self.radio_threading_mode_ffmpeg.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"FFMPEG", None))
         self.button_threading_mode_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
-        self.groupBox_6.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface Settings", None))
-        self.groupbox_GUI_language.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface Language (Neeeds restart)", None))
-        self.radio_ui_language_german.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
-        self.radio_ui_language_english.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"English", None))
-        self.radio_ui_language_french.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))
-        self.radio_ui_language_system.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"System Default", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Video Settings", None))
         self.groupbox_video_quality.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Quality", None))
         self.radio_quality_half.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Half", None))
@@ -1565,6 +1552,14 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_api_language_custom.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Custom", None))
         self.groupbox_searching.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Searching", None))
         self.label_searching_limit.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Limit:", None))
+        self.groupbox_performance_semaphore.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Semaphore", None))
+        self.label_semaphore.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Semaphore:", None))
+        self.button_semaphore_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
+        self.groupBox_6.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface Settings", None))
+        self.groupbox_GUI_language.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface Language (Neeeds restart)", None))
+        self.radio_ui_language_english.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"English", None))
+        self.radio_ui_language_german.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
+        self.radio_ui_language_french.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))
         self.button_settings_apply.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Apply / Reload", None))
         self.groupbox_advanced_user_information.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Advanced User Information", None))
         self.label_height.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Height:", None))

@@ -164,7 +164,7 @@
         <item row="0" column="1">
          <widget class="QStackedWidget" name="stacked_widget_main">
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="page">
            <layout class="QGridLayout" name="gridLayout_8">
@@ -1058,39 +1058,6 @@ QPushButton:pressed {
                  <string>Performance Settings</string>
                 </property>
                 <layout class="QGridLayout" name="gridLayout_11">
-                 <item row="1" column="0">
-                  <widget class="QGroupBox" name="groupbox_performance_semaphore">
-                   <property name="title">
-                    <string>Semaphore</string>
-                   </property>
-                   <layout class="QGridLayout" name="gridLayout_22">
-                    <item row="0" column="0">
-                     <widget class="QLabel" name="label_semaphore">
-                      <property name="text">
-                       <string>Semaphore:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="0" colspan="2">
-                     <widget class="QPushButton" name="button_semaphore_help">
-                      <property name="text">
-                       <string>Help</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="1">
-                     <widget class="QSpinBox" name="spinbox_semaphore">
-                      <property name="minimum">
-                       <number>1</number>
-                      </property>
-                      <property name="maximum">
-                       <number>10</number>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
-                 </item>
                  <item row="0" column="0" colspan="2">
                   <widget class="QGroupBox" name="groupbox_performance_threading">
                    <property name="title">
@@ -1146,52 +1113,6 @@ QPushButton:pressed {
                       <property name="text">
                        <string>Help</string>
                       </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
-                 </item>
-                 <item row="3" column="0" colspan="2">
-                  <widget class="QGroupBox" name="groupBox_6">
-                   <property name="title">
-                    <string>Graphical User Interface Settings</string>
-                   </property>
-                   <layout class="QGridLayout" name="gridLayout_13">
-                    <item row="0" column="0">
-                     <widget class="QGroupBox" name="groupbox_GUI_language">
-                      <property name="title">
-                       <string>Graphical User Interface Language (Neeeds restart)</string>
-                      </property>
-                      <layout class="QGridLayout" name="gridLayout_29">
-                       <item row="0" column="1">
-                        <widget class="QRadioButton" name="radio_ui_language_german">
-                         <property name="text">
-                          <string>German</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="0">
-                        <widget class="QRadioButton" name="radio_ui_language_english">
-                         <property name="text">
-                          <string>English</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="2">
-                        <widget class="QRadioButton" name="radio_ui_language_french">
-                         <property name="text">
-                          <string>French</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="3">
-                        <widget class="QRadioButton" name="radio_ui_language_system">
-                         <property name="text">
-                          <string>System Default</string>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
                      </widget>
                     </item>
                    </layout>
@@ -1371,14 +1292,89 @@ QPushButton:pressed {
                    </layout>
                   </widget>
                  </item>
+                 <item row="1" column="0">
+                  <widget class="QGroupBox" name="groupbox_performance_semaphore">
+                   <property name="title">
+                    <string>Semaphore</string>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_22">
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_semaphore">
+                      <property name="text">
+                       <string>Semaphore:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0" colspan="2">
+                     <widget class="QPushButton" name="button_semaphore_help">
+                      <property name="text">
+                       <string>Help</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QSpinBox" name="spinbox_semaphore">
+                      <property name="minimum">
+                       <number>1</number>
+                      </property>
+                      <property name="maximum">
+                       <number>10</number>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="3" column="0" colspan="2">
+                  <widget class="QGroupBox" name="groupBox_6">
+                   <property name="title">
+                    <string>Graphical User Interface Settings</string>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_13">
+                    <item row="0" column="0">
+                     <widget class="QGroupBox" name="groupbox_GUI_language">
+                      <property name="title">
+                       <string>Graphical User Interface Language (Neeeds restart)</string>
+                      </property>
+                      <layout class="QGridLayout" name="gridLayout_29">
+                       <item row="0" column="0">
+                        <widget class="QRadioButton" name="radio_ui_language_english">
+                         <property name="text">
+                          <string>English</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="1">
+                        <widget class="QRadioButton" name="radio_ui_language_german">
+                         <property name="text">
+                          <string>German</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="2">
+                        <widget class="QRadioButton" name="radio_ui_language_french">
+                         <property name="enabled">
+                          <bool>false</bool>
+                         </property>
+                         <property name="text">
+                          <string>French</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="4" column="0" colspan="2">
+                  <widget class="QPushButton" name="button_settings_apply">
+                   <property name="text">
+                    <string>Apply / Reload</string>
+                   </property>
+                  </widget>
+                 </item>
                 </layout>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QPushButton" name="button_settings_apply">
-                <property name="text">
-                 <string>Apply / Reload</string>
-                </property>
                </widget>
               </item>
              </layout>

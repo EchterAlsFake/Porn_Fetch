@@ -39,7 +39,12 @@ downloaded_segments = 0
 
 def ui_popup(text):
     """ A simple UI popup that will be used for small messages to the user."""
+    file = QFile(":/style/stylesheets/stylesheet_ui_popup.qss")
+    file.open(QFile.ReadOnly | QFile.Text)
+    stream = QTextStream(file)
+
     qmsg_box = QMessageBox()
+    qmsg_box.setStyleSheet(stream.readAll())
     qmsg_box.setText(text)
     qmsg_box.exec()
 
@@ -399,10 +404,10 @@ class PornFetch(QWidget):
         self.ui.setupUi(self)
         self.button_connectors()
         self.load_icons()
+        self.language_strings()
         self.settings_maps_initialization()
         self.load_user_settings()
         self.update_settings()
-        self.language_strings()
         self.ui.treeWidget.setColumnWidth(0, 600)
         self.ui.treeWidget.setColumnWidth(1, 200)
         self.ui.stacked_widget_main.setCurrentIndex(0)
@@ -1143,7 +1148,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
     def basic_search(self):
         self.update_settings()
-        query = self.ui.lineedit_search_query_2.text()
+        query = self.ui.lineedit_search_query.text()
         language = self.api_language
         search_limit = self.search_limit
         client = Client(language=language)
