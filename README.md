@@ -1,12 +1,12 @@
 # Dev Information:
 
-I have currently not the time to maintain this. School in Germnay is really hard in October - December.
-I'll make a big update. You can expect it at late December. Thanks everyone for supporting this project!
+Version 3 is actually finished. I only need to implement searching, filters and some minor UI & performance
+tweaks.
 
-Update:
+I need to wait for Egsagon to fix the queries and then I can release V3
 
-Something negative happened in my life (my fault), and my brain is some kind of shocked. I don't know
-when I'll be back. Maybe tomorrow I feel great again, or it takes a month.
+### If you want to test V3, use the detached3 branch
+
 
 # Porn Fetch - A Free & Open-Source PornHub Downloader 
 
