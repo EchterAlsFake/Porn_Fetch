@@ -32,8 +32,18 @@
 
 # Android:
 
-I'll try to compile PySide6 to Android. If I get that working, I could make a lot
-of progress for it. It would be so easy for me and I wouldn't need to learn Kivy.
+2023 - 24. December 
+
+I have some interesting news to share. I tried compiling PySide6 to Android the last 3 hours, and I am as close as I've
+never been. I am literally at the process, where Gradle is trying to build the java project. (Buildozer)
+
+I will try to do further in the next days. But even if I get PySide6 running, I have no idea how tf I am supposed to
+get the PHUB library and all the other stuff running. I would need to make a custom receipt and do a lot of stuff.
+
+Kivy was hard, but this is hell :)
+
+But every day I get a step closer, and you know what... If I get that done, I'd be the first who compiles PySide6 :) 
+
 
 
 - [] PySide6 to Android (will probably fail ;) 
@@ -45,30 +55,4 @@ of progress for it. It would be so easy for me and I wouldn't need to learn Kivy
 - [] Debugging / Logging
 
 
-
-
-
-# Layout:
-
-
-99% of developers are completely bad at design. Porn Fetch is also not the greatest and 
-most intuitive app, but I'll change that and I got some nice ideas:
-
-The goal is to make the app bigger, but more intuitive by using 3 widgets.
-
-1)  :
-
-The main widget will include the basic Downloading process, progressbars,
-status reports, error logs, explanations and is some kind of "homepage"
-
-2)  :
-
-The account widget will include the account, the feed, information about users, filters, 
-regexes, user search and pornstar search
-
-3) : The third widget will be about the settings and credits for the project.
-
-
-
-I know it maybe sounds weird, but you'll see when it's done :) 
 
