@@ -49,6 +49,13 @@ Update: 2023 - 25. December
 So, I got an error, which I can't fix. The error is related to a broken Java class in a Qt Module. 
 I am now trying with different versions. The Last version was 6.6.1, and I am now going to try with the Qt 7 beta version.
 
+# I FUCKING DID IT
+
+I GOT THE ANDROID APP WORKING, OH MY FUCKING GOD. I'll now try to port Porn Fetch into Android, but this will take
+weeks. BUT I FUCKING GOT IT OMG
+
+
+
 - [] PySide6 to Android (will probably fail ;) 
 - [] Download from file
 - [] Download from Model
