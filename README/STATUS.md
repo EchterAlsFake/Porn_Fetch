@@ -44,7 +44,10 @@ Kivy was hard, but this is hell :)
 
 But every day I get a step closer, and you know what... If I get that done, I'd be the first who compiles PySide6 :) 
 
+Update: 2023 - 25. December
 
+So, I got an error, which I can't fix. The error is related to a broken Java class in a Qt Module. 
+I am now trying with different versions. The Last version was 6.6.1, and I am now going to try with the Qt 7 beta version.
 
 - [] PySide6 to Android (will probably fail ;) 
 - [] Download from file
