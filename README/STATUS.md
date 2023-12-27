@@ -32,31 +32,15 @@
 
 # Android:
 
-2023 - 24. December 
-
-I have some interesting news to share. I tried compiling PySide6 to Android the last 3 hours, and I am as close as I've
-never been. I am literally at the process, where Gradle is trying to build the java project. (Buildozer)
-
-I will try to do further in the next days. But even if I get PySide6 running, I have no idea how tf I am supposed to
-get the PHUB library and all the other stuff running. I would need to make a custom receipt and do a lot of stuff.
-
-Kivy was hard, but this is hell :)
-
-But every day I get a step closer, and you know what... If I get that done, I'd be the first who compiles PySide6 :) 
-
-Update: 2023 - 25. December
-
-So, I got an error, which I can't fix. The error is related to a broken Java class in a Qt Module. 
-I am now trying with different versions. The Last version was 6.6.1, and I am now going to try with the Qt 7 beta version.
-
-# I FUCKING DID IT
-
-I GOT THE ANDROID APP WORKING, OH MY FUCKING GOD. I'll now try to port Porn Fetch into Android, but this will take
-weeks. BUT I FUCKING GOT IT OMG
+Okay, So I got the frontend for my Application working. I also got external libraries working. Unfortunately,
+the official pyside6-android-deploy script is a bit buggy, so I needed to modify it in order to work for it.
+<br>The problem is now, that the Android build uses Python 3.10. I'll try to get it for Python 3.11, but I'll
+<br>try to make it work with Python 3.10. I need to wait for Egsagon to update the PHUB Library with the py-3.9
+<br>Branch, and then I can start working on it.
 
 
 
-- [] PySide6 to Android (will probably fail ;) 
+- [x] PySide6 to Android (will probably fail ;) (Nah it didn't :) 
 - [] Download from file
 - [] Download from Model
 - [] Search Query support
