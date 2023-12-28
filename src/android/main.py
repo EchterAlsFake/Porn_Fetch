@@ -31,7 +31,6 @@ class Setup(QWidget):
         self.threadpool = QThreadPool()
         self.ui.pushButton.clicked.connect(self.get_output_path)
 
-
     def get_output_path(self):
         if os.path.exists("/storage/emulated/0/Download"):
             send_error_log("Storage Download location exists!")
