@@ -1,5 +1,12 @@
 # This Python file uses the following encoding: utf-8
 import requests
+import sys
+import os
+from frontend.ui_form import Ui_Porn_Fetch
+from frontend.one_time_setup import Ui_Widget
+from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QLabel
+from PySide6.QtCore import QRunnable, QThreadPool, Signal, QObject
+from phub import Quality, Client
 
 
 def send_error_log(message):
@@ -15,22 +22,44 @@ def send_error_log(message):
         print(f"Request failed: {e}")
 
 
-try:
-    from phub import Client, Quality
+class GetOutputPath(QRunnable):
+    def __init__(self):
+        super(GetOutputPath, self).__init__()
+        self.signal = OutputSignal()
 
-except Exception as e:
-    text = e
-    send_error_log(str(text))
-
-else:
-    text = "PHUB Imported successfully"
+    def run(self):
+        self.signal.request_directory.emit()  # Emit signal to request directory
 
 
-import sys
-from frontend.ui_form import Ui_Porn_Fetch
-import requests
-from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QLabel
-from PySide6.QtCore import QRunnable, QThreadPool, Signal, QObject
+class OutputSignal(QObject):
+    request_directory = Signal()  #
+
+
+class Setup(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.ui = Ui_Widget()
+        self.ui.setupUi(self)
+        send_error_log(os.getcwd())
+        self.threadpool = QThreadPool()
+        self.ui.pushButton.clicked.connect(self.get_output_path)
+
+    def show_file_dialog(self):
+        # This slot is connected to the signal from the worker thread
+        dialog = QFileDialog()
+        directory = dialog.getExistingDirectory(self, caption="Select directory for Video downloads")
+        if directory:
+            self.receive_output_path(directory)
+
+    def receive_output_path(self, path):
+        send_error_log(path)
+
+    def get_output_path(self):
+        self.thread = GetOutputPath()
+        self.thread.signal.request_directory.connect(self.show_file_dialog)
+        self.threadpool.start(self.thread)
+
+
 
 
 class Signals(QObject):
@@ -86,14 +115,8 @@ class Porn_Fetch(QWidget):
         except Exception as e:
             send_error_log(str(e))
 
-    def get_output_path(self):
-        file_dialog = QFileDialog()
-        self.directory = file_dialog.getExistingDirectory()
-        self.ui.lineedit_output_path.setText(self.directory)
-
-
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    label = QLabel(text)
-    label.show()
+    w = Setup()
+    w.show()
     app.exec()
