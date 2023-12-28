@@ -22,19 +22,6 @@ def send_error_log(message):
         print(f"Request failed: {e}")
 
 
-class GetOutputPath(QRunnable):
-    def __init__(self):
-        super(GetOutputPath, self).__init__()
-        self.signal = OutputSignal()
-
-    def run(self):
-        self.signal.request_directory.emit()  # Emit signal to request directory
-
-
-class OutputSignal(QObject):
-    request_directory = Signal()  #
-
-
 class Setup(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -44,20 +31,18 @@ class Setup(QWidget):
         self.threadpool = QThreadPool()
         self.ui.pushButton.clicked.connect(self.get_output_path)
 
-    def show_file_dialog(self):
-        # This slot is connected to the signal from the worker thread
-        dialog = QFileDialog()
-        directory = dialog.getExistingDirectory(self, caption="Select directory for Video downloads")
-        if directory:
-            self.receive_output_path(directory)
-
-    def receive_output_path(self, path):
-        send_error_log(path)
 
     def get_output_path(self):
-        self.thread = GetOutputPath()
-        self.thread.signal.request_directory.connect(self.show_file_dialog)
-        self.threadpool.start(self.thread)
+        if os.path.exists("/storage/emulated/0/Download"):
+            send_error_log("Storage Download location exists!")
+
+            with open("/storage/emulated/0/Download/test.txt", "w") as x:
+                x.write("""Hello World""")
+                send_error_log("Successfully wrote file")
+                x.close()
+
+        else:
+            send_error_log("Location doesn't exist... (FUCK)")
 
 
 
