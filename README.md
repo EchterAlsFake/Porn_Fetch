@@ -76,7 +76,11 @@ Set-ExecutionPolicy Bypass -Scope Process
 Invoke-Expression (Invoke-WebRequest -Uri https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_windows.ps1 -UseBasicParsing).Content
 ```
 ## 📱 Android
-The Android version is in active development. For the latest build, download from [here](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/2.9).
+I am currently working very hard to convert Porn Fetch from PySide6 version 3 to Android. 
+<br>I am actively on it. As long as I am working you can use the Kivy version entirely made by ChatGPT :)
+<br>For the latest Kivy build, download from [here](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/2.9).
+
+Note: The Android version is tested and developed on Android 13!
 
 ### Building for Android
 Use [this script](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/scripts/build_android.sh) to build on Ubuntu 22.04.3.
@@ -87,7 +91,7 @@ Run the CLI version of Porn Fetch via the 'iSH' app on iOS.
 
 ### Building for iOS
 Kivy-based apps can be converted for iOS, but I need community assistance for testing and compiling. Contact me on Discord (echteralsfake | EchterAlsFake#7164) if you can help.
-
+<br>I have no interest in developing Porn Fetch for iOS by myself. I don't have an iOS device and I won't ever have one.
 ## 🌍 Translating
 Currently available in:
 - German (3.0)
