@@ -24,7 +24,7 @@ class Ui_Porn_Fetch(object):
     def setupUi(self, Porn_Fetch):
         if not Porn_Fetch.objectName():
             Porn_Fetch.setObjectName(u"Porn_Fetch")
-        Porn_Fetch.resize(1628, 663)
+        Porn_Fetch.resize(396, 598)
         self.gridLayout_3 = QGridLayout(Porn_Fetch)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.widget = QWidget(Porn_Fetch)
@@ -100,41 +100,6 @@ class Ui_Porn_Fetch(object):
         self.page.setObjectName(u"page")
         self.gridLayout_7 = QGridLayout(self.page)
         self.gridLayout_7.setObjectName(u"gridLayout_7")
-        self.gridLayout_2 = QGridLayout()
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.label = QLabel(self.page)
-        self.label.setObjectName(u"label")
-
-        self.gridLayout_2.addWidget(self.label, 0, 0, 1, 1)
-
-        self.button_download = QPushButton(self.page)
-        self.button_download.setObjectName(u"button_download")
-
-        self.gridLayout_2.addWidget(self.button_download, 0, 2, 1, 1)
-
-        self.lineedit_video_url = QLineEdit(self.page)
-        self.lineedit_video_url.setObjectName(u"lineedit_video_url")
-
-        self.gridLayout_2.addWidget(self.lineedit_video_url, 0, 1, 1, 1)
-
-        self.label_2 = QLabel(self.page)
-        self.label_2.setObjectName(u"label_2")
-
-        self.gridLayout_2.addWidget(self.label_2, 1, 0, 1, 1)
-
-        self.lineedit_model_url = QLineEdit(self.page)
-        self.lineedit_model_url.setObjectName(u"lineedit_model_url")
-
-        self.gridLayout_2.addWidget(self.lineedit_model_url, 1, 1, 1, 1)
-
-        self.button_get_model_videos = QPushButton(self.page)
-        self.button_get_model_videos.setObjectName(u"button_get_model_videos")
-
-        self.gridLayout_2.addWidget(self.button_get_model_videos, 1, 2, 1, 1)
-
-
-        self.gridLayout_7.addLayout(self.gridLayout_2, 0, 0, 1, 1)
-
         self.gridLayout_4 = QGridLayout()
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.button_unselect_all = QPushButton(self.page)
@@ -157,7 +122,7 @@ class Ui_Porn_Fetch(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1482, 464))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 301, 592))
         self.gridLayout_5 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_5.setObjectName(u"gridLayout_5")
         self.treeWidget = QTreeWidget(self.scrollAreaWidgetContents)
@@ -172,9 +137,95 @@ class Ui_Porn_Fetch(object):
 
         self.gridLayout_7.addLayout(self.gridLayout_4, 1, 0, 1, 1)
 
+        self.gridLayout_2 = QGridLayout()
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.label_2 = QLabel(self.page)
+        self.label_2.setObjectName(u"label_2")
+
+        self.gridLayout_2.addWidget(self.label_2, 1, 0, 1, 1)
+
+        self.lineedit_model_url = QLineEdit(self.page)
+        self.lineedit_model_url.setObjectName(u"lineedit_model_url")
+
+        self.gridLayout_2.addWidget(self.lineedit_model_url, 1, 1, 1, 1)
+
+        self.lineedit_video_url = QLineEdit(self.page)
+        self.lineedit_video_url.setObjectName(u"lineedit_video_url")
+
+        self.gridLayout_2.addWidget(self.lineedit_video_url, 0, 1, 1, 1)
+
+        self.button_get_model_videos = QPushButton(self.page)
+        self.button_get_model_videos.setObjectName(u"button_get_model_videos")
+
+        self.gridLayout_2.addWidget(self.button_get_model_videos, 1, 2, 1, 1)
+
+        self.label = QLabel(self.page)
+        self.label.setObjectName(u"label")
+
+        self.gridLayout_2.addWidget(self.label, 0, 0, 1, 1)
+
+        self.button_download = QPushButton(self.page)
+        self.button_download.setObjectName(u"button_download")
+
+        self.gridLayout_2.addWidget(self.button_download, 0, 2, 1, 1)
+
+
+        self.gridLayout_7.addLayout(self.gridLayout_2, 0, 0, 1, 1)
+
         self.stackedWidget.addWidget(self.page)
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
+        self.gridLayout_9 = QGridLayout(self.page_2)
+        self.gridLayout_9.setObjectName(u"gridLayout_9")
+        self.gridLayout_8 = QGridLayout()
+        self.gridLayout_8.setObjectName(u"gridLayout_8")
+        self.label_password = QLabel(self.page_2)
+        self.label_password.setObjectName(u"label_password")
+
+        self.gridLayout_8.addWidget(self.label_password, 1, 0, 1, 1)
+
+        self.button_get_recommended_videos = QPushButton(self.page_2)
+        self.button_get_recommended_videos.setObjectName(u"button_get_recommended_videos")
+
+        self.gridLayout_8.addWidget(self.button_get_recommended_videos, 3, 1, 1, 2)
+
+        self.lineedit_username = QLineEdit(self.page_2)
+        self.lineedit_username.setObjectName(u"lineedit_username")
+
+        self.gridLayout_8.addWidget(self.lineedit_username, 0, 1, 1, 1)
+
+        self.button_get_watched_videos = QPushButton(self.page_2)
+        self.button_get_watched_videos.setObjectName(u"button_get_watched_videos")
+
+        self.gridLayout_8.addWidget(self.button_get_watched_videos, 4, 0, 1, 3)
+
+        self.lineedit_password = QLineEdit(self.page_2)
+        self.lineedit_password.setObjectName(u"lineedit_password")
+
+        self.gridLayout_8.addWidget(self.lineedit_password, 1, 1, 1, 1)
+
+        self.button_get_liked_videos = QPushButton(self.page_2)
+        self.button_get_liked_videos.setObjectName(u"button_get_liked_videos")
+
+        self.gridLayout_8.addWidget(self.button_get_liked_videos, 3, 0, 1, 1)
+
+        self.label_username = QLabel(self.page_2)
+        self.label_username.setObjectName(u"label_username")
+
+        self.gridLayout_8.addWidget(self.label_username, 0, 0, 1, 1)
+
+        self.button_login = QPushButton(self.page_2)
+        self.button_login.setObjectName(u"button_login")
+
+        self.gridLayout_8.addWidget(self.button_login, 2, 0, 1, 2)
+
+
+        self.gridLayout_9.addLayout(self.gridLayout_8, 0, 0, 1, 1)
+
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout_9.addItem(self.verticalSpacer_2, 1, 0, 1, 1)
+
         self.stackedWidget.addWidget(self.page_2)
 
         self.gridLayout_3.addWidget(self.stackedWidget, 0, 1, 1, 1)
@@ -182,25 +233,34 @@ class Ui_Porn_Fetch(object):
 
         self.retranslateUi(Porn_Fetch)
 
+        self.stackedWidget.setCurrentIndex(1)
+
+
         QMetaObject.connectSlotsByName(Porn_Fetch)
     # setupUi
 
     def retranslateUi(self, Porn_Fetch):
         Porn_Fetch.setWindowTitle(QCoreApplication.translate("Porn_Fetch", u"Porn_Fetch", None))
-        self.button_home.setText("")
-        self.button_account.setText(QCoreApplication.translate("Porn_Fetch", u"D", None))
+        self.button_home.setText(QCoreApplication.translate("Porn_Fetch", u"Home", None))
+        self.button_account.setText(QCoreApplication.translate("Porn_Fetch", u"Account", None))
         self.button_metadata.setText(QCoreApplication.translate("Porn_Fetch", u"PushButton", None))
         self.button_credits.setText(QCoreApplication.translate("Porn_Fetch", u"PushButton", None))
         self.label_3.setText(QCoreApplication.translate("Porn_Fetch", u"Total:", None))
         self.label_4.setText(QCoreApplication.translate("Porn_Fetch", u"PornHub:", None))
-        self.label.setText(QCoreApplication.translate("Porn_Fetch", u"Video URL:", None))
-        self.button_download.setText(QCoreApplication.translate("Porn_Fetch", u"Start", None))
-        self.label_2.setText(QCoreApplication.translate("Porn_Fetch", u"Model URL:", None))
-        self.button_get_model_videos.setText(QCoreApplication.translate("Porn_Fetch", u"Get videos", None))
         self.button_unselect_all.setText(QCoreApplication.translate("Porn_Fetch", u"Unselect all", None))
         self.button_download_tree_widget.setText(QCoreApplication.translate("Porn_Fetch", u"Download", None))
         self.button_select_all.setText(QCoreApplication.translate("Porn_Fetch", u"Select all", None))
         ___qtreewidgetitem = self.treeWidget.headerItem()
         ___qtreewidgetitem.setText(0, QCoreApplication.translate("Porn_Fetch", u"Title", None));
+        self.label_2.setText(QCoreApplication.translate("Porn_Fetch", u"Model URL:", None))
+        self.button_get_model_videos.setText(QCoreApplication.translate("Porn_Fetch", u"Get videos", None))
+        self.label.setText(QCoreApplication.translate("Porn_Fetch", u"Video URL:", None))
+        self.button_download.setText(QCoreApplication.translate("Porn_Fetch", u"Start", None))
+        self.label_password.setText(QCoreApplication.translate("Porn_Fetch", u"Password:", None))
+        self.button_get_recommended_videos.setText(QCoreApplication.translate("Porn_Fetch", u"Get recommended videos", None))
+        self.button_get_watched_videos.setText(QCoreApplication.translate("Porn_Fetch", u"Get watched videos", None))
+        self.button_get_liked_videos.setText(QCoreApplication.translate("Porn_Fetch", u"Get liked videos", None))
+        self.label_username.setText(QCoreApplication.translate("Porn_Fetch", u"Username:", None))
+        self.button_login.setText(QCoreApplication.translate("Porn_Fetch", u"Login", None))
     # retranslateUi
 

@@ -4,10 +4,10 @@ import sys
 import os
 
 from frontend.ui_form import Ui_Porn_Fetch
-from PySide6.QtWidgets import QApplication, QWidget, QLabel, QTreeWidgetItem
+from PySide6.QtWidgets import QApplication, QWidget, QLabel, QTreeWidgetItem, QMessageBox
 from PySide6.QtCore import QRunnable, QThreadPool, Signal, QObject, Qt, QSemaphore, QFile, QTextStream
 from PySide6.QtGui import QIcon
-from phub import Quality, Client, Video
+from phub import Quality, Client, Video, errors
 
 total_segments = 0
 downloaded_segments = 0
@@ -135,6 +135,13 @@ class Porn_Fetch(QWidget):
         self.ui.button_unselect_all.clicked.connect(self.unselect_all_items)
         self.ui.button_get_model_videos.clicked.connect(self.get_model_videos)
         self.ui.button_download.clicked.connect(self.download_single_video)
+        self.ui.button_home.clicked.connect(self.switch_home)
+        self.ui.button_account.clicked.connect(self.switch_account)
+        self.ui.button_login.clicked.connect(self.login)
+        self.ui.button_get_liked_videos.clicked.connect(self.get_liked_videos)
+        self.ui.button_get_watched_videos.clicked.connect(self.get_watched_videos)
+        self.ui.button_get_recommended_videos.clicked.connect(self.get_recommended_videos)
+
 
     def load_icons(self):
         self.ui.button_home.setIcon(QIcon(":/images/graphics/download.svg"))
@@ -149,6 +156,12 @@ class Porn_Fetch(QWidget):
 
         self.ui.progressbar_pornhub.setStyleSheet(stream_progress_pornhub.readAll())
         self.ui.progressbar_total.setStyleSheet(stream_progress_total.readAll())
+
+    def switch_account(self):
+        self.ui.stackedWidget.setCurrentIndex(1)
+
+    def switch_home(self):
+        self.ui.stackedWidget.setCurrentIndex(0)
 
     def update_progress(self, pos, total):
         self.ui.progressbar_pornhub.setMaximum(total)
@@ -216,6 +229,32 @@ class Porn_Fetch(QWidget):
         download_tree_thread.signals.start_undefined_range.connect(self.start_undefined_range)
         download_tree_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
         self.threadpool.start(download_tree_thread)
+
+    def login(self):
+        username = self.ui.lineedit_username.text()
+        password = self.ui.lineedit_password.text()
+        try:
+            self.client = Client(username, password, language="en")
+            qmessage_box = QMessageBox()
+            qmessage_box.setText("Login Successful")
+            qmessage_box.exec()
+
+        except errors.LoginFailed:
+            qmessage_box = QMessageBox()
+            qmessage_box.setText("Login failed!")
+            qmessage_box.exec()
+
+    def get_watched_videos(self):
+        self.add_to_tree_widget(self.client.account.watched)
+        self.switch_home()
+
+    def get_liked_videos(self):
+        self.add_to_tree_widget(self.client.account.liked)
+        self.switch_home()
+
+    def get_recommended_videos(self):
+        self.add_to_tree_widget(self.client.account.recommended)
+        self.switch_home()
 
 
 if __name__ == "__main__":
