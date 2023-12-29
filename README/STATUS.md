@@ -32,17 +32,12 @@
 
 # Android:
 
-Okay, So I got the frontend for my Application working. I also got external libraries working. Unfortunately,
-the official pyside6-android-deploy script is a bit buggy, so I needed to modify it in order to work for it.
-<br>The problem is now, that the Android build uses Python 3.10. I'll try to get it for Python 3.11, but I'll
-<br>try to make it work with Python 3.10. I need to wait for Egsagon to update the PHUB Library with the py-3.9
-<br>Branch, and then I can start working on it.
+Android is now in full development, although I still have issues with Storage permissions.
 
 
 
-- [x] PySide6 to Android (will probably fail ;) (Nah it didn't :) 
-- [] Download from file
-- [] Download from Model
+- [x] PySide6 to Android (will probably fail ;) (Nah it didn't :)
+- [x] Download from Model
 - [] Search Query support
 - [] Persistent settings
 - [] Title stripping
