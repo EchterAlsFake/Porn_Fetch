@@ -122,7 +122,7 @@ class Ui_Porn_Fetch(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 301, 592))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 250, 399))
         self.gridLayout_5 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_5.setObjectName(u"gridLayout_5")
         self.treeWidget = QTreeWidget(self.scrollAreaWidgetContents)
@@ -201,6 +201,7 @@ class Ui_Porn_Fetch(object):
 
         self.lineedit_password = QLineEdit(self.page_2)
         self.lineedit_password.setObjectName(u"lineedit_password")
+        self.lineedit_password.setEchoMode(QLineEdit.Password)
 
         self.gridLayout_8.addWidget(self.lineedit_password, 1, 1, 1, 1)
 

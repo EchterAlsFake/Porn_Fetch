@@ -437,11 +437,11 @@ class PornFetch(QWidget):
         file_progressbar_total.open(QFile.ReadOnly | QFile.Text)
         stream_progress_total = QTextStream(file_progressbar_total)
 
-        file_stylesheet_button_blue = QFile(":/style/stylesheets/stylesheet_button_blue")
-        file_stylesheet_button_orange = QFile(":/style/stylesheets/stylesheet_button_orange")
-        file_stylesheet_button_purple = QFile(":/style/stylesheets/stylesheet_button_purple")
-        file_stylesheet_button_login = QFile(":/style/stylesheets/stylesheet_button_login")
-        file_stylesheet_button_logins = QFile(":/style/stylesheets/stylesheet_buttons_login")
+        file_stylesheet_button_blue = QFile(":/style/stylesheets/stylesheet_button_blue.qss")
+        file_stylesheet_button_orange = QFile(":/style/stylesheets/stylesheet_button_orange.qss")
+        file_stylesheet_button_purple = QFile(":/style/stylesheets/stylesheet_button_purple.qss")
+        file_stylesheet_button_login = QFile(":/style/stylesheets/stylesheet_button_login.qss")
+        file_stylesheet_button_logins = QFile(":/style/stylesheets/stylesheet_buttons_login.qss")
 
         file_stylesheet_button_blue.open(QFile.ReadOnly | QFile.Text)
         stream_button_blue = QTextStream(file_stylesheet_button_blue)

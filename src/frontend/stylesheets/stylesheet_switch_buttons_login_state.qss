@@ -23,6 +23,3 @@ QPushButton:pressed {
     border-color: #FF6347;
     border-style: inset; /* Changes the style to look "pressed" */
 }
-
-
-"""

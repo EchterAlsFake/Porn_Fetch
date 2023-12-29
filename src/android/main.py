@@ -128,7 +128,7 @@ class Porn_Fetch(QWidget):
         self.output_path = "/storage/emulated/0/Download/"
         self.client = Client()
         self.semaphore = QSemaphore(2)
-        self.load_icons()
+        self.load_style()
 
         self.ui.button_download_tree_widget.clicked.connect(self.download_tree_widget)
         self.ui.button_select_all.clicked.connect(self.select_all_items)
@@ -142,9 +142,9 @@ class Porn_Fetch(QWidget):
         self.ui.button_get_watched_videos.clicked.connect(self.get_watched_videos)
         self.ui.button_get_recommended_videos.clicked.connect(self.get_recommended_videos)
 
-
-    def load_icons(self):
-        self.ui.button_home.setIcon(QIcon(":/images/graphics/download.svg"))
+    def load_style(self):
+        """a simple function to load the icons for the buttons"""
+        self.setWindowIcon(QIcon(":/images/graphics/logo_transparent.ico"))
 
         file_progress_pornhub = QFile(":/style/stylesheets/progressbar_pornhub.qss")
         file_progress_pornhub.open(QFile.ReadOnly | QFile.Text)
@@ -153,6 +153,42 @@ class Porn_Fetch(QWidget):
         file_progressbar_total = QFile(":/style/stylesheets/progressbar_total.qss")
         file_progressbar_total.open(QFile.ReadOnly | QFile.Text)
         stream_progress_total = QTextStream(file_progressbar_total)
+
+        file_stylesheet_button_blue = QFile(":/style/stylesheets/stylesheet_button_blue.qss")
+        file_stylesheet_button_orange = QFile(":/style/stylesheets/stylesheet_button_orange.qss")
+        file_stylesheet_button_purple = QFile(":/style/stylesheets/stylesheet_button_purple.qss")
+        file_stylesheet_button_login = QFile(":/style/stylesheets/stylesheet_button_login.qss")
+        file_stylesheet_button_logins = QFile(":/style/stylesheets/stylesheet_buttons_login.qss")
+
+        file_stylesheet_button_blue.open(QFile.ReadOnly | QFile.Text)
+        stream_button_blue = QTextStream(file_stylesheet_button_blue)
+        file_stylesheet_button_logins.open(QFile.ReadOnly | QFile.Text)
+        stream_button_logins = QTextStream(file_stylesheet_button_logins)
+        file_stylesheet_button_login.open(QFile.ReadOnly | QFile.Text)
+        stream_button_login = QTextStream(file_stylesheet_button_login)
+        file_stylesheet_button_orange.open(QFile.ReadOnly | QFile.Text)
+        stream_button_orange = QTextStream(file_stylesheet_button_orange)
+        file_stylesheet_button_purple.open(QFile.ReadOnly | QFile.Text)
+        stream_button_purple = QTextStream(file_stylesheet_button_purple)
+
+        blue = stream_button_blue.readAll()
+        orange = stream_button_orange.readAll()
+        purple = stream_button_purple.readAll()
+        login = stream_button_login.readAll()
+        logins = stream_button_logins.readAll()
+
+
+        self.ui.button_home.setStyleSheet(purple)
+        self.ui.button_account.setStyleSheet(purple)
+        self.ui.button_login.setStyleSheet(login)
+        self.ui.button_get_watched_videos.setStyleSheet(logins)
+        self.ui.button_get_liked_videos.setStyleSheet(logins)
+        self.ui.button_get_recommended_videos.setStyleSheet(logins)
+        self.ui.button_download.setStyleSheet(purple)
+        self.ui.button_get_model_videos.setStyleSheet(purple)
+        self.ui.button_download_tree_widget.setStyleSheet(purple)
+        self.ui.button_select_all.setStyleSheet(orange)
+        self.ui.button_unselect_all.setStyleSheet(blue)
 
         self.ui.progressbar_pornhub.setStyleSheet(stream_progress_pornhub.readAll())
         self.ui.progressbar_total.setStyleSheet(stream_progress_total.readAll())
@@ -235,6 +271,7 @@ class Porn_Fetch(QWidget):
         password = self.ui.lineedit_password.text()
         try:
             self.client = Client(username, password, language="en")
+            self.switch_login_button_state()
             qmessage_box = QMessageBox()
             qmessage_box.setText("Login Successful")
             qmessage_box.exec()
@@ -243,6 +280,16 @@ class Porn_Fetch(QWidget):
             qmessage_box = QMessageBox()
             qmessage_box.setText("Login failed!")
             qmessage_box.exec()
+
+    def switch_login_button_state(self):
+        file = QFile(":/style/stylesheets/stylesheet_switch_buttons_login_state.qss")
+        file.open(QFile.ReadOnly | QFile.Text)
+        stream = QTextStream(file)
+        stylesheet = stream.readAll()
+
+        self.ui.button_get_liked_videos.setStyleSheet(stylesheet)
+        self.ui.button_get_watched_videos.setStyleSheet(stylesheet)
+        self.ui.button_get_recommended_videos.setStyleSheet(stylesheet)
 
     def get_watched_videos(self):
         self.add_to_tree_widget(self.client.account.watched)

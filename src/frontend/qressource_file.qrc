@@ -16,12 +16,12 @@
         <file>stylesheets/progressbar_pornhub.qss</file>
         <file>stylesheets/progressbar_total.qss</file>
         <file>stylesheets/stylesheet_ui_popup.qss</file>
-        <file>stylesheets/stylesheet_button_blue</file>
-        <file>stylesheets/stylesheet_button_orange</file>
-        <file>stylesheets/stylesheet_button_purple</file>
-        <file>stylesheets/stylesheet_button_login</file>
-        <file>stylesheets/stylesheet_buttons_login</file>
-        <file>stylesheets/stylesheet_switch_buttons_login_state</file>
+        <file>stylesheets/stylesheet_button_blue.qss</file>
+        <file>stylesheets/stylesheet_button_orange.qss</file>
+        <file>stylesheets/stylesheet_button_purple.qss</file>
+        <file>stylesheets/stylesheet_button_login.qss</file>
+        <file>stylesheets/stylesheet_buttons_login.qss</file>
+        <file>stylesheets/stylesheet_switch_buttons_login_state.qss</file>
     </qresource>
     <qresource prefix="/credits">
         <file>../../README/CREDITS.md</file>
