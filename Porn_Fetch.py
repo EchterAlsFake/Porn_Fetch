@@ -406,7 +406,7 @@ class PornFetch(QWidget):
         self.ui = Ui_Porn_Fetch_Widget()
         self.ui.setupUi(self)
         self.button_connectors()
-        self.load_icons()
+        self.load_style()
         self.language_strings()
         self.settings_maps_initialization()
         self.load_user_settings()
@@ -416,7 +416,7 @@ class PornFetch(QWidget):
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(0)
 
-    def load_icons(self):
+    def load_style(self):
         """a simple function to load the icons for the buttons"""
         self.ui.button_switch_search.setIcon(QIcon(":/images/graphics/search.svg"))
         self.ui.button_switch_home.setIcon(QIcon(":/images/graphics/download.svg"))
@@ -436,6 +436,46 @@ class PornFetch(QWidget):
         file_progressbar_total = QFile(":/style/stylesheets/progressbar_total.qss")
         file_progressbar_total.open(QFile.ReadOnly | QFile.Text)
         stream_progress_total = QTextStream(file_progressbar_total)
+
+        file_stylesheet_button_blue = QFile(":/style/stylesheets/stylesheet_button_blue")
+        file_stylesheet_button_orange = QFile(":/style/stylesheets/stylesheet_button_orange")
+        file_stylesheet_button_purple = QFile(":/style/stylesheets/stylesheet_button_purple")
+        file_stylesheet_button_login = QFile(":/style/stylesheets/stylesheet_button_login")
+        file_stylesheet_button_logins = QFile(":/style/stylesheets/stylesheet_buttons_login")
+
+        file_stylesheet_button_blue.open(QFile.ReadOnly | QFile.Text)
+        stream_button_blue = QTextStream(file_stylesheet_button_blue)
+        file_stylesheet_button_logins.open(QFile.ReadOnly | QFile.Text)
+        stream_button_logins = QTextStream(file_stylesheet_button_logins)
+        file_stylesheet_button_login.open(QFile.ReadOnly | QFile.Text)
+        stream_button_login = QTextStream(file_stylesheet_button_login)
+        file_stylesheet_button_orange.open(QFile.ReadOnly | QFile.Text)
+        stream_button_orange = QTextStream(file_stylesheet_button_orange)
+        file_stylesheet_button_purple.open(QFile.ReadOnly | QFile.Text)
+        stream_button_purple = QTextStream(file_stylesheet_button_purple)
+
+        blue = stream_button_blue.readAll()
+        orange = stream_button_orange.readAll()
+        purple = stream_button_purple.readAll()
+        login = stream_button_login.readAll()
+        logins = stream_button_logins.readAll()
+
+        self.ui.button_login.setStyleSheet(login)
+        self.ui.button_get_watched_videos.setStyleSheet(logins)
+        self.ui.button_get_liked_videos.setStyleSheet(logins)
+        self.ui.button_get_recommended_videos.setStyleSheet(logins)
+        self.ui.button_download.setStyleSheet(purple)
+        self.ui.button_model.setStyleSheet(purple)
+        self.ui.button_open_file.setStyleSheet(purple)
+        self.ui.button_search_videos.setStyleSheet(purple)
+        self.ui.button_tree_download.setStyleSheet(purple)
+        self.ui.button_metadata_user_start.setStyleSheet(purple)
+        self.ui.button_metadata_video_start.setStyleSheet(purple)
+        self.ui.button_user_download_avatar.setStyleSheet(purple)
+        self.ui.button_user_get_bio.setStyleSheet(purple)
+        self.ui.button_video_thumbnail_download.setStyleSheet(purple)
+        self.ui.button_tree_select_all.setStyleSheet(orange)
+        self.ui.button_tree_unselect_all.setStyleSheet(blue)
 
         self.ui.progressbar_pornhub.setStyleSheet(stream_progress_pornhub.readAll())
         self.ui.progressbar_hqporner.setStyleSheet(stream_progress_hqporner.readAll())
@@ -535,35 +575,10 @@ class PornFetch(QWidget):
         self.show_credits()
 
     def switch_login_button_state(self):
-        stylesheet = """
-QPushButton {
-    /* Base style */
-    background-color: #FFA500; /* Orange background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #FFA500;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #40E0D0; /* Turquoise for hover */
-    border-color: #40E0D0;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #FF6347; /* Darker shade of orange when pressed */
-    border-color: #FF6347;
-    border-style: inset; /* Changes the style to look "pressed" */
-}
-
-
-"""
+        file = QFile(":/style/stylesheets/stylesheet_switch_buttons_login_state.qss")
+        file.open(QFile.ReadOnly | QFile.Text)
+        stream = QTextStream(file)
+        stylesheet = stream.readAll()
 
         self.ui.button_get_liked_videos.setStyleSheet(stylesheet)
         self.ui.button_get_watched_videos.setStyleSheet(stylesheet)

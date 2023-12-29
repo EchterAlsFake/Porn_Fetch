@@ -1,0 +1,25 @@
+QPushButton {
+    /* Base style */
+    background-color: #4CAF50; /* Green background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    border-color: #4CAF50;
+    font: bold 14px;
+    min-width: 10em;
+    padding: 6px;
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #66BB6A;
+    border-color: #66BB6A;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #388E3C;
+    border-color: #388E3C;
+    border-style: inset; /* Changes the style to look "pressed" */
+}

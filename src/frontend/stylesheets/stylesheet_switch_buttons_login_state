@@ -1,0 +1,28 @@
+QPushButton {
+    /* Base style */
+    background-color: #FFA500; /* Orange background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #FFA500;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #40E0D0; /* Turquoise for hover */
+    border-color: #40E0D0;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #FF6347; /* Darker shade of orange when pressed */
+    border-color: #FF6347;
+    border-style: inset; /* Changes the style to look "pressed" */
+}
+
+
+"""
