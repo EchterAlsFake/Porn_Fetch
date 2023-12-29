@@ -18,7 +18,7 @@ import src.frontend.resources
 from colorama import Fore
 from requests.exceptions import SSLError
 from datetime import datetime
-from hqporner_api.api import API
+from hqporner_api.api import Client as hq_Client, Quality as hq_Quality
 from configparser import ConfigParser
 from hue_shift import return_color, reset
 from phub import Quality, Client, errors, download, Video, HTMLQuery
@@ -115,10 +115,10 @@ class AddToTreeWidget(QRunnable):
 
             for i, video in enumerate(self.iterator, start=1):
                 if str(video).endswith(".html"):
-                    title = API().extract_title(url=str(video))
+                    title = hq_Client().get_video(str(video)).video_title
                     if self.data_mode == 1:
-                        duration = API().get_video_length(url=str(video))
-                        author = API().extract_actress(url=str(video))
+                        duration = hq_Client().get_video(str(video)).video_length
+                        author = hq_Client().get_video(str(video)).pornstars
                         author = "".join(author)
 
                     else:
@@ -192,8 +192,8 @@ class DownloadThread(QRunnable):
                                     display=self.callback)
 
             else:
-                API().download(url=self.video, output_path=self.output_path, callback=self.callback_hqporner,
-                               no_title=True, quality="highest")
+                hq_Client().get_video(url=str(self.video)).download(quality=hq_Quality.BEST, output_path=self.output_path, callback=self.callback_hqporner,
+                               no_title=True)
 
         finally:
             self.signals_completed.completed.emit()
@@ -739,9 +739,6 @@ QPushButton:pressed {
         elif self.gui_language == "fr":
             self.ui.radio_ui_language_french.setChecked(True)
 
-        elif self.gui_language == "system":
-            self.ui.radio_ui_language_system.setChecked(True)
-
         self.semaphore = QSemaphore(int(self.semaphore_limit))
         self.logger_debug("Loaded User Settings!")
 
@@ -789,9 +786,6 @@ QPushButton:pressed {
 
         elif self.ui.radio_ui_language_english.isChecked():
             self.conf.set("UI", "language", "en")
-
-        elif self.ui.radio_ui_language_system.isChecked():
-            self.conf.set("UI", "language", "system")
 
         self.update_settings()
 
@@ -966,7 +960,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
             output_path = correct_output_path(output_path)
 
             if str(url).endswith(".html"):
-                title = API().extract_title(url)
+                title = hq_Client().get_video(str(url)).video_title
 
             else:
                 title = video.title
@@ -976,7 +970,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
             if directory_system:
                 if str(url).endswith(".html"):
-                    author = API().extract_actress(url)[0]
+                    author = hq_Client().get_video(str(url)).pornstars[0]
 
                 else:
                     author = video.author.name
