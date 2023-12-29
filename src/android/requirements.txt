@@ -8,4 +8,4 @@ Usually I don't give version numbers, cuz why. But here it's mandatory.
 Append the following line to the requirements in buildozer.spec:
 (Porn Fetch Android won't support hqporner, therefore the hqporner_api library isn't needed)
 
-charset-normalizer==2.1.1,git+https://github.com/Egsagon/PHUB@py-3.9,idna,urllib3,certifi,hue_shift,plyer,markdown,colorama,requests,bs4
+,charset-normalizer==2.1.1,git+https://github.com/Egsagon/PHUB@py-3.9,idna,urllib3,certifi,hue_shift,plyer,markdown,colorama,requests,bs4

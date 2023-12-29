@@ -3,9 +3,8 @@ import requests
 import sys
 import os
 from frontend.ui_form import Ui_Porn_Fetch
-from frontend.one_time_setup import Ui_Widget
-from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QLabel
-from PySide6.QtCore import QRunnable, QThreadPool, Signal, QObject
+from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QLabel, QTreeWidgetItem
+from PySide6.QtCore import QRunnable, QThreadPool, Signal, QObject, Qt, QSemaphore
 from phub import Quality, Client
 
 
@@ -22,28 +21,18 @@ def send_error_log(message):
         print(f"Request failed: {e}")
 
 
-class Setup(QWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.ui = Ui_Widget()
-        self.ui.setupUi(self)
-        send_error_log(os.getcwd())
-        self.threadpool = QThreadPool()
-        self.ui.pushButton.clicked.connect(self.get_output_path)
+def get_output_path():
+    if os.path.exists("/storage/emulated/0/Download"):
+        send_error_log("Storage Download location exists!")
 
-    def get_output_path(self):
-        if os.path.exists("/storage/emulated/0/Download"):
-            send_error_log("Storage Download location exists!")
+        with open("/storage/emulated/0/Download/test.txt", "w") as x:
+            x.write("""Hello World""")
+            send_error_log("Successfully wrote file")
+            x.close()
+            return True
 
-            with open("/storage/emulated/0/Download/test.txt", "w") as x:
-                x.write("""Hello World""")
-                send_error_log("Successfully wrote file")
-                x.close()
-
-        else:
-            send_error_log("Location doesn't exist... (FUCK)")
-
-
+    else:
+        send_error_log("Location doesn't exist... (FUCK)")
 
 
 class Signals(QObject):
@@ -65,6 +54,7 @@ class Download(QRunnable):
     def run(self):
         try:
             self.video.download(self.output_path, quality=self.quality, display=self.callback)
+            self.signals.finished.emit()
         except Exception as e:
             send_error_log(str(e))
 
@@ -77,30 +67,80 @@ class Porn_Fetch(QWidget):
         self.ui.setupUi(self)
         self.threadpool = QThreadPool()
         self.quality = Quality.BEST
-        self.ui.button_output_path.clicked.connect(self.get_output_path)
-        self.ui.button_download.clicked.connect(self.download_video)
+        self.output_path = "/storage/emulated/0/Download"
+        self.client = Client()
+
+        self.ui.button_download_tree_widget.clicked.connect(self.download_tree_widget)
+        self.ui.button_select_all.clicked.connect(self.select_all_items)
+        self.ui.button_unselect_all.clicked.connect(self.unselect_all_items)
+        self.ui.button_get_model_videos.clicked.connect(self.get_model_videos)
+        self.ui.button_download.clicked.connect(self.download_single_video)
 
     def update_progress(self, pos, total):
         self.ui.button_progressbar.setMaximum(total)
         self.ui.button_progressbar.setValue(pos)
 
-    def download_video(self):
-        url = self.ui.lineedit_url.text()
-        quality = self.quality
-        output_path = self.directory
+    def unselect_all_items(self):
+        root = self.ui.treeWidget.invisibleRootItem()
+        item_count = root.childCount()
+        for i in range(item_count):
+            item = root.child(i)
+            item.setCheckState(0, Qt.Unchecked)
 
-        video = Client(language="en").get(url)
+    def select_all_items(self):
+        root = self.ui.treeWidget.invisibleRootItem()
+        item_count = root.childCount()
+        for i in range(item_count):
+            item = root.child(i)
+            item.setCheckState(0, Qt.Checked)
 
-        try:
-            self.thread = Download(video=video, quality=quality, output_path=output_path)
+    def get_model_videos(self):
+        url = self.ui.lineedit_model_url.text()
+        videos = self.client.get_user(url)
+        self.add_to_tree_widget(iterator=videos.videos)
+
+    def download_single_video(self):
+        iterator = []
+        url = self.ui.lineedit_video_url.text()
+        iterator.append(self.client.get(url))
+        self.add_to_tree_widget(iterator=iterator)
+
+    def add_to_tree_widget(self, iterator):
+        for idx, video in enumerate(iterator):
+            title = video.title
+            item = QTreeWidgetItem(self.ui.treeWidget)
+            item.setText(0, f"{idx}) {title}")
+            item.setData(0, Qt.UserRole, video)
+            item.setCheckState(0, Qt.Unchecked)
+
+    def finished_download(self):
+        ""
+
+    def download_tree_widget(self):
+        video_objects = []
+        for i in range(self.ui.treeWidget.topLevelItemCount()):
+            item = self.ui.treeWidget.topLevelItem(i)
+            checkState = item.checkState(0)
+            if checkState == Qt.Checked:
+                video_objects.append(item.data(0, Qt.UserRole))
+
+        for video in video_objects:
+            self.thread = Download(video=video, quality=Quality.BEST, output_path=self.output_path)
             self.thread.signals.progress.connect(self.update_progress)
+            self.thread.signals.finished.connect(self.finished_download)
             self.threadpool.start(self.thread)
 
-        except Exception as e:
-            send_error_log(str(e))
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    w = Setup()
-    w.show()
+
+    if get_output_path():
+        w = Porn_Fetch()
+        w.show()
+
+
+    else:
+        label = QLabel("Porn Fetch doesn't work on your Android Version.")
+        label.show()
+
     app.exec()
