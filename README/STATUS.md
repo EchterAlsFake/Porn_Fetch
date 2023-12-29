@@ -38,6 +38,10 @@ Android is now in full development, although I still have issues with Storage pe
 
 - [x] PySide6 to Android (will probably fail ;) (Nah it didn't :)
 - [x] Download from Model
+- [x] Account
+- [x] Total progress tracking
+- [x] Single video download
+- [x] Tree Widget
 - [] Search Query support
 - [] Persistent settings
 - [] Title stripping
