@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>526</width>
-    <height>619</height>
+    <width>1628</width>
+    <height>663</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -89,10 +89,42 @@
      </layout>
     </widget>
    </item>
+   <item row="1" column="1">
+    <layout class="QGridLayout" name="gridLayout_6">
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Total:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>PornHub:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QProgressBar" name="progressbar_pornhub">
+       <property name="value">
+        <number>0</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QProgressBar" name="progressbar_total">
+       <property name="value">
+        <number>0</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
    <item row="0" column="1">
     <widget class="QStackedWidget" name="stackedWidget">
      <widget class="QWidget" name="page">
-      <layout class="QGridLayout" name="gridLayout_5">
+      <layout class="QGridLayout" name="gridLayout_7">
        <item row="0" column="0">
         <layout class="QGridLayout" name="gridLayout_2">
          <item row="0" column="0">
@@ -133,6 +165,13 @@
        </item>
        <item row="1" column="0">
         <layout class="QGridLayout" name="gridLayout_4">
+         <item row="1" column="2">
+          <widget class="QPushButton" name="button_unselect_all">
+           <property name="text">
+            <string>Unselect all</string>
+           </property>
+          </widget>
+         </item>
          <item row="1" column="0">
           <widget class="QPushButton" name="button_download_tree_widget">
            <property name="text">
@@ -147,20 +186,32 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="2">
-          <widget class="QPushButton" name="button_unselect_all">
-           <property name="text">
-            <string>Unselect all</string>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="0" colspan="3">
-          <widget class="QTreeWidget" name="treeWidget">
-           <column>
-            <property name="text">
-             <string>Title</string>
+          <widget class="QScrollArea" name="scrollArea">
+           <property name="widgetResizable">
+            <bool>true</bool>
+           </property>
+           <widget class="QWidget" name="scrollAreaWidgetContents">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>1482</width>
+              <height>464</height>
+             </rect>
             </property>
-           </column>
+            <layout class="QGridLayout" name="gridLayout_5">
+             <item row="0" column="0">
+              <widget class="QTreeWidget" name="treeWidget">
+               <column>
+                <property name="text">
+                 <string>Title</string>
+                </property>
+               </column>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </widget>
          </item>
         </layout>
@@ -169,17 +220,6 @@
      </widget>
      <widget class="QWidget" name="page_2"/>
     </widget>
-   </item>
-   <item row="1" column="1">
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QProgressBar" name="button_progressbar">
-       <property name="value">
-        <number>24</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
   </layout>
  </widget>

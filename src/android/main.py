@@ -2,11 +2,15 @@
 import requests
 import sys
 import os
-from frontend.ui_form import Ui_Porn_Fetch
-from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QLabel, QTreeWidgetItem
-from PySide6.QtCore import QRunnable, QThreadPool, Signal, QObject, Qt, QSemaphore
-from phub import Quality, Client
 
+from frontend.ui_form import Ui_Porn_Fetch
+from PySide6.QtWidgets import QApplication, QWidget, QLabel, QTreeWidgetItem
+from PySide6.QtCore import QRunnable, QThreadPool, Signal, QObject, Qt, QSemaphore, QFile, QTextStream
+from PySide6.QtGui import QIcon
+from phub import Quality, Client, Video
+
+total_segments = 0
+downloaded_segments = 0
 
 def send_error_log(message):
     url = "http://192.168.2.103:8000/error-log/"
@@ -21,23 +25,44 @@ def send_error_log(message):
         print(f"Request failed: {e}")
 
 
+try:
+    import frontend.resources
+    send_error_log("Successfully imported resources")
+
+except Exception as e:
+    send_error_log(f"{e}")
+
+
 def get_output_path():
     if os.path.exists("/storage/emulated/0/Download"):
-        send_error_log("Storage Download location exists!")
-
-        with open("/storage/emulated/0/Download/test.txt", "w") as x:
-            x.write("""Hello World""")
-            send_error_log("Successfully wrote file")
-            x.close()
+        if os.path.isfile("/storage/emulated/0/Download/test.txt"):
+            send_error_log("Text.txt already exists")
             return True
+
+        else:
+            send_error_log("Storage Download location exists!")
+            with open("/storage/emulated/0/Download/test.txt", "w") as x:
+                x.write("""Hello World""")
+                send_error_log("Successfully wrote file")
+                x.close()
+                return True
 
     else:
         send_error_log("Location doesn't exist... (FUCK)")
 
 
+class QTreeWidgetSignal(QObject):
+    """Signals needed across the QTreeWidget"""
+    progress = Signal(Video)
+    get_total = Signal(str, Quality)
+    start_undefined_range = Signal()
+    stop_undefined_range = Signal()
+
+
 class Signals(QObject):
     finished = Signal()
     progress = Signal(int, int)
+    total_progress = Signal(int, int)
 
 
 class Download(QRunnable):
@@ -51,12 +76,45 @@ class Download(QRunnable):
     def callback(self, pos, total):
         self.signals.progress.emit(pos, total)
 
+        global downloaded_segments
+        downloaded_segments += 1  # Assuming each call represents one segment
+        self.signals.total_progress.emit(downloaded_segments, total_segments)
+
     def run(self):
         try:
             self.video.download(self.output_path, quality=self.quality, display=self.callback)
             self.signals.finished.emit()
         except Exception as e:
             send_error_log(str(e))
+
+
+class DownloadTreeWidget(QRunnable):
+    def __init__(self, treeWidget, semaphore, quality):
+        super(DownloadTreeWidget, self).__init__()
+        self.treeWidget = treeWidget
+        self.semaphore = semaphore
+        self.quality = quality
+        self.signals = QTreeWidgetSignal()
+
+    def run(self):
+        self.signals.start_undefined_range.emit()
+
+        video_objects = []
+        for i in range(self.treeWidget.topLevelItemCount()):
+            item = self.treeWidget.topLevelItem(i)
+            checkState = item.checkState(0)
+            if checkState == Qt.Checked:
+                video_objects.append(item.data(0, Qt.UserRole))
+
+        global total_segments, downloaded_segments
+        total_segments = sum(
+            [len(list(video.get_segments(quality=self.quality))) for video in video_objects])
+
+        downloaded_segments = 0
+
+        self.signals.stop_undefined_range.emit()
+        for video in video_objects:
+            self.signals.progress.emit(video)
 
 
 class Porn_Fetch(QWidget):
@@ -67,8 +125,10 @@ class Porn_Fetch(QWidget):
         self.ui.setupUi(self)
         self.threadpool = QThreadPool()
         self.quality = Quality.BEST
-        self.output_path = "/storage/emulated/0/Download"
+        self.output_path = "/storage/emulated/0/Download/"
         self.client = Client()
+        self.semaphore = QSemaphore(2)
+        self.load_icons()
 
         self.ui.button_download_tree_widget.clicked.connect(self.download_tree_widget)
         self.ui.button_select_all.clicked.connect(self.select_all_items)
@@ -76,9 +136,27 @@ class Porn_Fetch(QWidget):
         self.ui.button_get_model_videos.clicked.connect(self.get_model_videos)
         self.ui.button_download.clicked.connect(self.download_single_video)
 
+    def load_icons(self):
+        self.ui.button_home.setIcon(QIcon(":/images/graphics/download.svg"))
+
+        file_progress_pornhub = QFile(":/style/stylesheets/progressbar_pornhub.qss")
+        file_progress_pornhub.open(QFile.ReadOnly | QFile.Text)
+        stream_progress_pornhub = QTextStream(file_progress_pornhub)
+
+        file_progressbar_total = QFile(":/style/stylesheets/progressbar_total.qss")
+        file_progressbar_total.open(QFile.ReadOnly | QFile.Text)
+        stream_progress_total = QTextStream(file_progressbar_total)
+
+        self.ui.progressbar_pornhub.setStyleSheet(stream_progress_pornhub.readAll())
+        self.ui.progressbar_total.setStyleSheet(stream_progress_total.readAll())
+
     def update_progress(self, pos, total):
-        self.ui.button_progressbar.setMaximum(total)
-        self.ui.button_progressbar.setValue(pos)
+        self.ui.progressbar_pornhub.setMaximum(total)
+        self.ui.progressbar_pornhub.setValue(pos)
+
+    def update_total_progress(self, downloaded_segments, total_segments):
+        self.ui.progressbar_total.setMaximum(total_segments)
+        self.ui.progressbar_total.setValue(downloaded_segments)
 
     def unselect_all_items(self):
         root = self.ui.treeWidget.invisibleRootItem()
@@ -114,33 +192,49 @@ class Porn_Fetch(QWidget):
             item.setCheckState(0, Qt.Unchecked)
 
     def finished_download(self):
-        ""
+        self.semaphore.release()
+
+    def tree_widget_completed(self, video):
+        self.thread = Download(video=video, quality=Quality.BEST, output_path=self.output_path)
+        self.thread.signals.progress.connect(self.update_progress)
+        self.thread.signals.total_progress.connect(self.update_total_progress)
+        self.thread.signals.finished.connect(self.finished_download)
+        self.threadpool.start(self.thread)
+
+    def start_undefined_range(self):
+        self.ui.progressbar_total.setRange(0, 0)
+
+    def stop_undefined_range(self):
+        self.ui.progressbar_total.setRange(0, 1)
 
     def download_tree_widget(self):
-        video_objects = []
-        for i in range(self.ui.treeWidget.topLevelItemCount()):
-            item = self.ui.treeWidget.topLevelItem(i)
-            checkState = item.checkState(0)
-            if checkState == Qt.Checked:
-                video_objects.append(item.data(0, Qt.UserRole))
-
-        for video in video_objects:
-            self.thread = Download(video=video, quality=Quality.BEST, output_path=self.output_path)
-            self.thread.signals.progress.connect(self.update_progress)
-            self.thread.signals.finished.connect(self.finished_download)
-            self.threadpool.start(self.thread)
+        semaphore = self.semaphore
+        treeWidget = self.ui.treeWidget
+        quality = self.quality
+        download_tree_thread = DownloadTreeWidget(treeWidget=treeWidget, semaphore=semaphore, quality=quality)
+        download_tree_thread.signals.progress.connect(self.tree_widget_completed)
+        download_tree_thread.signals.start_undefined_range.connect(self.start_undefined_range)
+        download_tree_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
+        self.threadpool.start(download_tree_thread)
 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    try:
+        file = QFile(":/style/stylesheets/stylesheet.qss")
+        file.open(QFile.ReadOnly | QFile.Text)
+        stream = QTextStream(file)
+        app.setStyleSheet(stream.readAll())
+
+    except Exception as e:
+        send_error_log(f"Error applying stylesheet: {e}")
 
     if get_output_path():
         w = Porn_Fetch()
         w.show()
 
-
     else:
-        label = QLabel("Porn Fetch doesn't work on your Android Version.")
+        label = QLabel("Porn Fetch can't write to your Download directory.")
         label.show()
 
     app.exec()

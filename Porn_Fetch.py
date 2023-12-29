@@ -39,6 +39,7 @@ downloaded_segments = 0
 
 __version__ = "beta-3.0"
 
+
 def ui_popup(text):
     """ A simple UI popup that will be used for small messages to the user."""
     file = QFile(":/style/stylesheets/stylesheet_ui_popup.qss")
