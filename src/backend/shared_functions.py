@@ -12,7 +12,7 @@ from hue_shift import return_color, reset
 from datetime import datetime
 from pymediainfo import MediaInfo
 from configparser import ConfigParser
-from hqporner_api.api import API
+from hqporner_api.api import Client
 
 """
 The following are the sections and options for the configuration file. Please don't change anything here, 
@@ -139,7 +139,7 @@ def check_if_video_exists(video, output_path):
         media_info = MediaInfo.parse(output_path)
 
         if str(video).endswith(".html"):
-            video_duration = API().get_video_length(str(video))
+            video_duration = Client().get_video(str(video)).video_length
             video_duration = convert_to_seconds(video_duration)
 
         else:

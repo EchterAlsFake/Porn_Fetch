@@ -172,7 +172,7 @@ class DownloadThread(QRunnable):
         downloaded_segments += 1  # Assuming each call represents one segment
         self.signals.total_progress.emit(downloaded_segments, total_segments)
 
-    def callback_hqporner(self, pos, total, identifier):
+    def callback_hqporner(self, pos, total):
         self.signals.progress_hqporner.emit(pos, total)
 
     def run(self):
