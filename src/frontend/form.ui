@@ -419,7 +419,7 @@
             <item row="0" column="0">
              <widget class="QStackedWidget" name="stacked_widget_top">
               <property name="currentIndex">
-               <number>0</number>
+               <number>1</number>
               </property>
               <widget class="QWidget" name="page_3">
                <layout class="QGridLayout" name="gridLayout_4">
@@ -1043,7 +1043,130 @@ QPushButton:pressed {
                 </item>
                </layout>
               </widget>
-              <widget class="QWidget" name="page_4"/>
+              <widget class="QWidget" name="page_4">
+               <layout class="QGridLayout" name="gridLayout_6">
+                <item row="0" column="0" colspan="4">
+                 <layout class="QGridLayout" name="gridLayout">
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_query_1">
+                    <property name="text">
+                     <string>Query:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="label_query_3">
+                    <property name="text">
+                     <string>Query:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QLineEdit" name="lineedit_search_users">
+                    <property name="placeholderText">
+                     <string>Search for Users (with filters defined below)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QLineEdit" name="lineedit_search_hqporner">
+                    <property name="placeholderText">
+                     <string>Search for videos on HQPorner.com</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_query_2">
+                    <property name="text">
+                     <string>Query:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QLineEdit" name="lineedit_seach_pornhub_filters">
+                    <property name="placeholderText">
+                     <string>Search on PornHub (with filters defined below)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="2">
+                   <widget class="QPushButton" name="button_search_hqporner">
+                    <property name="text">
+                     <string>Start</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="2">
+                   <widget class="QPushButton" name="button_search_pornhub_filters">
+                    <property name="text">
+                     <string>Start</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="2">
+                   <widget class="QPushButton" name="button_search_users">
+                    <property name="text">
+                     <string>Start</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item row="1" column="3">
+                 <widget class="QScrollArea" name="scroll_area_user_filters">
+                  <property name="widgetResizable">
+                   <bool>true</bool>
+                  </property>
+                  <widget class="QWidget" name="scrollAreaWidgetContents">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>0</y>
+                     <width>811</width>
+                     <height>556</height>
+                    </rect>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_16">
+                    <item row="0" column="0">
+                     <widget class="QGroupBox" name="groupbox_user_filters">
+                      <property name="title">
+                       <string>User Search filters</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QScrollArea" name="scrollarea_search_filters">
+                  <property name="widgetResizable">
+                   <bool>true</bool>
+                  </property>
+                  <widget class="QWidget" name="scrollAreaWidgetContents_2">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>0</y>
+                     <width>811</width>
+                     <height>556</height>
+                    </rect>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_10">
+                    <item row="0" column="0">
+                     <widget class="QGroupBox" name="groupBox_3">
+                      <property name="title">
+                       <string>Search Filters</string>
+                      </property>
+                      <layout class="QGridLayout" name="gridLayout_14"/>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
              </widget>
             </item>
            </layout>

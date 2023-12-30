@@ -30,7 +30,7 @@ from src.frontend.ui_form import Ui_Porn_Fetch_Widget
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                             QTranslator, QCoreApplication)
-from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QFileDialog,
+from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QFileDialog, QGridLayout, QCheckBox,
                                QTreeWidgetItem)
 from PySide6.QtGui import QIcon
 
@@ -409,6 +409,7 @@ class PornFetch(QWidget):
         self.ui.setupUi(self)
         self.button_connectors()
         self.load_style()
+        self.create_checkboxes()
         self.language_strings()
         self.settings_maps_initialization()
         self.load_user_settings()
@@ -483,6 +484,39 @@ class PornFetch(QWidget):
         self.ui.progressbar_hqporner.setStyleSheet(stream_progress_hqporner.readAll())
         self.ui.progressbar_total.setStyleSheet(stream_progress_total.readAll())
         self.logger_debug("Loaded Icons!")
+
+    def create_checkboxes(self):
+        self.checkboxes = {}
+        member_attributes = [
+            'IS_MODEL', 'IS_STAFF', 'IS_ONLINE', 'HAS_AVATAR', 'HAS_VIDEOS',
+            'HAS_PHOTOS', 'HAS_PLAYLISTS', 'OFFER_FAN_CLUB', 'OFFER_CUSTOM_VIDEOS',
+            'SINGLE', 'TAKEN', 'OPEN_RELATION', 'GENDER_MALE', 'GENDER_FEMALE',
+            'GENDER_COUPLE', 'GENDER_TRANS_FEMALE', 'GENDER_FEMALE_COUPLE',
+            'GENDER_TRANS_MALE', 'GENDER_NON_BINARY', 'GENDER_OTHER',
+            'INTO_NONE', 'INTO_MALE', 'INTO_FEMALE', 'INTO_ALL'
+        ]
+
+        layout = QGridLayout(self.ui.groupbox_user_filters)
+        row, col = 0, 0
+        for attr in member_attributes:
+            checkbox = QCheckBox(attr.replace('_', ' ').title())
+            checkbox.setObjectName(attr)
+            self.checkboxes[attr] = checkbox
+            layout.addWidget(checkbox, row, col)
+
+            col += 1
+            if col >= 3:  # Adjust the number of columns as needed
+                col = 0
+                row += 1
+
+    def get_checked_filters(self):
+        checked_filters = []
+        for attr, checkbox in self.checkboxes.items():
+            if checkbox.isChecked():
+                checked_filters.append(f'Member.{attr}')
+
+        return ' | '.join(checked_filters)
+
 
     def language_strings(self):
         """Contains the language strings. Needed for translation"""
