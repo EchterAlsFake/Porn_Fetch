@@ -12,7 +12,7 @@ from hue_shift import return_color, reset
 from datetime import datetime
 from pymediainfo import MediaInfo
 from configparser import ConfigParser
-from hqporner_api.api import Client
+from hqporner_api.api import Client as hq_Client, Video as hq_Video
 
 """
 The following are the sections and options for the configuration file. Please don't change anything here, 
@@ -78,13 +78,16 @@ def logger_debug(e):
 
 def check_video(url, language):
     if str(url).endswith(".html"):
-        return url
+        return hq_Client().get_video(url)
 
     else:
         if isinstance(url, Video):
             return url
 
-        if isinstance(url, str):
+        if isinstance(url, hq_Video):
+            return url
+
+        if isinstance(url, str) and not str(url).endswith(".html"):
             try:
                 return Client(language=language).get(url)
 
@@ -139,7 +142,7 @@ def check_if_video_exists(video, output_path):
         media_info = MediaInfo.parse(output_path)
 
         if str(video).endswith(".html"):
-            video_duration = Client().get_video(str(video)).video_length
+            video_duration = hq_Client().get_video(str(video)).video_length
             video_duration = convert_to_seconds(video_duration)
 
         else:

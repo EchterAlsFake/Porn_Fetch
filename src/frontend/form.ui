@@ -164,7 +164,7 @@
         <item row="0" column="1">
          <widget class="QStackedWidget" name="stacked_widget_main">
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="page">
            <layout class="QGridLayout" name="gridLayout_8">
@@ -754,7 +754,7 @@ QPushButton:pressed {
                      </size>
                     </property>
                     <property name="placeholderText">
-                     <string>Click Open File to select a file, or write the location here and click Open File.    URLs need to be separated with a new line. Supports HQPorner and PornHub</string>
+                     <string>Click Open File to select a file, or write the location here and click Open File. URLs need to be separated with a new line. Supports HQPorner and PornHub</string>
                     </property>
                    </widget>
                   </item>
@@ -773,7 +773,7 @@ QPushButton:pressed {
                      </size>
                     </property>
                     <property name="placeholderText">
-                     <string>Enter PornHub Model URL. This can be a Pornstar Account or a PornHub Channel. The videos will be listed down in the TreeWidget</string>
+                     <string>Enter PornHub Model / Channel URL or a HQPorner Actresss name (e.g Anissa Kate or anissa-kate)</string>
                     </property>
                    </widget>
                   </item>
@@ -923,7 +923,7 @@ QPushButton:pressed {
                      </size>
                     </property>
                     <property name="placeholderText">
-                     <string>Enter a Search Query for PornHub  You can define filters in the settings. The returned videos will be listed down below and you can select them.</string>
+                     <string>Enter a Search query for PornHub. For Advanced searching use the search tab on the left</string>
                     </property>
                    </widget>
                   </item>

@@ -6,7 +6,7 @@ Copyright (C) 2023 Johannes Habel (EchterAlsFake)
 
 Version 3.0
 """
-
+import re
 import sys
 import os.path
 import time
@@ -18,10 +18,10 @@ import src.frontend.resources
 from colorama import Fore
 from requests.exceptions import SSLError
 from datetime import datetime
-from hqporner_api.api import Client as hq_Client, Quality as hq_Quality
+from hqporner_api.api import Client as hq_Client, Quality as hq_Quality, Video as hq_Video
 from configparser import ConfigParser
 from hue_shift import return_color, reset
-from phub import Quality, Client, errors, download, Video, HTMLQuery
+from phub import Quality, Client, errors, download, Video
 
 from src.backend.shared_functions import (strip_title, check_video, check_if_video_exists, setup_config_file,
                                           logger_debug, correct_output_path)
@@ -37,7 +37,7 @@ from PySide6.QtGui import QIcon
 total_segments = 0
 downloaded_segments = 0
 
-__version__ = "beta-3.0"
+__version__ = "3.0"
 
 
 def ui_popup(text):
@@ -72,7 +72,7 @@ class DownloadProgressSignal(QObject):
 
 class QTreeWidgetSignal(QObject):
     """Signals needed across the QTreeWidget"""
-    progress = Signal(str)
+    progress = Signal(object)
     get_total = Signal(str, Quality)
     start_undefined_range = Signal()
     stop_undefined_range = Signal()
@@ -110,27 +110,30 @@ class AddToTreeWidget(QRunnable):
             try:
                 total = len(self.iterator)
 
-            except IndexError:
+            except Exception:
                 logger_debug("Can't get length of the iterator. Progress won't be available!")
                 total = None
 
             for i, video in enumerate(self.iterator, start=1):
-                if str(video).endswith(".html"):
-                    title = hq_Client().get_video(str(video)).video_title
+                if isinstance(video, hq_Video):
+                    title = video.video_title
                     if self.data_mode == 1:
-                        duration = hq_Client().get_video(str(video)).video_length
-                        author = hq_Client().get_video(str(video)).pornstars
-                        author = "".join(author)
+                        duration = int(video.video_length) / 60
+                        pornstars = video.pornstars
+                        if len(pornstars) == 0:
+                            author = "author_not_found"
+
+                        else:
+                            author = pornstars[0]
 
                     else:
                         duration = disabled
                         author = disabled
-
-                    text_data = [str(title), str(author), str(duration), str(i), str(video)]
+                    logger_debug(f"EMITTED VIDEO TYPE: {type(video)}")
+                    text_data = [str(title), str(author), str(duration), str(i), video]
 
                 else:
                     title = video.title
-                    url = video.url
                     if self.data_mode == 1:
                         duration = round(video.duration.seconds / 60)
                         author = video.author.name
@@ -139,7 +142,8 @@ class AddToTreeWidget(QRunnable):
                         duration = disabled
                         author = disabled
 
-                    text_data = [str(title), str(author), str(duration), str(i), str(url)]
+                    logger_debug(f"EMITTED VIDEO TYPE: {type(video)}")
+                    text_data = [str(title), str(author), str(duration), str(i), video]
 
                 self.signals.progress.emit(total, i)
                 self.signals.text_data.emit(text_data)
@@ -193,8 +197,8 @@ class DownloadThread(QRunnable):
                                     display=self.callback)
 
             else:
-                hq_Client().get_video(url=str(self.video)).download(quality=hq_Quality.BEST, output_path=self.output_path, callback=self.callback_hqporner,
-                               no_title=True)
+                self.video.download(quality=hq_Quality.BEST, output_path=self.output_path,
+                                                                    callback=self.callback_hqporner, no_title=True)
 
         finally:
             self.signals_completed.completed.emit()
@@ -212,35 +216,33 @@ class QTreeWidgetDownloadThread(QRunnable):
 
     def run(self):
         self.signals.start_undefined_range.emit()
-        video_urls = []
-        video_objects = []
-        video_urls_hqporner = []
+        video_objects_hqporner = []
+        video_objects_pornhub = []
+
         for i in range(self.treeWidget.topLevelItemCount()):
             item = self.treeWidget.topLevelItem(i)
             checkState = item.checkState(0)
             if checkState == Qt.Checked:
-                video_urls.append(item.data(0, Qt.UserRole))
+                object_ = item.data(0, Qt.UserRole)
+                print(f"Object Type: ---- : {type(object_)}")
+                if isinstance(object_, hq_Video):
+                    video_objects_hqporner.append(object_)
+
+                elif isinstance(object_, Video):
+                    video_objects_pornhub.append(object_)
 
         global total_segments, downloaded_segments
-        for url in video_urls:
-            if str(url).endswith(".html"):
-                video_urls_hqporner.append(url)
-
-            else:
-                video_objects.append(
-                    check_video(url, language="en"))  # Not used for downloading, so language doesn't matter
-
         total_segments = sum(
-            [len(list(video.get_segments(quality=self.quality))) for video in video_objects])
+            [len(list(video.get_segments(quality=self.quality))) for video in video_objects_pornhub])
 
         downloaded_segments = 0
 
         self.signals.stop_undefined_range.emit()
-        for video_url in video_urls:
-            logger_debug(f"Downloading: {video_url}")
+        videos = video_objects_pornhub + video_objects_hqporner
+        for video in videos:
             self.semaphore.acquire()
             logger_debug("Semaphore Acquired")
-            self.signals.progress.emit(video_url)
+            self.signals.progress.emit(video)
 
 
 class MetadataVideos(QRunnable):
@@ -845,12 +847,13 @@ class PornFetch(QWidget):
         duration = data[2]
         index = data[3]
         video = data[4]
+        print(f"Received Video: {type(video)}")
 
         item = QTreeWidgetItem(self.ui.treeWidget)
         item.setText(0, f"{index}) {title}")
         item.setText(1, author)
         item.setText(2, str(duration))
-        item.setData(0, Qt.UserRole, str(video))
+        item.setData(0, Qt.UserRole, video)
         item.setCheckState(0, Qt.Unchecked)  # Adds a checkbox
 
     def download_tree_widget(self):
@@ -863,9 +866,8 @@ class PornFetch(QWidget):
         download_tree_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
         self.threadpool.start(download_tree_thread)
 
-    def tree_widget_completed(self, url):
-        print("Connected")
-        self.load_video(url)
+    def tree_widget_completed(self, video):
+        self.load_video(video)
 
     def unselect_all_items(self):
         root = self.ui.treeWidget.invisibleRootItem()
@@ -933,7 +935,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         api_language = self.api_language
         one_time_iterator = []
         if url.endswith(".html"):
-            one_time_iterator.append(url)
+            one_time_iterator.append(check_video(url=url, language=api_language))
 
         else:
             one_time_iterator.append(check_video(url=url, language=api_language))
@@ -941,17 +943,34 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         self.add_to_tree_widget_thread(iterator=one_time_iterator, search_limit=self.search_limit)
 
     def start_model(self):
-        model = self.ui.lineedit_model_url.text()
-        api_language = self.api_language
         search_limit = self.search_limit
-        if not isinstance(self.client, Client):
-            client = Client(language=api_language)
+        model = self.ui.lineedit_model_url.text()
+
+        actress_pattern = re.compile(r"https://hqporner\.com/actress/(.+)")
+        pornhub_pattern = re.compile(r"(.*?)pornhub(.*?)")
+
+        match = actress_pattern.match(model)
+        if match:
+            # Extract the actress name from the URL
+            model = match.group(1)
+            videos = hq_Client().get_videos_by_actress(name=model)
+
+        elif pornhub_pattern.match(model):
+            api_language = self.api_language
+            if not isinstance(self.client, Client):
+                client = Client(language=api_language)
+            else:
+                client = self.client
+
+            model_object = client.get_user(model)
+            videos = model_object.videos
+
+        elif not model.startswith("https://"):
+            videos = hq_Client().get_videos_by_actress(name=model)
 
         else:
-            client = self.client
+            return
 
-        model_object = client.get_user(model)
-        videos = model_object.videos
         self.add_to_tree_widget_thread(videos, search_limit=search_limit)
 
     def load_video(self, url):
@@ -961,60 +980,50 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         threading_mode = self.threading_mode
         directory_system = self.directory_system
         quality = self.quality
+        video = check_video(url, language=api_language)
+        if isinstance(video, hq_Video):
+            title = video.video_title
+            pornstars = video.pornstars
+            if len(pornstars) == 0:
+                author = "no_author_found"
 
-        if str(url).endswith(".html"):
-            video = url
+            else:
+                author = pornstars[0]
 
-        if not isinstance(url, Video):
+        elif isinstance(video, Video):
             video = check_video(url, language=api_language)
+            title = video.title
+            author = video.author.name
 
-        if not isinstance(url, Video) and not isinstance(url, str):
-            text = QCoreApplication.tr("Video is not from PornHub or HQPorner!")
-            ui_popup(text)
+        output_path = correct_output_path(output_path)
+        stripped_title = strip_title(title)
+        logger_debug(f"Loading Video: {stripped_title}")
+
+        if directory_system:
+            if not os.path.exists(f"{output_path}{author}"):
+                os.mkdir(output_path + author)
+
+            output_path = f"{output_path}{author}{os.sep}{stripped_title}.mp4"
+            output_path.strip("'")
 
         else:
-            output_path = correct_output_path(output_path)
+            output_path = f"{output_path}{stripped_title}.mp4"
+            output_path.strip("'")
 
-            if str(url).endswith(".html"):
-                title = hq_Client().get_video(str(url)).video_title
+        if not check_if_video_exists(video, output_path):
+            if self.threading:
+                logger_debug("Processing Thread")
+                self.process_video_thread(output_path=output_path, video=video, threading_mode=threading_mode,
+                                          quality=quality)
 
-            else:
-                title = video.title
+            elif not self.threading:
+                self.process_video_without_thread(output_path, video, quality)
 
-            stripped_title = strip_title(title)
-            logger_debug(f"Loading Video: {stripped_title}")
-
-            if directory_system:
-                if str(url).endswith(".html"):
-                    author = hq_Client().get_video(str(url)).pornstars[0]
-
-                else:
-                    author = video.author.name
-
-                if not os.path.exists(f"{output_path}{author}"):
-                    os.mkdir(output_path + author)
-
-                output_path = f"{output_path}{author}{os.sep}{stripped_title}.mp4"
-                output_path.strip("'")
-
-            else:
-                output_path = f"{output_path}{stripped_title}.mp4"
-                output_path.strip("'")
-
-            if not check_if_video_exists(video, output_path):
-                if self.threading:
-                    logger_debug("Processing Thread")
-                    self.process_video_thread(output_path=output_path, video=video, threading_mode=threading_mode,
-                                              quality=quality)
-
-                elif not self.threading:
-                    self.process_video_without_thread(output_path, video, quality)
-
-            else:
-                self.semaphore.release()
-                if not isinstance(video, str):
-                    global downloaded_segments
-                    downloaded_segments += len(list(video.get_segments(quality=quality)))
+        else:
+            self.semaphore.release()
+            if not isinstance(video, hq_Video):
+                global downloaded_segments
+                downloaded_segments += len(list(video.get_segments(quality=quality)))
 
     def return_client(self):
         if isinstance(self.client, Client):
@@ -1164,7 +1173,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         language = self.api_language
         search_limit = self.search_limit
         client = Client(language=language)
-        search = client.search(query, feature=HTMLQuery)
+        search = client.search(query, use_hubtraffic=True)
         self.add_to_tree_widget_thread(search, search_limit=search_limit)
 
     def search_pornstars(self):
