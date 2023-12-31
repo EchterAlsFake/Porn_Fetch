@@ -93,12 +93,13 @@ class TreeWidgetSignals(QObject):
 
 
 class AddToTreeWidget(QRunnable):
-    def __init__(self, iterator, search_limit, data_mode):
+    def __init__(self, iterator, search_limit, data_mode, clickable):
         super(AddToTreeWidget, self).__init__()
         self.signals = TreeWidgetSignals()
         self.iterator = iterator
         self.search_limit = search_limit
         self.data_mode = data_mode
+        self.clickable = clickable
 
     def run(self):
         self.signals.clear_signal.emit()
@@ -572,6 +573,9 @@ class PornFetch(QWidget):
         self.ui.button_get_recommended_videos.clicked.connect(self.get_recommended_videos)
 
         # Search
+        self.ui.button_search_videos.clicked.connect(self.basic_search)
+        self.ui.button_search_users.clicked.connect(self.search_users)
+        self.ui.button_search_hqporner.clicked.connect(self.hqporner_search)
 
         # Metadata
         self.ui.button_metadata_video_start.clicked.connect(self.get_metadata_video)
@@ -851,7 +855,16 @@ class PornFetch(QWidget):
     The following functions are related to the tree widget    
     """
 
-    def add_to_tree_widget_thread(self, iterator, search_limit):
+    def add_to_tree_widget_thread(self, iterator, search_limit, clickable=False):
+        if clickable:
+            for user_object in iterator:
+                uploads = user_object.uploads
+                if uploads:
+                    print("User has uploaded videos")
+
+
+
+
         if self.ui.radio_tree_show_title.isChecked():
             data_mode = 0
 
@@ -861,7 +874,7 @@ class PornFetch(QWidget):
         else:
             data_mode = 0
 
-        self.thread = AddToTreeWidget(iterator, search_limit, data_mode)
+        self.thread = AddToTreeWidget(iterator, search_limit, data_mode, clickable)
         self.thread.signals.text_data.connect(self.add_to_tree_widget_signal)
         self.thread.signals.progress.connect(self.progress_tree_widget)
         self.thread.signals.clear_signal.connect(self.clear_tree_widget)
@@ -1210,28 +1223,24 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         search = client.search(query, use_hubtraffic=True)
         self.add_to_tree_widget_thread(search, search_limit=search_limit)
 
-    def search_pornstars(self):
-        query = None
-        self.update_settings()
-        api_language = self.api_language
+    def hqporner_search(self):
+        query = self.ui.lineedit_search_hqporner.text()
         search_limit = self.search_limit
-        client = Client(language=api_language)
-        search = client.search_pornstar(name=query)
-        self.add_to_treewWidget_SEARCH(search, search_limit=search_limit)
+        search = hq_Client().get_videos_by_actress(query)
+        self.add_to_tree_widget_thread(iterator=search, search_limit=search_limit)
+
 
     def search_users(self):
-        query = None
-        self.update_settings()
-        api_language = self.api_language
+        query = self.ui.lineedit_search_users.text()
         search_limit = self.search_limit
-        client = Client(language=api_language)
-        search = client.search_user(username=query)
-        self.add_to_treewWidget_SEARCH(search, search_limit=search_limit)
+        filters = self.get_checked_filters()
+        search = Client().search_user(query, filters)
+        logger_debug("Received Search Query")
+        self.add_to_tree_widget_thread(iterator=search, search_limit=search_limit, clickable=True)
 
-    def add_to_treewWidget_SEARCH(self, search, search_limit):
-        ""
-        for x in search:
-            print(x.videos)
+
+
+
 
     def get_metadata_video(self):
         api_language = self.api_language

@@ -208,6 +208,8 @@ I hope that most issues are now fixed.
 - Added Avatar downloading 
 
 # 3.0
+- Entire rewrite of Porn Fetch, the CLI, the Android App and the HQPorner API.
+
 
 - Improved Semaphore functionality.
 - Users now have the option to select the number of videos to download simultaneously (ranging from 1 to 6).
@@ -233,3 +235,16 @@ I hope that most issues are now fixed.
 - New directory system to organize videos by model in separate folders.
 - Comprehensive rewrite of the Command Line Interface (CLI).
 - Significant enhancements to the overall user interface for a better visual experience.
+- HQPorner API now supports a lot more features
+- You can now also download by model on HQporner
+- You can now download by Top Porn on HQPorner
+- You can now search for videos on HQPorner
+- The methods in the code for handling HQPorner / PHUB videos are now split
+
+# Android
+- The Android App is now based on PySide6 
+- The Android App now supports HQPorner / PornHub
+- The Android App now supports most features from the main application
+- The Android App now supports translations
+
+> Still very unstable!

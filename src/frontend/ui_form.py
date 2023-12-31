@@ -680,77 +680,60 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridLayout_6.setObjectName(u"gridLayout_6")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.label_2 = QLabel(self.page_4)
-        self.label_2.setObjectName(u"label_2")
+        self.label_query_1 = QLabel(self.page_4)
+        self.label_query_1.setObjectName(u"label_query_1")
 
-        self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_query_1, 1, 0, 1, 1)
 
-        self.label_5 = QLabel(self.page_4)
-        self.label_5.setObjectName(u"label_5")
+        self.label_query_3 = QLabel(self.page_4)
+        self.label_query_3.setObjectName(u"label_query_3")
 
-        self.gridLayout.addWidget(self.label_5, 3, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_query_3, 3, 0, 1, 1)
 
-        self.lineEdit_2 = QLineEdit(self.page_4)
-        self.lineEdit_2.setObjectName(u"lineEdit_2")
+        self.lineedit_search_users = QLineEdit(self.page_4)
+        self.lineedit_search_users.setObjectName(u"lineedit_search_users")
 
-        self.gridLayout.addWidget(self.lineEdit_2, 3, 1, 1, 1)
+        self.gridLayout.addWidget(self.lineedit_search_users, 3, 1, 1, 1)
 
-        self.lineEdit_3 = QLineEdit(self.page_4)
-        self.lineEdit_3.setObjectName(u"lineEdit_3")
+        self.lineedit_search_hqporner = QLineEdit(self.page_4)
+        self.lineedit_search_hqporner.setObjectName(u"lineedit_search_hqporner")
 
-        self.gridLayout.addWidget(self.lineEdit_3, 1, 1, 1, 1)
+        self.gridLayout.addWidget(self.lineedit_search_hqporner, 1, 1, 1, 1)
 
-        self.label_4 = QLabel(self.page_4)
-        self.label_4.setObjectName(u"label_4")
+        self.label_query_2 = QLabel(self.page_4)
+        self.label_query_2.setObjectName(u"label_query_2")
 
-        self.gridLayout.addWidget(self.label_4, 2, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_query_2, 2, 0, 1, 1)
 
-        self.lineEdit = QLineEdit(self.page_4)
-        self.lineEdit.setObjectName(u"lineEdit")
+        self.lineedit_seach_pornhub_filters = QLineEdit(self.page_4)
+        self.lineedit_seach_pornhub_filters.setObjectName(u"lineedit_seach_pornhub_filters")
 
-        self.gridLayout.addWidget(self.lineEdit, 2, 1, 1, 1)
+        self.gridLayout.addWidget(self.lineedit_seach_pornhub_filters, 2, 1, 1, 1)
 
-        self.Start = QPushButton(self.page_4)
-        self.Start.setObjectName(u"Start")
+        self.button_search_hqporner = QPushButton(self.page_4)
+        self.button_search_hqporner.setObjectName(u"button_search_hqporner")
 
-        self.gridLayout.addWidget(self.Start, 1, 2, 1, 1)
+        self.gridLayout.addWidget(self.button_search_hqporner, 1, 2, 1, 1)
 
-        self.pushButton_2 = QPushButton(self.page_4)
-        self.pushButton_2.setObjectName(u"pushButton_2")
+        self.button_search_pornhub_filters = QPushButton(self.page_4)
+        self.button_search_pornhub_filters.setObjectName(u"button_search_pornhub_filters")
 
-        self.gridLayout.addWidget(self.pushButton_2, 2, 2, 1, 1)
+        self.gridLayout.addWidget(self.button_search_pornhub_filters, 2, 2, 1, 1)
 
-        self.pushButton_3 = QPushButton(self.page_4)
-        self.pushButton_3.setObjectName(u"pushButton_3")
+        self.button_search_users = QPushButton(self.page_4)
+        self.button_search_users.setObjectName(u"button_search_users")
 
-        self.gridLayout.addWidget(self.pushButton_3, 3, 2, 1, 1)
-
-
-        self.gridLayout_6.addLayout(self.gridLayout, 0, 0, 1, 1)
-
-        self.groupBox_3 = QGroupBox(self.page_4)
-        self.groupBox_3.setObjectName(u"groupBox_3")
-        self.gridLayout_14 = QGridLayout(self.groupBox_3)
-        self.gridLayout_14.setObjectName(u"gridLayout_14")
-        self.scrollarea_search_filters = QScrollArea(self.groupBox_3)
-        self.scrollarea_search_filters.setObjectName(u"scrollarea_search_filters")
-        self.scrollarea_search_filters.setWidgetResizable(True)
-        self.scrollAreaWidgetContents_2 = QWidget()
-        self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 793, 512))
-        self.scrollarea_search_filters.setWidget(self.scrollAreaWidgetContents_2)
-
-        self.gridLayout_14.addWidget(self.scrollarea_search_filters, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.button_search_users, 3, 2, 1, 1)
 
 
-        self.gridLayout_6.addWidget(self.groupBox_3, 1, 0, 1, 1)
+        self.gridLayout_6.addLayout(self.gridLayout, 0, 0, 1, 4)
 
         self.scroll_area_user_filters = QScrollArea(self.page_4)
         self.scroll_area_user_filters.setObjectName(u"scroll_area_user_filters")
         self.scroll_area_user_filters.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 817, 556))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 811, 556))
         self.gridLayout_16 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_16.setObjectName(u"gridLayout_16")
         self.groupbox_user_filters = QGroupBox(self.scrollAreaWidgetContents)
@@ -760,7 +743,26 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.scroll_area_user_filters.setWidget(self.scrollAreaWidgetContents)
 
-        self.gridLayout_6.addWidget(self.scroll_area_user_filters, 1, 1, 1, 1)
+        self.gridLayout_6.addWidget(self.scroll_area_user_filters, 1, 3, 1, 1)
+
+        self.scrollarea_search_filters = QScrollArea(self.page_4)
+        self.scrollarea_search_filters.setObjectName(u"scrollarea_search_filters")
+        self.scrollarea_search_filters.setWidgetResizable(True)
+        self.scrollAreaWidgetContents_2 = QWidget()
+        self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 811, 556))
+        self.gridLayout_10 = QGridLayout(self.scrollAreaWidgetContents_2)
+        self.gridLayout_10.setObjectName(u"gridLayout_10")
+        self.groupBox_3 = QGroupBox(self.scrollAreaWidgetContents_2)
+        self.groupBox_3.setObjectName(u"groupBox_3")
+        self.gridLayout_14 = QGridLayout(self.groupBox_3)
+        self.gridLayout_14.setObjectName(u"gridLayout_14")
+
+        self.gridLayout_10.addWidget(self.groupBox_3, 0, 0, 1, 1)
+
+        self.scrollarea_search_filters.setWidget(self.scrollAreaWidgetContents_2)
+
+        self.gridLayout_6.addWidget(self.scrollarea_search_filters, 1, 1, 1, 1)
 
         self.stacked_widget_top.addWidget(self.page_4)
 
@@ -1607,17 +1609,17 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_search_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Videos", None))
         self.label_model_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Model URL:", None))
         self.label_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"URL:", None))
-        self.label_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Query:", None))
-        self.label_5.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Query:", None))
-        self.lineEdit_2.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search for Users (with filters defined below)", None))
-        self.lineEdit_3.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search for videos on HQPorner.com", None))
-        self.label_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Query:", None))
-        self.lineEdit.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search on PornHub (with filters defined below)", None))
-        self.Start.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
-        self.pushButton_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
-        self.pushButton_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
-        self.groupBox_3.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Filters", None))
+        self.label_query_1.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Query:", None))
+        self.label_query_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Query:", None))
+        self.lineedit_search_users.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search for Users (with filters defined below)", None))
+        self.lineedit_search_hqporner.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search for videos on HQPorner.com", None))
+        self.label_query_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Query:", None))
+        self.lineedit_seach_pornhub_filters.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search on PornHub (with filters defined below)", None))
+        self.button_search_hqporner.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
+        self.button_search_pornhub_filters.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
+        self.button_search_users.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
         self.groupbox_user_filters.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"User Search filters", None))
+        self.groupBox_3.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Filters", None))
         self.groupBox.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Performance Settings", None))
         self.groupbox_performance_threading.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Threading?", None))
         self.radio_threading_no.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
