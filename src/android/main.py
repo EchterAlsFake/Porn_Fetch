@@ -33,7 +33,7 @@ try:
     from phub import Quality, Client, errors, download, Video
     from shared_functions import *
     from frontend.ui_form import Ui_Porn_Fetch_Widget
-    send_error_log("Successfully imported all packages...")
+    #send_error_log("Successfully imported all packages...")
 
 except Exception as e:
     send_error_log(f"Failed to import packages:  {e}")
@@ -464,6 +464,58 @@ class Porn_Fetch(QWidget):
         login = stream_button_login.readAll()
         logins = stream_button_logins.readAll()
 
+        scroll_area = """
+QScrollArea {
+    border: 2px solid #5D1049; /* Dark purple border */
+    background-color: #F0F0F0; /* Light background for the area */
+}
+
+QScrollBar:vertical {
+    border: 1px solid #5D1049; /* Dark purple border */
+    background: #E0E0E0; /* Light background for the scrollbar */
+    width: 15px; /* Increased width for better visibility */
+    margin: 22px 0 22px 0; /* Top and bottom margin */
+}
+
+QScrollBar::handle:vertical {
+    background: #9A55D3; /* Purple for the handle */
+    min-height: 20px; /* Minimum height for the handle */
+}
+
+QScrollBar::add-line:vertical {
+    border: 1px solid #5D1049;
+    background: #9A55D3;
+    height: 20px; /* Increased height for the arrow area */
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical {
+    border: 1px solid #5D1049;
+    background: #9A55D3;
+    height: 20px; /* Increased height for the arrow area */
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+    border: 1px solid #5D1049;
+    width: 15px; /* Width of the arrow */
+    height: 15px; /* Height of the arrow */
+    background: #5D1049; /* Dark purple background for the arrow */
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+
+QScrollBar:horizontal {
+    /* You can add similar properties for horizontal scrollbar if needed */
+}
+
+
+"""
+
         self.ui.button_login.setStyleSheet(login)
         self.ui.button_get_watched_videos.setStyleSheet(logins)
         self.ui.button_get_liked_videos.setStyleSheet(logins)
@@ -480,6 +532,11 @@ class Porn_Fetch(QWidget):
         self.ui.button_video_thumbnail_download.setStyleSheet(purple)
         self.ui.button_tree_select_all.setStyleSheet(orange)
         self.ui.button_tree_unselect_all.setStyleSheet(blue)
+        self.ui.scrollArea.setStyleSheet(scroll_area)
+        self.ui.scrollArea_2.setStyleSheet(scroll_area)
+        self.ui.scrollArea_3.setStyleSheet(scroll_area)
+        self.ui.scrollArea_4.setStyleSheet(scroll_area)
+
 
         self.ui.progressbar_pornhub.setStyleSheet(stream_progress_pornhub.readAll())
         self.ui.progressbar_hqporner.setStyleSheet(stream_progress_hqporner.readAll())
