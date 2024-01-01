@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1241</width>
-    <height>675</height>
+    <width>1377</width>
+    <height>917</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -194,8 +194,27 @@
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="1" column="0">
          <layout class="QGridLayout" name="gridLayout_3">
-          <item row="1" column="1">
-           <widget class="QProgressBar" name="progressbar_hqporner">
+          <item row="2" column="1">
+           <widget class="QProgressBar" name="progressbar_total">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>600</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QProgressBar" name="progressbar_pornhub">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -226,25 +245,6 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
-           <widget class="QProgressBar" name="progressbar_total">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>600</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="value">
-             <number>0</number>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_progress_hqporner">
             <property name="sizePolicy">
@@ -258,8 +258,8 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="QProgressBar" name="progressbar_pornhub">
+          <item row="1" column="1">
+           <widget class="QProgressBar" name="progressbar_hqporner">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -295,7 +295,7 @@
         <item row="0" column="0">
          <widget class="QStackedWidget" name="stacked_widget_main">
           <property name="currentIndex">
-           <number>1</number>
+           <number>4</number>
           </property>
           <widget class="QWidget" name="page">
            <layout class="QGridLayout" name="gridLayout_5">
@@ -304,7 +304,7 @@
               <item>
                <widget class="QStackedWidget" name="stacked_widget_top">
                 <property name="currentIndex">
-                 <number>0</number>
+                 <number>1</number>
                 </property>
                 <widget class="QWidget" name="page_3">
                  <layout class="QGridLayout" name="gridLayout">
@@ -798,7 +798,7 @@ QPushButton:pressed {
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>1109</width>
+                   <width>1245</width>
                    <height>551</height>
                   </rect>
                  </property>
@@ -1000,8 +1000,8 @@ QPushButton:pressed {
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>1123</width>
-                   <height>520</height>
+                   <width>1259</width>
+                   <height>762</height>
                   </rect>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_9">
@@ -1294,8 +1294,8 @@ QPushButton:pressed {
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>1123</width>
-                   <height>520</height>
+                   <width>1259</width>
+                   <height>762</height>
                   </rect>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_8">
@@ -1324,8 +1324,8 @@ QPushButton:pressed {
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>1109</width>
-                   <height>662</height>
+                   <width>1259</width>
+                   <height>762</height>
                   </rect>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_10">
@@ -1842,6 +1842,137 @@ QPushButton:pressed {
                      </layout>
                     </item>
                    </layout>
+                  </item>
+                 </layout>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="page_5">
+           <layout class="QGridLayout" name="gridLayout_20">
+            <item row="0" column="0">
+             <layout class="QGridLayout" name="gridLayout_14">
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="lineedit_seach_pornhub_filters">
+                <property name="placeholderText">
+                 <string>Search on PornHub (with filters defined below)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="lineedit_search_hqporner">
+                <property name="placeholderText">
+                 <string>Search for videos on HQPorner.com</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_query_1">
+                <property name="text">
+                 <string>Query:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_query_3">
+                <property name="text">
+                 <string>Query:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QPushButton" name="button_search_hqporner">
+                <property name="text">
+                 <string>Start</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_query_2">
+                <property name="text">
+                 <string>Query:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QPushButton" name="button_search_pornhub_filters">
+                <property name="text">
+                 <string>Start</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QLineEdit" name="lineedit_search_users">
+                <property name="placeholderText">
+                 <string>Search for Users (with filters defined below)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="2">
+               <widget class="QPushButton" name="button_search_users">
+                <property name="text">
+                 <string>Start</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <item>
+               <widget class="QScrollArea" name="scroll_area_search_filters_">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="widgetResizable">
+                 <bool>true</bool>
+                </property>
+                <widget class="QWidget" name="scrollAreaWidgetContents_6">
+                 <property name="geometry">
+                  <rect>
+                   <x>0</x>
+                   <y>0</y>
+                   <width>626</width>
+                   <height>667</height>
+                  </rect>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_19">
+                  <item row="0" column="0">
+                   <layout class="QGridLayout" name="gridlayout_search_filter"/>
+                  </item>
+                 </layout>
+                </widget>
+               </widget>
+              </item>
+              <item>
+               <widget class="QScrollArea" name="scroll_area_search_filters">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="widgetResizable">
+                 <bool>true</bool>
+                </property>
+                <widget class="QWidget" name="scrollAreaWidgetContents_5">
+                 <property name="geometry">
+                  <rect>
+                   <x>0</x>
+                   <y>0</y>
+                   <width>625</width>
+                   <height>667</height>
+                  </rect>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_18">
+                  <item row="0" column="0">
+                   <layout class="QGridLayout" name="gridlayout_user_filter"/>
                   </item>
                  </layout>
                 </widget>

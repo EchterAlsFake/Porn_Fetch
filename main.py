@@ -1,27 +1,64 @@
+"""
+Copyright (C) 2023-2024 Johannes Habel
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+Contact:
+
+E-Mail: EchterAlsFake@proton.me
+Discord: echteralsfake (faster response)
+"""
+
+__license__ = "GPL 3"
 __version__ = "3.0"
-__build__ = "desktop"
-send_error_logs = False  # Only enabled when developing the application.
+__build__ = "android"  # android or desktop
+__author__ = "Johannes Habel"
 
-"""
-Build Mode can be:
-
-1) 'android'
-2) 'desktop'
-
-Android will use a UI which is optimized for Android devices (still not very good),
-while Desktop is a lot better if you have a wide screen.
-
-Just in theory, you could use the desktop mode if you have a tablet and set landscape in buildozer orientation
-options.
-"""
-
-
-"""
-The send error log function is only used during the development process. Every reference to it will be disabled
-when building the final release!
-"""
 
 import requests
+import re
+import sys
+import os.path
+import time
+import argparse
+import markdown
+import traceback
+import src.frontend.resources
+
+from requests.exceptions import SSLError
+from pathlib import Path
+from hqporner_api.api import Client as hq_Client, Quality as hq_Quality, Video as hq_Video
+from phub import Quality, Client, errors, download, Video
+from src.backend.shared_functions import *
+
+if __build__ == "android":
+    from src.frontend.ui_form_android import Ui_Porn_Fetch_Widget
+
+elif __build__ == "desktop":
+    from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
+
+from src.frontend.License import Ui_License
+from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
+                            QTranslator, QCoreApplication)
+from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QCheckBox,
+                               QTreeWidgetItem, QButtonGroup)
+from PySide6.QtGui import QIcon
+
+
+total_segments = 0
+downloaded_segments = 0
+send_error_logs = False  # Only enabled when developing the application.
 
 
 def send_error_log(message):
@@ -37,68 +74,35 @@ def send_error_log(message):
         print(f"Request failed: {e}")
 
 
-try:
-    import re
-    import sys
-    import os.path
-    import time
-    import argparse
-    import markdown
-    import traceback
-    import src.frontend.resources
+def get_output_path(path="/storage/emulated/0/"):
+    """
+    This will "brute" force the output path. I can't ask for runtime permissions due to some
+    issues in Qt's QFileDialog and the general build process not allowing me to use pyjnius / Kivy
 
-    from colorama import Fore
-    from requests.exceptions import SSLError
-    from datetime import datetime
-    from hqporner_api.api import Client as hq_Client, Quality as hq_Quality, Video as hq_Video
-    from configparser import ConfigParser
-    from hue_shift import return_color, reset
-    from phub import Quality, Client, errors, download, Video
-    from src.backend.shared_functions import *
-    if __build__ == "android":
-        from src.frontend.ui_form_android import Ui_Porn_Fetch_Widget
+    This function will basically check some generic paths for storing the video files. If None was found, the user
+    will be prompted to enter one.
+    """
+    if not str(path).endswith("/"):
+        path += "/"
 
-    elif __build__ == "desktop":
-        from src.frontend.ui_form import Ui_Porn_Fetch_Widget
-
-    from src.frontend.License import Ui_License
-    if send_error_logs:
-        send_error_log("Successfully imported all packages...")
-
-except Exception as e:
-    if send_error_logs:
-        send_error_log(f"Failed to import packages:  {e}")
-
-from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
-                            QTranslator, QCoreApplication)
-from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QFileDialog, QGridLayout, QCheckBox,
-                               QTreeWidgetItem, QLabel, QButtonGroup)
-from PySide6.QtGui import QIcon
-
-total_segments = 0
-downloaded_segments = 0
-
-
-def get_output_path():
-    if os.path.exists("/storage/emulated/0/Download"):
-        if os.path.isfile("/storage/emulated/0/Download/test.txt"):
-            if send_error_logs:
-                send_error_log("Text.txt already exists")
+    if os.path.exists(path):
+        if os.path.isfile(f"{path}test.txt"):
             return True
 
         else:
-            if send_error_logs:
-                send_error_log("Storage Download location exists!")
-            with open("/storage/emulated/0/Download/test.txt", "w") as x:
-                x.write("""Hello World""")
-                if send_error_logs:
-                    send_error_log("Successfully wrote file")
-                x.close()
-                return True
+            try:
+                with open(f"{path}test.txt", "w") as text:
+                    text.write("""
+                    This is a test for the Porn Fetch application to check if Porn Fetch has permissions to write into
+                    the download directory.""")
+                    return True
+
+            except Exception as e:
+                print(f"Exception: {e}")
+                return False
 
     else:
-        if send_error_logs:
-            send_error_log("Location doesn't exist... (FUCK)")
+        return False
 
 
 def ui_popup(text):
@@ -258,6 +262,7 @@ class AddToTreeWidget(QRunnable):
 
         finally:
             self.signals.finished.emit()
+
 
 class DownloadThread(QRunnable):
     """Threading class to download videos."""
@@ -548,7 +553,6 @@ class Porn_Fetch(QWidget):
         login = stream_button_login.readAll()
         logins = stream_button_logins.readAll()
 
-
         self.ui.button_login.setStyleSheet(login)
         self.ui.button_get_watched_videos.setStyleSheet(logins)
         self.ui.button_get_liked_videos.setStyleSheet(logins)
@@ -565,8 +569,6 @@ class Porn_Fetch(QWidget):
         self.ui.button_video_thumbnail_download.setStyleSheet(purple)
         self.ui.button_tree_select_all.setStyleSheet(orange)
         self.ui.button_tree_unselect_all.setStyleSheet(blue)
-
-
 
         self.ui.progressbar_pornhub.setStyleSheet(stream_progress_pornhub.readAll())
         self.ui.progressbar_hqporner.setStyleSheet(stream_progress_hqporner.readAll())
@@ -658,12 +660,30 @@ class Porn_Fetch(QWidget):
         return ' | '.join(checked_filters)
 
     def setup_android(self):
-        self.output_path = "/storage/emulated/0/"
+        if get_output_path():
+            self.output_path = "/storage/emulated/0/Download/"
+
+        else:
+            ui_popup("""
+The output path: /storage/emulated/0/Download does not exist.
+The Permission System on Android is currently not working for me. 
+If you know what you do, you can now enter a manual output path, which will be used!
+If you don't know what /storage/ even is, please just close the App.
+
+Sorry.""")
+
+            text, ok = QInputDialog().getText(self, "Enter custom Path", "Enter custom Path:")
+            if ok:
+                if get_output_path(text):
+                    ui_popup(f"Success: {text} will be used for this session!")
+                    self.output_path = text
+
+                else:
+                    ui_popup("Sorry, but this path also doesn't exist, or I can't write to it. Sorry.")
+
         self.ui.lineedit_output_path.setDisabled(True)
-        self.ui.lineedit_output_path.placeholderText("Can't be changed on Android yet")
         self.button_groups()
         self.ui.button_open_file.setDisabled(True)
-        self.ui.button_output_path_select.setDisabled(True)
         scroll_area = QFile(":/style/stylesheets/stylesheet_scroll_area.qss")
         scroll_area.open(QFile.ReadOnly | QFile.Text)
         stream_scroll_area = QTextStream(scroll_area)
@@ -731,8 +751,8 @@ class Porn_Fetch(QWidget):
 
         # Search
         self.ui.button_search_videos.clicked.connect(self.basic_search)
-        #self.ui.button_search_users.clicked.connect(self.search_users)
-        #self.ui.button_search_hqporner.clicked.connect(self.hqporner_search)
+        # self.ui.button_search_users.clicked.connect(self.search_users)
+        # self.ui.button_search_hqporner.clicked.connect(self.hqporner_search)
 
         # Metadata
         self.ui.button_metadata_video_start.clicked.connect(self.get_metadata_video)
@@ -762,7 +782,6 @@ class Porn_Fetch(QWidget):
         self.ui.button_get_liked_videos.setStyleSheet(stylesheet)
         self.ui.button_get_watched_videos.setStyleSheet(stylesheet)
         self.ui.button_get_recommended_videos.setStyleSheet(stylesheet)
-
 
     """
     The following are functions used by different other functions to handle data over different classes / threads.
@@ -1132,6 +1151,12 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
             title = video.title
             author = video.author.name
 
+        else:
+            ui_popup(
+                QCoreApplication.tr("There's something wrong with the video. Is the URL correct?", disambiguation=""))
+            title = None
+            author = None
+
         output_path = correct_output_path(output_path)
         stripped_title = strip_title(title)
         logger_debug(f"Loading Video: {stripped_title}")
@@ -1244,7 +1269,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
             self.login()
             if not self.client.logged:
                 text = QCoreApplication.tr("There's a problem with the login. Please make sure you login first "
-                                           "and then you try to get videos based on your account.")
+                                           "and then you try to get videos based on your account.", disambiguation="")
                 ui_popup(text)
                 return False
 
@@ -1288,7 +1313,6 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         search = hq_Client().get_videos_by_actress(query)
         self.add_to_tree_widget_thread(iterator=search, search_limit=search_limit)
 
-
     def search_users(self):
         query = self.ui.lineedit_search_users.text()
         search_limit = self.search_limit
@@ -1296,10 +1320,6 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         search = Client().search_user(query, filters)
         logger_debug("Received Search Query")
         self.add_to_tree_widget_thread(iterator=search, search_limit=search_limit, clickable=True)
-
-
-
-
 
     def get_metadata_video(self):
         api_language = self.api_language
@@ -1402,7 +1422,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         client = self.return_client()
         user = client.get_user(url)
         avatar = user.avatar
-        avatar.download("./")
+        avatar.download(Path(self.output_path))
         user_string = self.get_user_avatar_language_string
         ui_popup(user_string)
 
@@ -1410,7 +1430,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         api_language = self.api_language
         url = self.ui.lineedit_metadata_video_url.text()
         video = check_video(url=url, language=api_language)
-        video.image.download("./")
+        video.image.download(Path(self.output_path))
         user_string = self.get_video_thumbnail_language_string
         ui_popup(user_string)
 
@@ -1420,7 +1440,6 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         file.open(QFile.ReadOnly | QFile.Text)
         stream = QTextStream(file)
         self.ui.textBrowser.setHtml(markdown.markdown(stream.readAll()))
-
 
 
 def main():
@@ -1472,14 +1491,17 @@ def main():
 
     except PermissionError:
         ui_popup(
-            QCoreApplication.tr("Insufficient Permissions to access something. Please run Porn Fetch as root / admin"))
+            QCoreApplication.tr("Insufficient Permissions to access something. Please run Porn Fetch as root / admin",
+                                disambiguation=""))
 
     except ConnectionResetError:
         ui_popup(
-            QCoreApplication.tr("Connection was reset. Are you connected to a public wifi or a university's wifi? "))
+            QCoreApplication.tr("Connection was reset. Are you connected to a public wifi or a university's wifi? ",
+                                disambiguation=""))
 
     except ConnectionError:
-        ui_popup(QCoreApplication.tr("Connection Error, please make sure you have a stable internet connection"))
+        ui_popup(QCoreApplication.tr("Connection Error, please make sure you have a stable internet connection",
+                                     disambiguation=""))
 
     except KeyboardInterrupt:
         sys.exit(0)
@@ -1487,7 +1509,7 @@ def main():
     except SSLError:
         ui_popup(QCoreApplication.tr(
             "SSLError: Your connection is blocked by your ISP / IT administrator (Firewall). If you are in a "
-            "University or at school, please connect to a VPN / Proxy"))
+            "University or at school, please connect to a VPN / Proxy", disambiguation=""))
 
     except TypeError:
         pass
@@ -1495,7 +1517,7 @@ def main():
     except OSError as e:
         ui_popup(QCoreApplication.tr(
             f"This error shouldn't happen. If you still see it it's REALLY important that you report the "
-            f"following: {e}"))
+            f"following: {e}", disambiguation=""))
 
     except ZeroDivisionError:
         pass

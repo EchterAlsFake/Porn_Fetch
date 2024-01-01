@@ -1,0 +1,10 @@
+phub
+colorama
+requests
+hqporner_api
+hue_shift
+pymediainfo
+markdown
+rich
+tqdm
+ffmpeg-progress-yield

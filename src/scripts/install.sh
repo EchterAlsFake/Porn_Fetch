@@ -79,7 +79,8 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 pip install pyinstaller
-pyinstaller -F Porn_Fetch.py
+pyinstaller -F main.py
 cd dist
-chmod +x Porn_Fetch
-echo "Porn Fetch is now installed to $(pwd)/"
+chmod +x main
+mv main Porn_Fetch
+echo "Porn Fetch is now installed in $(pwd)/"

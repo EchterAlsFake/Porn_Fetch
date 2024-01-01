@@ -40,6 +40,6 @@ pip install pyinstaller
 
 # Build the project
 Write-Output "Building the project..."
-pyinstaller -F Porn_Fetch.py
+pyinstaller -F main.py
 
 Write-Output "Done!"

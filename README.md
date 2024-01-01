@@ -7,7 +7,6 @@
 
 <p align="center">
   <a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg" alt="Build Status"/></a>
-  <a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/android.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/android.yml/badge.svg" alt="Android Build"/></a>
   <a href="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL"><img src="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL/badge.svg" alt="CodeQL Analysis"/></a>
   <img alt="GitHub release (by tag)" src="https://img.shields.io/github/downloads/EchterAlsFake/Porn_Fetch/2.9/total">
 
@@ -116,4 +115,4 @@ Important: Usage of Porn Fetch may not be in compliance with PornHub's terms of 
 
 ## 📚 License
 Licensed under [GPL 3](https://www.gnu.org/licenses/gpl-3.0.en.html).
- 
+<br>Copyright (C) 2023–2024 Johannes Habel 
