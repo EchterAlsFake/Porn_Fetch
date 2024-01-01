@@ -22,6 +22,7 @@
         <file>stylesheets/stylesheet_button_login.qss</file>
         <file>stylesheets/stylesheet_buttons_login.qss</file>
         <file>stylesheets/stylesheet_switch_buttons_login_state.qss</file>
+        <file>stylesheets/stylesheet_scroll_area.qss</file>
     </qresource>
     <qresource prefix="/credits">
         <file>../../README/CREDITS.md</file>

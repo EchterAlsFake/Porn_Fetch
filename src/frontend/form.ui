@@ -6,448 +6,55 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1776</width>
-    <height>927</height>
+    <width>1736</width>
+    <height>928</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Porn Fetch V3 (C) Johannes Habel GPL 3</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_9">
+  <layout class="QGridLayout" name="gridLayout_13">
    <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QWidget" name="widget" native="true">
-       <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="0">
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QPushButton" name="button_switch_home">
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>50</height>
-             </size>
-            </property>
-            <property name="cursor">
-             <cursorShape>PointingHandCursor</cursorShape>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border: none</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>32</width>
-              <height>32</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="button_switch_search">
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>50</height>
-             </size>
-            </property>
-            <property name="cursor">
-             <cursorShape>PointingHandCursor</cursorShape>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border: none;</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>32</width>
-              <height>32</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="button_switch_settings">
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>50</height>
-             </size>
-            </property>
-            <property name="cursor">
-             <cursorShape>PointingHandCursor</cursorShape>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border: none;</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>32</width>
-              <height>32</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="button_switch_metadata">
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>50</height>
-             </size>
-            </property>
-            <property name="cursor">
-             <cursorShape>PointingHandCursor</cursorShape>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border: none;</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>32</width>
-              <height>32</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="button_switch_credits">
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>50</height>
-             </size>
-            </property>
-            <property name="cursor">
-             <cursorShape>PointingHandCursor</cursorShape>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border: none;</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>32</width>
-              <height>32</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </item>
-        <item row="0" column="1">
-         <widget class="QStackedWidget" name="stacked_widget_main">
-          <property name="currentIndex">
-           <number>0</number>
-          </property>
-          <widget class="QWidget" name="page">
-           <layout class="QGridLayout" name="gridLayout_8">
-            <item row="1" column="0">
-             <widget class="QWidget" name="widget_status" native="true">
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_5">
-               <item row="2" column="0">
-                <widget class="QLabel" name="label_progress_information">
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="1">
+      <widget class="QStackedWidget" name="stacked_widget_main">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="page">
+        <layout class="QGridLayout" name="gridLayout_8">
+         <item row="0" column="0">
+          <widget class="QStackedWidget" name="stacked_widget_top">
+           <property name="currentIndex">
+            <number>1</number>
+           </property>
+           <widget class="QWidget" name="page_3">
+            <layout class="QGridLayout" name="gridLayout_4">
+             <item row="1" column="0" colspan="2">
+              <layout class="QGridLayout" name="gridLayout_7">
+               <item row="0" column="0" colspan="4">
+                <widget class="QRadioButton" name="radio_tree_show_title">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
-                  <string>Information: The total progressbar only counts the total progress of all PornHub videos being downloaded. I can't add it for HQPorner due to some differences in how the progress is being handled across the different websites!</string>
+                  <string>Only Title (a lot faster)</string>
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0">
-                <layout class="QGridLayout" name="gridLayout_3">
-                 <item row="2" column="0">
-                  <widget class="QLabel" name="label_total_progress">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="text">
-                    <string>Total:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="1">
-                  <widget class="QProgressBar" name="progressbar_pornhub">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="minimumSize">
-                    <size>
-                     <width>600</width>
-                     <height>0</height>
-                    </size>
-                   </property>
-                   <property name="value">
-                    <number>0</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="label_progress_pornhub">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="text">
-                    <string>PornHub:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="1">
-                  <widget class="QProgressBar" name="progressbar_total">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="minimumSize">
-                    <size>
-                     <width>600</width>
-                     <height>0</height>
-                    </size>
-                   </property>
-                   <property name="value">
-                    <number>0</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QLabel" name="label_progress_hqporner">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="text">
-                    <string>HQPorner:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="1">
-                  <widget class="QProgressBar" name="progressbar_hqporner">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="minimumSize">
-                    <size>
-                     <width>600</width>
-                     <height>0</height>
-                    </size>
-                   </property>
-                   <property name="value">
-                    <number>0</number>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item row="0" column="0">
-                <layout class="QGridLayout" name="gridlayout_status">
-                 <item row="0" column="1">
-                  <widget class="QLineEdit" name="lineedit_status">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="minimumSize">
-                    <size>
-                     <width>200</width>
-                     <height>0</height>
-                    </size>
-                   </property>
-                   <property name="readOnly">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="3">
-                  <widget class="QLineEdit" name="lineedit_debug">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="minimumSize">
-                    <size>
-                     <width>200</width>
-                     <height>0</height>
-                    </size>
-                   </property>
-                   <property name="readOnly">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QLabel" name="label_error">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="text">
-                    <string>Error:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="1">
-                  <widget class="QLineEdit" name="lineedit_error">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="minimumSize">
-                    <size>
-                     <width>200</width>
-                     <height>0</height>
-                    </size>
-                   </property>
-                   <property name="readOnly">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="3">
-                  <widget class="QLineEdit" name="lineedit_total">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="minimumSize">
-                    <size>
-                     <width>200</width>
-                     <height>0</height>
-                    </size>
-                   </property>
-                   <property name="readOnly">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="label_status">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="text">
-                    <string>Status:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="2">
-                  <widget class="QLabel" name="label_debug">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="text">
-                    <string>Debug:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="2">
-                  <widget class="QLabel" name="label_total">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="text">
-                    <string>Total:</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QStackedWidget" name="stacked_widget_top">
-              <property name="currentIndex">
-               <number>1</number>
-              </property>
-              <widget class="QWidget" name="page_3">
-               <layout class="QGridLayout" name="gridLayout_4">
-                <item row="1" column="0" colspan="2">
-                 <layout class="QGridLayout" name="gridLayout_7">
-                  <item row="0" column="0" colspan="4">
-                   <widget class="QRadioButton" name="radio_tree_show_title">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="text">
-                     <string>Only Title (a lot faster)</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="0" colspan="7">
-                   <widget class="QGroupBox" name="groupBox_4">
-                    <property name="title">
-                     <string/>
-                    </property>
-                    <layout class="QGridLayout" name="gridLayout_34">
-                     <item row="0" column="2">
-                      <widget class="QPushButton" name="button_tree_unselect_all">
-                       <property name="styleSheet">
-                        <string notr="true">QPushButton {
+               <item row="2" column="0" colspan="7">
+                <widget class="QGroupBox" name="groupBox_4">
+                 <property name="title">
+                  <string/>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_34">
+                  <item row="0" column="2">
+                   <widget class="QPushButton" name="button_tree_unselect_all">
+                    <property name="styleSheet">
+                     <string notr="true">QPushButton {
     /* Base style */
     background-color: rgb(0, 208, 255); /* Purple background */
     border-style: outset;
@@ -473,16 +80,16 @@ QPushButton:pressed {
     border-style: inset; /* Changes the style to look &quot;pressed&quot; */
 }
 </string>
-                       </property>
-                       <property name="text">
-                        <string>Unselect all</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="1">
-                      <widget class="QPushButton" name="button_tree_select_all">
-                       <property name="styleSheet">
-                        <string notr="true">QPushButton {
+                    </property>
+                    <property name="text">
+                     <string>Unselect all</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QPushButton" name="button_tree_select_all">
+                    <property name="styleSheet">
+                     <string notr="true">QPushButton {
     /* Base style */
     background-color: rgba(255, 162, 0, 170); /* Purple background */
 	color: rgb(255, 162, 0);
@@ -509,16 +116,16 @@ QPushButton:pressed {
     border-style: inset; /* Changes the style to look &quot;pressed&quot; */
 }
 </string>
-                       </property>
-                       <property name="text">
-                        <string>Select all</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="0">
-                      <widget class="QPushButton" name="button_tree_download">
-                       <property name="styleSheet">
-                        <string notr="true">QPushButton {
+                    </property>
+                    <property name="text">
+                     <string>Select all</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QPushButton" name="button_tree_download">
+                    <property name="styleSheet">
+                     <string notr="true">QPushButton {
     /* Base style */
     background-color: #7B1FA2; /* Purple background */
     border-style: outset;
@@ -544,77 +151,77 @@ QPushButton:pressed {
     border-style: inset; /* Changes the style to look &quot;pressed&quot; */
 }
 </string>
-                       </property>
-                       <property name="text">
-                        <string>Download Selected Videos</string>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item row="1" column="0" colspan="7">
-                   <widget class="QTreeWidget" name="treeWidget">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>1620</width>
-                      <height>100</height>
-                     </size>
-                    </property>
-                    <column>
-                     <property name="text">
-                      <string notr="true">Title</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>Author</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>Duration</string>
-                     </property>
-                    </column>
-                   </widget>
-                  </item>
-                  <item row="0" column="4" colspan="3">
-                   <widget class="QRadioButton" name="radio_tree_show_all">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
                     </property>
                     <property name="text">
-                     <string>Get Title, Author, Duration</string>
+                     <string>Download Selected Videos</string>
                     </property>
                    </widget>
                   </item>
                  </layout>
-                </item>
-                <item row="0" column="1">
-                 <layout class="QGridLayout" name="gridlayout_login_box_2">
-                  <item row="0" column="1" colspan="3">
-                   <widget class="QLineEdit" name="lineedit_username">
-                    <property name="placeholderText">
-                     <string>Enter your PornHub Username</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="0">
-                   <widget class="QPushButton" name="button_get_liked_videos">
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton {
+                </widget>
+               </item>
+               <item row="1" column="0" colspan="7">
+                <widget class="QTreeWidget" name="treeWidget">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>1620</width>
+                   <height>100</height>
+                  </size>
+                 </property>
+                 <column>
+                  <property name="text">
+                   <string notr="true">Title</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Author</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Duration</string>
+                  </property>
+                 </column>
+                </widget>
+               </item>
+               <item row="0" column="4" colspan="3">
+                <widget class="QRadioButton" name="radio_tree_show_all">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Get Title, Author, Duration</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="0" column="1">
+              <layout class="QGridLayout" name="gridlayout_login_box_2">
+               <item row="0" column="1" colspan="3">
+                <widget class="QLineEdit" name="lineedit_username">
+                 <property name="placeholderText">
+                  <string>Enter your PornHub Username</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QPushButton" name="button_get_liked_videos">
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
     border: 2px solid #444;
     border-radius: 4px;
     padding: 5px;
@@ -624,19 +231,19 @@ QPushButton:pressed {
     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
                                 stop:0 #78909C, stop:1 #90A4AE);
 }</string>
-                    </property>
-                    <property name="text">
-                     <string>Get Liked videos</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="1">
-                   <widget class="QPushButton" name="button_get_watched_videos">
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton {
+                 </property>
+                 <property name="text">
+                  <string>Get Liked videos</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QPushButton" name="button_get_watched_videos">
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
     border: 2px solid #444;
     border-radius: 4px;
     padding: 5px;
@@ -646,26 +253,26 @@ QPushButton:pressed {
     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
                                 stop:0 #78909C, stop:1 #90A4AE);
 }</string>
-                    </property>
-                    <property name="text">
-                     <string>Get watched videos</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="label_password">
-                    <property name="text">
-                     <string>Password:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="0" colspan="4">
-                   <widget class="QPushButton" name="button_login">
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton {
+                 </property>
+                 <property name="text">
+                  <string>Get watched videos</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_password">
+                 <property name="text">
+                  <string>Password:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0" colspan="4">
+                <widget class="QPushButton" name="button_login">
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
     /* Base style */
     background-color: #4CAF50; /* Green background */
     border-style: outset;
@@ -690,19 +297,19 @@ QPushButton:pressed {
     border-color: #388E3C;
     border-style: inset; /* Changes the style to look &quot;pressed&quot; */
 }</string>
-                    </property>
-                    <property name="text">
-                     <string>Login</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="2">
-                   <widget class="QPushButton" name="button_get_recommended_videos">
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton {
+                 </property>
+                 <property name="text">
+                  <string>Login</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="2">
+                <widget class="QPushButton" name="button_get_recommended_videos">
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
     border: 2px solid #444;
     border-radius: 4px;
     padding: 5px;
@@ -712,1303 +319,76 @@ QPushButton:pressed {
     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
                                 stop:0 #78909C, stop:1 #90A4AE);
 }</string>
-                    </property>
-                    <property name="text">
-                     <string>Get recommended videos</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="label_username">
-                    <property name="text">
-                     <string>Username:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="1" colspan="3">
-                   <widget class="QLineEdit" name="lineedit_password">
-                    <property name="echoMode">
-                     <enum>QLineEdit::Password</enum>
-                    </property>
-                    <property name="placeholderText">
-                     <string>Enter your PornHub Password</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item row="0" column="0">
-                 <layout class="QGridLayout" name="gridlayout_start_download_box_2">
-                  <item row="3" column="1">
-                   <widget class="QLineEdit" name="lineedit_file">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>300</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="placeholderText">
-                     <string>Click Open File to select a file, or write the location here and click Open File. URLs need to be separated with a new line. Supports HQPorner and PornHub</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="1">
-                   <widget class="QLineEdit" name="lineedit_model_url">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>300</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="placeholderText">
-                     <string>Enter PornHub Model / Channel URL or a HQPorner Actresss name (e.g Anissa Kate or anissa-kate)</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="2">
-                   <widget class="QPushButton" name="button_model">
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #7B1FA2; /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}</string>
-                    </property>
-                    <property name="text">
-                     <string>Get Videos</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="1">
-                   <widget class="QLineEdit" name="lineedit_url">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>300</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="placeholderText">
-                     <string>Enter PornHub or HQPorner Video URL</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="4" column="0">
-                   <widget class="QLabel" name="label_search_query">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>100</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string>Search Query:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="2">
-                   <widget class="QPushButton" name="button_download">
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #7B1FA2; /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}</string>
-                    </property>
-                    <property name="text">
-                     <string>Download</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="0">
-                   <widget class="QLabel" name="label_file">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>100</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string>File:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="4" column="1">
-                   <widget class="QLineEdit" name="lineedit_search_query">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>300</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="placeholderText">
-                     <string>Enter a Search query for PornHub. For Advanced searching use the search tab on the left</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="2">
-                   <widget class="QPushButton" name="button_open_file">
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #7B1FA2; /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}</string>
-                    </property>
-                    <property name="text">
-                     <string>Open File</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="4" column="2">
-                   <widget class="QPushButton" name="button_search_videos">
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #7B1FA2; /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}</string>
-                    </property>
-                    <property name="text">
-                     <string>Get Videos</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="label_model_url">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>100</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string>Model URL:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="label_url">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>100</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string>URL:</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
-              </widget>
-              <widget class="QWidget" name="page_4">
-               <layout class="QGridLayout" name="gridLayout_6">
-                <item row="0" column="0" colspan="4">
-                 <layout class="QGridLayout" name="gridLayout">
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="label_query_1">
-                    <property name="text">
-                     <string>Query:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="0">
-                   <widget class="QLabel" name="label_query_3">
-                    <property name="text">
-                     <string>Query:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="1">
-                   <widget class="QLineEdit" name="lineedit_search_users">
-                    <property name="placeholderText">
-                     <string>Search for Users (with filters defined below)</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="1">
-                   <widget class="QLineEdit" name="lineedit_search_hqporner">
-                    <property name="placeholderText">
-                     <string>Search for videos on HQPorner.com</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="label_query_2">
-                    <property name="text">
-                     <string>Query:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="1">
-                   <widget class="QLineEdit" name="lineedit_seach_pornhub_filters">
-                    <property name="placeholderText">
-                     <string>Search on PornHub (with filters defined below)</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="2">
-                   <widget class="QPushButton" name="button_search_hqporner">
-                    <property name="text">
-                     <string>Start</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="2">
-                   <widget class="QPushButton" name="button_search_pornhub_filters">
-                    <property name="text">
-                     <string>Start</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="2">
-                   <widget class="QPushButton" name="button_search_users">
-                    <property name="text">
-                     <string>Start</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item row="1" column="3">
-                 <widget class="QScrollArea" name="scroll_area_user_filters">
-                  <property name="widgetResizable">
-                   <bool>true</bool>
-                  </property>
-                  <widget class="QWidget" name="scrollAreaWidgetContents">
-                   <property name="geometry">
-                    <rect>
-                     <x>0</x>
-                     <y>0</y>
-                     <width>811</width>
-                     <height>556</height>
-                    </rect>
-                   </property>
-                   <layout class="QGridLayout" name="gridLayout_16">
-                    <item row="0" column="0">
-                     <widget class="QGroupBox" name="groupbox_user_filters">
-                      <property name="title">
-                       <string>User Search filters</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QScrollArea" name="scrollarea_search_filters">
-                  <property name="widgetResizable">
-                   <bool>true</bool>
-                  </property>
-                  <widget class="QWidget" name="scrollAreaWidgetContents_2">
-                   <property name="geometry">
-                    <rect>
-                     <x>0</x>
-                     <y>0</y>
-                     <width>811</width>
-                     <height>556</height>
-                    </rect>
-                   </property>
-                   <layout class="QGridLayout" name="gridLayout_10">
-                    <item row="0" column="0">
-                     <widget class="QGroupBox" name="groupBox_3">
-                      <property name="title">
-                       <string>Search Filters</string>
-                      </property>
-                      <layout class="QGridLayout" name="gridLayout_14"/>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="page_2">
-           <layout class="QGridLayout" name="gridLayout_25">
-            <item row="0" column="0">
-             <layout class="QGridLayout" name="gridLayout_15">
-              <item row="0" column="0">
-               <widget class="QGroupBox" name="groupBox">
-                <property name="title">
-                 <string>Performance Settings</string>
-                </property>
-                <layout class="QGridLayout" name="gridLayout_11">
-                 <item row="0" column="0" colspan="2">
-                  <widget class="QGroupBox" name="groupbox_performance_threading">
-                   <property name="title">
-                    <string>Threading?</string>
-                   </property>
-                   <layout class="QGridLayout" name="gridLayout_20">
-                    <item row="0" column="1">
-                     <widget class="QRadioButton" name="radio_threading_no">
-                      <property name="text">
-                       <string>No</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="0">
-                     <widget class="QRadioButton" name="radio_threading_yes">
-                      <property name="text">
-                       <string>Yes</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
-                 </item>
-                 <item row="1" column="1">
-                  <widget class="QGroupBox" name="groupbox_performance_threading_mode">
-                   <property name="title">
-                    <string>Threading Mode</string>
-                   </property>
-                   <layout class="QGridLayout" name="gridLayout_19">
-                    <item row="0" column="0">
-                     <widget class="QRadioButton" name="radio_threading_mode_high_performance">
-                      <property name="text">
-                       <string>High Performance</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="2">
-                     <widget class="QRadioButton" name="radio_threading_mode_default">
-                      <property name="text">
-                       <string>Default</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="1">
-                     <widget class="QRadioButton" name="radio_threading_mode_ffmpeg">
-                      <property name="text">
-                       <string>FFMPEG</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="3">
-                     <widget class="QPushButton" name="button_threading_mode_help">
-                      <property name="text">
-                       <string>Help</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
-                 </item>
-                 <item row="2" column="0" colspan="2">
-                  <widget class="QGroupBox" name="groupBox_2">
-                   <property name="title">
-                    <string>Video Settings</string>
-                   </property>
-                   <layout class="QGridLayout" name="gridLayout_12">
-                    <item row="0" column="0">
-                     <widget class="QGroupBox" name="groupbox_video_quality">
-                      <property name="title">
-                       <string>Quality</string>
-                      </property>
-                      <layout class="QGridLayout" name="gridLayout_18">
-                       <item row="0" column="1">
-                        <widget class="QRadioButton" name="radio_quality_half">
-                         <property name="text">
-                          <string>Half</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="0">
-                        <widget class="QRadioButton" name="radio_quality_best">
-                         <property name="text">
-                          <string>Best</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="2">
-                        <widget class="QRadioButton" name="radio_quality_worst">
-                         <property name="text">
-                          <string>Worst</string>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
-                     </widget>
-                    </item>
-                    <item row="1" column="0">
-                     <widget class="QGroupBox" name="groupbox_video_output">
-                      <property name="title">
-                       <string>Output</string>
-                      </property>
-                      <layout class="QGridLayout" name="gridLayout_21">
-                       <item row="1" column="0">
-                        <widget class="QLabel" name="label_directory_system">
-                         <property name="text">
-                          <string>Use Directory system? </string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="1" column="1">
-                        <widget class="QRadioButton" name="radio_directory_system_yes">
-                         <property name="text">
-                          <string>Yes</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="1" column="2">
-                        <widget class="QRadioButton" name="radio_directory_system_no">
-                         <property name="text">
-                          <string>No</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="1" colspan="3">
-                        <widget class="QLineEdit" name="lineedit_output_path">
-                         <property name="placeholderText">
-                          <string>Enter &quot;./&quot; for current directory</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="0">
-                        <widget class="QLabel" name="label_output_path">
-                         <property name="text">
-                          <string>Output path:</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="4">
-                        <widget class="QPushButton" name="button_output_path_select">
-                         <property name="text">
-                          <string>Select</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="1" column="4">
-                        <widget class="QPushButton" name="button_directory_system_help">
-                         <property name="text">
-                          <string>Help</string>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
-                     </widget>
-                    </item>
-                    <item row="0" column="1">
-                     <widget class="QGroupBox" name="groupbox_video_language">
-                      <property name="title">
-                       <string>API Language</string>
-                      </property>
-                      <layout class="QGridLayout" name="gridLayout_24">
-                       <item row="1" column="0">
-                        <widget class="QRadioButton" name="radio_api_language_german">
-                         <property name="text">
-                          <string>German</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="2" column="0">
-                        <widget class="QRadioButton" name="radio_api_language_french">
-                         <property name="text">
-                          <string>French</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="0">
-                        <widget class="QRadioButton" name="radio_api_language_english">
-                         <property name="text">
-                          <string>English</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="1">
-                        <widget class="QRadioButton" name="radio_api_language_chinese">
-                         <property name="text">
-                          <string>Chinese</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="1" column="1">
-                        <widget class="QRadioButton" name="radio_api_language_russian">
-                         <property name="text">
-                          <string>Russian</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="2" column="1">
-                        <widget class="QRadioButton" name="radio_api_language_custom">
-                         <property name="text">
-                          <string>Custom</string>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
-                     </widget>
-                    </item>
-                    <item row="1" column="1">
-                     <widget class="QGroupBox" name="groupbox_searching">
-                      <property name="title">
-                       <string>Searching</string>
-                      </property>
-                      <layout class="QGridLayout" name="gridLayout_23">
-                       <item row="0" column="0">
-                        <widget class="QLabel" name="label_searching_limit">
-                         <property name="text">
-                          <string>Search Limit:</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="1">
-                        <widget class="QSpinBox" name="spinbox_searching">
-                         <property name="minimum">
-                          <number>1</number>
-                         </property>
-                         <property name="maximum">
-                          <number>200</number>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QGroupBox" name="groupbox_performance_semaphore">
-                   <property name="title">
-                    <string>Semaphore</string>
-                   </property>
-                   <layout class="QGridLayout" name="gridLayout_22">
-                    <item row="0" column="0">
-                     <widget class="QLabel" name="label_semaphore">
-                      <property name="text">
-                       <string>Semaphore:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="0" colspan="2">
-                     <widget class="QPushButton" name="button_semaphore_help">
-                      <property name="text">
-                       <string>Help</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="1">
-                     <widget class="QSpinBox" name="spinbox_semaphore">
-                      <property name="minimum">
-                       <number>1</number>
-                      </property>
-                      <property name="maximum">
-                       <number>10</number>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
-                 </item>
-                 <item row="3" column="0" colspan="2">
-                  <widget class="QGroupBox" name="groupBox_6">
-                   <property name="title">
-                    <string>Graphical User Interface Settings</string>
-                   </property>
-                   <layout class="QGridLayout" name="gridLayout_13">
-                    <item row="0" column="0">
-                     <widget class="QGroupBox" name="groupbox_GUI_language">
-                      <property name="title">
-                       <string>Graphical User Interface Language (Neeeds restart)</string>
-                      </property>
-                      <layout class="QGridLayout" name="gridLayout_29">
-                       <item row="0" column="0">
-                        <widget class="QRadioButton" name="radio_ui_language_english">
-                         <property name="text">
-                          <string>English</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="1">
-                        <widget class="QRadioButton" name="radio_ui_language_german">
-                         <property name="text">
-                          <string>German</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="2">
-                        <widget class="QRadioButton" name="radio_ui_language_french">
-                         <property name="enabled">
-                          <bool>false</bool>
-                         </property>
-                         <property name="text">
-                          <string>French</string>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
-                     </widget>
-                    </item>
-                   </layout>
-                  </widget>
-                 </item>
-                 <item row="4" column="0" colspan="2">
-                  <widget class="QPushButton" name="button_settings_apply">
-                   <property name="text">
-                    <string>Apply / Reload</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="page_7">
-           <layout class="QGridLayout" name="gridLayout_26">
-            <item row="0" column="0">
-             <layout class="QGridLayout" name="gridLayout_31">
-              <item row="0" column="0">
-               <widget class="QTextBrowser" name="textBrowser"/>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="page_8">
-           <layout class="QGridLayout" name="gridLayout_40">
-            <item row="1" column="0" colspan="2">
-             <widget class="QGroupBox" name="groupbox_advanced_user_information">
-              <property name="title">
-               <string>Advanced User Information</string>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_28">
+                 </property>
+                 <property name="text">
+                  <string>Get recommended videos</string>
+                 </property>
+                </widget>
+               </item>
                <item row="0" column="0">
-                <layout class="QGridLayout" name="gridLayout_30">
-                 <item row="1" column="3">
-                  <widget class="QLineEdit" name="lineedit_user_fake_boobs"/>
-                 </item>
-                 <item row="0" column="3">
-                  <widget class="QLineEdit" name="lineedit_user_piercings"/>
-                 </item>
-                 <item row="3" column="0">
-                  <widget class="QLabel" name="label_height">
-                   <property name="text">
-                    <string>Height:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="7" column="1">
-                  <widget class="QLineEdit" name="lineedit_user_interests_hobbies"/>
-                 </item>
-                 <item row="4" column="1">
-                  <widget class="QLineEdit" name="lineedit_user_weight"/>
-                 </item>
-                 <item row="8" column="2">
-                  <widget class="QLabel" name="label_tattoos">
-                   <property name="text">
-                    <string>Tattoos:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="8" column="3">
-                  <widget class="QLineEdit" name="lineedit_user_tattoos"/>
-                 </item>
-                 <item row="6" column="1">
-                  <widget class="QLineEdit" name="lineedit_user_hair_color"/>
-                 </item>
-                 <item row="7" column="3">
-                  <widget class="QLineEdit" name="lineedit_user_city_country"/>
-                 </item>
-                 <item row="0" column="1">
-                  <widget class="QLineEdit" name="lineedit_user_relationship"/>
-                 </item>
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="label_relationship">
-                   <property name="text">
-                    <string>Relationship:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="3">
-                  <widget class="QLineEdit" name="lineedit_user_turn_ons"/>
-                 </item>
-                 <item row="1" column="1">
-                  <widget class="QLineEdit" name="lineedit_user_interested_in"/>
-                 </item>
-                 <item row="2" column="2">
-                  <widget class="QLabel" name="label_turn_ons">
-                   <property name="text">
-                    <string>Turn Ons:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="4" column="3">
-                  <widget class="QLineEdit" name="lineedit_user_video_views"/>
-                 </item>
-                 <item row="3" column="3">
-                  <widget class="QLineEdit" name="lineedit_user_turn_offs"/>
-                 </item>
-                 <item row="4" column="0">
-                  <widget class="QLabel" name="label_widght">
-                   <property name="text">
-                    <string>Weight:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="2">
-                  <widget class="QLabel" name="label_piercings">
-                   <property name="text">
-                    <string>Piercings:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="2">
-                  <widget class="QLabel" name="label_fake_boobs">
-                   <property name="text">
-                    <string>Fake Boobs:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="6" column="2">
-                  <widget class="QLabel" name="label_videos_watched">
-                   <property name="text">
-                    <string>Videos Watched:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="5" column="0">
-                  <widget class="QLabel" name="label_ethnicity">
-                   <property name="text">
-                    <string>Ethnicity:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="1">
-                  <widget class="QLineEdit" name="lineedit_user_height"/>
-                 </item>
-                 <item row="4" column="2">
-                  <widget class="QLabel" name="label_video_views">
-                   <property name="text">
-                    <string>Video Views:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="7" column="0">
-                  <widget class="QLabel" name="label_interests_hobbies">
-                   <property name="text">
-                    <string>Interests / Hobbies:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="8" column="1">
-                  <widget class="QLineEdit" name="lineedit_user_birth_place"/>
-                 </item>
-                 <item row="6" column="3">
-                  <widget class="QLineEdit" name="lineedit_user_videos_watched"/>
-                 </item>
-                 <item row="3" column="2">
-                  <widget class="QLabel" name="label_turn_offs">
-                   <property name="text">
-                    <string>Turn Offs:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="0">
-                  <widget class="QLabel" name="label_gender">
-                   <property name="text">
-                    <string>Gender:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="5" column="3">
-                  <widget class="QLineEdit" name="lineedit_user_profile_views"/>
-                 </item>
-                 <item row="6" column="0">
-                  <widget class="QLabel" name="label_hair_color">
-                   <property name="text">
-                    <string>Hair Color:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="5" column="2">
-                  <widget class="QLabel" name="label_profile_views">
-                   <property name="text">
-                    <string>Profile Views:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="7" column="2">
-                  <widget class="QLabel" name="label_city_country">
-                   <property name="text">
-                    <string>City / Country:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QLabel" name="label_interested_in">
-                   <property name="text">
-                    <string>Interested in:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="8" column="0">
-                  <widget class="QLabel" name="label_birth_place">
-                   <property name="text">
-                    <string>Birth Place:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="1">
-                  <widget class="QLineEdit" name="lineedit_user_gender"/>
-                 </item>
-                 <item row="5" column="1">
-                  <widget class="QLineEdit" name="lineedit_user_ethnicity"/>
-                 </item>
-                 <item row="9" column="0">
-                  <widget class="QLabel" name="label_home_town">
-                   <property name="text">
-                    <string>Home Town</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="9" column="1">
-                  <widget class="QLineEdit" name="lineedit_user_home_town"/>
-                 </item>
-                </layout>
+                <widget class="QLabel" name="label_username">
+                 <property name="text">
+                  <string>Username:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1" colspan="3">
+                <widget class="QLineEdit" name="lineedit_password">
+                 <property name="echoMode">
+                  <enum>QLineEdit::Password</enum>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Enter your PornHub Password</string>
+                 </property>
+                </widget>
                </item>
               </layout>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QGroupBox" name="groupBox_8">
-              <property name="title">
-               <string>Basic User Information</string>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_38">
-               <item row="0" column="0">
-                <layout class="QGridLayout" name="gridLayout_39">
-                 <item row="0" column="1">
-                  <widget class="QLineEdit" name="lineedit_user_name"/>
-                 </item>
-                 <item row="1" column="1">
-                  <widget class="QLineEdit" name="lineedit_user_type"/>
-                 </item>
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="label_12">
-                   <property name="text">
-                    <string>Name:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="0">
-                  <widget class="QPushButton" name="button_user_download_avatar">
-                   <property name="styleSheet">
-                    <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #7B1FA2; /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}
-</string>
-                   </property>
-                   <property name="text">
-                    <string>Download User Avatar</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QLabel" name="label_13">
-                   <property name="text">
-                    <string>User Type:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="1">
-                  <widget class="QPushButton" name="button_user_get_bio">
-                   <property name="styleSheet">
-                    <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #7B1FA2; /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}
-</string>
-                   </property>
-                   <property name="text">
-                    <string>Get User's Bio</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
+             </item>
+             <item row="0" column="0">
+              <layout class="QGridLayout" name="gridlayout_start_download_box_2">
+               <item row="3" column="1">
+                <widget class="QLineEdit" name="lineedit_file">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>300</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Click Open File to select a file, or write the location here and click Open File. URLs need to be separated with a new line. Supports HQPorner and PornHub</string>
+                 </property>
+                </widget>
                </item>
-              </layout>
-             </widget>
-            </item>
-            <item row="0" column="0" colspan="2">
-             <layout class="QGridLayout" name="gridLayout_27">
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_metadata_video_url">
-                <property name="text">
-                 <string>Video URL:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="2">
-               <widget class="QPushButton" name="button_metadata_user_start">
-                <property name="styleSheet">
-                 <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #7B1FA2; /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}
-</string>
-                </property>
-                <property name="text">
-                 <string>Start</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QLineEdit" name="lineedit_metadata_video_url"/>
-              </item>
-              <item row="1" column="1">
-               <widget class="QLineEdit" name="lineedit_metadata_user_url"/>
-              </item>
-              <item row="0" column="2">
-               <widget class="QPushButton" name="button_metadata_video_start">
-                <property name="styleSheet">
-                 <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #7B1FA2; /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}
-</string>
-                </property>
-                <property name="text">
-                 <string>Start</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_metadata_user_url">
-                <property name="text">
-                 <string>User URL:</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="2" column="1">
-             <widget class="QGroupBox" name="groupBox_7">
-              <property name="title">
-               <string>Video Information:</string>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_36">
-               <item row="0" column="0">
-                <layout class="QGridLayout" name="gridLayout_37">
-                 <item row="0" column="2">
-                  <widget class="QLabel" name="label_video_hotspots">
-                   <property name="text">
-                    <string>Hotspots:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="0">
-                  <widget class="QLabel" name="label_video_pornstars">
-                   <property name="text">
-                    <string>Pornstars:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="label_video_title">
-                   <property name="text">
-                    <string>Title:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="1">
-                  <widget class="QLineEdit" name="lineedit_video_duration"/>
-                 </item>
-                 <item row="2" column="0">
-                  <widget class="QLabel" name="label_video_duration">
-                   <property name="text">
-                    <string>Duration:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QLabel" name="label_video_views_2">
-                   <property name="text">
-                    <string>Views:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="2">
-                  <widget class="QLabel" name="label_video_rating">
-                   <property name="text">
-                    <string>Rating:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="1">
-                  <widget class="QLineEdit" name="lineedit_video_title"/>
-                 </item>
-                 <item row="1" column="2">
-                  <widget class="QLabel" name="label_video_tags">
-                   <property name="text">
-                    <string>Tags:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="1">
-                  <widget class="QLineEdit" name="lineedit_video_pornstars"/>
-                 </item>
-                 <item row="1" column="1">
-                  <widget class="QLineEdit" name="lineedit_video_views"/>
-                 </item>
-                 <item row="0" column="3">
-                  <widget class="QLineEdit" name="lineedit_video_hotspots"/>
-                 </item>
-                 <item row="1" column="3">
-                  <widget class="QLineEdit" name="lineedit_video_tags"/>
-                 </item>
-                 <item row="2" column="3">
-                  <widget class="QLineEdit" name="lineedit_video_rating"/>
-                 </item>
-                 <item row="3" column="3">
-                  <widget class="QLineEdit" name="lineedit_video_orientation"/>
-                 </item>
-                 <item row="3" column="2">
-                  <widget class="QLabel" name="label_video_orientation">
-                   <property name="text">
-                    <string>Orientation:</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
+               <item row="2" column="1">
+                <widget class="QLineEdit" name="lineedit_model_url">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>300</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Enter PornHub Model / Channel URL or a HQPorner Actresss name (e.g Anissa Kate or anissa-kate)</string>
+                 </property>
+                </widget>
                </item>
-               <item row="1" column="0">
-                <widget class="QPushButton" name="button_video_thumbnail_download">
+               <item row="2" column="2">
+                <widget class="QPushButton" name="button_model">
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
                  <property name="styleSheet">
                   <string notr="true">QPushButton {
     /* Base style */
@@ -2034,39 +414,1500 @@ QPushButton:pressed {
     background-color: #303F9F; /* Dark blue when pressed */
     border-color: #303F9F;
     border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}
-</string>
+}</string>
                  </property>
                  <property name="text">
-                  <string>Download Thumbnail</string>
+                  <string>Get Videos</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLineEdit" name="lineedit_url">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>300</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Enter PornHub or HQPorner Video URL</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_search_query">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>100</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Search Query:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QPushButton" name="button_download">
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Download</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_file">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>100</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>File:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QLineEdit" name="lineedit_search_query">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>300</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Enter a Search query for PornHub. For Advanced searching use the search tab on the left</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="2">
+                <widget class="QPushButton" name="button_open_file">
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Open File</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="2">
+                <widget class="QPushButton" name="button_search_videos">
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Get Videos</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_model_url">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>100</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Model URL:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_url">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>100</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>URL:</string>
                  </property>
                 </widget>
                </item>
               </layout>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <spacer name="verticalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Expanding</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="page_4">
+            <layout class="QGridLayout" name="gridLayout_6">
+             <item row="0" column="0" colspan="4">
+              <layout class="QGridLayout" name="gridLayout">
+               <item row="2" column="1">
+                <widget class="QLineEdit" name="lineedit_seach_pornhub_filters">
+                 <property name="placeholderText">
+                  <string>Search on PornHub (with filters defined below)</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QLineEdit" name="lineedit_search_hqporner">
+                 <property name="placeholderText">
+                  <string>Search for videos on HQPorner.com</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_query_1">
+                 <property name="text">
+                  <string>Query:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_query_3">
+                 <property name="text">
+                  <string>Query:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QPushButton" name="button_search_hqporner">
+                 <property name="text">
+                  <string>Start</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_query_2">
+                 <property name="text">
+                  <string>Query:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="2">
+                <widget class="QPushButton" name="button_search_pornhub_filters">
+                 <property name="text">
+                  <string>Start</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QLineEdit" name="lineedit_search_users">
+                 <property name="placeholderText">
+                  <string>Search for Users (with filters defined below)</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="2">
+                <widget class="QPushButton" name="button_search_users">
+                 <property name="text">
+                  <string>Start</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="0" colspan="4">
+              <layout class="QGridLayout" name="gridLayout_11">
+               <item row="0" column="0">
+                <widget class="QScrollArea" name="scroll_area_search_filters">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="widgetResizable">
+                  <bool>true</bool>
+                 </property>
+                 <widget class="QWidget" name="scrollAreaWidgetContents">
+                  <property name="geometry">
+                   <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>805</width>
+                    <height>637</height>
+                   </rect>
+                  </property>
+                  <layout class="QGridLayout" name="gridLayout_16">
+                   <item row="0" column="0">
+                    <layout class="QGridLayout" name="gridlayout_search_filter"/>
+                   </item>
+                  </layout>
+                 </widget>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QScrollArea" name="scroll_area_user_filter">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="widgetResizable">
+                  <bool>true</bool>
+                 </property>
+                 <widget class="QWidget" name="scrollAreaWidgetContents_2">
+                  <property name="geometry">
+                   <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>805</width>
+                    <height>637</height>
+                   </rect>
+                  </property>
+                  <layout class="QGridLayout" name="gridLayout_23">
+                   <item row="0" column="0">
+                    <layout class="QGridLayout" name="gridlayout_user_filter"/>
+                   </item>
+                  </layout>
+                 </widget>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="page_2">
+        <layout class="QGridLayout" name="gridLayout_25">
+         <item row="0" column="0">
+          <layout class="QGridLayout" name="gridLayout_15">
+           <item row="6" column="0">
+            <layout class="QGridLayout" name="gridLayout_12">
+             <item row="0" column="2">
+              <widget class="QRadioButton" name="radio_ui_language_german">
+               <property name="text">
+                <string>German</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_5">
+               <property name="text">
+                <string>Graphical User Interface Language:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QRadioButton" name="radio_ui_language_english">
+               <property name="text">
+                <string>English</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QRadioButton" name="radio_ui_language_french">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>French</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="2" column="0">
+            <layout class="QGridLayout" name="gridLayout_20">
+             <item row="0" column="2">
+              <widget class="QRadioButton" name="radio_threading_mode_ffmpeg">
+               <property name="text">
+                <string>FFMPEG</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QRadioButton" name="radio_threading_mode_high_performance">
+               <property name="text">
+                <string>High Performance</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QRadioButton" name="radio_threading_mode_default">
+               <property name="text">
+                <string>Default</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="4">
+              <widget class="QPushButton" name="button_threading_mode_help">
+               <property name="text">
+                <string>Help</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string>Threading Mode:</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="3" column="0">
+            <layout class="QGridLayout" name="gridLayout_19">
+             <item row="0" column="1">
+              <widget class="QRadioButton" name="radio_quality_best">
+               <property name="text">
+                <string>Best</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QRadioButton" name="radio_quality_worst">
+               <property name="text">
+                <string>Worst</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QRadioButton" name="radio_quality_half">
+               <property name="text">
+                <string>Half</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string>Quality:</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="0" column="0">
+            <layout class="QGridLayout" name="gridLayout_9">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string>Threading: </string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QRadioButton" name="radio_threading_no">
+               <property name="text">
+                <string>No</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QRadioButton" name="radio_threading_yes">
+               <property name="text">
+                <string>Yes</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="4" column="0">
+            <layout class="QGridLayout" name="gridLayout_18">
+             <item row="2" column="0">
+              <widget class="QRadioButton" name="radio_api_language_german">
+               <property name="text">
+                <string>German</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QRadioButton" name="radio_api_language_english">
+               <property name="text">
+                <string>English</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QRadioButton" name="radio_api_language_french">
+               <property name="text">
+                <string>French</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QRadioButton" name="radio_api_language_chinese">
+               <property name="text">
+                <string>Chinese</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QRadioButton" name="radio_api_language_russian">
+               <property name="text">
+                <string>Russian</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QRadioButton" name="radio_api_language_custom">
+               <property name="text">
+                <string>Custom</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" colspan="2">
+              <widget class="QLabel" name="label_4">
+               <property name="text">
+                <string>API Language</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="1" column="0">
+            <layout class="QGridLayout" name="gridLayout_17">
+             <item row="0" column="1">
+              <widget class="QSpinBox" name="spinbox_semaphore">
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <number>10</number>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_semaphore">
+               <property name="text">
+                <string>Semaphore:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0" colspan="2">
+              <widget class="QPushButton" name="button_semaphore_help">
+               <property name="text">
+                <string>Help</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="5" column="0">
+            <layout class="QGridLayout" name="gridLayout_22">
+             <item row="0" column="1" colspan="2">
+              <widget class="QLineEdit" name="lineedit_output_path">
+               <property name="placeholderText">
+                <string>Enter &quot;./&quot; for current directory</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_directory_system">
+               <property name="text">
+                <string>Use Directory system? </string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QRadioButton" name="radio_directory_system_no">
+               <property name="text">
+                <string>No</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="3">
+              <widget class="QPushButton" name="button_directory_system_help">
+               <property name="text">
+                <string>Help</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QRadioButton" name="radio_directory_system_yes">
+               <property name="text">
+                <string>Yes</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_output_path">
+               <property name="text">
+                <string>Output path:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QPushButton" name="button_output_path_select">
+               <property name="text">
+                <string>Select</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <layout class="QGridLayout" name="gridLayout_21">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_searching_limit">
+                 <property name="text">
+                  <string>Search Limit:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QSpinBox" name="spinbox_searching">
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>200</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+         <item row="1" column="0">
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <widget class="QPushButton" name="button_settings_apply">
+             <property name="text">
+              <string>Apply / Reload</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="page_7">
+        <layout class="QGridLayout" name="gridLayout_26">
+         <item row="0" column="0">
+          <layout class="QGridLayout" name="gridLayout_31">
+           <item row="0" column="0">
+            <widget class="QTextBrowser" name="textBrowser"/>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="page_8">
+        <layout class="QGridLayout" name="gridLayout_40">
+         <item row="1" column="0" colspan="2">
+          <widget class="QGroupBox" name="groupbox_advanced_user_information">
+           <property name="title">
+            <string>Advanced User Information</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_28">
+            <item row="0" column="0">
+             <layout class="QGridLayout" name="gridLayout_30">
+              <item row="1" column="3">
+               <widget class="QLineEdit" name="lineedit_user_fake_boobs"/>
+              </item>
+              <item row="0" column="3">
+               <widget class="QLineEdit" name="lineedit_user_piercings"/>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_height">
+                <property name="text">
+                 <string>Height:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="1">
+               <widget class="QLineEdit" name="lineedit_user_interests_hobbies"/>
+              </item>
+              <item row="4" column="1">
+               <widget class="QLineEdit" name="lineedit_user_weight"/>
+              </item>
+              <item row="8" column="2">
+               <widget class="QLabel" name="label_tattoos">
+                <property name="text">
+                 <string>Tattoos:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="3">
+               <widget class="QLineEdit" name="lineedit_user_tattoos"/>
+              </item>
+              <item row="6" column="1">
+               <widget class="QLineEdit" name="lineedit_user_hair_color"/>
+              </item>
+              <item row="7" column="3">
+               <widget class="QLineEdit" name="lineedit_user_city_country"/>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="lineedit_user_relationship"/>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_relationship">
+                <property name="text">
+                 <string>Relationship:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="3">
+               <widget class="QLineEdit" name="lineedit_user_turn_ons"/>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="lineedit_user_interested_in"/>
+              </item>
+              <item row="2" column="2">
+               <widget class="QLabel" name="label_turn_ons">
+                <property name="text">
+                 <string>Turn Ons:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="3">
+               <widget class="QLineEdit" name="lineedit_user_video_views"/>
+              </item>
+              <item row="3" column="3">
+               <widget class="QLineEdit" name="lineedit_user_turn_offs"/>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="label_widght">
+                <property name="text">
+                 <string>Weight:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QLabel" name="label_piercings">
+                <property name="text">
+                 <string>Piercings:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QLabel" name="label_fake_boobs">
+                <property name="text">
+                 <string>Fake Boobs:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="2">
+               <widget class="QLabel" name="label_videos_watched">
+                <property name="text">
+                 <string>Videos Watched:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QLabel" name="label_ethnicity">
+                <property name="text">
+                 <string>Ethnicity:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QLineEdit" name="lineedit_user_height"/>
+              </item>
+              <item row="4" column="2">
+               <widget class="QLabel" name="label_video_views">
+                <property name="text">
+                 <string>Video Views:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="0">
+               <widget class="QLabel" name="label_interests_hobbies">
+                <property name="text">
+                 <string>Interests / Hobbies:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="1">
+               <widget class="QLineEdit" name="lineedit_user_birth_place"/>
+              </item>
+              <item row="6" column="3">
+               <widget class="QLineEdit" name="lineedit_user_videos_watched"/>
+              </item>
+              <item row="3" column="2">
+               <widget class="QLabel" name="label_turn_offs">
+                <property name="text">
+                 <string>Turn Offs:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_gender">
+                <property name="text">
+                 <string>Gender:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="3">
+               <widget class="QLineEdit" name="lineedit_user_profile_views"/>
+              </item>
+              <item row="6" column="0">
+               <widget class="QLabel" name="label_hair_color">
+                <property name="text">
+                 <string>Hair Color:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="2">
+               <widget class="QLabel" name="label_profile_views">
+                <property name="text">
+                 <string>Profile Views:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="2">
+               <widget class="QLabel" name="label_city_country">
+                <property name="text">
+                 <string>City / Country:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_interested_in">
+                <property name="text">
+                 <string>Interested in:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="0">
+               <widget class="QLabel" name="label_birth_place">
+                <property name="text">
+                 <string>Birth Place:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="lineedit_user_gender"/>
+              </item>
+              <item row="5" column="1">
+               <widget class="QLineEdit" name="lineedit_user_ethnicity"/>
+              </item>
+              <item row="9" column="0">
+               <widget class="QLabel" name="label_home_town">
+                <property name="text">
+                 <string>Home Town</string>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="1">
+               <widget class="QLineEdit" name="lineedit_user_home_town"/>
+              </item>
+             </layout>
             </item>
            </layout>
           </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QGroupBox" name="groupBox_8">
+           <property name="title">
+            <string>Basic User Information</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_38">
+            <item row="0" column="0">
+             <layout class="QGridLayout" name="gridLayout_39">
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="lineedit_user_name"/>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="lineedit_user_type"/>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_12">
+                <property name="text">
+                 <string>Name:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QPushButton" name="button_user_download_avatar">
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}
+</string>
+                </property>
+                <property name="text">
+                 <string>Download User Avatar</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_13">
+                <property name="text">
+                 <string>User Type:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QPushButton" name="button_user_get_bio">
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}
+</string>
+                </property>
+                <property name="text">
+                 <string>Get User's Bio</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="0" colspan="2">
+          <layout class="QGridLayout" name="gridLayout_27">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_metadata_video_url">
+             <property name="text">
+              <string>Video URL:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QPushButton" name="button_metadata_user_start">
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}
+</string>
+             </property>
+             <property name="text">
+              <string>Start</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="lineedit_metadata_video_url"/>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="lineedit_metadata_user_url"/>
+           </item>
+           <item row="0" column="2">
+            <widget class="QPushButton" name="button_metadata_video_start">
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}
+</string>
+             </property>
+             <property name="text">
+              <string>Start</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_metadata_user_url">
+             <property name="text">
+              <string>User URL:</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="2" column="1">
+          <widget class="QGroupBox" name="groupBox_7">
+           <property name="title">
+            <string>Video Information:</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_36">
+            <item row="0" column="0">
+             <layout class="QGridLayout" name="gridLayout_37">
+              <item row="0" column="2">
+               <widget class="QLabel" name="label_video_hotspots">
+                <property name="text">
+                 <string>Hotspots:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_video_pornstars">
+                <property name="text">
+                 <string>Pornstars:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_video_title">
+                <property name="text">
+                 <string>Title:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="lineedit_video_duration"/>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_video_duration">
+                <property name="text">
+                 <string>Duration:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_video_views_2">
+                <property name="text">
+                 <string>Views:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QLabel" name="label_video_rating">
+                <property name="text">
+                 <string>Rating:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="lineedit_video_title"/>
+              </item>
+              <item row="1" column="2">
+               <widget class="QLabel" name="label_video_tags">
+                <property name="text">
+                 <string>Tags:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QLineEdit" name="lineedit_video_pornstars"/>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="lineedit_video_views"/>
+              </item>
+              <item row="0" column="3">
+               <widget class="QLineEdit" name="lineedit_video_hotspots"/>
+              </item>
+              <item row="1" column="3">
+               <widget class="QLineEdit" name="lineedit_video_tags"/>
+              </item>
+              <item row="2" column="3">
+               <widget class="QLineEdit" name="lineedit_video_rating"/>
+              </item>
+              <item row="3" column="3">
+               <widget class="QLineEdit" name="lineedit_video_orientation"/>
+              </item>
+              <item row="3" column="2">
+               <widget class="QLabel" name="label_video_orientation">
+                <property name="text">
+                 <string>Orientation:</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="1" column="0">
+             <widget class="QPushButton" name="button_video_thumbnail_download">
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    /* Base style */
+    background-color: #7B1FA2; /* Purple background */
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 8px; /* Slightly smaller radius for a smaller look */
+    border-color: #7B1FA2;
+    font: bold 12px; /* Smaller font size */
+    min-width: 8em; /* Smaller width */
+    padding: 4px; /* Less padding for a more compact look */
+    color: white; /* White text */
+}
+
+QPushButton:hover {
+    /* Hover effect */
+    background-color: #9575CD; /* Lighter violet for hover */
+    border-color: #9575CD;
+}
+
+QPushButton:pressed {
+    /* Pressed effect */
+    background-color: #303F9F; /* Dark blue when pressed */
+    border-color: #303F9F;
+    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
+}
+</string>
+              </property>
+              <property name="text">
+               <string>Download Thumbnail</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Expanding</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QWidget" name="widget_status" native="true">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_total_progress">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Total:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QProgressBar" name="progressbar_pornhub">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>600</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_progress_pornhub">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>PornHub:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QProgressBar" name="progressbar_total">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>600</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_progress_hqporner">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>HQPorner:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QProgressBar" name="progressbar_hqporner">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>600</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_progress_information">
+          <property name="text">
+           <string>Information: The total progressbar only counts the total progress of all PornHub videos being downloaded.</string>
+          </property>
          </widget>
         </item>
        </layout>
       </widget>
+     </item>
+     <item row="0" column="0" rowspan="2">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QPushButton" name="button_switch_home">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: none</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="button_switch_search">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: none;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="button_switch_settings">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: none;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="button_switch_metadata">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: none;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="button_switch_credits">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: none;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
