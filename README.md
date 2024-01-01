@@ -9,6 +9,8 @@
   <a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg" alt="Build Status"/></a>
   <a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/android.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/android.yml/badge.svg" alt="Android Build"/></a>
   <a href="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL"><img src="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL/badge.svg" alt="CodeQL Analysis"/></a>
+  <img alt="GitHub release (by tag)" src="https://img.shields.io/github/downloads/EchterAlsFake/Porn_Fetch/2.9/total">
+
 </p>
 
 <p align="center">
