@@ -295,7 +295,7 @@
         <item row="0" column="0">
          <widget class="QStackedWidget" name="stacked_widget_main">
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="page">
            <layout class="QGridLayout" name="gridLayout_5">
@@ -304,7 +304,7 @@
               <item>
                <widget class="QStackedWidget" name="stacked_widget_top">
                 <property name="currentIndex">
-                 <number>1</number>
+                 <number>0</number>
                 </property>
                 <widget class="QWidget" name="page_3">
                  <layout class="QGridLayout" name="gridLayout">
@@ -325,7 +325,7 @@
                        </size>
                       </property>
                       <property name="placeholderText">
-                       <string>Click Open File to select a file, or write the location here and click Open File. URLs need to be separated with a new line. Supports HQPorner and PornHub</string>
+                       <string>This feature does not work on Android, because there's a Bug in the QFileDialog, which I can't fix!</string>
                       </property>
                      </widget>
                     </item>
@@ -500,6 +500,9 @@ QPushButton:pressed {
                     </item>
                     <item row="3" column="2">
                      <widget class="QPushButton" name="button_open_file">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
                       </property>
@@ -620,6 +623,12 @@ QPushButton:pressed {
                    <layout class="QGridLayout" name="gridlayout_login_box_2">
                     <item row="1" column="0">
                      <widget class="QLabel" name="label_password">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
                       <property name="text">
                        <string>Password:</string>
                       </property>
@@ -637,6 +646,12 @@ QPushButton:pressed {
                     </item>
                     <item row="0" column="0">
                      <widget class="QLabel" name="label_username">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
                       <property name="text">
                        <string>Username:</string>
                       </property>

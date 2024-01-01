@@ -1,9 +1,25 @@
 # This Python file uses the following encoding: utf-8
 import requests
+__version__ = "3.0"
+__build__ = "android"
+
+"""
+Build Mode can be:
+
+1) 'android'
+2) 'desktop'
+
+Android will use a UI which is optimized for Android devices (still not very good),
+while Desktop is a lot better if you have a wide screen.
+
+Just in theory, you could use the desktop mode if you have a tablet and set landscape in buildozer orientation
+options.
+"""
+
 
 
 def send_error_log(message):
-    url = "http://192.168.176.244:8000/error-log/"
+    url = "http://192.168.2.139:8000/error-log/"
     data = {"message": message}
     try:
         response = requests.post(url, json=data)
@@ -32,7 +48,8 @@ try:
     from hue_shift import return_color, reset
     from phub import Quality, Client, errors, download, Video
     from shared_functions import *
-    from frontend.ui_form import Ui_Porn_Fetch_Widget
+    from src.frontend.ui_form_android import Ui_Porn_Fetch_Widget
+    from frontend.License import Ui_License
     #send_error_log("Successfully imported all packages...")
 
 except Exception as e:
@@ -40,8 +57,7 @@ except Exception as e:
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                             QTranslator, QCoreApplication)
-from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QFileDialog, QGridLayout, QCheckBox,
-                               QTreeWidgetItem, QLabel)
+from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QTreeWidgetItem)
 from PySide6.QtGui import QIcon
 
 total_segments = 0
@@ -115,6 +131,51 @@ class TreeWidgetSignals(QObject):
     text_data = Signal(list)
     progress = Signal(int, int)
     finished = Signal()
+
+
+class License(QWidget):
+    """License class to display the GPL 3 License to the user."""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.main_widget = None
+        self.conf = ConfigParser()
+        self.conf.read("config.ini")
+
+        self.ui = Ui_License()
+        self.ui.setupUi(self)
+        self.ui.button_accept.clicked.connect(self.accept)
+        self.ui.button_deny.clicked.connect(self.denied)
+
+    def check_license_and_proceed(self):
+        if self.conf["License"]["accepted"] == "true":
+            self.show_main_window()
+
+        else:
+            self.show()  # Show the license widget
+
+    def accept(self):
+        self.conf.set("License", "accepted", "true")
+        with open("config.ini", "w") as config_file:
+            self.conf.write(config_file)
+            config_file.close()
+
+        self.show_main_window()
+
+    def denied(self):
+        self.conf.set("License", "accepted", "false")
+        with open("config.ini", "w") as config_file:
+            self.conf.write(config_file)
+            config_file.close()
+            self.close()
+            sys.exit(0)
+
+    def show_main_window(self):
+        """ If license was accepted, the License widget is closed and the main widget will be shown."""
+        self.close()
+        self.main_widget = Porn_Fetch()
+        self.main_widget.show()
+
 
 
 class AddToTreeWidget(QRunnable):
@@ -1309,25 +1370,100 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
 
 
-if __name__ == "__main__":
+def main():
+    setup_config_file()
     app = QApplication(sys.argv)
+    app.setStyle("Fusion")
+
     try:
+        """
+        I had many problems with coding in general where something didn't work but the translations are the hardest
+        thing I've ever done. Now where I've understand it it makes sense but the Qt documentation is a piece of shit...
+        """
+        conf = ConfigParser()
+        conf.read("config.ini")
+
+        language = conf["UI"]["language"]
+
+        if language == "system":
+
+            # Obtain the system's locale
+            locale = QLocale.system()
+            # Get the language code (e.g., "de" for German)
+            language_code = locale.name().split('_')[0]
+            # Construct the path to the translation file
+
+        else:
+            language_code = language
+        path = f":/translations/translations/{language_code}.qm"
+
+        translator = QTranslator(app)
+        if translator.load(path):
+            logger_debug(f"{language_code} translation loaded")
+            app.installTranslator(translator)
+        else:
+            logger_debug(f"Failed to load {language_code} translation")
+
         file = QFile(":/style/stylesheets/stylesheet.qss")
         file.open(QFile.ReadOnly | QFile.Text)
         stream = QTextStream(file)
         app.setStyleSheet(stream.readAll())
 
-    except Exception as e:
-        send_error_log(f"Error applying stylesheet: {e}")
+        widget = License()  # Starts License widget and checks if license was accepted.
+        widget.check_license_and_proceed()
 
-    w = Porn_Fetch()
-    w.show()
+        """
+        The following exceptions are just general exceptions to handle some basic errors. They are not so relevant for
+        most cases.
+        """
+
+    except PermissionError:
+        ui_popup(
+            QCoreApplication.tr("Insufficient Permissions to access something. Please run Porn Fetch as root / admin"))
+
+    except ConnectionResetError:
+        ui_popup(
+            QCoreApplication.tr("Connection was reset. Are you connected to a public wifi or a university's wifi? "))
+
+    except ConnectionError:
+        ui_popup(QCoreApplication.tr("Connection Error, please make sure you have a stable internet connection"))
+
+    except KeyboardInterrupt:
+        sys.exit(0)
+
+    except SSLError:
+        ui_popup(QCoreApplication.tr(
+            "SSLError: Your connection is blocked by your ISP / IT administrator (Firewall). If you are in a "
+            "University or at school, please connect to a VPN / Proxy"))
+
+    except TypeError:
+        pass
+
+    except OSError as e:
+        ui_popup(QCoreApplication.tr(
+            f"This error shouldn't happen. If you still see it it's REALLY important that you report the "
+            f"following: {e}"))
+
+    except ZeroDivisionError:
+        pass
+
+    sys.exit(app.exec())
 
 
-    app.exec()
-"""
-    if get_output_path():
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-v", "--version", help="Shows the version information", action="store_true")
+
+    args = parser.parse_args()
+
+    try:
+        if args.version:
+            print(__version__)
+
         else:
-        label = QLabel("Porn Fetch can't write to your Download directory.")
-        label.show()
-"""
+            send_error_log(os.getcwd())
+            setup_config_file()
+            main()
+
+    except Exception as e:
+        send_error_log(f"Error: {e}")
