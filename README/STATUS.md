@@ -43,9 +43,9 @@ Android is now in full development, although I still have issues with Storage pe
 - [x] Single video download
 - [x] Tree Widget
 - [] Search Query support
-- [] Persistent settings
-- [] Title stripping
-- [] Debugging / Logging
+- [x] Persistent settings
+- [x] Title stripping
+- [x] Debugging / Logging
 
 
 

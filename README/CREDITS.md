@@ -1,6 +1,6 @@
 # Porn Fetch V3
 
-Copyright (C) 2023 Johannes Habel (EchterAlsFake)
+Copyright (C) 2023-2024 Johannes Habel (EchterAlsFake)
 
 
 ### This Project is only possible thanks to Egsagon's [PHUB](https://github.com/Egsagon/PHUB) API
