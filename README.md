@@ -8,7 +8,7 @@
 <p align="center">
   <a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg" alt="Build Status"/></a>
   <a href="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL"><img src="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL/badge.svg" alt="CodeQL Analysis"/></a>
-  <img alt="GitHub release (by tag)" src="https://img.shields.io/github/downloads/EchterAlsFake/Porn_Fetch/2.9/total">
+  <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/EchterAlsFake/Porn_Fetch/total?style=for-the-badge&logoColor=grey&labelColor=%2300CCCC&color=purple">
 
 </p>
 
