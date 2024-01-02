@@ -32,7 +32,7 @@
 
 # Android:
 
-Android is now in full development, although I still have issues with Storage permissions.
+Android is now in full development, although I still have issues with Storage permissions.<
 
 
 

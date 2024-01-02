@@ -22,7 +22,7 @@ Discord: echteralsfake (faster response)
 
 __license__ = "GPL 3"
 __version__ = "3.0"
-__build__ = "android"  # android or desktop
+__build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 
 
@@ -43,12 +43,8 @@ from hqporner_api.api import Client as hq_Client, Quality as hq_Quality, Video a
 from phub import Quality, Client, errors, download, Video
 from src.backend.shared_functions import *
 
-if __build__ == "android":
-    from src.frontend.ui_form_android import Ui_Porn_Fetch_Widget
 
-elif __build__ == "desktop":
-    from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
-
+from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
 from src.frontend.License import Ui_License
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                             QTranslator, QCoreApplication)
