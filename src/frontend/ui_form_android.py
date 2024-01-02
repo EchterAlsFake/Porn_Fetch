@@ -25,7 +25,7 @@ class Ui_Porn_Fetch_Widget(object):
     def setupUi(self, Porn_Fetch_Widget):
         if not Porn_Fetch_Widget.objectName():
             Porn_Fetch_Widget.setObjectName(u"Porn_Fetch_Widget")
-        Porn_Fetch_Widget.resize(1377, 917)
+        Porn_Fetch_Widget.resize(1076, 802)
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -500,7 +500,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollArea_4.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 1245, 551))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 944, 551))
         self.gridLayout_16 = QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_16.setObjectName(u"gridLayout_16")
         self.gridLayout_7 = QGridLayout()
@@ -532,7 +532,7 @@ class Ui_Porn_Fetch_Widget(object):
         __qtreewidgetitem.setText(0, u"Title");
         self.treeWidget.setHeaderItem(__qtreewidgetitem)
         self.treeWidget.setObjectName(u"treeWidget")
-        sizePolicy4 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.MinimumExpanding)
+        sizePolicy4 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
         sizePolicy4.setHorizontalStretch(0)
         sizePolicy4.setVerticalStretch(0)
         sizePolicy4.setHeightForWidth(self.treeWidget.sizePolicy().hasHeightForWidth())
@@ -647,6 +647,10 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_5.addLayout(self.verticalLayout_6, 0, 0, 1, 1)
 
+        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout_5.addItem(self.verticalSpacer_4, 1, 0, 1, 1)
+
         self.stacked_widget_main.addWidget(self.page)
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
@@ -659,7 +663,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1259, 762))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 958, 647))
         self.gridLayout_9 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_9.setObjectName(u"gridLayout_9")
         self.gridLayout_6 = QGridLayout()
@@ -866,7 +870,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 1259, 762))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 958, 647))
         self.gridLayout_8 = QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
         self.textBrowser = QTextBrowser(self.scrollAreaWidgetContents_2)
@@ -893,7 +897,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollArea_3.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 1259, 762))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 944, 662))
         self.gridLayout_10 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_10.setObjectName(u"gridLayout_10")
         self.gridLayout_27 = QGridLayout()
@@ -1401,11 +1405,17 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridLayout_14.setObjectName(u"gridLayout_14")
         self.lineedit_seach_pornhub_filters = QLineEdit(self.page_5)
         self.lineedit_seach_pornhub_filters.setObjectName(u"lineedit_seach_pornhub_filters")
+        sizePolicy1.setHeightForWidth(self.lineedit_seach_pornhub_filters.sizePolicy().hasHeightForWidth())
+        self.lineedit_seach_pornhub_filters.setSizePolicy(sizePolicy1)
+        self.lineedit_seach_pornhub_filters.setMinimumSize(QSize(100, 0))
 
         self.gridLayout_14.addWidget(self.lineedit_seach_pornhub_filters, 2, 1, 1, 1)
 
         self.lineedit_search_hqporner = QLineEdit(self.page_5)
         self.lineedit_search_hqporner.setObjectName(u"lineedit_search_hqporner")
+        sizePolicy1.setHeightForWidth(self.lineedit_search_hqporner.sizePolicy().hasHeightForWidth())
+        self.lineedit_search_hqporner.setSizePolicy(sizePolicy1)
+        self.lineedit_search_hqporner.setMinimumSize(QSize(100, 0))
 
         self.gridLayout_14.addWidget(self.lineedit_search_hqporner, 1, 1, 1, 1)
 
@@ -1436,6 +1446,9 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.lineedit_search_users = QLineEdit(self.page_5)
         self.lineedit_search_users.setObjectName(u"lineedit_search_users")
+        sizePolicy1.setHeightForWidth(self.lineedit_search_users.sizePolicy().hasHeightForWidth())
+        self.lineedit_search_users.setSizePolicy(sizePolicy1)
+        self.lineedit_search_users.setMinimumSize(QSize(100, 0))
 
         self.gridLayout_14.addWidget(self.lineedit_search_users, 3, 1, 1, 1)
 
@@ -1451,15 +1464,12 @@ class Ui_Porn_Fetch_Widget(object):
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.scroll_area_search_filters_ = QScrollArea(self.page_5)
         self.scroll_area_search_filters_.setObjectName(u"scroll_area_search_filters_")
-        sizePolicy5 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
-        sizePolicy5.setHorizontalStretch(0)
-        sizePolicy5.setVerticalStretch(0)
-        sizePolicy5.setHeightForWidth(self.scroll_area_search_filters_.sizePolicy().hasHeightForWidth())
-        self.scroll_area_search_filters_.setSizePolicy(sizePolicy5)
+        sizePolicy4.setHeightForWidth(self.scroll_area_search_filters_.sizePolicy().hasHeightForWidth())
+        self.scroll_area_search_filters_.setSizePolicy(sizePolicy4)
         self.scroll_area_search_filters_.setWidgetResizable(True)
         self.scrollAreaWidgetContents_6 = QWidget()
         self.scrollAreaWidgetContents_6.setObjectName(u"scrollAreaWidgetContents_6")
-        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 626, 667))
+        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 475, 552))
         self.gridLayout_19 = QGridLayout(self.scrollAreaWidgetContents_6)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.gridlayout_search_filter = QGridLayout()
@@ -1473,12 +1483,12 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.scroll_area_search_filters = QScrollArea(self.page_5)
         self.scroll_area_search_filters.setObjectName(u"scroll_area_search_filters")
-        sizePolicy5.setHeightForWidth(self.scroll_area_search_filters.sizePolicy().hasHeightForWidth())
-        self.scroll_area_search_filters.setSizePolicy(sizePolicy5)
+        sizePolicy4.setHeightForWidth(self.scroll_area_search_filters.sizePolicy().hasHeightForWidth())
+        self.scroll_area_search_filters.setSizePolicy(sizePolicy4)
         self.scroll_area_search_filters.setWidgetResizable(True)
         self.scrollAreaWidgetContents_5 = QWidget()
         self.scrollAreaWidgetContents_5.setObjectName(u"scrollAreaWidgetContents_5")
-        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 625, 667))
+        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 475, 552))
         self.gridLayout_18 = QGridLayout(self.scrollAreaWidgetContents_5)
         self.gridLayout_18.setObjectName(u"gridLayout_18")
         self.gridlayout_user_filter = QGridLayout()

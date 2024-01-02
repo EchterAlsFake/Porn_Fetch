@@ -9,6 +9,7 @@
         <file>graphics/down-arrow.ico</file>
         <file>graphics/tick.ico</file>
         <file>graphics/list.svg</file>
+        <file>graphics/account.svg</file>
     </qresource>
     <qresource prefix="/style">
         <file>stylesheets/stylesheet.qss</file>

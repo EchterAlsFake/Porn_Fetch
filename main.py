@@ -22,7 +22,7 @@ Discord: echteralsfake (faster response)
 
 __license__ = "GPL 3"
 __version__ = "3.0"
-__build__ = "android"  # android or desktop
+__build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 
 
@@ -33,6 +33,7 @@ import os.path
 import time
 import argparse
 import markdown
+import time
 import traceback
 import src.frontend.resources
 
@@ -64,14 +65,7 @@ send_error_logs = False  # Only enabled when developing the application.
 def send_error_log(message):
     url = "http://192.168.2.139:8000/error-log/"
     data = {"message": message}
-    try:
-        response = requests.post(url, json=data)
-        if response.status_code == 200:
-            print("Error log sent successfully")
-        else:
-            print(f"Failed to send error log: {response.content}")
-    except requests.exceptions.RequestException as e:
-        print(f"Request failed: {e}")
+    response = requests.post(url, json=data)
 
 
 def get_output_path(path="/storage/emulated/0/"):
@@ -98,7 +92,7 @@ def get_output_path(path="/storage/emulated/0/"):
                     return True
 
             except Exception as e:
-                print(f"Exception: {e}")
+                logger_error(e)
                 return False
 
     else:
@@ -292,7 +286,6 @@ class DownloadThread(QRunnable):
     def run(self):
         try:
             if isinstance(self.video, Video):
-                print(self.video)
                 if self.threading_mode == 2:
                     self.downloader = download.threaded(max_workers=20, timeout=5)
 
@@ -573,7 +566,7 @@ class Porn_Fetch(QWidget):
         self.ui.progressbar_pornhub.setStyleSheet(stream_progress_pornhub.readAll())
         self.ui.progressbar_hqporner.setStyleSheet(stream_progress_hqporner.readAll())
         self.ui.progressbar_total.setStyleSheet(stream_progress_total.readAll())
-        self.logger_debug("Loaded Icons!")
+        logger_debug("Loaded Icons!")
 
     def language_strings(self):
         """Contains the language strings. Needed for translation"""
@@ -692,15 +685,28 @@ Sorry.""")
         self.ui.scrollArea_2.setStyleSheet(stylesheet_scroll_area)
         self.ui.scrollArea_3.setStyleSheet(stylesheet_scroll_area)
         self.ui.scrollArea_4.setStyleSheet(stylesheet_scroll_area)
+        self.ui.button_switch_account.setIcon(QIcon(":/images/graphics/account.svg"))
+        self.ui.button_switch_account.clicked.connect(self.switch_to_account)
+        self.ui.button_switch_search.clicked.connect(self.switch_to_search_android)
+
+    def switch_to_account(self):
+        """Only needed for Android build"""
+        self.ui.stacked_widget_top.setCurrentIndex(1)
+        self.ui.stacked_widget_main.setCurrentIndex(0)
+        self.layout().update()
 
     def switch_to_home(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(0)
         self.layout().update()
 
-    def switch_to_search(self):
+    def switch_to_search_desktop(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(1)
+        self.layout().update()
+
+    def switch_to_search_android(self):
+        self.ui.stacked_widget_main.setCurrentIndex(4)
         self.layout().update()
 
     def switch_to_settings(self):
@@ -723,7 +729,7 @@ Sorry.""")
 
         # Menu Bar Switch Button Connections
         self.ui.button_switch_home.clicked.connect(self.switch_to_home)
-        self.ui.button_switch_search.clicked.connect(self.switch_to_search)
+        self.ui.button_switch_search.clicked.connect(self.switch_to_search_desktop)
         self.ui.button_switch_settings.clicked.connect(self.switch_to_settings)
         self.ui.button_switch_credits.clicked.connect(self.switch_to_credits)
         self.ui.button_switch_metadata.clicked.connect(self.switch_to_metadata)
@@ -761,17 +767,8 @@ Sorry.""")
         self.ui.button_user_download_avatar.clicked.connect(self.get_user_avatar)
         self.ui.button_video_thumbnail_download.clicked.connect(self.get_video_thumbnail)
 
-        self.logger_debug("Connected Buttons!")
+        logger_debug("Connected Buttons!")
 
-    def logger_error(self, e):
-        print(f"{datetime.now()} : {Fore.LIGHTRED_EX}[ERROR] : {reset()} : {e}")
-        if send_error_logs:
-            send_error_log(f"ERROR: {e}")
-
-    def logger_debug(self, e):
-        print(f"{datetime.now()} : {Fore.LIGHTCYAN_EX}[DEBUG] : {return_color()} : {e} {reset()}")
-        if send_error_logs:
-            send_error_log(f"DEBUG: {e}")
 
     def switch_login_button_state(self):
         file = QFile(":/style/stylesheets/stylesheet_switch_buttons_login_state.qss")
@@ -910,7 +907,7 @@ Sorry.""")
             self.ui.radio_ui_language_french.setChecked(True)
 
         self.semaphore = QSemaphore(int(self.semaphore_limit))
-        self.logger_debug("Loaded User Settings!")
+        logger_debug("Loaded User Settings!")
 
     def save_user_settings(self):
         """Saves the user settings to the configuration file based on the UI state."""
@@ -960,7 +957,7 @@ Sorry.""")
             self.conf.write(config_file)
 
         ui_popup(self.save_user_settings_language_string)
-        self.logger_debug("Saved User Settings!")
+        logger_debug("Saved User Settings!")
 
     """
     The following functions are related to the tree widget    
@@ -1002,7 +999,6 @@ Sorry.""")
         duration = data[2]
         index = data[3]
         video = data[4]
-        print(f"Received Video: {type(video)}")
 
         item = QTreeWidgetItem(self.ui.treeWidget)
         item.setText(0, f"{index}) {title}")
@@ -1213,7 +1209,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         self.ui.progressbar_hqporner.setValue(value)
 
     def download_completed(self):
-        self.logger_debug("Download Completed!")
+        logger_debug("Download Completed!")
         self.semaphore.release()
 
     def start_undefined_range(self):
@@ -1235,13 +1231,13 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         self.download_thread.signals.progress_hqporner.connect(self.update_progressbar_hqporner)
         self.download_thread.signals_completed.completed.connect(self.download_completed)
         self.threadpool.start(self.download_thread)
-        self.logger_debug("Started Download Thread!")
+        logger_debug("Started Download Thread!")
 
     def process_video_without_thread(self, output_path, video, quality):
         """Downloads the video without any threading.  (NOT RECOMMENDED!)"""
-        self.logger_debug("Downloading without threading! Note, the GUI will freeze until the video is downloaded!!!")
+        logger_debug("Downloading without threading! Note, the GUI will freeze until the video is downloaded!!!")
         video.download(path=output_path, quality=quality, downloader=download.default)
-        self.logger_debug("Download Completed!")
+        logger_debug("Download Completed!")
 
     """
     The following functions are related to the User's account
@@ -1541,6 +1537,6 @@ if __name__ == "__main__":
 
     except Exception as e:
         error_message = "An error occurred: " + str(e) + "\n" + traceback.format_exc()
-        print(error_message)
+        logger_error(error_message)
         if send_error_logs:
             send_error_log(error_message)
