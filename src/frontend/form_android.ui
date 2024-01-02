@@ -295,7 +295,7 @@
         <item row="0" column="0">
          <widget class="QStackedWidget" name="stacked_widget_main">
           <property name="currentIndex">
-           <number>4</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="page">
            <layout class="QGridLayout" name="gridLayout_5">
