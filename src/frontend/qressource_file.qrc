@@ -7,9 +7,9 @@
         <file>graphics/logo_transparent.ico</file>
         <file>graphics/top-arrow.ico</file>
         <file>graphics/down-arrow.ico</file>
-        <file>graphics/tick.ico</file>
         <file>graphics/list.svg</file>
         <file>graphics/account.svg</file>
+        <file>graphics/unread.svg</file>
     </qresource>
     <qresource prefix="/style">
         <file>stylesheets/stylesheet.qss</file>
@@ -23,7 +23,6 @@
         <file>stylesheets/stylesheet_button_login.qss</file>
         <file>stylesheets/stylesheet_buttons_login.qss</file>
         <file>stylesheets/stylesheet_switch_buttons_login_state.qss</file>
-        <file>stylesheets/stylesheet_scroll_area.qss</file>
     </qresource>
     <qresource prefix="/credits">
         <file>../../README/CREDITS.md</file>

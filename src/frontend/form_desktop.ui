@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1338</width>
-    <height>755</height>
+    <width>1491</width>
+    <height>712</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -33,6 +33,9 @@
        <layout class="QGridLayout" name="gridLayout_13">
         <item row="0" column="0">
          <widget class="QStackedWidget" name="stacked_widget_main">
+          <property name="styleSheet">
+           <string/>
+          </property>
           <property name="currentIndex">
            <number>3</number>
           </property>
@@ -59,8 +62,8 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>1220</width>
-                   <height>577</height>
+                   <width>1359</width>
+                   <height>579</height>
                   </rect>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_4">
@@ -232,7 +235,7 @@ QPushButton:pressed {
                     <property name="minimumSize">
                      <size>
                       <width>100</width>
-                      <height>100</height>
+                      <height>300</height>
                      </size>
                     </property>
                     <column>
@@ -254,8 +257,11 @@ QPushButton:pressed {
                   </item>
                   <item row="0" column="0">
                    <widget class="QStackedWidget" name="stacked_widget_top">
+                    <property name="styleSheet">
+                     <string/>
+                    </property>
                     <property name="currentIndex">
-                     <number>0</number>
+                     <number>3</number>
                     </property>
                     <widget class="QWidget" name="page_3">
                      <layout class="QGridLayout" name="gridLayout_5">
@@ -271,7 +277,7 @@ QPushButton:pressed {
                           </property>
                           <property name="minimumSize">
                            <size>
-                            <width>150</width>
+                            <width>0</width>
                             <height>0</height>
                            </size>
                           </property>
@@ -290,7 +296,7 @@ QPushButton:pressed {
                           </property>
                           <property name="minimumSize">
                            <size>
-                            <width>150</width>
+                            <width>0</width>
                             <height>0</height>
                            </size>
                           </property>
@@ -303,7 +309,7 @@ QPushButton:pressed {
                          <widget class="QPushButton" name="button_model">
                           <property name="minimumSize">
                            <size>
-                            <width>148</width>
+                            <width>0</width>
                             <height>0</height>
                            </size>
                           </property>
@@ -311,31 +317,7 @@ QPushButton:pressed {
                            <cursorShape>PointingHandCursor</cursorShape>
                           </property>
                           <property name="styleSheet">
-                           <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #7B1FA2; /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}</string>
+                           <string notr="true"/>
                           </property>
                           <property name="text">
                            <string>Get Videos</string>
@@ -352,7 +334,7 @@ QPushButton:pressed {
                           </property>
                           <property name="minimumSize">
                            <size>
-                            <width>150</width>
+                            <width>0</width>
                             <height>0</height>
                            </size>
                           </property>
@@ -384,7 +366,7 @@ QPushButton:pressed {
                          <widget class="QPushButton" name="button_download">
                           <property name="minimumSize">
                            <size>
-                            <width>148</width>
+                            <width>0</width>
                             <height>0</height>
                            </size>
                           </property>
@@ -392,31 +374,7 @@ QPushButton:pressed {
                            <cursorShape>PointingHandCursor</cursorShape>
                           </property>
                           <property name="styleSheet">
-                           <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #7B1FA2; /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}</string>
+                           <string notr="true"/>
                           </property>
                           <property name="text">
                            <string>Download</string>
@@ -452,7 +410,7 @@ QPushButton:pressed {
                           </property>
                           <property name="minimumSize">
                            <size>
-                            <width>150</width>
+                            <width>0</width>
                             <height>0</height>
                            </size>
                           </property>
@@ -465,7 +423,7 @@ QPushButton:pressed {
                          <widget class="QPushButton" name="button_open_file">
                           <property name="minimumSize">
                            <size>
-                            <width>148</width>
+                            <width>0</width>
                             <height>0</height>
                            </size>
                           </property>
@@ -473,31 +431,7 @@ QPushButton:pressed {
                            <cursorShape>PointingHandCursor</cursorShape>
                           </property>
                           <property name="styleSheet">
-                           <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #7B1FA2; /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}</string>
+                           <string notr="true"/>
                           </property>
                           <property name="text">
                            <string>Open File</string>
@@ -508,7 +442,7 @@ QPushButton:pressed {
                          <widget class="QPushButton" name="button_search_videos">
                           <property name="minimumSize">
                            <size>
-                            <width>148</width>
+                            <width>0</width>
                             <height>0</height>
                            </size>
                           </property>
@@ -516,31 +450,7 @@ QPushButton:pressed {
                            <cursorShape>PointingHandCursor</cursorShape>
                           </property>
                           <property name="styleSheet">
-                           <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #7B1FA2; /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}</string>
+                           <string notr="true"/>
                           </property>
                           <property name="text">
                            <string>Get Videos</string>
@@ -618,16 +528,7 @@ QPushButton:pressed {
                            <cursorShape>PointingHandCursor</cursorShape>
                           </property>
                           <property name="styleSheet">
-                           <string notr="true">QPushButton {
-    border: 2px solid #444;
-    border-radius: 4px;
-    padding: 5px;
-    color: #DDD;
-    font-weight: bold;
-    font-size: 14px;
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #78909C, stop:1 #90A4AE);
-}</string>
+                           <string notr="true"/>
                           </property>
                           <property name="text">
                            <string>Get Liked videos</string>
@@ -640,16 +541,7 @@ QPushButton:pressed {
                            <cursorShape>PointingHandCursor</cursorShape>
                           </property>
                           <property name="styleSheet">
-                           <string notr="true">QPushButton {
-    border: 2px solid #444;
-    border-radius: 4px;
-    padding: 5px;
-    color: #DDD;
-    font-weight: bold;
-    font-size: 14px;
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #78909C, stop:1 #90A4AE);
-}</string>
+                           <string notr="true"/>
                           </property>
                           <property name="text">
                            <string>Get watched videos</string>
@@ -667,7 +559,7 @@ QPushButton:pressed {
                          <widget class="QPushButton" name="button_login">
                           <property name="minimumSize">
                            <size>
-                            <width>206</width>
+                            <width>0</width>
                             <height>0</height>
                            </size>
                           </property>
@@ -675,31 +567,7 @@ QPushButton:pressed {
                            <cursorShape>PointingHandCursor</cursorShape>
                           </property>
                           <property name="styleSheet">
-                           <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #4CAF50; /* Green background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 10px;
-    border-color: #4CAF50;
-    font: bold 14px;
-    min-width: 10em;
-    padding: 6px;
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #66BB6A;
-    border-color: #66BB6A;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #388E3C;
-    border-color: #388E3C;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}</string>
+                           <string notr="true"/>
                           </property>
                           <property name="text">
                            <string>Login</string>
@@ -712,16 +580,7 @@ QPushButton:pressed {
                            <cursorShape>PointingHandCursor</cursorShape>
                           </property>
                           <property name="styleSheet">
-                           <string notr="true">QPushButton {
-    border: 2px solid #444;
-    border-radius: 4px;
-    padding: 5px;
-    color: #DDD;
-    font-weight: bold;
-    font-size: 14px;
-    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #78909C, stop:1 #90A4AE);
-}</string>
+                           <string notr="true"/>
                           </property>
                           <property name="text">
                            <string>Get recommended videos</string>
@@ -890,8 +749,8 @@ QPushButton:pressed {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>753</width>
-                             <height>243</height>
+                             <width>656</width>
+                             <height>68</height>
                             </rect>
                            </property>
                            <layout class="QGridLayout" name="gridLayout_16">
@@ -924,8 +783,8 @@ QPushButton:pressed {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>753</width>
-                             <height>243</height>
+                             <width>655</width>
+                             <height>68</height>
                             </rect>
                            </property>
                            <layout class="QGridLayout" name="gridLayout_23">
@@ -1131,409 +990,414 @@ QPushButton:pressed {
           <widget class="QWidget" name="page_2">
            <layout class="QGridLayout" name="gridLayout_25">
             <item row="0" column="0">
-             <layout class="QGridLayout" name="gridLayout_15">
-              <item row="6" column="0">
-               <layout class="QGridLayout" name="gridLayout_12">
-                <item row="0" column="1">
-                 <widget class="QRadioButton" name="radio_ui_language_english">
-                  <property name="text">
-                   <string>English</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QRadioButton" name="radio_ui_language_german">
-                  <property name="text">
-                   <string>German</string>
-                  </property>
-                 </widget>
-                </item>
+             <widget class="QScrollArea" name="scrollArea_4">
+              <property name="widgetResizable">
+               <bool>true</bool>
+              </property>
+              <widget class="QWidget" name="scrollAreaWidgetContents_6">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>1361</width>
+                 <height>444</height>
+                </rect>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_34">
                 <item row="0" column="0">
-                 <widget class="QLabel" name="label_5">
-                  <property name="text">
-                   <string>Graphical User Interface Language:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="3">
-                 <widget class="QRadioButton" name="radio_ui_language_french">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="text">
-                   <string>French</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="4">
-                 <spacer name="horizontalSpacer_11">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </item>
-              <item row="2" column="0">
-               <layout class="QGridLayout" name="gridLayout_20">
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_2">
-                  <property name="text">
-                   <string>Threading Mode:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QRadioButton" name="radio_threading_mode_ffmpeg">
-                  <property name="text">
-                   <string>FFMPEG</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QRadioButton" name="radio_threading_mode_high_performance">
-                  <property name="text">
-                   <string>High Performance</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="3">
-                 <widget class="QRadioButton" name="radio_threading_mode_default">
-                  <property name="text">
-                   <string>Default</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="4">
-                 <widget class="QPushButton" name="button_threading_mode_help">
-                  <property name="text">
-                   <string>Help</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="5">
-                 <spacer name="horizontalSpacer_7">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </item>
-              <item row="3" column="0">
-               <layout class="QGridLayout" name="gridLayout_19">
-                <item row="0" column="3">
-                 <widget class="QRadioButton" name="radio_quality_worst">
-                  <property name="text">
-                   <string>Worst</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_3">
-                  <property name="text">
-                   <string>Quality:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QRadioButton" name="radio_quality_best">
-                  <property name="text">
-                   <string>Best</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QRadioButton" name="radio_quality_half">
-                  <property name="text">
-                   <string>Half</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="4">
-                 <spacer name="horizontalSpacer_4">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </item>
-              <item row="0" column="0">
-               <layout class="QGridLayout" name="gridLayout_9">
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label">
-                  <property name="text">
-                   <string>Threading: </string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QRadioButton" name="radio_threading_no">
-                  <property name="text">
-                   <string>No</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QRadioButton" name="radio_threading_yes">
-                  <property name="text">
-                   <string>Yes</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="3">
-                 <spacer name="horizontalSpacer_9">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </item>
-              <item row="4" column="0">
-               <layout class="QGridLayout" name="gridLayout_18">
-                <item row="2" column="1">
-                 <widget class="QRadioButton" name="radio_api_language_russian">
-                  <property name="text">
-                   <string>Russian</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1">
-                 <widget class="QRadioButton" name="radio_api_language_custom">
-                  <property name="text">
-                   <string>Custom</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QRadioButton" name="radio_api_language_english">
-                  <property name="text">
-                   <string>English</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QRadioButton" name="radio_api_language_german">
-                  <property name="text">
-                   <string>German</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0">
-                 <widget class="QRadioButton" name="radio_api_language_french">
-                  <property name="text">
-                   <string>French</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QRadioButton" name="radio_api_language_chinese">
-                  <property name="text">
-                   <string>Chinese</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0" colspan="2">
-                 <widget class="QLabel" name="label_4">
-                  <property name="text">
-                   <string>API Language</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="2">
-                 <spacer name="horizontalSpacer_3">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </item>
-              <item row="1" column="0">
-               <layout class="QGridLayout" name="gridLayout_17">
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_semaphore">
-                  <property name="text">
-                   <string>Semaphore:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QSpinBox" name="spinbox_semaphore">
-                  <property name="minimum">
-                   <number>1</number>
-                  </property>
-                  <property name="maximum">
-                   <number>10</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0" colspan="2">
-                 <widget class="QPushButton" name="button_semaphore_help">
-                  <property name="text">
-                   <string>Help</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <spacer name="horizontalSpacer_8">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </item>
-              <item row="5" column="0">
-               <layout class="QGridLayout" name="gridLayout_22">
-                <item row="0" column="1" colspan="2">
-                 <widget class="QLineEdit" name="lineedit_output_path">
-                  <property name="placeholderText">
-                   <string>Enter &quot;./&quot; for current directory</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <layout class="QGridLayout" name="gridLayout_21">
+                 <layout class="QGridLayout" name="gridLayout_15">
+                  <item row="2" column="0">
+                   <layout class="QGridLayout" name="gridLayout_20">
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_2">
+                      <property name="text">
+                       <string>Threading Mode:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="QRadioButton" name="radio_threading_mode_ffmpeg">
+                      <property name="text">
+                       <string>FFMPEG</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QRadioButton" name="radio_threading_mode_high_performance">
+                      <property name="text">
+                       <string>High Performance</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="3">
+                     <widget class="QRadioButton" name="radio_threading_mode_default">
+                      <property name="text">
+                       <string>Default</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="4">
+                     <widget class="QPushButton" name="button_threading_mode_help">
+                      <property name="text">
+                       <string>Help</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="5">
+                     <spacer name="horizontalSpacer_7">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="1" column="0">
+                   <layout class="QGridLayout" name="gridLayout_17">
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_semaphore">
+                      <property name="text">
+                       <string>Semaphore:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QSpinBox" name="spinbox_semaphore">
+                      <property name="minimum">
+                       <number>1</number>
+                      </property>
+                      <property name="maximum">
+                       <number>10</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0" colspan="2">
+                     <widget class="QPushButton" name="button_semaphore_help">
+                      <property name="text">
+                       <string>Help</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <spacer name="horizontalSpacer_8">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="4" column="0">
+                   <layout class="QGridLayout" name="gridLayout_18">
+                    <item row="2" column="1">
+                     <widget class="QRadioButton" name="radio_api_language_russian">
+                      <property name="text">
+                       <string>Russian</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="QRadioButton" name="radio_api_language_custom">
+                      <property name="text">
+                       <string>Custom</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QRadioButton" name="radio_api_language_english">
+                      <property name="text">
+                       <string>English</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QRadioButton" name="radio_api_language_german">
+                      <property name="text">
+                       <string>German</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QRadioButton" name="radio_api_language_french">
+                      <property name="text">
+                       <string>French</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QRadioButton" name="radio_api_language_chinese">
+                      <property name="text">
+                       <string>Chinese</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0" colspan="2">
+                     <widget class="QLabel" name="label_4">
+                      <property name="text">
+                       <string>API Language</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2">
+                     <spacer name="horizontalSpacer_3">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="6" column="0">
+                   <layout class="QGridLayout" name="gridLayout_12">
+                    <item row="0" column="1">
+                     <widget class="QRadioButton" name="radio_ui_language_english">
+                      <property name="text">
+                       <string>English</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="QRadioButton" name="radio_ui_language_german">
+                      <property name="text">
+                       <string>German</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_5">
+                      <property name="text">
+                       <string>Graphical User Interface Language:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="3">
+                     <widget class="QRadioButton" name="radio_ui_language_french">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
+                      <property name="text">
+                       <string>French</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="4">
+                     <spacer name="horizontalSpacer_11">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="3" column="0">
+                   <layout class="QGridLayout" name="gridLayout_19">
+                    <item row="0" column="3">
+                     <widget class="QRadioButton" name="radio_quality_worst">
+                      <property name="text">
+                       <string>Worst</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_3">
+                      <property name="text">
+                       <string>Quality:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QRadioButton" name="radio_quality_best">
+                      <property name="text">
+                       <string>Best</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="QRadioButton" name="radio_quality_half">
+                      <property name="text">
+                       <string>Half</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="4">
+                     <spacer name="horizontalSpacer_4">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="5" column="0">
+                   <layout class="QGridLayout" name="gridLayout_22">
+                    <item row="0" column="1" colspan="2">
+                     <widget class="QLineEdit" name="lineedit_output_path">
+                      <property name="placeholderText">
+                       <string>Enter &quot;./&quot; for current directory</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <layout class="QGridLayout" name="gridLayout_21">
+                      <item row="0" column="0">
+                       <widget class="QLabel" name="label_searching_limit">
+                        <property name="text">
+                         <string>Search Limit:</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item row="1" column="2">
+                     <widget class="QRadioButton" name="radio_directory_system_no">
+                      <property name="text">
+                       <string>No</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_output_path">
+                      <property name="text">
+                       <string>Output path:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="label_directory_system">
+                      <property name="text">
+                       <string>Use Directory system? </string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="3">
+                     <widget class="QPushButton" name="button_output_path_select">
+                      <property name="text">
+                       <string>Select</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="3">
+                     <widget class="QPushButton" name="button_directory_system_help">
+                      <property name="text">
+                       <string>Help</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QRadioButton" name="radio_directory_system_yes">
+                      <property name="text">
+                       <string>Yes</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="4">
+                     <spacer name="horizontalSpacer_10">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QSpinBox" name="spinbox_searching">
+                      <property name="minimum">
+                       <number>1</number>
+                      </property>
+                      <property name="maximum">
+                       <number>200</number>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
                   <item row="0" column="0">
-                   <widget class="QLabel" name="label_searching_limit">
-                    <property name="text">
-                     <string>Search Limit:</string>
-                    </property>
-                   </widget>
+                   <layout class="QGridLayout" name="gridLayout_9">
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label">
+                      <property name="text">
+                       <string>Threading: </string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="QRadioButton" name="radio_threading_no">
+                      <property name="text">
+                       <string>No</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QRadioButton" name="radio_threading_yes">
+                      <property name="text">
+                       <string>Yes</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="3">
+                     <spacer name="horizontalSpacer_9">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
                   </item>
                  </layout>
                 </item>
-                <item row="1" column="2">
-                 <widget class="QRadioButton" name="radio_directory_system_no">
-                  <property name="text">
-                   <string>No</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_output_path">
-                  <property name="text">
-                   <string>Output path:</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="1" column="0">
-                 <widget class="QLabel" name="label_directory_system">
+                 <widget class="QPushButton" name="button_settings_apply">
                   <property name="text">
-                   <string>Use Directory system? </string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="3">
-                 <widget class="QPushButton" name="button_output_path_select">
-                  <property name="text">
-                   <string>Select</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="3">
-                 <widget class="QPushButton" name="button_directory_system_help">
-                  <property name="text">
-                   <string>Help</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QRadioButton" name="radio_directory_system_yes">
-                  <property name="text">
-                   <string>Yes</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="4">
-                 <spacer name="horizontalSpacer_10">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QSpinBox" name="spinbox_searching">
-                  <property name="minimum">
-                   <number>1</number>
-                  </property>
-                  <property name="maximum">
-                   <number>200</number>
+                   <string>Apply / Reload</string>
                   </property>
                  </widget>
                 </item>
                </layout>
-              </item>
-             </layout>
+              </widget>
+             </widget>
             </item>
             <item row="1" column="0">
-             <layout class="QVBoxLayout" name="verticalLayout_2">
-              <item>
-               <widget class="QPushButton" name="button_settings_apply">
-                <property name="text">
-                 <string>Apply / Reload</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="verticalSpacer_2">
-                <property name="orientation">
-                 <enum>Qt::Vertical</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>20</width>
-                  <height>40</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
+             <layout class="QVBoxLayout" name="verticalLayout_2"/>
             </item>
            </layout>
           </widget>
@@ -1562,57 +1426,19 @@ QPushButton:pressed {
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>1206</width>
-                   <height>662</height>
+                   <width>1359</width>
+                   <height>646</height>
                   </rect>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_27">
                   <item row="0" column="0">
                    <layout class="QGridLayout" name="gridLayout_28">
-                    <item row="1" column="2">
-                     <widget class="QPushButton" name="button_metadata_user_start">
-                      <property name="styleSheet">
-                       <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #7B1FA2; /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}
-</string>
-                      </property>
-                      <property name="text">
-                       <string>Start</string>
-                      </property>
-                     </widget>
-                    </item>
                     <item row="0" column="0">
                      <widget class="QLabel" name="label_metadata_video_url">
                       <property name="text">
                        <string>Video URL:</string>
                       </property>
                      </widget>
-                    </item>
-                    <item row="0" column="1">
-                     <widget class="QLineEdit" name="lineedit_metadata_video_url"/>
                     </item>
                     <item row="1" column="0">
                      <widget class="QLabel" name="label_metadata_user_url">
@@ -1621,43 +1447,31 @@ QPushButton:pressed {
                       </property>
                      </widget>
                     </item>
-                    <item row="0" column="2">
-                     <widget class="QPushButton" name="button_metadata_video_start">
+                    <item row="1" column="1">
+                     <widget class="QLineEdit" name="lineedit_metadata_user_url"/>
+                    </item>
+                    <item row="1" column="2">
+                     <widget class="QPushButton" name="button_metadata_user_start">
                       <property name="styleSheet">
-                       <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #7B1FA2; /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}
-</string>
+                       <string notr="true"/>
                       </property>
                       <property name="text">
                        <string>Start</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="1" column="1">
-                     <widget class="QLineEdit" name="lineedit_metadata_user_url"/>
+                    <item row="0" column="2">
+                     <widget class="QPushButton" name="button_metadata_video_start">
+                      <property name="styleSheet">
+                       <string notr="true"/>
+                      </property>
+                      <property name="text">
+                       <string>Start</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QLineEdit" name="lineedit_metadata_video_url"/>
                     </item>
                     <item row="2" column="0" colspan="3">
                      <layout class="QGridLayout" name="gridLayout_30">
@@ -1859,32 +1673,7 @@ QPushButton:pressed {
                         <item row="3" column="1">
                          <widget class="QPushButton" name="button_user_get_bio">
                           <property name="styleSheet">
-                           <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #7B1FA2; /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}
-</string>
+                           <string notr="true"/>
                           </property>
                           <property name="text">
                            <string>Get User's Bio</string>
@@ -1894,32 +1683,7 @@ QPushButton:pressed {
                         <item row="3" column="0">
                          <widget class="QPushButton" name="button_user_download_avatar">
                           <property name="styleSheet">
-                           <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #7B1FA2; /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}
-</string>
+                           <string notr="true"/>
                           </property>
                           <property name="text">
                            <string>Download User Avatar</string>
@@ -2028,32 +1792,7 @@ QPushButton:pressed {
                           <item row="5" column="0" colspan="4">
                            <widget class="QPushButton" name="button_video_thumbnail_download">
                             <property name="styleSheet">
-                             <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #7B1FA2; /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}
-</string>
+                             <string notr="true"/>
                             </property>
                             <property name="text">
                              <string>Download Thumbnail</string>
@@ -2092,117 +1831,136 @@ QPushButton:pressed {
          </widget>
         </item>
         <item row="1" column="0">
-         <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="1">
-           <widget class="QProgressBar" name="progressbar_pornhub">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>300</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="value">
-             <number>0</number>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_total_progress">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Total:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0" colspan="2">
-           <widget class="QLabel" name="label_progress_information">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Information: The total progressbar only counts the total progress of all PornHub videos being downloaded.</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QProgressBar" name="progressbar_hqporner">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>300</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="value">
-             <number>0</number>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_progress_pornhub">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>PornHub:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_progress_hqporner">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>HQPorner:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QProgressBar" name="progressbar_total">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>300</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="value">
-             <number>0</number>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <widget class="QScrollArea" name="scrollArea_2">
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="scrollAreaWidgetContents_5">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>1393</width>
+             <height>232</height>
+            </rect>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_33">
+            <item row="0" column="0">
+             <layout class="QGridLayout" name="gridLayout_3">
+              <item row="0" column="1">
+               <widget class="QProgressBar" name="progressbar_pornhub">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>300</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="value">
+                 <number>0</number>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_total_progress">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Total:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0" colspan="2">
+               <widget class="QLabel" name="label_progress_information">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Information: The total progressbar only counts the total progress of all PornHub videos being downloaded.</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QProgressBar" name="progressbar_hqporner">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>300</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="value">
+                 <number>0</number>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_progress_pornhub">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>PornHub:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_progress_hqporner">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>HQPorner:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QProgressBar" name="progressbar_total">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>300</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="value">
+                 <number>0</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </widget>
         </item>
        </layout>
       </widget>

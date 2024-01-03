@@ -22,7 +22,7 @@ Discord: echteralsfake (faster response)
 
 __license__ = "GPL 3"
 __version__ = "3.0"
-__build__ = "desktop"  # android or desktop
+__build__ = "android"  # android or desktop
 __author__ = "Johannes Habel"
 
 
@@ -30,7 +30,6 @@ import requests
 import re
 import sys
 import os.path
-import time
 import argparse
 import markdown
 import time
@@ -50,7 +49,7 @@ from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, 
                             QTranslator, QCoreApplication)
 from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QCheckBox,
                                QTreeWidgetItem, QButtonGroup)
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QIcon, QFont
 
 
 total_segments = 0
@@ -59,12 +58,12 @@ send_error_logs = False  # Only enabled when developing the application.
 
 
 def send_error_log(message):
-    url = "http://192.168.2.139:8000/error-log/"
+    url = "http://192.168.2.103:8000/error-log/"
     data = {"message": message}
-    response = requests.post(url, json=data)
+    requests.post(url, json=data)
 
 
-def get_output_path(path="/storage/emulated/0/"):
+def get_output_path(path="/storage/emulated/0/Download"):
     """
     This will "brute" force the output path. I can't ask for runtime permissions due to some
     issues in Qt's QFileDialog and the general build process not allowing me to use pyjnius / Kivy
@@ -72,26 +71,42 @@ def get_output_path(path="/storage/emulated/0/"):
     This function will basically check some generic paths for storing the video files. If None was found, the user
     will be prompted to enter one.
     """
+    if send_error_logs:
+        send_error_log(f"Checking path: {path}")
     if not str(path).endswith("/"):
         path += "/"
+        if send_error_logs:
+            send_error_log(f"Appended /, now: {path}")
 
     if os.path.exists(path):
+        if send_error_logs:
+            send_error_log(f"Path: {path} Exists")
         if os.path.isfile(f"{path}test.txt"):
+            if send_error_logs:
+                send_error_log("File already exists")
+
             return True
 
         else:
             try:
                 with open(f"{path}test.txt", "w") as text:
+                    if send_error_logs:
+                        send_error_log(f"Trying to write: {path}text.txt")
                     text.write("""
                     This is a test for the Porn Fetch application to check if Porn Fetch has permissions to write into
                     the download directory.""")
+                    send_error_log("Written test.txt")
                     return True
 
             except Exception as e:
+                if send_error_logs:
+                    send_error_log(f"Nope: {e}")
                 logger_error(e)
                 return False
 
     else:
+        if send_error_logs:
+            send_error_log("Returning False")
         return False
 
 
@@ -215,6 +230,10 @@ class AddToTreeWidget(QRunnable):
                 total = None
 
             for i, video in enumerate(self.iterator, start=1):
+
+                if i == self.search_limit + 1:
+                    break
+
                 if isinstance(video, hq_Video):
                     title = video.video_title
                     if self.data_mode == 1:
@@ -485,12 +504,11 @@ class Porn_Fetch(QWidget):
         self.ui = Ui_Porn_Fetch_Widget()
         self.ui.setupUi(self)
         self.button_connectors()
+        self.button_groups()
         self.load_style()
+
         if __build__ == "android":
             self.setup_android()
-
-        elif __build__ == "desktop":
-            self.create_checkboxes()
 
         self.create_checkboxes()
         self.language_strings()
@@ -505,6 +523,7 @@ class Porn_Fetch(QWidget):
         self.ui.button_switch_settings.setIcon(QIcon(":/images/graphics/settings.svg"))
         self.ui.button_switch_credits.setIcon(QIcon(":/images/graphics/information.svg"))
         self.ui.button_switch_metadata.setIcon(QIcon(":/images/graphics/list.svg"))
+        self.ui.button_switch_account.setIcon(QIcon(":/images/graphics/account.svg"))
         self.setWindowIcon(QIcon(":/images/graphics/logo_transparent.ico"))
 
         file_progress_pornhub = QFile(":/style/stylesheets/progressbar_pornhub.qss")
@@ -558,6 +577,15 @@ class Porn_Fetch(QWidget):
         self.ui.button_video_thumbnail_download.setStyleSheet(purple)
         self.ui.button_tree_select_all.setStyleSheet(orange)
         self.ui.button_tree_unselect_all.setStyleSheet(blue)
+        self.ui.button_search_pornhub_filters.setStyleSheet(purple)
+        self.ui.button_search_users.setStyleSheet(purple)
+        self.ui.button_search_hqporner.setStyleSheet(purple)
+        self.ui.button_help_pages.setStyleSheet(login)
+        self.ui.button_semaphore_help.setStyleSheet(login)
+        self.ui.button_threading_mode_help.setStyleSheet(login)
+        self.ui.button_directory_system_help.setStyleSheet(login)
+        self.ui.button_output_path_select.setStyleSheet(login)
+        self.ui.button_settings_apply.setStyleSheet(login)
 
         self.ui.progressbar_pornhub.setStyleSheet(stream_progress_pornhub.readAll())
         self.ui.progressbar_hqporner.setStyleSheet(stream_progress_hqporner.readAll())
@@ -585,8 +613,6 @@ class Porn_Fetch(QWidget):
                                                                        disambiguation=None)
 
     def button_groups(self):
-        """Only needed for the Android UI"""
-
         self.group_threading = QButtonGroup()
         self.group_threading.addButton(self.ui.radio_threading_no)
         self.group_threading.addButton(self.ui.radio_threading_yes)
@@ -615,6 +641,11 @@ class Porn_Fetch(QWidget):
         self.language_group.addButton(self.ui.radio_ui_language_english)
         self.language_group.addButton(self.ui.radio_ui_language_german)
         self.language_group.addButton(self.ui.radio_ui_language_french)
+
+        self.radio_hqporner = QButtonGroup()
+        self.radio_hqporner.addButton(self.ui.radio_top_porn_week)
+        self.radio_hqporner.addButton(self.ui.radio_top_porn_month)
+        self.radio_hqporner.addButton(self.ui.radio_top_porn_all_time)
 
     def create_checkboxes(self):
         self.checkboxes = {}
@@ -671,19 +702,15 @@ Sorry.""")
                     ui_popup("Sorry, but this path also doesn't exist, or I can't write to it. Sorry.")
 
         self.ui.lineedit_output_path.setDisabled(True)
-        self.button_groups()
         self.ui.button_open_file.setDisabled(True)
         scroll_area = QFile(":/style/stylesheets/stylesheet_scroll_area.qss")
         scroll_area.open(QFile.ReadOnly | QFile.Text)
         stream_scroll_area = QTextStream(scroll_area)
         stylesheet_scroll_area = stream_scroll_area.readAll()
         self.ui.scrollArea.setStyleSheet(stylesheet_scroll_area)
-        self.ui.scrollArea_2.setStyleSheet(stylesheet_scroll_area)
         self.ui.scrollArea_3.setStyleSheet(stylesheet_scroll_area)
-        self.ui.scrollArea_4.setStyleSheet(stylesheet_scroll_area)
         self.ui.button_switch_account.setIcon(QIcon(":/images/graphics/account.svg"))
         self.ui.button_switch_account.clicked.connect(self.switch_to_account)
-        self.ui.button_switch_search.clicked.connect(self.switch_to_search_android)
 
     def switch_to_account(self):
         """Only needed for Android build"""
@@ -696,36 +723,33 @@ Sorry.""")
         self.ui.stacked_widget_top.setCurrentIndex(0)
         self.layout().update()
 
-    def switch_to_search_desktop(self):
+    def switch_to_search(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
-        self.ui.stacked_widget_top.setCurrentIndex(1)
+        self.ui.stacked_widget_top.setCurrentIndex(2)
         self.layout().update()
 
-    def switch_to_search_android(self):
-        self.ui.stacked_widget_main.setCurrentIndex(4)
-        self.layout().update()
+    def switch_to_hqporner(self):
+        self.ui.stacked_widget_main.setCurrentIndex(0)
+        self.ui.stacked_widget_top.setCurrentIndex(3)
 
     def switch_to_settings(self):
         self.ui.stacked_widget_main.setCurrentIndex(1)
-        self.layout().update()
 
     def switch_to_metadata(self):
         self.ui.stacked_widget_main.setCurrentIndex(3)
-        self.layout().update()
 
     def switch_to_credits(self):
         self.ui.stacked_widget_main.setCurrentIndex(2)
         self.show_credits()
         time.sleep(0.3)
         self.show_credits()
-        self.layout().update()
 
     def button_connectors(self):
         """a function to link the buttons to their functions"""
 
         # Menu Bar Switch Button Connections
         self.ui.button_switch_home.clicked.connect(self.switch_to_home)
-        self.ui.button_switch_search.clicked.connect(self.switch_to_search_desktop)
+        self.ui.button_switch_search.clicked.connect(self.switch_to_search)
         self.ui.button_switch_settings.clicked.connect(self.switch_to_settings)
         self.ui.button_switch_credits.clicked.connect(self.switch_to_credits)
         self.ui.button_switch_metadata.clicked.connect(self.switch_to_metadata)
@@ -741,6 +765,7 @@ Sorry.""")
         self.ui.button_semaphore_help.clicked.connect(self.button_semaphore_help)
         self.ui.button_threading_mode_help.clicked.connect(self.button_threading_mode_help)
         self.ui.button_directory_system_help.clicked.connect(self.button_directory_system_help)
+        self.ui.button_help_pages.clicked.connect(self.hqporner_pages_help)
 
         # Settings
         self.ui.button_settings_apply.clicked.connect(self.save_user_settings)
@@ -762,6 +787,14 @@ Sorry.""")
         self.ui.button_user_get_bio.clicked.connect(self.get_user_bio)
         self.ui.button_user_download_avatar.clicked.connect(self.get_user_avatar)
         self.ui.button_video_thumbnail_download.clicked.connect(self.get_video_thumbnail)
+
+        # HQPorner
+        self.ui.button_hqporner_category_get_videos.clicked.connect(self.get_by_category_hqporner)
+        self.ui.button_top_porn_get_videos.clicked.connect(self.get_top_porn_hqporner)
+        self.ui.button_get_brazzers_videos.clicked.connect(self.get_brazzers_videos)
+        self.ui.button_list_categories.clicked.connect(self.list_categories_hqporner)
+        self.ui.button_switch_hqporner.clicked.connect(self.switch_to_hqporner)
+
 
         logger_debug("Connected Buttons!")
 
@@ -1426,6 +1459,54 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         user_string = self.get_video_thumbnail_language_string
         ui_popup(user_string)
 
+    def get_top_porn_hqporner(self):
+        if self.ui.radio_top_porn_week.isChecked():
+            sort = "week"
+
+        elif self.ui.radio_top_porn_month.isChecked():
+            sort = "month"
+
+        elif self.ui.radio_top_porn_all_time:
+            sort = "all_time"
+
+        else:
+            sort = None
+
+        pages = self.ui.spinbox_pages.value()
+        videos = hq_Client().get_top_porn(sort_by=sort, pages=pages)
+        search_limit = self.search_limit
+        self.add_to_tree_widget_thread(iterator=videos, search_limit=search_limit)
+
+    def get_by_category_hqporner(self):
+        category_name = self.ui.lineedit_hqporner_category.text()
+        pages = self.ui.spinbox_pages.value()
+        search_limit = self.search_limit
+        all_categories = hq_Client().get_all_categories()
+
+        if not category_name in all_categories:
+            ui_popup("Invalid Category. Press 'list categories' to see all possible ones.")
+
+        else:
+            videos = hq_Client().get_videos_by_category(name=category_name, pages=pages)
+            self.add_to_tree_widget_thread(videos, search_limit)
+
+    def get_brazzers_videos(self):
+        pages = self.ui.spinbox_pages.value()
+        videos = hq_Client().get_brazzers_videos(pages)
+        self.add_to_tree_widget_thread(videos, search_limit=False)
+
+    def list_categories_hqporner(self):
+        categories_ = hq_Client().get_all_categories()
+        categories = ",".join(categories_)
+        ui_popup(categories)
+
+    def hqporner_pages_help(self):
+        ui_popup("""
+Videos are split into pages on HQPorner. One page contains 46 videos.
+If you specify 2 pages 92 videos will therefore be loaded.
+
+If no more videos are found it will break the loop and the received videos can be used.""")
+
     def show_credits(self):
         self.ui.textBrowser.setOpenExternalLinks(True)
         file = QFile(":/credits/README/CREDITS.md")
@@ -1472,6 +1553,10 @@ def main():
         file.open(QFile.ReadOnly | QFile.Text)
         stream = QTextStream(file)
         app.setStyleSheet(stream.readAll())
+
+        if __build__ == "android":
+            font = QFont("arial", 12)
+            app.setFont(font)
 
         widget = License()  # Starts License widget and checks if license was accepted.
         widget.check_license_and_proceed()
@@ -1520,7 +1605,6 @@ def main():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", "--version", help="Shows the version information", action="store_true")
-
     args = parser.parse_args()
 
     try:

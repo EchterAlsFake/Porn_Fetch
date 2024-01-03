@@ -1,7 +1,7 @@
 QMessageBox {
     background-color: #2d2d2d; /* Dark background */
     font-family: Arial;
-    font-size: 14px;
+    font-size: 8px;
     color: #e0e0e0; /* Light text for better readability in dark mode */
 }
 

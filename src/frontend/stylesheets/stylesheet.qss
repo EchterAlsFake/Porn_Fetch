@@ -2,6 +2,7 @@ QWidget {
 color: white;
 background-color: rgb(60, 60, 60);
 border: none;
+font-size: 12px;
 }
 
 QLineEdit {
@@ -10,6 +11,7 @@ QLineEdit {
     padding: 5px;
     background-color: #333;
     color: #DDD;
+    font-size: 12px;
 }
 QLineEdit:focus {
     border: 2px solid #5599FF;
@@ -17,6 +19,7 @@ QLineEdit:focus {
 QRadioButton {
     color: #dcdcdc; /* Light grey text */
     spacing: 5px; /* Space between the radio button and its label */
+    font-size: 12px;
 }
 
 QRadioButton::indicator {
@@ -70,6 +73,7 @@ QTreeWidget {
     color: white;
     border: 2px solid green;
     border-radius: 5px;
+    font-size: 12px;
 }
 
 QTreeWidget QHeaderView::section {
@@ -77,6 +81,7 @@ QTreeWidget QHeaderView::section {
     color: white;
     border: 1px solid #5a2a82;
     padding: 4px;
+    font-size: 12px;
 }
 
 /* QGroupBox */
@@ -85,6 +90,7 @@ QGroupBox {
     border-radius: 5px;
     margin-top: 10px; /* Adjust top margin as needed */
     padding: 5px; /* Add some padding inside the group box */
+    font-size: 12px;
 }
 
 /* Title text of the QGroupBox */
@@ -97,6 +103,7 @@ QGroupBox::title {
     border: 1px solid #4CAF50; /* Border color for the title bar */
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
+    font-size: 12px;
 }
 
 /* Apply style to all child widgets within the QGroupBox */
@@ -107,6 +114,7 @@ QGroupBox QWidget {
 /* Style for child QLabel elements within the QGroupBox */
 QGroupBox QLabel {
     font-weight: bold; /* Make text bold for labels */
+    font-size: 12px;
 }
 
 /* Style for child QPushButton elements within the QGroupBox */
@@ -140,7 +148,7 @@ QGroupBox QComboBox {
 QLabel {
     color: #DDD;
     padding: 2px;
-    font-size: 14px;
+    font-size: 12px;
 }
 QPushButton {
     color: #dcdcdc; /* Light grey text */
@@ -148,6 +156,7 @@ QPushButton {
     border-radius: 7px; /* Rounded corners like the circular indicator */
     border: 2px solid #777; /* Slightly lighter border */
     background-color: #555; /* Dark background for unchecked state */
+    font-size: 12px;
 }
 
 QPushButton:checked {
@@ -197,6 +206,7 @@ QSpinBox {
     border: 2px solid #444; /* Border color */
     border-radius: 4px; /* Rounded corners */
     padding: 5px; /* Padding inside the spin box */
+    font-size: 12px;
 }
 
 QSpinBox::up-button {
@@ -236,3 +246,51 @@ QSpinBox::up-button:pressed, QSpinBox::down-button:pressed {
 
 QSpinBox:focus {
     border: 2px solid #5599FF; /* Focus border color */}
+
+QScrollArea {
+    border: 2px solid #5D1049; /* Dark purple border */
+    background-color: #F0F0F0; /* Light background for the area */
+}
+
+QScrollBar:vertical {
+    border: 1px solid #5D1049; /* Dark purple border */
+    background: #E0E0E0; /* Light background for the scrollbar */
+    width: 15px; /* Increased width for better visibility */
+    margin: 22px 0 22px 0; /* Top and bottom margin */
+}
+
+QScrollBar::handle:vertical {
+    background: #9A55D3; /* Purple for the handle */
+    min-height: 20px; /* Minimum height for the handle */
+}
+
+QScrollBar::add-line:vertical {
+    border: 1px solid #5D1049;
+    background: #9A55D3;
+    height: 20px; /* Increased height for the arrow area */
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical {
+    border: 1px solid #5D1049;
+    background: #9A55D3;
+    height: 20px; /* Increased height for the arrow area */
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+    border: 1px solid #5D1049;
+    width: 15px; /* Width of the arrow */
+    height: 15px; /* Height of the arrow */
+    background: #5D1049; /* Dark purple background for the arrow */
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+
+QScrollBar:horizontal {
+    /* You can add similar properties for horizontal scrollbar if needed */
+}
