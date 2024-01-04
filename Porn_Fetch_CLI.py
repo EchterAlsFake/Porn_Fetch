@@ -8,10 +8,12 @@ Version 3.0
 """
 import getpass
 import os.path
+import re
 import threading
 
 from tqdm import tqdm
-from hqporner_api import Client as hq_Client, Video as hq_Video, exceptions
+from hqporner_api.api import Client as hq_Client, Video as hq_Video
+from hqporner_api.modules.locals import *
 from threading import Semaphore
 from rich import print as rprint
 from rich.markdown import Markdown
@@ -86,9 +88,10 @@ Do you accept the License? [yes,no]""")
 {return_color()}3) Search Users / Models / Channels
 {return_color()}4) Download from a file with URLs
 {return_color()}5) Account
-{return_color()}6) Metadata
-{return_color()}7) Settings
-{return_color()}8) Credits / Information
+{return_color()}6) HQPorner
+{return_color()}7) Metadata
+{return_color()}8) Settings
+{return_color()}9) Credits / Information
 
 {return_color()}-------------------------------=>:{reset()}""")
 
@@ -108,13 +111,66 @@ Do you accept the License? [yes,no]""")
             self.account_options()
 
         elif options == "6":
-            self.get_metadat_options()
+            self.hqporner_options()
 
         elif options == "7":
-            self.save_user_settings()
+            self.get_metadat_options()
 
         elif options == "8":
+            self.save_user_settings()
+
+        elif options == "9":
             self.credits()
+
+    def hqporner_options(self):
+        options = input(f"""
+1) Get Brazzers Videos
+2) Get videos by category
+3) Get videos by ranking (top)
+-------------->:""")
+
+    def download_brazzers_videos(self):
+        pages = input(f"How many pages do you want to iterate through? One page contains 46 videos -->:")
+        videos = hq_Client().get_brazzers_videos(int(pages))
+        self.start_generator(videos)
+
+    def download_top_porn(self):
+        sorting = input(f"""
+Sorting:
+
+1) Sort by top week
+2) Sort by top month
+3) Sort by all time
+-------->:""")
+        pages = input(f"How many pages do you want to iterate through? One page contains 46 videos -->:")
+
+        if sorting == "1":
+            sort = Sort.WEEK
+
+        elif sorting == "2":
+            sort = Sort.MONTH
+
+        elif sorting == "3":
+            sort = Sort.ALL_TIME
+
+        else:
+            print("Wrong input. Please enter in range 1 - 3")
+            self.download_top_porn()
+
+        videos = hq_Client().get_top_porn(pages=int(pages), sort_by=sort)
+        self.start_generator(videos)
+
+    def get_by_category(self):
+        pages = input(f"How many pages do you want to iterate through? One page contains 46 videos -->:")
+        category = input(f"Please enter the category name. Press C to get all categories -->:")
+
+        if category.lower() == "c":
+            categories = ",".join(hq_Client().get_all_categories())
+            print(categories)
+
+        elif not category.lower() == "c":
+            videos = hq_Client().get_videos_by_category(pages=int(pages), category=category)
+            self.start_generator(videos)
 
     def start_single_video(self):
         url = input(f"{return_color()}Enter PornHub / HQPorner URL --=>:{reset()}")
@@ -129,11 +185,16 @@ Hint: You can select the videos to be downloaded later!
 
 {return_color()}----------------------------=>:{reset()}""")
 
-        
-        client = Client(language=self.api_language)
-        model = client.get_user(url)
-        videos = model.videos
-        self.start_generator(videos)
+        pattern = re.compile("(.*?)hqporner.com(.*?)")
+        if pattern.match(url).group(1):
+            video = hq_Client().get_videos_by_actress(url)
+            self.start_generator(video)
+
+        else:
+            client = Client(language=self.api_language)
+            model = client.get_user(url)
+            videos = model.videos
+            self.start_generator(videos)
 
     def start_from_file(self):
         file = input(f"""{reset()}
@@ -156,9 +217,9 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
     def pre_setup_video(self, url):
         self.semaphore.acquire()
         if str(url).endswith(".html"):
-            title = API().extract_title(url)
-            author = API().extract_actress(url)[0]
-            video = str(url)
+            video = hq_Client().get_video(url)
+            title = video.video_title
+            author = video.pornstars[0]
 
         else:
             language = self.api_language

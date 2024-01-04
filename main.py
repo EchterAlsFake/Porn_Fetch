@@ -39,6 +39,7 @@ import src.frontend.resources
 from requests.exceptions import SSLError
 from pathlib import Path
 from hqporner_api.api import Client as hq_Client, Quality as hq_Quality, Video as hq_Video
+from hqporner_api.modules.locals import *
 from phub import Quality, Client, errors, download, Video
 from src.backend.shared_functions import *
 
@@ -1461,13 +1462,13 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
     def get_top_porn_hqporner(self):
         if self.ui.radio_top_porn_week.isChecked():
-            sort = "week"
+            sort = Sort.WEEK
 
         elif self.ui.radio_top_porn_month.isChecked():
-            sort = "month"
+            sort = Sort.MONTH
 
         elif self.ui.radio_top_porn_all_time:
-            sort = "all_time"
+            sort = Sort.ALL_TIME
 
         else:
             sort = None
