@@ -24,7 +24,7 @@ from src.backend.shared_functions import (strip_title, check_video, check_if_vid
                                           logger_debug, logger_error, return_color, reset, correct_output_path)
 
 
-class CLI():
+class CLI:
     def __init__(self):
         setup_config_file()
         self.conf = ConfigParser()
@@ -127,7 +127,23 @@ Do you accept the License? [yes,no]""")
 1) Get Brazzers Videos
 2) Get videos by category
 3) Get videos by ranking (top)
+4) Back
 -------------->:""")
+
+        if options == "1":
+            self.download_brazzers_videos()
+
+        elif options == "2":
+            self.get_by_category()
+
+        elif options == "3":
+            self.download_top_porn()
+
+        elif options == "4":
+            self.main_menu()
+
+        else:
+            self.hqporner_options()
 
     def download_brazzers_videos(self):
         pages = input(f"How many pages do you want to iterate through? One page contains 46 videos -->:")
@@ -294,7 +310,7 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
         self.semaphore.release()
 
     def download_video_hqporner(self, url, output_path):
-        API().download(url=url, no_title=True, output_path=output_path, quality="highest")
+        "".download(url=url, no_title=True, output_path=output_path, quality="highest")
         logger_debug("Download Complete, releasing semaphore")
         self.semaphore.release()
 
@@ -451,8 +467,7 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
         options = input(f"""
 {return_color()}1) Search for Videos
 {return_color()}2) Search for Users
-{return_color()}3) Search for Pornstars
-{return_color()}4) Back
+{return_color()}3) Back
 {reset()}! search filters aren't working yet. 
 
 {return_color()}------------------=>:{reset()}""")
@@ -464,9 +479,6 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
             self.search_users()
 
         elif options == "3":
-            self.search_pornstars()
-
-        elif options == "4":
             self.main_menu()
 
     def search_videos(self):
@@ -491,17 +503,6 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
         generator = self.client.search_user(query)
         self.start_generator(generator)
 
-    def search_pornstars(self):
-
-        query = input(f"""
-{return_color()}Enter a query to search for Pornstars --=>:{reset()}""")
-
-        if not isinstance(self.client, Client):
-            language = self.api_language
-            self.client = Client(language=language)
-
-        generator = self.client.search_pornstar(query)
-        self.start_generator(generator)
 
     def start_generator(self, generator):
         video_objects = []

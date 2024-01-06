@@ -22,7 +22,7 @@ Discord: echteralsfake (faster response)
 
 __license__ = "GPL 3"
 __version__ = "3.0"
-__build__ = "android"  # android or desktop
+__build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 
 
@@ -59,6 +59,7 @@ send_error_logs = False  # Only enabled when developing the application.
 
 
 def send_error_log(message):
+    """A function to debug Porn Fetch on my local android development device"""
     url = "http://192.168.2.103:8000/error-log/"
     data = {"message": message}
     requests.post(url, json=data)
@@ -121,12 +122,6 @@ def ui_popup(text):
     qmsg_box.setStyleSheet(stream.readAll())
     qmsg_box.setText(text)
     qmsg_box.exec()
-
-
-def show_get_text_dialog(self, title, text):
-    name, ok = QInputDialog.getText(self, f'{title}', f'{text}:')
-    if ok:
-        return name
 
 
 class WorkerSignals(QObject):
