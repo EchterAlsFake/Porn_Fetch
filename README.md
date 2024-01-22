@@ -92,7 +92,7 @@ Use [this script](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/sc
 2) Paste the following in the terminal:
 
 ```
-apk update && apk install wget
+apk update && apk add wget
 wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_iSH.sh" | sh
 ```
 
