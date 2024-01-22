@@ -1,6 +1,5 @@
 """
 Porn Fetch CLI
-
 Licensed under GPL 3
 Copyright (C) 2023-2024 Johannes Habel (EchterAlsFake)
 
@@ -12,7 +11,7 @@ import re
 import threading
 
 from tqdm import tqdm
-from hqporner_api.api import Client as hq_Client, Video as hq_Video
+from hqporner_api.api import Client as hq_Client, Video as hq_Video, Quality as hq_Quality
 from hqporner_api.modules.locals import *
 from threading import Semaphore
 from rich import print as rprint
@@ -201,16 +200,22 @@ Hint: You can select the videos to be downloaded later!
 
 {return_color()}----------------------------=>:{reset()}""")
 
-        pattern = re.compile("(.*?)hqporner.com(.*?)")
-        if pattern.match(url).group(1):
-            video = hq_Client().get_videos_by_actress(url)
-            self.start_generator(video)
+        actress_pattern = re.compile(r"https://hqporner.com/actress/(.+)")
+        match = actress_pattern.match(url)
+
+        if match:
+            print("There's a match")
+            actress_id = match.group(1)
+            print(actress_id)
+            video = hq_Client().get_videos_by_actress(actress_id)
 
         else:
+            print("There isn't a match")
             client = Client(language=self.api_language)
             model = client.get_user(url)
-            videos = model.videos
-            self.start_generator(videos)
+            video = model.videos
+
+        self.start_generator(video)
 
     def start_from_file(self):
         file = input(f"""{reset()}
@@ -230,16 +235,17 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
             logger_error("File doesn't exist! Please try again.")
             self.start_from_file()
 
-    def pre_setup_video(self, url):
+    def pre_setup_video(self, video):
         self.semaphore.acquire()
-        if str(url).endswith(".html"):
-            video = hq_Client().get_video(url)
+        language = self.api_language
+        if isinstance(video, str):
+            video = check_video(language=language, url=video)
+
+        if isinstance(video, hq_Video):
             title = video.video_title
             author = video.pornstars[0]
 
-        else:
-            language = self.api_language
-            video = check_video(url, language)
+        elif isinstance(video, Video):
             title = video.title
             author = video.author.name
             quality = self.quality
@@ -259,13 +265,13 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
             output_path = f"{output_path}{title}"
 
         if not check_if_video_exists(video=video, output_path=output_path):
-            if isinstance(video, str):
+            if isinstance(video, hq_Video):
                 if self.threading:
-                    hqporner_thread = threading.Thread(target=self.download_video_hqporner, args=(url, output_path))
+                    hqporner_thread = threading.Thread(target=self.download_video_hqporner, args=(video, output_path))
                     hqporner_thread.start()
 
                 else:
-                    self.download_video_hqporner(url=url, output_path=output_path)
+                    self.download_video_hqporner(video=video, output_path=output_path)
 
             elif isinstance(video, Video):
                 if self.threading:
@@ -309,8 +315,9 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
         logger_debug("Download Complete, releasing semaphore")
         self.semaphore.release()
 
-    def download_video_hqporner(self, url, output_path):
-        "".download(url=url, no_title=True, output_path=output_path, quality="highest")
+    def download_video_hqporner(self, video, output_path):
+        logger_debug("Starting HQPorner Download!")
+        video.download(no_title=True, output_path=output_path, quality=hq_Quality.BEST, callback=self.download_callback)
         logger_debug("Download Complete, releasing semaphore")
         self.semaphore.release()
 
@@ -362,10 +369,11 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
 
             api_language_ext = self.api_language
             output_path_ext = self.output_path
-            if self.directory_system == 1:
+
+            if self.directory_system == "1":
                 directory_system_ext = "Yes"
 
-            elif self.directory_system == 0:
+            elif self.directory_system == "0":
                 directory_system_ext = "No"
 
             options = input(f"""
@@ -501,14 +509,19 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
             self.client = Client(language=language)
 
         generator = self.client.search_user(query)
-        self.start_generator(generator)
-
+        for user in generator:
+            print(user.name)
 
     def start_generator(self, generator):
         video_objects = []
 
         for idx, video in enumerate(generator):
-            print(f"{idx}) {video.title}")
+            try:
+                print(f"{idx}) {video.title}")
+
+            except AttributeError:
+                print(f"{idx}) {video.video_title}")
+
             video_objects.append(video)
 
         index = input(f"""{reset()}
@@ -520,13 +533,13 @@ e.g 1,6,92
 
         if index.lower() == "all":
             for video in video_objects:
-                self.pre_setup_video(url=video)
+                self.pre_setup_video(video)
 
         else:
             chosen_videos = index.split(",")
             for idx in chosen_videos:
                 video = video_objects[int(idx)]
-                self.pre_setup_video(url=video)
+                self.pre_setup_video(video)
 
     def get_video_metadata(self):
         language = self.api_language
@@ -537,7 +550,8 @@ e.g 1,6,92
 
         author = video.author.name
         duration = video.duration.seconds
-        duration = round(duration, 2) / 60
+        duration = duration / 60
+        duration = round(duration, 2)
         title = strip_title(video.title)
         date = video.date
         views = video.views
@@ -548,12 +562,12 @@ e.g 1,6,92
         tags = ", ".join(tags_list)
         hotspots = ", ".join(hotspots_list)
         pornstars = "".join(pornstar_list)
-        rating = f"Likes: {video.like.up} | Dislikes: {video.like.down}"
+        rating = f"Likes: {video.likes.up} | Dislikes: {video.likes.down}"
 
         input(f"""
 {return_color()}Title: {title}
 {return_color()}Author: {author}
-{return_color()}Duration: {duration}
+{return_color()}Duration: {duration} min
 {return_color()}Date: {date}
 {return_color()}Views: {views}
 {return_color()}Pornstars: {pornstars}
