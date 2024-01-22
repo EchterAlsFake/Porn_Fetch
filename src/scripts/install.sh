@@ -50,11 +50,6 @@ case $OS in
         echo "Detected OpenSUSE"
         sudo zypper install -y git python3-virtualenv libqt5-qtbase-devel
         ;;
-    "alpine")
-        # iSH (Alpine Linux) commands
-        echo "Detected Alpine Linux (iSH)"
-        apk add git python3 py3-pip py3-virtualenv
-        ;;
     "darwin")
         # macOS commands
         echo "Detected macOS"
@@ -83,4 +78,4 @@ pyinstaller -F main.py
 cd dist
 chmod +x main
 mv main Porn_Fetch
-echo "Porn Fetch is now installed in $(pwd)/"
+echo "Porn Fetch is now installed in $(pwd)"

@@ -88,11 +88,19 @@ Use [this script](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/sc
 
 ## 🍏 iOS
 ### iSH
-Run the CLI version of Porn Fetch via the 'iSH' app on iOS.
+1) Download the iSH from the App Store
+2) Paste the following in the terminal:
 
-### Building for iOS
-Kivy-based apps can be converted for iOS, but I need community assistance for testing and compiling. Contact me on Discord (echteralsfake | EchterAlsFake#7164) if you can help.
-<br>I have no interest in developing Porn Fetch for iOS by myself. I don't have an iOS device and I won't ever have one.
+```
+apk update && apk install wget
+wget "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install.sh" -O install.sh
+bash install.sh
+```
+
+This should install the CLI of Porn Fetch. You can run it with ./Porn_Fetch_CLI from the installed directory.
+
+
+
 ## 🌍 Translating
 Currently available in:
 - German (3.0)
