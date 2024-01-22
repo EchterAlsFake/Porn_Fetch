@@ -93,7 +93,7 @@ Use [this script](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/sc
 
 ```
 apk update && apk install wget
-wget "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install.sh" -O install.sh
+wget -O "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_iSH.sh" | sh
 bash install.sh
 ```
 
