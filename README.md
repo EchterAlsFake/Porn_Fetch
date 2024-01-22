@@ -93,7 +93,7 @@ Use [this script](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/sc
 
 ```
 apk update && apk install wget
-wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_iSH.sh" | sh
+wget -O "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_iSH.sh" | sh
 ```
 
 This should install the CLI of Porn Fetch. You can run it with ./Porn_Fetch_CLI from the installed directory.
