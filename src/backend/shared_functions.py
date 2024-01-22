@@ -4,7 +4,6 @@ If you know what you do, you can change a few things here :)
 """
 
 import os
-import string
 
 from phub import Client, errors, Video
 from colorama import Fore
@@ -141,11 +140,11 @@ def check_if_video_exists(video, output_path):
         logger_debug("Found video... checking length...")
         media_info = MediaInfo.parse(output_path)
 
-        if str(video).endswith(".html"):
-            video_duration = hq_Client().get_video(str(video)).video_length
+        if isinstance(video, hq_Video):
+            video_duration = video.video_length
             video_duration = convert_to_seconds(video_duration)
 
-        else:
+        elif isinstance(video, Video):
             video_duration = video.duration.seconds
 
         for track in media_info.tracks:
@@ -164,10 +163,11 @@ def check_if_video_exists(video, output_path):
 
 def strip_title(title):
     print(title)
+    # Characters not allowed in Windows filenames
     illegal_chars = '<>:"/\\|?*'
 
-    # Only keep characters that are valid UTF-8 and not in the list of illegal characters
-    cleaned_title = ''.join([char for char in title if char in string.printable and char not in illegal_chars])
+    # Keep characters that are not in the list of illegal characters
+    cleaned_title = ''.join(char for char in title if char not in illegal_chars)
 
     return cleaned_title
 

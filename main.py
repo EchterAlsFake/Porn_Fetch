@@ -49,7 +49,7 @@ from src.frontend.License import Ui_License
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                             QTranslator, QCoreApplication)
 from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QCheckBox,
-                               QTreeWidgetItem, QButtonGroup)
+                               QTreeWidgetItem, QButtonGroup, QFileDialog)
 from PySide6.QtGui import QIcon, QFont
 
 
@@ -706,7 +706,6 @@ Sorry.""")
         self.ui.scrollArea.setStyleSheet(stylesheet_scroll_area)
         self.ui.scrollArea_3.setStyleSheet(stylesheet_scroll_area)
         self.ui.button_switch_account.setIcon(QIcon(":/images/graphics/account.svg"))
-        self.ui.button_switch_account.clicked.connect(self.switch_to_account)
 
     def switch_to_account(self):
         """Only needed for Android build"""
@@ -749,6 +748,7 @@ Sorry.""")
         self.ui.button_switch_settings.clicked.connect(self.switch_to_settings)
         self.ui.button_switch_credits.clicked.connect(self.switch_to_credits)
         self.ui.button_switch_metadata.clicked.connect(self.switch_to_metadata)
+        self.ui.button_switch_account.clicked.connect(self.switch_to_account)
 
         # Video Download Button Connections
         self.ui.button_download.clicked.connect(self.start_single_video)
@@ -791,9 +791,10 @@ Sorry.""")
         self.ui.button_list_categories.clicked.connect(self.list_categories_hqporner)
         self.ui.button_switch_hqporner.clicked.connect(self.switch_to_hqporner)
 
-
+        # File Dialog
+        self.ui.button_output_path_select.clicked.connect(self.open_output_path_dialog)
+        self.ui.button_open_file.clicked.connect(self.open_file_dialog)
         logger_debug("Connected Buttons!")
-
 
     def switch_login_button_state(self):
         file = QFile(":/style/stylesheets/stylesheet_switch_buttons_login_state.qss")
@@ -1246,6 +1247,27 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         """
         The following functions are related to the QFileDialog
         """
+
+    def open_output_path_dialog(self):
+        dialog = QFileDialog()
+        path = dialog.getExistingDirectory()
+        self.ui.lineedit_output_path.setText(str(path))
+        self.output_path = path
+        self.save_user_settings()
+
+    def open_file_dialog(self):
+        dialog = QFileDialog()
+        file, types = dialog.getOpenFileName()
+        self.ui.lineedit_file.setText(file)
+        iterator = []
+
+        with open(file, "r") as url_file:
+            content = url_file.read().splitlines()
+
+            for url in content:
+                video = check_video(url, language=self.api_language)
+                iterator.append(video)
+                self.add_to_tree_widget_thread(iterator, search_limit=self.search_limit)
 
     def process_video_thread(self, output_path, video, threading_mode, quality):
         """Checks which of the three types of threading the user selected and handles them."""

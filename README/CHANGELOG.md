@@ -208,7 +208,7 @@ I hope that most issues are now fixed.
 - Added Avatar downloading 
 
 # 3.0
-- Entire rewrite of Porn Fetch, the CLI, the Android App and the HQPorner API.
+#### Entire rewrite of Porn Fetch, the CLI, the Android App and the HQPorner API.
 
 
 - Improved Semaphore functionality.
@@ -240,6 +240,9 @@ I hope that most issues are now fixed.
 - You can now download by Top Porn on HQPorner
 - You can now search for videos on HQPorner
 - The methods in the code for handling HQPorner / PHUB videos are now split
+- Changed the strip title function to allow non UTF-8 characters to support other language alphabets
+- Fixed the iOS build script although it's shit because you completely need to compile Python which takes 
+  years on iOS lol
 
 # Android
 - The Android App is now based on PySide6 
