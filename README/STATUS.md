@@ -3,8 +3,11 @@
 
 ## TODO:
 
+- [] Make a function to validate input before processing
+- [] Adding more exceptions
+- [] Fixing the layout
 - [] Update Web application
-- [x] Updating CLI
+- [] Updating CLI
 - [] Fixing the script for iOS (will take its time)
 - [] Searching for Pornstars
 - [] Searching for Users
@@ -32,7 +35,7 @@
 
 # Android:
 
-Android is now in full development, although I still have issues with Storage permissions.<
+Android is now in full development, although I still have issues with Storage permissions.
 
 
 
@@ -48,4 +51,18 @@ Android is now in full development, although I still have issues with Storage pe
 - [x] Debugging / Logging
 
 
+Where I was:
 
+My Account got banned due to a suspicious login attempt. I couldn't develop for
+two weeks, and I am currently trying to get away from caffeine for some time which 
+completely destroyed my sleep rhythm. 
+
+I will now slowly start fixing the project, but it will still take time and my biggest
+problem is the layout. I don't know so much about it and getting Android and Desktop
+under a roof isn't easy for me. 
+
+
+But there's also a good thing. I got an iPhone 6S (I still hate iOS) but this means
+that I can now fix this stupid build script lol.
+
+(Like imagine Apple still doesn't support LDAC... And they call themselves "innovative")
