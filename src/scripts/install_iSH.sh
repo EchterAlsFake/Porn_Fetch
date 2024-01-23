@@ -14,9 +14,9 @@ rm -rf Python-3.11.0 Python-3.11.0.tar.xz
 apk add git
 git clone https://github.com/EchterAlsFake/Porn_Fetch
 cd Porn_Fetch
-pip install -r requirements_cli.txt
-pip install pyinstaller
-pyinstaller -F Porn_Fetch_CLI.py
+python3 -m pip install -r requirements_cli.txt
+python3 -m pip install pyinstaller
+python3 -m pyinstaller -F Porn_Fetch_CLI.py
 cd dist
 chmod +x Porn_Fetch_CLI
 echo "Porn Fetch is now installed in $(pwd)"
