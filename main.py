@@ -20,6 +20,7 @@ E-Mail: EchterAlsFake@proton.me
 Discord: echteralsfake (faster response)
 """
 
+
 __license__ = "GPL 3"
 __version__ = "3.0"
 __build__ = "desktop"  # android or desktop
