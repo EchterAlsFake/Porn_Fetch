@@ -25,7 +25,6 @@
 - [Supported Platforms](#-supported-platforms)
 - [How to Build](#-building-from-source)
 - [Android Version](#-android)
-- [iOS Instructions](#-ios)
 - [Translation](#-translating)
 - [Useful Resources](#-useful-information)
 - [Legal Disclaimer](#-legal-rights)

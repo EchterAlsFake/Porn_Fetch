@@ -1030,7 +1030,7 @@ Sorry.""")
         else:
             data_mode = 0
 
-        if self.ui.checkbox_newest_videos_first.isChecked():
+        if self.ui.checkbox_show_videos_reversed.isChecked():
             reverse = True
 
         else:

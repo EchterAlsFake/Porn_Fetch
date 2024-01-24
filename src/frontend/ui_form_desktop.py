@@ -156,10 +156,10 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.horizontalLayout_2.addWidget(self.radio_tree_show_all)
 
-        self.checkbox_newest_videos_first = QCheckBox(self.scrollAreaWidgetContents_3)
-        self.checkbox_newest_videos_first.setObjectName(u"checkbox_newest_videos_first")
+        self.checkbox_show_videos_reversed = QCheckBox(self.scrollAreaWidgetContents_3)
+        self.checkbox_show_videos_reversed.setObjectName(u"checkbox_show_videos_reversed")
 
-        self.horizontalLayout_2.addWidget(self.checkbox_newest_videos_first)
+        self.horizontalLayout_2.addWidget(self.checkbox_show_videos_reversed)
 
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
@@ -1538,7 +1538,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.stacked_widget_main.setStyleSheet("")
         self.radio_tree_show_title.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Only Title (a lot faster)", None))
         self.radio_tree_show_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Title, Author, Duration", None))
-        self.checkbox_newest_videos_first.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Show newest videos first", None))
+        self.checkbox_show_videos_reversed.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Show videos in reverse", None))
         self.stacked_widget_top.setStyleSheet("")
         self.lineedit_file.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Click Open File to select a file, or write the location here and click Open File. URLs need to be separated with a new line. Supports HQPorner and PornHub", None))
         self.lineedit_model_url.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter PornHub Model / Channel URL or a HQPorner Actresss name (e.g Anissa Kate or anissa-kate)", None))
