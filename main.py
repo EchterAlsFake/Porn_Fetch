@@ -997,7 +997,7 @@ Sorry.""")
             self.conf.set("UI", "language", "en_DE")
 
         elif self.ui.radio_ui_language_chinese_simplified.isChecked():
-            self.conf.set("UI", "language", "zh-CN")
+            self.conf.set("UI", "language", "zh_CN")
 
         elif self.ui.radio_ui_language_system_default.isChecked():
             self.conf.set("UI", "language", "system")
