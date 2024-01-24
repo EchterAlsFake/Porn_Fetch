@@ -43,6 +43,7 @@ from hqporner_api.api import Client as hq_Client, Quality as hq_Quality, Video a
 from hqporner_api.modules.locals import *
 from phub import Quality, Client, errors, download, Video
 from src.backend.shared_functions import *
+from itertools import islice
 
 
 from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
@@ -204,13 +205,14 @@ class License(QWidget):
 
 
 class AddToTreeWidget(QRunnable):
-    def __init__(self, iterator, search_limit, data_mode, clickable):
+    def __init__(self, iterator, search_limit, data_mode, clickable, reverse):
         super(AddToTreeWidget, self).__init__()
         self.signals = TreeWidgetSignals()
         self.iterator = iterator
         self.search_limit = search_limit
         self.data_mode = data_mode
         self.clickable = clickable
+        self.reverse = reverse
 
     def run(self):
         self.signals.clear_signal.emit()
@@ -226,7 +228,15 @@ class AddToTreeWidget(QRunnable):
                 logger_debug("Can't get length of the iterator. Progress won't be available!")
                 total = None
 
-            for i, video in enumerate(self.iterator, start=1):
+            if self.reverse:
+                # Use islice to limit the number of items fetched from the iterator
+                videos = list(islice(self.iterator, self.search_limit))
+                videos.reverse()  # Reverse the list
+
+            else:
+                videos = islice(self.iterator, self.search_limit)
+
+            for i, video in enumerate(videos, start=1):
 
                 if i == self.search_limit + 1:
                     break
@@ -638,6 +648,8 @@ class Porn_Fetch(QWidget):
         self.language_group.addButton(self.ui.radio_ui_language_english)
         self.language_group.addButton(self.ui.radio_ui_language_german)
         self.language_group.addButton(self.ui.radio_ui_language_french)
+        self.language_group.addButton(self.ui.radio_ui_language_system_default)
+        self.language_group.addButton(self.ui.radio_ui_language_chinese_simplified)
 
         self.radio_hqporner = QButtonGroup()
         self.radio_hqporner.addButton(self.ui.radio_top_porn_week)
@@ -927,11 +939,17 @@ Sorry.""")
         if self.gui_language == "en":
             self.ui.radio_ui_language_english.setChecked(True)
 
-        elif self.gui_language == "de":
+        elif self.gui_language == "de_DE":
             self.ui.radio_ui_language_german.setChecked(True)
 
         elif self.gui_language == "fr":
             self.ui.radio_ui_language_french.setChecked(True)
+
+        elif self.gui_language == "zh_CN":
+            self.ui.radio_ui_language_chinese_simplified.setChecked(True)
+
+        elif self.gui_language == "system":
+            self.ui.radio_ui_language_system_default.setChecked(True)
 
         self.semaphore = QSemaphore(int(self.semaphore_limit))
         logger_debug("Loaded User Settings!")
@@ -973,10 +991,16 @@ Sorry.""")
             self.conf.set("UI", "language", "fr")
 
         elif self.ui.radio_ui_language_german.isChecked():
-            self.conf.set("UI", "language", "de")
+            self.conf.set("UI", "language", "de_DE")
 
         elif self.ui.radio_ui_language_english.isChecked():
-            self.conf.set("UI", "language", "en")
+            self.conf.set("UI", "language", "en_DE")
+
+        elif self.ui.radio_ui_language_chinese_simplified.isChecked():
+            self.conf.set("UI", "language", "zh-CN")
+
+        elif self.ui.radio_ui_language_system_default.isChecked():
+            self.conf.set("UI", "language", "system")
 
         self.update_settings()
 
@@ -1006,7 +1030,13 @@ Sorry.""")
         else:
             data_mode = 0
 
-        self.thread = AddToTreeWidget(iterator, search_limit, data_mode, clickable)
+        if self.ui.checkbox_newest_videos_first.isChecked():
+            reverse = True
+
+        else:
+            reverse = False
+
+        self.thread = AddToTreeWidget(iterator, search_limit, data_mode, clickable, reverse)
         self.thread.signals.text_data.connect(self.add_to_tree_widget_signal)
         self.thread.signals.progress.connect(self.progress_tree_widget)
         self.thread.signals.clear_signal.connect(self.clear_tree_widget)
@@ -1298,7 +1328,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
         try:
             self.client = Client(username, password, language=self.api_language)
-            self.logger_debug("Login Successful!")
+            logger_debug("Login Successful!")
             ui_popup(self.language_string_login_successful)
             self.switch_login_button_state()
 
@@ -1546,27 +1576,33 @@ def main():
         """
         conf = ConfigParser()
         conf.read("config.ini")
-
         language = conf["UI"]["language"]
 
         if language == "system":
-
             # Obtain the system's locale
             locale = QLocale.system()
-            # Get the language code (e.g., "de" for German)
-            language_code = locale.name().split('_')[0]
-            # Construct the path to the translation file
-
+            # Get the full locale name (e.g., "zh_CN" for Simplified Chinese)
+            language_code = locale.name()
+            print(language_code)
         else:
             language_code = language
-        path = f":/translations/translations/{language_code}.qm"
 
+        # Try loading the specific regional translation
+        path = f":/translations/translations/{language_code}.qm"
         translator = QTranslator(app)
         if translator.load(path):
             logger_debug(f"{language_code} translation loaded")
-            app.installTranslator(translator)
+
         else:
-            logger_debug(f"Failed to load {language_code} translation")
+            # Try loading a more general translation if specific one fails
+            general_language_code = language_code.split('_')[0]
+            path = f":/translations/translations/{general_language_code}.qm"
+            if translator.load(path):
+                logger_debug(f"{general_language_code} translation loaded as fallback")
+            else:
+                logger_debug(f"Failed to load {language_code} translation")
+
+        app.installTranslator(translator)
 
         file = QFile(":/style/stylesheets/stylesheet.qss")
         file.open(QFile.ReadOnly | QFile.Text)

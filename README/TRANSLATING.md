@@ -18,8 +18,7 @@ Qt Linguist is the recommended tool for translation. You can find installation i
 1. **Open Qt Linguist**: Launch the program, navigate to "File" > "Open", and locate the `en.ts` file in `Porn_Fetch/src/translations/`.
 2. **Configure Language Settings**: In the dialog, set 'English' as the source language and 'United States' as the region. Then, choose your target language and region.
 3. **Translate Strings**: The application contains approximately 110 strings. Select each string and provide your translation in the box below.
-4. **Mark Translations as Complete**: Once a string is translated, click the green checkmark to mark it as complete.
-5. **Save Your Work**: After translating, save your progress with `CTRL + S`.
+4. **Save Your Work**: After translating, save your progress with `CTRL + S`.
 
 **Note**: You don’t need to worry about converting the translations into `.qm` format or embedding them into the resource file. I will handle that part. 
 
@@ -28,7 +27,7 @@ Qt Linguist is the recommended tool for translation. You can find installation i
 You can submit the `.ts` file through:
 - A Pull Request on GitHub.
 - Opening an Issue on the repository.
-- Emailing to EchterAlsFake@proton.me.
+- Discord: echteralsfake
 
 **Tips for Translators**:
 - If unsure about a translation, feel free to skip it.

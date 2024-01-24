@@ -28,7 +28,8 @@
         <file>../../README/CREDITS.md</file>
     </qresource>
     <qresource prefix="/translations">
-        <file>translations/de.qm</file>
+        <file>translations/de_DE.qm</file>
         <file>translations/en.qm</file>
+        <file>translations/zh_CN.qm</file>
     </qresource>
 </RCC>

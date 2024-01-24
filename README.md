@@ -50,8 +50,9 @@
 - Linux (X11 / Wayland)
 - macOS (via source build or Python)
 - Android (recommended .apk)
-- iOS (via iSH)
 - ARM (native Python run)
+
+> iOS is NOT supported. Don't even try!
 
 ## 🌐 Supported Websites
 - [PornHub.com](https://github.com/Egsagon/PHUB)
@@ -86,26 +87,15 @@ Note: The Android version is tested and developed on Android 13!
 ### Building for Android
 Use [this script](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/scripts/build_android.sh) to build on Ubuntu 22.04.3.
 
-## 🍏 iOS
-### iSH
-1) Download the iSH from the App Store
-2) Paste the following in the terminal:
-
-```
-apk update && apk add wget
-wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_iSH.sh" | sh
-```
-
-This should install the CLI of Porn Fetch. You can run it with ./Porn_Fetch_CLI from the installed directory.
-
-
 
 ## 🌍 Translating
 Currently available in:
 - German (3.0)
 - English
+- Chinese (3.0) Thanks to: [Joshua-auhsoj](https://github.com/Joshua-auhsoj)
 
-To contribute a translation, follow [this guide](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/TRANSLATING.md).
+<br>To contribute a translation, follow [this guide](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/TRANSLATING.md).
+
 
 ## 🛠️ Useful Information
 - [Roadmap](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/ROADMAP.md)

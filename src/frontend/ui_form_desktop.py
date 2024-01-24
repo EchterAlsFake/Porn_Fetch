@@ -15,11 +15,12 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFormLayout, QGridLayout, QHBoxLayout,
-    QHeaderView, QLabel, QLineEdit, QProgressBar,
-    QPushButton, QRadioButton, QScrollArea, QSizePolicy,
-    QSpacerItem, QSpinBox, QStackedWidget, QTextBrowser,
-    QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QFormLayout, QGridLayout,
+    QHBoxLayout, QHeaderView, QLabel, QLineEdit,
+    QProgressBar, QPushButton, QRadioButton, QScrollArea,
+    QSizePolicy, QSpacerItem, QSpinBox, QStackedWidget,
+    QTextBrowser, QTreeWidget, QTreeWidgetItem, QVBoxLayout,
+    QWidget)
 
 class Ui_Porn_Fetch_Widget(object):
     def setupUi(self, Porn_Fetch_Widget):
@@ -155,6 +156,11 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.horizontalLayout_2.addWidget(self.radio_tree_show_all)
 
+        self.checkbox_newest_videos_first = QCheckBox(self.scrollAreaWidgetContents_3)
+        self.checkbox_newest_videos_first.setObjectName(u"checkbox_newest_videos_first")
+
+        self.horizontalLayout_2.addWidget(self.checkbox_newest_videos_first)
+
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout_2.addItem(self.horizontalSpacer)
@@ -165,126 +171,13 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_4.addLayout(self.gridLayout_7, 1, 0, 1, 1)
 
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.button_tree_download = QPushButton(self.scrollAreaWidgetContents_3)
-        self.button_tree_download.setObjectName(u"button_tree_download")
-        self.button_tree_download.setStyleSheet(u"QPushButton {\n"
-"    /* Base style */\n"
-"    background-color: #7B1FA2; /* Purple background */\n"
-"    border-style: outset;\n"
-"    border-width: 2px;\n"
-"    border-radius: 8px; /* Slightly smaller radius for a smaller look */\n"
-"    border-color: #7B1FA2;\n"
-"    font: bold 12px; /* Smaller font size */\n"
-"    min-width: 8em; /* Smaller width */\n"
-"    padding: 4px; /* Less padding for a more compact look */\n"
-"    color: white; /* White text */\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    /* Hover effect */\n"
-"    background-color: #9575CD; /* Lighter violet for hover */\n"
-"    border-color: #9575CD;\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    /* Pressed effect */\n"
-"    background-color: #303F9F; /* Dark blue when pressed */\n"
-"    border-color: #303F9F;\n"
-"    border-style: inset; /* Changes the style to look \"pressed\" */\n"
-"}\n"
-"")
-
-        self.horizontalLayout.addWidget(self.button_tree_download)
-
-        self.button_tree_select_all = QPushButton(self.scrollAreaWidgetContents_3)
-        self.button_tree_select_all.setObjectName(u"button_tree_select_all")
-        self.button_tree_select_all.setStyleSheet(u"QPushButton {\n"
-"    /* Base style */\n"
-"    background-color: rgba(255, 162, 0, 170); /* Purple background */\n"
-"	color: rgb(255, 162, 0);\n"
-"    border-style: outset;\n"
-"    border-width: 2px;\n"
-"    border-radius: 8px; /* Slightly smaller radius for a smaller look */\n"
-"    border-color: #7B1FA2;\n"
-"    font: bold 12px; /* Smaller font size */\n"
-"    min-width: 8em; /* Smaller width */\n"
-"    padding: 4px; /* Less padding for a more compact look */\n"
-"    color: white; /* White text */\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    /* Hover effect */\n"
-"    background-color: #9575CD; /* Lighter violet for hover */\n"
-"    border-color: #9575CD;\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    /* Pressed effect */\n"
-"    background-color: #303F9F; /* Dark blue when pressed */\n"
-"    border-color: #303F9F;\n"
-"    border-style: inset; /* Changes the style to look \"pressed\" */\n"
-"}\n"
-"")
-
-        self.horizontalLayout.addWidget(self.button_tree_select_all)
-
-        self.button_tree_unselect_all = QPushButton(self.scrollAreaWidgetContents_3)
-        self.button_tree_unselect_all.setObjectName(u"button_tree_unselect_all")
-        self.button_tree_unselect_all.setStyleSheet(u"QPushButton {\n"
-"    /* Base style */\n"
-"    background-color: rgb(0, 208, 255); /* Purple background */\n"
-"    border-style: outset;\n"
-"    border-width: 2px;\n"
-"    border-radius: 8px; /* Slightly smaller radius for a smaller look */\n"
-"    border-color: #7B1FA2;\n"
-"    font: bold 12px; /* Smaller font size */\n"
-"    min-width: 8em; /* Smaller width */\n"
-"    padding: 4px; /* Less padding for a more compact look */\n"
-"    color: white; /* White text */\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    /* Hover effect */\n"
-"    background-color: #9575CD; /* Lighter violet for hover */\n"
-"    border-color: #9575CD;\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    /* Pressed effect */\n"
-"    background-color: #303F9F; /* Dark blue when pressed */\n"
-"    border-color: #303F9F;\n"
-"    border-style: inset; /* Changes the style to look \"pressed\" */\n"
-"}\n"
-"")
-
-        self.horizontalLayout.addWidget(self.button_tree_unselect_all)
-
-
-        self.gridLayout_4.addLayout(self.horizontalLayout, 3, 0, 1, 1)
-
-        self.treeWidget = QTreeWidget(self.scrollAreaWidgetContents_3)
-        __qtreewidgetitem = QTreeWidgetItem()
-        __qtreewidgetitem.setText(0, u"Title");
-        self.treeWidget.setHeaderItem(__qtreewidgetitem)
-        self.treeWidget.setObjectName(u"treeWidget")
-        sizePolicy3 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.treeWidget.sizePolicy().hasHeightForWidth())
-        self.treeWidget.setSizePolicy(sizePolicy3)
-        self.treeWidget.setMinimumSize(QSize(100, 100))
-
-        self.gridLayout_4.addWidget(self.treeWidget, 2, 0, 1, 1)
-
         self.stacked_widget_top = QStackedWidget(self.scrollAreaWidgetContents_3)
         self.stacked_widget_top.setObjectName(u"stacked_widget_top")
-        sizePolicy4 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-        sizePolicy4.setHorizontalStretch(0)
-        sizePolicy4.setVerticalStretch(0)
-        sizePolicy4.setHeightForWidth(self.stacked_widget_top.sizePolicy().hasHeightForWidth())
-        self.stacked_widget_top.setSizePolicy(sizePolicy4)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.stacked_widget_top.sizePolicy().hasHeightForWidth())
+        self.stacked_widget_top.setSizePolicy(sizePolicy3)
         self.page_3 = QWidget()
         self.page_3.setObjectName(u"page_3")
         self.gridLayout_5 = QGridLayout(self.page_3)
@@ -293,19 +186,19 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridlayout_start_download_box_2.setObjectName(u"gridlayout_start_download_box_2")
         self.lineedit_file = QLineEdit(self.page_3)
         self.lineedit_file.setObjectName(u"lineedit_file")
-        sizePolicy5 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
-        sizePolicy5.setHorizontalStretch(0)
-        sizePolicy5.setVerticalStretch(0)
-        sizePolicy5.setHeightForWidth(self.lineedit_file.sizePolicy().hasHeightForWidth())
-        self.lineedit_file.setSizePolicy(sizePolicy5)
+        sizePolicy4 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.lineedit_file.sizePolicy().hasHeightForWidth())
+        self.lineedit_file.setSizePolicy(sizePolicy4)
         self.lineedit_file.setMinimumSize(QSize(0, 0))
 
         self.gridlayout_start_download_box_2.addWidget(self.lineedit_file, 3, 1, 1, 1)
 
         self.lineedit_model_url = QLineEdit(self.page_3)
         self.lineedit_model_url.setObjectName(u"lineedit_model_url")
-        sizePolicy5.setHeightForWidth(self.lineedit_model_url.sizePolicy().hasHeightForWidth())
-        self.lineedit_model_url.setSizePolicy(sizePolicy5)
+        sizePolicy4.setHeightForWidth(self.lineedit_model_url.sizePolicy().hasHeightForWidth())
+        self.lineedit_model_url.setSizePolicy(sizePolicy4)
         self.lineedit_model_url.setMinimumSize(QSize(0, 0))
 
         self.gridlayout_start_download_box_2.addWidget(self.lineedit_model_url, 2, 1, 1, 1)
@@ -320,8 +213,8 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.lineedit_url = QLineEdit(self.page_3)
         self.lineedit_url.setObjectName(u"lineedit_url")
-        sizePolicy5.setHeightForWidth(self.lineedit_url.sizePolicy().hasHeightForWidth())
-        self.lineedit_url.setSizePolicy(sizePolicy5)
+        sizePolicy4.setHeightForWidth(self.lineedit_url.sizePolicy().hasHeightForWidth())
+        self.lineedit_url.setSizePolicy(sizePolicy4)
         self.lineedit_url.setMinimumSize(QSize(0, 0))
 
         self.gridlayout_start_download_box_2.addWidget(self.lineedit_url, 0, 1, 1, 1)
@@ -352,8 +245,8 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.lineedit_search_query = QLineEdit(self.page_3)
         self.lineedit_search_query.setObjectName(u"lineedit_search_query")
-        sizePolicy5.setHeightForWidth(self.lineedit_search_query.sizePolicy().hasHeightForWidth())
-        self.lineedit_search_query.setSizePolicy(sizePolicy5)
+        sizePolicy4.setHeightForWidth(self.lineedit_search_query.sizePolicy().hasHeightForWidth())
+        self.lineedit_search_query.setSizePolicy(sizePolicy4)
         self.lineedit_search_query.setMinimumSize(QSize(0, 0))
 
         self.gridlayout_start_download_box_2.addWidget(self.lineedit_search_query, 4, 1, 1, 1)
@@ -402,8 +295,8 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridlayout_login_box_2.setObjectName(u"gridlayout_login_box_2")
         self.lineedit_username = QLineEdit(self.page_5)
         self.lineedit_username.setObjectName(u"lineedit_username")
-        sizePolicy5.setHeightForWidth(self.lineedit_username.sizePolicy().hasHeightForWidth())
-        self.lineedit_username.setSizePolicy(sizePolicy5)
+        sizePolicy4.setHeightForWidth(self.lineedit_username.sizePolicy().hasHeightForWidth())
+        self.lineedit_username.setSizePolicy(sizePolicy4)
         self.lineedit_username.setMinimumSize(QSize(150, 0))
 
         self.gridlayout_login_box_2.addWidget(self.lineedit_username, 0, 1, 1, 3)
@@ -453,8 +346,8 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.lineedit_password = QLineEdit(self.page_5)
         self.lineedit_password.setObjectName(u"lineedit_password")
-        sizePolicy5.setHeightForWidth(self.lineedit_password.sizePolicy().hasHeightForWidth())
-        self.lineedit_password.setSizePolicy(sizePolicy5)
+        sizePolicy4.setHeightForWidth(self.lineedit_password.sizePolicy().hasHeightForWidth())
+        self.lineedit_password.setSizePolicy(sizePolicy4)
         self.lineedit_password.setMinimumSize(QSize(150, 0))
         self.lineedit_password.setEchoMode(QLineEdit.Password)
 
@@ -472,16 +365,16 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.lineedit_seach_pornhub_filters = QLineEdit(self.page_4)
         self.lineedit_seach_pornhub_filters.setObjectName(u"lineedit_seach_pornhub_filters")
-        sizePolicy5.setHeightForWidth(self.lineedit_seach_pornhub_filters.sizePolicy().hasHeightForWidth())
-        self.lineedit_seach_pornhub_filters.setSizePolicy(sizePolicy5)
+        sizePolicy4.setHeightForWidth(self.lineedit_seach_pornhub_filters.sizePolicy().hasHeightForWidth())
+        self.lineedit_seach_pornhub_filters.setSizePolicy(sizePolicy4)
         self.lineedit_seach_pornhub_filters.setMinimumSize(QSize(300, 0))
 
         self.gridLayout.addWidget(self.lineedit_seach_pornhub_filters, 2, 1, 1, 1)
 
         self.lineedit_search_hqporner = QLineEdit(self.page_4)
         self.lineedit_search_hqporner.setObjectName(u"lineedit_search_hqporner")
-        sizePolicy5.setHeightForWidth(self.lineedit_search_hqporner.sizePolicy().hasHeightForWidth())
-        self.lineedit_search_hqporner.setSizePolicy(sizePolicy5)
+        sizePolicy4.setHeightForWidth(self.lineedit_search_hqporner.sizePolicy().hasHeightForWidth())
+        self.lineedit_search_hqporner.setSizePolicy(sizePolicy4)
         self.lineedit_search_hqporner.setMinimumSize(QSize(300, 0))
 
         self.gridLayout.addWidget(self.lineedit_search_hqporner, 1, 1, 1, 1)
@@ -513,8 +406,8 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.lineedit_search_users = QLineEdit(self.page_4)
         self.lineedit_search_users.setObjectName(u"lineedit_search_users")
-        sizePolicy5.setHeightForWidth(self.lineedit_search_users.sizePolicy().hasHeightForWidth())
-        self.lineedit_search_users.setSizePolicy(sizePolicy5)
+        sizePolicy4.setHeightForWidth(self.lineedit_search_users.sizePolicy().hasHeightForWidth())
+        self.lineedit_search_users.setSizePolicy(sizePolicy4)
         self.lineedit_search_users.setMinimumSize(QSize(300, 0))
 
         self.gridLayout.addWidget(self.lineedit_search_users, 3, 1, 1, 1)
@@ -531,13 +424,16 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridLayout_11.setObjectName(u"gridLayout_11")
         self.scroll_area_search_filters = QScrollArea(self.page_4)
         self.scroll_area_search_filters.setObjectName(u"scroll_area_search_filters")
-        sizePolicy3.setHeightForWidth(self.scroll_area_search_filters.sizePolicy().hasHeightForWidth())
-        self.scroll_area_search_filters.setSizePolicy(sizePolicy3)
+        sizePolicy5 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
+        sizePolicy5.setHorizontalStretch(0)
+        sizePolicy5.setVerticalStretch(0)
+        sizePolicy5.setHeightForWidth(self.scroll_area_search_filters.sizePolicy().hasHeightForWidth())
+        self.scroll_area_search_filters.setSizePolicy(sizePolicy5)
         self.scroll_area_search_filters.setMinimumSize(QSize(300, 0))
         self.scroll_area_search_filters.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 663, 93))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 663, 148))
         self.gridLayout_16 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_16.setObjectName(u"gridLayout_16")
         self.gridlayout_search_filter = QGridLayout()
@@ -551,13 +447,13 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.scroll_area_user_filter = QScrollArea(self.page_4)
         self.scroll_area_user_filter.setObjectName(u"scroll_area_user_filter")
-        sizePolicy3.setHeightForWidth(self.scroll_area_user_filter.sizePolicy().hasHeightForWidth())
-        self.scroll_area_user_filter.setSizePolicy(sizePolicy3)
-        self.scroll_area_user_filter.setMinimumSize(QSize(300, 0))
+        sizePolicy5.setHeightForWidth(self.scroll_area_user_filter.sizePolicy().hasHeightForWidth())
+        self.scroll_area_user_filter.setSizePolicy(sizePolicy5)
+        self.scroll_area_user_filter.setMinimumSize(QSize(300, 150))
         self.scroll_area_user_filter.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 662, 93))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 662, 148))
         self.gridLayout_23 = QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_23.setObjectName(u"gridLayout_23")
         self.gridlayout_user_filter = QGridLayout()
@@ -705,6 +601,116 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_4.addWidget(self.stacked_widget_top, 0, 0, 1, 1)
 
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.button_tree_download = QPushButton(self.scrollAreaWidgetContents_3)
+        self.button_tree_download.setObjectName(u"button_tree_download")
+        self.button_tree_download.setStyleSheet(u"QPushButton {\n"
+"    /* Base style */\n"
+"    background-color: #7B1FA2; /* Purple background */\n"
+"    border-style: outset;\n"
+"    border-width: 2px;\n"
+"    border-radius: 8px; /* Slightly smaller radius for a smaller look */\n"
+"    border-color: #7B1FA2;\n"
+"    font: bold 12px; /* Smaller font size */\n"
+"    min-width: 8em; /* Smaller width */\n"
+"    padding: 4px; /* Less padding for a more compact look */\n"
+"    color: white; /* White text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    /* Hover effect */\n"
+"    background-color: #9575CD; /* Lighter violet for hover */\n"
+"    border-color: #9575CD;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    /* Pressed effect */\n"
+"    background-color: #303F9F; /* Dark blue when pressed */\n"
+"    border-color: #303F9F;\n"
+"    border-style: inset; /* Changes the style to look \"pressed\" */\n"
+"}\n"
+"")
+
+        self.horizontalLayout.addWidget(self.button_tree_download)
+
+        self.button_tree_select_all = QPushButton(self.scrollAreaWidgetContents_3)
+        self.button_tree_select_all.setObjectName(u"button_tree_select_all")
+        self.button_tree_select_all.setStyleSheet(u"QPushButton {\n"
+"    /* Base style */\n"
+"    background-color: rgba(255, 162, 0, 170); /* Purple background */\n"
+"	color: rgb(255, 162, 0);\n"
+"    border-style: outset;\n"
+"    border-width: 2px;\n"
+"    border-radius: 8px; /* Slightly smaller radius for a smaller look */\n"
+"    border-color: #7B1FA2;\n"
+"    font: bold 12px; /* Smaller font size */\n"
+"    min-width: 8em; /* Smaller width */\n"
+"    padding: 4px; /* Less padding for a more compact look */\n"
+"    color: white; /* White text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    /* Hover effect */\n"
+"    background-color: #9575CD; /* Lighter violet for hover */\n"
+"    border-color: #9575CD;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    /* Pressed effect */\n"
+"    background-color: #303F9F; /* Dark blue when pressed */\n"
+"    border-color: #303F9F;\n"
+"    border-style: inset; /* Changes the style to look \"pressed\" */\n"
+"}\n"
+"")
+
+        self.horizontalLayout.addWidget(self.button_tree_select_all)
+
+        self.button_tree_unselect_all = QPushButton(self.scrollAreaWidgetContents_3)
+        self.button_tree_unselect_all.setObjectName(u"button_tree_unselect_all")
+        self.button_tree_unselect_all.setStyleSheet(u"QPushButton {\n"
+"    /* Base style */\n"
+"    background-color: rgb(0, 208, 255); /* Purple background */\n"
+"    border-style: outset;\n"
+"    border-width: 2px;\n"
+"    border-radius: 8px; /* Slightly smaller radius for a smaller look */\n"
+"    border-color: #7B1FA2;\n"
+"    font: bold 12px; /* Smaller font size */\n"
+"    min-width: 8em; /* Smaller width */\n"
+"    padding: 4px; /* Less padding for a more compact look */\n"
+"    color: white; /* White text */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    /* Hover effect */\n"
+"    background-color: #9575CD; /* Lighter violet for hover */\n"
+"    border-color: #9575CD;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    /* Pressed effect */\n"
+"    background-color: #303F9F; /* Dark blue when pressed */\n"
+"    border-color: #303F9F;\n"
+"    border-style: inset; /* Changes the style to look \"pressed\" */\n"
+"}\n"
+"")
+
+        self.horizontalLayout.addWidget(self.button_tree_unselect_all)
+
+
+        self.gridLayout_4.addLayout(self.horizontalLayout, 3, 0, 1, 1)
+
+        self.treeWidget = QTreeWidget(self.scrollAreaWidgetContents_3)
+        __qtreewidgetitem = QTreeWidgetItem()
+        __qtreewidgetitem.setText(0, u"Title");
+        self.treeWidget.setHeaderItem(__qtreewidgetitem)
+        self.treeWidget.setObjectName(u"treeWidget")
+        sizePolicy5.setHeightForWidth(self.treeWidget.sizePolicy().hasHeightForWidth())
+        self.treeWidget.setSizePolicy(sizePolicy5)
+        self.treeWidget.setMinimumSize(QSize(100, 150))
+
+        self.gridLayout_4.addWidget(self.treeWidget, 2, 0, 1, 1)
+
         self.scrollArea.setWidget(self.scrollAreaWidgetContents_3)
 
         self.verticalLayout_4.addWidget(self.scrollArea)
@@ -722,7 +728,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollArea_4.setWidgetResizable(True)
         self.scrollAreaWidgetContents_6 = QWidget()
         self.scrollAreaWidgetContents_6.setObjectName(u"scrollAreaWidgetContents_6")
-        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 1361, 444))
+        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 1375, 508))
         self.gridLayout_34 = QGridLayout(self.scrollAreaWidgetContents_6)
         self.gridLayout_34.setObjectName(u"gridLayout_34")
         self.gridLayout_15 = QGridLayout()
@@ -784,6 +790,10 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_17.addItem(self.horizontalSpacer_8, 0, 2, 1, 1)
 
+        self.horizontalSpacer_16 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout_17.addItem(self.horizontalSpacer_16, 1, 2, 1, 1)
+
 
         self.gridLayout_15.addLayout(self.gridLayout_17, 1, 0, 1, 1)
 
@@ -819,44 +829,62 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_18.addWidget(self.radio_api_language_chinese, 1, 1, 1, 1)
 
-        self.label_4 = QLabel(self.scrollAreaWidgetContents_6)
-        self.label_4.setObjectName(u"label_4")
-
-        self.gridLayout_18.addWidget(self.label_4, 0, 0, 1, 2)
-
         self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.gridLayout_18.addItem(self.horizontalSpacer_3, 1, 2, 1, 1)
+
+        self.label_4 = QLabel(self.scrollAreaWidgetContents_6)
+        self.label_4.setObjectName(u"label_4")
+
+        self.gridLayout_18.addWidget(self.label_4, 0, 0, 1, 3)
+
+        self.horizontalSpacer_12 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout_18.addItem(self.horizontalSpacer_12, 3, 2, 1, 1)
+
+        self.horizontalSpacer_13 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout_18.addItem(self.horizontalSpacer_13, 2, 2, 1, 1)
 
 
         self.gridLayout_15.addLayout(self.gridLayout_18, 4, 0, 1, 1)
 
         self.gridLayout_12 = QGridLayout()
         self.gridLayout_12.setObjectName(u"gridLayout_12")
-        self.radio_ui_language_english = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_ui_language_english.setObjectName(u"radio_ui_language_english")
+        self.radio_ui_language_french = QRadioButton(self.scrollAreaWidgetContents_6)
+        self.radio_ui_language_french.setObjectName(u"radio_ui_language_french")
+        self.radio_ui_language_french.setEnabled(False)
 
-        self.gridLayout_12.addWidget(self.radio_ui_language_english, 0, 1, 1, 1)
+        self.gridLayout_12.addWidget(self.radio_ui_language_french, 0, 5, 1, 1)
 
         self.radio_ui_language_german = QRadioButton(self.scrollAreaWidgetContents_6)
         self.radio_ui_language_german.setObjectName(u"radio_ui_language_german")
 
-        self.gridLayout_12.addWidget(self.radio_ui_language_german, 0, 2, 1, 1)
+        self.gridLayout_12.addWidget(self.radio_ui_language_german, 0, 3, 1, 1)
+
+        self.radio_ui_language_english = QRadioButton(self.scrollAreaWidgetContents_6)
+        self.radio_ui_language_english.setObjectName(u"radio_ui_language_english")
+
+        self.gridLayout_12.addWidget(self.radio_ui_language_english, 0, 2, 1, 1)
+
+        self.horizontalSpacer_11 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout_12.addItem(self.horizontalSpacer_11, 0, 6, 1, 1)
 
         self.label_5 = QLabel(self.scrollAreaWidgetContents_6)
         self.label_5.setObjectName(u"label_5")
 
         self.gridLayout_12.addWidget(self.label_5, 0, 0, 1, 1)
 
-        self.radio_ui_language_french = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_ui_language_french.setObjectName(u"radio_ui_language_french")
-        self.radio_ui_language_french.setEnabled(False)
+        self.radio_ui_language_system_default = QRadioButton(self.scrollAreaWidgetContents_6)
+        self.radio_ui_language_system_default.setObjectName(u"radio_ui_language_system_default")
 
-        self.gridLayout_12.addWidget(self.radio_ui_language_french, 0, 3, 1, 1)
+        self.gridLayout_12.addWidget(self.radio_ui_language_system_default, 0, 1, 1, 1)
 
-        self.horizontalSpacer_11 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.radio_ui_language_chinese_simplified = QRadioButton(self.scrollAreaWidgetContents_6)
+        self.radio_ui_language_chinese_simplified.setObjectName(u"radio_ui_language_chinese_simplified")
 
-        self.gridLayout_12.addItem(self.horizontalSpacer_11, 0, 4, 1, 1)
+        self.gridLayout_12.addWidget(self.radio_ui_language_chinese_simplified, 0, 4, 1, 1)
 
 
         self.gridLayout_15.addLayout(self.gridLayout_12, 6, 0, 1, 1)
@@ -947,6 +975,14 @@ class Ui_Porn_Fetch_Widget(object):
         self.spinbox_searching.setMaximum(200)
 
         self.gridLayout_22.addWidget(self.spinbox_searching, 2, 1, 1, 1)
+
+        self.horizontalSpacer_14 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout_22.addItem(self.horizontalSpacer_14, 1, 4, 1, 1)
+
+        self.horizontalSpacer_15 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout_22.addItem(self.horizontalSpacer_15, 2, 2, 1, 3)
 
 
         self.gridLayout_15.addLayout(self.gridLayout_22, 5, 0, 1, 1)
@@ -1414,8 +1450,8 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.progressbar_pornhub = QProgressBar(self.scrollAreaWidgetContents_5)
         self.progressbar_pornhub.setObjectName(u"progressbar_pornhub")
-        sizePolicy5.setHeightForWidth(self.progressbar_pornhub.sizePolicy().hasHeightForWidth())
-        self.progressbar_pornhub.setSizePolicy(sizePolicy5)
+        sizePolicy4.setHeightForWidth(self.progressbar_pornhub.sizePolicy().hasHeightForWidth())
+        self.progressbar_pornhub.setSizePolicy(sizePolicy4)
         self.progressbar_pornhub.setMinimumSize(QSize(300, 0))
         self.progressbar_pornhub.setValue(0)
 
@@ -1437,8 +1473,8 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.progressbar_hqporner = QProgressBar(self.scrollAreaWidgetContents_5)
         self.progressbar_hqporner.setObjectName(u"progressbar_hqporner")
-        sizePolicy5.setHeightForWidth(self.progressbar_hqporner.sizePolicy().hasHeightForWidth())
-        self.progressbar_hqporner.setSizePolicy(sizePolicy5)
+        sizePolicy4.setHeightForWidth(self.progressbar_hqporner.sizePolicy().hasHeightForWidth())
+        self.progressbar_hqporner.setSizePolicy(sizePolicy4)
         self.progressbar_hqporner.setMinimumSize(QSize(300, 0))
         self.progressbar_hqporner.setValue(0)
 
@@ -1460,8 +1496,8 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.progressbar_total = QProgressBar(self.scrollAreaWidgetContents_5)
         self.progressbar_total.setObjectName(u"progressbar_total")
-        sizePolicy5.setHeightForWidth(self.progressbar_total.sizePolicy().hasHeightForWidth())
-        self.progressbar_total.setSizePolicy(sizePolicy5)
+        sizePolicy4.setHeightForWidth(self.progressbar_total.sizePolicy().hasHeightForWidth())
+        self.progressbar_total.setSizePolicy(sizePolicy4)
         self.progressbar_total.setMinimumSize(QSize(300, 0))
         self.progressbar_total.setValue(0)
 
@@ -1484,7 +1520,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.retranslateUi(Porn_Fetch_Widget)
 
         self.stacked_widget_main.setCurrentIndex(0)
-        self.stacked_widget_top.setCurrentIndex(1)
+        self.stacked_widget_top.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(Porn_Fetch_Widget)
@@ -1502,12 +1538,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.stacked_widget_main.setStyleSheet("")
         self.radio_tree_show_title.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Only Title (a lot faster)", None))
         self.radio_tree_show_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Title, Author, Duration", None))
-        self.button_tree_download.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download Selected Videos", None))
-        self.button_tree_select_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Select all", None))
-        self.button_tree_unselect_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Unselect all", None))
-        ___qtreewidgetitem = self.treeWidget.headerItem()
-        ___qtreewidgetitem.setText(2, QCoreApplication.translate("Porn_Fetch_Widget", u"Duration", None));
-        ___qtreewidgetitem.setText(1, QCoreApplication.translate("Porn_Fetch_Widget", u"Author", None));
+        self.checkbox_newest_videos_first.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Show newest videos first", None))
         self.stacked_widget_top.setStyleSheet("")
         self.lineedit_file.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Click Open File to select a file, or write the location here and click Open File. URLs need to be separated with a new line. Supports HQPorner and PornHub", None))
         self.lineedit_model_url.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter PornHub Model / Channel URL or a HQPorner Actresss name (e.g Anissa Kate or anissa-kate)", None))
@@ -1552,6 +1583,12 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_get_random_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Video", None))
         self.label_get_brazzers_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Brazzers videos", None))
         self.button_get_brazzers_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Videos", None))
+        self.button_tree_download.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download Selected Videos", None))
+        self.button_tree_select_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Select all", None))
+        self.button_tree_unselect_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Unselect all", None))
+        ___qtreewidgetitem = self.treeWidget.headerItem()
+        ___qtreewidgetitem.setText(2, QCoreApplication.translate("Porn_Fetch_Widget", u"Duration", None));
+        ___qtreewidgetitem.setText(1, QCoreApplication.translate("Porn_Fetch_Widget", u"Author", None));
         self.label_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Threading Mode:", None))
         self.radio_threading_mode_ffmpeg.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"FFMPEG", None))
         self.radio_threading_mode_high_performance.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"High Performance", None))
@@ -1566,10 +1603,12 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_api_language_french.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))
         self.radio_api_language_chinese.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Chinese", None))
         self.label_4.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"API Language", None))
-        self.radio_ui_language_english.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"English", None))
-        self.radio_ui_language_german.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
-        self.label_5.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface Language:", None))
         self.radio_ui_language_french.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))
+        self.radio_ui_language_german.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
+        self.radio_ui_language_english.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"English", None))
+        self.label_5.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface Language:", None))
+        self.radio_ui_language_system_default.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"System default", None))
+        self.radio_ui_language_chinese_simplified.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Chinese (simplified)", None))
         self.radio_quality_worst.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Worst", None))
         self.label_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Quality:", None))
         self.radio_quality_best.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Best", None))
@@ -1579,7 +1618,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_directory_system_no.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
         self.label_output_path.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Output path:", None))
         self.label_directory_system.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Use Directory system? ", None))
-        self.button_output_path_select.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Select", None))
+        self.button_output_path_select.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Open", None))
         self.button_directory_system_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
         self.radio_directory_system_yes.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
         self.label.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Threading: ", None))
