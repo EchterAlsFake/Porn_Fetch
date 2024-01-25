@@ -3,7 +3,7 @@
 title = main
 # project directory. the general assumption is that project_dir is the parent directory
 # of input_file
-project_dir = .
+project_dir = /home/asuna/PycharmProjects/Porn_Fetch/
 # source file path
 input_file = /home/asuna/PycharmProjects/Porn_Fetch/main.py
 # directory where exec is stored

@@ -187,8 +187,7 @@ QCheckBox::indicator:unchecked {
 }
 
 QCheckBox::indicator:checked {
-    image: url(':/images/graphics/tick.ico');
-    background-color: #7a7aff; /* Bright color for checked state */
+    image: url(':/images/graphics/unread.svg');
     /* Here you can add your custom icon */
 }
 

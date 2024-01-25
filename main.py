@@ -221,12 +221,6 @@ class AddToTreeWidget(QRunnable):
 
         try:
             logger_debug(f"Search Limit: {str(self.search_limit)}")
-            try:
-                total = len(self.iterator)
-
-            except Exception:
-                logger_debug("Can't get length of the iterator. Progress won't be available!")
-                total = None
 
             if self.reverse:
                 # Use islice to limit the number of items fetched from the iterator
@@ -244,7 +238,11 @@ class AddToTreeWidget(QRunnable):
                 if isinstance(video, hq_Video):
                     title = video.video_title
                     if self.data_mode == 1:
-                        duration = int(video.video_length) / 60
+                        try:
+                            duration = int(video.video_length) / 60
+                        except ValueError:
+                            duration = video.video_length
+
                         pornstars = video.pornstars
                         if len(pornstars) == 0:
                             author = "author_not_found"
@@ -270,7 +268,7 @@ class AddToTreeWidget(QRunnable):
 
                     text_data = [str(title), str(author), str(duration), str(i), video]
 
-                self.signals.progress.emit(total, i)
+                self.signals.progress.emit(self.search_limit, i)
                 self.signals.text_data.emit(text_data)
 
         except errors.NoResult:
@@ -721,7 +719,6 @@ Sorry.""")
         self.ui.button_switch_account.setIcon(QIcon(":/images/graphics/account.svg"))
 
     def switch_to_account(self):
-        """Only needed for Android build"""
         self.ui.stacked_widget_top.setCurrentIndex(1)
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.layout().update()
@@ -787,8 +784,8 @@ Sorry.""")
 
         # Search
         self.ui.button_search_videos.clicked.connect(self.basic_search)
-        # self.ui.button_search_users.clicked.connect(self.search_users)
-        # self.ui.button_search_hqporner.clicked.connect(self.hqporner_search)
+        self.ui.button_search_users.clicked.connect(self.search_users)
+        self.ui.button_search_hqporner.clicked.connect(self.hqporner_search)
 
         # Metadata
         self.ui.button_metadata_video_start.clicked.connect(self.get_metadata_video)
@@ -1134,6 +1131,13 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
         ui_popup(text)
 
+    def hqporner_pages_help(self):
+        ui_popup("""
+Videos are split into pages on HQPorner. One page contains 46 videos.
+If you specify 2 pages 92 videos will therefore be loaded.
+
+If no more videos are found it will break the loop and the received videos can be used.""")
+
     """
     Starting video download processes
     """
@@ -1249,6 +1253,23 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
             api_language = self.api_language
             return Client(language=api_language)
 
+    def process_video_thread(self, output_path, video, threading_mode, quality):
+        """Checks which of the three types of threading the user selected and handles them."""
+        self.download_thread = DownloadThread(video=video, output_path=output_path, quality=quality,
+                                              threading_mode=threading_mode)
+        self.download_thread.signals.progress.connect(self.update_progressbar)
+        self.download_thread.signals.total_progress.connect(self.update_total_progressbar)
+        self.download_thread.signals.progress_hqporner.connect(self.update_progressbar_hqporner)
+        self.download_thread.signals_completed.completed.connect(self.download_completed)
+        self.threadpool.start(self.download_thread)
+        logger_debug("Started Download Thread!")
+
+    def process_video_without_thread(self, output_path, video, quality):
+        """Downloads the video without any threading.  (NOT RECOMMENDED!)"""
+        logger_debug("Downloading without threading! Note, the GUI will freeze until the video is downloaded!!!")
+        video.download(path=output_path, quality=quality, downloader=download.default)
+        logger_debug("Download Completed!")
+
     """
     The following functions are used to connect data between Threads and the Main UI
     """
@@ -1279,6 +1300,9 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         The following functions are related to the QFileDialog
         """
 
+    """
+    The following functions are used for opening files / directories with the QFileDialog"""
+
     def open_output_path_dialog(self):
         dialog = QFileDialog()
         path = dialog.getExistingDirectory()
@@ -1300,23 +1324,6 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
                 iterator.append(video)
                 self.add_to_tree_widget_thread(iterator, search_limit=self.search_limit)
 
-    def process_video_thread(self, output_path, video, threading_mode, quality):
-        """Checks which of the three types of threading the user selected and handles them."""
-        self.download_thread = DownloadThread(video=video, output_path=output_path, quality=quality,
-                                              threading_mode=threading_mode)
-        self.download_thread.signals.progress.connect(self.update_progressbar)
-        self.download_thread.signals.total_progress.connect(self.update_total_progressbar)
-        self.download_thread.signals.progress_hqporner.connect(self.update_progressbar_hqporner)
-        self.download_thread.signals_completed.completed.connect(self.download_completed)
-        self.threadpool.start(self.download_thread)
-        logger_debug("Started Download Thread!")
-
-    def process_video_without_thread(self, output_path, video, quality):
-        """Downloads the video without any threading.  (NOT RECOMMENDED!)"""
-        logger_debug("Downloading without threading! Note, the GUI will freeze until the video is downloaded!!!")
-        video.download(path=output_path, quality=quality, downloader=download.default)
-        logger_debug("Download Completed!")
-
     """
     The following functions are related to the User's account
     """
@@ -1334,6 +1341,9 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
         except errors.LoginFailed:
             ui_popup(self.language_string_login_failed)
+
+        except errors.ClientAlreadyLogged:
+            ui_popup(QCoreApplication.tr("You are already logged in!", disambiguation=""))
 
     def check_login(self):
         if self.client.logged:
@@ -1523,13 +1533,12 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
         pages = self.ui.spinbox_pages.value()
         videos = hq_Client().get_top_porn(sort_by=sort, pages=pages)
-        search_limit = self.search_limit
+        search_limit = pages * 46
         self.add_to_tree_widget_thread(iterator=videos, search_limit=search_limit)
 
     def get_by_category_hqporner(self):
         category_name = self.ui.lineedit_hqporner_category.text()
         pages = self.ui.spinbox_pages.value()
-        search_limit = self.search_limit
         all_categories = hq_Client().get_all_categories()
 
         if not category_name in all_categories:
@@ -1537,24 +1546,24 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
         else:
             videos = hq_Client().get_videos_by_category(name=category_name, pages=pages)
+            search_limit = pages * 46
             self.add_to_tree_widget_thread(videos, search_limit)
 
     def get_brazzers_videos(self):
         pages = self.ui.spinbox_pages.value()
+        search_limit = pages * 46
         videos = hq_Client().get_brazzers_videos(pages)
-        self.add_to_tree_widget_thread(videos, search_limit=False)
+        self.add_to_tree_widget_thread(videos, search_limit)
 
     def list_categories_hqporner(self):
         categories_ = hq_Client().get_all_categories()
         categories = ",".join(categories_)
         ui_popup(categories)
 
-    def hqporner_pages_help(self):
-        ui_popup("""
-Videos are split into pages on HQPorner. One page contains 46 videos.
-If you specify 2 pages 92 videos will therefore be loaded.
-
-If no more videos are found it will break the loop and the received videos can be used.""")
+    def get_random_video(self):
+        list_object = []
+        video = hq_Client().get_random_video()
+        self.add_to_tree_widget_thread(list_object.append(video), search_limit=1)
 
     def show_credits(self):
         self.ui.textBrowser.setOpenExternalLinks(True)
