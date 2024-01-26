@@ -305,6 +305,10 @@ class DownloadThread(QRunnable):
 
     def run(self):
         try:
+
+            if __build__ == "android":
+                self.output_path = "/storage/emulated/0/Download/"
+
             if isinstance(self.video, Video):
                 if self.threading_mode == 2:
                     self.downloader = download.threaded(max_workers=20, timeout=5)
