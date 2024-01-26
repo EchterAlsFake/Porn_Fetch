@@ -26,7 +26,7 @@ class Ui_Porn_Fetch_Widget(object):
     def setupUi(self, Porn_Fetch_Widget):
         if not Porn_Fetch_Widget.objectName():
             Porn_Fetch_Widget.setObjectName(u"Porn_Fetch_Widget")
-        Porn_Fetch_Widget.resize(1225, 627)
+        Porn_Fetch_Widget.resize(893, 618)
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -336,46 +336,10 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridLayout_6.setObjectName(u"gridLayout_6")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.lineedit_seach_pornhub_filters = QLineEdit(self.page_4)
-        self.lineedit_seach_pornhub_filters.setObjectName(u"lineedit_seach_pornhub_filters")
-        sizePolicy4.setHeightForWidth(self.lineedit_seach_pornhub_filters.sizePolicy().hasHeightForWidth())
-        self.lineedit_seach_pornhub_filters.setSizePolicy(sizePolicy4)
-        self.lineedit_seach_pornhub_filters.setMinimumSize(QSize(300, 0))
-
-        self.gridLayout.addWidget(self.lineedit_seach_pornhub_filters, 2, 1, 1, 1)
-
-        self.lineedit_search_hqporner = QLineEdit(self.page_4)
-        self.lineedit_search_hqporner.setObjectName(u"lineedit_search_hqporner")
-        sizePolicy4.setHeightForWidth(self.lineedit_search_hqporner.sizePolicy().hasHeightForWidth())
-        self.lineedit_search_hqporner.setSizePolicy(sizePolicy4)
-        self.lineedit_search_hqporner.setMinimumSize(QSize(300, 0))
-
-        self.gridLayout.addWidget(self.lineedit_search_hqporner, 1, 1, 1, 1)
-
-        self.label_query_1 = QLabel(self.page_4)
-        self.label_query_1.setObjectName(u"label_query_1")
-
-        self.gridLayout.addWidget(self.label_query_1, 1, 0, 1, 1)
-
-        self.label_query_3 = QLabel(self.page_4)
-        self.label_query_3.setObjectName(u"label_query_3")
-
-        self.gridLayout.addWidget(self.label_query_3, 3, 0, 1, 1)
-
         self.button_search_hqporner = QPushButton(self.page_4)
         self.button_search_hqporner.setObjectName(u"button_search_hqporner")
 
         self.gridLayout.addWidget(self.button_search_hqporner, 1, 2, 1, 1)
-
-        self.label_query_2 = QLabel(self.page_4)
-        self.label_query_2.setObjectName(u"label_query_2")
-
-        self.gridLayout.addWidget(self.label_query_2, 2, 0, 1, 1)
-
-        self.button_search_pornhub_filters = QPushButton(self.page_4)
-        self.button_search_pornhub_filters.setObjectName(u"button_search_pornhub_filters")
-
-        self.gridLayout.addWidget(self.button_search_pornhub_filters, 2, 2, 1, 1)
 
         self.lineedit_search_users = QLineEdit(self.page_4)
         self.lineedit_search_users.setObjectName(u"lineedit_search_users")
@@ -385,10 +349,51 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout.addWidget(self.lineedit_search_users, 3, 1, 1, 1)
 
+        self.lineedit_search_hqporner = QLineEdit(self.page_4)
+        self.lineedit_search_hqporner.setObjectName(u"lineedit_search_hqporner")
+        sizePolicy4.setHeightForWidth(self.lineedit_search_hqporner.sizePolicy().hasHeightForWidth())
+        self.lineedit_search_hqporner.setSizePolicy(sizePolicy4)
+        self.lineedit_search_hqporner.setMinimumSize(QSize(300, 0))
+
+        self.gridLayout.addWidget(self.lineedit_search_hqporner, 1, 1, 1, 1)
+
         self.button_search_users = QPushButton(self.page_4)
         self.button_search_users.setObjectName(u"button_search_users")
 
         self.gridLayout.addWidget(self.button_search_users, 3, 2, 1, 1)
+
+        self.label_query_1 = QLabel(self.page_4)
+        self.label_query_1.setObjectName(u"label_query_1")
+
+        self.gridLayout.addWidget(self.label_query_1, 1, 0, 1, 1)
+
+        self.button_search_pornhub_filters = QPushButton(self.page_4)
+        self.button_search_pornhub_filters.setObjectName(u"button_search_pornhub_filters")
+
+        self.gridLayout.addWidget(self.button_search_pornhub_filters, 2, 2, 1, 1)
+
+        self.label_query_3 = QLabel(self.page_4)
+        self.label_query_3.setObjectName(u"label_query_3")
+
+        self.gridLayout.addWidget(self.label_query_3, 3, 0, 1, 1)
+
+        self.lineedit_seach_pornhub_filters = QLineEdit(self.page_4)
+        self.lineedit_seach_pornhub_filters.setObjectName(u"lineedit_seach_pornhub_filters")
+        sizePolicy4.setHeightForWidth(self.lineedit_seach_pornhub_filters.sizePolicy().hasHeightForWidth())
+        self.lineedit_seach_pornhub_filters.setSizePolicy(sizePolicy4)
+        self.lineedit_seach_pornhub_filters.setMinimumSize(QSize(300, 0))
+
+        self.gridLayout.addWidget(self.lineedit_seach_pornhub_filters, 2, 1, 1, 1)
+
+        self.label_query_2 = QLabel(self.page_4)
+        self.label_query_2.setObjectName(u"label_query_2")
+
+        self.gridLayout.addWidget(self.label_query_2, 2, 0, 1, 1)
+
+        self.button_switch_search_filters = QPushButton(self.page_4)
+        self.button_switch_search_filters.setObjectName(u"button_switch_search_filters")
+
+        self.gridLayout.addWidget(self.button_switch_search_filters, 4, 0, 1, 3)
 
 
         self.gridLayout_6.addLayout(self.gridLayout, 0, 0, 1, 2)
@@ -531,7 +536,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 1131, 285))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 785, 284))
         self.gridLayout_4 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.verticalLayout_4 = QVBoxLayout()
@@ -542,6 +547,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_tree_show_title.setObjectName(u"radio_tree_show_title")
         sizePolicy2.setHeightForWidth(self.radio_tree_show_title.sizePolicy().hasHeightForWidth())
         self.radio_tree_show_title.setSizePolicy(sizePolicy2)
+        self.radio_tree_show_title.setChecked(True)
 
         self.horizontalLayout_2.addWidget(self.radio_tree_show_title)
 
@@ -693,7 +699,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollArea_4.setWidgetResizable(True)
         self.scrollAreaWidgetContents_6 = QWidget()
         self.scrollAreaWidgetContents_6.setObjectName(u"scrollAreaWidgetContents_6")
-        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 1019, 416))
+        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 801, 450))
         self.gridLayout_34 = QGridLayout(self.scrollAreaWidgetContents_6)
         self.gridLayout_34.setObjectName(u"gridLayout_34")
         self.gridLayout_15 = QGridLayout()
@@ -1020,31 +1026,20 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollArea_3.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 1017, 606))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 785, 1012))
         self.gridLayout_27 = QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_27.setObjectName(u"gridLayout_27")
         self.gridLayout_28 = QGridLayout()
         self.gridLayout_28.setObjectName(u"gridLayout_28")
-        self.label_metadata_video_url = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_metadata_video_url.setObjectName(u"label_metadata_video_url")
+        self.lineedit_metadata_video_url = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_metadata_video_url.setObjectName(u"lineedit_metadata_video_url")
 
-        self.gridLayout_28.addWidget(self.label_metadata_video_url, 0, 0, 1, 1)
-
-        self.label_metadata_user_url = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_metadata_user_url.setObjectName(u"label_metadata_user_url")
-
-        self.gridLayout_28.addWidget(self.label_metadata_user_url, 1, 0, 1, 1)
+        self.gridLayout_28.addWidget(self.lineedit_metadata_video_url, 0, 1, 1, 1)
 
         self.lineedit_metadata_user_url = QLineEdit(self.scrollAreaWidgetContents_4)
         self.lineedit_metadata_user_url.setObjectName(u"lineedit_metadata_user_url")
 
         self.gridLayout_28.addWidget(self.lineedit_metadata_user_url, 1, 1, 1, 1)
-
-        self.button_metadata_user_start = QPushButton(self.scrollAreaWidgetContents_4)
-        self.button_metadata_user_start.setObjectName(u"button_metadata_user_start")
-        self.button_metadata_user_start.setStyleSheet(u"")
-
-        self.gridLayout_28.addWidget(self.button_metadata_user_start, 1, 2, 1, 1)
 
         self.button_metadata_video_start = QPushButton(self.scrollAreaWidgetContents_4)
         self.button_metadata_video_start.setObjectName(u"button_metadata_video_start")
@@ -1052,222 +1047,136 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_28.addWidget(self.button_metadata_video_start, 0, 2, 1, 1)
 
-        self.lineedit_metadata_video_url = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_metadata_video_url.setObjectName(u"lineedit_metadata_video_url")
+        self.label_metadata_video_url = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_metadata_video_url.setObjectName(u"label_metadata_video_url")
 
-        self.gridLayout_28.addWidget(self.lineedit_metadata_video_url, 0, 1, 1, 1)
+        self.gridLayout_28.addWidget(self.label_metadata_video_url, 0, 0, 1, 1)
+
+        self.button_metadata_user_start = QPushButton(self.scrollAreaWidgetContents_4)
+        self.button_metadata_user_start.setObjectName(u"button_metadata_user_start")
+        self.button_metadata_user_start.setStyleSheet(u"")
+
+        self.gridLayout_28.addWidget(self.button_metadata_user_start, 1, 2, 1, 1)
+
+        self.label_metadata_user_url = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_metadata_user_url.setObjectName(u"label_metadata_user_url")
+
+        self.gridLayout_28.addWidget(self.label_metadata_user_url, 1, 0, 1, 1)
 
         self.gridLayout_30 = QGridLayout()
         self.gridLayout_30.setObjectName(u"gridLayout_30")
-        self.lineedit_user_tattoos = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_tattoos.setObjectName(u"lineedit_user_tattoos")
+        self.lineedit_user_interests_hobbies = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_user_interests_hobbies.setObjectName(u"lineedit_user_interests_hobbies")
 
-        self.gridLayout_30.addWidget(self.lineedit_user_tattoos, 8, 3, 1, 1)
+        self.gridLayout_30.addWidget(self.lineedit_user_interests_hobbies, 18, 1, 1, 1)
 
         self.lineedit_user_birth_place = QLineEdit(self.scrollAreaWidgetContents_4)
         self.lineedit_user_birth_place.setObjectName(u"lineedit_user_birth_place")
 
-        self.gridLayout_30.addWidget(self.lineedit_user_birth_place, 8, 1, 1, 1)
-
-        self.label_video_views = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_video_views.setObjectName(u"label_video_views")
-
-        self.gridLayout_30.addWidget(self.label_video_views, 4, 2, 1, 1)
-
-        self.lineedit_user_videos_watched = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_videos_watched.setObjectName(u"lineedit_user_videos_watched")
-
-        self.gridLayout_30.addWidget(self.lineedit_user_videos_watched, 6, 3, 1, 1)
-
-        self.lineedit_user_interests_hobbies = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_interests_hobbies.setObjectName(u"lineedit_user_interests_hobbies")
-
-        self.gridLayout_30.addWidget(self.lineedit_user_interests_hobbies, 7, 1, 1, 1)
-
-        self.lineedit_user_gender = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_gender.setObjectName(u"lineedit_user_gender")
-
-        self.gridLayout_30.addWidget(self.lineedit_user_gender, 2, 1, 1, 1)
-
-        self.label_relationship = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_relationship.setObjectName(u"label_relationship")
-
-        self.gridLayout_30.addWidget(self.label_relationship, 0, 0, 1, 1)
-
-        self.lineedit_user_hair_color = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_hair_color.setObjectName(u"lineedit_user_hair_color")
-
-        self.gridLayout_30.addWidget(self.lineedit_user_hair_color, 6, 1, 1, 1)
-
-        self.lineedit_user_relationship = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_relationship.setObjectName(u"lineedit_user_relationship")
-
-        self.gridLayout_30.addWidget(self.lineedit_user_relationship, 0, 1, 1, 1)
-
-        self.label_hair_color = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_hair_color.setObjectName(u"label_hair_color")
-
-        self.gridLayout_30.addWidget(self.label_hair_color, 6, 0, 1, 1)
-
-        self.label_widght = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_widght.setObjectName(u"label_widght")
-
-        self.gridLayout_30.addWidget(self.label_widght, 4, 0, 1, 1)
-
-        self.label_piercings = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_piercings.setObjectName(u"label_piercings")
-
-        self.gridLayout_30.addWidget(self.label_piercings, 0, 2, 1, 1)
-
-        self.label_interested_in = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_interested_in.setObjectName(u"label_interested_in")
-
-        self.gridLayout_30.addWidget(self.label_interested_in, 1, 0, 1, 1)
-
-        self.lineedit_user_ethnicity = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_ethnicity.setObjectName(u"lineedit_user_ethnicity")
-
-        self.gridLayout_30.addWidget(self.lineedit_user_ethnicity, 5, 1, 1, 1)
-
-        self.lineedit_user_profile_views = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_profile_views.setObjectName(u"lineedit_user_profile_views")
-
-        self.gridLayout_30.addWidget(self.lineedit_user_profile_views, 5, 3, 1, 1)
-
-        self.lineedit_user_turn_ons = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_turn_ons.setObjectName(u"lineedit_user_turn_ons")
-
-        self.gridLayout_30.addWidget(self.lineedit_user_turn_ons, 2, 3, 1, 1)
-
-        self.label_ethnicity = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_ethnicity.setObjectName(u"label_ethnicity")
-
-        self.gridLayout_30.addWidget(self.label_ethnicity, 5, 0, 1, 1)
-
-        self.label_turn_ons = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_turn_ons.setObjectName(u"label_turn_ons")
-
-        self.gridLayout_30.addWidget(self.label_turn_ons, 2, 2, 1, 1)
-
-        self.label_gender = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_gender.setObjectName(u"label_gender")
-
-        self.gridLayout_30.addWidget(self.label_gender, 2, 0, 1, 1)
-
-        self.lineedit_user_piercings = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_piercings.setObjectName(u"lineedit_user_piercings")
-
-        self.gridLayout_30.addWidget(self.lineedit_user_piercings, 0, 3, 1, 1)
-
-        self.lineedit_user_height = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_height.setObjectName(u"lineedit_user_height")
-
-        self.gridLayout_30.addWidget(self.lineedit_user_height, 3, 1, 1, 1)
-
-        self.label_profile_views = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_profile_views.setObjectName(u"label_profile_views")
-
-        self.gridLayout_30.addWidget(self.label_profile_views, 5, 2, 1, 1)
-
-        self.label_city_country = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_city_country.setObjectName(u"label_city_country")
-
-        self.gridLayout_30.addWidget(self.label_city_country, 7, 2, 1, 1)
-
-        self.label_fake_boobs = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_fake_boobs.setObjectName(u"label_fake_boobs")
-
-        self.gridLayout_30.addWidget(self.label_fake_boobs, 1, 2, 1, 1)
-
-        self.label_birth_place = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_birth_place.setObjectName(u"label_birth_place")
-
-        self.gridLayout_30.addWidget(self.label_birth_place, 8, 0, 1, 1)
-
-        self.label_interests_hobbies = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_interests_hobbies.setObjectName(u"label_interests_hobbies")
-
-        self.gridLayout_30.addWidget(self.label_interests_hobbies, 7, 0, 1, 1)
-
-        self.lineedit_user_city_country = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_city_country.setObjectName(u"lineedit_user_city_country")
-
-        self.gridLayout_30.addWidget(self.lineedit_user_city_country, 7, 3, 1, 1)
-
-        self.lineedit_user_weight = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_weight.setObjectName(u"lineedit_user_weight")
-
-        self.gridLayout_30.addWidget(self.lineedit_user_weight, 4, 1, 1, 1)
-
-        self.lineedit_user_interested_in = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_interested_in.setObjectName(u"lineedit_user_interested_in")
-
-        self.gridLayout_30.addWidget(self.lineedit_user_interested_in, 1, 1, 1, 1)
-
-        self.label_turn_offs = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_turn_offs.setObjectName(u"label_turn_offs")
-
-        self.gridLayout_30.addWidget(self.label_turn_offs, 3, 2, 1, 1)
+        self.gridLayout_30.addWidget(self.lineedit_user_birth_place, 20, 1, 1, 1)
 
         self.label_height = QLabel(self.scrollAreaWidgetContents_4)
         self.label_height.setObjectName(u"label_height")
 
-        self.gridLayout_30.addWidget(self.label_height, 3, 0, 1, 1)
+        self.gridLayout_30.addWidget(self.label_height, 7, 0, 1, 1)
 
-        self.lineedit_user_fake_boobs = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_fake_boobs.setObjectName(u"lineedit_user_fake_boobs")
+        self.label_birth_place = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_birth_place.setObjectName(u"label_birth_place")
 
-        self.gridLayout_30.addWidget(self.lineedit_user_fake_boobs, 1, 3, 1, 1)
+        self.gridLayout_30.addWidget(self.label_birth_place, 20, 0, 1, 1)
+
+        self.label_turn_ons = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_turn_ons.setObjectName(u"label_turn_ons")
+
+        self.gridLayout_30.addWidget(self.label_turn_ons, 5, 0, 1, 1)
+
+        self.label_interests_hobbies = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_interests_hobbies.setObjectName(u"label_interests_hobbies")
+
+        self.gridLayout_30.addWidget(self.label_interests_hobbies, 18, 0, 1, 1)
 
         self.lineedit_user_video_views = QLineEdit(self.scrollAreaWidgetContents_4)
         self.lineedit_user_video_views.setObjectName(u"lineedit_user_video_views")
 
-        self.gridLayout_30.addWidget(self.lineedit_user_video_views, 4, 3, 1, 1)
+        self.gridLayout_30.addWidget(self.lineedit_user_video_views, 10, 1, 1, 1)
 
-        self.lineedit_user_turn_offs = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_turn_offs.setObjectName(u"lineedit_user_turn_offs")
+        self.label_piercings = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_piercings.setObjectName(u"label_piercings")
 
-        self.gridLayout_30.addWidget(self.lineedit_user_turn_offs, 3, 3, 1, 1)
+        self.gridLayout_30.addWidget(self.label_piercings, 1, 0, 1, 1)
+
+        self.lineedit_user_tattoos = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_user_tattoos.setObjectName(u"lineedit_user_tattoos")
+
+        self.gridLayout_30.addWidget(self.lineedit_user_tattoos, 22, 1, 1, 1)
+
+        self.label_ethnicity = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_ethnicity.setObjectName(u"label_ethnicity")
+
+        self.gridLayout_30.addWidget(self.label_ethnicity, 14, 0, 1, 1)
+
+        self.lineedit_user_turn_ons = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_user_turn_ons.setObjectName(u"lineedit_user_turn_ons")
+
+        self.gridLayout_30.addWidget(self.lineedit_user_turn_ons, 5, 1, 1, 1)
+
+        self.lineedit_user_fake_boobs = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_user_fake_boobs.setObjectName(u"lineedit_user_fake_boobs")
+
+        self.gridLayout_30.addWidget(self.lineedit_user_fake_boobs, 3, 1, 1, 1)
+
+        self.lineedit_user_profile_views = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_user_profile_views.setObjectName(u"lineedit_user_profile_views")
+
+        self.gridLayout_30.addWidget(self.lineedit_user_profile_views, 15, 1, 1, 1)
+
+        self.lineedit_user_gender = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_user_gender.setObjectName(u"lineedit_user_gender")
+
+        self.gridLayout_30.addWidget(self.lineedit_user_gender, 4, 1, 1, 1)
+
+        self.lineedit_user_ethnicity = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_user_ethnicity.setObjectName(u"lineedit_user_ethnicity")
+
+        self.gridLayout_30.addWidget(self.lineedit_user_ethnicity, 14, 1, 1, 1)
+
+        self.lineedit_user_interested_in = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_user_interested_in.setObjectName(u"lineedit_user_interested_in")
+
+        self.gridLayout_30.addWidget(self.lineedit_user_interested_in, 2, 1, 1, 1)
+
+        self.lineedit_user_videos_watched = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_user_videos_watched.setObjectName(u"lineedit_user_videos_watched")
+
+        self.gridLayout_30.addWidget(self.lineedit_user_videos_watched, 16, 1, 1, 1)
+
+        self.label_turn_offs = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_turn_offs.setObjectName(u"label_turn_offs")
+
+        self.gridLayout_30.addWidget(self.label_turn_offs, 8, 0, 1, 1)
 
         self.label_videos_watched = QLabel(self.scrollAreaWidgetContents_4)
         self.label_videos_watched.setObjectName(u"label_videos_watched")
 
-        self.gridLayout_30.addWidget(self.label_videos_watched, 6, 2, 1, 1)
+        self.gridLayout_30.addWidget(self.label_videos_watched, 16, 0, 1, 1)
 
-        self.label_tattoos = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_tattoos.setObjectName(u"label_tattoos")
+        self.label_fake_boobs = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_fake_boobs.setObjectName(u"label_fake_boobs")
 
-        self.gridLayout_30.addWidget(self.label_tattoos, 8, 2, 1, 1)
+        self.gridLayout_30.addWidget(self.label_fake_boobs, 3, 0, 1, 1)
 
-        self.label_home_town = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_home_town.setObjectName(u"label_home_town")
+        self.label_interested_in = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_interested_in.setObjectName(u"label_interested_in")
 
-        self.gridLayout_30.addWidget(self.label_home_town, 9, 0, 1, 1)
+        self.gridLayout_30.addWidget(self.label_interested_in, 2, 0, 1, 1)
 
-        self.lineedit_user_home_town = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_home_town.setObjectName(u"lineedit_user_home_town")
+        self.label_gender = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_gender.setObjectName(u"label_gender")
 
-        self.gridLayout_30.addWidget(self.lineedit_user_home_town, 9, 1, 1, 1)
+        self.gridLayout_30.addWidget(self.label_gender, 4, 0, 1, 1)
 
         self.gridLayout_39 = QGridLayout()
         self.gridLayout_39.setObjectName(u"gridLayout_39")
-        self.lineedit_user_type = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_type.setObjectName(u"lineedit_user_type")
-
-        self.gridLayout_39.addWidget(self.lineedit_user_type, 2, 1, 1, 1)
-
-        self.button_user_get_bio = QPushButton(self.scrollAreaWidgetContents_4)
-        self.button_user_get_bio.setObjectName(u"button_user_get_bio")
-        self.button_user_get_bio.setStyleSheet(u"")
-
-        self.gridLayout_39.addWidget(self.button_user_get_bio, 3, 1, 1, 1)
-
-        self.button_user_download_avatar = QPushButton(self.scrollAreaWidgetContents_4)
-        self.button_user_download_avatar.setObjectName(u"button_user_download_avatar")
-        self.button_user_download_avatar.setStyleSheet(u"")
-
-        self.gridLayout_39.addWidget(self.button_user_download_avatar, 3, 0, 1, 1)
-
         self.lineedit_user_name = QLineEdit(self.scrollAreaWidgetContents_4)
         self.lineedit_user_name.setObjectName(u"lineedit_user_name")
 
@@ -1283,106 +1192,203 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_39.addWidget(self.label_12, 1, 0, 1, 1)
 
+        self.lineedit_user_type = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_user_type.setObjectName(u"lineedit_user_type")
+
+        self.gridLayout_39.addWidget(self.lineedit_user_type, 2, 1, 1, 1)
+
         self.gridLayout_37 = QGridLayout()
         self.gridLayout_37.setObjectName(u"gridLayout_37")
-        self.lineedit_video_pornstars = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_video_pornstars.setObjectName(u"lineedit_video_pornstars")
+        self.label_video_title = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_video_title.setObjectName(u"label_video_title")
 
-        self.gridLayout_37.addWidget(self.lineedit_video_pornstars, 4, 1, 1, 1)
+        self.gridLayout_37.addWidget(self.label_video_title, 0, 0, 1, 1)
+
+        self.label_video_tags = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_video_tags.setObjectName(u"label_video_tags")
+
+        self.gridLayout_37.addWidget(self.label_video_tags, 3, 0, 1, 1)
 
         self.lineedit_video_title = QLineEdit(self.scrollAreaWidgetContents_4)
         self.lineedit_video_title.setObjectName(u"lineedit_video_title")
 
         self.gridLayout_37.addWidget(self.lineedit_video_title, 0, 1, 1, 1)
 
-        self.label_video_tags = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_video_tags.setObjectName(u"label_video_tags")
-
-        self.gridLayout_37.addWidget(self.label_video_tags, 1, 2, 1, 1)
-
-        self.label_video_orientation = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_video_orientation.setObjectName(u"label_video_orientation")
-
-        self.gridLayout_37.addWidget(self.label_video_orientation, 4, 2, 1, 1)
-
-        self.lineedit_video_rating = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_video_rating.setObjectName(u"lineedit_video_rating")
-
-        self.gridLayout_37.addWidget(self.lineedit_video_rating, 2, 3, 1, 1)
-
-        self.lineedit_video_orientation = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_video_orientation.setObjectName(u"lineedit_video_orientation")
-
-        self.gridLayout_37.addWidget(self.lineedit_video_orientation, 4, 3, 1, 1)
-
-        self.lineedit_video_hotspots = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_video_hotspots.setObjectName(u"lineedit_video_hotspots")
-
-        self.gridLayout_37.addWidget(self.lineedit_video_hotspots, 0, 3, 1, 1)
-
-        self.lineedit_video_duration = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_video_duration.setObjectName(u"lineedit_video_duration")
-
-        self.gridLayout_37.addWidget(self.lineedit_video_duration, 2, 1, 1, 1)
-
-        self.label_video_hotspots = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_video_hotspots.setObjectName(u"label_video_hotspots")
-
-        self.gridLayout_37.addWidget(self.label_video_hotspots, 0, 2, 1, 1)
-
-        self.label_video_title = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_video_title.setObjectName(u"label_video_title")
-
-        self.gridLayout_37.addWidget(self.label_video_title, 0, 0, 1, 1)
-
-        self.label_video_pornstars = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_video_pornstars.setObjectName(u"label_video_pornstars")
-
-        self.gridLayout_37.addWidget(self.label_video_pornstars, 4, 0, 1, 1)
-
         self.lineedit_video_views = QLineEdit(self.scrollAreaWidgetContents_4)
         self.lineedit_video_views.setObjectName(u"lineedit_video_views")
 
-        self.gridLayout_37.addWidget(self.lineedit_video_views, 1, 1, 1, 1)
-
-        self.lineedit_video_tags = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_video_tags.setObjectName(u"lineedit_video_tags")
-
-        self.gridLayout_37.addWidget(self.lineedit_video_tags, 1, 3, 1, 1)
-
-        self.label_video_duration = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_video_duration.setObjectName(u"label_video_duration")
-
-        self.gridLayout_37.addWidget(self.label_video_duration, 2, 0, 1, 1)
+        self.gridLayout_37.addWidget(self.lineedit_video_views, 2, 1, 1, 1)
 
         self.label_video_rating = QLabel(self.scrollAreaWidgetContents_4)
         self.label_video_rating.setObjectName(u"label_video_rating")
 
-        self.gridLayout_37.addWidget(self.label_video_rating, 2, 2, 1, 1)
+        self.gridLayout_37.addWidget(self.label_video_rating, 5, 0, 1, 1)
+
+        self.label_video_duration = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_video_duration.setObjectName(u"label_video_duration")
+
+        self.gridLayout_37.addWidget(self.label_video_duration, 4, 0, 1, 1)
+
+        self.lineedit_video_tags = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_video_tags.setObjectName(u"lineedit_video_tags")
+
+        self.gridLayout_37.addWidget(self.lineedit_video_tags, 3, 1, 1, 1)
 
         self.label_video_views_2 = QLabel(self.scrollAreaWidgetContents_4)
         self.label_video_views_2.setObjectName(u"label_video_views_2")
 
-        self.gridLayout_37.addWidget(self.label_video_views_2, 1, 0, 1, 1)
+        self.gridLayout_37.addWidget(self.label_video_views_2, 2, 0, 1, 1)
+
+        self.lineedit_video_hotspots = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_video_hotspots.setObjectName(u"lineedit_video_hotspots")
+
+        self.gridLayout_37.addWidget(self.lineedit_video_hotspots, 1, 1, 1, 1)
+
+        self.lineedit_video_duration = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_video_duration.setObjectName(u"lineedit_video_duration")
+
+        self.gridLayout_37.addWidget(self.lineedit_video_duration, 4, 1, 1, 1)
+
+        self.label_video_pornstars = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_video_pornstars.setObjectName(u"label_video_pornstars")
+
+        self.gridLayout_37.addWidget(self.label_video_pornstars, 6, 0, 1, 1)
+
+        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout_37.addItem(self.verticalSpacer_3, 9, 0, 1, 1)
+
+        self.lineedit_video_rating = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_video_rating.setObjectName(u"lineedit_video_rating")
+
+        self.gridLayout_37.addWidget(self.lineedit_video_rating, 5, 1, 1, 1)
+
+        self.label_video_hotspots = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_video_hotspots.setObjectName(u"label_video_hotspots")
+
+        self.gridLayout_37.addWidget(self.label_video_hotspots, 1, 0, 1, 1)
+
+        self.lineedit_video_pornstars = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_video_pornstars.setObjectName(u"lineedit_video_pornstars")
+
+        self.gridLayout_37.addWidget(self.lineedit_video_pornstars, 6, 1, 1, 1)
+
+        self.label_video_orientation = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_video_orientation.setObjectName(u"label_video_orientation")
+
+        self.gridLayout_37.addWidget(self.label_video_orientation, 7, 0, 1, 1)
+
+        self.lineedit_video_orientation = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_video_orientation.setObjectName(u"lineedit_video_orientation")
+
+        self.gridLayout_37.addWidget(self.lineedit_video_orientation, 7, 1, 1, 1)
+
+
+        self.gridLayout_39.addLayout(self.gridLayout_37, 6, 0, 1, 2)
+
+
+        self.gridLayout_30.addLayout(self.gridLayout_39, 23, 0, 1, 4)
+
+        self.label_widght = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_widght.setObjectName(u"label_widght")
+
+        self.gridLayout_30.addWidget(self.label_widght, 9, 0, 1, 1)
+
+        self.lineedit_user_relationship = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_user_relationship.setObjectName(u"lineedit_user_relationship")
+
+        self.gridLayout_30.addWidget(self.lineedit_user_relationship, 0, 1, 1, 1)
+
+        self.label_relationship = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_relationship.setObjectName(u"label_relationship")
+
+        self.gridLayout_30.addWidget(self.label_relationship, 0, 0, 1, 1)
+
+        self.lineedit_user_piercings = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_user_piercings.setObjectName(u"lineedit_user_piercings")
+
+        self.gridLayout_30.addWidget(self.lineedit_user_piercings, 1, 1, 1, 1)
+
+        self.lineedit_user_weight = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_user_weight.setObjectName(u"lineedit_user_weight")
+
+        self.gridLayout_30.addWidget(self.lineedit_user_weight, 9, 1, 1, 1)
+
+        self.lineedit_user_home_town = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_user_home_town.setObjectName(u"lineedit_user_home_town")
+
+        self.gridLayout_30.addWidget(self.lineedit_user_home_town, 21, 1, 1, 1)
+
+        self.lineedit_user_city_country = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_user_city_country.setObjectName(u"lineedit_user_city_country")
+
+        self.gridLayout_30.addWidget(self.lineedit_user_city_country, 19, 1, 1, 1)
+
+        self.lineedit_user_height = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_user_height.setObjectName(u"lineedit_user_height")
+
+        self.gridLayout_30.addWidget(self.lineedit_user_height, 7, 1, 1, 1)
+
+        self.label_video_views = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_video_views.setObjectName(u"label_video_views")
+
+        self.gridLayout_30.addWidget(self.label_video_views, 10, 0, 1, 1)
+
+        self.lineedit_user_turn_offs = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_user_turn_offs.setObjectName(u"lineedit_user_turn_offs")
+
+        self.gridLayout_30.addWidget(self.lineedit_user_turn_offs, 8, 1, 1, 1)
+
+        self.label_profile_views = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_profile_views.setObjectName(u"label_profile_views")
+
+        self.gridLayout_30.addWidget(self.label_profile_views, 15, 0, 1, 1)
+
+        self.label_city_country = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_city_country.setObjectName(u"label_city_country")
+
+        self.gridLayout_30.addWidget(self.label_city_country, 19, 0, 1, 1)
+
+        self.label_tattoos = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_tattoos.setObjectName(u"label_tattoos")
+
+        self.gridLayout_30.addWidget(self.label_tattoos, 22, 0, 1, 1)
+
+        self.label_home_town = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_home_town.setObjectName(u"label_home_town")
+
+        self.gridLayout_30.addWidget(self.label_home_town, 21, 0, 1, 1)
+
+        self.lineedit_user_hair_color = QLineEdit(self.scrollAreaWidgetContents_4)
+        self.lineedit_user_hair_color.setObjectName(u"lineedit_user_hair_color")
+
+        self.gridLayout_30.addWidget(self.lineedit_user_hair_color, 17, 1, 1, 1)
+
+        self.label_hair_color = QLabel(self.scrollAreaWidgetContents_4)
+        self.label_hair_color.setObjectName(u"label_hair_color")
+
+        self.gridLayout_30.addWidget(self.label_hair_color, 17, 0, 1, 1)
+
+
+        self.gridLayout_28.addLayout(self.gridLayout_30, 5, 0, 1, 3)
+
+        self.button_user_get_bio = QPushButton(self.scrollAreaWidgetContents_4)
+        self.button_user_get_bio.setObjectName(u"button_user_get_bio")
+        self.button_user_get_bio.setStyleSheet(u"")
+
+        self.gridLayout_28.addWidget(self.button_user_get_bio, 2, 0, 1, 2)
+
+        self.button_user_download_avatar = QPushButton(self.scrollAreaWidgetContents_4)
+        self.button_user_download_avatar.setObjectName(u"button_user_download_avatar")
+        self.button_user_download_avatar.setStyleSheet(u"")
+
+        self.gridLayout_28.addWidget(self.button_user_download_avatar, 4, 0, 1, 2)
 
         self.button_video_thumbnail_download = QPushButton(self.scrollAreaWidgetContents_4)
         self.button_video_thumbnail_download.setObjectName(u"button_video_thumbnail_download")
         self.button_video_thumbnail_download.setStyleSheet(u"")
 
-        self.gridLayout_37.addWidget(self.button_video_thumbnail_download, 5, 0, 1, 4)
-
-        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.gridLayout_37.addItem(self.verticalSpacer_3, 6, 0, 1, 1)
-
-
-        self.gridLayout_39.addLayout(self.gridLayout_37, 4, 0, 1, 2)
-
-
-        self.gridLayout_30.addLayout(self.gridLayout_39, 10, 0, 1, 4)
-
-
-        self.gridLayout_28.addLayout(self.gridLayout_30, 2, 0, 1, 3)
+        self.gridLayout_28.addWidget(self.button_video_thumbnail_download, 3, 0, 1, 2)
 
 
         self.gridLayout_27.addLayout(self.gridLayout_28, 0, 0, 1, 1)
@@ -1399,6 +1405,11 @@ class Ui_Porn_Fetch_Widget(object):
         self.page_9.setObjectName(u"page_9")
         self.gridLayout_11 = QGridLayout(self.page_9)
         self.gridLayout_11.setObjectName(u"gridLayout_11")
+        self.label_7 = QLabel(self.page_9)
+        self.label_7.setObjectName(u"label_7")
+
+        self.gridLayout_11.addWidget(self.label_7, 0, 3, 1, 1)
+
         self.scroll_area_search_filters = QScrollArea(self.page_9)
         self.scroll_area_search_filters.setObjectName(u"scroll_area_search_filters")
         sizePolicy6.setHeightForWidth(self.scroll_area_search_filters.sizePolicy().hasHeightForWidth())
@@ -1407,12 +1418,17 @@ class Ui_Porn_Fetch_Widget(object):
         self.scroll_area_search_filters.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1033, 206))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 397, 408))
         self.gridLayout_16 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_16.setObjectName(u"gridLayout_16")
+        self.gridlayout_search_filter = QGridLayout()
+        self.gridlayout_search_filter.setObjectName(u"gridlayout_search_filter")
+
+        self.gridLayout_16.addLayout(self.gridlayout_search_filter, 1, 0, 1, 1)
+
         self.scroll_area_search_filters.setWidget(self.scrollAreaWidgetContents)
 
-        self.gridLayout_11.addWidget(self.scroll_area_search_filters, 0, 0, 1, 2)
+        self.gridLayout_11.addWidget(self.scroll_area_search_filters, 1, 2, 1, 1)
 
         self.scroll_area_user_filter = QScrollArea(self.page_9)
         self.scroll_area_user_filter.setObjectName(u"scroll_area_user_filter")
@@ -1422,22 +1438,27 @@ class Ui_Porn_Fetch_Widget(object):
         self.scroll_area_user_filter.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 1025, 206))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 396, 408))
         self.gridLayout_23 = QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_23.setObjectName(u"gridLayout_23")
-        self.gridlayout_search_filter = QGridLayout()
-        self.gridlayout_search_filter.setObjectName(u"gridlayout_search_filter")
-
-        self.gridLayout_23.addLayout(self.gridlayout_search_filter, 0, 0, 1, 1)
-
-        self.scroll_area_user_filter.setWidget(self.scrollAreaWidgetContents_2)
-
-        self.gridLayout_11.addWidget(self.scroll_area_user_filter, 1, 0, 1, 1)
-
         self.gridlayout_user_filter = QGridLayout()
         self.gridlayout_user_filter.setObjectName(u"gridlayout_user_filter")
 
-        self.gridLayout_11.addLayout(self.gridlayout_user_filter, 1, 1, 1, 1)
+        self.gridLayout_23.addLayout(self.gridlayout_user_filter, 0, 1, 1, 1)
+
+        self.scroll_area_user_filter.setWidget(self.scrollAreaWidgetContents_2)
+
+        self.gridLayout_11.addWidget(self.scroll_area_user_filter, 1, 3, 1, 1)
+
+        self.label_6 = QLabel(self.page_9)
+        self.label_6.setObjectName(u"label_6")
+
+        self.gridLayout_11.addWidget(self.label_6, 0, 2, 1, 1)
+
+        self.button_switch_search_filters_back = QPushButton(self.page_9)
+        self.button_switch_search_filters_back.setObjectName(u"button_switch_search_filters_back")
+
+        self.gridLayout_11.addWidget(self.button_switch_search_filters_back, 2, 2, 1, 2)
 
         self.stacked_widget_main.addWidget(self.page_9)
 
@@ -1453,7 +1474,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_5 = QWidget()
         self.scrollAreaWidgetContents_5.setObjectName(u"scrollAreaWidgetContents_5")
-        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 1151, 122))
+        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 805, 122))
         self.gridLayout_33 = QGridLayout(self.scrollAreaWidgetContents_5)
         self.gridLayout_33.setObjectName(u"gridLayout_33")
         self.gridLayout_3 = QGridLayout()
@@ -1567,15 +1588,16 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_username.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Username:", None))
         self.lineedit_password.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter your PornHub Password", None))
         self.button_get_recommended_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get recommended videos", None))
-        self.lineedit_seach_pornhub_filters.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search on PornHub (with filters defined below)", None))
-        self.lineedit_search_hqporner.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search for videos on HQPorner.com", None))
-        self.label_query_1.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Query:", None))
-        self.label_query_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Query:", None))
         self.button_search_hqporner.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
-        self.label_query_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Query:", None))
-        self.button_search_pornhub_filters.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
         self.lineedit_search_users.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search for Users (with filters defined below)", None))
+        self.lineedit_search_hqporner.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search for videos on HQPorner.com", None))
         self.button_search_users.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
+        self.label_query_1.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Query:", None))
+        self.button_search_pornhub_filters.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
+        self.label_query_3.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Query:", None))
+        self.lineedit_seach_pornhub_filters.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search on PornHub (with filters defined below)", None))
+        self.label_query_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Query:", None))
+        self.button_switch_search_filters.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Filters (Users / Videos)", None))
         self.label_videos_by_category.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get videos by category", None))
         self.button_hqporner_category_get_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Videos", None))
         self.button_list_categories.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"List of all categories", None))
@@ -1635,42 +1657,45 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_threading_no.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
         self.radio_threading_yes.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
         self.button_settings_apply.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Apply / Reload", None))
-        self.label_metadata_video_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Video URL:", None))
-        self.label_metadata_user_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"User URL:", None))
-        self.button_metadata_user_start.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
         self.button_metadata_video_start.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
-        self.label_video_views.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Video Views:", None))
-        self.label_relationship.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Relationship:", None))
-        self.label_hair_color.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Hair Color:", None))
-        self.label_widght.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Weight:", None))
-        self.label_piercings.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Piercings:", None))
-        self.label_interested_in.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Interested in:", None))
-        self.label_ethnicity.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Ethnicity:", None))
-        self.label_turn_ons.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Turn Ons:", None))
-        self.label_gender.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Gender:", None))
-        self.label_profile_views.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Profile Views:", None))
-        self.label_city_country.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"City / Country:", None))
-        self.label_fake_boobs.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Fake Boobs:", None))
-        self.label_birth_place.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Birth Place:", None))
-        self.label_interests_hobbies.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Interests / Hobbies:", None))
-        self.label_turn_offs.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Turn Offs:", None))
+        self.label_metadata_video_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Video URL:", None))
+        self.button_metadata_user_start.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
+        self.label_metadata_user_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"User URL:", None))
         self.label_height.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Height:", None))
+        self.label_birth_place.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Birth Place:", None))
+        self.label_turn_ons.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Turn Ons:", None))
+        self.label_interests_hobbies.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Interests / Hobbies:", None))
+        self.label_piercings.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Piercings:", None))
+        self.label_ethnicity.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Ethnicity:", None))
+        self.label_turn_offs.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Turn Offs:", None))
         self.label_videos_watched.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Videos Watched:", None))
-        self.label_tattoos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Tattoos:", None))
-        self.label_home_town.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Home Town", None))
-        self.button_user_get_bio.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get User's Bio", None))
-        self.button_user_download_avatar.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download User Avatar", None))
+        self.label_fake_boobs.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Fake Boobs:", None))
+        self.label_interested_in.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Interested in:", None))
+        self.label_gender.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Gender:", None))
         self.label_13.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"User Type:", None))
         self.label_12.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Name:", None))
-        self.label_video_tags.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Tags:", None))
-        self.label_video_orientation.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Orientation:", None))
-        self.label_video_hotspots.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Hotspots:", None))
         self.label_video_title.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Title:", None))
-        self.label_video_pornstars.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Pornstars:", None))
-        self.label_video_duration.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Duration:", None))
+        self.label_video_tags.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Tags:", None))
         self.label_video_rating.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Rating:", None))
+        self.label_video_duration.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Duration:", None))
         self.label_video_views_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Views:", None))
+        self.label_video_pornstars.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Pornstars:", None))
+        self.label_video_hotspots.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Hotspots:", None))
+        self.label_video_orientation.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Orientation:", None))
+        self.label_widght.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Weight:", None))
+        self.label_relationship.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Relationship:", None))
+        self.label_video_views.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Video Views:", None))
+        self.label_profile_views.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Profile Views:", None))
+        self.label_city_country.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"City / Country:", None))
+        self.label_tattoos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Tattoos:", None))
+        self.label_home_town.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Home Town", None))
+        self.label_hair_color.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Hair Color:", None))
+        self.button_user_get_bio.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get User's Bio", None))
+        self.button_user_download_avatar.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download User Avatar", None))
         self.button_video_thumbnail_download.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download Thumbnail", None))
+        self.label_7.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"User search filters", None))
+        self.label_6.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search filters", None))
+        self.button_switch_search_filters_back.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Go back to Searching", None))
         self.label_total_progress.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
         self.label_progress_information.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Information: The total progressbar only counts the total progress of all PornHub videos being downloaded.", None))
         self.label_progress_pornhub.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"PornHub:", None))

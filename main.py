@@ -23,7 +23,7 @@ Discord: echteralsfake (faster response)
 
 __license__ = "GPL 3"
 __version__ = "3.0"
-__build__ = "desktop"  # android or desktop
+__build__ = "android"  # android or desktop
 __author__ = "Johannes Habel"
 
 
@@ -699,7 +699,7 @@ If you don't know what /storage/ even is, please just close the App.
 
 Sorry.""")
 
-            text, ok = QInputDialog().getText(self, "Enter custom Path", "Enter custom Path:")
+            text, ok = QInputDialog(self).getText(self, "Enter custom Path", "Enter custom Path:")
             if ok:
                 if get_output_path(text):
                     ui_popup(f"Success: {text} will be used for this session!")
@@ -710,13 +710,6 @@ Sorry.""")
 
         self.ui.lineedit_output_path.setDisabled(True)
         self.ui.button_open_file.setDisabled(True)
-        scroll_area = QFile(":/style/stylesheets/stylesheet_scroll_area.qss")
-        scroll_area.open(QFile.ReadOnly | QFile.Text)
-        stream_scroll_area = QTextStream(scroll_area)
-        stylesheet_scroll_area = stream_scroll_area.readAll()
-        self.ui.scrollArea.setStyleSheet(stylesheet_scroll_area)
-        self.ui.scrollArea_3.setStyleSheet(stylesheet_scroll_area)
-        self.ui.button_switch_account.setIcon(QIcon(":/images/graphics/account.svg"))
 
     def switch_to_account(self):
         self.ui.stacked_widget_top.setCurrentIndex(1)
@@ -749,6 +742,13 @@ Sorry.""")
         time.sleep(0.3)
         self.show_credits()
 
+    def switch_to_search_filters(self):
+        self.ui.stacked_widget_main.setCurrentIndex(4)
+
+    def switch_to_search_filters_back(self):
+        self.ui.stacked_widget_main.setCurrentIndex(0)
+        self.ui.stacked_widget_top.setCurrentIndex(2)
+
     def button_connectors(self):
         """a function to link the buttons to their functions"""
 
@@ -759,6 +759,8 @@ Sorry.""")
         self.ui.button_switch_credits.clicked.connect(self.switch_to_credits)
         self.ui.button_switch_metadata.clicked.connect(self.switch_to_metadata)
         self.ui.button_switch_account.clicked.connect(self.switch_to_account)
+        self.ui.button_switch_search_filters.clicked.connect(self.switch_to_search_filters)
+        self.ui.button_switch_search_filters_back.clicked.connect(self.switch_to_search_filters_back)
 
         # Video Download Button Connections
         self.ui.button_download.clicked.connect(self.start_single_video)
