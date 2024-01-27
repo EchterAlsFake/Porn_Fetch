@@ -81,6 +81,7 @@ def check_video(url, language):
 
     else:
         if isinstance(url, Video):
+            url.fetch("page@")
             return url
 
         if isinstance(url, hq_Video):
@@ -88,7 +89,9 @@ def check_video(url, language):
 
         if isinstance(url, str) and not str(url).endswith(".html"):
             try:
-                return Client(language=language).get(url)
+                video = Client(language=language).get(url)
+                video.fetch("page@")
+                return video
 
             except errors.URLError:
                 logger_error(f"Invalid URL! : {url}")

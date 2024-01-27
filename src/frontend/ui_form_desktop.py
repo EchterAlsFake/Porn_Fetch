@@ -722,7 +722,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_settings.setWidgetResizable(True)
         self.scrollAreaWidgetContents_6 = QWidget()
         self.scrollAreaWidgetContents_6.setObjectName(u"scrollAreaWidgetContents_6")
-        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 680, 444))
+        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 1006, 496))
         self.gridLayout_34 = QGridLayout(self.scrollAreaWidgetContents_6)
         self.gridLayout_34.setObjectName(u"gridLayout_34")
         self.gridlayout_settings = QGridLayout()
@@ -908,23 +908,26 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridlayout_api_language = QGridLayout()
         self.gridlayout_api_language.setObjectName(u"gridlayout_api_language")
-        self.radio_api_language_russian = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_api_language_russian.setObjectName(u"radio_api_language_russian")
-        self.radio_api_language_russian.setCursor(QCursor(Qt.PointingHandCursor))
+        self.label_api_language = QLabel(self.scrollAreaWidgetContents_6)
+        self.label_api_language.setObjectName(u"label_api_language")
+        sizePolicy1.setHeightForWidth(self.label_api_language.sizePolicy().hasHeightForWidth())
+        self.label_api_language.setSizePolicy(sizePolicy1)
 
-        self.gridlayout_api_language.addWidget(self.radio_api_language_russian, 2, 1, 1, 1)
+        self.gridlayout_api_language.addWidget(self.label_api_language, 0, 0, 1, 5)
 
-        self.radio_api_language_custom = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_api_language_custom.setObjectName(u"radio_api_language_custom")
-        self.radio_api_language_custom.setCursor(QCursor(Qt.PointingHandCursor))
+        self.horizontalSpacer_13 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        self.gridlayout_api_language.addWidget(self.radio_api_language_custom, 3, 1, 1, 1)
+        self.gridlayout_api_language.addItem(self.horizontalSpacer_13, 2, 4, 1, 1)
 
-        self.radio_api_language_english = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_api_language_english.setObjectName(u"radio_api_language_english")
-        self.radio_api_language_english.setCursor(QCursor(Qt.PointingHandCursor))
+        self.radio_api_language_spanish = QRadioButton(self.scrollAreaWidgetContents_6)
+        self.radio_api_language_spanish.setObjectName(u"radio_api_language_spanish")
 
-        self.gridlayout_api_language.addWidget(self.radio_api_language_english, 1, 0, 1, 1)
+        self.gridlayout_api_language.addWidget(self.radio_api_language_spanish, 1, 2, 1, 1)
+
+        self.radio_api_language_portuguese = QRadioButton(self.scrollAreaWidgetContents_6)
+        self.radio_api_language_portuguese.setObjectName(u"radio_api_language_portuguese")
+
+        self.gridlayout_api_language.addWidget(self.radio_api_language_portuguese, 3, 2, 1, 1)
 
         self.radio_api_language_german = QRadioButton(self.scrollAreaWidgetContents_6)
         self.radio_api_language_german.setObjectName(u"radio_api_language_german")
@@ -932,36 +935,57 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridlayout_api_language.addWidget(self.radio_api_language_german, 2, 0, 1, 1)
 
-        self.radio_api_language_french = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_api_language_french.setObjectName(u"radio_api_language_french")
-        self.radio_api_language_french.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_api_language.addWidget(self.radio_api_language_french, 3, 0, 1, 1)
-
         self.radio_api_language_chinese = QRadioButton(self.scrollAreaWidgetContents_6)
         self.radio_api_language_chinese.setObjectName(u"radio_api_language_chinese")
         self.radio_api_language_chinese.setCursor(QCursor(Qt.PointingHandCursor))
 
         self.gridlayout_api_language.addWidget(self.radio_api_language_chinese, 1, 1, 1, 1)
 
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.radio_api_language_dutch = QRadioButton(self.scrollAreaWidgetContents_6)
+        self.radio_api_language_dutch.setObjectName(u"radio_api_language_dutch")
 
-        self.gridlayout_api_language.addItem(self.horizontalSpacer_3, 1, 2, 1, 1)
+        self.gridlayout_api_language.addWidget(self.radio_api_language_dutch, 3, 1, 1, 1)
 
-        self.label_api_language = QLabel(self.scrollAreaWidgetContents_6)
-        self.label_api_language.setObjectName(u"label_api_language")
-        sizePolicy1.setHeightForWidth(self.label_api_language.sizePolicy().hasHeightForWidth())
-        self.label_api_language.setSizePolicy(sizePolicy1)
+        self.radio_api_language_italian = QRadioButton(self.scrollAreaWidgetContents_6)
+        self.radio_api_language_italian.setObjectName(u"radio_api_language_italian")
 
-        self.gridlayout_api_language.addWidget(self.label_api_language, 0, 0, 1, 3)
+        self.gridlayout_api_language.addWidget(self.radio_api_language_italian, 2, 2, 1, 1)
+
+        self.radio_api_language_russian = QRadioButton(self.scrollAreaWidgetContents_6)
+        self.radio_api_language_russian.setObjectName(u"radio_api_language_russian")
+        self.radio_api_language_russian.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.gridlayout_api_language.addWidget(self.radio_api_language_russian, 2, 1, 1, 1)
+
+        self.radio_api_language_english = QRadioButton(self.scrollAreaWidgetContents_6)
+        self.radio_api_language_english.setObjectName(u"radio_api_language_english")
+        self.radio_api_language_english.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.gridlayout_api_language.addWidget(self.radio_api_language_english, 1, 0, 1, 1)
 
         self.horizontalSpacer_12 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        self.gridlayout_api_language.addItem(self.horizontalSpacer_12, 3, 2, 1, 1)
+        self.gridlayout_api_language.addItem(self.horizontalSpacer_12, 3, 4, 1, 1)
 
-        self.horizontalSpacer_13 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.radio_api_language_french = QRadioButton(self.scrollAreaWidgetContents_6)
+        self.radio_api_language_french.setObjectName(u"radio_api_language_french")
+        self.radio_api_language_french.setCursor(QCursor(Qt.PointingHandCursor))
 
-        self.gridlayout_api_language.addItem(self.horizontalSpacer_13, 2, 2, 1, 1)
+        self.gridlayout_api_language.addWidget(self.radio_api_language_french, 3, 0, 1, 1)
+
+        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridlayout_api_language.addItem(self.horizontalSpacer_3, 1, 4, 1, 1)
+
+        self.radio_api_language_czech = QRadioButton(self.scrollAreaWidgetContents_6)
+        self.radio_api_language_czech.setObjectName(u"radio_api_language_czech")
+
+        self.gridlayout_api_language.addWidget(self.radio_api_language_czech, 1, 3, 1, 1)
+
+        self.radio_api_language_japanese = QRadioButton(self.scrollAreaWidgetContents_6)
+        self.radio_api_language_japanese.setObjectName(u"radio_api_language_japanese")
+
+        self.gridlayout_api_language.addWidget(self.radio_api_language_japanese, 2, 3, 1, 1)
 
 
         self.gridlayout_settings.addLayout(self.gridlayout_api_language, 4, 0, 1, 1)
@@ -1553,7 +1577,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.retranslateUi(Porn_Fetch_Widget)
 
-        self.stacked_widget_main.setCurrentIndex(0)
+        self.stacked_widget_main.setCurrentIndex(1)
         self.stacked_widget_top.setCurrentIndex(0)
 
 
@@ -1636,13 +1660,18 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_ui_language.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface Language:", None))
         self.radio_ui_language_system_default.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"System default", None))
         self.radio_ui_language_chinese_simplified.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Chinese (simplified)", None))
-        self.radio_api_language_russian.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Russian", None))
-        self.radio_api_language_custom.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Custom", None))
-        self.radio_api_language_english.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"English", None))
+        self.label_api_language.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"PornHub Language (affects video titles)", None))
+        self.radio_api_language_spanish.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Spanish", None))
+        self.radio_api_language_portuguese.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Portuguese", None))
         self.radio_api_language_german.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
-        self.radio_api_language_french.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))
         self.radio_api_language_chinese.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Chinese", None))
-        self.label_api_language.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"API Language", None))
+        self.radio_api_language_dutch.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Dutch", None))
+        self.radio_api_language_italian.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Italian", None))
+        self.radio_api_language_russian.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Russian", None))
+        self.radio_api_language_english.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"English", None))
+        self.radio_api_language_french.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))
+        self.radio_api_language_czech.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Czech", None))
+        self.radio_api_language_japanese.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Japanese", None))
         self.lineedit_output_path.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter \"./\" for current directory", None))
         self.label_output_path.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Output path:", None))
         self.button_directory_system_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))

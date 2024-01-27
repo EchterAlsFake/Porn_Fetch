@@ -248,6 +248,8 @@ class AddToTreeWidget(QRunnable):
 
                 else:
                     title = video.title
+                    logger_debug(f"Title: {title}")
+                    logger_debug(f"Language of the Client: {video.client.language}")
                     if self.data_mode == 1:
                         duration = round(video.duration.seconds / 60)
                         author = video.author.name
@@ -629,7 +631,13 @@ class Porn_Fetch(QWidget):
         self.group_api_language.addButton(self.ui.radio_api_language_french)
         self.group_api_language.addButton(self.ui.radio_api_language_english)
         self.group_api_language.addButton(self.ui.radio_api_language_russian)
-        self.group_api_language.addButton(self.ui.radio_api_language_custom)
+        self.group_api_language.addButton(self.ui.radio_api_language_czech)
+        self.group_api_language.addButton(self.ui.radio_api_language_italian)
+        self.group_api_language.addButton(self.ui.radio_api_language_spanish)
+        self.group_api_language.addButton(self.ui.radio_api_language_portuguese)
+        self.group_api_language.addButton(self.ui.radio_api_language_dutch)
+        self.group_api_language.addButton(self.ui.radio_api_language_japanese)
+
 
         self.directory_system_group = QButtonGroup()
         self.directory_system_group.addButton(self.ui.radio_directory_system_no)
@@ -836,6 +844,21 @@ Sorry.""", disambiguation=""))
             "worst": self.ui.radio_quality_worst
         }
 
+        self.language_map = {
+            "en": self.ui.radio_api_language_english,
+            "fr": self.ui.radio_api_language_french,
+            "de": self.ui.radio_api_language_german,
+            "zh": self.ui.radio_api_language_chinese,
+            "nl": self.ui.radio_api_language_dutch,
+            "ru": self.ui.radio_api_language_russian,
+            "jp": self.ui.radio_api_language_japanese,
+            "pt": self.ui.radio_api_language_portuguese,
+            "es": self.ui.radio_api_language_spanish,
+            "cz": self.ui.radio_api_language_czech,
+            "it": self.ui.radio_api_language_italian
+        }
+
+
         self.threading_map = {
             "yes": self.ui.radio_threading_yes,
             "no": self.ui.radio_threading_no
@@ -852,13 +875,6 @@ Sorry.""", disambiguation=""))
             "0": self.ui.radio_directory_system_no
         }
 
-    def get_custom_language_code(self):
-        text, ok = QInputDialog.getText(self, "QInputDialog.getText()",
-                                        QCoreApplication.tr("Please enter the Custom API Language:",
-                                                            disambiguation=""), QLineEdit.Normal)
-        if ok and text:
-            return text
-
     def load_user_settings(self):
         """Loads the user settings from the configuration file and applies them."""
 
@@ -867,7 +883,7 @@ Sorry.""", disambiguation=""))
         self.threading_map.get(self.conf.get("Performance", "threading")).setChecked(True)
         self.threading_mode_map.get(self.conf.get("Performance", "threading_mode")).setChecked(True)
         self.directory_system_map.get(self.conf.get("Video", "directory_system")).setChecked(True)
-
+        self.language_map.get(self.conf.get("Video", "language")).setChecked(True)
         self.ui.spinbox_semaphore.setValue(int(self.conf.get("Performance", "semaphore")))
         self.ui.spinbox_treewidget_limit.setValue(int(self.conf.get("Video", "search_limit")))
         self.ui.lineedit_output_path.setText(self.conf.get("Video", "output_path"))
@@ -893,31 +909,9 @@ Sorry.""", disambiguation=""))
         elif self.gui_language == "system":
             self.ui.radio_ui_language_system_default.setChecked(True)
 
-        if self.conf["Video"]["language"] == "custom":
-            self.api_language = self.get_custom_language_code()
-            self.ui.radio_api_language_custom.setChecked(True)
-
-        elif self.conf["Video"]["language"] == "en":
-            self.ui.radio_api_language_english.setChecked(True)
-            self.api_language = "en"
-
-        elif self.conf["Video"]["language"] == "de":
-            self.ui.radio_api_language_german.setChecked(True)
-            self.api_language = "de"
-
-        elif self.conf["Video"]["language"] == "ru":
-            self.ui.radio_api_language_russian.setChecked(True)
-            self.api_language = "rt"
-
-        elif self.conf["Video"]["language"] == "zh":
-            self.ui.radio_api_language_chinese.setChecked(True)
-            self.api_language = "cn"
-
-        elif self.conf["Video"]["language"] == "fr":
-            self.ui.radio_api_language_french.setChecked(True)
-            self.api_language = "fr"
-
         self.update_settings()
+        self.api_language = self.conf["Video"]["language"]
+        logger_debug(f"Video Language: {self.api_language}")
         self.semaphore = QSemaphore(int(self.semaphore_limit))
         logger_debug("Loaded User Settings!")
 
@@ -968,9 +962,6 @@ Sorry.""", disambiguation=""))
 
         elif self.ui.radio_ui_language_system_default.isChecked():
             self.conf.set("UI", "language", "system")
-
-        if self.ui.radio_api_language_custom.isChecked():
-            self.conf.set("Video", "language", "custom")
 
         self.update_settings()
 
