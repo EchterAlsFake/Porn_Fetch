@@ -18,7 +18,7 @@
   <a href="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md"><strong>Development Update V3.0</strong></a>
 </p>
 
-![Alt text](https://github.com/EchterAlsFake/Porn_Fetch/blob/9c634446b097f35d17fcf06e735e184ccd358c60/screenshot.png?raw=true "Optional Title")
+![Alt text](https://github.com/EchterAlsFake/Porn_Fetch/blob/7f9c21f73ae8dd50257be6fc2e5cc2b717ab44c9/src/frontend/graphics/screenshot.png?raw=true "Optional Title")
 
 ## 🚀 Quick Links
 - [Features](#-features)
