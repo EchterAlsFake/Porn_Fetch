@@ -248,8 +248,6 @@ class AddToTreeWidget(QRunnable):
 
                 else:
                     title = video.title
-                    logger_debug(f"Title: {title}")
-                    logger_debug(f"Language of the Client: {video.client.language}")
                     if self.data_mode == 1:
                         duration = round(video.duration.seconds / 60)
                         author = video.author.name
@@ -1122,17 +1120,9 @@ If no more videos are found it will break the loop and the received videos can b
     def start_model(self):
         search_limit = self.search_limit
         model = self.ui.lineedit_model_url.text()
-
-        actress_pattern = re.compile(r"https://hqporner\.com/actress/(.+)")
         pornhub_pattern = re.compile(r"(.*?)pornhub(.*?)")
 
-        match = actress_pattern.match(model)
-        if match:
-            # Extract the actress name from the URL
-            model = match.group(1)
-            videos = hq_Client().get_videos_by_actress(name=model)
-
-        elif pornhub_pattern.match(model):
+        if pornhub_pattern.match(model):
             api_language = self.api_language
             if not isinstance(self.client, Client):
                 client = Client(language=api_language)
@@ -1142,11 +1132,8 @@ If no more videos are found it will break the loop and the received videos can b
             model_object = client.get_user(model)
             videos = model_object.videos
 
-        elif not model.startswith("https://"):
-            videos = hq_Client().get_videos_by_actress(name=model)
-
         else:
-            return
+            videos = hq_Client().get_videos_by_actress(model)
 
         self.add_to_tree_widget_thread(videos, search_limit=search_limit)
 
