@@ -71,15 +71,6 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.verticallayout_sidebar.addWidget(self.button_switch_hqporner)
 
-        self.button_switch_search = QPushButton(Porn_Fetch_Widget)
-        self.button_switch_search.setObjectName(u"button_switch_search")
-        self.button_switch_search.setMinimumSize(QSize(50, 50))
-        self.button_switch_search.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_switch_search.setStyleSheet(u"border: none;")
-        self.button_switch_search.setIconSize(QSize(32, 32))
-
-        self.verticallayout_sidebar.addWidget(self.button_switch_search)
-
         self.button_switch_settings = QPushButton(Porn_Fetch_Widget)
         self.button_switch_settings.setObjectName(u"button_switch_settings")
         self.button_switch_settings.setMinimumSize(QSize(50, 50))
@@ -1574,7 +1565,6 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_switch_home.setText("")
         self.button_switch_account.setText("")
         self.button_switch_hqporner.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"HQ", None))
-        self.button_switch_search.setText("")
         self.button_switch_settings.setText("")
         self.button_switch_metadata.setText("")
         self.button_switch_credits.setText("")

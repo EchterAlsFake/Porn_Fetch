@@ -1105,11 +1105,11 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         ui_popup(text)
 
     def hqporner_pages_help(self):
-        ui_popup("""
+        ui_popup(QCoreApplication.tr("""
 Videos are split into pages on HQPorner. One page contains 46 videos.
 If you specify 2 pages 92 videos will therefore be loaded.
 
-If no more videos are found it will break the loop and the received videos can be used.""")
+If no more videos are found it will break the loop and the received videos can be used.""", disambiguation=""))
 
     """
     Starting video download processes
