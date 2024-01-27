@@ -53,7 +53,7 @@ accepted = no
 [Performance]
 threading = yes
 threading_mode = 2
-semaphore = 1
+semaphore = 2
 
 [Video]
 quality = best
@@ -63,7 +63,7 @@ directory_system = 0
 search_limit = 50
 
 [UI]
-language = en
+language = system
 """
 
 

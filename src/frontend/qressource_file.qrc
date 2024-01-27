@@ -2,7 +2,6 @@
     <qresource prefix="/images">
         <file>graphics/download.svg</file>
         <file>graphics/information.svg</file>
-        <file>graphics/search.svg</file>
         <file>graphics/settings.svg</file>
         <file>graphics/logo_transparent.ico</file>
         <file>graphics/top-arrow.ico</file>
@@ -16,7 +15,6 @@
         <file>stylesheets/progressbar_hqporner.qss</file>
         <file>stylesheets/progressbar_pornhub.qss</file>
         <file>stylesheets/progressbar_total.qss</file>
-        <file>stylesheets/stylesheet_ui_popup.qss</file>
         <file>stylesheets/stylesheet_button_blue.qss</file>
         <file>stylesheets/stylesheet_button_orange.qss</file>
         <file>stylesheets/stylesheet_button_purple.qss</file>

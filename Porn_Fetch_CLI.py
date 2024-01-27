@@ -476,7 +476,6 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
 {return_color()}1) Search for Videos
 {return_color()}2) Search for Users
 {return_color()}3) Back
-{reset()}! search filters aren't working yet. 
 
 {return_color()}------------------=>:{reset()}""")
 

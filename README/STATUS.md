@@ -3,25 +3,17 @@
 
 ## TODO:
 
-- [] Make a function to validate input before processing
 - [] Adding more exceptions
-- [] Fixing the layout
-- [] Update Web application
-- [] Updating CLI
-- [] Searching for Pornstars
-- [] Searching for Users
-- [] Filters for both (Users, Pornstars)
+- [] Including French translations (will need an update on the .ts)
 - [] Updating both translations
-- [] Supporting feed objects
-- [] OLED night black instead of grey
+- [x] Fixing the layout
+- [x] Updating CLI
 - [x] Different threading modes, for different use cases
 - [x] A new and better layout
 - [x] Better way of getting metadata
 - [x] Directory structure system
 - [x] Better way of checking if file exists
-- [] A lot better exception handling
 - [x] More features for hqporner.com
-- [] Including French translations (will need an update on the .ts)
 - [x] Dark mode for license widget
 - [x] Working on the translations
 - [x] Support for macOS in Build Script (untested)
@@ -44,7 +36,7 @@ Android is now in full development, although I still have issues with Storage pe
 - [x] Total progress tracking
 - [x] Single video download
 - [x] Tree Widget
-- [] Search Query support
+- [x] Search Query support
 - [x] Persistent settings
 - [x] Title stripping
 - [x] Debugging / Logging

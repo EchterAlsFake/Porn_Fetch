@@ -20,12 +20,10 @@ E-Mail: EchterAlsFake@proton.me
 Discord: echteralsfake (faster response)
 """
 
-
 __license__ = "GPL 3"
 __version__ = "3.0"
-__build__ = "android"  # android or desktop
+__build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
-
 
 import requests
 import re
@@ -33,7 +31,6 @@ import sys
 import os.path
 import argparse
 import markdown
-import time
 import traceback
 import src.frontend.resources
 
@@ -45,15 +42,13 @@ from phub import Quality, Client, errors, download, Video
 from src.backend.shared_functions import *
 from itertools import islice
 
-
 from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
 from src.frontend.License import Ui_License
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                             QTranslator, QCoreApplication)
-from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QCheckBox,
+from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QLineEdit,
                                QTreeWidgetItem, QButtonGroup, QFileDialog)
 from PySide6.QtGui import QIcon, QFont
-
 
 total_segments = 0
 downloaded_segments = 0
@@ -116,12 +111,7 @@ def get_output_path(path="/storage/emulated/0/Download"):
 
 def ui_popup(text):
     """ A simple UI popup that will be used for small messages to the user."""
-    file = QFile(":/style/stylesheets/stylesheet_ui_popup.qss")
-    file.open(QFile.ReadOnly | QFile.Text)
-    stream = QTextStream(file)
-
     qmsg_box = QMessageBox()
-    qmsg_box.setStyleSheet(stream.readAll())
     qmsg_box.setText(text)
     qmsg_box.exec()
 
@@ -305,10 +295,6 @@ class DownloadThread(QRunnable):
 
     def run(self):
         try:
-
-            if __build__ == "android":
-                self.output_path = "/storage/emulated/0/Download/"
-
             if isinstance(self.video, Video):
                 if self.threading_mode == 2:
                     self.downloader = download.threaded(max_workers=20, timeout=5)
@@ -391,7 +377,7 @@ class MetadataVideos(QRunnable):
         duration = f"{duration} {duration_string}"
         pornstar_generator = self.video.pornstars
         tags_generator = self.video.tags
-        rating = self.video.like
+        rating = self.video.likes
         orientation = self.video.orientation
         hotspots = self.video.hotspots
 
@@ -519,15 +505,12 @@ class Porn_Fetch(QWidget):
         if __build__ == "android":
             self.setup_android()
 
-        self.create_checkboxes()
         self.language_strings()
         self.settings_maps_initialization()
         self.load_user_settings()
-        self.update_settings()
 
     def load_style(self):
         """a simple function to load the icons for the buttons"""
-        self.ui.button_switch_search.setIcon(QIcon(":/images/graphics/search.svg"))
         self.ui.button_switch_home.setIcon(QIcon(":/images/graphics/download.svg"))
         self.ui.button_switch_settings.setIcon(QIcon(":/images/graphics/settings.svg"))
         self.ui.button_switch_credits.setIcon(QIcon(":/images/graphics/information.svg"))
@@ -585,8 +568,6 @@ class Porn_Fetch(QWidget):
         self.ui.button_video_thumbnail_download.setStyleSheet(purple)
         self.ui.button_tree_select_all.setStyleSheet(orange)
         self.ui.button_tree_unselect_all.setStyleSheet(blue)
-        self.ui.button_search_pornhub_filters.setStyleSheet(purple)
-        self.ui.button_search_users.setStyleSheet(purple)
         self.ui.button_search_hqporner.setStyleSheet(purple)
         self.ui.button_help_pages.setStyleSheet(login)
         self.ui.button_semaphore_help.setStyleSheet(login)
@@ -594,6 +575,12 @@ class Porn_Fetch(QWidget):
         self.ui.button_directory_system_help.setStyleSheet(login)
         self.ui.button_output_path_select.setStyleSheet(login)
         self.ui.button_settings_apply.setStyleSheet(login)
+        self.ui.button_search_pornhub.setStyleSheet(purple)
+        self.ui.button_hqporner_category_get_videos.setStyleSheet(purple)
+        self.ui.button_get_random_videos.setStyleSheet(purple)
+        self.ui.button_get_brazzers_videos.setStyleSheet(purple)
+        self.ui.button_list_categories.setStyleSheet(purple)
+        self.ui.button_top_porn_get_videos.setStyleSheet(purple)
 
         self.ui.progressbar_pornhub.setStyleSheet(stream_progress_pornhub.readAll())
         self.ui.progressbar_hqporner.setStyleSheet(stream_progress_hqporner.readAll())
@@ -609,7 +596,8 @@ class Porn_Fetch(QWidget):
         self.get_output_path_string_ui_popup = QCoreApplication.tr("""The specified output path doesn't exist.
         If you think, this is an error, please report it!""", disambiguation=None)
 
-        self.save_user_settings_language_string = QCoreApplication.tr("Saved User Settings!", disambiguation=None)
+        self.save_user_settings_language_string = QCoreApplication.tr("Saved User Settings, please restart Porn Fetch!",
+                                                                      disambiguation=None)
         self.open_file_language_string = QCoreApplication.tr("Select URL file", disambiguation=None)
         self.language_string_login_failed = QCoreApplication.tr("Login Failed, please check your credentials and try "
                                                                 "again!", disambiguation=None)
@@ -640,6 +628,8 @@ class Porn_Fetch(QWidget):
         self.group_api_language.addButton(self.ui.radio_api_language_german)
         self.group_api_language.addButton(self.ui.radio_api_language_french)
         self.group_api_language.addButton(self.ui.radio_api_language_english)
+        self.group_api_language.addButton(self.ui.radio_api_language_russian)
+        self.group_api_language.addButton(self.ui.radio_api_language_custom)
 
         self.directory_system_group = QButtonGroup()
         self.directory_system_group.addButton(self.ui.radio_directory_system_no)
@@ -657,62 +647,32 @@ class Porn_Fetch(QWidget):
         self.radio_hqporner.addButton(self.ui.radio_top_porn_month)
         self.radio_hqporner.addButton(self.ui.radio_top_porn_all_time)
 
-    def create_checkboxes(self):
-        self.checkboxes = {}
-        member_attributes = [
-            'IS_MODEL', 'IS_STAFF', 'IS_ONLINE', 'HAS_AVATAR', 'HAS_VIDEOS',
-            'HAS_PHOTOS', 'HAS_PLAYLISTS', 'OFFER_FAN_CLUB', 'OFFER_CUSTOM_VIDEOS',
-            'SINGLE', 'TAKEN', 'OPEN_RELATION', 'GENDER_MALE', 'GENDER_FEMALE',
-            'GENDER_COUPLE', 'GENDER_TRANS_FEMALE', 'GENDER_FEMALE_COUPLE',
-            'GENDER_TRANS_MALE', 'GENDER_NON_BINARY', 'GENDER_OTHER',
-            'INTO_NONE', 'INTO_MALE', 'INTO_FEMALE', 'INTO_ALL'
-        ]
-
-        layout = self.ui.gridlayout_user_filter
-        row, col = 0, 0
-        for attr in member_attributes:
-            checkbox = QCheckBox(attr.replace('_', ' ').title())
-            checkbox.setObjectName(attr)
-            self.checkboxes[attr] = checkbox
-            layout.addWidget(checkbox, row, col)
-
-            col += 1
-            if col >= 3:  # Adjust the number of columns as needed
-                col = 0
-                row += 1
-
-    def get_checked_filters(self):
-        checked_filters = []
-        for attr, checkbox in self.checkboxes.items():
-            if checkbox.isChecked():
-                checked_filters.append(f'Member.{attr}')
-
-        return ' | '.join(checked_filters)
-
     def setup_android(self):
         if get_output_path():
             self.output_path = "/storage/emulated/0/Download/"
 
         else:
-            ui_popup("""
+            ui_popup(QCoreApplication.tr("""
 The output path: /storage/emulated/0/Download does not exist.
 The Permission System on Android is currently not working for me. 
 If you know what you do, you can now enter a manual output path, which will be used!
 If you don't know what /storage/ even is, please just close the App.
 
-Sorry.""")
+Sorry.""", disambiguation=""))
 
-            text, ok = QInputDialog(self).getText(self, "Enter custom Path", "Enter custom Path:")
+            text, ok = QInputDialog(self).getText(self, "Enter custom Path", QCoreApplication.tr("Enter custom Path:", disambiguation=""))
             if ok:
                 if get_output_path(text):
-                    ui_popup(f"Success: {text} will be used for this session!")
+                    ui_popup(QCoreApplication.tr(f"Success: {text} will be used for this session!", disambiguation=""))
                     self.output_path = text
+                    self.ui.lineedit_output_path.setText(self.output_path)
+                    self.ui.lineedit_output_path.setReadOnly(True)
+                    self.ui.button_open_file.setDisabled(True)
+                    self.ui.lineedit_file.setText(QCoreApplication.tr("Not supported on Android", disambiguation=""))
 
                 else:
-                    ui_popup("Sorry, but this path also doesn't exist, or I can't write to it. Sorry.")
-
-        self.ui.lineedit_output_path.setDisabled(True)
-        self.ui.button_open_file.setDisabled(True)
+                    ui_popup(QCoreApplication.tr("Sorry, but this path also doesn't exist, or I can't write to it. Sorry.", disambiguation=""))
+                    exit()
 
     def switch_to_account(self):
         self.ui.stacked_widget_top.setCurrentIndex(1)
@@ -722,11 +682,6 @@ Sorry.""")
     def switch_to_home(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(0)
-        self.layout().update()
-
-    def switch_to_search(self):
-        self.ui.stacked_widget_main.setCurrentIndex(0)
-        self.ui.stacked_widget_top.setCurrentIndex(2)
         self.layout().update()
 
     def switch_to_hqporner(self):
@@ -742,15 +697,12 @@ Sorry.""")
     def switch_to_credits(self):
         self.ui.stacked_widget_main.setCurrentIndex(2)
         self.show_credits()
-        time.sleep(0.3)
-        self.show_credits()
 
     def button_connectors(self):
         """a function to link the buttons to their functions"""
 
         # Menu Bar Switch Button Connections
         self.ui.button_switch_home.clicked.connect(self.switch_to_home)
-        self.ui.button_switch_search.clicked.connect(self.switch_to_search)
         self.ui.button_switch_settings.clicked.connect(self.switch_to_settings)
         self.ui.button_switch_credits.clicked.connect(self.switch_to_credits)
         self.ui.button_switch_metadata.clicked.connect(self.switch_to_metadata)
@@ -779,8 +731,7 @@ Sorry.""")
         self.ui.button_get_recommended_videos.clicked.connect(self.get_recommended_videos)
 
         # Search
-        self.ui.button_search_videos.clicked.connect(self.basic_search)
-        self.ui.button_search_users.clicked.connect(self.search_users)
+        self.ui.button_search_pornhub.clicked.connect(self.basic_search)
         self.ui.button_search_hqporner.clicked.connect(self.hqporner_search)
 
         # Metadata
@@ -856,7 +807,7 @@ Sorry.""")
 
     def get_search_limit(self):
         """Returns the search limit selected by the user"""
-        search_limit = self.ui.spinbox_searching.value() if self.ui.spinbox_searching.value() >= 1 else 50
+        search_limit = self.ui.spinbox_treewidget_limit.value() if self.ui.spinbox_treewidget_limit.value() >= 1 else 50
         self.search_limit = search_limit
 
     def is_directory_system(self):
@@ -877,20 +828,12 @@ Sorry.""")
         self.get_semaphore_limit()
 
     def settings_maps_initialization(self):
-        self.native_languages = ["en", "de", "fr", "ru", "zh"]
 
         # Maps for settings and corresponding UI elements
         self.quality_map = {
             "best": self.ui.radio_quality_best,
             "half": self.ui.radio_quality_half,
             "worst": self.ui.radio_quality_worst
-        }
-
-        self.language_map = {
-            "en": self.ui.radio_api_language_english,
-            "fr": self.ui.radio_api_language_french,
-            "de": self.ui.radio_api_language_german,
-            "zh": self.ui.radio_api_language_chinese
         }
 
         self.threading_map = {
@@ -909,18 +852,24 @@ Sorry.""")
             "0": self.ui.radio_directory_system_no
         }
 
+    def get_custom_language_code(self):
+        text, ok = QInputDialog.getText(self, "QInputDialog.getText()",
+                                        QCoreApplication.tr("Please enter the Custom API Language:",
+                                                            disambiguation=""), QLineEdit.Normal)
+        if ok and text:
+            return text
+
     def load_user_settings(self):
         """Loads the user settings from the configuration file and applies them."""
 
         # Apply settings
         self.quality_map.get(self.conf.get("Video", "quality")).setChecked(True)
-        self.language_map.get(self.conf.get("Video", "language")).setChecked(True)
         self.threading_map.get(self.conf.get("Performance", "threading")).setChecked(True)
         self.threading_mode_map.get(self.conf.get("Performance", "threading_mode")).setChecked(True)
         self.directory_system_map.get(self.conf.get("Video", "directory_system")).setChecked(True)
 
         self.ui.spinbox_semaphore.setValue(int(self.conf.get("Performance", "semaphore")))
-        self.ui.spinbox_searching.setValue(int(self.conf.get("Video", "search_limit")))
+        self.ui.spinbox_treewidget_limit.setValue(int(self.conf.get("Video", "search_limit")))
         self.ui.lineedit_output_path.setText(self.conf.get("Video", "output_path"))
 
         self.semaphore_limit = self.conf.get("Performance", "semaphore")
@@ -944,6 +893,31 @@ Sorry.""")
         elif self.gui_language == "system":
             self.ui.radio_ui_language_system_default.setChecked(True)
 
+        if self.conf["Video"]["language"] == "custom":
+            self.api_language = self.get_custom_language_code()
+            self.ui.radio_api_language_custom.setChecked(True)
+
+        elif self.conf["Video"]["language"] == "en":
+            self.ui.radio_api_language_english.setChecked(True)
+            self.api_language = "en"
+
+        elif self.conf["Video"]["language"] == "de":
+            self.ui.radio_api_language_german.setChecked(True)
+            self.api_language = "de"
+
+        elif self.conf["Video"]["language"] == "ru":
+            self.ui.radio_api_language_russian.setChecked(True)
+            self.api_language = "rt"
+
+        elif self.conf["Video"]["language"] == "zh":
+            self.ui.radio_api_language_chinese.setChecked(True)
+            self.api_language = "cn"
+
+        elif self.conf["Video"]["language"] == "fr":
+            self.ui.radio_api_language_french.setChecked(True)
+            self.api_language = "fr"
+
+        self.update_settings()
         self.semaphore = QSemaphore(int(self.semaphore_limit))
         logger_debug("Loaded User Settings!")
 
@@ -977,7 +951,7 @@ Sorry.""")
 
         # Save other settings
         self.conf.set("Performance", "semaphore", str(self.ui.spinbox_semaphore.value()))
-        self.conf.set("Video", "search_limit", str(self.ui.spinbox_searching.value()))
+        self.conf.set("Video", "search_limit", str(self.ui.spinbox_treewidget_limit.value()))
         self.conf.set("Video", "output_path", self.ui.lineedit_output_path.text())
 
         if self.ui.radio_ui_language_french.isChecked():
@@ -995,13 +969,16 @@ Sorry.""")
         elif self.ui.radio_ui_language_system_default.isChecked():
             self.conf.set("UI", "language", "system")
 
+        if self.ui.radio_api_language_custom.isChecked():
+            self.conf.set("Video", "language", "custom")
+
         self.update_settings()
 
         with open("config.ini", "w") as config_file:
             self.conf.write(config_file)
 
         ui_popup(self.save_user_settings_language_string)
-        logger_debug("Saved User Settings!")
+        logger_debug("Saved User Settings, please restart Porn Fetch.")
 
     """
     The following functions are related to the tree widget    
@@ -1139,9 +1116,9 @@ If no more videos are found it will break the loop and the received videos can b
     """
 
     def start_single_video(self):
-        self.update_settings()
         url = self.ui.lineedit_url.text()
         api_language = self.api_language
+        print(f"Using API Language: {api_language}")
         one_time_iterator = []
         if url.endswith(".html"):
             one_time_iterator.append(check_video(url=url, language=api_language))
@@ -1183,7 +1160,6 @@ If no more videos are found it will break the loop and the received videos can b
         self.add_to_tree_widget_thread(videos, search_limit=search_limit)
 
     def load_video(self, url):
-        self.update_settings()
         output_path = self.output_path
         api_language = self.api_language
         threading_mode = self.threading_mode
@@ -1245,9 +1221,7 @@ If no more videos are found it will break the loop and the received videos can b
             return self.client
 
         else:
-            self.update_settings()
-            api_language = self.api_language
-            return Client(language=api_language)
+            return Client(language=self.api_language)
 
     def process_video_thread(self, output_path, video, threading_mode, quality):
         """Checks which of the three types of threading the user selected and handles them."""
@@ -1292,10 +1266,6 @@ If no more videos are found it will break the loop and the received videos can b
     def stop_undefined_range(self):
         self.ui.progressbar_total.setRange(0, 1)
 
-        """
-        The following functions are related to the QFileDialog
-        """
-
     """
     The following functions are used for opening files / directories with the QFileDialog"""
 
@@ -1316,9 +1286,11 @@ If no more videos are found it will break the loop and the received videos can b
             content = url_file.read().splitlines()
 
             for url in content:
+                print(url)
                 video = check_video(url, language=self.api_language)
                 iterator.append(video)
-                self.add_to_tree_widget_thread(iterator, search_limit=self.search_limit)
+
+            self.add_to_tree_widget_thread(iterator, search_limit=self.search_limit)
 
     """
     The following functions are related to the User's account
@@ -1327,7 +1299,6 @@ If no more videos are found it will break the loop and the received videos can b
     def login(self):
         username = self.ui.lineedit_username.text()
         password = self.ui.lineedit_password.text()
-        self.update_settings()
 
         try:
             self.client = Client(username, password, language=self.api_language)
@@ -1379,7 +1350,6 @@ If no more videos are found it will break the loop and the received videos can b
     """
 
     def basic_search(self):
-        self.update_settings()
         query = self.ui.lineedit_seach_pornhub.text()
         language = self.api_language
         search_limit = self.search_limit
@@ -1392,14 +1362,6 @@ If no more videos are found it will break the loop and the received videos can b
         search_limit = self.search_limit
         search = hq_Client().get_videos_by_actress(query)
         self.add_to_tree_widget_thread(iterator=search, search_limit=search_limit)
-
-    def search_users(self):
-        query = self.ui.lineedit_search_users.text()
-        search_limit = self.search_limit
-        filters = self.get_checked_filters()
-        search = Client().search_user(query, filters)
-        logger_debug("Received Search Query")
-        self.add_to_tree_widget_thread(iterator=search, search_limit=search_limit, clickable=True)
 
     def get_metadata_video(self):
         api_language = self.api_language
@@ -1538,7 +1500,7 @@ If no more videos are found it will break the loop and the received videos can b
         all_categories = hq_Client().get_all_categories()
 
         if not category_name in all_categories:
-            ui_popup("Invalid Category. Press 'list categories' to see all possible ones.")
+            ui_popup(QCoreApplication.tr("Invalid Category. Press 'list categories' to see all possible ones.", disambiguation=""))
 
         else:
             videos = hq_Client().get_videos_by_category(name=category_name, pages=pages)
