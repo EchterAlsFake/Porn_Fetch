@@ -577,7 +577,6 @@ class Porn_Fetch(QWidget):
         self.ui.button_download.setStyleSheet(purple)
         self.ui.button_model.setStyleSheet(purple)
         self.ui.button_open_file.setStyleSheet(purple)
-        self.ui.button_search_videos.setStyleSheet(purple)
         self.ui.button_tree_download.setStyleSheet(purple)
         self.ui.button_metadata_user_start.setStyleSheet(purple)
         self.ui.button_metadata_video_start.setStyleSheet(purple)
@@ -746,13 +745,6 @@ Sorry.""")
         time.sleep(0.3)
         self.show_credits()
 
-    def switch_to_search_filters(self):
-        self.ui.stacked_widget_main.setCurrentIndex(4)
-
-    def switch_to_search_filters_back(self):
-        self.ui.stacked_widget_main.setCurrentIndex(0)
-        self.ui.stacked_widget_top.setCurrentIndex(2)
-
     def button_connectors(self):
         """a function to link the buttons to their functions"""
 
@@ -763,8 +755,6 @@ Sorry.""")
         self.ui.button_switch_credits.clicked.connect(self.switch_to_credits)
         self.ui.button_switch_metadata.clicked.connect(self.switch_to_metadata)
         self.ui.button_switch_account.clicked.connect(self.switch_to_account)
-        self.ui.button_switch_search_filters.clicked.connect(self.switch_to_search_filters)
-        self.ui.button_switch_search_filters_back.clicked.connect(self.switch_to_search_filters_back)
 
         # Video Download Button Connections
         self.ui.button_download.clicked.connect(self.start_single_video)
@@ -1390,7 +1380,7 @@ If no more videos are found it will break the loop and the received videos can b
 
     def basic_search(self):
         self.update_settings()
-        query = self.ui.lineedit_search_query.text()
+        query = self.ui.lineedit_seach_pornhub.text()
         language = self.api_language
         search_limit = self.search_limit
         client = Client(language=language)
