@@ -3,9 +3,9 @@
 
 ## TODO:
 
-- [] Adding more exceptions
 - [] Including French translations (will need an update on the .ts)
-- [] Updating both translations
+- [] Updating chinese translations (will need an update on the .ts)
+- [x] Updating both translations
 - [x] Fixing the layout
 - [x] Updating CLI
 - [x] Different threading modes, for different use cases
