@@ -4,7 +4,7 @@
 ## TODO:
 
 - [] Including French translations (will need an update on the .ts)
-- [] Updating chinese translations (will need an update on the .ts)
+- [x] Updating chinese translations (will need an update on the .ts)
 - [x] Updating both translations
 - [x] Fixing the layout
 - [x] Updating CLI
