@@ -125,6 +125,7 @@ class DownloadProgressSignal(QObject):
     """Sends the current download progress to the main UI to update the progressbar."""
     progress = Signal(int, int)
     progress_hqporner = Signal(int, int)
+    progress_eporner = Signal(int, int)
     total_progress = Signal(int, int)
 
 
@@ -246,11 +247,23 @@ class AddToTreeWidget(QRunnable):
 
                     text_data = [str(title), str(author), str(duration), str(i), video]
 
-                else:
+                elif isinstance(video, Video):
                     title = video.title
                     if self.data_mode == 1:
                         duration = round(video.duration.seconds / 60)
                         author = video.author.name
+
+                    else:
+                        duration = disabled
+                        author = disabled
+
+                    text_data = [str(title), str(author), str(duration), str(i), video]
+
+                elif isinstance(video, ep_Video):
+                    title = video.title
+                    if self.data_mode == 1:
+                        duration = round(int(video.length_seconds) / 60)
+                        author = video.author
 
                     else:
                         duration = disabled
@@ -293,6 +306,9 @@ class DownloadThread(QRunnable):
     def callback_hqporner(self, pos, total):
         self.signals.progress_hqporner.emit(pos, total)
 
+    def callback_eporner(self, pos, total):
+        self.signals.progress_eporner.emit(pos, total)
+
     def run(self):
         try:
             if isinstance(self.video, Video):
@@ -308,9 +324,13 @@ class DownloadThread(QRunnable):
                 self.video.download(downloader=self.downloader, path=self.output_path, quality=self.quality,
                                     display=self.callback)
 
-            else:
-                self.video.download(quality=hq_Quality.BEST, output_path=self.output_path,
+            elif isinstance(self.video, hq_Video):
+                self.video.download(quality=self.quality, output_path=self.output_path,
                                     callback=self.callback_hqporner, no_title=True)
+
+            elif isinstance(self.video, ep_Video):
+                self.video.download_video(quality=self.quality, output_path=self.output_path,
+                                          callback=self.callback_eporner, no_title=True)
 
         finally:
             self.signals_completed.completed.emit()
@@ -330,6 +350,7 @@ class QTreeWidgetDownloadThread(QRunnable):
         self.signals.start_undefined_range.emit()
         video_objects_hqporner = []
         video_objects_pornhub = []
+        video_objects_eporner = []
 
         for i in range(self.treeWidget.topLevelItemCount()):
             item = self.treeWidget.topLevelItem(i)
@@ -342,6 +363,9 @@ class QTreeWidgetDownloadThread(QRunnable):
                 elif isinstance(object_, Video):
                     video_objects_pornhub.append(object_)
 
+                elif isinstance(object_, ep_Video):
+                    video_objects_eporner.append(object_)
+
         global total_segments, downloaded_segments
         total_segments = sum(
             [len(list(video.get_segments(quality=self.quality))) for video in video_objects_pornhub])
@@ -349,7 +373,7 @@ class QTreeWidgetDownloadThread(QRunnable):
         downloaded_segments = 0
 
         self.signals.stop_undefined_range.emit()
-        videos = video_objects_pornhub + video_objects_hqporner
+        videos = video_objects_pornhub + video_objects_hqporner + video_objects_eporner
         for video in videos:
             self.semaphore.acquire()
             logger_debug("Semaphore Acquired")
@@ -526,6 +550,10 @@ class Porn_Fetch(QWidget):
         file_progress_hqporner.open(QFile.ReadOnly | QFile.Text)
         stream_progress_hqporner = QTextStream(file_progress_hqporner)
 
+        file_progress_eqporner = QFile(":/style/stylesheets/progressbar_eporner.qss")
+        file_progress_eqporner.open(QFile.ReadOnly | QFile.Text)
+        stream_progress_eporner = QTextStream(file_progress_eqporner)
+
         file_progressbar_total = QFile(":/style/stylesheets/progressbar_total.qss")
         file_progressbar_total.open(QFile.ReadOnly | QFile.Text)
         stream_progress_total = QTextStream(file_progressbar_total)
@@ -585,6 +613,7 @@ class Porn_Fetch(QWidget):
         self.ui.progressbar_pornhub.setStyleSheet(stream_progress_pornhub.readAll())
         self.ui.progressbar_hqporner.setStyleSheet(stream_progress_hqporner.readAll())
         self.ui.progressbar_total.setStyleSheet(stream_progress_total.readAll())
+        self.ui.progressbar_eporner.setStyleSheet(stream_progress_eporner.readAll())
         logger_debug("Loaded Icons!")
 
     def language_strings(self):
@@ -978,7 +1007,7 @@ Sorry.""", disambiguation=""))
             for user_object in iterator:
                 uploads = user_object.uploads
                 if uploads:
-                    print("User has uploaded videos")
+                    pass  # Implemented in v3.1
 
         if self.ui.radio_tree_show_title.isChecked():
             data_mode = 0
@@ -1154,9 +1183,12 @@ If no more videos are found it will break the loop and the received videos can b
                 author = pornstars[0]
 
         elif isinstance(video, Video):
-            video = check_video(url, language=api_language)
             title = video.title
             author = video.author.name
+
+        elif isinstance(video, ep_Video):
+            title = video.title
+            author = video.author
 
         else:
             ui_popup(
@@ -1208,6 +1240,7 @@ If no more videos are found it will break the loop and the received videos can b
         self.download_thread.signals.progress.connect(self.update_progressbar)
         self.download_thread.signals.total_progress.connect(self.update_total_progressbar)
         self.download_thread.signals.progress_hqporner.connect(self.update_progressbar_hqporner)
+        self.download_thread.signals.progress_eporner.connect(self.update_progressbar_eporner)
         self.download_thread.signals_completed.completed.connect(self.download_completed)
         self.threadpool.start(self.download_thread)
         logger_debug("Started Download Thread!")
@@ -1233,6 +1266,10 @@ If no more videos are found it will break the loop and the received videos can b
     def update_progressbar_hqporner(self, value, maximum):
         self.ui.progressbar_hqporner.setMaximum(maximum)
         self.ui.progressbar_hqporner.setValue(value)
+
+    def update_progressbar_eporner(self, value, maximum):
+        self.ui.progressbar_eporner.setMaximum(maximum)
+        self.ui.progressbar_eporner.setValue(value)
 
     def download_completed(self):
         logger_debug("Download Completed!")

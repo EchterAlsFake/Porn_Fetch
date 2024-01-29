@@ -246,6 +246,7 @@ I hope that most issues are now fixed.
 - Enhanced structure of the Q Resource file.
 - Stylesheets have been reorganized and divided into multiple sections for better management.
 - Changed the strip title function to allow non UTF-8 characters to support other language alphabets
+- Comprehensive rewrite of the Command Line Interface (CLI).
 
 ## Translations
 - Added German
@@ -261,9 +262,9 @@ I hope that most issues are now fixed.
 - Fixed an issue with the config file location creation
 
 
-## Other
+## Features
+- Added support for Eporner.com
 - New directory system to organize videos by model in separate folders.
-- Comprehensive rewrite of the Command Line Interface (CLI).
 - Videos can now be shown in reverse order [#17](https://github.com/EchterAlsFake/Porn_Fetch/issues/17)
 - You can now also download by model on HQPorner
 - You can now download by category on HQPorner

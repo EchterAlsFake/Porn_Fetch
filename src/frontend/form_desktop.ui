@@ -244,8 +244,8 @@ color: #ff8397</string>
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>1004</width>
-                   <height>289</height>
+                   <width>489</width>
+                   <height>288</height>
                   </rect>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_4">
@@ -480,8 +480,8 @@ QPushButton:pressed {
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>1006</width>
-                 <height>197</height>
+                 <width>618</width>
+                 <height>168</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_14">
@@ -2373,15 +2373,15 @@ QPushButton:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1024</width>
-             <height>130</height>
+             <width>1010</width>
+             <height>161</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_33">
-            <item row="0" column="0">
+            <item row="1" column="0">
              <layout class="QGridLayout" name="gridlayout_status">
-              <item row="0" column="1">
-               <widget class="QProgressBar" name="progressbar_pornhub">
+              <item row="3" column="1">
+               <widget class="QProgressBar" name="progressbar_total">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -2396,32 +2396,6 @@ QPushButton:pressed {
                 </property>
                 <property name="value">
                  <number>0</number>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="label_total_progress">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string>Total:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="0" colspan="2">
-               <widget class="QLabel" name="label_progress_information">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string>Information: The total progressbar only counts the total progress of all PornHub videos being downloaded.</string>
                 </property>
                </widget>
               </item>
@@ -2470,8 +2444,21 @@ QPushButton:pressed {
                 </property>
                </widget>
               </item>
-              <item row="2" column="1">
-               <widget class="QProgressBar" name="progressbar_total">
+              <item row="4" column="0" colspan="2">
+               <widget class="QLabel" name="label_progress_information">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Information: The total progressbar only counts the total progress of all PornHub videos being downloaded.</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QProgressBar" name="progressbar_pornhub">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -2484,6 +2471,33 @@ QPushButton:pressed {
                   <height>0</height>
                  </size>
                 </property>
+                <property name="value">
+                 <number>0</number>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_total_progress">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Total:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_progress_eporner">
+                <property name="text">
+                 <string>Eporner</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QProgressBar" name="progressbar_eporner">
                 <property name="value">
                  <number>0</number>
                 </property>

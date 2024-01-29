@@ -4,6 +4,7 @@ If you know what you do, you can change a few things here :)
 """
 
 import os
+import re
 
 from phub import Client, errors, Video
 from colorama import Fore
@@ -12,6 +13,7 @@ from datetime import datetime
 from pymediainfo import MediaInfo
 from configparser import ConfigParser
 from hqporner_api.api import Client as hq_Client, Video as hq_Video
+from eporner_api.eporner_api import Client as ep_Client, Video as ep_Video
 
 """
 The following are the sections and options for the configuration file. Please don't change anything here, 
@@ -79,12 +81,20 @@ def check_video(url, language):
     if str(url).endswith(".html"):
         return hq_Client().get_video(url)
 
+    regex_eporner_url = re.compile(r"eporner.com/(.*?)")
+    if regex_eporner_url.search(str(url)):
+        print("URL is an EPorner URL")
+        return ep_Client().get_video(url, enable_html_scraping=True)
+
     else:
         if isinstance(url, Video):
             url.fetch("page@")
             return url
 
         if isinstance(url, hq_Video):
+            return url
+
+        if isinstance(url, ep_Video):
             return url
 
         if isinstance(url, str) and not str(url).endswith(".html"):
