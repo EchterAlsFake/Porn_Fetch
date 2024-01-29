@@ -8,3 +8,4 @@ markdown
 rich
 tqdm
 ffmpeg-progress-yield
+eporner_api
