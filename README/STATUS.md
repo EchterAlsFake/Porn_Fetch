@@ -4,8 +4,13 @@
 ## TODO:
 
 - [] Including French translations (will need an update on the .ts)
+- [] Testing
+- [] Refactoring
+- [] Updating CLI
+- [] Updating stylesheets
+- [] Support Dark / Light theme
 - [x] Support for EPorner.com (API is already finished)
-- [] Support for XNXX.com (API needs to be coded, but should be easy)
+- [x] Support for XNXX.com (API needs to be coded, but should be easy)
 - [x] Updating chinese translations (will need an update on the .ts)
 - [x] Updating both translations
 - [x] Fixing the layout
