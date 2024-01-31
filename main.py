@@ -36,8 +36,7 @@ import src.frontend.resources
 
 from requests.exceptions import SSLError
 from pathlib import Path
-from hqporner_api.api import Client as hq_Client, Quality as hq_Quality, Video as hq_Video
-from hqporner_api.modules.locals import *
+from hqporner_api.api import Client as hq_Client, Video as hq_Video, Sort as hq_Sort
 from phub import Quality, Client, errors, download, Video
 from src.backend.shared_functions import *
 from itertools import islice
@@ -46,7 +45,7 @@ from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
 from src.frontend.License import Ui_License
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                             QTranslator, QCoreApplication)
-from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QLineEdit,
+from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog,
                                QTreeWidgetItem, QButtonGroup, QFileDialog)
 from PySide6.QtGui import QIcon, QFont
 
@@ -126,6 +125,7 @@ class DownloadProgressSignal(QObject):
     progress = Signal(int, int)
     progress_hqporner = Signal(int, int)
     progress_eporner = Signal(int, int)
+    progress_xnxx = Signal(int, int)
     total_progress = Signal(int, int)
 
 
@@ -271,6 +271,22 @@ class AddToTreeWidget(QRunnable):
 
                     text_data = [str(title), str(author), str(duration), str(i), video]
 
+                elif isinstance(video, xn_Video):
+                    title = video.title
+                    if self.data_mode == 1:
+                        duration = str(video.length)
+                        try:
+                            author = video.pornstars[0]
+
+                        except IndexError:
+                            author = "no_pornstars_found"
+
+                    else:
+                        duration = disabled
+                        author = disabled
+
+                    text_data = [str(title), str(author), str(duration), str(i), video]
+
                 self.signals.progress.emit(self.search_limit, i)
                 self.signals.text_data.emit(text_data)
 
@@ -292,9 +308,18 @@ class DownloadThread(QRunnable):
         self.quality = quality
         self.output_path = output_path
         self.threading_mode = threading_mode
-        self.downloader = None
         self.signals = DownloadProgressSignal()
         self.signals_completed = WorkerSignals()
+
+        if isinstance(self.video, Video):
+            if self.threading_mode == "threaded":
+                self.threading_mode = download.threaded()
+
+            elif self.threading_mode == "FFMPEG":
+                self.threading_mode = download.FFMPEG
+
+            elif self.threading_mode == "default":
+                self.threading_mode = download.default
 
     def callback(self, pos, total):
         self.signals.progress.emit(pos, total)
@@ -309,19 +334,17 @@ class DownloadThread(QRunnable):
     def callback_eporner(self, pos, total):
         self.signals.progress_eporner.emit(pos, total)
 
+    def callback_xnxx(self, pos, total):
+        self.signals.progress_xnxx.emit(pos, total)
+
+        global downloaded_segments
+        downloaded_segments += 1
+        self.signals.total_progress.emit(downloaded_segments, total_segments)
+
     def run(self):
         try:
             if isinstance(self.video, Video):
-                if self.threading_mode == 2:
-                    self.downloader = download.threaded(max_workers=20, timeout=5)
-
-                elif self.threading_mode == 1:
-                    self.downloader = download.FFMPEG
-
-                elif self.threading_mode == 0:
-                    self.downloader = download.default
-
-                self.video.download(downloader=self.downloader, path=self.output_path, quality=self.quality,
+                self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality,
                                     display=self.callback)
 
             elif isinstance(self.video, hq_Video):
@@ -331,6 +354,10 @@ class DownloadThread(QRunnable):
             elif isinstance(self.video, ep_Video):
                 self.video.download_video(quality=self.quality, output_path=self.output_path,
                                           callback=self.callback_eporner, no_title=True)
+
+            elif isinstance(self.video, xn_Video):
+                self.video.download(downloader=self.threading_mode, output_path=self.output_path, quality=self.quality,
+                                    callback=self.callback_xnxx)
 
         finally:
             self.signals_completed.completed.emit()
@@ -351,6 +378,7 @@ class QTreeWidgetDownloadThread(QRunnable):
         video_objects_hqporner = []
         video_objects_pornhub = []
         video_objects_eporner = []
+        video_objects_xnxx = []
 
         for i in range(self.treeWidget.topLevelItemCount()):
             item = self.treeWidget.topLevelItem(i)
@@ -366,14 +394,17 @@ class QTreeWidgetDownloadThread(QRunnable):
                 elif isinstance(object_, ep_Video):
                     video_objects_eporner.append(object_)
 
+                elif isinstance(object_, xn_Video):
+                    video_objects_xnxx.append(object_)
+
         global total_segments, downloaded_segments
         total_segments = sum(
-            [len(list(video.get_segments(quality=self.quality))) for video in video_objects_pornhub])
+            [len(list(video.get_segments(quality=self.quality))) for video in video_objects_pornhub + video_objects_xnxx])
 
         downloaded_segments = 0
 
         self.signals.stop_undefined_range.emit()
-        videos = video_objects_pornhub + video_objects_hqporner + video_objects_eporner
+        videos = video_objects_pornhub + video_objects_hqporner + video_objects_eporner + video_objects_xnxx
         for video in videos:
             self.semaphore.acquire()
             logger_debug("Semaphore Acquired")
@@ -459,35 +490,6 @@ class MetadataUser(QRunnable):
         self.signals.data.emit(data)
 
 
-class DownloadTreeWidget(QRunnable):
-    def __init__(self, treeWidget, semaphore, quality):
-        super(DownloadTreeWidget, self).__init__()
-        self.treeWidget = treeWidget
-        self.semaphore = semaphore
-        self.quality = quality
-        self.signals = QTreeWidgetSignal()
-
-    def run(self):
-        self.signals.start_undefined_range.emit()
-
-        video_objects = []
-        for i in range(self.treeWidget.topLevelItemCount()):
-            item = self.treeWidget.topLevelItem(i)
-            checkState = item.checkState(0)
-            if checkState == Qt.Checked:
-                video_objects.append(item.data(0, Qt.UserRole))
-
-        global total_segments, downloaded_segments
-        total_segments = sum(
-            [len(list(video.get_segments(quality=self.quality))) for video in video_objects])
-
-        downloaded_segments = 0
-
-        self.signals.stop_undefined_range.emit()
-        for video in video_objects:
-            self.signals.progress.emit(video)
-
-
 class Porn_Fetch(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -558,6 +560,10 @@ class Porn_Fetch(QWidget):
         file_progressbar_total.open(QFile.ReadOnly | QFile.Text)
         stream_progress_total = QTextStream(file_progressbar_total)
 
+        file_progressbar_xnxx = QFile(":/style/stylesheets/progressbar_xnxx.qss")
+        file_progressbar_xnxx.open(QFile.ReadOnly | QFile.Text)
+        stream_progress_xnxx = QTextStream(file_progressbar_xnxx)
+
         file_stylesheet_button_blue = QFile(":/style/stylesheets/stylesheet_button_blue.qss")
         file_stylesheet_button_orange = QFile(":/style/stylesheets/stylesheet_button_orange.qss")
         file_stylesheet_button_purple = QFile(":/style/stylesheets/stylesheet_button_purple.qss")
@@ -614,6 +620,7 @@ class Porn_Fetch(QWidget):
         self.ui.progressbar_hqporner.setStyleSheet(stream_progress_hqporner.readAll())
         self.ui.progressbar_total.setStyleSheet(stream_progress_total.readAll())
         self.ui.progressbar_eporner.setStyleSheet(stream_progress_eporner.readAll())
+        self.ui.progressbar_xnxx.setStyleSheet(stream_progress_xnxx.readAll())
         logger_debug("Loaded Icons!")
 
     def language_strings(self):
@@ -638,10 +645,6 @@ class Porn_Fetch(QWidget):
                                                                        disambiguation=None)
 
     def button_groups(self):
-        self.group_threading = QButtonGroup()
-        self.group_threading.addButton(self.ui.radio_threading_no)
-        self.group_threading.addButton(self.ui.radio_threading_yes)
-
         self.group_threading_mode = QButtonGroup()
         self.group_threading_mode.addButton(self.ui.radio_threading_mode_ffmpeg)
         self.group_threading_mode.addButton(self.ui.radio_threading_mode_default)
@@ -798,70 +801,6 @@ Sorry.""", disambiguation=""))
         self.ui.button_get_watched_videos.setStyleSheet(stylesheet)
         self.ui.button_get_recommended_videos.setStyleSheet(stylesheet)
 
-    """
-    The following are functions used by different other functions to handle data over different classes / threads.
-    Mostly by using signals and slot connectors. I don't recommend anyone to change stuff here!
-    (It's already complicated enough, even with the Documentation)
-    """
-
-    def get_quality(self):
-        """Returns the quality selected by the user"""
-        if self.ui.radio_quality_best.isChecked():
-            self.quality = Quality.BEST
-
-        elif self.ui.radio_quality_half.isChecked():
-            self.quality = Quality.HALF
-
-        elif self.ui.radio_quality_worst.isChecked():
-            self.quality = Quality.WORST
-
-    def get_semaphore_limit(self):
-        """Returns the semaphore limit selected by the user"""
-        value = self.ui.spinbox_semaphore.value()
-        if value >= 1:
-            self.semaphore_limit = value
-
-    def get_threading_mode(self):
-        """Returns the threading mode selected by the user"""
-        if self.ui.radio_threading_mode_default.isChecked():
-            self.threading_mode = 0
-
-        elif self.ui.radio_threading_mode_ffmpeg.isChecked():
-            self.threading_mode = 1
-
-        elif self.ui.radio_threading_mode_high_performance.isChecked():
-            self.threading_mode = 2
-
-    def get_threading(self):
-        """Checks if threading should be used or not"""
-        if self.ui.radio_threading_yes.isChecked():
-            self.threading = True
-
-        elif self.ui.radio_threading_no.isChecked():
-            self.threading = False
-
-    def get_search_limit(self):
-        """Returns the search limit selected by the user"""
-        search_limit = self.ui.spinbox_treewidget_limit.value() if self.ui.spinbox_treewidget_limit.value() >= 1 else 50
-        self.search_limit = search_limit
-
-    def is_directory_system(self):
-        """Checks if the directory system was enabled"""
-        if self.ui.radio_directory_system_yes.isChecked():
-            self.directory_system = True
-
-        elif self.ui.radio_directory_system_no.isChecked():
-            self.directory_system = False
-
-    def update_settings(self):
-        """Updates all settings, so that the cache gets reloaded."""
-        self.get_threading()
-        self.get_search_limit()
-        self.get_threading_mode()
-        self.get_quality()
-        self.is_directory_system()
-        self.get_semaphore_limit()
-
     def settings_maps_initialization(self):
 
         # Maps for settings and corresponding UI elements
@@ -885,16 +824,10 @@ Sorry.""", disambiguation=""))
             "it": self.ui.radio_api_language_italian
         }
 
-
-        self.threading_map = {
-            "yes": self.ui.radio_threading_yes,
-            "no": self.ui.radio_threading_no
-        }
-
         self.threading_mode_map = {
-            "2": self.ui.radio_threading_mode_high_performance,
-            "1": self.ui.radio_threading_mode_ffmpeg,
-            "0": self.ui.radio_threading_mode_default
+            "threaded": self.ui.radio_threading_mode_high_performance,
+            "FFMPEG": self.ui.radio_threading_mode_ffmpeg,
+            "default": self.ui.radio_threading_mode_default
         }
 
         self.directory_system_map = {
@@ -907,7 +840,6 @@ Sorry.""", disambiguation=""))
 
         # Apply settings
         self.quality_map.get(self.conf.get("Video", "quality")).setChecked(True)
-        self.threading_map.get(self.conf.get("Performance", "threading")).setChecked(True)
         self.threading_mode_map.get(self.conf.get("Performance", "threading_mode")).setChecked(True)
         self.directory_system_map.get(self.conf.get("Video", "directory_system")).setChecked(True)
         self.language_map.get(self.conf.get("Video", "language")).setChecked(True)
@@ -916,10 +848,14 @@ Sorry.""", disambiguation=""))
         self.ui.lineedit_output_path.setText(self.conf.get("Video", "output_path"))
 
         self.semaphore_limit = self.conf.get("Performance", "semaphore")
-        self.search_limit = self.conf.get("Video", "search_limit")
+        self.search_limit = int(self.conf.get("Video", "search_limit"))
         self.output_path = self.conf.get("Video", "output_path")
 
         self.gui_language = self.conf.get("UI", "language")
+        self.quality = self.conf["Video"]["quality"]
+        self.threading_mode = self.conf["Performance"]["threading_mode"]
+        self.api_language = self.conf["Video"]["language"]
+        self.semaphore = QSemaphore(int(self.semaphore_limit))
 
         if self.gui_language == "en":
             self.ui.radio_ui_language_english.setChecked(True)
@@ -936,10 +872,7 @@ Sorry.""", disambiguation=""))
         elif self.gui_language == "system":
             self.ui.radio_ui_language_system_default.setChecked(True)
 
-        self.update_settings()
-        self.api_language = self.conf["Video"]["language"]
         logger_debug(f"Video Language: {self.api_language}")
-        self.semaphore = QSemaphore(int(self.semaphore_limit))
         logger_debug("Loaded User Settings!")
 
     def save_user_settings(self):
@@ -989,8 +922,6 @@ Sorry.""", disambiguation=""))
 
         elif self.ui.radio_ui_language_system_default.isChecked():
             self.conf.set("UI", "language", "system")
-
-        self.update_settings()
 
         with open("config.ini", "w") as config_file:
             self.conf.write(config_file)
@@ -1136,14 +1067,8 @@ If no more videos are found it will break the loop and the received videos can b
     def start_single_video(self):
         url = self.ui.lineedit_url.text()
         api_language = self.api_language
-        print(f"Using API Language: {api_language}")
         one_time_iterator = []
-        if url.endswith(".html"):
-            one_time_iterator.append(check_video(url=url, language=api_language))
-
-        else:
-            one_time_iterator.append(check_video(url=url, language=api_language))
-
+        one_time_iterator.append(check_video(url=url, language=api_language))
         self.add_to_tree_widget_thread(iterator=one_time_iterator, search_limit=self.search_limit)
 
     def start_model(self):
@@ -1167,12 +1092,15 @@ If no more videos are found it will break the loop and the received videos can b
         self.add_to_tree_widget_thread(videos, search_limit=search_limit)
 
     def load_video(self, url):
+        print("Connected")
         output_path = self.output_path
         api_language = self.api_language
         threading_mode = self.threading_mode
         directory_system = self.directory_system
         quality = self.quality
+
         video = check_video(url, language=api_language)
+
         if isinstance(video, hq_Video):
             title = video.video_title
             pornstars = video.pornstars
@@ -1189,6 +1117,14 @@ If no more videos are found it will break the loop and the received videos can b
         elif isinstance(video, ep_Video):
             title = video.title
             author = video.author
+
+        elif isinstance(video, xn_Video):
+            title = video.title
+            try:
+                author = video.pornstars[0]
+
+            except IndexError:
+                author = "no_pornstars_found"
 
         else:
             ui_popup(
@@ -1212,13 +1148,9 @@ If no more videos are found it will break the loop and the received videos can b
             output_path.strip("'")
 
         if not check_if_video_exists(video, output_path):
-            if self.threading:
-                logger_debug("Processing Thread")
-                self.process_video_thread(output_path=output_path, video=video, threading_mode=threading_mode,
-                                          quality=quality)
-
-            elif not self.threading:
-                self.process_video_without_thread(output_path, video, quality)
+            logger_debug("Processing Thread")
+            self.process_video_thread(output_path=output_path, video=video, threading_mode=threading_mode,
+                                      quality=quality)
 
         else:
             self.semaphore.release()
@@ -1241,15 +1173,10 @@ If no more videos are found it will break the loop and the received videos can b
         self.download_thread.signals.total_progress.connect(self.update_total_progressbar)
         self.download_thread.signals.progress_hqporner.connect(self.update_progressbar_hqporner)
         self.download_thread.signals.progress_eporner.connect(self.update_progressbar_eporner)
+        self.download_thread.signals.progress_xnxx.connect(self.update_progressbar_xnxx)
         self.download_thread.signals_completed.completed.connect(self.download_completed)
         self.threadpool.start(self.download_thread)
         logger_debug("Started Download Thread!")
-
-    def process_video_without_thread(self, output_path, video, quality):
-        """Downloads the video without any threading.  (NOT RECOMMENDED!)"""
-        logger_debug("Downloading without threading! Note, the GUI will freeze until the video is downloaded!!!")
-        video.download(path=output_path, quality=quality, downloader=download.default)
-        logger_debug("Download Completed!")
 
     """
     The following functions are used to connect data between Threads and the Main UI
@@ -1270,6 +1197,10 @@ If no more videos are found it will break the loop and the received videos can b
     def update_progressbar_eporner(self, value, maximum):
         self.ui.progressbar_eporner.setMaximum(maximum)
         self.ui.progressbar_eporner.setValue(value)
+
+    def update_progressbar_xnxx(self, value, maximum):
+        self.ui.progressbar_xnxx.setMaximum(maximum)
+        self.ui.progressbar_xnxx.setValue(value)
 
     def download_completed(self):
         logger_debug("Download Completed!")
@@ -1493,13 +1424,13 @@ If no more videos are found it will break the loop and the received videos can b
 
     def get_top_porn_hqporner(self):
         if self.ui.radio_top_porn_week.isChecked():
-            sort = Sort.WEEK
+            sort = hq_Sort.WEEK
 
         elif self.ui.radio_top_porn_month.isChecked():
-            sort = Sort.MONTH
+            sort = hq_Sort.MONTH
 
         elif self.ui.radio_top_porn_all_time:
-            sort = Sort.ALL_TIME
+            sort = hq_Sort.ALL_TIME
 
         else:
             sort = None

@@ -56,6 +56,8 @@
 ## 🌐 Supported Websites
 - [PornHub.com](https://github.com/Egsagon/PHUB)
 - [HQPorner.com](https://github.com/EchterAlsFake/hqporner_api)
+- [xnxx.com](https://www.xnxx.com) (v3.0)
+- [Eporner.com](https://www.eporner.com) (v3.0
 
 ## 🔨 Building from Source
 Easy-to-use build scripts are available for various platforms. Run these in your terminal:

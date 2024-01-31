@@ -261,9 +261,12 @@ I hope that most issues are now fixed.
 ## Issues / Bug Fixes
 - Fixed an issue with the config file location creation
 
+# Deprecations
+- Threading is now ALWAYS on. You can't disable it, because I see no reason for it.
 
 ## Features
 - Added support for Eporner.com
+- Added support for xnxx.com
 - New directory system to organize videos by model in separate folders.
 - Videos can now be shown in reverse order [#17](https://github.com/EchterAlsFake/Porn_Fetch/issues/17)
 - You can now also download by model on HQPorner

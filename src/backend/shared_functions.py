@@ -14,6 +14,7 @@ from pymediainfo import MediaInfo
 from configparser import ConfigParser
 from hqporner_api.api import Client as hq_Client, Video as hq_Video
 from eporner_api.eporner_api import Client as ep_Client, Video as ep_Video
+from xnxx_api.xnxx_api import Client as xn_Client, Video as xn_Video
 
 """
 The following are the sections and options for the configuration file. Please don't change anything here, 
@@ -21,19 +22,13 @@ as they are indeed needed for the main applications!
 """
 
 sections = ["Performance", "License", "Video", "UI"]
-options_performance = ["threading", "semaphore", "threading_mode"]
+options_performance = ["semaphore", "threading_mode"]
 options_video = ["quality", "language", "output_path", "directory_system", "search_limit"]
 options_license = ["accepted"]
 options_ui = ["language"]
 
 """
 Explanation:
-
-Threading Mode:
-
-2 = High Performance
-1 = FFMPEG
-0 = Default
 
 Directory System:
 
@@ -53,8 +48,7 @@ default_configuration = f"""
 accepted = no
 
 [Performance]
-threading = yes
-threading_mode = 2
+threading_mode = threaded
 semaphore = 2
 
 [Video]
@@ -82,9 +76,13 @@ def check_video(url, language):
         return hq_Client().get_video(url)
 
     regex_eporner_url = re.compile(r"eporner.com/(.*?)")
+    regex_xnxx_url = re.compile(r"xnxx.com(.*?)")
+
     if regex_eporner_url.search(str(url)):
-        print("URL is an EPorner URL")
         return ep_Client().get_video(url, enable_html_scraping=True)
+
+    elif regex_xnxx_url.search(str(url)):
+        return xn_Client().get_video(url)
 
     else:
         if isinstance(url, Video):
@@ -95,6 +93,9 @@ def check_video(url, language):
             return url
 
         if isinstance(url, ep_Video):
+            return url
+
+        if isinstance(url, xn_Video):
             return url
 
         if isinstance(url, str) and not str(url).endswith(".html"):

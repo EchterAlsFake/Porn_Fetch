@@ -1,11 +1,12 @@
-phub
+git+https://github.com/EchterAlsFake/PHUB.git
+git+https://github.com/EchterAlsFake/hqporner_api.git
+git+https://github.com/EchterAlsfake/eporner_api.git
+git+https://github.com/EchterAlsFake/xnxx_api.git
 colorama
 requests
-hqporner_api
 hue_shift
 pymediainfo
 markdown
 rich
 tqdm
 ffmpeg-progress-yield
-eporner_api
