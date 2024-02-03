@@ -122,6 +122,8 @@ class WorkerSignals(QObject):
 
 class DownloadProgressSignal(QObject):
     """Sends the current download progress to the main UI to update the progressbar."""
+
+    # ADAPTION
     progress = Signal(int, int)
     progress_hqporner = Signal(int, int)
     progress_eporner = Signal(int, int)
@@ -222,12 +224,12 @@ class AddToTreeWidget(QRunnable):
                 videos = islice(self.iterator, self.search_limit)
 
             for i, video in enumerate(videos, start=1):
-
+            # ADAPTION
                 if i == self.search_limit + 1:
                     break
 
                 if isinstance(video, hq_Video):
-                    title = video.video_title
+                    title = video.title
                     if self.data_mode == 1:
                         try:
                             duration = int(video.video_length) / 60
@@ -341,6 +343,8 @@ class DownloadThread(QRunnable):
         downloaded_segments += 1  # Since xnxx uses same downloading method as PHUB, wen can add this to total :)
         self.signals.total_progress.emit(downloaded_segments, total_segments)
 
+    # ADAPTION
+
     def run(self):
         try:
             if isinstance(self.video, Video):
@@ -358,6 +362,8 @@ class DownloadThread(QRunnable):
             elif isinstance(self.video, xn_Video):
                 self.video.download(downloader=self.threading_mode, output_path=self.output_path, quality=self.quality,
                                     callback=self.callback_xnxx)
+
+            # ADAPTION
 
         finally:
             self.signals_completed.completed.emit()
@@ -380,6 +386,8 @@ class QTreeWidgetDownloadThread(QRunnable):
         video_objects_eporner = []
         video_objects_xnxx = []
 
+        # ADAPTION
+
         for i in range(self.treeWidget.topLevelItemCount()):
             item = self.treeWidget.topLevelItem(i)
             checkState = item.checkState(0)
@@ -397,14 +405,16 @@ class QTreeWidgetDownloadThread(QRunnable):
                 elif isinstance(object_, xn_Video):
                     video_objects_xnxx.append(object_)
 
+                # ADAPTION
+
         global total_segments, downloaded_segments
         total_segments = sum(
-            [len(list(video.get_segments(quality=self.quality))) for video in video_objects_pornhub + video_objects_xnxx])
+            [len(list(video.get_segments(quality=self.quality))) for video in video_objects_pornhub + video_objects_xnxx])  # ADAPTION
 
         downloaded_segments = 0
 
         self.signals.stop_undefined_range.emit()
-        videos = video_objects_pornhub + video_objects_hqporner + video_objects_eporner + video_objects_xnxx
+        videos = video_objects_pornhub + video_objects_hqporner + video_objects_eporner + video_objects_xnxx # ADAPTION
         for video in videos:
             self.semaphore.acquire()
             logger_debug("Semaphore Acquired")
@@ -420,32 +430,59 @@ class MetadataVideos(QRunnable):
         self.video = video
 
     def run(self):
+        """
+        I know this can be handled better, I'll refactor it in v3.1
+        """
+
         self.signals.start_undefined.emit()
 
         like_string = QCoreApplication.tr("Likes", disambiguation="The Likes of the video")
         dislike_string = QCoreApplication.tr("Dislikes", disambiguation="The dislikes of the video")
         duration_string = QCoreApplication.tr("minutes", disambiguation="The duration of the video")
 
-        title = self.video.title
-        views = self.video.views
-        duration = round(self.video.duration.seconds / 60, 2)
-        duration = f"{duration} {duration_string}"
-        pornstar_generator = self.video.pornstars
-        tags_generator = self.video.tags
-        rating = self.video.likes
-        orientation = self.video.orientation
-        hotspots = self.video.hotspots
+        if isinstance(self.video, Video):
+            title = self.video.title
+            views = self.video.views
+            duration = round(self.video.duration.seconds / 60, 2)
+            duration = f"{duration} {duration_string}"
+            pornstar_generator = self.video.pornstars
+            tags_generator = self.video.tags
+            rating = self.video.likes
+            orientation = self.video.orientation
+            hotspots = self.video.hotspots
+            pornstar_list = [pornstar.name for pornstar in pornstar_generator]
+            tags_list = [tag.name for tag in tags_generator]
+            hotspots_list = [str(hotspot) for hotspot in hotspots]
 
-        pornstar_list = [pornstar.name for pornstar in pornstar_generator]
-        tags_list = [tag.name for tag in tags_generator]
-        hotspots_list = [str(hotspot) for hotspot in hotspots]
+            pornstars = ", ".join(pornstar_list)
+            tags = ", ".join(tags_list)
+            hotspots_x = ", ".join(hotspots_list)
+            rating = f"{like_string}: {rating.up} | {dislike_string}: {rating.down}"
+            data = [title, views, duration, orientation, pornstars, tags, rating, hotspots_x]
 
-        pornstars = ", ".join(pornstar_list)
-        tags = ", ".join(tags_list)
-        hotspots_x = ", ".join(hotspots_list)
-        rating = f"{like_string}: {rating.up} | {dislike_string}: {rating.down}"
+        elif isinstance(self.video, hq_Video):
+            title = self.video.title
+            duration = self.video.video_length
+            pornstars = ",".join(self.video.pornstars)
+            tags = ",".join(self.video.categories)
+            data = [title, None, duration, None, pornstars, tags, None, None]
 
-        data = [title, views, duration, orientation, pornstars, tags, rating, hotspots_x]
+        elif isinstance(self.video, ep_Video):
+            title = self.video.title
+            views = self.video.views
+            duration = self.video.length_minutes
+            rating = self.video.rating
+            tags = ",".join(self.video.keywords)
+            data = [title, views, duration, None, None, tags, rating, None]
+
+        elif isinstance(self.video, xn_Video):
+            title = self.video.title
+            views = self.video.views
+            pornstars = ",".join(self.video.pornstars)
+            keywords = ",".join(self.video.keywords)
+            rating = f"{like_string}: {self.video.likes} | {dislike_string}: {self.video.dislikes}"
+            data = [title, views, None, None, pornstars, keywords, rating, None]
+
         self.signals.data.emit(data)
 
 
@@ -615,6 +652,7 @@ class Porn_Fetch(QWidget):
         self.ui.button_get_brazzers_videos.setStyleSheet(purple)
         self.ui.button_list_categories.setStyleSheet(purple)
         self.ui.button_top_porn_get_videos.setStyleSheet(purple)
+        self.ui.button_switch_supported_websites.setStyleSheet(login)
 
         self.ui.progressbar_pornhub.setStyleSheet(stream_progress_pornhub.readAll())
         self.ui.progressbar_hqporner.setStyleSheet(stream_progress_hqporner.readAll())
@@ -736,6 +774,9 @@ Sorry.""", disambiguation=""))
         self.ui.stacked_widget_main.setCurrentIndex(2)
         self.show_credits()
 
+    def switch_to_supported_websites(self):
+        self.ui.stacked_widget_main.setCurrentIndex(4)
+
     def button_connectors(self):
         """a function to link the buttons to their functions"""
 
@@ -745,6 +786,7 @@ Sorry.""", disambiguation=""))
         self.ui.button_switch_credits.clicked.connect(self.switch_to_credits)
         self.ui.button_switch_metadata.clicked.connect(self.switch_to_metadata)
         self.ui.button_switch_account.clicked.connect(self.switch_to_account)
+        self.ui.button_switch_supported_websites.clicked.connect(self.switch_to_supported_websites)
 
         # Video Download Button Connections
         self.ui.button_download.clicked.connect(self.start_single_video)
@@ -1080,6 +1122,7 @@ If no more videos are found it will break the loop and the received videos can b
             api_language = self.api_language
             if not isinstance(self.client, Client):
                 client = Client(language=api_language)
+
             else:
                 client = self.client
 
@@ -1092,7 +1135,6 @@ If no more videos are found it will break the loop and the received videos can b
         self.add_to_tree_widget_thread(videos, search_limit=search_limit)
 
     def load_video(self, url):
-        print("Connected")
         output_path = self.output_path
         api_language = self.api_language
         threading_mode = self.threading_mode
@@ -1102,7 +1144,7 @@ If no more videos are found it will break the loop and the received videos can b
         video = check_video(url, language=api_language)
 
         if isinstance(video, hq_Video):
-            title = video.video_title
+            title = video.title
             pornstars = video.pornstars
             if len(pornstars) == 0:
                 author = "no_author_found"
@@ -1125,6 +1167,8 @@ If no more videos are found it will break the loop and the received videos can b
 
             except IndexError:
                 author = "no_pornstars_found"
+
+        # ADAPTION
 
         else:
             ui_popup(
@@ -1174,6 +1218,7 @@ If no more videos are found it will break the loop and the received videos can b
         self.download_thread.signals.progress_hqporner.connect(self.update_progressbar_hqporner)
         self.download_thread.signals.progress_eporner.connect(self.update_progressbar_eporner)
         self.download_thread.signals.progress_xnxx.connect(self.update_progressbar_xnxx)
+        # ADAPTION
         self.download_thread.signals_completed.completed.connect(self.download_completed)
         self.threadpool.start(self.download_thread)
         logger_debug("Started Download Thread!")
@@ -1202,6 +1247,7 @@ If no more videos are found it will break the loop and the received videos can b
         self.ui.progressbar_xnxx.setMaximum(maximum)
         self.ui.progressbar_xnxx.setValue(value)
 
+    # ADAPTION
     def download_completed(self):
         logger_debug("Download Completed!")
         self.semaphore.release()
@@ -1213,7 +1259,8 @@ If no more videos are found it will break the loop and the received videos can b
         self.ui.progressbar_total.setRange(0, 1)
 
     """
-    The following functions are used for opening files / directories with the QFileDialog"""
+    The following functions are used for opening files / directories with the QFileDialog
+    """
 
     def open_output_path_dialog(self):
         dialog = QFileDialog()

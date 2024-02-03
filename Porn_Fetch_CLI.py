@@ -13,6 +13,8 @@ import threading
 from tqdm import tqdm
 from hqporner_api.api import Client as hq_Client, Video as hq_Video, Quality as hq_Quality
 from hqporner_api.modules.locals import *
+from xnxx_api.xnxx_api import Client as xn_Client, Video as xn_Video
+from eporner_api.eporner_api import Client as ep_Client, Video as ep_Video
 from threading import Semaphore
 from rich import print as rprint
 from rich.markdown import Markdown
@@ -82,15 +84,14 @@ Do you accept the License? [yes,no]""")
 
     def main_menu(self):
         options = input(f"""
-{return_color()}1) Download a Video (PornHub / HQPorner)
+{return_color()}1) Download a Video
 {return_color()}2) Download videos from a Model / Channel / User
 {return_color()}3) Search Users / Models / Channels
 {return_color()}4) Download from a file with URLs
-{return_color()}5) Account
+{return_color()}5) PornHub Account
 {return_color()}6) HQPorner
-{return_color()}7) Metadata
-{return_color()}8) Settings
-{return_color()}9) Credits / Information
+{return_color()}7) Settings
+{return_color()}8) Credits / Information
 
 {return_color()}-------------------------------=>:{reset()}""")
 
@@ -113,12 +114,9 @@ Do you accept the License? [yes,no]""")
             self.hqporner_options()
 
         elif options == "7":
-            self.get_metadat_options()
-
-        elif options == "8":
             self.save_user_settings()
 
-        elif options == "9":
+        elif options == "8":
             self.credits()
 
     def hqporner_options(self):
@@ -204,13 +202,10 @@ Hint: You can select the videos to be downloaded later!
         match = actress_pattern.match(url)
 
         if match:
-            print("There's a match")
             actress_id = match.group(1)
-            print(actress_id)
             video = hq_Client().get_videos_by_actress(actress_id)
 
         else:
-            print("There isn't a match")
             client = Client(language=self.api_language)
             model = client.get_user(url)
             video = model.videos
@@ -238,17 +233,25 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
     def pre_setup_video(self, video):
         self.semaphore.acquire()
         language = self.api_language
+        quality = self.quality
         if isinstance(video, str):
             video = check_video(language=language, url=video)
 
         if isinstance(video, hq_Video):
-            title = video.video_title
+            title = video.title
             author = video.pornstars[0]
 
         elif isinstance(video, Video):
             title = video.title
             author = video.author.name
-            quality = self.quality
+
+        elif isinstance(video, xn_Video):
+            title = video.title
+            author = video.uploader
+
+        elif isinstance(video, ep_Video):
+            title = video.title
+            author = video.author
 
         title = strip_title(title)
         output_path = self.output_path
@@ -266,21 +269,21 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
 
         if not check_if_video_exists(video=video, output_path=output_path):
             if isinstance(video, hq_Video):
-                if self.threading:
-                    hqporner_thread = threading.Thread(target=self.download_video_hqporner, args=(video, output_path))
-                    hqporner_thread.start()
-
-                else:
-                    self.download_video_hqporner(video=video, output_path=output_path)
+                hqporner_thread = threading.Thread(target=self.download_video_hqporner, args=(video, output_path))
+                hqporner_thread.start()
 
             elif isinstance(video, Video):
-                if self.threading:
-                    pornhub_thread = threading.Thread(target=self.download_video_pornhub,
-                                                      args=(video, output_path, quality))
-                    pornhub_thread.start()
+                pornhub_thread = threading.Thread(target=self.download_video_pornhub,
+                                                  args=(video, output_path, quality))
+                pornhub_thread.start()
 
-                else:
-                    self.download_video_pornhub(video=video, output_path=output_path, quality=quality)
+            elif isinstance(video, xn_Video):
+                xn_thread = threading.Thread(target=self.download_video_xnxx, args=(video, output_path, quality))
+                xn_thread.start()
+
+            elif isinstance(video, ep_Video):
+                ep_thread = threading.Thread(target=self.download_video_eporner, args=(video, output_path, quality))
+                ep_thread.start()
 
     def download_callback(self, pos, total):
         """
@@ -302,13 +305,13 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
 
     def download_video_pornhub(self, video, output_path, quality):
 
-        if self.threading_mode == "2":
+        if self.threading_mode == "threaded":
             threading_X = download.threaded()
 
-        elif self.threading_mode == "1":
+        elif self.threading_mode == "FFMPEG":
             threading_X = download.FFMPEG
 
-        elif self.threading_mode == "0":
+        elif self.threading_mode == "default":
             threading_X = download.default
 
         video.download(downloader=threading_X, quality=quality, path=output_path, display=self.download_callback)
@@ -321,55 +324,33 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
         logger_debug("Download Complete, releasing semaphore")
         self.semaphore.release()
 
+    def download_video_xnxx(self, video, output_path, quality):
+        logger_debug("Starting XNXX Download!")
+        video.download(output_path=output_path, quality=quality, callback=self.download_callback, downloader=self.threading_mode)
+        logger_debug("Download Complete!, releasing semaphore")
+        self.semaphore.release()
+
+    def download_video_eporner(self, video, output_path, quality):
+        logger_debug("Starting EPorner Download!")
+        video.download_video(output_path=output_path, quality=quality, callback=self.download_callback)
+        logger_debug("Download Complete!, releasing semaphore")
+        self.semaphore.release()
+
     def load_user_settings(self):
         self.api_language = self.conf["Video"]["language"]
         self.output_path = self.conf["Video"]["output_path"]
         self.search_limit = int(self.conf["Video"]["search_limit"])
-        self.threading = self.conf["Performance"]["threading"]
         self.threading_mode = self.conf["Performance"]["threading_mode"]
         self.directory_system = self.conf["Video"]["directory_system"]
         self.semaphore_limit = int(self.conf["Performance"]["semaphore"])
         self.semaphore = Semaphore(self.semaphore_limit)
-        quality = self.conf["Video"]["quality"]
-
-        if quality == "best":
-            self.quality = Quality.BEST
-
-        elif quality == "half":
-            self.quality = Quality.HALF
-
-        elif quality == "worst":
-            self.quality = Quality.WORST
-
-        if self.threading == "yes":
-            self.threading = True
+        self.quality = self.conf["Video"]["quality"]
 
         if self.directory_system == "1":
             self.directory_system = True
 
     def save_user_settings(self):
         while True:
-            if self.quality == Quality.BEST:
-                quality_ext = "Best"
-
-            elif self.quality == Quality.HALF:
-                quality_ext = "Half"
-
-            elif self.quality == Quality.WORST:
-                quality_ext = "Worst"
-
-            if self.threading_mode == "2":
-                threading_ext = "High Performance"
-
-            elif self.threading_mode == "1":
-                threading_ext = "FFMPEG"
-
-            elif self.threading_mode == "0":
-                threading_ext = "Default"
-
-            api_language_ext = self.api_language
-            output_path_ext = self.output_path
-
             if self.directory_system == "1":
                 directory_system_ext = "Yes"
 
@@ -378,26 +359,36 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
 
             options = input(f"""
 {reset()}--------------{return_color()}QUALITY{reset()}-------------|
-{return_color()}|>  Current: {quality_ext}
+{return_color()}|>  Current: {self.quality}
 {return_color()}|>  1) Best
 {return_color()}|>  2) Half
 {return_color()}|>  3) Worst
 {reset()}|-------------{return_color()}Threading{reset()}-----------|
-{return_color()}|>  Current: {threading_ext}
+{return_color()}|>  Current: {self.threading_mode}
 {return_color()}|>  4) High Performance
 {return_color()}|>  5) FFMPEG (needs ffmpeg installed on your system)
 {return_color()}|>  6) Default
-{return_color()}|>  7) Disable Threading for the whole application
+{return_color()}|>  7) Change Semaphore Limit (Current: {self.semaphore_limit})
 {reset()}|--------------{return_color()}API Language{reset()}--------|
-{return_color()}|>  Current: {api_language_ext}
-{return_color()}|>  8) Enter custom language code... e.g. de for german or es for espanol
+{return_color()}|>  Current: {self.api_language}
+{return_color()}|>  8) English
+{return_color()}|>  9) German
+{return_color()}|>  10) French
+{return_color()}|>  11) Chinese
+{return_color()}|>  12) Russian
+{return_color()}|>  13) Dutch
+{return_color()}|>  14) Spanish
+{return_color()}|>  15) Italian
+{return_color()}|>  16) Portuguese
+{return_color()}|>  17) Czech
+{return_color()}|>  18) Japanese
 {reset()}|--------------{return_color()}Output Path{reset()}----------|
-{return_color()}|>  Current: {output_path_ext}
-{return_color()}|>  9) Change Output Path
+{return_color()}|>  Current: {self.output_path}
+{return_color()}|>  19) Change Output Path
 {reset()}|--------------{return_color()}Directory System{reset()}-----|
 {return_color()}|>  Current: {directory_system_ext}
-{return_color()}|>  10) Enable
-{return_color()}|>  11) Disable
+{return_color()}|>  20) Enable
+{return_color()}|>  21) Disable
 {return_color()}|---------{return_color()}PRESS 99 TO STOP{reset()}----------|
 {return_color()}|--------------------------=>:{reset()}""")
             if options == "1":
@@ -410,26 +401,52 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
                 self.conf.set("Video", "quality", "worst")
 
             elif options == "4":
-                self.conf.set("Performance", "threading_mode", "2")
-                self.conf.set("Performance", "threading", "1")
+                self.conf.set("Performance", "threading_mode", "threaded")
 
             elif options == "5":
-                self.conf.set("Performance", "threading_mode", "1")
-                self.conf.set("Performance", "threading", "1")
+                self.conf.set("Performance", "threading_mode", "FFMPEG")
 
             elif options == "6":
-                self.conf.set("Performance", "threading_mode", "0")
-                self.conf.set("Performance", "threading", "1")
+                self.conf.set("Performance", "threading_mode", "default")
 
             elif options == "7":
-                self.conf.set("Performance", "threading", "0")
+                limit = input(f"{return_color()}Enter the new Semaphore Limit between 1-6 -->:{reset()}")
+                self.conf.set("Performance", "semaphore", options)
 
             elif options == "8":
-                language_code = input(f"""
-{return_color()}Please enter the language code -->:{reset()}""")
-                self.conf.set("Video", "language", language_code)
+                self.conf.set("Video", "language", "en")
 
             elif options == "9":
+                self.conf.set("Video", "language", "de")
+
+            elif options == "10":
+                self.conf.set("Video", "language", "fr")
+
+            elif options == "11":
+                self.conf.set("Video", "language", "zh")
+
+            elif options == "12":
+                self.conf.set("Video", "language", "rt")
+
+            elif options == "13":
+                self.conf.set("Video", "language", "nl")
+
+            elif options == "14":
+                self.conf.set("Video", "language", "es")
+
+            elif options == "15":
+                self.conf.set("Video", "language", "it")
+
+            elif options == "16":
+                self.conf.set("Video", "language", "pt")
+
+            elif options == "17":
+                self.conf.set("Video", "language", "cz")
+
+            elif options == "18":
+                self.conf.set("Video", "language", "jp")
+
+            elif options == "19":
                 output_path = input(f"""
 {return_color()}Please enter the new output path -->:{reset()}""")
                 if not os.path.exists(output_path):
@@ -440,10 +457,10 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
 
                 self.conf.set("Video", "output_path", output_path)
 
-            elif options == "10":
+            elif options == "20":
                 self.conf.set("Video", "directory_system", "1")
 
-            elif options == "11":
+            elif options == "21":
                 self.conf.set("Video", "directory_system", "0")
 
             elif options == "99":
@@ -473,8 +490,8 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
 
     def search_options(self):
         options = input(f"""
-{return_color()}1) Search for Videos
-{return_color()}2) Search for Users
+{return_color()}1) Search for Videos (PornHub, HQPorner)
+{return_color()}2) Search for Users  (PornHub)
 {return_color()}3) Back
 
 {return_color()}------------------=>:{reset()}""")
@@ -491,12 +508,22 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
     def search_videos(self):
         query = input(f"""
 {return_color()}Please enter your search query ---=>:{reset()}""")
+        platform = input(f"""
+{return_color()}Please enter your platform: [1]: PornHub, [2]: HQPorner""")
 
-        if not isinstance(self.client, Client):
-            language = self.api_language
-            self.client = Client(language=language)
+        if platform == "1":
+            if not isinstance(self.client, Client):
+                language = self.api_language
+                self.client = Client(language=language)
 
-        generator = self.client.search(query)
+            generator = self.client.search(query)
+
+        elif platform == "2":
+            generator = hq_Client.search_videos(query, pages=2)
+
+        else:
+            logger_debug("Wrong Platform. Choose between 1-2")
+
         self.start_generator(generator)
 
     def search_users(self):
@@ -698,15 +725,14 @@ Press ENTER to continue...""")
         iterator = self.client.account.recommended
         self.start_generator(iterator)
 
-
     def credits(self):
         text_markdown = f"""
 # Porn Fetch V3
 
-Copyright (C) 2023 Johannes Habel (EchterAlsFake)
+Copyright (C) 2023-2024 Johannes Habel (EchterAlsFake)
 
 
-### This Project is only possible thanks to Egsagon's [PHUB](https://github.com/Egsagon/PHUB) API
+### This Project is only possible thanks to Egsagon's [PHUB](https://github.com/EchterAlsFake/PHUB) API
 
 ## Please check out his project and give it a star!
 
@@ -723,12 +749,14 @@ Copyright (C) 2023 Johannes Habel (EchterAlsFake)
 
 - <a href="https://iconscout.com/icons/list" class="text-underline font-size-sm" target="_blank">List</a> by <a href="https://iconscout.com/contributors/iyikon" class="text-underline font-size-sm" target="_blank">Iyikon ...</a>
 - <a href="https://iconscout.com/icons/information" class="text-underline font-size-sm" target="_blank">Information</a> by <a href="https://iconscout.com/contributors/petai-jantrapoon" class="text-underline font-size-sm">Petai Jantrapoon</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
-- <a href="https://iconscout.com/icons/tick" class="text-underline font-size-sm" target="_blank">Tick</a> by <a href="https://iconscout.com/contributors/endesignz" class="text-underline font-size-sm">Jessiey Sahana</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
+- <a href="https://iconscout.com/icons/unread" class="text-underline font-size-sm" target="_blank">unread</a> by <a href="https://iconscout.com/contributors/bharat-icons" class="text-underline font-size-sm">Bharat Design</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
 - <a href="https://iconscout.com/icons/top-arrow" class="text-underline font-size-sm" target="_blank">Top Arrow</a> by <a href="https://iconscout.com/contributors/creative-studio" class="text-underline font-size-sm" target="_blank">Mian Saab</a>
 - <a href="https://iconscout.com/icons/down-arrow" class="text-underline font-size-sm" target="_blank">Down Arrow</a> by <a href="https://iconscout.com/contributors/adamicons" class="text-underline font-size-sm">Adam Dicons</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
 - <a href="https://iconscout.com/icons/tick" class="text-underline font-size-sm" target="_blank">Tick</a> by <a href="https://iconscout.com/contributors/kolo-design" class="text-underline font-size-sm" target="_blank">Kalash</a>
+- <a href="https://iconscout.com/icons/account" class="text-underline font-size-sm" target="_blank">account</a> by <a href="https://iconscout.com/contributors/anggaraputra" class="text-underline font-size-sm">Anggara Putra</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
 - Download Icon by [Tutukof](https://iconscout.com/contributors/fersusart)
-- Search Icon by [Kmg Design](https://iconscout.com/contributors/kmgdesignid)
+- Free [Settings Icon](https://iconscout.com/free-icon/settings-2856913) in Gradient Style
+By [Haca Studio](https://iconscout.com/contributors/boosticon)
 
 Logo was generated by DALL-E (ChatGPT)
 
@@ -736,6 +764,7 @@ Logo was generated by DALL-E (ChatGPT)
 
 - [Egsagon](https://github.com/Egsagon)
 - [RSDCFGVHBJNKML](https://github.com/RSDCFGVHBJNKML) : Enhancement [#11](https://github.com/EchterAlsFake/Porn_Fetch/issues/11)
+- Chinese (3.0) Thanks to: [Joshua-auhsoj](https://github.com/Joshua-auhsoj) & Enhancement [#17](https://github.com/EchterAlsFake/Porn_Fetch/issues/17)
 
 # Libraries
 
@@ -748,20 +777,15 @@ Logo was generated by DALL-E (ChatGPT)
 - [colorama](https://github.com/tartley/colorama)
 - [markdown](https://github.com/Python-Markdown/markdown)
 - [rich](https://github.com/Textualize/rich)
+- [tqdm](https://github.com/tqdm/tqdm)
+- [EPorner API](https://github.com/EchterAlsFake/eporner_api)
+- [XNXX API](https://github.com/EchterAlsFake/xnxx_api)
 <br>ANDROID:
-- [Kivy MD](https://github.com/kivymd/KivyMD)
-- [Kivy](https://kivy.org/)
 - [Buildozer](https://github.com/kivy/buildozer)
 - [Cython](https://github.com/cython/cython)
 
 ** All other libraries are built in to Python.
 
-(Note:
-
-This text may not be up to date with the newest Porn Fetch version.
-For the 100% up to date version See:
-
-[Credits](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/CREDITS.md)
 """
         md = Markdown(text_markdown)
         rprint(md)

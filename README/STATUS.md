@@ -4,10 +4,10 @@
 ## TODO:
 
 - [] Including French translations (will need an update on the .ts)
-- [] Testing
-- [] Refactoring
-- [] Updating CLI
-- [] Updating stylesheets
+- [x] Testing
+- [x] Updating CLI
+- [x] Refactoring
+- [x] Fixing metadata for other websites
 - [x] Support for EPorner.com (API is already finished)
 - [x] Support for XNXX.com (API needs to be coded, but should be easy)
 - [x] Updating chinese translations (will need an update on the .ts)

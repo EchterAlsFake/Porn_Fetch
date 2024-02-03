@@ -26,7 +26,7 @@ class Ui_Porn_Fetch_Widget(object):
     def setupUi(self, Porn_Fetch_Widget):
         if not Porn_Fetch_Widget.objectName():
             Porn_Fetch_Widget.setObjectName(u"Porn_Fetch_Widget")
-        Porn_Fetch_Widget.resize(1098, 668)
+        Porn_Fetch_Widget.resize(1054, 729)
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -121,7 +121,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_status.setWidgetResizable(True)
         self.scrollAreaWidgetContents_5 = QWidget()
         self.scrollAreaWidgetContents_5.setObjectName(u"scrollAreaWidgetContents_5")
-        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 1010, 192))
+        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 980, 192))
         self.gridLayout_33 = QGridLayout(self.scrollAreaWidgetContents_5)
         self.gridLayout_33.setObjectName(u"gridLayout_33")
         self.gridlayout_status = QGridLayout()
@@ -229,7 +229,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_treewidget.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 489, 288))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 960, 288))
         self.gridLayout_4 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.verticallayout_treewidget_settings = QVBoxLayout()
@@ -400,14 +400,14 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_stacked_top.setWidgetResizable(True)
         self.scrollAreaWidgetContents_7 = QWidget()
         self.scrollAreaWidgetContents_7.setObjectName(u"scrollAreaWidgetContents_7")
-        self.scrollAreaWidgetContents_7.setGeometry(QRect(0, 0, 618, 168))
+        self.scrollAreaWidgetContents_7.setGeometry(QRect(0, 0, 948, 218))
         self.gridLayout_14 = QGridLayout(self.scrollAreaWidgetContents_7)
         self.gridLayout_14.setObjectName(u"gridLayout_14")
         self.stacked_widget_top = QStackedWidget(self.scrollAreaWidgetContents_7)
         self.stacked_widget_top.setObjectName(u"stacked_widget_top")
         sizePolicy4.setHeightForWidth(self.stacked_widget_top.sizePolicy().hasHeightForWidth())
         self.stacked_widget_top.setSizePolicy(sizePolicy4)
-        self.stacked_widget_top.setMinimumSize(QSize(600, 150))
+        self.stacked_widget_top.setMinimumSize(QSize(600, 200))
         self.stacked_widget_top.setStyleSheet(u"b")
         self.page_3 = QWidget()
         self.page_3.setObjectName(u"page_3")
@@ -417,27 +417,73 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridlayout_downloading.setSpacing(0)
         self.gridlayout_downloading.setObjectName(u"gridlayout_downloading")
         self.gridlayout_downloading.setSizeConstraint(QLayout.SetMaximumSize)
-        self.label_url = QLabel(self.page_3)
-        self.label_url.setObjectName(u"label_url")
-        sizePolicy6 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.button_open_file = QPushButton(self.page_3)
+        self.button_open_file.setObjectName(u"button_open_file")
+        sizePolicy6 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
         sizePolicy6.setHorizontalStretch(0)
         sizePolicy6.setVerticalStretch(0)
-        sizePolicy6.setHeightForWidth(self.label_url.sizePolicy().hasHeightForWidth())
-        self.label_url.setSizePolicy(sizePolicy6)
-        self.label_url.setMinimumSize(QSize(100, 2))
+        sizePolicy6.setHeightForWidth(self.button_open_file.sizePolicy().hasHeightForWidth())
+        self.button_open_file.setSizePolicy(sizePolicy6)
+        self.button_open_file.setMinimumSize(QSize(60, 2))
+        self.button_open_file.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_open_file.setStyleSheet(u"")
 
-        self.gridlayout_downloading.addWidget(self.label_url, 0, 0, 1, 1)
+        self.gridlayout_downloading.addWidget(self.button_open_file, 4, 2, 1, 1)
 
         self.button_search_hqporner = QPushButton(self.page_3)
         self.button_search_hqporner.setObjectName(u"button_search_hqporner")
-        sizePolicy7 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-        sizePolicy7.setHorizontalStretch(0)
-        sizePolicy7.setVerticalStretch(0)
-        sizePolicy7.setHeightForWidth(self.button_search_hqporner.sizePolicy().hasHeightForWidth())
-        self.button_search_hqporner.setSizePolicy(sizePolicy7)
+        sizePolicy6.setHeightForWidth(self.button_search_hqporner.sizePolicy().hasHeightForWidth())
+        self.button_search_hqporner.setSizePolicy(sizePolicy6)
         self.button_search_hqporner.setCursor(QCursor(Qt.PointingHandCursor))
 
-        self.gridlayout_downloading.addWidget(self.button_search_hqporner, 3, 2, 1, 1)
+        self.gridlayout_downloading.addWidget(self.button_search_hqporner, 5, 2, 1, 1)
+
+        self.button_download = QPushButton(self.page_3)
+        self.button_download.setObjectName(u"button_download")
+        sizePolicy6.setHeightForWidth(self.button_download.sizePolicy().hasHeightForWidth())
+        self.button_download.setSizePolicy(sizePolicy6)
+        self.button_download.setMinimumSize(QSize(60, 2))
+        self.button_download.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_download.setStyleSheet(u"")
+
+        self.gridlayout_downloading.addWidget(self.button_download, 1, 2, 1, 1)
+
+        self.lineedit_seach_pornhub = QLineEdit(self.page_3)
+        self.lineedit_seach_pornhub.setObjectName(u"lineedit_seach_pornhub")
+        sizePolicy3.setHeightForWidth(self.lineedit_seach_pornhub.sizePolicy().hasHeightForWidth())
+        self.lineedit_seach_pornhub.setSizePolicy(sizePolicy3)
+        self.lineedit_seach_pornhub.setMinimumSize(QSize(300, 0))
+
+        self.gridlayout_downloading.addWidget(self.lineedit_seach_pornhub, 6, 1, 1, 1)
+
+        self.label_url = QLabel(self.page_3)
+        self.label_url.setObjectName(u"label_url")
+        sizePolicy7 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        sizePolicy7.setHorizontalStretch(0)
+        sizePolicy7.setVerticalStretch(0)
+        sizePolicy7.setHeightForWidth(self.label_url.sizePolicy().hasHeightForWidth())
+        self.label_url.setSizePolicy(sizePolicy7)
+        self.label_url.setMinimumSize(QSize(100, 2))
+
+        self.gridlayout_downloading.addWidget(self.label_url, 1, 0, 1, 1)
+
+        self.label_search_query_pornhub = QLabel(self.page_3)
+        self.label_search_query_pornhub.setObjectName(u"label_search_query_pornhub")
+
+        self.gridlayout_downloading.addWidget(self.label_search_query_pornhub, 6, 0, 1, 1)
+
+        self.lineedit_search_hqporner = QLineEdit(self.page_3)
+        self.lineedit_search_hqporner.setObjectName(u"lineedit_search_hqporner")
+        sizePolicy3.setHeightForWidth(self.lineedit_search_hqporner.sizePolicy().hasHeightForWidth())
+        self.lineedit_search_hqporner.setSizePolicy(sizePolicy3)
+        self.lineedit_search_hqporner.setMinimumSize(QSize(300, 0))
+
+        self.gridlayout_downloading.addWidget(self.lineedit_search_hqporner, 5, 1, 1, 1)
+
+        self.label_search_query_hqporner = QLabel(self.page_3)
+        self.label_search_query_hqporner.setObjectName(u"label_search_query_hqporner")
+
+        self.gridlayout_downloading.addWidget(self.label_search_query_hqporner, 5, 0, 1, 1)
 
         self.lineedit_file = QLineEdit(self.page_3)
         self.lineedit_file.setObjectName(u"lineedit_file")
@@ -446,23 +492,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.lineedit_file.setMinimumSize(QSize(300, 2))
         self.lineedit_file.setReadOnly(True)
 
-        self.gridlayout_downloading.addWidget(self.lineedit_file, 2, 1, 1, 1)
-
-        self.label_file = QLabel(self.page_3)
-        self.label_file.setObjectName(u"label_file")
-        sizePolicy6.setHeightForWidth(self.label_file.sizePolicy().hasHeightForWidth())
-        self.label_file.setSizePolicy(sizePolicy6)
-        self.label_file.setMinimumSize(QSize(100, 2))
-
-        self.gridlayout_downloading.addWidget(self.label_file, 2, 0, 1, 1)
-
-        self.lineedit_search_hqporner = QLineEdit(self.page_3)
-        self.lineedit_search_hqporner.setObjectName(u"lineedit_search_hqporner")
-        sizePolicy3.setHeightForWidth(self.lineedit_search_hqporner.sizePolicy().hasHeightForWidth())
-        self.lineedit_search_hqporner.setSizePolicy(sizePolicy3)
-        self.lineedit_search_hqporner.setMinimumSize(QSize(300, 0))
-
-        self.gridlayout_downloading.addWidget(self.lineedit_search_hqporner, 3, 1, 1, 1)
+        self.gridlayout_downloading.addWidget(self.lineedit_file, 4, 1, 1, 1)
 
         self.lineedit_url = QLineEdit(self.page_3)
         self.lineedit_url.setObjectName(u"lineedit_url")
@@ -470,25 +500,25 @@ class Ui_Porn_Fetch_Widget(object):
         self.lineedit_url.setSizePolicy(sizePolicy3)
         self.lineedit_url.setMinimumSize(QSize(300, 4))
 
-        self.gridlayout_downloading.addWidget(self.lineedit_url, 0, 1, 1, 1)
-
-        self.label_model_url = QLabel(self.page_3)
-        self.label_model_url.setObjectName(u"label_model_url")
-        sizePolicy6.setHeightForWidth(self.label_model_url.sizePolicy().hasHeightForWidth())
-        self.label_model_url.setSizePolicy(sizePolicy6)
-        self.label_model_url.setMinimumSize(QSize(100, 2))
-
-        self.gridlayout_downloading.addWidget(self.label_model_url, 1, 0, 1, 1)
+        self.gridlayout_downloading.addWidget(self.lineedit_url, 1, 1, 1, 1)
 
         self.button_model = QPushButton(self.page_3)
         self.button_model.setObjectName(u"button_model")
-        sizePolicy7.setHeightForWidth(self.button_model.sizePolicy().hasHeightForWidth())
-        self.button_model.setSizePolicy(sizePolicy7)
+        sizePolicy6.setHeightForWidth(self.button_model.sizePolicy().hasHeightForWidth())
+        self.button_model.setSizePolicy(sizePolicy6)
         self.button_model.setMinimumSize(QSize(60, 2))
         self.button_model.setCursor(QCursor(Qt.PointingHandCursor))
         self.button_model.setStyleSheet(u"")
 
-        self.gridlayout_downloading.addWidget(self.button_model, 1, 2, 1, 1)
+        self.gridlayout_downloading.addWidget(self.button_model, 3, 2, 1, 1)
+
+        self.button_search_pornhub = QPushButton(self.page_3)
+        self.button_search_pornhub.setObjectName(u"button_search_pornhub")
+        sizePolicy6.setHeightForWidth(self.button_search_pornhub.sizePolicy().hasHeightForWidth())
+        self.button_search_pornhub.setSizePolicy(sizePolicy6)
+        self.button_search_pornhub.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.gridlayout_downloading.addWidget(self.button_search_pornhub, 6, 2, 1, 1)
 
         self.lineedit_model_url = QLineEdit(self.page_3)
         self.lineedit_model_url.setObjectName(u"lineedit_model_url")
@@ -496,56 +526,31 @@ class Ui_Porn_Fetch_Widget(object):
         self.lineedit_model_url.setSizePolicy(sizePolicy3)
         self.lineedit_model_url.setMinimumSize(QSize(300, 2))
 
-        self.gridlayout_downloading.addWidget(self.lineedit_model_url, 1, 1, 1, 1)
+        self.gridlayout_downloading.addWidget(self.lineedit_model_url, 3, 1, 1, 1)
 
-        self.button_download = QPushButton(self.page_3)
-        self.button_download.setObjectName(u"button_download")
-        sizePolicy7.setHeightForWidth(self.button_download.sizePolicy().hasHeightForWidth())
-        self.button_download.setSizePolicy(sizePolicy7)
-        self.button_download.setMinimumSize(QSize(60, 2))
-        self.button_download.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_download.setStyleSheet(u"")
+        self.label_model_url = QLabel(self.page_3)
+        self.label_model_url.setObjectName(u"label_model_url")
+        sizePolicy7.setHeightForWidth(self.label_model_url.sizePolicy().hasHeightForWidth())
+        self.label_model_url.setSizePolicy(sizePolicy7)
+        self.label_model_url.setMinimumSize(QSize(100, 2))
 
-        self.gridlayout_downloading.addWidget(self.button_download, 0, 2, 1, 1)
+        self.gridlayout_downloading.addWidget(self.label_model_url, 3, 0, 1, 1)
 
-        self.button_open_file = QPushButton(self.page_3)
-        self.button_open_file.setObjectName(u"button_open_file")
-        sizePolicy7.setHeightForWidth(self.button_open_file.sizePolicy().hasHeightForWidth())
-        self.button_open_file.setSizePolicy(sizePolicy7)
-        self.button_open_file.setMinimumSize(QSize(60, 2))
-        self.button_open_file.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_open_file.setStyleSheet(u"")
+        self.label_file = QLabel(self.page_3)
+        self.label_file.setObjectName(u"label_file")
+        sizePolicy7.setHeightForWidth(self.label_file.sizePolicy().hasHeightForWidth())
+        self.label_file.setSizePolicy(sizePolicy7)
+        self.label_file.setMinimumSize(QSize(100, 2))
 
-        self.gridlayout_downloading.addWidget(self.button_open_file, 2, 2, 1, 1)
+        self.gridlayout_downloading.addWidget(self.label_file, 4, 0, 1, 1)
 
-        self.label_search_query_hqporner = QLabel(self.page_3)
-        self.label_search_query_hqporner.setObjectName(u"label_search_query_hqporner")
+        self.button_switch_supported_websites = QPushButton(self.page_3)
+        self.button_switch_supported_websites.setObjectName(u"button_switch_supported_websites")
 
-        self.gridlayout_downloading.addWidget(self.label_search_query_hqporner, 3, 0, 1, 1)
-
-        self.label_search_query_pornhub = QLabel(self.page_3)
-        self.label_search_query_pornhub.setObjectName(u"label_search_query_pornhub")
-
-        self.gridlayout_downloading.addWidget(self.label_search_query_pornhub, 4, 0, 1, 1)
-
-        self.lineedit_seach_pornhub = QLineEdit(self.page_3)
-        self.lineedit_seach_pornhub.setObjectName(u"lineedit_seach_pornhub")
-        sizePolicy3.setHeightForWidth(self.lineedit_seach_pornhub.sizePolicy().hasHeightForWidth())
-        self.lineedit_seach_pornhub.setSizePolicy(sizePolicy3)
-        self.lineedit_seach_pornhub.setMinimumSize(QSize(300, 0))
-
-        self.gridlayout_downloading.addWidget(self.lineedit_seach_pornhub, 4, 1, 1, 1)
-
-        self.button_search_pornhub = QPushButton(self.page_3)
-        self.button_search_pornhub.setObjectName(u"button_search_pornhub")
-        sizePolicy7.setHeightForWidth(self.button_search_pornhub.sizePolicy().hasHeightForWidth())
-        self.button_search_pornhub.setSizePolicy(sizePolicy7)
-        self.button_search_pornhub.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_downloading.addWidget(self.button_search_pornhub, 4, 2, 1, 1)
+        self.gridlayout_downloading.addWidget(self.button_switch_supported_websites, 0, 0, 1, 3)
 
 
-        self.gridLayout_5.addLayout(self.gridlayout_downloading, 0, 0, 1, 1)
+        self.gridLayout_5.addLayout(self.gridlayout_downloading, 1, 0, 1, 1)
 
         self.stacked_widget_top.addWidget(self.page_3)
         self.page_5 = QWidget()
@@ -651,8 +656,8 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.button_hqporner_category_get_videos = QPushButton(self.page_6)
         self.button_hqporner_category_get_videos.setObjectName(u"button_hqporner_category_get_videos")
-        sizePolicy7.setHeightForWidth(self.button_hqporner_category_get_videos.sizePolicy().hasHeightForWidth())
-        self.button_hqporner_category_get_videos.setSizePolicy(sizePolicy7)
+        sizePolicy6.setHeightForWidth(self.button_hqporner_category_get_videos.sizePolicy().hasHeightForWidth())
+        self.button_hqporner_category_get_videos.setSizePolicy(sizePolicy6)
         self.button_hqporner_category_get_videos.setMinimumSize(QSize(0, 10))
         self.button_hqporner_category_get_videos.setCursor(QCursor(Qt.PointingHandCursor))
 
@@ -660,8 +665,8 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.button_list_categories = QPushButton(self.page_6)
         self.button_list_categories.setObjectName(u"button_list_categories")
-        sizePolicy7.setHeightForWidth(self.button_list_categories.sizePolicy().hasHeightForWidth())
-        self.button_list_categories.setSizePolicy(sizePolicy7)
+        sizePolicy6.setHeightForWidth(self.button_list_categories.sizePolicy().hasHeightForWidth())
+        self.button_list_categories.setSizePolicy(sizePolicy6)
         self.button_list_categories.setMinimumSize(QSize(0, 10))
         self.button_list_categories.setCursor(QCursor(Qt.PointingHandCursor))
 
@@ -1174,7 +1179,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_metadata.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 234, 1080))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 990, 1080))
         self.gridLayout_27 = QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_27.setObjectName(u"gridLayout_27")
         self.gridlayout_metadata_ = QGridLayout()
@@ -1558,6 +1563,30 @@ class Ui_Porn_Fetch_Widget(object):
         self.page_9.setObjectName(u"page_9")
         self.gridLayout_11 = QGridLayout(self.page_9)
         self.gridLayout_11.setObjectName(u"gridLayout_11")
+        self.stackedWidget = QStackedWidget(self.page_9)
+        self.stackedWidget.setObjectName(u"stackedWidget")
+        self.page_10 = QWidget()
+        self.page_10.setObjectName(u"page_10")
+        self.gridLayout_3 = QGridLayout(self.page_10)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.setSpacing(0)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.textbrowser_websites = QTextBrowser(self.page_10)
+        self.textbrowser_websites.setObjectName(u"textbrowser_websites")
+
+        self.verticalLayout.addWidget(self.textbrowser_websites)
+
+
+        self.gridLayout_3.addLayout(self.verticalLayout, 0, 0, 1, 1)
+
+        self.stackedWidget.addWidget(self.page_10)
+        self.page_11 = QWidget()
+        self.page_11.setObjectName(u"page_11")
+        self.stackedWidget.addWidget(self.page_11)
+
+        self.gridLayout_11.addWidget(self.stackedWidget, 0, 0, 1, 1)
+
         self.stacked_widget_main.addWidget(self.page_9)
 
         self.gridLayout_13.addWidget(self.stacked_widget_main, 1, 0, 1, 1)
@@ -1571,7 +1600,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.retranslateUi(Porn_Fetch_Widget)
 
-        self.stacked_widget_main.setCurrentIndex(1)
+        self.stacked_widget_main.setCurrentIndex(0)
         self.stacked_widget_top.setCurrentIndex(0)
 
 
@@ -1602,22 +1631,23 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_tree_download.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download Selected Videos", None))
         self.button_tree_select_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Select all", None))
         self.button_tree_unselect_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Unselect all", None))
-        self.label_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"URL:", None))
+        self.button_open_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Open File", None))
         self.button_search_hqporner.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
+        self.button_download.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download", None))
+        self.lineedit_seach_pornhub.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search videos on PornHub", None))
+        self.label_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"URL:", None))
+        self.label_search_query_pornhub.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Query:", None))
+        self.lineedit_search_hqporner.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search videos on HQPorner", None))
+        self.label_search_query_hqporner.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Query:", None))
         self.lineedit_file.setText("")
         self.lineedit_file.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"URLs in the file must be separated with new lines!", None))
-        self.label_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"File:", None))
-        self.lineedit_search_hqporner.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search videos on HQPorner", None))
-        self.lineedit_url.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter PornHub or HQPorner Video URL", None))
-        self.label_model_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Model URL:", None))
+        self.lineedit_url.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter video URL", None))
         self.button_model.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Videos", None))
-        self.lineedit_model_url.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter PornHub Model / Channel URL or a HQPorner Actresss name (e.g Anissa Kate or anissa-kate)", None))
-        self.button_download.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download", None))
-        self.button_open_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Open File", None))
-        self.label_search_query_hqporner.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Query:", None))
-        self.label_search_query_pornhub.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Query:", None))
-        self.lineedit_seach_pornhub.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search videos on PornHub", None))
         self.button_search_pornhub.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
+        self.lineedit_model_url.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter Model / Channel / Actress name", None))
+        self.label_model_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Model URL:", None))
+        self.label_file.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"File:", None))
+        self.button_switch_supported_websites.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"See Supported Websites", None))
         self.lineedit_username.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter your PornHub Username", None))
         self.button_get_liked_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Liked videos", None))
         self.button_get_watched_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get watched videos", None))
@@ -1714,5 +1744,47 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_user_get_bio.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get User's Bio", None))
         self.button_user_download_avatar.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download User Avatar", None))
         self.button_video_thumbnail_download.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download Thumbnail", None))
+        self.textbrowser_websites.setHtml(QCoreApplication.translate("Porn_Fetch_Widget", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Supported Websites:</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Downloading:</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px;"
+                        " margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com (supports total progress)</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Eporner.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XNXX.com (supports total progress)</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">All sites support threaded down"
+                        "loads and selectable quality!</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Model / Channel Downloads</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px"
+                        "; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Searching:</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I am constantly working to support more websites.</p>\n"
+""
+                        "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin"
+                        "-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
     # retranslateUi
 
