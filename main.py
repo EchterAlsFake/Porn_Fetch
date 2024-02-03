@@ -338,7 +338,7 @@ class DownloadThread(QRunnable):
         self.signals.progress_xnxx.emit(pos, total)
 
         global downloaded_segments
-        downloaded_segments += 1
+        downloaded_segments += 1  # Since xnxx uses same downloading method as PHUB, wen can add this to total :)
         self.signals.total_progress.emit(downloaded_segments, total_segments)
 
     def run(self):
@@ -1352,27 +1352,27 @@ If no more videos are found it will break the loop and the received videos can b
         self.threadpool.start(self.user_metadata_thread)
 
     def apply_metadata_user(self, data):
-        interested_in = data[0]
-        relationship = data[1]
-        city_and_country = data[2]
-        gender = data[3]
-        birth_place = data[4]
-        height = data[5]
-        weight = data[6]
-        ethnicity = data[7]
-        hair_color = data[8]
-        fake_boobs = data[9]
-        tattoos = data[10]
-        piercings = data[11]
-        hometown = data[12]
-        interests_and_hobbies = data[13]
-        turn_ons = data[14]
-        turn_offs = data[15]
-        video_views = data[16]
-        profile_views = data[17]
-        videos_watched = data[18]
-        type = data[19]
-        name = data[20]
+        interested_in = get_element_safe(data, 0)
+        relationship = get_element_safe(data, 1)
+        city_and_country = get_element_safe(data, 2)
+        gender = get_element_safe(data, 3)
+        birth_place = get_element_safe(data, 4)
+        height = get_element_safe(data, 5)
+        weight = get_element_safe(data, 6)
+        ethnicity = get_element_safe(data, 7)
+        hair_color = get_element_safe(data, 8)
+        fake_boobs = get_element_safe(data, 9)
+        tattoos = get_element_safe(data, 10)
+        piercings = get_element_safe(data, 11)
+        hometown = get_element_safe(data, 12)
+        interests_and_hobbies = get_element_safe(data, 13)
+        turn_ons = get_element_safe(data, 14)
+        turn_offs = get_element_safe(data, 15)
+        video_views = get_element_safe(data, 16)
+        profile_views = get_element_safe(data, 17)
+        videos_watched = get_element_safe(data, 18)
+        type = get_element_safe(data, 19)
+        name = get_element_safe(data, 20)
 
         self.ui.lineedit_user_interested_in.setText(str(interested_in))
         self.ui.lineedit_user_relationship.setText(str(relationship))
@@ -1459,7 +1459,8 @@ If no more videos are found it will break the loop and the received videos can b
         videos = hq_Client().get_brazzers_videos(pages)
         self.add_to_tree_widget_thread(videos, search_limit)
 
-    def list_categories_hqporner(self):
+    @classmethod
+    def list_categories_hqporner(cls):
         categories_ = hq_Client().get_all_categories()
         categories = ",".join(categories_)
         ui_popup(categories)

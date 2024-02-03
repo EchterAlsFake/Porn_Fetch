@@ -261,3 +261,14 @@ def correct_output_path(output_path):
 
     else:
         return output_path
+
+
+def get_element_safe(list, index):
+    """
+    I need this for the metadata functions, because not always are all values in the actual list, which need to be
+    extracted.
+    """
+    if 0 <= index < len(list):
+        return list[index]
+    else:
+        return ""

@@ -21,28 +21,36 @@
 ![Alt text](https://github.com/EchterAlsFake/Porn_Fetch/blob/7f9c21f73ae8dd50257be6fc2e5cc2b717ab44c9/src/frontend/graphics/screenshot.png?raw=true "Optional Title")
 
 ## 🚀 Quick Links
+- [Legal Rights](#-legal-rights)
 - [Features](#-features)
 - [Supported Platforms](#-supported-platforms)
-- [How to Build](#-building-from-source)
-- [Android Version](#-android)
-- [Translation](#-translating)
-- [Useful Resources](#-useful-information)
-- [Legal Disclaimer](#-legal-rights)
-- [Acknowledgements](#-credits)
-- [License Details](#-license)
+- [Supported Websites](#-supported-websites)
+- [Building from Source](#-building-from-source)
+  - [Linux](#for-ubuntu-windows-arch-linux-termux-fedora-opensuse)
+  - [Termux](#for-termux)
+  - [Windows](#for-windows-powershell-as-admin)
+- [Android](#-android)
+- [Translating](#-translating)
+- [Useful Information](#-useful-information)
+- [Credits](#-credits)
+- [License](#-license)
+## ⚖️ Legal Rights
+Warning: Porn Fetch is in fact against the ToS of every website. Usage is on your own risk!
 
 ## 🌟 Features
-- Direct downloads from PornHub
+- Direct downloads from PornHub and other sites
 - Selectable video quality
 - Metadata retrieval
 - Full channel/user/model download capabilities
 - In-app search and download features
 - Optional account login
-- Download history management
 - Multi-threaded downloading
 - Dark mode and CLI support
 - No ads or mandatory logins
 - Cross-platform compatibility
+- Multiple supported websites
+- Multiple languages
+- Native Android application
 
 ## 🖥️ Supported Platforms
 - Windows 10, 11 (backward compatibility untested)
@@ -54,15 +62,23 @@
 > iOS is NOT supported. Don't even try!
 
 ## 🌐 Supported Websites
+#### Important:
+
+Not all websites support every feature. 
+<br>Some might only support downloading, while others support searching
+
+### You can see more information [HERE]()
+
+
 - [PornHub.com](https://github.com/Egsagon/PHUB)
 - [HQPorner.com](https://github.com/EchterAlsFake/hqporner_api)
-- [xnxx.com](https://www.xnxx.com) (v3.0)
-- [Eporner.com](https://www.eporner.com) (v3.0
+- [xnxx.com](https://github.com/EchterAlsFake/xnxx_api) (v3.0)
+- [Eporner.com](https://github.com/EchterAlsFake/eporner_api) (v3.0
 
 ## 🔨 Building from Source
 Easy-to-use build scripts are available for various platforms. Run these in your terminal:
 
-### For Ubuntu, Windows, Arch Linux, Termux, iSH, Fedora, OpenSUSE:
+### For Ubuntu, Windows, Arch Linux, Termux, Fedora, OpenSUSE:
 ```bash
 wget "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install.sh" -O install.sh
 bash install.sh
@@ -79,15 +95,12 @@ Set-ExecutionPolicy Bypass -Scope Process
 Invoke-Expression (Invoke-WebRequest -Uri https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_windows.ps1 -UseBasicParsing).Content
 ```
 ## 📱 Android
-I am currently working very hard to convert Porn Fetch from PySide6 version 3 to Android. 
-<br>I am actively on it. As long as I am working you can use the Kivy version entirely made by ChatGPT :)
-<br>For the latest Kivy build, download from [here](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/2.9).
-
-Note: The Android version is tested and developed on Android 13!
+The Android app is the exact same as the desktop app. Thanks to Qt's Android developing Guide, you'll be able to simply
+install the .apk file, and you have the full version of Porn Fetch on your device.
 
 ### Building for Android
-Use [this script](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/scripts/build_android.sh) to build on Ubuntu 22.04.3.
-
+Building the PySide6 application by yourself isn't possible through a simple script. If you really want
+to do it, please refer to my [Pyside6-to-Android](https://github.com/EchterAlsFake/PySide6-to-Android) repository.
 
 ## 🌍 Translating
 Currently available in:
@@ -97,17 +110,16 @@ Currently available in:
 
 <br>To contribute a translation, follow [this guide](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/TRANSLATING.md).
 
+> If a language is marked with a `*` it means, you can contribute something, and it needs an update!
+
 
 ## 🛠️ Useful Information
 - [Roadmap](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/ROADMAP.md)
 - [Changelog](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/CHANGELOG.md)
 - [Development Status](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md)
 
-## ⚖️ Legal Rights
-Important: Usage of Porn Fetch may not be in compliance with PornHub's terms of service. It is recommended to use a VPN for privacy.
-
 ## 👏 Credits
-- API: [PHUB](https://github.com/Egsagon/PHUB)
+- API: [PHUB](https://github.com/EchterAlsFake/PHUB)
 - GUI: [Qt](https://qt.io) for Python
 ### See [Credits](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/CREDITS.md)
 
