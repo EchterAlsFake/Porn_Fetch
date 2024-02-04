@@ -322,6 +322,14 @@ class AddToTreeWidget(QRunnable):
 
 class DownloadThread(QRunnable):
     """Threading class to download videos."""
+
+    """
+    I know that this function is horribly optimized, but I (and ChatGPT) don't know how to do it better.
+    If you find a way, to keep both progress bars, handle ffmpeg progress and keep the total progress available:
+    
+    Make a PR and I'll underline your name at the top of my Readme lmao
+    """
+
     signal = Signal()
 
     def __init__(self, video, quality, output_path, threading_mode):
@@ -333,6 +341,7 @@ class DownloadThread(QRunnable):
         self.threading_mode = threading_mode
         self.signals = DownloadProgressSignal()
         self.signals_completed = WorkerSignals()
+        self.video_progress = {}
 
         if isinstance(self.video, Video):
             if self.threading_mode == "threaded":
@@ -344,55 +353,101 @@ class DownloadThread(QRunnable):
             elif self.threading_mode == "default":
                 self.threading_mode = download.default
 
-    def callback(self, pos, total):
+    def callback(self, pos, total, ffmpeg=False):
         self.signals.progress.emit(pos, total)
 
-        global downloaded_segments
-        downloaded_segments += 1  # Assuming each call represents one segment
-        self.signals.total_progress.emit(downloaded_segments, total_segments)
+        if ffmpeg is False:
+            global downloaded_segments
+            downloaded_segments += 1  # Assuming each call represents one segment
+            self.signals.total_progress.emit(downloaded_segments, total_segments)
 
-    def callback_hqporner(self, pos, total):
+    def callback_hqporner(self, pos, total, ffmpeg=False):
         self.signals.progress_hqporner.emit(pos, total)
 
-    def callback_eporner(self, pos, total):
+    def callback_eporner(self, pos, total, ffmpeg=False):
         self.signals.progress_eporner.emit(pos, total)
 
-    def callback_xnxx(self, pos, total):
+    def callback_xnxx(self, pos, total, ffmpeg=False):
         self.signals.progress_xnxx.emit(pos, total)
 
-        global downloaded_segments
-        downloaded_segments += 1  # Since xnxx uses same downloading method as PHUB, wen can add this to total :)
-        self.signals.total_progress.emit(downloaded_segments, total_segments)
+        if ffmpeg is False:
+            global downloaded_segments
+            downloaded_segments += 1
+            self.signals.total_progress.emit(downloaded_segments, total_segments)
 
-    def callback_xvideos(self, pos, total):
+    def callback_xvideos(self, pos, total, ffmpeg=True):
         self.signals.progress_xvideos.emit(pos, total)
+
         global downloaded_segments
         downloaded_segments += 1
         self.signals.total_progress.emit(downloaded_segments, total_segments)
+
+    def callback_ffmpeg(self, pos, total):
+        video_title = self.video.title
+        self.video_progress[video_title] = pos / total * 100
+
+        total_progress = sum(self.video_progress.values()) / len(self.video_progress)
+        self.signals.total_progress.emit(total_progress, 100)
+
+    def wrapper_ffmpeg_pornhub(self, pos, total):
+        self.callback_ffmpeg(pos, total)
+        self.callback(pos, total, ffmpeg=True)
+
+    def wrapper_ffmpeg_xvideos(self, pos, total):
+        self.callback_ffmpeg(pos, total)
+        self.callback_xvideos(pos, total, ffmpeg=True)
+
+    def wrapper_ffmpeg_xnxx(self, pos, total):
+        self.callback_ffmpeg(pos, total)
+        self.callback_xnxx(pos, total, ffmpeg=True)
+
 
     # ADAPTION
 
     def run(self):
         try:
-            if isinstance(self.video, Video):
-                self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality,
-                                    display=self.callback)
+            if self.threading_mode == "FFMPEG" or self.threading_mode == download.FFMPEG:
 
-            elif isinstance(self.video, hq_Video):
-                self.video.download(quality=self.quality, output_path=self.output_path,
-                                    callback=self.callback_hqporner, no_title=True)
+                if isinstance(self.video, Video):
+                    self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality,
+                                        display=self.wrapper_ffmpeg_pornhub)
 
-            elif isinstance(self.video, ep_Video):
-                self.video.download_video(quality=self.quality, output_path=self.output_path,
-                                          callback=self.callback_eporner, no_title=True)
+                elif isinstance(self.video, hq_Video):
+                    self.video.download(quality=self.quality, output_path=self.output_path,
+                                        callback=self.callback_hqporner, no_title=True)
 
-            elif isinstance(self.video, xn_Video):
-                self.video.download(downloader=self.threading_mode, output_path=self.output_path, quality=self.quality,
-                                    callback=self.callback_xnxx)
+                elif isinstance(self.video, ep_Video):
+                    self.video.download_video(quality=self.quality, output_path=self.output_path,
+                                              callback=self.callback_eporner, no_title=True)
 
-            elif isinstance(self.video, xv_Video):
-                self.video.download(downloader=self.threading_mode, output_path=self.output_path, quality=self.quality,
-                                    callback=self.callback_xvideos)
+                elif isinstance(self.video, xn_Video):
+                    self.video.download(downloader=self.threading_mode, output_path=self.output_path, quality=self.quality,
+                                        callback=self.wrapper_ffmpeg_xnxx)
+
+                elif isinstance(self.video, xv_Video):
+                    self.video.download(downloader=self.threading_mode, output_path=self.output_path, quality=self.quality,
+                                        callback=self.wrapper_ffmpeg_xvideos)
+
+            else:
+                if isinstance(self.video, Video):
+                    self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality,
+                                        display=self.callback)
+
+                elif isinstance(self.video, hq_Video):
+                    self.video.download(quality=self.quality, output_path=self.output_path,
+                                        callback=self.callback_hqporner, no_title=True)
+
+                elif isinstance(self.video, ep_Video):
+                    self.video.download_video(quality=self.quality, output_path=self.output_path,
+                                              callback=self.callback_eporner, no_title=True)
+
+                elif isinstance(self.video, xn_Video):
+                    self.video.download(downloader=self.threading_mode, output_path=self.output_path, quality=self.quality,
+                                        callback=self.callback_xnxx)
+
+                elif isinstance(self.video, xv_Video):
+                    self.video.download(downloader=self.threading_mode, output_path=self.output_path, quality=self.quality,
+                                        callback=self.callback_xvideos)
 
             # ADAPTION
 
@@ -403,12 +458,13 @@ class DownloadThread(QRunnable):
 class QTreeWidgetDownloadThread(QRunnable):
     """Threading class for the QTreeWidget (sends objects to the download class defined above)"""
 
-    def __init__(self, treeWidget, semaphore, quality):
+    def __init__(self, treeWidget, semaphore, quality, threading_mode):
         super(QTreeWidgetDownloadThread, self).__init__()
         self.treeWidget = treeWidget
         self.semaphore = semaphore
         self.signals = QTreeWidgetSignal()
         self.quality = quality
+        self.threading_mode = threading_mode
 
     def run(self):
         self.signals.start_undefined_range.emit()
@@ -440,10 +496,19 @@ class QTreeWidgetDownloadThread(QRunnable):
                     video_objects_xvideos.append(object_)
                 # ADAPTION
 
-        global total_segments, downloaded_segments
-        total_segments = sum(
-            [len(list(video.get_segments(quality=self.quality))) for video in video_objects_pornhub +
-             video_objects_xnxx + video_objects_xvideos])  # ADAPTION
+        if not self.threading_mode == "FFMPEG":
+            print("Threading Mode isn't FFMPEG")
+            global total_segments, downloaded_segments
+            total_segments = sum(
+                [len(list(video.get_segments(quality=self.quality))) for video in video_objects_pornhub +
+                 video_objects_xnxx + video_objects_xvideos])  # ADAPTION
+
+        else:
+            counter = 0
+            for _ in video_objects_pornhub + video_objects_xnxx + video_objects_xvideos:
+                counter += 100
+
+            total_segments = counter
 
         downloaded_segments = 0
 
@@ -855,6 +920,8 @@ Sorry.""", disambiguation=""))
 
     def check_ffmpeg(self):
         if self.ui.radio_threading_mode_ffmpeg.isChecked() or self.conf["Performance"]["threading_mode"] == "ffmpeg":
+            ui_popup("Information: The total progressbar is showing a false status when downloading with FFMPEG!")
+
             if sys.platform == "linux":
                 if not os.path.isfile("ffmpeg"):
                     url_linux = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
@@ -1150,7 +1217,7 @@ Sorry.""", disambiguation=""))
         treeWidget = self.ui.treeWidget
         quality = self.quality
         download_tree_thread = QTreeWidgetDownloadThread(treeWidget=treeWidget, semaphore=semaphore,
-                                                         quality=quality)
+                                                         quality=quality, threading_mode=self.threading_mode)
         download_tree_thread.signals.progress.connect(self.tree_widget_completed)
         download_tree_thread.signals.start_undefined_range.connect(self.start_undefined_range)
         download_tree_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
@@ -1317,7 +1384,7 @@ If no more videos are found it will break the loop and the received videos can b
             output_path = f"{output_path}{stripped_title}.mp4"
             output_path.strip("'")
 
-        if not check_if_video_exists(video, output_path):
+        if not os.path.exists(output_path) or not os.path.isfile(output_path):
             logger_debug("Processing Thread")
             self.process_video_thread(output_path=output_path, video=video, threading_mode=threading_mode,
                                       quality=quality)
