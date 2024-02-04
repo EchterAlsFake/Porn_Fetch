@@ -617,13 +617,18 @@ class FFMPEGDownload(QRunnable):
         # Finalize
         self.signals.progress_signal.emit(total_length, total_length)  # Ensure progress bar reaches 100%
         os.remove(filename)  # Clean up downloaded archive
-        os.removedirs("ffmpeg-6.1-amd64-static")
+
+        if sys.platform == "linux":
+            os.removedirs("ffmpeg-6.1-amd64-static")
+
+        elif sys.platform == "win32":
+            os.removedirs("ffmpeg-6.1.1-essentials_build")
 
 
 class Porn_Fetch(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-
+        print(sys.platform)
         # Variable initialization:
         self.gui_language = None
         self.semaphore = None
@@ -860,7 +865,7 @@ Sorry.""", disambiguation=""))
 
                 consts.FFMPEG_EXECUTABLE = "ffmpeg"
 
-            elif sys.platform == "win":
+            elif sys.platform == "win32":
                 if not os.path.isfile("ffmpeg.exe"):
                     url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
                     ui_popup("FFMPEG isn't installed on your system. I'll do this now for you.")
@@ -869,12 +874,6 @@ Sorry.""", disambiguation=""))
                     self.threadpool.start(self.downloader)
 
                 consts.FFMPEG_EXECUTABLE = "ffmpeg.exe"
-
-
-
-
-
-
 
     def switch_to_account(self):
         self.ui.stacked_widget_top.setCurrentIndex(1)
@@ -1042,7 +1041,6 @@ Sorry.""", disambiguation=""))
 
         logger_debug(f"Video Language: {self.api_language}")
         logger_debug("Loaded User Settings!")
-        self.check_ffmpeg()
 
     def save_user_settings(self):
         """Saves the user settings to the configuration file based on the UI state."""
@@ -1092,7 +1090,6 @@ Sorry.""", disambiguation=""))
 
         ui_popup(self.save_user_settings_language_string)
         logger_debug("Saved User Settings, please restart Porn Fetch.")
-        self.check_ffmpeg()
 
     """
     The following functions are related to the tree widget    
