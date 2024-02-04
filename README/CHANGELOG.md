@@ -275,7 +275,7 @@ I hope that most issues are now fixed.
 - You can now download by Top Porn on HQPorner
 - You can now download a random video on HQPorner
 - You can now search for videos on HQPorner
-
+- FFMPEG will now be automatically downloaded and installed if checked as threading mode
 
 # Android
 - The Android App is now exactly the same as Porn Fetch desktop

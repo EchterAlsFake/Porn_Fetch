@@ -25,20 +25,22 @@ __version__ = "3.0"
 __build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 
+import shutil
+import tarfile
+
 import requests
-import re
 import sys
 import os.path
 import argparse
 import markdown
 import traceback
+import zipfile
 import src.frontend.resources
 
 from requests.exceptions import SSLError
 from pathlib import Path
-from hqporner_api.api import Client as hq_Client, Video as hq_Video, Sort as hq_Sort
-from xvideos_api.xvideos_api import Client as xv_Client, Video as xv_Video
-from phub import Quality, Client, errors, download, Video
+from hqporner_api.api import Sort as hq_Sort
+from phub import Quality, download, consts
 from src.backend.shared_functions import *
 from itertools import islice
 
@@ -560,12 +562,69 @@ class MetadataUser(QRunnable):
         self.signals.data.emit(data)
 
 
+class FFMPEGSignals(QObject):
+    progress_signal = Signal(int, int)
+
+
+class FFMPEGDownload(QRunnable):
+    def __init__(self, url, extract_path, mode):
+        super().__init__()
+        self.url = url
+        self.extract_path = extract_path
+        self.mode = mode
+        self.signals = FFMPEGSignals()
+
+    def run(self):
+        # Download the file
+        with requests.get(self.url, stream=True) as r:
+            r.raise_for_status()
+            total_length = int(r.headers.get('content-length'))
+            self.signals.progress_signal.emit(0, total_length)  # Initialize progress bar
+            dl = 0
+            filename = self.url.split('/')[-1]
+            with open(filename, 'wb') as f:
+                for chunk in r.iter_content(chunk_size=8192):
+                    if chunk:  # filter out keep-alive new chunks
+                        f.write(chunk)
+                        dl += len(chunk)
+                        self.signals.progress_signal.emit(dl, total_length)
+
+        # Extract the file based on OS mode
+        if self.mode == "linux" and filename.endswith(".tar.xz"):
+            with tarfile.open(filename, "r:xz") as tar:
+                total_members = len(tar.getmembers())
+
+                for idx, member in enumerate(tar.getmembers()):
+                    if 'ffmpeg' in member.name and (member.name.endswith('ffmpeg')):
+                        tar.extract(member, self.extract_path)
+                        extracted_path = os.path.join(self.extract_path, member.path)
+                        shutil.move(extracted_path, "./")
+
+                    self.signals.progress_signal.emit(idx, total_members)
+
+        elif self.mode == "windows" and filename.endswith(".zip"):
+            with zipfile.ZipFile(filename, 'r') as zip_ref:
+                total = len(zip_ref.namelist())
+
+                for idx, member in enumerate(zip_ref.namelist()):
+                    if 'ffmpeg.exe' in member:
+                        zip_ref.extract(member, self.extract_path)
+                        extracted_path = os.path.join(self.extract_path, member)
+                        shutil.move(extracted_path, ".")
+
+                    self.signals.progress_signal.emit(idx, total)
+
+        # Finalize
+        self.signals.progress_signal.emit(total_length, total_length)  # Ensure progress bar reaches 100%
+        os.remove(filename)  # Clean up downloaded archive
+        os.removedirs("ffmpeg-6.1-amd64-static")
+
+
 class Porn_Fetch(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
         # Variable initialization:
-
         self.gui_language = None
         self.semaphore = None
         self.native_languages = None
@@ -604,6 +663,7 @@ class Porn_Fetch(QWidget):
         self.language_strings()
         self.settings_maps_initialization()
         self.load_user_settings()
+        self.check_ffmpeg()
 
     def load_style(self):
         """a simple function to load the icons for the buttons"""
@@ -788,6 +848,34 @@ Sorry.""", disambiguation=""))
                     ui_popup(QCoreApplication.tr("Sorry, but this path also doesn't exist, or I can't write to it. Sorry.", disambiguation=""))
                     exit()
 
+    def check_ffmpeg(self):
+        if self.ui.radio_threading_mode_ffmpeg.isChecked() or self.conf["Performance"]["threading_mode"] == "ffmpeg":
+            if sys.platform == "linux":
+                if not os.path.isfile("ffmpeg"):
+                    url_linux = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
+                    ui_popup("FFMPEG isn't installed on your system. I'll do this now for you.")
+                    self.downloader = FFMPEGDownload(url=url_linux, extract_path=".", mode="linux")
+                    self.downloader.signals.progress_signal.connect(self.update_total_progressbar)
+                    self.threadpool.start(self.downloader)
+
+                consts.FFMPEG_EXECUTABLE = "ffmpeg"
+
+            elif sys.platform == "win":
+                if not os.path.isfile("ffmpeg.exe"):
+                    url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
+                    ui_popup("FFMPEG isn't installed on your system. I'll do this now for you.")
+                    self.downloader = FFMPEGDownload(url=url_windows, extract_path=".", mode="windows")
+                    self.downloader.signals.progress_signal.connect(self.update_total_progressbar)
+                    self.threadpool.start(self.downloader)
+
+                consts.FFMPEG_EXECUTABLE = "ffmpeg.exe"
+
+
+
+
+
+
+
     def switch_to_account(self):
         self.ui.stacked_widget_top.setCurrentIndex(1)
         self.ui.stacked_widget_main.setCurrentIndex(0)
@@ -954,6 +1042,7 @@ Sorry.""", disambiguation=""))
 
         logger_debug(f"Video Language: {self.api_language}")
         logger_debug("Loaded User Settings!")
+        self.check_ffmpeg()
 
     def save_user_settings(self):
         """Saves the user settings to the configuration file based on the UI state."""
@@ -967,11 +1056,6 @@ Sorry.""", disambiguation=""))
         for language, radio_button in self.language_map.items():
             if radio_button.isChecked():
                 self.conf.set("Video", "language", language)
-
-        # Save threading setting
-        for threading, radio_button in self.threading_map.items():
-            if radio_button.isChecked():
-                self.conf.set("Performance", "threading", threading)
 
         # Save threading mode
         for mode, radio_button in self.threading_mode_map.items():
@@ -1008,6 +1092,7 @@ Sorry.""", disambiguation=""))
 
         ui_popup(self.save_user_settings_language_string)
         logger_debug("Saved User Settings, please restart Porn Fetch.")
+        self.check_ffmpeg()
 
     """
     The following functions are related to the tree widget    
