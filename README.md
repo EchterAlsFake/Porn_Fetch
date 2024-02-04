@@ -3,7 +3,7 @@
 </p>
 
 
-<h1 align="center">Porn Fetch - The Ultimate Open-Source PornHub Downloader</h1>
+<h1 align="center">Porn Fetch - The Ultimate Open-Source Porn(Hub) Downloader</h1>
 
 <p align="center">
   <a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg" alt="Build Status"/></a>
@@ -74,6 +74,7 @@ Not all websites support every feature.
 - [HQPorner.com](https://github.com/EchterAlsFake/hqporner_api)
 - [xnxx.com](https://github.com/EchterAlsFake/xnxx_api) (v3.0)
 - [Eporner.com](https://github.com/EchterAlsFake/eporner_api) (v3.0
+- [XVideos.com](https://github.com/EchterAlsFake/xvideos_api) (v3.0)
 
 ## 🔨 Building from Source
 Easy-to-use build scripts are available for various platforms. Run these in your terminal:
@@ -106,7 +107,7 @@ to do it, please refer to my [Pyside6-to-Android](https://github.com/EchterAlsFa
 Currently available in:
 - German (3.0)
 - English
-- Chinese (3.0) Thanks to: [Joshua-auhsoj](https://github.com/Joshua-auhsoj)
+- Chinese (3.0) `[*]` Thanks to: [Joshua-auhsoj](https://github.com/Joshua-auhsoj)
 
 <br>To contribute a translation, follow [this guide](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/TRANSLATING.md).
 

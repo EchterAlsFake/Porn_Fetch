@@ -15,6 +15,7 @@ from configparser import ConfigParser
 from hqporner_api.api import Client as hq_Client, Video as hq_Video
 from eporner_api.eporner_api import Client as ep_Client, Video as ep_Video
 from xnxx_api.xnxx_api import Client as xn_Client, Video as xn_Video
+from xvideos_api.xvideos_api import Client as xv_Client, Video as xv_Video
 
 """
 The following are the sections and options for the configuration file. Please don't change anything here, 
@@ -77,12 +78,16 @@ def check_video(url, language):
 
     regex_eporner_url = re.compile(r"eporner.com/(.*?)")
     regex_xnxx_url = re.compile(r"xnxx.com(.*?)")
+    regex_xvideos_url = re.compile(r'xvideos.com(.*?)')
 
     if regex_eporner_url.search(str(url)):
         return ep_Client().get_video(url, enable_html_scraping=True)
 
     elif regex_xnxx_url.search(str(url)):
         return xn_Client().get_video(url)
+
+    elif regex_xvideos_url.search(str(url)):
+        return xv_Client().get_video(url)
 
     else:
         if isinstance(url, Video):
@@ -96,6 +101,9 @@ def check_video(url, language):
             return url
 
         if isinstance(url, xn_Video):
+            return url
+
+        if isinstance(url, xv_Video):
             return url
 
         if isinstance(url, str) and not str(url).endswith(".html"):

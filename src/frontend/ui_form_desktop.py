@@ -121,44 +121,84 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_status.setWidgetResizable(True)
         self.scrollAreaWidgetContents_5 = QWidget()
         self.scrollAreaWidgetContents_5.setObjectName(u"scrollAreaWidgetContents_5")
-        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 980, 192))
+        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 966, 223))
         self.gridLayout_33 = QGridLayout(self.scrollAreaWidgetContents_5)
         self.gridLayout_33.setObjectName(u"gridLayout_33")
         self.gridlayout_status = QGridLayout()
         self.gridlayout_status.setObjectName(u"gridlayout_status")
-        self.label_progress_pornhub = QLabel(self.scrollAreaWidgetContents_5)
-        self.label_progress_pornhub.setObjectName(u"label_progress_pornhub")
+        self.label_total_progress = QLabel(self.scrollAreaWidgetContents_5)
+        self.label_total_progress.setObjectName(u"label_total_progress")
         sizePolicy2 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.label_total_progress.sizePolicy().hasHeightForWidth())
+        self.label_total_progress.setSizePolicy(sizePolicy2)
+
+        self.gridlayout_status.addWidget(self.label_total_progress, 5, 0, 1, 1)
+
+        self.label_progress_pornhub = QLabel(self.scrollAreaWidgetContents_5)
+        self.label_progress_pornhub.setObjectName(u"label_progress_pornhub")
         sizePolicy2.setHeightForWidth(self.label_progress_pornhub.sizePolicy().hasHeightForWidth())
         self.label_progress_pornhub.setSizePolicy(sizePolicy2)
 
         self.gridlayout_status.addWidget(self.label_progress_pornhub, 0, 0, 1, 1)
+
+        self.label_progress_xnxx = QLabel(self.scrollAreaWidgetContents_5)
+        self.label_progress_xnxx.setObjectName(u"label_progress_xnxx")
+
+        self.gridlayout_status.addWidget(self.label_progress_xnxx, 3, 0, 1, 1)
+
+        self.progressbar_hqporner = QProgressBar(self.scrollAreaWidgetContents_5)
+        self.progressbar_hqporner.setObjectName(u"progressbar_hqporner")
+        sizePolicy3 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.progressbar_hqporner.sizePolicy().hasHeightForWidth())
+        self.progressbar_hqporner.setSizePolicy(sizePolicy3)
+        self.progressbar_hqporner.setMinimumSize(QSize(300, 0))
+        self.progressbar_hqporner.setValue(0)
+
+        self.gridlayout_status.addWidget(self.progressbar_hqporner, 1, 1, 1, 1)
 
         self.label_progress_information = QLabel(self.scrollAreaWidgetContents_5)
         self.label_progress_information.setObjectName(u"label_progress_information")
         sizePolicy2.setHeightForWidth(self.label_progress_information.sizePolicy().hasHeightForWidth())
         self.label_progress_information.setSizePolicy(sizePolicy2)
 
-        self.gridlayout_status.addWidget(self.label_progress_information, 5, 0, 1, 2)
+        self.gridlayout_status.addWidget(self.label_progress_information, 6, 0, 1, 2)
+
+        self.progressbar_xnxx = QProgressBar(self.scrollAreaWidgetContents_5)
+        self.progressbar_xnxx.setObjectName(u"progressbar_xnxx")
+        self.progressbar_xnxx.setValue(0)
+
+        self.gridlayout_status.addWidget(self.progressbar_xnxx, 3, 1, 1, 1)
+
+        self.progressbar_eporner = QProgressBar(self.scrollAreaWidgetContents_5)
+        self.progressbar_eporner.setObjectName(u"progressbar_eporner")
+        self.progressbar_eporner.setValue(0)
+
+        self.gridlayout_status.addWidget(self.progressbar_eporner, 2, 1, 1, 1)
 
         self.label_progress_eporner = QLabel(self.scrollAreaWidgetContents_5)
         self.label_progress_eporner.setObjectName(u"label_progress_eporner")
 
         self.gridlayout_status.addWidget(self.label_progress_eporner, 2, 0, 1, 1)
 
+        self.label_progress_hqporner = QLabel(self.scrollAreaWidgetContents_5)
+        self.label_progress_hqporner.setObjectName(u"label_progress_hqporner")
+        sizePolicy2.setHeightForWidth(self.label_progress_hqporner.sizePolicy().hasHeightForWidth())
+        self.label_progress_hqporner.setSizePolicy(sizePolicy2)
+
+        self.gridlayout_status.addWidget(self.label_progress_hqporner, 1, 0, 1, 1)
+
         self.progressbar_total = QProgressBar(self.scrollAreaWidgetContents_5)
         self.progressbar_total.setObjectName(u"progressbar_total")
-        sizePolicy3 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
         sizePolicy3.setHeightForWidth(self.progressbar_total.sizePolicy().hasHeightForWidth())
         self.progressbar_total.setSizePolicy(sizePolicy3)
         self.progressbar_total.setMinimumSize(QSize(300, 0))
         self.progressbar_total.setValue(0)
 
-        self.gridlayout_status.addWidget(self.progressbar_total, 4, 1, 1, 1)
+        self.gridlayout_status.addWidget(self.progressbar_total, 5, 1, 1, 1)
 
         self.progressbar_pornhub = QProgressBar(self.scrollAreaWidgetContents_5)
         self.progressbar_pornhub.setObjectName(u"progressbar_pornhub")
@@ -169,45 +209,16 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridlayout_status.addWidget(self.progressbar_pornhub, 0, 1, 1, 1)
 
-        self.label_progress_hqporner = QLabel(self.scrollAreaWidgetContents_5)
-        self.label_progress_hqporner.setObjectName(u"label_progress_hqporner")
-        sizePolicy2.setHeightForWidth(self.label_progress_hqporner.sizePolicy().hasHeightForWidth())
-        self.label_progress_hqporner.setSizePolicy(sizePolicy2)
+        self.label_progress_xvideos = QLabel(self.scrollAreaWidgetContents_5)
+        self.label_progress_xvideos.setObjectName(u"label_progress_xvideos")
 
-        self.gridlayout_status.addWidget(self.label_progress_hqporner, 1, 0, 1, 1)
+        self.gridlayout_status.addWidget(self.label_progress_xvideos, 4, 0, 1, 1)
 
-        self.label_total_progress = QLabel(self.scrollAreaWidgetContents_5)
-        self.label_total_progress.setObjectName(u"label_total_progress")
-        sizePolicy2.setHeightForWidth(self.label_total_progress.sizePolicy().hasHeightForWidth())
-        self.label_total_progress.setSizePolicy(sizePolicy2)
+        self.progressbar_xvideos = QProgressBar(self.scrollAreaWidgetContents_5)
+        self.progressbar_xvideos.setObjectName(u"progressbar_xvideos")
+        self.progressbar_xvideos.setValue(0)
 
-        self.gridlayout_status.addWidget(self.label_total_progress, 4, 0, 1, 1)
-
-        self.progressbar_eporner = QProgressBar(self.scrollAreaWidgetContents_5)
-        self.progressbar_eporner.setObjectName(u"progressbar_eporner")
-        self.progressbar_eporner.setValue(0)
-
-        self.gridlayout_status.addWidget(self.progressbar_eporner, 2, 1, 1, 1)
-
-        self.progressbar_hqporner = QProgressBar(self.scrollAreaWidgetContents_5)
-        self.progressbar_hqporner.setObjectName(u"progressbar_hqporner")
-        sizePolicy3.setHeightForWidth(self.progressbar_hqporner.sizePolicy().hasHeightForWidth())
-        self.progressbar_hqporner.setSizePolicy(sizePolicy3)
-        self.progressbar_hqporner.setMinimumSize(QSize(300, 0))
-        self.progressbar_hqporner.setValue(0)
-
-        self.gridlayout_status.addWidget(self.progressbar_hqporner, 1, 1, 1, 1)
-
-        self.label_progress_xnxx = QLabel(self.scrollAreaWidgetContents_5)
-        self.label_progress_xnxx.setObjectName(u"label_progress_xnxx")
-
-        self.gridlayout_status.addWidget(self.label_progress_xnxx, 3, 0, 1, 1)
-
-        self.progressbar_xnxx = QProgressBar(self.scrollAreaWidgetContents_5)
-        self.progressbar_xnxx.setObjectName(u"progressbar_xnxx")
-        self.progressbar_xnxx.setValue(0)
-
-        self.gridlayout_status.addWidget(self.progressbar_xnxx, 3, 1, 1, 1)
+        self.gridlayout_status.addWidget(self.progressbar_xvideos, 4, 1, 1, 1)
 
 
         self.gridLayout_33.addLayout(self.gridlayout_status, 1, 0, 1, 1)
@@ -229,7 +240,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_treewidget.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 960, 288))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 489, 288))
         self.gridLayout_4 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.verticallayout_treewidget_settings = QVBoxLayout()
@@ -400,7 +411,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_stacked_top.setWidgetResizable(True)
         self.scrollAreaWidgetContents_7 = QWidget()
         self.scrollAreaWidgetContents_7.setObjectName(u"scrollAreaWidgetContents_7")
-        self.scrollAreaWidgetContents_7.setGeometry(QRect(0, 0, 948, 218))
+        self.scrollAreaWidgetContents_7.setGeometry(QRect(0, 0, 618, 218))
         self.gridLayout_14 = QGridLayout(self.scrollAreaWidgetContents_7)
         self.gridLayout_14.setObjectName(u"gridLayout_14")
         self.stacked_widget_top = QStackedWidget(self.scrollAreaWidgetContents_7)
@@ -826,7 +837,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_settings.setWidgetResizable(True)
         self.scrollAreaWidgetContents_6 = QWidget()
         self.scrollAreaWidgetContents_6.setObjectName(u"scrollAreaWidgetContents_6")
-        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 1006, 464))
+        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 680, 413))
         self.gridLayout_34 = QGridLayout(self.scrollAreaWidgetContents_6)
         self.gridLayout_34.setObjectName(u"gridLayout_34")
         self.gridlayout_settings = QGridLayout()
@@ -1179,7 +1190,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_metadata.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 990, 1080))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 234, 1080))
         self.gridLayout_27 = QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_27.setObjectName(u"gridLayout_27")
         self.gridlayout_metadata_ = QGridLayout()
@@ -1600,7 +1611,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.retranslateUi(Porn_Fetch_Widget)
 
-        self.stacked_widget_main.setCurrentIndex(0)
+        self.stacked_widget_main.setCurrentIndex(4)
         self.stacked_widget_top.setCurrentIndex(0)
 
 
@@ -1615,12 +1626,13 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_switch_settings.setText("")
         self.button_switch_metadata.setText("")
         self.button_switch_credits.setText("")
+        self.label_total_progress.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
         self.label_progress_pornhub.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"PornHub:", None))
+        self.label_progress_xnxx.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"XNXX", None))
         self.label_progress_information.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Information: The total progressbar only counts the total progress of all PornHub videos being downloaded.", None))
         self.label_progress_eporner.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Eporner", None))
         self.label_progress_hqporner.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"HQPorner:", None))
-        self.label_total_progress.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
-        self.label_progress_xnxx.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"XNXX", None))
+        self.label_progress_xvideos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"XVideos", None))
         self.stacked_widget_main.setStyleSheet("")
         self.radio_tree_show_title.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Only Title (a lot faster)", None))
         self.radio_tree_show_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Title, Author, Duration", None))
@@ -1760,31 +1772,32 @@ class Ui_Porn_Fetch_Widget(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Eporner.com</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XNXX.com (supports total progress)</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">All sites support threaded down"
-                        "loads and selectable quality!</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XVideos.com (supports total progress)</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\""
+                        "><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">All sites support threaded downloads and selectable quality!</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Model / Channel Downloads</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px"
-                        "; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Searching:</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; ma"
+                        "rgin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Searching:</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I am constantly working to support more websites.</p>\n"
-""
-                        "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style="
+                        "\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I am constantly working to support more websites.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin"
-                        "-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
+"<p style=\"-qt-paragraph-type:empty; margin-top:0p"
+                        "x; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
     # retranslateUi
 

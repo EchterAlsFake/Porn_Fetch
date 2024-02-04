@@ -267,6 +267,7 @@ I hope that most issues are now fixed.
 ## Features
 - Added support for Eporner.com
 - Added support for xnxx.com
+- Added support for xvideos.com
 - New directory system to organize videos by model in separate folders.
 - Videos can now be shown in reverse order [#17](https://github.com/EchterAlsFake/Porn_Fetch/issues/17)
 - You can now also download by model on HQPorner

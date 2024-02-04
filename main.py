@@ -37,6 +37,7 @@ import src.frontend.resources
 from requests.exceptions import SSLError
 from pathlib import Path
 from hqporner_api.api import Client as hq_Client, Video as hq_Video, Sort as hq_Sort
+from xvideos_api.xvideos_api import Client as xv_Client, Video as xv_Video
 from phub import Quality, Client, errors, download, Video
 from src.backend.shared_functions import *
 from itertools import islice
@@ -128,6 +129,7 @@ class DownloadProgressSignal(QObject):
     progress_hqporner = Signal(int, int)
     progress_eporner = Signal(int, int)
     progress_xnxx = Signal(int, int)
+    progress_xvideos = Signal(int, int)
     total_progress = Signal(int, int)
 
 
@@ -289,6 +291,23 @@ class AddToTreeWidget(QRunnable):
 
                     text_data = [str(title), str(author), str(duration), str(i), video]
 
+                elif isinstance(video, xv_Video):
+                    title = video.title
+                    if self.data_mode == 1:
+                        duration = str(video.length)
+                        author = video.uploader
+
+                        if author is None or author == "":
+                            author = "unknown_author"
+
+                    else:
+                        duration = disabled
+                        author = disabled
+
+                    text_data = [str(title), str(author), str(duration), str(i), video]
+
+
+
                 self.signals.progress.emit(self.search_limit, i)
                 self.signals.text_data.emit(text_data)
 
@@ -343,6 +362,12 @@ class DownloadThread(QRunnable):
         downloaded_segments += 1  # Since xnxx uses same downloading method as PHUB, wen can add this to total :)
         self.signals.total_progress.emit(downloaded_segments, total_segments)
 
+    def callback_xvideos(self, pos, total):
+        self.signals.progress_xvideos.emit(pos, total)
+        global downloaded_segments
+        downloaded_segments += 1
+        self.signals.total_progress.emit(downloaded_segments, total_segments)
+
     # ADAPTION
 
     def run(self):
@@ -362,6 +387,10 @@ class DownloadThread(QRunnable):
             elif isinstance(self.video, xn_Video):
                 self.video.download(downloader=self.threading_mode, output_path=self.output_path, quality=self.quality,
                                     callback=self.callback_xnxx)
+
+            elif isinstance(self.video, xv_Video):
+                self.video.download(downloader=self.threading_mode, output_path=self.output_path, quality=self.quality,
+                                    callback=self.callback_xvideos)
 
             # ADAPTION
 
@@ -385,7 +414,7 @@ class QTreeWidgetDownloadThread(QRunnable):
         video_objects_pornhub = []
         video_objects_eporner = []
         video_objects_xnxx = []
-
+        video_objects_xvideos = []
         # ADAPTION
 
         for i in range(self.treeWidget.topLevelItemCount()):
@@ -405,16 +434,20 @@ class QTreeWidgetDownloadThread(QRunnable):
                 elif isinstance(object_, xn_Video):
                     video_objects_xnxx.append(object_)
 
+                elif isinstance(object_, xv_Video):
+                    video_objects_xvideos.append(object_)
                 # ADAPTION
 
         global total_segments, downloaded_segments
         total_segments = sum(
-            [len(list(video.get_segments(quality=self.quality))) for video in video_objects_pornhub + video_objects_xnxx])  # ADAPTION
+            [len(list(video.get_segments(quality=self.quality))) for video in video_objects_pornhub +
+             video_objects_xnxx + video_objects_xvideos])  # ADAPTION
 
         downloaded_segments = 0
 
         self.signals.stop_undefined_range.emit()
-        videos = video_objects_pornhub + video_objects_hqporner + video_objects_eporner + video_objects_xnxx # ADAPTION
+        videos = (video_objects_pornhub + video_objects_hqporner + video_objects_eporner + video_objects_xnxx +
+                  video_objects_xvideos) # ADAPTION
         for video in videos:
             self.semaphore.acquire()
             logger_debug("Semaphore Acquired")
@@ -601,6 +634,10 @@ class Porn_Fetch(QWidget):
         file_progressbar_xnxx.open(QFile.ReadOnly | QFile.Text)
         stream_progress_xnxx = QTextStream(file_progressbar_xnxx)
 
+        file_progressbar_xvideos = QFile(":/style/stylesheets/progressbar_xvideos.qss")
+        file_progressbar_xvideos.open(QFile.ReadOnly | QFile.Text)
+        stream_progress_xvideos = QTextStream(file_progressbar_xvideos)
+
         file_stylesheet_button_blue = QFile(":/style/stylesheets/stylesheet_button_blue.qss")
         file_stylesheet_button_orange = QFile(":/style/stylesheets/stylesheet_button_orange.qss")
         file_stylesheet_button_purple = QFile(":/style/stylesheets/stylesheet_button_purple.qss")
@@ -659,6 +696,7 @@ class Porn_Fetch(QWidget):
         self.ui.progressbar_total.setStyleSheet(stream_progress_total.readAll())
         self.ui.progressbar_eporner.setStyleSheet(stream_progress_eporner.readAll())
         self.ui.progressbar_xnxx.setStyleSheet(stream_progress_xnxx.readAll())
+        self.ui.progressbar_xvideos.setStyleSheet(stream_progress_xvideos.readAll())
         logger_debug("Loaded Icons!")
 
     def language_strings(self):
@@ -1168,6 +1206,12 @@ If no more videos are found it will break the loop and the received videos can b
             except IndexError:
                 author = "no_pornstars_found"
 
+        elif isinstance(video, xv_Video):
+            title = video.title
+            author = video.uploader
+            if author is None or author == "":
+                author = "unknown_author"
+
         # ADAPTION
 
         else:
@@ -1218,6 +1262,7 @@ If no more videos are found it will break the loop and the received videos can b
         self.download_thread.signals.progress_hqporner.connect(self.update_progressbar_hqporner)
         self.download_thread.signals.progress_eporner.connect(self.update_progressbar_eporner)
         self.download_thread.signals.progress_xnxx.connect(self.update_progressbar_xnxx)
+        self.download_thread.signals.progress_xvideos.connect(self.update_progressbar_xvideos)
         # ADAPTION
         self.download_thread.signals_completed.completed.connect(self.download_completed)
         self.threadpool.start(self.download_thread)
@@ -1246,6 +1291,10 @@ If no more videos are found it will break the loop and the received videos can b
     def update_progressbar_xnxx(self, value, maximum):
         self.ui.progressbar_xnxx.setMaximum(maximum)
         self.ui.progressbar_xnxx.setValue(value)
+
+    def update_progressbar_xvideos(self, value, maximum):
+        self.ui.progressbar_xvideos.setMaximum(maximum)
+        self.ui.progressbar_xvideos.setValue(value)
 
     # ADAPTION
     def download_completed(self):

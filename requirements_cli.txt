@@ -2,6 +2,7 @@ git+https://github.com/EchterAlsFake/PHUB.git
 git+https://github.com/EchterAlsFake/hqporner_api.git
 git+https://github.com/EchterAlsfake/eporner_api.git
 git+https://github.com/EchterAlsFake/xnxx_api.git
+git+https://github.com/EchterAlsFake/xvideos_api.git
 colorama
 requests
 hue_shift
