@@ -96,7 +96,8 @@ def get_output_path(path="/storage/emulated/0/Download"):
                     text.write("""
                     This is a test for the Porn Fetch application to check if Porn Fetch has permissions to write into
                     the download directory.""")
-                    send_error_log("Written test.txt")
+                    if send_error_logs:
+                        send_error_log("Written test.txt")
                     return True
 
             except Exception as e:
@@ -847,6 +848,8 @@ Sorry.""", disambiguation=""))
                     self.ui.lineedit_output_path.setReadOnly(True)
                     self.ui.button_open_file.setDisabled(True)
                     self.ui.lineedit_file.setText(QCoreApplication.tr("Not supported on Android", disambiguation=""))
+                    self.ui.radio_threading_mode_ffmpeg.setDisabled(True) # ffmpeg on android would be too much for this project...
+                    self.ui.radio_threading_mode_high_performance.setChecked(True)
 
                 else:
                     ui_popup(QCoreApplication.tr("Sorry, but this path also doesn't exist, or I can't write to it. Sorry.", disambiguation=""))
@@ -854,8 +857,6 @@ Sorry.""", disambiguation=""))
 
     def check_ffmpeg(self):
         if self.ui.radio_threading_mode_ffmpeg.isChecked() or self.conf["Performance"]["threading_mode"] == "ffmpeg":
-            ui_popup("Information: The total progressbar is showing a false status when downloading with FFMPEG!")
-
             if sys.platform == "linux":
                 if not os.path.isfile("ffmpeg"):
                     url_linux = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
