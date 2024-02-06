@@ -353,7 +353,6 @@ class DownloadThread(QRunnable):
         self.callback_ffmpeg(pos, total)
         self.callback_xnxx(pos, total, ffmpeg=True)
 
-
     # ADAPTION
 
     def run(self):
@@ -449,7 +448,6 @@ class QTreeWidgetDownloadThread(QRunnable):
                 # ADAPTION
 
         if not self.threading_mode == "FFMPEG":
-            print("Threading Mode isn't FFMPEG")
             global total_segments, downloaded_segments
             total_segments = sum(
                 [len(list(video.get_segments(quality=self.quality))) for video in video_objects_pornhub +
@@ -492,48 +490,25 @@ class MetadataVideos(QRunnable):
         dislike_string = QCoreApplication.tr("Dislikes", disambiguation="The dislikes of the video")
         duration_string = QCoreApplication.tr("minutes", disambiguation="The duration of the video")
 
-        if isinstance(self.video, Video):
-            title = self.video.title
-            views = self.video.views
-            duration = round(self.video.duration.seconds / 60, 2)
-            duration = f"{duration} {duration_string}"
-            pornstar_generator = self.video.pornstars
-            tags_generator = self.video.tags
-            rating = self.video.likes
-            orientation = self.video.orientation
-            hotspots = self.video.hotspots
-            pornstar_list = [pornstar.name for pornstar in pornstar_generator]
-            tags_list = [tag.name for tag in tags_generator]
-            hotspots_list = [str(hotspot) for hotspot in hotspots]
+        title = self.video.title
+        views = self.video.views if hasattr(self.video, 'views') else "Unknown"
+        duration = self.video.length
+        orientation = self.video.orientation if hasattr(self.video, 'orientation') else "Unknown"
+        pornstars = ",".join(self.video.pornstars if hasattr(self.video, 'pornstars') else "Unknown")
+        tags = ",".join(self.video.tags if hasattr(self.video, 'tags') else self.video.categories)
+        hotspots_x = ",".join(self.video.hotspots if hasattr(self.video, 'hotspots') else "unknown")
+        
+        likes = self.video.likes if hasattr(self.video, 'likes') else "Unknown"
+        dislikes = self.video.dislikes if hasattr(self.video, 'dislikes') else "Unknown"
 
-            pornstars = ", ".join(pornstar_list)
-            tags = ", ".join(tags_list)
-            hotspots_x = ", ".join(hotspots_list)
-            rating = f"{like_string}: {rating.up} | {dislike_string}: {rating.down}"
-            data = [title, views, duration, orientation, pornstars, tags, rating, hotspots_x]
+        rating = f"{like_string}: {likes} | {dislike_string}: {dislikes}"
+        try:
+            duration = f"{round(duration / 60)} {duration_string}"
 
-        elif isinstance(self.video, hq_Video):
-            title = self.video.title
-            duration = self.video.video_length
-            pornstars = ",".join(self.video.pornstars)
-            tags = ",".join(self.video.categories)
-            data = [title, None, duration, None, pornstars, tags, None, None]
-
-        elif isinstance(self.video, ep_Video):
-            title = self.video.title
-            views = self.video.views
-            duration = self.video.length_minutes
-            rating = self.video.rating
-            tags = ",".join(self.video.keywords)
-            data = [title, views, duration, None, None, tags, rating, None]
-
-        elif isinstance(self.video, xn_Video):
-            title = self.video.title
-            views = self.video.views
-            pornstars = ",".join(self.video.pornstars)
-            keywords = ",".join(self.video.keywords)
-            rating = f"{like_string}: {self.video.likes} | {dislike_string}: {self.video.dislikes}"
-            data = [title, views, None, None, pornstars, keywords, rating, None]
+        except (ValueError, TypeError):
+            duration = str(duration)
+        
+        data = [title, views, duration, orientation, pornstars, tags, rating, hotspots_x]
 
         self.signals.data.emit(data)
 
