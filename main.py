@@ -213,8 +213,10 @@ class AddToTreeWidget(QRunnable):
 
     def process_video(self, video, index):
         title = video.title
-        duration = 'disabled'
-        author = 'disabled'
+        disabled = QCoreApplication.tr("Disabled", disambiguation="It means, that the displaying of the"
+                                                                  "author and duration in the tree widget is disabled")
+        duration = disabled
+        author = disabled
 
         if self.data_mode == 1:
             if isinstance(video, (hq_Video, xn_Video, xv_Video)):
@@ -242,8 +244,6 @@ class AddToTreeWidget(QRunnable):
 
     def run(self):
         self.signals.clear_signal.emit()
-        disabled = QCoreApplication.tr("Disabled", disambiguation="It means, that the displaying of the"
-                                                                  "author and duration in the tree widget is disabled")
 
         try:
             logger_debug(f"Search Limit: {str(self.search_limit)}")
@@ -314,7 +314,15 @@ class DownloadThread(QRunnable):
             self.signals.total_progress.emit(downloaded_segments, total_segments)
 
     def callback_hqporner(self, pos, total, ffmpeg=False):
-        self.signals.progress_hqporner.emit(pos, total)
+        # Choose a divisor that reduces the values sufficiently
+        # 1024 converts bytes to kilobytes, for example
+        # Fixes the OverflowError
+        divisor = 1024
+        pos_reduced = pos // divisor
+        total_reduced = total // divisor
+
+        # Emit the signal with the reduced values
+        self.signals.progress_hqporner.emit(pos_reduced, total_reduced)
 
     def callback_eporner(self, pos, total, ffmpeg=False):
         self.signals.progress_eporner.emit(pos, total)
