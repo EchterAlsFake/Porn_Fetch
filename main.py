@@ -39,7 +39,7 @@ import src.frontend.resources
 
 from requests.exceptions import SSLError
 from pathlib import Path
-from hqporner_api.api import Sort as hq_Sort
+from hqporner_api.api import Sort as hq_Sort, Video as hq_Video
 from phub import Quality, download, consts
 from src.backend.shared_functions import *
 from itertools import islice
@@ -211,6 +211,35 @@ class AddToTreeWidget(QRunnable):
         self.clickable = clickable
         self.reverse = reverse
 
+    def process_video(self, video, index):
+        title = video.title
+        duration = 'disabled'
+        author = 'disabled'
+
+        if self.data_mode == 1:
+            if isinstance(video, (hq_Video, xn_Video, xv_Video)):
+                duration = str(video.length)
+
+                if hasattr(video, 'pornstars'):
+                    author = video.pornstars[0] if video.pornstars else "author_not_found"
+
+                else:
+                    author = video.author if hasattr(video, 'author') and video.author else "unknown_author"
+
+            elif isinstance(video, Video):
+                duration = round(video.duration.seconds / 60)
+                author = video.author.name
+
+            elif isinstance(video, ep_Video):
+                duration = round(int(video.length) / 60)
+                author = video.author
+
+        # Handling exceptions for missing author in xn_Video
+        if isinstance(video, xn_Video) and not hasattr(video, 'pornstars'):
+            author = "no_pornstars_found"
+
+        return [str(title), str(author), str(duration), str(index), video]
+
     def run(self):
         self.signals.clear_signal.emit()
         disabled = QCoreApplication.tr("Disabled", disambiguation="It means, that the displaying of the"
@@ -227,91 +256,14 @@ class AddToTreeWidget(QRunnable):
             else:
                 videos = islice(self.iterator, self.search_limit)
 
-            for i, video in enumerate(videos, start=1):
-            # ADAPTION
-                if i == self.search_limit + 1:
-                    break
+                for i, video in enumerate(videos, start=1):
+                    if i == self.search_limit + 1:
+                        break
 
-                if isinstance(video, hq_Video):
-                    title = video.title
-                    if self.data_mode == 1:
-                        try:
-                            duration = int(video.video_length) / 60
-                        except ValueError:
-                            duration = video.video_length
+                    text_data = self.process_video(video, i)
 
-                        pornstars = video.pornstars
-                        if len(pornstars) == 0:
-                            author = "author_not_found"
-
-                        else:
-                            author = pornstars[0]
-
-                    else:
-                        duration = disabled
-                        author = disabled
-
-                    text_data = [str(title), str(author), str(duration), str(i), video]
-
-                elif isinstance(video, Video):
-                    title = video.title
-                    if self.data_mode == 1:
-                        duration = round(video.duration.seconds / 60)
-                        author = video.author.name
-
-                    else:
-                        duration = disabled
-                        author = disabled
-
-                    text_data = [str(title), str(author), str(duration), str(i), video]
-
-                elif isinstance(video, ep_Video):
-                    title = video.title
-                    if self.data_mode == 1:
-                        duration = round(int(video.length_seconds) / 60)
-                        author = video.author
-
-                    else:
-                        duration = disabled
-                        author = disabled
-
-                    text_data = [str(title), str(author), str(duration), str(i), video]
-
-                elif isinstance(video, xn_Video):
-                    title = video.title
-                    if self.data_mode == 1:
-                        duration = str(video.length)
-                        try:
-                            author = video.pornstars[0]
-
-                        except IndexError:
-                            author = "no_pornstars_found"
-
-                    else:
-                        duration = disabled
-                        author = disabled
-
-                    text_data = [str(title), str(author), str(duration), str(i), video]
-
-                elif isinstance(video, xv_Video):
-                    title = video.title
-                    if self.data_mode == 1:
-                        duration = str(video.length)
-                        author = video.uploader
-
-                        if author is None or author == "":
-                            author = "unknown_author"
-
-                    else:
-                        duration = disabled
-                        author = disabled
-
-                    text_data = [str(title), str(author), str(duration), str(i), video]
-
-
-
-                self.signals.progress.emit(self.search_limit, i)
-                self.signals.text_data.emit(text_data)
+                    self.signals.progress.emit(self.search_limit, i)
+                    self.signals.text_data.emit(text_data)
 
         except errors.NoResult:
             pass
@@ -1327,9 +1279,12 @@ If no more videos are found it will break the loop and the received videos can b
         quality = self.quality
 
         video = check_video(url, language=api_language)
+        title = video.title
 
-        if isinstance(video, hq_Video):
-            title = video.title
+        if isinstance(video, Video):
+            author = video.author.name
+
+        elif isinstance(video, hq_Video):
             pornstars = video.pornstars
             if len(pornstars) == 0:
                 author = "no_author_found"
@@ -1337,35 +1292,8 @@ If no more videos are found it will break the loop and the received videos can b
             else:
                 author = pornstars[0]
 
-        elif isinstance(video, Video):
-            title = video.title
-            author = video.author.name
-
-        elif isinstance(video, ep_Video):
-            title = video.title
-            author = video.author
-
-        elif isinstance(video, xn_Video):
-            title = video.title
-            try:
-                author = video.pornstars[0]
-
-            except IndexError:
-                author = "no_pornstars_found"
-
-        elif isinstance(video, xv_Video):
-            title = video.title
-            author = video.uploader
-            if author is None or author == "":
-                author = "unknown_author"
-
-        # ADAPTION
-
         else:
-            ui_popup(
-                QCoreApplication.tr("There's something wrong with the video. Is the URL correct?", disambiguation=""))
-            title = None
-            author = None
+            author = video.author
 
         output_path = correct_output_path(output_path)
         stripped_title = strip_title(title)
