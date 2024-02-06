@@ -263,6 +263,7 @@ I hope that most issues are now fixed.
 
 # Deprecations
 - Threading is now ALWAYS on. You can't disable it, because I see no reason for it.
+- Removed Searching Filters
 
 ## Features
 - Added support for Eporner.com

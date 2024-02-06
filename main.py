@@ -806,14 +806,13 @@ class Porn_Fetch(QWidget):
         self.ui.button_video_thumbnail_download.setStyleSheet(purple)
         self.ui.button_tree_select_all.setStyleSheet(orange)
         self.ui.button_tree_unselect_all.setStyleSheet(blue)
-        self.ui.button_search_hqporner.setStyleSheet(purple)
         self.ui.button_help_pages.setStyleSheet(login)
         self.ui.button_semaphore_help.setStyleSheet(login)
         self.ui.button_threading_mode_help.setStyleSheet(login)
         self.ui.button_directory_system_help.setStyleSheet(login)
         self.ui.button_output_path_select.setStyleSheet(login)
         self.ui.button_settings_apply.setStyleSheet(login)
-        self.ui.button_search_pornhub.setStyleSheet(purple)
+        self.ui.button_search.setStyleSheet(purple)
         self.ui.button_hqporner_category_get_videos.setStyleSheet(purple)
         self.ui.button_get_random_videos.setStyleSheet(purple)
         self.ui.button_get_brazzers_videos.setStyleSheet(purple)
@@ -1003,8 +1002,7 @@ Sorry.""", disambiguation=""))
         self.ui.button_get_recommended_videos.clicked.connect(self.get_recommended_videos)
 
         # Search
-        self.ui.button_search_pornhub.clicked.connect(self.basic_search)
-        self.ui.button_search_hqporner.clicked.connect(self.hqporner_search)
+        self.ui.button_search.clicked.connect(self.basic_search)
 
         # Metadata
         self.ui.button_metadata_video_start.clicked.connect(self.get_metadata_video)
@@ -1541,18 +1539,21 @@ If no more videos are found it will break the loop and the received videos can b
     """
 
     def basic_search(self):
-        query = self.ui.lineedit_seach_pornhub.text()
-        language = self.api_language
-        search_limit = self.search_limit
-        client = Client(language=language)
-        search = client.search(query, use_hubtraffic=True)
-        self.add_to_tree_widget_thread(search, search_limit=search_limit)
+        query = self.ui.lineedit_search_query.text()
 
-    def hqporner_search(self):
-        query = self.ui.lineedit_search_hqporner.text()
-        search_limit = self.search_limit
-        search = hq_Client().get_videos_by_actress(query)
-        self.add_to_tree_widget_thread(iterator=search, search_limit=search_limit)
+        if self.ui.radio_search_website_pornhub.isChecked():
+            videos = Client().search(query, use_hubtraffic=True)
+            search_limit = 100
+
+        elif self.ui.radio_search_website_xvideos.isChecked():
+            videos = xv_Client.search(query, pages=3)
+            search_limit = 3 * 27
+
+        elif self.ui.radio_search_website_hqporner.isChecked():
+            videos = hq_Client.search_videos(query, pages=3)
+            search_limit = 3 * 46
+
+        self.add_to_tree_widget_thread(videos, search_limit=search_limit)
 
     def get_metadata_video(self):
         api_language = self.api_language
