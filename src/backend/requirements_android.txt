@@ -6,4 +6,4 @@ a good reason for it.
 Usually I don't give version numbers, cuz why. But here it's mandatory.
 
 
-,charset-normalizer==2.1.1,git+https://github.com/EchterAlsFake/PHUB@py-3.10,idna,urllib3,certifi,hue_shift,markdown,colorama,requests,hqporner_api,pymediainfo,ffmpeg-progress-yield,tqdm,eporner_api,xnxx_api
+,charset-normalizer==2.1.1,git+https://github.com/EchterAlsFake/PHUB@py-3.10,idna,urllib3,certifi,hue_shift,markdown,colorama,requests,git+https://github.com/EchterAlsFake/hqporner_api,pymediainfo,ffmpeg-progress-yield,tqdm,git+https://github.com/EchterAlsFake/eporner_api,git+https://github.com/EchterAlsFake/xnxx_api,git+https://github.com/EchterAlsFake/xvideos_api
