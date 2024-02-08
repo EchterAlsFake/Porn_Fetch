@@ -496,6 +496,53 @@ class MetadataUser(QRunnable):
         self.signals.data.emit(data)
 
 
+class VideoLoaderSignals(QObject):
+    loaded = Signal(object, str, str, object, str, bool, str)
+    error = Signal(str)
+
+
+class VideoLoader(QRunnable):
+    def __init__(self, url, output_path, api_language, threading_mode, directory_system, quality):
+        super(VideoLoader, self).__init__()
+        self.url = url
+        self.output_path = output_path
+        self.api_language = api_language
+        self.threading_mode = threading_mode
+        self.directory_system = directory_system
+        self.quality = quality
+        self.signals = VideoLoaderSignals()
+
+    def run(self):
+        try:
+            video = check_video(self.url, language=self.api_language)
+            title = video.title
+
+            if isinstance(video, Video):
+                author = video.author.name
+            elif isinstance(video, hq_Video):
+                pornstars = video.pornstars
+                author = pornstars[0] if pornstars else "no_author_found"
+            else:
+                author = video.author
+
+            output_path = Path(self.output_path)
+            stripped_title = strip_title(title)
+
+            if self.directory_system:
+                author_path = output_path / author
+                author_path.mkdir(parents=True, exist_ok=True)
+                output_file_path = author_path / f"{stripped_title}.mp4"
+            else:
+                output_file_path = output_path / f"{stripped_title}.mp4"
+
+            # Emit the loaded signal with all the required information
+            self.signals.loaded.emit(video, author, stripped_title, output_file_path, self.threading_mode,
+                                     self.directory_system, self.quality)
+
+        except Exception as e:
+            self.signals.error.emit(str(e))
+
+
 class FFMPEGSignals(QObject):
     progress_signal = Signal(int, int)
 
@@ -1192,50 +1239,25 @@ If no more videos are found it will break the loop and the received videos can b
         self.add_to_tree_widget_thread(videos, search_limit=search_limit)
 
     def load_video(self, url):
-        output_path = self.output_path
-        api_language = self.api_language
-        threading_mode = self.threading_mode
-        directory_system = self.directory_system
-        quality = self.quality
+        video_loader = VideoLoader(url, self.output_path, self.api_language, self.threading_mode, self.directory_system,
+                                   self.quality)
 
-        video = check_video(url, language=api_language)
-        title = video.title
+        # Connect signals to your slots
+        video_loader.signals.loaded.connect(self.on_video_loaded)
+        video_loader.signals.error.connect(self.on_video_load_error)
 
-        if isinstance(video, Video):
-            author = video.author.name
+        # Start the thread
+        QThreadPool.globalInstance().start(video_loader)
 
-        elif isinstance(video, hq_Video):
-            pornstars = video.pornstars
-            if len(pornstars) == 0:
-                author = "no_author_found"
+    def on_video_loaded(self, video, author, stripped_title, output_file_path, threading_mode, directory_system,
+                        quality):
+        # Handle the loaded video, possibly start download
+        self.process_video_thread(output_path=output_file_path, video=video, threading_mode=threading_mode,
+                                  quality=quality)
 
-            else:
-                author = pornstars[0]
-
-        else:
-            author = video.author
-
-        output_path = Path(output_path)
-
-        stripped_title = strip_title(title)
-        logger_debug(f"Loading Video: {stripped_title}")
-
-        if directory_system:
-            author_path = output_path / author  # Use the '/' operator for joining paths
-            author_path.mkdir(parents=True, exist_ok=True)  # Creates the directory if it does not exist
-            output_file_path = author_path / f"{stripped_title}.mp4"
-        else:
-            output_file_path = output_path / f"{stripped_title}.mp4"
-
-        if not output_file_path.exists():
-            logger_debug("Processing Thread")
-            self.process_video_thread(output_path=output_file_path, video=video, threading_mode=threading_mode,
-                                      quality=quality)
-        else:
-            self.semaphore.release()
-            if not isinstance(video, hq_Video):
-                global downloaded_segments
-                downloaded_segments += len(list(video.get_segments(quality=quality)))
+    def on_video_load_error(self, error_message):
+        # Handle errors, possibly show message to user
+        logger_debug(f"Error loading video: {error_message}")
 
     def return_client(self):
         if isinstance(self.client, Client):
