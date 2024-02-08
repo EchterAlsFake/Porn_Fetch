@@ -294,9 +294,11 @@ class DownloadThread(QRunnable):
         if ffmpeg:
             self.update_ffmpeg_progress(pos, total)
         else:
-            if not signal == self.signals.progress_hqporner:
-                signal.emit(pos, total)  # signal is already the correct signal for the video source
+            if not signal == self.signals.progress_hqporner or not signal == self.signals.progress_eporner:
+                  # signal is already the correct signal for the video source
                 self.update_total_progress(ffmpeg)
+            signal.emit(pos, total)
+
 
     def update_ffmpeg_progress(self, pos, total):
         """Update progress for FFmpeg downloads."""
@@ -322,10 +324,13 @@ class DownloadThread(QRunnable):
 
             if self.threading_mode == download.FFMPEG:
                 path = str(self.output_path)
-                logger_debug(f"PornHub Path: {path}")
-
-            self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality,
+            try:
+                self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality,
                                 display=lambda pos, total: self.generic_callback(pos, total, self.signals.progress))
+
+            except TypeError:
+                self.video.download(downloader=self.threading_mode, path=str(self.output_path), quality=self.quality,
+                                    display=lambda pos, total: self.generic_callback(pos, total, self.signals.progress))
 
         elif isinstance(self.video, hq_Video):  # Assuming 'hq_Video' is the class for HQPorner
             self.video.download(quality=self.quality, output_path=self.output_path,
@@ -1302,7 +1307,6 @@ If no more videos are found it will break the loop and the received videos can b
         self.ui.progressbar_hqporner.setValue(value)
 
     def update_progressbar_eporner(self, value, maximum):
-        logger_debug(f"Eporner: received: {value} / {maximum}")
         self.ui.progressbar_eporner.setMaximum(maximum)
         self.ui.progressbar_eporner.setValue(value)
 
