@@ -301,3 +301,8 @@ This is also the reason why Porn Fetch uses an older Android SDK, because with a
 <br> Permission system, but there's no guarantee that this works.
 
 I tested it on Android 12 & 13 on two devices.
+
+
+# 3.1
+
+- Placeholder

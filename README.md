@@ -13,9 +13,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/beta-3.0"><strong>Download Version 3.0 (BETA)</strong></a> ·
-  <a href="https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/2.9"><strong>Download Version 2.9</strong></a> ·
-  <a href="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md"><strong>Development Update V3.0</strong></a>
+  <a href="https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/release-3.0"><strong>Download Version 3.0</strong></a> ·
+  <a href="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md"><strong>Development Update V3.1</strong></a>
 </p>
 
 ![Alt text](https://github.com/EchterAlsFake/Porn_Fetch/blob/7f9c21f73ae8dd50257be6fc2e5cc2b717ab44c9/src/frontend/graphics/screenshot.png?raw=true "Optional Title")
@@ -72,9 +71,9 @@ Not all websites support every feature.
 
 - [PornHub.com](https://github.com/Egsagon/PHUB)
 - [HQPorner.com](https://github.com/EchterAlsFake/hqporner_api)
-- [xnxx.com](https://github.com/EchterAlsFake/xnxx_api) (v3.0)
-- [Eporner.com](https://github.com/EchterAlsFake/eporner_api) (v3.0
-- [XVideos.com](https://github.com/EchterAlsFake/xvideos_api) (v3.0)
+- [xnxx.com](https://github.com/EchterAlsFake/xnxx_api)
+- [Eporner.com](https://github.com/EchterAlsFake/eporner_api)
+- [XVideos.com](https://github.com/EchterAlsFake/xvideos_api)
 
 ## 🔨 Building from Source
 Easy-to-use build scripts are available for various platforms. Run these in your terminal:
