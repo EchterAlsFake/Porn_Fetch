@@ -1276,26 +1276,22 @@ If no more videos are found it will break the loop and the received videos can b
         else:
             author = video.author
 
-        output_path = correct_output_path(output_path)
+        output_path = Path(output_path)
+
         stripped_title = strip_title(title)
         logger_debug(f"Loading Video: {stripped_title}")
 
         if directory_system:
-            if not os.path.exists(f"{output_path}{author}"):
-                os.mkdir(output_path + author)
-
-            output_path = f"{output_path}{author}{os.sep}{stripped_title}.mp4"
-            output_path.strip("'")
-
+            author_path = output_path / author  # Use the '/' operator for joining paths
+            author_path.mkdir(parents=True, exist_ok=True)  # Creates the directory if it does not exist
+            output_file_path = author_path / f"{stripped_title}.mp4"
         else:
-            output_path = f"{output_path}{stripped_title}.mp4"
-            output_path.strip("'")
+            output_file_path = output_path / f"{stripped_title}.mp4"
 
-        if not os.path.exists(output_path) or not os.path.isfile(output_path):
+        if not output_file_path.exists():
             logger_debug("Processing Thread")
-            self.process_video_thread(output_path=output_path, video=video, threading_mode=threading_mode,
+            self.process_video_thread(output_path=output_file_path, video=video, threading_mode=threading_mode,
                                       quality=quality)
-
         else:
             self.semaphore.release()
             if not isinstance(video, hq_Video):
