@@ -22,7 +22,7 @@ Discord: echteralsfake (faster response)
 
 __license__ = "GPL 3"
 __version__ = "3.0"
-__build__ = "desktop"  # android or desktop
+__build__ = "android"  # android or desktop
 __author__ = "Johannes Habel"
 total_segments = 0
 downloaded_segments = 0
@@ -837,6 +837,8 @@ class Porn_Fetch(QWidget):
         self.ui.lineedit_output_path.setText(self.output_path)
         self.ui.lineedit_output_path.setReadOnly(True)
         self.ui.button_open_file.setDisabled(True)
+        self.ui.radio_threading_mode_default.setChecked(True)
+        self.ui.radio_threading_mode_high_performance.setDisabled(True)
         self.ui.lineedit_file.setText(QCoreApplication.tr("Not supported on Android", disambiguation=""))
         self.ui.radio_threading_mode_ffmpeg.setDisabled(True)  # Assume ffmpeg is too much for Android in this context.
         self.warn_about_high_performance_threading()
