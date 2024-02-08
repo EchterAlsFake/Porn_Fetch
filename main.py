@@ -294,8 +294,9 @@ class DownloadThread(QRunnable):
         if ffmpeg:
             self.update_ffmpeg_progress(pos, total)
         else:
-            signal.emit(pos, total)  # signal is already the correct signal for the video source
-            self.update_total_progress(ffmpeg)
+            if not signal == self.signals.progress_hqporner:
+                signal.emit(pos, total)  # signal is already the correct signal for the video source
+                self.update_total_progress(ffmpeg)
 
     def update_ffmpeg_progress(self, pos, total):
         """Update progress for FFmpeg downloads."""
@@ -309,6 +310,7 @@ class DownloadThread(QRunnable):
         if not ffmpeg:
             global downloaded_segments
             downloaded_segments += 1
+            logger_debug(f"Downloaded Segments: {downloaded_segments} / Total Segments: {total_segments}")
             self.signals.total_progress.emit(downloaded_segments, total_segments)
 
     def run(self):
@@ -317,6 +319,11 @@ class DownloadThread(QRunnable):
 
         if isinstance(self.video, Video):  # Assuming 'Video' is the class for Pornhub
             self.threading_mode = self.resolve_threading_mode(self.threading_mode)
+
+            if self.threading_mode == download.FFMPEG:
+                path = str(self.output_path)
+                logger_debug(f"PornHub Path: {path}")
+
             self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality,
                                 display=lambda pos, total: self.generic_callback(pos, total, self.signals.progress))
 
@@ -1295,6 +1302,7 @@ If no more videos are found it will break the loop and the received videos can b
         self.ui.progressbar_hqporner.setValue(value)
 
     def update_progressbar_eporner(self, value, maximum):
+        logger_debug(f"Eporner: received: {value} / {maximum}")
         self.ui.progressbar_eporner.setMaximum(maximum)
         self.ui.progressbar_eporner.setValue(value)
 
