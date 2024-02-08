@@ -422,10 +422,6 @@ class MetadataVideos(QRunnable):
         self.video = video
 
     def run(self):
-        """
-        I know this can be handled better, I'll refactor it in v3.1
-        """
-
         self.signals.start_undefined.emit()
 
         like_string = QCoreApplication.tr("Likes", disambiguation="The Likes of the video")
@@ -1252,6 +1248,7 @@ If no more videos are found it will break the loop and the received videos can b
     def on_video_loaded(self, video, author, stripped_title, output_file_path, threading_mode, directory_system,
                         quality):
         # Handle the loaded video, possibly start download
+        self.stop_undefined_range()
         self.process_video_thread(output_path=output_file_path, video=video, threading_mode=threading_mode,
                                   quality=quality)
 
