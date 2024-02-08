@@ -25,43 +25,66 @@ __version__ = "3.0"
 __build__ = "android"  # android or desktop
 __author__ = "Johannes Habel"
 
-import shutil
-import tarfile
-
-import requests
-import sys
-import os.path
-import argparse
-import markdown
-import traceback
-import zipfile
-import src.frontend.resources
-
-from requests.exceptions import SSLError
-from pathlib import Path
-from hqporner_api.api import Sort as hq_Sort, Video as hq_Video
-from phub import Quality, download, consts
-from src.backend.shared_functions import *
-from itertools import islice
-
-from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
-from src.frontend.License import Ui_License
-from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
-                            QTranslator, QCoreApplication)
-from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog,
-                               QTreeWidgetItem, QButtonGroup, QFileDialog)
-from PySide6.QtGui import QIcon, QFont
-
-total_segments = 0
-downloaded_segments = 0
-send_error_logs = False  # Only enabled when developing the application.
-
 
 def send_error_log(message):
     """A function to debug Porn Fetch on my local android development device"""
     url = "http://192.168.2.103:8000/error-log/"
     data = {"message": message}
     requests.post(url, json=data)
+
+
+def logger_error(e):
+    print(f"{datetime.now()} : {Fore.LIGHTRED_EX}[ERROR] : {reset()} : {e}")
+    if send_error_logs:
+        send_error_log(e)
+
+
+def logger_debug(e):
+    print(f"{datetime.now()} : {Fore.LIGHTCYAN_EX}[DEBUG] : {return_color()} : {e} {reset()}")
+    if send_error_logs:
+        send_error_log(e)
+
+import requests
+
+try:
+
+    import shutil
+    import tarfile
+
+
+    import sys
+    import os.path
+    import argparse
+    import markdown
+    import traceback
+    import zipfile
+    import src.frontend.resources
+
+    from requests.exceptions import SSLError
+    from pathlib import Path
+    from hqporner_api.api import Sort as hq_Sort, Video as hq_Video
+    from phub import Quality, download, consts
+    from src.backend.shared_functions import *
+    from itertools import islice
+
+    from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
+    from src.frontend.License import Ui_License
+    from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
+                                QTranslator, QCoreApplication)
+    from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog,
+                                   QTreeWidgetItem, QButtonGroup, QFileDialog)
+    from PySide6.QtGui import QIcon, QFont
+
+except Exception as e:
+    logger_error(e)
+
+
+total_segments = 0
+downloaded_segments = 0
+send_error_logs = True  # Only enabled when developing the application.
+
+
+
 
 
 def get_output_path(path="/storage/emulated/0/Download"):

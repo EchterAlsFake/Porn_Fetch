@@ -3,7 +3,12 @@
 
 ## TODO:
 
-- [] Including French translations (will need an update on the .ts)
+
+- [] Testing
+- [] Testing (Android)
+- [] Finishing CLI
+- [] Compiling / Building
+- [x] Including French translations (will need an update on the .ts)
 - [x] Testing
 - [x] Updating CLI
 - [x] Refactoring

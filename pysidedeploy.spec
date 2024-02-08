@@ -28,11 +28,11 @@ qml_files =
 # excluded qml plugin binaries
 excluded_qml_plugins = 
 # path to pyside wheel
-wheel_pyside = /home/asuna/pyside-setup/dist/PySide6-6.5.3-6.5.3-cp37-abi3-android_aarch64.whl
+wheel_pyside = /home/asuna/PycharmProjects/Porn_Fetch/src/backend/PySide6_6.6.1_aarch64.whl
 # path to shiboken wheel
-wheel_shiboken = /home/asuna/pyside-setup/dist/shiboken6-6.5.3-6.5.3-cp37-abi3-android_aarch64.whl
+wheel_shiboken = /home/asuna/PycharmProjects/Porn_Fetch/src/backend/shiboken6_6.6.1_aarch64.whl
 # plugins to be copied to libs folder of the packaged application. comma separated
-plugins = platforms_qtforandroid,styles_qandroidstyle,platforms_qtforandroid,platforminputcontexts_qtvirtualkeyboardplugin,generic_qinsighttracker,iconengines_qsvgicon,imageformats_qgif,imageformats_qicns,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,imageformats_qtga,imageformats_qtiff,imageformats_qwbmp,imageformats_qwebp
+plugins = platforms_qtforandroid,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle
 
 [nuitka]
 # (str) specify any extra nuitka arguments
@@ -49,11 +49,11 @@ recipe_dir = /home/asuna/PycharmProjects/Porn_Fetch/deployment/recipes
 # path to extra qt android jars to be loaded by the application
 jars_dir = /home/asuna/PycharmProjects/Porn_Fetch/deployment/jar/PySide6/jar
 # if empty uses default ndk path downloaded by buildozer
-ndk_path = /home/asuna/Android/Sdk/android-ndk-r26b
+ndk_path = /home/asuna/Android/Sdk/ndk/25c
 # if empty uses default sdk path downloaded by buildozer
 sdk_path = /home/asuna/Android/Sdk
 # modules used. comma separated
-modules = Widgets,Core,Gui
+modules = Core,Gui,Widgets
 # other libraries to be loaded. comma separated.
 # loaded at app startup
 local_libs = plugins_platforms_qtforandroid

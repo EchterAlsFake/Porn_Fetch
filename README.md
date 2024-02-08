@@ -108,6 +108,7 @@ Currently available in:
 - German (3.0)
 - English
 - Chinese (3.0) `[*]` Thanks to: [Joshua-auhsoj](https://github.com/Joshua-auhsoj)
+- French (3.0) `[*]` Thanks to: [Egsagon](https://github.com/Egsagon)
 
 <br>To contribute a translation, follow [this guide](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/TRANSLATING.md).
 
