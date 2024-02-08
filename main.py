@@ -22,12 +22,12 @@ Discord: echteralsfake (faster response)
 
 __license__ = "GPL 3"
 __version__ = "3.0"
-__build__ = "android"  # android or desktop
+__build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 total_segments = 0
 downloaded_segments = 0
 
-send_error_logs = True  # Only enabled when developing the application.
+send_error_logs = False  # Only enabled when developing the application.
 
 import shutil
 import tarfile
