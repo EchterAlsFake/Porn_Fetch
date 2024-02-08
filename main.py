@@ -289,16 +289,16 @@ class DownloadThread(QRunnable):
             "default": download.default
         }.get(mode, download.default)
 
-    def generic_callback(self, pos, total, signal, ffmpeg=False):
+    def generic_callback(self, pos, total, signal, video_source, ffmpeg=False):
         """Generic callback function to emit progress signals."""
         if ffmpeg:
             self.update_ffmpeg_progress(pos, total)
         else:
-            if not signal == self.signals.progress_hqporner or not signal == self.signals.progress_eporner:
-                  # signal is already the correct signal for the video source
-                self.update_total_progress(ffmpeg)
+            # Emit signal for individual progress
             signal.emit(pos, total)
-
+            # Update total progress only if the video source uses segments
+            if video_source not in ['hqporner', 'eporner']:
+                self.update_total_progress(ffmpeg)
 
     def update_ffmpeg_progress(self, pos, total):
         """Update progress for FFmpeg downloads."""
@@ -321,38 +321,41 @@ class DownloadThread(QRunnable):
 
         if isinstance(self.video, Video):  # Assuming 'Video' is the class for Pornhub
             self.threading_mode = self.resolve_threading_mode(self.threading_mode)
-
-            if self.threading_mode == download.FFMPEG:
-                path = str(self.output_path)
+            video_source = "pornhub"
+            path = self.output_path
             try:
-                self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality,
-                                display=lambda pos, total: self.generic_callback(pos, total, self.signals.progress))
+                self.video.download(downloader=self.threading_mode, path=path, quality=self.quality,
+                                display=lambda pos, total: self.generic_callback(pos, total, self.signals.progress, video_source))
 
             except TypeError:
-                self.video.download(downloader=self.threading_mode, path=str(self.output_path), quality=self.quality,
-                                    display=lambda pos, total: self.generic_callback(pos, total, self.signals.progress))
+                self.video.download(downloader=self.threading_mode, path=path, quality=self.quality,
+                                    display=lambda pos, total: self.generic_callback(pos, total, self.signals.progress, video_source))
 
         elif isinstance(self.video, hq_Video):  # Assuming 'hq_Video' is the class for HQPorner
+            video_source = "hqporner"
             self.video.download(quality=self.quality, output_path=self.output_path,
                                 callback=lambda pos, total: self.generic_callback(pos, total,
-                                                                                  self.signals.progress_hqporner))
+                                                                                  self.signals.progress_hqporner, video_source))
 
         elif isinstance(self.video, ep_Video):  # Assuming 'ep_Video' is the class for EPorner
+            video_source = "eporner"
             self.video.download_video(quality=self.quality, output_path=self.output_path,
                                       callback=lambda pos, total: self.generic_callback(pos, total,
-                                                                                        self.signals.progress_eporner))
+                                                                                        self.signals.progress_eporner, video_source))
 
         elif isinstance(self.video, xn_Video):  # Assuming 'xn_Video' is the class for XNXX
+            video_source = "xnxx"
             self.video.download(downloader=self.threading_mode, output_path=self.output_path,
                                 quality=self.quality,
                                 callback=lambda pos, total: self.generic_callback(pos, total,
-                                                                                  self.signals.progress_xnxx))
+                                                                                  self.signals.progress_xnxx, video_source))
 
         elif isinstance(self.video, xv_Video):  # Assuming 'xv_Video' is the class for XVideos
+            video_source = "xvideos"
             self.video.download(downloader=self.threading_mode, output_path=self.output_path,
                                 quality=self.quality,
                                 callback=lambda pos, total: self.generic_callback(pos, total,
-                                                                                  self.signals.progress_xvideos))
+                                                                                  self.signals.progress_xvideos, video_source))
 
         # ... other video types ...
 
