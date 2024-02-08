@@ -4,7 +4,7 @@
 ## TODO:
 
 
-- [] Testing
+- [x] Testing
 - [x] Testing (Android) Success
 - [] Finishing CLI
 - [] Compiling / Building
