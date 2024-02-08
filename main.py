@@ -262,20 +262,10 @@ class AddToTreeWidget(QRunnable):
 
 
 class DownloadThread(QRunnable):
-    """Threading class to download videos."""
-
-    """
-    I know that this function is horribly optimized, but I (and ChatGPT) don't know how to do it better.
-    If you find a way, to keep both progress bars, handle ffmpeg progress and keep the total progress available:
-    
-    Make a PR and I'll underline your name at the top of my Readme lmao
-    """
-
-    signal = Signal()
+    """Refactored threading class to download videos with improved performance and logic."""
 
     def __init__(self, video, quality, output_path, threading_mode):
-        super(DownloadThread, self).__init__()
-
+        super().__init__()
         self.video = video
         self.quality = quality
         self.output_path = output_path
@@ -283,130 +273,79 @@ class DownloadThread(QRunnable):
         self.signals = DownloadProgressSignal()
         self.signals_completed = WorkerSignals()
         self.video_progress = {}
+        self.progress_signals = {
+            'pornhub': self.signals.progress,
+            'hqporner': self.signals.progress_hqporner,
+            'eporner': self.signals.progress_eporner,
+            'xnxx': self.signals.progress_xnxx,
+            'xvideos': self.signals.progress_xvideos,
+        }
 
-        if isinstance(self.video, Video):
-            if self.threading_mode == "threaded":
-                self.threading_mode = download.threaded()
+    def resolve_threading_mode(self, mode):
+        """Resolve the appropriate threading mode based on input."""
+        return {
+            "threaded": download.threaded(),
+            "FFMPEG": download.FFMPEG,
+            "default": download.default
+        }.get(mode, download.default)
 
-            elif self.threading_mode == "FFMPEG":
-                self.threading_mode = download.FFMPEG
+    def generic_callback(self, pos, total, signal, ffmpeg=False):
+        """Generic callback function to emit progress signals."""
+        if ffmpeg:
+            self.update_ffmpeg_progress(pos, total)
+        else:
+            signal.emit(pos, total)  # signal is already the correct signal for the video source
+            self.update_total_progress(ffmpeg)
 
-            elif self.threading_mode == "default":
-                self.threading_mode = download.default
+    def update_ffmpeg_progress(self, pos, total):
+        """Update progress for FFmpeg downloads."""
+        video_title = self.video.title
+        self.video_progress[video_title] = pos / total * 100
+        total_progress = sum(self.video_progress.values()) / len(self.video_progress)
+        self.signals.total_progress.emit(total_progress, 100)
 
-    def callback(self, pos, total, ffmpeg=False):
-        self.signals.progress.emit(pos, total)
-
-        if ffmpeg is False:
-            global downloaded_segments
-            downloaded_segments += 1  # Assuming each call represents one segment
-            self.signals.total_progress.emit(downloaded_segments, total_segments)
-
-    def callback_hqporner(self, pos, total, ffmpeg=False):
-        # Choose a divisor that reduces the values sufficiently
-        # 1024 converts bytes to kilobytes, for example
-        # Fixes the OverflowError
-        divisor = 1024
-        pos_reduced = pos // divisor
-        total_reduced = total // divisor
-
-        # Emit the signal with the reduced values
-        self.signals.progress_hqporner.emit(pos_reduced, total_reduced)
-
-    def callback_eporner(self, pos, total, ffmpeg=False):
-        self.signals.progress_eporner.emit(pos, total)
-
-    def callback_xnxx(self, pos, total, ffmpeg=False):
-        self.signals.progress_xnxx.emit(pos, total)
-
-        if ffmpeg is False:
+    def update_total_progress(self, ffmpeg):
+        """Update total download progress."""
+        if not ffmpeg:
             global downloaded_segments
             downloaded_segments += 1
             self.signals.total_progress.emit(downloaded_segments, total_segments)
 
-    def callback_xvideos(self, pos, total, ffmpeg=True):
-        self.signals.progress_xvideos.emit(pos, total)
-
-        global downloaded_segments
-        downloaded_segments += 1
-        self.signals.total_progress.emit(downloaded_segments, total_segments)
-
-    def callback_ffmpeg(self, pos, total):
-        video_title = self.video.title
-        self.video_progress[video_title] = pos / total * 100
-
-        total_progress = sum(self.video_progress.values()) / len(self.video_progress)
-        self.signals.total_progress.emit(total_progress, 100)
-
-    def wrapper_ffmpeg_pornhub(self, pos, total):
-        self.callback_ffmpeg(pos, total)
-        self.callback(pos, total, ffmpeg=True)
-
-    def wrapper_ffmpeg_xvideos(self, pos, total):
-        self.callback_ffmpeg(pos, total)
-        self.callback_xvideos(pos, total, ffmpeg=True)
-
-    def wrapper_ffmpeg_xnxx(self, pos, total):
-        self.callback_ffmpeg(pos, total)
-        self.callback_xnxx(pos, total, ffmpeg=True)
-
-    # ADAPTION
-
     def run(self):
-        try:
-            logger_debug(f"Downloading Video to: {self.output_path}")
+        """Run the download in a thread, optimizing for different video sources and modes."""
+        logger_debug(f"Downloading Video to: {self.output_path}")
 
-            if self.threading_mode == "FFMPEG" or self.threading_mode == download.FFMPEG:
+        if isinstance(self.video, Video):  # Assuming 'Video' is the class for Pornhub
+            self.threading_mode = self.resolve_threading_mode(self.threading_mode)
+            self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality,
+                                display=lambda pos, total: self.generic_callback(pos, total, self.signals.progress))
 
-                if isinstance(self.video, Video):
-                    self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality,
-                                        display=self.wrapper_ffmpeg_pornhub)
+        elif isinstance(self.video, hq_Video):  # Assuming 'hq_Video' is the class for HQPorner
+            self.video.download(quality=self.quality, output_path=self.output_path,
+                                callback=lambda pos, total: self.generic_callback(pos, total,
+                                                                                  self.signals.progress_hqporner))
 
-                elif isinstance(self.video, hq_Video):
-                    self.video.download(quality=self.quality, output_path=self.output_path,
-                                        callback=self.callback_hqporner, no_title=True)
+        elif isinstance(self.video, ep_Video):  # Assuming 'ep_Video' is the class for EPorner
+            self.video.download_video(quality=self.quality, output_path=self.output_path,
+                                      callback=lambda pos, total: self.generic_callback(pos, total,
+                                                                                        self.signals.progress_eporner))
 
-                elif isinstance(self.video, ep_Video):
-                    self.video.download_video(quality=self.quality, output_path=self.output_path,
-                                              callback=self.callback_eporner, no_title=True)
+        elif isinstance(self.video, xn_Video):  # Assuming 'xn_Video' is the class for XNXX
+            self.video.download(downloader=self.threading_mode, output_path=self.output_path,
+                                quality=self.quality,
+                                callback=lambda pos, total: self.generic_callback(pos, total,
+                                                                                  self.signals.progress_xnxx))
 
-                elif isinstance(self.video, xn_Video):
-                    self.video.download(downloader=self.threading_mode, output_path=self.output_path,
-                                        quality=self.quality,
-                                        callback=self.wrapper_ffmpeg_xnxx)
+        elif isinstance(self.video, xv_Video):  # Assuming 'xv_Video' is the class for XVideos
+            self.video.download(downloader=self.threading_mode, output_path=self.output_path,
+                                quality=self.quality,
+                                callback=lambda pos, total: self.generic_callback(pos, total,
+                                                                                  self.signals.progress_xvideos))
 
-                elif isinstance(self.video, xv_Video):
-                    self.video.download(downloader=self.threading_mode, output_path=self.output_path,
-                                        quality=self.quality,
-                                        callback=self.wrapper_ffmpeg_xvideos)
+        # ... other video types ...
 
-            else:
-                if isinstance(self.video, Video):
-                    self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality,
-                                        display=self.callback)
-
-                elif isinstance(self.video, hq_Video):
-                    self.video.download(quality=self.quality, output_path=self.output_path,
-                                        callback=self.callback_hqporner, no_title=True)
-
-                elif isinstance(self.video, ep_Video):
-                    self.video.download_video(quality=self.quality, output_path=self.output_path,
-                                              callback=self.callback_eporner, no_title=True)
-
-                elif isinstance(self.video, xn_Video):
-                    self.video.download(downloader=self.threading_mode, output_path=self.output_path,
-                                        quality=self.quality,
-                                        callback=self.callback_xnxx)
-
-                elif isinstance(self.video, xv_Video):
-                    self.video.download(downloader=self.threading_mode, output_path=self.output_path,
-                                        quality=self.quality,
-                                        callback=self.callback_xvideos)
-
-            # ADAPTION
-
-        finally:
-            self.signals_completed.completed.emit()
+        # Emit the completed signal when done
+        self.signals_completed.completed.emit()
 
 
 class QTreeWidgetDownloadThread(QRunnable):
