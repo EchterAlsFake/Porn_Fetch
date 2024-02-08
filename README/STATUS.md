@@ -5,7 +5,7 @@
 
 
 - [] Testing
-- [] Testing (Android)
+- [x] Testing (Android) Success
 - [] Finishing CLI
 - [] Compiling / Building
 - [x] Including French translations (will need an update on the .ts)

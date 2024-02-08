@@ -24,44 +24,37 @@ __license__ = "GPL 3"
 __version__ = "3.0"
 __build__ = "android"  # android or desktop
 __author__ = "Johannes Habel"
-
-try:
-    import shutil
-    import tarfile
-    import requests
-
-    import sys
-    import os.path
-    import argparse
-    import markdown
-    import traceback
-    import zipfile
-    import src.frontend.resources
-
-    from requests.exceptions import SSLError
-    from pathlib import Path
-    from hqporner_api.api import Sort as hq_Sort, Video as hq_Video
-    from phub import Quality, download, consts
-    from src.backend.shared_functions import *
-    from itertools import islice
-
-    from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
-    from src.frontend.License import Ui_License
-    from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
-                                QTranslator, QCoreApplication)
-    from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QLabel,
-                                   QTreeWidgetItem, QButtonGroup, QFileDialog)
-    from PySide6.QtGui import QIcon, QFont
-
-
-except Exception as e:
-    from PySide6.QtWidgets import (QWidget, QApplication, QLabel,)
-
-
 total_segments = 0
 downloaded_segments = 0
 
 send_error_logs = True  # Only enabled when developing the application.
+
+import shutil
+import tarfile
+import requests
+
+import sys
+import os.path
+import argparse
+import markdown
+import traceback
+import zipfile
+import src.frontend.resources
+
+from requests.exceptions import SSLError
+from pathlib import Path
+from hqporner_api.api import Sort as hq_Sort, Video as hq_Video
+from phub import Quality, download, consts
+from src.backend.shared_functions import *
+from itertools import islice
+
+from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
+from src.frontend.License import Ui_License
+from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
+                            QTranslator, QCoreApplication)
+from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QLabel,
+                               QTreeWidgetItem, QButtonGroup, QFileDialog)
+from PySide6.QtGui import QIcon, QFont
 
 
 def send_error_log(message):
@@ -85,49 +78,25 @@ def logger_debug(e):
 
 def get_output_path(path="/storage/emulated/0/Download"):
     """
-    This will "brute" force the output path. I can't ask for runtime permissions due to some
-    issues in Qt's QFileDialog and the general build process not allowing me to use pyjnius / Kivy
-
-    This function will basically check some generic paths for storing the video files. If None was found, the user
-    will be prompted to enter one.
+    Checks if the application can write to a specified directory by attempting to create a test file.
+    If the directory does not exist or the file cannot be created, returns False.
     """
-    if send_error_logs:
-        send_error_log(f"Checking path: {path}")
-    if not str(path).endswith("/"):
-        path += "/"
-        if send_error_logs:
-            send_error_log(f"Appended /, now: {path}")
+    path = path if path.endswith("/") else f"{path}/"
+    test_file_path = f"{path}test.txt"
 
-    if os.path.exists(path):
-        if send_error_logs:
-            send_error_log(f"Path: {path} Exists")
-        if os.path.isfile(f"{path}test.txt"):
-            if send_error_logs:
-                send_error_log("File already exists")
+    try:
+        if not os.path.exists(path):
+            return False
 
+        if os.path.isfile(test_file_path):
             return True
 
-        else:
-            try:
-                with open(f"{path}test.txt", "w") as text:
-                    if send_error_logs:
-                        send_error_log(f"Trying to write: {path}text.txt")
-                    text.write("""
-                    This is a test for the Porn Fetch application to check if Porn Fetch has permissions to write into
-                    the download directory.""")
-                    if send_error_logs:
-                        send_error_log("Written test.txt")
-                    return True
+        with open(test_file_path, "w") as test_file:
+            test_file.write("Test content for permission check.")
+        return True
 
-            except Exception as e:
-                if send_error_logs:
-                    send_error_log(f"Nope: {e}")
-                logger_error(e)
-                return False
-
-    else:
-        if send_error_logs:
-            send_error_log("Returning False")
+    except Exception as e:
+        logger_error(e)
         return False
 
 
@@ -402,11 +371,13 @@ class DownloadThread(QRunnable):
                                               callback=self.callback_eporner, no_title=True)
 
                 elif isinstance(self.video, xn_Video):
-                    self.video.download(downloader=self.threading_mode, output_path=self.output_path, quality=self.quality,
+                    self.video.download(downloader=self.threading_mode, output_path=self.output_path,
+                                        quality=self.quality,
                                         callback=self.wrapper_ffmpeg_xnxx)
 
                 elif isinstance(self.video, xv_Video):
-                    self.video.download(downloader=self.threading_mode, output_path=self.output_path, quality=self.quality,
+                    self.video.download(downloader=self.threading_mode, output_path=self.output_path,
+                                        quality=self.quality,
                                         callback=self.wrapper_ffmpeg_xvideos)
 
             else:
@@ -423,11 +394,13 @@ class DownloadThread(QRunnable):
                                               callback=self.callback_eporner, no_title=True)
 
                 elif isinstance(self.video, xn_Video):
-                    self.video.download(downloader=self.threading_mode, output_path=self.output_path, quality=self.quality,
+                    self.video.download(downloader=self.threading_mode, output_path=self.output_path,
+                                        quality=self.quality,
                                         callback=self.callback_xnxx)
 
                 elif isinstance(self.video, xv_Video):
-                    self.video.download(downloader=self.threading_mode, output_path=self.output_path, quality=self.quality,
+                    self.video.download(downloader=self.threading_mode, output_path=self.output_path,
+                                        quality=self.quality,
                                         callback=self.callback_xvideos)
 
             # ADAPTION
@@ -494,7 +467,7 @@ class QTreeWidgetDownloadThread(QRunnable):
 
         self.signals.stop_undefined_range.emit()
         videos = (video_objects_pornhub + video_objects_hqporner + video_objects_eporner + video_objects_xnxx +
-                  video_objects_xvideos) # ADAPTION
+                  video_objects_xvideos)  # ADAPTION
         for video in videos:
             self.semaphore.acquire()
             logger_debug("Semaphore Acquired")
@@ -527,7 +500,7 @@ class MetadataVideos(QRunnable):
         pornstars = ",".join(self.video.pornstars if hasattr(self.video, 'pornstars') else "Unknown")
         tags = ",".join(self.video.tags if hasattr(self.video, 'tags') else self.video.categories)
         hotspots_x = ",".join(self.video.hotspots if hasattr(self.video, 'hotspots') else "unknown")
-        
+
         likes = self.video.likes if hasattr(self.video, 'likes') else "Unknown"
         dislikes = self.video.dislikes if hasattr(self.video, 'dislikes') else "Unknown"
 
@@ -537,7 +510,7 @@ class MetadataVideos(QRunnable):
 
         except (ValueError, TypeError):
             duration = str(duration)
-        
+
         data = [title, views, duration, orientation, pornstars, tags, rating, hotspots_x]
 
         self.signals.data.emit(data)
@@ -683,14 +656,13 @@ class Porn_Fetch(QWidget):
         self.button_connectors()
         self.button_groups()
         self.load_style()
-
-        if __build__ == "android":
-            self.setup_android()
-
         self.language_strings()
         self.settings_maps_initialization()
         self.load_user_settings()
         self.check_ffmpeg()
+
+        if __build__ == "android":
+            self.setup_android()
 
     def load_style(self):
         """a simple function to load the icons for the buttons"""
@@ -830,7 +802,6 @@ class Porn_Fetch(QWidget):
         self.group_api_language.addButton(self.ui.radio_api_language_dutch)
         self.group_api_language.addButton(self.ui.radio_api_language_japanese)
 
-
         self.directory_system_group = QButtonGroup()
         self.directory_system_group.addButton(self.ui.radio_directory_system_no)
         self.directory_system_group.addButton(self.ui.radio_directory_system_yes)
@@ -848,33 +819,37 @@ class Porn_Fetch(QWidget):
         self.radio_hqporner.addButton(self.ui.radio_top_porn_all_time)
 
     def setup_android(self):
-        if get_output_path():
-            self.output_path = "/storage/emulated/0/Download/"
+        logger_debug(f"Running on Android: {sys.platform}")
+        if not get_output_path():
+            self.handle_no_output_path()
+            return  # Early return to avoid setting up UI components again at the end.
 
+        self.configure_ui_for_android("/storage/emulated/0/Download/")
+
+    def handle_no_output_path(self):
+        ui_popup(QCoreApplication.tr("The output path does not exist or is not writable.", disambiguation=""))
+        text, ok = QInputDialog.getText(self, "Enter custom Path",
+                                        QCoreApplication.tr("Enter custom Path:", disambiguation=""))
+        if ok and get_output_path(text):
+            ui_popup(QCoreApplication.tr(f"Success: {text} will be used for this session!", disambiguation=""))
+            self.configure_ui_for_android(text)
         else:
-            ui_popup(QCoreApplication.tr("""
-The output path: /storage/emulated/0/Download does not exist.
-The Permission System on Android is currently not working for me. 
-If you know what you do, you can now enter a manual output path, which will be used!
-If you don't know what /storage/ even is, please just close the App.
+            ui_popup(QCoreApplication.tr("Invalid path. The application will now exit.", disambiguation=""))
+            exit()
 
-Sorry.""", disambiguation=""))
+    def configure_ui_for_android(self, path):
+        self.output_path = path
+        self.ui.lineedit_output_path.setText(self.output_path)
+        self.ui.lineedit_output_path.setReadOnly(True)
+        self.ui.button_open_file.setDisabled(True)
+        self.ui.lineedit_file.setText(QCoreApplication.tr("Not supported on Android", disambiguation=""))
+        self.ui.radio_threading_mode_ffmpeg.setDisabled(True)  # Assume ffmpeg is too much for Android in this context.
+        self.warn_about_high_performance_threading()
 
-            text, ok = QInputDialog(self).getText(self, "Enter custom Path", QCoreApplication.tr("Enter custom Path:", disambiguation=""))
-            if ok:
-                if get_output_path(text):
-                    ui_popup(QCoreApplication.tr(f"Success: {text} will be used for this session!", disambiguation=""))
-                    self.output_path = text
-                    self.ui.lineedit_output_path.setText(self.output_path)
-                    self.ui.lineedit_output_path.setReadOnly(True)
-                    self.ui.button_open_file.setDisabled(True)
-                    self.ui.lineedit_file.setText(QCoreApplication.tr("Not supported on Android", disambiguation=""))
-                    self.ui.radio_threading_mode_ffmpeg.setDisabled(True) # ffmpeg on android would be too much for this project...
-                    self.ui.radio_threading_mode_high_performance.setChecked(True)
-
-                else:
-                    ui_popup(QCoreApplication.tr("Sorry, but this path also doesn't exist, or I can't write to it. Sorry.", disambiguation=""))
-                    exit()
+    def warn_about_high_performance_threading(self):
+        if self.ui.radio_threading_mode_high_performance.isChecked():
+            ui_popup(QCoreApplication.tr("High Performance threading may cause issues on Android devices.",
+                                         disambiguation=""))
 
     def check_ffmpeg(self):
         if self.ui.radio_threading_mode_ffmpeg.isChecked() or self.conf["Performance"]["threading_mode"] == "ffmpeg":
@@ -974,6 +949,7 @@ Sorry.""", disambiguation=""))
         self.ui.button_get_brazzers_videos.clicked.connect(self.get_brazzers_videos)
         self.ui.button_list_categories.clicked.connect(self.list_categories_hqporner)
         self.ui.button_switch_hqporner.clicked.connect(self.switch_to_hqporner)
+        self.ui.button_get_random_videos.clicked.connect(self.get_random_video)
 
         # File Dialog
         self.ui.button_output_path_select.clicked.connect(self.open_output_path_dialog)
@@ -1625,7 +1601,8 @@ If no more videos are found it will break the loop and the received videos can b
         all_categories = hq_Client().get_all_categories()
 
         if not category_name in all_categories:
-            ui_popup(QCoreApplication.tr("Invalid Category. Press 'list categories' to see all possible ones.", disambiguation=""))
+            ui_popup(QCoreApplication.tr("Invalid Category. Press 'list categories' to see all possible ones.",
+                                         disambiguation=""))
 
         else:
             videos = hq_Client().get_videos_by_category(name=category_name, pages=pages)
@@ -1647,7 +1624,8 @@ If no more videos are found it will break the loop and the received videos can b
     def get_random_video(self):
         list_object = []
         video = hq_Client().get_random_video()
-        self.add_to_tree_widget_thread(list_object.append(video), search_limit=1)
+        list_object.append(video)
+        self.add_to_tree_widget_thread(list_object, search_limit=2)
 
     def show_credits(self):
         self.ui.textBrowser.setOpenExternalLinks(True)
@@ -1714,27 +1692,31 @@ def main():
         most cases.
         """
 
-    except PermissionError:
+    except PermissionError as e:
         ui_popup(
             QCoreApplication.tr("Insufficient Permissions to access something. Please run Porn Fetch as root / admin",
                                 disambiguation=""))
+        logger_error(e)
 
-    except ConnectionResetError:
+    except ConnectionResetError as e:
         ui_popup(
             QCoreApplication.tr("Connection was reset. Are you connected to a public wifi or a university's wifi? ",
                                 disambiguation=""))
+        logger_error(e)
 
-    except ConnectionError:
+    except ConnectionError as e:
         ui_popup(QCoreApplication.tr("Connection Error, please make sure you have a stable internet connection",
                                      disambiguation=""))
+        logger_error(e)
 
     except KeyboardInterrupt:
         sys.exit(0)
 
-    except SSLError:
+    except SSLError as e:
         ui_popup(QCoreApplication.tr(
             "SSLError: Your connection is blocked by your ISP / IT administrator (Firewall). If you are in a "
             "University or at school, please connect to a VPN / Proxy", disambiguation=""))
+        logger_error(e)
 
     except TypeError:
         pass
@@ -1743,6 +1725,7 @@ def main():
         ui_popup(QCoreApplication.tr(
             f"This error shouldn't happen. If you still see it it's REALLY important that you report the "
             f"following: {e}", disambiguation=""))
+        logger_error(e)
 
     except ZeroDivisionError:
         pass
