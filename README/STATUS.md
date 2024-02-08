@@ -7,7 +7,7 @@
 - [x] Testing
 - [x] Testing (Android) Success
 - [] Finishing CLI
-- [] Compiling / Building
+- [x] Compiling / Building
 - [x] Including French translations (will need an update on the .ts)
 - [x] Testing
 - [x] Updating CLI

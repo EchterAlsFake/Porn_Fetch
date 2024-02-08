@@ -15,13 +15,14 @@ from hqporner_api.api import Client as hq_Client, Video as hq_Video, Quality as 
 from hqporner_api.modules.locals import *
 from xnxx_api.xnxx_api import Client as xn_Client, Video as xn_Video
 from eporner_api.eporner_api import Client as ep_Client, Video as ep_Video
+from xvideos_api.xvideos_api import Client as xv_Client, Video as xv_Video
 from threading import Semaphore
 from rich import print as rprint
 from rich.markdown import Markdown
 from configparser import ConfigParser
 from phub import Video, Client, errors, download, Quality
 
-from src.backend.shared_functions import (strip_title, check_video, check_if_video_exists, setup_config_file,
+from src.backend.shared_functions import (strip_title, check_video, setup_config_file,
                                           logger_debug, logger_error, return_color, reset, correct_output_path)
 
 
@@ -92,6 +93,7 @@ Do you accept the License? [yes,no]""")
 {return_color()}6) HQPorner
 {return_color()}7) Settings
 {return_color()}8) Credits / Information
+{return_color()}9) Exit
 
 {return_color()}-------------------------------=>:{reset()}""")
 
@@ -118,6 +120,9 @@ Do you accept the License? [yes,no]""")
 
         elif options == "8":
             self.credits()
+
+        elif options == "9":
+            exit()
 
     def hqporner_options(self):
         options = input(f"""
@@ -245,11 +250,7 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
             title = video.title
             author = video.author.name
 
-        elif isinstance(video, xn_Video):
-            title = video.title
-            author = video.uploader
-
-        elif isinstance(video, ep_Video):
+        else:
             title = video.title
             author = video.author
 
@@ -267,9 +268,12 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
         else:
             output_path = f"{output_path}{title}"
 
-        if not check_if_video_exists(video=video, output_path=output_path):
+        if not output_path.endswith(".mp4"):
+            output_path += ".mp4"
+
+        if not os.path.exists(output_path):
             if isinstance(video, hq_Video):
-                hqporner_thread = threading.Thread(target=self.download_video_hqporner, args=(video, output_path))
+                hqporner_thread = threading.Thread(target=self.download_video_hqporner, args=(video, output_path, quality))
                 hqporner_thread.start()
 
             elif isinstance(video, Video):
@@ -284,6 +288,10 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
             elif isinstance(video, ep_Video):
                 ep_thread = threading.Thread(target=self.download_video_eporner, args=(video, output_path, quality))
                 ep_thread.start()
+            
+            elif isinstance(video, xv_Video):
+                xv_thread = threading.Thread(target=self.download_video_xvideos, args=(video, output_path, quality))
+                xv_thread.start()
 
     def download_callback(self, pos, total):
         """
@@ -318,9 +326,15 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
         logger_debug("Download Complete, releasing semaphore")
         self.semaphore.release()
 
-    def download_video_hqporner(self, video, output_path):
+    def download_video_xvideos(self, video, output_path, quality):
+        logger_debug("Starting XVideos Download!")
+        video.download(output_path=output_path, quality=quality, callback=self.download_callback, downloader=self.threading_mode)
+        logger_debug("Download Complete, releasing semaphore")
+        self.semaphore.release()
+
+    def download_video_hqporner(self, video, output_path, quality):
         logger_debug("Starting HQPorner Download!")
-        video.download(no_title=True, output_path=output_path, quality=hq_Quality.BEST, callback=self.download_callback)
+        video.download(no_title=True, output_path=output_path, quality=quality, callback=self.download_callback)
         logger_debug("Download Complete, releasing semaphore")
         self.semaphore.release()
 
