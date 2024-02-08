@@ -841,6 +841,7 @@ class Porn_Fetch(QWidget):
         self.ui.radio_threading_mode_high_performance.setDisabled(True)
         self.ui.lineedit_file.setText(QCoreApplication.tr("Not supported on Android", disambiguation=""))
         self.ui.radio_threading_mode_ffmpeg.setDisabled(True)  # Assume ffmpeg is too much for Android in this context.
+        self.threading_mode = "threaded"
         self.warn_about_high_performance_threading()
 
     def warn_about_high_performance_threading(self):
