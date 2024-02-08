@@ -25,32 +25,10 @@ __version__ = "3.0"
 __build__ = "android"  # android or desktop
 __author__ = "Johannes Habel"
 
-
-def send_error_log(message):
-    """A function to debug Porn Fetch on my local android development device"""
-    url = "http://192.168.2.103:8000/error-log/"
-    data = {"message": message}
-    requests.post(url, json=data)
-
-
-def logger_error(e):
-    print(f"{datetime.now()} : {Fore.LIGHTRED_EX}[ERROR] : {reset()} : {e}")
-    if send_error_logs:
-        send_error_log(e)
-
-
-def logger_debug(e):
-    print(f"{datetime.now()} : {Fore.LIGHTCYAN_EX}[DEBUG] : {return_color()} : {e} {reset()}")
-    if send_error_logs:
-        send_error_log(e)
-
-import requests
-
 try:
-
     import shutil
     import tarfile
-
+    import requests
 
     import sys
     import os.path
@@ -71,20 +49,38 @@ try:
     from src.frontend.License import Ui_License
     from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                                 QTranslator, QCoreApplication)
-    from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog,
+    from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QLabel,
                                    QTreeWidgetItem, QButtonGroup, QFileDialog)
     from PySide6.QtGui import QIcon, QFont
 
+
 except Exception as e:
-    logger_error(e)
+    from PySide6.QtWidgets import (QWidget, QApplication, QLabel,)
 
 
 total_segments = 0
 downloaded_segments = 0
+
 send_error_logs = True  # Only enabled when developing the application.
 
 
+def send_error_log(message):
+    """A function to debug Porn Fetch on my local android development device"""
+    url = "http://192.168.2.103:8000/error-log/"
+    data = {"message": message}
+    requests.post(url, json=data)
 
+
+def logger_error(e):
+    print(f"{datetime.now()} : {Fore.LIGHTRED_EX}[ERROR] : {reset()} : {e}")
+    if send_error_logs:
+        send_error_log(e)
+
+
+def logger_debug(e):
+    print(f"{datetime.now()} : {Fore.LIGHTCYAN_EX}[DEBUG] : {return_color()} : {e} {reset()}")
+    if send_error_logs:
+        send_error_log(e)
 
 
 def get_output_path(path="/storage/emulated/0/Download"):
@@ -389,6 +385,8 @@ class DownloadThread(QRunnable):
 
     def run(self):
         try:
+            logger_debug(f"Downloading Video to: {self.output_path}")
+
             if self.threading_mode == "FFMPEG" or self.threading_mode == download.FFMPEG:
 
                 if isinstance(self.video, Video):

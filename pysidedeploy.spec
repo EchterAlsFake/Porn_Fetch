@@ -5,7 +5,7 @@ title = main
 # of input_file
 project_dir = .
 # source file path
-input_file = main.py
+input_file = /home/asuna/PycharmProjects/Porn_Fetch/main.py
 # directory where exec is stored
 exec_directory = .
 # path to .pyproject project file
@@ -32,7 +32,7 @@ wheel_pyside = /home/asuna/PycharmProjects/Porn_Fetch/src/backend/PySide6_6.6.1_
 # path to shiboken wheel
 wheel_shiboken = /home/asuna/PycharmProjects/Porn_Fetch/src/backend/shiboken6_6.6.1_aarch64.whl
 # plugins to be copied to libs folder of the packaged application. comma separated
-plugins = platforms_qtforandroid,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle
+plugins = platforms_qtforandroid,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle
 
 [nuitka]
 # (str) specify any extra nuitka arguments
