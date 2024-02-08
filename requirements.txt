@@ -7,7 +7,6 @@ colorama
 PySide6
 requests
 hue_shift
-pymediainfo
 Markdown
 rich
 tqdm

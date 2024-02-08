@@ -6,7 +6,6 @@ git+https://github.com/EchterAlsFake/xvideos_api.git
 colorama
 requests
 hue_shift
-pymediainfo
 markdown
 rich
 tqdm

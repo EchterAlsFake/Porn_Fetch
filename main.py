@@ -52,8 +52,7 @@ from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
 from src.frontend.License import Ui_License
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                             QTranslator, QCoreApplication)
-from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QLabel,
-                               QTreeWidgetItem, QButtonGroup, QFileDialog)
+from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog,                               QTreeWidgetItem, QButtonGroup, QFileDialog)
 from PySide6.QtGui import QIcon, QFont
 
 
@@ -312,7 +311,6 @@ class DownloadThread(QRunnable):
         if not ffmpeg:
             global downloaded_segments
             downloaded_segments += 1
-            logger_debug(f"Downloaded Segments: {downloaded_segments} / Total Segments: {total_segments}")
             self.signals.total_progress.emit(downloaded_segments, total_segments)
 
     def run(self):
@@ -1034,8 +1032,25 @@ class Porn_Fetch(QWidget):
         elif self.gui_language == "system":
             self.ui.radio_ui_language_system_default.setChecked(True)
 
+        if self.conf["Video"]["directory_system"] == "1":
+            self.directory_system = True
+            self.ui.radio_directory_system_yes.setChecked(True)
+
+        elif self.conf["Video"]["directory_system"] == "0":
+            self.directory_system = False
+            self.ui.radio_directory_system_no.setChecked(True)
+
         logger_debug(f"Video Language: {self.api_language}")
         logger_debug("Loaded User Settings!")
+
+        logger_debug(f"""
+Settings:
+
+Quality: {self.quality}
+Path: {self.output_path}
+Language: {self.api_language}
+Use Directory System? : {self.directory_system}
+""")
 
     def save_user_settings(self):
         """Saves the user settings to the configuration file based on the UI state."""
@@ -1574,7 +1589,7 @@ If no more videos are found it will break the loop and the received videos can b
                                          disambiguation=""))
 
         else:
-            videos = hq_Client().get_videos_by_category(name=category_name, pages=pages)
+            videos = hq_Client().get_videos_by_category(category=category_name, pages=pages)
             search_limit = pages * 46
             self.add_to_tree_widget_thread(videos, search_limit)
 
