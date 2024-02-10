@@ -50,12 +50,13 @@ Warning: Porn Fetch is in fact against the ToS of every website. Usage is on you
 - Multiple supported websites
 - Multiple languages
 - Native Android application
+- Multiple supported Websites
 
 ## 🖥️ Supported Platforms
 - Windows 10, 11 (backward compatibility untested)
 - Linux (X11 / Wayland)
 - macOS (via source build or Python)
-- Android (recommended .apk)
+- Android (arm64-v8a)
 - ARM (native Python run)
 
 > iOS is NOT supported. Don't even try!
