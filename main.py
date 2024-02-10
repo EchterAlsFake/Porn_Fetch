@@ -618,7 +618,6 @@ class FFMPEGDownload(QRunnable):
 class Porn_Fetch(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        print(sys.platform)
         # Variable initialization:
         self.gui_language = None
         self.semaphore = None
@@ -655,6 +654,7 @@ class Porn_Fetch(QWidget):
         self.settings_maps_initialization()
         self.load_user_settings()
         self.check_ffmpeg()
+        self.switch_to_home()
 
         if __build__ == "android":
             self.setup_android()
@@ -1045,15 +1045,6 @@ class Porn_Fetch(QWidget):
 
         logger_debug(f"Video Language: {self.api_language}")
         logger_debug("Loaded User Settings!")
-
-        logger_debug(f"""
-Settings:
-
-Quality: {self.quality}
-Path: {self.output_path}
-Language: {self.api_language}
-Use Directory System? : {self.directory_system}
-""")
 
     def save_user_settings(self):
         """Saves the user settings to the configuration file based on the UI state."""
