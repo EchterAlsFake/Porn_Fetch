@@ -5,10 +5,11 @@ Information:
 3.1 may take a bit longer than expected, because I now have school again.
 
 - [x] Fixing the issue, that when you open Porn Fetch the settings are displayed
-- [] Error handling, when user entered wrong URL
+- [x] Error handling when user entered the wrong URL
+- [x] Fixing total progress callback for processed videos in file mode
 - [] Fixing the progress callback for HQPorner
 - [] Fixing the threaded presets for Android (may or may not work...)
-- [] Adding more UI Popups into the translations
+- [x] Adding more UI Popups into the translations
 - [] Code refactoring
 - [] Make functions more robust
 - [] Change README

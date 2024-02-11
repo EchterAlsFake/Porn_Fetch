@@ -55,6 +55,9 @@ from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, 
 from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog,                               QTreeWidgetItem, QButtonGroup, QFileDialog)
 from PySide6.QtGui import QIcon, QFont
 
+invalid_input_string = QCoreApplication.tr("Wrong Input, please verify the URL, category or actress!",
+                                            disambiguation="")
+
 
 def send_error_log(message):
     """A function to debug Porn Fetch on my local android development device"""
@@ -524,29 +527,36 @@ class VideoLoader(QRunnable):
     def run(self):
         try:
             video = check_video(self.url, language=self.api_language)
-            title = video.title
 
-            if isinstance(video, Video):
-                author = video.author.name
-            elif isinstance(video, hq_Video):
-                pornstars = video.pornstars
-                author = pornstars[0] if pornstars else "no_author_found"
+            if video is False:
+                ui_popup(invalid_input_string)
+
             else:
-                author = video.author
+                title = video.title
 
-            output_path = Path(self.output_path)
-            stripped_title = strip_title(title)
+                if isinstance(video, Video):
+                    author = video.author.name
 
-            if self.directory_system:
-                author_path = output_path / author
-                author_path.mkdir(parents=True, exist_ok=True)
-                output_file_path = author_path / f"{stripped_title}.mp4"
-            else:
-                output_file_path = output_path / f"{stripped_title}.mp4"
+                elif isinstance(video, hq_Video):
+                    pornstars = video.pornstars
+                    author = pornstars[0] if pornstars else "no_author_found"
+                else:
+                    author = video.author
 
-            # Emit the loaded signal with all the required information
-            self.signals.loaded.emit(video, author, stripped_title, output_file_path, self.threading_mode,
-                                     self.directory_system, self.quality)
+                output_path = Path(self.output_path)
+                stripped_title = strip_title(title)
+
+                if self.directory_system:
+                    author_path = output_path / author
+                    author_path.mkdir(parents=True, exist_ok=True)
+                    output_file_path = author_path / f"{stripped_title}.mp4"
+
+                else:
+                    output_file_path = output_path / f"{stripped_title}.mp4"
+
+                # Emit the loaded signal with all the required information
+                self.signals.loaded.emit(video, author, stripped_title, output_file_path, self.threading_mode,
+                                         self.directory_system, self.quality)
 
         except Exception as e:
             self.signals.error.emit(str(e))
@@ -754,10 +764,6 @@ class Porn_Fetch(QWidget):
 
     def language_strings(self):
         """Contains the language strings. Needed for translation"""
-        self.get_api_language_string_dialog = QCoreApplication.tr("Please enter the language code for your "
-                                                                  "language.  Example: en, de, fr, ru --=>:",
-                                                                  disambiguation=None)
-
         self.get_output_path_string_ui_popup = QCoreApplication.tr("""The specified output path doesn't exist.
         If you think, this is an error, please report it!""", disambiguation=None)
 
@@ -772,6 +778,8 @@ class Porn_Fetch(QWidget):
                                                                    disambiguation=None)
         self.get_video_thumbnail_language_string = QCoreApplication.tr("Video thumbnail saved in current directory",
                                                                        disambiguation=None)
+
+
 
     def button_groups(self):
         self.group_threading_mode = QButtonGroup()
@@ -851,10 +859,13 @@ class Porn_Fetch(QWidget):
 
     def check_ffmpeg(self):
         if self.ui.radio_threading_mode_ffmpeg.isChecked() or self.conf["Performance"]["threading_mode"] == "ffmpeg":
+            ffmpeg_string = QCoreApplication.tr("FFMPEG isn't installed on your system. I'll do this now for you.",
+                                                 disambiguation="")
+
             if sys.platform == "linux":
                 if not os.path.isfile("ffmpeg"):
                     url_linux = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
-                    ui_popup("FFMPEG isn't installed on your system. I'll do this now for you.")
+                    ui_popup(ffmpeg_string)
                     self.downloader = FFMPEGDownload(url=url_linux, extract_path=".", mode="linux")
                     self.downloader.signals.progress_signal.connect(self.update_total_progressbar)
                     self.threadpool.start(self.downloader)
@@ -864,7 +875,7 @@ class Porn_Fetch(QWidget):
             elif sys.platform == "win32":
                 if not os.path.isfile("ffmpeg.exe"):
                     url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
-                    ui_popup("FFMPEG isn't installed on your system. I'll do this now for you.")
+                    ui_popup(ffmpeg_string)
                     self.downloader = FFMPEGDownload(url=url_windows, extract_path=".", mode="windows")
                     self.downloader.signals.progress_signal.connect(self.update_total_progressbar)
                     self.threadpool.start(self.downloader)
@@ -1234,8 +1245,14 @@ If no more videos are found it will break the loop and the received videos can b
         url = self.ui.lineedit_url.text()
         api_language = self.api_language
         one_time_iterator = []
-        one_time_iterator.append(check_video(url=url, language=api_language))
-        self.add_to_tree_widget_thread(iterator=one_time_iterator, search_limit=self.search_limit)
+
+        video = check_video(url=url, language=api_language)
+        if video is False:
+            ui_popup(invalid_input_string)
+
+        else:
+            one_time_iterator.append(video)
+            self.add_to_tree_widget_thread(iterator=one_time_iterator, search_limit=self.search_limit)
 
     def start_model(self):
         search_limit = self.search_limit
@@ -1360,11 +1377,16 @@ If no more videos are found it will break the loop and the received videos can b
 
         with open(file, "r") as url_file:
             content = url_file.read().splitlines()
-
-            for url in content:
-                print(url)
+            for idx, url in enumerate(content):
                 video = check_video(url, language=self.api_language)
-                iterator.append(video)
+                if video is False:
+                    ui_popup(invalid_input_string)
+
+                else:
+                    iterator.append(video)
+
+                self.ui.progressbar_total.setMaximum(len(content))
+                self.ui.progressbar_total.setValue(idx)
 
             self.add_to_tree_widget_thread(iterator, search_limit=self.search_limit)
 
@@ -1447,7 +1469,10 @@ If no more videos are found it will break the loop and the received videos can b
         video = self.ui.lineedit_metadata_video_url.text()
         video = check_video(url=video, language=api_language)
 
-        if not video is False:
+        if video is False:
+            ui_popup(invalid_input_string)
+
+        else:
             self.metadata_thread = MetadataVideos(video)
             self.metadata_thread.signals.start_undefined.connect(self.start_undefined_range)
             self.metadata_thread.signals.data.connect(self.apply_metadata_video)
@@ -1551,9 +1576,14 @@ If no more videos are found it will break the loop and the received videos can b
         api_language = self.api_language
         url = self.ui.lineedit_metadata_video_url.text()
         video = check_video(url=url, language=api_language)
-        video.image.download(Path(self.output_path))
-        user_string = self.get_video_thumbnail_language_string
-        ui_popup(user_string)
+
+        if video is False or not isinstance(video, Video):
+            ui_popup(invalid_input_string)
+
+        else:
+            video.image.download(Path(self.output_path))
+            user_string = self.get_video_thumbnail_language_string
+            ui_popup(user_string)
 
     def get_top_porn_hqporner(self):
         if self.ui.radio_top_porn_week.isChecked():

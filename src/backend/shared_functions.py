@@ -71,49 +71,57 @@ def logger_debug(e):
     print(f"{datetime.now()} : {Fore.LIGHTCYAN_EX}[DEBUG] : {return_color()} : {e} {reset()}")
 
 
-def check_video(url, language):
-    if str(url).endswith(".html"):
-        return hq_Client().get_video(url)
+def check_video(url, language, is_url=True):
 
-    regex_eporner_url = re.compile(r"eporner.com/(.*?)")
-    regex_xnxx_url = re.compile(r"xnxx.com(.*?)")
-    regex_xvideos_url = re.compile(r'xvideos.com(.*?)')
+    if is_url:
+        regex_eporner_url = re.compile(r"eporner.com/(.*?)")
+        regex_xnxx_url = re.compile(r"xnxx.com(.*?)")
+        regex_xvideos_url = re.compile(r'xvideos.com(.*?)')
 
-    if regex_eporner_url.search(str(url)):
-        return ep_Client().get_video(url, enable_html_scraping=True)
+        if str(url).endswith(".html"):
+            return hq_Client().get_video(url)
 
-    elif regex_xnxx_url.search(str(url)):
-        return xn_Client().get_video(url)
+        elif regex_eporner_url.search(str(url)):
+            return ep_Client().get_video(url, enable_html_scraping=True)
 
-    elif regex_xvideos_url.search(str(url)):
-        return xv_Client().get_video(url)
+        elif regex_xnxx_url.search(str(url)):
+            return xn_Client().get_video(url)
 
-    else:
+        elif regex_xvideos_url.search(str(url)):
+            return xv_Client().get_video(url)
+
         if isinstance(url, Video):
             url.fetch("page@")
             return url
 
-        if isinstance(url, hq_Video):
+        elif isinstance(url, hq_Video):
             return url
 
-        if isinstance(url, ep_Video):
+        elif isinstance(url, ep_Video):
             return url
 
-        if isinstance(url, xn_Video):
+        elif isinstance(url, xn_Video):
             return url
 
-        if isinstance(url, xv_Video):
+        elif isinstance(url, xv_Video):
             return url
 
-        if isinstance(url, str) and not str(url).endswith(".html"):
+        elif isinstance(url, str) and not str(url).endswith(".html"):
             try:
                 video = Client(language=language).get(url)
                 video.fetch("page@")
                 return video
 
-            except errors.URLError:
-                logger_error(f"Invalid URL! : {url}")
+            except Exception:
                 return False
+
+        else:
+            return False
+
+    else:
+        pass
+
+        # TODO
 
 
 def strip_title(title):
