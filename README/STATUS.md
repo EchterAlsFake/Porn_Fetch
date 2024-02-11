@@ -13,7 +13,7 @@ Information:
 - [] Code refactoring
 - [] Make functions more robust
 - [] Change README
-- [] Adding a Disclaimer into the License Agreement, that Porn Fetch is against ToS
+- [x] Adding a Disclaimer into the License Agreement, that Porn Fetch is against ToS
 - [] Renaming UI things, so that they make more sense
 - [] Improve the load_style function
 - [] Updating the CLI
