@@ -7,6 +7,7 @@ Information:
 - [x] Fixing the issue, that when you open Porn Fetch the settings are displayed
 - [x] Error handling when user entered the wrong URL
 - [x] Fixing total progress callback for processed videos in file mode
+- [x] Fixing the issue, that the downloaded ffmpeg .zip isn't deleted on windows
 - [] Fixing the progress callback for HQPorner
 - [] Fixing the threaded presets for Android (may or may not work...)
 - [x] Adding more UI Popups into the translations

@@ -52,11 +52,12 @@ from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
 from src.frontend.License import Ui_License
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                             QTranslator, QCoreApplication)
-from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog,                               QTreeWidgetItem, QButtonGroup, QFileDialog)
+from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QTreeWidgetItem, QButtonGroup,
+                               QFileDialog)
 from PySide6.QtGui import QIcon, QFont
 
 invalid_input_string = QCoreApplication.tr("Wrong Input, please verify the URL, category or actress!",
-                                            disambiguation="")
+                                           disambiguation="")
 
 
 def send_error_log(message):
@@ -67,12 +68,14 @@ def send_error_log(message):
 
 
 def logger_error(e):
+    """Simple mechanism of printing error messages"""
     print(f"{datetime.now()} : {Fore.LIGHTRED_EX}[ERROR] : {reset()} : {e}")
     if send_error_logs:
         send_error_log(e)
 
 
 def logger_debug(e):
+    """Simple mechanism of printing debug messages"""
     print(f"{datetime.now()} : {Fore.LIGHTCYAN_EX}[DEBUG] : {return_color()} : {e} {reset()}")
     if send_error_logs:
         send_error_log(e)
@@ -110,6 +113,7 @@ def ui_popup(text):
 
 
 class WorkerSignals(QObject):
+    """Signals for the Download class"""
     progress = Signal(int)
     completed = Signal()
 
@@ -183,7 +187,7 @@ class License(QWidget):
             self.conf.write(config_file)
             config_file.close()
             self.close()
-            sys.exit(0)
+            sys.exit(0)  # exiting if user denied
 
     def show_main_window(self):
         """ If license was accepted, the License widget is closed and the main widget will be shown."""
@@ -209,6 +213,7 @@ class AddToTreeWidget(QRunnable):
         duration = disabled
         author = disabled
 
+        # Checks which mode is selected by the user and loads the video attributes
         if self.data_mode == 1:
             if isinstance(video, (hq_Video, xn_Video, xv_Video)):
                 duration = str(video.length)
@@ -242,19 +247,19 @@ class AddToTreeWidget(QRunnable):
             if self.reverse:
                 # Use islice to limit the number of items fetched from the iterator
                 videos = list(islice(self.iterator, self.search_limit))
-                videos.reverse()  # Reverse the list
+                videos.reverse()  # Reverse the list (to show videos in reverse order)
 
             else:
                 videos = islice(self.iterator, self.search_limit)
 
                 for i, video in enumerate(videos, start=1):
                     if i == self.search_limit + 1:
-                        break
+                        break  # The search limit prevents an infinite loop
 
                     text_data = self.process_video(video, i)
 
-                    self.signals.progress.emit(self.search_limit, i)
-                    self.signals.text_data.emit(text_data)
+                    self.signals.progress.emit(self.search_limit, i)  # sends the current progress
+                    self.signals.text_data.emit(text_data)  # sends the data to the main class
 
         except errors.NoResult:
             pass
@@ -305,7 +310,7 @@ class DownloadThread(QRunnable):
     def update_ffmpeg_progress(self, pos, total):
         """Update progress for FFmpeg downloads."""
         video_title = self.video.title
-        self.video_progress[video_title] = pos / total * 100
+        self.video_progress[video_title] = pos / total * 100  # video title as video id, to keep track which video has how many progress done
         total_progress = sum(self.video_progress.values()) / len(self.video_progress)
         self.signals.total_progress.emit(total_progress, 100)
 
@@ -326,37 +331,44 @@ class DownloadThread(QRunnable):
             path = self.output_path
             try:
                 self.video.download(downloader=self.threading_mode, path=path, quality=self.quality,
-                                display=lambda pos, total: self.generic_callback(pos, total, self.signals.progress, video_source))
+                                    display=lambda pos, total: self.generic_callback(pos, total, self.signals.progress,
+                                                                                     video_source))
 
             except TypeError:
                 self.video.download(downloader=self.threading_mode, path=path, quality=self.quality,
-                                    display=lambda pos, total: self.generic_callback(pos, total, self.signals.progress, video_source))
+                                    display=lambda pos, total: self.generic_callback(pos, total, self.signals.progress,
+                                                                                     video_source))
 
-        elif isinstance(self.video, hq_Video):  # Assuming 'hq_Video' is the class for HQPorner
+        # We need to specify the sources, so that it knows which individual progressbar to use
+        elif isinstance(self.video, hq_Video):
             video_source = "hqporner"
             self.video.download(quality=self.quality, output_path=self.output_path,
                                 callback=lambda pos, total: self.generic_callback(pos, total,
-                                                                                  self.signals.progress_hqporner, video_source))
+                                                                                  self.signals.progress_hqporner,
+                                                                                  video_source))
 
-        elif isinstance(self.video, ep_Video):  # Assuming 'ep_Video' is the class for EPorner
+        elif isinstance(self.video, ep_Video):
             video_source = "eporner"
             self.video.download_video(quality=self.quality, output_path=self.output_path,
                                       callback=lambda pos, total: self.generic_callback(pos, total,
-                                                                                        self.signals.progress_eporner, video_source))
+                                                                                        self.signals.progress_eporner,
+                                                                                        video_source))
 
-        elif isinstance(self.video, xn_Video):  # Assuming 'xn_Video' is the class for XNXX
+        elif isinstance(self.video, xn_Video):
             video_source = "xnxx"
             self.video.download(downloader=self.threading_mode, output_path=self.output_path,
                                 quality=self.quality,
                                 callback=lambda pos, total: self.generic_callback(pos, total,
-                                                                                  self.signals.progress_xnxx, video_source))
+                                                                                  self.signals.progress_xnxx,
+                                                                                  video_source))
 
-        elif isinstance(self.video, xv_Video):  # Assuming 'xv_Video' is the class for XVideos
+        elif isinstance(self.video, xv_Video):
             video_source = "xvideos"
             self.video.download(downloader=self.threading_mode, output_path=self.output_path,
                                 quality=self.quality,
                                 callback=lambda pos, total: self.generic_callback(pos, total,
-                                                                                  self.signals.progress_xvideos, video_source))
+                                                                                  self.signals.progress_xvideos,
+                                                                                  video_source))
 
         # ... other video types ...
 
@@ -377,56 +389,39 @@ class QTreeWidgetDownloadThread(QRunnable):
 
     def run(self):
         self.signals.start_undefined_range.emit()
-        video_objects_hqporner = []
-        video_objects_pornhub = []
-        video_objects_eporner = []
-        video_objects_xnxx = []
-        video_objects_xvideos = []
-        # ADAPTION
+        video_objects = []
 
         for i in range(self.treeWidget.topLevelItemCount()):
             item = self.treeWidget.topLevelItem(i)
             checkState = item.checkState(0)
             if checkState == Qt.Checked:
-                object_ = item.data(0, Qt.UserRole)
-                if isinstance(object_, hq_Video):
-                    video_objects_hqporner.append(object_)
-
-                elif isinstance(object_, Video):
-                    video_objects_pornhub.append(object_)
-
-                elif isinstance(object_, ep_Video):
-                    video_objects_eporner.append(object_)
-
-                elif isinstance(object_, xn_Video):
-                    video_objects_xnxx.append(object_)
-
-                elif isinstance(object_, xv_Video):
-                    video_objects_xvideos.append(object_)
-                # ADAPTION
+                video_objects.append(item.data(0, Qt.UserRole))
 
         if not self.threading_mode == "FFMPEG":
             global total_segments, downloaded_segments
             total_segments = sum(
-                [len(list(video.get_segments(quality=self.quality))) for video in video_objects_pornhub +
-                 video_objects_xnxx + video_objects_xvideos])  # ADAPTION
+                [len(list(video.get_segments(quality=self.quality))) for video in video_objects if
+                 hasattr(video, 'get_segments')])
+
+            # This basically looks how many segments exist in all videos together, so that we can calculate the total
+            # progress
 
         else:
+            # FFMPEG has always 0-100 as progress callback, that is why I specify 100 for each video instead of the
+            # total segments
             counter = 0
-            for _ in video_objects_pornhub + video_objects_xnxx + video_objects_xvideos:
+            for _ in video_objects:
                 counter += 100
 
             total_segments = counter
 
         downloaded_segments = 0
-
         self.signals.stop_undefined_range.emit()
-        videos = (video_objects_pornhub + video_objects_hqporner + video_objects_eporner + video_objects_xnxx +
-                  video_objects_xvideos)  # ADAPTION
-        for video in videos:
-            self.semaphore.acquire()
+
+        for video in video_objects:
+            self.semaphore.acquire()  # Trying to start the download if the thread isn't locked
             logger_debug("Semaphore Acquired")
-            self.signals.progress.emit(video)
+            self.signals.progress.emit(video)  # Now emits the video to the main class for further processing
 
 
 class MetadataVideos(QRunnable):
@@ -438,7 +433,11 @@ class MetadataVideos(QRunnable):
         self.video = video
 
     def run(self):
-        self.signals.start_undefined.emit()
+        """
+        Loads all metadata for videos. Since we don't have all variables on every website, I cna load them if they are
+        available, which is why I always check with the hasattribute method.
+        """
+        self.signals.start_undefined.emit()  # This btw starts the undefined range in the total bar. (Loading animation)
 
         like_string = QCoreApplication.tr("Likes", disambiguation="The Likes of the video")
         dislike_string = QCoreApplication.tr("Dislikes", disambiguation="The dislikes of the video")
@@ -464,7 +463,7 @@ class MetadataVideos(QRunnable):
 
         data = [title, views, duration, orientation, pornstars, tags, rating, hotspots_x]
 
-        self.signals.data.emit(data)
+        self.signals.data.emit(data)  # Send the data to the main class, so that they can be applied to the lineedits
 
 
 class MetadataUser(QRunnable):
@@ -509,6 +508,7 @@ class MetadataUser(QRunnable):
 
 
 class VideoLoaderSignals(QObject):
+    """Signals for the Video Loader class to handle the loading of videos"""
     loaded = Signal(object, str, str, object, str, bool, str)
     error = Signal(str)
 
@@ -544,9 +544,10 @@ class VideoLoader(QRunnable):
                     author = video.author
 
                 output_path = Path(self.output_path)
-                stripped_title = strip_title(title)
+                stripped_title = strip_title(title)  # Strip the title, so that videos with special chars can be saved
+                # on windows. Would raise an OSError otherwise
 
-                if self.directory_system:
+                if self.directory_system:  # If the directory system is enabled, this will create an additional folder
                     author_path = output_path / author
                     author_path.mkdir(parents=True, exist_ok=True)
                     output_file_path = author_path / f"{stripped_title}.mp4"
@@ -563,10 +564,12 @@ class VideoLoader(QRunnable):
 
 
 class FFMPEGSignals(QObject):
+    """The progress for the ffmpeg download and extraction process"""
     progress_signal = Signal(int, int)
 
 
 class FFMPEGDownload(QRunnable):
+    """Downloads ffmpeg into the execution path of Porn Fetch"""
     def __init__(self, url, extract_path, mode):
         super().__init__()
         self.url = url
@@ -619,10 +622,10 @@ class FFMPEGDownload(QRunnable):
         os.remove(filename)  # Clean up downloaded archive
 
         if sys.platform == "linux":
-            os.removedirs("ffmpeg-6.1-amd64-static")
+            shutil.rmtree("ffmpeg-6.1-amd64-static")
 
         elif sys.platform == "win32":
-            os.removedirs("ffmpeg-6.1.1-essentials_build")
+            shutil.rmtree("ffmpeg-6.1.1-essentials_build")
 
 
 class Porn_Fetch(QWidget):
@@ -779,9 +782,10 @@ class Porn_Fetch(QWidget):
         self.get_video_thumbnail_language_string = QCoreApplication.tr("Video thumbnail saved in current directory",
                                                                        disambiguation=None)
 
-
-
     def button_groups(self):
+        """
+        The button groups are needed to tell the radio button which of them are in a group.
+        If I don't do this, then you could check all redio buttons at the same time lol"""
         self.group_threading_mode = QButtonGroup()
         self.group_threading_mode.addButton(self.ui.radio_threading_mode_ffmpeg)
         self.group_threading_mode.addButton(self.ui.radio_threading_mode_default)
@@ -822,6 +826,7 @@ class Porn_Fetch(QWidget):
         self.radio_hqporner.addButton(self.ui.radio_top_porn_all_time)
 
     def setup_android(self):
+        """Sets up for Porn Fetch for Android devices"""
         logger_debug(f"Running on Android: {sys.platform}")
         if not get_output_path():
             self.handle_no_output_path()
@@ -841,6 +846,7 @@ class Porn_Fetch(QWidget):
             exit()
 
     def configure_ui_for_android(self, path):
+        """Disables some things on Android which just don't work yet"""
         self.output_path = path
         self.ui.lineedit_output_path.setText(self.output_path)
         self.ui.lineedit_output_path.setReadOnly(True)
@@ -860,7 +866,7 @@ class Porn_Fetch(QWidget):
     def check_ffmpeg(self):
         if self.ui.radio_threading_mode_ffmpeg.isChecked() or self.conf["Performance"]["threading_mode"] == "ffmpeg":
             ffmpeg_string = QCoreApplication.tr("FFMPEG isn't installed on your system. I'll do this now for you.",
-                                                 disambiguation="")
+                                                disambiguation="")
 
             if sys.platform == "linux":
                 if not os.path.isfile("ffmpeg"):
@@ -882,6 +888,7 @@ class Porn_Fetch(QWidget):
 
                 consts.FFMPEG_EXECUTABLE = "ffmpeg.exe"
 
+    """These functions are used to switch to different widgets. Basically this is the sidebar at the left"""
     def switch_to_account(self):
         self.ui.stacked_widget_top.setCurrentIndex(1)
         self.ui.stacked_widget_main.setCurrentIndex(0)
@@ -966,6 +973,7 @@ class Porn_Fetch(QWidget):
         logger_debug("Connected Buttons!")
 
     def switch_login_button_state(self):
+        """If user is logged in, I'll change the stylesheets of the buttons"""
         file = QFile(":/style/stylesheets/stylesheet_switch_buttons_login_state.qss")
         file.open(QFile.ReadOnly | QFile.Text)
         stream = QTextStream(file)
