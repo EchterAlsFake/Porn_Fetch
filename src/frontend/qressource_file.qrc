@@ -21,7 +21,7 @@
         <file>stylesheets/stylesheet_button_blue.qss</file>
         <file>stylesheets/stylesheet_button_orange.qss</file>
         <file>stylesheets/stylesheet_button_purple.qss</file>
-        <file>stylesheets/stylesheet_button_login.qss</file>
+        <file>stylesheets/stylesheet_button_green.qss</file>
         <file>stylesheets/stylesheet_buttons_login.qss</file>
         <file>stylesheets/stylesheet_switch_buttons_login_state.qss</file>
     </qresource>

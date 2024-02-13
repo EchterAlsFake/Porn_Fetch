@@ -1,295 +1,189 @@
 QWidget {
-color: white;
-background-color: rgb(60, 60, 60);
-border: none;
-font-size: 12px;
+    color: #E0E0E0;
+    background-color: #2E2E2E;
+    border: none;
+    font-size: 12px;
 }
 
 QLineEdit {
-    border: 2px solid #444;
+    border: 1px solid #444;
     border-radius: 4px;
     padding: 5px;
-    background-color: #333;
-    color: #DDD;
-    font-size: 12px;
+    background-color: #3C3C3C;
+    color: #E0E0E0;
 }
+
 QLineEdit:focus {
     border: 2px solid #5599FF;
 }
+
 QRadioButton {
-    color: #dcdcdc; /* Light grey text */
-    spacing: 5px; /* Space between the radio button and its label */
-    font-size: 12px;
+    color: #E0E0E0;
+    spacing: 5px;
 }
 
 QRadioButton::indicator {
     width: 13px;
     height: 13px;
-    border-radius: 7px; /* Circular indicator */
+    border-radius: 7px;
 }
 
 QRadioButton::indicator:unchecked {
-    background-color: #555; /* Dark background for unchecked state */
-    border: 2px solid #777; /* Slightly lighter border */
+    background-color: #555;
+    border: 1px solid #777;
 }
 
 QRadioButton::indicator:checked {
-    background-color: #7a7aff; /* Bright color for checked state */
-    border: 2px solid #5a5aff; /* Border slightly darker than the background */
+    background-color: #7A7AFF;
+    border: 1px solid #5A5AFF;
 }
 
-QRadioButton::indicator:checked:hover,
-QRadioButton::indicator:unchecked:hover {
-    border-color: #9a9aff; /* Change border color on hover */
+QRadioButton::indicator:hover {
+    border-color: #9A9AFF;
 }
-
 
 QSlider::groove:horizontal {
-    border: 1px solid #5a2a82;
+    border: 1px solid #5A2A82;
     height: 8px;
-    background: #e0e0e0;
-    margin: 0px;
+    background: #333;
     border-radius: 4px;
 }
 
 QSlider::handle:horizontal {
-    background: #5a2a82;
-    border: 1px solid #5a2a82;
+    background: #5A2A82;
+    border: 1px solid #5A2A82;
     width: 18px;
     margin: -6px 0;
     border-radius: 9px;
 }
 
-QSlider::add-page:horizontal {
-    background: #e0e0e0;
-}
-
 QSlider::sub-page:horizontal {
-    background: #5a2a82;
+    background: #5A2A82;
 }
 
 QTreeWidget {
-    background-color: rgb(60, 60, 60);
-    color: white;
-    border: 2px solid green;
+    background-color: #2E2E2E;
+    border: 1px solid #3A9D23;
     border-radius: 5px;
-    font-size: 12px;
 }
 
 QTreeWidget QHeaderView::section {
-    background-color: rgb(94, 94, 94);
-    color: white;
-    border: 1px solid #5a2a82;
-    padding: 4px;
-    font-size: 12px;
+    background-color: #3C3C3C;
+    border: 1px solid #5A2A82;
 }
 
-/* QGroupBox */
 QGroupBox {
-    border: 2px solid #4CAF50; /* Border color for the group box */
+    border: 2px solid #4CAF50;
     border-radius: 5px;
-    margin-top: 10px; /* Adjust top margin as needed */
-    padding: 5px; /* Add some padding inside the group box */
-    font-size: 12px;
+    margin-top: 10px;
+    padding: 5px;
 }
 
-/* Title text of the QGroupBox */
 QGroupBox::title {
     subcontrol-origin: margin;
     subcontrol-position: top center;
-    padding: 0 5px; /* Add padding for title text */
-    background-color: #4CAF50; /* Background color for the title bar */
-    color: white; /* Title text color */
-    border: 1px solid #4CAF50; /* Border color for the title bar */
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-    font-size: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid #4CAF50;
 }
 
-/* Apply style to all child widgets within the QGroupBox */
-QGroupBox QWidget {
-    margin: 3px; /* Adjust margin for child widgets */
-}
-
-/* Style for child QLabel elements within the QGroupBox */
-QGroupBox QLabel {
-    font-weight: bold; /* Make text bold for labels */
-    font-size: 12px;
-}
-
-/* Style for child QPushButton elements within the QGroupBox */
 QGroupBox QPushButton {
-    background-color: #4CAF50; /* Background color for buttons */
-    color: white; /* Button text color */
-    border: 1px solid #4CAF50; /* Button border color */
-    border-radius: 3px; /* Button border radius */
-    padding: 5px 10px; /* Add padding to buttons */
+    background-color: #4CAF50;
+    border: 1px solid #4CAF50;
+    border-radius: 3px;
+    padding: 5px 10px;
 }
 
-/* Hover effect for QPushButton */
 QGroupBox QPushButton:hover {
-    background-color: #66BB6A; /* Lighter green color on hover */
-    border-color: #66BB6A; /* Border color changes on hover */
+    background-color: #66BB6A;
 }
 
-/* Pressed effect for QPushButton */
 QGroupBox QPushButton:pressed {
-    background-color: #388E3C; /* Darker green color when pressed */
-    border-color: #388E3C; /* Border color changes when pressed */
-}
-
-/* Style for child QComboBox elements within the QGroupBox */
-QGroupBox QComboBox {
-    border: 1px solid #4CAF50; /* Border color for combo boxes */
-    border-radius: 3px; /* Combo box border radius */
-    padding: 3px; /* Add padding to combo boxes */
+    background-color: #388E3C;
 }
 
 QLabel {
-    color: #DDD;
+    color: #E0E0E0;
     padding: 2px;
     font-size: 12px;
-}
-QPushButton {
-    color: #dcdcdc; /* Light grey text */
-    padding: 5px; /* Space inside the button */
-    border-radius: 7px; /* Rounded corners like the circular indicator */
-    border: 2px solid #777; /* Slightly lighter border */
-    background-color: #555; /* Dark background for unchecked state */
-    font-size: 12px;
+    border: none; /* Removed border from QLabel */
 }
 
-QPushButton:checked {
-    background-color: #7a7aff; /* Bright color for checked state */
-    border: 2px solid #5a5aff; /* Border slightly darker than the background */
+QPushButton, QCheckBox {
+    color: #E0E0E0;
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #555;
+    background-color: #3C3C3C;
 }
 
 QPushButton:hover {
-    border-color: #9a9aff; /* Change border color on hover */
+    border-color: #9A9AFF;
 }
 
-QPushButton:checked:hover {
-    border-color: #9a9aff; /* Keep consistent hover effect when checked */
-}
 QCheckBox {
-    color: #dcdcdc; /* Light grey text */
-    spacing: 5px; /* Space between the checkbox and its label */
+    spacing: 5px; /* Adjust spacing between the checkbox and its label */
 }
 
 QCheckBox::indicator {
     width: 15px;
     height: 15px;
-    border: 2px solid #777; /* Border color */
-}
-
-QCheckBox::indicator:unchecked {
-    background-color: #555; /* Dark background for unchecked state */
-}
-
-QCheckBox::indicator:checked {
-    image: url(':/images/graphics/unread.svg');
-    /* Here you can add your custom icon */
+    border: 1px solid #555;
+    border-radius: 4px; /* Rounded corners for the checkbox indicator */
 }
 
 QCheckBox::indicator:hover {
-    border-color: #9a9aff; /* Change border color on hover */
+    border-color: #9A9AFF;
+}
+
+QCheckBox::indicator:checked {
+    background-color: #9A9AFF;
+    image: url(':/images/graphics/unread.svg'); /* Use your own checked icon */
+}
+
+QCheckBox::indicator:unchecked {
+    background-color: #3C3C3C;
 }
 
 QCheckBox::indicator:checked:hover {
-    background-color: #8a8aff; /* Slightly lighter background on hover */
+    background-color: #9A9AFF; /* Slightly different or the same as checked to indicate active hover */
+}
+
+QCheckBox::indicator:unchecked:hover {
+    background-color: #555; /* Provide visual feedback for hover on unchecked */
 }
 
 QSpinBox {
-    color: #DDD; /* Text color */
-    background-color: #333; /* Background color */
-    border: 2px solid #444; /* Border color */
-    border-radius: 4px; /* Rounded corners */
-    padding: 5px; /* Padding inside the spin box */
-    font-size: 12px;
+    background-color: #3C3C3C;
+    border: 1px solid #444;
+    padding: 5px;
 }
 
-QSpinBox::up-button {
-    subcontrol-origin: border;
-    subcontrol-position: top right; /* Position on the top right */
-    width: 15px; /* Width of the button */
-    border-left: 1px solid #444; /* Border to separate from the down button */
-    background-color: #555; /* Background color */
-}
-
-QSpinBox::down-button {
-    subcontrol-origin: border;
-    subcontrol-position: bottom right; /* Position on the bottom right */
-    width: 15px; /* Width of the button */
-    background-color: #555; /* Background color */
-}
-
-QSpinBox::up-arrow {
-    image: url(':/images/graphics/top-arrow.ico'); /* Custom up arrow icon */
-    width: 7px; /* Width of the arrow */
-    height: 7px; /* Height of the arrow */
-}
-
-QSpinBox::down-arrow {
-    image: url(':/images/graphics/down-arrow.ico'); /* Custom down arrow icon */
-    width: 7px; /* Width of the arrow */
-    height: 7px; /* Height of the arrow */
+QSpinBox::up-button, QSpinBox::down-button {
+    background-color: #555;
 }
 
 QSpinBox::up-button:hover, QSpinBox::down-button:hover {
-    background-color: #666; /* Slightly lighter background on hover */
-}
-
-QSpinBox::up-button:pressed, QSpinBox::down-button:pressed {
-    background-color: #777; /* Slightly darker background when pressed */
+    background-color: #666;
 }
 
 QSpinBox:focus {
-    border: 2px solid #5599FF; /* Focus border color */}
-
-QScrollArea {
-    border: 2px solid #5D1049; /* Dark purple border */
-    background-color: #F0F0F0; /* Light background for the area */
+    border: 2px solid #5599FF;
 }
 
-QScrollBar:vertical {
-    border: 1px solid #5D1049; /* Dark purple border */
-    background: #E0E0E0; /* Light background for the scrollbar */
-    width: 15px; /* Increased width for better visibility */
-    margin: 22px 0 22px 0; /* Top and bottom margin */
-}
-
-QScrollBar::handle:vertical {
-    background: #9A55D3; /* Purple for the handle */
-    min-height: 20px; /* Minimum height for the handle */
-}
-
-QScrollBar::add-line:vertical {
+QScrollArea, QScrollBar {
     border: 1px solid #5D1049;
+    background-color: #3C3C3C;
+}
+
+QScrollBar::handle {
     background: #9A55D3;
-    height: 20px; /* Increased height for the arrow area */
-    subcontrol-position: bottom;
-    subcontrol-origin: margin;
 }
 
-QScrollBar::sub-line:vertical {
-    border: 1px solid #5D1049;
+QScrollBar::add-line, QScrollBar::sub-line {
     background: #9A55D3;
-    height: 20px; /* Increased height for the arrow area */
-    subcontrol-position: top;
-    subcontrol-origin: margin;
 }
 
-QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
-    border: 1px solid #5D1049;
-    width: 15px; /* Width of the arrow */
-    height: 15px; /* Height of the arrow */
-    background: #5D1049; /* Dark purple background for the arrow */
-}
-
-QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
-    background: none;
-}
-
-QScrollBar:horizontal {
-    /* You can add similar properties for horizontal scrollbar if needed */
+QScrollBar::up-arrow, QScrollBar::down-arrow {
+    background: #5D1049;
 }

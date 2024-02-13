@@ -1,26 +1,16 @@
 QPushButton {
-    /* Base style */
-    background-color: rgba(255, 162, 0, 170); /* Purple background */
-	color: rgb(255, 162, 0);
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
+    background-color: rgba(255, 162, 0, 170); /* Semi-transparent orange */
+    font: bold 12px;
+    min-width: 8em;
+    padding: 4px;
+    color: white;
+    border-radius: 8px;
 }
 
 QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
+    background-color: #9575CD; /* Lighter violet */
 }
 
 QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look "pressed" */
+    background-color: #303F9F; /* Dark blue */
 }

@@ -32,6 +32,7 @@ send_error_logs = False  # Only enabled when developing the application.
 import shutil
 import tarfile
 import requests
+import time
 
 import sys
 import os.path
@@ -280,6 +281,7 @@ class DownloadThread(QRunnable):
         self.signals = DownloadProgressSignal()
         self.signals_completed = WorkerSignals()
         self.video_progress = {}
+        self.last_update_time = 0
         self.progress_signals = {
             'pornhub': self.signals.progress,
             'hqporner': self.signals.progress_hqporner,
@@ -297,15 +299,21 @@ class DownloadThread(QRunnable):
         }.get(mode, download.default)
 
     def generic_callback(self, pos, total, signal, video_source, ffmpeg=False):
-        """Generic callback function to emit progress signals."""
-        if ffmpeg:
-            self.update_ffmpeg_progress(pos, total)
-        else:
-            # Emit signal for individual progress
-            signal.emit(pos, total)
-            # Update total progress only if the video source uses segments
-            if video_source not in ['hqporner', 'eporner']:
-                self.update_total_progress(ffmpeg)
+        """Generic callback function to emit progress signals with rate limiting."""
+        current_time = time.time()  # Get current time
+
+        # Check if 0.5 seconds have passed since last update
+        if current_time - self.last_update_time >= 0.5:
+            if ffmpeg:
+                self.update_ffmpeg_progress(pos, total)
+            else:
+                # Emit signal for individual progress
+                signal.emit(pos, total)
+                # Update total progress only if the video source uses segments
+                if video_source not in ['hqporner', 'eporner']:
+                    self.update_total_progress(ffmpeg)
+
+            self.last_update_time = current_time  # Update the last update time
 
     def update_ffmpeg_progress(self, pos, total):
         """Update progress for FFmpeg downloads."""
@@ -672,97 +680,86 @@ class Porn_Fetch(QWidget):
         if __build__ == "android":
             self.setup_android()
 
+    def load_stylesheet(self, path):
+        """Load stylesheet from a given path with explicit open and close."""
+        file = QFile(path)
+        if not file.open(QFile.ReadOnly | QFile.Text):
+            logger_debug(f"Failed to open {path}")
+            return ""
+        stylesheet = QTextStream(file).readAll()
+        file.close()
+        return stylesheet
+
     def load_style(self):
-        """a simple function to load the icons for the buttons"""
-        self.ui.button_switch_home.setIcon(QIcon(":/images/graphics/download.svg"))
-        self.ui.button_switch_settings.setIcon(QIcon(":/images/graphics/settings.svg"))
-        self.ui.button_switch_credits.setIcon(QIcon(":/images/graphics/information.svg"))
-        self.ui.button_switch_metadata.setIcon(QIcon(":/images/graphics/list.svg"))
-        self.ui.button_switch_account.setIcon(QIcon(":/images/graphics/account.svg"))
+        """Refactored function to load icons and stylesheets."""
+        # Setting icons with a loop if applicable
+        icons = {
+            self.ui.button_switch_home: "download.svg",
+            self.ui.button_switch_settings: "settings.svg",
+            self.ui.button_switch_credits: "information.svg",
+            self.ui.button_switch_metadata: "list.svg",
+            self.ui.button_switch_account: "account.svg",
+        }
+        for button, icon_name in icons.items():
+            button.setIcon(QIcon(f":/images/graphics/{icon_name}"))
+
         self.setWindowIcon(QIcon(":/images/graphics/logo_transparent.ico"))
+        # Stylesheets
+        stylesheet_paths = {
+            "progressbar_pornhub": ":/style/stylesheets/progressbar_pornhub.qss",
+            "progressbar_hqporner": ":/style/stylesheets/progressbar_hqporner.qss",
+            "progressbar_eporner": ":/style/stylesheets/progressbar_eporner.qss",
+            "progressbar_total": ":/style/stylesheets/progressbar_total.qss",
+            "progressbar_xnxx": ":/style/stylesheets/progressbar_xnxx.qss",
+            "progressbar_xvideos": ":/style/stylesheets/progressbar_xvideos.qss",
+            "button_blue": ":/style/stylesheets/stylesheet_button_blue.qss",
+            "button_orange": ":/style/stylesheets/stylesheet_button_orange.qss",
+            "button_purple": ":/style/stylesheets/stylesheet_button_purple.qss",
+            "button_green": ":/style/stylesheets/stylesheet_button_green.qss",
+            "buttons_login": ":/style/stylesheets/stylesheet_buttons_login.qss",
+        }
 
-        file_progress_pornhub = QFile(":/style/stylesheets/progressbar_pornhub.qss")
-        file_progress_pornhub.open(QFile.ReadOnly | QFile.Text)
-        stream_progress_pornhub = QTextStream(file_progress_pornhub)
+        stylesheets = {key: self.load_stylesheet(path) for key, path in stylesheet_paths.items()}
 
-        file_progress_hqporner = QFile(":/style/stylesheets/progressbar_hqporner.qss")
-        file_progress_hqporner.open(QFile.ReadOnly | QFile.Text)
-        stream_progress_hqporner = QTextStream(file_progress_hqporner)
+        # Applying stylesheets to specific buttons
+        # Simplify this part based on actual UI structure and naming
+        self.ui.button_login.setStyleSheet(stylesheets["button_green"])
+        self.ui.progressbar_pornhub.setStyleSheet(stylesheets["progressbar_pornhub"])
+        self.ui.progressbar_total.setStyleSheet(stylesheets["progressbar_total"])
+        self.ui.progressbar_xnxx.setStyleSheet(stylesheets["progressbar_xnxx"])
+        self.ui.progressbar_eporner.setStyleSheet(stylesheets["progressbar_eporner"])
+        self.ui.progressbar_hqporner.setStyleSheet(stylesheets["progressbar_hqporner"])
+        self.ui.progressbar_xvideos.setStyleSheet(stylesheets["progressbar_xvideos"])
 
-        file_progress_eqporner = QFile(":/style/stylesheets/progressbar_eporner.qss")
-        file_progress_eqporner.open(QFile.ReadOnly | QFile.Text)
-        stream_progress_eporner = QTextStream(file_progress_eqporner)
+        self.ui.button_model.setStyleSheet(stylesheets["button_purple"])
+        self.ui.button_search.setStyleSheet(stylesheets["button_purple"])
+        self.ui.button_download.setStyleSheet(stylesheets["button_purple"])
+        self.ui.button_threading_mode_help.setStyleSheet(stylesheets["button_green"])
+        self.ui.button_directory_system_help.setStyleSheet(stylesheets["button_green"])
+        self.ui.button_help_pages.setStyleSheet(stylesheets["button_green"])
+        self.ui.button_semaphore_help.setStyleSheet(stylesheets["button_green"])
+        self.ui.button_tree_download.setStyleSheet(stylesheets["button_orange"])
+        self.ui.button_tree_unselect_all.setStyleSheet(stylesheets["button_blue"])
+        self.ui.button_tree_select_all.setStyleSheet(stylesheets["button_green"])
+        self.ui.button_output_path_select.setStyleSheet(stylesheets["button_blue"])
+        self.ui.button_login.setStyleSheet(stylesheets["button_blue"])
+        self.ui.button_settings_apply.setStyleSheet(stylesheets["button_blue"])
+        self.ui.button_user_get_bio.setStyleSheet(stylesheets["button_orange"])
+        self.ui.button_get_random_videos.setStyleSheet(stylesheets["button_purple"])
+        self.ui.button_get_brazzers_videos.setStyleSheet(stylesheets["button_purple"])
+        self.ui.button_metadata_user_start.setStyleSheet(stylesheets["button_purple"])
+        self.ui.button_list_categories.setStyleSheet(stylesheets["button_purple"])
+        self.ui.button_open_file.setStyleSheet(stylesheets["button_purple"])
+        self.ui.button_switch_supported_websites.setStyleSheet(stylesheets["button_blue"])
+        self.ui.button_user_download_avatar.setStyleSheet(stylesheets["button_orange"])
+        self.ui.button_video_thumbnail_download.setStyleSheet(stylesheets["button_orange"])
+        self.ui.button_metadata_video_start.setStyleSheet(stylesheets["button_purple"])
+        self.ui.button_hqporner_category_get_videos.setStyleSheet(stylesheets["button_purple"])
+        self.ui.button_top_porn_get_videos.setStyleSheet(stylesheets["button_purple"])
+        self.ui.button_get_watched_videos.setStyleSheet(stylesheets["buttons_login"])
+        self.ui.button_get_liked_videos.setStyleSheet(stylesheets["buttons_login"])
+        self.ui.button_get_recommended_videos.setStyleSheet(stylesheets["buttons_login"])
 
-        file_progressbar_total = QFile(":/style/stylesheets/progressbar_total.qss")
-        file_progressbar_total.open(QFile.ReadOnly | QFile.Text)
-        stream_progress_total = QTextStream(file_progressbar_total)
-
-        file_progressbar_xnxx = QFile(":/style/stylesheets/progressbar_xnxx.qss")
-        file_progressbar_xnxx.open(QFile.ReadOnly | QFile.Text)
-        stream_progress_xnxx = QTextStream(file_progressbar_xnxx)
-
-        file_progressbar_xvideos = QFile(":/style/stylesheets/progressbar_xvideos.qss")
-        file_progressbar_xvideos.open(QFile.ReadOnly | QFile.Text)
-        stream_progress_xvideos = QTextStream(file_progressbar_xvideos)
-
-        file_stylesheet_button_blue = QFile(":/style/stylesheets/stylesheet_button_blue.qss")
-        file_stylesheet_button_orange = QFile(":/style/stylesheets/stylesheet_button_orange.qss")
-        file_stylesheet_button_purple = QFile(":/style/stylesheets/stylesheet_button_purple.qss")
-        file_stylesheet_button_login = QFile(":/style/stylesheets/stylesheet_button_login.qss")
-        file_stylesheet_button_logins = QFile(":/style/stylesheets/stylesheet_buttons_login.qss")
-
-        file_stylesheet_button_blue.open(QFile.ReadOnly | QFile.Text)
-        stream_button_blue = QTextStream(file_stylesheet_button_blue)
-        file_stylesheet_button_logins.open(QFile.ReadOnly | QFile.Text)
-        stream_button_logins = QTextStream(file_stylesheet_button_logins)
-        file_stylesheet_button_login.open(QFile.ReadOnly | QFile.Text)
-        stream_button_login = QTextStream(file_stylesheet_button_login)
-        file_stylesheet_button_orange.open(QFile.ReadOnly | QFile.Text)
-        stream_button_orange = QTextStream(file_stylesheet_button_orange)
-        file_stylesheet_button_purple.open(QFile.ReadOnly | QFile.Text)
-        stream_button_purple = QTextStream(file_stylesheet_button_purple)
-
-        blue = stream_button_blue.readAll()
-        orange = stream_button_orange.readAll()
-        purple = stream_button_purple.readAll()
-        login = stream_button_login.readAll()
-        logins = stream_button_logins.readAll()
-
-        self.ui.button_login.setStyleSheet(login)
-        self.ui.button_get_watched_videos.setStyleSheet(logins)
-        self.ui.button_get_liked_videos.setStyleSheet(logins)
-        self.ui.button_get_recommended_videos.setStyleSheet(logins)
-        self.ui.button_download.setStyleSheet(purple)
-        self.ui.button_model.setStyleSheet(purple)
-        self.ui.button_open_file.setStyleSheet(purple)
-        self.ui.button_tree_download.setStyleSheet(purple)
-        self.ui.button_metadata_user_start.setStyleSheet(purple)
-        self.ui.button_metadata_video_start.setStyleSheet(purple)
-        self.ui.button_user_download_avatar.setStyleSheet(purple)
-        self.ui.button_user_get_bio.setStyleSheet(purple)
-        self.ui.button_video_thumbnail_download.setStyleSheet(purple)
-        self.ui.button_tree_select_all.setStyleSheet(orange)
-        self.ui.button_tree_unselect_all.setStyleSheet(blue)
-        self.ui.button_help_pages.setStyleSheet(login)
-        self.ui.button_semaphore_help.setStyleSheet(login)
-        self.ui.button_threading_mode_help.setStyleSheet(login)
-        self.ui.button_directory_system_help.setStyleSheet(login)
-        self.ui.button_output_path_select.setStyleSheet(login)
-        self.ui.button_settings_apply.setStyleSheet(login)
-        self.ui.button_search.setStyleSheet(purple)
-        self.ui.button_hqporner_category_get_videos.setStyleSheet(purple)
-        self.ui.button_get_random_videos.setStyleSheet(purple)
-        self.ui.button_get_brazzers_videos.setStyleSheet(purple)
-        self.ui.button_list_categories.setStyleSheet(purple)
-        self.ui.button_top_porn_get_videos.setStyleSheet(purple)
-        self.ui.button_switch_supported_websites.setStyleSheet(login)
-
-        self.ui.progressbar_pornhub.setStyleSheet(stream_progress_pornhub.readAll())
-        self.ui.progressbar_hqporner.setStyleSheet(stream_progress_hqporner.readAll())
-        self.ui.progressbar_total.setStyleSheet(stream_progress_total.readAll())
-        self.ui.progressbar_eporner.setStyleSheet(stream_progress_eporner.readAll())
-        self.ui.progressbar_xnxx.setStyleSheet(stream_progress_xnxx.readAll())
-        self.ui.progressbar_xvideos.setStyleSheet(stream_progress_xvideos.readAll())
         logger_debug("Loaded Icons!")
 
     def language_strings(self):
@@ -973,7 +970,7 @@ class Porn_Fetch(QWidget):
         logger_debug("Connected Buttons!")
 
     def switch_login_button_state(self):
-        """If user is logged in, I'll change the stylesheets of the buttons"""
+        """If the user is logged in, I'll change the stylesheets of the buttons"""
         file = QFile(":/style/stylesheets/stylesheet_switch_buttons_login_state.qss")
         file.open(QFile.ReadOnly | QFile.Text)
         stream = QTextStream(file)
@@ -1120,10 +1117,12 @@ class Porn_Fetch(QWidget):
 
     def add_to_tree_widget_thread(self, iterator, search_limit, clickable=False):
         if clickable:
+            # If a Pornstar has uploads, I want to add a button to download their videos. This is gonna be implemented in
+            # v3.2
             for user_object in iterator:
                 uploads = user_object.uploads
                 if uploads:
-                    pass  # Implemented in v3.1
+                    pass  # Implemented in v3.2
 
         if self.ui.radio_tree_show_title.isChecked():
             data_mode = 0
@@ -1148,9 +1147,14 @@ class Porn_Fetch(QWidget):
         self.threadpool.start(self.thread)
 
     def clear_tree_widget(self):
+        """
+        This (like the name says) clears the tree widget. I try to improve this in the future, to allow the user
+        the adding of multiple videos, so that the tree widget doesn't get cleared instantly.
+        """
         self.ui.treeWidget.clear()
 
     def progress_tree_widget(self, total, current):
+        """This tracks the progress of the tree widget data"""
         self.ui.progressbar_total.setMaximum(total)
         self.ui.progressbar_total.setValue(current)
 
@@ -1169,6 +1173,9 @@ class Porn_Fetch(QWidget):
         item.setCheckState(0, Qt.Unchecked)  # Adds a checkbox
 
     def download_tree_widget(self):
+        """
+        Starts the thread for downloading the tree widget
+        """
         semaphore = self.semaphore
         treeWidget = self.ui.treeWidget
         quality = self.quality
@@ -1180,9 +1187,14 @@ class Porn_Fetch(QWidget):
         self.threadpool.start(download_tree_thread)
 
     def tree_widget_completed(self, video):
+        """
+        This emits the video. If the semaphore is released, this function is called, so that the next video can be
+        downloaded.
+        """
         self.load_video(video)
 
     def unselect_all_items(self):
+        """Unselects all items from the tree widget"""
         root = self.ui.treeWidget.invisibleRootItem()
         item_count = root.childCount()
         for i in range(item_count):
@@ -1190,6 +1202,7 @@ class Porn_Fetch(QWidget):
             item.setCheckState(0, Qt.Unchecked)
 
     def select_all_items(self):
+        """Selects all items from the tree widget"""
         root = self.ui.treeWidget.invisibleRootItem()
         item_count = root.childCount()
         for i in range(item_count):
@@ -1250,12 +1263,17 @@ If no more videos are found it will break the loop and the received videos can b
     """
 
     def start_single_video(self):
+        """
+        Starts the download of a single video.
+        This still uses the tree widget, because this makes it easier to track the total progress, as I've already
+        implemented this feature into the tree widget and I don't want to write code 2 times
+        """
         url = self.ui.lineedit_url.text()
         api_language = self.api_language
         one_time_iterator = []
 
         video = check_video(url=url, language=api_language)
-        if video is False:
+        if video is False:  # If a video url is invalid, check_video will return it as False
             ui_popup(invalid_input_string)
 
         else:
@@ -1263,6 +1281,8 @@ If no more videos are found it will break the loop and the received videos can b
             self.add_to_tree_widget_thread(iterator=one_time_iterator, search_limit=self.search_limit)
 
     def start_model(self):
+        """Starts the model download. I need to update some stuff here, to support other websites as well"""
+        # TODO
         search_limit = self.search_limit
         model = self.ui.lineedit_model_url.text()
         pornhub_pattern = re.compile(r"(.*?)pornhub(.*?)")
@@ -1284,6 +1304,7 @@ If no more videos are found it will break the loop and the received videos can b
         self.add_to_tree_widget_thread(videos, search_limit=search_limit)
 
     def load_video(self, url):
+        """This starts the thread to load a video"""
         video_loader = VideoLoader(url, self.output_path, self.api_language, self.threading_mode, self.directory_system,
                                    self.quality)
 
@@ -1332,38 +1353,47 @@ If no more videos are found it will break the loop and the received videos can b
     """
 
     def update_total_progressbar(self, value, maximum):
+        """This updates the total progressbar"""
         self.ui.progressbar_total.setMaximum(maximum)
         self.ui.progressbar_total.setValue(value)
 
     def update_progressbar(self, value, maximum):
+        """This updates the PornHub progressbar"""
         self.ui.progressbar_pornhub.setMaximum(maximum)
         self.ui.progressbar_pornhub.setValue(value)
 
     def update_progressbar_hqporner(self, value, maximum):
+        """This updates the HQPorner progressbar"""
         self.ui.progressbar_hqporner.setMaximum(maximum)
         self.ui.progressbar_hqporner.setValue(value)
 
     def update_progressbar_eporner(self, value, maximum):
+        """This updates the eporner progressbar"""
         self.ui.progressbar_eporner.setMaximum(maximum)
         self.ui.progressbar_eporner.setValue(value)
 
     def update_progressbar_xnxx(self, value, maximum):
+        """This updates the xnxx progressbar"""
         self.ui.progressbar_xnxx.setMaximum(maximum)
         self.ui.progressbar_xnxx.setValue(value)
 
     def update_progressbar_xvideos(self, value, maximum):
+        """This updates the xvideos progressbar"""
         self.ui.progressbar_xvideos.setMaximum(maximum)
         self.ui.progressbar_xvideos.setValue(value)
 
     # ADAPTION
     def download_completed(self):
+        """If a video is downloaded, the semaphore is released"""
         logger_debug("Download Completed!")
         self.semaphore.release()
 
     def start_undefined_range(self):
+        """This starts the undefined range (loading animation) of the total progressbar"""
         self.ui.progressbar_total.setRange(0, 0)
 
     def stop_undefined_range(self):
+        """This stops the undefined range (loading animation) of the total progressbar"""
         self.ui.progressbar_total.setRange(0, 1)
 
     """
@@ -1371,6 +1401,7 @@ If no more videos are found it will break the loop and the received videos can b
     """
 
     def open_output_path_dialog(self):
+        """This handles the output path from the settings widget"""
         dialog = QFileDialog()
         path = dialog.getExistingDirectory()
         self.ui.lineedit_output_path.setText(str(path))
@@ -1378,6 +1409,7 @@ If no more videos are found it will break the loop and the received videos can b
         self.save_user_settings()
 
     def open_file_dialog(self):
+        """This opens and processes urls in a the file"""
         dialog = QFileDialog()
         file, types = dialog.getOpenFileName()
         self.ui.lineedit_file.setText(file)
@@ -1403,8 +1435,17 @@ If no more videos are found it will break the loop and the received videos can b
     """
 
     def login(self):
+        """
+        This handles logging in into the users PornHub accounts
+        I need to update this to support more websites
+        """
+        # TODO
+
         username = self.ui.lineedit_username.text()
         password = self.ui.lineedit_password.text()
+        if len(username) <=2 or len(password) <=2:
+            ui_popup(QCoreApplication.tr("Those credentials don't seem to be valid..."))
+            return
 
         try:
             self.client = Client(username, password, language=self.api_language)
@@ -1419,6 +1460,7 @@ If no more videos are found it will break the loop and the received videos can b
             ui_popup(QCoreApplication.tr("You are already logged in!", disambiguation=""))
 
     def check_login(self):
+        """Checks if the user is logged in, so that no errors are threw if not"""
         if self.client.logged:
             return True
 
@@ -1456,6 +1498,7 @@ If no more videos are found it will break the loop and the received videos can b
     """
 
     def basic_search(self):
+        """Does is simple search for videos without filters on selected website"""
         query = self.ui.lineedit_search_query.text()
 
         if self.ui.radio_search_website_pornhub.isChecked():
@@ -1472,7 +1515,8 @@ If no more videos are found it will break the loop and the received videos can b
 
         self.add_to_tree_widget_thread(videos, search_limit=search_limit)
 
-    def get_metadata_video(self):
+    def get_metadata_video(self): # TODO
+        """This starts the metadata thread for videos"""
         api_language = self.api_language
         video = self.ui.lineedit_metadata_video_url.text()
         video = check_video(url=video, language=api_language)
@@ -1486,7 +1530,11 @@ If no more videos are found it will break the loop and the received videos can b
             self.metadata_thread.signals.data.connect(self.apply_metadata_video)
             self.threadpool.start(self.metadata_thread)
 
-    def apply_metadata_video(self, data):
+    def apply_metadata_video(self, data): # TODO
+        """
+        This applies the metadata to the actual lineedits. I need to improve this mechanism, so that
+        I can do that for more websites
+        """
         title = data[0]
         views = data[1]
         duration = data[2]
@@ -1507,7 +1555,11 @@ If no more videos are found it will break the loop and the received videos can b
         self.stop_undefined_range()
 
     def get_metadata_user(self):
-        api_language = self.api_language
+        """
+        This gets metadata for PornHub users. I try to add support for other sites, but depends on the APIs
+        and the information provided by the website
+        """
+        api_language = self.api_language # TODO
         user = self.ui.lineedit_metadata_user_url.text()
         client = Client(language=api_language)
         user_object = client.get_user(user)
@@ -1518,6 +1570,7 @@ If no more videos are found it will break the loop and the received videos can b
         self.threadpool.start(self.user_metadata_thread)
 
     def apply_metadata_user(self, data):
+        """This applies the metadata, and as you can see, this is the magic of the index filtering :) """ # TODO
         interested_in = get_element_safe(data, 0)
         relationship = get_element_safe(data, 1)
         city_and_country = get_element_safe(data, 2)
@@ -1565,6 +1618,7 @@ If no more videos are found it will break the loop and the received videos can b
         self.stop_undefined_range()
 
     def get_user_bio(self):
+        """Returns the user bio in a string format"""
         url = self.ui.lineedit_metadata_user_url.text()
         client = self.return_client()
         user = client.get_user(url)
@@ -1572,6 +1626,7 @@ If no more videos are found it will break the loop and the received videos can b
         ui_popup(bio)
 
     def get_user_avatar(self):
+        """Downloads the users avatar image to the specified output path"""
         url = self.ui.lineedit_metadata_user_url.text()
         client = self.return_client()
         user = client.get_user(url)
@@ -1581,6 +1636,7 @@ If no more videos are found it will break the loop and the received videos can b
         ui_popup(user_string)
 
     def get_video_thumbnail(self):
+        """Returns the video thumbnail. I need to add support for more websites here""" # TODO
         api_language = self.api_language
         url = self.ui.lineedit_metadata_video_url.text()
         video = check_video(url=url, language=api_language)
@@ -1612,6 +1668,7 @@ If no more videos are found it will break the loop and the received videos can b
         self.add_to_tree_widget_thread(iterator=videos, search_limit=search_limit)
 
     def get_by_category_hqporner(self):
+        """Returns video by category from HQPorner. I want to add support for EPorner""" # TODO
         category_name = self.ui.lineedit_hqporner_category.text()
         pages = self.ui.spinbox_pages.value()
         all_categories = hq_Client().get_all_categories()
@@ -1626,6 +1683,7 @@ If no more videos are found it will break the loop and the received videos can b
             self.add_to_tree_widget_thread(videos, search_limit)
 
     def get_brazzers_videos(self):
+        """Get brazzers videos from HQPorner"""
         pages = self.ui.spinbox_pages.value()
         search_limit = pages * 46
         videos = hq_Client().get_brazzers_videos(pages)
@@ -1633,17 +1691,20 @@ If no more videos are found it will break the loop and the received videos can b
 
     @classmethod
     def list_categories_hqporner(cls):
+        """Get all available categories. I want to also extend that for EPorner (and maybe even more sites)"""
         categories_ = hq_Client().get_all_categories()
         categories = ",".join(categories_)
         ui_popup(categories)
 
     def get_random_video(self):
+        """Gets a random video from HQPorner"""
         list_object = []
         video = hq_Client().get_random_video()
         list_object.append(video)
         self.add_to_tree_widget_thread(list_object, search_limit=2)
 
     def show_credits(self):
+        """Loads the credits from the CREDITS.md.  Credits need to be recompiled in qresource file every time"""
         self.ui.textBrowser.setOpenExternalLinks(True)
         file = QFile(":/credits/README/CREDITS.md")
         file.open(QFile.ReadOnly | QFile.Text)

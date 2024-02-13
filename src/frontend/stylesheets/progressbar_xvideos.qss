@@ -1,12 +1,12 @@
 QProgressBar {
-    color: #ffffff; /* Ensures text color is white for better visibility */
-    border: 2px solid #5a2a82; /* Keeps your purple border */
-    border-radius: 5px; /* Rounded corners for the bar */
-    text-align: center; /* Text aligned to the center */
-    background-color: #4A4A4A; /* A dark background color for the bar */
+    color: #E0E0E0;
+    border: 2px solid #5A2A82;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #3C3C3C;
 }
 
 QProgressBar::chunk {
-    background-color: rgb(213, 0, 255);
-    width: 20px; /* Adjust this to change the width of the 'chunk' */
+    background-color: #D500FF; /* Adjusted to a consistent magenta */
+    width: 20px;
 }
