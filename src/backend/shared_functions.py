@@ -14,7 +14,9 @@ from configparser import ConfigParser
 from hqporner_api.api import Client as hq_Client, Video as hq_Video
 from eporner_api.eporner_api import Client as ep_Client, Video as ep_Video
 from xnxx_api.xnxx_api import Client as xn_Client, Video as xn_Video
+from xnxx_api.modules.download import threaded as xn_threaded
 from xvideos_api.xvideos_api import Client as xv_Client, Video as xv_Video
+from xvideos_api.modules.download import threaded as xv_threaded
 
 """
 The following are the sections and options for the configuration file. Please don't change anything here, 

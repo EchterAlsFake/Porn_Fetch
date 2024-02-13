@@ -300,20 +300,15 @@ class DownloadThread(QRunnable):
 
     def generic_callback(self, pos, total, signal, video_source, ffmpeg=False):
         """Generic callback function to emit progress signals with rate limiting."""
-        current_time = time.time()  # Get current time
 
-        # Check if 0.5 seconds have passed since last update
-        if current_time - self.last_update_time >= 0.5:
-            if ffmpeg:
-                self.update_ffmpeg_progress(pos, total)
-            else:
-                # Emit signal for individual progress
-                signal.emit(pos, total)
-                # Update total progress only if the video source uses segments
-                if video_source not in ['hqporner', 'eporner']:
-                    self.update_total_progress(ffmpeg)
-
-            self.last_update_time = current_time  # Update the last update time
+        if ffmpeg:
+            self.update_ffmpeg_progress(pos, total)
+        else:
+            # Emit signal for individual progress
+            signal.emit(pos, total)
+            # Update total progress only if the video source uses segments
+            if video_source not in ['hqporner', 'eporner']:
+                self.update_total_progress(ffmpeg)
 
     def update_ffmpeg_progress(self, pos, total):
         """Update progress for FFmpeg downloads."""
@@ -332,6 +327,19 @@ class DownloadThread(QRunnable):
     def run(self):
         """Run the download in a thread, optimizing for different video sources and modes."""
         logger_debug(f"Downloading Video to: {self.output_path}")
+
+        if __build__ == "android":
+            if self.threading_mode == "threaded" or self.threading_mode == download.threaded:
+                if isinstance(self.video, Video):
+                    self.threading_mode = download.threaded(max_workers=3, timeout=10)
+
+                elif isinstance(self.video, xn_Video):
+                    self.threading_mode = xn_threaded(max_workers=3, timeout=10)
+
+                elif isinstance(self.video, xv_Video):
+                    self.threading_mode = xv_threaded(max_workers=3, timeout=10)
+
+                # ADAPTION
 
         if isinstance(self.video, Video):  # Assuming 'Video' is the class for Pornhub
             self.threading_mode = self.resolve_threading_mode(self.threading_mode)
@@ -848,11 +856,8 @@ class Porn_Fetch(QWidget):
         self.ui.lineedit_output_path.setText(self.output_path)
         self.ui.lineedit_output_path.setReadOnly(True)
         self.ui.button_open_file.setDisabled(True)
-        self.ui.radio_threading_mode_default.setChecked(True)
-        self.ui.radio_threading_mode_high_performance.setDisabled(True)
         self.ui.lineedit_file.setText(QCoreApplication.tr("Not supported on Android", disambiguation=""))
         self.ui.radio_threading_mode_ffmpeg.setDisabled(True)  # Assume ffmpeg is too much for Android in this context.
-        self.threading_mode = "default"
         self.warn_about_high_performance_threading()
 
     def warn_about_high_performance_threading(self):
@@ -1443,7 +1448,7 @@ If no more videos are found it will break the loop and the received videos can b
 
         username = self.ui.lineedit_username.text()
         password = self.ui.lineedit_password.text()
-        if len(username) <=2 or len(password) <=2:
+        if len(username) <= 2 or len(password) <= 2:
             ui_popup(QCoreApplication.tr("Those credentials don't seem to be valid..."))
             return
 
