@@ -25,7 +25,9 @@ Information:
 - [x] Adding code comments
 - [x] Updating stylesheets
 - [x] implementing logic, so that user can't log in to PornHub without entering actual credentials
-
+- [x] Fixing the total progress for FFMPEG
+- [x] fixing the fffmpeg Type error # 21
+- [x] Fixing individual progress for ffmpeg
 I am probably done with this by the end of March.
 
 My next holidays are at 22.3 or 24.3 (idk lol)

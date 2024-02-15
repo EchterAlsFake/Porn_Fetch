@@ -275,6 +275,7 @@ class DownloadThread(QRunnable):
     def __init__(self, video, quality, output_path, threading_mode):
         super().__init__()
         self.video = video
+        self.ffmpeg = None
         self.quality = quality
         self.output_path = output_path
         self.threading_mode = threading_mode
@@ -303,6 +304,7 @@ class DownloadThread(QRunnable):
 
         if ffmpeg:
             self.update_ffmpeg_progress(pos, total)
+            signal.emit(pos, total)
         else:
             # Emit signal for individual progress
             signal.emit(pos, total)
@@ -327,6 +329,8 @@ class DownloadThread(QRunnable):
     def run(self):
         """Run the download in a thread, optimizing for different video sources and modes."""
         logger_debug(f"Downloading Video to: {self.output_path}")
+        if self.threading_mode == "FFMPEG" or self.threading_mode == download.FFMPEG:
+            self.ffmpeg = True
 
         if __build__ == "android":
             if self.threading_mode == "threaded" or self.threading_mode == download.threaded:
@@ -348,12 +352,12 @@ class DownloadThread(QRunnable):
             try:
                 self.video.download(downloader=self.threading_mode, path=path, quality=self.quality,
                                     display=lambda pos, total: self.generic_callback(pos, total, self.signals.progress,
-                                                                                     video_source))
+                                                                                     video_source, self.ffmpeg))
 
             except TypeError:
                 self.video.download(downloader=self.threading_mode, path=path, quality=self.quality,
                                     display=lambda pos, total: self.generic_callback(pos, total, self.signals.progress,
-                                                                                     video_source))
+                                                                                     video_source, self.ffmpeg))
 
         # We need to specify the sources, so that it knows which individual progressbar to use
         elif isinstance(self.video, hq_Video):
@@ -361,14 +365,14 @@ class DownloadThread(QRunnable):
             self.video.download(quality=self.quality, output_path=self.output_path,
                                 callback=lambda pos, total: self.generic_callback(pos, total,
                                                                                   self.signals.progress_hqporner,
-                                                                                  video_source))
+                                                                                  video_source, self.ffmpeg))
 
         elif isinstance(self.video, ep_Video):
             video_source = "eporner"
             self.video.download_video(quality=self.quality, output_path=self.output_path,
                                       callback=lambda pos, total: self.generic_callback(pos, total,
                                                                                         self.signals.progress_eporner,
-                                                                                        video_source))
+                                                                                        video_source, self.ffmpeg))
 
         elif isinstance(self.video, xn_Video):
             video_source = "xnxx"
@@ -376,7 +380,7 @@ class DownloadThread(QRunnable):
                                 quality=self.quality,
                                 callback=lambda pos, total: self.generic_callback(pos, total,
                                                                                   self.signals.progress_xnxx,
-                                                                                  video_source))
+                                                                                  video_source, self.ffmpeg))
 
         elif isinstance(self.video, xv_Video):
             video_source = "xvideos"
@@ -384,7 +388,7 @@ class DownloadThread(QRunnable):
                                 quality=self.quality,
                                 callback=lambda pos, total: self.generic_callback(pos, total,
                                                                                   self.signals.progress_xvideos,
-                                                                                  video_source))
+                                                                                  video_source, self.ffmpeg))
 
         # ... other video types ...
 
@@ -414,6 +418,7 @@ class QTreeWidgetDownloadThread(QRunnable):
                 video_objects.append(item.data(0, Qt.UserRole))
 
         if not self.threading_mode == "FFMPEG":
+            logger_debug("Getting segments...")
             global total_segments, downloaded_segments
             total_segments = sum(
                 [len(list(video.get_segments(quality=self.quality))) for video in video_objects if
@@ -423,6 +428,7 @@ class QTreeWidgetDownloadThread(QRunnable):
             # progress
 
         else:
+            logger_debug("Progress tracking: FFMPEG")
             # FFMPEG has always 0-100 as progress callback, that is why I specify 100 for each video instead of the
             # total segments
             counter = 0

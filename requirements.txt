@@ -4,7 +4,7 @@ git+https://github.com/EchterAlsfake/eporner_api.git
 git+https://github.com/EchterAlsFake/xnxx_api.git
 git+https://github.com/EchterAlsFake/xvideos_api.git
 colorama
-PySide6
+PySide6==6.6.1
 requests
 hue_shift
 Markdown
