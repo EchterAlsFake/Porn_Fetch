@@ -58,18 +58,17 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.verticallayout_sidebar.addWidget(self.button_switch_account)
 
-        self.button_switch_hqporner = QPushButton(Porn_Fetch_Widget)
-        self.button_switch_hqporner.setObjectName(u"button_switch_hqporner")
-        self.button_switch_hqporner.setMinimumSize(QSize(50, 50))
+        self.button_switch_tools = QPushButton(Porn_Fetch_Widget)
+        self.button_switch_tools.setObjectName(u"button_switch_tools")
+        self.button_switch_tools.setMinimumSize(QSize(50, 50))
         font = QFont()
-        font.setPointSize(25)
-        self.button_switch_hqporner.setFont(font)
-        self.button_switch_hqporner.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_switch_hqporner.setStyleSheet(u"border: none;\n"
-"color: #ff8397")
-        self.button_switch_hqporner.setIconSize(QSize(64, 64))
+        font.setPointSize(9)
+        self.button_switch_tools.setFont(font)
+        self.button_switch_tools.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_switch_tools.setStyleSheet(u"border: none")
+        self.button_switch_tools.setIconSize(QSize(32, 32))
 
-        self.verticallayout_sidebar.addWidget(self.button_switch_hqporner)
+        self.verticallayout_sidebar.addWidget(self.button_switch_tools)
 
         self.button_switch_settings = QPushButton(Porn_Fetch_Widget)
         self.button_switch_settings.setObjectName(u"button_switch_settings")
@@ -517,6 +516,11 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.horizontallayout_searching_websites.addWidget(self.radio_search_website_xvideos)
 
+        self.radio_search_website_eporner = QRadioButton(self.page_download)
+        self.radio_search_website_eporner.setObjectName(u"radio_search_website_eporner")
+
+        self.horizontallayout_searching_websites.addWidget(self.radio_search_website_eporner)
+
         self.horizontal_spacer_searching = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontallayout_searching_websites.addItem(self.horizontal_spacer_searching)
@@ -853,7 +857,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_settings.setWidgetResizable(True)
         self.scrollAreaWidgetContents_6 = QWidget()
         self.scrollAreaWidgetContents_6.setObjectName(u"scrollAreaWidgetContents_6")
-        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 670, 374))
+        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 962, 497))
         self.gridLayout_34 = QGridLayout(self.scrollAreaWidgetContents_6)
         self.gridLayout_34.setObjectName(u"gridLayout_34")
         self.gridlayout_settings = QGridLayout()
@@ -1206,7 +1210,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_metadata.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 232, 978))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 946, 978))
         self.gridLayout_27 = QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_27.setObjectName(u"gridLayout_27")
         self.gridlayout_metadata_ = QGridLayout()
@@ -1627,8 +1631,8 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.retranslateUi(Porn_Fetch_Widget)
 
-        self.stacked_widget_main.setCurrentIndex(0)
-        self.stacked_widget_top.setCurrentIndex(3)
+        self.stacked_widget_main.setCurrentIndex(4)
+        self.stacked_widget_top.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(Porn_Fetch_Widget)
@@ -1638,7 +1642,7 @@ class Ui_Porn_Fetch_Widget(object):
         Porn_Fetch_Widget.setWindowTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Porn Fetch V3 (C) Johannes Habel GPL 3", None))
         self.button_switch_home.setText("")
         self.button_switch_account.setText("")
-        self.button_switch_hqporner.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"HQ", None))
+        self.button_switch_tools.setText("")
         self.button_switch_settings.setText("")
         self.button_switch_metadata.setText("")
         self.button_switch_credits.setText("")
@@ -1671,6 +1675,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_search_website_pornhub.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"PornHub", None))
         self.radio_search_website_hqporner.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"HQPorner", None))
         self.radio_search_website_xvideos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"XVideos", None))
+        self.radio_search_website_eporner.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"EPorner", None))
         self.button_model.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Videos", None))
         self.labell_search.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Query:", None))
         self.lineedit_file.setText("")
@@ -1802,17 +1807,19 @@ class Ui_Porn_Fetch_Widget(object):
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Xvideos.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Eporner.com</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:"
+                        "0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I am constantly working to support more websites.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I am constantly working to support more websites.</p"
-                        ">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; "
+                        "margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; "
-                        "margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
     # retranslateUi
 

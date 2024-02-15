@@ -315,7 +315,8 @@ class DownloadThread(QRunnable):
     def update_ffmpeg_progress(self, pos, total):
         """Update progress for FFmpeg downloads."""
         video_title = self.video.title
-        self.video_progress[video_title] = pos / total * 100  # video title as video id, to keep track which video has how many progress done
+        self.video_progress[
+            video_title] = pos / total * 100  # video title as video id, to keep track which video has how many progress done
         total_progress = sum(self.video_progress.values()) / len(self.video_progress)
         self.signals.total_progress.emit(total_progress, 100)
 
@@ -592,6 +593,7 @@ class FFMPEGSignals(QObject):
 
 class FFMPEGDownload(QRunnable):
     """Downloads ffmpeg into the execution path of Porn Fetch"""
+
     def __init__(self, url, extract_path, mode):
         super().__init__()
         self.url = url
@@ -690,6 +692,7 @@ class Porn_Fetch(QWidget):
         self.load_user_settings()
         self.check_ffmpeg()
         self.switch_to_home()
+        self.check_for_updates()
 
         if __build__ == "android":
             self.setup_android()
@@ -713,6 +716,7 @@ class Porn_Fetch(QWidget):
             self.ui.button_switch_credits: "information.svg",
             self.ui.button_switch_metadata: "list.svg",
             self.ui.button_switch_account: "account.svg",
+            self.ui.button_switch_tools: "tools.svg"
         }
         for button, icon_name in icons.items():
             button.setIcon(QIcon(f":/images/graphics/{icon_name}"))
@@ -792,6 +796,19 @@ class Porn_Fetch(QWidget):
                                                                    disambiguation=None)
         self.get_video_thumbnail_language_string = QCoreApplication.tr("Video thumbnail saved in current directory",
                                                                        disambiguation=None)
+
+    @classmethod
+    def check_for_updates(cls):
+        logger_debug("Checking for updates...")
+        if requests.get("https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.1").status_code == 200:
+            logger_debug("Next release v3.1 found!")
+            ui_popup(QCoreApplication.tr("Information: A new version of Porn Fetch (v3.1) is out. "
+                                         "I recommend you to update Porn Fetch. Go to: "
+                                         "https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.1",
+                                         disambiguation=None))
+
+        else:
+            logger_debug("No updates found...")
 
     def button_groups(self):
         """
@@ -897,6 +914,7 @@ class Porn_Fetch(QWidget):
                 consts.FFMPEG_EXECUTABLE = "ffmpeg.exe"
 
     """These functions are used to switch to different widgets. Basically this is the sidebar at the left"""
+
     def switch_to_account(self):
         self.ui.stacked_widget_top.setCurrentIndex(1)
         self.ui.stacked_widget_main.setCurrentIndex(0)
@@ -972,7 +990,7 @@ class Porn_Fetch(QWidget):
         self.ui.button_top_porn_get_videos.clicked.connect(self.get_top_porn_hqporner)
         self.ui.button_get_brazzers_videos.clicked.connect(self.get_brazzers_videos)
         self.ui.button_list_categories.clicked.connect(self.list_categories_hqporner)
-        self.ui.button_switch_hqporner.clicked.connect(self.switch_to_hqporner)
+        self.ui.button_switch_tools.clicked.connect(self.switch_to_hqporner)
         self.ui.button_get_random_videos.clicked.connect(self.get_random_video)
 
         # File Dialog
@@ -1509,7 +1527,7 @@ If no more videos are found it will break the loop and the received videos can b
     """
 
     def basic_search(self):
-        """Does is simple search for videos without filters on selected website"""
+        """Does a simple search for videos without filters on selected website"""
         query = self.ui.lineedit_search_query.text()
 
         if self.ui.radio_search_website_pornhub.isChecked():
@@ -1524,9 +1542,14 @@ If no more videos are found it will break the loop and the received videos can b
             videos = hq_Client.search_videos(query, pages=3)
             search_limit = 3 * 46
 
+        elif self.ui.radio_search_website_eporner.isChecked():
+            videos = ep_Client().search_videos(query, sorting_gay="", sorting_order="", sorting_low_quality="", page=1,
+                                               per_page=45, enable_html_scraping=True)
+            search_limit = 45
+
         self.add_to_tree_widget_thread(videos, search_limit=search_limit)
 
-    def get_metadata_video(self): # TODO
+    def get_metadata_video(self):  # TODO
         """This starts the metadata thread for videos"""
         api_language = self.api_language
         video = self.ui.lineedit_metadata_video_url.text()
@@ -1541,11 +1564,11 @@ If no more videos are found it will break the loop and the received videos can b
             self.metadata_thread.signals.data.connect(self.apply_metadata_video)
             self.threadpool.start(self.metadata_thread)
 
-    def apply_metadata_video(self, data): # TODO
+    def apply_metadata_video(self, data):  # TODO
         """
         This applies the metadata to the actual lineedits. I need to improve this mechanism, so that
         I can do that for more websites
-        """
+            """
         title = data[0]
         views = data[1]
         duration = data[2]
@@ -1570,7 +1593,7 @@ If no more videos are found it will break the loop and the received videos can b
         This gets metadata for PornHub users. I try to add support for other sites, but depends on the APIs
         and the information provided by the website
         """
-        api_language = self.api_language # TODO
+        api_language = self.api_language  # TODO
         user = self.ui.lineedit_metadata_user_url.text()
         client = Client(language=api_language)
         user_object = client.get_user(user)
@@ -1581,7 +1604,7 @@ If no more videos are found it will break the loop and the received videos can b
         self.threadpool.start(self.user_metadata_thread)
 
     def apply_metadata_user(self, data):
-        """This applies the metadata, and as you can see, this is the magic of the index filtering :) """ # TODO
+        """This applies the metadata, and as you can see, this is the magic of the index filtering :) """  # TODO
         interested_in = get_element_safe(data, 0)
         relationship = get_element_safe(data, 1)
         city_and_country = get_element_safe(data, 2)
@@ -1647,7 +1670,7 @@ If no more videos are found it will break the loop and the received videos can b
         ui_popup(user_string)
 
     def get_video_thumbnail(self):
-        """Returns the video thumbnail. I need to add support for more websites here""" # TODO
+        """Returns the video thumbnail. I need to add support for more websites here"""  # TODO
         api_language = self.api_language
         url = self.ui.lineedit_metadata_video_url.text()
         video = check_video(url=url, language=api_language)
@@ -1679,7 +1702,7 @@ If no more videos are found it will break the loop and the received videos can b
         self.add_to_tree_widget_thread(iterator=videos, search_limit=search_limit)
 
     def get_by_category_hqporner(self):
-        """Returns video by category from HQPorner. I want to add support for EPorner""" # TODO
+        """Returns video by category from HQPorner. I want to add support for EPorner"""  # TODO
         category_name = self.ui.lineedit_hqporner_category.text()
         pages = self.ui.spinbox_pages.value()
         all_categories = hq_Client().get_all_categories()

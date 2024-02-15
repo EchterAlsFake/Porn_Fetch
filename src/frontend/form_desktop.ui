@@ -84,7 +84,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="button_switch_hqporner">
+        <widget class="QPushButton" name="button_switch_tools">
          <property name="minimumSize">
           <size>
            <width>50</width>
@@ -93,23 +93,22 @@
          </property>
          <property name="font">
           <font>
-           <pointsize>25</pointsize>
+           <pointsize>9</pointsize>
           </font>
          </property>
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="styleSheet">
-          <string notr="true">border: none;
-color: #ff8397</string>
+          <string notr="true">border: none</string>
          </property>
          <property name="text">
-          <string>HQ</string>
+          <string/>
          </property>
          <property name="iconSize">
           <size>
-           <width>64</width>
-           <height>64</height>
+           <width>32</width>
+           <height>32</height>
           </size>
          </property>
         </widget>
@@ -408,7 +407,7 @@ color: #ff8397</string>
            <string/>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>4</number>
           </property>
           <widget class="QWidget" name="widget">
            <layout class="QGridLayout" name="gridLayout_8">
@@ -683,7 +682,7 @@ QPushButton:pressed {
                    <string notr="true">b</string>
                   </property>
                   <property name="currentIndex">
-                   <number>3</number>
+                   <number>2</number>
                   </property>
                   <widget class="QWidget" name="page_download">
                    <layout class="QGridLayout" name="gridLayout_5">
@@ -870,6 +869,13 @@ QPushButton:pressed {
                          <widget class="QRadioButton" name="radio_search_website_xvideos">
                           <property name="text">
                            <string>XVideos</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QRadioButton" name="radio_search_website_eporner">
+                          <property name="text">
+                           <string>EPorner</string>
                           </property>
                          </widget>
                         </item>
@@ -1501,8 +1507,8 @@ QPushButton:pressed {
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>670</width>
-                 <height>374</height>
+                 <width>962</width>
+                 <height>497</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_34">
@@ -2091,7 +2097,7 @@ QPushButton:pressed {
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>232</width>
+                   <width>946</width>
                    <height>978</height>
                   </rect>
                  </property>
@@ -2547,6 +2553,8 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- PornHub.com&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- HQPorner.com&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Xvideos.com&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Eporner.com&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;I am constantly working to support more websites.&lt;/p&gt;

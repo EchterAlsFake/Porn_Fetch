@@ -9,6 +9,7 @@
         <file>graphics/list.svg</file>
         <file>graphics/account.svg</file>
         <file>graphics/unread.svg</file>
+        <file>graphics/tools.svg</file>
     </qresource>
     <qresource prefix="/style">
         <file>stylesheets/stylesheet.qss</file>
