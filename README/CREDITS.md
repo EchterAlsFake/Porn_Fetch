@@ -26,6 +26,7 @@ Copyright (C) 2023-2024 Johannes Habel (EchterAlsFake)
 - <a href="https://iconscout.com/icons/tick" class="text-underline font-size-sm" target="_blank">Tick</a> by <a href="https://iconscout.com/contributors/kolo-design" class="text-underline font-size-sm" target="_blank">Kalash</a>
 - <a href="https://iconscout.com/icons/account" class="text-underline font-size-sm" target="_blank">account</a> by <a href="https://iconscout.com/contributors/anggaraputra" class="text-underline font-size-sm">Anggara Putra</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
 - <a href="https://iconscout.com/icons/tools" class="text-underline font-size-sm" target="_blank">Tools</a> by <a href="https://iconscout.com/contributors/adms-icon" class="text-underline font-size-sm" target="_blank">ADMS Icons</a>
+- <a href="https://iconscout.com/icons/faq" class="text-underline font-size-sm" target="_blank">Faq</a> by <a href="https://iconscout.com/contributors/petai-jantrapoon" class="text-underline font-size-sm">Petai Jantrapoon</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
 - Download Icon by [Tutukof](https://iconscout.com/contributors/fersusart)
 - Free [Settings Icon](https://iconscout.com/free-icon/settings-2856913) in Gradient Style
 By [Haca Studio](https://iconscout.com/contributors/boosticon)

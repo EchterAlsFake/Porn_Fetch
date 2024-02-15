@@ -7,6 +7,7 @@ import os
 import re
 
 from phub import Client, errors, Video
+from phub.modules import download as ph_download
 from colorama import Fore
 from hue_shift import return_color, reset
 from datetime import datetime
@@ -14,9 +15,9 @@ from configparser import ConfigParser
 from hqporner_api.api import Client as hq_Client, Video as hq_Video
 from eporner_api.eporner_api import Client as ep_Client, Video as ep_Video
 from xnxx_api.xnxx_api import Client as xn_Client, Video as xn_Video
-from xnxx_api.modules.download import threaded as xn_threaded
+from xnxx_api.modules.download import threaded as xn_threaded, FFMPEG as xn_ffmpeg, default as xn_default
 from xvideos_api.xvideos_api import Client as xv_Client, Video as xv_Video
-from xvideos_api.modules.download import threaded as xv_threaded
+from xvideos_api.modules.download import threaded as xv_threaded, FFMPEG as xv_ffmpeg, default as xv_default
 
 """
 The following are the sections and options for the configuration file. Please don't change anything here, 
@@ -24,8 +25,8 @@ as they are indeed needed for the main applications!
 """
 
 sections = ["Performance", "License", "Video", "UI"]
-options_performance = ["semaphore", "threading_mode"]
-options_video = ["quality", "language", "output_path", "directory_system", "search_limit"]
+options_performance = ["semaphore", "threading_mode", "workers", "timeout"]
+options_video = ["quality", "language", "output_path", "directory_system", "search_limit", "delay"]
 options_license = ["accepted"]
 options_ui = ["language"]
 
@@ -52,6 +53,8 @@ accepted = no
 [Performance]
 threading_mode = threaded
 semaphore = 2
+workers = 20
+timeout = 10
 
 [Video]
 quality = best
@@ -59,6 +62,7 @@ language = en
 output_path = ./
 directory_system = 0
 search_limit = 50
+delay = 0
 
 [UI]
 language = system
@@ -73,14 +77,15 @@ def logger_debug(e):
     print(f"{datetime.now()} : {Fore.LIGHTCYAN_EX}[DEBUG] : {return_color()} : {e} {reset()}")
 
 
-def check_video(url, language, is_url=True):
+def check_video(url, language, is_url=True, delay=False):
 
     if is_url:
         regex_eporner_url = re.compile(r"eporner.com/(.*?)")
         regex_xnxx_url = re.compile(r"xnxx.com(.*?)")
         regex_xvideos_url = re.compile(r'xvideos.com(.*?)')
+        regex_hqporner_url = re.compile(r'hqporner.com/(.*?)')
 
-        if str(url).endswith(".html"):
+        if regex_hqporner_url.search(str(url)):
             return hq_Client().get_video(url)
 
         elif regex_eporner_url.search(str(url)):
@@ -110,7 +115,7 @@ def check_video(url, language, is_url=True):
 
         elif isinstance(url, str) and not str(url).endswith(".html"):
             try:
-                video = Client(language=language).get(url)
+                video = Client(language=language, delay=delay).get(url)
                 video.fetch("page@")
                 return video
 

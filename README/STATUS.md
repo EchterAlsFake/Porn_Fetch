@@ -22,6 +22,10 @@ Information:
 - [x] Fixing individual progress for ffmpeg
 - [x] Adding Searching Support for EPorner
 - [x] Implementing Update mechanism, so that if new release is out, users get notified
+- [x] Implementing a factory reset
+- [x] Adding a setting for specifying the workers and timeout in the threaded preset
+- [x] Bring back client delay (optional)
+- [x] Redesigning settings widget
 - [] Code refactoring
 - [] Make functions more robust
 - [] Change README
@@ -32,8 +36,6 @@ Information:
 - [] Fixing searching (result) limit
 - [] Fixing total progress for loading objects and stuff
 - [] Implementing playlist support for PornHub
-- [] Adding a setting for specifying the workers and timeout in the threaded preset
-- [] Bring back client delay (optional)
 - [] handle `Client.call failed after 4 attempts`
 - [] handle other non phub, but PornHub errors
 I am probably done with this by the end of March.

@@ -10,6 +10,7 @@
         <file>graphics/account.svg</file>
         <file>graphics/unread.svg</file>
         <file>graphics/tools.svg</file>
+        <file>graphics/faq.svg</file>
     </qresource>
     <qresource prefix="/style">
         <file>stylesheets/stylesheet.qss</file>
@@ -25,6 +26,7 @@
         <file>stylesheets/stylesheet_button_green.qss</file>
         <file>stylesheets/stylesheet_buttons_login.qss</file>
         <file>stylesheets/stylesheet_switch_buttons_login_state.qss</file>
+        <file>stylesheets/stylesheet_button_reset.qss</file>
     </qresource>
     <qresource prefix="/credits">
         <file>../../README/CREDITS.md</file>

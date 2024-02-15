@@ -24,6 +24,9 @@ __license__ = "GPL 3"
 __version__ = "3.0"
 __build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
+
+import xvideos_api.modules.download
+
 total_segments = 0
 downloaded_segments = 0
 
@@ -271,8 +274,7 @@ class AddToTreeWidget(QRunnable):
 
 class DownloadThread(QRunnable):
     """Refactored threading class to download videos with improved performance and logic."""
-
-    def __init__(self, video, quality, output_path, threading_mode):
+    def __init__(self, video, quality, output_path, threading_mode, workers, timeout):
         super().__init__()
         self.video = video
         self.ffmpeg = None
@@ -281,6 +283,8 @@ class DownloadThread(QRunnable):
         self.threading_mode = threading_mode
         self.signals = DownloadProgressSignal()
         self.signals_completed = WorkerSignals()
+        self.workers = int(workers)
+        self.timeout = int(timeout)
         self.video_progress = {}
         self.last_update_time = 0
         self.progress_signals = {
@@ -293,11 +297,26 @@ class DownloadThread(QRunnable):
 
     def resolve_threading_mode(self, mode):
         """Resolve the appropriate threading mode based on input."""
-        return {
-            "threaded": download.threaded(),
-            "FFMPEG": download.FFMPEG,
-            "default": download.default
-        }.get(mode, download.default)
+        if isinstance(self.video, Video):
+            return {
+            "threaded": download.threaded(max_workers=self.workers, timeout=self.timeout),
+            "FFMPEG":   download.FFMPEG,
+            "default":  download.default
+            }.get(mode, download.default)
+
+        elif isinstance(self.video, xv_Video):
+            return {
+            "threaded": xv_threaded(max_workers=self.workers, timeout=self.timeout),
+            "FFMPEG":   xv_ffmpeg,
+            "default":  xv_default
+            }.get(mode, download.default)
+
+        elif isinstance(self.video, xn_Video):
+            return {
+            "threaded": xn_threaded(max_workers=self.workers, timeout=self.timeout),
+            "FFMPEG":   xn_ffmpeg,
+            "default":  xn_default
+            }.get(mode, download.default)
 
     def generic_callback(self, pos, total, signal, video_source, ffmpeg=False):
         """Generic callback function to emit progress signals with rate limiting."""
@@ -537,7 +556,7 @@ class VideoLoaderSignals(QObject):
 
 
 class VideoLoader(QRunnable):
-    def __init__(self, url, output_path, api_language, threading_mode, directory_system, quality):
+    def __init__(self, url, output_path, api_language, threading_mode, directory_system, quality, delay):
         super(VideoLoader, self).__init__()
         self.url = url
         self.output_path = output_path
@@ -546,10 +565,11 @@ class VideoLoader(QRunnable):
         self.directory_system = directory_system
         self.quality = quality
         self.signals = VideoLoaderSignals()
+        self.delay = delay
 
     def run(self):
         try:
-            video = check_video(self.url, language=self.api_language)
+            video = check_video(self.url, language=self.api_language, delay=self.delay)
 
             if video is False:
                 ui_popup(invalid_input_string)
@@ -656,6 +676,8 @@ class Porn_Fetch(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         # Variable initialization:
+        self.workers = None
+        self.timeout = None
         self.gui_language = None
         self.semaphore = None
         self.native_languages = None
@@ -716,7 +738,15 @@ class Porn_Fetch(QWidget):
             self.ui.button_switch_credits: "information.svg",
             self.ui.button_switch_metadata: "list.svg",
             self.ui.button_switch_account: "account.svg",
-            self.ui.button_switch_tools: "tools.svg"
+            self.ui.button_switch_tools: "tools.svg",
+            self.ui.button_help_pages: "faq.svg",
+            self.ui.button_workers_help: "faq.svg",
+            self.ui.button_pornhub_delay_help: "faq.svg",
+            self.ui.button_threading_mode_help: "faq.svg",
+            self.ui.button_semaphore_help: "faq.svg",
+            self.ui.button_timeout_help: "faq.svg",
+            self.ui.button_directory_system_help: "faq.svg",
+            self.ui.button_result_limit_help: "faq.svg",
         }
         for button, icon_name in icons.items():
             button.setIcon(QIcon(f":/images/graphics/{icon_name}"))
@@ -735,6 +765,7 @@ class Porn_Fetch(QWidget):
             "button_purple": ":/style/stylesheets/stylesheet_button_purple.qss",
             "button_green": ":/style/stylesheets/stylesheet_button_green.qss",
             "buttons_login": ":/style/stylesheets/stylesheet_buttons_login.qss",
+            "button_reset": ":/style/stylesheets/stylesheet_button_reset.qss"
         }
 
         stylesheets = {key: self.load_stylesheet(path) for key, path in stylesheet_paths.items()}
@@ -777,6 +808,11 @@ class Porn_Fetch(QWidget):
         self.ui.button_get_watched_videos.setStyleSheet(stylesheets["buttons_login"])
         self.ui.button_get_liked_videos.setStyleSheet(stylesheets["buttons_login"])
         self.ui.button_get_recommended_videos.setStyleSheet(stylesheets["buttons_login"])
+        self.ui.button_timeout_help.setStyleSheet(stylesheets["button_green"])
+        self.ui.button_workers_help.setStyleSheet(stylesheets["button_green"])
+        self.ui.button_pornhub_delay_help.setStyleSheet(stylesheets["button_green"])
+        self.ui.button_result_limit_help.setStyleSheet(stylesheets["button_green"])
+        self.ui.button_settings_reset.setStyleSheet(stylesheets["button_reset"])
 
         logger_debug("Loaded Icons!")
 
@@ -915,6 +951,11 @@ class Porn_Fetch(QWidget):
 
     """These functions are used to switch to different widgets. Basically this is the sidebar at the left"""
 
+    def reset_pornfetch(self):
+        ui_popup(QCoreApplication.tr("Porn Fetch will now reset to its default settings...", disambiguation=None))
+        setup_config_file(force=True)
+        ui_popup(QCoreApplication.tr("Done! Please restart.", disambiguation=None))
+
     def switch_to_account(self):
         self.ui.stacked_widget_top.setCurrentIndex(1)
         self.ui.stacked_widget_main.setCurrentIndex(0)
@@ -965,9 +1006,13 @@ class Porn_Fetch(QWidget):
         self.ui.button_threading_mode_help.clicked.connect(self.button_threading_mode_help)
         self.ui.button_directory_system_help.clicked.connect(self.button_directory_system_help)
         self.ui.button_help_pages.clicked.connect(self.hqporner_pages_help)
+        self.ui.button_workers_help.clicked.connect(self.maximal_workers_help)
+        self.ui.button_timeout_help.clicked.connect(self.timeout_help)
+        self.ui.button_pornhub_delay_help.clicked.connect(self.pornhub_delay_help)
 
         # Settings
         self.ui.button_settings_apply.clicked.connect(self.save_user_settings)
+        self.ui.button_settings_reset.clicked.connect(self.reset_pornfetch)
 
         # Account
         self.ui.button_login.clicked.connect(self.login)
@@ -1064,6 +1109,9 @@ class Porn_Fetch(QWidget):
         self.threading_mode = self.conf["Performance"]["threading_mode"]
         self.api_language = self.conf["Video"]["language"]
         self.semaphore = QSemaphore(int(self.semaphore_limit))
+        self.delay = self.conf["Video"]["delay"]
+        self.timeout = int(self.conf["Performance"]["timeout"])
+        self.workers = int(self.conf["Performance"]["workers"])
 
         if self.gui_language == "en":
             self.ui.radio_ui_language_english.setChecked(True)
@@ -1087,6 +1135,10 @@ class Porn_Fetch(QWidget):
         elif self.conf["Video"]["directory_system"] == "0":
             self.directory_system = False
             self.ui.radio_directory_system_no.setChecked(True)
+
+        self.ui.spinbox_maximal_timeout.setValue(int(self.timeout))
+        self.ui.spinbox_maximal_workers.setValue(int(self.workers))
+        self.ui.spinbox_pornhub_delay.setValue(int(self.delay))
 
         logger_debug(f"Video Language: {self.api_language}")
         logger_debug("Loaded User Settings!")
@@ -1133,6 +1185,10 @@ class Porn_Fetch(QWidget):
 
         elif self.ui.radio_ui_language_system_default.isChecked():
             self.conf.set("UI", "language", "system")
+
+        self.conf.set("Performance", "timeout", str(self.ui.spinbox_maximal_timeout.value()))
+        self.conf.set("Performance", "workers", str(self.ui.spinbox_maximal_workers.value()))
+        self.conf.set("Video", "delay", str(self.ui.spinbox_pornhub_delay.value()))
 
         with open("config.ini", "w") as config_file:
             self.conf.write(config_file)
@@ -1241,8 +1297,41 @@ class Porn_Fetch(QWidget):
     """
     The following functions are used for the help messages
     """
+    @classmethod
+    def pornhub_delay_help(cls):
+        text = QCoreApplication.tr(f"""
+You can set a delay between requests from you to PornHub. If you are downloading a lot of videos or experiencing 
+'client.call' errors, you should enable a delay. By default the delay is turned off with the value 0
 
-    def button_semaphore_help(self):
+A good starting point is between 0.5 - 1.5
+
+The longer the delay is, the longer it will take to download videos, load videos and generally do stuff.
+This does NOT affect other sites!
+""", disambiguation=None)
+        ui_popup(text)
+
+    @classmethod
+    def maximal_workers_help(cls):
+        text = QCoreApplication.tr(f"""
+The maximal workers define the amount of maximal threads which can be started when using the threaded download mode.
+One thread handles downloading one segment, so (in theory) 20 threads can download 20 segments at the same time.
+This can of course be helpful when you have a very fast internet connection, but when you have a poor PC or running on
+Android, you should set this to a lower value.
+
+I recommend '3' for Android and 5 for low bandwidth connections < 15000 kbit/s
+""", disambiguation=None)
+        ui_popup(text)
+
+    @classmethod
+    def timeout_help(cls):
+        text = QCoreApplication.tr(f"""
+The timeout handles the timeout for retrieving segments when using the treaded download mode. If you have a poor 
+internet connection you can set this higher than 10. But this isn't required for most users!
+""", disambiguation=None)
+        ui_popup(text)
+
+    @classmethod
+    def button_semaphore_help(cls):
         text = QCoreApplication.tr(f"""
 The Semaphore is a tool to limit the number of simultaneous actions / downloads.
 
@@ -1252,7 +1341,8 @@ you have a really good internet connection and a good system.
 """, disambiguation=None)
         ui_popup(text)
 
-    def button_threading_mode_help(self):
+    @classmethod
+    def button_threading_mode_help(cls):
         text = QCoreApplication.tr("""
 The different threading modes are used for different scenarios. 
 
@@ -1269,7 +1359,8 @@ With the High Performance method, we can just download other segments while wait
 """, disambiguation=None)
         ui_popup(text)
 
-    def button_directory_system_help(self):
+    @classmethod
+    def button_directory_system_help(cls):
         text = QCoreApplication.tr("""
 The directory system will save videos in an intelligent way. If you download 3 videos form one Pornstar and 5 videos 
 from another, Porn Fetch will automatically make folders for it and move the 3 videos into that one folder and the other
@@ -1280,7 +1371,8 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
         ui_popup(text)
 
-    def hqporner_pages_help(self):
+    @classmethod
+    def hqporner_pages_help(cls):
         ui_popup(QCoreApplication.tr("""
 Videos are split into pages on HQPorner. One page contains 46 videos.
 If you specify 2 pages 92 videos will therefore be loaded.
@@ -1301,7 +1393,7 @@ If no more videos are found it will break the loop and the received videos can b
         api_language = self.api_language
         one_time_iterator = []
 
-        video = check_video(url=url, language=api_language)
+        video = check_video(url=url, language=api_language, delay=self.delay)
         if video is False:  # If a video url is invalid, check_video will return it as False
             ui_popup(invalid_input_string)
 
@@ -1335,7 +1427,7 @@ If no more videos are found it will break the loop and the received videos can b
     def load_video(self, url):
         """This starts the thread to load a video"""
         video_loader = VideoLoader(url, self.output_path, self.api_language, self.threading_mode, self.directory_system,
-                                   self.quality)
+                                   self.quality, delay=self.delay)
 
         # Connect signals to your slots
         video_loader.signals.loaded.connect(self.on_video_loaded)
@@ -1365,7 +1457,7 @@ If no more videos are found it will break the loop and the received videos can b
     def process_video_thread(self, output_path, video, threading_mode, quality):
         """Checks which of the three types of threading the user selected and handles them."""
         self.download_thread = DownloadThread(video=video, output_path=output_path, quality=quality,
-                                              threading_mode=threading_mode)
+                                              threading_mode=threading_mode, workers=self.workers, timeout=self.timeout)
         self.download_thread.signals.progress.connect(self.update_progressbar)
         self.download_thread.signals.total_progress.connect(self.update_total_progressbar)
         self.download_thread.signals.progress_hqporner.connect(self.update_progressbar_hqporner)
@@ -1447,7 +1539,7 @@ If no more videos are found it will break the loop and the received videos can b
         with open(file, "r") as url_file:
             content = url_file.read().splitlines()
             for idx, url in enumerate(content):
-                video = check_video(url, language=self.api_language)
+                video = check_video(url, language=self.api_language, delay=self.delay)
                 if video is False:
                     ui_popup(invalid_input_string)
 
@@ -1473,7 +1565,7 @@ If no more videos are found it will break the loop and the received videos can b
         username = self.ui.lineedit_username.text()
         password = self.ui.lineedit_password.text()
         if len(username) <= 2 or len(password) <= 2:
-            ui_popup(QCoreApplication.tr("Those credentials don't seem to be valid..."))
+            ui_popup(QCoreApplication.tr("Those credentials don't seem to be valid...", disambiguation=None))
             return
 
         try:
@@ -1553,7 +1645,7 @@ If no more videos are found it will break the loop and the received videos can b
         """This starts the metadata thread for videos"""
         api_language = self.api_language
         video = self.ui.lineedit_metadata_video_url.text()
-        video = check_video(url=video, language=api_language)
+        video = check_video(url=video, language=api_language, delay=self.delay)
 
         if video is False:
             ui_popup(invalid_input_string)
@@ -1673,7 +1765,7 @@ If no more videos are found it will break the loop and the received videos can b
         """Returns the video thumbnail. I need to add support for more websites here"""  # TODO
         api_language = self.api_language
         url = self.ui.lineedit_metadata_video_url.text()
-        video = check_video(url=url, language=api_language)
+        video = check_video(url=url, language=api_language, delay=self.delay)
 
         if video is False or not isinstance(video, Video):
             ui_popup(invalid_input_string)

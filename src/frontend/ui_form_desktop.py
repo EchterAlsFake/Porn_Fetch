@@ -15,7 +15,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QFormLayout, QGridLayout,
+from PySide6.QtWidgets import (QApplication, QCheckBox, QGridLayout, QGroupBox,
     QHBoxLayout, QHeaderView, QLabel, QLayout,
     QLineEdit, QProgressBar, QPushButton, QRadioButton,
     QScrollArea, QSizePolicy, QSpacerItem, QSpinBox,
@@ -26,15 +26,15 @@ class Ui_Porn_Fetch_Widget(object):
     def setupUi(self, Porn_Fetch_Widget):
         if not Porn_Fetch_Widget.objectName():
             Porn_Fetch_Widget.setObjectName(u"Porn_Fetch_Widget")
-        Porn_Fetch_Widget.resize(1054, 729)
+        Porn_Fetch_Widget.resize(997, 582)
         sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Porn_Fetch_Widget.sizePolicy().hasHeightForWidth())
         Porn_Fetch_Widget.setSizePolicy(sizePolicy)
         Porn_Fetch_Widget.setMinimumSize(QSize(100, 50))
-        self.gridLayout = QGridLayout(Porn_Fetch_Widget)
-        self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout_15 = QGridLayout(Porn_Fetch_Widget)
+        self.gridLayout_15.setObjectName(u"gridLayout_15")
         self.main_gridlayout = QGridLayout()
         self.main_gridlayout.setSpacing(0)
         self.main_gridlayout.setObjectName(u"main_gridlayout")
@@ -120,7 +120,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_status.setWidgetResizable(True)
         self.scrollAreaWidgetContents_5 = QWidget()
         self.scrollAreaWidgetContents_5.setObjectName(u"scrollAreaWidgetContents_5")
-        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 966, 202))
+        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 909, 209))
         self.gridLayout_33 = QGridLayout(self.scrollAreaWidgetContents_5)
         self.gridLayout_33.setObjectName(u"gridLayout_33")
         self.gridlayout_status = QGridLayout()
@@ -239,7 +239,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_treewidget.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 946, 282))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 889, 284))
         self.gridLayout_4 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.verticallayout_treewidget_settings = QVBoxLayout()
@@ -410,14 +410,14 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_stacked_top.setWidgetResizable(True)
         self.scrollAreaWidgetContents_7 = QWidget()
         self.scrollAreaWidgetContents_7.setObjectName(u"scrollAreaWidgetContents_7")
-        self.scrollAreaWidgetContents_7.setGeometry(QRect(0, 0, 948, 218))
+        self.scrollAreaWidgetContents_7.setGeometry(QRect(0, 0, 891, 248))
         self.gridLayout_14 = QGridLayout(self.scrollAreaWidgetContents_7)
         self.gridLayout_14.setObjectName(u"gridLayout_14")
         self.stacked_widget_top = QStackedWidget(self.scrollAreaWidgetContents_7)
         self.stacked_widget_top.setObjectName(u"stacked_widget_top")
         sizePolicy4.setHeightForWidth(self.stacked_widget_top.sizePolicy().hasHeightForWidth())
         self.stacked_widget_top.setSizePolicy(sizePolicy4)
-        self.stacked_widget_top.setMinimumSize(QSize(600, 200))
+        self.stacked_widget_top.setMinimumSize(QSize(600, 230))
         self.stacked_widget_top.setStyleSheet(u"b")
         self.page_download = QWidget()
         self.page_download.setObjectName(u"page_download")
@@ -664,180 +664,145 @@ class Ui_Porn_Fetch_Widget(object):
         self.page_hqporner.setObjectName(u"page_hqporner")
         self.gridLayout_29 = QGridLayout(self.page_hqporner)
         self.gridLayout_29.setObjectName(u"gridLayout_29")
-        self.gridlayout_hqporner = QGridLayout()
-        self.gridlayout_hqporner.setObjectName(u"gridlayout_hqporner")
-        self.horizontallayout_category = QHBoxLayout()
-        self.horizontallayout_category.setObjectName(u"horizontallayout_category")
-        self.label_videos_by_category = QLabel(self.page_hqporner)
-        self.label_videos_by_category.setObjectName(u"label_videos_by_category")
-        self.label_videos_by_category.setMinimumSize(QSize(0, 4))
+        self.groupBox = QGroupBox(self.page_hqporner)
+        self.groupBox.setObjectName(u"groupBox")
+        self.gridLayout_7 = QGridLayout(self.groupBox)
+        self.gridLayout_7.setObjectName(u"gridLayout_7")
+        self.gridLayout = QGridLayout()
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.label_pages = QLabel(self.groupBox)
+        self.label_pages.setObjectName(u"label_pages")
 
-        self.horizontallayout_category.addWidget(self.label_videos_by_category)
+        self.gridLayout.addWidget(self.label_pages, 4, 0, 1, 1)
 
-        self.lineedit_hqporner_category = QLineEdit(self.page_hqporner)
-        self.lineedit_hqporner_category.setObjectName(u"lineedit_hqporner_category")
-        sizePolicy8 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.radio_top_porn_all_time = QRadioButton(self.groupBox)
+        self.radio_top_porn_all_time.setObjectName(u"radio_top_porn_all_time")
+        self.radio_top_porn_all_time.setMinimumSize(QSize(0, 10))
+        self.radio_top_porn_all_time.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.gridLayout.addWidget(self.radio_top_porn_all_time, 0, 3, 1, 1)
+
+        self.button_get_brazzers_videos = QPushButton(self.groupBox)
+        self.button_get_brazzers_videos.setObjectName(u"button_get_brazzers_videos")
+        sizePolicy8 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         sizePolicy8.setHorizontalStretch(0)
-        sizePolicy8.setVerticalStretch(4)
-        sizePolicy8.setHeightForWidth(self.lineedit_hqporner_category.sizePolicy().hasHeightForWidth())
-        self.lineedit_hqporner_category.setSizePolicy(sizePolicy8)
-        self.lineedit_hqporner_category.setMinimumSize(QSize(100, 4))
+        sizePolicy8.setVerticalStretch(0)
+        sizePolicy8.setHeightForWidth(self.button_get_brazzers_videos.sizePolicy().hasHeightForWidth())
+        self.button_get_brazzers_videos.setSizePolicy(sizePolicy8)
+        self.button_get_brazzers_videos.setMinimumSize(QSize(0, 10))
+        self.button_get_brazzers_videos.setCursor(QCursor(Qt.PointingHandCursor))
 
-        self.horizontallayout_category.addWidget(self.lineedit_hqporner_category)
+        self.gridLayout.addWidget(self.button_get_brazzers_videos, 3, 4, 1, 1)
 
-        self.button_hqporner_category_get_videos = QPushButton(self.page_hqporner)
-        self.button_hqporner_category_get_videos.setObjectName(u"button_hqporner_category_get_videos")
-        sizePolicy7.setHeightForWidth(self.button_hqporner_category_get_videos.sizePolicy().hasHeightForWidth())
-        self.button_hqporner_category_get_videos.setSizePolicy(sizePolicy7)
-        self.button_hqporner_category_get_videos.setMinimumSize(QSize(0, 10))
-        self.button_hqporner_category_get_videos.setCursor(QCursor(Qt.PointingHandCursor))
+        self.radio_top_porn_month = QRadioButton(self.groupBox)
+        self.radio_top_porn_month.setObjectName(u"radio_top_porn_month")
+        self.radio_top_porn_month.setMinimumSize(QSize(0, 10))
+        self.radio_top_porn_month.setCursor(QCursor(Qt.PointingHandCursor))
 
-        self.horizontallayout_category.addWidget(self.button_hqporner_category_get_videos)
+        self.gridLayout.addWidget(self.radio_top_porn_month, 0, 2, 1, 1)
 
-        self.button_list_categories = QPushButton(self.page_hqporner)
-        self.button_list_categories.setObjectName(u"button_list_categories")
-        sizePolicy7.setHeightForWidth(self.button_list_categories.sizePolicy().hasHeightForWidth())
-        self.button_list_categories.setSizePolicy(sizePolicy7)
-        self.button_list_categories.setMinimumSize(QSize(0, 10))
-        self.button_list_categories.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_get_random_videos = QPushButton(self.groupBox)
+        self.button_get_random_videos.setObjectName(u"button_get_random_videos")
+        sizePolicy8.setHeightForWidth(self.button_get_random_videos.sizePolicy().hasHeightForWidth())
+        self.button_get_random_videos.setSizePolicy(sizePolicy8)
+        self.button_get_random_videos.setMinimumSize(QSize(0, 10))
+        self.button_get_random_videos.setCursor(QCursor(Qt.PointingHandCursor))
 
-        self.horizontallayout_category.addWidget(self.button_list_categories)
+        self.gridLayout.addWidget(self.button_get_random_videos, 2, 4, 1, 1)
 
-        self.horizontalspacer_categories = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontallayout_category.addItem(self.horizontalspacer_categories)
-
-
-        self.gridlayout_hqporner.addLayout(self.horizontallayout_category, 1, 0, 1, 1)
-
-        self.horizontallayout_top = QHBoxLayout()
-        self.horizontallayout_top.setObjectName(u"horizontallayout_top")
-        self.label_get_top_porn = QLabel(self.page_hqporner)
+        self.label_get_top_porn = QLabel(self.groupBox)
         self.label_get_top_porn.setObjectName(u"label_get_top_porn")
 
-        self.horizontallayout_top.addWidget(self.label_get_top_porn)
+        self.gridLayout.addWidget(self.label_get_top_porn, 0, 0, 1, 1)
 
-        self.radio_top_porn_week = QRadioButton(self.page_hqporner)
+        self.radio_top_porn_week = QRadioButton(self.groupBox)
         self.radio_top_porn_week.setObjectName(u"radio_top_porn_week")
         self.radio_top_porn_week.setMinimumSize(QSize(0, 10))
         self.radio_top_porn_week.setCursor(QCursor(Qt.PointingHandCursor))
         self.radio_top_porn_week.setChecked(True)
 
-        self.horizontallayout_top.addWidget(self.radio_top_porn_week)
+        self.gridLayout.addWidget(self.radio_top_porn_week, 0, 1, 1, 1)
 
-        self.radio_top_porn_month = QRadioButton(self.page_hqporner)
-        self.radio_top_porn_month.setObjectName(u"radio_top_porn_month")
-        self.radio_top_porn_month.setMinimumSize(QSize(0, 10))
-        self.radio_top_porn_month.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.horizontallayout_top.addWidget(self.radio_top_porn_month)
-
-        self.radio_top_porn_all_time = QRadioButton(self.page_hqporner)
-        self.radio_top_porn_all_time.setObjectName(u"radio_top_porn_all_time")
-        self.radio_top_porn_all_time.setMinimumSize(QSize(0, 10))
-        self.radio_top_porn_all_time.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.horizontallayout_top.addWidget(self.radio_top_porn_all_time)
-
-        self.button_top_porn_get_videos = QPushButton(self.page_hqporner)
+        self.button_top_porn_get_videos = QPushButton(self.groupBox)
         self.button_top_porn_get_videos.setObjectName(u"button_top_porn_get_videos")
         self.button_top_porn_get_videos.setMinimumSize(QSize(0, 10))
         self.button_top_porn_get_videos.setCursor(QCursor(Qt.PointingHandCursor))
 
-        self.horizontallayout_top.addWidget(self.button_top_porn_get_videos)
+        self.gridLayout.addWidget(self.button_top_porn_get_videos, 0, 4, 1, 1)
 
-        self.horizontalspacer_top_porn = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.label_videos_by_category = QLabel(self.groupBox)
+        self.label_videos_by_category.setObjectName(u"label_videos_by_category")
+        self.label_videos_by_category.setMinimumSize(QSize(0, 4))
 
-        self.horizontallayout_top.addItem(self.horizontalspacer_top_porn)
+        self.gridLayout.addWidget(self.label_videos_by_category, 1, 0, 1, 1)
 
+        self.button_list_categories = QPushButton(self.groupBox)
+        self.button_list_categories.setObjectName(u"button_list_categories")
+        sizePolicy7.setHeightForWidth(self.button_list_categories.sizePolicy().hasHeightForWidth())
+        self.button_list_categories.setSizePolicy(sizePolicy7)
+        self.button_list_categories.setMinimumSize(QSize(0, 2))
+        self.button_list_categories.setCursor(QCursor(Qt.PointingHandCursor))
 
-        self.gridlayout_hqporner.addLayout(self.horizontallayout_top, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.button_list_categories, 1, 4, 1, 1)
 
-        self.horizontallayout_pages = QHBoxLayout()
-        self.horizontallayout_pages.setObjectName(u"horizontallayout_pages")
-        self.label_pages = QLabel(self.page_hqporner)
-        self.label_pages.setObjectName(u"label_pages")
-
-        self.horizontallayout_pages.addWidget(self.label_pages)
-
-        self.spinbox_pages = QSpinBox(self.page_hqporner)
-        self.spinbox_pages.setObjectName(u"spinbox_pages")
-        sizePolicy9 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.MinimumExpanding)
+        self.button_hqporner_category_get_videos = QPushButton(self.groupBox)
+        self.button_hqporner_category_get_videos.setObjectName(u"button_hqporner_category_get_videos")
+        sizePolicy9 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
         sizePolicy9.setHorizontalStretch(0)
-        sizePolicy9.setVerticalStretch(0)
-        sizePolicy9.setHeightForWidth(self.spinbox_pages.sizePolicy().hasHeightForWidth())
-        self.spinbox_pages.setSizePolicy(sizePolicy9)
-        self.spinbox_pages.setMinimumSize(QSize(0, 4))
-        self.spinbox_pages.setValue(2)
+        sizePolicy9.setVerticalStretch(2)
+        sizePolicy9.setHeightForWidth(self.button_hqporner_category_get_videos.sizePolicy().hasHeightForWidth())
+        self.button_hqporner_category_get_videos.setSizePolicy(sizePolicy9)
+        self.button_hqporner_category_get_videos.setMinimumSize(QSize(0, 2))
+        self.button_hqporner_category_get_videos.setCursor(QCursor(Qt.PointingHandCursor))
 
-        self.horizontallayout_pages.addWidget(self.spinbox_pages)
+        self.gridLayout.addWidget(self.button_hqporner_category_get_videos, 1, 3, 1, 1)
 
-        self.button_help_pages = QPushButton(self.page_hqporner)
-        self.button_help_pages.setObjectName(u"button_help_pages")
-        sizePolicy9.setHeightForWidth(self.button_help_pages.sizePolicy().hasHeightForWidth())
-        self.button_help_pages.setSizePolicy(sizePolicy9)
-        self.button_help_pages.setMinimumSize(QSize(0, 4))
-        self.button_help_pages.setCursor(QCursor(Qt.PointingHandCursor))
+        self.lineedit_hqporner_category = QLineEdit(self.groupBox)
+        self.lineedit_hqporner_category.setObjectName(u"lineedit_hqporner_category")
+        sizePolicy10 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        sizePolicy10.setHorizontalStretch(0)
+        sizePolicy10.setVerticalStretch(4)
+        sizePolicy10.setHeightForWidth(self.lineedit_hqporner_category.sizePolicy().hasHeightForWidth())
+        self.lineedit_hqporner_category.setSizePolicy(sizePolicy10)
+        self.lineedit_hqporner_category.setMinimumSize(QSize(100, 4))
 
-        self.horizontallayout_pages.addWidget(self.button_help_pages)
+        self.gridLayout.addWidget(self.lineedit_hqporner_category, 1, 1, 1, 2)
 
-        self.horizontalspacer_pages = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontallayout_pages.addItem(self.horizontalspacer_pages)
-
-
-        self.gridlayout_hqporner.addLayout(self.horizontallayout_pages, 3, 0, 1, 1)
-
-        self.horizontallayout_brazzers_random = QHBoxLayout()
-        self.horizontallayout_brazzers_random.setSpacing(0)
-        self.horizontallayout_brazzers_random.setObjectName(u"horizontallayout_brazzers_random")
-        self.horizontallayout_brazzers_random.setContentsMargins(-1, 0, -1, -1)
-        self.formlayout_random_brazzers = QFormLayout()
-        self.formlayout_random_brazzers.setObjectName(u"formlayout_random_brazzers")
-        self.labe_get_random_video = QLabel(self.page_hqporner)
+        self.labe_get_random_video = QLabel(self.groupBox)
         self.labe_get_random_video.setObjectName(u"labe_get_random_video")
         self.labe_get_random_video.setMinimumSize(QSize(0, 4))
 
-        self.formlayout_random_brazzers.setWidget(0, QFormLayout.LabelRole, self.labe_get_random_video)
+        self.gridLayout.addWidget(self.labe_get_random_video, 2, 0, 1, 4)
 
-        self.button_get_random_videos = QPushButton(self.page_hqporner)
-        self.button_get_random_videos.setObjectName(u"button_get_random_videos")
-        sizePolicy10 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Minimum)
-        sizePolicy10.setHorizontalStretch(0)
-        sizePolicy10.setVerticalStretch(0)
-        sizePolicy10.setHeightForWidth(self.button_get_random_videos.sizePolicy().hasHeightForWidth())
-        self.button_get_random_videos.setSizePolicy(sizePolicy10)
-        self.button_get_random_videos.setMinimumSize(QSize(0, 10))
-        self.button_get_random_videos.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.formlayout_random_brazzers.setWidget(0, QFormLayout.FieldRole, self.button_get_random_videos)
-
-        self.label_get_brazzers_videos = QLabel(self.page_hqporner)
+        self.label_get_brazzers_videos = QLabel(self.groupBox)
         self.label_get_brazzers_videos.setObjectName(u"label_get_brazzers_videos")
         self.label_get_brazzers_videos.setMinimumSize(QSize(0, 4))
 
-        self.formlayout_random_brazzers.setWidget(1, QFormLayout.LabelRole, self.label_get_brazzers_videos)
+        self.gridLayout.addWidget(self.label_get_brazzers_videos, 3, 0, 1, 4)
 
-        self.button_get_brazzers_videos = QPushButton(self.page_hqporner)
-        self.button_get_brazzers_videos.setObjectName(u"button_get_brazzers_videos")
-        sizePolicy11 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-        sizePolicy11.setHorizontalStretch(0)
-        sizePolicy11.setVerticalStretch(0)
-        sizePolicy11.setHeightForWidth(self.button_get_brazzers_videos.sizePolicy().hasHeightForWidth())
-        self.button_get_brazzers_videos.setSizePolicy(sizePolicy11)
-        self.button_get_brazzers_videos.setMinimumSize(QSize(0, 10))
-        self.button_get_brazzers_videos.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_help_pages = QPushButton(self.groupBox)
+        self.button_help_pages.setObjectName(u"button_help_pages")
+        sizePolicy8.setHeightForWidth(self.button_help_pages.sizePolicy().hasHeightForWidth())
+        self.button_help_pages.setSizePolicy(sizePolicy8)
+        self.button_help_pages.setMinimumSize(QSize(0, 0))
+        self.button_help_pages.setCursor(QCursor(Qt.PointingHandCursor))
 
-        self.formlayout_random_brazzers.setWidget(1, QFormLayout.FieldRole, self.button_get_brazzers_videos)
+        self.gridLayout.addWidget(self.button_help_pages, 4, 4, 1, 1)
+
+        self.spinbox_pages = QSpinBox(self.groupBox)
+        self.spinbox_pages.setObjectName(u"spinbox_pages")
+        sizePolicy8.setHeightForWidth(self.spinbox_pages.sizePolicy().hasHeightForWidth())
+        self.spinbox_pages.setSizePolicy(sizePolicy8)
+        self.spinbox_pages.setMinimumSize(QSize(0, 4))
+        self.spinbox_pages.setValue(2)
+
+        self.gridLayout.addWidget(self.spinbox_pages, 4, 1, 1, 3)
 
 
-        self.horizontallayout_brazzers_random.addLayout(self.formlayout_random_brazzers)
+        self.gridLayout_7.addLayout(self.gridLayout, 0, 0, 1, 1)
 
 
-        self.gridlayout_hqporner.addLayout(self.horizontallayout_brazzers_random, 2, 0, 1, 1)
-
-
-        self.gridLayout_29.addLayout(self.gridlayout_hqporner, 0, 0, 1, 1)
+        self.gridLayout_29.addWidget(self.groupBox, 0, 1, 1, 1)
 
         self.stacked_widget_top.addWidget(self.page_hqporner)
 
@@ -857,327 +822,424 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_settings.setWidgetResizable(True)
         self.scrollAreaWidgetContents_6 = QWidget()
         self.scrollAreaWidgetContents_6.setObjectName(u"scrollAreaWidgetContents_6")
-        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 962, 497))
+        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 891, 586))
         self.gridLayout_34 = QGridLayout(self.scrollAreaWidgetContents_6)
         self.gridLayout_34.setObjectName(u"gridLayout_34")
-        self.gridlayout_settings = QGridLayout()
-        self.gridlayout_settings.setObjectName(u"gridlayout_settings")
-        self.gridlayout_threading_mode = QGridLayout()
-        self.gridlayout_threading_mode.setObjectName(u"gridlayout_threading_mode")
-        self.label_threading_mode = QLabel(self.scrollAreaWidgetContents_6)
-        self.label_threading_mode.setObjectName(u"label_threading_mode")
-        sizePolicy2.setHeightForWidth(self.label_threading_mode.sizePolicy().hasHeightForWidth())
-        self.label_threading_mode.setSizePolicy(sizePolicy2)
-
-        self.gridlayout_threading_mode.addWidget(self.label_threading_mode, 0, 0, 1, 1)
-
-        self.radio_threading_mode_ffmpeg = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_threading_mode_ffmpeg.setObjectName(u"radio_threading_mode_ffmpeg")
-        self.radio_threading_mode_ffmpeg.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_threading_mode.addWidget(self.radio_threading_mode_ffmpeg, 0, 2, 1, 1)
-
-        self.radio_threading_mode_high_performance = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_threading_mode_high_performance.setObjectName(u"radio_threading_mode_high_performance")
-        self.radio_threading_mode_high_performance.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_threading_mode.addWidget(self.radio_threading_mode_high_performance, 0, 1, 1, 1)
-
-        self.radio_threading_mode_default = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_threading_mode_default.setObjectName(u"radio_threading_mode_default")
-        self.radio_threading_mode_default.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_threading_mode.addWidget(self.radio_threading_mode_default, 0, 3, 1, 1)
-
-        self.button_threading_mode_help = QPushButton(self.scrollAreaWidgetContents_6)
-        self.button_threading_mode_help.setObjectName(u"button_threading_mode_help")
-        self.button_threading_mode_help.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_threading_mode.addWidget(self.button_threading_mode_help, 0, 4, 1, 1)
-
-        self.horizontalSpacer_7 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.gridlayout_threading_mode.addItem(self.horizontalSpacer_7, 0, 5, 1, 1)
-
-
-        self.gridlayout_settings.addLayout(self.gridlayout_threading_mode, 1, 0, 1, 1)
-
-        self.button_settings_apply = QPushButton(self.scrollAreaWidgetContents_6)
-        self.button_settings_apply.setObjectName(u"button_settings_apply")
-        self.button_settings_apply.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_settings.addWidget(self.button_settings_apply, 6, 0, 1, 1)
-
-        self.gridlayout_semaphore = QGridLayout()
-        self.gridlayout_semaphore.setObjectName(u"gridlayout_semaphore")
-        self.label_semaphore = QLabel(self.scrollAreaWidgetContents_6)
-        self.label_semaphore.setObjectName(u"label_semaphore")
-
-        self.gridlayout_semaphore.addWidget(self.label_semaphore, 0, 0, 1, 1)
-
-        self.spinbox_semaphore = QSpinBox(self.scrollAreaWidgetContents_6)
-        self.spinbox_semaphore.setObjectName(u"spinbox_semaphore")
-        self.spinbox_semaphore.setMinimum(1)
-        self.spinbox_semaphore.setMaximum(10)
-
-        self.gridlayout_semaphore.addWidget(self.spinbox_semaphore, 0, 1, 1, 1)
-
-        self.button_semaphore_help = QPushButton(self.scrollAreaWidgetContents_6)
-        self.button_semaphore_help.setObjectName(u"button_semaphore_help")
-        self.button_semaphore_help.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_semaphore.addWidget(self.button_semaphore_help, 1, 0, 1, 2)
-
-        self.horizontalSpacer_8 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.gridlayout_semaphore.addItem(self.horizontalSpacer_8, 0, 2, 1, 1)
-
-        self.horizontalspacer_semaphore = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.gridlayout_semaphore.addItem(self.horizontalspacer_semaphore, 1, 2, 1, 1)
-
-
-        self.gridlayout_settings.addLayout(self.gridlayout_semaphore, 0, 0, 1, 1)
-
-        self.gridlayout_output_limit = QGridLayout()
-        self.gridlayout_output_limit.setObjectName(u"gridlayout_output_limit")
-        self.horizontalspacer_directory_system = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.gridlayout_output_limit.addItem(self.horizontalspacer_directory_system, 1, 4, 1, 1)
-
-        self.spinbox_treewidget_limit = QSpinBox(self.scrollAreaWidgetContents_6)
-        self.spinbox_treewidget_limit.setObjectName(u"spinbox_treewidget_limit")
-        self.spinbox_treewidget_limit.setMinimum(1)
-        self.spinbox_treewidget_limit.setMaximum(200)
-
-        self.gridlayout_output_limit.addWidget(self.spinbox_treewidget_limit, 2, 1, 1, 1)
-
-        self.horizontalspacer_output_path = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.gridlayout_output_limit.addItem(self.horizontalspacer_output_path, 0, 4, 1, 1)
-
-        self.lineedit_output_path = QLineEdit(self.scrollAreaWidgetContents_6)
-        self.lineedit_output_path.setObjectName(u"lineedit_output_path")
-
-        self.gridlayout_output_limit.addWidget(self.lineedit_output_path, 0, 1, 1, 2)
-
-        self.label_output_path = QLabel(self.scrollAreaWidgetContents_6)
-        self.label_output_path.setObjectName(u"label_output_path")
-
-        self.gridlayout_output_limit.addWidget(self.label_output_path, 0, 0, 1, 1)
-
-        self.button_directory_system_help = QPushButton(self.scrollAreaWidgetContents_6)
-        self.button_directory_system_help.setObjectName(u"button_directory_system_help")
-        self.button_directory_system_help.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_output_limit.addWidget(self.button_directory_system_help, 1, 3, 1, 1)
-
-        self.label_directory_system = QLabel(self.scrollAreaWidgetContents_6)
-        self.label_directory_system.setObjectName(u"label_directory_system")
-
-        self.gridlayout_output_limit.addWidget(self.label_directory_system, 1, 0, 1, 1)
-
-        self.button_output_path_select = QPushButton(self.scrollAreaWidgetContents_6)
-        self.button_output_path_select.setObjectName(u"button_output_path_select")
-        self.button_output_path_select.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_output_limit.addWidget(self.button_output_path_select, 0, 3, 1, 1)
-
-        self.gridlayout_result_limit = QGridLayout()
-        self.gridlayout_result_limit.setObjectName(u"gridlayout_result_limit")
-        self.label_searching_limit = QLabel(self.scrollAreaWidgetContents_6)
-        self.label_searching_limit.setObjectName(u"label_searching_limit")
-
-        self.gridlayout_result_limit.addWidget(self.label_searching_limit, 0, 0, 1, 1)
-
-
-        self.gridlayout_output_limit.addLayout(self.gridlayout_result_limit, 2, 0, 1, 1)
-
-        self.radio_directory_system_yes = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_directory_system_yes.setObjectName(u"radio_directory_system_yes")
-        self.radio_directory_system_yes.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_output_limit.addWidget(self.radio_directory_system_yes, 1, 1, 1, 1)
-
-        self.horizontalspacer_result_limit = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.gridlayout_output_limit.addItem(self.horizontalspacer_result_limit, 2, 2, 1, 3)
-
-        self.radio_directory_system_no = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_directory_system_no.setObjectName(u"radio_directory_system_no")
-        self.radio_directory_system_no.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_output_limit.addWidget(self.radio_directory_system_no, 1, 2, 1, 1)
-
-
-        self.gridlayout_settings.addLayout(self.gridlayout_output_limit, 4, 0, 1, 1)
-
-        self.gridlayout_quality = QGridLayout()
-        self.gridlayout_quality.setObjectName(u"gridlayout_quality")
-        self.radio_quality_worst = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_quality_worst.setObjectName(u"radio_quality_worst")
-        self.radio_quality_worst.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_quality.addWidget(self.radio_quality_worst, 0, 3, 1, 1)
-
-        self.label_quality = QLabel(self.scrollAreaWidgetContents_6)
-        self.label_quality.setObjectName(u"label_quality")
-        sizePolicy2.setHeightForWidth(self.label_quality.sizePolicy().hasHeightForWidth())
-        self.label_quality.setSizePolicy(sizePolicy2)
-
-        self.gridlayout_quality.addWidget(self.label_quality, 0, 0, 1, 1)
-
-        self.radio_quality_best = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_quality_best.setObjectName(u"radio_quality_best")
-        self.radio_quality_best.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_quality.addWidget(self.radio_quality_best, 0, 1, 1, 1)
-
-        self.radio_quality_half = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_quality_half.setObjectName(u"radio_quality_half")
-        self.radio_quality_half.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_quality.addWidget(self.radio_quality_half, 0, 2, 1, 1)
-
-        self.horizontalspacer_quality = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.gridlayout_quality.addItem(self.horizontalspacer_quality, 0, 4, 1, 1)
-
-
-        self.gridlayout_settings.addLayout(self.gridlayout_quality, 2, 0, 1, 1)
-
+        self.goroupbox_gui = QGroupBox(self.scrollAreaWidgetContents_6)
+        self.goroupbox_gui.setObjectName(u"goroupbox_gui")
+        self.gridLayout_12 = QGridLayout(self.goroupbox_gui)
+        self.gridLayout_12.setObjectName(u"gridLayout_12")
         self.gridlayout_gui_settings = QGridLayout()
         self.gridlayout_gui_settings.setObjectName(u"gridlayout_gui_settings")
-        self.radio_ui_language_french = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_ui_language_french.setObjectName(u"radio_ui_language_french")
-        self.radio_ui_language_french.setEnabled(True)
-
-        self.gridlayout_gui_settings.addWidget(self.radio_ui_language_french, 0, 5, 1, 1)
-
-        self.radio_ui_language_german = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_ui_language_german.setObjectName(u"radio_ui_language_german")
-        self.radio_ui_language_german.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_gui_settings.addWidget(self.radio_ui_language_german, 0, 3, 1, 1)
-
-        self.radio_ui_language_english = QRadioButton(self.scrollAreaWidgetContents_6)
+        self.radio_ui_language_english = QRadioButton(self.goroupbox_gui)
         self.radio_ui_language_english.setObjectName(u"radio_ui_language_english")
         self.radio_ui_language_english.setCursor(QCursor(Qt.PointingHandCursor))
 
         self.gridlayout_gui_settings.addWidget(self.radio_ui_language_english, 0, 2, 1, 1)
 
-        self.label_ui_language = QLabel(self.scrollAreaWidgetContents_6)
+        self.radio_ui_language_system_default = QRadioButton(self.goroupbox_gui)
+        self.radio_ui_language_system_default.setObjectName(u"radio_ui_language_system_default")
+        self.radio_ui_language_system_default.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.gridlayout_gui_settings.addWidget(self.radio_ui_language_system_default, 0, 1, 1, 1)
+
+        self.radio_ui_language_french = QRadioButton(self.goroupbox_gui)
+        self.radio_ui_language_french.setObjectName(u"radio_ui_language_french")
+        self.radio_ui_language_french.setEnabled(True)
+
+        self.gridlayout_gui_settings.addWidget(self.radio_ui_language_french, 0, 5, 1, 1)
+
+        self.radio_ui_language_german = QRadioButton(self.goroupbox_gui)
+        self.radio_ui_language_german.setObjectName(u"radio_ui_language_german")
+        self.radio_ui_language_german.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.gridlayout_gui_settings.addWidget(self.radio_ui_language_german, 0, 3, 1, 1)
+
+        self.label_ui_language = QLabel(self.goroupbox_gui)
         self.label_ui_language.setObjectName(u"label_ui_language")
         sizePolicy2.setHeightForWidth(self.label_ui_language.sizePolicy().hasHeightForWidth())
         self.label_ui_language.setSizePolicy(sizePolicy2)
 
         self.gridlayout_gui_settings.addWidget(self.label_ui_language, 0, 0, 1, 1)
 
-        self.radio_ui_language_system_default = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_ui_language_system_default.setObjectName(u"radio_ui_language_system_default")
-        self.radio_ui_language_system_default.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_gui_settings.addWidget(self.radio_ui_language_system_default, 0, 1, 1, 1)
-
-        self.radio_ui_language_chinese_simplified = QRadioButton(self.scrollAreaWidgetContents_6)
+        self.radio_ui_language_chinese_simplified = QRadioButton(self.goroupbox_gui)
         self.radio_ui_language_chinese_simplified.setObjectName(u"radio_ui_language_chinese_simplified")
         self.radio_ui_language_chinese_simplified.setCursor(QCursor(Qt.PointingHandCursor))
 
         self.gridlayout_gui_settings.addWidget(self.radio_ui_language_chinese_simplified, 0, 4, 1, 1)
 
-        self.horizontalspacer_gui_language = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        self.gridlayout_gui_settings.addItem(self.horizontalspacer_gui_language, 0, 6, 1, 1)
+        self.gridLayout_12.addLayout(self.gridlayout_gui_settings, 0, 0, 1, 1)
 
 
-        self.gridlayout_settings.addLayout(self.gridlayout_gui_settings, 5, 0, 1, 1)
+        self.gridLayout_34.addWidget(self.goroupbox_gui, 2, 0, 1, 1)
+
+        self.groupbox_videos = QGroupBox(self.scrollAreaWidgetContents_6)
+        self.groupbox_videos.setObjectName(u"groupbox_videos")
+        self.gridLayout_10 = QGridLayout(self.groupbox_videos)
+        self.gridLayout_10.setObjectName(u"gridLayout_10")
+        self.horizontalLayout_9 = QHBoxLayout()
+        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
+        self.label_searching_limit = QLabel(self.groupbox_videos)
+        self.label_searching_limit.setObjectName(u"label_searching_limit")
+
+        self.horizontalLayout_9.addWidget(self.label_searching_limit)
+
+        self.spinbox_treewidget_limit = QSpinBox(self.groupbox_videos)
+        self.spinbox_treewidget_limit.setObjectName(u"spinbox_treewidget_limit")
+        self.spinbox_treewidget_limit.setMinimum(1)
+        self.spinbox_treewidget_limit.setMaximum(200)
+
+        self.horizontalLayout_9.addWidget(self.spinbox_treewidget_limit)
+
+        self.button_result_limit_help = QPushButton(self.groupbox_videos)
+        self.button_result_limit_help.setObjectName(u"button_result_limit_help")
+        self.button_result_limit_help.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.horizontalLayout_9.addWidget(self.button_result_limit_help)
+
+
+        self.gridLayout_10.addLayout(self.horizontalLayout_9, 3, 0, 1, 1)
+
+        self.horizontallayout_directory_system = QHBoxLayout()
+        self.horizontallayout_directory_system.setObjectName(u"horizontallayout_directory_system")
+        self.label_directory_system = QLabel(self.groupbox_videos)
+        self.label_directory_system.setObjectName(u"label_directory_system")
+
+        self.horizontallayout_directory_system.addWidget(self.label_directory_system)
+
+        self.radio_directory_system_yes = QRadioButton(self.groupbox_videos)
+        self.radio_directory_system_yes.setObjectName(u"radio_directory_system_yes")
+        self.radio_directory_system_yes.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.horizontallayout_directory_system.addWidget(self.radio_directory_system_yes)
+
+        self.radio_directory_system_no = QRadioButton(self.groupbox_videos)
+        self.radio_directory_system_no.setObjectName(u"radio_directory_system_no")
+        self.radio_directory_system_no.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.horizontallayout_directory_system.addWidget(self.radio_directory_system_no)
+
+        self.button_directory_system_help = QPushButton(self.groupbox_videos)
+        self.button_directory_system_help.setObjectName(u"button_directory_system_help")
+        self.button_directory_system_help.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.horizontallayout_directory_system.addWidget(self.button_directory_system_help)
+
+
+        self.gridLayout_10.addLayout(self.horizontallayout_directory_system, 2, 0, 1, 1)
+
+        self.horizontallayout_quality = QHBoxLayout()
+        self.horizontallayout_quality.setObjectName(u"horizontallayout_quality")
+        self.label_quality = QLabel(self.groupbox_videos)
+        self.label_quality.setObjectName(u"label_quality")
+        sizePolicy2.setHeightForWidth(self.label_quality.sizePolicy().hasHeightForWidth())
+        self.label_quality.setSizePolicy(sizePolicy2)
+
+        self.horizontallayout_quality.addWidget(self.label_quality)
+
+        self.radio_quality_best = QRadioButton(self.groupbox_videos)
+        self.radio_quality_best.setObjectName(u"radio_quality_best")
+        self.radio_quality_best.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.horizontallayout_quality.addWidget(self.radio_quality_best)
+
+        self.radio_quality_half = QRadioButton(self.groupbox_videos)
+        self.radio_quality_half.setObjectName(u"radio_quality_half")
+        self.radio_quality_half.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.horizontallayout_quality.addWidget(self.radio_quality_half)
+
+        self.radio_quality_worst = QRadioButton(self.groupbox_videos)
+        self.radio_quality_worst.setObjectName(u"radio_quality_worst")
+        self.radio_quality_worst.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.horizontallayout_quality.addWidget(self.radio_quality_worst)
+
+
+        self.gridLayout_10.addLayout(self.horizontallayout_quality, 0, 0, 1, 1)
+
+        self.horizontallayout_output_path = QHBoxLayout()
+        self.horizontallayout_output_path.setObjectName(u"horizontallayout_output_path")
+        self.label_output_path = QLabel(self.groupbox_videos)
+        self.label_output_path.setObjectName(u"label_output_path")
+
+        self.horizontallayout_output_path.addWidget(self.label_output_path)
+
+        self.lineedit_output_path = QLineEdit(self.groupbox_videos)
+        self.lineedit_output_path.setObjectName(u"lineedit_output_path")
+
+        self.horizontallayout_output_path.addWidget(self.lineedit_output_path)
+
+        self.button_output_path_select = QPushButton(self.groupbox_videos)
+        self.button_output_path_select.setObjectName(u"button_output_path_select")
+        self.button_output_path_select.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.horizontallayout_output_path.addWidget(self.button_output_path_select)
+
+
+        self.gridLayout_10.addLayout(self.horizontallayout_output_path, 1, 0, 1, 1)
 
         self.gridlayout_api_language = QGridLayout()
         self.gridlayout_api_language.setObjectName(u"gridlayout_api_language")
-        self.label_api_language = QLabel(self.scrollAreaWidgetContents_6)
+        self.radio_api_language_chinese = QRadioButton(self.groupbox_videos)
+        self.radio_api_language_chinese.setObjectName(u"radio_api_language_chinese")
+        self.radio_api_language_chinese.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.gridlayout_api_language.addWidget(self.radio_api_language_chinese, 2, 1, 1, 1)
+
+        self.horizontalspacer_api_language_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridlayout_api_language.addItem(self.horizontalspacer_api_language_3, 3, 4, 1, 1)
+
+        self.radio_api_language_french = QRadioButton(self.groupbox_videos)
+        self.radio_api_language_french.setObjectName(u"radio_api_language_french")
+        self.radio_api_language_french.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.gridlayout_api_language.addWidget(self.radio_api_language_french, 4, 0, 1, 1)
+
+        self.horizontalspacer_api_language_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridlayout_api_language.addItem(self.horizontalspacer_api_language_2, 2, 4, 1, 1)
+
+        self.radio_api_language_english = QRadioButton(self.groupbox_videos)
+        self.radio_api_language_english.setObjectName(u"radio_api_language_english")
+        self.radio_api_language_english.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.gridlayout_api_language.addWidget(self.radio_api_language_english, 2, 0, 1, 1)
+
+        self.radio_api_language_spanish = QRadioButton(self.groupbox_videos)
+        self.radio_api_language_spanish.setObjectName(u"radio_api_language_spanish")
+
+        self.gridlayout_api_language.addWidget(self.radio_api_language_spanish, 2, 2, 1, 1)
+
+        self.radio_api_language_portuguese = QRadioButton(self.groupbox_videos)
+        self.radio_api_language_portuguese.setObjectName(u"radio_api_language_portuguese")
+
+        self.gridlayout_api_language.addWidget(self.radio_api_language_portuguese, 4, 2, 1, 1)
+
+        self.radio_api_language_japanese = QRadioButton(self.groupbox_videos)
+        self.radio_api_language_japanese.setObjectName(u"radio_api_language_japanese")
+
+        self.gridlayout_api_language.addWidget(self.radio_api_language_japanese, 3, 3, 1, 1)
+
+        self.horizontalspacer_api_language = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridlayout_api_language.addItem(self.horizontalspacer_api_language, 4, 4, 1, 1)
+
+        self.radio_api_language_italian = QRadioButton(self.groupbox_videos)
+        self.radio_api_language_italian.setObjectName(u"radio_api_language_italian")
+
+        self.gridlayout_api_language.addWidget(self.radio_api_language_italian, 3, 2, 1, 1)
+
+        self.radio_api_language_czech = QRadioButton(self.groupbox_videos)
+        self.radio_api_language_czech.setObjectName(u"radio_api_language_czech")
+
+        self.gridlayout_api_language.addWidget(self.radio_api_language_czech, 2, 3, 1, 1)
+
+        self.radio_api_language_german = QRadioButton(self.groupbox_videos)
+        self.radio_api_language_german.setObjectName(u"radio_api_language_german")
+        self.radio_api_language_german.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.gridlayout_api_language.addWidget(self.radio_api_language_german, 3, 0, 1, 1)
+
+        self.radio_api_language_dutch = QRadioButton(self.groupbox_videos)
+        self.radio_api_language_dutch.setObjectName(u"radio_api_language_dutch")
+
+        self.gridlayout_api_language.addWidget(self.radio_api_language_dutch, 4, 1, 1, 1)
+
+        self.radio_api_language_russian = QRadioButton(self.groupbox_videos)
+        self.radio_api_language_russian.setObjectName(u"radio_api_language_russian")
+        self.radio_api_language_russian.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.gridlayout_api_language.addWidget(self.radio_api_language_russian, 3, 1, 1, 1)
+
+        self.label_api_language = QLabel(self.groupbox_videos)
         self.label_api_language.setObjectName(u"label_api_language")
         sizePolicy2.setHeightForWidth(self.label_api_language.sizePolicy().hasHeightForWidth())
         self.label_api_language.setSizePolicy(sizePolicy2)
 
-        self.gridlayout_api_language.addWidget(self.label_api_language, 0, 0, 1, 5)
-
-        self.horizontalspacer_api_language_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.gridlayout_api_language.addItem(self.horizontalspacer_api_language_3, 2, 4, 1, 1)
-
-        self.radio_api_language_spanish = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_api_language_spanish.setObjectName(u"radio_api_language_spanish")
-
-        self.gridlayout_api_language.addWidget(self.radio_api_language_spanish, 1, 2, 1, 1)
-
-        self.radio_api_language_portuguese = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_api_language_portuguese.setObjectName(u"radio_api_language_portuguese")
-
-        self.gridlayout_api_language.addWidget(self.radio_api_language_portuguese, 3, 2, 1, 1)
-
-        self.radio_api_language_german = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_api_language_german.setObjectName(u"radio_api_language_german")
-        self.radio_api_language_german.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_api_language.addWidget(self.radio_api_language_german, 2, 0, 1, 1)
-
-        self.radio_api_language_chinese = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_api_language_chinese.setObjectName(u"radio_api_language_chinese")
-        self.radio_api_language_chinese.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_api_language.addWidget(self.radio_api_language_chinese, 1, 1, 1, 1)
-
-        self.radio_api_language_dutch = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_api_language_dutch.setObjectName(u"radio_api_language_dutch")
-
-        self.gridlayout_api_language.addWidget(self.radio_api_language_dutch, 3, 1, 1, 1)
-
-        self.radio_api_language_italian = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_api_language_italian.setObjectName(u"radio_api_language_italian")
-
-        self.gridlayout_api_language.addWidget(self.radio_api_language_italian, 2, 2, 1, 1)
-
-        self.radio_api_language_russian = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_api_language_russian.setObjectName(u"radio_api_language_russian")
-        self.radio_api_language_russian.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_api_language.addWidget(self.radio_api_language_russian, 2, 1, 1, 1)
-
-        self.radio_api_language_english = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_api_language_english.setObjectName(u"radio_api_language_english")
-        self.radio_api_language_english.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_api_language.addWidget(self.radio_api_language_english, 1, 0, 1, 1)
-
-        self.horizontalspacer_api_language = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.gridlayout_api_language.addItem(self.horizontalspacer_api_language, 3, 4, 1, 1)
-
-        self.radio_api_language_french = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_api_language_french.setObjectName(u"radio_api_language_french")
-        self.radio_api_language_french.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_api_language.addWidget(self.radio_api_language_french, 3, 0, 1, 1)
-
-        self.horizontalspacer_api_language_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.gridlayout_api_language.addItem(self.horizontalspacer_api_language_2, 1, 4, 1, 1)
-
-        self.radio_api_language_czech = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_api_language_czech.setObjectName(u"radio_api_language_czech")
-
-        self.gridlayout_api_language.addWidget(self.radio_api_language_czech, 1, 3, 1, 1)
-
-        self.radio_api_language_japanese = QRadioButton(self.scrollAreaWidgetContents_6)
-        self.radio_api_language_japanese.setObjectName(u"radio_api_language_japanese")
-
-        self.gridlayout_api_language.addWidget(self.radio_api_language_japanese, 2, 3, 1, 1)
+        self.gridlayout_api_language.addWidget(self.label_api_language, 1, 0, 1, 1)
 
 
-        self.gridlayout_settings.addLayout(self.gridlayout_api_language, 3, 0, 1, 1)
+        self.gridLayout_10.addLayout(self.gridlayout_api_language, 4, 0, 1, 1)
+
+
+        self.gridLayout_34.addWidget(self.groupbox_videos, 1, 0, 1, 1)
+
+        self.gridlayout_settings = QGridLayout()
+        self.gridlayout_settings.setObjectName(u"gridlayout_settings")
+        self.groupbox_performance = QGroupBox(self.scrollAreaWidgetContents_6)
+        self.groupbox_performance.setObjectName(u"groupbox_performance")
+        self.gridLayout_9 = QGridLayout(self.groupbox_performance)
+        self.gridLayout_9.setObjectName(u"gridLayout_9")
+        self.horizontallayout_simultaneous_downloads = QHBoxLayout()
+        self.horizontallayout_simultaneous_downloads.setObjectName(u"horizontallayout_simultaneous_downloads")
+        self.label_semaphore = QLabel(self.groupbox_performance)
+        self.label_semaphore.setObjectName(u"label_semaphore")
+
+        self.horizontallayout_simultaneous_downloads.addWidget(self.label_semaphore)
+
+        self.spinbox_semaphore = QSpinBox(self.groupbox_performance)
+        self.spinbox_semaphore.setObjectName(u"spinbox_semaphore")
+        self.spinbox_semaphore.setMinimum(1)
+        self.spinbox_semaphore.setMaximum(10)
+
+        self.horizontallayout_simultaneous_downloads.addWidget(self.spinbox_semaphore)
+
+        self.button_semaphore_help = QPushButton(self.groupbox_performance)
+        self.button_semaphore_help.setObjectName(u"button_semaphore_help")
+        self.button_semaphore_help.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.horizontallayout_simultaneous_downloads.addWidget(self.button_semaphore_help)
+
+
+        self.gridLayout_9.addLayout(self.horizontallayout_simultaneous_downloads, 2, 0, 1, 1)
+
+        self.horizontallayout_maximal_workers = QHBoxLayout()
+        self.horizontallayout_maximal_workers.setObjectName(u"horizontallayout_maximal_workers")
+        self.label_maximal_workers = QLabel(self.groupbox_performance)
+        self.label_maximal_workers.setObjectName(u"label_maximal_workers")
+
+        self.horizontallayout_maximal_workers.addWidget(self.label_maximal_workers)
+
+        self.spinbox_maximal_workers = QSpinBox(self.groupbox_performance)
+        self.spinbox_maximal_workers.setObjectName(u"spinbox_maximal_workers")
+        self.spinbox_maximal_workers.setMinimum(1)
+        self.spinbox_maximal_workers.setMaximum(50)
+
+        self.horizontallayout_maximal_workers.addWidget(self.spinbox_maximal_workers)
+
+        self.button_workers_help = QPushButton(self.groupbox_performance)
+        self.button_workers_help.setObjectName(u"button_workers_help")
+        self.button_workers_help.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.horizontallayout_maximal_workers.addWidget(self.button_workers_help)
+
+
+        self.gridLayout_9.addLayout(self.horizontallayout_maximal_workers, 4, 0, 1, 1)
+
+        self.horizontallayout_pornhub_delay = QHBoxLayout()
+        self.horizontallayout_pornhub_delay.setObjectName(u"horizontallayout_pornhub_delay")
+        self.label_pornhub_delay = QLabel(self.groupbox_performance)
+        self.label_pornhub_delay.setObjectName(u"label_pornhub_delay")
+
+        self.horizontallayout_pornhub_delay.addWidget(self.label_pornhub_delay)
+
+        self.spinbox_pornhub_delay = QSpinBox(self.groupbox_performance)
+        self.spinbox_pornhub_delay.setObjectName(u"spinbox_pornhub_delay")
+        self.spinbox_pornhub_delay.setMinimum(0)
+        self.spinbox_pornhub_delay.setMaximum(10)
+
+        self.horizontallayout_pornhub_delay.addWidget(self.spinbox_pornhub_delay)
+
+        self.button_pornhub_delay_help = QPushButton(self.groupbox_performance)
+        self.button_pornhub_delay_help.setObjectName(u"button_pornhub_delay_help")
+        self.button_pornhub_delay_help.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.horizontallayout_pornhub_delay.addWidget(self.button_pornhub_delay_help)
+
+
+        self.gridLayout_9.addLayout(self.horizontallayout_pornhub_delay, 3, 0, 1, 1)
+
+        self.horizontallayout_threading_mode = QHBoxLayout()
+        self.horizontallayout_threading_mode.setObjectName(u"horizontallayout_threading_mode")
+        self.label_threading_mode = QLabel(self.groupbox_performance)
+        self.label_threading_mode.setObjectName(u"label_threading_mode")
+        sizePolicy2.setHeightForWidth(self.label_threading_mode.sizePolicy().hasHeightForWidth())
+        self.label_threading_mode.setSizePolicy(sizePolicy2)
+
+        self.horizontallayout_threading_mode.addWidget(self.label_threading_mode)
+
+        self.radio_threading_mode_high_performance = QRadioButton(self.groupbox_performance)
+        self.radio_threading_mode_high_performance.setObjectName(u"radio_threading_mode_high_performance")
+        self.radio_threading_mode_high_performance.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.horizontallayout_threading_mode.addWidget(self.radio_threading_mode_high_performance)
+
+        self.radio_threading_mode_ffmpeg = QRadioButton(self.groupbox_performance)
+        self.radio_threading_mode_ffmpeg.setObjectName(u"radio_threading_mode_ffmpeg")
+        self.radio_threading_mode_ffmpeg.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.horizontallayout_threading_mode.addWidget(self.radio_threading_mode_ffmpeg)
+
+        self.radio_threading_mode_default = QRadioButton(self.groupbox_performance)
+        self.radio_threading_mode_default.setObjectName(u"radio_threading_mode_default")
+        self.radio_threading_mode_default.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.horizontallayout_threading_mode.addWidget(self.radio_threading_mode_default)
+
+        self.button_threading_mode_help = QPushButton(self.groupbox_performance)
+        self.button_threading_mode_help.setObjectName(u"button_threading_mode_help")
+        self.button_threading_mode_help.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.horizontallayout_threading_mode.addWidget(self.button_threading_mode_help)
+
+
+        self.gridLayout_9.addLayout(self.horizontallayout_threading_mode, 1, 0, 1, 1)
+
+        self.horizontallayout_maximal_timeout = QHBoxLayout()
+        self.horizontallayout_maximal_timeout.setObjectName(u"horizontallayout_maximal_timeout")
+        self.label_maximal_timeout = QLabel(self.groupbox_performance)
+        self.label_maximal_timeout.setObjectName(u"label_maximal_timeout")
+
+        self.horizontallayout_maximal_timeout.addWidget(self.label_maximal_timeout)
+
+        self.spinbox_maximal_timeout = QSpinBox(self.groupbox_performance)
+        self.spinbox_maximal_timeout.setObjectName(u"spinbox_maximal_timeout")
+        self.spinbox_maximal_timeout.setMinimum(5)
+        self.spinbox_maximal_timeout.setMaximum(30)
+
+        self.horizontallayout_maximal_timeout.addWidget(self.spinbox_maximal_timeout)
+
+        self.button_timeout_help = QPushButton(self.groupbox_performance)
+        self.button_timeout_help.setObjectName(u"button_timeout_help")
+        self.button_timeout_help.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.horizontallayout_maximal_timeout.addWidget(self.button_timeout_help)
+
+
+        self.gridLayout_9.addLayout(self.horizontallayout_maximal_timeout, 5, 0, 1, 1)
+
+
+        self.gridlayout_settings.addWidget(self.groupbox_performance, 0, 0, 1, 1)
 
 
         self.gridLayout_34.addLayout(self.gridlayout_settings, 0, 0, 1, 1)
+
+        self.horizontallayout_settings_apply = QHBoxLayout()
+        self.horizontallayout_settings_apply.setObjectName(u"horizontallayout_settings_apply")
+        self.button_settings_apply = QPushButton(self.scrollAreaWidgetContents_6)
+        self.button_settings_apply.setObjectName(u"button_settings_apply")
+        self.button_settings_apply.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.horizontallayout_settings_apply.addWidget(self.button_settings_apply)
+
+        self.button_settings_reset = QPushButton(self.scrollAreaWidgetContents_6)
+        self.button_settings_reset.setObjectName(u"button_settings_reset")
+        self.button_settings_reset.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_settings_reset.setStyleSheet(u"QPushButton {\n"
+"    background-color: rgb(85, 0, 0)/* Green */\n"
+"    font: bold 14px;\n"
+"    min-width: 5em;\n"
+"    padding: 3px;\n"
+"    color: white;\n"
+"    border-radius: 10px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color:  rgb(222, 0, 41)/* Lighter green */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: rgb(108, 0, 52) /* Dark green */\n"
+"}\n"
+"")
+
+        self.horizontallayout_settings_apply.addWidget(self.button_settings_reset)
+
+
+        self.gridLayout_34.addLayout(self.horizontallayout_settings_apply, 3, 0, 1, 1)
 
         self.scrollarea_settings.setWidget(self.scrollAreaWidgetContents_6)
 
@@ -1210,7 +1272,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_metadata.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 946, 978))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 889, 1012))
         self.gridLayout_27 = QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_27.setObjectName(u"gridLayout_27")
         self.gridlayout_metadata_ = QGridLayout()
@@ -1626,13 +1688,13 @@ class Ui_Porn_Fetch_Widget(object):
         self.main_gridlayout.addWidget(self.main_widget, 0, 1, 1, 1)
 
 
-        self.gridLayout.addLayout(self.main_gridlayout, 0, 0, 1, 1)
+        self.gridLayout_15.addLayout(self.main_gridlayout, 0, 0, 1, 1)
 
 
         self.retranslateUi(Porn_Fetch_Widget)
 
-        self.stacked_widget_main.setCurrentIndex(4)
-        self.stacked_widget_top.setCurrentIndex(2)
+        self.stacked_widget_main.setCurrentIndex(1)
+        self.stacked_widget_top.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(Porn_Fetch_Widget)
@@ -1691,58 +1753,70 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_username.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Username:", None))
         self.lineedit_password.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter your PornHub Password", None))
         self.button_get_recommended_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get recommended videos", None))
-        self.label_videos_by_category.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get videos by category", None))
-        self.button_hqporner_category_get_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Videos", None))
-        self.button_list_categories.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"List of all categories", None))
+        self.groupBox.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"HQPorner", None))
+        self.label_pages.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Pages:", None))
+        self.radio_top_porn_all_time.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"All Time", None))
+        self.button_get_brazzers_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Videos", None))
+        self.radio_top_porn_month.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Month", None))
+        self.button_get_random_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Video", None))
         self.label_get_top_porn.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Top Porn:", None))
         self.radio_top_porn_week.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Week", None))
-        self.radio_top_porn_month.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Month", None))
-        self.radio_top_porn_all_time.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"All Time", None))
         self.button_top_porn_get_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Videos", None))
-        self.label_pages.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Pages:", None))
-        self.button_help_pages.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
+        self.label_videos_by_category.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get videos by category", None))
+        self.button_list_categories.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"List of all categories", None))
+        self.button_hqporner_category_get_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Videos", None))
         self.labe_get_random_video.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get random video", None))
-        self.button_get_random_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Video", None))
         self.label_get_brazzers_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Brazzers videos", None))
-        self.button_get_brazzers_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Videos", None))
-        self.label_threading_mode.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Threading Mode:", None))
-        self.radio_threading_mode_ffmpeg.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"FFMPEG", None))
-        self.radio_threading_mode_high_performance.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"High Performance", None))
-        self.radio_threading_mode_default.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Default", None))
-        self.button_threading_mode_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
-        self.button_settings_apply.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Apply / Reload", None))
-        self.label_semaphore.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Semaphore:", None))
-        self.button_semaphore_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
-        self.lineedit_output_path.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter \"./\" for current directory", None))
-        self.label_output_path.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Output path:", None))
-        self.button_directory_system_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
-        self.label_directory_system.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Use Directory system? ", None))
-        self.button_output_path_select.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Open", None))
+        self.button_help_pages.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
+        self.goroupbox_gui.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface", None))
+        self.radio_ui_language_english.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"English", None))
+        self.radio_ui_language_system_default.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"System default", None))
+        self.radio_ui_language_french.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))
+        self.radio_ui_language_german.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
+        self.label_ui_language.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface Language:", None))
+        self.radio_ui_language_chinese_simplified.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Chinese (simplified)", None))
+        self.groupbox_videos.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Videos", None))
         self.label_searching_limit.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Result Limit:", None))
+        self.button_result_limit_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
+        self.label_directory_system.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Use Directory system? ", None))
         self.radio_directory_system_yes.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
         self.radio_directory_system_no.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
-        self.radio_quality_worst.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Worst", None))
+        self.button_directory_system_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
         self.label_quality.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Quality:", None))
         self.radio_quality_best.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Best", None))
         self.radio_quality_half.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Half", None))
-        self.radio_ui_language_french.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))
-        self.radio_ui_language_german.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
-        self.radio_ui_language_english.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"English", None))
-        self.label_ui_language.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface Language:", None))
-        self.radio_ui_language_system_default.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"System default", None))
-        self.radio_ui_language_chinese_simplified.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Chinese (simplified)", None))
-        self.label_api_language.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"PornHub Language (affects video titles)", None))
+        self.radio_quality_worst.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Worst", None))
+        self.label_output_path.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Output path:", None))
+        self.lineedit_output_path.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter \"./\" for current directory", None))
+        self.button_output_path_select.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Open", None))
+        self.radio_api_language_chinese.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Chinese", None))
+        self.radio_api_language_french.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))
+        self.radio_api_language_english.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"English", None))
         self.radio_api_language_spanish.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Spanish", None))
         self.radio_api_language_portuguese.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Portuguese", None))
-        self.radio_api_language_german.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
-        self.radio_api_language_chinese.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Chinese", None))
-        self.radio_api_language_dutch.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Dutch", None))
-        self.radio_api_language_italian.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Italian", None))
-        self.radio_api_language_russian.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Russian", None))
-        self.radio_api_language_english.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"English", None))
-        self.radio_api_language_french.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))
-        self.radio_api_language_czech.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Czech", None))
         self.radio_api_language_japanese.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Japanese", None))
+        self.radio_api_language_italian.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Italian", None))
+        self.radio_api_language_czech.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Czech", None))
+        self.radio_api_language_german.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
+        self.radio_api_language_dutch.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Dutch", None))
+        self.radio_api_language_russian.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Russian", None))
+        self.label_api_language.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"PornHub Language (affects video titles)", None))
+        self.groupbox_performance.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Performance", None))
+        self.label_semaphore.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Simultaneous downloads:", None))
+        self.button_semaphore_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
+        self.label_maximal_workers.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Maximal workers:", None))
+        self.button_workers_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
+        self.label_pornhub_delay.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"PornHub Delay (0 = Disabled) in seconds:", None))
+        self.button_pornhub_delay_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
+        self.label_threading_mode.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Threading Mode:", None))
+        self.radio_threading_mode_high_performance.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"High Performance", None))
+        self.radio_threading_mode_ffmpeg.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"FFMPEG", None))
+        self.radio_threading_mode_default.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Default", None))
+        self.button_threading_mode_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
+        self.label_maximal_timeout.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Maximal timeout:", None))
+        self.button_timeout_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
+        self.button_settings_apply.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Apply  (needs restart)", None))
+        self.button_settings_reset.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Reset Porn Fetch to default settings", None))
         self.button_metadata_video_start.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
         self.label_metadata_video_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Video URL:", None))
         self.button_metadata_user_start.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
@@ -1780,45 +1854,48 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_user_download_avatar.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download User Avatar", None))
         self.button_video_thumbnail_download.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download Thumbnail", None))
         self.textbrowser_websites.setHtml(QCoreApplication.translate("Porn_Fetch_Widget", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Supported Websites:</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Downloading:</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-righ"
-                        "t:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com (supports total progress)</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px;"
+                        " margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com (supports total progress)</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Eporner.com</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XNXX.com (supports total progress)</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XVideos.com (supports total progress)</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">All sites support threaded "
-                        "downloads and selectable quality!</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\""
+                        "><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">All sites support threaded downloads and selectable quality!</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Model / Channel Downloads</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left"
-                        ":0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Searching:</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; ma"
+                        "rgin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Searching:</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Xvideos.com</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Eporner.com</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-t"
+                        "op:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:"
-                        "0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I am constantly working to support more websites.</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0p"
+                        "x; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; "
-                        "margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
     # retranslateUi
