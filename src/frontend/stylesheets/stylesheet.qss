@@ -159,8 +159,14 @@ QSpinBox {
     padding: 5px;
 }
 
-QSpinBox::up-button, QSpinBox::down-button {
+QSpinBox::up-button {
     background-color: #555;
+    image: url(':/images/graphics/top-arrow.ico')
+}
+
+QSpinBox::down-button {
+    background-color: #555;
+    image: url(':/images/graphics/down-arrow.ico')
 }
 
 QSpinBox::up-button:hover, QSpinBox::down-button:hover {

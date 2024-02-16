@@ -26,18 +26,17 @@ Information:
 - [x] Adding a setting for specifying the workers and timeout in the threaded preset
 - [x] Bring back client delay (optional)
 - [x] Redesigning settings widget
+- [x] Adding get_by_category for EPorner
+- [x] Fixing searching (result) limit
+- [x] Fixing total progress for loading objects and stuff
+- [x] handle `Client.call failed after 4 attempts`
 - [] Code refactoring
 - [] Make functions more robust
 - [] Change README
 - [] Updating the CLI
 
-- [] Adding get_by_category for EPorner
 - [] Adding model for Xvideos and EPorner (May or may not work...)
-- [] Fixing searching (result) limit
-- [] Fixing total progress for loading objects and stuff
 - [] Implementing playlist support for PornHub
-- [] handle `Client.call failed after 4 attempts`
-- [] handle other non phub, but PornHub errors
 I am probably done with this by the end of March.
 
 My next holidays are at 22.3 or 24.3 (idk lol)

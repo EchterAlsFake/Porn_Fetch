@@ -21,7 +21,7 @@ Discord: echteralsfake (faster response)
 """
 
 __license__ = "GPL 3"
-__version__ = "3.0"
+__version__ = "3.1"
 __build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 
@@ -257,16 +257,21 @@ class AddToTreeWidget(QRunnable):
                 videos = islice(self.iterator, self.search_limit)
 
                 for i, video in enumerate(videos, start=1):
-                    if i == self.search_limit + 1:
-                        break  # The search limit prevents an infinite loop
+                    try:
+                        if i == self.search_limit + 1:
+                            break  # The search limit prevents an infinite loop
 
-                    text_data = self.process_video(video, i)
+                        text_data = self.process_video(video, i)
 
-                    self.signals.progress.emit(self.search_limit, i)  # sends the current progress
-                    self.signals.text_data.emit(text_data)  # sends the data to the main class
+                        self.signals.progress.emit(self.search_limit, i)  # sends the current progress
+                        self.signals.text_data.emit(text_data)  # sends the data to the main class
 
-        except errors.NoResult:
-            pass
+                    except errors.NoResult:
+                        pass
+
+                    except ConnectionError:
+                        logger_error("Client.call failed!, retrying...  If this error persists, set a delay in the settings")
+                        logger_error(f"Video: {i} won't be processed.")
 
         finally:
             self.signals.finished.emit()
@@ -739,7 +744,6 @@ class Porn_Fetch(QWidget):
             self.ui.button_switch_metadata: "list.svg",
             self.ui.button_switch_account: "account.svg",
             self.ui.button_switch_tools: "tools.svg",
-            self.ui.button_help_pages: "faq.svg",
             self.ui.button_workers_help: "faq.svg",
             self.ui.button_pornhub_delay_help: "faq.svg",
             self.ui.button_threading_mode_help: "faq.svg",
@@ -785,7 +789,6 @@ class Porn_Fetch(QWidget):
         self.ui.button_download.setStyleSheet(stylesheets["button_purple"])
         self.ui.button_threading_mode_help.setStyleSheet(stylesheets["button_green"])
         self.ui.button_directory_system_help.setStyleSheet(stylesheets["button_green"])
-        self.ui.button_help_pages.setStyleSheet(stylesheets["button_green"])
         self.ui.button_semaphore_help.setStyleSheet(stylesheets["button_green"])
         self.ui.button_tree_download.setStyleSheet(stylesheets["button_orange"])
         self.ui.button_tree_unselect_all.setStyleSheet(stylesheets["button_blue"])
@@ -1005,10 +1008,10 @@ class Porn_Fetch(QWidget):
         self.ui.button_semaphore_help.clicked.connect(self.button_semaphore_help)
         self.ui.button_threading_mode_help.clicked.connect(self.button_threading_mode_help)
         self.ui.button_directory_system_help.clicked.connect(self.button_directory_system_help)
-        self.ui.button_help_pages.clicked.connect(self.hqporner_pages_help)
         self.ui.button_workers_help.clicked.connect(self.maximal_workers_help)
         self.ui.button_timeout_help.clicked.connect(self.timeout_help)
         self.ui.button_pornhub_delay_help.clicked.connect(self.pornhub_delay_help)
+        self.ui.button_result_limit_help.clicked.connect(self.result_limit_help)
 
         # Settings
         self.ui.button_settings_apply.clicked.connect(self.save_user_settings)
@@ -1037,6 +1040,10 @@ class Porn_Fetch(QWidget):
         self.ui.button_list_categories.clicked.connect(self.list_categories_hqporner)
         self.ui.button_switch_tools.clicked.connect(self.switch_to_hqporner)
         self.ui.button_get_random_videos.clicked.connect(self.get_random_video)
+
+        # EPorner
+        self.ui.button_list_categories_eporner.clicked.connect(self.list_categories_eporner)
+        self.ui.button_eporner_category_get_videos.clicked.connect(self.get_by_category_eporner)
 
         # File Dialog
         self.ui.button_output_path_select.clicked.connect(self.open_output_path_dialog)
@@ -1109,7 +1116,7 @@ class Porn_Fetch(QWidget):
         self.threading_mode = self.conf["Performance"]["threading_mode"]
         self.api_language = self.conf["Video"]["language"]
         self.semaphore = QSemaphore(int(self.semaphore_limit))
-        self.delay = self.conf["Video"]["delay"]
+        self.delay = int(self.conf["Video"]["delay"])
         self.timeout = int(self.conf["Performance"]["timeout"])
         self.workers = int(self.conf["Performance"]["workers"])
 
@@ -1297,6 +1304,16 @@ class Porn_Fetch(QWidget):
     """
     The following functions are used for the help messages
     """
+
+    @classmethod
+    def result_limit_help(cls):
+        text = QCoreApplication.tr(f"""
+The result limit defines how many videos will be returned when performing a search or doing other operations which
+involves loading multiple videos. This also affects models / channels and your liked videos. The result limit is
+basically the number of videos which can be loaded into the tree widget (this thing where videos are displayed).
+""", disambiguation=None)
+        ui_popup(text)
+
     @classmethod
     def pornhub_delay_help(cls):
         text = QCoreApplication.tr(f"""
@@ -1371,17 +1388,6 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
         ui_popup(text)
 
-    @classmethod
-    def hqporner_pages_help(cls):
-        ui_popup(QCoreApplication.tr("""
-Videos are split into pages on HQPorner. One page contains 46 videos.
-If you specify 2 pages 92 videos will therefore be loaded.
-
-If no more videos are found it will break the loop and the received videos can be used.""", disambiguation=""))
-
-    """
-    Starting video download processes
-    """
 
     def start_single_video(self):
         """
@@ -1411,7 +1417,7 @@ If no more videos are found it will break the loop and the received videos can b
         if pornhub_pattern.match(model):
             api_language = self.api_language
             if not isinstance(self.client, Client):
-                client = Client(language=api_language)
+                client = Client(language=api_language, delay=self.delay)
 
             else:
                 client = self.client
@@ -1569,7 +1575,7 @@ If no more videos are found it will break the loop and the received videos can b
             return
 
         try:
-            self.client = Client(username, password, language=self.api_language)
+            self.client = Client(username, password, language=self.api_language, delay=self.delay)
             logger_debug("Login Successful!")
             ui_popup(self.language_string_login_successful)
             self.switch_login_button_state()
@@ -1621,27 +1627,27 @@ If no more videos are found it will break the loop and the received videos can b
     def basic_search(self):
         """Does a simple search for videos without filters on selected website"""
         query = self.ui.lineedit_search_query.text()
+        search_limit = self.search_limit
 
         if self.ui.radio_search_website_pornhub.isChecked():
             videos = Client().search(query, use_hubtraffic=True)
-            search_limit = 100
 
         elif self.ui.radio_search_website_xvideos.isChecked():
-            videos = xv_Client.search(query, pages=3)
-            search_limit = 3 * 27
+            pages = round(search_limit / 48)
+            videos = xv_Client.search(query, pages=pages)
 
         elif self.ui.radio_search_website_hqporner.isChecked():
-            videos = hq_Client.search_videos(query, pages=3)
+            pages = round(search_limit / 46)
+            videos = hq_Client.search_videos(query, pages=pages)
             search_limit = 3 * 46
 
         elif self.ui.radio_search_website_eporner.isChecked():
             videos = ep_Client().search_videos(query, sorting_gay="", sorting_order="", sorting_low_quality="", page=1,
-                                               per_page=45, enable_html_scraping=True)
-            search_limit = 45
+                                               per_page=search_limit, enable_html_scraping=True)
 
         self.add_to_tree_widget_thread(videos, search_limit=search_limit)
 
-    def get_metadata_video(self):  # TODO
+    def get_metadata_video(self):
         """This starts the metadata thread for videos"""
         api_language = self.api_language
         video = self.ui.lineedit_metadata_video_url.text()
@@ -1687,7 +1693,7 @@ If no more videos are found it will break the loop and the received videos can b
         """
         api_language = self.api_language  # TODO
         user = self.ui.lineedit_metadata_user_url.text()
-        client = Client(language=api_language)
+        client = Client(language=api_language, delay=self.delay)
         user_object = client.get_user(user)
 
         self.user_metadata_thread = MetadataUser(user_object)
@@ -1788,30 +1794,54 @@ If no more videos are found it will break the loop and the received videos can b
         else:
             sort = None
 
-        pages = self.ui.spinbox_pages.value()
+
+        search_limit = self.search_limit
+        pages = round(search_limit / 46)
         videos = hq_Client().get_top_porn(sort_by=sort, pages=pages)
-        search_limit = pages * 46
         self.add_to_tree_widget_thread(iterator=videos, search_limit=search_limit)
 
     def get_by_category_hqporner(self):
         """Returns video by category from HQPorner. I want to add support for EPorner"""  # TODO
+        self.list_all_categories_string = QCoreApplication.tr("Invalid Category. Press 'list categories' to see all possible ones.",
+                                         disambiguation="")
         category_name = self.ui.lineedit_hqporner_category.text()
-        pages = self.ui.spinbox_pages.value()
         all_categories = hq_Client().get_all_categories()
+        search_limit = self.search_limit
+        pages = round(search_limit / 46)
 
         if not category_name in all_categories:
-            ui_popup(QCoreApplication.tr("Invalid Category. Press 'list categories' to see all possible ones.",
-                                         disambiguation=""))
+            ui_popup(self.list_all_categories_string)
 
         else:
             videos = hq_Client().get_videos_by_category(category=category_name, pages=pages)
-            search_limit = pages * 46
             self.add_to_tree_widget_thread(videos, search_limit)
+
+    def get_by_category_eporner(self):
+        """Returns video by category from EPorner"""
+        search_limit = self.search_limit
+        pages = round(search_limit / 63)
+        category_name = self.ui.lineedit_videos_by_category_eporner.text()
+
+        if not category_name in self.all_cateogories_eporner:
+            ui_popup(self.list_all_categories_string)
+
+
+        else:
+            videos = ep_Client().get_videos_by_category(category=category_name, pages=pages, enable_html_scraping=True)
+            self.add_to_tree_widget_thread(iterator=videos, search_limit=search_limit)
+
+    def list_categories_eporner(self):
+        """Lists all video categories from EPorner"""
+        all_categories = ",".join([getattr(ep_Category, category) for category in dir(ep_Category) if
+                          not callable(getattr(ep_Category, category)) and not category.startswith("__")])
+
+        self.all_cateogories_eporner = all_categories # Need this list to verify the category later
+        ui_popup(all_categories)
 
     def get_brazzers_videos(self):
         """Get brazzers videos from HQPorner"""
-        pages = self.ui.spinbox_pages.value()
-        search_limit = pages * 46
+        search_limit = self.search_limit
+        pages = round(search_limit / 46)
         videos = hq_Client().get_brazzers_videos(pages)
         self.add_to_tree_widget_thread(videos, search_limit)
 
