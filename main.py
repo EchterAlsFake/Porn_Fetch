@@ -1,3 +1,31 @@
+import shutil
+import tarfile
+import requests
+import time
+import sys
+import os.path
+import argparse
+import markdown
+import traceback
+import zipfile
+import src.frontend.resources
+
+from requests.exceptions import SSLError
+from pathlib import Path
+from hqporner_api.api import Sort as hq_Sort
+from phub import Quality, download, consts
+from src.backend.shared_functions import *
+from itertools import islice
+
+from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
+from src.frontend.License import Ui_License
+from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
+                            QTranslator, QCoreApplication)
+from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QTreeWidgetItem, QButtonGroup,
+                               QFileDialog)
+from PySide6.QtGui import QIcon, QFont
+
+
 """
 Copyright (C) 2023-2024 Johannes Habel
 
@@ -20,142 +48,97 @@ E-Mail: EchterAlsFake@proton.me
 Discord: echteralsfake (faster response)
 """
 
+
 __license__ = "GPL 3"
 __version__ = "3.1"
 __build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
-
-import re
-
-import xvideos_api.modules.download
-
 total_segments = 0
 downloaded_segments = 0
-
 send_error_logs = False  # Only enabled when developing the application.
-
-import shutil
-import tarfile
-import requests
-import time
-
-import sys
-import os.path
-import argparse
-import markdown
-import traceback
-import zipfile
-import src.frontend.resources
-
-from requests.exceptions import SSLError
-from pathlib import Path
-from hqporner_api.api import Sort as hq_Sort, Video as hq_Video
-from phub import Quality, download, consts
-from src.backend.shared_functions import *
-from itertools import islice
-
-from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
-from src.frontend.License import Ui_License
-from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
-                            QTranslator, QCoreApplication)
-from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog, QTreeWidgetItem, QButtonGroup,
-                               QFileDialog)
-from PySide6.QtGui import QIcon, QFont
-
 invalid_input_string = QCoreApplication.tr("Wrong Input, please verify the URL, category or actress!",
                                            disambiguation="")
 
+class SomeFunctions:
 
-def send_error_log(message):
-    """A function to debug Porn Fetch on my local android development device"""
-    url = "http://192.168.2.103:8000/error-log/"
-    data = {"message": message}
-    requests.post(url, json=data)
+    @classmethod
+    def send_error_log(cls, message):
+        """A function to debug Porn Fetch on my local android development device"""
+        url = "http://192.168.2.103:8000/error-log/"
+        data = {"message": message}
+        requests.post(url, json=data)
 
+    @classmethod
+    def logger_error(cls, e):
+        """Simple mechanism of printing error messages"""
+        print(f"{datetime.now()} : {Fore.LIGHTRED_EX}[ERROR] : {reset()} : {e}")
+        if send_error_logs:
+            SomeFunctions().send_error_log(e)
 
-def logger_error(e):
-    """Simple mechanism of printing error messages"""
-    print(f"{datetime.now()} : {Fore.LIGHTRED_EX}[ERROR] : {reset()} : {e}")
-    if send_error_logs:
-        send_error_log(e)
+    @classmethod
+    def logger_debug(cls, e):
+        """Simple mechanism of printing debug messages"""
+        print(f"{datetime.now()} : {Fore.LIGHTCYAN_EX}[DEBUG] : {return_color()} : {e} {reset()}")
+        if send_error_logs:
+            SomeFunctions().send_error_log(e)
 
+    @classmethod
+    def get_output_path(cls, path="/storage/emulated/0/Download"):
+        """
+        Checks if the application can write to a specified directory by attempting to create a test file.
+        If the directory does not exist or the file cannot be created, returns False.
+        """
+        path = path if path.endswith("/") else f"{path}/"
+        test_file_path = f"{path}test.txt"
 
-def logger_debug(e):
-    """Simple mechanism of printing debug messages"""
-    print(f"{datetime.now()} : {Fore.LIGHTCYAN_EX}[DEBUG] : {return_color()} : {e} {reset()}")
-    if send_error_logs:
-        send_error_log(e)
+        try:
+            if not os.path.exists(path):
+                return False
 
+            if os.path.isfile(test_file_path):
+                return True
 
-def get_output_path(path="/storage/emulated/0/Download"):
-    """
-    Checks if the application can write to a specified directory by attempting to create a test file.
-    If the directory does not exist or the file cannot be created, returns False.
-    """
-    path = path if path.endswith("/") else f"{path}/"
-    test_file_path = f"{path}test.txt"
-
-    try:
-        if not os.path.exists(path):
-            return False
-
-        if os.path.isfile(test_file_path):
+            with open(test_file_path, "w") as test_file:
+                test_file.write("Test content for permission check.")
             return True
 
-        with open(test_file_path, "w") as test_file:
-            test_file.write("Test content for permission check.")
-        return True
+        except Exception as e:
+            logger_error(e)
+            return False
 
-    except Exception as e:
-        logger_error(e)
-        return False
-
-
-def ui_popup(text):
-    """ A simple UI popup that will be used for small messages to the user."""
-    qmsg_box = QMessageBox()
-    qmsg_box.setText(text)
-    qmsg_box.exec()
+    @classmethod
+    def ui_popup(cls, text):
+        """ A simple UI popup that will be used for small messages to the user."""
+        qmsg_box = QMessageBox()
+        qmsg_box.setText(text)
+        qmsg_box.exec()
 
 
-class WorkerSignals(QObject):
+class Signals(QObject):
     """Signals for the Download class"""
-    progress = Signal(int)
+    # Progress Signals
+    progress_single = Signal(int)
     completed = Signal()
-
-
-class DownloadProgressSignal(QObject):
-    """Sends the current download progress to the main UI to update the progressbar."""
-
-    # ADAPTION
     progress = Signal(int, int)
     progress_hqporner = Signal(int, int)
     progress_eporner = Signal(int, int)
     progress_xnxx = Signal(int, int)
     progress_xvideos = Signal(int, int)
     total_progress = Signal(int, int)
+    progress_video = Signal(object)
 
-
-class QTreeWidgetSignal(QObject):
-    """Signals needed across the QTreeWidget"""
-    progress = Signal(object)
-    get_total = Signal(str, Quality)
+    # Ranges
     start_undefined_range = Signal()
     stop_undefined_range = Signal()
-
-
-class MetadataSignals(QObject):
-    """Signals needed to emit data from the metadata class"""
     data = Signal(list)
-    start_undefined = Signal()
 
-
-class TreeWidgetSignals(QObject):
-    """Signals to send data to the tree Widget"""
-    clear_signal = Signal()
+    # Metadata
     text_data = Signal(list)
-    progress = Signal(int, int)
+
+    # Operations
     finished = Signal()
+    clear_signal = Signal()
+    get_total = Signal(str, Quality)
 
 
 class License(QWidget):
@@ -205,8 +188,7 @@ class License(QWidget):
 class AddToTreeWidget(QRunnable):
     def __init__(self, iterator, search_limit, data_mode, clickable, reverse):
         super(AddToTreeWidget, self).__init__()
-        self.signals = TreeWidgetSignals()
-        self.signals_ = QTreeWidgetSignal()
+        self.signals = Signals()
         self.iterator = iterator
         self.search_limit = search_limit
         self.data_mode = data_mode
@@ -253,11 +235,11 @@ class AddToTreeWidget(QRunnable):
 
             if self.reverse:
                 logger_debug("Reversing Videos. This may take some time...")
-                self.signals_.start_undefined_range.emit()
+                self.signals.start_undefined_range.emit()
                 # Use islice to limit the number of items fetched from the iterator
                 videos = list(islice(self.iterator, self.search_limit))
                 videos.reverse()  # Reverse the list (to show videos in reverse order)
-                self.signals_.stop_undefined_range.emit()
+                self.signals.stop_undefined_range.emit()
 
             else:
                 videos = islice(self.iterator, self.search_limit)
@@ -292,8 +274,7 @@ class DownloadThread(QRunnable):
         self.quality = quality
         self.output_path = output_path
         self.threading_mode = threading_mode
-        self.signals = DownloadProgressSignal()
-        self.signals_completed = WorkerSignals()
+        self.signals = Signals()
         self.workers = int(workers)
         self.timeout = int(timeout)
         self.video_progress = {}
@@ -332,6 +313,13 @@ class DownloadThread(QRunnable):
     def generic_callback(self, pos, total, signal, video_source, ffmpeg=False):
         """Generic callback function to emit progress signals with rate limiting."""
 
+        current_time = time.time()
+        # Check if the current time is at least 0.5 seconds greater than the last update time
+        if current_time - self.last_update_time < 0.5:
+            # If not, do not update the progress and return immediately
+            return
+
+        # Update the progress because it's been at least 0.5 seconds
         if ffmpeg:
             self.update_ffmpeg_progress(pos, total)
             signal.emit(pos, total)
@@ -341,6 +329,9 @@ class DownloadThread(QRunnable):
             # Update total progress only if the video source uses segments
             if video_source not in ['hqporner', 'eporner']:
                 self.update_total_progress(ffmpeg)
+
+        # Update the last update time to the current time
+        self.last_update_time = current_time
 
     def update_ffmpeg_progress(self, pos, total):
         """Update progress for FFmpeg downloads."""
@@ -362,19 +353,6 @@ class DownloadThread(QRunnable):
         logger_debug(f"Downloading Video to: {self.output_path}")
         if self.threading_mode == "FFMPEG" or self.threading_mode == download.FFMPEG:
             self.ffmpeg = True
-
-        if __build__ == "android":
-            if self.threading_mode == "threaded" or self.threading_mode == download.threaded:
-                if isinstance(self.video, Video):
-                    self.threading_mode = download.threaded(max_workers=3, timeout=10)
-
-                elif isinstance(self.video, xn_Video):
-                    self.threading_mode = xn_threaded(max_workers=3, timeout=10)
-
-                elif isinstance(self.video, xv_Video):
-                    self.threading_mode = xv_threaded(max_workers=3, timeout=10)
-
-                # ADAPTION
 
         if isinstance(self.video, Video):  # Assuming 'Video' is the class for Pornhub
             self.threading_mode = self.resolve_threading_mode(self.threading_mode)
@@ -424,7 +402,7 @@ class DownloadThread(QRunnable):
         # ... other video types ...
 
         # Emit the completed signal when done
-        self.signals_completed.completed.emit()
+        self.signals.completed.emit()
 
 
 class QTreeWidgetDownloadThread(QRunnable):
@@ -434,7 +412,7 @@ class QTreeWidgetDownloadThread(QRunnable):
         super(QTreeWidgetDownloadThread, self).__init__()
         self.treeWidget = treeWidget
         self.semaphore = semaphore
-        self.signals = QTreeWidgetSignal()
+        self.signals = Signals()
         self.quality = quality
         self.threading_mode = threading_mode
 
@@ -474,7 +452,7 @@ class QTreeWidgetDownloadThread(QRunnable):
         for video in video_objects:
             self.semaphore.acquire()  # Trying to start the download if the thread isn't locked
             logger_debug("Semaphore Acquired")
-            self.signals.progress.emit(video)  # Now emits the video to the main class for further processing
+            self.signals.progress_video.emit(video)  # Now emits the video to the main class for further processing
 
 
 class MetadataVideos(QRunnable):
@@ -482,7 +460,7 @@ class MetadataVideos(QRunnable):
 
     def __init__(self, video):
         super(MetadataVideos, self).__init__()
-        self.signals = MetadataSignals()
+        self.signals = Signals()
         self.video = video
 
     def run(self):
@@ -490,7 +468,7 @@ class MetadataVideos(QRunnable):
         Loads all metadata for videos. Since we don't have all variables on every website, I cna load them if they are
         available, which is why I always check with the hasattribute method.
         """
-        self.signals.start_undefined.emit()  # This btw starts the undefined range in the total bar. (Loading animation)
+        self.signals.start_undefined_range.emit()  # This btw starts the undefined range in the total bar. (Loading animation)
 
         like_string = QCoreApplication.tr("Likes", disambiguation="The Likes of the video")
         dislike_string = QCoreApplication.tr("Dislikes", disambiguation="The dislikes of the video")
@@ -525,10 +503,10 @@ class MetadataUser(QRunnable):
     def __init__(self, user):
         super(MetadataUser, self).__init__()
         self.user = user
-        self.signals = MetadataSignals()
+        self.signals = Signals()
 
     def run(self):
-        self.signals.start_undefined.emit()
+        self.signals.start_undefined_range.emit()
         info = self.user.info
 
         interested_in = info.get("Interested in")
@@ -583,7 +561,7 @@ class VideoLoader(QRunnable):
             video = check_video(self.url, language=self.api_language, delay=self.delay)
 
             if video is False:
-                ui_popup(invalid_input_string)
+                SomeFunctions().ui_popup(invalid_input_string)
 
             else:
                 title = video.title
@@ -617,11 +595,6 @@ class VideoLoader(QRunnable):
             self.signals.error.emit(str(e))
 
 
-class FFMPEGSignals(QObject):
-    """The progress for the ffmpeg download and extraction process"""
-    progress_signal = Signal(int, int)
-
-
 class FFMPEGDownload(QRunnable):
     """Downloads ffmpeg into the execution path of Porn Fetch"""
 
@@ -630,14 +603,14 @@ class FFMPEGDownload(QRunnable):
         self.url = url
         self.extract_path = extract_path
         self.mode = mode
-        self.signals = FFMPEGSignals()
+        self.signals = Signals()
 
     def run(self):
         # Download the file
         with requests.get(self.url, stream=True) as r:
             r.raise_for_status()
             total_length = int(r.headers.get('content-length'))
-            self.signals.progress_signal.emit(0, total_length)  # Initialize progress bar
+            self.signals.total_progress.emit(0, total_length)  # Initialize progress bar
             dl = 0
             filename = self.url.split('/')[-1]
             with open(filename, 'wb') as f:
@@ -645,7 +618,7 @@ class FFMPEGDownload(QRunnable):
                     if chunk:  # filter out keep-alive new chunks
                         f.write(chunk)
                         dl += len(chunk)
-                        self.signals.progress_signal.emit(dl, total_length)
+                        self.signals.total_progress.emit(dl, total_length)
 
         # Extract the file based on OS mode
         if self.mode == "linux" and filename.endswith(".tar.xz"):
@@ -658,7 +631,7 @@ class FFMPEGDownload(QRunnable):
                         extracted_path = os.path.join(self.extract_path, member.path)
                         shutil.move(extracted_path, "./")
 
-                    self.signals.progress_signal.emit(idx, total_members)
+                    self.signals.total_progress.emit(idx, total_members)
 
         elif self.mode == "windows" and filename.endswith(".zip"):
             with zipfile.ZipFile(filename, 'r') as zip_ref:
@@ -670,10 +643,10 @@ class FFMPEGDownload(QRunnable):
                         extracted_path = os.path.join(self.extract_path, member)
                         shutil.move(extracted_path, ".")
 
-                    self.signals.progress_signal.emit(idx, total)
+                    self.signals.total_progress.emit(idx, total)
 
         # Finalize
-        self.signals.progress_signal.emit(total_length, total_length)  # Ensure progress bar reaches 100%
+        self.signals.total_progress.emit(total_length, total_length)  # Ensure progress bar reaches 100%
         os.remove(filename)  # Clean up downloaded archive
 
         if sys.platform == "linux":
@@ -730,7 +703,8 @@ class Porn_Fetch(QWidget):
         if __build__ == "android":
             self.setup_android()
 
-    def load_stylesheet(self, path):
+    @classmethod
+    def load_stylesheet(cls, path):
         """Load stylesheet from a given path with explicit open and close."""
         file = QFile(path)
         if not file.open(QFile.ReadOnly | QFile.Text):
@@ -847,7 +821,7 @@ class Porn_Fetch(QWidget):
         logger_debug("Checking for updates...")
         if requests.get("https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.1").status_code == 200:
             logger_debug("Next release v3.1 found!")
-            ui_popup(QCoreApplication.tr("Information: A new version of Porn Fetch (v3.1) is out. "
+            SomeFunctions().ui_popup(QCoreApplication.tr("Information: A new version of Porn Fetch (v3.1) is out. "
                                          "I recommend you to update Porn Fetch. Go to: "
                                          "https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.1",
                                          disambiguation=None))
@@ -901,22 +875,22 @@ class Porn_Fetch(QWidget):
     def setup_android(self):
         """Sets up for Porn Fetch for Android devices"""
         logger_debug(f"Running on Android: {sys.platform}")
-        if not get_output_path():
+        if not SomeFunctions().get_output_path():
             self.handle_no_output_path()
             return  # Early return to avoid setting up UI components again at the end.
 
         self.configure_ui_for_android("/storage/emulated/0/Download/")
 
     def handle_no_output_path(self):
-        ui_popup(QCoreApplication.tr("The output path does not exist or is not writable.", disambiguation=""))
+        SomeFunctions().ui_popup(QCoreApplication.tr("The output path does not exist or is not writable.", disambiguation=""))
         text, ok = QInputDialog.getText(self, "Enter custom Path",
                                         QCoreApplication.tr("Enter custom Path:", disambiguation=""))
-        if ok and get_output_path(text):
-            ui_popup(QCoreApplication.tr(f"Success: {text} will be used for this session!", disambiguation=""))
+        if ok and SomeFunctions().get_output_path(text):
+            SomeFunctions().ui_popup(QCoreApplication.tr(f"Success: {text} will be used for this session!", disambiguation=""))
             self.configure_ui_for_android(text)
         else:
-            ui_popup(QCoreApplication.tr("Invalid path. The application will now exit.", disambiguation=""))
-            exit()
+            SomeFunctions().ui_popup(QCoreApplication.tr("Invalid path. The application will now exit.", disambiguation=""))
+            sys.exit()
 
     def configure_ui_for_android(self, path):
         """Disables some things on Android which just don't work yet"""
@@ -930,7 +904,7 @@ class Porn_Fetch(QWidget):
 
     def warn_about_high_performance_threading(self):
         if self.ui.radio_threading_mode_high_performance.isChecked():
-            ui_popup(QCoreApplication.tr("High Performance threading may cause issues on Android devices.",
+            SomeFunctions().ui_popup(QCoreApplication.tr("High Performance threading may cause issues on Android devices.",
                                          disambiguation=""))
 
     def check_ffmpeg(self):
@@ -941,9 +915,9 @@ class Porn_Fetch(QWidget):
             if sys.platform == "linux":
                 if not os.path.isfile("ffmpeg"):
                     url_linux = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
-                    ui_popup(ffmpeg_string)
+                    SomeFunctions().ui_popup(ffmpeg_string)
                     self.downloader = FFMPEGDownload(url=url_linux, extract_path=".", mode="linux")
-                    self.downloader.signals.progress_signal.connect(self.update_total_progressbar)
+                    self.downloader.signals.total_progress.connect(self.update_total_progressbar)
                     self.threadpool.start(self.downloader)
 
                 consts.FFMPEG_EXECUTABLE = "ffmpeg"
@@ -951,9 +925,9 @@ class Porn_Fetch(QWidget):
             elif sys.platform == "win32":
                 if not os.path.isfile("ffmpeg.exe"):
                     url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
-                    ui_popup(ffmpeg_string)
+                    SomeFunctions().ui_popup(ffmpeg_string)
                     self.downloader = FFMPEGDownload(url=url_windows, extract_path=".", mode="windows")
-                    self.downloader.signals.progress_signal.connect(self.update_total_progressbar)
+                    self.downloader.signals.total_progress.connect(self.update_total_progressbar)
                     self.threadpool.start(self.downloader)
 
                 consts.FFMPEG_EXECUTABLE = "ffmpeg.exe"
@@ -961,9 +935,9 @@ class Porn_Fetch(QWidget):
     """These functions are used to switch to different widgets. Basically this is the sidebar at the left"""
 
     def reset_pornfetch(self):
-        ui_popup(QCoreApplication.tr("Porn Fetch will now reset to its default settings...", disambiguation=None))
+        SomeFunctions().ui_popup(QCoreApplication.tr("Porn Fetch will now reset to its default settings...", disambiguation=None))
         setup_config_file(force=True)
-        ui_popup(QCoreApplication.tr("Done! Please restart.", disambiguation=None))
+        SomeFunctions().ui_popup(QCoreApplication.tr("Done! Please restart.", disambiguation=None))
 
     def switch_to_account(self):
         self.ui.stacked_widget_top.setCurrentIndex(1)
@@ -1206,7 +1180,7 @@ class Porn_Fetch(QWidget):
         with open("config.ini", "w") as config_file:
             self.conf.write(config_file)
 
-        ui_popup(self.save_user_settings_language_string)
+        SomeFunctions().ui_popup(self.save_user_settings_language_string)
         logger_debug("Saved User Settings, please restart Porn Fetch.")
 
     """
@@ -1241,8 +1215,8 @@ class Porn_Fetch(QWidget):
         self.thread.signals.text_data.connect(self.add_to_tree_widget_signal)
         self.thread.signals.progress.connect(self.progress_tree_widget)
         self.thread.signals.clear_signal.connect(self.clear_tree_widget)
-        self.thread.signals_.start_undefined_range.connect(self.start_undefined_range)
-        self.thread.signals_.stop_undefined_range.connect(self.stop_undefined_range)
+        self.thread.signals.start_undefined_range.connect(self.start_undefined_range)
+        self.thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
         self.thread.signals.finished.connect(self.stop_undefined_range)
         self.threadpool.start(self.thread)
 
@@ -1281,7 +1255,7 @@ class Porn_Fetch(QWidget):
         quality = self.quality
         download_tree_thread = QTreeWidgetDownloadThread(treeWidget=treeWidget, semaphore=semaphore,
                                                          quality=quality, threading_mode=self.threading_mode)
-        download_tree_thread.signals.progress.connect(self.tree_widget_completed)
+        download_tree_thread.signals.progress_video.connect(self.tree_widget_completed)
         download_tree_thread.signals.start_undefined_range.connect(self.start_undefined_range)
         download_tree_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
         self.threadpool.start(download_tree_thread)
@@ -1320,7 +1294,7 @@ The result limit defines how many videos will be returned when performing a sear
 involves loading multiple videos. This also affects models / channels and your liked videos. The result limit is
 basically the number of videos which can be loaded into the tree widget (this thing where videos are displayed).
 """, disambiguation=None)
-        ui_popup(text)
+        SomeFunctions().ui_popup(text)
 
     @classmethod
     def pornhub_delay_help(cls):
@@ -1333,7 +1307,7 @@ A good starting point is between 0.5 - 1.5
 The longer the delay is, the longer it will take to download videos, load videos and generally do stuff.
 This does NOT affect other sites!
 """, disambiguation=None)
-        ui_popup(text)
+        SomeFunctions().ui_popup(text)
 
     @classmethod
     def maximal_workers_help(cls):
@@ -1345,7 +1319,7 @@ Android, you should set this to a lower value.
 
 I recommend '3' for Android and 5 for low bandwidth connections < 15000 kbit/s
 """, disambiguation=None)
-        ui_popup(text)
+        SomeFunctions().ui_popup(text)
 
     @classmethod
     def timeout_help(cls):
@@ -1353,7 +1327,7 @@ I recommend '3' for Android and 5 for low bandwidth connections < 15000 kbit/s
 The timeout handles the timeout for retrieving segments when using the treaded download mode. If you have a poor 
 internet connection you can set this higher than 10. But this isn't required for most users!
 """, disambiguation=None)
-        ui_popup(text)
+        SomeFunctions().ui_popup(text)
 
     @classmethod
     def button_semaphore_help(cls):
@@ -1364,7 +1338,7 @@ For example: If the semaphore is set to 1, only 1 video will be downloaded at th
 If the semaphore is set to 4, 4 videos will be downloaded at the same time. Changing this is only useful, if
 you have a really good internet connection and a good system.
 """, disambiguation=None)
-        ui_popup(text)
+        SomeFunctions().ui_popup(text)
 
     @classmethod
     def button_threading_mode_help(cls):
@@ -1382,7 +1356,7 @@ good as high performance.
 timeouts this can really slow down the process, as we need to wait for PornHub to return the video segments.
 With the High Performance method, we can just download other segments while waiting which makes it so fast.
 """, disambiguation=None)
-        ui_popup(text)
+        SomeFunctions().ui_popup(text)
 
     @classmethod
     def button_directory_system_help(cls):
@@ -1394,8 +1368,7 @@ from another, Porn Fetch will automatically make folders for it and move the 3 v
 This can be helpful for organizing stuff, but is a more advanced feature, so the majority of users won't use it probably.
 """, disambiguation=None)
 
-        ui_popup(text)
-
+        SomeFunctions().ui_popup(text)
 
     def start_single_video(self):
         """
@@ -1409,15 +1382,14 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
         video = check_video(url=url, language=api_language, delay=self.delay)
         if video is False:  # If a video url is invalid, check_video will return it as False
-            ui_popup(invalid_input_string)
+            SomeFunctions().ui_popup(invalid_input_string)
 
         else:
             one_time_iterator.append(video)
             self.add_to_tree_widget_thread(iterator=one_time_iterator, search_limit=self.search_limit)
 
     def start_model(self):
-        """Starts the model download. I need to update some stuff here, to support other websites as well"""
-        # TODO
+        """Starts the model downloads"""
         search_limit = self.search_limit
         model = self.ui.lineedit_model_url.text()
         pornhub_pattern = re.compile(r"(.*?)pornhub(.*?)")
@@ -1467,6 +1439,8 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
     def on_video_load_error(self, error_message):
         # Handle errors, possibly show message to user
         logger_debug(f"Error loading video: {error_message}")
+        SomeFunctions().ui_popup(QCoreApplication.tr(f"Some error occurred in loading a video. Please report this: {e}",
+                                                     None))
 
     def return_client(self):
         if isinstance(self.client, Client):
@@ -1486,7 +1460,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         self.download_thread.signals.progress_xnxx.connect(self.update_progressbar_xnxx)
         self.download_thread.signals.progress_xvideos.connect(self.update_progressbar_xvideos)
         # ADAPTION
-        self.download_thread.signals_completed.completed.connect(self.download_completed)
+        self.download_thread.signals.completed.connect(self.download_completed)
         self.threadpool.start(self.download_thread)
         logger_debug("Started Download Thread!")
 
@@ -1496,8 +1470,15 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
     def update_total_progressbar(self, value, maximum):
         """This updates the total progressbar"""
-        self.ui.progressbar_total.setMaximum(maximum)
-        self.ui.progressbar_total.setValue(value)
+        try:
+            self.ui.progressbar_total.setMaximum(maximum)
+            self.ui.progressbar_total.setValue(value)
+
+        except OverflowError:
+            value = value / 1024 / 1024
+            maximum = maximum / 1024 / 1024
+            self.ui.progressbar_total.setMaximum(maximum)
+            self.ui.progressbar_total.setValue(value)
 
     def update_progressbar(self, value, maximum):
         """This updates the PornHub progressbar"""
@@ -1564,7 +1545,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
             for idx, url in enumerate(content):
                 video = check_video(url, language=self.api_language, delay=self.delay)
                 if video is False:
-                    ui_popup(invalid_input_string)
+                    SomeFunctions().ui_popup(invalid_input_string)
 
                 else:
                     iterator.append(video)
@@ -1588,20 +1569,20 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         username = self.ui.lineedit_username.text()
         password = self.ui.lineedit_password.text()
         if len(username) <= 2 or len(password) <= 2:
-            ui_popup(QCoreApplication.tr("Those credentials don't seem to be valid...", disambiguation=None))
+            SomeFunctions().ui_popup(QCoreApplication.tr("Those credentials don't seem to be valid...", disambiguation=None))
             return
 
         try:
             self.client = Client(username, password, language=self.api_language, delay=self.delay)
             logger_debug("Login Successful!")
-            ui_popup(self.language_string_login_successful)
+            SomeFunctions().ui_popup(self.language_string_login_successful)
             self.switch_login_button_state()
 
         except errors.LoginFailed:
-            ui_popup(self.language_string_login_failed)
+            SomeFunctions().ui_popup(self.language_string_login_failed)
 
         except errors.ClientAlreadyLogged:
-            ui_popup(QCoreApplication.tr("You are already logged in!", disambiguation=""))
+            SomeFunctions().ui_popup(QCoreApplication.tr("You are already logged in!", disambiguation=""))
 
     def check_login(self):
         """Checks if the user is logged in, so that no errors are threw if not"""
@@ -1613,7 +1594,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
             if not self.client.logged:
                 text = QCoreApplication.tr("There's a problem with the login. Please make sure you login first "
                                            "and then you try to get videos based on your account.", disambiguation="")
-                ui_popup(text)
+                SomeFunctions().ui_popup(text)
                 return False
 
             else:
@@ -1671,11 +1652,11 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         video = check_video(url=video, language=api_language, delay=self.delay)
 
         if video is False:
-            ui_popup(invalid_input_string)
+            SomeFunctions().ui_popup(invalid_input_string)
 
         else:
             self.metadata_thread = MetadataVideos(video)
-            self.metadata_thread.signals.start_undefined.connect(self.start_undefined_range)
+            self.metadata_thread.signals.start_undefined_range.connect(self.start_undefined_range)
             self.metadata_thread.signals.data.connect(self.apply_metadata_video)
             self.threadpool.start(self.metadata_thread)
 
@@ -1714,7 +1695,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         user_object = client.get_user(user)
 
         self.user_metadata_thread = MetadataUser(user_object)
-        self.user_metadata_thread.signals.start_undefined.connect(self.start_undefined_range)
+        self.user_metadata_thread.signals.start_undefined_range.connect(self.start_undefined_range)
         self.user_metadata_thread.signals.data.connect(self.apply_metadata_user)
         self.threadpool.start(self.user_metadata_thread)
 
@@ -1772,7 +1753,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         client = self.return_client()
         user = client.get_user(url)
         bio = user.bio
-        ui_popup(bio)
+        SomeFunctions().ui_popup(bio)
 
     def get_user_avatar(self):
         """Downloads the users avatar image to the specified output path"""
@@ -1782,7 +1763,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         avatar = user.avatar
         avatar.download(Path(self.output_path))
         user_string = self.get_user_avatar_language_string
-        ui_popup(user_string)
+        SomeFunctions().ui_popup(user_string)
 
     def get_video_thumbnail(self):
         """Returns the video thumbnail. I need to add support for more websites here"""  # TODO
@@ -1791,12 +1772,12 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         video = check_video(url=url, language=api_language, delay=self.delay)
 
         if video is False or not isinstance(video, Video):
-            ui_popup(invalid_input_string)
+            SomeFunctions().ui_popup(invalid_input_string)
 
         else:
             video.image.download(Path(self.output_path))
             user_string = self.get_video_thumbnail_language_string
-            ui_popup(user_string)
+            SomeFunctions().ui_popup(user_string)
 
     def get_top_porn_hqporner(self):
         if self.ui.radio_top_porn_week.isChecked():
@@ -1810,7 +1791,6 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
         else:
             sort = None
-
 
         search_limit = self.search_limit
         pages = round(search_limit / 46)
@@ -1827,7 +1807,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         pages = round(search_limit / 46)
 
         if not category_name in all_categories:
-            ui_popup(self.list_all_categories_string)
+            SomeFunctions().ui_popup(self.list_all_categories_string)
 
         else:
             videos = hq_Client().get_videos_by_category(category=category_name, pages=pages)
@@ -1840,8 +1820,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         category_name = self.ui.lineedit_videos_by_category_eporner.text()
 
         if not category_name in self.all_cateogories_eporner:
-            ui_popup(self.list_all_categories_string)
-
+            SomeFunctions().ui_popup(self.list_all_categories_string)
 
         else:
             videos = ep_Client().get_videos_by_category(category=category_name, pages=pages, enable_html_scraping=True)
@@ -1853,7 +1832,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
                           not callable(getattr(ep_Category, category)) and not category.startswith("__")])
 
         self.all_cateogories_eporner = all_categories # Need this list to verify the category later
-        ui_popup(all_categories)
+        SomeFunctions().ui_popup(all_categories)
 
     def get_brazzers_videos(self):
         """Get brazzers videos from HQPorner"""
@@ -1867,7 +1846,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         """Get all available categories. I want to also extend that for EPorner (and maybe even more sites)"""
         categories_ = hq_Client().get_all_categories()
         categories = ",".join(categories_)
-        ui_popup(categories)
+        SomeFunctions().ui_popup(categories)
 
     def get_random_video(self):
         """Gets a random video from HQPorner"""
@@ -1889,96 +1868,56 @@ def main():
     setup_config_file()
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
+    """
+    I had many problems with coding in general where something didn't work but the translations are the hardest
+    thing I've ever done. Now where I've understand it it makes sense but the Qt documentation is a piece of shit...
+    """
+    conf = ConfigParser()
+    conf.read("config.ini")
+    language = conf["UI"]["language"]
 
-    try:
-        """
-        I had many problems with coding in general where something didn't work but the translations are the hardest
-        thing I've ever done. Now where I've understand it it makes sense but the Qt documentation is a piece of shit...
-        """
-        conf = ConfigParser()
-        conf.read("config.ini")
-        language = conf["UI"]["language"]
+    if language == "system":
+        # Obtain the system's locale
+        locale = QLocale.system()
+        # Get the full locale name (e.g., "zh_CN" for Simplified Chinese)
+        language_code = locale.name()
+        print(language_code)
+    else:
+        language_code = language
 
-        if language == "system":
-            # Obtain the system's locale
-            locale = QLocale.system()
-            # Get the full locale name (e.g., "zh_CN" for Simplified Chinese)
-            language_code = locale.name()
-            print(language_code)
-        else:
-            language_code = language
+    # Try loading the specific regional translation
+    path = f":/translations/translations/{language_code}.qm"
+    translator = QTranslator(app)
+    if translator.load(path):
+        logger_debug(f"{language_code} translation loaded")
 
-        # Try loading the specific regional translation
-        path = f":/translations/translations/{language_code}.qm"
-        translator = QTranslator(app)
+    else:
+        # Try loading a more general translation if specific one fails
+        general_language_code = language_code.split('_')[0]
+        path = f":/translations/translations/{general_language_code}.qm"
         if translator.load(path):
-            logger_debug(f"{language_code} translation loaded")
-
+            logger_debug(f"{general_language_code} translation loaded as fallback")
         else:
-            # Try loading a more general translation if specific one fails
-            general_language_code = language_code.split('_')[0]
-            path = f":/translations/translations/{general_language_code}.qm"
-            if translator.load(path):
-                logger_debug(f"{general_language_code} translation loaded as fallback")
-            else:
-                logger_debug(f"Failed to load {language_code} translation")
+            logger_debug(f"Failed to load {language_code} translation")
 
-        app.installTranslator(translator)
+    app.installTranslator(translator)
 
-        file = QFile(":/style/stylesheets/stylesheet.qss")
-        file.open(QFile.ReadOnly | QFile.Text)
-        stream = QTextStream(file)
-        app.setStyleSheet(stream.readAll())
+    file = QFile(":/style/stylesheets/stylesheet.qss")
+    file.open(QFile.ReadOnly | QFile.Text)
+    stream = QTextStream(file)
+    app.setStyleSheet(stream.readAll())
 
-        if __build__ == "android":
-            font = QFont("arial", 12)
-            app.setFont(font)
+    if __build__ == "android":
+        font = QFont("arial", 12)
+        app.setFont(font)
 
-        widget = License()  # Starts License widget and checks if license was accepted.
-        widget.check_license_and_proceed()
+    widget = License()  # Starts License widget and checks if license was accepted.
+    widget.check_license_and_proceed()
 
-        """
-        The following exceptions are just general exceptions to handle some basic errors. They are not so relevant for
-        most cases.
-        """
-
-    except PermissionError as e:
-        ui_popup(
-            QCoreApplication.tr("Insufficient Permissions to access something. Please run Porn Fetch as root / admin",
-                                disambiguation=""))
-        logger_error(e)
-
-    except ConnectionResetError as e:
-        ui_popup(
-            QCoreApplication.tr("Connection was reset. Are you connected to a public wifi or a university's wifi? ",
-                                disambiguation=""))
-        logger_error(e)
-
-    except ConnectionError as e:
-        ui_popup(QCoreApplication.tr("Connection Error, please make sure you have a stable internet connection",
-                                     disambiguation=""))
-        logger_error(e)
-
-    except KeyboardInterrupt:
-        sys.exit(0)
-
-    except SSLError as e:
-        ui_popup(QCoreApplication.tr(
-            "SSLError: Your connection is blocked by your ISP / IT administrator (Firewall). If you are in a "
-            "University or at school, please connect to a VPN / Proxy", disambiguation=""))
-        logger_error(e)
-
-    except TypeError:
-        pass
-
-    except OSError as e:
-        ui_popup(QCoreApplication.tr(
-            f"This error shouldn't happen. If you still see it it's REALLY important that you report the "
-            f"following: {e}", disambiguation=""))
-        logger_error(e)
-
-    except ZeroDivisionError:
-        pass
+    """
+    The following exceptions are just general exceptions to handle some basic errors. They are not so relevant for
+    most cases.
+    """
 
     sys.exit(app.exec())
 
@@ -1996,8 +1935,46 @@ if __name__ == "__main__":
             setup_config_file()
             main()
 
+    except PermissionError as e:
+        SomeFunctions().ui_popup(
+            QCoreApplication.tr("Insufficient Permissions to access something. Please run Porn Fetch as root / admin",
+                                disambiguation=""))
+        logger_error(e)
+
+    except ConnectionResetError as e:
+        SomeFunctions().ui_popup(
+            QCoreApplication.tr("Connection was reset. Are you connected to a public wifi or a university's wifi? ",
+                                disambiguation=""))
+        logger_error(e)
+
+    except ConnectionError as e:
+        SomeFunctions().ui_popup(QCoreApplication.tr("Connection Error, please make sure you have a stable internet connection",
+                                     disambiguation=""))
+        logger_error(e)
+
+    except KeyboardInterrupt:
+        sys.exit(0)
+
+    except SSLError as e:
+        SomeFunctions().ui_popup(QCoreApplication.tr(
+            "SSLError: Your connection is blocked by your ISP / IT administrator (Firewall). If you are in a "
+            "University or at school, please connect to a VPN / Proxy", disambiguation=""))
+        logger_error(e)
+
+    except TypeError:
+        pass
+
+    except OSError as e:
+        SomeFunctions().ui_popup(QCoreApplication.tr(
+            f"This error shouldn't happen. If you still see it it's REALLY important that you report the "
+            f"following: {e}", disambiguation=""))
+        logger_error(e)
+
+    except ZeroDivisionError:
+        pass
+
     except Exception as e:
         error_message = "An error occurred: " + str(e) + "\n" + traceback.format_exc()
         logger_error(error_message)
         if send_error_logs:
-            send_error_log(error_message)
+            SomeFunctions().send_error_log(error_message)

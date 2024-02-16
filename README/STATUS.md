@@ -33,12 +33,13 @@ Information:
 - [x] Adding model for EPorner
 - [x] fixing an issue that video reversing is not working
 - [x] fixing overflow error
-- [] Code refactoring
-- [] Make functions more robust
+- [x] progress now gets only updated all 0.5 seconds
+- [x] Code refactoring (refactored all Signals)
+- [x] Make functions more robust
 - [] Change README
 - [] Updating the CLI
-
 - [] Implementing playlist support for PornHub
+
 I am probably done with this by the end of March.
 
 My next holidays are at 22.3 or 24.3 (idk lol)
