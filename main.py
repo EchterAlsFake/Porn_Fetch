@@ -820,11 +820,11 @@ class Porn_Fetch(QWidget):
     @classmethod
     def check_for_updates(cls):
         logger_debug("Checking for updates...")
-        if requests.get("https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.1").status_code == 200:
+        if requests.get("https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.2").status_code == 200:
             logger_debug("Next release v3.1 found!")
-            SomeFunctions().ui_popup(QCoreApplication.tr("Information: A new version of Porn Fetch (v3.1) is out. "
+            SomeFunctions().ui_popup(QCoreApplication.tr("Information: A new version of Porn Fetch (v3.2) is out. "
                                          "I recommend you to update Porn Fetch. Go to: "
-                                         "https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.1",
+                                         "https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.2",
                                          disambiguation=None))
 
         else:

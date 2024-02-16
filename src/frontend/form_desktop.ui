@@ -236,7 +236,7 @@
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>0</y>
+             <y>-121</y>
              <width>956</width>
              <height>202</height>
             </rect>
@@ -305,7 +305,7 @@
                  </sizepolicy>
                 </property>
                 <property name="text">
-                 <string>Information: The total progressbar only counts the total progress of all PornHub videos being downloaded.</string>
+                 <string>Information: The total progressbar does not count for Eporner and HQPorner.</string>
                 </property>
                </widget>
               </item>
@@ -407,7 +407,7 @@
            <string/>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="widget">
            <layout class="QGridLayout" name="gridLayout_8">
@@ -422,7 +422,7 @@
                  <property name="geometry">
                   <rect>
                    <x>0</x>
-                   <y>0</y>
+                   <y>-61</y>
                    <width>936</width>
                    <height>282</height>
                   </rect>
@@ -682,7 +682,7 @@ QPushButton:pressed {
                    <string notr="true">b</string>
                   </property>
                   <property name="currentIndex">
-                   <number>0</number>
+                   <number>3</number>
                   </property>
                   <widget class="QWidget" name="page_download">
                    <layout class="QGridLayout" name="gridLayout_5">
@@ -1522,7 +1522,7 @@ QPushButton:pressed {
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>686</width>
+                 <width>938</width>
                  <height>568</height>
                 </rect>
                </property>

@@ -38,10 +38,11 @@ Warning: Porn Fetch is in fact against the ToS of every website. Usage is on you
 
 ## 🌟 Features
 - Direct downloads from PornHub and other sites
+- PornHub playlist downloads
 - Selectable video quality
 - Metadata retrieval
 - Full channel/user/model download capabilities
-- In-app search and download features
+- In-app search and download features for multiple sites
 - Optional account login
 - Multi-threaded downloading
 - Dark mode and CLI support
@@ -50,7 +51,7 @@ Warning: Porn Fetch is in fact against the ToS of every website. Usage is on you
 - Multiple supported websites
 - Multiple languages
 - Native Android application
-- Multiple supported Websites
+- modern looking user interface
 
 ## 🖥️ Supported Platforms
 - Windows 10, 11 (backward compatibility untested)

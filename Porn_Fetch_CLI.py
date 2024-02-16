@@ -3,7 +3,7 @@ Porn Fetch CLI
 Licensed under GPL 3
 Copyright (C) 2023-2024 Johannes Habel (EchterAlsFake)
 
-Version 3.0
+Version 3.1
 """
 import getpass
 import os.path
@@ -87,13 +87,14 @@ Do you accept the License? [yes,no]""")
         options = input(f"""
 {return_color()}1) Download a Video
 {return_color()}2) Download videos from a Model / Channel / User
-{return_color()}3) Search Users / Models / Channels
-{return_color()}4) Download from a file with URLs
-{return_color()}5) PornHub Account
-{return_color()}6) HQPorner
-{return_color()}7) Settings
-{return_color()}8) Credits / Information
-{return_color()}9) Exit
+{return_color()}3) Download a PornHub Playlist
+{return_color()}4) Search Users / Models / Channels
+{return_color()}5) Download from a file with URLs
+{return_color()}6) PornHub Account
+{return_color()}7) HQPorner
+{return_color()}8) Settings
+{return_color()}9) Credits / Information
+{return_color()}10) Exit
 
 {return_color()}-------------------------------=>:{reset()}""")
 
@@ -104,24 +105,27 @@ Do you accept the License? [yes,no]""")
             self.start_model_user_channel()
 
         elif options == "3":
-            self.search_options()
+            self.start_playlist()
 
         elif options == "4":
-            self.start_from_file()
+            self.search_options()
 
         elif options == "5":
-            self.account_options()
+            self.start_from_file()
 
         elif options == "6":
-            self.hqporner_options()
+            self.account_options()
 
         elif options == "7":
-            self.save_user_settings()
+            self.hqporner_options()
 
         elif options == "8":
-            self.credits()
+            self.save_user_settings()
 
         elif options == "9":
+            self.credits()
+
+        elif options == "10":
             exit()
 
     def hqporner_options(self):
@@ -193,6 +197,11 @@ Sorting:
     def start_single_video(self):
         url = input(f"{return_color()}Enter PornHub / HQPorner URL --=>:{reset()}")
         self.pre_setup_video(url)
+
+    def start_playlist(self):
+        url = input(f"{return_color()}Enter PornHub playlist URL -->:{reset()}")
+        videos = Client().get_playlist(url).videos
+        self.start_generator(generator=videos)
 
     def start_model_user_channel(self):
         url = input(f"""{reset()}
@@ -405,6 +414,7 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
 {return_color()}|>  21) Disable
 {return_color()}|---------{return_color()}PRESS 99 TO STOP{reset()}----------|
 {return_color()}|--------------------------=>:{reset()}""")
+
             if options == "1":
                 self.conf.set("Video", "quality", "best")
 
@@ -425,7 +435,7 @@ Hint: URLs from either PornHub or HQPorner need to be separated with new lines!
 
             elif options == "7":
                 limit = input(f"{return_color()}Enter the new Semaphore Limit between 1-6 -->:{reset()}")
-                self.conf.set("Performance", "semaphore", options)
+                self.conf.set("Performance", "semaphore", limit)
 
             elif options == "8":
                 self.conf.set("Video", "language", "en")
@@ -741,7 +751,7 @@ Press ENTER to continue...""")
 
     def credits(self):
         text_markdown = f"""
-# Porn Fetch V3
+# Porn Fetch V3.1
 
 Copyright (C) 2023-2024 Johannes Habel (EchterAlsFake)
 
@@ -768,17 +778,21 @@ Copyright (C) 2023-2024 Johannes Habel (EchterAlsFake)
 - <a href="https://iconscout.com/icons/down-arrow" class="text-underline font-size-sm" target="_blank">Down Arrow</a> by <a href="https://iconscout.com/contributors/adamicons" class="text-underline font-size-sm">Adam Dicons</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
 - <a href="https://iconscout.com/icons/tick" class="text-underline font-size-sm" target="_blank">Tick</a> by <a href="https://iconscout.com/contributors/kolo-design" class="text-underline font-size-sm" target="_blank">Kalash</a>
 - <a href="https://iconscout.com/icons/account" class="text-underline font-size-sm" target="_blank">account</a> by <a href="https://iconscout.com/contributors/anggaraputra" class="text-underline font-size-sm">Anggara Putra</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
+- <a href="https://iconscout.com/icons/tools" class="text-underline font-size-sm" target="_blank">Tools</a> by <a href="https://iconscout.com/contributors/adms-icon" class="text-underline font-size-sm" target="_blank">ADMS Icons</a>
+- <a href="https://iconscout.com/icons/faq" class="text-underline font-size-sm" target="_blank">Faq</a> by <a href="https://iconscout.com/contributors/petai-jantrapoon" class="text-underline font-size-sm">Petai Jantrapoon</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
 - Download Icon by [Tutukof](https://iconscout.com/contributors/fersusart)
 - Free [Settings Icon](https://iconscout.com/free-icon/settings-2856913) in Gradient Style
 By [Haca Studio](https://iconscout.com/contributors/boosticon)
+
 
 Logo was generated by DALL-E (ChatGPT)
 
 ## Contributors (as in V3 and before)
 
-- [Egsagon](https://github.com/Egsagon)
+- [Egsagon](https://github.com/Egsagon) PHUB API & French Translations
 - [RSDCFGVHBJNKML](https://github.com/RSDCFGVHBJNKML) : Enhancement [#11](https://github.com/EchterAlsFake/Porn_Fetch/issues/11)
 - Chinese (3.0) Thanks to: [Joshua-auhsoj](https://github.com/Joshua-auhsoj) & Enhancement [#17](https://github.com/EchterAlsFake/Porn_Fetch/issues/17)
+- [RonLar1132](https://github.com/RonLar1132) Enhancement # 20 (Playlist Support)
 
 # Libraries
 
@@ -787,16 +801,20 @@ Logo was generated by DALL-E (ChatGPT)
 - [hqporner_api](https://github.com/EchterAlsFake/hqporner_api)
 - [hue_shift](https://github.com/EchterAlsFake/hue_shift)
 - [PySide6](https://doc.qt.io/qtforpython-6/)
-- [pymediainfo](https://github.com/sbraz/pymediainfo)
 - [colorama](https://github.com/tartley/colorama)
 - [markdown](https://github.com/Python-Markdown/markdown)
 - [rich](https://github.com/Textualize/rich)
 - [tqdm](https://github.com/tqdm/tqdm)
 - [EPorner API](https://github.com/EchterAlsFake/eporner_api)
 - [XNXX API](https://github.com/EchterAlsFake/xnxx_api)
+- [XVideos_API](https://github.com/EchterAlsFake/xvideos_api)
 <br>ANDROID:
 - [Buildozer](https://github.com/kivy/buildozer)
 - [Cython](https://github.com/cython/cython)
+
+# Applications
+
+- [FFMPEG](https://ffmpeg.org/) 
 
 ** All other libraries are built in to Python.
 

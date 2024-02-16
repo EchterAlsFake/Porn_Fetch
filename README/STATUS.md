@@ -37,8 +37,8 @@ Information:
 - [x] Code refactoring (refactored all Signals)
 - [x] Make functions more robust
 - [x] Implementing playlist support for PornHub
-- [] Change README
-- [] Updating the CLI
+- [x] Change README
+- [x] Updating the CLI
 
 I am probably done with this by the end of March.
 
