@@ -36,9 +36,9 @@ Information:
 - [x] progress now gets only updated all 0.5 seconds
 - [x] Code refactoring (refactored all Signals)
 - [x] Make functions more robust
+- [x] Implementing playlist support for PornHub
 - [] Change README
 - [] Updating the CLI
-- [] Implementing playlist support for PornHub
 
 I am probably done with this by the end of March.
 

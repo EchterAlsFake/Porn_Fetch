@@ -59,6 +59,7 @@ send_error_logs = False  # Only enabled when developing the application.
 invalid_input_string = QCoreApplication.tr("Wrong Input, please verify the URL, category or actress!",
                                            disambiguation="")
 
+
 class SomeFunctions:
 
     @classmethod
@@ -312,19 +313,21 @@ class DownloadThread(QRunnable):
 
     def generic_callback(self, pos, total, signal, video_source, ffmpeg=False):
         """Generic callback function to emit progress signals with rate limiting."""
-
         current_time = time.time()
-        # Check if the current time is at least 0.5 seconds greater than the last update time
-        if current_time - self.last_update_time < 0.5:
-            # If not, do not update the progress and return immediately
-            return
 
-        # Update the progress because it's been at least 0.5 seconds
         if ffmpeg:
             self.update_ffmpeg_progress(pos, total)
             signal.emit(pos, total)
+
         else:
             # Emit signal for individual progress
+            if video_source == "hqporner" or video_source == "eporner":
+
+                # Check if the current time is at least 0.5 seconds greater than the last update time
+                if current_time - self.last_update_time < 0.1:
+                    # If not, do not update the progress and return immediately
+                    return
+
             signal.emit(pos, total)
             # Update total progress only if the video source uses segments
             if video_source not in ['hqporner', 'eporner']:
@@ -685,9 +688,7 @@ class Porn_Fetch(QWidget):
         self.total_progress = 0
         self.conf = ConfigParser()
         self.conf.read("config.ini")
-
         self.threadpool = QThreadPool()
-
         self.ui = Ui_Porn_Fetch_Widget()
         self.ui.setupUi(self)
         self.button_connectors()
@@ -796,7 +797,7 @@ class Porn_Fetch(QWidget):
         self.ui.button_pornhub_delay_help.setStyleSheet(stylesheets["button_green"])
         self.ui.button_result_limit_help.setStyleSheet(stylesheets["button_green"])
         self.ui.button_settings_reset.setStyleSheet(stylesheets["button_reset"])
-
+        self.ui.button_playlist_get_videos.setStyleSheet(stylesheets["button_purple"])
         logger_debug("Loaded Icons!")
 
     def language_strings(self):
@@ -983,6 +984,7 @@ class Porn_Fetch(QWidget):
         self.ui.button_tree_download.clicked.connect(self.download_tree_widget)
         self.ui.button_tree_select_all.clicked.connect(self.select_all_items)
         self.ui.button_tree_unselect_all.clicked.connect(self.unselect_all_items)
+        self.ui.button_playlist_get_videos.clicked.connect(self.start_playlist)
 
         # Help Buttons Connections
         self.ui.button_semaphore_help.clicked.connect(self.button_semaphore_help)
@@ -1416,6 +1418,13 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
             videos = ep_Client.get_pornstar(url=model, enable_html_scraping=True).videos(pages=pages)
 
         self.add_to_tree_widget_thread(videos, search_limit=search_limit)
+
+    def start_playlist(self):
+        url = self.ui.lineedit_playlist_url.text()
+        client = Client(language=self.api_language, delay=self.delay)
+        playlist = client.get_playlist(url)
+        videos = playlist.videos
+        self.add_to_tree_widget_thread(iterator=videos, search_limit=self.search_limit)
 
     def load_video(self, url):
         """This starts the thread to load a video"""
