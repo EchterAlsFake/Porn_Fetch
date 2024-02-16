@@ -8,6 +8,7 @@ Version 3.1
 import getpass
 import os.path
 import re
+import sys
 import threading
 
 from tqdm import tqdm
@@ -126,7 +127,7 @@ Do you accept the License? [yes,no]""")
             self.credits()
 
         elif options == "10":
-            exit()
+            sys.exit()
 
     def hqporner_options(self):
         options = input(f"""
