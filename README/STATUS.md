@@ -30,12 +30,14 @@ Information:
 - [x] Fixing searching (result) limit
 - [x] Fixing total progress for loading objects and stuff
 - [x] handle `Client.call failed after 4 attempts`
+- [x] Adding model for EPorner
+- [x] fixing an issue that video reversing is not working
+- [x] fixing overflow error
 - [] Code refactoring
 - [] Make functions more robust
 - [] Change README
 - [] Updating the CLI
 
-- [] Adding model for Xvideos and EPorner (May or may not work...)
 - [] Implementing playlist support for PornHub
 I am probably done with this by the end of March.
 

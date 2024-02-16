@@ -25,6 +25,8 @@ __version__ = "3.1"
 __build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 
+import re
+
 import xvideos_api.modules.download
 
 total_segments = 0
@@ -204,6 +206,7 @@ class AddToTreeWidget(QRunnable):
     def __init__(self, iterator, search_limit, data_mode, clickable, reverse):
         super(AddToTreeWidget, self).__init__()
         self.signals = TreeWidgetSignals()
+        self.signals_ = QTreeWidgetSignal()
         self.iterator = iterator
         self.search_limit = search_limit
         self.data_mode = data_mode
@@ -249,29 +252,32 @@ class AddToTreeWidget(QRunnable):
             logger_debug(f"Search Limit: {str(self.search_limit)}")
 
             if self.reverse:
+                logger_debug("Reversing Videos. This may take some time...")
+                self.signals_.start_undefined_range.emit()
                 # Use islice to limit the number of items fetched from the iterator
                 videos = list(islice(self.iterator, self.search_limit))
                 videos.reverse()  # Reverse the list (to show videos in reverse order)
+                self.signals_.stop_undefined_range.emit()
 
             else:
                 videos = islice(self.iterator, self.search_limit)
 
-                for i, video in enumerate(videos, start=1):
-                    try:
-                        if i == self.search_limit + 1:
-                            break  # The search limit prevents an infinite loop
+            for i, video in enumerate(videos, start=1):
+                try:
+                    if i == self.search_limit + 1:
+                        break  # The search limit prevents an infinite loop
 
-                        text_data = self.process_video(video, i)
+                    text_data = self.process_video(video, i)
 
-                        self.signals.progress.emit(self.search_limit, i)  # sends the current progress
-                        self.signals.text_data.emit(text_data)  # sends the data to the main class
+                    self.signals.progress.emit(self.search_limit, i)  # sends the current progress
+                    self.signals.text_data.emit(text_data)  # sends the data to the main class
 
-                    except errors.NoResult:
-                        pass
+                except errors.NoResult:
+                    pass
 
-                    except ConnectionError:
-                        logger_error("Client.call failed!, retrying...  If this error persists, set a delay in the settings")
-                        logger_error(f"Video: {i} won't be processed.")
+                except ConnectionError:
+                    logger_error("Client.call failed!, retrying...  If this error persists, set a delay in the settings")
+                    logger_error(f"Video: {i} won't be processed.")
 
         finally:
             self.signals.finished.emit()
@@ -448,7 +454,7 @@ class QTreeWidgetDownloadThread(QRunnable):
             total_segments = sum(
                 [len(list(video.get_segments(quality=self.quality))) for video in video_objects if
                  hasattr(video, 'get_segments')])
-
+            logger_debug("Got segments")
             # This basically looks how many segments exist in all videos together, so that we can calculate the total
             # progress
 
@@ -1235,6 +1241,8 @@ class Porn_Fetch(QWidget):
         self.thread.signals.text_data.connect(self.add_to_tree_widget_signal)
         self.thread.signals.progress.connect(self.progress_tree_widget)
         self.thread.signals.clear_signal.connect(self.clear_tree_widget)
+        self.thread.signals_.start_undefined_range.connect(self.start_undefined_range)
+        self.thread.signals_.stop_undefined_range.connect(self.stop_undefined_range)
         self.thread.signals.finished.connect(self.stop_undefined_range)
         self.threadpool.start(self.thread)
 
@@ -1413,6 +1421,8 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         search_limit = self.search_limit
         model = self.ui.lineedit_model_url.text()
         pornhub_pattern = re.compile(r"(.*?)pornhub(.*?)")
+        hqporner_pattern = re.compile(r'(.*?)hqporner.com(.*?)')
+        eporner_pattern = re.compile(r'(.*?)eporner.com(.*)')
 
         if pornhub_pattern.match(model):
             api_language = self.api_language
@@ -1425,8 +1435,13 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
             model_object = client.get_user(model)
             videos = model_object.videos
 
-        else:
-            videos = hq_Client().get_videos_by_actress(model)
+        elif hqporner_pattern.match(model):
+            pages = round(search_limit / 46)
+            videos = hq_Client().get_videos_by_actress(actress=model, pages=pages)
+
+        elif eporner_pattern.match(model):
+            pages = round(search_limit / 38)
+            videos = ep_Client.get_pornstar(url=model, enable_html_scraping=True).videos(pages=pages)
 
         self.add_to_tree_widget_thread(videos, search_limit=search_limit)
 
@@ -1491,11 +1506,13 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
     def update_progressbar_hqporner(self, value, maximum):
         """This updates the HQPorner progressbar"""
-        self.ui.progressbar_hqporner.setMaximum(maximum)
-        self.ui.progressbar_hqporner.setValue(value)
+        self.ui.progressbar_hqporner.setMaximum(maximum / 1024 / 1024)
+        self.ui.progressbar_hqporner.setValue(value / 1024 / 1024)
 
     def update_progressbar_eporner(self, value, maximum):
         """This updates the eporner progressbar"""
+        value = value / 1024 / 1024
+        maximum = maximum / 1024 / 1024
         self.ui.progressbar_eporner.setMaximum(maximum)
         self.ui.progressbar_eporner.setValue(value)
 
