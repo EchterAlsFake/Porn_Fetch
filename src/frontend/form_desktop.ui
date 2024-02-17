@@ -407,7 +407,7 @@
            <string/>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="widget">
            <layout class="QGridLayout" name="gridLayout_8">
@@ -666,7 +666,7 @@ QPushButton:pressed {
                  <x>0</x>
                  <y>0</y>
                  <width>1501</width>
-                 <height>298</height>
+                 <height>252</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_14">
@@ -1527,8 +1527,8 @@ QPushButton:pressed {
                <property name="geometry">
                 <rect>
                  <x>0</x>
-                 <y>0</y>
-                 <width>938</width>
+                 <y>-28</y>
+                 <width>1487</width>
                  <height>568</height>
                 </rect>
                </property>
@@ -1630,7 +1630,7 @@ QPushButton:pressed {
                         <number>1</number>
                        </property>
                        <property name="maximum">
-                        <number>200</number>
+                        <number>2000</number>
                        </property>
                       </widget>
                      </item>
@@ -2181,7 +2181,7 @@ QPushButton:pressed {
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>936</width>
+                   <width>232</width>
                    <height>978</height>
                   </rect>
                  </property>

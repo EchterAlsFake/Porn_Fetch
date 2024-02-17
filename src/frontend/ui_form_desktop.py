@@ -411,7 +411,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_stacked_top.setWidgetResizable(True)
         self.scrollAreaWidgetContents_7 = QWidget()
         self.scrollAreaWidgetContents_7.setObjectName(u"scrollAreaWidgetContents_7")
-        self.scrollAreaWidgetContents_7.setGeometry(QRect(0, 0, 1501, 298))
+        self.scrollAreaWidgetContents_7.setGeometry(QRect(0, 0, 1501, 252))
         self.gridLayout_14 = QGridLayout(self.scrollAreaWidgetContents_7)
         self.gridLayout_14.setObjectName(u"gridLayout_14")
         self.stacked_widget_top = QStackedWidget(self.scrollAreaWidgetContents_7)
@@ -859,7 +859,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_settings.setWidgetResizable(True)
         self.scrollAreaWidgetContents_6 = QWidget()
         self.scrollAreaWidgetContents_6.setObjectName(u"scrollAreaWidgetContents_6")
-        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 938, 568))
+        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, -28, 1487, 568))
         self.gridLayout_34 = QGridLayout(self.scrollAreaWidgetContents_6)
         self.gridLayout_34.setObjectName(u"gridLayout_34")
         self.goroupbox_gui = QGroupBox(self.scrollAreaWidgetContents_6)
@@ -925,7 +925,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.spinbox_treewidget_limit = QSpinBox(self.groupbox_videos)
         self.spinbox_treewidget_limit.setObjectName(u"spinbox_treewidget_limit")
         self.spinbox_treewidget_limit.setMinimum(1)
-        self.spinbox_treewidget_limit.setMaximum(200)
+        self.spinbox_treewidget_limit.setMaximum(2000)
 
         self.horizontalLayout_9.addWidget(self.spinbox_treewidget_limit)
 
@@ -1309,7 +1309,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_metadata.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 936, 978))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 232, 978))
         self.gridLayout_27 = QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_27.setObjectName(u"gridLayout_27")
         self.gridlayout_metadata_ = QGridLayout()
@@ -1759,7 +1759,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.retranslateUi(Porn_Fetch_Widget)
 
-        self.stacked_widget_main.setCurrentIndex(0)
+        self.stacked_widget_main.setCurrentIndex(1)
         self.stacked_widget_top.setCurrentIndex(0)
         self.stackedWidget.setCurrentIndex(0)
 
