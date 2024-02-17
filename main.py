@@ -299,14 +299,14 @@ class DownloadThread(QRunnable):
 
         elif isinstance(self.video, xv_Video):
             return {
-            "threaded": xv_threaded(max_workers=self.workers, timeout=self.timeout),
+            "threaded": xv_threaded(max_workers=self.workers, timeout=self.timeout, retries=5),
             "FFMPEG":   xv_ffmpeg,
             "default":  xv_default
             }.get(mode, download.default)
 
         elif isinstance(self.video, xn_Video):
             return {
-            "threaded": xn_threaded(max_workers=self.workers, timeout=self.timeout),
+            "threaded": xn_threaded(max_workers=self.workers, timeout=self.timeout, retries=5),
             "FFMPEG":   xn_ffmpeg,
             "default":  xn_default
             }.get(mode, download.default)
@@ -943,16 +943,21 @@ class Porn_Fetch(QWidget):
     def switch_to_account(self):
         self.ui.stacked_widget_top.setCurrentIndex(1)
         self.ui.stacked_widget_main.setCurrentIndex(0)
-        self.layout().update()
+        self.ui.stacked_widget_top.setMinimumHeight(150)
+        self.ui.scrollarea_stacked_top.setMaximumHeight(150)
 
     def switch_to_home(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(0)
-        self.layout().update()
+        self.ui.stacked_widget_top.setMinimumHeight(220)
+        self.ui.scrollarea_stacked_top.setMaximumHeight(220)
+        logger_debug("Minimum")
 
     def switch_to_hqporner(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(3)
+        self.ui.stacked_widget_top.setMinimumHeight(300)
+        self.ui.scrollarea_stacked_top.setMaximumHeight(300)
 
     def switch_to_settings(self):
         self.ui.stacked_widget_main.setCurrentIndex(1)
@@ -1496,15 +1501,27 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
     def update_progressbar_hqporner(self, value, maximum):
         """This updates the HQPorner progressbar"""
-        self.ui.progressbar_hqporner.setMaximum(maximum / 1024 / 1024)
-        self.ui.progressbar_hqporner.setValue(value / 1024 / 1024)
+        try:
+            self.ui.progressbar_hqporner.setMaximum(maximum)
+            self.ui.progressbar_hqporner.setValue(value)
+
+        except OverflowError:
+            value = value / 1024 / 1024
+            maximum = maximum / 1024 / 1024
+            self.ui.progressbar_hqporner.setMaximum(maximum)
+            self.ui.progressbar_hqporner.setValue(value)
 
     def update_progressbar_eporner(self, value, maximum):
         """This updates the eporner progressbar"""
-        value = value / 1024 / 1024
-        maximum = maximum / 1024 / 1024
-        self.ui.progressbar_eporner.setMaximum(maximum)
-        self.ui.progressbar_eporner.setValue(value)
+        try:
+            self.ui.progressbar_eporner.setMaximum(maximum)
+            self.ui.progressbar_eporner.setValue(value)
+
+        except OverflowError:
+            value = value / 1024 / 1024
+            maximum = maximum / 1024 / 1024
+            self.ui.progressbar_eporner.setMaximum(maximum)
+            self.ui.progressbar_eporner.setValue(value)
 
     def update_progressbar_xnxx(self, value, maximum):
         """This updates the xnxx progressbar"""
@@ -1552,15 +1569,14 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         with open(file, "r") as url_file:
             content = url_file.read().splitlines()
             for idx, url in enumerate(content):
+                self.ui.progressbar_total.setMaximum(len(content))
+                self.ui.progressbar_total.setValue(idx)
                 video = check_video(url, language=self.api_language, delay=self.delay)
                 if video is False:
                     SomeFunctions().ui_popup(invalid_input_string)
 
                 else:
                     iterator.append(video)
-
-                self.ui.progressbar_total.setMaximum(len(content))
-                self.ui.progressbar_total.setValue(idx)
 
             self.add_to_tree_widget_thread(iterator, search_limit=self.search_limit)
 
@@ -1980,7 +1996,7 @@ if __name__ == "__main__":
         logger_error(e)
 
     except ZeroDivisionError:
-        pass
+        SomeFunctions().ui_popup(QCoreApplication.tr(f"Zero Division Error. This shouldn't really happen...", None))
 
     except Exception as e:
         error_message = "An error occurred: " + str(e) + "\n" + traceback.format_exc()
