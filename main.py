@@ -951,7 +951,6 @@ class Porn_Fetch(QWidget):
         self.ui.stacked_widget_top.setCurrentIndex(0)
         self.ui.stacked_widget_top.setMinimumHeight(220)
         self.ui.scrollarea_stacked_top.setMaximumHeight(220)
-        logger_debug("Minimum")
 
     def switch_to_hqporner(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
