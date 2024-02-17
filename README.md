@@ -13,8 +13,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/release-3.0"><strong>Download Version 3.0</strong></a> ·
-  <a href="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md"><strong>Development Update V3.1</strong></a>
+  <a href="https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.1"><strong>Download Version 3.1</strong></a> ·
+  <a href="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md"><strong>Development Update V3.2</strong></a>
 </p>
 
 ![Alt text](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/screenshot.png?raw=true "Optional Title")
@@ -117,7 +117,6 @@ Currently available in:
 
 
 ## 🛠️ Useful Information
-- [Roadmap](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/ROADMAP.md)
 - [Changelog](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/CHANGELOG.md)
 - [Development Status](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md)
 
