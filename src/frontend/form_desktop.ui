@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1593</width>
-    <height>776</height>
+    <width>1610</width>
+    <height>772</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -237,26 +237,13 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1505</width>
-             <height>202</height>
+             <width>1536</width>
+             <height>118</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_33">
             <item row="1" column="0">
              <layout class="QGridLayout" name="gridlayout_status">
-              <item row="5" column="0">
-               <widget class="QLabel" name="label_total_progress">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string>Total:</string>
-                </property>
-               </widget>
-              </item>
               <item row="0" column="0">
                <widget class="QLabel" name="label_progress_pornhub">
                 <property name="sizePolicy">
@@ -267,98 +254,6 @@
                 </property>
                 <property name="text">
                  <string>PornHub:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="0">
-               <widget class="QLabel" name="label_progress_xnxx">
-                <property name="text">
-                 <string>XNXX</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QProgressBar" name="progressbar_hqporner">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>300</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="value">
-                 <number>0</number>
-                </property>
-               </widget>
-              </item>
-              <item row="6" column="0" colspan="2">
-               <widget class="QLabel" name="label_progress_information">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string>Information: The total progressbar does not count for Eporner and HQPorner.</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="1">
-               <widget class="QProgressBar" name="progressbar_xnxx">
-                <property name="value">
-                 <number>0</number>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QProgressBar" name="progressbar_eporner">
-                <property name="value">
-                 <number>0</number>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="label_progress_eporner">
-                <property name="text">
-                 <string>Eporner</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_progress_hqporner">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string>HQPorner:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="1">
-               <widget class="QProgressBar" name="progressbar_total">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>300</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="value">
-                 <number>0</number>
                 </property>
                </widget>
               </item>
@@ -381,17 +276,55 @@
                 </property>
                </widget>
               </item>
-              <item row="4" column="0">
-               <widget class="QLabel" name="label_progress_xvideos">
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_total_progress">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="text">
-                 <string>XVideos</string>
+                 <string>Total:</string>
                 </property>
                </widget>
               </item>
-              <item row="4" column="1">
-               <widget class="QProgressBar" name="progressbar_xvideos">
+              <item row="1" column="1">
+               <widget class="QProgressBar" name="progressbar_total">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>300</width>
+                  <height>0</height>
+                 </size>
+                </property>
                 <property name="value">
                  <number>0</number>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="0" colspan="2">
+               <widget class="QLabel" name="label_progress_information">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Information: The total progressbar does not count for Eporner and HQPorner, because they are using different mechanisms for downloading.</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="0" colspan="2">
+               <widget class="QPushButton" name="button_view_all_progress_bars">
+                <property name="text">
+                 <string>View all other progress bars</string>
                 </property>
                </widget>
               </item>
@@ -407,7 +340,7 @@
            <string/>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="widget">
            <layout class="QGridLayout" name="gridLayout_8">
@@ -423,11 +356,61 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>1485</width>
-                   <height>282</height>
+                   <width>1516</width>
+                   <height>346</height>
                   </rect>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_4">
+                  <item row="1" column="0">
+                   <layout class="QHBoxLayout" name="horizontallayout_treewidget_buttons">
+                    <item>
+                     <widget class="QPushButton" name="button_tree_download">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true"/>
+                      </property>
+                      <property name="text">
+                       <string>Download Selected Videos</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="button_tree_select_all">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true"/>
+                      </property>
+                      <property name="text">
+                       <string>Select all</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="button_tree_unselect_all">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true"/>
+                      </property>
+                      <property name="text">
+                       <string>Unselect all</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="button_stop">
+                      <property name="text">
+                       <string>Stop loading videos (does not stop downloads)</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
                   <item row="0" column="0">
                    <layout class="QVBoxLayout" name="verticallayout_treewidget_settings">
                     <item>
@@ -518,125 +501,6 @@
                     </item>
                    </layout>
                   </item>
-                  <item row="1" column="0">
-                   <layout class="QHBoxLayout" name="horizontallayout_treewidget_buttons">
-                    <item>
-                     <widget class="QPushButton" name="button_tree_download">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="styleSheet">
-                       <string notr="true">QPushButton {
-    /* Base style */
-    background-color: #7B1FA2; /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}
-</string>
-                      </property>
-                      <property name="text">
-                       <string>Download Selected Videos</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QPushButton" name="button_tree_select_all">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="styleSheet">
-                       <string notr="true">QPushButton {
-    /* Base style */
-    background-color: rgba(255, 162, 0, 170); /* Purple background */
-	color: rgb(255, 162, 0);
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}
-</string>
-                      </property>
-                      <property name="text">
-                       <string>Select all</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QPushButton" name="button_tree_unselect_all">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="styleSheet">
-                       <string notr="true">QPushButton {
-    /* Base style */
-    background-color: rgb(0, 208, 255); /* Purple background */
-    border-style: outset;
-    border-width: 2px;
-    border-radius: 8px; /* Slightly smaller radius for a smaller look */
-    border-color: #7B1FA2;
-    font: bold 12px; /* Smaller font size */
-    min-width: 8em; /* Smaller width */
-    padding: 4px; /* Less padding for a more compact look */
-    color: white; /* White text */
-}
-
-QPushButton:hover {
-    /* Hover effect */
-    background-color: #9575CD; /* Lighter violet for hover */
-    border-color: #9575CD;
-}
-
-QPushButton:pressed {
-    /* Pressed effect */
-    background-color: #303F9F; /* Dark blue when pressed */
-    border-color: #303F9F;
-    border-style: inset; /* Changes the style to look &quot;pressed&quot; */
-}
-</string>
-                      </property>
-                      <property name="text">
-                       <string>Unselect all</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </item>
                  </layout>
                 </widget>
                </widget>
@@ -665,8 +529,8 @@ QPushButton:pressed {
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>1501</width>
-                 <height>252</height>
+                 <width>1518</width>
+                 <height>256</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_14">
@@ -688,7 +552,7 @@ QPushButton:pressed {
                    <string notr="true">b</string>
                   </property>
                   <property name="currentIndex">
-                   <number>0</number>
+                   <number>2</number>
                   </property>
                   <widget class="QWidget" name="page_download">
                    <layout class="QGridLayout" name="gridLayout_5">
@@ -1186,7 +1050,118 @@ QPushButton:pressed {
                    </layout>
                   </widget>
                   <widget class="QWidget" name="page_nothing_2">
-                   <layout class="QGridLayout" name="gridLayout_6"/>
+                   <layout class="QGridLayout" name="gridLayout_6">
+                    <item row="0" column="0">
+                     <widget class="QScrollArea" name="scrollArea">
+                      <property name="widgetResizable">
+                       <bool>true</bool>
+                      </property>
+                      <widget class="QWidget" name="scrollAreaWidgetContents">
+                       <property name="geometry">
+                        <rect>
+                         <x>0</x>
+                         <y>0</y>
+                         <width>1480</width>
+                         <height>218</height>
+                        </rect>
+                       </property>
+                       <layout class="QGridLayout" name="gridLayout_18">
+                        <item row="0" column="0">
+                         <layout class="QGridLayout" name="gridLayout_17">
+                          <item row="0" column="1">
+                           <widget class="QProgressBar" name="progressbar_hqporner">
+                            <property name="sizePolicy">
+                             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                             </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                             <size>
+                              <width>300</width>
+                              <height>0</height>
+                             </size>
+                            </property>
+                            <property name="value">
+                             <number>0</number>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="1" column="1">
+                           <widget class="QProgressBar" name="progressbar_eporner">
+                            <property name="value">
+                             <number>0</number>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="3" column="1">
+                           <widget class="QProgressBar" name="progressbar_xvideos">
+                            <property name="value">
+                             <number>0</number>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="1" column="0">
+                           <widget class="QLabel" name="label_progress_eporner">
+                            <property name="text">
+                             <string>Eporner</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="2" column="0">
+                           <widget class="QLabel" name="label_progress_xnxx">
+                            <property name="text">
+                             <string>XNXX</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="0" column="0">
+                           <widget class="QLabel" name="label_progress_hqporner">
+                            <property name="sizePolicy">
+                             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                             </sizepolicy>
+                            </property>
+                            <property name="text">
+                             <string>HQPorner:</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="3" column="0">
+                           <widget class="QLabel" name="label_progress_xvideos">
+                            <property name="text">
+                             <string>XVideos</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="2" column="1">
+                           <widget class="QProgressBar" name="progressbar_xnxx">
+                            <property name="value">
+                             <number>0</number>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="4" column="1">
+                           <spacer name="verticalSpacer_2">
+                            <property name="orientation">
+                             <enum>Qt::Vertical</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                             <size>
+                              <width>20</width>
+                              <height>40</height>
+                             </size>
+                            </property>
+                           </spacer>
+                          </item>
+                         </layout>
+                        </item>
+                       </layout>
+                      </widget>
+                     </widget>
+                    </item>
+                   </layout>
                   </widget>
                   <widget class="QWidget" name="page_hqporner">
                    <layout class="QGridLayout" name="gridLayout_29">
@@ -1527,8 +1502,8 @@ QPushButton:pressed {
                <property name="geometry">
                 <rect>
                  <x>0</x>
-                 <y>-28</y>
-                 <width>1487</width>
+                 <y>0</y>
+                 <width>686</width>
                  <height>568</height>
                 </rect>
                </property>
@@ -1630,7 +1605,7 @@ QPushButton:pressed {
                         <number>1</number>
                        </property>
                        <property name="maximum">
-                        <number>2000</number>
+                        <number>5000</number>
                        </property>
                       </widget>
                      </item>
@@ -1936,7 +1911,7 @@ QPushButton:pressed {
                           <number>1</number>
                          </property>
                          <property name="maximum">
-                          <number>10</number>
+                          <number>5000</number>
                          </property>
                         </widget>
                        </item>
@@ -1967,7 +1942,7 @@ QPushButton:pressed {
                           <number>1</number>
                          </property>
                          <property name="maximum">
-                          <number>50</number>
+                          <number>5000</number>
                          </property>
                         </widget>
                        </item>
@@ -1998,7 +1973,7 @@ QPushButton:pressed {
                           <number>0</number>
                          </property>
                          <property name="maximum">
-                          <number>10</number>
+                          <number>5000</number>
                          </property>
                         </widget>
                        </item>
@@ -2086,7 +2061,7 @@ QPushButton:pressed {
                           <number>5</number>
                          </property>
                          <property name="maximum">
-                          <number>30</number>
+                          <number>5000</number>
                          </property>
                         </widget>
                        </item>
