@@ -97,6 +97,7 @@ class SomeFunctions:
                 return False
 
             if os.path.isfile(test_file_path):
+                logger_debug("Android output path tests successful", None)
                 return True
 
             with open(test_file_path, "w") as test_file:
@@ -158,9 +159,11 @@ class License(QWidget):
 
     def check_license_and_proceed(self):
         if self.conf["License"]["accepted"] == "true":
+            logger_debug("License already accepted, continuing...")
             self.show_main_window()
 
         else:
+            logger_debug("Showing License widget")
             self.show()  # Show the license widget
 
     def accept(self):
@@ -176,6 +179,7 @@ class License(QWidget):
         with open("config.ini", "w") as config_file:
             self.conf.write(config_file)
             config_file.close()
+            logger_error("License was denied, closing Porn Fetch")
             self.close()
             sys.exit(0)  # exiting if user denied
 
@@ -226,25 +230,26 @@ class AddToTreeWidget(QRunnable):
         if isinstance(video, xn_Video) and not hasattr(video, 'pornstars'):
             author = "no_pornstars_found"
 
+        logger_debug(f"{str(title)} Successfully processed!")
         return [str(title), str(author), str(duration), str(index), video]
 
     def run(self):
         self.signals.clear_signal.emit()
-
+        self.signals.start_undefined_range.emit()
         try:
-            logger_debug(f"Search Limit: {str(self.search_limit)}")
+            logger_debug(f"Result Limit: {str(self.search_limit)}")
 
             if self.reverse:
                 logger_debug("Reversing Videos. This may take some time...")
-                self.signals.start_undefined_range.emit()
+
                 # Use islice to limit the number of items fetched from the iterator
                 videos = list(islice(self.iterator, self.search_limit))
                 videos.reverse()  # Reverse the list (to show videos in reverse order)
-                self.signals.stop_undefined_range.emit()
 
             else:
                 videos = islice(self.iterator, self.search_limit)
 
+            self.signals.stop_undefined_range.emit()
             for i, video in enumerate(videos, start=1):
                 try:
                     if i == self.search_limit + 1:
@@ -361,6 +366,7 @@ class DownloadThread(QRunnable):
             self.threading_mode = self.resolve_threading_mode(self.threading_mode)
             video_source = "pornhub"
             path = self.output_path
+            logger_debug("Starting the Download!")
             try:
                 self.video.download(downloader=self.threading_mode, path=path, quality=self.quality,
                                     display=lambda pos, total: self.generic_callback(pos, total, self.signals.progress,
@@ -496,7 +502,7 @@ class MetadataVideos(QRunnable):
             duration = str(duration)
 
         data = [title, views, duration, orientation, pornstars, tags, rating, hotspots_x]
-
+        logger_debug("Successfully loaded video metadata")
         self.signals.data.emit(data)  # Send the data to the main class, so that they can be applied to the lineedits
 
 
