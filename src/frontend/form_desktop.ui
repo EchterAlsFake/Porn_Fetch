@@ -409,6 +409,13 @@
                       </property>
                      </widget>
                     </item>
+                    <item>
+                     <widget class="QPushButton" name="button_export_video_urls">
+                      <property name="text">
+                       <string>Export video URLs</string>
+                      </property>
+                     </widget>
+                    </item>
                    </layout>
                   </item>
                   <item row="0" column="0">
@@ -457,6 +464,13 @@
                        </widget>
                       </item>
                       <item>
+                       <widget class="QCheckBox" name="checkbox_do_not_clear_videos">
+                        <property name="text">
+                         <string>Do not clear videos</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
                        <widget class="QCheckBox" name="checkbox_show_videos_reversed">
                         <property name="cursor">
                          <cursorShape>PointingHandCursor</cursorShape>
@@ -465,6 +479,19 @@
                          <string>Show videos in reverse</string>
                         </property>
                        </widget>
+                      </item>
+                      <item>
+                       <spacer name="horizontalSpacer">
+                        <property name="orientation">
+                         <enum>Qt::Horizontal</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>40</width>
+                          <height>20</height>
+                         </size>
+                        </property>
+                       </spacer>
                       </item>
                      </layout>
                     </item>
@@ -552,7 +579,7 @@
                    <string notr="true">b</string>
                   </property>
                   <property name="currentIndex">
-                   <number>2</number>
+                   <number>1</number>
                   </property>
                   <widget class="QWidget" name="page_download">
                    <layout class="QGridLayout" name="gridLayout_5">
@@ -1503,8 +1530,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>686</width>
-                 <height>568</height>
+                 <width>1518</width>
+                 <height>612</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_34">
@@ -2156,7 +2183,7 @@ QPushButton:pressed {
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>232</width>
+                   <width>1502</width>
                    <height>978</height>
                   </rect>
                  </property>

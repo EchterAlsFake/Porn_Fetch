@@ -226,6 +226,11 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.horizontallayout_treewidget_buttons.addWidget(self.button_stop)
 
+        self.button_export_video_urls = QPushButton(self.scrollAreaWidgetContents_3)
+        self.button_export_video_urls.setObjectName(u"button_export_video_urls")
+
+        self.horizontallayout_treewidget_buttons.addWidget(self.button_export_video_urls)
+
 
         self.gridLayout_4.addLayout(self.horizontallayout_treewidget_buttons, 1, 0, 1, 1)
 
@@ -252,11 +257,20 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.horizontallayout_treewidget_settings.addWidget(self.radio_tree_show_all)
 
+        self.checkbox_do_not_clear_videos = QCheckBox(self.scrollAreaWidgetContents_3)
+        self.checkbox_do_not_clear_videos.setObjectName(u"checkbox_do_not_clear_videos")
+
+        self.horizontallayout_treewidget_settings.addWidget(self.checkbox_do_not_clear_videos)
+
         self.checkbox_show_videos_reversed = QCheckBox(self.scrollAreaWidgetContents_3)
         self.checkbox_show_videos_reversed.setObjectName(u"checkbox_show_videos_reversed")
         self.checkbox_show_videos_reversed.setCursor(QCursor(Qt.PointingHandCursor))
 
         self.horizontallayout_treewidget_settings.addWidget(self.checkbox_show_videos_reversed)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontallayout_treewidget_settings.addItem(self.horizontalSpacer)
 
 
         self.verticallayout_treewidget_settings.addLayout(self.horizontallayout_treewidget_settings)
@@ -814,7 +828,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_settings.setWidgetResizable(True)
         self.scrollAreaWidgetContents_6 = QWidget()
         self.scrollAreaWidgetContents_6.setObjectName(u"scrollAreaWidgetContents_6")
-        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 686, 568))
+        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 1518, 612))
         self.gridLayout_34 = QGridLayout(self.scrollAreaWidgetContents_6)
         self.gridLayout_34.setObjectName(u"gridLayout_34")
         self.goroupbox_gui = QGroupBox(self.scrollAreaWidgetContents_6)
@@ -1264,7 +1278,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_metadata.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 232, 978))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 1502, 978))
         self.gridLayout_27 = QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_27.setObjectName(u"gridLayout_27")
         self.gridlayout_metadata_ = QGridLayout()
@@ -1715,7 +1729,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.retranslateUi(Porn_Fetch_Widget)
 
         self.stacked_widget_main.setCurrentIndex(0)
-        self.stacked_widget_top.setCurrentIndex(2)
+        self.stacked_widget_top.setCurrentIndex(1)
         self.stackedWidget.setCurrentIndex(0)
 
 
@@ -1739,8 +1753,10 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_tree_select_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Select all", None))
         self.button_tree_unselect_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Unselect all", None))
         self.button_stop.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Stop loading videos (does not stop downloads)", None))
+        self.button_export_video_urls.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Export video URLs", None))
         self.radio_tree_show_title.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Only Title (a lot faster)", None))
         self.radio_tree_show_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Title, Author, Duration", None))
+        self.checkbox_do_not_clear_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Do not clear videos", None))
         self.checkbox_show_videos_reversed.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Show videos in reverse", None))
         ___qtreewidgetitem = self.treeWidget.headerItem()
         ___qtreewidgetitem.setText(2, QCoreApplication.translate("Porn_Fetch_Widget", u"Duration", None));

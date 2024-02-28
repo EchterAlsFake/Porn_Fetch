@@ -56,6 +56,7 @@ __build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 total_segments = 0
 downloaded_segments = 0
+last_index = 0
 stop_flag = Event()
 send_error_logs = False  # Only enabled when developing the application.
 invalid_input_string = QCoreApplication.tr("Wrong Input, please verify the URL, category or actress!",
@@ -192,7 +193,7 @@ class License(QWidget):
 
 
 class AddToTreeWidget(QRunnable):
-    def __init__(self, iterator, search_limit, data_mode, clickable, reverse, stop_flag):
+    def __init__(self, iterator, search_limit, data_mode, clickable, reverse, stop_flag, is_checked):
         super(AddToTreeWidget, self).__init__()
         self.signals = Signals()
         self.iterator = iterator
@@ -201,6 +202,7 @@ class AddToTreeWidget(QRunnable):
         self.clickable = clickable
         self.reverse = reverse
         self.stop_flag = stop_flag
+        self.is_checked = is_checked
 
     def process_video(self, video, index):
         title = video.title
@@ -238,6 +240,15 @@ class AddToTreeWidget(QRunnable):
     def run(self):
         self.signals.clear_signal.emit()
         self.signals.start_undefined_range.emit()
+        global last_index
+
+        if self.is_checked:
+            start = last_index + 1
+            self.search_limit += last_index + 1
+
+        else:
+            start = 1
+
         try:
             logger_debug(f"Result Limit: {str(self.search_limit)}")
 
@@ -252,9 +263,12 @@ class AddToTreeWidget(QRunnable):
                 videos = islice(self.iterator, self.search_limit)
 
             self.signals.stop_undefined_range.emit()
-            for i, video in enumerate(videos, start=1):
+
+            for i, video in enumerate(videos, start=start):
                 if self.stop_flag.is_set():
                     return
+
+                last_index += 1
                 try:
                     if i == self.search_limit + 1:
                         break  # The search limit prevents an infinite loop
@@ -819,7 +833,8 @@ class Porn_Fetch(QWidget):
         self.ui.button_settings_reset.setStyleSheet(stylesheets["button_reset"])
         self.ui.button_playlist_get_videos.setStyleSheet(stylesheets["button_purple"])
         self.ui.button_view_all_progress_bars.setStyleSheet(stylesheets["button_blue"])
-        self.ui.button_stop.setStyleSheet(stylesheets["button_purple"])
+        self.ui.button_stop.setStyleSheet(stylesheets["button_reset"])
+        self.ui.button_export_video_urls.setStyleSheet(stylesheets["button_purple"])
 
     def language_strings(self):
         """Contains the language strings. Needed for translation"""
@@ -1071,6 +1086,7 @@ class Porn_Fetch(QWidget):
 
         # Other stuff idk
         self.ui.button_stop.clicked.connect(self.switch_stop_state)
+        self.ui.button_export_video_urls.clicked.connect(self.export_urls)
 
     def switch_login_button_state(self):
         """If the user is logged in, I'll change the stylesheets of the buttons"""
@@ -1251,7 +1267,9 @@ class Porn_Fetch(QWidget):
         else:
             reverse = False
 
-        self.thread = AddToTreeWidget(iterator, search_limit, data_mode, clickable, reverse, stop_flag=stop_flag)
+        is_checked = self.ui.checkbox_do_not_clear_videos.isChecked()
+
+        self.thread = AddToTreeWidget(iterator, search_limit, data_mode, clickable, reverse, is_checked=is_checked, stop_flag=stop_flag)
         self.thread.signals.text_data.connect(self.add_to_tree_widget_signal)
         self.thread.signals.progress.connect(self.progress_tree_widget)
         self.thread.signals.clear_signal.connect(self.clear_tree_widget)
@@ -1265,7 +1283,37 @@ class Porn_Fetch(QWidget):
         This (like the name says) clears the tree widget. I try to improve this in the future, to allow the user
         the adding of multiple videos, so that the tree widget doesn't get cleared instantly.
         """
-        self.ui.treeWidget.clear()
+        if not self.ui.checkbox_do_not_clear_videos.isChecked():
+            self.ui.treeWidget.clear()
+
+    def export_urls(self):
+        video_urls = []
+
+        for i in range(self.ui.treeWidget.topLevelItemCount()):
+            item = self.ui.treeWidget.topLevelItem(i)
+            video_object = item.data(0, Qt.UserRole)
+            video_urls.append(video_object.url)
+
+        if len(video_urls) == 0:
+            SomeFunctions().ui_popup(QCoreApplication.tr("No video URLs found. Are there videos in the tree widget?", ""))
+            return
+
+        file, mode = QFileDialog().getOpenFileName(self, QCoreApplication.tr("Select the file for saving urls. If the file already contains URLs the new ones"
+                                             "will be appended to it. Make sure Porn Fetch has needed permissions to open the file!", None))
+
+        try:
+            with open(file, "a") as file:
+                for url in video_urls:
+                    file.write(f"\n{url}")
+
+        except PermissionError:
+            SomeFunctions().ui_popup(QCoreApplication.tr(f"Permission Error, please select a file from your user space,"
+                                                         f"or run Porn Fetch with admin permissions (not recommended!)",
+                                                         None))
+        
+        
+        
+
 
     def progress_tree_widget(self, total, current):
         """This tracks the progress of the tree widget data"""
