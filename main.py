@@ -321,18 +321,11 @@ class DownloadThread(QRunnable):
             "default":  download.default
             }.get(mode, download.default)
 
-        elif isinstance(self.video, xv_Video):
+        else:
             return {
-            "threaded": xv_threaded(max_workers=self.workers, timeout=self.timeout, retries=5),
-            "FFMPEG":   xv_ffmpeg,
-            "default":  xv_default
-            }.get(mode, download.default)
-
-        elif isinstance(self.video, xn_Video):
-            return {
-            "threaded": xn_threaded(max_workers=self.workers, timeout=self.timeout, retries=5),
-            "FFMPEG":   xn_ffmpeg,
-            "default":  xn_default
+            "threaded": bs_threaded(max_workers=self.workers, timeout=self.timeout, retries=5),
+            "FFMPEG":   bs_ffmpeg,
+            "default":  bs_default
             }.get(mode, download.default)
 
     def generic_callback(self, pos, total, signal, video_source, ffmpeg=False):

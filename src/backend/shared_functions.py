@@ -16,7 +16,7 @@ from hqporner_api.api import Client as hq_Client, Video as hq_Video
 from eporner_api.eporner_api import Client as ep_Client, Video as ep_Video
 from eporner_api.modules.locals import Category as ep_Category
 from xnxx_api.xnxx_api import Client as xn_Client, Video as xn_Video
-from xnxx_api.modules.download import threaded as xn_threaded, FFMPEG as xn_ffmpeg, default as xn_default
+from base_api.modules.download import threaded as bs_threaded, FFMPEG as bs_ffmpeg, default as bs_default
 from xvideos_api.xvideos_api import Client as xv_Client, Video as xv_Video
 from xvideos_api.modules.download import threaded as xv_threaded, FFMPEG as xv_ffmpeg, default as xv_default
 
