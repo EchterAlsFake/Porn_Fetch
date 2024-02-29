@@ -6,6 +6,7 @@
 - [x] Initializing the client only one time and not multiple times
 - [x] Implementing a `stop` button, so that loading videos can be stopped immediately
 - [x] Improving debug messages
+- [x] Fixing Overflow error
 - [] Improve the guide for contributing translations
 - [] Improving the help messages and the german translations to be more accurate
 - [] A complete rewrite of the CLI version

@@ -14,7 +14,7 @@ from threading import Event
 from requests.exceptions import SSLError
 from pathlib import Path
 from hqporner_api.api import Sort as hq_Sort
-from phub import Quality, download, consts
+from phub import download, consts
 from src.backend.shared_functions import *
 from itertools import islice
 
@@ -143,7 +143,7 @@ class Signals(QObject):
     # Operations
     finished = Signal()
     clear_signal = Signal()
-    get_total = Signal(str, Quality)
+    get_total = Signal(str, str)
 
 
 class License(QWidget):
@@ -187,7 +187,7 @@ class License(QWidget):
     def show_main_window(self):
         """ If license was accepted, the License widget is closed and the main widget will be shown."""
         self.close()
-        logger_debug("[2/5] License accepted")
+        logger_debug("Startup - Initialization: [2/5] License accepted")
         self.main_widget = Porn_Fetch()
         self.main_widget.show()
 
@@ -634,6 +634,7 @@ class FFMPEGDownload(QRunnable):
 
     def run(self):
         # Download the file
+        logger_debug("FFMPEG: [1/4] Starting the download")
         with requests.get(self.url, stream=True) as r:
             r.raise_for_status()
             total_length = int(r.headers.get('content-length'))
@@ -647,6 +648,7 @@ class FFMPEGDownload(QRunnable):
                         dl += len(chunk)
                         self.signals.total_progress.emit(dl, total_length)
 
+        logger_debug("FFMPEG: [2/4] Starting file extraction")
         # Extract the file based on OS mode
         if self.mode == "linux" and filename.endswith(".tar.xz"):
             with tarfile.open(filename, "r:xz") as tar:
@@ -671,7 +673,7 @@ class FFMPEGDownload(QRunnable):
                         shutil.move(extracted_path, ".")
 
                     self.signals.total_progress.emit(idx, total)
-
+        logger_debug("FFMPEG: [3/4] Finished Extraction")
         # Finalize
         self.signals.total_progress.emit(total_length, total_length)  # Ensure progress bar reaches 100%
         os.remove(filename)  # Clean up downloaded archive
@@ -682,6 +684,7 @@ class FFMPEGDownload(QRunnable):
         elif sys.platform == "win32":
             shutil.rmtree("ffmpeg-6.1.1-essentials_build")
 
+        logger_debug("FFMPEG: [4/4] Cleaned Up")
 
 class Porn_Fetch(QWidget):
     def __init__(self, parent=None):
@@ -718,15 +721,15 @@ class Porn_Fetch(QWidget):
         self.button_connectors()
         self.button_groups()
         self.load_style()
-        logger_debug("[3/5] Initialized the User Interface")
+        logger_debug("Startup - Initialization: [3/5] Initialized the User Interface")
         self.language_strings()
         self.settings_maps_initialization()
         self.load_user_settings()
-        logger_debug("[4/5] Loaded the user settings")
+        logger_debug("Startup - Initialization: [4/5] Loaded the user settings")
         self.check_ffmpeg()
         self.switch_to_home()
         self.check_for_updates()
-        logger_debug("[5/5] Checked for updates, setup Done!")
+        logger_debug("Startup - Initialization: [5/5] Checked for updates, setup Done!")
 
         if __build__ == "android":
             self.setup_android()
@@ -1007,11 +1010,10 @@ class Porn_Fetch(QWidget):
         time.sleep(1)
         self.switch_stop_state_2()
 
+    @classmethod
     def switch_stop_state_2(self):
         global stop_flag
         stop_flag = Event()
-
-
 
     def button_connectors(self):
         """a function to link the buttons to their functions"""
@@ -1569,27 +1571,19 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
     def update_progressbar_hqporner(self, value, maximum):
         """This updates the HQPorner progressbar"""
-        try:
-            self.ui.progressbar_hqporner.setMaximum(maximum)
-            self.ui.progressbar_hqporner.setValue(value)
-
-        except OverflowError:
-            value = value / 1024 / 1024
-            maximum = maximum / 1024 / 1024
-            self.ui.progressbar_hqporner.setMaximum(maximum)
-            self.ui.progressbar_hqporner.setValue(value)
+        scaling_factor = 1024 * 1024
+        scaled_value = int(value / scaling_factor)
+        scaled_maximum = int(maximum / scaling_factor)
+        self.ui.progressbar_hqporner.setMaximum(scaled_maximum)
+        self.ui.progressbar_hqporner.setValue(scaled_value)
 
     def update_progressbar_eporner(self, value, maximum):
         """This updates the eporner progressbar"""
-        try:
-            self.ui.progressbar_eporner.setMaximum(maximum)
-            self.ui.progressbar_eporner.setValue(value)
-
-        except OverflowError:
-            value = value / 1024 / 1024
-            maximum = maximum / 1024 / 1024
-            self.ui.progressbar_eporner.setMaximum(maximum)
-            self.ui.progressbar_eporner.setValue(value)
+        scaling_factor = 1024 * 1024
+        scaled_value = int(value / scaling_factor)
+        scaled_maximum = int(maximum / scaling_factor)
+        self.ui.progressbar_eporner.setMaximum(scaled_maximum)
+        self.ui.progressbar_eporner.setValue(scaled_value)
 
     def update_progressbar_xnxx(self, value, maximum):
         """This updates the xnxx progressbar"""
@@ -1979,7 +1973,7 @@ def main():
     path = f":/translations/translations/{language_code}.qm"
     translator = QTranslator(app)
     if translator.load(path):
-        logger_debug(f"[1/5] {language_code} translation loaded")
+        logger_debug(f"Startup - Initialization: [1/5] {language_code} translation loaded")
 
     else:
         # Try loading a more general translation if specific one fails
