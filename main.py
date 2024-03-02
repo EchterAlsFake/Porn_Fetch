@@ -270,21 +270,37 @@ class AddToTreeWidget(QRunnable):
                     return
 
                 last_index += 1
-                try:
-                    if i == self.search_limit + 1:
-                        break  # The search limit prevents an infinite loop
+                try_attempt = True
+                while try_attempt:
+                    try:
+                        if i == self.search_limit + 1:
+                            break  # The search limit prevents an infinite loop
 
-                    text_data = self.process_video(video, i)
+                        text_data = self.process_video(video, i)
 
-                    self.signals.progress.emit(self.search_limit, i)  # sends the current progress
-                    self.signals.text_data.emit(text_data)  # sends the data to the main class
+                        self.signals.progress.emit(self.search_limit, i)  # sends the current progress
+                        self.signals.text_data.emit(text_data)  # sends the data to the main class
+                        try_attempt = False  # Processing succeeded, move to the next video
 
-                except errors.NoResult:
-                    pass
+                    except errors.NoResult:
+                        try_attempt = False  # No result, move to the next video
 
-                except ConnectionError:
-                    logger_error("Client.call failed!, retrying...  If this error persists, set a delay in the settings")
-                    logger_error(f"Video: {i} won't be processed.")
+                    except errors.RegexError as e:
+                        logger_error("Warning: Rate limited by PornHub, trying again in 10 seconds...")
+                        for j in range(10):
+                            print(f"\r\033[K[Sleeping: [{j} / 10]", end='', flush=True)
+
+                            time.sleep(1)
+
+                    except ConnectionError:
+                        logger_error(
+                            "Client.call failed!, retrying...  If this error persists, set a delay in the settings")
+                        logger_error(f"Video: {i} won't be processed.")
+                        try_attempt = False  # Move to the next video after logging the error
+
+                    except IndexError:
+                        logger_error("You got blocked from PornHub. Please switch your IP or wait some minutes. (at least 5)")
+                        SomeFunctions().ui_popup(QCoreApplication.tr("You got blocked from PornHub. Please switch your IP or wait some minutes. (at least 5)", None))
 
         finally:
             self.signals.finished.emit()
@@ -765,6 +781,7 @@ class Porn_Fetch(QWidget):
             self.ui.button_directory_system_help: "faq.svg",
             self.ui.button_result_limit_help: "faq.svg",
             self.ui.button_timeout_maximal_retries_help: "faq.svg",
+            self.ui.button_help_file: "faq.svg",
         }
         for button, icon_name in icons.items():
             button.setIcon(QIcon(f":/images/graphics/{icon_name}"))
@@ -835,6 +852,7 @@ class Porn_Fetch(QWidget):
         self.ui.button_stop.setStyleSheet(stylesheets["button_reset"])
         self.ui.button_export_video_urls.setStyleSheet(stylesheets["button_purple"])
         self.ui.button_timeout_maximal_retries_help.setStyleSheet(stylesheets["button_green"])
+        self.ui.button_help_file.setStyleSheet(stylesheets["button_green"])
 
     def language_strings(self):
         """Contains the language strings. Needed for translation"""
@@ -1046,6 +1064,8 @@ class Porn_Fetch(QWidget):
         self.ui.button_timeout_help.clicked.connect(self.timeout_help)
         self.ui.button_pornhub_delay_help.clicked.connect(self.pornhub_delay_help)
         self.ui.button_result_limit_help.clicked.connect(self.result_limit_help)
+        self.ui.button_help_file.clicked.connect(self.open_file_help)
+        self.ui.button_timeout_maximal_retries_help.clicked.connect(self.max_retries_help)
 
         # Settings
         self.ui.button_settings_apply.clicked.connect(self.save_user_settings)
@@ -1302,13 +1322,13 @@ class Porn_Fetch(QWidget):
             SomeFunctions().ui_popup(QCoreApplication.tr("No video URLs found. Are there videos in the tree widget?", ""))
             return
 
-        file, mode = QFileDialog().getOpenFileName(self, QCoreApplication.tr("Select the file for saving urls. If the file already contains URLs the new ones"
+        file, mode = QFileDialog().getSaveFileName(self, QCoreApplication.tr("Select the file for saving urls. If the file already contains URLs the new ones"
                                              "will be appended to it. Make sure Porn Fetch has needed permissions to open the file!", None))
 
         try:
             with open(file, "a") as file:
                 for url in video_urls:
-                    file.write(f"\n{url}")
+                    file.write(f"{url}\n")
 
         except PermissionError:
             SomeFunctions().ui_popup(QCoreApplication.tr(f"Permission Error, please select a file from your user space,"
@@ -1463,6 +1483,38 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
         SomeFunctions().ui_popup(text)
 
+    @classmethod
+    def open_file_help(cls):
+        text = QCoreApplication.tr("""
+Create a .txt file and add URLs like this:
+
+url1
+url2
+url3
+...
+
+Split them with new lines. No comma, not multiple URLs in the same line!
+You can also add model URLs like this:
+
+model#MODEL_URL
+
+An example for a file would be:
+
+https://de.pornhub.com/view_video.php?viewkey=ph5be76343323ff
+https://de.pornhub.com/view_video.php?viewkey=ph5946e5f19585a
+model#https://de.pornhub.com/pornstar/nancy-a
+""", None)
+        SomeFunctions().ui_popup(text)
+
+    @classmethod
+    def max_retries_help(cls):
+        text = QCoreApplication.tr("""
+The maximal retries defines how much attempts will be used for a network request. For example if an API calls
+a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
+""", None)
+        SomeFunctions().ui_popup(text)
+
+
     def start_single_video(self):
         """
         Starts the download of a single video.
@@ -1481,10 +1533,15 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
             one_time_iterator.append(video)
             self.add_to_tree_widget_thread(iterator=one_time_iterator, search_limit=self.search_limit)
 
-    def start_model(self):
+    def start_model(self, url=None):
         """Starts the model downloads"""
+        if type(url) is str:
+            model = url
+
+        else:
+            model = self.ui.lineedit_model_url.text()
+
         search_limit = self.search_limit
-        model = self.ui.lineedit_model_url.text()
         pornhub_pattern = re.compile(r"(.*?)pornhub(.*?)")
         hqporner_pattern = re.compile(r'(.*?)hqporner.com(.*?)')
         eporner_pattern = re.compile(r'(.*?)eporner.com(.*)')
@@ -1636,20 +1693,36 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         file, types = dialog.getOpenFileName()
         self.ui.lineedit_file.setText(file)
         iterator = []
+        model_iterators = []
 
         with open(file, "r") as url_file:
             content = url_file.read().splitlines()
             for idx, url in enumerate(content):
+                if len(url) == 0:
+                    continue
+                    
                 self.ui.progressbar_total.setMaximum(len(content))
                 self.ui.progressbar_total.setValue(idx)
-                video = check_video(url, language=self.api_language, delay=self.delay)
+                if url.startswith("model#"):
+                    url = url.split("#")
+                    url = url[1]
+                    model_iterators.append(url)
+
+                else:
+                    video = check_video(url, language=self.api_language, delay=self.delay)
+
                 if video is False:
                     SomeFunctions().ui_popup(invalid_input_string)
 
                 else:
                     iterator.append(video)
 
+            logger_debug("Adding URLs to the tree widget...")
             self.add_to_tree_widget_thread(iterator, search_limit=self.search_limit)
+            logger_debug("Adding Model videos to the tree widget...")
+            for url in model_iterators:
+                logger_debug(f"Model URL {url}")
+                self.start_model(url)
 
     """
     The following functions are related to the User's account
@@ -1724,7 +1797,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         search_limit = self.search_limit
 
         if self.ui.radio_search_website_pornhub.isChecked():
-            videos = Client().search(query, use_hubtraffic=True)
+            videos = Client().search(query)
 
         elif self.ui.radio_search_website_xvideos.isChecked():
             pages = round(search_limit / 48)
