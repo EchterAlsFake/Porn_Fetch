@@ -690,6 +690,7 @@ class Porn_Fetch(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         # Variable initialization:
+        self.max_retries = None
         self.workers = None
         self.timeout = None
         self.gui_language = None
@@ -762,6 +763,7 @@ class Porn_Fetch(QWidget):
             self.ui.button_timeout_help: "faq.svg",
             self.ui.button_directory_system_help: "faq.svg",
             self.ui.button_result_limit_help: "faq.svg",
+            self.ui.button_timeout_maximal_retries_help: "faq.svg",
         }
         for button, icon_name in icons.items():
             button.setIcon(QIcon(f":/images/graphics/{icon_name}"))
@@ -831,6 +833,7 @@ class Porn_Fetch(QWidget):
         self.ui.button_view_all_progress_bars.setStyleSheet(stylesheets["button_blue"])
         self.ui.button_stop.setStyleSheet(stylesheets["button_reset"])
         self.ui.button_export_video_urls.setStyleSheet(stylesheets["button_purple"])
+        self.ui.button_timeout_maximal_retries_help.setStyleSheet(stylesheets["button_green"])
 
     def language_strings(self):
         """Contains the language strings. Needed for translation"""
@@ -1152,6 +1155,7 @@ class Porn_Fetch(QWidget):
         self.delay = int(self.conf["Video"]["delay"])
         self.timeout = int(self.conf["Performance"]["timeout"])
         self.workers = int(self.conf["Performance"]["workers"])
+        self.max_retries = int(self.conf["Performance"]["retries"])
 
         if self.gui_language == "en":
             self.ui.radio_ui_language_english.setChecked(True)
@@ -1179,6 +1183,7 @@ class Porn_Fetch(QWidget):
         self.ui.spinbox_maximal_timeout.setValue(int(self.timeout))
         self.ui.spinbox_maximal_workers.setValue(int(self.workers))
         self.ui.spinbox_pornhub_delay.setValue(int(self.delay))
+        consts.MAX_CALL_RETRIES = self.max_retries
         self.client = Client(delay=self.delay, language=self.api_language)
 
     def save_user_settings(self):
@@ -1227,6 +1232,7 @@ class Porn_Fetch(QWidget):
         self.conf.set("Performance", "timeout", str(self.ui.spinbox_maximal_timeout.value()))
         self.conf.set("Performance", "workers", str(self.ui.spinbox_maximal_workers.value()))
         self.conf.set("Video", "delay", str(self.ui.spinbox_pornhub_delay.value()))
+        self.conf.set("Performance", "retries", str(self.ui.spinbox_maximal_retries.value()))
 
         with open("config.ini", "w") as config_file:
             self.conf.write(config_file)

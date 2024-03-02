@@ -26,7 +26,7 @@ as they are indeed needed for the main applications!
 """
 
 sections = ["Performance", "License", "Video", "UI"]
-options_performance = ["semaphore", "threading_mode", "workers", "timeout"]
+options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries"]
 options_video = ["quality", "language", "output_path", "directory_system", "search_limit", "delay"]
 options_license = ["accepted"]
 options_ui = ["language"]
@@ -56,6 +56,7 @@ threading_mode = threaded
 semaphore = 2
 workers = 20
 timeout = 10
+retries = 4
 
 [Video]
 quality = best

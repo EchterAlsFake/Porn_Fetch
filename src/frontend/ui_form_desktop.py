@@ -579,7 +579,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1480, 218))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 383, 132))
         self.gridLayout_18 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_18.setObjectName(u"gridLayout_18")
         self.gridLayout_17 = QGridLayout()
@@ -1207,6 +1207,29 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_9.addLayout(self.horizontallayout_maximal_timeout, 5, 0, 1, 1)
 
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.label_maximal_retries = QLabel(self.groupbox_performance)
+        self.label_maximal_retries.setObjectName(u"label_maximal_retries")
+
+        self.horizontalLayout_2.addWidget(self.label_maximal_retries)
+
+        self.spinbox_maximal_retries = QSpinBox(self.groupbox_performance)
+        self.spinbox_maximal_retries.setObjectName(u"spinbox_maximal_retries")
+        self.spinbox_maximal_retries.setMinimum(5)
+        self.spinbox_maximal_retries.setMaximum(5000)
+
+        self.horizontalLayout_2.addWidget(self.spinbox_maximal_retries)
+
+        self.button_timeout_maximal_retries_help = QPushButton(self.groupbox_performance)
+        self.button_timeout_maximal_retries_help.setObjectName(u"button_timeout_maximal_retries_help")
+        self.button_timeout_maximal_retries_help.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.horizontalLayout_2.addWidget(self.button_timeout_maximal_retries_help)
+
+
+        self.gridLayout_9.addLayout(self.horizontalLayout_2, 6, 0, 1, 1)
+
 
         self.gridlayout_settings.addWidget(self.groupbox_performance, 0, 0, 1, 1)
 
@@ -1278,7 +1301,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_metadata.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 1502, 978))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 232, 978))
         self.gridLayout_27 = QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_27.setObjectName(u"gridLayout_27")
         self.gridlayout_metadata_ = QGridLayout()
@@ -1728,7 +1751,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.retranslateUi(Porn_Fetch_Widget)
 
-        self.stacked_widget_main.setCurrentIndex(0)
+        self.stacked_widget_main.setCurrentIndex(1)
         self.stacked_widget_top.setCurrentIndex(1)
         self.stackedWidget.setCurrentIndex(0)
 
@@ -1860,6 +1883,8 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_threading_mode_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
         self.label_maximal_timeout.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Maximal timeout:", None))
         self.button_timeout_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
+        self.label_maximal_retries.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Maximal retries:", None))
+        self.button_timeout_maximal_retries_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
         self.button_settings_apply.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Apply  (needs restart)", None))
         self.button_settings_reset.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Reset Porn Fetch to default settings", None))
         self.button_metadata_video_start.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
