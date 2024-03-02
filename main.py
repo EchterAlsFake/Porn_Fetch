@@ -17,6 +17,7 @@ from hqporner_api.api import Sort as hq_Sort
 from phub import download, consts
 from src.backend.shared_functions import *
 from itertools import islice
+from base_api.modules import consts as bs_consts
 
 from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
 from src.frontend.License import Ui_License
@@ -1184,6 +1185,8 @@ class Porn_Fetch(QWidget):
         self.ui.spinbox_maximal_workers.setValue(int(self.workers))
         self.ui.spinbox_pornhub_delay.setValue(int(self.delay))
         consts.MAX_CALL_RETRIES = self.max_retries
+        bs_consts.MAX_RETRIES = self.max_retries
+
         self.client = Client(delay=self.delay, language=self.api_language)
 
     def save_user_settings(self):
