@@ -778,6 +778,13 @@
                          </widget>
                         </item>
                         <item>
+                         <widget class="QRadioButton" name="radio_search_website_xnxx">
+                          <property name="text">
+                           <string>XNXX</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
                          <spacer name="horizontal_spacer_searching">
                           <property name="orientation">
                            <enum>Qt::Horizontal</enum>

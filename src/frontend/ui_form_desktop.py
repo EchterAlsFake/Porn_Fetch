@@ -426,6 +426,11 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.horizontallayout_searching_websites.addWidget(self.radio_search_website_eporner)
 
+        self.radio_search_website_xnxx = QRadioButton(self.page_download)
+        self.radio_search_website_xnxx.setObjectName(u"radio_search_website_xnxx")
+
+        self.horizontallayout_searching_websites.addWidget(self.radio_search_website_xnxx)
+
         self.horizontal_spacer_searching = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontallayout_searching_websites.addItem(self.horizontal_spacer_searching)
@@ -1802,6 +1807,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_search_website_hqporner.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"HQPorner", None))
         self.radio_search_website_xvideos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"XVideos", None))
         self.radio_search_website_eporner.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"EPorner", None))
+        self.radio_search_website_xnxx.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"XNXX", None))
         self.lineedit_file.setText("")
         self.lineedit_file.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"URLs in the file must be separated with new lines!", None))
         self.labell_search.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Search Query:", None))

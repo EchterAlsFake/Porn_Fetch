@@ -1,3 +1,4 @@
+import re
 import shutil
 import tarfile
 import requests
@@ -1322,8 +1323,7 @@ class Porn_Fetch(QWidget):
             SomeFunctions().ui_popup(QCoreApplication.tr("No video URLs found. Are there videos in the tree widget?", ""))
             return
 
-        file, mode = QFileDialog().getSaveFileName(self, QCoreApplication.tr("Select the file for saving urls. If the file already contains URLs the new ones"
-                                             "will be appended to it. Make sure Porn Fetch has needed permissions to open the file!", None))
+        file, mode = QFileDialog().getSaveFileName(self)
 
         try:
             with open(file, "a") as file:
@@ -1545,6 +1545,7 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
         pornhub_pattern = re.compile(r"(.*?)pornhub(.*?)")
         hqporner_pattern = re.compile(r'(.*?)hqporner.com(.*?)')
         eporner_pattern = re.compile(r'(.*?)eporner.com(.*)')
+        xnxx_pattern = re.compile(r'(.*?)xnxx.com(.*)')
 
         if pornhub_pattern.match(model):
             api_language = self.api_language
@@ -1564,6 +1565,9 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
         elif eporner_pattern.match(model):
             pages = round(search_limit / 38)
             videos = ep_Client.get_pornstar(url=model, enable_html_scraping=True).videos(pages=pages)
+
+        elif xnxx_pattern.match(model):
+            videos = xn_Client.get_user(url=model).videos
 
         self.add_to_tree_widget_thread(videos, search_limit=search_limit)
 
@@ -1700,7 +1704,7 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
             for idx, url in enumerate(content):
                 if len(url) == 0:
                     continue
-                    
+
                 self.ui.progressbar_total.setMaximum(len(content))
                 self.ui.progressbar_total.setValue(idx)
                 if url.startswith("model#"):
@@ -1811,6 +1815,9 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
         elif self.ui.radio_search_website_eporner.isChecked():
             videos = ep_Client().search_videos(query, sorting_gay="", sorting_order="", sorting_low_quality="", page=1,
                                                per_page=search_limit, enable_html_scraping=True)
+
+        elif self.ui.radio_search_website_xnxx.isChecked():
+            videos = xn_Client().search(query).videos
 
         self.add_to_tree_widget_thread(videos, search_limit=search_limit)
 

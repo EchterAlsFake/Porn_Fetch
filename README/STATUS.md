@@ -7,10 +7,9 @@
 - [x] Implementing a `stop` button, so that loading videos can be stopped immediately
 - [x] Improving debug messages
 - [x] Fixing Overflow error
+- [x] Adding searching support for XNXX
+- [x] Adding model support for XNXX
+- [x] Improving the help messages and the german translations to be more accurate
 - [] Improve the guide for contributing translations
-- [] Improving the help messages and the german translations to be more accurate
 - [] A complete rewrite of the CLI version
 - [] Embedding metadata like Pornstars etc. into the downloaded videos
-- [] Adding searching support for XNXX
-- [] Adding model support for XNXX
-- [] Adding get by category for XNXX
