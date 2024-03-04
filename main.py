@@ -1602,7 +1602,6 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
         SomeFunctions().ui_popup(QCoreApplication.tr(f"Some error occurred in loading a video. Please report this: {e}",
                                                      None))
 
-
     def process_video_thread(self, output_path, video, threading_mode, quality):
         """Checks which of the three types of threading the user selected and handles them."""
         self.download_thread = DownloadThread(video=video, output_path=output_path, quality=quality,
@@ -1699,7 +1698,7 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
         iterator = []
         model_iterators = []
 
-        with open(file, "r") as url_file:
+        with (open(file, "r") as url_file):
             content = url_file.read().splitlines()
             for idx, url in enumerate(content):
                 if len(url) == 0:
@@ -1715,11 +1714,11 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
                 else:
                     video = check_video(url, language=self.api_language, delay=self.delay)
 
-                if video is False:
-                    SomeFunctions().ui_popup(invalid_input_string)
+                    if video is not False:
+                        iterator.append(video)
 
-                else:
-                    iterator.append(video)
+                    else:
+                        SomeFunctions().ui_popup(invalid_input_string)
 
             logger_debug("Adding URLs to the tree widget...")
             self.add_to_tree_widget_thread(iterator, search_limit=self.search_limit)

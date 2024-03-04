@@ -437,7 +437,7 @@
                          <string>Only Title (a lot faster)</string>
                         </property>
                         <property name="checked">
-                         <bool>false</bool>
+                         <bool>true</bool>
                         </property>
                        </widget>
                       </item>
@@ -452,14 +452,20 @@
                         <property name="cursor">
                          <cursorShape>PointingHandCursor</cursorShape>
                         </property>
+                        <property name="toolTip">
+                         <string/>
+                        </property>
                         <property name="styleSheet">
                          <string notr="true"/>
                         </property>
                         <property name="text">
                          <string>Get Title, Author, Duration</string>
                         </property>
-                        <property name="checked">
+                        <property name="checkable">
                          <bool>true</bool>
+                        </property>
+                        <property name="checked">
+                         <bool>false</bool>
                         </property>
                        </widget>
                       </item>
@@ -1102,8 +1108,8 @@
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>1480</width>
-                         <height>218</height>
+                         <width>383</width>
+                         <height>132</height>
                         </rect>
                        </property>
                        <layout class="QGridLayout" name="gridLayout_18">
@@ -1544,8 +1550,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>1518</width>
-                 <height>612</height>
+                 <width>686</width>
+                 <height>599</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_34">
@@ -2228,7 +2234,7 @@ QPushButton:pressed {
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>1502</width>
+                   <width>232</width>
                    <height>978</height>
                   </rect>
                  </property>
