@@ -1,6 +1,11 @@
-import re
+import sys
+import pathlib
+import threading
 
 from src.backend.shared_functions import *
+from phub import download as ph_download
+from base_api.modules.download import *
+from base_api.modules.progress_bars import *
 
 pornhub_pattern = re.compile(r'(.*?)pornhub.com(.*)')
 hqporner_pattern = re.compile(r'(.*?)hqporner.com(.*)')
@@ -11,10 +16,22 @@ eporner_pattern = re.compile(r'(.*?)eporner.com(.*)')
 
 class CLI():
     def __init__(self):
+        self.threading_mode = None
+        self.result_limit = None
+        self.directory_system = None
+        self.output_path = None
+        self.quality = None
+        self.semaphore = None
+        self.retries = None
+        self.timeout = None
+        self.workers = None
+        self.delay = None
+        self.language = None
         while True:
             setup_config_file()
             self.conf = ConfigParser()
             self.conf.read("config.ini")
+            self.load_user_settings()
             self.menu()
 
 
@@ -38,11 +55,18 @@ Do you accept the license?  [yes,no]
 ---------------------------------->:""")
 
             if license == "yes":
-                self.conf = "your_mom"
+                self.conf.set("License", "accepted", "true")
 
+                with open("config.ini", "w") as config_file:
+                    self.conf.write(config_file)
 
+            else:
+                self.conf.set("License", "accepted", "false")
 
+                with open("config.ini", "w") as config_file:
+                    self.conf.write(config_file)
 
+                sys.exit()
 
 
     def menu(self):
@@ -63,43 +87,180 @@ Do you accept the license?  [yes,no]
         if options == "1":
             self.process_video()
 
-
-
     def load_user_settings(self):
-
-
+        self.language = self.conf.get("Video", "language")
+        self.delay = int(self.conf.get("Video", "delay"))
+        self.workers = int(self.conf.get("Performance", "workers"))
+        self.timeout = int(self.conf.get("Performance", "timeout"))
+        self.retries = int(self.conf.get("Performance", "retries"))
+        self.semaphore = threading.Semaphore(int(self.conf.get("Performance", "semaphore")))
+        self.quality = self.conf.get("Video", "quality")
+        self.output_path = correct_output_path(output_path=self.conf.get("Video", "output_path"))
+        self.directory_system = True if self.conf.get("Video", "directory_system") == "1" else False
+        self.result_limit = int(self.conf.get("Video", "search_limit"))
+        self.threading_mode = self.conf.get("Performance", "threading_mode")
 
 
 
     def save_user_settings(self):
+        languages = """
+de: German
+en: English
+fr: French
+zh: Chinese
+rt: Russian
+nl: Dutch
+es: Spanish
+it: Italian
+pt: Portuguese
+cz: Czech
+jp: Japanese
+"""
+        while True:
+            settings_options = input(f"""
+--------- Quality ----------
+1) Best
+2) Half
+3) Worst
+-------- Performance --------
+4) Change Semaphore
+5) Change Delay
+6) Change Workers
+7) Change Retries
+8) Change Timeout
+-------- Directory System ---
+9) Enable / Disable directory system
+-------- Result Limit -------
+10) Change result limit
+-------- Language (Video titles for PornHub)
+11) Change Language
+-------- Output Path --------
+12) Change output path
 
+99) Exit
+------------->:
+""")
 
-
-
-
-
+            try:
+                if settings_options == "1":
+                    self.conf.set("Video", "quality", "best")
+    
+                elif settings_options == "2":
+                    self.conf.set("Video", "quality", "half")
+    
+                elif settings_options == "3":
+                    self.conf.set("Video", "quality", "worst")
+                
+                elif settings_options == "4":
+                    limit = input(f"Enter a new Semaphore limit -->:")    
+                    self.conf.set("Performance", "semaphore", limit)
+                
+                elif settings_options == "5":
+                    limit = input(f"Enter a new delay (seconds) -->:")
+                    self.conf.set("Video", "delay", limit)
+                
+                elif settings_options == "6":
+                    limit = input(f"Enter a new value for max workers -->:")
+                    self.conf.set("Performance", "workers", limit)
+    
+                elif settings_options == "7":
+                    limit = input(f"Enter a new value for max retries -->:")
+                    self.conf.set("Performance", "retries", limit)
+                
+                elif settings_options == "8":
+                    limit = input(f"Enter a new value for the max timeout -->:", limit)
+                
+                elif settings_options == "9":
+                    if self.directory_system:
+                        self.conf.set("Video", "directory_system", "0")
+                    
+                    else:
+                        self.conf.set("Video", "directory_system", "1")
+                    
+                elif settings_options == "10":
+                    limit = input(f"Enter a new result limit -->:")
+                    self.conf.set("Video", "search_limit", limit)
+                
+                elif settings_options == "11":
+                    print("Please enter a language code from the list below:")
+                    print(languages)
+                    language = input(f"Enter the new language code -->:")
+                    self.conf.set("Video", "language", language)
+                
+                elif settings_options == "12":
+                    path = input(f"Enter a new output path -->:")
+                    if not os.path.exists(path):
+                        raise FileNotFoundError("The specified output path doesn't exist!")
+                    
+                    self.conf.set("Video", "output_path", path)                
+            
+                
+                elif settings_options == "99":
+                    self.menu()
+            
+            finally:
+                with open("config.ini", "w") as config_file:
+                    self.conf.write(config_file)
+                    
+                    
     def process_video(self, url=None):
         if url is None:
             url = input(f"Please enter the Video URL -->:")
 
 
-        video = check_video(url=url, language=self.)
+        video = check_video(url=url, language=self.language, delay=self.delay)
 
+        title = video.title
 
+        if isinstance(video, Video):
+            author = video.author.name
 
+        else:
+            author = video.author
 
+        output_path = self.output_path
 
+        if self.directory_system:
+            output_path = pathlib.Path(output_path + title + author + ".mp4")
 
+        else:
+            output_path = pathlib.Path(output_path + title + ".mp4")
 
+        if os.path.exists(output_path):
+            logger_debug(f"File: {output_path} already exists, skipping...")
+            return
+
+        logger_debug("Trying to acquire the semaphore...")
+        self.semaphore.acquire()
+        self.thread = threading.Thread(target=self.download, args=(video, output_path, ))
+        self.thread.start()
 
     def process_model(self):
+        pass
+
+    def download(self, video, output_path):
+
+        try:
+            if self.threading_mode == "threaded" and isinstance(video, Video):
+                self.threading_mode = ph_download.threaded(max_workers=self.workers, timeout=self.timeout)
+
+            elif self.threading_mode == "threaded" and not isinstance(video, Video):
+                self.threading_mode = threaded(max_workers=self.workers, timeout=self.timeout, retries=self.retries)
+
+
+            if isinstance(video, Video):
+                video.download(path=output_path, quality=self.quality, downloader=self.threading_mode, display=Callback.text_progress_bar)
+
+
+            else:
+                video.download(path=output_path, quality=self.quality, downloader=self.threading_mode, callback=Callback.text_progress_bar)
+
+        finally:
+            logger_debug(f"Finished downloading for: {video.title}")
 
 
 
-    def
-
-
-
+CLI()
 
 
 

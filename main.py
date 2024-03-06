@@ -1,4 +1,3 @@
-import re
 import shutil
 import tarfile
 import requests
