@@ -68,7 +68,6 @@ Do you accept the license?  [yes,no]
 
                 sys.exit()
 
-
     def menu(self):
         options = input(f"""
 1) Download a Video
@@ -82,7 +81,6 @@ Do you accept the license?  [yes,no]
 99) Exit
 
 ------------------>:""")
-
 
         if options == "1":
             self.process_video()
@@ -99,8 +97,6 @@ Do you accept the license?  [yes,no]
         self.directory_system = True if self.conf.get("Video", "directory_system") == "1" else False
         self.result_limit = int(self.conf.get("Video", "search_limit"))
         self.threading_mode = self.conf.get("Performance", "threading_mode")
-
-
 
     def save_user_settings(self):
         languages = """
@@ -202,14 +198,11 @@ jp: Japanese
                 with open("config.ini", "w") as config_file:
                     self.conf.write(config_file)
                     
-                    
     def process_video(self, url=None):
         if url is None:
             url = input(f"Please enter the Video URL -->:")
 
-
         video = check_video(url=url, language=self.language, delay=self.delay)
-
         title = video.title
 
         if isinstance(video, Video):
@@ -235,8 +228,96 @@ jp: Japanese
         self.thread = threading.Thread(target=self.download, args=(video, output_path, ))
         self.thread.start()
 
-    def process_model(self):
-        pass
+    def iterate_generator(self, generator):
+        videos = []
+
+        for idx, video in enumerate(generator):
+            print(f"{idx}) - {video.title}")
+            videos.append(video)
+
+        vids = input(f"""
+Please enter the numbers of videos you want to download with a comma separated.
+for example: 1,5,94,3
+
+------------------------>:""")
+
+        selected_videos = vids.split(",")
+        for number in selected_videos:
+            video = videos[int(number)]
+            self.process_video(video)
+
+    def process_model(self, url=None):
+        if url is None:
+            model = input(f"Enter the model URL -->:")
+
+        else:
+            model = url
+
+        if eporner_pattern.search(model):
+            model = ep_Client().get_pornstar(model, enable_html_scraping=True).videos(pages=10)
+
+        elif xnxx_pattern.match(model):
+            model = xn_Client().get_user(model).videos
+
+        elif pornhub_pattern.match(model):
+            model = Client().get_user(model).videos
+
+        elif hqporner_pattern.match(model):
+            model = hq_Client().get_videos_by_actress(model)
+
+        elif xvideos_pattern.match(model):
+            print("XVideos isn't supported yet, sorry.")
+            return
+
+        self.iterate_generator(model)
+
+    def process_playlist(self):
+        url = input("Enter the (PornHub) playlist URL -->:")
+        playlist = Client().get_playlist(url)
+        print(f"Processing: {playlist.title}")
+        self.iterate_generator(playlist.videos)
+
+    def search_videos(self):
+        website = input(f"""
+Please select the website to search on:
+
+1) PornHub
+2) HQPorner
+3) XVideos
+4) XNXX
+5) Eporner
+----------->:""")
+        query = input(f"Please enter the search query -->:")
+
+        if website == "1":
+            self.iterate_generator(Client().search(query))
+
+        elif website == "2":
+            self.iterate_generator(hq_Client().search_videos(query=query, pages=10))
+
+        elif website == "3":
+            self.iterate_generator(xv_Client().search(query))
+
+        elif website == "4":
+            self.iterate_generator(xn_Client().search(query))
+
+        elif website == "5":
+            self.iterate_generator(ep_Client().search_videos(query, page=1, per_page=self.result_limit, sorting_order="", sorting_gay="", sorting_low_quality=""))
+
+    def process_file(self):
+        file = input(f"Please enter the file path -->:")
+
+        with open(file, "r") as file:
+            content = file.read()
+            content = content.splitlines()
+
+        for line in content:
+            if line.startswith("model#"):
+                line = line.split("#")[1]
+                self.process_model(line)
+
+
+
 
     def download(self, video, output_path):
 
@@ -247,10 +328,8 @@ jp: Japanese
             elif self.threading_mode == "threaded" and not isinstance(video, Video):
                 self.threading_mode = threaded(max_workers=self.workers, timeout=self.timeout, retries=self.retries)
 
-
             if isinstance(video, Video):
                 video.download(path=output_path, quality=self.quality, downloader=self.threading_mode, display=Callback.text_progress_bar)
-
 
             else:
                 video.download(path=output_path, quality=self.quality, downloader=self.threading_mode, callback=Callback.text_progress_bar)
