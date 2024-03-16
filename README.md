@@ -1,23 +1,18 @@
 <p align="center">
-  <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/V3.0/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="200"/>
+  <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/V3.0/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="600"/>
 </p>
 
 
 <h1 align="center">Porn Fetch - The Ultimate Open-Source Porn(Hub) Downloader</h1>
 
 <p align="center">
-  <a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/python-app.yml/badge.svg" alt="Build Status"/></a>
+  <a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui.yml/badge.svg" alt="Build GUI Status"/></a>
+  <a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_cli.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_cli.yml/badge.svg" alt="Build CLI Status"/></a>
   <a href="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL"><img src="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL/badge.svg" alt="CodeQL Analysis"/></a>
-  <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/EchterAlsFake/Porn_Fetch/total?style=for-the-badge&logoColor=grey&labelColor=%2300CCCC&color=purple">
+<img alt="GitHub all releases" src="https://img.shields.io/github/downloads/EchterAlsFake/Porn_Fetch/total?style=for-the-badge&logoColor=grey&labelColor=%2300CCCC&color=purple">
 
 </p>
 
-<p align="center">
-  <a href="https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.1"><strong>Download Version 3.1</strong></a> ·
-  <a href="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md"><strong>Development Update V3.2</strong></a>
-</p>
-
-![Alt text](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/screenshot.png?raw=true "Optional Title")
 
 ## 🚀 Quick Links
 - [Legal Rights](#-legal-rights)
