@@ -31,45 +31,45 @@
 - [License](#-license)
 
 ## 🌟 Features
-- Direct downloads from PornHub and other sites
-- PornHub playlist downloads
-- Selectable video quality
+- Downloading Videos
+- Downloading Playlists
+- Downloading whole model / channel accounts
+- Searching for videos (and downloading them directly)
+- Downloading from a file
 - Metadata retrieval
-- Full channel/user/model download capabilities
-- In-app search and download features for multiple sites
 - Optional account login
 - Multi-threaded downloading
 - Dark mode and CLI support
 - No ads or mandatory logins
 - Cross-platform compatibility
 - Multiple supported websites
-- Multiple languages
+- Multiple user interface languages
 - Native Android application
 - modern looking user interface
 
 ## 🖥️ Supported Platforms
-- Windows 10, 11 (backward compatibility untested)
+- Windows 7, 8, 10, 11
 - Linux (X11 / Wayland)
-- macOS (via source build or Python)
-- Android (arm64-v8a)
-- ARM (native Python run)
+- Android (arm64-v8a | aarch64)
 
-> iOS is NOT supported. Don't even try!
+> [!IMPORTANT] 
+> Porn Fetch supports 32bit and 64bit operating systems.
+> iOS is NOT supported. Other systems like macOS may work, but you need to build it
+> by yourself using Python and Pyinstaller
 
 ## 🌐 Supported Websites
-#### Important:
-
-Not all websites support every feature. 
-<br>Some might only support downloading, while others support searching
-
-### You can see more information [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/WEBSITES.md)
-
-
 - [PornHub.com](https://github.com/Egsagon/PHUB)
 - [HQPorner.com](https://github.com/EchterAlsFake/hqporner_api)
 - [xnxx.com](https://github.com/EchterAlsFake/xnxx_api)
 - [Eporner.com](https://github.com/EchterAlsFake/eporner_api)
 - [XVideos.com](https://github.com/EchterAlsFake/xvideos_api)
+
+> [!IMPORTANT] 
+> Not all websites support every feature. 
+> Some might only support downloading, while others support searching
+
+### You can see more information [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/WEBSITES.md)
+
 
 ## 🔨 Building from Source
 Easy-to-use build scripts are available for various platforms. Run these in your terminal:
@@ -90,6 +90,9 @@ Set-ExecutionPolicy RemoteSigned
 Set-ExecutionPolicy Bypass -Scope Process
 Invoke-Expression (Invoke-WebRequest -Uri https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_windows.ps1 -UseBasicParsing).Content
 ```
+
+> Scripts aren't maintained very often. Please report errors immediately!
+
 ## 📱 Android
 The Android app is the exact same as the desktop app. Thanks to Qt's Android developing Guide, you'll be able to simply
 install the .apk file, and you have the full version of Porn Fetch on your device.
