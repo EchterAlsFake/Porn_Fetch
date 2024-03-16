@@ -12,6 +12,8 @@
 <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/EchterAlsFake/Porn_Fetch/total?style=social&logo=github&logoColor=purple">
 </p>
 
+> [!WARNING]
+> Porn Fetch is NOT associated with the websites. Porn Fetch is AGAINST the Terms of Services of EVERY website! Usage is on YOUR risk.
 
 ## 🚀 Quick Links
 - [Legal Rights](#-legal-rights)
@@ -27,8 +29,6 @@
 - [Useful Information](#-useful-information)
 - [Credits](#-credits)
 - [License](#-license)
-## ⚖️ Legal Rights
-Warning: Porn Fetch is in fact against the ToS of every website. Usage is on your own risk!
 
 ## 🌟 Features
 - Direct downloads from PornHub and other sites
