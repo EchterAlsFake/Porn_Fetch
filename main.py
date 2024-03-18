@@ -1598,7 +1598,7 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
     def on_video_load_error(self, error_message):
         # Handle errors, possibly show message to user
         logger_debug(f"Error loading video: {error_message}")
-        SomeFunctions().ui_popup(QCoreApplication.tr(f"Some error occurred in loading a video. Please report this: {e}",
+        SomeFunctions().ui_popup(QCoreApplication.tr(f"Some error occurred in loading a video. Please report this: {error_message}",
                                                      None))
 
     def process_video_thread(self, output_path, video, threading_mode, quality):
