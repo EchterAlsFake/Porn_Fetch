@@ -24,7 +24,6 @@
 > Porn Fetch is NOT associated with the websites. Porn Fetch is AGAINST the Terms of Services of EVERY website! Usage is on YOUR risk.
 
 ## 🚀 Quick Links
-- [Legal Rights](#-legal-rights)
 - [Features](#-features)
 - [Supported Platforms](#-supported-platforms)
 - [Supported Websites](#-supported-websites)
@@ -34,7 +33,6 @@
   - [Windows](#for-windows-powershell-as-admin)
 - [Android](#-android)
 - [Translating](#-translating)
-- [Useful Information](#-useful-information)
 - [Credits](#-credits)
 - [License](#-license)
 
@@ -124,8 +122,11 @@ Currently available in:
 ## 👏 Credits
 - API: [PHUB](https://github.com/EchterAlsFake/PHUB)
 - GUI: [Qt](https://qt.io) for Python
+- FFmpeg: [FFmpeg](https://ffmpeg.org/) GPL
 ### See [Credits](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/CREDITS.md)
 
 ## 📚 License
 Licensed under [GPL 3](https://www.gnu.org/licenses/gpl-3.0.en.html).
 <br>Copyright (C) 2023–2024 Johannes Habel 
+
+Porn Fetch uses [FFmpeg](https://ffmpeg.org/), which is licensed under the GPL license
