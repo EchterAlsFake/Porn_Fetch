@@ -120,7 +120,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_status.setWidgetResizable(True)
         self.scrollAreaWidgetContents_5 = QWidget()
         self.scrollAreaWidgetContents_5.setObjectName(u"scrollAreaWidgetContents_5")
-        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 1536, 118))
+        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 1522, 146))
         self.gridLayout_33 = QGridLayout(self.scrollAreaWidgetContents_5)
         self.gridLayout_33.setObjectName(u"gridLayout_33")
         self.gridlayout_status = QGridLayout()
@@ -174,6 +174,17 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_view_all_progress_bars.setObjectName(u"button_view_all_progress_bars")
 
         self.gridlayout_status.addWidget(self.button_view_all_progress_bars, 8, 0, 1, 2)
+
+        self.label_progress_converting = QLabel(self.scrollAreaWidgetContents_5)
+        self.label_progress_converting.setObjectName(u"label_progress_converting")
+
+        self.gridlayout_status.addWidget(self.label_progress_converting, 2, 0, 1, 1)
+
+        self.progressbar_converting = QProgressBar(self.scrollAreaWidgetContents_5)
+        self.progressbar_converting.setObjectName(u"progressbar_converting")
+        self.progressbar_converting.setValue(0)
+
+        self.gridlayout_status.addWidget(self.progressbar_converting, 2, 1, 1, 1)
 
 
         self.gridLayout_33.addLayout(self.gridlayout_status, 1, 0, 1, 1)
@@ -1782,6 +1793,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_total_progress.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
         self.label_progress_information.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Information: The total progressbar does not count for Eporner and HQPorner, because they are using different mechanisms for downloading.", None))
         self.button_view_all_progress_bars.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"View all other progress bars", None))
+        self.label_progress_converting.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Converting:", None))
         self.stacked_widget_main.setStyleSheet("")
         self.button_tree_download.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download Selected Videos", None))
         self.button_tree_select_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Select all", None))

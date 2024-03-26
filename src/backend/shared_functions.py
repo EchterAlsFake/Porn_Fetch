@@ -5,6 +5,7 @@ If you know what you do, you can change a few things here :)
 
 import os
 import re
+from mutagen.mp4 import MP4
 
 from phub import Client, errors, Video
 from phub.modules import download as ph_download
@@ -19,6 +20,7 @@ from xnxx_api.xnxx_api import Client as xn_Client, Video as xn_Video
 from xvideos_api.xvideos_api import Client as xv_Client, Video as xv_Video
 from base_api.modules.download import FFMPEG as bs_ffmpeg, default as bs_default, threaded as bs_threaded
 from base_api.modules.quality import Quality as bs_Quality
+from ffmpeg_progress_yield import FfmpegProgress
 
 """
 The following are the sections and options for the configuration file. Please don't change anything here, 
@@ -230,3 +232,32 @@ def get_element_safe(list, index):
         return list[index]
     else:
         return ""
+
+
+def write_tags(path, video):
+    title = video.title
+    comment = "Downloaded with Porn Fetch (GPLv3)"
+    genre = "Porn"
+    if hasattr(video.author, "name"):
+        artist = video.author.name
+
+    else:
+        artist = video.author if not isinstance(video.author, list) else video.author[0]
+
+    if artist == "":
+        artist = "Unknown"
+
+    audio = MP4(path)
+
+    audio.tags["\xa9nam"] = title
+    audio.tags["\xa9ART"] = artist
+    audio.tags["\xa9cmt"] = comment
+    audio.tags["\xa9gen"] = genre
+    audio.save()
+
+
+pornhub_pattern = re.compile(r'(.*?)pornhub.com(.*)')
+hqporner_pattern = re.compile(r'(.*?)hqporner.com(.*)')
+xnxx_pattern = re.compile(r'(.*?)xnxx.com(.*)')
+xvideos_pattern = re.compile(r'(.*?)xvideos.com(.*)')
+eporner_pattern = re.compile(r'(.*?)eporner.com(.*)')

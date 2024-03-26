@@ -7,11 +7,6 @@ from phub import download as ph_download
 from base_api.modules.download import *
 from base_api.modules.progress_bars import *
 
-pornhub_pattern = re.compile(r'(.*?)pornhub.com(.*)')
-hqporner_pattern = re.compile(r'(.*?)hqporner.com(.*)')
-xnxx_pattern = re.compile(r'(.*?)xnxx.com(.*)')
-xvideos_pattern = re.compile(r'(.*?)xvideos.com(.*)')
-eporner_pattern = re.compile(r'(.*?)eporner.com(.*)')
 
 
 class CLI():

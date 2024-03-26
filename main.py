@@ -1,5 +1,7 @@
 import shutil
 import tarfile
+
+import ffmpeg_progress_yield
 import requests
 import time
 import sys
@@ -27,7 +29,6 @@ from PySide6.QtWidgets import (QWidget, QApplication, QMessageBox, QInputDialog,
                                QFileDialog)
 from PySide6.QtGui import QIcon, QFont
 
-
 """
 Copyright (C) 2023-2024 Johannes Habel
 
@@ -50,7 +51,6 @@ E-Mail: EchterAlsFake@proton.me
 Discord: echteralsfake (faster response)
 """
 
-
 __license__ = "GPL 3"
 __version__ = "3.2"
 __build__ = "desktop"  # android or desktop
@@ -62,6 +62,8 @@ stop_flag = Event()
 send_error_logs = False  # Only enabled when developing the application.
 invalid_input_string = QCoreApplication.tr("Wrong Input, please verify the URL, category or actress!",
                                            disambiguation="")
+ffmpeg_features = True
+ffmpeg_path = None
 
 
 class SomeFunctions:
@@ -132,6 +134,7 @@ class Signals(QObject):
     progress_xvideos = Signal(int, int)
     total_progress = Signal(int, int)
     progress_video = Signal(object)
+    ffmpeg_progress = Signal(int, int)
 
     # Ranges
     start_undefined_range = Signal()
@@ -235,7 +238,9 @@ class AddToTreeWidget(QRunnable):
         if isinstance(video, xn_Video) and not hasattr(video, 'pornstars'):
             author = "no_pornstars_found"
 
-        print(f"\r\033[K[{Fore.LIGHTCYAN_EX}{index}/{self.search_limit}]{Fore.RESET}{str(title)} Successfully processed!", end='', flush=True)
+        print(
+            f"\r\033[K[{Fore.LIGHTCYAN_EX}{index}/{self.search_limit}]{Fore.RESET}{str(title)} Successfully processed!",
+            end='', flush=True)
         return [str(title), str(author), str(duration), str(index), video]
 
     def run(self):
@@ -299,8 +304,11 @@ class AddToTreeWidget(QRunnable):
                         try_attempt = False  # Move to the next video after logging the error
 
                     except IndexError:
-                        logger_error("You got blocked from PornHub. Please switch your IP or wait some minutes. (at least 5)")
-                        SomeFunctions().ui_popup(QCoreApplication.tr("You got blocked from PornHub. Please switch your IP or wait some minutes. (at least 5)", None))
+                        logger_error(
+                            "You got blocked from PornHub. Please switch your IP or wait some minutes. (at least 5)")
+                        SomeFunctions().ui_popup(QCoreApplication.tr(
+                            "You got blocked from PornHub. Please switch your IP or wait some minutes. (at least 5)",
+                            None))
 
         finally:
             self.signals.finished.emit()
@@ -308,6 +316,7 @@ class AddToTreeWidget(QRunnable):
 
 class DownloadThread(QRunnable):
     """Refactored threading class to download videos with improved performance and logic."""
+
     def __init__(self, video, quality, output_path, threading_mode, workers, timeout, stop_flag):
         super().__init__()
         self.video = video
@@ -333,16 +342,16 @@ class DownloadThread(QRunnable):
         """Resolve the appropriate threading mode based on input."""
         if isinstance(self.video, Video):
             return {
-            "threaded": download.threaded(max_workers=self.workers, timeout=self.timeout),
-            "FFMPEG":   download.FFMPEG,
-            "default":  download.default
+                "threaded": download.threaded(max_workers=self.workers, timeout=self.timeout),
+                "FFMPEG": download.FFMPEG,
+                "default": download.default
             }.get(mode, download.default)
 
         else:
             return {
-            "threaded": bs_threaded(max_workers=self.workers, timeout=self.timeout, retries=5),
-            "FFMPEG":   bs_ffmpeg,
-            "default":  bs_default
+                "threaded": bs_threaded(max_workers=self.workers, timeout=self.timeout, retries=5),
+                "FFMPEG": bs_ffmpeg,
+                "default": bs_default
             }.get(mode, download.default)
 
     def generic_callback(self, pos, total, signal, video_source, ffmpeg=False):
@@ -390,60 +399,80 @@ class DownloadThread(QRunnable):
     def run(self):
         """Run the download in a thread, optimizing for different video sources and modes."""
 
-        logger_debug(f"Downloading Video to: {self.output_path}")
-        if self.threading_mode == "FFMPEG" or self.threading_mode == download.FFMPEG:
-            self.ffmpeg = True
+        try:
+            logger_debug(f"Downloading Video to: {self.output_path}")
+            if self.threading_mode == "FFMPEG" or self.threading_mode == download.FFMPEG:
+                self.ffmpeg = True
 
-        if isinstance(self.video, Video):  # Assuming 'Video' is the class for Pornhub
-            self.threading_mode = self.resolve_threading_mode(self.threading_mode)
-            video_source = "pornhub"
-            path = self.output_path
-            logger_debug("Starting the Download!")
-            try:
-                self.video.download(downloader=self.threading_mode, path=path, quality=self.quality,
-                                    display=lambda pos, total: self.generic_callback(pos, total, self.signals.progress,
-                                                                                     video_source, self.ffmpeg))
+            if isinstance(self.video, Video):  # Assuming 'Video' is the class for Pornhub
+                self.threading_mode = self.resolve_threading_mode(self.threading_mode)
+                video_source = "pornhub"
+                path = self.output_path
+                logger_debug("Starting the Download!")
+                try:
+                    self.video.download(downloader=self.threading_mode, path=path, quality=self.quality,
+                                        display=lambda pos, total: self.generic_callback(pos, total,
+                                                                                         self.signals.progress,
+                                                                                         video_source, self.ffmpeg))
 
-            except TypeError:
-                self.video.download(downloader=self.threading_mode, path=path, quality=self.quality,
-                                    display=lambda pos, total: self.generic_callback(pos, total, self.signals.progress,
-                                                                                     video_source, self.ffmpeg))
+                except TypeError:
+                    self.video.download(downloader=self.threading_mode, path=path, quality=self.quality,
+                                        display=lambda pos, total: self.generic_callback(pos, total,
+                                                                                         self.signals.progress,
+                                                                                         video_source, self.ffmpeg))
 
-        # We need to specify the sources, so that it knows which individual progressbar to use
-        elif isinstance(self.video, hq_Video):
-            video_source = "hqporner"
-            self.video.download(quality=self.quality, output_path=self.output_path,
-                                callback=lambda pos, total: self.generic_callback(pos, total,
-                                                                                  self.signals.progress_hqporner,
-                                                                                  video_source, self.ffmpeg))
+            # We need to specify the sources, so that it knows which individual progressbar to use
+            elif isinstance(self.video, hq_Video):
+                video_source = "hqporner"
+                self.video.download(quality=self.quality, output_path=self.output_path,
+                                    callback=lambda pos, total: self.generic_callback(pos, total,
+                                                                                      self.signals.progress_hqporner,
+                                                                                      video_source, self.ffmpeg))
 
-        elif isinstance(self.video, ep_Video):
-            video_source = "eporner"
-            self.video.download_video(quality=self.quality, output_path=self.output_path,
-                                      callback=lambda pos, total: self.generic_callback(pos, total,
-                                                                                        self.signals.progress_eporner,
-                                                                                        video_source, self.ffmpeg))
+            elif isinstance(self.video, ep_Video):
+                video_source = "eporner"
+                self.video.download_video(quality=self.quality, output_path=self.output_path,
+                                          callback=lambda pos, total: self.generic_callback(pos, total,
+                                                                                            self.signals.progress_eporner,
+                                                                                            video_source, self.ffmpeg))
 
-        elif isinstance(self.video, xn_Video):
-            video_source = "xnxx"
-            self.video.download(downloader=self.threading_mode, output_path=self.output_path,
-                                quality=self.quality,
-                                callback=lambda pos, total: self.generic_callback(pos, total,
-                                                                                  self.signals.progress_xnxx,
-                                                                                  video_source, self.ffmpeg))
+            elif isinstance(self.video, xn_Video):
+                video_source = "xnxx"
+                self.video.download(downloader=self.threading_mode, output_path=self.output_path,
+                                    quality=self.quality,
+                                    callback=lambda pos, total: self.generic_callback(pos, total,
+                                                                                      self.signals.progress_xnxx,
+                                                                                      video_source, self.ffmpeg))
 
-        elif isinstance(self.video, xv_Video):
-            video_source = "xvideos"
-            self.video.download(downloader=self.threading_mode, output_path=self.output_path,
-                                quality=self.quality,
-                                callback=lambda pos, total: self.generic_callback(pos, total,
-                                                                                  self.signals.progress_xvideos,
-                                                                                  video_source, self.ffmpeg))
+            elif isinstance(self.video, xv_Video):
+                video_source = "xvideos"
+                self.video.download(downloader=self.threading_mode, output_path=self.output_path,
+                                    quality=self.quality,
+                                    callback=lambda pos, total: self.generic_callback(pos, total,
+                                                                                      self.signals.progress_xvideos,
+                                                                                      video_source, self.ffmpeg))
 
-        # ... other video types ...
+                # ... other video types ...
 
-        # Emit the completed signal when done
-            self.signals.completed.emit()
+                # Emit the completed signal when done
+                self.signals.completed.emit()
+
+        finally:
+            if ffmpeg_features:
+                logger_debug("Writing Tags...")
+                os.rename(f"{self.output_path}", f"{self.output_path}_.tmp")
+                logger_debug(f"FFMPEG PATH: {ffmpeg_path}")
+                cmd = [ffmpeg_path, "-i", f"{self.output_path}_.tmp", "-c", "copy", self.output_path]
+                ff = FfmpegProgress(cmd)
+                for progress in ff.run_command_with_progress():
+                    self.signals.ffmpeg_progress.emit(round(progress), 100)
+
+                os.remove(f"{self.output_path}_.tmp")
+                write_tags(path=self.output_path, video=self.video)
+                logger_debug("Written Tags")
+
+            else:
+                logger_debug("FFMPEG features disabled, writing tags won't be available!")
 
 
 class QTreeWidgetDownloadThread(QRunnable):
@@ -639,70 +668,6 @@ class VideoLoader(QRunnable):
             self.signals.error.emit(str(e))
 
 
-class FFMPEGDownload(QRunnable):
-    """Downloads ffmpeg into the execution path of Porn Fetch"""
-
-    def __init__(self, url, extract_path, mode):
-        super().__init__()
-        self.url = url
-        self.extract_path = extract_path
-        self.mode = mode
-        self.signals = Signals()
-
-    def run(self):
-        # Download the file
-        logger_debug("FFMPEG: [1/4] Starting the download")
-        with requests.get(self.url, stream=True) as r:
-            r.raise_for_status()
-            total_length = int(r.headers.get('content-length'))
-            self.signals.total_progress.emit(0, total_length)  # Initialize progress bar
-            dl = 0
-            filename = self.url.split('/')[-1]
-            with open(filename, 'wb') as f:
-                for chunk in r.iter_content(chunk_size=8192):
-                    if chunk:  # filter out keep-alive new chunks
-                        f.write(chunk)
-                        dl += len(chunk)
-                        self.signals.total_progress.emit(dl, total_length)
-
-        logger_debug("FFMPEG: [2/4] Starting file extraction")
-        # Extract the file based on OS mode
-        if self.mode == "linux" and filename.endswith(".tar.xz"):
-            with tarfile.open(filename, "r:xz") as tar:
-                total_members = len(tar.getmembers())
-
-                for idx, member in enumerate(tar.getmembers()):
-                    if 'ffmpeg' in member.name and (member.name.endswith('ffmpeg')):
-                        tar.extract(member, self.extract_path)
-                        extracted_path = os.path.join(self.extract_path, member.path)
-                        shutil.move(extracted_path, "./")
-
-                    self.signals.total_progress.emit(idx, total_members)
-
-        elif self.mode == "windows" and filename.endswith(".zip"):
-            with zipfile.ZipFile(filename, 'r') as zip_ref:
-                total = len(zip_ref.namelist())
-
-                for idx, member in enumerate(zip_ref.namelist()):
-                    if 'ffmpeg.exe' in member:
-                        zip_ref.extract(member, self.extract_path)
-                        extracted_path = os.path.join(self.extract_path, member)
-                        shutil.move(extracted_path, ".")
-
-                    self.signals.total_progress.emit(idx, total)
-        logger_debug("FFMPEG: [3/4] Finished Extraction")
-        # Finalize
-        self.signals.total_progress.emit(total_length, total_length)  # Ensure progress bar reaches 100%
-        os.remove(filename)  # Clean up downloaded archive
-
-        if sys.platform == "linux":
-            shutil.rmtree("ffmpeg-6.1-amd64-static")
-
-        elif sys.platform == "win32":
-            shutil.rmtree("ffmpeg-6.1.1-essentials_build")
-
-        logger_debug("FFMPEG: [4/4] Cleaned Up")
-
 class Porn_Fetch(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -744,7 +709,6 @@ class Porn_Fetch(QWidget):
         self.settings_maps_initialization()
         self.load_user_settings()
         logger_debug("Startup - Initialization: [4/5] Loaded the user settings")
-        self.check_ffmpeg()
         self.switch_to_home()
         self.check_for_updates()
         logger_debug("Startup - Initialization: [5/5] Checked for updates, setup Done!")
@@ -795,6 +759,7 @@ class Porn_Fetch(QWidget):
             "progressbar_total": ":/style/stylesheets/progressbar_total.qss",
             "progressbar_xnxx": ":/style/stylesheets/progressbar_xnxx.qss",
             "progressbar_xvideos": ":/style/stylesheets/progressbar_xvideos.qss",
+            "progressbar_converting": ":/style/stylesheets/progressbar_converting.qss",
             "button_blue": ":/style/stylesheets/stylesheet_button_blue.qss",
             "button_orange": ":/style/stylesheets/stylesheet_button_orange.qss",
             "button_purple": ":/style/stylesheets/stylesheet_button_purple.qss",
@@ -814,6 +779,7 @@ class Porn_Fetch(QWidget):
         self.ui.progressbar_eporner.setStyleSheet(stylesheets["progressbar_eporner"])
         self.ui.progressbar_hqporner.setStyleSheet(stylesheets["progressbar_hqporner"])
         self.ui.progressbar_xvideos.setStyleSheet(stylesheets["progressbar_xvideos"])
+        self.ui.progressbar_converting.setStyleSheet(stylesheets["progressbar_converting"])
 
         self.ui.button_model.setStyleSheet(stylesheets["button_purple"])
         self.ui.button_search.setStyleSheet(stylesheets["button_purple"])
@@ -875,10 +841,10 @@ class Porn_Fetch(QWidget):
     def check_for_updates(cls):
         if requests.get("https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.3").status_code == 200:
             logger_debug("Next release v3.3 found!")
-            SomeFunctions().ui_popup(QCoreApplication.tr("Information: A new version of Porn Fetch (v3.2) is out. "
-                                         "I recommend you to update Porn Fetch. Go to: "
-                                         "https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.3",
-                                         disambiguation=None))
+            SomeFunctions().ui_popup(QCoreApplication.tr("Information: A new version of Porn Fetch (v3.3) is out. "
+                                                         "I recommend you to update Porn Fetch. Go to: "
+                                                         "https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.3",
+                                                         None))
 
         else:
             logger_debug("No updates found...")
@@ -936,14 +902,17 @@ class Porn_Fetch(QWidget):
         self.configure_ui_for_android("/storage/emulated/0/Download/")
 
     def handle_no_output_path(self):
-        SomeFunctions().ui_popup(QCoreApplication.tr("The output path does not exist or is not writable.", disambiguation=""))
+        SomeFunctions().ui_popup(
+            QCoreApplication.tr("The output path does not exist or is not writable.", disambiguation=""))
         text, ok = QInputDialog.getText(self, "Enter custom Path",
                                         QCoreApplication.tr("Enter custom Path:", disambiguation=""))
         if ok and SomeFunctions().get_output_path(text):
-            SomeFunctions().ui_popup(QCoreApplication.tr(f"Success: {text} will be used for this session!", disambiguation=""))
+            SomeFunctions().ui_popup(
+                QCoreApplication.tr(f"Success: {text} will be used for this session!", disambiguation=""))
             self.configure_ui_for_android(text)
         else:
-            SomeFunctions().ui_popup(QCoreApplication.tr("Invalid path. The application will now exit.", disambiguation=""))
+            SomeFunctions().ui_popup(
+                QCoreApplication.tr("Invalid path. The application will now exit.", disambiguation=""))
             sys.exit()
 
     def configure_ui_for_android(self, path):
@@ -958,40 +927,18 @@ class Porn_Fetch(QWidget):
 
     def warn_about_high_performance_threading(self):
         if self.ui.radio_threading_mode_high_performance.isChecked():
-            SomeFunctions().ui_popup(QCoreApplication.tr("High Performance threading may cause issues on Android devices.",
-                                         disambiguation=""))
+            SomeFunctions().ui_popup(
+                QCoreApplication.tr("High Performance threading may cause issues on Android devices.",
+                                    disambiguation=""))
 
-    def check_ffmpeg(self):
-        if self.ui.radio_threading_mode_ffmpeg.isChecked() or self.conf["Performance"]["threading_mode"] == "ffmpeg":
-            ffmpeg_string = QCoreApplication.tr("FFMPEG isn't installed on your system. I'll do this now for you.",
-                                                disambiguation="")
-
-            if sys.platform == "linux":
-                if not os.path.isfile("ffmpeg"):
-                    url_linux = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
-                    SomeFunctions().ui_popup(ffmpeg_string)
-                    self.downloader = FFMPEGDownload(url=url_linux, extract_path=".", mode="linux")
-                    self.downloader.signals.total_progress.connect(self.update_total_progressbar)
-                    self.threadpool.start(self.downloader)
-
-                consts.FFMPEG_EXECUTABLE = "ffmpeg"
-
-            elif sys.platform == "win32":
-                if not os.path.isfile("ffmpeg.exe"):
-                    url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
-                    SomeFunctions().ui_popup(ffmpeg_string)
-                    self.downloader = FFMPEGDownload(url=url_windows, extract_path=".", mode="windows")
-                    self.downloader.signals.total_progress.connect(self.update_total_progressbar)
-                    self.threadpool.start(self.downloader)
-
-                consts.FFMPEG_EXECUTABLE = "ffmpeg.exe"
-
-    """These functions are used to switch to different widgets. Basically this is the sidebar at the left"""
-
-    def reset_pornfetch(self):
-        SomeFunctions().ui_popup(QCoreApplication.tr("Porn Fetch will now reset to its default settings...", disambiguation=None))
+    @staticmethod
+    def reset_pornfetch():
+        SomeFunctions().ui_popup(
+            QCoreApplication.tr("Porn Fetch will now reset to its default settings...", disambiguation=None))
         setup_config_file(force=True)
         SomeFunctions().ui_popup(QCoreApplication.tr("Done! Please restart.", disambiguation=None))
+
+    "These functions are used to switch to different widgets. Basically this is the sidebar at the left"
 
     def switch_to_account(self):
         self.ui.stacked_widget_top.setCurrentIndex(1)
@@ -1201,12 +1148,31 @@ class Porn_Fetch(QWidget):
             self.directory_system = False
             self.ui.radio_directory_system_no.setChecked(True)
 
+        global ffmpeg_path
+
+        if os.path.isfile("ffmpeg"):
+            ffmpeg_path = "ffmpeg"
+
+        elif os.path.isfile("ffmpeg.exe"):
+            ffmpeg_path = "ffmpeg.exe"
+
+        else:
+            logger_error("FFMPEG wasn't found... Have you extracted it from the .zip file?")
+            logger_error("FFMPEG Features won't be available!")
+
+            global ffmpeg_features
+            ffmpeg_features = False
+
+            self.ui.radio_threading_mode_ffmpeg.setChecked(False)
+            self.ui.radio_threading_mode_ffmpeg.setDisabled(False)
+            self.ui.radio_threading_mode_ffmpeg.setToolTip("FFMPEG is not installed, therefore this feature is NOT available.")
+
         self.ui.spinbox_maximal_timeout.setValue(int(self.timeout))
         self.ui.spinbox_maximal_workers.setValue(int(self.workers))
         self.ui.spinbox_pornhub_delay.setValue(int(self.delay))
         consts.MAX_CALL_RETRIES = self.max_retries
         bs_consts.MAX_RETRIES = self.max_retries
-
+        consts.FFMPEG_EXECUTABLE = ffmpeg_path
         self.client = Client(delay=self.delay, language=self.api_language)
 
     def save_user_settings(self):
@@ -1293,7 +1259,8 @@ class Porn_Fetch(QWidget):
 
         is_checked = self.ui.checkbox_do_not_clear_videos.isChecked()
 
-        self.thread = AddToTreeWidget(iterator, search_limit, data_mode, clickable, reverse, is_checked=is_checked, stop_flag=stop_flag)
+        self.thread = AddToTreeWidget(iterator, search_limit, data_mode, clickable, reverse, is_checked=is_checked,
+                                      stop_flag=stop_flag)
         self.thread.signals.text_data.connect(self.add_to_tree_widget_signal)
         self.thread.signals.progress.connect(self.progress_tree_widget)
         self.thread.signals.clear_signal.connect(self.clear_tree_widget)
@@ -1319,7 +1286,8 @@ class Porn_Fetch(QWidget):
             video_urls.append(video_object.url)
 
         if len(video_urls) == 0:
-            SomeFunctions().ui_popup(QCoreApplication.tr("No video URLs found. Are there videos in the tree widget?", ""))
+            SomeFunctions().ui_popup(
+                QCoreApplication.tr("No video URLs found. Are there videos in the tree widget?", ""))
             return
 
         file, mode = QFileDialog().getSaveFileName(self)
@@ -1333,10 +1301,6 @@ class Porn_Fetch(QWidget):
             SomeFunctions().ui_popup(QCoreApplication.tr(f"Permission Error, please select a file from your user space,"
                                                          f"or run Porn Fetch with admin permissions (not recommended!)",
                                                          None))
-        
-        
-        
-
 
     def progress_tree_widget(self, total, current):
         """This tracks the progress of the tree widget data"""
@@ -1365,7 +1329,8 @@ class Porn_Fetch(QWidget):
         treeWidget = self.ui.treeWidget
         quality = self.quality
         download_tree_thread = QTreeWidgetDownloadThread(treeWidget=treeWidget, semaphore=semaphore,
-                                                         quality=quality, threading_mode=self.threading_mode, stop_flag=stop_flag)
+                                                         quality=quality, threading_mode=self.threading_mode,
+                                                         stop_flag=stop_flag)
         download_tree_thread.signals.progress_video.connect(self.tree_widget_completed)
         download_tree_thread.signals.start_undefined_range.connect(self.start_undefined_range)
         download_tree_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
@@ -1513,7 +1478,6 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
 """, None)
         SomeFunctions().ui_popup(text)
 
-
     def start_single_video(self):
         """
         Starts the download of a single video.
@@ -1541,10 +1505,6 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
             model = self.ui.lineedit_model_url.text()
 
         search_limit = self.search_limit
-        pornhub_pattern = re.compile(r"(.*?)pornhub(.*?)")
-        hqporner_pattern = re.compile(r'(.*?)hqporner.com(.*?)')
-        eporner_pattern = re.compile(r'(.*?)eporner.com(.*)')
-        xnxx_pattern = re.compile(r'(.*?)xnxx.com(.*)')
 
         if pornhub_pattern.match(model):
             api_language = self.api_language
@@ -1598,19 +1558,22 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
     def on_video_load_error(self, error_message):
         # Handle errors, possibly show message to user
         logger_debug(f"Error loading video: {error_message}")
-        SomeFunctions().ui_popup(QCoreApplication.tr(f"Some error occurred in loading a video. Please report this: {error_message}",
-                                                     None))
+        SomeFunctions().ui_popup(
+            QCoreApplication.tr(f"Some error occurred in loading a video. Please report this: {error_message}",
+                                None))
 
     def process_video_thread(self, output_path, video, threading_mode, quality):
         """Checks which of the three types of threading the user selected and handles them."""
         self.download_thread = DownloadThread(video=video, output_path=output_path, quality=quality,
-                                              threading_mode=threading_mode, workers=self.workers, timeout=self.timeout, stop_flag=stop_flag)
+                                              threading_mode=threading_mode, workers=self.workers, timeout=self.timeout,
+                                              stop_flag=stop_flag)
         self.download_thread.signals.progress.connect(self.update_progressbar)
         self.download_thread.signals.total_progress.connect(self.update_total_progressbar)
         self.download_thread.signals.progress_hqporner.connect(self.update_progressbar_hqporner)
         self.download_thread.signals.progress_eporner.connect(self.update_progressbar_eporner)
         self.download_thread.signals.progress_xnxx.connect(self.update_progressbar_xnxx)
         self.download_thread.signals.progress_xvideos.connect(self.update_progressbar_xvideos)
+        self.download_thread.signals.ffmpeg_progress.connect(self.update_converting)
         # ADAPTION
         self.download_thread.signals.completed.connect(self.download_completed)
         self.threadpool.start(self.download_thread)
@@ -1631,6 +1594,11 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
             maximum = maximum / 1024 / 1024
             self.ui.progressbar_total.setMaximum(maximum)
             self.ui.progressbar_total.setValue(value)
+
+    def update_converting(self, value, maximum):
+        """This updates the converting progressbar"""
+        self.ui.progressbar_converting.setMaximum(maximum)
+        self.ui.progressbar_converting.setValue(value)
 
     def update_progressbar(self, value, maximum):
         """This updates the PornHub progressbar"""
@@ -1740,7 +1708,8 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
         username = self.ui.lineedit_username.text()
         password = self.ui.lineedit_password.text()
         if len(username) <= 2 or len(password) <= 2:
-            SomeFunctions().ui_popup(QCoreApplication.tr("Those credentials don't seem to be valid...", disambiguation=None))
+            SomeFunctions().ui_popup(
+                QCoreApplication.tr("Those credentials don't seem to be valid...", disambiguation=None))
             return
 
         try:
@@ -1970,8 +1939,9 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
 
     def get_by_category_hqporner(self):
         """Returns video by category from HQPorner. I want to add support for EPorner"""  # TODO
-        self.list_all_categories_string = QCoreApplication.tr("Invalid Category. Press 'list categories' to see all possible ones.",
-                                         disambiguation="")
+        self.list_all_categories_string = QCoreApplication.tr(
+            "Invalid Category. Press 'list categories' to see all possible ones.",
+            disambiguation="")
         category_name = self.ui.lineedit_hqporner_category.text()
         all_categories = hq_Client().get_all_categories()
         search_limit = self.search_limit
@@ -2000,9 +1970,9 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
     def list_categories_eporner(self):
         """Lists all video categories from EPorner"""
         all_categories = ",".join([getattr(ep_Category, category) for category in dir(ep_Category) if
-                          not callable(getattr(ep_Category, category)) and not category.startswith("__")])
+                                   not callable(getattr(ep_Category, category)) and not category.startswith("__")])
 
-        self.all_cateogories_eporner = all_categories # Need this list to verify the category later
+        self.all_cateogories_eporner = all_categories  # Need this list to verify the category later
         SomeFunctions().ui_popup(all_categories)
 
     def get_brazzers_videos(self):
@@ -2119,8 +2089,9 @@ if __name__ == "__main__":
         logger_error(e)
 
     except ConnectionError as e:
-        SomeFunctions().ui_popup(QCoreApplication.tr("Connection Error, please make sure you have a stable internet connection",
-                                     disambiguation=""))
+        SomeFunctions().ui_popup(
+            QCoreApplication.tr("Connection Error, please make sure you have a stable internet connection",
+                                disambiguation=""))
         logger_error(e)
 
     except KeyboardInterrupt:

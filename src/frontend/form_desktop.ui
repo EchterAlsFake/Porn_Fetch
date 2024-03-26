@@ -237,8 +237,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1536</width>
-             <height>118</height>
+             <width>1522</width>
+             <height>146</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_33">
@@ -325,6 +325,20 @@
                <widget class="QPushButton" name="button_view_all_progress_bars">
                 <property name="text">
                  <string>View all other progress bars</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_progress_converting">
+                <property name="text">
+                 <string>Converting:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QProgressBar" name="progressbar_converting">
+                <property name="value">
+                 <number>0</number>
                 </property>
                </widget>
               </item>
