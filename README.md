@@ -12,6 +12,12 @@
 <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/EchterAlsFake/Porn_Fetch/total?style=social&logo=github&logoColor=purple">
 </p>
 
+---
+
+**[<kpd> <br> Install <br> </kbd>] [Install]**
+---
+
+
 > [!WARNING]
 > Porn Fetch is NOT associated with the websites. Porn Fetch is AGAINST the Terms of Services of EVERY website! Usage is on YOUR risk.
 
