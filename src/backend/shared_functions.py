@@ -247,6 +247,15 @@ def write_tags(path, video):
     if artist == "":
         artist = "Unknown"
 
+    if hasattr(video, "date"):
+        date = video.date.strftime("%Y/%m/%d")
+
+    elif hasattr(video, "publish_date"):
+        date = video.publish_date
+
+    else:
+        date = "Unknown"
+
     logger_debug("Tags [1/3]")
 
     audio = MP4(path)
@@ -254,6 +263,7 @@ def write_tags(path, video):
     audio.tags["\xa9ART"] = artist
     audio.tags["\xa9cmt"] = comment
     audio.tags["\xa9gen"] = genre
+    audio.tags["\xa9day"] = date
 
     logger_debug("Tags: [2/3]")
     audio.save()

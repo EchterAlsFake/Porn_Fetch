@@ -191,7 +191,7 @@ class License(QWidget):
     def show_main_window(self):
         """ If license was accepted, the License widget is closed and the main widget will be shown."""
         self.close()
-        logger_debug("Startup - Initialization: [2/5] License accepted")
+        logger_debug("Startup: [2/5] License accepted")
         self.main_widget = Porn_Fetch()
         self.main_widget.show()
 
@@ -701,14 +701,14 @@ class Porn_Fetch(QWidget):
         self.button_connectors()
         self.button_groups()
         self.load_style()
-        SomeFunctions().logger_debug("Startup - Initialization: [3/5] Initialized the User Interface")
+        SomeFunctions().logger_debug("Startup: [3/5] Initialized the User Interface")
         self.language_strings()
         self.settings_maps_initialization()
         self.load_user_settings()
-        SomeFunctions().logger_debug("Startup - Initialization: [4/5] Loaded the user settings")
+        SomeFunctions().logger_debug("Startup: [4/5] Loaded the user settings")
         self.switch_to_home()
         self.check_for_updates()
-        SomeFunctions().logger_debug("Startup - Initialization: [5/5] ✔")
+        SomeFunctions().logger_debug("Startup: [5/5] ✔")
 
         if __build__ == "android":
             self.setup_android()
@@ -2027,7 +2027,7 @@ def main():
     path = f":/translations/translations/{language_code}.qm"
     translator = QTranslator(app)
     if translator.load(path):
-        logger_debug(f"Startup - Initialization: [1/5] {language_code} translation loaded")
+        logger_debug(f"Startup: [1/5] {language_code} translation loaded")
 
     else:
         # Try loading a more general translation if specific one fails
