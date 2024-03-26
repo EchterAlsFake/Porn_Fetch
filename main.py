@@ -221,10 +221,10 @@ class AddToTreeWidget(QRunnable):
                 duration = str(video.length)
 
                 if hasattr(video, 'pornstars'):
-                    author = video.pornstars[0] if video.pornstars else "author_not_found"
+                    author = video.pornstars[0] if video.pornstars else "unknown"
 
                 else:
-                    author = video.author if hasattr(video, 'author') and video.author else "unknown_author"
+                    author = video.author if hasattr(video, 'author') and video.author else "unknown"
 
             elif isinstance(video, Video):
                 duration = round(video.duration.seconds / 60)
@@ -236,7 +236,7 @@ class AddToTreeWidget(QRunnable):
 
         # Handling exceptions for missing author in xn_Video
         if isinstance(video, xn_Video) and not hasattr(video, 'pornstars'):
-            author = "no_pornstars_found"
+            author = "unknown"
 
         print(
             f"\r\033[K[{Fore.LIGHTCYAN_EX}{index}/{self.search_limit}]{Fore.RESET}{str(title)} Successfully processed!",
@@ -291,10 +291,9 @@ class AddToTreeWidget(QRunnable):
                         try_attempt = False  # No result, move to the next video
 
                     except errors.RegexError as e:
-                        SomeFunctions().logger_error("Warning: Rate limited by PornHub, trying again in 10 seconds...")
-                        for j in range(10):
+                        SomeFunctions().logger_error("Warning: Rate limited by PornHub, trying again in 5 seconds...")
+                        for j in range(5):
                             print(f"\r\033[K[Sleeping: [{j} / 10]", end='', flush=True)
-
                             time.sleep(1)
 
                     except ConnectionError:
@@ -382,7 +381,7 @@ class DownloadThread(QRunnable):
         self.last_update_time = current_time
 
     def update_ffmpeg_progress(self, pos, total):
-        """Update progress for FFmpeg downloads."""
+        """Update progress for ffmpeg downloads."""
         video_title = self.video.title
         self.video_progress[
             video_title] = pos / total * 100  # video title as video id, to keep track which video has how many progress done

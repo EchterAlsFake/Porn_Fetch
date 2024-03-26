@@ -18,4 +18,4 @@
 - [] remove doubled code segments
 - [] Refactoring the project structure
 - [] Rewriting the readme 
-- [] Changing the way of ffmpeg downloading
+- [x] Changing the way of ffmpeg downloading
