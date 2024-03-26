@@ -18,10 +18,10 @@
 
 
 
-**[<kbd> <br> Install <br> </kbd>][https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/WEBSITES.md]**
+**[<kbd> <br> Install <br> </kbd>] [Install](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/WEBSITES.md)**
 ---
-
 </div>
+
 > [!WARNING]
 > Porn Fetch is NOT associated with the websites. Porn Fetch is AGAINST the Terms of Services of EVERY website! Usage is on YOUR risk.
 
