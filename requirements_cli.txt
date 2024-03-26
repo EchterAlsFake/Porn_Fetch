@@ -11,3 +11,4 @@ markdown
 rich
 tqdm
 ffmpeg-progress-yield
+mutagen
