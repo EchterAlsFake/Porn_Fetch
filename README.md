@@ -10,11 +10,11 @@
 
 ---
 
-**[<kbd>Download (v3.1)</kbd>](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.1)** 
-**[<kbd>Supported Websites</kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/WEBSITES.md)** 
-**[<kbd>FAQ</kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/FAQ.md)** 
-**[<kbd>Changelog</kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/CHANGELOG.md)** 
-**[<kbd>Development Status</kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md)** 
+**[<kbd>&nbsp;<br>&nbsp;Download (v3.1)&nbsp;<br>&nbsp;</kbd>](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.1)** 
+**[<kbd>&nbsp;<br>&nbsp;Supported Websites&nbsp;<br>&nbsp;</kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/WEBSITES.md)** 
+**[<kbd>&nbsp;<br>&nbsp;FAQ&nbsp;<br>&nbsp;</kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/FAQ.md)** 
+**[<kbd>&nbsp;<br>&nbsp;Changelog&nbsp;<br>&nbsp;</kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/CHANGELOG.md)** 
+**[<kbd>&nbsp;<br>&nbsp;Development Status&nbsp;<br>&nbsp;</kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md)** 
 
 ---
 </div>
