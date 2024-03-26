@@ -1,8 +1,8 @@
-<p align="center">
-  <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/V3.0/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
-</p>
+<div align = center>
 
+<img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/V3.0/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
 
+<br>
 <h1 align="center">Porn Fetch - The Ultimate Open-Source Porn(Hub) Downloader</h1>
 
 <p align="center">
@@ -18,10 +18,10 @@
 
 
 
-**[<kbd> <br> Install <br> </kbd>][Install]** 
+**[<kbd> <br> Install <br> </kbd>][https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/WEBSITES.md]**
 ---
 
-
+</div>
 > [!WARNING]
 > Porn Fetch is NOT associated with the websites. Porn Fetch is AGAINST the Terms of Services of EVERY website! Usage is on YOUR risk.
 
