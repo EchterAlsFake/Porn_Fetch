@@ -267,7 +267,7 @@ def write_tags(path, video):
 
     logger_debug("Tags: [2/3]")
     audio.save()
-    logger_error("Tags: [3/3] ✔")
+    logger_debug("Tags: [3/3] ✔")
 
 
 pornhub_pattern = re.compile(r'(.*?)pornhub.com(.*)')
