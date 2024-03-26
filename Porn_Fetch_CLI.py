@@ -29,7 +29,6 @@ class CLI():
             self.load_user_settings()
             self.menu()
 
-
     def license(self):
         if not self.conf["License"]["accepted"] == "true":
             license = input(f"""

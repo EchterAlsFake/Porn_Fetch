@@ -247,13 +247,17 @@ def write_tags(path, video):
     if artist == "":
         artist = "Unknown"
 
-    audio = MP4(path)
+    logger_debug("Tags [1/3]")
 
+    audio = MP4(path)
     audio.tags["\xa9nam"] = title
     audio.tags["\xa9ART"] = artist
     audio.tags["\xa9cmt"] = comment
     audio.tags["\xa9gen"] = genre
+
+    logger_debug("Tags: [2/3]")
     audio.save()
+    logger_error("Tags: [3/3] ✔")
 
 
 pornhub_pattern = re.compile(r'(.*?)pornhub.com(.*)')

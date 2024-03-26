@@ -184,7 +184,7 @@ class License(QWidget):
         with open("config.ini", "w") as config_file:
             self.conf.write(config_file)
             config_file.close()
-            logger_error("License was denied, closing Porn Fetch")
+            SomeFunctions().logger_error("License was denied, closing Porn Fetch")
             self.close()
             sys.exit(0)  # exiting if user denied
 
@@ -291,20 +291,20 @@ class AddToTreeWidget(QRunnable):
                         try_attempt = False  # No result, move to the next video
 
                     except errors.RegexError as e:
-                        logger_error("Warning: Rate limited by PornHub, trying again in 10 seconds...")
+                        SomeFunctions().logger_error("Warning: Rate limited by PornHub, trying again in 10 seconds...")
                         for j in range(10):
                             print(f"\r\033[K[Sleeping: [{j} / 10]", end='', flush=True)
 
                             time.sleep(1)
 
                     except ConnectionError:
-                        logger_error(
+                        SomeFunctions().logger_error(
                             "Client.call failed!, retrying...  If this error persists, set a delay in the settings")
-                        logger_error(f"Video: {i} won't be processed.")
+                        SomeFunctions().logger_error(f"Video: {i} won't be processed.")
                         try_attempt = False  # Move to the next video after logging the error
 
                     except IndexError:
-                        logger_error(
+                        SomeFunctions().logger_error(
                             "You got blocked from PornHub. Please switch your IP or wait some minutes. (at least 5)")
                         SomeFunctions().ui_popup(QCoreApplication.tr(
                             "You got blocked from PornHub. Please switch your IP or wait some minutes. (at least 5)",
@@ -400,7 +400,7 @@ class DownloadThread(QRunnable):
         """Run the download in a thread, optimizing for different video sources and modes."""
 
         try:
-            logger_debug(f"Downloading Video to: {self.output_path}")
+            SomeFunctions().logger_debug(f"Downloading Video to: {self.output_path}")
             if self.threading_mode == "FFMPEG" or self.threading_mode == download.FFMPEG:
                 self.ffmpeg = True
 
@@ -459,9 +459,8 @@ class DownloadThread(QRunnable):
 
         finally:
             if ffmpeg_features:
-                logger_debug("Writing Tags...")
                 os.rename(f"{self.output_path}", f"{self.output_path}_.tmp")
-                logger_debug(f"FFMPEG PATH: {ffmpeg_path}")
+                SomeFunctions().logger_debug(f"FFMPEG PATH: {ffmpeg_path}")
                 cmd = [ffmpeg_path, "-i", f"{self.output_path}_.tmp", "-c", "copy", self.output_path]
                 ff = FfmpegProgress(cmd)
                 for progress in ff.run_command_with_progress():
@@ -469,10 +468,8 @@ class DownloadThread(QRunnable):
 
                 os.remove(f"{self.output_path}_.tmp")
                 write_tags(path=self.output_path, video=self.video)
-                logger_debug("Written Tags")
-
             else:
-                logger_debug("FFMPEG features disabled, writing tags won't be available!")
+                SomeFunctions().logger_debug("FFMPEG features disabled, writing tags and converting the video won't be available!")
 
 
 class QTreeWidgetDownloadThread(QRunnable):
@@ -498,17 +495,17 @@ class QTreeWidgetDownloadThread(QRunnable):
                 video_objects.append(item.data(0, Qt.UserRole))
 
         if not self.threading_mode == "FFMPEG":
-            logger_debug("Getting segments...")
+            SomeFunctions().logger_debug("Getting segments...")
             global total_segments, downloaded_segments
             total_segments = sum(
                 [len(list(video.get_segments(quality=self.quality))) for video in video_objects if
                  hasattr(video, 'get_segments')])
-            logger_debug("Got segments")
+            SomeFunctions().logger_debug("Got segments")
             # This basically looks how many segments exist in all videos together, so that we can calculate the total
             # progress
 
         else:
-            logger_debug("Progress tracking: FFMPEG")
+            SomeFunctions().logger_debug("Progress tracking: FFMPEG")
             # FFMPEG has always 0-100 as progress callback, that is why I specify 100 for each video instead of the
             # total segments
             counter = 0
@@ -524,7 +521,7 @@ class QTreeWidgetDownloadThread(QRunnable):
             self.semaphore.acquire()  # Trying to start the download if the thread isn't locked
             if stop_flag.is_set():
                 return
-            logger_debug("Semaphore Acquired")
+            SomeFunctions().logger_debug("Semaphore Acquired")
             self.signals.progress_video.emit(video)  # Now emits the video to the main class for further processing
 
 
@@ -566,7 +563,7 @@ class MetadataVideos(QRunnable):
             duration = str(duration)
 
         data = [title, views, duration, orientation, pornstars, tags, rating, hotspots_x]
-        logger_debug("Successfully loaded video metadata")
+        SomeFunctions().logger_debug("Successfully loaded video metadata")
         self.signals.data.emit(data)  # Send the data to the main class, so that they can be applied to the lineedits
 
 
@@ -704,14 +701,14 @@ class Porn_Fetch(QWidget):
         self.button_connectors()
         self.button_groups()
         self.load_style()
-        logger_debug("Startup - Initialization: [3/5] Initialized the User Interface")
+        SomeFunctions().logger_debug("Startup - Initialization: [3/5] Initialized the User Interface")
         self.language_strings()
         self.settings_maps_initialization()
         self.load_user_settings()
-        logger_debug("Startup - Initialization: [4/5] Loaded the user settings")
+        SomeFunctions().logger_debug("Startup - Initialization: [4/5] Loaded the user settings")
         self.switch_to_home()
         self.check_for_updates()
-        logger_debug("Startup - Initialization: [5/5] Checked for updates, setup Done!")
+        SomeFunctions().logger_debug("Startup - Initialization: [5/5] ✔")
 
         if __build__ == "android":
             self.setup_android()
@@ -840,14 +837,14 @@ class Porn_Fetch(QWidget):
     @classmethod
     def check_for_updates(cls):
         if requests.get("https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.3").status_code == 200:
-            logger_debug("Next release v3.3 found!")
+            SomeFunctions().logger_debug("Next release v3.3 found!")
             SomeFunctions().ui_popup(QCoreApplication.tr("Information: A new version of Porn Fetch (v3.3) is out. "
                                                          "I recommend you to update Porn Fetch. Go to: "
                                                          "https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.3",
                                                          None))
 
         else:
-            logger_debug("No updates found...")
+            SomeFunctions().logger_debug("No updates found...")
 
     def button_groups(self):
         """
@@ -894,7 +891,7 @@ class Porn_Fetch(QWidget):
 
     def setup_android(self):
         """Sets up for Porn Fetch for Android devices"""
-        logger_debug(f"Running on Android: {sys.platform}")
+        SomeFunctions().logger_debug(f"Running on Android: {sys.platform}")
         if not SomeFunctions().get_output_path():
             self.handle_no_output_path()
             return  # Early return to avoid setting up UI components again at the end.
@@ -1157,8 +1154,8 @@ class Porn_Fetch(QWidget):
             ffmpeg_path = "ffmpeg.exe"
 
         else:
-            logger_error("FFMPEG wasn't found... Have you extracted it from the .zip file?")
-            logger_error("FFMPEG Features won't be available!")
+            SomeFunctions().logger_error("FFMPEG wasn't found... Have you extracted it from the .zip file?")
+            SomeFunctions().logger_error("FFMPEG Features won't be available!")
 
             global ffmpeg_features
             ffmpeg_features = False
@@ -1227,7 +1224,7 @@ class Porn_Fetch(QWidget):
             self.conf.write(config_file)
 
         SomeFunctions().ui_popup(self.save_user_settings_language_string)
-        logger_debug("Saved User Settings, please restart Porn Fetch.")
+        SomeFunctions().logger_debug("Saved User Settings, please restart Porn Fetch.")
 
     """
     The following functions are related to the tree widget    
@@ -1557,7 +1554,7 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
 
     def on_video_load_error(self, error_message):
         # Handle errors, possibly show message to user
-        logger_debug(f"Error loading video: {error_message}")
+        SomeFunctions().logger_debug(f"Error loading video: {error_message}")
         SomeFunctions().ui_popup(
             QCoreApplication.tr(f"Some error occurred in loading a video. Please report this: {error_message}",
                                 None))
@@ -1577,7 +1574,7 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
         # ADAPTION
         self.download_thread.signals.completed.connect(self.download_completed)
         self.threadpool.start(self.download_thread)
-        logger_debug("Started Download Thread!")
+        SomeFunctions().logger_debug("Started Download Thread!")
 
     """
     The following functions are used to connect data between Threads and the Main UI
@@ -1634,7 +1631,7 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
     # ADAPTION
     def download_completed(self):
         """If a video is downloaded, the semaphore is released"""
-        logger_debug("Download Completed!")
+        SomeFunctions().logger_debug("Download Completed!")
         self.semaphore.release()
 
     def start_undefined_range(self):
@@ -1687,11 +1684,11 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
                     else:
                         SomeFunctions().ui_popup(invalid_input_string)
 
-            logger_debug("Adding URLs to the tree widget...")
+            SomeFunctions().logger_debug("Adding URLs to the tree widget...")
             self.add_to_tree_widget_thread(iterator, search_limit=self.search_limit)
-            logger_debug("Adding Model videos to the tree widget...")
+            SomeFunctions().logger_debug("Adding Model videos to the tree widget...")
             for url in model_iterators:
-                logger_debug(f"Model URL {url}")
+                SomeFunctions().logger_debug(f"Loading videos for model URL: {url}")
                 self.start_model(url)
 
     """
@@ -1714,7 +1711,7 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
 
         try:
             self.client = Client(username, password, language=self.api_language, delay=self.delay)
-            logger_debug("Login Successful!")
+            SomeFunctions().logger_debug("Login Successful!")
             SomeFunctions().ui_popup(self.language_string_login_successful)
             self.switch_login_button_state()
 
@@ -2080,19 +2077,19 @@ if __name__ == "__main__":
         SomeFunctions().ui_popup(
             QCoreApplication.tr("Insufficient Permissions to access something. Please run Porn Fetch as root / admin",
                                 disambiguation=""))
-        logger_error(e)
+        SomeFunctions().logger_error(e)
 
     except ConnectionResetError as e:
         SomeFunctions().ui_popup(
             QCoreApplication.tr("Connection was reset. Are you connected to a public wifi or a university's wifi? ",
                                 disambiguation=""))
-        logger_error(e)
+        SomeFunctions().logger_error(e)
 
     except ConnectionError as e:
         SomeFunctions().ui_popup(
             QCoreApplication.tr("Connection Error, please make sure you have a stable internet connection",
                                 disambiguation=""))
-        logger_error(e)
+        SomeFunctions().logger_error(e)
 
     except KeyboardInterrupt:
         sys.exit(0)
@@ -2101,7 +2098,7 @@ if __name__ == "__main__":
         SomeFunctions().ui_popup(QCoreApplication.tr(
             "SSLError: Your connection is blocked by your ISP / IT administrator (Firewall). If you are in a "
             "University or at school, please connect to a VPN / Proxy", disambiguation=""))
-        logger_error(e)
+        SomeFunctions().logger_error(e)
 
     except TypeError:
         pass
@@ -2110,13 +2107,13 @@ if __name__ == "__main__":
         SomeFunctions().ui_popup(QCoreApplication.tr(
             f"This error shouldn't happen. If you still see it it's REALLY important that you report the "
             f"following: {e}", disambiguation=""))
-        logger_error(e)
+        SomeFunctions().logger_error(e)
 
     except ZeroDivisionError:
         SomeFunctions().ui_popup(QCoreApplication.tr(f"Zero Division Error. This shouldn't really happen...", None))
 
     except Exception as e:
         error_message = "An error occurred: " + str(e) + "\n" + traceback.format_exc()
-        logger_error(error_message)
+        SomeFunctions().logger_error(error_message)
         if send_error_logs:
             SomeFunctions().send_error_log(error_message)
