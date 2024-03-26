@@ -13,5 +13,8 @@
 - [] Improve the guide for contributing translations
 - [] A complete rewrite of the CLI version
 - [] Embedding metadata like Pornstars etc. into the downloaded videos
+- [] optimizing some stuff
+- [] refactoring more code to be used across CLI and main window
+- [] remove doubled code segments
 - [] Refactoring the project structure
 - [] Rewriting the readme 

@@ -246,7 +246,7 @@ for example: 1,5,94,3
             video = videos[int(number)]
             self.process_video(video)
 
-    def process_model(self, url=None):
+    def process_model(self, url=None, do_return=False):
         if url is None:
             model = input(f"Enter the model URL -->:")
 
@@ -268,6 +268,9 @@ for example: 1,5,94,3
         elif xvideos_pattern.match(model):
             print("XVideos isn't supported yet, sorry.")
             return
+
+        if do_return:
+            return model
 
         self.iterate_generator(model)
 
@@ -305,6 +308,9 @@ Please select the website to search on:
             self.iterate_generator(ep_Client().search_videos(query, page=1, per_page=self.result_limit, sorting_order="", sorting_gay="", sorting_low_quality=""))
 
     def process_file(self):
+        videos = []
+        models = []
+        objects = []
         file = input(f"Please enter the file path -->:")
 
         with open(file, "r") as file:
@@ -314,10 +320,20 @@ Please select the website to search on:
         for line in content:
             if line.startswith("model#"):
                 line = line.split("#")[1]
-                self.process_model(line)
+                models.append(self.process_model(url=line, do_return=True))
 
+            else:
+                videos.append(line)
 
+        logger_debug("Processing Models / Videos...")
+        for video in videos:
+            objects.append(check_video(video, language=self.language, delay=self.delay))
 
+        for video in models:
+            objects.append(video)
+
+        logger_debug("Done!")
+        self.iterate_generator(objects)
 
     def download(self, video, output_path):
 
