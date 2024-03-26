@@ -1,16 +1,24 @@
-<p align="center">
-  <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/V3.0/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
-</p>
-
-
+<div align = center>
+<img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/V3.0/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
+<br>
 <h1 align="center">Porn Fetch - The Ultimate Open-Source Porn(Hub) Downloader</h1>
-
-<p align="center">
-  <a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui.yml/badge.svg" alt="Build GUI Status"/></a>
-  <a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_cli.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_cli.yml/badge.svg" alt="Build CLI Status"/></a>
-  <a href="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL"><img src="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL/badge.svg" alt="CodeQL Analysis"/></a>
+<a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui.yml/badge.svg" alt="Build GUI Status"/></a>
+<a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_cli.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_cli.yml/badge.svg" alt="Build CLI Status"/></a>
+<a href="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL"><img src="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL/badge.svg" alt="CodeQL Analysis"/></a>
 <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/EchterAlsFake/Porn_Fetch/total?style=social&logo=github&logoColor=purple">
-</p>
+<br>
+
+---
+
+**[<kbd><strong>&nbsp;<br>&nbsp;Download (v3.1)&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.1)** 
+**[<kbd><strong>&nbsp;<br>&nbsp;Screenshots&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/SCREENSHOTS.md)** 
+**[<kbd><strong>&nbsp;<br>&nbsp;Supported Websites&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/WEBSITES.md)** 
+**[<kbd><strong>&nbsp;<br>&nbsp;FAQ&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/FAQ.md)** 
+**[<kbd><strong>&nbsp;<br>&nbsp;Changelog&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/CHANGELOG.md)** 
+**[<kbd><strong>&nbsp;<br>&nbsp;Development Status&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md)** 
+
+---
+</div>
 
 > [!WARNING]
 > Porn Fetch is NOT associated with the websites. Porn Fetch is AGAINST the Terms of Services of EVERY website! Usage is on YOUR risk.
@@ -112,10 +120,6 @@ Currently available in:
 
 > If a language is marked with a `*` it means, you can contribute something, and it needs an update!
 
-
-## 🛠️ Useful Information
-- [Changelog](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/CHANGELOG.md)
-- [Development Status](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md)
 
 ## 👏 Credits
 - API: [PHUB](https://github.com/EchterAlsFake/PHUB)
