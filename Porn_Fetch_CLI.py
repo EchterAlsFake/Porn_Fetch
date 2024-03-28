@@ -26,12 +26,13 @@ class CLI:
             setup_config_file()
             self.conf = ConfigParser()
             self.conf.read("config.ini")
+            self.license()
             self.load_user_settings()
             self.menu()
 
     def license(self):
         if not self.conf["License"]["accepted"] == "true":
-            license_text = input(f"""
+            license_text = input(f"""{Fore.WHITE}
 GPL License Agreement for Porn Fetch
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
@@ -49,7 +50,7 @@ Porn Fetch uses ffmpeg for video processing / converting. FFmpeg is free softwar
 See more information on: https://FFmpeg.org
 
 
-Do you accept the license?  [yes,no]
+Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_EX}no{Fore.RESET}]
 ---------------------------------->:""")
 
             if license_text == "yes":
@@ -66,16 +67,16 @@ Do you accept the license?  [yes,no]
 
     def menu(self):
         options = input(f"""
-1) Download a Video
-2) Get videos from a model
-3) Get videos from a PornHub playlist
-4) Search for videos
-5) Search a file for URLs and Model URLs
-6) Settings
+{return_color()}1) Download a Video
+{return_color()}2) Get videos from a model
+{return_color()}3) Get videos from a PornHub playlist
+{return_color()}4) Search for videos
+{return_color()}5) Search a file for URLs and Model URLs
+{return_color()}6) Settings
 
-98) Credits
-99) Exit
------------------->:""")
+{Fore.LIGHTWHITE_EX}98) Credits
+{Fore.LIGHTRED_EX}99) Exit
+{return_color()}------------------>:""")
 
         if options == "1":
             self.process_video()
@@ -115,7 +116,7 @@ Do you accept the license?  [yes,no]
         self.threading_mode = self.conf.get("Performance", "threading_mode")
 
     def save_user_settings(self):
-        languages = """
+        languages = f"""{Fore.WHITE}
 de: German
 en: English
 fr: French
@@ -130,28 +131,27 @@ jp: Japanese
 """
         while True:
             settings_options = input(f"""
---------- Quality ----------
-1) Best
-2) Half
-3) Worst
--------- Performance --------
-4) Change Semaphore
-5) Change Delay
-6) Change Workers
-7) Change Retries
-8) Change Timeout
--------- Directory System ---
-9) Enable / Disable directory system
--------- Result Limit -------
-10) Change result limit
--------- Language (Video titles for PornHub)
-11) Change Language
--------- Output Path --------
-12) Change output path
+{Fore.WHITE}--------- {Fore.LIGHTGREEN_EX}Quality {Fore.WHITE}----------
+{Fore.LIGHTMAGENTA_EX}1) Best
+{return_color()}2) Half
+{Fore.LIGHTRED_EX}3) Worst
+{Fore.WHITE}-------- {Fore.LIGHTCYAN_EX}Performance {Fore.WHITE}--------
+{return_color()}4) Change Semaphore
+{return_color()}5) Change Delay
+{return_color()}6) Change Workers
+{return_color()}7) Change Retries
+{return_color()}8) Change Timeout
+{Fore.WHITE}-------- {Fore.LIGHTYELLOW_EX}Directory System {Fore.WHITE}---
+{return_color()}9) Enable / Disable directory system
+{Fore.WHITE}-------- {return_color()}Result Limit {Fore.WHITE}-------
+{return_color()}10) Change result limit
+{Fore.WHITE}-------- {return_color()}Language (Video titles for PornHub){Fore.WHITE}
+{return_color()}11) Change Language
+{Fore.WHITE}-------- {return_color()}Output Path {Fore.WHITE}--------
+{return_color()}12) Change output path
 
-99) Exit
-------------->:
-""")
+{Fore.LIGHTRED_EX}99) Exit
+{return_color()}------------->:""")
 
             try:
                 if settings_options == "1":
@@ -216,7 +216,7 @@ jp: Japanese
                     
     def process_video(self, url=None):
         if url is None:
-            url = input(f"Please enter the Video URL -->:")
+            url = input(f"{return_color()}Please enter the Video URL -->:")
 
         video = check_video(url=url, language=self.language, delay=self.delay)
         title = Core().strip_title(video.title)
@@ -239,10 +239,10 @@ jp: Japanese
             output_path = pathlib.Path(output_path + title + ".mp4")
 
         if os.path.exists(output_path):
-            logger_debug(f"File: {output_path} already exists, skipping...")
+            logger_debug(f"{return_color()}File: {output_path} already exists, skipping...")
             return
 
-        logger_debug("Trying to acquire the semaphore...")
+        logger_debug(f"{return_color()}Trying to acquire the semaphore...")
         self.semaphore.acquire()
         self.thread = threading.Thread(target=self.download, args=(video, output_path, ))
         self.thread.start()
@@ -254,11 +254,14 @@ jp: Japanese
             print(f"{idx}) - {video.title}")
             videos.append(video)
 
-        vids = input(f"""
-Please enter the numbers of videos you want to download with a comma separated.
-for example: 1,5,94,3
+            if idx >= self.result_limit:
+                break
 
------------------------->:""")
+        vids = input(f"""
+{return_color()}Please enter the numbers of videos you want to download with a comma separated.
+for example: 1,5,94,3{Fore.WHITE}
+
+{return_color()}------------------------>:{Fore.WHITE}""")
 
         selected_videos = vids.split(",")
         for number in selected_videos:
@@ -267,7 +270,7 @@ for example: 1,5,94,3
 
     def process_model(self, url=None, do_return=False):
         if url is None:
-            model = input(f"Enter the model URL -->:")
+            model = input(f"{return_color()}Enter the model URL -->:")
 
         else:
             model = url
@@ -285,7 +288,7 @@ for example: 1,5,94,3
             model = hq_Client().get_videos_by_actress(model)
 
         elif xvideos_pattern.match(model):
-            print("XVideos isn't supported yet, sorry.")
+            print(f"{return_color()}XVideos isn't supported yet, sorry.")
             return
 
         if do_return:
@@ -294,22 +297,22 @@ for example: 1,5,94,3
         self.iterate_generator(model)
 
     def process_playlist(self):
-        url = input("Enter the (PornHub) playlist URL -->:")
+        url = input(f"{return_color()}Enter the (PornHub) playlist URL -->:")
         playlist = Client().get_playlist(url)
-        print(f"Processing: {playlist.title}")
+        print(f"{return_color()}Processing: {playlist.title}")
         self.iterate_generator(playlist.sample())
 
     def search_videos(self):
         website = input(f"""
-Please select the website to search on:
+{return_color()}Please select the website to search on:
 
-1) PornHub
-2) HQPorner
-3) XVideos
-4) XNXX
-5) Eporner
------------>:""")
-        query = input(f"Please enter the search query -->:")
+{return_color()}1) PornHub
+{return_color()}2) HQPorner
+{return_color()}3) XVideos
+{return_color()}4) XNXX
+{return_color()}5) Eporner
+{return_color()}----------->:""")
+        query = input(f"{return_color()}Please enter the search query -->:")
 
         if website == "1":
             self.iterate_generator(Client().search(query))
@@ -321,17 +324,18 @@ Please select the website to search on:
             self.iterate_generator(xv_Client().search(query))
 
         elif website == "4":
-            self.iterate_generator(xn_Client().search(query))
+            self.iterate_generator(xn_Client().search(query).videos)
 
         elif website == "5":
             self.iterate_generator(ep_Client().search_videos(query, page=1, per_page=self.result_limit,
-                                                             sorting_order="", sorting_gay="", sorting_low_quality=""))
+                                                             sorting_order="", sorting_gay="", sorting_low_quality="",
+                                                             enable_html_scraping=True))
 
     def process_file(self):
         videos = []
         models = []
         objects = []
-        file = input(f"Please enter the file path -->:")
+        file = input(f"{return_color()}Please enter the file path -->:")
 
         with open(file, "r") as file:
             content = file.read()
@@ -345,14 +349,14 @@ Please select the website to search on:
             else:
                 videos.append(line)
 
-        logger_debug("Processing Models / Videos...")
+        logger_debug(f"{return_color()}Processing Models / Videos...")
         for video in videos:
             objects.append(check_video(video, language=self.language, delay=self.delay))
 
         for video in models:
             objects.append(video)
 
-        logger_debug("Done!")
+        logger_debug(f"{return_color()}Done!")
         self.iterate_generator(objects)
 
     def download(self, video, output_path):
@@ -371,7 +375,7 @@ Please select the website to search on:
                                callback=Callback.text_progress_bar)
 
         finally:
-            logger_debug(f"Finished downloading for: {video.title}")
+            logger_debug(f"{return_color()}Finished downloading for: {video.title}")
 
     @staticmethod
     def credits():
