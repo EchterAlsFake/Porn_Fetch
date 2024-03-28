@@ -10,12 +10,15 @@
 - [x] Adding searching support for XNXX
 - [x] Adding model support for XNXX
 - [x] Improving the help messages and the german translations to be more accurate
-- [] Improve the guide for contributing translations
-- [] A complete rewrite of the CLI version
+- [x] Improve the guide for contributing translations
+- [x] A complete rewrite of the CLI version
 - [x] Embedding metadata like Pornstars etc. into the downloaded videos
-- [] optimizing some stuff
-- [] refactoring more code to be used across CLI and main window
-- [] remove doubled code segments
+- [x] optimizing some stuff
+- [x] refactoring more code to be used across CLI and main window
+- [x] remove doubled code segments
 - [x] Refactoring the project structure
 - [x] Rewriting the readme 
 - [x] Changing the way of ffmpeg downloading
+- [] Fixing the Android layout once again
+- [] Fixing the Windows performance (idk)
+- [] metadata and tags for CLI
