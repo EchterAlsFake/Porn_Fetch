@@ -14,389 +14,389 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1168"/>
+        <location filename="../form_desktop.ui" line="1188"/>
         <source>HQPorner:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="639"/>
+        <location filename="../form_desktop.ui" line="659"/>
         <source>File:</source>
         <translation>Datei:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="683"/>
+        <location filename="../form_desktop.ui" line="703"/>
         <source>Open File</source>
         <translation>Öffne Datei</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="727"/>
-        <location filename="../form_desktop.ui" line="837"/>
-        <location filename="../form_desktop.ui" line="1245"/>
-        <location filename="../form_desktop.ui" line="1360"/>
-        <location filename="../form_desktop.ui" line="1404"/>
-        <location filename="../form_desktop.ui" line="1494"/>
+        <location filename="../form_desktop.ui" line="747"/>
+        <location filename="../form_desktop.ui" line="857"/>
+        <location filename="../form_desktop.ui" line="1265"/>
+        <location filename="../form_desktop.ui" line="1380"/>
+        <location filename="../form_desktop.ui" line="1424"/>
+        <location filename="../form_desktop.ui" line="1514"/>
         <source>Get Videos</source>
         <translation>Videos abrufen</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="658"/>
+        <location filename="../form_desktop.ui" line="678"/>
         <source>Model URL:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="862"/>
+        <location filename="../form_desktop.ui" line="882"/>
         <source>Download</source>
         <translation>Herunterladen</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="830"/>
+        <location filename="../form_desktop.ui" line="850"/>
         <source>Search Query:</source>
         <translation>Suchbegriff:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="702"/>
+        <location filename="../form_desktop.ui" line="722"/>
         <source>URL:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1037"/>
+        <location filename="../form_desktop.ui" line="1057"/>
         <source>Get recommended videos</source>
         <translation>vorgeschlagene Videos abrufen</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1050"/>
+        <location filename="../form_desktop.ui" line="1070"/>
         <source>Password:</source>
         <translation>Passwort:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="606"/>
-        <location filename="../form_desktop.ui" line="2253"/>
+        <location filename="../form_desktop.ui" line="626"/>
         <location filename="../form_desktop.ui" line="2273"/>
+        <location filename="../form_desktop.ui" line="2293"/>
         <source>Start</source>
         <translation>Start</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="823"/>
+        <location filename="../form_desktop.ui" line="843"/>
         <source>URLs in the file must be separated with new lines!</source>
         <translation>URLs in der Datei müssen mit einer neuen Zeile separiert werden!</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="960"/>
+        <location filename="../form_desktop.ui" line="980"/>
         <source>Get Liked videos</source>
         <translation>Gelikte Videos abrufen</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="986"/>
+        <location filename="../form_desktop.ui" line="1006"/>
         <source>Username:</source>
         <translation>Nutzername:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="973"/>
+        <location filename="../form_desktop.ui" line="993"/>
         <source>Get watched videos</source>
         <translation>geschaute Videos abrufen</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1005"/>
+        <location filename="../form_desktop.ui" line="1025"/>
         <source>Login</source>
         <translation>Anmelden</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1072"/>
+        <location filename="../form_desktop.ui" line="1092"/>
         <source>Enter your PornHub Password</source>
         <translation>Gib dein PornnHub Passwort ein</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1024"/>
+        <location filename="../form_desktop.ui" line="1044"/>
         <source>Enter your PornHub Username</source>
         <translation>Gib deinen PornHub Nutzernamen ein</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="437"/>
+        <location filename="../form_desktop.ui" line="451"/>
         <source>Only Title (a lot faster)</source>
         <translation>Nur Titel (deutlich schneller)</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="459"/>
+        <location filename="../form_desktop.ui" line="476"/>
         <source>Get Title, Author, Duration</source>
         <translation>Titel, Autor und Länge</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="479"/>
+        <location filename="../form_desktop.ui" line="499"/>
         <source>Show videos in reverse</source>
         <translation>Video in umgedrehter Reihenfolge zeigen</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="519"/>
+        <location filename="../form_desktop.ui" line="539"/>
         <source>Author</source>
         <translation>Autor</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="524"/>
+        <location filename="../form_desktop.ui" line="544"/>
         <source>Duration</source>
         <translation>Länge</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="375"/>
+        <location filename="../form_desktop.ui" line="389"/>
         <source>Download Selected Videos</source>
         <translation>Lade ausgewählte Videos herunter</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="388"/>
+        <location filename="../form_desktop.ui" line="402"/>
         <source>Select all</source>
         <translation>Alles auswählen</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="401"/>
+        <location filename="../form_desktop.ui" line="415"/>
         <source>Unselect all</source>
         <translation>Auswahl aufheben</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2054"/>
+        <location filename="../form_desktop.ui" line="2074"/>
         <source>High Performance</source>
         <translation>Hohe Leistung</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2074"/>
+        <location filename="../form_desktop.ui" line="2094"/>
         <source>Default</source>
         <translation>Standard</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2064"/>
+        <location filename="../form_desktop.ui" line="2084"/>
         <source>FFMPEG</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="869"/>
-        <location filename="../form_desktop.ui" line="1659"/>
-        <location filename="../form_desktop.ui" line="1700"/>
-        <location filename="../form_desktop.ui" line="1965"/>
-        <location filename="../form_desktop.ui" line="1996"/>
-        <location filename="../form_desktop.ui" line="2027"/>
-        <location filename="../form_desktop.ui" line="2084"/>
-        <location filename="../form_desktop.ui" line="2115"/>
-        <location filename="../form_desktop.ui" line="2146"/>
+        <location filename="../form_desktop.ui" line="889"/>
+        <location filename="../form_desktop.ui" line="1679"/>
+        <location filename="../form_desktop.ui" line="1720"/>
+        <location filename="../form_desktop.ui" line="1985"/>
+        <location filename="../form_desktop.ui" line="2016"/>
+        <location filename="../form_desktop.ui" line="2047"/>
+        <location filename="../form_desktop.ui" line="2104"/>
+        <location filename="../form_desktop.ui" line="2135"/>
+        <location filename="../form_desktop.ui" line="2166"/>
         <source>Help</source>
         <translation>Hilfe</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1690"/>
+        <location filename="../form_desktop.ui" line="1710"/>
         <source>No</source>
         <translation>Nein</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1680"/>
+        <location filename="../form_desktop.ui" line="1700"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1596"/>
-        <location filename="../form_desktop.ui" line="1893"/>
+        <location filename="../form_desktop.ui" line="1616"/>
+        <location filename="../form_desktop.ui" line="1913"/>
         <source>German</source>
         <translation>Deutsch</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1566"/>
-        <location filename="../form_desktop.ui" line="1835"/>
+        <location filename="../form_desktop.ui" line="1586"/>
+        <location filename="../form_desktop.ui" line="1855"/>
         <source>English</source>
         <translation>Englisch</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1586"/>
-        <location filename="../form_desktop.ui" line="1812"/>
+        <location filename="../form_desktop.ui" line="1606"/>
+        <location filename="../form_desktop.ui" line="1832"/>
         <source>French</source>
         <translation>Französisch</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1670"/>
+        <location filename="../form_desktop.ui" line="1690"/>
         <source>Use Directory system? </source>
         <translation>Ordner System nutzen? </translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1765"/>
+        <location filename="../form_desktop.ui" line="1785"/>
         <source>Enter &quot;./&quot; for current directory</source>
         <translation>Gib &quot;./&quot; für das aktuelle Verzeichnis ein</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1923"/>
+        <location filename="../form_desktop.ui" line="1943"/>
         <source>PornHub Language (affects video titles)</source>
         <translation>PornHub Sprache (wirkt sich auf Videotitel aus)</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1842"/>
+        <location filename="../form_desktop.ui" line="1862"/>
         <source>Spanish</source>
         <translation>Spanisch</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1849"/>
+        <location filename="../form_desktop.ui" line="1869"/>
         <source>Portuguese</source>
         <translation>Portugiesisch</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1900"/>
+        <location filename="../form_desktop.ui" line="1920"/>
         <source>Dutch</source>
         <translation>Niederländisch</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1876"/>
+        <location filename="../form_desktop.ui" line="1896"/>
         <source>Italian</source>
         <translation>Italienisch</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1883"/>
+        <location filename="../form_desktop.ui" line="1903"/>
         <source>Czech</source>
         <translation>Tschechisch</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1856"/>
+        <location filename="../form_desktop.ui" line="1876"/>
         <source>Japanese</source>
         <translation>Japanisch</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1758"/>
+        <location filename="../form_desktop.ui" line="1778"/>
         <source>Output path:</source>
         <translation>Ausgabe Pfad:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1789"/>
+        <location filename="../form_desktop.ui" line="1809"/>
         <source>Chinese</source>
         <translation>Chinesisch</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1910"/>
+        <location filename="../form_desktop.ui" line="1930"/>
         <source>Russian</source>
         <translation>Russisch</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1737"/>
+        <location filename="../form_desktop.ui" line="1757"/>
         <source>Half</source>
         <translation>Hälfte</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1727"/>
+        <location filename="../form_desktop.ui" line="1747"/>
         <source>Best</source>
         <translation>Bestmöglich</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1430"/>
-        <location filename="../form_desktop.ui" line="1456"/>
+        <location filename="../form_desktop.ui" line="1450"/>
+        <location filename="../form_desktop.ui" line="1476"/>
         <source>Get videos by category</source>
         <translation>Erhalte Videos einer Kategorie</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1299"/>
-        <location filename="../form_desktop.ui" line="1516"/>
+        <location filename="../form_desktop.ui" line="1319"/>
+        <location filename="../form_desktop.ui" line="1536"/>
         <source>List of all categories</source>
         <translation>Alle Kategorien auflisten</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1322"/>
+        <location filename="../form_desktop.ui" line="1342"/>
         <source>Get Top Porn:</source>
         <translation>Top Porn:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1274"/>
+        <location filename="../form_desktop.ui" line="1294"/>
         <source>Week</source>
         <translation>Woche</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1229"/>
+        <location filename="../form_desktop.ui" line="1249"/>
         <source>Month</source>
         <translation>Monat</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1338"/>
+        <location filename="../form_desktop.ui" line="1358"/>
         <source>All Time</source>
         <translation>Gesamtzeit</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1417"/>
+        <location filename="../form_desktop.ui" line="1437"/>
         <source>Get random video</source>
         <translation>Zufälliges Video</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1382"/>
+        <location filename="../form_desktop.ui" line="1402"/>
         <source>Get Video</source>
         <translation>Zufälliges Video abrufen</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1258"/>
+        <location filename="../form_desktop.ui" line="1278"/>
         <source>Get Brazzers videos</source>
         <translation>Brazzers Videos</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2044"/>
+        <location filename="../form_desktop.ui" line="2064"/>
         <source>Threading Mode:</source>
         <translation>Threading Modus:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1747"/>
+        <location filename="../form_desktop.ui" line="1767"/>
         <source>Worst</source>
         <translation>Schlechteste</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1717"/>
+        <location filename="../form_desktop.ui" line="1737"/>
         <source>Quality:</source>
         <translation>Qualität:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1609"/>
+        <location filename="../form_desktop.ui" line="1629"/>
         <source>Graphical User Interface Language:</source>
         <translation>Sprache der graphischen Oberfläche:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1576"/>
+        <location filename="../form_desktop.ui" line="1596"/>
         <source>System default</source>
         <translation>Systemstandard</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1619"/>
+        <location filename="../form_desktop.ui" line="1639"/>
         <source>Chinese (simplified)</source>
         <translation>Chinesisch (vereinfacht)</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1775"/>
+        <location filename="../form_desktop.ui" line="1795"/>
         <source>Open</source>
         <translation>Öffnen</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1639"/>
+        <location filename="../form_desktop.ui" line="1659"/>
         <source>Result Limit:</source>
         <translation>Ergebniss Limit:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1148"/>
+        <location filename="../form_desktop.ui" line="1168"/>
         <source>Eporner</source>
         <translation>Eporner</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="783"/>
-        <location filename="../form_desktop.ui" line="1155"/>
+        <location filename="../form_desktop.ui" line="803"/>
+        <location filename="../form_desktop.ui" line="1175"/>
         <source>XNXX</source>
         <translation>XNXX</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="769"/>
-        <location filename="../form_desktop.ui" line="1175"/>
+        <location filename="../form_desktop.ui" line="789"/>
+        <location filename="../form_desktop.ui" line="1195"/>
         <source>XVideos</source>
         <translation>XVideos</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="936"/>
+        <location filename="../form_desktop.ui" line="956"/>
         <source>Enter video URL</source>
         <translation>Gib eine Video URL ein</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="620"/>
+        <location filename="../form_desktop.ui" line="640"/>
         <source>Search Website</source>
         <translation>Suche auf Webseite</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="737"/>
+        <location filename="../form_desktop.ui" line="757"/>
         <source>See Supported Websites</source>
         <translation>Liste der unterstützten Webseiten</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="891"/>
+        <location filename="../form_desktop.ui" line="911"/>
         <source>Search for Videos. Select Website below</source>
         <translation>Suche nach Videos. Wähle die Seite weiter unten aus</translation>
     </message>
@@ -406,29 +406,29 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="910"/>
+        <location filename="../form_desktop.ui" line="930"/>
         <source>Enter Model / Channel / Actress URL</source>
         <translation>Gib eine Model / Kanal oder Darsteller URL ein</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="752"/>
+        <location filename="../form_desktop.ui" line="772"/>
         <source>PornHub</source>
         <translation>PornHub</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="762"/>
-        <location filename="../form_desktop.ui" line="1212"/>
+        <location filename="../form_desktop.ui" line="782"/>
+        <location filename="../form_desktop.ui" line="1232"/>
         <source>HQPorner</source>
         <translation>HQPorner</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="776"/>
-        <location filename="../form_desktop.ui" line="1442"/>
+        <location filename="../form_desktop.ui" line="796"/>
+        <location filename="../form_desktop.ui" line="1462"/>
         <source>EPorner</source>
         <translation>EPorner</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="613"/>
+        <location filename="../form_desktop.ui" line="633"/>
         <source>Playlist URL:</source>
         <translation></translation>
     </message>
@@ -443,247 +443,252 @@
         <translation>Alle Fortschrittsbalken anzeigen</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="408"/>
+        <location filename="../form_desktop.ui" line="334"/>
+        <source>Converting:</source>
+        <translation>Konvertieren:</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="422"/>
         <source>Stop loading videos (does not stop downloads)</source>
         <translation>Stoppe das Laden von Videos (stoppt nicht das Herunterladen)</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="415"/>
+        <location filename="../form_desktop.ui" line="429"/>
         <source>Export video URLs</source>
         <translation>Video URLs exportieren</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="469"/>
+        <location filename="../form_desktop.ui" line="489"/>
         <source>Do not clear videos</source>
         <translation>Videos nicht leeren</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="917"/>
+        <location filename="../form_desktop.ui" line="937"/>
         <source>Enter a PornHub Playlist URL</source>
         <translation>Gib eine PornHub Playlist URL ein</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1555"/>
+        <location filename="../form_desktop.ui" line="1575"/>
         <source>Graphical User Interface</source>
         <translation>Benutzeroberfläche</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1631"/>
+        <location filename="../form_desktop.ui" line="1651"/>
         <source>Videos</source>
         <translation>Videos</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1937"/>
+        <location filename="../form_desktop.ui" line="1957"/>
         <source>Performance</source>
         <translation>Leistung</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1945"/>
+        <location filename="../form_desktop.ui" line="1965"/>
         <source>Simultaneous downloads:</source>
         <translation>Gleichzeitige Downloads:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1976"/>
+        <location filename="../form_desktop.ui" line="1996"/>
         <source>Maximal workers:</source>
         <translation>Maximale Arbeiter:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2007"/>
+        <location filename="../form_desktop.ui" line="2027"/>
         <source>PornHub Delay (0 = Disabled) in seconds:</source>
         <translation>PornHub Verzögerung (0 = Deaktiviert) in Sekunden:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2095"/>
+        <location filename="../form_desktop.ui" line="2115"/>
         <source>Maximal timeout:</source>
         <translation>Maximale Zeitüberschreitung:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2126"/>
+        <location filename="../form_desktop.ui" line="2146"/>
         <source>Maximal retries:</source>
         <translation>Maximale Netzwerk wiederholungen:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2165"/>
+        <location filename="../form_desktop.ui" line="2185"/>
         <source>Apply  (needs restart)</source>
         <translation>Anwenden (benötigt Neustart)</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2194"/>
+        <location filename="../form_desktop.ui" line="2214"/>
         <source>Reset Porn Fetch to default settings</source>
         <translation>Porn Fetch auf Werkseinstellungen zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2260"/>
+        <location filename="../form_desktop.ui" line="2280"/>
         <source>Video URL:</source>
         <translation>Video URL:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2280"/>
+        <location filename="../form_desktop.ui" line="2300"/>
         <source>User URL:</source>
         <translation>Nutzer URL:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2303"/>
+        <location filename="../form_desktop.ui" line="2323"/>
         <source>Height:</source>
         <translation>Höhe:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2310"/>
+        <location filename="../form_desktop.ui" line="2330"/>
         <source>Birth Place:</source>
         <translation>Geburtsort:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2317"/>
+        <location filename="../form_desktop.ui" line="2337"/>
         <source>Turn Ons:</source>
         <translation>Anturner:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2324"/>
+        <location filename="../form_desktop.ui" line="2344"/>
         <source>Interests / Hobbies:</source>
         <translation>Interessen / Hobbys:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2338"/>
+        <location filename="../form_desktop.ui" line="2358"/>
         <source>Piercings:</source>
         <translation>Piercings:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2352"/>
+        <location filename="../form_desktop.ui" line="2372"/>
         <source>Ethnicity:</source>
         <translation>Ethnie:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2408"/>
+        <location filename="../form_desktop.ui" line="2428"/>
         <source>Turn Offs:</source>
         <translation>Abturner:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2415"/>
+        <location filename="../form_desktop.ui" line="2435"/>
         <source>Videos Watched:</source>
         <translation>angeschaute Videos:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2422"/>
+        <location filename="../form_desktop.ui" line="2442"/>
         <source>Fake Boobs:</source>
         <translation>Falsche Brüste:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2429"/>
+        <location filename="../form_desktop.ui" line="2449"/>
         <source>Interested in:</source>
         <translation>Interessiert an:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2436"/>
+        <location filename="../form_desktop.ui" line="2456"/>
         <source>Gender:</source>
         <translation>Geschlecht:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2452"/>
+        <location filename="../form_desktop.ui" line="2472"/>
         <source>User Type:</source>
         <translation>Nutzer Typ:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2459"/>
+        <location filename="../form_desktop.ui" line="2479"/>
         <source>Name:</source>
         <translation>Name:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2475"/>
+        <location filename="../form_desktop.ui" line="2495"/>
         <source>Title:</source>
         <translation>Titel:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2482"/>
+        <location filename="../form_desktop.ui" line="2502"/>
         <source>Tags:</source>
         <translation>Tags:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2503"/>
+        <location filename="../form_desktop.ui" line="2523"/>
         <source>Rating:</source>
         <translation>Bewertung:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2510"/>
+        <location filename="../form_desktop.ui" line="2530"/>
         <source>Duration:</source>
         <translation>Länge:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2524"/>
+        <location filename="../form_desktop.ui" line="2544"/>
         <source>Views:</source>
         <translation>Aufrufe:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2545"/>
+        <location filename="../form_desktop.ui" line="2565"/>
         <source>Pornstars:</source>
         <translation>Pornstars:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2572"/>
+        <location filename="../form_desktop.ui" line="2592"/>
         <source>Hotspots:</source>
         <translation>Hotspots:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2586"/>
+        <location filename="../form_desktop.ui" line="2606"/>
         <source>Orientation:</source>
         <translation>Gesinnung:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2604"/>
+        <location filename="../form_desktop.ui" line="2624"/>
         <source>Weight:</source>
         <translation>Gesicht:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2618"/>
+        <location filename="../form_desktop.ui" line="2638"/>
         <source>Relationship:</source>
         <translation>Beziehungsstatus:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2660"/>
+        <location filename="../form_desktop.ui" line="2680"/>
         <source>Video Views:</source>
         <translation>Video Aufrufe:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2674"/>
+        <location filename="../form_desktop.ui" line="2694"/>
         <source>Profile Views:</source>
         <translation>Profilansichten:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2681"/>
+        <location filename="../form_desktop.ui" line="2701"/>
         <source>City / Country:</source>
         <translation>Stadt / Land:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2688"/>
+        <location filename="../form_desktop.ui" line="2708"/>
         <source>Tattoos:</source>
         <translation>Tattoos:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2695"/>
+        <location filename="../form_desktop.ui" line="2715"/>
         <source>Home Town</source>
         <translation>Heimatstadt</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2709"/>
+        <location filename="../form_desktop.ui" line="2729"/>
         <source>Hair Color:</source>
         <translation>Haarfarbe:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2724"/>
+        <location filename="../form_desktop.ui" line="2744"/>
         <source>Get User&apos;s Bio</source>
         <translation>Nutzer Bio abrufen</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2737"/>
+        <location filename="../form_desktop.ui" line="2757"/>
         <source>Download User Avatar</source>
         <translation>Nutzer Avatar herunterladen</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2750"/>
+        <location filename="../form_desktop.ui" line="2770"/>
         <source>Download Thumbnail</source>
         <translation>Vorschaubild herunterladen</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2781"/>
+        <location filename="../form_desktop.ui" line="2801"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -708,6 +713,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- PornHub.com&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- HQPorner.com&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- EPorner.com&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- XNXX.com&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Searching:&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
@@ -715,7 +721,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- HQPorner.com&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Xvideos.com&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Eporner.com&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- XNXX.com&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;I am constantly working to support more websites.&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
@@ -731,83 +737,88 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>QCoreApplication</name>
     <message>
-        <location filename="../../../main.py" line="211"/>
+        <location filename="../../../main.py" line="208"/>
         <source>Disabled</source>
         <translation>Deaktiviert</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="304"/>
+        <location filename="../../../main.py" line="305"/>
         <source>You got blocked from PornHub. Please switch your IP or wait some minutes. (at least 5)</source>
         <translation>Du wurdest von PornHub blockiert. Bitte ändere deine IP oder warte ein paar Minuten (mindestens 5)</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="518"/>
+        <location filename="../../../main.py" line="521"/>
         <source>Likes</source>
         <translation>Likes</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="519"/>
+        <location filename="../../../main.py" line="522"/>
         <source>Dislikes</source>
         <translation>Dislikes</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="520"/>
+        <location filename="../../../main.py" line="523"/>
         <source>minutes</source>
         <translation>Minuten</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="861"/>
+        <location filename="../../../main.py" line="801"/>
         <source>The specified output path doesn&apos;t exist.
         If you think, this is an error, please report it!</source>
         <translation>Der angegebene Pfad existiert nicht!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="864"/>
+        <location filename="../../../main.py" line="804"/>
         <source>Saved User Settings, please restart Porn Fetch!</source>
         <translation>Einstellungen wurden gespeichert. Bitte starte Porn Fetch neu!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="865"/>
+        <location filename="../../../main.py" line="805"/>
         <source>Select URL file</source>
         <translation>URL Datei öffnen</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="867"/>
+        <location filename="../../../main.py" line="807"/>
         <source>Login Failed, please check your credentials and try again!</source>
         <translation>Login gescheitert, bitte überprüfe deine Eingaben!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="869"/>
+        <location filename="../../../main.py" line="809"/>
         <source>Login Successful!</source>
         <translation>Login erfolgreich!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="871"/>
+        <location filename="../../../main.py" line="811"/>
         <source>User Avatar saved in current directory...</source>
         <translation>Nutzer Avatar wurde in das aktuelle Verzeichnis gespeichert...</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="873"/>
+        <location filename="../../../main.py" line="813"/>
         <source>Video thumbnail saved in current directory</source>
         <translation>Video Vorschaubild wurde in das aktuelle Verzeichnis gespeichert</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="942"/>
+        <location filename="../../../main.py" line="822"/>
+        <source>Information: A new version of Porn Fetch (v3.3) is out. I recommend you to update Porn Fetch. Go to: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.3</source>
+        <translation>Information: Eine neue Version von Porn Fetch (v3.3) wurde veröffentlicht. Ich empfehle dir Porn Fetch zu aktualisieren. Gehe zu: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.3</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="883"/>
         <source>Enter custom Path:</source>
         <translation>Gib einen benutzerdefinierten Pfad ein:</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="944"/>
+        <location filename="../../../main.py" line="886"/>
         <source>Success: {text} will be used for this session!</source>
         <translation>Erfolg: {text} wird für diese Sitzung genutzt!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="956"/>
+        <location filename="../../../main.py" line="899"/>
         <source>Not supported on Android</source>
         <translation>Wird nicht auf Android unterstützt</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1453"/>
+        <location filename="../../../main.py" line="1392"/>
         <source>
 The Semaphore is a tool to limit the number of simultaneous actions / downloads.
 
@@ -822,7 +833,7 @@ du eine sehr gute Internetverbindung und starke Systemleistung hast.
 </translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1471"/>
+        <location filename="../../../main.py" line="1410"/>
         <source>
 The different threading modes are used for different scenarios. 
 
@@ -851,7 +862,7 @@ warten müssen, bis das nächste Segment zur Verfügung gestellt wird. Bei 1. Mo
 </translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1482"/>
+        <location filename="../../../main.py" line="1421"/>
         <source>
 The directory system will save videos in an intelligent way. If you download 3 videos form one Pornstar and 5 videos 
 from another, Porn Fetch will automatically make folders for it and move the 3 videos into that one folder and the other
@@ -868,42 +879,42 @@ Dies kann helfen Videos besser zu organisieren, aber die meisten werden es nicht
 </translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="65"/>
+        <location filename="../../../main.py" line="1538"/>
+        <source>Some error occurred in loading a video. Please report this: {error_message}</source>
+        <translation>Ein unerwarteter Fehler trat beim Laden des Videos auf. Bilde melde das folgende: {error_message}</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="59"/>
         <source>Wrong Input, please verify the URL, category or actress!</source>
         <translation>Falsche Eingabe, bitte verifiziere die URL, Kategorie oder Darsteller!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="940"/>
+        <location filename="../../../main.py" line="881"/>
         <source>The output path does not exist or is not writable.</source>
         <translation>Der Ausgabepfad existiert nicht oder ist nicht beschreibbar.</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="947"/>
+        <location filename="../../../main.py" line="890"/>
         <source>Invalid path. The application will now exit.</source>
         <translation>Ungültiger Pfad. Die Anwendung wird nun geschlossen.</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="963"/>
+        <location filename="../../../main.py" line="907"/>
         <source>High Performance threading may cause issues on Android devices.</source>
         <translation>Der Hochleistungs-threading Modus kann unter Android zu fehlern führen.</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="968"/>
-        <source>FFMPEG isn&apos;t installed on your system. I&apos;ll do this now for you.</source>
-        <translation>FFMPEG ist nicht auf deinem System installiert. Ich werde dies jetzt für dich tun.</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="993"/>
+        <location filename="../../../main.py" line="912"/>
         <source>Porn Fetch will now reset to its default settings...</source>
         <translation>Porn Fetch wird nun auf Werkseinstellungen zurückgesetzt...</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="995"/>
+        <location filename="../../../main.py" line="914"/>
         <source>Done! Please restart.</source>
         <translation>Fertig! Bitte neustarten.</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1409"/>
+        <location filename="../../../main.py" line="1348"/>
         <source>
 The result limit defines how many videos will be returned when performing a search or doing other operations which
 involves loading multiple videos. This also affects models / channels and your liked videos. The result limit is
@@ -916,7 +927,7 @@ die Anzahl an Videos, die maximal in das Tree Widget ( das kleine Ding, wo Video
 </translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1422"/>
+        <location filename="../../../main.py" line="1361"/>
         <source>
 You can set a delay between requests from you to PornHub. If you are downloading a lot of videos or experiencing 
 &apos;client.call&apos; errors, you should enable a delay. By default the delay is turned off with the value 0
@@ -936,22 +947,17 @@ Dies beeinflusst keine anderen Webseiten!
 </translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="882"/>
-        <source>Information: A new version of Porn Fetch (v3.2) is out. I recommend you to update Porn Fetch. Go to: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.3</source>
-        <translation>Information: Eine neue Version von Porn Fetch (v3.3) is da. Ich empfehle dir Porn Fetch zu aktualisieren. Gehe dafür zu: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.3</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1323"/>
+        <location filename="../../../main.py" line="1265"/>
         <source>No video URLs found. Are there videos in the tree widget?</source>
         <translation>Keine video URLs gefunden. Sind überhaupt Videos im tree widget?</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1336"/>
+        <location filename="../../../main.py" line="1278"/>
         <source>Permission Error, please select a file from your user space,or run Porn Fetch with admin permissions (not recommended!)</source>
         <translation>Zugriffsfehler, bitte speichere die Datei in deinem Nutzer Bereich, oder starte Porn Fetch mit Administrator rechten (nicht empfohlen)</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1434"/>
+        <location filename="../../../main.py" line="1373"/>
         <source>
 The maximal workers define the amount of maximal threads which can be started when using the threaded download mode.
 One thread handles downloading one segment, so (in theory) 20 threads can download 20 segments at the same time.
@@ -970,7 +976,7 @@ Ich empfehle 3 für Android und 5 für schlechte Netzwerkverbindungen.&lt; 15000
 </translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1442"/>
+        <location filename="../../../main.py" line="1381"/>
         <source>
 The timeout handles the timeout for retrieving segments when using the treaded download mode. If you have a poor 
 internet connection you can set this higher than 10. But this isn&apos;t required for most users!
@@ -980,7 +986,7 @@ DIe Zeitüberschreitung regelt die Wartezeit auf Segmente im Hochleistungsmodus.
 </translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1507"/>
+        <location filename="../../../main.py" line="1446"/>
         <source>
 Create a .txt file and add URLs like this:
 
@@ -1020,7 +1026,7 @@ model#https://de.pornhub.com/pornstar/nancy-a
 </translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1515"/>
+        <location filename="../../../main.py" line="1454"/>
         <source>
 The maximal retries defines how much attempts will be used for a network request. For example if an API calls
 a URL for a website there will be &lt;AMOUNT&gt; of attempts until an error is thrown.
@@ -1030,57 +1036,52 @@ Die maximalen Versuche der Netzwerkanfragen definieren, wie oft Netzwerkanfragen
 </translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1603"/>
-        <source>Some error occurred in loading a video. Please report this: {e}</source>
-        <translation>Ein Fehler ist im Laden eines Video Objekts aufgetreten. Bitte melde das Folgende: {e}</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1745"/>
+        <location filename="../../../main.py" line="1687"/>
         <source>Those credentials don&apos;t seem to be valid...</source>
         <translation>Diese Zugangsdaten sehen ungültig aus...</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1758"/>
+        <location filename="../../../main.py" line="1700"/>
         <source>You are already logged in!</source>
         <translation>Du bist bereits eingeloggt!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1769"/>
+        <location filename="../../../main.py" line="1711"/>
         <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
         <translation>Es gibt ein Problem mit dem Login. Bitte logge dich erst ein und versuche dann Videos von deinem Account zu laden.</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1976"/>
+        <location filename="../../../main.py" line="1919"/>
         <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
         <translation>Ungültige Kategorie. Drücke &quot;Kategorien auflisten&quot; um alle möglichen zu sehen.</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2114"/>
+        <location filename="../../../main.py" line="2057"/>
         <source>Insufficient Permissions to access something. Please run Porn Fetch as root / admin</source>
         <translation>Fehlende Zugriffsrechte um auf etwas zuzugreifen. Bitte versuche Porn Fetch als root / admin zu starten</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2120"/>
+        <location filename="../../../main.py" line="2063"/>
         <source>Connection was reset. Are you connected to a public wifi or a university&apos;s wifi? </source>
         <translation>Die Verbindung wurde zurückgesetzt. Bist du in einem Öffentlichen W-Lan oder an einer Universität? </translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2125"/>
+        <location filename="../../../main.py" line="2069"/>
         <source>Connection Error, please make sure you have a stable internet connection</source>
         <translation>Verbindungsfehlert, bitte stelle sicher, dass du eine stabile Internetverbindung hast</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2134"/>
+        <location filename="../../../main.py" line="2078"/>
         <source>SSLError: Your connection is blocked by your ISP / IT administrator (Firewall). If you are in a University or at school, please connect to a VPN / Proxy</source>
         <translation>SSL Fehler: Deine Verbindung wird höchstwahrscheinlich von deinem ISP oder einem IT Administrator blockiert. Falls du gerade an einer Schule oder Universität bist, verbinde dich mit einem VPN / Proxy</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2143"/>
+        <location filename="../../../main.py" line="2087"/>
         <source>This error shouldn&apos;t happen. If you still see it it&apos;s REALLY important that you report the following: {e}</source>
         <translation>Dieser Fehler sollte eigentlich nicht passieren. Falls du ihn trotzdem siehst, ist es wichtig, dass du das folgende auf GitHub meldest: {e}</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2147"/>
+        <location filename="../../../main.py" line="2091"/>
         <source>Zero Division Error. This shouldn&apos;t really happen...</source>
         <translation>Teilung durch 0. Das sollte eigentlich echt nicht passieren :D...</translation>
     </message>

@@ -11,7 +11,7 @@ from threading import Event
 from requests.exceptions import SSLError
 from pathlib import Path
 from hqporner_api.api import Sort as hq_Sort
-from phub import download, consts
+from phub import consts
 from src.backend.shared_functions import *
 from itertools import islice
 from base_api.modules import consts as bs_consts
