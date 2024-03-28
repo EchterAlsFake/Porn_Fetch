@@ -1,7 +1,3 @@
-import shutil
-import tarfile
-
-import ffmpeg_progress_yield
 import requests
 import time
 import sys
@@ -9,10 +5,9 @@ import os.path
 import argparse
 import markdown
 import traceback
-import zipfile
 import src.frontend.resources
-from threading import Event
 
+from threading import Event
 from requests.exceptions import SSLError
 from pathlib import Path
 from hqporner_api.api import Sort as hq_Sort
@@ -20,7 +15,7 @@ from phub import download, consts
 from src.backend.shared_functions import *
 from itertools import islice
 from base_api.modules import consts as bs_consts
-
+from base_api.base import Core
 from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
 from src.frontend.License import Ui_License
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
@@ -337,22 +332,6 @@ class DownloadThread(QRunnable):
             'xvideos': self.signals.progress_xvideos,
         }
 
-    def resolve_threading_mode(self, mode):
-        """Resolve the appropriate threading mode based on input."""
-        if isinstance(self.video, Video):
-            return {
-                "threaded": download.threaded(max_workers=self.workers, timeout=self.timeout),
-                "FFMPEG": download.FFMPEG,
-                "default": download.default
-            }.get(mode, download.default)
-
-        else:
-            return {
-                "threaded": bs_threaded(max_workers=self.workers, timeout=self.timeout, retries=5),
-                "FFMPEG": bs_ffmpeg,
-                "default": bs_default
-            }.get(mode, download.default)
-
     def generic_callback(self, pos, total, signal, video_source, ffmpeg=False):
         """Generic callback function to emit progress signals with rate limiting."""
         current_time = time.time()
@@ -423,21 +402,21 @@ class DownloadThread(QRunnable):
             # We need to specify the sources, so that it knows which individual progressbar to use
             elif isinstance(self.video, hq_Video):
                 video_source = "hqporner"
-                self.video.download(quality=self.quality, output_path=self.output_path,
+                self.video.download(quality=self.quality, path=self.output_path,
                                     callback=lambda pos, total: self.generic_callback(pos, total,
                                                                                       self.signals.progress_hqporner,
                                                                                       video_source, self.ffmpeg))
 
             elif isinstance(self.video, ep_Video):
                 video_source = "eporner"
-                self.video.download_video(quality=self.quality, output_path=self.output_path,
+                self.video.download(quality=self.quality, path=self.output_path,
                                           callback=lambda pos, total: self.generic_callback(pos, total,
                                                                                             self.signals.progress_eporner,
                                                                                             video_source, self.ffmpeg))
 
             elif isinstance(self.video, xn_Video):
                 video_source = "xnxx"
-                self.video.download(downloader=self.threading_mode, output_path=self.output_path,
+                self.video.download(downloader=self.threading_mode, path=self.output_path,
                                     quality=self.quality,
                                     callback=lambda pos, total: self.generic_callback(pos, total,
                                                                                       self.signals.progress_xnxx,
@@ -445,7 +424,7 @@ class DownloadThread(QRunnable):
 
             elif isinstance(self.video, xv_Video):
                 video_source = "xvideos"
-                self.video.download(downloader=self.threading_mode, output_path=self.output_path,
+                self.video.download(downloader=self.threading_mode, path=self.output_path,
                                     quality=self.quality,
                                     callback=lambda pos, total: self.generic_callback(pos, total,
                                                                                       self.signals.progress_xvideos,
@@ -645,7 +624,7 @@ class VideoLoader(QRunnable):
                     author = video.author
 
                 output_path = Path(self.output_path)
-                stripped_title = strip_title(title)  # Strip the title, so that videos with special chars can be saved
+                stripped_title = Core().strip_title(title)  # Strip the title, so that videos with special chars can be saved
                 # on windows. Would raise an OSError otherwise
 
                 if self.directory_system:  # If the directory system is enabled, this will create an additional folder
@@ -1515,7 +1494,7 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
 
         elif hqporner_pattern.match(model):
             pages = round(search_limit / 46)
-            videos = hq_Client().get_videos_by_actress(actress=model, pages=pages)
+            videos = hq_Client().get_videos_by_actress(name=model, pages=pages)
 
         elif eporner_pattern.match(model):
             pages = round(search_limit / 38)

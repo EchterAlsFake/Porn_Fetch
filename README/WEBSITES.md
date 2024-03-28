@@ -18,5 +18,5 @@
 | PornHub  |      Yes      |    Yes    |      Yes      |   Yes    |      Yes       |  Yes  |
 | HQporner |      Yes      |    Yes    |      No       |   Yes    |       No       |  Yes  |
 | Eporner  |      Yes      |    Yes    |      No       |   Yes    |       No       |  Yes  |
-| xnxx     |      Yes      |    No     |      No       |   Yes    |      Yes       |  No   |
+| xnxx     |      Yes      |    Yes    |      No       |   Yes    |      Yes       |  Yes  |
 | xvideos  |      Yes      |    Yes    |      No       |   Yes    |      Yes       |  No   |

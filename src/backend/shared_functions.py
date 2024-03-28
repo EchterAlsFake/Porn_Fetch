@@ -5,10 +5,10 @@ If you know what you do, you can change a few things here :)
 
 import os
 import re
-from mutagen.mp4 import MP4
 
+from mutagen.mp4 import MP4
 from phub import Client, errors, Video
-from phub.modules import download as ph_download
+from phub.modules import download as download
 from colorama import Fore
 from hue_shift import return_color, reset
 from datetime import datetime
@@ -32,6 +32,12 @@ options_performance = ["semaphore", "threading_mode", "workers", "timeout", "ret
 options_video = ["quality", "language", "output_path", "directory_system", "search_limit", "delay"]
 options_license = ["accepted"]
 options_ui = ["language"]
+
+pornhub_pattern = re.compile(r'(.*?)pornhub(.*)') # can also be .org
+hqporner_pattern = re.compile(r'(.*?)hqporner.com(.*)')
+xnxx_pattern = re.compile(r'(.*?)xnxx.com(.*)')
+xvideos_pattern = re.compile(r'(.*?)xvideos.com(.*)')
+eporner_pattern = re.compile(r'(.*?)eporner.com(.*)')
 
 """
 Explanation:
@@ -84,21 +90,17 @@ def logger_debug(e):
 def check_video(url, language, is_url=True, delay=False):
 
     if is_url:
-        regex_eporner_url = re.compile(r"eporner.com/(.*?)")
-        regex_xnxx_url = re.compile(r"xnxx.com(.*?)")
-        regex_xvideos_url = re.compile(r'xvideos.com(.*?)')
-        regex_hqporner_url = re.compile(r'hqporner.com/(.*?)')
 
-        if regex_hqporner_url.search(str(url)):
+        if hqporner_pattern.search(str(url)):
             return hq_Client().get_video(url)
 
-        elif regex_eporner_url.search(str(url)):
+        elif eporner_pattern.search(str(url)):
             return ep_Client().get_video(url, enable_html_scraping=True)
 
-        elif regex_xnxx_url.search(str(url)):
+        elif xnxx_pattern.search(str(url)):
             return xn_Client().get_video(url)
 
-        elif regex_xvideos_url.search(str(url)):
+        elif xvideos_pattern.search(str(url)):
             return xv_Client().get_video(url)
 
         if isinstance(url, Video):
@@ -133,17 +135,6 @@ def check_video(url, language, is_url=True, delay=False):
         pass
 
         # TODO
-
-
-def strip_title(title):
-    print(title)
-    # Characters not allowed in Windows filenames
-    illegal_chars = '<>:"/\\|?*'
-
-    # Keep characters that are not in the list of illegal characters
-    cleaned_title = ''.join(char for char in title if char not in illegal_chars)
-
-    return cleaned_title
 
 
 def setup_config_file(force=False):
@@ -270,8 +261,18 @@ def write_tags(path, video):
     logger_debug("Tags: [3/3] ✔")
 
 
-pornhub_pattern = re.compile(r'(.*?)pornhub.com(.*)')
-hqporner_pattern = re.compile(r'(.*?)hqporner.com(.*)')
-xnxx_pattern = re.compile(r'(.*?)xnxx.com(.*)')
-xvideos_pattern = re.compile(r'(.*?)xvideos.com(.*)')
-eporner_pattern = re.compile(r'(.*?)eporner.com(.*)')
+def resolve_threading_mode(video, mode, workers, timeout):
+    """Resolve the appropriate threading mode based on input."""
+    if isinstance(video, Video):
+        return {
+            "threaded": download.threaded(max_workers=workers, timeout=timeout),
+            "FFMPEG": download.FFMPEG,
+            "default": download.default
+        }.get(mode, download.default)
+
+    else:
+        return {
+            "threaded": bs_threaded(max_workers=workers, timeout=timeout, retries=5),
+            "FFMPEG": bs_ffmpeg,
+            "default": bs_default
+        }.get(mode, download.default)
