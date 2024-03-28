@@ -5,6 +5,9 @@ import os.path
 import argparse
 import markdown
 import traceback
+import zipfile
+import shutil
+import tarfile
 import src.frontend.resources
 
 from threading import Event
@@ -644,6 +647,71 @@ class VideoLoader(QRunnable):
             self.signals.error.emit(str(e))
 
 
+class FFMPEGDownload(QRunnable):
+    """Downloads ffmpeg into the execution path of Porn Fetch"""
+
+    def __init__(self, url, extract_path, mode):
+        super().__init__()
+        self.url = url
+        self.extract_path = extract_path
+        self.mode = mode
+        self.signals = Signals()
+
+    def run(self):
+        # Download the file
+        logger_debug("FFMPEG: [1/4] Starting the download")
+        with requests.get(self.url, stream=True) as r:
+            r.raise_for_status()
+            total_length = int(r.headers.get('content-length'))
+            self.signals.total_progress.emit(0, total_length)  # Initialize progress bar
+            dl = 0
+            filename = self.url.split('/')[-1]
+            with open(filename, 'wb') as f:
+                for chunk in r.iter_content(chunk_size=8192):
+                    if chunk:  # filter out keep-alive new chunks
+                        f.write(chunk)
+                        dl += len(chunk)
+                        self.signals.total_progress.emit(dl, total_length)
+
+        logger_debug("FFMPEG: [2/4] Starting file extraction")
+        # Extract the file based on OS mode
+        if self.mode == "linux" and filename.endswith(".tar.xz"):
+            with tarfile.open(filename, "r:xz") as tar:
+                total_members = len(tar.getmembers())
+
+                for idx, member in enumerate(tar.getmembers()):
+                    if 'ffmpeg' in member.name and (member.name.endswith('ffmpeg')):
+                        tar.extract(member, self.extract_path)
+                        extracted_path = os.path.join(self.extract_path, member.path)
+                        shutil.move(extracted_path, "./")
+
+                    self.signals.total_progress.emit(idx, total_members)
+
+        elif self.mode == "windows" and filename.endswith(".zip"):
+            with zipfile.ZipFile(filename, 'r') as zip_ref:
+                total = len(zip_ref.namelist())
+
+                for idx, member in enumerate(zip_ref.namelist()):
+                    if 'ffmpeg.exe' in member:
+                        zip_ref.extract(member, self.extract_path)
+                        extracted_path = os.path.join(self.extract_path, member)
+                        shutil.move(extracted_path, ".")
+
+                    self.signals.total_progress.emit(idx, total)
+        logger_debug("FFMPEG: [3/4] Finished Extraction")
+        # Finalize
+        self.signals.total_progress.emit(total_length, total_length)  # Ensure progress bar reaches 100%
+        os.remove(filename)  # Clean up downloaded archive
+
+        if sys.platform == "linux":
+            shutil.rmtree("ffmpeg-6.1-amd64-static")
+
+        elif sys.platform == "win32":
+            shutil.rmtree("ffmpeg-6.1.1-essentials_build")
+
+        logger_debug("FFMPEG: [4/4] Cleaned Up")
+
+
 class Porn_Fetch(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -687,6 +755,7 @@ class Porn_Fetch(QWidget):
         SomeFunctions().logger_debug("Startup: [4/5] Loaded the user settings")
         self.switch_to_home()
         self.check_for_updates()
+        self.check_ffmpeg()
         SomeFunctions().logger_debug("Startup: [5/5] ✔")
 
         if __build__ == "android":
@@ -795,6 +864,7 @@ class Porn_Fetch(QWidget):
         self.ui.button_export_video_urls.setStyleSheet(stylesheets["button_purple"])
         self.ui.button_timeout_maximal_retries_help.setStyleSheet(stylesheets["button_green"])
         self.ui.button_help_file.setStyleSheet(stylesheets["button_green"])
+        self.ui.button_download_ffmpeg.setStyleSheet(stylesheets["button_purple"])
 
     def language_strings(self):
         """Contains the language strings. Needed for translation"""
@@ -824,6 +894,47 @@ class Porn_Fetch(QWidget):
 
         else:
             SomeFunctions().logger_debug("No updates found...")
+
+    def check_ffmpeg(self):
+        if not shutil.which("ffmpeg"):
+            if not os.path.isfile("ffmpeg") or not os.path.isfile("ffmpeg.exe"):
+                if self.conf.get("Performance", "ffmpeg_warning") == "true":
+                    ffmpeg_string = QCoreApplication.tr("""
+    FFmpeg isn't installed on your system... Some features won't be available:
+    
+    - The FFmpeg threading mode
+    - Converting videos into a valid .mp4 format
+    - Writing tags / metadata into the videos
+    
+    These features aren't necessary for Porn Fetch, but can be useful for some people.
+    
+    To automatically install ffmpeg, just head over to the settings and press the magical button, or install ffmpeg in your
+    local PATH (e.g, through your linux package manager, or through the Windows PATH)
+    
+    
+    This warning won't be shown again.
+    """, disambiguation="")
+                    SomeFunctions().ui_popup(ffmpeg_string)
+                    self.conf.set("Performance", "ffmpeg_warning", "false")
+
+                self.ui.radio_threading_mode_ffmpeg.setDisabled(True)
+                global ffmpeg_features
+                ffmpeg_features = False
+                logger_error("FFMPEG features have been disabled, because ffmpeg wasn't found on your system.")
+
+    def download_ffmpeg(self):
+        if sys.platform == "linux":
+            if not os.path.isfile("ffmpeg"):
+                url_linux = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
+                self.downloader = FFMPEGDownload(url=url_linux, extract_path=".", mode="linux")
+
+        elif sys.platform == "win32":
+            if not os.path.isfile("ffmpeg.exe"):
+                url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
+                self.downloader = FFMPEGDownload(url=url_windows, extract_path=".", mode="windows")
+
+        self.downloader.signals.total_progress.connect(self.update_total_progressbar)
+        self.threadpool.start(self.downloader)
 
     def button_groups(self):
         """
@@ -956,7 +1067,7 @@ class Porn_Fetch(QWidget):
         self.switch_stop_state_2()
 
     @classmethod
-    def switch_stop_state_2(self):
+    def switch_stop_state_2(cls):
         global stop_flag
         stop_flag = Event()
 
@@ -1029,6 +1140,7 @@ class Porn_Fetch(QWidget):
         # Other stuff idk
         self.ui.button_stop.clicked.connect(self.switch_stop_state)
         self.ui.button_export_video_urls.clicked.connect(self.export_urls)
+        self.ui.button_download_ffmpeg.clicked.connect(self.download_ffmpeg)
 
     def switch_login_button_state(self):
         """If the user is logged in, I'll change the stylesheets of the buttons"""
@@ -1125,7 +1237,6 @@ class Porn_Fetch(QWidget):
             self.ui.radio_directory_system_no.setChecked(True)
 
         global ffmpeg_path
-
         if os.path.isfile("ffmpeg"):
             ffmpeg_path = "ffmpeg"
 
@@ -1140,7 +1251,7 @@ class Porn_Fetch(QWidget):
             ffmpeg_features = False
 
             self.ui.radio_threading_mode_ffmpeg.setChecked(False)
-            self.ui.radio_threading_mode_ffmpeg.setDisabled(False)
+            self.ui.radio_threading_mode_ffmpeg.setDisabled(True)
             self.ui.radio_threading_mode_ffmpeg.setToolTip("FFMPEG is not installed, therefore this feature is NOT available.")
 
         self.ui.spinbox_maximal_timeout.setValue(int(self.timeout))

@@ -850,57 +850,42 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_settings.setWidgetResizable(True)
         self.scrollAreaWidgetContents_6 = QWidget()
         self.scrollAreaWidgetContents_6.setObjectName(u"scrollAreaWidgetContents_6")
-        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 686, 599))
+        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 1504, 627))
         self.gridLayout_34 = QGridLayout(self.scrollAreaWidgetContents_6)
         self.gridLayout_34.setObjectName(u"gridLayout_34")
-        self.goroupbox_gui = QGroupBox(self.scrollAreaWidgetContents_6)
-        self.goroupbox_gui.setObjectName(u"goroupbox_gui")
-        self.gridLayout_12 = QGridLayout(self.goroupbox_gui)
-        self.gridLayout_12.setObjectName(u"gridLayout_12")
-        self.gridlayout_gui_settings = QGridLayout()
-        self.gridlayout_gui_settings.setObjectName(u"gridlayout_gui_settings")
-        self.radio_ui_language_english = QRadioButton(self.goroupbox_gui)
-        self.radio_ui_language_english.setObjectName(u"radio_ui_language_english")
-        self.radio_ui_language_english.setCursor(QCursor(Qt.PointingHandCursor))
+        self.horizontallayout_settings_apply = QHBoxLayout()
+        self.horizontallayout_settings_apply.setObjectName(u"horizontallayout_settings_apply")
+        self.button_settings_apply = QPushButton(self.scrollAreaWidgetContents_6)
+        self.button_settings_apply.setObjectName(u"button_settings_apply")
+        self.button_settings_apply.setCursor(QCursor(Qt.PointingHandCursor))
 
-        self.gridlayout_gui_settings.addWidget(self.radio_ui_language_english, 0, 2, 1, 1)
+        self.horizontallayout_settings_apply.addWidget(self.button_settings_apply)
 
-        self.radio_ui_language_system_default = QRadioButton(self.goroupbox_gui)
-        self.radio_ui_language_system_default.setObjectName(u"radio_ui_language_system_default")
-        self.radio_ui_language_system_default.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_settings_reset = QPushButton(self.scrollAreaWidgetContents_6)
+        self.button_settings_reset.setObjectName(u"button_settings_reset")
+        self.button_settings_reset.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_settings_reset.setStyleSheet(u"QPushButton {\n"
+"    background-color: rgb(85, 0, 0)/* Green */\n"
+"    font: bold 14px;\n"
+"    min-width: 5em;\n"
+"    padding: 3px;\n"
+"    color: white;\n"
+"    border-radius: 10px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color:  rgb(222, 0, 41)/* Lighter green */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: rgb(108, 0, 52) /* Dark green */\n"
+"}\n"
+"")
 
-        self.gridlayout_gui_settings.addWidget(self.radio_ui_language_system_default, 0, 1, 1, 1)
-
-        self.radio_ui_language_french = QRadioButton(self.goroupbox_gui)
-        self.radio_ui_language_french.setObjectName(u"radio_ui_language_french")
-        self.radio_ui_language_french.setEnabled(True)
-
-        self.gridlayout_gui_settings.addWidget(self.radio_ui_language_french, 0, 5, 1, 1)
-
-        self.radio_ui_language_german = QRadioButton(self.goroupbox_gui)
-        self.radio_ui_language_german.setObjectName(u"radio_ui_language_german")
-        self.radio_ui_language_german.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_gui_settings.addWidget(self.radio_ui_language_german, 0, 3, 1, 1)
-
-        self.label_ui_language = QLabel(self.goroupbox_gui)
-        self.label_ui_language.setObjectName(u"label_ui_language")
-        sizePolicy2.setHeightForWidth(self.label_ui_language.sizePolicy().hasHeightForWidth())
-        self.label_ui_language.setSizePolicy(sizePolicy2)
-
-        self.gridlayout_gui_settings.addWidget(self.label_ui_language, 0, 0, 1, 1)
-
-        self.radio_ui_language_chinese_simplified = QRadioButton(self.goroupbox_gui)
-        self.radio_ui_language_chinese_simplified.setObjectName(u"radio_ui_language_chinese_simplified")
-        self.radio_ui_language_chinese_simplified.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_gui_settings.addWidget(self.radio_ui_language_chinese_simplified, 0, 4, 1, 1)
+        self.horizontallayout_settings_apply.addWidget(self.button_settings_reset)
 
 
-        self.gridLayout_12.addLayout(self.gridlayout_gui_settings, 0, 0, 1, 1)
-
-
-        self.gridLayout_34.addWidget(self.goroupbox_gui, 2, 0, 1, 1)
+        self.gridLayout_34.addLayout(self.horizontallayout_settings_apply, 4, 0, 1, 1)
 
         self.groupbox_videos = QGroupBox(self.scrollAreaWidgetContents_6)
         self.groupbox_videos.setObjectName(u"groupbox_videos")
@@ -1093,7 +1078,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridLayout_10.addLayout(self.gridlayout_api_language, 4, 0, 1, 1)
 
 
-        self.gridLayout_34.addWidget(self.groupbox_videos, 1, 0, 1, 1)
+        self.gridLayout_34.addWidget(self.groupbox_videos, 2, 0, 1, 1)
 
         self.gridlayout_settings = QGridLayout()
         self.gridlayout_settings.setObjectName(u"gridlayout_settings")
@@ -1256,41 +1241,61 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridlayout_settings.addWidget(self.groupbox_performance, 0, 0, 1, 1)
 
 
-        self.gridLayout_34.addLayout(self.gridlayout_settings, 0, 0, 1, 1)
+        self.gridLayout_34.addLayout(self.gridlayout_settings, 1, 0, 1, 1)
 
-        self.horizontallayout_settings_apply = QHBoxLayout()
-        self.horizontallayout_settings_apply.setObjectName(u"horizontallayout_settings_apply")
-        self.button_settings_apply = QPushButton(self.scrollAreaWidgetContents_6)
-        self.button_settings_apply.setObjectName(u"button_settings_apply")
-        self.button_settings_apply.setCursor(QCursor(Qt.PointingHandCursor))
+        self.goroupbox_gui = QGroupBox(self.scrollAreaWidgetContents_6)
+        self.goroupbox_gui.setObjectName(u"goroupbox_gui")
+        self.gridLayout_12 = QGridLayout(self.goroupbox_gui)
+        self.gridLayout_12.setObjectName(u"gridLayout_12")
+        self.gridlayout_gui_settings = QGridLayout()
+        self.gridlayout_gui_settings.setObjectName(u"gridlayout_gui_settings")
+        self.radio_ui_language_english = QRadioButton(self.goroupbox_gui)
+        self.radio_ui_language_english.setObjectName(u"radio_ui_language_english")
+        self.radio_ui_language_english.setCursor(QCursor(Qt.PointingHandCursor))
 
-        self.horizontallayout_settings_apply.addWidget(self.button_settings_apply)
+        self.gridlayout_gui_settings.addWidget(self.radio_ui_language_english, 0, 2, 1, 1)
 
-        self.button_settings_reset = QPushButton(self.scrollAreaWidgetContents_6)
-        self.button_settings_reset.setObjectName(u"button_settings_reset")
-        self.button_settings_reset.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_settings_reset.setStyleSheet(u"QPushButton {\n"
-"    background-color: rgb(85, 0, 0)/* Green */\n"
-"    font: bold 14px;\n"
-"    min-width: 5em;\n"
-"    padding: 3px;\n"
-"    color: white;\n"
-"    border-radius: 10px;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color:  rgb(222, 0, 41)/* Lighter green */\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: rgb(108, 0, 52) /* Dark green */\n"
-"}\n"
-"")
+        self.radio_ui_language_system_default = QRadioButton(self.goroupbox_gui)
+        self.radio_ui_language_system_default.setObjectName(u"radio_ui_language_system_default")
+        self.radio_ui_language_system_default.setCursor(QCursor(Qt.PointingHandCursor))
 
-        self.horizontallayout_settings_apply.addWidget(self.button_settings_reset)
+        self.gridlayout_gui_settings.addWidget(self.radio_ui_language_system_default, 0, 1, 1, 1)
+
+        self.radio_ui_language_french = QRadioButton(self.goroupbox_gui)
+        self.radio_ui_language_french.setObjectName(u"radio_ui_language_french")
+        self.radio_ui_language_french.setEnabled(True)
+
+        self.gridlayout_gui_settings.addWidget(self.radio_ui_language_french, 0, 5, 1, 1)
+
+        self.radio_ui_language_german = QRadioButton(self.goroupbox_gui)
+        self.radio_ui_language_german.setObjectName(u"radio_ui_language_german")
+        self.radio_ui_language_german.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.gridlayout_gui_settings.addWidget(self.radio_ui_language_german, 0, 3, 1, 1)
+
+        self.label_ui_language = QLabel(self.goroupbox_gui)
+        self.label_ui_language.setObjectName(u"label_ui_language")
+        sizePolicy2.setHeightForWidth(self.label_ui_language.sizePolicy().hasHeightForWidth())
+        self.label_ui_language.setSizePolicy(sizePolicy2)
+
+        self.gridlayout_gui_settings.addWidget(self.label_ui_language, 0, 0, 1, 1)
+
+        self.radio_ui_language_chinese_simplified = QRadioButton(self.goroupbox_gui)
+        self.radio_ui_language_chinese_simplified.setObjectName(u"radio_ui_language_chinese_simplified")
+        self.radio_ui_language_chinese_simplified.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.gridlayout_gui_settings.addWidget(self.radio_ui_language_chinese_simplified, 0, 4, 1, 1)
 
 
-        self.gridLayout_34.addLayout(self.horizontallayout_settings_apply, 3, 0, 1, 1)
+        self.gridLayout_12.addLayout(self.gridlayout_gui_settings, 0, 0, 1, 1)
+
+
+        self.gridLayout_34.addWidget(self.goroupbox_gui, 3, 0, 1, 1)
+
+        self.button_download_ffmpeg = QPushButton(self.scrollAreaWidgetContents_6)
+        self.button_download_ffmpeg.setObjectName(u"button_download_ffmpeg")
+
+        self.gridLayout_34.addWidget(self.button_download_ffmpeg, 0, 0, 1, 1)
 
         self.scrollarea_settings.setWidget(self.scrollAreaWidgetContents_6)
 
@@ -1773,9 +1778,9 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.retranslateUi(Porn_Fetch_Widget)
 
-        self.stacked_widget_main.setCurrentIndex(4)
+        self.stacked_widget_main.setCurrentIndex(1)
         self.stacked_widget_top.setCurrentIndex(0)
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(Porn_Fetch_Widget)
@@ -1864,13 +1869,8 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_videos_by_category_eporner.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get videos by category", None))
         self.button_eporner_category_get_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Videos", None))
         self.button_list_categories_eporner.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"List of all categories", None))
-        self.goroupbox_gui.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface", None))
-        self.radio_ui_language_english.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"English", None))
-        self.radio_ui_language_system_default.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"System default", None))
-        self.radio_ui_language_french.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))
-        self.radio_ui_language_german.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
-        self.label_ui_language.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface Language:", None))
-        self.radio_ui_language_chinese_simplified.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Chinese (simplified)", None))
+        self.button_settings_apply.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Apply  (needs restart)", None))
+        self.button_settings_reset.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Reset Porn Fetch to default settings", None))
         self.groupbox_videos.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Videos", None))
         self.label_searching_limit.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Result Limit:", None))
         self.button_result_limit_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
@@ -1913,8 +1913,14 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_timeout_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
         self.label_maximal_retries.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Maximal retries:", None))
         self.button_timeout_maximal_retries_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
-        self.button_settings_apply.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Apply  (needs restart)", None))
-        self.button_settings_reset.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Reset Porn Fetch to default settings", None))
+        self.goroupbox_gui.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface", None))
+        self.radio_ui_language_english.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"English", None))
+        self.radio_ui_language_system_default.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"System default", None))
+        self.radio_ui_language_french.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))
+        self.radio_ui_language_german.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
+        self.label_ui_language.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface Language:", None))
+        self.radio_ui_language_chinese_simplified.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Chinese (simplified)", None))
+        self.button_download_ffmpeg.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download and Setup FFmpeg", None))
         self.button_metadata_video_start.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
         self.label_metadata_video_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Video URL:", None))
         self.button_metadata_user_start.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))

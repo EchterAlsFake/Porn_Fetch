@@ -65,6 +65,7 @@ semaphore = 2
 workers = 20
 timeout = 10
 retries = 4
+ffmpeg_warning = true
 
 [Video]
 quality = best

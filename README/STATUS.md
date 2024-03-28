@@ -20,7 +20,6 @@
 - [x] Rewriting the readme 
 - [x] Changing the way of ffmpeg downloading
 - [x] metadata and tags for CLI
+- [x] Profiling and testing performance between ffmpeg and high performance threading (Result: High performance is faster... MUCH FASTER)
 - [] Fixing the Android layout once again
 - [] Fixing the Windows performance (idk)
-- [] Fixing ffmpeg progress tracking
-- [] Profiling and testing performance between ffmpeg and high performance threading

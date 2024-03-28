@@ -354,7 +354,7 @@
            <string/>
           </property>
           <property name="currentIndex">
-           <number>4</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="widget">
            <layout class="QGridLayout" name="gridLayout_8">
@@ -1564,88 +1564,55 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>686</width>
-                 <height>599</height>
+                 <width>1504</width>
+                 <height>627</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_34">
-                <item row="2" column="0">
-                 <widget class="QGroupBox" name="goroupbox_gui">
-                  <property name="title">
-                   <string>Graphical User Interface</string>
-                  </property>
-                  <layout class="QGridLayout" name="gridLayout_12">
-                   <item row="0" column="0">
-                    <layout class="QGridLayout" name="gridlayout_gui_settings">
-                     <item row="0" column="2">
-                      <widget class="QRadioButton" name="radio_ui_language_english">
-                       <property name="cursor">
-                        <cursorShape>PointingHandCursor</cursorShape>
-                       </property>
-                       <property name="text">
-                        <string>English</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="1">
-                      <widget class="QRadioButton" name="radio_ui_language_system_default">
-                       <property name="cursor">
-                        <cursorShape>PointingHandCursor</cursorShape>
-                       </property>
-                       <property name="text">
-                        <string>System default</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="5">
-                      <widget class="QRadioButton" name="radio_ui_language_french">
-                       <property name="enabled">
-                        <bool>true</bool>
-                       </property>
-                       <property name="text">
-                        <string>French</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="3">
-                      <widget class="QRadioButton" name="radio_ui_language_german">
-                       <property name="cursor">
-                        <cursorShape>PointingHandCursor</cursorShape>
-                       </property>
-                       <property name="text">
-                        <string>German</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="0">
-                      <widget class="QLabel" name="label_ui_language">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="text">
-                        <string>Graphical User Interface Language:</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="4">
-                      <widget class="QRadioButton" name="radio_ui_language_chinese_simplified">
-                       <property name="cursor">
-                        <cursorShape>PointingHandCursor</cursorShape>
-                       </property>
-                       <property name="text">
-                        <string>Chinese (simplified)</string>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </item>
-                  </layout>
-                 </widget>
+                <item row="4" column="0">
+                 <layout class="QHBoxLayout" name="horizontallayout_settings_apply">
+                  <item>
+                   <widget class="QPushButton" name="button_settings_apply">
+                    <property name="cursor">
+                     <cursorShape>PointingHandCursor</cursorShape>
+                    </property>
+                    <property name="text">
+                     <string>Apply  (needs restart)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="button_settings_reset">
+                    <property name="cursor">
+                     <cursorShape>PointingHandCursor</cursorShape>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QPushButton {
+    background-color: rgb(85, 0, 0)/* Green */
+    font: bold 14px;
+    min-width: 5em;
+    padding: 3px;
+    color: white;
+    border-radius: 10px;
+}
+
+QPushButton:hover {
+    background-color:  rgb(222, 0, 41)/* Lighter green */
+}
+
+QPushButton:pressed {
+    background-color: rgb(108, 0, 52) /* Dark green */
+}
+</string>
+                    </property>
+                    <property name="text">
+                     <string>Reset Porn Fetch to default settings</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
-                <item row="1" column="0">
+                <item row="2" column="0">
                  <widget class="QGroupBox" name="groupbox_videos">
                   <property name="title">
                    <string>Videos</string>
@@ -1949,7 +1916,7 @@
                   </layout>
                  </widget>
                 </item>
-                <item row="0" column="0">
+                <item row="1" column="0">
                  <layout class="QGridLayout" name="gridlayout_settings">
                   <item row="0" column="0">
                    <widget class="QGroupBox" name="groupbox_performance">
@@ -2175,47 +2142,87 @@
                  </layout>
                 </item>
                 <item row="3" column="0">
-                 <layout class="QHBoxLayout" name="horizontallayout_settings_apply">
-                  <item>
-                   <widget class="QPushButton" name="button_settings_apply">
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="text">
-                     <string>Apply  (needs restart)</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="button_settings_reset">
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton {
-    background-color: rgb(85, 0, 0)/* Green */
-    font: bold 14px;
-    min-width: 5em;
-    padding: 3px;
-    color: white;
-    border-radius: 10px;
-}
-
-QPushButton:hover {
-    background-color:  rgb(222, 0, 41)/* Lighter green */
-}
-
-QPushButton:pressed {
-    background-color: rgb(108, 0, 52) /* Dark green */
-}
-</string>
-                    </property>
-                    <property name="text">
-                     <string>Reset Porn Fetch to default settings</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
+                 <widget class="QGroupBox" name="goroupbox_gui">
+                  <property name="title">
+                   <string>Graphical User Interface</string>
+                  </property>
+                  <layout class="QGridLayout" name="gridLayout_12">
+                   <item row="0" column="0">
+                    <layout class="QGridLayout" name="gridlayout_gui_settings">
+                     <item row="0" column="2">
+                      <widget class="QRadioButton" name="radio_ui_language_english">
+                       <property name="cursor">
+                        <cursorShape>PointingHandCursor</cursorShape>
+                       </property>
+                       <property name="text">
+                        <string>English</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="1">
+                      <widget class="QRadioButton" name="radio_ui_language_system_default">
+                       <property name="cursor">
+                        <cursorShape>PointingHandCursor</cursorShape>
+                       </property>
+                       <property name="text">
+                        <string>System default</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="5">
+                      <widget class="QRadioButton" name="radio_ui_language_french">
+                       <property name="enabled">
+                        <bool>true</bool>
+                       </property>
+                       <property name="text">
+                        <string>French</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="3">
+                      <widget class="QRadioButton" name="radio_ui_language_german">
+                       <property name="cursor">
+                        <cursorShape>PointingHandCursor</cursorShape>
+                       </property>
+                       <property name="text">
+                        <string>German</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="label_ui_language">
+                       <property name="sizePolicy">
+                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                         <horstretch>0</horstretch>
+                         <verstretch>0</verstretch>
+                        </sizepolicy>
+                       </property>
+                       <property name="text">
+                        <string>Graphical User Interface Language:</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="4">
+                      <widget class="QRadioButton" name="radio_ui_language_chinese_simplified">
+                       <property name="cursor">
+                        <cursorShape>PointingHandCursor</cursorShape>
+                       </property>
+                       <property name="text">
+                        <string>Chinese (simplified)</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QPushButton" name="button_download_ffmpeg">
+                  <property name="text">
+                   <string>Download and Setup FFmpeg</string>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </widget>
@@ -2786,7 +2793,7 @@ QPushButton:pressed {
             <item row="0" column="0">
              <widget class="QStackedWidget" name="stackedWidget">
               <property name="currentIndex">
-               <number>0</number>
+               <number>1</number>
               </property>
               <widget class="QWidget" name="page_i_dont_know">
                <layout class="QGridLayout" name="gridLayout_3">
