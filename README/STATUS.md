@@ -22,3 +22,5 @@
 - [x] metadata and tags for CLI
 - [] Fixing the Android layout once again
 - [] Fixing the Windows performance (idk)
+- [] Fixing ffmpeg progress tracking
+- [] Profiling and testing performance between ffmpeg and high performance threading

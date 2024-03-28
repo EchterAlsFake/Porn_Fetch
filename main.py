@@ -383,7 +383,8 @@ class DownloadThread(QRunnable):
                 self.ffmpeg = True
 
             if isinstance(self.video, Video):  # Assuming 'Video' is the class for Pornhub
-                self.threading_mode = self.resolve_threading_mode(self.threading_mode)
+                self.threading_mode = resolve_threading_mode(workers=self.workers, timeout=
+                                                             self.timeout, mode=self.threading_mode, video=self.video)
                 video_source = "pornhub"
                 path = self.output_path
                 logger_debug("Starting the Download!")
