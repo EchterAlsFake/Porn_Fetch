@@ -1,5 +1,8 @@
 import pathlib
 import threading
+import time
+
+import phub.consts
 
 from src.backend.shared_functions import *
 from base_api.modules.download import *
@@ -22,6 +25,8 @@ class CLI:
         self.workers = None
         self.delay = None
         self.language = None
+        self.ffmpeg_features = True
+        self.ffmpeg_path = None
         while True:
             setup_config_file()
             self.conf = ConfigParser()
@@ -114,6 +119,19 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
         self.directory_system = True if self.conf.get("Video", "directory_system") == "1" else False
         self.result_limit = int(self.conf.get("Video", "search_limit"))
         self.threading_mode = self.conf.get("Performance", "threading_mode")
+
+        if os.path.isfile("ffmpeg"):
+            self.ffmpeg_path = "ffmpeg"
+            phub.consts.FFMPEG_EXECUTABLE = self.ffmpeg_path
+
+        elif os.path.isfile("ffmpeg.exe"):
+            self.ffmpeg_path = "ffmpeg.exe"
+            phub.consts.FFMPEG_EXECUTABLE = self.ffmpeg_path
+
+        else:
+            logger_error("FFMPEG wasn't found... Have you extracted it from the .zip file?")
+            logger_error("FFMPEG Features won't be available!")
+            self.ffmpeg_features = False
 
     def save_user_settings(self):
         languages = f"""{Fore.WHITE}
@@ -376,6 +394,18 @@ for example: 1,5,94,3{Fore.WHITE}
 
         finally:
             logger_debug(f"{return_color()}Finished downloading for: {video.title}")
+            if self.ffmpeg_features:
+                os.rename(f"{output_path}", f"{output_path}_.tmp")
+                cmd = [self.ffmpeg_path, "-i", f"{output_path}_.tmp", "-c", "copy", output_path, '-hide_banner',
+                       '-loglevel', 'error']
+                ff = FfmpegProgress(cmd)
+                for progress in ff.run_command_with_progress():
+                    print(f"\r\033[K[Converting: {progress}/100", end='', flush=True)
+
+                os.remove(f"{output_path}_.tmp")
+                write_tags(path=output_path, video=video)
+            else:
+                logger_debug("FFMPEG features disabled, writing tags and converting the video won't be available!")
 
     @staticmethod
     def credits():

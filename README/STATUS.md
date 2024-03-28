@@ -19,6 +19,6 @@
 - [x] Refactoring the project structure
 - [x] Rewriting the readme 
 - [x] Changing the way of ffmpeg downloading
+- [x] metadata and tags for CLI
 - [] Fixing the Android layout once again
 - [] Fixing the Windows performance (idk)
-- [] metadata and tags for CLI
