@@ -659,9 +659,11 @@ class FFMPEGDownload(QRunnable):
 
     def run(self):
         # Download the file
+        print(self.url)
         logger_debug("FFMPEG: [1/4] Starting the download")
         with requests.get(self.url, stream=True) as r:
             r.raise_for_status()
+            print(r.headers)
             total_length = int(r.headers.get('content-length'))
             self.signals.total_progress.emit(0, total_length)  # Initialize progress bar
             dl = 0
@@ -896,31 +898,49 @@ class Porn_Fetch(QWidget):
             SomeFunctions().logger_debug("No updates found...")
 
     def check_ffmpeg(self):
-        if not shutil.which("ffmpeg"):
-            if not os.path.isfile("ffmpeg") or not os.path.isfile("ffmpeg.exe"):
+        # Check if ffmpeg is available in the system PATH
+        global ffmpeg_path
+        ffmpeg_path = shutil.which("ffmpeg")
+
+        if ffmpeg_path is None:
+            # If ffmpeg is not in PATH, check the current directory for ffmpeg binaries
+            ffmpeg_binary = "ffmpeg.exe" if os.path.isfile("ffmpeg.exe") else "ffmpeg" if os.path.isfile(
+                "ffmpeg") else None
+
+            if ffmpeg_binary is None:
+                # If ffmpeg binaries are not found in the current directory, display warning and disable features
                 if self.conf.get("Performance", "ffmpeg_warning") == "true":
-                    ffmpeg_string = QCoreApplication.tr("""
-    FFmpeg isn't installed on your system... Some features won't be available:
-    
-    - The FFmpeg threading mode
-    - Converting videos into a valid .mp4 format
-    - Writing tags / metadata into the videos
-    
-    These features aren't necessary for Porn Fetch, but can be useful for some people.
-    
-    To automatically install ffmpeg, just head over to the settings and press the magical button, or install ffmpeg in your
-    local PATH (e.g, through your linux package manager, or through the Windows PATH)
-    
-    
-    This warning won't be shown again.
-    """, disambiguation="")
-                    SomeFunctions().ui_popup(ffmpeg_string)
+                    ffmpeg_warning_message = QCoreApplication.tr(
+                        """
+FFmpeg isn't installed on your system... Some features won't be available:
+
+- The FFmpeg threading mode
+- Converting videos into a valid .mp4 format
+- Writing tags / metadata into the videos
+
+These features aren't necessary for Porn Fetch, but can be useful for some people.
+
+To automatically install ffmpeg, just head over to the settings and press the magical button, or install ffmpeg in your
+local PATH (e.g, through your linux package manager, or through the Windows PATH)
+
+This warning won't be shown again.
+                        """, disambiguation="")
+                    SomeFunctions().ui_popup(ffmpeg_warning_message)
                     self.conf.set("Performance", "ffmpeg_warning", "false")
 
                 self.ui.radio_threading_mode_ffmpeg.setDisabled(True)
                 global ffmpeg_features
                 ffmpeg_features = False
                 logger_error("FFMPEG features have been disabled, because ffmpeg wasn't found on your system.")
+            else:
+                # If ffmpeg binary is found in the current directory, set it as the ffmpeg path
+                ffmpeg_path = os.path.abspath(ffmpeg_binary)
+        else:
+            # If ffmpeg is found in system PATH, use it directly
+            ffmpeg_path = shutil.which("ffmpeg")
+            consts.FFMPEG_EXECUTABLE = ffmpeg_path
+            bs_consts.FFMPEG_PATH = ffmpeg_path
+            logger_debug(f"FFMPEG: {ffmpeg_path}")
 
     def download_ffmpeg(self):
         if sys.platform == "linux":
@@ -1235,24 +1255,6 @@ class Porn_Fetch(QWidget):
         elif self.conf["Video"]["directory_system"] == "0":
             self.directory_system = False
             self.ui.radio_directory_system_no.setChecked(True)
-
-        global ffmpeg_path
-        if os.path.isfile("ffmpeg"):
-            ffmpeg_path = "ffmpeg"
-
-        elif os.path.isfile("ffmpeg.exe"):
-            ffmpeg_path = "ffmpeg.exe"
-
-        else:
-            SomeFunctions().logger_error("FFMPEG wasn't found... Have you extracted it from the .zip file?")
-            SomeFunctions().logger_error("FFMPEG Features won't be available!")
-
-            global ffmpeg_features
-            ffmpeg_features = False
-
-            self.ui.radio_threading_mode_ffmpeg.setChecked(False)
-            self.ui.radio_threading_mode_ffmpeg.setDisabled(True)
-            self.ui.radio_threading_mode_ffmpeg.setToolTip("FFMPEG is not installed, therefore this feature is NOT available.")
 
         self.ui.spinbox_maximal_timeout.setValue(int(self.timeout))
         self.ui.spinbox_maximal_workers.setValue(int(self.workers))
