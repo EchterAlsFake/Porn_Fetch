@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'form_desktop.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.6.1
+## Created by: Qt User Interface Compiler version 6.6.3
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -27,7 +27,7 @@ class Ui_Porn_Fetch_Widget(object):
         if not Porn_Fetch_Widget.objectName():
             Porn_Fetch_Widget.setObjectName(u"Porn_Fetch_Widget")
         Porn_Fetch_Widget.resize(1610, 772)
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Porn_Fetch_Widget.sizePolicy().hasHeightForWidth())
@@ -97,7 +97,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.verticallayout_sidebar.addWidget(self.button_switch_credits)
 
-        self.vertical_spacer_sidebar = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.vertical_spacer_sidebar = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticallayout_sidebar.addItem(self.vertical_spacer_sidebar)
 
@@ -112,7 +112,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridLayout_13.setContentsMargins(0, 0, 0, 0)
         self.scrollarea_status = QScrollArea(self.main_widget)
         self.scrollarea_status.setObjectName(u"scrollarea_status")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Maximum)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Maximum)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.scrollarea_status.sizePolicy().hasHeightForWidth())
@@ -127,7 +127,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridlayout_status.setObjectName(u"gridlayout_status")
         self.label_progress_pornhub = QLabel(self.scrollAreaWidgetContents_5)
         self.label_progress_pornhub.setObjectName(u"label_progress_pornhub")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
         sizePolicy2.setHeightForWidth(self.label_progress_pornhub.sizePolicy().hasHeightForWidth())
@@ -137,7 +137,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.progressbar_pornhub = QProgressBar(self.scrollAreaWidgetContents_5)
         self.progressbar_pornhub.setObjectName(u"progressbar_pornhub")
-        sizePolicy3 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Fixed)
         sizePolicy3.setHorizontalStretch(0)
         sizePolicy3.setVerticalStretch(0)
         sizePolicy3.setHeightForWidth(self.progressbar_pornhub.sizePolicy().hasHeightForWidth())
@@ -280,7 +280,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.horizontallayout_treewidget_settings.addWidget(self.checkbox_show_videos_reversed)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontallayout_treewidget_settings.addItem(self.horizontalSpacer)
 
@@ -292,7 +292,7 @@ class Ui_Porn_Fetch_Widget(object):
         __qtreewidgetitem.setText(0, u"Title");
         self.treeWidget.setHeaderItem(__qtreewidgetitem)
         self.treeWidget.setObjectName(u"treeWidget")
-        sizePolicy4 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
+        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
         sizePolicy4.setHorizontalStretch(0)
         sizePolicy4.setVerticalStretch(0)
         sizePolicy4.setHeightForWidth(self.treeWidget.sizePolicy().hasHeightForWidth())
@@ -313,7 +313,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.scrollarea_stacked_top = QScrollArea(self.widget)
         self.scrollarea_stacked_top.setObjectName(u"scrollarea_stacked_top")
-        sizePolicy5 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
+        sizePolicy5 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
         sizePolicy5.setHorizontalStretch(0)
         sizePolicy5.setVerticalStretch(0)
         sizePolicy5.setHeightForWidth(self.scrollarea_stacked_top.sizePolicy().hasHeightForWidth())
@@ -341,7 +341,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridlayout_downloading.setSizeConstraint(QLayout.SetMaximumSize)
         self.button_search = QPushButton(self.page_download)
         self.button_search.setObjectName(u"button_search")
-        sizePolicy6 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        sizePolicy6 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
         sizePolicy6.setHorizontalStretch(0)
         sizePolicy6.setVerticalStretch(0)
         sizePolicy6.setHeightForWidth(self.button_search.sizePolicy().hasHeightForWidth())
@@ -362,7 +362,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.label_file = QLabel(self.page_download)
         self.label_file.setObjectName(u"label_file")
-        sizePolicy7 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        sizePolicy7 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
         sizePolicy7.setHorizontalStretch(0)
         sizePolicy7.setVerticalStretch(0)
         sizePolicy7.setHeightForWidth(self.label_file.sizePolicy().hasHeightForWidth())
@@ -443,7 +443,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.horizontallayout_searching_websites.addWidget(self.radio_search_website_xnxx)
 
-        self.horizontal_spacer_searching = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontal_spacer_searching = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontallayout_searching_websites.addItem(self.horizontal_spacer_searching)
 
@@ -584,7 +584,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridlayout_login_box.addWidget(self.lineedit_password, 1, 1, 1, 3)
 
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridlayout_login_box.addItem(self.verticalSpacer, 4, 2, 1, 1)
 
@@ -655,7 +655,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_17.addWidget(self.progressbar_xnxx, 2, 1, 1, 1)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_17.addItem(self.verticalSpacer_2, 4, 1, 1, 1)
 
@@ -716,7 +716,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.lineedit_hqporner_category = QLineEdit(self.groupBox)
         self.lineedit_hqporner_category.setObjectName(u"lineedit_hqporner_category")
-        sizePolicy8 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        sizePolicy8 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         sizePolicy8.setHorizontalStretch(0)
         sizePolicy8.setVerticalStretch(4)
         sizePolicy8.setHeightForWidth(self.lineedit_hqporner_category.sizePolicy().hasHeightForWidth())
@@ -739,7 +739,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.button_hqporner_category_get_videos = QPushButton(self.groupBox)
         self.button_hqporner_category_get_videos.setObjectName(u"button_hqporner_category_get_videos")
-        sizePolicy9 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        sizePolicy9 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
         sizePolicy9.setHorizontalStretch(0)
         sizePolicy9.setVerticalStretch(2)
         sizePolicy9.setHeightForWidth(self.button_hqporner_category_get_videos.sizePolicy().hasHeightForWidth())
@@ -751,7 +751,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.button_get_random_videos = QPushButton(self.groupBox)
         self.button_get_random_videos.setObjectName(u"button_get_random_videos")
-        sizePolicy10 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        sizePolicy10 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         sizePolicy10.setHorizontalStretch(0)
         sizePolicy10.setVerticalStretch(0)
         sizePolicy10.setHeightForWidth(self.button_get_random_videos.sizePolicy().hasHeightForWidth())
@@ -1001,7 +1001,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridlayout_api_language.addWidget(self.radio_api_language_chinese, 2, 1, 1, 1)
 
-        self.horizontalspacer_api_language_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalspacer_api_language_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridlayout_api_language.addItem(self.horizontalspacer_api_language_3, 3, 4, 1, 1)
 
@@ -1011,7 +1011,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridlayout_api_language.addWidget(self.radio_api_language_french, 4, 0, 1, 1)
 
-        self.horizontalspacer_api_language_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalspacer_api_language_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridlayout_api_language.addItem(self.horizontalspacer_api_language_2, 2, 4, 1, 1)
 
@@ -1036,7 +1036,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridlayout_api_language.addWidget(self.radio_api_language_japanese, 3, 3, 1, 1)
 
-        self.horizontalspacer_api_language = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalspacer_api_language = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridlayout_api_language.addItem(self.horizontalspacer_api_language, 4, 4, 1, 1)
 
@@ -1576,7 +1576,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.girdlayout_pure_video_metadata.addWidget(self.label_video_pornstars, 6, 0, 1, 1)
 
-        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.girdlayout_pure_video_metadata.addItem(self.verticalSpacer_3, 9, 0, 1, 1)
 
