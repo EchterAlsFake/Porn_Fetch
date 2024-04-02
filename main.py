@@ -2111,7 +2111,7 @@ def main():
         locale = QLocale.system()
         # Get the full locale name (e.g., "zh_CN" for Simplified Chinese)
         language_code = locale.name()
-        print(language_code)
+        SomeFunctions().logger_debug(f"System Language: {language_code}")
     else:
         language_code = language
 
@@ -2119,16 +2119,16 @@ def main():
     path = f":/translations/translations/{language_code}.qm"
     translator = QTranslator(app)
     if translator.load(path):
-        logger_debug(f"Startup: [1/5] {language_code} translation loaded")
+        SomeFunctions().logger_debug(f"Startup: [1/5] {language_code} translation loaded")
 
     else:
         # Try loading a more general translation if specific one fails
         general_language_code = language_code.split('_')[0]
         path = f":/translations/translations/{general_language_code}.qm"
         if translator.load(path):
-            logger_debug(f"{general_language_code} translation loaded as fallback")
+            SomeFunctions().logger_debug(f"{general_language_code} translation loaded as fallback")
         else:
-            logger_debug(f"Failed to load {language_code} translation")
+            SomeFunctions().logger_debug(f"Failed to load {language_code} translation")
 
     app.installTranslator(translator)
 
