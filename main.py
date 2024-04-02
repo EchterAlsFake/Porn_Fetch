@@ -437,8 +437,8 @@ class DownloadThread(QRunnable):
 
                 # ... other video types ...
 
-                # Emit the completed signal when done
-                self.signals.completed.emit()
+            # Emit the completed signal when done
+            self.signals.completed.emit()
 
         finally:
             if ffmpeg_features:
