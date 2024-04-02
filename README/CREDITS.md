@@ -1,4 +1,4 @@
-# Porn Fetch V3.1
+# Porn Fetch V3.2
 
 Copyright (C) 2023-2024 Johannes Habel (EchterAlsFake)
 
