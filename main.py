@@ -928,6 +928,8 @@ This warning won't be shown again.
                         """, disambiguation="")
                     SomeFunctions().ui_popup(ffmpeg_warning_message)
                     self.conf.set("Performance", "ffmpeg_warning", "false")
+                    with open("config.ini", "w") as config_file:
+                        self.conf.write(config_file)
 
                 self.ui.radio_threading_mode_ffmpeg.setDisabled(True)
                 global ffmpeg_features
