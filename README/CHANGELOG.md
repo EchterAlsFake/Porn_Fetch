@@ -346,3 +346,65 @@ I tested it on Android 12 & 13 on two devices.
 
 # Android
 - [x] Fixed the threaded presets for Android (may or may not work...)
+
+
+# 3.2
+
+## New Features
+- Disabled limits in the settings e.g., the search limit
+- You can now apply your own values for the timeout, max workers, delay and other network settings
+- You can now export Video URLs from the tree widget directly into a file
+- You can now stop loading video objects by clicking the button
+- Porn Fetch is now able to install ffmpeg automatically for you. Go to the settings to do this.
+- Added Searching support for xnxx
+- Added Model support for xnxx
+- Porn Fetch will now automatically write some metadata to the files and convert the .ts files into a valid .mp4 header file.
+  (This requires FFmpeg. If it is not installed, it will be skipped.)
+
+## Bug Fixes
+- Fixed the Overflow Error
+- Fixed logger debug / error connections (only relevant for local development with Android)
+- Fixed several typo issues, e.g., #34
+- Fixed some PHUB errors related to #33 #30 #27 #12 #4
+
+
+## Other
+- Rewrite of the README
+- Rewrite of the CLI of Porn Fetch
+- A lot of code optimizations
+
+Like I said before, this is a stability update. The next update will focus explicitly on Windows and Android performance
+and layout design.
+
+# ANDROID USERS!
+This release does NOT contain an asset for Android. I am currently not able to compile Porn Fetch for Android, because Qt
+just has released Qt 6.6.3 and messed up some stuff again. When I open my .apk I get an error: "Invalid ID 0x00000000"
+I am currently not able to fix this. Please use the .apk from [Version 3.1](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.1)
+
+> [!NOTE] 
+> Android is very unstable in general. It's very experimental and I am trying to optimize and fix stuff, but it's not 
+> very easy when there's no one that helps you or has made a guide how to do it :) 
+
+#### As always, thanks for your patience and have fun with this release :)
+
+### Downloads:
+
+- GUI: The GUI is the graphical user interface of Porn Fetch. (You probably want this)
+- CLI: The CLI is a terminal version of Porn Fetch for experienced users
+- x64: This is for 64bit systems. (You probably want this if your PC isn't a toaster)
+- x32: If your PC is a toaster, pick this.
+
+
+:)
+
+
+
+
+
+
+
+
+
+
+
+
