@@ -1,3 +1,30 @@
 # 3.3
 - [] Fixing the Android layout once again
 - [] Fixing the Windows performance (idk)
+- [] Compiling for all android architectures
+- [] Making functions and the application in general more robust
+- [] Testing internet connection for SSL errors or firewall blockings
+- [] Trying another approach for Windows downloading, because threading seems to not really work on Windoof
+- [] Changing the Layout on Android, so that the progressbars become an extra widget, which would lead to more
+  space being available
+- [] Adding model support for xvideos
+- [] Rewriting the file implementation to be less painful and allow more kind of sortings
+- [] Adding Search query support for files
+- [] Support for writing the thumbnails as a cover for the .mp4 files into the metadata tags
+- [] Supporting (OPTIONAL) discord rich presence
+- [] Fixing the qlineedits when used with tabbing
+- [] Reworking the stylesheets to have a better contrast
+- [] Supporting light mode :rofl:
+- [] Supporting more video formats. Now where ffmpeg is fully integrated, why not adding this lol
+- [] Improving terminal debug messages
+- [] Improving the CLI debug messages, so that progress is reported more clearly
+- [] Adding license information to all libraries in credits
+- [] Adding support for the custom delay in the other API libraries (eaf_base_api)
+- [] A better way of checking if a file was already downloaded (like really verifying if actual content is in the file)
+- [] Updating german translations
+- [] Fixing the tree widget to be less ugly (for real, I hate it myself)
+- [] Fixing all the build scripts
+- [] Switching to Python 3.12
+- [] Switching to Qt 6.7
+- [] Make the code clearer, so that people who read the code for the first time actually understand what's happening :D
+- [] Making contributions easier, by clearly saying what to do, how to do it and what to watch out for
