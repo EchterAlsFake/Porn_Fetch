@@ -1108,6 +1108,7 @@ This warning won't be shown again.
 
     def switch_to_supported_websites(self):
         self.ui.stacked_widget_main.setCurrentIndex(4)
+        self.ui.stackedWidget.setCurrentIndex(0)
 
     def switch_to_all_progress_bars(self):
         self.ui.stacked_widget_top.setCurrentIndex(2)
