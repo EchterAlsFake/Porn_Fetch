@@ -11,6 +11,7 @@ import tarfile
 import src.frontend.resources
 
 from threading import Event
+from pypresence import Presence, exceptions
 from requests.exceptions import SSLError
 from pathlib import Path
 from hqporner_api.api import Sort as hq_Sort
@@ -54,6 +55,8 @@ __version__ = "3.2"
 __build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 __next_release__ = "3.3"
+discord_id = "1224629014032023563"  # Used for rich presence
+discord_image = "logo_transparent"
 total_segments = 0
 downloaded_segments = 0
 last_index = 0
@@ -211,6 +214,29 @@ class CheckUpdates(QRunnable):
 
         else:
             self.signals.result.emit(False)
+
+
+class CheckInternet(QRunnable):
+    def __init__(self):
+        super(CheckInternet, self).__init__()
+        self.signals = UpdateSignals()
+
+    def run(self):
+        urls = ["https://www.pornhub.com", "https://www.eporner.com", "https://www.hqporner.com", "https://www.xnxx.com",
+                "https://www.xvideos.com"]
+
+        try:
+            for url in urls:
+                if not requests.get(url).status_code == 200:
+                    self.signals.result.emit(False)
+                    return
+
+        except (requests.exceptions.SSLError, requests.exceptions.ConnectionError, ConnectionResetError,
+                ConnectionError, requests.exceptions.HTTPError):
+            self.signals.result.emit(False)
+
+        else:
+            self.signals.result.emit(True)
 
 
 class AddToTreeWidget(QRunnable):
@@ -469,7 +495,7 @@ class DownloadThread(QRunnable):
                     self.signals.ffmpeg_progress.emit(round(progress), 100)
 
                 os.remove(f"{self.output_path}_.tmp")
-                write_tags(path=self.output_path, video=self.video)
+                write_tags(path=self.output_path, video=self.video, ffmpeg_path=ffmpeg_path)
             else:
                 SomeFunctions().logger_debug("FFMPEG features disabled, writing tags and converting the video won't be available!")
 
@@ -734,6 +760,23 @@ class FFMPEGDownload(QRunnable):
         self.signals.finished.emit()
 
 
+class Discord(QRunnable):
+    def __init__(self):
+        super(Discord, self).__init__()
+
+    def run(self):
+        try:
+            while True:
+                presence = Presence(discord_id)
+                presence.connect()
+                presence.update(details=f"Porn Fetch (v{__version__})", large_image=discord_image, buttons=
+                [{"label": "Visit Project", "url": "https://github.com/EchterAlsFake/Porn_Fetch"}])
+                time.sleep(10)
+
+        except Exception:
+            logger_error("An error occured in discord rich presence. You can safely ignore this...")
+
+
 class Porn_Fetch(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -777,7 +820,9 @@ class Porn_Fetch(QWidget):
         SomeFunctions().logger_debug("Startup: [4/5] Loaded the user settings")
         self.switch_to_home()
         self.check_for_updates()
+        self.check_internet()
         self.check_ffmpeg()
+        self.discord()
         SomeFunctions().logger_debug("Startup: [5/5] ✔")
 
         if __build__ == "android":
@@ -813,6 +858,7 @@ class Porn_Fetch(QWidget):
             self.ui.button_result_limit_help: "faq.svg",
             self.ui.button_timeout_maximal_retries_help: "faq.svg",
             self.ui.button_help_file: "faq.svg",
+            self.ui.discord_rich_presence_help: "faq.svg",
         }
         for button, icon_name in icons.items():
             button.setIcon(QIcon(f":/images/graphics/{icon_name}"))
@@ -921,6 +967,22 @@ class Porn_Fetch(QWidget):
         else:
             SomeFunctions().logger_debug("No updates found...")
 
+    def check_internet(self):
+        self.internet_thread = CheckInternet()
+        self.internet_thread.signals.result.connect(self.check_internet_result)
+        self.threadpool.start(self.internet_thread)
+
+    @classmethod
+    def check_internet_result(cls, value):
+        if value:
+            logger_debug("All Internet connection tests passed: ✔")
+
+        else:
+            logger_error("""
+Couldn't access one of the supported websites, make sure you have a stable internet connection and you are outside of 
+a firewall. If you are at a public place or using your universities WiFi, your IT-Administrator may have forbidden 
+access to specific sites. In this case you can use a VPN / Proxy.""")
+
     def check_ffmpeg(self):
         # Check if ffmpeg is available in the system PATH
         global ffmpeg_path
@@ -986,6 +1048,22 @@ This warning won't be shown again.
     @classmethod
     def ffmpeg_finished(cls):
         SomeFunctions().ui_popup(QCoreApplication.tr("FFmpeg has been installed. Please restart Porn Fetch :)"))
+
+    def discord(self):
+        """
+        I don't force anyone to use this. It's disabled by default :)
+        """
+
+        if self.conf["UI"]["discord"] == "true":
+            self.ui.checkbox_discord.setChecked(True)
+            logger_debug("Discord Rich Presence enabled, connecting...")
+            self.discord_thread = Discord()
+            self.threadpool.start(self.discord_thread)
+            logger_debug("Started Discord thread")
+
+        else:
+            self.ui.checkbox_discord.setChecked(False)
+            logger_debug("Discord Rich Presence: Disabled")
 
     def button_groups(self):
         """
@@ -1152,6 +1230,7 @@ This warning won't be shown again.
         self.ui.button_result_limit_help.clicked.connect(self.result_limit_help)
         self.ui.button_help_file.clicked.connect(self.open_file_help)
         self.ui.button_timeout_maximal_retries_help.clicked.connect(self.max_retries_help)
+        self.ui.discord_rich_presence_help.clicked.connect(self.discord_rich_presence_help)
 
         # Settings
         self.ui.button_settings_apply.clicked.connect(self.save_user_settings)
@@ -1339,6 +1418,7 @@ This warning won't be shown again.
         elif self.ui.radio_ui_language_system_default.isChecked():
             self.conf.set("UI", "language", "system")
 
+        self.conf.set("UI", "discord", "true") if self.ui.checkbox_discord.isChecked() else "false"
         self.conf.set("Performance", "timeout", str(self.ui.spinbox_maximal_timeout.value()))
         self.conf.set("Performance", "workers", str(self.ui.spinbox_maximal_workers.value()))
         self.conf.set("Video", "delay", str(self.ui.spinbox_pornhub_delay.value()))
@@ -1596,6 +1676,15 @@ model#https://de.pornhub.com/pornstar/nancy-a
         text = QCoreApplication.tr("""
 The maximal retries defines how much attempts will be used for a network request. For example if an API calls
 a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
+""", None)
+        SomeFunctions().ui_popup(text)
+
+    @classmethod
+    def discord_rich_presence_help(cls):
+        text = QCoreApplication.tr("""
+Discord Rich Presence will show in your discord profile, that you are currently running Porn Fetch. I don't force 
+anyone to use it, as it is maybe a bit weird if your friends or some other people would see this, but it's useful for 
+advertising my project. It's disabled by default, but if you want, you can turn it on :)
 """, None)
         SomeFunctions().ui_popup(text)
 

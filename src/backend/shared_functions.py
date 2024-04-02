@@ -6,6 +6,7 @@ If you know what you do, you can change a few things here :)
 import os
 import re
 
+import requests
 from mutagen.mp4 import MP4
 from phub import Client, errors, Video
 from phub.modules import download as download
@@ -28,10 +29,10 @@ as they are indeed needed for the main applications!
 """
 
 sections = ["Performance", "License", "Video", "UI"]
-options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries"]
+options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries", "ffmpeg_warning"]
 options_video = ["quality", "language", "output_path", "directory_system", "search_limit", "delay"]
 options_license = ["accepted"]
-options_ui = ["language"]
+options_ui = ["language", "discord"]
 
 pornhub_pattern = re.compile(r'(.*?)pornhub(.*)') # can also be .org
 hqporner_pattern = re.compile(r'(.*?)hqporner.com(.*)')
@@ -77,6 +78,7 @@ delay = 0
 
 [UI]
 language = system
+discord = false
 """
 
 
@@ -226,7 +228,7 @@ def get_element_safe(list, index):
         return ""
 
 
-def write_tags(path, video):
+def write_tags(path, video, ffmpeg_path):
     title = video.title
     comment = "Downloaded with Porn Fetch (GPLv3)"
     genre = "Porn"
