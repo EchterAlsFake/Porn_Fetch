@@ -53,6 +53,7 @@ __license__ = "GPL 3"
 __version__ = "3.2"
 __build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
+__next_release__ = "3.3"
 total_segments = 0
 downloaded_segments = 0
 last_index = 0
@@ -192,6 +193,24 @@ class License(QWidget):
         logger_debug("Startup: [2/5] License accepted")
         self.main_widget = Porn_Fetch()
         self.main_widget.show()
+
+
+class UpdateSignals(QObject):
+    result = Signal(bool)
+
+
+class CheckUpdates(QRunnable):
+    def __init__(self):
+        super(CheckUpdates, self).__init__()
+        self.signals = UpdateSignals()
+
+    def run(self):
+        url = f"https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/{__next_release__}"
+        if requests.get(url).status_code == 200:
+            self.signals.result.emit(True)
+
+        else:
+            self.signals.result.emit(False)
 
 
 class AddToTreeWidget(QRunnable):
@@ -886,14 +905,18 @@ class Porn_Fetch(QWidget):
         self.get_video_thumbnail_language_string = QCoreApplication.tr("Video thumbnail saved in current directory",
                                                                        disambiguation=None)
 
+    def check_for_updates(self):
+        self.update_thread = CheckUpdates()
+        self.update_thread.signals.result.connect(self.check_for_updates_result)
+        self.threadpool.start(self.update_thread)
+
     @classmethod
-    def check_for_updates(cls):
-        if requests.get("https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.3").status_code == 200:
-            SomeFunctions().logger_debug("Next release v3.3 found!")
-            SomeFunctions().ui_popup(QCoreApplication.tr("Information: A new version of Porn Fetch (v3.3) is out. "
-                                                         "I recommend you to update Porn Fetch. Go to: "
-                                                         "https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.3",
-                                                         None))
+    def check_for_updates_result(cls, value):
+        if value:
+            SomeFunctions().logger_debug(f"Next release v{__next_release__} found!")
+            SomeFunctions().ui_popup(QCoreApplication.tr(f"""
+            Information: A new version of Porn Fetch (v{__next_release__}) is out. I recommend you to update Porn Fetch. 
+            Go to: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/ {__next_release__}""", None))
 
         else:
             SomeFunctions().logger_debug("No updates found...")
