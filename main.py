@@ -364,6 +364,7 @@ class DownloadThread(QRunnable):
 
     def update_ffmpeg_progress(self, pos, total):
         """Update progress for ffmpeg downloads."""
+        print(f"\r\033[KProgress: [{pos} / 100]", end='', flush=True)  # I don't know why, but this fixes the progress.
         video_title = self.video.title
         self.video_progress[
             video_title] = pos / total * 100  # video title as video id, to keep track which video has how many progress done
@@ -659,11 +660,10 @@ class FFMPEGDownload(QRunnable):
 
     def run(self):
         # Download the file
-        print(self.url)
+        SomeFunctions().logger_debug(f"Downloading: {self.url}")
         logger_debug("FFMPEG: [1/4] Starting the download")
         with requests.get(self.url, stream=True) as r:
             r.raise_for_status()
-            print(r.headers)
             total_length = int(r.headers.get('content-length'))
             self.signals.total_progress.emit(0, total_length)  # Initialize progress bar
             dl = 0
@@ -712,6 +712,7 @@ class FFMPEGDownload(QRunnable):
             shutil.rmtree("ffmpeg-6.1.1-essentials_build")
 
         logger_debug("FFMPEG: [4/4] Cleaned Up")
+        self.signals.finished.emit()
 
 
 class Porn_Fetch(QWidget):
@@ -954,7 +955,12 @@ This warning won't be shown again.
                 self.downloader = FFMPEGDownload(url=url_windows, extract_path=".", mode="windows")
 
         self.downloader.signals.total_progress.connect(self.update_total_progressbar)
+        self.downloader.signals.finished.connect(self.ffmpeg_finished)
         self.threadpool.start(self.downloader)
+
+    @classmethod
+    def ffmpeg_finished(cls):
+        SomeFunctions().ui_popup(QCoreApplication.tr("FFmpeg has been installed. Please restart Porn Fetch :)"))
 
     def button_groups(self):
         """
