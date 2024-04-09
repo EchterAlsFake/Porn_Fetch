@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'form_desktop.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.6.1
+## Created by: Qt User Interface Compiler version 6.6.3
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -26,8 +26,8 @@ class Ui_Porn_Fetch_Widget(object):
     def setupUi(self, Porn_Fetch_Widget):
         if not Porn_Fetch_Widget.objectName():
             Porn_Fetch_Widget.setObjectName(u"Porn_Fetch_Widget")
-        Porn_Fetch_Widget.resize(1610, 772)
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        Porn_Fetch_Widget.resize(1275, 772)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Porn_Fetch_Widget.sizePolicy().hasHeightForWidth())
@@ -79,15 +79,6 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.verticallayout_sidebar.addWidget(self.button_switch_settings)
 
-        self.button_switch_metadata = QPushButton(Porn_Fetch_Widget)
-        self.button_switch_metadata.setObjectName(u"button_switch_metadata")
-        self.button_switch_metadata.setMinimumSize(QSize(50, 50))
-        self.button_switch_metadata.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_switch_metadata.setStyleSheet(u"border: none;")
-        self.button_switch_metadata.setIconSize(QSize(32, 32))
-
-        self.verticallayout_sidebar.addWidget(self.button_switch_metadata)
-
         self.button_switch_credits = QPushButton(Porn_Fetch_Widget)
         self.button_switch_credits.setObjectName(u"button_switch_credits")
         self.button_switch_credits.setMinimumSize(QSize(50, 50))
@@ -97,7 +88,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.verticallayout_sidebar.addWidget(self.button_switch_credits)
 
-        self.vertical_spacer_sidebar = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.vertical_spacer_sidebar = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticallayout_sidebar.addItem(self.vertical_spacer_sidebar)
 
@@ -112,7 +103,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridLayout_13.setContentsMargins(0, 0, 0, 0)
         self.scrollarea_status = QScrollArea(self.main_widget)
         self.scrollarea_status.setObjectName(u"scrollarea_status")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Maximum)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Maximum)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.scrollarea_status.sizePolicy().hasHeightForWidth())
@@ -120,14 +111,14 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_status.setWidgetResizable(True)
         self.scrollAreaWidgetContents_5 = QWidget()
         self.scrollAreaWidgetContents_5.setObjectName(u"scrollAreaWidgetContents_5")
-        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 1536, 151))
+        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 1201, 156))
         self.gridLayout_33 = QGridLayout(self.scrollAreaWidgetContents_5)
         self.gridLayout_33.setObjectName(u"gridLayout_33")
         self.gridlayout_status = QGridLayout()
         self.gridlayout_status.setObjectName(u"gridlayout_status")
         self.label_progress_pornhub = QLabel(self.scrollAreaWidgetContents_5)
         self.label_progress_pornhub.setObjectName(u"label_progress_pornhub")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
         sizePolicy2.setHeightForWidth(self.label_progress_pornhub.sizePolicy().hasHeightForWidth())
@@ -137,7 +128,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.progressbar_pornhub = QProgressBar(self.scrollAreaWidgetContents_5)
         self.progressbar_pornhub.setObjectName(u"progressbar_pornhub")
-        sizePolicy3 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Fixed)
         sizePolicy3.setHorizontalStretch(0)
         sizePolicy3.setVerticalStretch(0)
         sizePolicy3.setHeightForWidth(self.progressbar_pornhub.sizePolicy().hasHeightForWidth())
@@ -206,7 +197,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_treewidget.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 709, 280))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 1181, 308))
         self.gridLayout_4 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.horizontallayout_treewidget_buttons = QHBoxLayout()
@@ -280,7 +271,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.horizontallayout_treewidget_settings.addWidget(self.checkbox_show_videos_reversed)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontallayout_treewidget_settings.addItem(self.horizontalSpacer)
 
@@ -292,7 +283,7 @@ class Ui_Porn_Fetch_Widget(object):
         __qtreewidgetitem.setText(0, u"Title");
         self.treeWidget.setHeaderItem(__qtreewidgetitem)
         self.treeWidget.setObjectName(u"treeWidget")
-        sizePolicy4 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
+        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
         sizePolicy4.setHorizontalStretch(0)
         sizePolicy4.setVerticalStretch(0)
         sizePolicy4.setHeightForWidth(self.treeWidget.sizePolicy().hasHeightForWidth())
@@ -313,7 +304,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.scrollarea_stacked_top = QScrollArea(self.widget)
         self.scrollarea_stacked_top.setObjectName(u"scrollarea_stacked_top")
-        sizePolicy5 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
+        sizePolicy5 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
         sizePolicy5.setHorizontalStretch(0)
         sizePolicy5.setVerticalStretch(0)
         sizePolicy5.setHeightForWidth(self.scrollarea_stacked_top.sizePolicy().hasHeightForWidth())
@@ -322,7 +313,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_stacked_top.setWidgetResizable(True)
         self.scrollAreaWidgetContents_7 = QWidget()
         self.scrollAreaWidgetContents_7.setObjectName(u"scrollAreaWidgetContents_7")
-        self.scrollAreaWidgetContents_7.setGeometry(QRect(0, 0, 618, 118))
+        self.scrollAreaWidgetContents_7.setGeometry(QRect(0, 0, 1183, 256))
         self.gridLayout_14 = QGridLayout(self.scrollAreaWidgetContents_7)
         self.gridLayout_14.setObjectName(u"gridLayout_14")
         self.stacked_widget_top = QStackedWidget(self.scrollAreaWidgetContents_7)
@@ -341,7 +332,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridlayout_downloading.setSizeConstraint(QLayout.SetMaximumSize)
         self.button_search = QPushButton(self.page_download)
         self.button_search.setObjectName(u"button_search")
-        sizePolicy6 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        sizePolicy6 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
         sizePolicy6.setHorizontalStretch(0)
         sizePolicy6.setVerticalStretch(0)
         sizePolicy6.setHeightForWidth(self.button_search.sizePolicy().hasHeightForWidth())
@@ -362,7 +353,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.label_file = QLabel(self.page_download)
         self.label_file.setObjectName(u"label_file")
-        sizePolicy7 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        sizePolicy7 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
         sizePolicy7.setHorizontalStretch(0)
         sizePolicy7.setVerticalStretch(0)
         sizePolicy7.setHeightForWidth(self.label_file.sizePolicy().hasHeightForWidth())
@@ -443,7 +434,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.horizontallayout_searching_websites.addWidget(self.radio_search_website_xnxx)
 
-        self.horizontal_spacer_searching = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontal_spacer_searching = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontallayout_searching_websites.addItem(self.horizontal_spacer_searching)
 
@@ -584,7 +575,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridlayout_login_box.addWidget(self.lineedit_password, 1, 1, 1, 3)
 
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridlayout_login_box.addItem(self.verticalSpacer, 4, 2, 1, 1)
 
@@ -601,7 +592,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 383, 136))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1145, 218))
         self.gridLayout_18 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_18.setObjectName(u"gridLayout_18")
         self.gridLayout_17 = QGridLayout()
@@ -655,7 +646,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_17.addWidget(self.progressbar_xnxx, 2, 1, 1, 1)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout_17.addItem(self.verticalSpacer_2, 4, 1, 1, 1)
 
@@ -716,7 +707,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.lineedit_hqporner_category = QLineEdit(self.groupBox)
         self.lineedit_hqporner_category.setObjectName(u"lineedit_hqporner_category")
-        sizePolicy8 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        sizePolicy8 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         sizePolicy8.setHorizontalStretch(0)
         sizePolicy8.setVerticalStretch(4)
         sizePolicy8.setHeightForWidth(self.lineedit_hqporner_category.sizePolicy().hasHeightForWidth())
@@ -739,7 +730,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.button_hqporner_category_get_videos = QPushButton(self.groupBox)
         self.button_hqporner_category_get_videos.setObjectName(u"button_hqporner_category_get_videos")
-        sizePolicy9 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        sizePolicy9 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
         sizePolicy9.setHorizontalStretch(0)
         sizePolicy9.setVerticalStretch(2)
         sizePolicy9.setHeightForWidth(self.button_hqporner_category_get_videos.sizePolicy().hasHeightForWidth())
@@ -751,7 +742,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.button_get_random_videos = QPushButton(self.groupBox)
         self.button_get_random_videos.setObjectName(u"button_get_random_videos")
-        sizePolicy10 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        sizePolicy10 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         sizePolicy10.setHorizontalStretch(0)
         sizePolicy10.setVerticalStretch(0)
         sizePolicy10.setHeightForWidth(self.button_get_random_videos.sizePolicy().hasHeightForWidth())
@@ -850,7 +841,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_settings.setWidgetResizable(True)
         self.scrollAreaWidgetContents_6 = QWidget()
         self.scrollAreaWidgetContents_6.setObjectName(u"scrollAreaWidgetContents_6")
-        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, -68, 1504, 678))
+        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, -88, 1166, 688))
         self.gridLayout_19 = QGridLayout(self.scrollAreaWidgetContents_6)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.button_download_ffmpeg = QPushButton(self.scrollAreaWidgetContents_6)
@@ -1135,7 +1126,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridlayout_api_language.addWidget(self.radio_api_language_chinese, 2, 1, 1, 1)
 
-        self.horizontalspacer_api_language_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalspacer_api_language_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridlayout_api_language.addItem(self.horizontalspacer_api_language_3, 3, 4, 1, 1)
 
@@ -1145,7 +1136,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridlayout_api_language.addWidget(self.radio_api_language_french, 4, 0, 1, 1)
 
-        self.horizontalspacer_api_language_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalspacer_api_language_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridlayout_api_language.addItem(self.horizontalspacer_api_language_2, 2, 4, 1, 1)
 
@@ -1170,7 +1161,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridlayout_api_language.addWidget(self.radio_api_language_japanese, 3, 3, 1, 1)
 
-        self.horizontalspacer_api_language = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalspacer_api_language = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridlayout_api_language.addItem(self.horizontalspacer_api_language, 4, 4, 1, 1)
 
@@ -1218,14 +1209,38 @@ class Ui_Porn_Fetch_Widget(object):
         self.goroupbox_gui.setObjectName(u"goroupbox_gui")
         self.gridLayout_12 = QGridLayout(self.goroupbox_gui)
         self.gridLayout_12.setObjectName(u"gridLayout_12")
+        self.horizontalLayout_5 = QHBoxLayout()
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.label_discord = QLabel(self.goroupbox_gui)
+        self.label_discord.setObjectName(u"label_discord")
+
+        self.horizontalLayout_5.addWidget(self.label_discord)
+
+        self.radio_discord_yes = QRadioButton(self.goroupbox_gui)
+        self.radio_discord_yes.setObjectName(u"radio_discord_yes")
+
+        self.horizontalLayout_5.addWidget(self.radio_discord_yes)
+
+        self.radio_discord_no = QRadioButton(self.goroupbox_gui)
+        self.radio_discord_no.setObjectName(u"radio_discord_no")
+
+        self.horizontalLayout_5.addWidget(self.radio_discord_no)
+
+        self.discord_rich_presence_help = QPushButton(self.goroupbox_gui)
+        self.discord_rich_presence_help.setObjectName(u"discord_rich_presence_help")
+
+        self.horizontalLayout_5.addWidget(self.discord_rich_presence_help)
+
+
+        self.gridLayout_12.addLayout(self.horizontalLayout_5, 1, 0, 1, 1)
+
         self.gridlayout_gui_settings = QGridLayout()
         self.gridlayout_gui_settings.setObjectName(u"gridlayout_gui_settings")
-        self.label_ui_language = QLabel(self.goroupbox_gui)
-        self.label_ui_language.setObjectName(u"label_ui_language")
-        sizePolicy2.setHeightForWidth(self.label_ui_language.sizePolicy().hasHeightForWidth())
-        self.label_ui_language.setSizePolicy(sizePolicy2)
+        self.radio_ui_language_german = QRadioButton(self.goroupbox_gui)
+        self.radio_ui_language_german.setObjectName(u"radio_ui_language_german")
+        self.radio_ui_language_german.setCursor(QCursor(Qt.PointingHandCursor))
 
-        self.gridlayout_gui_settings.addWidget(self.label_ui_language, 1, 0, 1, 1)
+        self.gridlayout_gui_settings.addWidget(self.radio_ui_language_german, 1, 3, 1, 1)
 
         self.radio_ui_language_chinese_simplified = QRadioButton(self.goroupbox_gui)
         self.radio_ui_language_chinese_simplified.setObjectName(u"radio_ui_language_chinese_simplified")
@@ -1239,46 +1254,42 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridlayout_gui_settings.addWidget(self.radio_ui_language_english, 1, 2, 1, 1)
 
-        self.radio_ui_language_french = QRadioButton(self.goroupbox_gui)
-        self.radio_ui_language_french.setObjectName(u"radio_ui_language_french")
-        self.radio_ui_language_french.setEnabled(True)
-
-        self.gridlayout_gui_settings.addWidget(self.radio_ui_language_french, 1, 5, 1, 1)
-
-        self.radio_ui_language_german = QRadioButton(self.goroupbox_gui)
-        self.radio_ui_language_german.setObjectName(u"radio_ui_language_german")
-        self.radio_ui_language_german.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.gridlayout_gui_settings.addWidget(self.radio_ui_language_german, 1, 3, 1, 1)
-
         self.radio_ui_language_system_default = QRadioButton(self.goroupbox_gui)
         self.radio_ui_language_system_default.setObjectName(u"radio_ui_language_system_default")
         self.radio_ui_language_system_default.setCursor(QCursor(Qt.PointingHandCursor))
 
         self.gridlayout_gui_settings.addWidget(self.radio_ui_language_system_default, 1, 1, 1, 1)
 
+        self.label_ui_language = QLabel(self.goroupbox_gui)
+        self.label_ui_language.setObjectName(u"label_ui_language")
+        sizePolicy2.setHeightForWidth(self.label_ui_language.sizePolicy().hasHeightForWidth())
+        self.label_ui_language.setSizePolicy(sizePolicy2)
+
+        self.gridlayout_gui_settings.addWidget(self.label_ui_language, 1, 0, 1, 1)
+
+        self.radio_ui_language_french = QRadioButton(self.goroupbox_gui)
+        self.radio_ui_language_french.setObjectName(u"radio_ui_language_french")
+        self.radio_ui_language_french.setEnabled(True)
+
+        self.gridlayout_gui_settings.addWidget(self.radio_ui_language_french, 1, 5, 1, 1)
+
+        self.label_design = QLabel(self.goroupbox_gui)
+        self.label_design.setObjectName(u"label_design")
+
+        self.gridlayout_gui_settings.addWidget(self.label_design, 2, 0, 1, 1)
+
+        self.radio_design_dark_mode = QRadioButton(self.goroupbox_gui)
+        self.radio_design_dark_mode.setObjectName(u"radio_design_dark_mode")
+
+        self.gridlayout_gui_settings.addWidget(self.radio_design_dark_mode, 2, 1, 1, 1)
+
+        self.radio_design_white_mode = QRadioButton(self.goroupbox_gui)
+        self.radio_design_white_mode.setObjectName(u"radio_design_white_mode")
+
+        self.gridlayout_gui_settings.addWidget(self.radio_design_white_mode, 2, 2, 1, 1)
+
 
         self.gridLayout_12.addLayout(self.gridlayout_gui_settings, 0, 0, 1, 1)
-
-        self.horizontalLayout_5 = QHBoxLayout()
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.label_discord = QLabel(self.goroupbox_gui)
-        self.label_discord.setObjectName(u"label_discord")
-
-        self.horizontalLayout_5.addWidget(self.label_discord)
-
-        self.checkbox_discord = QCheckBox(self.goroupbox_gui)
-        self.checkbox_discord.setObjectName(u"checkbox_discord")
-
-        self.horizontalLayout_5.addWidget(self.checkbox_discord)
-
-        self.discord_rich_presence_help = QPushButton(self.goroupbox_gui)
-        self.discord_rich_presence_help.setObjectName(u"discord_rich_presence_help")
-
-        self.horizontalLayout_5.addWidget(self.discord_rich_presence_help)
-
-
-        self.gridLayout_12.addLayout(self.horizontalLayout_5, 1, 0, 1, 1)
 
 
         self.gridLayout_19.addWidget(self.goroupbox_gui, 3, 0, 1, 2)
@@ -1341,421 +1352,6 @@ class Ui_Porn_Fetch_Widget(object):
         self.page_metadata.setObjectName(u"page_metadata")
         self.gridLayout_32 = QGridLayout(self.page_metadata)
         self.gridLayout_32.setObjectName(u"gridLayout_32")
-        self.verticallayout_metadata = QVBoxLayout()
-        self.verticallayout_metadata.setObjectName(u"verticallayout_metadata")
-        self.scrollarea_metadata = QScrollArea(self.page_metadata)
-        self.scrollarea_metadata.setObjectName(u"scrollarea_metadata")
-        self.scrollarea_metadata.setWidgetResizable(True)
-        self.scrollAreaWidgetContents_4 = QWidget()
-        self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 232, 1012))
-        self.gridLayout_27 = QGridLayout(self.scrollAreaWidgetContents_4)
-        self.gridLayout_27.setObjectName(u"gridLayout_27")
-        self.gridlayout_metadata_ = QGridLayout()
-        self.gridlayout_metadata_.setObjectName(u"gridlayout_metadata_")
-        self.lineedit_metadata_video_url = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_metadata_video_url.setObjectName(u"lineedit_metadata_video_url")
-
-        self.gridlayout_metadata_.addWidget(self.lineedit_metadata_video_url, 0, 1, 1, 1)
-
-        self.lineedit_metadata_user_url = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_metadata_user_url.setObjectName(u"lineedit_metadata_user_url")
-
-        self.gridlayout_metadata_.addWidget(self.lineedit_metadata_user_url, 1, 1, 1, 1)
-
-        self.button_metadata_video_start = QPushButton(self.scrollAreaWidgetContents_4)
-        self.button_metadata_video_start.setObjectName(u"button_metadata_video_start")
-        self.button_metadata_video_start.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_metadata_video_start.setStyleSheet(u"")
-
-        self.gridlayout_metadata_.addWidget(self.button_metadata_video_start, 0, 2, 1, 1)
-
-        self.label_metadata_video_url = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_metadata_video_url.setObjectName(u"label_metadata_video_url")
-
-        self.gridlayout_metadata_.addWidget(self.label_metadata_video_url, 0, 0, 1, 1)
-
-        self.button_metadata_user_start = QPushButton(self.scrollAreaWidgetContents_4)
-        self.button_metadata_user_start.setObjectName(u"button_metadata_user_start")
-        self.button_metadata_user_start.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_metadata_user_start.setStyleSheet(u"")
-
-        self.gridlayout_metadata_.addWidget(self.button_metadata_user_start, 1, 2, 1, 1)
-
-        self.label_metadata_user_url = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_metadata_user_url.setObjectName(u"label_metadata_user_url")
-
-        self.gridlayout_metadata_.addWidget(self.label_metadata_user_url, 1, 0, 1, 1)
-
-        self.gridlayout_user_metadata = QGridLayout()
-        self.gridlayout_user_metadata.setObjectName(u"gridlayout_user_metadata")
-        self.lineedit_user_interests_hobbies = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_interests_hobbies.setObjectName(u"lineedit_user_interests_hobbies")
-        self.lineedit_user_interests_hobbies.setReadOnly(True)
-
-        self.gridlayout_user_metadata.addWidget(self.lineedit_user_interests_hobbies, 18, 1, 1, 1)
-
-        self.lineedit_user_birth_place = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_birth_place.setObjectName(u"lineedit_user_birth_place")
-        self.lineedit_user_birth_place.setReadOnly(True)
-
-        self.gridlayout_user_metadata.addWidget(self.lineedit_user_birth_place, 20, 1, 1, 1)
-
-        self.label_height = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_height.setObjectName(u"label_height")
-
-        self.gridlayout_user_metadata.addWidget(self.label_height, 7, 0, 1, 1)
-
-        self.label_birth_place = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_birth_place.setObjectName(u"label_birth_place")
-
-        self.gridlayout_user_metadata.addWidget(self.label_birth_place, 20, 0, 1, 1)
-
-        self.label_turn_ons = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_turn_ons.setObjectName(u"label_turn_ons")
-
-        self.gridlayout_user_metadata.addWidget(self.label_turn_ons, 5, 0, 1, 1)
-
-        self.label_interests_hobbies = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_interests_hobbies.setObjectName(u"label_interests_hobbies")
-
-        self.gridlayout_user_metadata.addWidget(self.label_interests_hobbies, 18, 0, 1, 1)
-
-        self.lineedit_user_video_views = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_video_views.setObjectName(u"lineedit_user_video_views")
-        self.lineedit_user_video_views.setReadOnly(True)
-
-        self.gridlayout_user_metadata.addWidget(self.lineedit_user_video_views, 10, 1, 1, 1)
-
-        self.label_piercings = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_piercings.setObjectName(u"label_piercings")
-
-        self.gridlayout_user_metadata.addWidget(self.label_piercings, 1, 0, 1, 1)
-
-        self.lineedit_user_tattoos = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_tattoos.setObjectName(u"lineedit_user_tattoos")
-        self.lineedit_user_tattoos.setReadOnly(True)
-
-        self.gridlayout_user_metadata.addWidget(self.lineedit_user_tattoos, 22, 1, 1, 1)
-
-        self.label_ethnicity = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_ethnicity.setObjectName(u"label_ethnicity")
-
-        self.gridlayout_user_metadata.addWidget(self.label_ethnicity, 14, 0, 1, 1)
-
-        self.lineedit_user_turn_ons = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_turn_ons.setObjectName(u"lineedit_user_turn_ons")
-        self.lineedit_user_turn_ons.setReadOnly(True)
-
-        self.gridlayout_user_metadata.addWidget(self.lineedit_user_turn_ons, 5, 1, 1, 1)
-
-        self.lineedit_user_fake_boobs = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_fake_boobs.setObjectName(u"lineedit_user_fake_boobs")
-        self.lineedit_user_fake_boobs.setReadOnly(True)
-
-        self.gridlayout_user_metadata.addWidget(self.lineedit_user_fake_boobs, 3, 1, 1, 1)
-
-        self.lineedit_user_profile_views = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_profile_views.setObjectName(u"lineedit_user_profile_views")
-        self.lineedit_user_profile_views.setReadOnly(True)
-
-        self.gridlayout_user_metadata.addWidget(self.lineedit_user_profile_views, 15, 1, 1, 1)
-
-        self.lineedit_user_gender = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_gender.setObjectName(u"lineedit_user_gender")
-        self.lineedit_user_gender.setReadOnly(True)
-
-        self.gridlayout_user_metadata.addWidget(self.lineedit_user_gender, 4, 1, 1, 1)
-
-        self.lineedit_user_ethnicity = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_ethnicity.setObjectName(u"lineedit_user_ethnicity")
-        self.lineedit_user_ethnicity.setReadOnly(True)
-
-        self.gridlayout_user_metadata.addWidget(self.lineedit_user_ethnicity, 14, 1, 1, 1)
-
-        self.lineedit_user_interested_in = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_interested_in.setObjectName(u"lineedit_user_interested_in")
-        self.lineedit_user_interested_in.setReadOnly(True)
-
-        self.gridlayout_user_metadata.addWidget(self.lineedit_user_interested_in, 2, 1, 1, 1)
-
-        self.lineedit_user_videos_watched = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_videos_watched.setObjectName(u"lineedit_user_videos_watched")
-        self.lineedit_user_videos_watched.setReadOnly(True)
-
-        self.gridlayout_user_metadata.addWidget(self.lineedit_user_videos_watched, 16, 1, 1, 1)
-
-        self.label_turn_offs = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_turn_offs.setObjectName(u"label_turn_offs")
-
-        self.gridlayout_user_metadata.addWidget(self.label_turn_offs, 8, 0, 1, 1)
-
-        self.label_videos_watched = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_videos_watched.setObjectName(u"label_videos_watched")
-
-        self.gridlayout_user_metadata.addWidget(self.label_videos_watched, 16, 0, 1, 1)
-
-        self.label_fake_boobs = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_fake_boobs.setObjectName(u"label_fake_boobs")
-
-        self.gridlayout_user_metadata.addWidget(self.label_fake_boobs, 3, 0, 1, 1)
-
-        self.label_interested_in = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_interested_in.setObjectName(u"label_interested_in")
-
-        self.gridlayout_user_metadata.addWidget(self.label_interested_in, 2, 0, 1, 1)
-
-        self.label_gender = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_gender.setObjectName(u"label_gender")
-
-        self.gridlayout_user_metadata.addWidget(self.label_gender, 4, 0, 1, 1)
-
-        self.gridlayout_vieo_metadata = QGridLayout()
-        self.gridlayout_vieo_metadata.setObjectName(u"gridlayout_vieo_metadata")
-        self.lineedit_user_name = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_name.setObjectName(u"lineedit_user_name")
-        self.lineedit_user_name.setReadOnly(True)
-
-        self.gridlayout_vieo_metadata.addWidget(self.lineedit_user_name, 1, 1, 1, 1)
-
-        self.label_user_type = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_user_type.setObjectName(u"label_user_type")
-
-        self.gridlayout_vieo_metadata.addWidget(self.label_user_type, 2, 0, 1, 1)
-
-        self.label_name = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_name.setObjectName(u"label_name")
-
-        self.gridlayout_vieo_metadata.addWidget(self.label_name, 1, 0, 1, 1)
-
-        self.lineedit_user_type = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_type.setObjectName(u"lineedit_user_type")
-        self.lineedit_user_type.setReadOnly(True)
-
-        self.gridlayout_vieo_metadata.addWidget(self.lineedit_user_type, 2, 1, 1, 1)
-
-        self.girdlayout_pure_video_metadata = QGridLayout()
-        self.girdlayout_pure_video_metadata.setObjectName(u"girdlayout_pure_video_metadata")
-        self.label_video_title = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_video_title.setObjectName(u"label_video_title")
-
-        self.girdlayout_pure_video_metadata.addWidget(self.label_video_title, 0, 0, 1, 1)
-
-        self.label_video_tags = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_video_tags.setObjectName(u"label_video_tags")
-
-        self.girdlayout_pure_video_metadata.addWidget(self.label_video_tags, 3, 0, 1, 1)
-
-        self.lineedit_video_title = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_video_title.setObjectName(u"lineedit_video_title")
-        self.lineedit_video_title.setReadOnly(True)
-
-        self.girdlayout_pure_video_metadata.addWidget(self.lineedit_video_title, 0, 1, 1, 1)
-
-        self.lineedit_video_views = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_video_views.setObjectName(u"lineedit_video_views")
-        self.lineedit_video_views.setReadOnly(True)
-
-        self.girdlayout_pure_video_metadata.addWidget(self.lineedit_video_views, 2, 1, 1, 1)
-
-        self.label_video_rating = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_video_rating.setObjectName(u"label_video_rating")
-
-        self.girdlayout_pure_video_metadata.addWidget(self.label_video_rating, 5, 0, 1, 1)
-
-        self.label_video_duration = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_video_duration.setObjectName(u"label_video_duration")
-
-        self.girdlayout_pure_video_metadata.addWidget(self.label_video_duration, 4, 0, 1, 1)
-
-        self.lineedit_video_tags = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_video_tags.setObjectName(u"lineedit_video_tags")
-        self.lineedit_video_tags.setReadOnly(True)
-
-        self.girdlayout_pure_video_metadata.addWidget(self.lineedit_video_tags, 3, 1, 1, 1)
-
-        self.label_video_views_2 = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_video_views_2.setObjectName(u"label_video_views_2")
-
-        self.girdlayout_pure_video_metadata.addWidget(self.label_video_views_2, 2, 0, 1, 1)
-
-        self.lineedit_video_hotspots = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_video_hotspots.setObjectName(u"lineedit_video_hotspots")
-        self.lineedit_video_hotspots.setReadOnly(True)
-
-        self.girdlayout_pure_video_metadata.addWidget(self.lineedit_video_hotspots, 1, 1, 1, 1)
-
-        self.lineedit_video_duration = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_video_duration.setObjectName(u"lineedit_video_duration")
-        self.lineedit_video_duration.setReadOnly(True)
-
-        self.girdlayout_pure_video_metadata.addWidget(self.lineedit_video_duration, 4, 1, 1, 1)
-
-        self.label_video_pornstars = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_video_pornstars.setObjectName(u"label_video_pornstars")
-
-        self.girdlayout_pure_video_metadata.addWidget(self.label_video_pornstars, 6, 0, 1, 1)
-
-        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.girdlayout_pure_video_metadata.addItem(self.verticalSpacer_3, 9, 0, 1, 1)
-
-        self.lineedit_video_rating = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_video_rating.setObjectName(u"lineedit_video_rating")
-        self.lineedit_video_rating.setReadOnly(True)
-
-        self.girdlayout_pure_video_metadata.addWidget(self.lineedit_video_rating, 5, 1, 1, 1)
-
-        self.label_video_hotspots = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_video_hotspots.setObjectName(u"label_video_hotspots")
-
-        self.girdlayout_pure_video_metadata.addWidget(self.label_video_hotspots, 1, 0, 1, 1)
-
-        self.lineedit_video_pornstars = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_video_pornstars.setObjectName(u"lineedit_video_pornstars")
-        self.lineedit_video_pornstars.setReadOnly(True)
-
-        self.girdlayout_pure_video_metadata.addWidget(self.lineedit_video_pornstars, 6, 1, 1, 1)
-
-        self.label_video_orientation = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_video_orientation.setObjectName(u"label_video_orientation")
-
-        self.girdlayout_pure_video_metadata.addWidget(self.label_video_orientation, 7, 0, 1, 1)
-
-        self.lineedit_video_orientation = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_video_orientation.setObjectName(u"lineedit_video_orientation")
-        self.lineedit_video_orientation.setReadOnly(True)
-
-        self.girdlayout_pure_video_metadata.addWidget(self.lineedit_video_orientation, 7, 1, 1, 1)
-
-
-        self.gridlayout_vieo_metadata.addLayout(self.girdlayout_pure_video_metadata, 6, 0, 1, 2)
-
-
-        self.gridlayout_user_metadata.addLayout(self.gridlayout_vieo_metadata, 23, 0, 1, 4)
-
-        self.label_widght = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_widght.setObjectName(u"label_widght")
-
-        self.gridlayout_user_metadata.addWidget(self.label_widght, 9, 0, 1, 1)
-
-        self.lineedit_user_relationship = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_relationship.setObjectName(u"lineedit_user_relationship")
-        self.lineedit_user_relationship.setReadOnly(True)
-
-        self.gridlayout_user_metadata.addWidget(self.lineedit_user_relationship, 0, 1, 1, 1)
-
-        self.label_relationship = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_relationship.setObjectName(u"label_relationship")
-
-        self.gridlayout_user_metadata.addWidget(self.label_relationship, 0, 0, 1, 1)
-
-        self.lineedit_user_piercings = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_piercings.setObjectName(u"lineedit_user_piercings")
-        self.lineedit_user_piercings.setReadOnly(True)
-
-        self.gridlayout_user_metadata.addWidget(self.lineedit_user_piercings, 1, 1, 1, 1)
-
-        self.lineedit_user_weight = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_weight.setObjectName(u"lineedit_user_weight")
-        self.lineedit_user_weight.setReadOnly(True)
-
-        self.gridlayout_user_metadata.addWidget(self.lineedit_user_weight, 9, 1, 1, 1)
-
-        self.lineedit_user_home_town = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_home_town.setObjectName(u"lineedit_user_home_town")
-        self.lineedit_user_home_town.setReadOnly(True)
-
-        self.gridlayout_user_metadata.addWidget(self.lineedit_user_home_town, 21, 1, 1, 1)
-
-        self.lineedit_user_city_country = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_city_country.setObjectName(u"lineedit_user_city_country")
-        self.lineedit_user_city_country.setReadOnly(True)
-
-        self.gridlayout_user_metadata.addWidget(self.lineedit_user_city_country, 19, 1, 1, 1)
-
-        self.lineedit_user_height = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_height.setObjectName(u"lineedit_user_height")
-        self.lineedit_user_height.setReadOnly(True)
-
-        self.gridlayout_user_metadata.addWidget(self.lineedit_user_height, 7, 1, 1, 1)
-
-        self.label_video_views = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_video_views.setObjectName(u"label_video_views")
-
-        self.gridlayout_user_metadata.addWidget(self.label_video_views, 10, 0, 1, 1)
-
-        self.lineedit_user_turn_offs = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_turn_offs.setObjectName(u"lineedit_user_turn_offs")
-        self.lineedit_user_turn_offs.setReadOnly(True)
-
-        self.gridlayout_user_metadata.addWidget(self.lineedit_user_turn_offs, 8, 1, 1, 1)
-
-        self.label_profile_views = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_profile_views.setObjectName(u"label_profile_views")
-
-        self.gridlayout_user_metadata.addWidget(self.label_profile_views, 15, 0, 1, 1)
-
-        self.label_city_country = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_city_country.setObjectName(u"label_city_country")
-
-        self.gridlayout_user_metadata.addWidget(self.label_city_country, 19, 0, 1, 1)
-
-        self.label_tattoos = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_tattoos.setObjectName(u"label_tattoos")
-
-        self.gridlayout_user_metadata.addWidget(self.label_tattoos, 22, 0, 1, 1)
-
-        self.label_home_town = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_home_town.setObjectName(u"label_home_town")
-
-        self.gridlayout_user_metadata.addWidget(self.label_home_town, 21, 0, 1, 1)
-
-        self.lineedit_user_hair_color = QLineEdit(self.scrollAreaWidgetContents_4)
-        self.lineedit_user_hair_color.setObjectName(u"lineedit_user_hair_color")
-        self.lineedit_user_hair_color.setReadOnly(True)
-
-        self.gridlayout_user_metadata.addWidget(self.lineedit_user_hair_color, 17, 1, 1, 1)
-
-        self.label_hair_color = QLabel(self.scrollAreaWidgetContents_4)
-        self.label_hair_color.setObjectName(u"label_hair_color")
-
-        self.gridlayout_user_metadata.addWidget(self.label_hair_color, 17, 0, 1, 1)
-
-
-        self.gridlayout_metadata_.addLayout(self.gridlayout_user_metadata, 5, 0, 1, 3)
-
-        self.button_user_get_bio = QPushButton(self.scrollAreaWidgetContents_4)
-        self.button_user_get_bio.setObjectName(u"button_user_get_bio")
-        self.button_user_get_bio.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_user_get_bio.setStyleSheet(u"")
-
-        self.gridlayout_metadata_.addWidget(self.button_user_get_bio, 2, 0, 1, 2)
-
-        self.button_user_download_avatar = QPushButton(self.scrollAreaWidgetContents_4)
-        self.button_user_download_avatar.setObjectName(u"button_user_download_avatar")
-        self.button_user_download_avatar.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_user_download_avatar.setStyleSheet(u"")
-
-        self.gridlayout_metadata_.addWidget(self.button_user_download_avatar, 4, 0, 1, 2)
-
-        self.button_video_thumbnail_download = QPushButton(self.scrollAreaWidgetContents_4)
-        self.button_video_thumbnail_download.setObjectName(u"button_video_thumbnail_download")
-        self.button_video_thumbnail_download.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_video_thumbnail_download.setStyleSheet(u"")
-
-        self.gridlayout_metadata_.addWidget(self.button_video_thumbnail_download, 3, 0, 1, 2)
-
-
-        self.gridLayout_27.addLayout(self.gridlayout_metadata_, 0, 0, 1, 1)
-
-        self.scrollarea_metadata.setWidget(self.scrollAreaWidgetContents_4)
-
-        self.verticallayout_metadata.addWidget(self.scrollarea_metadata)
-
-
-        self.gridLayout_32.addLayout(self.verticallayout_metadata, 0, 0, 1, 1)
-
         self.stacked_widget_main.addWidget(self.page_metadata)
         self.page_supported_websites = QWidget()
         self.page_supported_websites.setObjectName(u"page_supported_websites")
@@ -1812,7 +1408,6 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_switch_account.setText("")
         self.button_switch_tools.setText("")
         self.button_switch_settings.setText("")
-        self.button_switch_metadata.setText("")
         self.button_switch_credits.setText("")
         self.label_progress_pornhub.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"PornHub:", None))
         self.label_total_progress.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
@@ -1933,103 +1528,72 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_api_language_russian.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Russian", None))
         self.label_api_language.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"PornHub Language (affects video titles)", None))
         self.goroupbox_gui.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface", None))
-        self.label_ui_language.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface Language:", None))
+        self.label_discord.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Discord Rich Presence:", None))
+        self.radio_discord_yes.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
+        self.radio_discord_no.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
+        self.discord_rich_presence_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
+        self.radio_ui_language_german.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
         self.radio_ui_language_chinese_simplified.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Chinese (simplified)", None))
         self.radio_ui_language_english.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"English", None))
-        self.radio_ui_language_french.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))
-        self.radio_ui_language_german.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
         self.radio_ui_language_system_default.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"System default", None))
-        self.label_discord.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Discord Rich Presence:", None))
-        self.checkbox_discord.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
-        self.discord_rich_presence_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
+        self.label_ui_language.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface Language:", None))
+        self.radio_ui_language_french.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))
+        self.label_design.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Design:", None))
+        self.radio_design_dark_mode.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Dark Mode", None))
+        self.radio_design_white_mode.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"White Mode", None))
         self.button_settings_apply.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Apply  (needs restart)", None))
         self.button_settings_reset.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Reset Porn Fetch to default settings", None))
-        self.button_metadata_video_start.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
-        self.label_metadata_video_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Video URL:", None))
-        self.button_metadata_user_start.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Start", None))
-        self.label_metadata_user_url.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"User URL:", None))
-        self.label_height.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Height:", None))
-        self.label_birth_place.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Birth Place:", None))
-        self.label_turn_ons.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Turn Ons:", None))
-        self.label_interests_hobbies.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Interests / Hobbies:", None))
-        self.label_piercings.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Piercings:", None))
-        self.label_ethnicity.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Ethnicity:", None))
-        self.label_turn_offs.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Turn Offs:", None))
-        self.label_videos_watched.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Videos Watched:", None))
-        self.label_fake_boobs.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Fake Boobs:", None))
-        self.label_interested_in.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Interested in:", None))
-        self.label_gender.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Gender:", None))
-        self.label_user_type.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"User Type:", None))
-        self.label_name.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Name:", None))
-        self.label_video_title.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Title:", None))
-        self.label_video_tags.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Tags:", None))
-        self.label_video_rating.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Rating:", None))
-        self.label_video_duration.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Duration:", None))
-        self.label_video_views_2.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Views:", None))
-        self.label_video_pornstars.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Pornstars:", None))
-        self.label_video_hotspots.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Hotspots:", None))
-        self.label_video_orientation.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Orientation:", None))
-        self.label_widght.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Weight:", None))
-        self.label_relationship.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Relationship:", None))
-        self.label_video_views.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Video Views:", None))
-        self.label_profile_views.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Profile Views:", None))
-        self.label_city_country.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"City / Country:", None))
-        self.label_tattoos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Tattoos:", None))
-        self.label_home_town.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Home Town", None))
-        self.label_hair_color.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Hair Color:", None))
-        self.button_user_get_bio.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get User's Bio", None))
-        self.button_user_download_avatar.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download User Avatar", None))
-        self.button_video_thumbnail_download.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download Thumbnail", None))
         self.textbrowser_websites.setHtml(QCoreApplication.translate("Porn_Fetch_Widget", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Supported Websites:</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Downloading:</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px;"
-                        " margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com (supports total progress)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Eporner.com</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XNXX.com (supports total progress)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XVideos.com (supports total progress)</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\""
-                        "><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">All sites support *threaded* downloads and selectable quality!</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">* hqporner and eporner running in QThreads, but they don't fetch segments. The video is directly</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">downloaded, therefore threading in a segment isn't needed.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;"
-                        " -qt-block-indent:0; text-indent:0px;\">Model / Channel Downloads</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- EPorner.com</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XNXX.com</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:"
-                        "0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Searching:</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Xvideos.com</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Eporner.com</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XNXX.com</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px"
-                        "; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I am constantly working to support more websites.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-"
-                        "block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
+"</style></head><body style=\" font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">Supported Websites:</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" fon"
+                        "t-family:'Sans Serif';\">Downloading:</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- PornHub.com (supports total progress)</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- HQPorner.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- Eporner.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- XNXX.com (sup"
+                        "ports total progress)</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- XVideos.com (supports total progress)</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">All sites support *threaded* downloads and selectable quality!</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans"
+                        " Serif';\">* hqporner and eporner running in QThreads, but they don't fetch segments. The video is directly</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">downloaded, therefore threading in a segment isn't needed.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">Model / Channel Downloads</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt"
+                        "-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- PornHub.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- HQPorner.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- EPorner.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- XNXX.com</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans"
+                        " Serif';\">Searching:</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- PornHub.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- HQPorner.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- Xvideos.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- Eporner.com</span></p>\n"
+"<p style=\" margin-top:0px; "
+                        "margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- XNXX.com</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">I am constantly working to support more websites.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; m"
+                        "argin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p></body></html>", None))
     # retranslateUi
 

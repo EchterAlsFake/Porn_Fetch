@@ -1,6 +1,9 @@
 # 3.3
 - [x] Testing internet connection for SSL errors or firewall blockings
 - [x] Supporting (OPTIONAL) discord rich presence
+- [x] Removed the metadata functions from Porn Fetch
+- [x] Make the code clearer, so that people who read the code for the first time actually understand what's happening :D
+- [x] Improving terminal debug messages
 - [] Fixing the Android layout once again
 - [] Fixing the Windows performance (idk)
 - [] Compiling for all android architectures
@@ -13,9 +16,7 @@
 - [] Adding Search query support for files
 - [] Fixing the qlineedits when used with tabbing
 - [] Reworking the stylesheets to have a better contrast
-- [] Supporting light mode :rofl:
 - [] Supporting more video formats. Now where ffmpeg is fully integrated, why not adding this lol
-- [] Improving terminal debug messages
 - [] Improving the CLI debug messages, so that progress is reported more clearly
 - [] Adding license information to all libraries in credits
 - [] Adding support for the custom delay in the other API libraries (eaf_base_api)
@@ -25,5 +26,4 @@
 - [] Fixing all the build scripts
 - [] Switching to Python 3.12
 - [] Switching to Qt 6.7
-- [] Make the code clearer, so that people who read the code for the first time actually understand what's happening :D
 - [] Making contributions easier, by clearly saying what to do, how to do it and what to watch out for
