@@ -24,8 +24,12 @@ jobs:
         sudo apt-get install -y libegl1-mesa xvfb libxcb-cursor0
     - name: Install dependencies
       run: |
+        mkdir not_a_venv
+        cd not_a_venv
+        python -m venv venv
+        source venv/bin/activate
+        cd ..
         python -m pip install --upgrade pip
-        pip install pyinstaller
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Build Porn Fetch (GUI - PySide6-Deploy)
       run: |
