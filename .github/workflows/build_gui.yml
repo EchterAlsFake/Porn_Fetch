@@ -80,6 +80,9 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: pyside6-application-macos
+          run: |
+            cd deploy
+            ls -R deploy
           path: deploy/main.app
 
   build-windows-x64:
