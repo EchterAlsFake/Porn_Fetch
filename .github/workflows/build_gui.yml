@@ -221,8 +221,6 @@ jobs:
           LD_LIBRARY_PATH: /usr/local/lib
 
       - name: Install Python packages
-        env:
-          PIP_NO_SSL_VERIFY: '1'
         run: |
           /usr/local/python-32/bin/pip3.11 install --upgrade pip
           /usr/local/python-32/bin/pip3.11 install pyinstaller
@@ -230,7 +228,7 @@ jobs:
 
       - name: Build Porn Fetch (CLI) (PyInstaller - Termux)
         run: |
-          /usr/local/python-32/bin/pyinstaller -F --paths /usr/local/python-32/lib/python3.11/site-packages Porn_Fetch_CLI.py
+          /usr/local/python-32/bin/python3.11 -m pyinstaller -F --paths /usr/local/python-32/lib/python3.11/site-packages Porn_Fetch_CLI.py
           cd dist
           chmod +x Porn_Fetch_CLI
 
