@@ -28,20 +28,20 @@ jobs:
           virtualenv venv
           source venv/bin/activate
           pip install -r requirements.txt
-          pip install PySide6 pyside6-deploy nuitka zstandard
+          pip install PySide6 nuitka zstandard
 
       - name: Build application for x64
         run: |
           mkdir deploy
           mv * deploy/
           cd deploy
-          pyside6-deploy --output-dir ../build-x64 --nuitka --onefile
+          pyside6-deploy
 
       - name: Archive x64 build
         uses: actions/upload-artifact@v2
         with:
           name: pyside6-application-x64
-          path: build-x64/main.bin
+          path: main.bin
 
 
   build-x32:
@@ -63,20 +63,21 @@ jobs:
           virtualenv venv
           source venv/bin/activate
           pip install -r requirements.txt
-          pip install PySide6 pyside6-deploy nuitka zstandard
+          pip install PySide6 nuitka zstandard
 
       - name: Build application for x32
         run: |
           mkdir deploy
           mv * deploy/
           cd deploy
-          pyside6-deploy --output-dir ../build-x32 --nuitka --onefile
+          pyside6-deploy
+          mv main.bin main_32.bin
 
       - name: Archive x32 build
         uses: actions/upload-artifact@v2
         with:
           name: pyside6-application-x32
-          path: build-x32/main.bin
+          path: main_32.bin
 
       - name: Clean up
         run: cd .. && rm -rf deploy
