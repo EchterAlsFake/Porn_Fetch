@@ -224,9 +224,9 @@ jobs:
         env:
           PIP_NO_SSL_VERIFY: '1'
         run: |
-          /usr/local/python-32/bin/pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org --upgrade pip
-          /usr/local/python-32/bin/pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org pyinstaller
-          if [ -f requirements_cli.txt ]; then /usr/local/python-32/bin/pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r requirements_cli.txt; fi
+          /usr/local/python-32/bin/pip3.11 install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org --upgrade pip
+          /usr/local/python-32/bin/pip3.11 install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org pyinstaller
+          if [ -f requirements_cli.txt ]; then /usr/local/python-32/bin/pip3.11 install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r requirements_cli.txt; fi
 
       - name: Build Porn Fetch (CLI) (PyInstaller - Termux)
         run: |
