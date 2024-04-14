@@ -222,13 +222,16 @@ jobs:
 
       - name: Install Python packages
         run: |
-          /usr/local/python-32/bin/pip3.11 install --upgrade pip
-          /usr/local/python-32/bin/pip3.11 install pyinstaller
-          if [ -f requirements_cli.txt ]; then /usr/local/python-32/bin/pip3.11 install -r requirements_cli.txt; fi
+          /usr/local/python-32/bin/python3.11 -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install pyinstaller
+          pip install -r requirements_cli.txt
 
       - name: Build Porn Fetch (CLI) (PyInstaller - Termux)
         run: |
-          /usr/local/python-32/bin/python3.11 -m pyinstaller -F --paths /usr/local/python-32/lib/python3.11/site-packages Porn_Fetch_CLI.py
+          source venv/bin/activate
+          pyinstaller -F Porn_Fetch_CLI.py
           cd dist
           chmod +x Porn_Fetch_CLI
 
