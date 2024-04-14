@@ -82,7 +82,6 @@ jobs:
           name: pyside6-application-windows-x64
           path: deploy/main.exe
 
-
   build-pornfetch-gui-macos:
     runs-on: macos-latest
     steps:
@@ -122,7 +121,6 @@ jobs:
           name: pyside6-application-macos
           path: deploy/pyside_app_demo.app
 
-
   build-pornfetch-cli-windows-x64:
     runs-on: windows-latest
     steps:
@@ -138,7 +136,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pyinstaller
-          if [ -f requirements_cli.txt ]; then pip install -r requirements.txt; fi
+          pip install -r requirements_cli.txt
       - name: Build Porn Fetch (CLI - Windows - X64) (PyInstaller)
         run: |
           pyinstaller -F Porn_Fetch_CLI.py
@@ -164,7 +162,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pyinstaller
-          if [ -f requirements_cli.txt ]; then pip install -r requirements.txt; fi
+          pip install -r requirements_cli.txt
       - name: Build Porn Fetch (CLI - Windows - X32) (PyInstaller)
         run: |
           pyinstaller -F Porn_Fetch_CLI.py
@@ -207,7 +205,7 @@ jobs:
       - name: Install dependencies for building Python
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential gcc-multilib libffi-dev libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev
+          sudo apt-get install -y build-essential gcc-multilib libffi-dev libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev zlib1g-dev:i386
 
       - name: Download and build Python 3.11 for x32
         run: |
