@@ -27,6 +27,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install pyinstaller
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Build Porn Fetch (GUI - PyInstaller)
+    - name: Build Porn Fetch (GUI - PySide6-Deploy)
       run: |
-        pyinstaller -F main.py && cd dist && chmod +x main && mv main Porn_Fetch && xvfb-run ./Porn_Fetch --version
+        pyside6-deploy && chmod +x main.bin && mv main.bin Porn_Fetch.bin && xvfb-run ./Porn_Fetch.bin --version
