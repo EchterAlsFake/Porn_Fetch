@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'License.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.6.3
+## Created by: Qt User Interface Compiler version 6.7.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -87,6 +87,6 @@ class Ui_License(object):
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">Porn Fetch is NOT associated with any of the websites. Using thi"
                         "s tool is against the ToS of every website. Usage of Porn Fetch is at your own risk. I (the developer) am not liable for any of your actions. This tool is not meant to be used for mass downloading content from websites or downloading copyright protected material.</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;\"><br /></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'JetBrains Mono','monospace'; font-size:14pt; font-weight:600; color:#000000;\">Information:</span><span style=\" font-family:'JetBrains Mono','monospace'; font-size:12pt; color:#000000;\"><br />Porn Fetch uses ffmpeg for video processing / converting. FFmpeg is free software licensed under the GPL license.<br />See more information on: https://FFmpeg.org</span></p></body></html>", None))
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'JetBrains Mono','monospace'; font-size:14pt; font-weight:600; color:#ffffff;\">Information:</span><span style=\" font-family:'JetBrains Mono','monospace'; font-size:12pt; color:#ffffff;\"><br />Porn Fetch uses ffmpeg for video processing / converting. FFmpeg is free software licensed under the GPL license.<br />See more information on: https://FFmpeg.org</span></p></body></html>", None))
     # retranslateUi
 

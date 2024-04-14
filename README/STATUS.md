@@ -4,6 +4,8 @@
 - [x] Removed the metadata functions from Porn Fetch
 - [x] Make the code clearer, so that people who read the code for the first time actually understand what's happening :D
 - [x] Improving terminal debug messages
+- [x] Switching to Qt 6.7
+- [x] Switching to Nuitka build deployment for C code compilation
 - [] Fixing the Android layout once again
 - [] Fixing the Windows performance (idk)
 - [] Compiling for all android architectures
@@ -25,5 +27,4 @@
 - [] Fixing the tree widget to be less ugly (for real, I hate it myself)
 - [] Fixing all the build scripts
 - [] Switching to Python 3.12
-- [] Switching to Qt 6.7
 - [] Making contributions easier, by clearly saying what to do, how to do it and what to watch out for

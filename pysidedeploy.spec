@@ -1,44 +1,54 @@
 [app]
 # title of your application
-title = main
+title = pyside_app_demo
 # project directory. the general assumption is that project_dir is the parent directory
 # of input_file
-project_dir = /home/asuna/PycharmProjects/Porn_Fetch/
+project_dir = .
 # source file path
-input_file = /home/asuna/PycharmProjects/Porn_Fetch/main.py
+input_file = C:\Users\bvgugcfxtzu\PycharmProjects\Porn_Fetch\main.py
 # directory where exec is stored
 exec_directory = .
 # path to .pyproject project file
 project_file = 
-icon = /home/asuna/venv/lib/python3.11/site-packages/PySide6/scripts/deploy_lib/pyside_icon.jpg
+# application icon
+icon = C:\Users\bvgugcfxtzu\PycharmProjects\venv\Lib\site-packages\PySide6\scripts\deploy_lib\pyside_icon.ico
 
 [python]
 # python path
-python_path = /home/asuna/venv/bin/python3.11
+python_path = C:\Users\bvgugcfxtzu\PycharmProjects\venv\Scripts\python.exe
 # python packages to install
 # ordered-set = increase compile time performance of nuitka packaging
 # zstandard = provides final executable size optimization
-packages = nuitka==1.5.4,ordered_set,zstandard
+packages = Nuitka==2.1
 # buildozer = for deploying Android application
 android_packages = buildozer==1.5.0,cython==0.29.33
 
 [qt]
 # comma separated path to qml files required
-# normally all the qml files are added automatically
+# normally all the qml files required by the project are added automatically
 qml_files = 
 # excluded qml plugin binaries
 excluded_qml_plugins = 
+# qt modules used. comma separated
+modules = Gui,Widgets,Core
+# qt plugins used by the application
+plugins = generic,accessiblebridge,styles,imageformats,egldeviceintegrations,xcbglintegrations,iconengines,platformthemes,platforms/darwin,platforms,platforminputcontexts
+
+[android]
 # path to pyside wheel
-wheel_pyside = /home/asuna/pyside-setup/dist/PySide6-6.6.2-6.6.2-cp37-abi3-android_aarch64.whl
+wheel_pyside = 
 # path to shiboken wheel
-wheel_shiboken = /home/asuna/pyside-setup/dist/shiboken6-6.6.2-6.6.2-cp37-abi3-android_aarch64.whl
+wheel_shiboken = 
 # plugins to be copied to libs folder of the packaged application. comma separated
-plugins = platforms_qtforandroid,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg,styles_qandroidstyle,platforms_qtforandroid,iconengines_qsvgicon,imageformats_qgif,imageformats_qico,imageformats_qjpeg,imageformats_qsvg
+plugins = 
 
 [nuitka]
-# (str) specify any extra nuitka arguments
+# usage description for permissions requested by the app as found in the info.plist file
+# of the app bundle
 # eg = extra_args = --show-modules --follow-stdlib
-extra_args = --quiet --noinclude-qt-translations=True
+macos.permissions = 
+# (str) specify any extra nuitka arguments
+extra_args = --quiet --noinclude-qt-translations
 
 [buildozer]
 # build mode
@@ -46,19 +56,17 @@ extra_args = --quiet --noinclude-qt-translations=True
 # release creates an aab, while debug creates an apk
 mode = debug
 # contrains path to pyside6 and shiboken6 recipe dir
-recipe_dir = /home/asuna/PycharmProjects/Porn_Fetch/deployment/recipes
+recipe_dir = 
 # path to extra qt android jars to be loaded by the application
-jars_dir = /home/asuna/PycharmProjects/Porn_Fetch/deployment/jar/PySide6/jar
+jars_dir = 
 # if empty uses default ndk path downloaded by buildozer
-ndk_path = /home/asuna/Android/Sdk/ndk/25c
+ndk_path = 
 # if empty uses default sdk path downloaded by buildozer
-sdk_path = /home/asuna/Android/Sdk
-# modules used. comma separated
-modules = Widgets,Gui,Core
+sdk_path = 
 # other libraries to be loaded. comma separated.
 # loaded at app startup
-local_libs = plugins_platforms_qtforandroid
+local_libs = 
 # architecture of deployed platform
 # possible values = ["aarch64", "armv7a", "i686", "x86_64"]
-arch = aarch64
+arch = 
 

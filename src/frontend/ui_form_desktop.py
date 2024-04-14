@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'form_desktop.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.6.3
+## Created by: Qt User Interface Compiler version 6.7.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -841,7 +841,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_settings.setWidgetResizable(True)
         self.scrollAreaWidgetContents_6 = QWidget()
         self.scrollAreaWidgetContents_6.setObjectName(u"scrollAreaWidgetContents_6")
-        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, -88, 1166, 688))
+        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, -88, 1166, 662))
         self.gridLayout_19 = QGridLayout(self.scrollAreaWidgetContents_6)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.button_download_ffmpeg = QPushButton(self.scrollAreaWidgetContents_6)
@@ -1273,21 +1273,6 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridlayout_gui_settings.addWidget(self.radio_ui_language_french, 1, 5, 1, 1)
 
-        self.label_design = QLabel(self.goroupbox_gui)
-        self.label_design.setObjectName(u"label_design")
-
-        self.gridlayout_gui_settings.addWidget(self.label_design, 2, 0, 1, 1)
-
-        self.radio_design_dark_mode = QRadioButton(self.goroupbox_gui)
-        self.radio_design_dark_mode.setObjectName(u"radio_design_dark_mode")
-
-        self.gridlayout_gui_settings.addWidget(self.radio_design_dark_mode, 2, 1, 1, 1)
-
-        self.radio_design_white_mode = QRadioButton(self.goroupbox_gui)
-        self.radio_design_white_mode.setObjectName(u"radio_design_white_mode")
-
-        self.gridlayout_gui_settings.addWidget(self.radio_design_white_mode, 2, 2, 1, 1)
-
 
         self.gridLayout_12.addLayout(self.gridlayout_gui_settings, 0, 0, 1, 1)
 
@@ -1538,9 +1523,6 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_ui_language_system_default.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"System default", None))
         self.label_ui_language.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface Language:", None))
         self.radio_ui_language_french.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"French", None))
-        self.label_design.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Design:", None))
-        self.radio_design_dark_mode.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Dark Mode", None))
-        self.radio_design_white_mode.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"White Mode", None))
         self.button_settings_apply.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Apply  (needs restart)", None))
         self.button_settings_reset.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Reset Porn Fetch to default settings", None))
         self.textbrowser_websites.setHtml(QCoreApplication.translate("Porn_Fetch_Widget", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"

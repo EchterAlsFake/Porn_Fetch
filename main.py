@@ -51,7 +51,7 @@ Discord: echteralsfake (faster response)
 """
 
 __license__ = "GPL 3"
-__version__ = "3.2"
+__version__ = "3.3"
 __build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 __next_release__ = "3.3"
@@ -95,6 +95,10 @@ class Signals(QObject):
     finished = Signal()
     clear_signal = Signal()
     get_total = Signal(str, str)
+    result = Signal(bool)
+
+    # Errors
+    error_signal = Signal(str)
 
 
 class License(QWidget):
@@ -143,14 +147,10 @@ class License(QWidget):
         self.main_widget.show()
 
 
-class UpdateSignals(QObject):
-    result = Signal(bool)
-
-
 class CheckUpdates(QRunnable):
     def __init__(self):
         super(CheckUpdates, self).__init__()
-        self.signals = UpdateSignals()
+        self.signals = Signals
 
     def run(self):
         url = f"https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/{__next_release__}"
@@ -164,7 +164,7 @@ class CheckUpdates(QRunnable):
 class CheckInternet(QRunnable):
     def __init__(self):
         super(CheckInternet, self).__init__()
-        self.signals = UpdateSignals()
+        self.signals = Signals()
 
     def run(self):
         try:
@@ -182,13 +182,12 @@ class CheckInternet(QRunnable):
 
 
 class AddToTreeWidget(QRunnable):
-    def __init__(self, iterator, search_limit, data_mode, clickable, reverse, stop_flag, is_checked):
+    def __init__(self, iterator, search_limit, data_mode, reverse, stop_flag, is_checked):
         super(AddToTreeWidget, self).__init__()
         self.signals = Signals()
         self.iterator = iterator
         self.search_limit = search_limit
         self.data_mode = data_mode
-        self.clickable = clickable
         self.reverse = reverse
         self.stop_flag = stop_flag
         self.is_checked = is_checked
@@ -280,12 +279,16 @@ Rate limited by PornHub, waiting for 5 seconds...
 
 Note: If this error persists, please close the application and report the following error.
 
-Error: {e}
+Error: {e}""")
 
-""")
-                        for j in range(5):
-                            print(f"\r\033[K[Sleeping: [{j} / 5]", end='', flush=True)
-                            time.sleep(1)
+                    except (ConnectionResetError, ConnectionAbortedError, ConnectionRefusedError):
+                        self.signals.error_signal("""
+There's a problem with your internet access... Are certain Porn sites blocked by a firewall or your ISP?""")
+                        break
+
+                    for j in range(5):
+                        print(f"\r\033[K[Sleeping: [{j} / 5]", end='', flush=True)
+                        time.sleep(1)
 
         finally:
             self.signals.finished.emit()
@@ -1218,12 +1221,6 @@ This warning won't be shown again.
         self.ui.stacked_widget_top.setMinimumHeight(150)
         self.ui.scrollarea_stacked_top.setMaximumHeight(150)
 
-    def switch_to_home(self):
-        self.ui.stacked_widget_main.setCurrentIndex(0)
-        self.ui.stacked_widget_top.setCurrentIndex(0)
-        self.ui.stacked_widget_top.setMinimumHeight(220)
-        self.ui.scrollarea_stacked_top.setMaximumHeight(220)
-
     def switch_to_hqporner(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(3)
@@ -1251,7 +1248,6 @@ This warning won't be shown again.
         stop_flag.set()
         time.sleep(1)
         self.switch_stop_state_2()
-
 
     """
     The following functions are related to the tree widget    
@@ -1561,19 +1557,20 @@ This warning won't be shown again.
         self.ui.lineedit_file.setText(file)
         iterator = []
         model_iterators = []
+        search_iterators = []
 
         with (open(file, "r") as url_file):
             content = url_file.read().splitlines()
-            for idx, url in enumerate(content):
-                if len(url) == 0:
+            for idx, line in enumerate(content):
+                if len(line) == 0:
                     continue
 
                 self.ui.progressbar_total.setMaximum(len(content))
-                self.ui.progressbar_total.setValue(idx)
+
                 if url.startswith("model#"):
-                    url = url.split("#")
-                    url = url[1]
+                    url = url.split("#")[1]
                     model_iterators.append(url)
+                    search_iterators.append(line)
 
                 else:
                     video = check_video(url, language=self.api_language, delay=self.delay)
@@ -1583,6 +1580,9 @@ This warning won't be shown again.
 
                     else:
                         ui_popup(invalid_input_string)
+
+                self.ui.progressbar_total.setValue(idx)
+
 
             logger_debug("Adding URLs to the tree widget...")
             self.add_to_tree_widget_thread(iterator, search_limit=self.search_limit)
@@ -1834,14 +1834,18 @@ if __name__ == "__main__":
     parser.add_argument("-v", "--version", help="Shows the version information", action="store_true")
     args = parser.parse_args()
 
+    if args.version:
+        print(__version__)
+
+    setup_config_file()
     try:
-        if args.version:
-            print(__version__)
+        main()
 
-        else:
-            setup_config_file()
-            main()
+    except FileNotFoundError as e:
+        ui_popup(f"a File Not Found Error occured. This shouldn't happenn. If you see this error, please report it: {e}")
 
-    except Exception as e:
-        print(e)
-        # TODO
+    except PermissionError as e:
+        ui_popup(f"Permission Error: {e}, please report this error.")
+
+    except OverflowError:
+        ui_popup("OverFlow Error, please report this immediately, as it's supposed to be fixed!")
