@@ -207,7 +207,7 @@ jobs:
           sudo apt-get update
           sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get install -y build-essential gcc-multilib libffi-dev libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev binutils-dev
+          sudo apt-get install -y build-essential gcc-multilib libffi-dev libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev binutils-dev libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
           sudo apt-get install -y libfl-dev libncurses5:i386 libncursesw5:i386 libtinfo5:i386 zlib1g:i386 zlib1g-dev:i386 openssl libssl-dev
       - name: Download and build Python 3.11 for x32
         run: |
@@ -224,9 +224,9 @@ jobs:
         env:
           PIP_NO_SSL_VERIFY: '1'
         run: |
-          /usr/local/python-32/bin/pip3.11 install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org --upgrade pip
-          /usr/local/python-32/bin/pip3.11 install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org pyinstaller
-          if [ -f requirements_cli.txt ]; then /usr/local/python-32/bin/pip3.11 install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r requirements_cli.txt; fi
+          /usr/local/python-32/bin/pip3.11 install --upgrade pip
+          /usr/local/python-32/bin/pip3.11 install pyinstaller
+          if [ -f requirements_cli.txt ]; then /usr/local/python-32/bin/pip3.11 install -r requirements_cli.txt; fi
 
       - name: Build Porn Fetch (CLI) (PyInstaller - Termux)
         run: |
