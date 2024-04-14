@@ -211,9 +211,9 @@ jobs:
           sudo apt-get install -y libfl-dev libncurses5:i386 libncursesw5:i386 libtinfo5:i386 zlib1g:i386 zlib1g-dev:i386 openssl libssl-dev
       - name: Download and build Python 3.11 for x32
         run: |
-          wget https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tgz
-          tar -xzf Python-3.11.0.tgz
-          cd Python-3.11.0
+          wget https://www.python.org/ftp/python/3.11.6/Python-3.11.6.tgz
+          tar -xzf Python-3.11.6.tgz
+          cd Python-3.11.6
           CFLAGS="-m32" LDFLAGS="-m32" ./configure --prefix=/usr/local/python-32 --with-ensurepip=install --with-openssl=/usr/lib/i386-linux-gnu
           make -j $(nproc)
           sudo make altinstall
