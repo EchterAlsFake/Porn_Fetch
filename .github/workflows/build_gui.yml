@@ -214,7 +214,7 @@ jobs:
           wget https://www.python.org/ftp/python/3.11.6/Python-3.11.6.tgz
           tar -xzf Python-3.11.6.tgz
           cd Python-3.11.6
-          CFLAGS="-m32" LDFLAGS="-m32" ./configure --prefix=/usr/local/python-32 --with-ensurepip=install
+          CFLAGS="-m32" LDFLAGS="-m32" ./configure --prefix=/usr/local/python-32 --with-ensurepip=install --shared-libraries
           make -j $(nproc)
           sudo make altinstall
         env:
