@@ -150,7 +150,7 @@ class License(QWidget):
 class CheckUpdates(QRunnable):
     def __init__(self):
         super(CheckUpdates, self).__init__()
-        self.signals = Signals
+        self.signals = Signals()
 
     def run(self):
         url = f"https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/{__next_release__}"
