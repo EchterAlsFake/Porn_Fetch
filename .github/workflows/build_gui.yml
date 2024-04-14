@@ -206,7 +206,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential gcc-multilib libffi-dev libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev binutils-dev
-
+          sudo apt-get install -y libncursesw5-dev libncursesw5-dev:i386 libtinfo5:i386 libtinfo-dev:i386 libpanelw5:i386 libpanelw5-dev:i386
       - name: Download and build Python 3.11 for x32
         run: |
           wget https://www.python.org/ftp/python/3.11.0/Python-3.11.0.tgz
