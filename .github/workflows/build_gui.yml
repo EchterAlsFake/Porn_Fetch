@@ -32,8 +32,10 @@ jobs:
 
       - name: Build application for x64
         run: |
+          run: |
           mkdir deploy
-          mv * deploy/
+          shopt -s extglob
+          mv !(deploy) deploy/
           cd deploy
           pyside6-deploy
 
@@ -67,8 +69,10 @@ jobs:
 
       - name: Build application for x32
         run: |
+          run: |
           mkdir deploy
-          mv * deploy/
+          shopt -s extglob
+          mv !(deploy) deploy/
           cd deploy
           pyside6-deploy
           mv main.bin main_32.bin
