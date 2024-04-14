@@ -46,3 +46,107 @@ jobs:
         with:
           name: pyside6-application-x64
           path: deploy/main.bin
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install virtualenv
+          virtualenv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+          pip install PySide6 nuitka zstandard
+
+      - name: Build application
+        run: |
+          mkdir deploy
+          mv * deploy/
+          cd deploy
+          source ../venv/bin/activate
+          pyside6-deploy
+
+      - name: Archive macOS build
+        uses: actions/upload-artifact@v2
+        with:
+          name: pyside6-application-macos
+          path: deploy/main.app
+
+  build-windows-x64:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.11 x64
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+          architecture: x64
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install virtualenv
+          virtualenv venv
+          .\\venv\\Scripts\\activate
+          pip install -r requirements.txt
+          pip install PySide6 nuitka zstandard
+
+      - name: Build application for Windows x64
+        run: |
+          mkdir deploy
+          move * deploy/
+          cd deploy
+          .\\..\\venv\\Scripts\\activate
+          pyside6-deploy --extra-modules=QtCore,QtWidgets,QtGui
+
+      - name: Archive Windows x64 build
+        uses: actions/upload-artifact@v2
+        with:
+          name: pyside6-application-windows-x64
+          path: deploy/main.exe
+
+  build-windows-x32:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.11 x86
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+          architecture: x86
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install virtualenv
+          virtualenv venv
+          .\\venv\\Scripts\\activate
+          pip install -r requirements.txt
+          pip install PySide6 nuitka zstandard
+
+      - name: Build application for Windows x32
+        run: |
+          mkdir deploy
+          move * deploy/
+          cd deploy
+          .\\..\\venv\\Scripts\\activate
+          pyside6-deploy --extra-modules=QtCore,QtWidgets,QtGui
+
+      - name: Archive Windows x32 build
+        uses: actions/upload-artifact@v2
+        with:
+          name: pyside6-application-windows-x32
+          path: deploy/main.exe
