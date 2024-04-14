@@ -222,6 +222,7 @@ jobs:
 
       - name: Install Python packages
         run: |
+          export LD_LIBRARY_PATH=/usr/local/python-32/lib:$LD_LIBRARY_PATH
           /usr/local/python-32/bin/python3.11 -m venv venv
           source venv/bin/activate
           pip install --upgrade pip
@@ -230,6 +231,7 @@ jobs:
 
       - name: Build Porn Fetch (CLI) (PyInstaller - Termux)
         run: |
+          export LD_LIBRARY_PATH=/usr/local/python-32/lib:$LD_LIBRARY_PATH
           source venv/bin/activate
           pyinstaller -F Porn_Fetch_CLI.py
           cd dist
