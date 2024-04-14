@@ -34,8 +34,10 @@ jobs:
         run: |
           mkdir deploy
           shopt -s extglob
-          mv !(deploy) deploy/
+          mv !(deploy|venv) deploy/  # Ensure venv is not moved
           cd deploy
+          pwd
+          ls -la
           source ../venv/bin/activate
           pyside6-deploy
 
@@ -44,44 +46,3 @@ jobs:
         with:
           name: pyside6-application-x64
           path: main.bin
-
-
-  build-x32:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Python 3.11 x32
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.11
-          architecture: x86
-
-      - name: Install Python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install virtualenv
-          virtualenv venv
-          source venv/bin/activate
-          pip install -r requirements.txt
-          pip install PySide6 nuitka zstandard
-
-      - name: Build application for x32
-        run: |
-          run: |
-          mkdir deploy
-          shopt -s extglob
-          mv !(deploy) deploy/
-          cd deploy
-          pyside6-deploy
-          mv main.bin main_32.bin
-
-      - name: Archive x32 build
-        uses: actions/upload-artifact@v2
-        with:
-          name: pyside6-application-x32
-          path: main_32.bin
-
-      - name: Clean up
-        run: cd .. && rm -rf deploy
