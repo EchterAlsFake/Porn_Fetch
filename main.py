@@ -610,7 +610,7 @@ class FFMPEGDownload(QRunnable):
             shutil.rmtree("ffmpeg-6.1-amd64-static")
 
         elif sys.platform == "win32":
-            shutil.rmtree("ffmpeg-6.1.1-essentials_build")
+            shutil.rmtree("ffmpeg-7.0-essentials_build")
 
         logger_debug("FFMPEG: [4/4] Cleaned Up")
         self.signals.finished.emit()
