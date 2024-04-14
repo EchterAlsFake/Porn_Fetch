@@ -36,6 +36,7 @@ jobs:
           shopt -s extglob
           mv !(deploy) deploy/
           cd deploy
+          source ../venv/bin/activate
           pyside6-deploy
 
       - name: Archive x64 build
