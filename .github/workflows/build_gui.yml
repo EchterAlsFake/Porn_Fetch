@@ -1,37 +1,82 @@
-name:  Porn Fetch (GUI)
+name: Build PySide6 Application
 
 on:
   push:
-    branches: [ "master" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "master" ]
-
-permissions:
-  contents: read
+    branches:
+      - main
 
 jobs:
-  build:
+  build-x64:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.11"
-    - name: Install system dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libegl1-mesa xvfb libxcb-cursor0
-    - name: Install dependencies
-      run: |
-        mkdir not_a_venv
-        cd not_a_venv
-        python -m venv venv
-        source venv/bin/activate
-        cd ..
-        python -m pip install --upgrade pip
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Build Porn Fetch (GUI - PySide6-Deploy)
-      run: |
-        source not_a_venv/venv/bin/activate
-        pyside6-deploy && chmod +x main.bin && mv main.bin Porn_Fetch.bin && xvfb-run ./Porn_Fetch.bin --version
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.11 x64
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+          architecture: x64
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install virtualenv
+          virtualenv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+          pip install PySide6 pyside6-deploy nuitka zstandard
+
+      - name: Build application for x64
+        run: |
+          mkdir deploy
+          mv * deploy/
+          cd deploy
+          pyside6-deploy --output-dir ../build-x64 --nuitka --onefile
+
+      - name: Archive x64 build
+        uses: actions/upload-artifact@v2
+        with:
+          name: pyside6-application-x64
+          path: build-x64/main.bin
+
+
+  build-x32:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.11 x32
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+          architecture: x86
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install virtualenv
+          virtualenv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+          pip install PySide6 pyside6-deploy nuitka zstandard
+
+      - name: Build application for x32
+        run: |
+          mkdir deploy
+          mv * deploy/
+          cd deploy
+          pyside6-deploy --output-dir ../build-x32 --nuitka --onefile
+
+      - name: Archive x32 build
+        uses: actions/upload-artifact@v2
+        with:
+          name: pyside6-application-x32
+          path: build-x32/main.bin
+
+      - name: Clean up
+        run: cd .. && rm -rf deploy
