@@ -33,4 +33,5 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Build Porn Fetch (GUI - PySide6-Deploy)
       run: |
+        source not_a_venv/venv/bin/activate
         pyside6-deploy && chmod +x main.bin && mv main.bin Porn_Fetch.bin && xvfb-run ./Porn_Fetch.bin --version
