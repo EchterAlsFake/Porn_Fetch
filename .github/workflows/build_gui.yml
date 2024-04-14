@@ -205,7 +205,7 @@ jobs:
       - name: Install dependencies for building Python
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential gcc-multilib libffi-dev libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev zlib1g-dev:i386
+          sudo apt-get install -y build-essential gcc-multilib libffi-dev libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev binutils-dev python-dev
 
       - name: Download and build Python 3.11 for x32
         run: |
