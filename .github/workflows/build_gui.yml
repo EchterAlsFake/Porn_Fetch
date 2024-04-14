@@ -70,7 +70,8 @@ jobs:
       - name: Build application
         run: |
           mkdir deploy
-          mv * deploy/
+          shopt -s extglob
+          mv !(deploy|venv) deploy/
           cd deploy
           source ../venv/bin/activate
           pyside6-deploy
@@ -105,9 +106,9 @@ jobs:
       - name: Build application for Windows x64
         run: |
           mkdir deploy
-          move * deploy/
+          Get-ChildItem -Path . -Exclude deploy,venv | Move-Item -Destination deploy
           cd deploy
-          .\\..\\venv\\Scripts\\activate
+          ..\venv\Scripts\activate
           pyside6-deploy --extra-modules=QtCore,QtWidgets,QtGui
 
       - name: Archive Windows x64 build
@@ -140,9 +141,9 @@ jobs:
       - name: Build application for Windows x32
         run: |
           mkdir deploy
-          move * deploy/
+          Get-ChildItem -Path . -Exclude deploy,venv | Move-Item -Destination deploy
           cd deploy
-          .\\..\\venv\\Scripts\\activate
+          ..\venv\Scripts\activate
           pyside6-deploy --extra-modules=QtCore,QtWidgets,QtGui
 
       - name: Archive Windows x32 build
