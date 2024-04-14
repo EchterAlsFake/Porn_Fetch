@@ -76,13 +76,14 @@ jobs:
           source ../venv/bin/activate
           pyside6-deploy
 
+      - name: List output directory
+        run: |
+          ls -R deploy/
+
       - name: Archive macOS build
         uses: actions/upload-artifact@v2
         with:
           name: pyside6-application-macos
-          run: |
-            cd deploy
-            ls -R deploy
           path: deploy/main.app
 
   build-windows-x64:
