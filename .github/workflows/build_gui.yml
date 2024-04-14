@@ -113,7 +113,7 @@ jobs:
           Get-ChildItem -Path . -Exclude deploy,venv | Move-Item -Destination deploy
           cd deploy
           ..\venv\Scripts\activate
-          echo | pyside6-deploy --extra-modules=QtCore,QtWidgets,QtGui
+          echo "yes" | pyside6-deploy --extra-modules=QtCore,QtWidgets,QtGui
 
       - name: Archive Windows x64 build
         uses: actions/upload-artifact@v2
