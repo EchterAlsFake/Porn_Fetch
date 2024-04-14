@@ -32,7 +32,6 @@ jobs:
 
       - name: Build application for x64
         run: |
-          run: |
           mkdir deploy
           shopt -s extglob
           mv !(deploy) deploy/
