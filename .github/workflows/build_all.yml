@@ -1,9 +1,6 @@
 name: Build PySide6 Application
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
     branches:
       - master

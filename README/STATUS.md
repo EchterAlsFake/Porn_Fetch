@@ -6,9 +6,9 @@
 - [x] Improving terminal debug messages
 - [x] Switching to Qt 6.7
 - [x] Switching to Nuitka build deployment for C code compilation
+- [x] Compiling for all android architectures
 - [] Fixing the Android layout once again
 - [] Fixing the Windows performance (idk)
-- [] Compiling for all android architectures
 - [] Making functions and the application in general more robust
 - [] Trying another approach for Windows downloading, because threading seems to not really work on Windoof
 - [] Changing the Layout on Android, so that the progressbars become an extra widget, which would lead to more
@@ -26,5 +26,4 @@
 - [] Updating german translations
 - [] Fixing the tree widget to be less ugly (for real, I hate it myself)
 - [] Fixing all the build scripts
-- [] Switching to Python 3.12
 - [] Making contributions easier, by clearly saying what to do, how to do it and what to watch out for
