@@ -8,15 +8,14 @@
 - [x] Switching to Nuitka build deployment for C code compilation
 - [x] Compiling for all android architectures
 - [x] Fixing the qlineedits when used with tabbing
+- [x] Rewriting the file implementation to be less painful and allow more kind of sortings
+- [x] Making functions and the application in general more robust
+- [x] Reworking the stylesheets to have a better contrast
 - [] Fixing the Android layout once again
-- [] Making functions and the application in general more robust
-- [] Trying another approach for Windows downloading, because threading seems to not really work on Windoof
 - [] Changing the Layout on Android, so that the progressbars become an extra widget, which would lead to more
   space being available
 - [] Adding model support for xvideos
-- [] Rewriting the file implementation to be less painful and allow more kind of sortings
 - [] Adding Search query support for files
-- [] Reworking the stylesheets to have a better contrast
 - [] Improving the CLI debug messages, so that progress is reported more clearly
 - [] Adding license information to all libraries in credits
 - [] Adding support for the custom delay in the other API libraries (eaf_base_api)

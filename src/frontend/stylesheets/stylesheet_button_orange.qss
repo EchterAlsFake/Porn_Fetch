@@ -1,14 +1,14 @@
 QPushButton {
-    background-color: rgba(255, 162, 0, 170); /* Semi-transparent orange */
+    background-color: #FFA200; /* Solid orange */
     font: bold 12px;
     color: white;
     border-radius: 8px;
 }
 
 QPushButton:hover {
-    background-color: #9575CD; /* Lighter violet */
+    background-color: #FFB74D; /* Lighter orange */
 }
 
 QPushButton:pressed {
-    background-color: #303F9F; /* Dark blue */
+    background-color: #F57C00; /* Dark orange */
 }

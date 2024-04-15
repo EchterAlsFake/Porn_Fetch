@@ -1,24 +1,25 @@
 QWidget {
-    color: #E0E0E0;
-    background-color: #2E2E2E;
+    color: #ECECEC;  /* Brightened for better contrast */
+    background-color: #262626; /* Darkened for better contrast */
     border: none;
     font-size: 12px;
 }
 
 QLineEdit {
-    border: 1px solid #444;
+    border: 2px solid #555;  /* Adjusted for better visibility */
     border-radius: 4px;
+    border-color: rgba(64,224,208, 90);
     padding: 5px;
-    background-color: #3C3C3C;
-    color: #E0E0E0;
+    background-color: #333;  /* Slightly lighter for distinction */
+    color: #ECECEC;
 }
 
 QLineEdit:focus {
-    border: 2px solid #5599FF;
+    border: 2px solid #5599FF;  /* Bright blue to indicate focus */
 }
 
 QRadioButton {
-    color: #E0E0E0;
+    color: #ECECEC;
     spacing: 5px;
 }
 
@@ -43,7 +44,7 @@ QRadioButton::indicator:hover {
 }
 
 QSlider::groove:horizontal {
-    border: 1px solid #5A2A82;
+    border: 1px solid #5A2A82;  /* Purple border for better visibility */
     height: 8px;
     background: #333;
     border-radius: 4px;
@@ -62,18 +63,18 @@ QSlider::sub-page:horizontal {
 }
 
 QTreeWidget {
-    background-color: #2E2E2E;
-    border: 1px solid #3A9D23;
+    background-color: #262626;
+    border: 1px solid #3A9D23;  /* Green border for emphasis */
     border-radius: 5px;
 }
 
 QTreeWidget QHeaderView::section {
-    background-color: #3C3C3C;
+    background-color: #333;
     border: 1px solid #5A2A82;
 }
 
 QGroupBox {
-    border: 2px solid #4CAF50;
+    border: 2px solid #4CAF50;  /* More vivid green for emphasis */
     border-radius: 5px;
     margin-top: 10px;
     padding: 5px;
@@ -83,7 +84,7 @@ QGroupBox::title {
     subcontrol-origin: margin;
     subcontrol-position: top center;
     background-color: #4CAF50;
-    color: white;
+    color: #FFFFFF; /* Ensured white color for contrast */
     border: 1px solid #4CAF50;
 }
 
@@ -103,18 +104,18 @@ QGroupBox QPushButton:pressed {
 }
 
 QLabel {
-    color: #E0E0E0;
+    color: #ECECEC;
     padding: 2px;
     font-size: 12px;
-    border: none; /* Removed border from QLabel */
+    border: none;
 }
 
 QPushButton, QCheckBox {
-    color: #E0E0E0;
+    color: #ECECEC;
     padding: 5px;
     border-radius: 4px;
     border: 1px solid #555;
-    background-color: #3C3C3C;
+    background-color: #333;
 }
 
 QPushButton:hover {
@@ -122,51 +123,35 @@ QPushButton:hover {
 }
 
 QCheckBox {
-    spacing: 5px; /* Adjust spacing between the checkbox and its label */
+    spacing: 5px;
 }
 
 QCheckBox::indicator {
     width: 15px;
     height: 15px;
     border: 1px solid #555;
-    border-radius: 4px; /* Rounded corners for the checkbox indicator */
+    border-radius: 4px;
 }
 
-QCheckBox::indicator:hover {
-    border-color: #9A9AFF;
-}
 
 QCheckBox::indicator:checked {
-    background-color: #9A9AFF;
-    image: url(':/images/graphics/unread.svg'); /* Use your own checked icon */
+    image: url(':/images/graphics/done.svg');
 }
 
-QCheckBox::indicator:unchecked {
-    background-color: #3C3C3C;
-}
-
-QCheckBox::indicator:checked:hover {
-    background-color: #9A9AFF; /* Slightly different or the same as checked to indicate active hover */
-}
 
 QCheckBox::indicator:unchecked:hover {
-    background-color: #555; /* Provide visual feedback for hover on unchecked */
+    background-color: #555;
 }
 
 QSpinBox {
-    background-color: #3C3C3C;
-    border: 1px solid #444;
+    background-color: #333;
+    border: 1px solid #555;
     padding: 5px;
 }
 
-QSpinBox::up-button {
+QSpinBox::up-button, QSpinBox::down-button {
     background-color: #555;
-    image: url(':/images/graphics/top-arrow.ico')
-}
-
-QSpinBox::down-button {
-    background-color: #555;
-    image: url(':/images/graphics/down-arrow.ico')
+    image: url(':/images/graphics/arrow.ico'); /* Unified the icons */
 }
 
 QSpinBox::up-button:hover, QSpinBox::down-button:hover {
@@ -178,12 +163,12 @@ QSpinBox:focus {
 }
 
 QScrollArea, QScrollBar {
-    border: 1px solid #5D1049;
-    background-color: #3C3C3C;
+    border: 1px solid #5D1049; /* Dark purple for visibility */
+    background-color: #333;
 }
 
 QScrollBar::handle {
-    background: #9A55D3;
+    background: #9A55D3; /* Vivid purple for better distinction */
 }
 
 QScrollBar::add-line, QScrollBar::sub-line {

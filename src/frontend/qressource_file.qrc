@@ -11,6 +11,7 @@
         <file>graphics/unread.svg</file>
         <file>graphics/tools.svg</file>
         <file>graphics/faq.svg</file>
+        <file>graphics/done.svg</file>
     </qresource>
     <qresource prefix="/style">
         <file>stylesheets/stylesheet.qss</file>

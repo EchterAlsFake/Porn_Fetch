@@ -10,5 +10,5 @@ QPushButton:hover {
 }
 
 QPushButton:pressed {
-    background-color: #303F9F; /* Dark blue */
+    background-color: #6A1B9A; /* Dark purple */
 }

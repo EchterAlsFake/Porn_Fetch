@@ -24,7 +24,7 @@ from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
 from src.frontend.License import Ui_License
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
-                            QTranslator, QCoreApplication)
+                            QTranslator, QCoreApplication, QIODevice)
 from PySide6.QtWidgets import (QWidget, QApplication, QInputDialog, QTreeWidgetItem, QButtonGroup, QFileDialog)
 from PySide6.QtGui import QIcon, QFont
 
@@ -92,8 +92,11 @@ class Signals(QObject):
     stop_undefined_range = Signal()
     data = Signal(list)
 
-    # Metadata
+    # Other (I don't remember)
     text_data = Signal(list)
+
+    # URL Thread
+    url_iterators = Signal(list, list, list)
 
     # Operations
     finished = Signal()
@@ -290,9 +293,9 @@ Error: {e}""")
 There's a problem with your internet access... Are certain Porn sites blocked by a firewall or your ISP?""")
                         break
 
-                    for j in range(5):
-                        print(f"\r\033[K[Sleeping: [{j} / 5]", end='', flush=True)
-                        time.sleep(1)
+                        for j in range(5):
+                            print(f"\r\033[K[Sleeping: [{j} / 5]", end='', flush=True)
+                            time.sleep(1)
 
         finally:
             self.signals.finished.emit()
@@ -340,6 +343,10 @@ class DownloadThread(QRunnable):
                 if current_time - self.last_update_time < 0.5:
                     # If not, do not update the progress and return immediately
                     return
+
+                scaling_factor = 1024 * 1024
+                pos = int(pos / scaling_factor)
+                total = int(total / scaling_factor)
 
             signal.emit(pos, total)
             # Update total progress only if the video source uses segments
@@ -533,9 +540,8 @@ class VideoLoader(QRunnable):
                     author = video.author
 
                 output_path = Path(self.output_path)
-                stripped_title = Core().strip_title(
-                    title)  # Strip the title, so that videos with special chars can be saved
-                # on windows. Would raise an OSError otherwise
+                stripped_title = Core().strip_title(title)  # Strip the title so that videos with special chars can be
+                # saved on windows. It would raise an OSError otherwise
 
                 if self.directory_system:  # If the directory system is enabled, this will create an additional folder
                     author_path = output_path / author
@@ -646,6 +652,53 @@ class Discord(QRunnable):
 
             except exceptions.PyPresenceException as e:
                 logger_error(f"Pypresence exception... {e}")
+
+
+class AddUrls(QRunnable):
+    """
+    This class is used to add the URLs from the 'open file' function, because the UI doesn't respond until
+    all URLs / Models / Search terms have been processed. This is why I made this threading class
+    """
+
+    def __init__(self, file, api_language, delay):
+        super(AddUrls, self).__init__()
+        self.signals = Signals()
+        self.file = file
+        self.api_language = api_language
+        self.delay = delay
+
+    def run(self):
+        iterator = []
+        model_iterators = []
+        search_iterators = []
+
+        with open(self.file, "r") as url_file:
+            content = url_file.read().splitlines()
+
+        for idx, line in enumerate(content):
+            if len(line) == 0:
+                continue
+
+            total = len(content)
+            self.signals.total_progress.emit(0, total)
+
+            if line.startswith("model#"):
+                line = line.split("#")[1]
+                model_iterators.append(line)
+                search_iterators.append(line)
+
+            else:
+                video = check_video(line, language=self.api_language, delay=self.delay)
+
+                if video is not False:
+                    iterator.append(video)
+
+                else:
+                    ui_popup(invalid_input_string)
+
+            self.signals.total_progress.emit(idx, total)
+
+            self.signals.url_iterators.emit(iterator, model_iterators, search_iterators)
 
 
 class Porn_Fetch(QWidget):
@@ -1341,8 +1394,7 @@ This warning won't be shown again.
             video_urls.append(video_object.url)
 
         if len(video_urls) == 0:
-            ui_popup(
-                QCoreApplication.tr("No video URLs found. Are there videos in the tree widget?", ""))
+            ui_popup(QCoreApplication.tr("No video URLs found. Are there videos in the tree widget?", None))
             return
 
         file, mode = QFileDialog().getSaveFileName(self)
@@ -1491,15 +1543,8 @@ This warning won't be shown again.
 
     def update_total_progressbar(self, value, maximum):
         """This updates the total progressbar"""
-        try:
-            self.ui.progressbar_total.setMaximum(maximum)
-            self.ui.progressbar_total.setValue(value)
-
-        except OverflowError:
-            value = value / 1024 / 1024
-            maximum = maximum / 1024 / 1024
-            self.ui.progressbar_total.setMaximum(maximum)
-            self.ui.progressbar_total.setValue(value)
+        self.ui.progressbar_total.setMaximum(maximum)
+        self.ui.progressbar_total.setValue(value)
 
     def update_converting(self, value, maximum):
         """This updates the converting progressbar"""
@@ -1513,19 +1558,13 @@ This warning won't be shown again.
 
     def update_progressbar_hqporner(self, value, maximum):
         """This updates the HQPorner progressbar"""
-        scaling_factor = 1024 * 1024
-        scaled_value = int(value / scaling_factor)
-        scaled_maximum = int(maximum / scaling_factor)
-        self.ui.progressbar_hqporner.setMaximum(scaled_maximum)
-        self.ui.progressbar_hqporner.setValue(scaled_value)
+        self.ui.progressbar_hqporner.setMaximum(maximum)
+        self.ui.progressbar_hqporner.setValue(value)
 
     def update_progressbar_eporner(self, value, maximum):
         """This updates the eporner progressbar"""
-        scaling_factor = 1024 * 1024
-        scaled_value = int(value / scaling_factor)
-        scaled_maximum = int(maximum / scaling_factor)
-        self.ui.progressbar_eporner.setMaximum(scaled_maximum)
-        self.ui.progressbar_eporner.setValue(scaled_value)
+        self.ui.progressbar_eporner.setMaximum(maximum)
+        self.ui.progressbar_eporner.setValue(value)
 
     def update_progressbar_xnxx(self, value, maximum):
         """This updates the xnxx progressbar"""
@@ -1564,49 +1603,32 @@ This warning won't be shown again.
         self.save_user_settings()
 
     def open_file_dialog(self):
-        """This opens and processes urls in a the file"""
+        """This opens and processes urls in the file"""
         dialog = QFileDialog()
         file, types = dialog.getOpenFileName()
         self.ui.lineedit_file.setText(file)
-        iterator = []
-        model_iterators = []
-        search_iterators = []
+        self.start_it()
 
-        with (open(file, "r") as url_file):
-            content = url_file.read().splitlines()
-            for idx, line in enumerate(content):
-                if len(line) == 0:
-                    continue
+    def start_it(self):
+        file = self.ui.lineedit_file.text()
+        self.url_thread = AddUrls(file, api_language=self.api_language, delay=self.delay)
+        self.url_thread.signals.total_progress.connect(self.update_total_progressbar)
+        self.url_thread.signals.url_iterators.connect(self.receive_url_result)
+        self.threadpool.start(self.url_thread)
 
-                self.ui.progressbar_total.setMaximum(len(content))
+    def receive_url_result(self, iterator, model_iterator, search_iterator):
+        logger_debug(f"Received Video Iterator ({len(iterator)} videos)")
+        logger_debug(f"Received Model Iterator ({len(model_iterator)} urls)")
+        logger_debug(f"Received Search Iterator ({len(search_iterator)} keywords)")
 
-                if url.startswith("model#"):
-                    url = url.split("#")[1]
-                    model_iterators.append(url)
-                    search_iterators.append(line)
+        logger_debug("Processing Videos...")
+        self.add_to_tree_widget_thread(iterator, search_limit=self.search_limit)
+        logger_debug("Processing Models...")
+        for url in model_iterator:
+            self.start_model(url)
 
-                else:
-                    video = check_video(url, language=self.api_language, delay=self.delay)
-
-                    if video is not False:
-                        iterator.append(video)
-
-                    else:
-                        ui_popup(invalid_input_string)
-
-                self.ui.progressbar_total.setValue(idx)
-
-
-            logger_debug("Adding URLs to the tree widget...")
-            self.add_to_tree_widget_thread(iterator, search_limit=self.search_limit)
-            logger_debug("Adding Model videos to the tree widget...")
-            for url in model_iterators:
-                logger_debug(f"Loading videos for model URL: {url}")
-                self.start_model(url)
-
-    """
-    The following functions are related to the User's account
-    """
+        logger_debug("Processing Search queries....")
+        # Placeholder
 
     def login(self):
         """

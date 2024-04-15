@@ -1,14 +1,17 @@
 QPushButton {
-    background-color: rgb(0, 98, 255);
-    font: bold 12px;
+    background-color: #2196F3; /* Vivid blue */
     color: white;
-    border-radius: 8px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: none;
+    padding: 6px 12px;
 }
 
 QPushButton:hover {
-    background-color: #9575CD; /* Lighter violet */
+    background-color: #64B5F6; /* Lighter blue */
+    border-color: #BBDEFB; /* Even lighter blue border */
 }
 
 QPushButton:pressed {
-    background-color: #303F9F; /* Dark blue */
+    background-color: #1976D2; /* Darker blue */
 }
