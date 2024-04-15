@@ -111,7 +111,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_status.setWidgetResizable(True)
         self.scrollAreaWidgetContents_5 = QWidget()
         self.scrollAreaWidgetContents_5.setObjectName(u"scrollAreaWidgetContents_5")
-        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 1201, 156))
+        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 1201, 146))
         self.gridLayout_33 = QGridLayout(self.scrollAreaWidgetContents_5)
         self.gridLayout_33.setObjectName(u"gridLayout_33")
         self.gridlayout_status = QGridLayout()
@@ -197,7 +197,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_treewidget.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 1181, 308))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 1181, 318))
         self.gridLayout_4 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.horizontallayout_treewidget_buttons = QHBoxLayout()
@@ -841,7 +841,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_settings.setWidgetResizable(True)
         self.scrollAreaWidgetContents_6 = QWidget()
         self.scrollAreaWidgetContents_6.setObjectName(u"scrollAreaWidgetContents_6")
-        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, -88, 1166, 662))
+        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 686, 657))
         self.gridLayout_19 = QGridLayout(self.scrollAreaWidgetContents_6)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.button_download_ffmpeg = QPushButton(self.scrollAreaWidgetContents_6)
@@ -1376,11 +1376,114 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_16.addLayout(self.main_gridlayout, 0, 0, 1, 1)
 
+        QWidget.setTabOrder(self.button_switch_home, self.button_switch_account)
+        QWidget.setTabOrder(self.button_switch_account, self.button_switch_tools)
+        QWidget.setTabOrder(self.button_switch_tools, self.button_switch_settings)
+        QWidget.setTabOrder(self.button_switch_settings, self.button_switch_credits)
+        QWidget.setTabOrder(self.button_switch_credits, self.scrollarea_status)
+        QWidget.setTabOrder(self.scrollarea_status, self.button_view_all_progress_bars)
+        QWidget.setTabOrder(self.button_view_all_progress_bars, self.scrollarea_stacked_top)
+        QWidget.setTabOrder(self.scrollarea_stacked_top, self.button_switch_supported_websites)
+        QWidget.setTabOrder(self.button_switch_supported_websites, self.lineedit_url)
+        QWidget.setTabOrder(self.lineedit_url, self.button_download)
+        QWidget.setTabOrder(self.button_download, self.lineedit_playlist_url)
+        QWidget.setTabOrder(self.lineedit_playlist_url, self.button_playlist_get_videos)
+        QWidget.setTabOrder(self.button_playlist_get_videos, self.lineedit_model_url)
+        QWidget.setTabOrder(self.lineedit_model_url, self.button_model)
+        QWidget.setTabOrder(self.button_model, self.lineedit_file)
+        QWidget.setTabOrder(self.lineedit_file, self.button_help_file)
+        QWidget.setTabOrder(self.button_help_file, self.button_open_file)
+        QWidget.setTabOrder(self.button_open_file, self.lineedit_search_query)
+        QWidget.setTabOrder(self.lineedit_search_query, self.button_search)
+        QWidget.setTabOrder(self.button_search, self.radio_search_website_pornhub)
+        QWidget.setTabOrder(self.radio_search_website_pornhub, self.radio_search_website_hqporner)
+        QWidget.setTabOrder(self.radio_search_website_hqporner, self.radio_search_website_xvideos)
+        QWidget.setTabOrder(self.radio_search_website_xvideos, self.radio_search_website_eporner)
+        QWidget.setTabOrder(self.radio_search_website_eporner, self.radio_search_website_xnxx)
+        QWidget.setTabOrder(self.radio_search_website_xnxx, self.treeWidget)
+        QWidget.setTabOrder(self.treeWidget, self.radio_tree_show_title)
+        QWidget.setTabOrder(self.radio_tree_show_title, self.scrollarea_treewidget)
+        QWidget.setTabOrder(self.scrollarea_treewidget, self.radio_tree_show_all)
+        QWidget.setTabOrder(self.radio_tree_show_all, self.checkbox_do_not_clear_videos)
+        QWidget.setTabOrder(self.checkbox_do_not_clear_videos, self.checkbox_show_videos_reversed)
+        QWidget.setTabOrder(self.checkbox_show_videos_reversed, self.button_tree_download)
+        QWidget.setTabOrder(self.button_tree_download, self.button_tree_select_all)
+        QWidget.setTabOrder(self.button_tree_select_all, self.button_tree_unselect_all)
+        QWidget.setTabOrder(self.button_tree_unselect_all, self.button_stop)
+        QWidget.setTabOrder(self.button_stop, self.button_export_video_urls)
+        QWidget.setTabOrder(self.button_export_video_urls, self.lineedit_username)
+        QWidget.setTabOrder(self.lineedit_username, self.lineedit_password)
+        QWidget.setTabOrder(self.lineedit_password, self.button_login)
+        QWidget.setTabOrder(self.button_login, self.button_get_liked_videos)
+        QWidget.setTabOrder(self.button_get_liked_videos, self.button_get_watched_videos)
+        QWidget.setTabOrder(self.button_get_watched_videos, self.button_get_recommended_videos)
+        QWidget.setTabOrder(self.button_get_recommended_videos, self.scrollArea)
+        QWidget.setTabOrder(self.scrollArea, self.radio_top_porn_week)
+        QWidget.setTabOrder(self.radio_top_porn_week, self.radio_top_porn_month)
+        QWidget.setTabOrder(self.radio_top_porn_month, self.radio_top_porn_all_time)
+        QWidget.setTabOrder(self.radio_top_porn_all_time, self.button_top_porn_get_videos)
+        QWidget.setTabOrder(self.button_top_porn_get_videos, self.lineedit_hqporner_category)
+        QWidget.setTabOrder(self.lineedit_hqporner_category, self.button_hqporner_category_get_videos)
+        QWidget.setTabOrder(self.button_hqporner_category_get_videos, self.button_list_categories)
+        QWidget.setTabOrder(self.button_list_categories, self.button_get_random_videos)
+        QWidget.setTabOrder(self.button_get_random_videos, self.button_get_brazzers_videos)
+        QWidget.setTabOrder(self.button_get_brazzers_videos, self.lineedit_videos_by_category_eporner)
+        QWidget.setTabOrder(self.lineedit_videos_by_category_eporner, self.button_eporner_category_get_videos)
+        QWidget.setTabOrder(self.button_eporner_category_get_videos, self.button_list_categories_eporner)
+        QWidget.setTabOrder(self.button_list_categories_eporner, self.scrollarea_settings)
+        QWidget.setTabOrder(self.scrollarea_settings, self.button_download_ffmpeg)
+        QWidget.setTabOrder(self.button_download_ffmpeg, self.radio_threading_mode_high_performance)
+        QWidget.setTabOrder(self.radio_threading_mode_high_performance, self.radio_threading_mode_ffmpeg)
+        QWidget.setTabOrder(self.radio_threading_mode_ffmpeg, self.radio_threading_mode_default)
+        QWidget.setTabOrder(self.radio_threading_mode_default, self.button_threading_mode_help)
+        QWidget.setTabOrder(self.button_threading_mode_help, self.spinbox_semaphore)
+        QWidget.setTabOrder(self.spinbox_semaphore, self.button_semaphore_help)
+        QWidget.setTabOrder(self.button_semaphore_help, self.spinbox_pornhub_delay)
+        QWidget.setTabOrder(self.spinbox_pornhub_delay, self.button_pornhub_delay_help)
+        QWidget.setTabOrder(self.button_pornhub_delay_help, self.spinbox_maximal_workers)
+        QWidget.setTabOrder(self.spinbox_maximal_workers, self.button_workers_help)
+        QWidget.setTabOrder(self.button_workers_help, self.spinbox_maximal_timeout)
+        QWidget.setTabOrder(self.spinbox_maximal_timeout, self.button_timeout_help)
+        QWidget.setTabOrder(self.button_timeout_help, self.spinbox_maximal_retries)
+        QWidget.setTabOrder(self.spinbox_maximal_retries, self.button_timeout_maximal_retries_help)
+        QWidget.setTabOrder(self.button_timeout_maximal_retries_help, self.radio_quality_best)
+        QWidget.setTabOrder(self.radio_quality_best, self.radio_quality_half)
+        QWidget.setTabOrder(self.radio_quality_half, self.radio_quality_worst)
+        QWidget.setTabOrder(self.radio_quality_worst, self.lineedit_output_path)
+        QWidget.setTabOrder(self.lineedit_output_path, self.button_output_path_select)
+        QWidget.setTabOrder(self.button_output_path_select, self.radio_directory_system_yes)
+        QWidget.setTabOrder(self.radio_directory_system_yes, self.radio_directory_system_no)
+        QWidget.setTabOrder(self.radio_directory_system_no, self.button_directory_system_help)
+        QWidget.setTabOrder(self.button_directory_system_help, self.spinbox_treewidget_limit)
+        QWidget.setTabOrder(self.spinbox_treewidget_limit, self.button_result_limit_help)
+        QWidget.setTabOrder(self.button_result_limit_help, self.radio_api_language_english)
+        QWidget.setTabOrder(self.radio_api_language_english, self.radio_api_language_chinese)
+        QWidget.setTabOrder(self.radio_api_language_chinese, self.radio_api_language_spanish)
+        QWidget.setTabOrder(self.radio_api_language_spanish, self.radio_api_language_czech)
+        QWidget.setTabOrder(self.radio_api_language_czech, self.radio_api_language_german)
+        QWidget.setTabOrder(self.radio_api_language_german, self.radio_api_language_russian)
+        QWidget.setTabOrder(self.radio_api_language_russian, self.radio_api_language_italian)
+        QWidget.setTabOrder(self.radio_api_language_italian, self.radio_api_language_japanese)
+        QWidget.setTabOrder(self.radio_api_language_japanese, self.radio_api_language_french)
+        QWidget.setTabOrder(self.radio_api_language_french, self.radio_api_language_dutch)
+        QWidget.setTabOrder(self.radio_api_language_dutch, self.radio_api_language_portuguese)
+        QWidget.setTabOrder(self.radio_api_language_portuguese, self.radio_ui_language_system_default)
+        QWidget.setTabOrder(self.radio_ui_language_system_default, self.radio_ui_language_english)
+        QWidget.setTabOrder(self.radio_ui_language_english, self.radio_ui_language_german)
+        QWidget.setTabOrder(self.radio_ui_language_german, self.radio_ui_language_chinese_simplified)
+        QWidget.setTabOrder(self.radio_ui_language_chinese_simplified, self.radio_ui_language_french)
+        QWidget.setTabOrder(self.radio_ui_language_french, self.radio_discord_yes)
+        QWidget.setTabOrder(self.radio_discord_yes, self.radio_discord_no)
+        QWidget.setTabOrder(self.radio_discord_no, self.button_settings_apply)
+        QWidget.setTabOrder(self.button_settings_apply, self.button_settings_reset)
+        QWidget.setTabOrder(self.button_settings_reset, self.textBrowser)
+        QWidget.setTabOrder(self.textBrowser, self.discord_rich_presence_help)
+        QWidget.setTabOrder(self.discord_rich_presence_help, self.textbrowser_websites)
 
         self.retranslateUi(Porn_Fetch_Widget)
 
-        self.stacked_widget_main.setCurrentIndex(1)
-        self.stacked_widget_top.setCurrentIndex(0)
+        self.stacked_widget_main.setCurrentIndex(0)
+        self.stacked_widget_top.setCurrentIndex(2)
         self.stackedWidget.setCurrentIndex(1)
 
 
@@ -1526,56 +1629,52 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_settings_apply.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Apply  (needs restart)", None))
         self.button_settings_reset.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Reset Porn Fetch to default settings", None))
         self.textbrowser_websites.setHtml(QCoreApplication.translate("Porn_Fetch_Widget", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">Supported Websites:</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" fon"
-                        "t-family:'Sans Serif';\">Downloading:</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- PornHub.com (supports total progress)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- HQPorner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- Eporner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- XNXX.com (sup"
-                        "ports total progress)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- XVideos.com (supports total progress)</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">All sites support *threaded* downloads and selectable quality!</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans"
-                        " Serif';\">* hqporner and eporner running in QThreads, but they don't fetch segments. The video is directly</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">downloaded, therefore threading in a segment isn't needed.</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">Model / Channel Downloads</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt"
-                        "-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- PornHub.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- HQPorner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- EPorner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- XNXX.com</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans"
-                        " Serif';\">Searching:</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- PornHub.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- HQPorner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- Xvideos.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- Eporner.com</span></p>\n"
-"<p style=\" margin-top:0px; "
-                        "margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">- XNXX.com</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif';\">I am constantly working to support more websites.</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; m"
-                        "argin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';\"><br /></p></body></html>", None))
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Supported Websites:</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Downloading:</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-righ"
+                        "t:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com (supports total progress)</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Eporner.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XNXX.com (supports total progress)</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XVideos.com (supports total progress)</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">All sites support *threaded"
+                        "* downloads and selectable quality!</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">* hqporner and eporner running in QThreads, but they don't fetch segments. The video is directly</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">downloaded, therefore threading in a segment isn't needed.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Model / Channel Downloads</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; m"
+                        "argin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- EPorner.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XNXX.com</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Searching:</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left"
+                        ":0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Xvideos.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Eporner.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XNXX.com</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-ri"
+                        "ght:0px; -qt-block-indent:0; text-indent:0px;\">I am constantly working to support more websites.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-blo"
+                        "ck-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
     # retranslateUi
 

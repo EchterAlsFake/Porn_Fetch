@@ -54,19 +54,23 @@ __license__ = "GPL 3"
 __version__ = "3.3"
 __build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
-__next_release__ = "3.3"
+__next_release__ = "3.4"
 discord_id = "1224629014032023563"  # Used for rich presence
 discord_image = "logo_transparent"
 total_segments = 0
 downloaded_segments = 0
 last_index = 0
 stop_flag = Event()
-send_error_logs = False  # Only enabled when developing the application.
 invalid_input_string = QCoreApplication.tr("Wrong Input, please verify the URL, category or actress!", None)
 ffmpeg_features = True
 ffmpeg_path = None
 urls = ["https://www.pornhub.com", "https://www.eporner.com", "https://www.hqporner.com", "https://www.xnxx.com",
         "https://www.xvideos.com"]
+
+url_linux = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
+url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
+ffmpeg_linux = "ffmpeg-7.0-essentials_build"
+ffmpeg_windows = "ffmpeg-6.1-amd64-static"
 
 
 class Signals(QObject):
@@ -607,10 +611,10 @@ class FFMPEGDownload(QRunnable):
         os.remove(filename)  # Clean up downloaded archive
 
         if sys.platform == "linux":
-            shutil.rmtree("ffmpeg-6.1-amd64-static")
+            shutil.rmtree(ffmpeg_linux)
 
         elif sys.platform == "win32":
-            shutil.rmtree("ffmpeg-7.0-essentials_build")
+            shutil.rmtree(ffmpeg_windows)
 
         logger_debug("FFMPEG: [4/4] Cleaned Up")
         self.signals.finished.emit()
@@ -799,6 +803,17 @@ class Porn_Fetch(QWidget):
         self.ui.button_help_file.setStyleSheet(stylesheets["button_green"])
         self.ui.button_download_ffmpeg.setStyleSheet(stylesheets["button_purple"])
 
+    def load_tab_order(self):
+        """
+        This is used to correctly assign the tab order. It should be possible to navigate Porn Fetch only with your
+        keyboard.
+        """
+        # Login Boxes (Taborder
+
+
+
+
+
     def check_for_updates(self):
         """Checks for updates in a thread, so that the main UI isn't blocked, until update checks are done"""
         self.update_thread = CheckUpdates()
@@ -884,12 +899,10 @@ This warning won't be shown again.
     def download_ffmpeg(self):
         if sys.platform == "linux":
             if not os.path.isfile("ffmpeg"):
-                url_linux = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
                 self.downloader = FFMPEGDownload(url=url_linux, extract_path=".", mode="linux")
 
         elif sys.platform == "win32":
             if not os.path.isfile("ffmpeg.exe"):
-                url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
                 self.downloader = FFMPEGDownload(url=url_windows, extract_path=".", mode="windows")
 
         self.downloader.signals.total_progress.connect(self.update_total_progressbar)

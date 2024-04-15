@@ -7,8 +7,8 @@
 - [x] Switching to Qt 6.7
 - [x] Switching to Nuitka build deployment for C code compilation
 - [x] Compiling for all android architectures
+- [x] Fixing the qlineedits when used with tabbing
 - [] Fixing the Android layout once again
-- [] Fixing the Windows performance (idk)
 - [] Making functions and the application in general more robust
 - [] Trying another approach for Windows downloading, because threading seems to not really work on Windoof
 - [] Changing the Layout on Android, so that the progressbars become an extra widget, which would lead to more
@@ -16,9 +16,7 @@
 - [] Adding model support for xvideos
 - [] Rewriting the file implementation to be less painful and allow more kind of sortings
 - [] Adding Search query support for files
-- [] Fixing the qlineedits when used with tabbing
 - [] Reworking the stylesheets to have a better contrast
-- [] Supporting more video formats. Now where ffmpeg is fully integrated, why not adding this lol
 - [] Improving the CLI debug messages, so that progress is reported more clearly
 - [] Adding license information to all libraries in credits
 - [] Adding support for the custom delay in the other API libraries (eaf_base_api)
