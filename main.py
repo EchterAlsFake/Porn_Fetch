@@ -24,8 +24,9 @@ from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
 from src.frontend.License import Ui_License
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
-                            QTranslator, QCoreApplication, QIODevice)
-from PySide6.QtWidgets import (QWidget, QApplication, QInputDialog, QTreeWidgetItem, QButtonGroup, QFileDialog)
+                            QTranslator, QCoreApplication)
+from PySide6.QtWidgets import (QWidget, QApplication, QInputDialog, QTreeWidgetItem, QButtonGroup, QFileDialog,
+                               QPushButton)
 from PySide6.QtGui import QIcon, QFont
 
 """
@@ -52,7 +53,7 @@ Discord: echteralsfake (faster response)
 
 __license__ = "GPL 3"
 __version__ = "3.3"
-__build__ = "desktop"  # android or desktop
+__build__ = "android"  # android or desktop
 __author__ = "Johannes Habel"
 __next_release__ = "3.4"
 discord_id = "1224629014032023563"  # Used for rich presence
@@ -855,17 +856,10 @@ class Porn_Fetch(QWidget):
         self.ui.button_timeout_maximal_retries_help.setStyleSheet(stylesheets["button_green"])
         self.ui.button_help_file.setStyleSheet(stylesheets["button_green"])
         self.ui.button_download_ffmpeg.setStyleSheet(stylesheets["button_purple"])
-
-    def load_tab_order(self):
-        """
-        This is used to correctly assign the tab order. It should be possible to navigate Porn Fetch only with your
-        keyboard.
-        """
-        # Login Boxes (Taborder
-
-
-
-
+        self.header = self.ui.treeWidget.header()
+        self.header.resizeSection(0, 300)
+        self.header.resizeSection(1, 150)
+        self.header.resizeSection(2, 50)
 
     def check_for_updates(self):
         """Checks for updates in a thread, so that the main UI isn't blocked, until update checks are done"""
@@ -1050,6 +1044,20 @@ This warning won't be shown again.
         self.ui.lineedit_file.setText(QCoreApplication.tr("Not supported on Android", None))
         self.ui.radio_threading_mode_ffmpeg.setDisabled(True)
         self.warn_about_high_performance_threading()
+
+        self.ui.gridlayout_progressbar.addWidget(self.ui.label_progress_pornhub)
+        self.ui.gridlayout_progressbar.addWidget(self.ui.progressbar_pornhub)
+        self.ui.gridlayout_progressbar.addWidget(self.ui.label_total_progress)
+        self.ui.gridlayout_progressbar.addWidget(self.ui.progressbar_total)
+        self.ui.gridlayout_progressbar.addWidget(self.ui.label_progress_converting)
+        self.ui.gridlayout_progressbar.addWidget(self.ui.progressbar_converting)
+
+        self.progress_button = QPushButton("Show Progress")
+        self.ui.verticallayout_sidebar.addWidget(self.progress_button)
+        self.progress_button.clicked.connect(self.switch_to_all_progress_bars)
+        self.ui.scrollarea_status.deleteLater()
+
+
 
     def warn_about_high_performance_threading(self):
         if self.ui.radio_threading_mode_high_performance.isChecked():

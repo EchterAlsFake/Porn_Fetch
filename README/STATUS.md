@@ -11,7 +11,7 @@
 - [x] Rewriting the file implementation to be less painful and allow more kind of sortings
 - [x] Making functions and the application in general more robust
 - [x] Reworking the stylesheets to have a better contrast
-- [] Fixing the Android layout once again
+- [x] Fixing the Android layout once again
 - [] Changing the Layout on Android, so that the progressbars become an extra widget, which would lead to more
   space being available
 - [] Adding model support for xvideos
