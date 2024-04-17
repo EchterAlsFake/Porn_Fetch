@@ -8,12 +8,17 @@ import shutil
 import tarfile
 import src.frontend.resources
 
+from itertools import islice
 from threading import Event
 from pathlib import Path
-from itertools import islice
 from pypresence import Presence, exceptions
-from hqporner_api.api import Sort as hq_Sort
-from phub import consts
+
+from hqporner_api.api import Client as hq_Client, Sort as hq_Sort, Video as hq_Video
+from eporner_api.eporner_api import Client as ep_Client, Video as ep_Video
+from xnxx_api.xnxx_api import Client as xn_Client, Video as xn_Video
+from xvideos_api.xvideos_api import Client as xv_Client, Video as xv_Video
+from phub import Client, consts
+from phub.modules.download import threaded as ph_threaded, default as ph_default, FFMPEG as ph_FFMPEG
 from base_api.modules import consts as bs_consts
 from base_api.base import Core
 
@@ -53,7 +58,7 @@ Discord: echteralsfake (faster response)
 
 __license__ = "GPL 3"
 __version__ = "3.3"
-__build__ = "android"  # android or desktop
+__build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 __next_release__ = "3.4"
 discord_id = "1224629014032023563"  # Used for rich presence
@@ -293,10 +298,6 @@ Error: {e}""")
                         self.signals.error_signal("""
 There's a problem with your internet access... Are certain Porn sites blocked by a firewall or your ISP?""")
                         break
-
-                        for j in range(5):
-                            print(f"\r\033[K[Sleeping: [{j} / 5]", end='', flush=True)
-                            time.sleep(1)
 
         finally:
             self.signals.finished.emit()
@@ -1057,8 +1058,6 @@ This warning won't be shown again.
         self.progress_button.clicked.connect(self.switch_to_all_progress_bars)
         self.ui.scrollarea_status.deleteLater()
 
-
-
     def warn_about_high_performance_threading(self):
         if self.ui.radio_threading_mode_high_performance.isChecked():
             ui_popup(
@@ -1494,6 +1493,9 @@ This warning won't be shown again.
 
         elif xnxx_pattern.match(model):
             videos = xn_Client.get_user(url=model).videos
+
+        elif xvideos_pattern.match(model):
+            videos = xv_Client().get_pornstar(url=model).videos
 
         self.add_to_tree_widget_thread(videos, search_limit=search_limit)
 

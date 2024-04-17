@@ -19,4 +19,4 @@
 | HQporner |      Yes      |    Yes    |      No       |   Yes    |       No       |  Yes  |
 | Eporner  |      Yes      |    Yes    |      No       |   Yes    |       No       |  Yes  |
 | xnxx     |      Yes      |    Yes    |      No       |   Yes    |      Yes       |  Yes  |
-| xvideos  |      Yes      |    Yes    |      No       |   Yes    |      Yes       |  No   |
+| xvideos  |      Yes      |    Yes    |      No       |   Yes    |      Yes       |  Yes  |

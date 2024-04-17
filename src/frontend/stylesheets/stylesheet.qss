@@ -73,6 +73,19 @@ QTreeWidget QHeaderView::section {
     border: 1px solid #5A2A82;
 }
 
+QTreeView::indicator {
+    width: 15px;
+    height: 15px;
+    border: 1px solid #555;
+    border-radius: 4px; }
+
+QTreeView::indicator:unchecked:hover {
+    background-color: #555;
+}
+QTreeView::indicator:checked {
+    image: url(':/images/graphics/done.svg');
+}
+
 QGroupBox {
     border: 2px solid #4CAF50;  /* More vivid green for emphasis */
     border-radius: 5px;

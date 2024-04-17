@@ -12,15 +12,15 @@
 - [x] Making functions and the application in general more robust
 - [x] Reworking the stylesheets to have a better contrast
 - [x] Fixing the Android layout once again
+- [x] Adding model support for xvideos
+- [x] Fixing the tree widget to be less ugly (for real, I hate it myself)
 - [] Changing the Layout on Android, so that the progressbars become an extra widget, which would lead to more
   space being available
-- [] Adding model support for xvideos
 - [] Adding Search query support for files
 - [] Improving the CLI debug messages, so that progress is reported more clearly
 - [] Adding license information to all libraries in credits
 - [] Adding support for the custom delay in the other API libraries (eaf_base_api)
 - [] A better way of checking if a file was already downloaded (like really verifying if actual content is in the file)
 - [] Updating german translations
-- [] Fixing the tree widget to be less ugly (for real, I hate it myself)
 - [] Fixing all the build scripts
 - [] Making contributions easier, by clearly saying what to do, how to do it and what to watch out for
