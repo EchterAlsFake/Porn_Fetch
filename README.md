@@ -84,6 +84,35 @@ The Graphical User Interface is only for 64bit systems. The CLI supports 64 and 
 ### You can see more information [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/WEBSITES.md)
 
 
+## Working with Files
+Porn Fetch allows you to use a URL or kind of a batch file to programmatically download all videos, models, and search
+terms listed in there.
+
+Here's a short documentation how to use it:
+
+> [!NOTE]
+> The format ending of the file doesn't matter.
+
+Here's a quick example on how to use it. It should explain anything by itself:
+
+```text
+Inside the File:
+
+url # The url of some video you want to download. Just in raw format, like when you would download it.
+model#pornhub.com/pornstar/whatever # First enter "model#" after the # follows the model URL
+search#query#website  # First enter search# then the query and then after another hashtag the website you want to search on.
+
+
+Porn Fetch supports all URLs, Models and search terms like it would if you use the basic GUI for downloading.
+```
+
+> [!IMPORTANT]
+> When using the search function, make sure the website is the exact same name like in the URL between www. and .com
+> e., for "https://www.pornhub.com" it would be just "pornhub" or for "https://xvideos.com" it would be just "xvideos"
+
+
+If you still need a real example file, [here you go]()
+
 ## 🔨 Building from Source
 Easy-to-use build scripts are available for various platforms. Run these in your terminal:
 

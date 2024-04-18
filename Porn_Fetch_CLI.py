@@ -306,8 +306,7 @@ for example: 1,5,94,3{Fore.WHITE}
             model = hq_Client().get_videos_by_actress(model)
 
         elif xvideos_pattern.match(model):
-            print(f"{return_color()}XVideos isn't supported yet, sorry.")
-            return
+            model = xv_Client().get_pornstar(model).videos
 
         if do_return:
             return model

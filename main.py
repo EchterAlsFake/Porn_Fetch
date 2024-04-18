@@ -689,6 +689,12 @@ class AddUrls(QRunnable):
                 model_iterators.append(line)
                 search_iterators.append(line)
 
+            elif line.startswith("search#"):
+                query = line.split("#")[1]
+                site = line.split("#")[2]
+                search_iterators.append({"website" : site,
+                                         "query": query})
+
             else:
                 video = check_video(line, language=self.api_language, delay=self.delay)
 
@@ -1638,7 +1644,31 @@ This warning won't be shown again.
             self.start_model(url)
 
         logger_debug("Processing Search queries....")
-        # Placeholder
+        for search in search_iterator:
+            query = search.get("query")
+            website = search.get("website")
+
+            if website == "hqporner":
+                self.ui.radio_search_website_hqporner.setChecked(True)
+
+            elif website == "xvideos":
+                self.ui.radio_search_website_xvideos.setChecked(True)
+
+            elif website == "pornhub":
+                self.ui.radio_search_website_pornhub.setChecked(True)
+
+            elif website == "xnxx":
+                self.ui.radio_search_website_xnxx.setChecked(True)
+
+            elif website == "eporner":
+                self.ui.radio_search_website_eporner.setChecked(True)
+
+            else:
+                ui_popup(f"Information: The Website {website} specified in the URL file isn't valid.")
+                return
+
+            self.ui.lineedit_search_query.setText(query)
+            self.basic_search()
 
     def login(self):
         """

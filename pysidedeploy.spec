@@ -30,15 +30,15 @@ qml_files =
 # excluded qml plugin binaries
 excluded_qml_plugins = 
 # qt modules used. comma separated
-modules = Widgets,Core,Gui
+modules = Core,Gui,Widgets
 # qt plugins used by the application
 plugins = 
 
 [android]
 # path to pyside wheel
-wheel_pyside = /home/asuna/Downloads/PySide6-6.7.0-6.7.0-no-py-ver-impl-available-no-abi-tag-info-available-android_armv7a.whl
+wheel_pyside = /home/asuna/Downloads/PySide6-6.7.0-6.7.0-cp311-cp311-android_aarch64.whl
 # path to shiboken wheel
-wheel_shiboken = /home/asuna/Downloads/shiboken6-6.7.0-6.7.0-no-py-ver-impl-available-no-abi-tag-info-available-android_armv7a.whl
+wheel_shiboken = /home/asuna/Downloads/shiboken6-6.7.0-6.7.0-cp311-cp311-android_aarch64.whl
 # plugins to be copied to libs folder of the packaged application. comma separated
 plugins = imageformats_qjpeg,iconengines_qsvgicon,imageformats_qgif,imageformats_qsvg,platforms_qtforandroid,imageformats_qico,styles_qandroidstyle
 
@@ -68,5 +68,5 @@ sdk_path = /home/asuna/Android/Sdk
 local_libs = plugins_platforms_qtforandroid
 # architecture of deployed platform
 # possible values = ["aarch64", "armv7a", "i686", "x86_64"]
-arch = armv7a
+arch = aarch64
 
