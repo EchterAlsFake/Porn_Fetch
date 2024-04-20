@@ -24,3 +24,5 @@
 - [] Updating german translations
 - [] Fixing all the build scripts
 - [] Making contributions easier, by clearly saying what to do, how to do it and what to watch out for
+- [] Adding time sortings for the tree widget
+- [] Allow selecting between a range of videos in the tree widget for downloading

@@ -1470,7 +1470,7 @@ This warning won't be shown again.
 
     def start_model(self, url=None):
         """Starts the model downloads"""
-        if type(url) is str:
+        if isinstance(url, str):
             model = url
 
         else:
