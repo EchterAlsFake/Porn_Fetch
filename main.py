@@ -1453,7 +1453,7 @@ This warning won't be shown again.
     def start_single_video(self):
         """
         Starts the download of a single video.
-        This still uses the tree widget, because this makes it easier to track the total progress, as I've already
+        This still uses the tree widget because this makes it easier to track the total progress, as I've already
         implemented this feature into the tree widget and I don't want to write code 2 times
         """
         url = self.ui.lineedit_url.text()

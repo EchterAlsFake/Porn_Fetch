@@ -36,9 +36,9 @@ plugins =
 
 [android]
 # path to pyside wheel
-wheel_pyside = /home/asuna/Downloads/PySide6-6.7.0-6.7.0-cp311-cp311-android_aarch64.whl
-# path to shiboken wheel
-wheel_shiboken = /home/asuna/Downloads/shiboken6-6.7.0-6.7.0-cp311-cp311-android_aarch64.whl
+wheel_pyside = /home/asuna/PYSIDE/pyside-setup/PySide6-6.7.0-6.7.0-cp310-cp310-linux_aarch64.whl 
+#path to shiboken wheel
+wheel_shiboken = /home/asuna/PYSIDE/pyside-setup/shiboken6-6.7.0-6.7.0-cp310-cp310-linux_aarch64.whl
 # plugins to be copied to libs folder of the packaged application. comma separated
 plugins = imageformats_qjpeg,iconengines_qsvgicon,imageformats_qgif,imageformats_qsvg,platforms_qtforandroid,imageformats_qico,styles_qandroidstyle
 
