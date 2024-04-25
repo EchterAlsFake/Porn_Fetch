@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1468</width>
-    <height>981</height>
+    <width>1630</width>
+    <height>963</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -25,7 +25,7 @@
   <property name="windowTitle">
    <string>Porn Fetch V3.3 (C) Johannes Habel GPL 3</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_16">
+  <layout class="QGridLayout" name="gridLayout_20">
    <item row="0" column="0">
     <widget class="QScrollArea" name="scroll_area_really_important_lol">
      <property name="horizontalScrollBarPolicy">
@@ -39,8 +39,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>1448</width>
-        <height>961</height>
+        <width>1610</width>
+        <height>943</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_22">
@@ -74,7 +74,7 @@
               </property>
               <widget class="QWidget" name="widget">
                <layout class="QGridLayout" name="gridLayout_8">
-                <item row="0" column="1">
+                <item row="1" column="1">
                  <widget class="QScrollArea" name="scrollarea_stacked_top">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
@@ -96,7 +96,7 @@
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>1350</width>
+                     <width>1512</width>
                      <height>291</height>
                     </rect>
                    </property>
@@ -642,7 +642,7 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>1312</width>
+                             <width>1474</width>
                              <height>253</height>
                             </rect>
                            </property>
@@ -1070,7 +1070,7 @@
                   </widget>
                  </widget>
                 </item>
-                <item row="1" column="1">
+                <item row="2" column="1">
                  <layout class="QVBoxLayout" name="verticallayout_treewidget">
                   <item>
                    <widget class="QScrollArea" name="scrollarea_treewidget">
@@ -1082,101 +1082,13 @@
                       <rect>
                        <x>0</x>
                        <y>0</y>
-                       <width>1348</width>
-                       <height>375</height>
+                       <width>1510</width>
+                       <height>326</height>
                       </rect>
                      </property>
                      <layout class="QGridLayout" name="gridLayout_4">
-                      <item row="0" column="0">
+                      <item row="1" column="0">
                        <layout class="QVBoxLayout" name="verticallayout_treewidget_settings">
-                        <item>
-                         <layout class="QHBoxLayout" name="horizontallayout_treewidget_settings">
-                          <item>
-                           <widget class="QRadioButton" name="radio_tree_show_title">
-                            <property name="sizePolicy">
-                             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                              <horstretch>0</horstretch>
-                              <verstretch>0</verstretch>
-                             </sizepolicy>
-                            </property>
-                            <property name="cursor">
-                             <cursorShape>PointingHandCursor</cursorShape>
-                            </property>
-                            <property name="text">
-                             <string>Only Title (a lot faster)</string>
-                            </property>
-                            <property name="checked">
-                             <bool>true</bool>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QRadioButton" name="radio_tree_show_all">
-                            <property name="sizePolicy">
-                             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                              <horstretch>0</horstretch>
-                              <verstretch>0</verstretch>
-                             </sizepolicy>
-                            </property>
-                            <property name="cursor">
-                             <cursorShape>PointingHandCursor</cursorShape>
-                            </property>
-                            <property name="toolTip">
-                             <string/>
-                            </property>
-                            <property name="styleSheet">
-                             <string notr="true"/>
-                            </property>
-                            <property name="text">
-                             <string>Get Title, Author, Duration</string>
-                            </property>
-                            <property name="checkable">
-                             <bool>true</bool>
-                            </property>
-                            <property name="checked">
-                             <bool>false</bool>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QCheckBox" name="checkbox_do_not_clear_videos">
-                            <property name="text">
-                             <string>Do not clear videos</string>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QCheckBox" name="checkbox_show_videos_reversed">
-                            <property name="cursor">
-                             <cursorShape>PointingHandCursor</cursorShape>
-                            </property>
-                            <property name="text">
-                             <string>Show videos in reverse</string>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QPushButton" name="button_export_video_urls">
-                            <property name="text">
-                             <string>Export video URLs</string>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <spacer name="horizontalSpacer">
-                            <property name="orientation">
-                             <enum>Qt::Horizontal</enum>
-                            </property>
-                            <property name="sizeHint" stdset="0">
-                             <size>
-                              <width>40</width>
-                              <height>20</height>
-                             </size>
-                            </property>
-                           </spacer>
-                          </item>
-                         </layout>
-                        </item>
                         <item>
                          <widget class="QTreeWidget" name="treeWidget">
                           <property name="sizePolicy">
@@ -1210,13 +1122,163 @@
                         </item>
                        </layout>
                       </item>
+                      <item row="0" column="0">
+                       <layout class="QGridLayout" name="gridLayout_16">
+                        <item row="0" column="1">
+                         <widget class="QRadioButton" name="radio_tree_show_all">
+                          <property name="sizePolicy">
+                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                           </sizepolicy>
+                          </property>
+                          <property name="cursor">
+                           <cursorShape>PointingHandCursor</cursorShape>
+                          </property>
+                          <property name="toolTip">
+                           <string/>
+                          </property>
+                          <property name="styleSheet">
+                           <string notr="true"/>
+                          </property>
+                          <property name="text">
+                           <string>Get Title, Author, Duration</string>
+                          </property>
+                          <property name="checkable">
+                           <bool>true</bool>
+                          </property>
+                          <property name="checked">
+                           <bool>false</bool>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="0" column="2">
+                         <widget class="QPushButton" name="button_tree_export_video_urls">
+                          <property name="text">
+                           <string>Export video URLs</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="1" column="1">
+                         <widget class="QCheckBox" name="checkbox_tree_do_not_clear_videos">
+                          <property name="text">
+                           <string>Do not clear videos</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="0" column="0">
+                         <widget class="QRadioButton" name="radio_tree_show_title">
+                          <property name="sizePolicy">
+                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                           </sizepolicy>
+                          </property>
+                          <property name="cursor">
+                           <cursorShape>PointingHandCursor</cursorShape>
+                          </property>
+                          <property name="text">
+                           <string>Only Title (a lot faster)</string>
+                          </property>
+                          <property name="checked">
+                           <bool>true</bool>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="1" column="2">
+                         <widget class="QCheckBox" name="checkbox_tree_show_videos_reversed">
+                          <property name="cursor">
+                           <cursorShape>PointingHandCursor</cursorShape>
+                          </property>
+                          <property name="text">
+                           <string>Show videos in reverse</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="1" column="0">
+                         <widget class="QCheckBox" name="checkbox_tree_allow_sorting">
+                          <property name="text">
+                           <string>Allow Sorting</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="0" column="3">
+                         <spacer name="horizontalSpacer">
+                          <property name="orientation">
+                           <enum>Qt::Horizontal</enum>
+                          </property>
+                          <property name="sizeHint" stdset="0">
+                           <size>
+                            <width>40</width>
+                            <height>20</height>
+                           </size>
+                          </property>
+                         </spacer>
+                        </item>
+                        <item row="1" column="3">
+                         <spacer name="horizontalSpacer_2">
+                          <property name="orientation">
+                           <enum>Qt::Horizontal</enum>
+                          </property>
+                          <property name="sizeHint" stdset="0">
+                           <size>
+                            <width>40</width>
+                            <height>20</height>
+                           </size>
+                          </property>
+                         </spacer>
+                        </item>
+                       </layout>
+                      </item>
                      </layout>
                     </widget>
                    </widget>
                   </item>
                   <item>
-                   <layout class="QHBoxLayout" name="horizontalLayout_4">
-                    <item>
+                   <layout class="QGridLayout" name="gridLayout_17">
+                    <item row="1" column="1">
+                     <widget class="QPushButton" name="button_tree_unselect_all">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="toolTip">
+                       <string>Unselects all videos in the tree widget</string>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true"/>
+                      </property>
+                      <property name="text">
+                       <string>Unselect all</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2">
+                     <widget class="QPushButton" name="button_tree_stop">
+                      <property name="toolTip">
+                       <string>Does not stop downloading videos</string>
+                      </property>
+                      <property name="text">
+                       <string>Stop loading videos</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QPushButton" name="button_tree_select_range">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="toolTip">
+                       <string>Automatically checks a range of videos</string>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true"/>
+                      </property>
+                      <property name="text">
+                       <string>Select a range of videos</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0" colspan="3">
                      <widget class="QPushButton" name="button_tree_download">
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
@@ -1231,55 +1293,39 @@
                     </item>
                    </layout>
                   </item>
+                 </layout>
+                </item>
+                <item row="0" column="1">
+                 <layout class="QHBoxLayout" name="horizontalLayout_3">
                   <item>
-                   <layout class="QVBoxLayout" name="verticalLayout_3">
-                    <item>
-                     <layout class="QHBoxLayout" name="horizontallayout_treewidget_buttons">
-                      <item>
-                       <widget class="QPushButton" name="button_tree_select_range">
-                        <property name="cursor">
-                         <cursorShape>PointingHandCursor</cursorShape>
-                        </property>
-                        <property name="toolTip">
-                         <string>Automatically checks a range of videos</string>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true"/>
-                        </property>
-                        <property name="text">
-                         <string>Select a range of videos</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QPushButton" name="button_tree_unselect_all">
-                        <property name="cursor">
-                         <cursorShape>PointingHandCursor</cursorShape>
-                        </property>
-                        <property name="toolTip">
-                         <string>Unselects all videos in the tree widget</string>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true"/>
-                        </property>
-                        <property name="text">
-                         <string>Unselect all</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QPushButton" name="button_stop">
-                        <property name="toolTip">
-                         <string>Does not stop downloading videos</string>
-                        </property>
-                        <property name="text">
-                         <string>Stop loading videos</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </item>
-                   </layout>
+                   <widget class="QLabel" name="label_status_internet">
+                    <property name="text">
+                     <string>Internet:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineedit_status_internet"/>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="label_status_ffmpeg">
+                    <property name="text">
+                     <string>FFmpeg:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineedit_status_ffmpeg"/>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="label_status_update">
+                    <property name="text">
+                     <string>Update available:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineedit_status_update"/>
                   </item>
                  </layout>
                 </item>
@@ -1297,7 +1343,7 @@
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>1143</width>
+                     <width>846</width>
                      <height>762</height>
                     </rect>
                    </property>
@@ -2099,7 +2145,7 @@ p, li { white-space: pre-wrap; }
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>1368</width>
+                 <width>1530</width>
                  <height>171</height>
                 </rect>
                </property>
@@ -2135,6 +2181,27 @@ p, li { white-space: pre-wrap; }
                     </property>
                     <property name="value">
                      <number>0</number>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_progress_converting">
+                    <property name="text">
+                     <string>Converting:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QProgressBar" name="progressbar_converting">
+                    <property name="value">
+                     <number>0</number>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="8" column="0" colspan="2">
+                   <widget class="QPushButton" name="button_view_all_progress_bars">
+                    <property name="text">
+                     <string>View all other progress bars</string>
                     </property>
                    </widget>
                   </item>
@@ -2180,27 +2247,6 @@ p, li { white-space: pre-wrap; }
                     </property>
                     <property name="text">
                      <string>Information: The total progressbar does not count for Eporner and HQPorner, because they are using different mechanisms for downloading.</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="8" column="0" colspan="2">
-                   <widget class="QPushButton" name="button_view_all_progress_bars">
-                    <property name="text">
-                     <string>View all other progress bars</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="label_progress_converting">
-                    <property name="text">
-                     <string>Converting:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="1">
-                   <widget class="QProgressBar" name="progressbar_converting">
-                    <property name="value">
-                     <number>0</number>
                     </property>
                    </widget>
                   </item>
@@ -2395,13 +2441,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>radio_search_website_eporner</tabstop>
   <tabstop>radio_search_website_xnxx</tabstop>
   <tabstop>treeWidget</tabstop>
-  <tabstop>radio_tree_show_title</tabstop>
   <tabstop>scrollarea_treewidget</tabstop>
-  <tabstop>radio_tree_show_all</tabstop>
-  <tabstop>checkbox_do_not_clear_videos</tabstop>
-  <tabstop>checkbox_show_videos_reversed</tabstop>
-  <tabstop>button_tree_select_range</tabstop>
-  <tabstop>button_tree_unselect_all</tabstop>
   <tabstop>lineedit_username</tabstop>
   <tabstop>lineedit_password</tabstop>
   <tabstop>button_login</tabstop>

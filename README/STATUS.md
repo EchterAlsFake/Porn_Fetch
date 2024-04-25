@@ -15,6 +15,7 @@
 - [x] Adding model support for xvideos
 - [x] Fixing the tree widget to be less ugly (for real, I hate it myself)
 - [x] Adding license information to all libraries in credits
+- [x] Make the tree widget support sorting in general
 - [] Changing the Layout on Android, so that the progressbars become an extra widget, which would lead to more
   space being available
 - [] Adding Search query support for files

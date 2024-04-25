@@ -13,12 +13,8 @@ from threading import Event
 from pathlib import Path
 from pypresence import Presence, exceptions
 
-from hqporner_api.api import Client as hq_Client, Sort as hq_Sort, Video as hq_Video
-from eporner_api.eporner_api import Client as ep_Client, Video as ep_Video
-from xnxx_api.xnxx_api import Client as xn_Client, Video as xn_Video
-from xvideos_api.xvideos_api import Client as xv_Client, Video as xv_Video
-from phub import Client, consts
-from phub.modules.download import threaded as ph_threaded, default as ph_default, FFMPEG as ph_FFMPEG
+from hqporner_api.api import Sort as hq_Sort
+from phub import consts
 from base_api.modules import consts as bs_consts
 from base_api.base import Core
 
@@ -277,7 +273,13 @@ class AddToTreeWidget(QRunnable):
                         if i == self.search_limit + 1:
                             break  # The search limit prevents an infinite loop
 
-                        text_data = self.process_video(video, i)
+                        try:
+                            text_data = self.process_video(video, i)
+                        except errors.RegexError as e:
+                            logger_error(f"Warning: a Regex Error occurred. This must not be an error, but could be one!"
+                                         f" -->: {e}")
+
+                            text_data = [str(video.title), str("Unknown"), str("Unknown"), str(i), video]
 
                         self.signals.progress.emit(self.search_limit, i)  # sends the current progress
                         self.signals.text_data.emit(text_data)  # sends the data to the main class
@@ -286,7 +288,7 @@ class AddToTreeWidget(QRunnable):
                     except errors.NoResult:
                         try_attempt = False  # No result, move to the next video
 
-                    except (errors.RegexError, errors.MaxRetriesExceeded, IndexError, ConnectionError) as e:
+                    except (errors.MaxRetriesExceeded, IndexError, ConnectionError) as e:
                         logger_error(f"""
 Rate limited by PornHub, waiting for 5 seconds...
 
@@ -858,8 +860,8 @@ class Porn_Fetch(QWidget):
         self.ui.button_settings_reset.setStyleSheet(stylesheets["button_reset"])
         self.ui.button_playlist_get_videos.setStyleSheet(stylesheets["button_purple"])
         self.ui.button_view_all_progress_bars.setStyleSheet(stylesheets["button_blue"])
-        self.ui.button_stop.setStyleSheet(stylesheets["button_reset"])
-        self.ui.button_export_video_urls.setStyleSheet(stylesheets["button_purple"])
+        self.ui.button_tree_stop.setStyleSheet(stylesheets["button_reset"])
+        self.ui.button_tree_export_video_urls.setStyleSheet(stylesheets["button_purple"])
         self.ui.button_timeout_maximal_retries_help.setStyleSheet(stylesheets["button_green"])
         self.ui.button_help_file.setStyleSheet(stylesheets["button_green"])
         self.ui.button_download_ffmpeg.setStyleSheet(stylesheets["button_purple"])
@@ -874,17 +876,18 @@ class Porn_Fetch(QWidget):
         self.update_thread.signals.result.connect(self.check_for_updates_result)
         self.threadpool.start(self.update_thread)
 
-    @classmethod
-    def check_for_updates_result(cls, value):
+    def check_for_updates_result(self, value):
         """Receives the Update result from the thread"""
         if value:
             logger_debug(f"Next release v{__next_release__} found!")
             ui_popup(QCoreApplication.tr(f"""
             Information: A new version of Porn Fetch (v{__next_release__}) is out. I recommend you to update Porn Fetch. 
             Go to: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/ {__next_release__}""", None))
+            self.ui.lineedit_status_update.setText(f"✔, V{__next_release__} is out!")
 
         else:
             logger_debug("No updates found...")
+            self.ui.lineedit_status_update.setText("❌")
 
     def check_internet(self):
         """Checks the internet access for all sites"""
@@ -892,16 +895,17 @@ class Porn_Fetch(QWidget):
         self.internet_thread.signals.result.connect(self.check_internet_result)
         self.threadpool.start(self.internet_thread)
 
-    @classmethod
-    def check_internet_result(cls, value):
+    def check_internet_result(self, value):
         if value:
             logger_debug("All Internet connection tests passed: ✔")
+            self.ui.lineedit_status_internet.setText("✔")
 
         else:
             logger_error("""
 Couldn't access one of the supported websites, make sure you have a stable internet connection and you are outside of 
 a firewall. If you are at a public place or using your universities WiFi, your IT-Administrator may have forbidden 
 access to specific sites. In this case you can use a VPN / Proxy.""")
+            self.ui.lineedit_status_internet.setText("❌, please check your Internet connection!")
 
     def check_ffmpeg(self):
         # Check if ffmpeg is available in the system PATH
@@ -940,14 +944,17 @@ This warning won't be shown again.
                 global ffmpeg_features
                 ffmpeg_features = False
                 logger_error("FFMPEG features have been disabled, because ffmpeg wasn't found on your system.")
+                self.ui.lineedit_status_ffmpeg.setText("❌, FFmpeg features won't be available!")
             else:
                 # If ffmpeg binary is found in the current directory, set it as the ffmpeg path
                 ffmpeg_path = os.path.abspath(ffmpeg_binary)
+                self.ui.lineedit_status_ffmpeg.setText(f"✔ -->: {ffmpeg_path}")
         else:
             # If ffmpeg is found in system PATH, use it directly
             ffmpeg_path = shutil.which("ffmpeg")
             consts.FFMPEG_EXECUTABLE = ffmpeg_path
             bs_consts.FFMPEG_PATH = ffmpeg_path
+            self.ui.lineedit_status_ffmpeg.setText(f"✔ -->: {ffmpeg_path}")
             logger_debug(f"FFMPEG: {ffmpeg_path}")
 
     def download_ffmpeg(self):
@@ -1076,6 +1083,15 @@ This warning won't be shown again.
         setup_config_file(force=True)
         ui_popup(QCoreApplication.tr("Done! Please restart.", None))
 
+    def toggle_sorting(self):
+        if self.ui.checkbox_tree_allow_sorting.isChecked():
+            logger_debug("Enabling sorting on the tree widget")
+            self.ui.treeWidget.setSortingEnabled(True)
+
+        else:
+            logger_debug("Disabling sorting on the tree widget")
+            self.ui.treeWidget.setSortingEnabled(False)
+
     def button_connectors(self):
         """a function to link the buttons to their functions"""
         # Menu Bar Switch Button Connections
@@ -1136,8 +1152,9 @@ This warning won't be shown again.
         self.ui.button_open_file.clicked.connect(self.open_file_dialog)
 
         # Other stuff idk
-        self.ui.button_stop.clicked.connect(self.switch_stop_state)
-        self.ui.button_export_video_urls.clicked.connect(self.export_urls)
+        self.ui.checkbox_tree_allow_sorting.checkStateChanged.connect(self.toggle_sorting)
+        self.ui.button_tree_stop.clicked.connect(self.switch_stop_state)
+        self.ui.button_tree_export_video_urls.clicked.connect(self.export_urls)
         self.ui.button_download_ffmpeg.clicked.connect(self.download_ffmpeg)
 
     def switch_login_button_state(self):
@@ -1339,13 +1356,13 @@ This warning won't be shown again.
         elif self.ui.radio_tree_show_all.isChecked():
             data_mode = 1
 
-        if self.ui.checkbox_show_videos_reversed.isChecked():
+        if self.ui.checkbox_tree_show_videos_reversed.isChecked():
             reverse = True
 
         else:
             reverse = False
 
-        is_checked = self.ui.checkbox_do_not_clear_videos.isChecked()
+        is_checked = self.ui.checkbox_tree_do_not_clear_videos.isChecked()
 
         self.thread = AddToTreeWidget(iterator=iterator, search_limit=search_limit, data_mode=data_mode,
                                       reverse=reverse, is_checked=is_checked, stop_flag=stop_flag)
@@ -1395,7 +1412,7 @@ This warning won't be shown again.
         This (like the name says) clears the tree widget. I try to improve this in the future, to allow the user
         the adding of multiple videos, so that the tree widget doesn't get cleared instantly.
         """
-        if not self.ui.checkbox_do_not_clear_videos.isChecked():
+        if not self.ui.checkbox_tree_do_not_clear_videos.isChecked():
             self.ui.treeWidget.clear()
 
     def export_urls(self):

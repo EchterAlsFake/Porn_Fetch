@@ -26,22 +26,22 @@ class Ui_Porn_Fetch_Widget(object):
     def setupUi(self, Porn_Fetch_Widget):
         if not Porn_Fetch_Widget.objectName():
             Porn_Fetch_Widget.setObjectName(u"Porn_Fetch_Widget")
-        Porn_Fetch_Widget.resize(1468, 981)
+        Porn_Fetch_Widget.resize(1630, 963)
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Porn_Fetch_Widget.sizePolicy().hasHeightForWidth())
         Porn_Fetch_Widget.setSizePolicy(sizePolicy)
         Porn_Fetch_Widget.setMinimumSize(QSize(100, 50))
-        self.gridLayout_16 = QGridLayout(Porn_Fetch_Widget)
-        self.gridLayout_16.setObjectName(u"gridLayout_16")
+        self.gridLayout_20 = QGridLayout(Porn_Fetch_Widget)
+        self.gridLayout_20.setObjectName(u"gridLayout_20")
         self.scroll_area_really_important_lol = QScrollArea(Porn_Fetch_Widget)
         self.scroll_area_really_important_lol.setObjectName(u"scroll_area_really_important_lol")
         self.scroll_area_really_important_lol.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.scroll_area_really_important_lol.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 1448, 961))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 1610, 943))
         self.gridLayout_22 = QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_22.setObjectName(u"gridLayout_22")
         self.gridLayout_21 = QGridLayout()
@@ -69,7 +69,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_stacked_top.setWidgetResizable(True)
         self.scrollAreaWidgetContents_7 = QWidget()
         self.scrollAreaWidgetContents_7.setObjectName(u"scrollAreaWidgetContents_7")
-        self.scrollAreaWidgetContents_7.setGeometry(QRect(0, 0, 1350, 291))
+        self.scrollAreaWidgetContents_7.setGeometry(QRect(0, 0, 1512, 291))
         self.gridLayout_14 = QGridLayout(self.scrollAreaWidgetContents_7)
         self.gridLayout_14.setObjectName(u"gridLayout_14")
         self.stacked_widget_top = QStackedWidget(self.scrollAreaWidgetContents_7)
@@ -354,7 +354,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1312, 253))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1474, 253))
         self.gridLayout_18 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_18.setObjectName(u"gridLayout_18")
         self.gridlayout_progressbar = QGridLayout()
@@ -591,7 +591,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.scrollarea_stacked_top.setWidget(self.scrollAreaWidgetContents_7)
 
-        self.gridLayout_8.addWidget(self.scrollarea_stacked_top, 0, 1, 1, 1)
+        self.gridLayout_8.addWidget(self.scrollarea_stacked_top, 1, 1, 1, 1)
 
         self.verticallayout_treewidget = QVBoxLayout()
         self.verticallayout_treewidget.setObjectName(u"verticallayout_treewidget")
@@ -600,56 +600,11 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_treewidget.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 1348, 375))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 1510, 326))
         self.gridLayout_4 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.verticallayout_treewidget_settings = QVBoxLayout()
         self.verticallayout_treewidget_settings.setObjectName(u"verticallayout_treewidget_settings")
-        self.horizontallayout_treewidget_settings = QHBoxLayout()
-        self.horizontallayout_treewidget_settings.setObjectName(u"horizontallayout_treewidget_settings")
-        self.radio_tree_show_title = QRadioButton(self.scrollAreaWidgetContents_3)
-        self.radio_tree_show_title.setObjectName(u"radio_tree_show_title")
-        sizePolicy5.setHeightForWidth(self.radio_tree_show_title.sizePolicy().hasHeightForWidth())
-        self.radio_tree_show_title.setSizePolicy(sizePolicy5)
-        self.radio_tree_show_title.setCursor(QCursor(Qt.PointingHandCursor))
-        self.radio_tree_show_title.setChecked(True)
-
-        self.horizontallayout_treewidget_settings.addWidget(self.radio_tree_show_title)
-
-        self.radio_tree_show_all = QRadioButton(self.scrollAreaWidgetContents_3)
-        self.radio_tree_show_all.setObjectName(u"radio_tree_show_all")
-        sizePolicy5.setHeightForWidth(self.radio_tree_show_all.sizePolicy().hasHeightForWidth())
-        self.radio_tree_show_all.setSizePolicy(sizePolicy5)
-        self.radio_tree_show_all.setCursor(QCursor(Qt.PointingHandCursor))
-        self.radio_tree_show_all.setStyleSheet(u"")
-        self.radio_tree_show_all.setCheckable(True)
-        self.radio_tree_show_all.setChecked(False)
-
-        self.horizontallayout_treewidget_settings.addWidget(self.radio_tree_show_all)
-
-        self.checkbox_do_not_clear_videos = QCheckBox(self.scrollAreaWidgetContents_3)
-        self.checkbox_do_not_clear_videos.setObjectName(u"checkbox_do_not_clear_videos")
-
-        self.horizontallayout_treewidget_settings.addWidget(self.checkbox_do_not_clear_videos)
-
-        self.checkbox_show_videos_reversed = QCheckBox(self.scrollAreaWidgetContents_3)
-        self.checkbox_show_videos_reversed.setObjectName(u"checkbox_show_videos_reversed")
-        self.checkbox_show_videos_reversed.setCursor(QCursor(Qt.PointingHandCursor))
-
-        self.horizontallayout_treewidget_settings.addWidget(self.checkbox_show_videos_reversed)
-
-        self.button_export_video_urls = QPushButton(self.scrollAreaWidgetContents_3)
-        self.button_export_video_urls.setObjectName(u"button_export_video_urls")
-
-        self.horizontallayout_treewidget_settings.addWidget(self.button_export_video_urls)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontallayout_treewidget_settings.addItem(self.horizontalSpacer)
-
-
-        self.verticallayout_treewidget_settings.addLayout(self.horizontallayout_treewidget_settings)
-
         self.treeWidget = QTreeWidget(self.scrollAreaWidgetContents_3)
         __qtreewidgetitem = QTreeWidgetItem()
         __qtreewidgetitem.setText(0, u"Title");
@@ -665,55 +620,134 @@ class Ui_Porn_Fetch_Widget(object):
         self.verticallayout_treewidget_settings.addWidget(self.treeWidget)
 
 
-        self.gridLayout_4.addLayout(self.verticallayout_treewidget_settings, 0, 0, 1, 1)
+        self.gridLayout_4.addLayout(self.verticallayout_treewidget_settings, 1, 0, 1, 1)
+
+        self.gridLayout_16 = QGridLayout()
+        self.gridLayout_16.setObjectName(u"gridLayout_16")
+        self.radio_tree_show_all = QRadioButton(self.scrollAreaWidgetContents_3)
+        self.radio_tree_show_all.setObjectName(u"radio_tree_show_all")
+        sizePolicy5.setHeightForWidth(self.radio_tree_show_all.sizePolicy().hasHeightForWidth())
+        self.radio_tree_show_all.setSizePolicy(sizePolicy5)
+        self.radio_tree_show_all.setCursor(QCursor(Qt.PointingHandCursor))
+        self.radio_tree_show_all.setStyleSheet(u"")
+        self.radio_tree_show_all.setCheckable(True)
+        self.radio_tree_show_all.setChecked(False)
+
+        self.gridLayout_16.addWidget(self.radio_tree_show_all, 0, 1, 1, 1)
+
+        self.button_tree_export_video_urls = QPushButton(self.scrollAreaWidgetContents_3)
+        self.button_tree_export_video_urls.setObjectName(u"button_tree_export_video_urls")
+
+        self.gridLayout_16.addWidget(self.button_tree_export_video_urls, 0, 2, 1, 1)
+
+        self.checkbox_tree_do_not_clear_videos = QCheckBox(self.scrollAreaWidgetContents_3)
+        self.checkbox_tree_do_not_clear_videos.setObjectName(u"checkbox_tree_do_not_clear_videos")
+
+        self.gridLayout_16.addWidget(self.checkbox_tree_do_not_clear_videos, 1, 1, 1, 1)
+
+        self.radio_tree_show_title = QRadioButton(self.scrollAreaWidgetContents_3)
+        self.radio_tree_show_title.setObjectName(u"radio_tree_show_title")
+        sizePolicy5.setHeightForWidth(self.radio_tree_show_title.sizePolicy().hasHeightForWidth())
+        self.radio_tree_show_title.setSizePolicy(sizePolicy5)
+        self.radio_tree_show_title.setCursor(QCursor(Qt.PointingHandCursor))
+        self.radio_tree_show_title.setChecked(True)
+
+        self.gridLayout_16.addWidget(self.radio_tree_show_title, 0, 0, 1, 1)
+
+        self.checkbox_tree_show_videos_reversed = QCheckBox(self.scrollAreaWidgetContents_3)
+        self.checkbox_tree_show_videos_reversed.setObjectName(u"checkbox_tree_show_videos_reversed")
+        self.checkbox_tree_show_videos_reversed.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.gridLayout_16.addWidget(self.checkbox_tree_show_videos_reversed, 1, 2, 1, 1)
+
+        self.checkbox_tree_allow_sorting = QCheckBox(self.scrollAreaWidgetContents_3)
+        self.checkbox_tree_allow_sorting.setObjectName(u"checkbox_tree_allow_sorting")
+
+        self.gridLayout_16.addWidget(self.checkbox_tree_allow_sorting, 1, 0, 1, 1)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_16.addItem(self.horizontalSpacer, 0, 3, 1, 1)
+
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_16.addItem(self.horizontalSpacer_2, 1, 3, 1, 1)
+
+
+        self.gridLayout_4.addLayout(self.gridLayout_16, 0, 0, 1, 1)
 
         self.scrollarea_treewidget.setWidget(self.scrollAreaWidgetContents_3)
 
         self.verticallayout_treewidget.addWidget(self.scrollarea_treewidget)
 
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.button_tree_download = QPushButton(self.widget)
-        self.button_tree_download.setObjectName(u"button_tree_download")
-        self.button_tree_download.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_tree_download.setStyleSheet(u"")
-
-        self.horizontalLayout_4.addWidget(self.button_tree_download)
-
-
-        self.verticallayout_treewidget.addLayout(self.horizontalLayout_4)
-
-        self.verticalLayout_3 = QVBoxLayout()
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.horizontallayout_treewidget_buttons = QHBoxLayout()
-        self.horizontallayout_treewidget_buttons.setObjectName(u"horizontallayout_treewidget_buttons")
-        self.button_tree_select_range = QPushButton(self.widget)
-        self.button_tree_select_range.setObjectName(u"button_tree_select_range")
-        self.button_tree_select_range.setCursor(QCursor(Qt.PointingHandCursor))
-        self.button_tree_select_range.setStyleSheet(u"")
-
-        self.horizontallayout_treewidget_buttons.addWidget(self.button_tree_select_range)
-
+        self.gridLayout_17 = QGridLayout()
+        self.gridLayout_17.setObjectName(u"gridLayout_17")
         self.button_tree_unselect_all = QPushButton(self.widget)
         self.button_tree_unselect_all.setObjectName(u"button_tree_unselect_all")
         self.button_tree_unselect_all.setCursor(QCursor(Qt.PointingHandCursor))
         self.button_tree_unselect_all.setStyleSheet(u"")
 
-        self.horizontallayout_treewidget_buttons.addWidget(self.button_tree_unselect_all)
+        self.gridLayout_17.addWidget(self.button_tree_unselect_all, 1, 1, 1, 1)
 
-        self.button_stop = QPushButton(self.widget)
-        self.button_stop.setObjectName(u"button_stop")
+        self.button_tree_stop = QPushButton(self.widget)
+        self.button_tree_stop.setObjectName(u"button_tree_stop")
 
-        self.horizontallayout_treewidget_buttons.addWidget(self.button_stop)
+        self.gridLayout_17.addWidget(self.button_tree_stop, 1, 2, 1, 1)
+
+        self.button_tree_select_range = QPushButton(self.widget)
+        self.button_tree_select_range.setObjectName(u"button_tree_select_range")
+        self.button_tree_select_range.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_tree_select_range.setStyleSheet(u"")
+
+        self.gridLayout_17.addWidget(self.button_tree_select_range, 1, 0, 1, 1)
+
+        self.button_tree_download = QPushButton(self.widget)
+        self.button_tree_download.setObjectName(u"button_tree_download")
+        self.button_tree_download.setCursor(QCursor(Qt.PointingHandCursor))
+        self.button_tree_download.setStyleSheet(u"")
+
+        self.gridLayout_17.addWidget(self.button_tree_download, 0, 0, 1, 3)
 
 
-        self.verticalLayout_3.addLayout(self.horizontallayout_treewidget_buttons)
+        self.verticallayout_treewidget.addLayout(self.gridLayout_17)
 
 
-        self.verticallayout_treewidget.addLayout(self.verticalLayout_3)
+        self.gridLayout_8.addLayout(self.verticallayout_treewidget, 2, 1, 1, 1)
+
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.label_status_internet = QLabel(self.widget)
+        self.label_status_internet.setObjectName(u"label_status_internet")
+
+        self.horizontalLayout_3.addWidget(self.label_status_internet)
+
+        self.lineedit_status_internet = QLineEdit(self.widget)
+        self.lineedit_status_internet.setObjectName(u"lineedit_status_internet")
+
+        self.horizontalLayout_3.addWidget(self.lineedit_status_internet)
+
+        self.label_status_ffmpeg = QLabel(self.widget)
+        self.label_status_ffmpeg.setObjectName(u"label_status_ffmpeg")
+
+        self.horizontalLayout_3.addWidget(self.label_status_ffmpeg)
+
+        self.lineedit_status_ffmpeg = QLineEdit(self.widget)
+        self.lineedit_status_ffmpeg.setObjectName(u"lineedit_status_ffmpeg")
+
+        self.horizontalLayout_3.addWidget(self.lineedit_status_ffmpeg)
+
+        self.label_status_update = QLabel(self.widget)
+        self.label_status_update.setObjectName(u"label_status_update")
+
+        self.horizontalLayout_3.addWidget(self.label_status_update)
+
+        self.lineedit_status_update = QLineEdit(self.widget)
+        self.lineedit_status_update.setObjectName(u"lineedit_status_update")
+
+        self.horizontalLayout_3.addWidget(self.lineedit_status_update)
 
 
-        self.gridLayout_8.addLayout(self.verticallayout_treewidget, 1, 1, 1, 1)
+        self.gridLayout_8.addLayout(self.horizontalLayout_3, 0, 1, 1, 1)
 
         self.stacked_widget_main.addWidget(self.widget)
         self.page_settings = QWidget()
@@ -725,7 +759,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_settings.setWidgetResizable(True)
         self.scrollAreaWidgetContents_6 = QWidget()
         self.scrollAreaWidgetContents_6.setObjectName(u"scrollAreaWidgetContents_6")
-        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 1143, 762))
+        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 846, 762))
         self.gridLayout_19 = QGridLayout(self.scrollAreaWidgetContents_6)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.button_download_ffmpeg = QPushButton(self.scrollAreaWidgetContents_6)
@@ -1264,7 +1298,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_status.setWidgetResizable(True)
         self.scrollAreaWidgetContents_5 = QWidget()
         self.scrollAreaWidgetContents_5.setObjectName(u"scrollAreaWidgetContents_5")
-        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 1368, 171))
+        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 1530, 171))
         self.gridLayout_33 = QGridLayout(self.scrollAreaWidgetContents_5)
         self.gridLayout_33.setObjectName(u"gridLayout_33")
         self.gridlayout_status = QGridLayout()
@@ -1284,6 +1318,22 @@ class Ui_Porn_Fetch_Widget(object):
         self.progressbar_pornhub.setValue(0)
 
         self.gridlayout_status.addWidget(self.progressbar_pornhub, 0, 1, 1, 1)
+
+        self.label_progress_converting = QLabel(self.scrollAreaWidgetContents_5)
+        self.label_progress_converting.setObjectName(u"label_progress_converting")
+
+        self.gridlayout_status.addWidget(self.label_progress_converting, 2, 0, 1, 1)
+
+        self.progressbar_converting = QProgressBar(self.scrollAreaWidgetContents_5)
+        self.progressbar_converting.setObjectName(u"progressbar_converting")
+        self.progressbar_converting.setValue(0)
+
+        self.gridlayout_status.addWidget(self.progressbar_converting, 2, 1, 1, 1)
+
+        self.button_view_all_progress_bars = QPushButton(self.scrollAreaWidgetContents_5)
+        self.button_view_all_progress_bars.setObjectName(u"button_view_all_progress_bars")
+
+        self.gridlayout_status.addWidget(self.button_view_all_progress_bars, 8, 0, 1, 2)
 
         self.label_total_progress = QLabel(self.scrollAreaWidgetContents_5)
         self.label_total_progress.setObjectName(u"label_total_progress")
@@ -1307,22 +1357,6 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_progress_information.setSizePolicy(sizePolicy5)
 
         self.gridlayout_status.addWidget(self.label_progress_information, 9, 0, 1, 2)
-
-        self.button_view_all_progress_bars = QPushButton(self.scrollAreaWidgetContents_5)
-        self.button_view_all_progress_bars.setObjectName(u"button_view_all_progress_bars")
-
-        self.gridlayout_status.addWidget(self.button_view_all_progress_bars, 8, 0, 1, 2)
-
-        self.label_progress_converting = QLabel(self.scrollAreaWidgetContents_5)
-        self.label_progress_converting.setObjectName(u"label_progress_converting")
-
-        self.gridlayout_status.addWidget(self.label_progress_converting, 2, 0, 1, 1)
-
-        self.progressbar_converting = QProgressBar(self.scrollAreaWidgetContents_5)
-        self.progressbar_converting.setObjectName(u"progressbar_converting")
-        self.progressbar_converting.setValue(0)
-
-        self.gridlayout_status.addWidget(self.progressbar_converting, 2, 1, 1, 1)
 
 
         self.gridLayout_33.addLayout(self.gridlayout_status, 1, 0, 1, 1)
@@ -1396,7 +1430,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.scroll_area_really_important_lol.setWidget(self.scrollAreaWidgetContents_4)
 
-        self.gridLayout_16.addWidget(self.scroll_area_really_important_lol, 0, 0, 1, 1)
+        self.gridLayout_20.addWidget(self.scroll_area_really_important_lol, 0, 0, 1, 1)
 
         QWidget.setTabOrder(self.button_switch_home, self.button_switch_account)
         QWidget.setTabOrder(self.button_switch_account, self.button_switch_tools)
@@ -1423,14 +1457,8 @@ class Ui_Porn_Fetch_Widget(object):
         QWidget.setTabOrder(self.radio_search_website_xvideos, self.radio_search_website_eporner)
         QWidget.setTabOrder(self.radio_search_website_eporner, self.radio_search_website_xnxx)
         QWidget.setTabOrder(self.radio_search_website_xnxx, self.treeWidget)
-        QWidget.setTabOrder(self.treeWidget, self.radio_tree_show_title)
-        QWidget.setTabOrder(self.radio_tree_show_title, self.scrollarea_treewidget)
-        QWidget.setTabOrder(self.scrollarea_treewidget, self.radio_tree_show_all)
-        QWidget.setTabOrder(self.radio_tree_show_all, self.checkbox_do_not_clear_videos)
-        QWidget.setTabOrder(self.checkbox_do_not_clear_videos, self.checkbox_show_videos_reversed)
-        QWidget.setTabOrder(self.checkbox_show_videos_reversed, self.button_tree_select_range)
-        QWidget.setTabOrder(self.button_tree_select_range, self.button_tree_unselect_all)
-        QWidget.setTabOrder(self.button_tree_unselect_all, self.lineedit_username)
+        QWidget.setTabOrder(self.treeWidget, self.scrollarea_treewidget)
+        QWidget.setTabOrder(self.scrollarea_treewidget, self.lineedit_username)
         QWidget.setTabOrder(self.lineedit_username, self.lineedit_password)
         QWidget.setTabOrder(self.lineedit_password, self.button_login)
         QWidget.setTabOrder(self.button_login, self.button_get_liked_videos)
@@ -1566,30 +1594,34 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_videos_by_category_eporner.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get videos by category", None))
         self.button_eporner_category_get_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Videos", None))
         self.button_list_categories_eporner.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"List of all categories", None))
-        self.radio_tree_show_title.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Only Title (a lot faster)", None))
+        ___qtreewidgetitem = self.treeWidget.headerItem()
+        ___qtreewidgetitem.setText(2, QCoreApplication.translate("Porn_Fetch_Widget", u"Duration", None));
+        ___qtreewidgetitem.setText(1, QCoreApplication.translate("Porn_Fetch_Widget", u"Author", None));
 #if QT_CONFIG(tooltip)
         self.radio_tree_show_all.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.radio_tree_show_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Title, Author, Duration", None))
-        self.checkbox_do_not_clear_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Do not clear videos", None))
-        self.checkbox_show_videos_reversed.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Show videos in reverse", None))
-        self.button_export_video_urls.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Export video URLs", None))
-        ___qtreewidgetitem = self.treeWidget.headerItem()
-        ___qtreewidgetitem.setText(2, QCoreApplication.translate("Porn_Fetch_Widget", u"Duration", None));
-        ___qtreewidgetitem.setText(1, QCoreApplication.translate("Porn_Fetch_Widget", u"Author", None));
-        self.button_tree_download.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download Selected Videos", None))
-#if QT_CONFIG(tooltip)
-        self.button_tree_select_range.setToolTip(QCoreApplication.translate("Porn_Fetch_Widget", u"Automatically checks a range of videos", None))
-#endif // QT_CONFIG(tooltip)
-        self.button_tree_select_range.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Select a range of videos", None))
+        self.button_tree_export_video_urls.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Export video URLs", None))
+        self.checkbox_tree_do_not_clear_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Do not clear videos", None))
+        self.radio_tree_show_title.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Only Title (a lot faster)", None))
+        self.checkbox_tree_show_videos_reversed.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Show videos in reverse", None))
+        self.checkbox_tree_allow_sorting.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Allow Sorting", None))
 #if QT_CONFIG(tooltip)
         self.button_tree_unselect_all.setToolTip(QCoreApplication.translate("Porn_Fetch_Widget", u"Unselects all videos in the tree widget", None))
 #endif // QT_CONFIG(tooltip)
         self.button_tree_unselect_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Unselect all", None))
 #if QT_CONFIG(tooltip)
-        self.button_stop.setToolTip(QCoreApplication.translate("Porn_Fetch_Widget", u"Does not stop downloading videos", None))
+        self.button_tree_stop.setToolTip(QCoreApplication.translate("Porn_Fetch_Widget", u"Does not stop downloading videos", None))
 #endif // QT_CONFIG(tooltip)
-        self.button_stop.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Stop loading videos", None))
+        self.button_tree_stop.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Stop loading videos", None))
+#if QT_CONFIG(tooltip)
+        self.button_tree_select_range.setToolTip(QCoreApplication.translate("Porn_Fetch_Widget", u"Automatically checks a range of videos", None))
+#endif // QT_CONFIG(tooltip)
+        self.button_tree_select_range.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Select a range of videos", None))
+        self.button_tree_download.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download Selected Videos", None))
+        self.label_status_internet.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Internet:", None))
+        self.label_status_ffmpeg.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"FFmpeg:", None))
+        self.label_status_update.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Update available:", None))
         self.button_download_ffmpeg.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download and Setup FFmpeg", None))
         self.groupbox_performance.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Performance", None))
         self.label_semaphore.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Simultaneous downloads:", None))
@@ -1698,10 +1730,10 @@ class Ui_Porn_Fetch_Widget(object):
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p></body></html>", None))
         self.label_progress_pornhub.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"PornHub:", None))
+        self.label_progress_converting.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Converting:", None))
+        self.button_view_all_progress_bars.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"View all other progress bars", None))
         self.label_total_progress.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Total:", None))
         self.label_progress_information.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Information: The total progressbar does not count for Eporner and HQPorner, because they are using different mechanisms for downloading.", None))
-        self.button_view_all_progress_bars.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"View all other progress bars", None))
-        self.label_progress_converting.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Converting:", None))
         self.button_switch_home.setText("")
         self.button_switch_account.setText("")
         self.button_switch_tools.setText("")

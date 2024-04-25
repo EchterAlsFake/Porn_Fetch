@@ -264,6 +264,27 @@ def write_tags(path, video, ffmpeg_path):
     logger_debug("Tags: [3/3] ✔")
 
 
+def parse_length(length):
+    if length.isdigit():
+        return int(length)
+
+    time_units = {'s': 1 / 60, 'm': 1, 'h': 60}
+    total_minutes = 0
+    parts = length.split()
+    for part in parts:
+        value = int(part[:-1])
+        unit = part[-1]
+        if unit in time_units:
+            total_minutes += value * time_units[unit]
+
+    if total_minutes > 0:
+        return int(total_minutes)
+
+    if length.endswith('min'):
+        return int(length[:-3])
+
+    return None
+
 def resolve_threading_mode(video, mode, workers, timeout):
     """Resolve the appropriate threading mode based on input."""
     if isinstance(video, Video):
