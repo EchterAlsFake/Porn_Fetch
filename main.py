@@ -837,7 +837,7 @@ class Porn_Fetch(QWidget):
         self.ui.button_semaphore_help.setStyleSheet(stylesheets["button_green"])
         self.ui.button_tree_download.setStyleSheet(stylesheets["button_orange"])
         self.ui.button_tree_unselect_all.setStyleSheet(stylesheets["button_blue"])
-        self.ui.button_tree_select_all.setStyleSheet(stylesheets["button_green"])
+        self.ui.button_tree_select_range.setStyleSheet(stylesheets["button_green"])
         self.ui.button_output_path_select.setStyleSheet(stylesheets["button_blue"])
         self.ui.button_login.setStyleSheet(stylesheets["button_blue"])
         self.ui.button_settings_apply.setStyleSheet(stylesheets["button_blue"])
@@ -1090,7 +1090,7 @@ This warning won't be shown again.
         self.ui.button_download.clicked.connect(self.start_single_video)
         self.ui.button_model.clicked.connect(self.start_model)
         self.ui.button_tree_download.clicked.connect(self.download_tree_widget)
-        self.ui.button_tree_select_all.clicked.connect(self.select_all_items)
+        self.ui.button_tree_select_range.clicked.connect(self.select_all_items)
         self.ui.button_tree_unselect_all.clicked.connect(self.unselect_all_items)
         self.ui.button_playlist_get_videos.clicked.connect(self.start_playlist)
 

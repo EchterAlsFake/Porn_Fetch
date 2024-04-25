@@ -32,11 +32,11 @@ excluded_qml_plugins =
 # qt modules used. comma separated
 modules = Core,Gui,Widgets
 # qt plugins used by the application
-plugins = 
+plugins =
 
 [android]
 # path to pyside wheel
-wheel_pyside = /home/asuna/PYSIDE/pyside-setup/PySide6-6.7.0-6.7.0-cp310-cp310-linux_aarch64.whl 
+wheel_pyside = /home/asuna/PYSIDE/pyside-setup/PySide6-6.7.0-6.7.0-cp310-cp310-linux_aarch64.whl
 #path to shiboken wheel
 wheel_shiboken = /home/asuna/PYSIDE/pyside-setup/shiboken6-6.7.0-6.7.0-cp310-cp310-linux_aarch64.whl
 # plugins to be copied to libs folder of the packaged application. comma separated
