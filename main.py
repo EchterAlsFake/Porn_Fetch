@@ -236,7 +236,7 @@ class AddToTreeWidget(QRunnable):
             end='', flush=True)
 
         if self.data_mode == 1:
-            duration = str(parse_length(duration)) + " " + QCoreApplication.tr("minutes", None)
+            duration = str(parse_length(duration))
 
         return [str(title), str(author), str(duration), str(index), video]
 
@@ -874,6 +874,10 @@ class Porn_Fetch(QWidget):
         self.header.resizeSection(0, 300)
         self.header.resizeSection(1, 150)
         self.header.resizeSection(2, 50)
+        self.header.sortIndicatorChanged.connect(self.reindex)
+
+        # Sort by the 'Length' column in ascending order
+        self.ui.treeWidget.sortByColumn(2, Qt.AscendingOrder)
 
     def check_for_updates(self):
         """Checks for updates in a thread, so that the main UI isn't blocked, until update checks are done"""
@@ -1386,16 +1390,25 @@ This warning won't be shown again.
         """
         title = data[0]
         author = data[1]
-        duration = data[2]
+        try:
+            duration = int(data[2])  # Ensure duration is an integer
+
+        except ValueError:
+            duration = int(00000)
+
         index = data[3]
         video = data[4]
 
         item = QTreeWidgetItem(self.ui.treeWidget)
         item.setText(0, f"{index}) {title}")
         item.setText(1, author)
-        item.setText(2, str(duration))
+        # Format duration as a fixed-width string with leading zeros for better sorting, e.g., "00104"
+        formatted_duration = f"{duration:05d}"
+        item.setText(2, formatted_duration)  # Set the text as the zero-padded number
+        item.setData(2, Qt.UserRole, int(duration))  # Store the actual integer value in UserRole if needed later
+
+        item.setCheckState(0, Qt.Unchecked)
         item.setData(0, Qt.UserRole, video)
-        item.setCheckState(0, Qt.Unchecked)  # Adds a checkbox
 
     def download_tree_widget(self):
         """
@@ -1420,6 +1433,22 @@ This warning won't be shown again.
         """
         if not self.ui.checkbox_tree_do_not_clear_videos.isChecked():
             self.ui.treeWidget.clear()
+
+    def reindex(self):
+        ascending = self.ui.treeWidget.header().sortIndicatorOrder() == Qt.AscendingOrder
+        count = self.ui.treeWidget.topLevelItemCount()
+        for i in range(count):
+            if ascending:
+                # When sorting in ascending order, start indexes at 1 and increment
+                new_index = i + 1
+            else:
+                # When sorting in descending order, start indexes at the count and decrement
+                new_index = count - i
+
+            item = self.ui.treeWidget.topLevelItem(i)
+            current_text = item.text(0)
+            original_title = current_text.split(') ', 1)[1] if ') ' in current_text else current_text
+            item.setText(0, f"{new_index}) {original_title}")
 
     def export_urls(self):
         video_urls = []
@@ -1467,13 +1496,14 @@ This warning won't be shown again.
 
     def select_range_of_items(self):
         # Create an instance of the UI form widget
-        self.widget = QWidget()  # Or the appropriate parent widget
+        self.widget = QWidget()
         self.range_ui = Ui_Form()
         self.range_ui.setupUi(self.widget)
         root = self.ui.treeWidget.invisibleRootItem()
         item_count = root.childCount()
         self.range_ui.spinbox_range_end.setMaximum(item_count)
-        self.range_ui.button_range_apply.clicked.connect(self.process_range_of_items_selection)
+        self.range_ui.button_range_apply_index.clicked.connect(self.process_range_of_items_selection_index)
+        self.range_ui.button_range_apply_time.clicked.connect(self.process_range_of_items_selection_time)
         self.range_ui.button_range_apply_everything.clicked.connect(self.select_all_items)
 
         # Show the new widget
@@ -1489,7 +1519,7 @@ This warning won't be shown again.
 
         self.widget.deleteLater()
 
-    def process_range_of_items_selection(self):
+    def process_range_of_items_selection_index(self):
         start = self.range_ui.spinbox_range_start.value()
         end = self.range_ui.spinbox_range_end.value()
         root = self.ui.treeWidget.invisibleRootItem()
@@ -1502,6 +1532,27 @@ This warning won't be shown again.
             item = root.child(i)
             item.setCheckState(0, Qt.Checked)
 
+        self.widget.deleteLater()
+
+    def process_range_of_items_selection_time(self):
+        start_time = int(self.range_ui.lineedit_range_start.text())
+        end_time = int(self.range_ui.lineedit_range_end.text())
+        root = self.ui.treeWidget.invisibleRootItem()
+
+        # Loop through all items in the QTreeWidget
+        for i in range(root.childCount()):
+            item = root.child(i)
+
+            # Retrieve the duration from the item, assuming it's stored as an integer in UserRole
+            duration = int(item.data(2, Qt.UserRole))
+
+            # Check if the duration is within the specified start and end times
+            if start_time <= duration <= end_time:
+                item.setCheckState(0, Qt.Checked)
+            else:
+                item.setCheckState(0, Qt.Unchecked)  # Optionally uncheck items outside the range
+
+        # Assuming this is meant to close the widget, but it might be better to handle this outside this function
         self.widget.deleteLater()
 
     def start_single_video(self):
