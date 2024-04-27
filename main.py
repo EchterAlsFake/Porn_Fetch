@@ -234,6 +234,10 @@ class AddToTreeWidget(QRunnable):
         print(
             f"\r\033[K[{Fore.LIGHTCYAN_EX}{index}/{self.search_limit}]{Fore.RESET}{str(title)} Successfully processed!",
             end='', flush=True)
+
+        if self.data_mode == 1:
+            duration = str(parse_length(duration)) + " " + QCoreApplication.tr("minutes", None)
+
         return [str(title), str(author), str(duration), str(index), video]
 
     def run(self):
@@ -1107,7 +1111,6 @@ This warning won't be shown again.
         self.ui.button_download.clicked.connect(self.start_single_video)
         self.ui.button_model.clicked.connect(self.start_model)
         self.ui.button_tree_download.clicked.connect(self.download_tree_widget)
-        self.ui.button_tree_select_range.clicked.connect(self.select_all_items)
         self.ui.button_tree_unselect_all.clicked.connect(self.unselect_all_items)
         self.ui.button_playlist_get_videos.clicked.connect(self.start_playlist)
 
@@ -1462,6 +1465,20 @@ This warning won't be shown again.
             item = root.child(i)
             item.setCheckState(0, Qt.Unchecked)
 
+    def select_range_of_items(self):
+        # Create an instance of the UI form widget
+        self.widget = QWidget()  # Or the appropriate parent widget
+        self.range_ui = Ui_Form()
+        self.range_ui.setupUi(self.widget)
+        root = self.ui.treeWidget.invisibleRootItem()
+        item_count = root.childCount()
+        self.range_ui.spinbox_range_end.setMaximum(item_count)
+        self.range_ui.button_range_apply.clicked.connect(self.process_range_of_items_selection)
+        self.range_ui.button_range_apply_everything.clicked.connect(self.select_all_items)
+
+        # Show the new widget
+        self.widget.show()
+
     def select_all_items(self):
         """Selects all items from the tree widget"""
         root = self.ui.treeWidget.invisibleRootItem()
@@ -1470,30 +1487,22 @@ This warning won't be shown again.
             item = root.child(i)
             item.setCheckState(0, Qt.Checked)
 
-    def select_range_of_items(self):
-        self.widget = Ui_Form()
-        self.widget.setupUi(self)
-        root = self.ui.treeWidget.invisibleRootItem()
-        item_count = root.childCount()
-        self.widget.spinbox_range_end.setMaximum(item_count)
-        self.widget.button_range_apply.clicked.connect(self.process_range_of_items_selection)
+        self.widget.deleteLater()
 
     def process_range_of_items_selection(self):
-        start = self.widget.spinbox_range_start.value()
-        end = self.widget.spinbox_range_end.value()
-
+        start = self.range_ui.spinbox_range_start.value()
+        end = self.range_ui.spinbox_range_end.value()
         root = self.ui.treeWidget.invisibleRootItem()
-        item_count = root.childCount()
-        for i in range(item_count):
-            if i < start:
-                pass
 
-            if i > end:
-                break
+        # Adjust start and end indices to match tree widget indexing
+        start -= 1
+        end -= 1
 
-            else:
-                item = root.child(i)
-                item.setCheckState(0, Qt.Checked)
+        for i in range(start, end + 1):  # Adjust range to be inclusive of end
+            item = root.child(i)
+            item.setCheckState(0, Qt.Checked)
+
+        self.widget.deleteLater()
 
     def start_single_video(self):
         """
@@ -1641,6 +1650,7 @@ This warning won't be shown again.
     def download_completed(self):
         """If a video is downloaded, the semaphore is released"""
         logger_debug("Download Completed!")
+        self.ui.progressbar_total.setMaximum(100)
         self.semaphore.release()
 
     def start_undefined_range(self):
@@ -1649,8 +1659,10 @@ This warning won't be shown again.
 
     def stop_undefined_range(self):
         """This stops the undefined range (loading animation) of the total progressbar"""
-        self.ui.progressbar_total.setRange(0, 1)
-
+        logger_debug("Repainting the total progressbar")
+        self.ui.progressbar_total.setMinimum(0)
+        self.ui.progressbar_total.setMaximum(100)
+        self.ui.progressbar_total.setValue(0)
     """
     The following functions are used for opening files / directories with the QFileDialog
     """

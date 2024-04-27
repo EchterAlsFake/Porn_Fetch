@@ -18,6 +18,10 @@
 - [x] Make the tree widget support sorting in general
 - [x] Adding support for the custom delay in the other API libraries (eaf_base_api) (NEEDS ADDITIONAL TESTING!)
 - [x] Adding Search query support for files
+- [x] Adding time sortings for the tree widget
+- [x] Allow selecting between a range of videos in the tree widget for downloading
+- [x] Fixing the total progressbar glitch
+- [x] Fixing the different lengths in the tree widget
 - [] Changing the Layout on Android, so that the progressbars become an extra widget, which would lead to more
   space being available
 - [] Improving the CLI debug messages, so that progress is reported more clearly
@@ -25,5 +29,3 @@
 - [] Updating german translations
 - [] Fixing all the build scripts
 - [] Making contributions easier, by clearly saying what to do, how to do it and what to watch out for
-- [] Adding time sortings for the tree widget
-- [] Allow selecting between a range of videos in the tree widget for downloading
