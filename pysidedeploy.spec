@@ -11,7 +11,7 @@ exec_directory = .
 # path to .pyproject project file
 project_file = 
 # application icon
-icon = src/frontend/graphics/android_app_icon.png
+icon = ../src/frontend/graphics/android_app_icon.png
 
 [python]
 # python path
