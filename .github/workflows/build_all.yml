@@ -119,7 +119,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: pyside6-application-macos
-          path: deploy/pyside_app_demo.app
+          path: deploy/main.app
 
   build-pornfetch-cli-windows-x64:
     runs-on: windows-latest
@@ -144,7 +144,7 @@ jobs:
       - name: Archive Porn Fetch CLI (Windows X64) build
         uses: actions/upload-artifact@v2
         with:
-          name: PornFetch_CLI_Linux_x64
+          name: PornFetch_CLI_Windows_x64
           path: dist/Porn_Fetch_CLI.exe
 
   build-pornfetch-cli-windows-x32:
@@ -170,7 +170,7 @@ jobs:
       - name: Archive Porn Fetch CLI (Windows X32) build
         uses: actions/upload-artifact@v2
         with:
-          name: PornFetch_CLI_Linux_x32
+          name: PornFetch_CLI_Windows_x32
           path: dist/Porn_Fetch_CLI.exe
 
   build-pornfetch-cli-linux-64:
