@@ -72,7 +72,7 @@ urls = ["https://www.pornhub.com", "https://www.eporner.com", "https://www.hqpor
 
 url_linux = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
 url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
-ffmpeg_linux = "ffmpeg-7.0-essentials_build"
+ffmpeg_linux = "ffmpeg-6.1-amd64-static"
 ffmpeg_windows = "ffmpeg-6.1-amd64-static"
 
 
@@ -584,7 +584,11 @@ class FFMPEGDownload(QRunnable):
         logger_debug("FFMPEG: [1/4] Starting the download")
         with requests.get(self.url, stream=True) as r:
             r.raise_for_status()
-            total_length = int(r.headers.get('content-length'))
+            try:
+                total_length = int(r.headers.get('content-length'))
+            except Exception:
+                total_length = 41313894
+
             self.signals.total_progress.emit(0, total_length)  # Initialize progress bar
             dl = 0
             filename = self.url.split('/')[-1]

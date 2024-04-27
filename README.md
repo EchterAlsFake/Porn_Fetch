@@ -2,7 +2,11 @@
 <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/V3.0/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
 <br>
 <h1 align="center">Porn Fetch - The Ultimate Open-Source Porn(Hub) Downloader</h1>
-<a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_all.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_all.yml/badge.svg" alt="Build GUI Status"/></a>
+<a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui_windows.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui_windows.yml/badge.svg" alt="Build GUI Windows Status"/></a>
+<a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui_linux.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui_linux.yml/badge.svg" alt="Build GUI Linux Status"/></a>
+<a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui_macos.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui_macos.yml/badge.svg" alt="Build GUI MacOS Status"/></a>
+<a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_cli_windows.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_cli_windows.yml/badge.svg" alt="Build CLI Windows Status"/></a>
+<a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_cli_linux.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_cli_linux.yml/badge.svg" alt="Build GUI CLI Linux Status"/></a>
 <a href="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL"><img src="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL/badge.svg" alt="CodeQL Analysis"/></a>
 <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/EchterAlsFake/Porn_Fetch/total?style=social&logo=github&logoColor=purple">
 <br>
@@ -61,13 +65,13 @@
 
 - Windows (10 / 11)
 - Linux   (X11 / Wayland)
-- Android (aarch64)
-- macOS   (Untested)
+- Android
+- macOS (Untested)
 
 The Graphical User Interface is only for 64bit systems. The CLI supports 64 and 32bit systems.
 <br>Porn Fetch is developed on Arch Linux (Hyprland) and cross-compiled using GitHub CI/CD
 
-> Downloading on Windows is generally slower, because Windows doesn't have a good I/O network handling
+> Downloading on Windows is generally slower because Windows doesn't have a good I/O network handling
 
 
 ## 🌐 Supported Websites
@@ -85,10 +89,10 @@ The Graphical User Interface is only for 64bit systems. The CLI supports 64 and 
 
 
 ## Working with Files
-Porn Fetch allows you to use a URL or kind of a batch file to programmatically download all videos, models, and search
+Porn Fetch allows you to use a URL or kind of batch file to programmatically download all videos, models, and search
 terms listed in there.
 
-Here's a short documentation how to use it:
+Here's a short documentation on how to use it:
 
 > [!NOTE]
 > The format ending of the file doesn't matter.

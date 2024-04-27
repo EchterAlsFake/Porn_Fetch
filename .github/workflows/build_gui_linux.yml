@@ -1,0 +1,48 @@
+name: Build GUI (Linux x64)
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  build-pornfetch-gui-linux-x64:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.11 x64
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+          architecture: x64
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install virtualenv
+          virtualenv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+          pip install PySide6 nuitka zstandard
+
+      - name: Build application for x64
+        run: |
+          mkdir deploy
+          shopt -s extglob
+          mv !(deploy|venv) deploy/  # Ensure venv is not moved
+          cd deploy
+          pwd
+          ls -la
+          source ../venv/bin/activate
+          pyside6-deploy -c src/build/pysidedeploy_linux.spec main.py
+
+      - name: Archive x64 build
+        uses: actions/upload-artifact@v2
+        with:
+          name: pyside6-application-x64
+          path: deploy/main.bin

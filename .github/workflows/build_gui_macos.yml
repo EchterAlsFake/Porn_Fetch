@@ -1,0 +1,49 @@
+name: Build GUI (MacOS x64)
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  build-pornfetch-gui-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install virtualenv
+          virtualenv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+          pip install PySide6 nuitka zstandard
+
+      - name: Build application
+        run: |
+          mkdir deploy
+          shopt -s extglob
+          mv !(deploy|venv) deploy/
+          cd deploy
+          source ../venv/bin/activate
+          pyside6-deploy -c src/build/pysidedeploy_macos.spec main.py
+
+      - name: List output directory
+        run: |
+          ls -R deploy/
+
+      - name: Archive macOS build
+        uses: actions/upload-artifact@v2
+        with:
+          name: pyside6-application-macos
+          path: deploy/main.app
