@@ -1,7 +1,5 @@
 import pathlib
 import threading
-import time
-
 import phub.consts
 
 from src.backend.shared_functions import *
@@ -174,29 +172,29 @@ jp: Japanese
             try:
                 if settings_options == "1":
                     self.conf.set("Video", "quality", "best")
-    
+
                 elif settings_options == "2":
                     self.conf.set("Video", "quality", "half")
-    
+
                 elif settings_options == "3":
                     self.conf.set("Video", "quality", "worst")
-                
+
                 elif settings_options == "4":
-                    limit = input(f"Enter a new Semaphore limit -->:")    
+                    limit = input(f"Enter a new Semaphore limit -->:")
                     self.conf.set("Performance", "semaphore", limit)
-                
+
                 elif settings_options == "5":
                     limit = input(f"Enter a new delay (seconds) -->:")
                     self.conf.set("Video", "delay", limit)
-                
+
                 elif settings_options == "6":
                     limit = input(f"Enter a new value for max workers -->:")
                     self.conf.set("Performance", "workers", limit)
-    
+
                 elif settings_options == "7":
                     limit = input(f"Enter a new value for max retries -->:")
                     self.conf.set("Performance", "retries", limit)
-                
+
                 elif settings_options == "8":
                     limit = input(f"Enter a new value for the max timeout -->:")
                     self.conf.set("Performance", "timeout", limit)
@@ -204,34 +202,34 @@ jp: Japanese
                 elif settings_options == "9":
                     if self.directory_system:
                         self.conf.set("Video", "directory_system", "0")
-                    
+
                     else:
                         self.conf.set("Video", "directory_system", "1")
-                    
+
                 elif settings_options == "10":
                     limit = input(f"Enter a new result limit -->:")
                     self.conf.set("Video", "search_limit", limit)
-                
+
                 elif settings_options == "11":
                     print("Please enter a language code from the list below:")
                     print(languages)
                     language = input(f"Enter the new language code -->:")
                     self.conf.set("Video", "language", language)
-                
+
                 elif settings_options == "12":
                     path = input(f"Enter a new output path -->:")
                     if not os.path.exists(path):
                         raise FileNotFoundError("The specified output path doesn't exist!")
-                    
-                    self.conf.set("Video", "output_path", path)                
+
+                    self.conf.set("Video", "output_path", path)
 
                 elif settings_options == "99":
                     self.menu()
-            
+
             finally:
                 with open("config.ini", "w") as config_file:
                     self.conf.write(config_file)
-                    
+
     def process_video(self, url=None):
         if url is None:
             url = input(f"{return_color()}Please enter the Video URL -->:")
@@ -262,7 +260,7 @@ jp: Japanese
 
         logger_debug(f"{return_color()}Trying to acquire the semaphore...")
         self.semaphore.acquire()
-        self.thread = threading.Thread(target=self.download, args=(video, output_path, ))
+        self.thread = threading.Thread(target=self.download, args=(video, output_path,))
         self.thread.start()
 
     def iterate_generator(self, generator):
@@ -402,7 +400,7 @@ for example: 1,5,94,3{Fore.WHITE}
                     print(f"\r\033[K[Converting: {progress}/100", end='', flush=True)
 
                 os.remove(f"{output_path}_.tmp")
-                write_tags(path=output_path, video=video)
+                write_tags(path=output_path, video=video, ffmpeg_path=None)
             else:
                 logger_debug("FFMPEG features disabled, writing tags and converting the video won't be available!")
 

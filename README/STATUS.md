@@ -22,10 +22,12 @@
 - [x] Allow selecting between a range of videos in the tree widget for downloading
 - [x] Fixing the total progressbar glitch
 - [x] Fixing the different lengths in the tree widget
+- [x] Updating german translations
 - [] Changing the Layout on Android, so that the progressbars become an extra widget, which would lead to more
   space being available
-- [] Improving the CLI debug messages, so that progress is reported more clearly
-- [] A better way of checking if a file was already downloaded (like really verifying if actual content is in the file)
-- [] Updating german translations
-- [] Fixing all the build scripts
-- [] Making contributions easier, by clearly saying what to do, how to do it and what to watch out for
+
+~~[] Improving the CLI debug messages, so that progress is reported more clearly~~
+
+~~[] A better way of checking if a file was already downloaded (like really verifying if actual content is in the file)~~
+
+~~[] Making contributions easier, by clearly saying what to do, how to do it and what to watch out for~~
