@@ -16,11 +16,11 @@
 - [x] Fixing the tree widget to be less ugly (for real, I hate it myself)
 - [x] Adding license information to all libraries in credits
 - [x] Make the tree widget support sorting in general
+- [x] Adding support for the custom delay in the other API libraries (eaf_base_api) (NEEDS ADDITIONAL TESTING!)
+- [x] Adding Search query support for files
 - [] Changing the Layout on Android, so that the progressbars become an extra widget, which would lead to more
   space being available
-- [] Adding Search query support for files
 - [] Improving the CLI debug messages, so that progress is reported more clearly
-- [] Adding support for the custom delay in the other API libraries (eaf_base_api)
 - [] A better way of checking if a file was already downloaded (like really verifying if actual content is in the file)
 - [] Updating german translations
 - [] Fixing all the build scripts

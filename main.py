@@ -23,6 +23,7 @@ from src.backend.shared_gui import *
 from src.backend.class_help import *
 from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
 from src.frontend.License import Ui_License
+from src.frontend.range_selector import Ui_Form
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                             QTranslator, QCoreApplication)
@@ -1153,6 +1154,7 @@ This warning won't be shown again.
 
         # Other stuff idk
         self.ui.checkbox_tree_allow_sorting.checkStateChanged.connect(self.toggle_sorting)
+        self.ui.button_tree_select_range.clicked.connect(self.select_range_of_items)
         self.ui.button_tree_stop.clicked.connect(self.switch_stop_state)
         self.ui.button_tree_export_video_urls.clicked.connect(self.export_urls)
         self.ui.button_download_ffmpeg.clicked.connect(self.download_ffmpeg)
@@ -1258,6 +1260,7 @@ This warning won't be shown again.
         self.ui.spinbox_maximal_workers.setValue(int(self.workers))
         self.ui.spinbox_pornhub_delay.setValue(int(self.delay))
         consts.MAX_CALL_RETRIES = self.max_retries
+        bs_consts.REQUEST_DELAY = self.delay
         bs_consts.MAX_RETRIES = self.max_retries
         consts.FFMPEG_EXECUTABLE = ffmpeg_path
         self.client = Client(delay=self.delay, language=self.api_language)
@@ -1466,6 +1469,31 @@ This warning won't be shown again.
         for i in range(item_count):
             item = root.child(i)
             item.setCheckState(0, Qt.Checked)
+
+    def select_range_of_items(self):
+        self.widget = Ui_Form()
+        self.widget.setupUi(self)
+        root = self.ui.treeWidget.invisibleRootItem()
+        item_count = root.childCount()
+        self.widget.spinbox_range_end.setMaximum(item_count)
+        self.widget.button_range_apply.clicked.connect(self.process_range_of_items_selection)
+
+    def process_range_of_items_selection(self):
+        start = self.widget.spinbox_range_start.value()
+        end = self.widget.spinbox_range_end.value()
+
+        root = self.ui.treeWidget.invisibleRootItem()
+        item_count = root.childCount()
+        for i in range(item_count):
+            if i < start:
+                pass
+
+            if i > end:
+                break
+
+            else:
+                item = root.child(i)
+                item.setCheckState(0, Qt.Checked)
 
     def start_single_video(self):
         """
