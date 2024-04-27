@@ -39,7 +39,7 @@ jobs:
           pwd
           ls -la
           source ../venv/bin/activate
-          pyside6-deploy
+          pyside6-deploy -c src/build/pysidedeploy_linux.spec
 
       - name: Archive x64 build
         uses: actions/upload-artifact@v2
@@ -74,7 +74,7 @@ jobs:
           Get-ChildItem -Path . -Exclude deploy,venv | Move-Item -Destination deploy
           cd deploy
           ..\venv\Scripts\activate
-          echo "yes" | pyside6-deploy --extra-modules=QtCore,QtWidgets,QtGui
+          echo "yes" | pyside6-deploy -c src/build/pysidedeploy_windows.spec
 
       - name: Archive Windows x64 build
         uses: actions/upload-artifact@v2
@@ -109,7 +109,7 @@ jobs:
           mv !(deploy|venv) deploy/
           cd deploy
           source ../venv/bin/activate
-          pyside6-deploy
+          pyside6-deploy -c src/build/pysidedeploy_macos.spec
 
       - name: List output directory
         run: |

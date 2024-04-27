@@ -5,17 +5,17 @@ title = main
 # of input_file
 project_dir = .
 # source file path
-input_file = /home/asuna/PycharmProjects/Porn_Fetch/main.py
+input_file =
 # directory where exec is stored
 exec_directory = .
 # path to .pyproject project file
 project_file = 
 # application icon
-icon = ../src/frontend/graphics/android_app_icon.png
+icon =
 
 [python]
 # python path
-python_path = /home/asuna/venv/bin/python
+python_path =
 # python packages to install
 # ordered-set = increase compile time performance of nuitka packaging
 # zstandard = provides final executable size optimization
@@ -30,17 +30,17 @@ qml_files =
 # excluded qml plugin binaries
 excluded_qml_plugins = 
 # qt modules used. comma separated
-modules = Core,Gui,Widgets
+modules = Gui,DBus,Core,Widgets
 # qt plugins used by the application
-plugins =
+plugins = egldeviceintegrations,iconengines,platforms/darwin,xcbglintegrations,imageformats,platforms,platformthemes,styles,platforminputcontexts,accessiblebridge,generic
 
 [android]
 # path to pyside wheel
-wheel_pyside = /home/asuna/PYSIDE/pyside-setup/PySide6-6.7.0-6.7.0-cp310-cp310-linux_aarch64.whl
-#path to shiboken wheel
-wheel_shiboken = /home/asuna/PYSIDE/pyside-setup/shiboken6-6.7.0-6.7.0-cp310-cp310-linux_aarch64.whl
+wheel_pyside = 
+# path to shiboken wheel
+wheel_shiboken = 
 # plugins to be copied to libs folder of the packaged application. comma separated
-plugins = imageformats_qjpeg,iconengines_qsvgicon,imageformats_qgif,imageformats_qsvg,platforms_qtforandroid,imageformats_qico,styles_qandroidstyle
+plugins = 
 
 [nuitka]
 # usage description for permissions requested by the app as found in the info.plist file
@@ -56,17 +56,17 @@ extra_args = --quiet --noinclude-qt-translations
 # release creates an aab, while debug creates an apk
 mode = debug
 # contrains path to pyside6 and shiboken6 recipe dir
-recipe_dir = /home/asuna/PycharmProjects/Porn_Fetch/deployment/recipes
+recipe_dir = 
 # path to extra qt android jars to be loaded by the application
-jars_dir = /home/asuna/PycharmProjects/Porn_Fetch/deployment/jar/PySide6/jar
+jars_dir = 
 # if empty uses default ndk path downloaded by buildozer
-ndk_path = /home/asuna/Android/Sdk/ndk/26b
+ndk_path = 
 # if empty uses default sdk path downloaded by buildozer
-sdk_path = /home/asuna/Android/Sdk
+sdk_path = 
 # other libraries to be loaded. comma separated.
 # loaded at app startup
-local_libs = plugins_platforms_qtforandroid
+local_libs = 
 # architecture of deployed platform
 # possible values = ["aarch64", "armv7a", "i686", "x86_64"]
-arch = aarch64
+arch = 
 
