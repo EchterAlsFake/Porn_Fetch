@@ -1,4 +1,4 @@
-name: Build PySide6 Application
+name: Build Build CLI (Linux x32,x64)
 
 on:
   pull_request:
