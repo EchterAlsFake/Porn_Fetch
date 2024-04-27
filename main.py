@@ -54,10 +54,10 @@ Discord: echteralsfake (faster response)
 """
 
 __license__ = "GPL 3"
-__version__ = "3.3"
-__build__ = "desktop"  # android or desktop
+__version__ = "3.4"
+__build__ = "android"  # android or desktop
 __author__ = "Johannes Habel"
-__next_release__ = "3.4"
+__next_release__ = "3.5"
 discord_id = "1224629014032023563"  # Used for rich presence
 discord_image = "logo_transparent"
 total_segments = 0
