@@ -645,7 +645,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../form_desktop.ui" line="1323"/>
         <source>Update available:</source>
-        <translation>Aktualisierung verfübar:</translation>
+        <translation>Aktualisierung verfügbar:</translation>
     </message>
     <message>
         <location filename="../form_desktop.ui" line="1371"/>
