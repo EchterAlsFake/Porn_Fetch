@@ -11,7 +11,7 @@ exec_directory = .
 # path to .pyproject project file
 project_file = 
 # application icon
-icon = /src/frontend/graphics/logo_transparent.icns
+icon = src/frontend/graphics/logo_transparent.icns
 
 [python]
 # python path
