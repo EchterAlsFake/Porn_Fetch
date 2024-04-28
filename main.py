@@ -55,7 +55,7 @@ Discord: echteralsfake (faster response)
 
 __license__ = "GPL 3"
 __version__ = "3.4"
-__build__ = "android"  # android or desktop
+__build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 __next_release__ = "3.5"
 discord_id = "1224629014032023563"  # Used for rich presence
@@ -74,6 +74,7 @@ url_linux = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-stat
 url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
 ffmpeg_linux = "ffmpeg-6.1-amd64-static"
 ffmpeg_windows = "ffmpeg-7.0-essentials_build"
+android_arch = None
 
 
 class Signals(QObject):
