@@ -48,7 +48,6 @@
 - Downloading whole model / channel accounts
 - Searching for videos (and downloading them directly)
 - Downloading from a file
-- Metadata retrieval
 - Optional account login
 - Multi-threaded downloading
 - Dark mode and CLI support
