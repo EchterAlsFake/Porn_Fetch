@@ -1,4 +1,4 @@
-name: Build Build CLI (Windows x32,x64)
+name: Build CLI (Windows x32,x64)
 
 on:
   pull_request:

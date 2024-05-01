@@ -31,7 +31,6 @@
 
 ## 🚀 Quick Links
 - [Features](#-features)
-- [Supported Platforms](#-supported-platforms)
 - [Supported Websites](#-supported-websites)
 - [Building from Source](#-building-from-source)
   - [Linux](#for-ubuntu-windows-arch-linux-termux-fedora-opensuse)
@@ -49,7 +48,7 @@
 - Searching for videos (and downloading them directly)
 - Downloading from a file
 - Optional account login
-- Multi-threaded downloading
+- Multithreaded downloading
 - Dark mode and CLI support
 - No ads or mandatory logins
 - Cross-platform compatibility
@@ -114,7 +113,7 @@ Porn Fetch supports all URLs, Models and search terms like it would if you use t
 > e., for "https://www.pornhub.com" it would be just "pornhub" or for "https://xvideos.com" it would be just "xvideos"
 
 
-If you still need a real example file, [here you go]()
+If you still need a real example file, [here you go](https://github.com/EchterAlsFake/Porn_Fetch/blob/eac6fa2ccf644e4b30816a7bd2fa0257b2a03e36/src/backend/urls.txt)
 
 ## 🔨 Building from Source
 Easy-to-use build scripts are available for various platforms. Run these in your terminal:

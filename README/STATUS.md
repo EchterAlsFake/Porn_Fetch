@@ -7,6 +7,7 @@
 - [] Splitting functions into other .py files
 - [] Using Qt's logging instead of my own approach
 - [] Trying to optimize the UI performance with more threading and slower UI repainting
+- [] Improving the sorting mechanism, to be less confusing
 
 # Maybe or maybe not:
 - [] Enabling optional downloading over the tor network or proxies
