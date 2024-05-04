@@ -716,7 +716,7 @@ class AddUrls(QRunnable):
                 else:
                     ui_popup(invalid_input_string)
 
-        self.signals.total_progress.emit(idx, total)
+            self.signals.total_progress.emit(idx, total)
 
         self.signals.url_iterators.emit(iterator, model_iterators, search_iterators)
 
