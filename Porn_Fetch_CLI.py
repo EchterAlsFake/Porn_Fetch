@@ -391,6 +391,7 @@ for example: 1,5,94,3{Fore.WHITE}
 
         finally:
             logger_debug(f"{return_color()}Finished downloading for: {video.title}")
+            self.semaphore.release()
             if self.ffmpeg_features:
                 os.rename(f"{output_path}", f"{output_path}_.tmp")
                 cmd = [self.ffmpeg_path, "-i", f"{output_path}_.tmp", "-c", "copy", output_path, '-hide_banner',
