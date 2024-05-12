@@ -23,6 +23,9 @@
 ---
 </div>
 
+> [!NOTE]
+> I am not active on GitHub for the next weeks. Errors won't be fixed now, but later, when I feel better.
+
 > [!WARNING]
 > Porn Fetch is NOT associated with the websites. Porn Fetch is AGAINST the Terms of Services of EVERY website! Usage is on YOUR risk.
 
