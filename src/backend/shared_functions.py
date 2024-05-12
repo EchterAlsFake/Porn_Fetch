@@ -232,7 +232,11 @@ def write_tags(path, video, ffmpeg_path):
     title = video.title
     comment = "Downloaded with Porn Fetch (GPLv3)"
     genre = "Porn"
-    if hasattr(video.author, "name"):
+
+    if isinstance(video, hq_Video):
+        artist = video.pornstars[0]
+
+    elif hasattr(video.author, "name"):
         artist = video.author.name
 
     else:

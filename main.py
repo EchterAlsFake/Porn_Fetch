@@ -384,8 +384,12 @@ class DownloadThread(QRunnable):
 
     def run(self):
         """Run the download in a thread, optimizing for different video sources and modes."""
-
         try:
+            if os.path.isfile(self.output_path):
+                logger_debug("The file already exists, skipping...")
+                self.signals.completed.emit()
+                return
+
             logger_debug(f"Downloading Video to: {self.output_path}")
             if self.threading_mode == "FFMPEG" or self.threading_mode == download.FFMPEG:
                 self.ffmpeg = True
@@ -441,9 +445,6 @@ class DownloadThread(QRunnable):
 
                 # ... other video types ...
 
-            # Emit the completed signal when done
-            self.signals.completed.emit()
-
         finally:
             if ffmpeg_features:
                 os.rename(f"{self.output_path}", f"{self.output_path}_.tmp")
@@ -457,6 +458,8 @@ class DownloadThread(QRunnable):
                 write_tags(path=self.output_path, video=self.video, ffmpeg_path=ffmpeg_path)
             else:
                 logger_debug("FFMPEG features disabled, writing tags and converting the video won't be available!")
+
+            self.signals.completed.emit()
 
 
 class QTreeWidgetDownloadThread(QRunnable):
@@ -1618,7 +1621,7 @@ This warning won't be shown again.
     def start_playlist(self):
         url = self.ui.lineedit_playlist_url.text()
         playlist = self.client.get_playlist(url)
-        videos = playlist.videos
+        videos = playlist.sample()
         self.add_to_tree_widget_thread(iterator=videos, search_limit=self.search_limit)
 
     def load_video(self, url):
