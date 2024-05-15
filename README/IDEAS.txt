@@ -1,0 +1,42 @@
+1:
+
+Merge all attribute names of all my APIs so that they are consistent and I don't have to do ten thousand
+if statements.
+
+Make ONE function which handles receiving the attributes of a video.
+
+-->: Give these attributes to EVERY function (where it's needed) with a Signal, so that I don't have to reload them.
+
+- Time efficient
+- Data efficient
+- Simpler
+- Better
+
+2:
+
+Reorganize the progressbars:
+
+Instead of making progressbars for every website, why should I not just make a progressbar for every video downloaded
+lmao.
+
+(Like why didn't I get this idea the last fucking year, I mean it's soooooo much better)
+
+-->: Give the title of the video across all functions that need it and make unique identifiers for it at runtime.
+-->: Maybe even a class which handles this, so that I can just access the IDs
+
+3:
+
+Switch to Qts logging approach instead of using my own, because it's unprofessional, sucks and is stupidly made
+
+-->: Make a class for debugging and error monitoring
+
+4:
+Completely redesigning the layout.
+
+-->: I need to find out how to make the app usable on Android and Desktop
+
+(Probably removing some functionality from the Android application to keep it maintainable, because I don't want to mess
+with responsive design)
+
+-->: Restructuring the elements and widgets (I'm probably going to take some inspiration from other applications)
+

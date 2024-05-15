@@ -24,6 +24,9 @@ from src.backend.class_help import *
 from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
 from src.frontend.License import Ui_License
 from src.frontend.range_selector import Ui_Form
+from src.backend.signals import Signals
+from src.backend.consts import *
+
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                             QTranslator, QCoreApplication)
@@ -53,6 +56,8 @@ E-Mail: EchterAlsFake@proton.me
 Discord: echteralsfake (faster response)
 """
 
+stop_flag = Event()
+
 __license__ = "GPL 3"
 __version__ = "3.4"
 __build__ = "desktop"  # android or desktop
@@ -63,8 +68,6 @@ discord_image = "logo_transparent"
 total_segments = 0
 downloaded_segments = 0
 last_index = 0
-stop_flag = Event()
-invalid_input_string = QCoreApplication.tr("Wrong Input, please verify the URL, category or actress!", None)
 ffmpeg_features = True
 ffmpeg_path = None
 urls = ["https://www.pornhub.com", "https://www.eporner.com", "https://www.hqporner.com", "https://www.xnxx.com",
@@ -75,41 +78,6 @@ url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
 ffmpeg_linux = "ffmpeg-6.1-amd64-static"
 ffmpeg_windows = "ffmpeg-7.0-essentials_build"
 android_arch = None
-
-
-class Signals(QObject):
-    """Signals for the Download class"""
-    # Progress Signals
-    progress_single = Signal(int)
-    completed = Signal()
-    progress = Signal(int, int)
-    progress_hqporner = Signal(int, int)
-    progress_eporner = Signal(int, int)
-    progress_xnxx = Signal(int, int)
-    progress_xvideos = Signal(int, int)
-    total_progress = Signal(int, int)
-    progress_video = Signal(object)
-    ffmpeg_progress = Signal(int, int)
-
-    # Ranges
-    start_undefined_range = Signal()
-    stop_undefined_range = Signal()
-    data = Signal(list)
-
-    # Other (I don't remember)
-    text_data = Signal(list)
-
-    # URL Thread
-    url_iterators = Signal(list, list, list)
-
-    # Operations
-    finished = Signal()
-    clear_signal = Signal()
-    get_total = Signal(str, str)
-    result = Signal(bool)
-
-    # Errors
-    error_signal = Signal(str)
 
 
 class License(QWidget):
@@ -158,38 +126,31 @@ class License(QWidget):
         self.main_widget.show()
 
 
-class CheckUpdates(QRunnable):
+class Setup(QRunnable):
     def __init__(self):
-        super(CheckUpdates, self).__init__()
+        super(Setup, self).__init__()
         self.signals = Signals()
 
     def run(self):
         url = f"https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/{__next_release__}"
         if requests.get(url).status_code == 200:
-            self.signals.result.emit(True)
+            self.signals.signal_setup_update.emit(True)
 
         else:
-            self.signals.result.emit(False)
+            self.signals.signal_setup_update.emit(False)
 
-
-class CheckInternet(QRunnable):
-    def __init__(self):
-        super(CheckInternet, self).__init__()
-        self.signals = Signals()
-
-    def run(self):
         try:
             for url in urls:
                 if not requests.get(url).status_code == 200:
-                    self.signals.result.emit(False)
+                    self.signals.signal_setup_internet.emit(False)
                     return
 
         except (requests.exceptions.SSLError, requests.exceptions.ConnectionError, ConnectionResetError,
                 ConnectionError, requests.exceptions.HTTPError):
-            self.signals.result.emit(False)
+            self.signals.signal_setup_internet.emit(False)
 
         else:
-            self.signals.result.emit(True)
+            self.signals.signal_setup_internet.emit(True)
 
 
 class AddToTreeWidget(QRunnable):
