@@ -309,3 +309,62 @@ def resolve_threading_mode(video, mode, workers, timeout):
             "FFMPEG": bs_ffmpeg,
             "default": bs_default
         }.get(mode, download.default)
+
+
+def load_video_attributes(video):
+    """
+    Since all my APIs have kinda different names for the same attributes I made this function to associate all of its
+    names to their attribute, so that I can just write this function one time and use it across Porn Fetch.
+
+    (Sounds complicated, just look at the code and you'll understand)
+    """
+    attributes = ["title", "author", "length", "publish_date", "categories", "thumbnail"]
+    data = []  # Data will be saved here and returned later
+
+    if isinstance(video, Video):
+        # This is a PornHub video, so we are using all methods from PHUB API
+
+        title = video.title
+        author = video.author.name
+
+        if author is None or author == "":
+            author = video.pornstars[0]
+
+        if len(author) == 0:
+            author = "Unknown"  # Mechanism to prevent a video failing because of unknown pornstars / author. I mean
+            # this won't happen, but just in case yk
+
+        length = video.duration.seconds
+        publish_date = video.date
+        categories = ",".join(video.tags)  # Tags or categories is kinda the same so I don't care lol
+        thumbnail = "Unknown"  # PHUB doesn't support Thumbnails at the moment
+
+    elif isinstance(video, xn_Video):
+        # This is a XNXX Video, so we are using all methods from the XNXX API
+
+        title = video.title
+        author = video.author
+
+        if author is None or author == "":
+            author = video.pornstars[0]
+
+        if len(author) == 0:
+            author = "Unknown"
+
+        length = video.length
+        publish_date = video.publish_date
+        categories = ",".join(video.tags)
+        thumbnail = video.thumbnail_url[0]
+
+    elif isinstance(video, hq_Video):
+        # This is a HQPorner Video, so we are using all methods from the hqporner_api
+
+        title = video.title
+        author = video.pornstars[0]
+        if len(author) == 0:
+            author = "Unknown"
+
+        length = video.length
+        publish_date = video.publish_date
+        categories = "".join(video.categories)
+        thumbnail = video.get_thumbnails()[0]
