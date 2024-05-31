@@ -79,6 +79,7 @@ delay = 0
 [UI]
 language = system
 discord = false
+
 """
 
 
@@ -368,3 +369,23 @@ def load_video_attributes(video):
         publish_date = video.publish_date
         categories = "".join(video.categories)
         thumbnail = video.get_thumbnails()[0]
+
+    elif isinstance(video, ep_Video):
+        # This is an EPorner Video, so we are using all methods from the eporner_api
+
+        title = video.title
+        author = video.author
+
+        if author is None or author == "":
+            author = "Unknown"
+
+        length = video.length
+        publish_date = video.publish_date
+        categories = ",".join(video.tags)
+        thumbnail = video.thumbnail
+
+    else:
+        raise "Weird Error, shouldn't happen..."
+
+    data.append(title, author, length, publish_date, categories, thumbnail)
+    return data

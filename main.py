@@ -172,23 +172,7 @@ class AddToTreeWidget(QRunnable):
 
         # Checks which mode is selected by the user and loads the video attributes
         if self.data_mode == 1:
-            if isinstance(video, (hq_Video, xn_Video, xv_Video)):
-                duration = str(video.length)
-
-                if hasattr(video, 'pornstars'):
-                    author = video.pornstars[0] if video.pornstars else "unknown"
-
-                else:
-                    author = video.author if hasattr(video, 'author') and video.author else "unknown"
-
-            elif isinstance(video, Video):
-                duration = round(video.duration.seconds / 60)
-                author = video.author.name
-
-            elif isinstance(video, ep_Video):
-                duration = round(int(video.length) / 60)
-                author = video.author
-
+            data = load_video_attributes(video)
         # Handling exceptions for missing author in xn_Video
         if isinstance(video, xn_Video) and not hasattr(video, 'pornstars'):
             author = "unknown"
@@ -1593,8 +1577,6 @@ This warning won't be shown again.
         # Connect signals to your slots
         video_loader.signals.loaded.connect(self.on_video_loaded)
         video_loader.signals.error.connect(self.on_video_load_error)
-
-        # Start the thread
         QThreadPool.globalInstance().start(video_loader)
 
     def on_video_loaded(self, video, author, stripped_title, output_file_path, threading_mode, directory_system,
