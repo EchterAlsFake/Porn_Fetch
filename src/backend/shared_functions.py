@@ -337,7 +337,8 @@ def load_video_attributes(video):
 
         length = video.duration.seconds
         publish_date = video.date
-        categories = ",".join(video.tags)  # Tags or categories is kinda the same so I don't care lol
+        tags = [tag.name for tag in video.tags]
+        categories = ",".join(tags)  # Tags or categories is kinda the same so I don't care lol
         thumbnail = "Unknown"  # PHUB doesn't support Thumbnails at the moment
 
     elif isinstance(video, xn_Video):
@@ -387,5 +388,10 @@ def load_video_attributes(video):
     else:
         raise "Weird Error, shouldn't happen..."
 
-    data.append(title, author, length, publish_date, categories, thumbnail)
+    data.append(title)
+    data.append(author)
+    data.append(length)
+    data.append(publish_date)
+    data.append(categories)
+    data.append(thumbnail)
     return data

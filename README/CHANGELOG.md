@@ -400,3 +400,15 @@ I tested it on Android 12 & 13 on two devices.
 
 ## Deprecations
 - removed all metadata functionality from Porn Fetch, because it's useless and hard to maintain.
+
+> [!NOTE]
+> Version 3.4 is such a big release, that I decided to skip 3.4-3.9 and directly mark it as v4.0
+
+# 4.0
+
+
+# Bug Fixes
+- Fixed an Issue where the discord rich presence was never started, even when enabled
+- 
+
+

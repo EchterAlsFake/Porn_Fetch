@@ -25,7 +25,6 @@ from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
 from src.frontend.License import Ui_License
 from src.frontend.range_selector import Ui_Form
 from src.backend.signals import Signals
-from src.backend.consts import *
 
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
@@ -78,6 +77,7 @@ url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
 ffmpeg_linux = "ffmpeg-6.1-amd64-static"
 ffmpeg_windows = "ffmpeg-7.0-essentials_build"
 android_arch = None
+invalid_input_string = QCoreApplication.tr("Wrong Input, please verify the URL, category or actress!", None)
 
 
 class License(QWidget):
@@ -173,9 +173,9 @@ class AddToTreeWidget(QRunnable):
         # Checks which mode is selected by the user and loads the video attributes
         if self.data_mode == 1:
             data = load_video_attributes(video)
-        # Handling exceptions for missing author in xn_Video
-        if isinstance(video, xn_Video) and not hasattr(video, 'pornstars'):
-            author = "unknown"
+            title = data[0]
+            author = data[1]
+            duration = data[2]
 
         print(
             f"\r\033[K[{Fore.LIGHTCYAN_EX}{index}/{self.search_limit}]{Fore.RESET}{str(title)} Successfully processed!",
@@ -486,17 +486,11 @@ class VideoLoader(QRunnable):
                 ui_popup(invalid_input_string)
 
             else:
-                title = video.title
-
-                if isinstance(video, Video):
-                    author = video.author.name
-
-                elif isinstance(video, hq_Video):
-                    pornstars = video.pornstars
-                    author = pornstars[0] if pornstars else "no_author_found"
-                else:
-                    author = video.author
-
+                data = load_video_attributes(video)
+                title = data[0]
+                author = data[1]
+                # You may think it's ineffective to load the video objects and fetch all data everytime, but since
+                # the data across all APIs use caching it doesn't matter anyway, and it's easier to read :)
                 output_path = Path(self.output_path)
                 stripped_title = Core().strip_title(title)  # Strip the title so that videos with special chars can be
                 # saved on windows. It would raise an OSError otherwise
@@ -535,7 +529,8 @@ class FFMPEGDownload(QRunnable):
             r.raise_for_status()
             try:
                 total_length = int(r.headers.get('content-length'))
-            except Exception:
+
+            except Exception:  # Sometimes the headers are not correctly set, so I need to set the size manually
                 total_length = 41313894
 
             self.signals.total_progress.emit(0, total_length)  # Initialize progress bar
@@ -834,8 +829,8 @@ class Porn_Fetch(QWidget):
 
     def check_for_updates(self):
         """Checks for updates in a thread, so that the main UI isn't blocked, until update checks are done"""
-        self.update_thread = CheckUpdates()
-        self.update_thread.signals.result.connect(self.check_for_updates_result)
+        self.update_thread = Setup()
+        self.update_thread.signals.signal_setup_update.connect(self.check_for_updates_result)
         self.threadpool.start(self.update_thread)
 
     def check_for_updates_result(self, value):
@@ -853,8 +848,8 @@ class Porn_Fetch(QWidget):
 
     def check_internet(self):
         """Checks the internet access for all sites"""
-        self.internet_thread = CheckInternet()
-        self.internet_thread.signals.result.connect(self.check_internet_result)
+        self.internet_thread = Setup()
+        self.internet_thread.signals.signal_setup_internet.connect(self.check_internet_result)
         self.threadpool.start(self.internet_thread)
 
     def check_internet_result(self, value):
@@ -934,7 +929,7 @@ This warning won't be shown again.
 
     @classmethod
     def ffmpeg_finished(cls):
-        ui_popup(QCoreApplication.tr("FFmpeg has been installed. Please restart Porn Fetch :)"))
+        ui_popup(QCoreApplication.tr("FFmpeg has been installed. Please restart Porn Fetch :)", None))
 
     def discord_(self):
         """
@@ -1215,7 +1210,7 @@ This warning won't be shown again.
         self.workers = int(self.conf["Performance"]["workers"])
         self.max_retries = int(self.conf["Performance"]["retries"])
 
-        self.discord = True if self.conf["UI"]["discord"] == "yes" else False
+        self.discord = True if self.conf["UI"]["discord"] == "true" else False
         self.ui.spinbox_maximal_timeout.setValue(int(self.timeout))
         self.ui.spinbox_maximal_workers.setValue(int(self.workers))
         self.ui.spinbox_pornhub_delay.setValue(int(self.delay))
