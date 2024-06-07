@@ -148,31 +148,21 @@ jobs:
       - name: Get current release body
         id: get_release_body
         run: |
-          if gh release view v${{ secrets.VERSION }}-automated-${{ env.GITHUB_SHA_SHORT }} >/dev/null 2>&1; then
-            gh release view v${{ secrets.VERSION }}-automated-${{ env.GITHUB_SHA_SHORT }} --json body --jq .body > current_body.txt
-            CURRENT_BODY=$(cat current_body.txt)
-            echo "CURRENT_BODY<<EOF" >> $GITHUB_ENV
-            echo "$CURRENT_BODY" >> $GITHUB_ENV
-            echo "EOF" >> $GITHUB_ENV
-          else
-            echo "CURRENT_BODY=" >> $GITHUB_ENV
+          CURRENT_BODY=$(gh release view v${{ secrets.VERSION }}-automated-${{ env.GITHUB_SHA_SHORT }} --json body --jq .body || echo "")
+          echo "CURRENT_BODY<<EOF" >> $GITHUB_ENV
+          echo "$CURRENT_BODY" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
-        shell: bash
 
       - name: Append new SHA512 hash to release body
         id: append_release_body
         run: |
-          NEW_BODY="${CURRENT_BODY}\n- PornFetch_${{ matrix.os }}_${{ matrix.arch }}: ${{ steps.calculate_sha.outputs.sha }}"
-          echo "NEW_BODY<<EOF" >> $GITHUB_ENV
-          echo "$NEW_BODY" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-        env:
-          CURRENT_BODY: ${{ env.CURRENT_BODY }}
+          echo "NEW_BODY=${CURRENT_BODY}\n- PornFetch_Windows_x64: ${{ env.sha512_windows_x64 }}" >> $GITHUB_ENV
 
       - name: Update GitHub release
         run: |
-          gh release edit v${{ secrets.VERSION }}-automated-${{ env.GITHUB_SHA_SHORT }} --notes "$NEW_BODY"
+          gh release edit v${{ secrets.VERSION }}-automated-${{ env.GITHUB_SHA_SHORT }} --notes "${NEW_BODY}"
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
           NEW_BODY: ${{ env.NEW_BODY }}
