@@ -95,16 +95,16 @@ jobs:
       - name: Check if Release Exists
         id: check_release
         run: |
-          if gh release view v1.0.0-automated-${{ env.GITHUB_SHA_SHORT }} >/dev/null 2>&1; then
-            echo "RELEASE_EXISTS=true" >> $GITHUB_ENV
-          else
-            echo "RELEASE_EXISTS=false" >> $GITHUB_ENV
+          gh release view v1.0.0-automated-${{ env.GITHUB_SHA_SHORT }} >/dev/null 2>&1 && echo "RELEASE_EXISTS=true" || echo "RELEASE_EXISTS=false"
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
 
+      - name: Set RELEASE_EXISTS
+        run: echo "RELEASE_EXISTS=${{ steps.check_release.outputs.RELEASE_EXISTS }}" >> $GITHUB_ENV
+
       - name: Create GitHub Release
         id: create_release
-        if: env.RELEASE_EXISTS == 'false'
+        if: steps.check_release.outputs.RELEASE_EXISTS == 'false'
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
@@ -117,10 +117,11 @@ jobs:
           prerelease: true
 
       - name: Get Release Upload URL
-        if: env.RELEASE_EXISTS == 'true'
+        if: steps.check_release.outputs.RELEASE_EXISTS == 'true'
         id: get_release_url
         run: |
-          echo "UPLOAD_URL=$(gh release view v1.0.0-automated-${{ env.GITHUB_SHA_SHORT }} --json upload_url --jq .upload_url)" >> $GITHUB_ENV
+          UPLOAD_URL=$(gh release view v1.0.0-automated-${{ env.GITHUB_SHA_SHORT }} --json upload_url --jq .upload_url)
+          echo "UPLOAD_URL=$UPLOAD_URL" >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         shell: bash
@@ -128,7 +129,7 @@ jobs:
       - name: Upload Windows x64 artifact to release
         uses: actions/upload-release-asset@v1
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url || env.UPLOAD_URL }}
+          upload_url: ${{ steps.create_release.outputs.upload_url || steps.get_release_url.outputs.upload_url }}
           asset_path: ./artifacts/Porn_Fetch_CLI.exe
           asset_name: PornFetch_CLI_Windows_x64.exe
           asset_content_type: application/octet-stream
@@ -136,7 +137,7 @@ jobs:
       - name: Upload Windows x32 artifact to release
         uses: actions/upload-release-asset@v1
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url || env.UPLOAD_URL }}
+          upload_url: ${{ steps.create_release.outputs.upload_url || steps.get_release_url.outputs.upload_url }}
           asset_path: ./artifacts/Porn_Fetch_CLI.exe
           asset_name: PornFetch_CLI_Windows_x32.exe
           asset_content_type: application/octet-stream
