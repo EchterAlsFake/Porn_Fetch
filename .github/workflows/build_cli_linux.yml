@@ -25,7 +25,7 @@ jobs:
           if [ -f requirements_cli.txt ]; then pip install -r requirements_cli.txt; fi
       - name: Build Porn Fetch (CLI) (PyInstaller - Termux)
         run: |
-          pyinstaller -F Porn_Fetch_CLI.py && cd dist && chmod +x PornFetch_Linux_CLI_x64
+          pyinstaller -F Porn_Fetch_CLI.py && cd dist && mv Porn_Fetch_CLI Porn_Fetch_Linux_CLI_x64 && chmod +x PornFetch_Linux_CLI_x64
 
       - name: Archive Porn Fetch CLI (Linux_64) build
         uses: actions/upload-artifact@v2
@@ -69,9 +69,7 @@ jobs:
         run: |
           export LD_LIBRARY_PATH=/usr/local/python-32/lib:$LD_LIBRARY_PATH
           source venv/bin/activate
-          pyinstaller -F Porn_Fetch_CLI.py
-          cd dist
-          chmod +x Porn_Fetch_CLI && mv Porn_Fetch_CLI PornFetch_Linux_CLI_x32
+          pyinstaller -F Porn_Fetch_CLI.py && cd dist && mv Porn_Fetch_CLI Porn_Fetch_Linux_CLI_x32 && chmod +x PornFetch_Linux_CLI_x32
 
       - name: Archive Porn Fetch CLI (Linux_32) build
         uses: actions/upload-artifact@v2
