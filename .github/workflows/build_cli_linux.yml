@@ -134,7 +134,7 @@ jobs:
           prerelease: true
 
       - name: Get Release Upload URL
-        if: steps.check_release.outputs.RELEASE_EXISTS == 'true'
+        if: env.RELEASE_EXISTS == 'true'
         id: get_release_url
         run: |
           UPLOAD_URL=$(gh release view v1.0.0-automated-${{ env.GITHUB_SHA_SHORT }} --json upload_url --jq .upload_url)
@@ -142,6 +142,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         shell: bash
+
+      - name: Set Release Upload URL
+        if: env.RELEASE_EXISTS == 'true'
+        run: echo "UPLOAD_URL=$(gh release view v1.0.0-automated-${{ env.GITHUB_SHA_SHORT }} --json upload_url --jq .upload_url)" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
 
       - name: Upload Linux x64 artifact to release
         uses: actions/upload-release-asset@v1
