@@ -157,7 +157,7 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.get_release_url.outputs.upload_url }}
-          asset_path: ./artifacts/Porn_Fetch_CLI_Linux_x64
+          asset_path: ./artifacts/PornFetch_CLI_Linux_x64
           asset_name: PornFetch_CLI_Linux_x64
           asset_content_type: application/gzip
 
