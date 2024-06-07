@@ -110,6 +110,12 @@ jobs:
         id: vars
         run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
 
+      - name: Verify PAT
+        run: |
+          curl -H "Authorization: token ${{ secrets.PAT }}" https://api.github.com/user
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+
       - name: Check if Release Exists
         id: check_release
         run: |
