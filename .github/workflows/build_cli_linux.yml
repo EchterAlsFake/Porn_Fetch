@@ -93,7 +93,7 @@ jobs:
       - name: Download Linux x32 artifact
         uses: actions/download-artifact@v2
         with:
-          name: PornFetch_Linux_CLI_x32
+          name: PornFetch_CLI_Linux_x32
           path: ./artifacts
 
       - name: List artifacts directory
