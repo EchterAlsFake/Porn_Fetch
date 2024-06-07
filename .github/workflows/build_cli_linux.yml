@@ -25,13 +25,13 @@ jobs:
           if [ -f requirements_cli.txt ]; then pip install -r requirements_cli.txt; fi
       - name: Build Porn Fetch (CLI) (PyInstaller - Termux)
         run: |
-          pyinstaller -F Porn_Fetch_CLI.py && cd dist && chmod +x Porn_Fetch_CLI
+          pyinstaller -F Porn_Fetch_CLI.py && cd dist && chmod +x PornFetch_Linux_CLI_x64
 
       - name: Archive Porn Fetch CLI (Linux_64) build
         uses: actions/upload-artifact@v2
         with:
-          name: PornFetch_CLI_Linux_x64
-          path: dist/Porn_Fetch_CLI
+          name: PornFetch_Linux_CLI_x64
+          path: dist/PornFetch_Linux_CLI_x64
 
   build-pornfetch-cli-linux-32:
     runs-on: ubuntu-latest
@@ -71,13 +71,13 @@ jobs:
           source venv/bin/activate
           pyinstaller -F Porn_Fetch_CLI.py
           cd dist
-          chmod +x Porn_Fetch_CLI
+          chmod +x Porn_Fetch_CLI && mv Porn_Fetch_CLI PornFetch_Linux_CLI_x32
 
       - name: Archive Porn Fetch CLI (Linux_32) build
         uses: actions/upload-artifact@v2
         with:
           name: PornFetch_CLI_Linux_x32
-          path: dist/Porn_Fetch_CLI
+          path: dist/PornFetch_Linux_CLI_x32
 
   create-release:
     needs: [build-pornfetch-cli-linux-64, build-pornfetch-cli-linux-32]
@@ -86,24 +86,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install gh CLI
-        run: |
-          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-          sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
-          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-          sudo apt update
-          sudo apt install gh -y
-
       - name: Download Linux x64 artifact
         uses: actions/download-artifact@v2
         with:
-          name: PornFetch_CLI_Linux_x64
+          name: PornFetch_Linux_CLI_x64
           path: ./artifacts
 
       - name: Download Linux x32 artifact
         uses: actions/download-artifact@v2
         with:
-          name: PornFetch_CLI_Linux_x32
+          name: PornFetch_Linux_CLI_x32
           path: ./artifacts
 
       - name: List artifacts directory
@@ -160,14 +152,14 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.get_release_url.outputs.upload_url }}
-          asset_path: ./artifacts/PornFetch_CLI_Linux_x64
-          asset_name: PornFetch_CLI_Linux_x64
+          asset_path: ./artifacts/PornFetch_Linux_CLI_x64
+          asset_name: PornFetch_Linux_CLI_x64
           asset_content_type: application/gzip
 
       - name: Upload Linux x32 artifact to release
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.get_release_url.outputs.upload_url }}
-          asset_path: ./artifacts/PornFetch_CLI_Linux_x32
-          asset_name: PornFetch_CLI_Linux_x32
+          asset_path: ./artifacts/PornFetch_Linux_CLI_x32
+          asset_name: PornFetch_Linux_CLI_x32
           asset_content_type: application/gzip
