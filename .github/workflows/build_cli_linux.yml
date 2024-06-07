@@ -146,11 +146,12 @@ jobs:
       - name: Get Release Upload URL
         id: get_release_url
         run: |
-          UPLOAD_URL=$(gh release view v1.0.0-automated-${{ env.GITHUB_SHA_SHORT }} --json upload_url --jq .upload_url)
+          UPLOAD_URL=$(gh release view v1.0.0-automated-${{ env.GITHUB_SHA_SHORT }} --json uploadUrl --jq .uploadUrl)
           echo "UPLOAD_URL=$UPLOAD_URL" >> $GITHUB_ENV
           echo "::set-output name=upload_url::$UPLOAD_URL"
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
+        shell: bash
 
       - name: Upload Linux x64 artifact to release
         uses: actions/upload-release-asset@v1
