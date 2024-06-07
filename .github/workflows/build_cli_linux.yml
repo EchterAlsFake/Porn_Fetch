@@ -106,6 +106,9 @@ jobs:
           name: PornFetch_CLI_Linux_x32
           path: ./artifacts
 
+      - name: List artifacts directory
+        run: ls -R ./artifacts
+
       - name: Get short SHA
         id: vars
         run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
@@ -165,6 +168,6 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.get_release_url.outputs.upload_url }}
-          asset_path: ./artifacts/Porn_Fetch_CLI_Linux_x32
+          asset_path: ./artifacts/PornFetch_CLI_Linux_x32
           asset_name: PornFetch_CLI_Linux_x32
           asset_content_type: application/gzip
