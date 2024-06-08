@@ -103,6 +103,7 @@ jobs:
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
+          SHA512_WINDOWS_X64: ${{ env.sha512_windows_x64 }}
         with:
           tag_name: v${{ secrets.VERSION }}-automated-${{ env.GITHUB_SHA_SHORT }}
           release_name: Automated Release v${{ secrets.VERSION }}-${{ env.GITHUB_SHA_SHORT }}
@@ -118,10 +119,16 @@ jobs:
         run: |
           gh release view v${{ secrets.VERSION }}-automated-${{ env.GITHUB_SHA_SHORT }} --json body --jq .body > current_body.txt || echo "" > current_body.txt
 
+      - name: Debug - Print current release body
+        run: cat current_body.txt
+
       - name: Append new SHA512 hash to release body
         id: append_release_body
         run: |
           echo -e "$(cat current_body.txt)\n- PornFetch_GUI_Windows_x64: ${{ env.sha512_windows_x64 }}" > new_body.txt
+
+      - name: Debug - Print new release body
+        run: cat new_body.txt
 
       - name: Update GitHub release
         run: |

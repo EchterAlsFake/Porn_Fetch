@@ -106,6 +106,7 @@ jobs:
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
+          SHA512_LINUX_X64: ${{ env.sha512_linux_x64 }}
         with:
           tag_name: v${{ secrets.VERSION }}-automated-${{ env.GITHUB_SHA_SHORT }}
           release_name: Automated Release v${{ secrets.VERSION }}-${{ env.GITHUB_SHA_SHORT }}
