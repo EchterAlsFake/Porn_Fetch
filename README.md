@@ -30,7 +30,6 @@ Thank you all, I'll let you know when it's fixed. For updates, please refer to t
 <h1 align="center">Porn Fetch - The Ultimate Open-Source Porn(Hub) Downloader</h1>
 <a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui_windows.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui_windows.yml/badge.svg" alt="Build GUI Windows Status"/></a>
 <a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui_linux.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui_linux.yml/badge.svg" alt="Build GUI Linux Status"/></a>
-<a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui_macos.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui_macos.yml/badge.svg" alt="Build GUI MacOS Status"/></a>
 <a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_cli_windows.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_cli_windows.yml/badge.svg" alt="Build CLI Windows Status"/></a>
 <a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_cli_linux.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_cli_linux.yml/badge.svg" alt="Build GUI CLI Linux Status"/></a>
 <a href="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL"><img src="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL/badge.svg" alt="CodeQL Analysis"/></a>
