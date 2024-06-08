@@ -74,7 +74,7 @@ jobs:
       - name: Archive Porn Fetch CLI (Linux_32) build
         uses: actions/upload-artifact@v2
         with:
-          name: PornFetch_CLI_Linux_x32
+          name: PornFetch_Linux_CLI_x32
           path: dist/PornFetch_Linux_CLI_x32
 
   create-release:
@@ -101,7 +101,7 @@ jobs:
       - name: Download Linux x32 artifact
         uses: actions/download-artifact@v2
         with:
-          name: PornFetch_CLI_Linux_x32
+          name: PornFetch_Linux_CLI_x32
           path: ./artifacts
 
       - name: List artifacts directory
@@ -139,7 +139,7 @@ jobs:
       - name: Calculate SHA512 for Linux x32
         id: sha512_linux_x32
         run: |
-          sha512sum ./artifacts/PornFetch_CLI_Linux_x32 | awk '{ print $1 }' > sha512_linux_x32.txt
+          sha512sum ./artifacts/PornFetch_Linux_CLI_x32 | awk '{ print $1 }' > sha512_linux_x32.txt
           echo "sha512_linux_x32=$(cat sha512_linux_x32.txt)" >> $GITHUB_ENV
 
       - name: Get current release body
@@ -185,6 +185,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
           upload_url: ${{ steps.get_release_url.outputs.upload_url }}
-          asset_path: ./artifacts/PornFetch_CLI_Linux_x32
+          asset_path: ./artifacts/PornFetch_Linux_CLI__x32
           asset_name: PornFetch_Linux_CLI_x32
           asset_content_type: application/gzip
