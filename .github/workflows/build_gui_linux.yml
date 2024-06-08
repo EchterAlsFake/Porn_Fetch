@@ -119,6 +119,8 @@ jobs:
 
       - name: Get current release body
         id: get_release_body
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh release view v${{ secrets.VERSION }}-automated-${{ env.GITHUB_SHA_SHORT }} --json body --jq .body > current_body.txt || echo "" > current_body.txt
 

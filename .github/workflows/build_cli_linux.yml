@@ -173,7 +173,7 @@ jobs:
       - name: Append new SHA512 hash to release body
         id: append_release_body
         run: |
-          echo -e "$(cat current_body.txt)\n- PornFetch_Linux_x64: ${{ env.sha512_linux_x64 }}\n- PornFetch_Linux_x32: ${{ env.sha512_linux_x32 }}" > new_body.txt
+          echo -e "$(cat current_body.txt)\n- PornFetch_Linux_CLI_x64: ${{ env.sha512_linux_x64 }}\n- PornFetch_Linux_CLI_x32: ${{ env.sha512_linux_x32 }}" > new_body.txt
 
       - name: Update GitHub release
         run: |
