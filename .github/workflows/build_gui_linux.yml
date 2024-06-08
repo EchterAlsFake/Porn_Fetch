@@ -90,6 +90,7 @@ jobs:
           else
             echo "RELEASE_EXISTS=false" >> $GITHUB_ENV
             echo "::set-output name=release_exists::false"
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
 
