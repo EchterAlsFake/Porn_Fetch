@@ -1,29 +1,3 @@
-> [!WARNING] 
-> I currently investigate an issue where Porn Fetch executables are flagged as a virus on VirusTotal (36+ vendors).
-> I of course have NOT modified the executables and I will be absolutely transparent to ANYONE in the build process. 
-> <br>
-> <br>
-> Please see this issue for updates: [Porn Fetch trojan report](https://github.com/EchterAlsFake/Porn_Fetch/issues/40)
-
-> [!IMPORTANT]
-> DO NOT DOWNLOAD PORN FETCH UNTIL THIS ISSUE HAS BEEN RESOLVED!
-
-
-> [!NOTE] 
-> My account didn't get hacked and I always used code signing (in most of the cases). I am pretty sure there haven't been
-> any modifications by a third party, but I will do anything to find out what did go wrong.
-
-
-
-If you want to use Porn Fetch now, please ONLY use it from the source code but NOT from the releases.
-
-
-Thank you all, I'll let you know when it's fixed. For updates, please refer to the issue mentioned above. Thanks.
-
-
-
-
-
 <div align = center>
 <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/V3.0/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
 <br>
@@ -49,14 +23,11 @@ Thank you all, I'll let you know when it's fixed. For updates, please refer to t
 ---
 </div>
 
-> [!NOTE]
-> I am not active on GitHub for the next weeks. Errors won't be fixed now, but later, when I feel better.
-
 > [!WARNING]
 > Porn Fetch is NOT associated with the websites. Porn Fetch is AGAINST the Terms of Services of EVERY website! Usage is on YOUR risk.
 
 > [!IMPORTANT]
-> I need someone to help me with testing on macOS. I will highly appreciate any help. Please contact me on Discord: echteralsfake
+> Porn Fetch may get flagged by your antivirus software. See [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/ANTIVIRUS_FLAGS.md) for an explanation why this is.
 
 ## 🚀 Quick Links
 - [Features](#-features)
