@@ -45,7 +45,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: pyside6-application-x64
-          path: deploy/main.bin#
+          path: deploy/main.bin
 
   create-release:
     needs: build-pornfetch-gui-linux-x64
