@@ -17,18 +17,14 @@
 - [] Entirely reworking the Layout, the UI design AND the Android Layout
 
 """
-The goal is to build a dynamic layout which supports landscape and portrait mode.
-The problem is, that I am not good at designing resizeable layout as I've never 
-done it.
+Update:
 
-But I want to at least try it, although it means a lot of work.
-But when all this sh*t is done, I've finally built an application which is a stable
-real-world showcase project. This would also be a template for my other projects, so that 
-every UI / Application that I build is designed like Porn Fetch.
+Since the UI is a lot optimized for desktop systems I decided to make just a new UI file for Android devices, or to say
+for smartphones. I will then use the same buttons, same connections, and same functions, but the design will be different.
+This means that I don't have to rewrite this entire thing :)
 
-You know all people in my environment are kinda laughing me out for this project, but the
-difference between them and me is, that I build a project people are using, and they are just 
-scrolling through TikTok :skull:
+
+In 2 weeks I have summer holidays (21th June) and then we can bring some 🔥 into this project :)
 """""
 
 # Maybe or maybe not:
