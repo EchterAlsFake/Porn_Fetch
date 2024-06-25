@@ -5,7 +5,6 @@
 - [] Fixing searching for xvideos
 - [] Huge code refactoring
 - [] Splitting functions into other .py files
-- [] Using Qt's logging instead of my own approach
 - [] Trying to optimize the UI performance with more threading and slower UI repainting
 - [] Supporting more websites
 - [] Writing the thumbnail into the video metadata

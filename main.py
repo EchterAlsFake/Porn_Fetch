@@ -178,6 +178,7 @@ class AddToTreeWidget(QRunnable):
         self.is_checked = is_checked
 
     def process_video(self, video, index):
+        session_urls.append(video.url)
         title = video.title
         disabled = QCoreApplication.tr("Disabled", None)
         duration = disabled
@@ -722,6 +723,113 @@ class Porn_Fetch(QWidget):
         if __build__ == "android":
             self.setup_android()  # Sets up Android, if build mode is Android (handles some UI stuff and things)
 
+    def button_groups(self):
+        """
+        The button groups are needed to tell the radio button which of them are in a group.
+        If I don't do this, then you could check all redio buttons at the same time lol"""
+        self.group_threading_mode = QButtonGroup()
+        self.group_threading_mode.addButton(self.ui.radio_threading_mode_ffmpeg)
+        self.group_threading_mode.addButton(self.ui.radio_threading_mode_default)
+        self.group_threading_mode.addButton(self.ui.radio_threading_mode_high_performance)
+
+        self.group_quality = QButtonGroup()
+        self.group_quality.addButton(self.ui.radio_quality_worst)
+        self.group_quality.addButton(self.ui.radio_quality_half)
+        self.group_quality.addButton(self.ui.radio_quality_best)
+
+        self.group_api_language = QButtonGroup()
+        self.group_api_language.addButton(self.ui.radio_api_language_chinese)
+        self.group_api_language.addButton(self.ui.radio_api_language_german)
+        self.group_api_language.addButton(self.ui.radio_api_language_french)
+        self.group_api_language.addButton(self.ui.radio_api_language_english)
+        self.group_api_language.addButton(self.ui.radio_api_language_russian)
+        self.group_api_language.addButton(self.ui.radio_api_language_czech)
+        self.group_api_language.addButton(self.ui.radio_api_language_italian)
+        self.group_api_language.addButton(self.ui.radio_api_language_spanish)
+        self.group_api_language.addButton(self.ui.radio_api_language_portuguese)
+        self.group_api_language.addButton(self.ui.radio_api_language_dutch)
+        self.group_api_language.addButton(self.ui.radio_api_language_japanese)
+
+        self.directory_system_group = QButtonGroup()
+        self.directory_system_group.addButton(self.ui.radio_directory_system_no)
+        self.directory_system_group.addButton(self.ui.radio_directory_system_yes)
+
+        self.language_group = QButtonGroup()
+        self.language_group.addButton(self.ui.radio_ui_language_english)
+        self.language_group.addButton(self.ui.radio_ui_language_german)
+        self.language_group.addButton(self.ui.radio_ui_language_french)
+        self.language_group.addButton(self.ui.radio_ui_language_system_default)
+        self.language_group.addButton(self.ui.radio_ui_language_chinese_simplified)
+
+        self.radio_hqporner = QButtonGroup()
+        self.radio_hqporner.addButton(self.ui.radio_top_porn_week)
+        self.radio_hqporner.addButton(self.ui.radio_top_porn_month)
+        self.radio_hqporner.addButton(self.ui.radio_top_porn_all_time)
+
+    def button_connectors(self):
+        """a function to link the buttons to their functions"""
+        # Menu Bar Switch Button Connections
+        self.ui.button_switch_home.clicked.connect(self.switch_to_home)
+        self.ui.button_switch_settings.clicked.connect(self.switch_to_settings)
+        self.ui.button_switch_credits.clicked.connect(self.switch_to_credits)
+        self.ui.button_switch_account.clicked.connect(self.switch_to_account)
+        self.ui.button_switch_supported_websites.clicked.connect(self.switch_to_supported_websites)
+        self.ui.button_view_progress_bars.clicked.connect(self.switch_to_all_progress_bars)
+
+        # Video Download Button Connections
+        self.ui.button_download.clicked.connect(self.start_single_video)
+        self.ui.button_model.clicked.connect(self.start_model)
+        self.ui.button_tree_download.clicked.connect(self.download_tree_widget)
+        self.ui.button_tree_unselect_all.clicked.connect(self.unselect_all_items)
+        self.ui.button_playlist_get_videos.clicked.connect(self.start_playlist)
+
+        # Help Buttons Connections
+        self.ui.button_semaphore_help.clicked.connect(button_semaphore_help)
+        self.ui.button_threading_mode_help.clicked.connect(button_threading_mode_help)
+        self.ui.button_directory_system_help.clicked.connect(button_directory_system_help)
+        self.ui.button_workers_help.clicked.connect(maximal_workers_help)
+        self.ui.button_timeout_help.clicked.connect(timeout_help)
+        self.ui.button_pornhub_delay_help.clicked.connect(pornhub_delay_help)
+        self.ui.button_result_limit_help.clicked.connect(result_limit_help)
+        self.ui.button_help_file.clicked.connect(open_file_help)
+        self.ui.button_timeout_maximal_retries_help.clicked.connect(max_retries_help)
+
+        # Settings
+        self.ui.button_settings_apply.clicked.connect(self.save_user_settings)
+        self.ui.button_settings_reset.clicked.connect(reset_pornfetch)
+
+        # Account
+        self.ui.button_login.clicked.connect(self.login)
+        self.ui.button_get_watched_videos.clicked.connect(self.get_watched_videos)
+        self.ui.button_get_liked_videos.clicked.connect(self.get_liked_videos)
+        self.ui.button_get_recommended_videos.clicked.connect(self.get_recommended_videos)
+
+        # Search
+        self.ui.button_search.clicked.connect(self.basic_search)
+
+        # HQPorner
+        self.ui.button_hqporner_category_get_videos.clicked.connect(self.get_by_category_hqporner)
+        self.ui.button_top_porn_get_videos.clicked.connect(self.get_top_porn_hqporner)
+        self.ui.button_get_brazzers_videos.clicked.connect(self.get_brazzers_videos)
+        self.ui.button_list_categories.clicked.connect(self.list_categories_hqporner)
+        self.ui.button_switch_tools.clicked.connect(self.switch_to_tools)
+        self.ui.button_get_random_videos.clicked.connect(self.get_random_video)
+
+        # EPorner
+        self.ui.button_list_categories_eporner.clicked.connect(self.list_categories_eporner)
+        self.ui.button_eporner_category_get_videos.clicked.connect(self.get_by_category_eporner)
+
+        # File Dialog
+        self.ui.button_output_path_select.clicked.connect(self.open_output_path_dialog)
+        self.ui.button_open_file.clicked.connect(self.open_file_dialog)
+
+        # Other stuff idk
+        self.ui.checkbox_tree_allow_sorting.checkStateChanged.connect(self.toggle_sorting)
+        self.ui.button_tree_select_range.clicked.connect(self.select_range_of_items)
+        self.ui.button_tree_stop.clicked.connect(switch_stop_state)
+        self.ui.button_tree_export_video_urls.clicked.connect(export_urls)
+        self.ui.button_download_ffmpeg.clicked.connect(self.download_ffmpeg)
+
     def load_style(self):
         """Refactored function to load icons and stylesheets."""
         # Setting icons with a loop if applicable
@@ -816,262 +924,6 @@ class Porn_Fetch(QWidget):
 
         # Sort by the 'Length' column in ascending order
         self.ui.treeWidget.sortByColumn(2, Qt.AscendingOrder)
-
-    def check_for_updates(self):
-        """Checks for updates in a thread, so that the main UI isn't blocked, until update checks are done"""
-        self.update_thread = CheckUpdates()
-        self.update_thread.signals.result.connect(self.check_for_updates_result)
-        self.threadpool.start(self.update_thread)
-
-    def check_for_updates_result(self, value):
-        """Receives the Update result from the thread"""
-        if value:
-            logger_debug(f"Next release v{__next_release__} found!")
-            try:
-                changelog = (requests.get(f"https://github.com/EchterAlsFake/Porn_Fetch/tree/master/README/Changelog/"
-                                         f"{__next_release__}/Changelog.md").text)
-
-            except Exception as e:
-                logger_error(f"Couldn't fetch changelog of version: {__next_release__}")
-                changelog = f"Unknown Error: {e}"
-
-            ui_popup(QCoreApplication().tr(f"""
-            Information: A new version of Porn Fetch (v{__next_release__}) is out. I recommend you to update Porn Fetch. 
-            Go to: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/ {__next_release__}
-            
-            Changelog:
-            {markdown.markdown(changelog)}
-            
-            """, None))
-
-
-    def check_ffmpeg(self):
-        # Check if ffmpeg is available in the system PATH
-        global ffmpeg_path
-        ffmpeg_path = shutil.which("ffmpeg")
-
-        if ffmpeg_path is None:
-            # If ffmpeg is not in PATH, check the current directory for ffmpeg binaries
-            ffmpeg_binary = "ffmpeg.exe" if os.path.isfile("ffmpeg.exe") else "ffmpeg" if os.path.isfile(
-                "ffmpeg") else None
-
-            if ffmpeg_binary is None:
-                # If ffmpeg binaries are not found in the current directory, display warning and disable features
-                if self.conf.get("Performance", "ffmpeg_warning") == "true":
-                    ffmpeg_warning_message = QCoreApplication().tr(
-                        """
-FFmpeg isn't installed on your system... Some features won't be available:
-
-- The FFmpeg threading mode
-- Converting videos into a valid .mp4 format
-- Writing tags / metadata into the videos
-
-These features aren't necessary for Porn Fetch, but can be useful for some people.
-
-To automatically install ffmpeg, just head over to the settings and press the magical button, or install ffmpeg in your
-local PATH (e.g, through your linux package manager, or through the Windows PATH)
-
-This warning won't be shown again.
-                        """, None)
-                    ui_popup(ffmpeg_warning_message)
-                    self.conf.set("Performance", "ffmpeg_warning", "false")
-                    with open("config.ini", "w") as config_file:
-                        self.conf.write(config_file)
-
-                self.ui.radio_threading_mode_ffmpeg.setDisabled(True)
-                global ffmpeg_features
-                ffmpeg_features = False
-                logger_error("FFMPEG features have been disabled, because ffmpeg wasn't found on your system.")
-            else:
-                # If ffmpeg binary is found in the current directory, set it as the ffmpeg path
-                ffmpeg_path = os.path.abspath(ffmpeg_binary)
-        else:
-            # If ffmpeg is found in system PATH, use it directly
-            ffmpeg_path = shutil.which("ffmpeg")
-            consts.FFMPEG_EXECUTABLE = ffmpeg_path
-            bs_consts.FFMPEG_PATH = ffmpeg_path
-            logger_debug(f"FFMPEG: {ffmpeg_path}")
-
-    def download_ffmpeg(self):
-        if sys.platform == "linux":
-            if not os.path.isfile("ffmpeg"):
-                self.downloader = FFMPEGDownload(url=url_linux, extract_path=".", mode="linux")
-
-        elif sys.platform == "win32":
-            if not os.path.isfile("ffmpeg.exe"):
-                self.downloader = FFMPEGDownload(url=url_windows, extract_path=".", mode="windows")
-
-        self.downloader.signals.total_progress.connect(self.update_total_progressbar)
-        self.downloader.signals.finished.connect(self.ffmpeg_finished)
-        self.threadpool.start(self.downloader)
-
-    @classmethod
-    def ffmpeg_finished(cls):
-        ui_popup(QCoreApplication().tr("FFmpeg has been installed. Please restart Porn Fetch :)", None))
-
-    def button_groups(self):
-        """
-        The button groups are needed to tell the radio button which of them are in a group.
-        If I don't do this, then you could check all redio buttons at the same time lol"""
-        self.group_threading_mode = QButtonGroup()
-        self.group_threading_mode.addButton(self.ui.radio_threading_mode_ffmpeg)
-        self.group_threading_mode.addButton(self.ui.radio_threading_mode_default)
-        self.group_threading_mode.addButton(self.ui.radio_threading_mode_high_performance)
-
-        self.group_quality = QButtonGroup()
-        self.group_quality.addButton(self.ui.radio_quality_worst)
-        self.group_quality.addButton(self.ui.radio_quality_half)
-        self.group_quality.addButton(self.ui.radio_quality_best)
-
-        self.group_api_language = QButtonGroup()
-        self.group_api_language.addButton(self.ui.radio_api_language_chinese)
-        self.group_api_language.addButton(self.ui.radio_api_language_german)
-        self.group_api_language.addButton(self.ui.radio_api_language_french)
-        self.group_api_language.addButton(self.ui.radio_api_language_english)
-        self.group_api_language.addButton(self.ui.radio_api_language_russian)
-        self.group_api_language.addButton(self.ui.radio_api_language_czech)
-        self.group_api_language.addButton(self.ui.radio_api_language_italian)
-        self.group_api_language.addButton(self.ui.radio_api_language_spanish)
-        self.group_api_language.addButton(self.ui.radio_api_language_portuguese)
-        self.group_api_language.addButton(self.ui.radio_api_language_dutch)
-        self.group_api_language.addButton(self.ui.radio_api_language_japanese)
-
-        self.directory_system_group = QButtonGroup()
-        self.directory_system_group.addButton(self.ui.radio_directory_system_no)
-        self.directory_system_group.addButton(self.ui.radio_directory_system_yes)
-
-        self.language_group = QButtonGroup()
-        self.language_group.addButton(self.ui.radio_ui_language_english)
-        self.language_group.addButton(self.ui.radio_ui_language_german)
-        self.language_group.addButton(self.ui.radio_ui_language_french)
-        self.language_group.addButton(self.ui.radio_ui_language_system_default)
-        self.language_group.addButton(self.ui.radio_ui_language_chinese_simplified)
-
-        self.radio_hqporner = QButtonGroup()
-        self.radio_hqporner.addButton(self.ui.radio_top_porn_week)
-        self.radio_hqporner.addButton(self.ui.radio_top_porn_month)
-        self.radio_hqporner.addButton(self.ui.radio_top_porn_all_time)
-
-    def setup_android(self):
-        """Sets up for Porn Fetch for Android devices"""
-        logger_debug(f"Running on Android: {sys.platform}")
-        if not get_output_path():
-            self.handle_no_output_path()
-            return  # Early return to avoid setting up UI components again at the end.
-
-        self.configure_ui_for_android("/storage/emulated/0/Download/")
-
-    def handle_no_output_path(self):
-        ui_popup(
-            QCoreApplication().tr("The output path does not exist or is not writable.", None))
-        text, ok = QInputDialog.getText(self, "Enter custom Path",
-                                        QCoreApplication().tr("Enter custom Path:", None))
-        if ok and get_output_path(text):
-            ui_popup(
-                QCoreApplication().tr(f"Success: {text} will be used for this session!", None))
-            self.configure_ui_for_android(text)
-        else:
-            ui_popup(
-                QCoreApplication().tr("Invalid path. The application will now exit.", None))
-            sys.exit()
-
-    def configure_ui_for_android(self, path):
-        ""
-
-    def warn_about_high_performance_threading(self):
-        if self.ui.radio_threading_mode_high_performance.isChecked():
-            ui_popup(
-                QCoreApplication().tr("High Performance threading may cause issues on Android devices.", None))
-
-    def toggle_sorting(self):
-        if self.ui.checkbox_tree_allow_sorting.isChecked():
-            logger_debug("Enabling sorting on the tree widget")
-            self.ui.treeWidget.setSortingEnabled(True)
-
-        else:
-            logger_debug("Disabling sorting on the tree widget")
-            self.ui.treeWidget.setSortingEnabled(False)
-
-    def button_connectors(self):
-        """a function to link the buttons to their functions"""
-        # Menu Bar Switch Button Connections
-        self.ui.button_switch_home.clicked.connect(self.switch_to_home)
-        self.ui.button_switch_settings.clicked.connect(self.switch_to_settings)
-        self.ui.button_switch_credits.clicked.connect(self.switch_to_credits)
-        self.ui.button_switch_account.clicked.connect(self.switch_to_account)
-        self.ui.button_switch_supported_websites.clicked.connect(self.switch_to_supported_websites)
-        self.ui.button_view_progress_bars.clicked.connect(self.switch_to_all_progress_bars)
-
-        # Video Download Button Connections
-        self.ui.button_download.clicked.connect(self.start_single_video)
-        self.ui.button_model.clicked.connect(self.start_model)
-        self.ui.button_tree_download.clicked.connect(self.download_tree_widget)
-        self.ui.button_tree_unselect_all.clicked.connect(self.unselect_all_items)
-        self.ui.button_playlist_get_videos.clicked.connect(self.start_playlist)
-
-        # Help Buttons Connections
-        self.ui.button_semaphore_help.clicked.connect(button_semaphore_help)
-        self.ui.button_threading_mode_help.clicked.connect(button_threading_mode_help)
-        self.ui.button_directory_system_help.clicked.connect(button_directory_system_help)
-        self.ui.button_workers_help.clicked.connect(maximal_workers_help)
-        self.ui.button_timeout_help.clicked.connect(timeout_help)
-        self.ui.button_pornhub_delay_help.clicked.connect(pornhub_delay_help)
-        self.ui.button_result_limit_help.clicked.connect(result_limit_help)
-        self.ui.button_help_file.clicked.connect(open_file_help)
-        self.ui.button_timeout_maximal_retries_help.clicked.connect(max_retries_help)
-
-        # Settings
-        self.ui.button_settings_apply.clicked.connect(self.save_user_settings)
-        self.ui.button_settings_reset.clicked.connect(reset_pornfetch)
-
-        # Account
-        self.ui.button_login.clicked.connect(self.login)
-        self.ui.button_get_watched_videos.clicked.connect(self.get_watched_videos)
-        self.ui.button_get_liked_videos.clicked.connect(self.get_liked_videos)
-        self.ui.button_get_recommended_videos.clicked.connect(self.get_recommended_videos)
-
-        # Search
-        self.ui.button_search.clicked.connect(self.basic_search)
-
-        # HQPorner
-        self.ui.button_hqporner_category_get_videos.clicked.connect(self.get_by_category_hqporner)
-        self.ui.button_top_porn_get_videos.clicked.connect(self.get_top_porn_hqporner)
-        self.ui.button_get_brazzers_videos.clicked.connect(self.get_brazzers_videos)
-        self.ui.button_list_categories.clicked.connect(self.list_categories_hqporner)
-        self.ui.button_switch_tools.clicked.connect(self.switch_to_hqporner)
-        self.ui.button_get_random_videos.clicked.connect(self.get_random_video)
-
-        # EPorner
-        self.ui.button_list_categories_eporner.clicked.connect(self.list_categories_eporner)
-        self.ui.button_eporner_category_get_videos.clicked.connect(self.get_by_category_eporner)
-
-        # File Dialog
-        self.ui.button_output_path_select.clicked.connect(self.open_output_path_dialog)
-        self.ui.button_open_file.clicked.connect(self.open_file_dialog)
-
-        # Other stuff idk
-        self.ui.checkbox_tree_allow_sorting.checkStateChanged.connect(self.toggle_sorting)
-        self.ui.button_tree_select_range.clicked.connect(self.select_range_of_items)
-        self.ui.button_tree_stop.clicked.connect(switch_stop_state)
-        self.ui.button_tree_export_video_urls.clicked.connect(export_urls)
-        self.ui.button_download_ffmpeg.clicked.connect(self.download_ffmpeg)
-
-    def switch_login_button_state(self):
-        """If the user is logged in, I'll change the stylesheets of the buttons"""
-        file = QFile(":/style/stylesheets/stylesheet_switch_buttons_login_state.qss")
-        file.open(QFile.ReadOnly | QFile.Text)
-        stream = QTextStream(file)
-        stylesheet = stream.readAll()
-
-        self.ui.button_get_liked_videos.setStyleSheet(stylesheet)
-        self.ui.button_get_watched_videos.setStyleSheet(stylesheet)
-        self.ui.button_get_recommended_videos.setStyleSheet(stylesheet)
-
-    def switch_to_home(self):
-        self.ui.stacked_widget_main.setCurrentIndex(0)
-        self.ui.stacked_widget_top.setCurrentIndex(0)
-        self.ui.stacked_widget_top.setMinimumHeight(220)
-        self.ui.scrollarea_stacked_top.setMaximumHeight(220)
 
     def settings_maps_initialization(self):
         # Maps for settings and corresponding UI elements
@@ -1191,9 +1043,112 @@ This warning won't be shown again.
         ui_popup(QCoreApplication().tr("Saved User Settings, please restart Porn Fetch!", None))
         logger_debug("Saved User Settings, please restart Porn Fetch.")
 
-    """
-    Switchers for the Stacked Widgets
-    """
+    def check_for_updates(self):
+        """Checks for updates in a thread, so that the main UI isn't blocked, until update checks are done"""
+        self.update_thread = CheckUpdates()
+        self.update_thread.signals.result.connect(check_for_updates_result)
+        self.threadpool.start(self.update_thread)
+
+    def check_ffmpeg(self):
+        # Check if ffmpeg is available in the system PATH
+        global ffmpeg_path
+        ffmpeg_path = shutil.which("ffmpeg")
+
+        if ffmpeg_path is None:
+            # If ffmpeg is not in PATH, check the current directory for ffmpeg binaries
+            ffmpeg_binary = "ffmpeg.exe" if os.path.isfile("ffmpeg.exe") else "ffmpeg" if os.path.isfile(
+                "ffmpeg") else None
+
+            if ffmpeg_binary is None:
+                # If ffmpeg binaries are not found in the current directory, display warning and disable features
+                if self.conf.get("Performance", "ffmpeg_warning") == "true":
+                    ffmpeg_warning_message = QCoreApplication().tr(
+                        """
+FFmpeg isn't installed on your system... Some features won't be available:
+
+- The FFmpeg threading mode
+- Converting videos into a valid .mp4 format
+- Writing tags / metadata into the videos
+
+These features aren't necessary for Porn Fetch, but can be useful for some people.
+
+To automatically install ffmpeg, just head over to the settings and press the magical button, or install ffmpeg in your
+local PATH (e.g, through your linux package manager, or through the Windows PATH)
+
+This warning won't be shown again.
+                        """, None)
+                    ui_popup(ffmpeg_warning_message)
+                    self.conf.set("Performance", "ffmpeg_warning", "false")
+                    with open("config.ini", "w") as config_file:
+                        self.conf.write(config_file)
+
+                self.ui.radio_threading_mode_ffmpeg.setDisabled(True)
+                global ffmpeg_features
+                ffmpeg_features = False
+                logger_error("FFMPEG features have been disabled, because ffmpeg wasn't found on your system.")
+            else:
+                # If ffmpeg binary is found in the current directory, set it as the ffmpeg path
+                ffmpeg_path = os.path.abspath(ffmpeg_binary)
+        else:
+            # If ffmpeg is found in system PATH, use it directly
+            ffmpeg_path = shutil.which("ffmpeg")
+            consts.FFMPEG_EXECUTABLE = ffmpeg_path
+            bs_consts.FFMPEG_PATH = ffmpeg_path
+            logger_debug(f"FFMPEG: {ffmpeg_path}")
+
+    def download_ffmpeg(self):
+        if sys.platform == "linux":
+            if not os.path.isfile("ffmpeg"):
+                self.downloader = FFMPEGDownload(url=url_linux, extract_path=".", mode="linux")
+
+        elif sys.platform == "win32":
+            if not os.path.isfile("ffmpeg.exe"):
+                self.downloader = FFMPEGDownload(url=url_windows, extract_path=".", mode="windows")
+
+        self.downloader.signals.total_progress.connect(self.update_total_progressbar)
+        self.downloader.signals.finished.connect(ffmpeg_finished)
+        self.threadpool.start(self.downloader)
+
+    def setup_android(self):
+        """Sets up for Porn Fetch for Android devices"""
+        logger_debug(f"Running on Android: {sys.platform}")
+        if not get_output_path():
+            self.handle_no_output_path()
+            return  # Early return to avoid setting up UI components again at the end.
+
+        self.configure_ui_for_android("/storage/emulated/0/Download/")
+
+    def handle_no_output_path(self):
+        ui_popup(
+            QCoreApplication().tr("The output path does not exist or is not writable.", None))
+        text, ok = QInputDialog.getText(self, "Enter custom Path",
+                                        QCoreApplication().tr("Enter custom Path:", None))
+        if ok and get_output_path(text):
+            ui_popup(
+                QCoreApplication().tr(f"Success: {text} will be used for this session!", None))
+            self.configure_ui_for_android(text)
+        else:
+            ui_popup(
+                QCoreApplication().tr("Invalid path. The application will now exit.", None))
+            sys.exit()
+
+    def configure_ui_for_android(self, path):
+        ""
+
+    def toggle_sorting(self):
+        if self.ui.checkbox_tree_allow_sorting.isChecked():
+            logger_debug("Enabling sorting on the tree widget")
+            self.ui.treeWidget.setSortingEnabled(True)
+
+        else:
+            logger_debug("Disabling sorting on the tree widget")
+            self.ui.treeWidget.setSortingEnabled(False)
+
+    def switch_to_home(self):
+        self.ui.stacked_widget_main.setCurrentIndex(0)
+        self.ui.stacked_widget_top.setCurrentIndex(0)
+        self.ui.stacked_widget_top.setMinimumHeight(220)
+        self.ui.scrollarea_stacked_top.setMaximumHeight(220)
 
     def switch_to_account(self):
         self.ui.stacked_widget_top.setCurrentIndex(1)
@@ -1201,7 +1156,7 @@ This warning won't be shown again.
         self.ui.stacked_widget_top.setMinimumHeight(150)
         self.ui.scrollarea_stacked_top.setMaximumHeight(150)
 
-    def switch_to_hqporner(self):
+    def switch_to_tools(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(3)
         self.ui.stacked_widget_top.setMinimumHeight(300)
@@ -1209,9 +1164,6 @@ This warning won't be shown again.
 
     def switch_to_settings(self):
         self.ui.stacked_widget_main.setCurrentIndex(1)
-
-    def switch_to_metadata(self):
-        self.ui.stacked_widget_main.setCurrentIndex(3)
 
     def switch_to_credits(self):
         self.ui.stacked_widget_main.setCurrentIndex(2)
@@ -1652,6 +1604,17 @@ This warning won't be shown again.
         except errors.ClientAlreadyLogged:
             ui_popup(QCoreApplication().tr("You are already logged in!", None))
 
+    def switch_login_button_state(self):
+        """If the user is logged in, I'll change the stylesheets of the buttons"""
+        file = QFile(":/style/stylesheets/stylesheet_switch_buttons_login_state.qss")
+        file.open(QFile.ReadOnly | QFile.Text)
+        stream = QTextStream(file)
+        stylesheet = stream.readAll()
+
+        self.ui.button_get_liked_videos.setStyleSheet(stylesheet)
+        self.ui.button_get_watched_videos.setStyleSheet(stylesheet)
+        self.ui.button_get_recommended_videos.setStyleSheet(stylesheet)
+
     def check_login(self):
         """Checks if the user is logged in, so that no errors are threw if not"""
         if self.client.logged:
@@ -1897,6 +1860,31 @@ if __name__ == "__main__":
 
         else:
             ui_popup(QCoreApplication().tr("No URLs in the current session...", None))
+
+    def ffmpeg_finished():
+        ui_popup(QCoreApplication().tr("FFmpeg has been installed. Please restart Porn Fetch :)", None))
+
+
+    def check_for_updates_result(value):
+        """Receives the Update result from the thread"""
+        if value:
+            logger_debug(f"Next release v{__next_release__} found!")
+            try:
+                changelog = (requests.get(f"https://github.com/EchterAlsFake/Porn_Fetch/tree/master/README/Changelog/"
+                                          f"{__next_release__}/Changelog.md").text)
+
+            except Exception as e:
+                logger_error(f"Couldn't fetch changelog of version: {__next_release__}")
+                changelog = f"Unknown Error: {e}"
+
+            ui_popup(QCoreApplication().tr(f"""
+            Information: A new version of Porn Fetch (v{__next_release__}) is out. I recommend you to update Porn Fetch. 
+            Go to: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/ {__next_release__}
+
+            Changelog:
+            {markdown.markdown(changelog)}
+
+            """, None))
 
 
     parser = argparse.ArgumentParser()
