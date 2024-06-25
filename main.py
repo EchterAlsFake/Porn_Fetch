@@ -179,7 +179,7 @@ class AddToTreeWidget(QRunnable):
 
     def process_video(self, video, index):
         title = video.title
-        disabled = QCoreApplication().tr("Disabled", None)
+        disabled = QCoreApplication.tr("Disabled", None)
         duration = disabled
         author = disabled
 
@@ -1229,7 +1229,9 @@ This warning won't be shown again.
     The following functions are related to the tree widget    
     """
 
-    def add_to_tree_widget_thread(self, iterator, search_limit):
+    def add_to_tree_widget_thread(self, iterator):
+        search_limit = self.search_limit
+
         if self.ui.radio_tree_show_title.isChecked():
             data_mode = 0
 
@@ -1417,7 +1419,7 @@ This warning won't be shown again.
 
         else:
             one_time_iterator.append(video)
-            self.add_to_tree_widget_thread(iterator=one_time_iterator, search_limit=self.search_limit)
+            self.add_to_tree_widget_thread(iterator=one_time_iterator)
 
     def start_model(self, url=None):
         """Starts the model downloads"""
@@ -1442,7 +1444,7 @@ This warning won't be shown again.
 
         elif hqporner_pattern.match(model):
             pages = round(search_limit / 46)
-            videos = hq_Client().get_videos_by_actress(name=model, pages=pages)
+            videos = hq_Client().get_videos_by_actress(name=model)
 
         elif eporner_pattern.match(model):
             pages = round(search_limit / 38)
@@ -1454,13 +1456,13 @@ This warning won't be shown again.
         elif xvideos_pattern.match(model):
             videos = xv_Client().get_pornstar(url=model).videos
 
-        self.add_to_tree_widget_thread(videos, search_limit=search_limit)
+        self.add_to_tree_widget_thread(videos)
 
     def start_playlist(self):
         url = self.ui.lineedit_playlist_url.text()
         playlist = self.client.get_playlist(url)
         videos = playlist.sample()
-        self.add_to_tree_widget_thread(iterator=videos, search_limit=self.search_limit)
+        self.add_to_tree_widget_thread(iterator=videos)
 
     def load_video(self, url):
         """This starts the thread to load a video"""
@@ -1592,7 +1594,7 @@ This warning won't be shown again.
         logger_debug(f"Received Search Iterator ({len(search_iterator)} keywords)")
 
         logger_debug("Processing Videos...")
-        self.add_to_tree_widget_thread(iterator, search_limit=self.search_limit)
+        self.add_to_tree_widget_thread(iterator)
         logger_debug("Processing Models...")
         for url in model_iterator:
             self.start_model(url)
@@ -1671,19 +1673,19 @@ This warning won't be shown again.
         """Returns the videos watched by the user"""
         if self.check_login():
             watched = self.client.account.watched
-            self.add_to_tree_widget_thread(watched, search_limit=self.search_limit)
+            self.add_to_tree_widget_thread(watched)
 
     def get_liked_videos(self):
         """Returns the videos liked by the user"""
         if self.check_login():
             liked = self.client.account.liked
-            self.add_to_tree_widget_thread(liked, search_limit=self.search_limit)
+            self.add_to_tree_widget_thread(liked)
 
     def get_recommended_videos(self):
         """Returns the videos recommended for the user"""
         if self.check_login():
             recommended = self.client.account.recommended
-            self.add_to_tree_widget_thread(recommended, search_limit=self.search_limit)
+            self.add_to_tree_widget_thread(recommended)
 
     """
     The following functions are related to the search functionality
@@ -1692,7 +1694,6 @@ This warning won't be shown again.
     def basic_search(self):
         """Does a simple search for videos without filters on selected website"""
         query = self.ui.lineedit_search_query.text()
-        search_limit = self.search_limit
 
         if self.ui.radio_search_website_pornhub.isChecked():
             videos = Client().search(query)
@@ -1701,16 +1702,16 @@ This warning won't be shown again.
             videos = xv_Client.search(query)
 
         elif self.ui.radio_search_website_hqporner.isChecked():
-            videos = hq_Client.search_videos(query, pages=99)
+            videos = hq_Client.search_videos(query)
 
         elif self.ui.radio_search_website_eporner.isChecked():
             videos = ep_Client().search_videos(query, sorting_gay="", sorting_order="", sorting_low_quality="", page=1,
-                                               per_page=search_limit, enable_html_scraping=True)
+                                               per_page=self.search_limit, enable_html_scraping=True)
 
         elif self.ui.radio_search_website_xnxx.isChecked():
             videos = xn_Client().search(query).videos
 
-        self.add_to_tree_widget_thread(videos, search_limit=search_limit)
+        self.add_to_tree_widget_thread(videos)
 
     def get_top_porn_hqporner(self):
         if self.ui.radio_top_porn_week.isChecked():
@@ -1725,10 +1726,8 @@ This warning won't be shown again.
         else:
             sort = None
 
-        search_limit = self.search_limit
-        pages = round(search_limit / 46)
-        videos = hq_Client().get_top_porn(sort_by=sort, pages=pages)
-        self.add_to_tree_widget_thread(iterator=videos, search_limit=search_limit)
+        videos = hq_Client().get_top_porn(sort_by=sort)
+        self.add_to_tree_widget_thread(iterator=videos)
 
     def get_by_category_hqporner(self):
         """Returns video by category from HQPorner. I want to add support for EPorner"""  # TODO
@@ -1736,28 +1735,24 @@ This warning won't be shown again.
             "Invalid Category. Press 'list categories' to see all possible ones.", None))
         category_name = self.ui.lineedit_hqporner_category.text()
         all_categories = hq_Client().get_all_categories()
-        search_limit = self.search_limit
-        pages = round(search_limit / 46)
 
         if not category_name in all_categories:
             ui_popup(self.list_all_categories_string)
 
         else:
-            videos = hq_Client().get_videos_by_category(category=category_name, pages=pages)
-            self.add_to_tree_widget_thread(videos, search_limit)
+            videos = hq_Client().get_videos_by_category(category=category_name)
+            self.add_to_tree_widget_thread(videos)
 
     def get_by_category_eporner(self):
         """Returns video by category from EPorner"""
-        search_limit = self.search_limit
-        pages = round(search_limit / 63)
         category_name = self.ui.lineedit_videos_by_category_eporner.text()
 
         if not category_name in self.all_cateogories_eporner:
             ui_popup(self.list_all_categories_string)
 
         else:
-            videos = ep_Client().get_videos_by_category(category=category_name, pages=pages, enable_html_scraping=True)
-            self.add_to_tree_widget_thread(iterator=videos, search_limit=search_limit)
+            videos = ep_Client().get_videos_by_category(category=category_name, enable_html_scraping=True)
+            self.add_to_tree_widget_thread(iterator=videos)
 
     def list_categories_eporner(self):
         """Lists all video categories from EPorner"""
@@ -1769,10 +1764,8 @@ This warning won't be shown again.
 
     def get_brazzers_videos(self):
         """Get brazzers videos from HQPorner"""
-        search_limit = self.search_limit
-        pages = round(search_limit / 46)
-        videos = hq_Client().get_brazzers_videos(pages)
-        self.add_to_tree_widget_thread(videos, search_limit)
+        videos = hq_Client().get_brazzers_videos()
+        self.add_to_tree_widget_thread(videos)
 
     @classmethod
     def list_categories_hqporner(cls):
@@ -1783,10 +1776,8 @@ This warning won't be shown again.
 
     def get_random_video(self):
         """Gets a random video from HQPorner"""
-        list_object = []
         video = hq_Client().get_random_video()
-        list_object.append(video)
-        self.add_to_tree_widget_thread(list_object, search_limit=2)
+        self.add_to_tree_widget_thread([].append(video))
 
     def show_credits(self):
         """Loads the credits from the CREDITS.md.  Credits need to be recompiled in qresource file every time"""
