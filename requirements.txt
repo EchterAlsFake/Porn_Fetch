@@ -13,4 +13,3 @@ rich
 tqdm
 ffmpeg-progress-yield
 mutagen
-pypresence

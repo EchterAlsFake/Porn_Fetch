@@ -11,7 +11,6 @@ import src.frontend.resources
 from itertools import islice
 from threading import Event
 from pathlib import Path
-from pypresence import Presence, exceptions
 
 from hqporner_api.api import Sort as hq_Sort
 from phub import consts
@@ -27,8 +26,7 @@ from src.frontend.range_selector import Ui_Form
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                             QTranslator, QCoreApplication)
-from PySide6.QtWidgets import (QWidget, QApplication, QInputDialog, QTreeWidgetItem, QButtonGroup, QFileDialog,
-                               QPushButton)
+from PySide6.QtWidgets import QWidget, QApplication, QInputDialog, QTreeWidgetItem, QButtonGroup, QFileDialog
 from PySide6.QtGui import QIcon, QFont
 
 """
@@ -58,8 +56,6 @@ __version__ = "3.4"
 __build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 __next_release__ = "3.5"
-discord_id = "1224629014032023563"  # Used for rich presence
-discord_image = "logo_transparent"
 total_segments = 0
 downloaded_segments = 0
 last_index = 0
@@ -75,6 +71,7 @@ url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
 ffmpeg_linux = "ffmpeg-6.1-amd64-static"
 ffmpeg_windows = "ffmpeg-7.0-essentials_build"
 android_arch = None
+session_urls = []  # This list saves all URls used in the current session. Used for the URL export function
 
 
 class Signals(QObject):
@@ -172,26 +169,6 @@ class CheckUpdates(QRunnable):
             self.signals.result.emit(False)
 
 
-class CheckInternet(QRunnable):
-    def __init__(self):
-        super(CheckInternet, self).__init__()
-        self.signals = Signals()
-
-    def run(self):
-        try:
-            for url in urls:
-                if not requests.get(url).status_code == 200:
-                    self.signals.result.emit(False)
-                    return
-
-        except (requests.exceptions.SSLError, requests.exceptions.ConnectionError, ConnectionResetError,
-                ConnectionError, requests.exceptions.HTTPError):
-            self.signals.result.emit(False)
-
-        else:
-            self.signals.result.emit(True)
-
-
 class AddToTreeWidget(QRunnable):
     def __init__(self, iterator, search_limit, data_mode, reverse, stop_flag, is_checked):
         super(AddToTreeWidget, self).__init__()
@@ -205,7 +182,7 @@ class AddToTreeWidget(QRunnable):
 
     def process_video(self, video, index):
         title = video.title
-        disabled = QCoreApplication.tr("Disabled", None)
+        disabled = QCoreApplication().tr("Disabled", None)
         duration = disabled
         author = disabled
 
@@ -282,8 +259,9 @@ class AddToTreeWidget(QRunnable):
                         try:
                             text_data = self.process_video(video, i)
                         except errors.RegexError as e:
-                            logger_error(f"Warning: a Regex Error occurred. This must not be an error, but could be one!"
-                                         f" -->: {e}")
+                            logger_error(
+                                f"Warning: a Regex Error occurred. This must not be an error, but could be one!"
+                                f" -->: {e}")
 
                             text_data = [str(video.title), str("Unknown"), str("Unknown"), str(i), video]
 
@@ -643,34 +621,6 @@ class FFMPEGDownload(QRunnable):
         self.signals.finished.emit()
 
 
-class Discord(QRunnable):
-    """
-    The Discord class handles the Pypresence, which is a feature that allows to show your current activity in Discord.
-    If enabled, discord will show on your profile, that you are 'playing' Porn Fetch.
-    """
-
-    def __init__(self):
-        super(Discord, self).__init__()
-
-    def run(self):
-        while True:
-            try:
-                presence = Presence(discord_id)
-                presence.connect()
-                presence.update(details=f"Porn Fetch (v{__version__})", large_image=discord_image, buttons=
-                [{"label": "Visit Project", "url": "https://github.com/EchterAlsFake/Porn_Fetch"}])
-                time.sleep(60)  # Delay of 60 seconds, so that the Discord API doesn't get spammed
-
-            except exceptions.DiscordNotFound:
-                logger_error("Discord was not found... Pypresence won't be started!")
-
-            except exceptions.InvalidID:
-                logger_error("Invalid Discord Application ID. Please report this error, as it shouldn't happen!")
-
-            except exceptions.PyPresenceException as e:
-                logger_error(f"Pypresence exception... {e}")
-
-
 class AddUrls(QRunnable):
     """
     This class is used to add the URLs from the 'open file' function, because the UI doesn't respond until
@@ -707,7 +657,7 @@ class AddUrls(QRunnable):
             elif line.startswith("search#"):
                 query = line.split("#")[1]
                 site = line.split("#")[2]
-                search_iterators.append({"website" : site,
+                search_iterators.append({"website": site,
                                          "query": query})
 
             else:
@@ -727,10 +677,8 @@ class AddUrls(QRunnable):
 class Porn_Fetch(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-
         # Variable initialization:
         self.gui_language_map = None
-        self.discord_map = None
         self.max_retries = None
         self.workers = None
         self.timeout = None
@@ -770,25 +718,12 @@ class Porn_Fetch(QWidget):
         self.load_user_settings()  # Loads the user settings and applies selected values to the UI
         logger_debug("Startup: [4/5] Loaded the user settings")
         self.switch_to_home()  # Switches Porn Fetch to the home widget
-        self.check_for_updates()  # Checks if a new version is out, by using the GitHub release tags
-        self.check_internet()  # Checks if Porn Fetch can reach all websites
+        self.check_for_updates()
         self.check_ffmpeg()  # Checks and sets up FFmpeg
-        self.discord_()  # Discord Rich Presence
         logger_debug("Startup: [5/5] ✔")
 
         if __build__ == "android":
             self.setup_android()  # Sets up Android, if build mode is Android (handles some UI stuff and things)
-
-    @classmethod
-    def load_stylesheet(cls, path):
-        """Load stylesheet from a given path with explicit open and close."""
-        file = QFile(path)
-        if not file.open(QFile.ReadOnly | QFile.Text):
-            logger_debug(f"Failed to open {path}")
-            return ""
-        stylesheet = QTextStream(file).readAll()
-        file.close()
-        return stylesheet
 
     def load_style(self):
         """Refactored function to load icons and stylesheets."""
@@ -808,7 +743,7 @@ class Porn_Fetch(QWidget):
             self.ui.button_result_limit_help: "faq.svg",
             self.ui.button_timeout_maximal_retries_help: "faq.svg",
             self.ui.button_help_file: "faq.svg",
-            self.ui.discord_rich_presence_help: "faq.svg",
+            self.ui.button_view_progress_bars: "progressbars.svg"
         }
         for button, icon_name in icons.items():
             button.setIcon(QIcon(f":/images/graphics/{icon_name}"))
@@ -831,7 +766,7 @@ class Porn_Fetch(QWidget):
             "button_reset": ":/style/stylesheets/stylesheet_button_reset.qss"
         }
 
-        stylesheets = {key: self.load_stylesheet(path) for key, path in stylesheet_paths.items()}
+        stylesheets = {key: load_stylesheet(path) for key, path in stylesheet_paths.items()}
 
         # Applying stylesheets to specific buttons
         # Simplify this part based on actual UI structure and naming
@@ -843,7 +778,6 @@ class Porn_Fetch(QWidget):
         self.ui.progressbar_hqporner.setStyleSheet(stylesheets["progressbar_hqporner"])
         self.ui.progressbar_xvideos.setStyleSheet(stylesheets["progressbar_xvideos"])
         self.ui.progressbar_converting.setStyleSheet(stylesheets["progressbar_converting"])
-
         self.ui.button_model.setStyleSheet(stylesheets["button_purple"])
         self.ui.button_search.setStyleSheet(stylesheets["button_purple"])
         self.ui.button_download.setStyleSheet(stylesheets["button_purple"])
@@ -872,7 +806,6 @@ class Porn_Fetch(QWidget):
         self.ui.button_result_limit_help.setStyleSheet(stylesheets["button_green"])
         self.ui.button_settings_reset.setStyleSheet(stylesheets["button_reset"])
         self.ui.button_playlist_get_videos.setStyleSheet(stylesheets["button_purple"])
-        self.ui.button_view_all_progress_bars.setStyleSheet(stylesheets["button_blue"])
         self.ui.button_tree_stop.setStyleSheet(stylesheets["button_reset"])
         self.ui.button_tree_export_video_urls.setStyleSheet(stylesheets["button_purple"])
         self.ui.button_timeout_maximal_retries_help.setStyleSheet(stylesheets["button_green"])
@@ -897,32 +830,23 @@ class Porn_Fetch(QWidget):
         """Receives the Update result from the thread"""
         if value:
             logger_debug(f"Next release v{__next_release__} found!")
-            ui_popup(QCoreApplication.tr(f"""
+            try:
+                changelog = (requests.get(f"https://github.com/EchterAlsFake/Porn_Fetch/tree/master/README/Changelog/"
+                                         f"{__next_release__}/Changelog.md").text)
+
+            except Exception as e:
+                logger_error(f"Couldn't fetch changelog of version: {__next_release__}")
+                changelog = f"Unknown Error: {e}"
+
+            ui_popup(QCoreApplication().tr(f"""
             Information: A new version of Porn Fetch (v{__next_release__}) is out. I recommend you to update Porn Fetch. 
-            Go to: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/ {__next_release__}""", None))
-            self.ui.lineedit_status_update.setText(f"✔, V{__next_release__} is out!")
+            Go to: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/ {__next_release__}
+            
+            Changelog:
+            {markdown.markdown(changelog)}
+            
+            """, None))
 
-        else:
-            logger_debug("No updates found...")
-            self.ui.lineedit_status_update.setText("❌")
-
-    def check_internet(self):
-        """Checks the internet access for all sites"""
-        self.internet_thread = CheckInternet()
-        self.internet_thread.signals.result.connect(self.check_internet_result)
-        self.threadpool.start(self.internet_thread)
-
-    def check_internet_result(self, value):
-        if value:
-            logger_debug("All Internet connection tests passed: ✔")
-            self.ui.lineedit_status_internet.setText("✔")
-
-        else:
-            logger_error("""
-Couldn't access one of the supported websites, make sure you have a stable internet connection and you are outside of 
-a firewall. If you are at a public place or using your universities WiFi, your IT-Administrator may have forbidden 
-access to specific sites. In this case you can use a VPN / Proxy.""")
-            self.ui.lineedit_status_internet.setText("❌, please check your Internet connection!")
 
     def check_ffmpeg(self):
         # Check if ffmpeg is available in the system PATH
@@ -937,7 +861,7 @@ access to specific sites. In this case you can use a VPN / Proxy.""")
             if ffmpeg_binary is None:
                 # If ffmpeg binaries are not found in the current directory, display warning and disable features
                 if self.conf.get("Performance", "ffmpeg_warning") == "true":
-                    ffmpeg_warning_message = QCoreApplication.tr(
+                    ffmpeg_warning_message = QCoreApplication().tr(
                         """
 FFmpeg isn't installed on your system... Some features won't be available:
 
@@ -961,17 +885,14 @@ This warning won't be shown again.
                 global ffmpeg_features
                 ffmpeg_features = False
                 logger_error("FFMPEG features have been disabled, because ffmpeg wasn't found on your system.")
-                self.ui.lineedit_status_ffmpeg.setText("❌, FFmpeg features won't be available!")
             else:
                 # If ffmpeg binary is found in the current directory, set it as the ffmpeg path
                 ffmpeg_path = os.path.abspath(ffmpeg_binary)
-                self.ui.lineedit_status_ffmpeg.setText(f"✔ -->: {ffmpeg_path}")
         else:
             # If ffmpeg is found in system PATH, use it directly
             ffmpeg_path = shutil.which("ffmpeg")
             consts.FFMPEG_EXECUTABLE = ffmpeg_path
             bs_consts.FFMPEG_PATH = ffmpeg_path
-            self.ui.lineedit_status_ffmpeg.setText(f"✔ -->: {ffmpeg_path}")
             logger_debug(f"FFMPEG: {ffmpeg_path}")
 
     def download_ffmpeg(self):
@@ -989,16 +910,7 @@ This warning won't be shown again.
 
     @classmethod
     def ffmpeg_finished(cls):
-        ui_popup(QCoreApplication.tr("FFmpeg has been installed. Please restart Porn Fetch :)"))
-
-    def discord_(self):
-        """
-        I don't force anyone to use this. It's disabled by default :)
-        """
-        if self.discord:
-            self.discord_thread = Discord()
-            self.threadpool.start(self.discord_thread)
-            logger_debug("Started Discord thread")
+        ui_popup(QCoreApplication().tr("FFmpeg has been installed. Please restart Porn Fetch :)", None))
 
     def button_groups(self):
         """
@@ -1054,51 +966,25 @@ This warning won't be shown again.
 
     def handle_no_output_path(self):
         ui_popup(
-            QCoreApplication.tr("The output path does not exist or is not writable.", None))
+            QCoreApplication().tr("The output path does not exist or is not writable.", None))
         text, ok = QInputDialog.getText(self, "Enter custom Path",
-                                        QCoreApplication.tr("Enter custom Path:", None))
+                                        QCoreApplication().tr("Enter custom Path:", None))
         if ok and get_output_path(text):
             ui_popup(
-                QCoreApplication.tr(f"Success: {text} will be used for this session!", None))
+                QCoreApplication().tr(f"Success: {text} will be used for this session!", None))
             self.configure_ui_for_android(text)
         else:
             ui_popup(
-                QCoreApplication.tr("Invalid path. The application will now exit.", None))
+                QCoreApplication().tr("Invalid path. The application will now exit.", None))
             sys.exit()
 
     def configure_ui_for_android(self, path):
-        """Disables some things on Android which just don't work yet"""
-        self.output_path = path
-        self.ui.lineedit_output_path.setText(self.output_path)
-        self.ui.lineedit_output_path.setReadOnly(True)
-        self.ui.button_open_file.setDisabled(True)
-        self.ui.lineedit_file.setText(QCoreApplication.tr("Not supported on Android", None))
-        self.ui.radio_threading_mode_ffmpeg.setDisabled(True)
-        self.warn_about_high_performance_threading()
-
-        self.ui.gridlayout_progressbar.addWidget(self.ui.label_progress_pornhub)
-        self.ui.gridlayout_progressbar.addWidget(self.ui.progressbar_pornhub)
-        self.ui.gridlayout_progressbar.addWidget(self.ui.label_total_progress)
-        self.ui.gridlayout_progressbar.addWidget(self.ui.progressbar_total)
-        self.ui.gridlayout_progressbar.addWidget(self.ui.label_progress_converting)
-        self.ui.gridlayout_progressbar.addWidget(self.ui.progressbar_converting)
-
-        self.progress_button = QPushButton("Show Progress")
-        self.ui.verticallayout_sidebar.addWidget(self.progress_button)
-        self.progress_button.clicked.connect(self.switch_to_all_progress_bars)
-        self.ui.scrollarea_status.deleteLater()
+        ""
 
     def warn_about_high_performance_threading(self):
         if self.ui.radio_threading_mode_high_performance.isChecked():
             ui_popup(
-                QCoreApplication.tr("High Performance threading may cause issues on Android devices.", None))
-
-    @staticmethod
-    def reset_pornfetch():
-        ui_popup(
-            QCoreApplication.tr("Porn Fetch will now reset to its default settings...", None))
-        setup_config_file(force=True)
-        ui_popup(QCoreApplication.tr("Done! Please restart.", None))
+                QCoreApplication().tr("High Performance threading may cause issues on Android devices.", None))
 
     def toggle_sorting(self):
         if self.ui.checkbox_tree_allow_sorting.isChecked():
@@ -1117,7 +1003,7 @@ This warning won't be shown again.
         self.ui.button_switch_credits.clicked.connect(self.switch_to_credits)
         self.ui.button_switch_account.clicked.connect(self.switch_to_account)
         self.ui.button_switch_supported_websites.clicked.connect(self.switch_to_supported_websites)
-        self.ui.button_view_all_progress_bars.clicked.connect(self.switch_to_all_progress_bars)
+        self.ui.button_view_progress_bars.clicked.connect(self.switch_to_all_progress_bars)
 
         # Video Download Button Connections
         self.ui.button_download.clicked.connect(self.start_single_video)
@@ -1136,11 +1022,10 @@ This warning won't be shown again.
         self.ui.button_result_limit_help.clicked.connect(result_limit_help)
         self.ui.button_help_file.clicked.connect(open_file_help)
         self.ui.button_timeout_maximal_retries_help.clicked.connect(max_retries_help)
-        self.ui.discord_rich_presence_help.clicked.connect(discord_rich_presence_help)
 
         # Settings
         self.ui.button_settings_apply.clicked.connect(self.save_user_settings)
-        self.ui.button_settings_reset.clicked.connect(self.reset_pornfetch)
+        self.ui.button_settings_reset.clicked.connect(reset_pornfetch)
 
         # Account
         self.ui.button_login.clicked.connect(self.login)
@@ -1170,8 +1055,8 @@ This warning won't be shown again.
         # Other stuff idk
         self.ui.checkbox_tree_allow_sorting.checkStateChanged.connect(self.toggle_sorting)
         self.ui.button_tree_select_range.clicked.connect(self.select_range_of_items)
-        self.ui.button_tree_stop.clicked.connect(self.switch_stop_state)
-        self.ui.button_tree_export_video_urls.clicked.connect(self.export_urls)
+        self.ui.button_tree_stop.clicked.connect(switch_stop_state)
+        self.ui.button_tree_export_video_urls.clicked.connect(export_urls)
         self.ui.button_download_ffmpeg.clicked.connect(self.download_ffmpeg)
 
     def switch_login_button_state(self):
@@ -1184,11 +1069,6 @@ This warning won't be shown again.
         self.ui.button_get_liked_videos.setStyleSheet(stylesheet)
         self.ui.button_get_watched_videos.setStyleSheet(stylesheet)
         self.ui.button_get_recommended_videos.setStyleSheet(stylesheet)
-
-    @classmethod
-    def switch_stop_state_2(cls):
-        global stop_flag
-        stop_flag = Event()
 
     def switch_to_home(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
@@ -1229,11 +1109,6 @@ This warning won't be shown again.
             "0": self.ui.radio_directory_system_no
         }
 
-        self.discord_map = {
-            "false": self.ui.radio_discord_no,
-            "true": self.ui.radio_discord_yes
-        }
-
         self.gui_language_map = {
             "en": self.ui.radio_ui_language_english,
             "de_DE": self.ui.radio_ui_language_german,
@@ -1250,7 +1125,6 @@ This warning won't be shown again.
         self.threading_mode_map.get(self.conf.get("Performance", "threading_mode")).setChecked(True)
         self.directory_system_map.get(self.conf.get("Video", "directory_system")).setChecked(True)
         self.language_map.get(self.conf.get("Video", "language")).setChecked(True)
-        self.discord_map.get(self.conf.get("UI", "discord")).setChecked(True)
         self.gui_language_map.get(self.conf.get("UI", "language")).setChecked(True)
         self.ui.spinbox_semaphore.setValue(int(self.conf.get("Performance", "semaphore")))
         self.ui.spinbox_treewidget_limit.setValue(int(self.conf.get("Video", "search_limit")))
@@ -1270,7 +1144,6 @@ This warning won't be shown again.
         self.workers = int(self.conf["Performance"]["workers"])
         self.max_retries = int(self.conf["Performance"]["retries"])
 
-        self.discord = True if self.conf["UI"]["discord"] == "yes" else False
         self.ui.spinbox_maximal_timeout.setValue(int(self.timeout))
         self.ui.spinbox_maximal_workers.setValue(int(self.workers))
         self.ui.spinbox_pornhub_delay.setValue(int(self.delay))
@@ -1306,10 +1179,6 @@ This warning won't be shown again.
             if radio_button.isChecked():
                 self.conf.set("UI", "language", language)
 
-        for mode, radio_button in self.discord_map.items():
-            if radio_button.isChecked():
-                self.conf.set("UI", "discord", mode)
-
         # Save other settings
         self.conf.set("Performance", "semaphore", str(self.ui.spinbox_semaphore.value()))
         self.conf.set("Video", "search_limit", str(self.ui.spinbox_treewidget_limit.value()))
@@ -1322,7 +1191,7 @@ This warning won't be shown again.
         with open("config.ini", "w") as config_file:
             self.conf.write(config_file)
 
-        ui_popup(QCoreApplication.tr("Saved User Settings, please restart Porn Fetch!", None))
+        ui_popup(QCoreApplication().tr("Saved User Settings, please restart Porn Fetch!", None))
         logger_debug("Saved User Settings, please restart Porn Fetch.")
 
     """
@@ -1357,11 +1226,7 @@ This warning won't be shown again.
 
     def switch_to_all_progress_bars(self):
         self.ui.stacked_widget_top.setCurrentIndex(2)
-
-    def switch_stop_state(self):
-        stop_flag.set()
-        time.sleep(1)
-        self.switch_stop_state_2()
+        self.ui.stacked_widget_main.setCurrentIndex(0)
 
     """
     The following functions are related to the tree widget    
@@ -1457,30 +1322,6 @@ This warning won't be shown again.
             current_text = item.text(0)
             original_title = current_text.split(') ', 1)[1] if ') ' in current_text else current_text
             item.setText(0, f"{new_index}) {original_title}")
-
-    def export_urls(self):
-        video_urls = []
-
-        for i in range(self.ui.treeWidget.topLevelItemCount()):
-            item = self.ui.treeWidget.topLevelItem(i)
-            video_object = item.data(0, Qt.UserRole)
-            video_urls.append(video_object.url)
-
-        if len(video_urls) == 0:
-            ui_popup(QCoreApplication.tr("No video URLs found. Are there videos in the tree widget?", None))
-            return
-
-        file, mode = QFileDialog().getSaveFileName(self)
-
-        try:
-            with open(file, "a") as file:
-                for url in video_urls:
-                    file.write(f"{url}\n")
-
-        except PermissionError:
-            ui_popup(QCoreApplication.tr(f"Permission Error, please select a file from your user space,"
-                                         f"or run Porn Fetch with admin permissions (not recommended!)",
-                                         None))
 
     def progress_tree_widget(self, total, current):
         """This tracks the progress of the tree widget data"""
@@ -1646,8 +1487,8 @@ This warning won't be shown again.
     def on_video_load_error(self, error_message):
         # Handle errors, possibly show message to user
         logger_debug(f"Error loading video: {error_message}")
-        ui_popup(QCoreApplication.tr(f"Some error occurred in loading a video. Please report this: {error_message}",
-                                     None))
+        ui_popup(QCoreApplication().tr(f"Some error occurred in loading a video. Please report this: {error_message}",
+                                       None))
 
     def process_video_thread(self, output_path, video, threading_mode, quality):
         """Checks which of the three types of threading the user selected and handles them."""
@@ -1718,10 +1559,10 @@ This warning won't be shown again.
 
     def stop_undefined_range(self):
         """This stops the undefined range (loading animation) of the total progressbar"""
-        logger_debug("Repainting the total progressbar")
         self.ui.progressbar_total.setMinimum(0)
         self.ui.progressbar_total.setMaximum(100)
         self.ui.progressbar_total.setValue(0)
+
     """
     The following functions are used for opening files / directories with the QFileDialog
     """
@@ -1797,20 +1638,20 @@ This warning won't be shown again.
         password = self.ui.lineedit_password.text()
         if len(username) <= 2 or len(password) <= 2:
             ui_popup(
-                QCoreApplication.tr("Those credentials don't seem to be valid...", None))
+                QCoreApplication().tr("Those credentials don't seem to be valid...", None))
             return
 
         try:
             self.client = Client(username, password, language=self.api_language, delay=self.delay)
             logger_debug("Login Successful!")
-            ui_popup(QCoreApplication.tr("Login Successful!", None))
+            ui_popup(QCoreApplication().tr("Login Successful!", None))
             self.switch_login_button_state()
 
         except errors.LoginFailed:
-            ui_popup(QCoreApplication.tr("Login Failed, please check your credentials and try again!", None))
+            ui_popup(QCoreApplication().tr("Login Failed, please check your credentials and try again!", None))
 
         except errors.ClientAlreadyLogged:
-            ui_popup(QCoreApplication.tr("You are already logged in!", None))
+            ui_popup(QCoreApplication().tr("You are already logged in!", None))
 
     def check_login(self):
         """Checks if the user is logged in, so that no errors are threw if not"""
@@ -1820,8 +1661,9 @@ This warning won't be shown again.
         elif not self.client.logged:
             self.login()
             if not self.client.logged:
-                text = QCoreApplication.tr("There's a problem with the login. Please make sure you login first "
-                                           "and then you try to get videos based on your account.", None)
+                text = (QCoreApplication().tr(
+                    "There's a problem with the login. Please make sure you login first and then you try to "
+                    "get videos based on your account.", None))
                 ui_popup(text)
                 return False
 
@@ -1893,8 +1735,8 @@ This warning won't be shown again.
 
     def get_by_category_hqporner(self):
         """Returns video by category from HQPorner. I want to add support for EPorner"""  # TODO
-        self.list_all_categories_string = QCoreApplication.tr(
-            "Invalid Category. Press 'list categories' to see all possible ones.", None)
+        self.list_all_categories_string = (QCoreApplication().tr(
+            "Invalid Category. Press 'list categories' to see all possible ones.", None))
         category_name = self.ui.lineedit_hqporner_category.text()
         all_categories = hq_Client().get_all_categories()
         search_limit = self.search_limit
@@ -2021,6 +1863,54 @@ def main():
 
 
 if __name__ == "__main__":
+
+    """
+    These functions are static functions which I won't need while coding.
+    These just exist for some reason, but I don't want to scroll through endless lines of code,
+    which is why I placed them here.
+    """
+
+
+    def load_stylesheet(path):
+        """Load stylesheet from a given path with explicit open and close."""
+        file = QFile(path)
+        if not file.open(QFile.ReadOnly | QFile.Text):
+            logger_debug(f"Failed to open {path}")
+            return ""
+        stylesheet = QTextStream(file).readAll()
+        file.close()
+        return stylesheet
+
+
+    def reset_pornfetch():
+        setup_config_file(force=True)
+        ui_popup(QCoreApplication().tr("Done! Please restart.", None))
+
+
+    def switch_stop_state_2():
+        global stop_flag
+        stop_flag = Event()
+
+
+    def switch_stop_state():
+        stop_flag.set()
+        time.sleep(1)
+        switch_stop_state_2()
+
+
+    def export_urls():
+        if not len(session_urls) == 0:
+            file, type = QFileDialog().getOpenFileName()
+            with open(file, "w") as url_export_file:
+                for url in session_urls:
+                    url_export_file.write(f"{url}\n")
+
+            ui_popup(f"Success! Saved: {len(session_urls)} URLs")
+
+        else:
+            ui_popup(QCoreApplication().tr("No URLs in the current session...", None))
+
+
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", "--version", help="Shows the version information", action="store_true")
     args = parser.parse_args()
@@ -2029,14 +1919,4 @@ if __name__ == "__main__":
         print(__version__)
 
     setup_config_file()
-    try:
-        main()
-
-    except FileNotFoundError as e:
-        ui_popup(f"a File Not Found Error occured. This shouldn't happenn. If you see this error, please report it: {e}")
-
-    except PermissionError as e:
-        ui_popup(f"Permission Error: {e}, please report this error.")
-
-    except OverflowError:
-        ui_popup("OverFlow Error, please report this immediately, as it's supposed to be fixed!")
+    main()
