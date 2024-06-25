@@ -63,9 +63,6 @@ stop_flag = Event()
 invalid_input_string = QCoreApplication.tr("Wrong Input, please verify the URL, category or actress!", None)
 ffmpeg_features = True
 ffmpeg_path = None
-urls = ["https://www.pornhub.com", "https://www.eporner.com", "https://www.hqporner.com", "https://www.xnxx.com",
-        "https://www.xvideos.com"]
-
 url_linux = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
 url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
 ffmpeg_linux = "ffmpeg-6.1-amd64-static"
@@ -1701,7 +1698,7 @@ This warning won't be shown again.
             videos = Client().search(query)
 
         elif self.ui.radio_search_website_xvideos.isChecked():
-            videos = xv_Client.search(query, pages=99)
+            videos = xv_Client.search(query)
 
         elif self.ui.radio_search_website_hqporner.isChecked():
             videos = hq_Client.search_videos(query, pages=99)
