@@ -1086,17 +1086,14 @@ This warning won't be shown again.
     def switch_to_home(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(0)
-        self.ui.stacked_widget_top.setMinimumHeight(240)
 
     def switch_to_account(self):
         self.ui.stacked_widget_top.setCurrentIndex(1)
         self.ui.stacked_widget_main.setCurrentIndex(0)
-        self.ui.stacked_widget_top.setMinimumHeight(150)
 
     def switch_to_tools(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(3)
-        self.ui.stacked_widget_top.setMinimumHeight(300)
 
     def switch_to_settings(self):
         self.ui.stacked_widget_main.setCurrentIndex(1)
@@ -1106,8 +1103,7 @@ This warning won't be shown again.
         self.show_credits()
 
     def switch_to_supported_websites(self):
-        self.ui.stacked_widget_main.setCurrentIndex(4)
-        self.ui.stackedWidget.setCurrentIndex(0)
+        self.ui.stacked_widget_main.setCurrentIndex(3)
 
     def switch_to_all_progress_bars(self):
         self.ui.stacked_widget_top.setCurrentIndex(2)
