@@ -297,7 +297,8 @@ def write_tags(path, video):
 
     logger_debug("Tags: [2/3] - Writing Thumbnail")
     content = requests.get(thumbnail).content
-    audio.tags["covr"] = MP4Cover(content, imageformat=MP4Cover.FORMAT_PNG)
+    cover = MP4Cover(content, imageformat=MP4Cover.FORMAT_JPEG)
+    audio.tags["covr"] = [cover]
     audio.save()
     logger_debug("Tags: [3/3] ✔")
 

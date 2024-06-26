@@ -7,7 +7,7 @@
 - [] Splitting functions into other .py files
 - [] Trying to optimize the UI performance with more threading and slower UI repainting
 - [] Supporting more websites
-- [] Writing the thumbnail into the video metadata
+- [x] Writing the thumbnail into the video metadata
 - [] Improving the sorting mechanism, to be less confusing
 - [] Entirely reworking the progressbars and progress reporting in general
 - [] Fixing the errors with the playlist
