@@ -97,7 +97,7 @@
                      <x>0</x>
                      <y>0</y>
                      <width>1570</width>
-                     <height>277</height>
+                     <height>284</height>
                     </rect>
                    </property>
                    <layout class="QGridLayout" name="gridLayout_14">
@@ -663,8 +663,8 @@
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>1532</width>
-                             <height>239</height>
+                             <width>387</width>
+                             <height>206</height>
                             </rect>
                            </property>
                            <layout class="QGridLayout" name="gridLayout_18">
@@ -1153,7 +1153,7 @@
                        <x>0</x>
                        <y>0</y>
                        <width>1568</width>
-                       <height>336</height>
+                       <height>403</height>
                       </rect>
                      </property>
                      <layout class="QGridLayout" name="gridLayout_4">
@@ -2230,7 +2230,7 @@ p, li { white-space: pre-wrap; }
                  <x>0</x>
                  <y>0</y>
                  <width>1588</width>
-                 <height>161</height>
+                 <height>87</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_33">
@@ -2338,7 +2338,7 @@ p, li { white-space: pre-wrap; }
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="styleSheet">
-            <string notr="true">border: none</string>
+            <string notr="true">border: none;</string>
            </property>
            <property name="text">
             <string/>

@@ -227,33 +227,61 @@ def get_element_safe(list, index):
     else:
         return ""
 
+def load_video_attributes(video):
 
-def write_tags(path, video, ffmpeg_path):
     title = video.title
+
+    if isinstance(video, xn_Video):
+        author = video.author
+        length = video.length
+        tags = video.tags
+        publish_date = video.publish_date
+
+    elif isinstance(video, xv_Video):
+        author = video.author
+        length = video.length
+        tags = video.tags
+        publish_date = video.publish_date
+
+    elif isinstance(video, Video):
+        try:
+            author = video.author.name
+
+        except Exception:
+            author = video.pornstars[0]
+
+        length = video.duration.seconds
+        tags = ",".join([tag.name for tag in video.tags])
+        publish_date = video.date
+
+    elif isinstance(video, ep_Video):
+        author = video.author
+        length = video.length_minutes
+        tags = ",".join([tag for tag in video.tags])
+        publish_date = video.publish_date
+
+    elif isinstance(video, hq_Video):
+        try:
+            author = video.pornstars[0]
+        except Exception:
+            author = "No pornstars / author"  # This can sometimes happen. Very rarely, but can happen...
+
+        length = video.length
+        tags = ",".join([category for category in video.categories])
+        publish_date = video.publish_date
+
+    data = [title, author, length, tags, publish_date]
+    return data
+
+
+def write_tags(path, video):
+    data = load_video_attributes(video)
     comment = "Downloaded with Porn Fetch (GPLv3)"
     genre = "Porn"
 
-    if isinstance(video, hq_Video):
-        artist = video.pornstars[0]
-
-    elif hasattr(video.author, "name"):
-        artist = video.author.name
-
-    else:
-        artist = video.author if not isinstance(video.author, list) else video.author[0]
-
-    if artist == "":
-        artist = "Unknown"
-
-    if hasattr(video, "date"):
-        date = video.date.strftime("%Y/%m/%d")
-
-    elif hasattr(video, "publish_date"):
-        date = video.publish_date
-
-    else:
-        date = "Unknown"
-
+    title = data[0]
+    artist = data[1]
+    date = data[3]
     logger_debug("Tags [1/3]")
 
     audio = MP4(path)

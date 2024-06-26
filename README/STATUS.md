@@ -2,7 +2,7 @@
 - [] Fixing the completely broken and stupid Android layout
 - [] Fixing the UI flickering issues on Android
 - [] Fixing the low thread starting times on Android
-- [] Fixing searching for xvideos
+- [x] Fixing searching for xvideos
 - [] Huge code refactoring
 - [] Splitting functions into other .py files
 - [] Trying to optimize the UI performance with more threading and slower UI repainting

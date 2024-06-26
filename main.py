@@ -187,25 +187,9 @@ class AddToTreeWidget(QRunnable):
         # Checks which mode is selected by the user and loads the video attributes
         if self.data_mode == 1:
             if isinstance(video, (hq_Video, xn_Video, xv_Video)):
-                duration = str(video.length)
-
-                if hasattr(video, 'pornstars'):
-                    author = video.pornstars[0] if video.pornstars else "unknown"
-
-                else:
-                    author = video.author if hasattr(video, 'author') and video.author else "unknown"
-
-            elif isinstance(video, Video):
-                duration = round(video.duration.seconds / 60)
-                author = video.author.name
-
-            elif isinstance(video, ep_Video):
-                duration = round(int(video.length) / 60)
-                author = video.author
-
-        # Handling exceptions for missing author in xn_Video
-        if isinstance(video, xn_Video) and not hasattr(video, 'pornstars'):
-            author = "unknown"
+                data = load_video_attributes(video)
+                author = data[1]
+                duration = data[2]
 
         print(
             f"\r\033[K[{Fore.LIGHTCYAN_EX}{index}/{self.search_limit}]{Fore.RESET}{str(title)} Successfully processed!",
@@ -431,7 +415,7 @@ class DownloadThread(QRunnable):
                     self.signals.ffmpeg_progress.emit(round(progress), 100)
 
                 os.remove(f"{self.output_path}_.tmp")
-                write_tags(path=self.output_path, video=self.video, ffmpeg_path=ffmpeg_path)
+                write_tags(path=self.output_path, video=self.video)
             else:
                 logger_debug("FFMPEG features disabled, writing tags and converting the video won't be available!")
 
@@ -517,17 +501,9 @@ class VideoLoader(QRunnable):
                 ui_popup(invalid_input_string)
 
             else:
-                title = video.title
-
-                if isinstance(video, Video):
-                    author = video.author.name
-
-                elif isinstance(video, hq_Video):
-                    pornstars = video.pornstars
-                    author = pornstars[0] if pornstars else "no_author_found"
-                else:
-                    author = video.author
-
+                data = load_video_attributes(video)
+                title = data[0]
+                author = data[1]
                 output_path = Path(self.output_path)
                 stripped_title = Core().strip_title(title)  # Strip the title so that videos with special chars can be
                 # saved on windows. It would raise an OSError otherwise
@@ -566,6 +542,7 @@ class FFMPEGDownload(QRunnable):
             r.raise_for_status()
             try:
                 total_length = int(r.headers.get('content-length'))
+
             except Exception:
                 total_length = 41313894
 
@@ -1252,8 +1229,7 @@ This warning won't be shown again.
 
     def clear_tree_widget(self):
         """
-        This (like the name says) clears the tree widget. I try to improve this in the future, to allow the user
-        the adding of multiple videos, so that the tree widget doesn't get cleared instantly.
+        This (like the name says) clears the tree widget.
         """
         if not self.ui.checkbox_tree_do_not_clear_videos.isChecked():
             self.ui.treeWidget.clear()
