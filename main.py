@@ -178,25 +178,21 @@ class AddToTreeWidget(QRunnable):
         self.is_checked = is_checked
 
     def process_video(self, video, index):
+        data = load_video_attributes(video)
         session_urls.append(video.url)
-        title = video.title
+        title = data[0]
         disabled = QCoreApplication.tr("Disabled", None)
         duration = disabled
         author = disabled
 
         # Checks which mode is selected by the user and loads the video attributes
         if self.data_mode == 1:
-            if isinstance(video, (hq_Video, xn_Video, xv_Video)):
-                data = load_video_attributes(video)
-                author = data[1]
-                duration = data[2]
+            author = data[1]
+            duration = str(parse_length(data[2]))
 
         print(
             f"\r\033[K[{Fore.LIGHTCYAN_EX}{index}/{self.search_limit}]{Fore.RESET}{str(title)} Successfully processed!",
             end='', flush=True)
-
-        if self.data_mode == 1:
-            duration = str(parse_length(duration))
 
         return [str(title), str(author), str(duration), str(index), video]
 
@@ -663,12 +659,11 @@ class Porn_Fetch(QWidget):
         self.directory_system_map = None
         self.threading_mode_map = None
         self.threading_map = None
-        self.language_map = None
         self.quality_map = None
         self.selected_category = None
         self.excluded_categories_filter = None
         self.client = None
-        self.api_language = None
+        self.api_language = "en"
         self.delay = None
         self.search_limit = None
         self.semaphore_limit = None
@@ -713,19 +708,6 @@ class Porn_Fetch(QWidget):
         self.group_quality.addButton(self.ui.radio_quality_worst)
         self.group_quality.addButton(self.ui.radio_quality_half)
         self.group_quality.addButton(self.ui.radio_quality_best)
-
-        self.group_api_language = QButtonGroup()
-        self.group_api_language.addButton(self.ui.radio_api_language_chinese)
-        self.group_api_language.addButton(self.ui.radio_api_language_german)
-        self.group_api_language.addButton(self.ui.radio_api_language_french)
-        self.group_api_language.addButton(self.ui.radio_api_language_english)
-        self.group_api_language.addButton(self.ui.radio_api_language_russian)
-        self.group_api_language.addButton(self.ui.radio_api_language_czech)
-        self.group_api_language.addButton(self.ui.radio_api_language_italian)
-        self.group_api_language.addButton(self.ui.radio_api_language_spanish)
-        self.group_api_language.addButton(self.ui.radio_api_language_portuguese)
-        self.group_api_language.addButton(self.ui.radio_api_language_dutch)
-        self.group_api_language.addButton(self.ui.radio_api_language_japanese)
 
         self.directory_system_group = QButtonGroup()
         self.directory_system_group.addButton(self.ui.radio_directory_system_no)
@@ -910,20 +892,6 @@ class Porn_Fetch(QWidget):
             "worst": self.ui.radio_quality_worst
         }
 
-        self.language_map = {
-            "en": self.ui.radio_api_language_english,
-            "fr": self.ui.radio_api_language_french,
-            "de": self.ui.radio_api_language_german,
-            "zh": self.ui.radio_api_language_chinese,
-            "nl": self.ui.radio_api_language_dutch,
-            "ru": self.ui.radio_api_language_russian,
-            "jp": self.ui.radio_api_language_japanese,
-            "pt": self.ui.radio_api_language_portuguese,
-            "es": self.ui.radio_api_language_spanish,
-            "cz": self.ui.radio_api_language_czech,
-            "it": self.ui.radio_api_language_italian
-        }
-
         self.threading_mode_map = {
             "threaded": self.ui.radio_threading_mode_high_performance,
             "FFMPEG": self.ui.radio_threading_mode_ffmpeg,
@@ -950,7 +918,6 @@ class Porn_Fetch(QWidget):
         self.quality_map.get(self.conf.get("Video", "quality")).setChecked(True)
         self.threading_mode_map.get(self.conf.get("Performance", "threading_mode")).setChecked(True)
         self.directory_system_map.get(self.conf.get("Video", "directory_system")).setChecked(True)
-        self.language_map.get(self.conf.get("Video", "language")).setChecked(True)
         self.gui_language_map.get(self.conf.get("UI", "language")).setChecked(True)
         self.ui.spinbox_semaphore.setValue(int(self.conf.get("Performance", "semaphore")))
         self.ui.spinbox_treewidget_limit.setValue(int(self.conf.get("Video", "search_limit")))
@@ -986,11 +953,6 @@ class Porn_Fetch(QWidget):
             if radio_button.isChecked():
                 self.conf.set("Video", "quality", quality)
 
-        # Save language setting
-        for language, radio_button in self.language_map.items():
-            if radio_button.isChecked():
-                self.conf.set("Video", "language", language)
-
         # Save threading mode
         for mode, radio_button in self.threading_mode_map.items():
             if radio_button.isChecked():
@@ -1017,7 +979,7 @@ class Porn_Fetch(QWidget):
         with open("config.ini", "w") as config_file:
             self.conf.write(config_file)
 
-        ui_popup(QCoreApplication().tr("Saved User Settings, please restart Porn Fetch!", None))
+        ui_popup(QCoreApplication.tr(self, "Saved User Settings, please restart Porn Fetch!", None))
         logger_debug("Saved User Settings, please restart Porn Fetch.")
 
     def check_for_updates(self):
@@ -1039,7 +1001,7 @@ class Porn_Fetch(QWidget):
             if ffmpeg_binary is None:
                 # If ffmpeg binaries are not found in the current directory, display warning and disable features
                 if self.conf.get("Performance", "ffmpeg_warning") == "true":
-                    ffmpeg_warning_message = QCoreApplication().tr(
+                    ffmpeg_warning_message = QCoreApplication.tr(self,
                         """
 FFmpeg isn't installed on your system... Some features won't be available:
 
@@ -1097,16 +1059,16 @@ This warning won't be shown again.
 
     def handle_no_output_path(self):
         ui_popup(
-            QCoreApplication().tr("The output path does not exist or is not writable.", None))
+            QCoreApplication.tr(self, "The output path does not exist or is not writable.", None))
         text, ok = QInputDialog.getText(self, "Enter custom Path",
-                                        QCoreApplication().tr("Enter custom Path:", None))
+                                        QCoreApplication.tr(self, "Enter custom Path:", None))
         if ok and get_output_path(text):
             ui_popup(
-                QCoreApplication().tr(f"Success: {text} will be used for this session!", None))
+                QCoreApplication.tr(self, f"Success: {text} will be used for this session!", None))
             self.configure_ui_for_android(text)
         else:
             ui_popup(
-                QCoreApplication().tr("Invalid path. The application will now exit.", None))
+                QCoreApplication.tr(self, "Invalid path. The application will now exit.", None))
             sys.exit()
 
     def configure_ui_for_android(self, path):
@@ -1125,19 +1087,16 @@ This warning won't be shown again.
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(0)
         self.ui.stacked_widget_top.setMinimumHeight(220)
-        self.ui.scrollarea_stacked_top.setMaximumHeight(220)
 
     def switch_to_account(self):
         self.ui.stacked_widget_top.setCurrentIndex(1)
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setMinimumHeight(150)
-        self.ui.scrollarea_stacked_top.setMaximumHeight(150)
 
     def switch_to_tools(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(3)
         self.ui.stacked_widget_top.setMinimumHeight(300)
-        self.ui.scrollarea_stacked_top.setMaximumHeight(300)
 
     def switch_to_settings(self):
         self.ui.stacked_widget_main.setCurrentIndex(1)
@@ -1414,7 +1373,7 @@ This warning won't be shown again.
     def on_video_load_error(self, error_message):
         # Handle errors, possibly show message to user
         logger_debug(f"Error loading video: {error_message}")
-        ui_popup(QCoreApplication().tr(f"Some error occurred in loading a video. Please report this: {error_message}",
+        ui_popup(QCoreApplication.tr(self, f"Some error occurred in loading a video. Please report this: {error_message}",
                                        None))
 
     def process_video_thread(self, output_path, video, threading_mode, quality):
@@ -1565,20 +1524,20 @@ This warning won't be shown again.
         password = self.ui.lineedit_password.text()
         if len(username) <= 2 or len(password) <= 2:
             ui_popup(
-                QCoreApplication().tr("Those credentials don't seem to be valid...", None))
+                QCoreApplication.tr(self, "Those credentials don't seem to be valid...", None))
             return
 
         try:
             self.client = Client(username, password, language=self.api_language, delay=self.delay)
             logger_debug("Login Successful!")
-            ui_popup(QCoreApplication().tr("Login Successful!", None))
+            ui_popup(QCoreApplication.tr(self, "Login Successful!", None))
             self.switch_login_button_state()
 
         except errors.LoginFailed:
-            ui_popup(QCoreApplication().tr("Login Failed, please check your credentials and try again!", None))
+            ui_popup(QCoreApplication.tr(self, "Login Failed, please check your credentials and try again!", None))
 
         except errors.ClientAlreadyLogged:
-            ui_popup(QCoreApplication().tr("You are already logged in!", None))
+            ui_popup(QCoreApplication.tr(self, "You are already logged in!", None))
 
     def switch_login_button_state(self):
         """If the user is logged in, I'll change the stylesheets of the buttons"""
@@ -1599,7 +1558,7 @@ This warning won't be shown again.
         elif not self.client.logged:
             self.login()
             if not self.client.logged:
-                text = (QCoreApplication().tr(
+                text = (QCoreApplication.tr(self,
                     "There's a problem with the login. Please make sure you login first and then you try to "
                     "get videos based on your account.", None))
                 ui_popup(text)
@@ -1670,7 +1629,7 @@ This warning won't be shown again.
 
     def get_by_category_hqporner(self):
         """Returns video by category from HQPorner. I want to add support for EPorner"""  # TODO
-        self.list_all_categories_string = (QCoreApplication().tr(
+        self.list_all_categories_string = (QCoreApplication.tr(self,
             "Invalid Category. Press 'list categories' to see all possible ones.", None))
         category_name = self.ui.lineedit_hqporner_category.text()
         all_categories = hq_Client().get_all_categories()
@@ -1811,7 +1770,7 @@ if __name__ == "__main__":
 
     def reset_pornfetch():
         setup_config_file(force=True)
-        ui_popup(QCoreApplication().tr("Done! Please restart.", None))
+        ui_popup(QCoreApplication.tr("Done! Please restart.", None))
 
 
     def switch_stop_state_2():
@@ -1835,10 +1794,10 @@ if __name__ == "__main__":
             ui_popup(f"Success! Saved: {len(session_urls)} URLs")
 
         else:
-            ui_popup(QCoreApplication().tr("No URLs in the current session...", None))
+            ui_popup(QCoreApplication.tr("No URLs in the current session...", None))
 
     def ffmpeg_finished():
-        ui_popup(QCoreApplication().tr("FFmpeg has been installed. Please restart Porn Fetch :)", None))
+        ui_popup(QCoreApplication.tr("FFmpeg has been installed. Please restart Porn Fetch :)", None))
 
 
     def check_for_updates_result(value):
@@ -1853,7 +1812,7 @@ if __name__ == "__main__":
                 logger_error(f"Couldn't fetch changelog of version: {__next_release__}")
                 changelog = f"Unknown Error: {e}"
 
-            ui_popup(QCoreApplication().tr(f"""
+            ui_popup(QCoreApplication.tr(f"""
             Information: A new version of Porn Fetch (v{__next_release__}) is out. I recommend you to update Porn Fetch. 
             Go to: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/ {__next_release__}
 

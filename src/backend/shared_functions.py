@@ -7,7 +7,7 @@ import os
 import re
 
 import requests
-from mutagen.mp4 import MP4
+from mutagen.mp4 import MP4, MP4Cover
 from phub import Client, errors, Video
 from phub.modules import download as download
 from colorama import Fore
@@ -70,7 +70,6 @@ ffmpeg_warning = true
 
 [Video]
 quality = best
-language = en
 output_path = ./
 directory_system = 0
 search_limit = 50
@@ -78,7 +77,6 @@ delay = 0
 
 [UI]
 language = system
-discord = false
 """
 
 
@@ -227,8 +225,8 @@ def get_element_safe(list, index):
     else:
         return ""
 
-def load_video_attributes(video):
 
+def load_video_attributes(video):
     title = video.title
 
     if isinstance(video, xn_Video):
@@ -236,12 +234,14 @@ def load_video_attributes(video):
         length = video.length
         tags = video.tags
         publish_date = video.publish_date
+        thumbnail = video.thumbnail_url[0]
 
     elif isinstance(video, xv_Video):
         author = video.author
         length = video.length
         tags = video.tags
         publish_date = video.publish_date
+        thumbnail = video.thumbnail_url
 
     elif isinstance(video, Video):
         try:
@@ -250,15 +250,17 @@ def load_video_attributes(video):
         except Exception:
             author = video.pornstars[0]
 
-        length = video.duration.seconds
+        length = video.duration.seconds / 60
         tags = ",".join([tag.name for tag in video.tags])
         publish_date = video.date
+        thumbnail = video.image.url
 
     elif isinstance(video, ep_Video):
         author = video.author
         length = video.length_minutes
         tags = ",".join([tag for tag in video.tags])
         publish_date = video.publish_date
+        thumbnail = video.thumbnail
 
     elif isinstance(video, hq_Video):
         try:
@@ -269,8 +271,9 @@ def load_video_attributes(video):
         length = video.length
         tags = ",".join([category for category in video.categories])
         publish_date = video.publish_date
+        thumbnail = video.get_thumbnails()[0]
 
-    data = [title, author, length, tags, publish_date]
+    data = [title, author, length, tags, publish_date, thumbnail]
     return data
 
 
@@ -282,6 +285,7 @@ def write_tags(path, video):
     title = data[0]
     artist = data[1]
     date = data[3]
+    thumbnail = data[5]
     logger_debug("Tags [1/3]")
 
     audio = MP4(path)
@@ -291,7 +295,9 @@ def write_tags(path, video):
     audio.tags["\xa9gen"] = genre
     audio.tags["\xa9day"] = date
 
-    logger_debug("Tags: [2/3]")
+    logger_debug("Tags: [2/3] - Writing Thumbnail")
+    content = requests.get(thumbnail).content
+    audio.tags["covr"] = MP4Cover(content, imageformat=MP4Cover.FORMAT_PNG)
     audio.save()
     logger_debug("Tags: [3/3] ✔")
 
