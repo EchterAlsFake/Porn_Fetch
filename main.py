@@ -1086,7 +1086,7 @@ This warning won't be shown again.
     def switch_to_home(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(0)
-        self.ui.stacked_widget_top.setMinimumHeight(220)
+        self.ui.stacked_widget_top.setMinimumHeight(240)
 
     def switch_to_account(self):
         self.ui.stacked_widget_top.setCurrentIndex(1)
