@@ -41,8 +41,9 @@ class Ui_Porn_Fetch_Widget(object):
         self.groupBox_3 = QGroupBox(Porn_Fetch_Widget)
         self.groupBox_3.setObjectName(u"groupBox_3")
         self.gridLayout_14 = QGridLayout(self.groupBox_3)
+        self.gridLayout_14.setSpacing(3)
         self.gridLayout_14.setObjectName(u"gridLayout_14")
-        self.gridLayout_14.setContentsMargins(-1, -1, -1, 0)
+        self.gridLayout_14.setContentsMargins(-1, -1, -1, 3)
         self.button_switch_settings = QPushButton(self.groupBox_3)
         self.button_switch_settings.setObjectName(u"button_switch_settings")
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Maximum)
@@ -53,7 +54,23 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_switch_settings.setMinimumSize(QSize(50, 35))
         self.button_switch_settings.setMaximumSize(QSize(16777215, 35))
         self.button_switch_settings.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.button_switch_settings.setStyleSheet(u"border: none;")
+        self.button_switch_settings.setStyleSheet(u"QPushButton {\n"
+"    background-color: #800080;\n"
+"    color: white;\n"
+"    border-radius: 8px;\n"
+"    border: 3px solid #dda0dd;\n"
+"    padding: 8px 10px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #9932cc;\n"
+"    border: 3px solid #ba55d3;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #4b0082;\n"
+"}\n"
+"")
         self.button_switch_settings.setIconSize(QSize(32, 32))
 
         self.gridLayout_14.addWidget(self.button_switch_settings, 0, 3, 1, 1)
@@ -68,7 +85,22 @@ class Ui_Porn_Fetch_Widget(object):
         font.setPointSize(9)
         self.button_switch_tools.setFont(font)
         self.button_switch_tools.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.button_switch_tools.setStyleSheet(u"border: none")
+        self.button_switch_tools.setStyleSheet(u"QPushButton {\n"
+"    background-color: #000000;\n"
+"    color: #ffffff;\n"
+"    border-radius: 8px;\n"
+"    border: 2px solid #ffffff;\n"
+"    padding: 8px 10px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #333333;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #666666;\n"
+"}\n"
+"")
         self.button_switch_tools.setIconSize(QSize(32, 32))
 
         self.gridLayout_14.addWidget(self.button_switch_tools, 0, 2, 1, 1)
@@ -80,7 +112,23 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_switch_home.setMinimumSize(QSize(50, 35))
         self.button_switch_home.setMaximumSize(QSize(16777215, 35))
         self.button_switch_home.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.button_switch_home.setStyleSheet(u"border: none;")
+        self.button_switch_home.setStyleSheet(u"QPushButton {\n"
+"    background-color: #4CAF50;\n"
+"    color: white;\n"
+"    border-radius: 8px;\n"
+"    border: 2px solid #0078d7;\n"
+"    padding: 8px 10px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #66BB6A;\n"
+"    border: 2px solid #005bb5;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #388E3C;\n"
+"}\n"
+"")
         self.button_switch_home.setIconSize(QSize(32, 32))
 
         self.gridLayout_14.addWidget(self.button_switch_home, 0, 0, 1, 1)
@@ -92,7 +140,22 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_switch_credits.setMinimumSize(QSize(50, 35))
         self.button_switch_credits.setMaximumSize(QSize(16777215, 35))
         self.button_switch_credits.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.button_switch_credits.setStyleSheet(u"border: none;")
+        self.button_switch_credits.setStyleSheet(u"QPushButton {\n"
+"    background-color: #008CBA;\n"
+"    color: white;\n"
+"    border-radius: 8px;\n"
+"    border: none;\n"
+"    padding: 8px 10px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #00A3CC;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #005F8C;\n"
+"}\n"
+"")
         self.button_switch_credits.setIconSize(QSize(32, 32))
 
         self.gridLayout_14.addWidget(self.button_switch_credits, 0, 4, 1, 1)
@@ -104,7 +167,22 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_switch_account.setMinimumSize(QSize(50, 35))
         self.button_switch_account.setMaximumSize(QSize(16777215, 35))
         self.button_switch_account.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.button_switch_account.setStyleSheet(u"border: none")
+        self.button_switch_account.setStyleSheet(u"QPushButton {\n"
+"    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 #ff7f50, stop:1 #ff4500);\n"
+"    color: white;\n"
+"    border-radius: 8px;\n"
+"    border: none;\n"
+"    padding: 8px 10px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 #ffa07a, stop:1 #ff6347);\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 #cd5c5c, stop:1 #b22222);\n"
+"}\n"
+"")
         self.button_switch_account.setIconSize(QSize(32, 32))
 
         self.gridLayout_14.addWidget(self.button_switch_account, 0, 1, 1, 1)
@@ -116,7 +194,22 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_view_progress_bars.setMinimumSize(QSize(50, 35))
         self.button_view_progress_bars.setMaximumSize(QSize(16777215, 35))
         self.button_view_progress_bars.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.button_view_progress_bars.setStyleSheet(u"border: none;")
+        self.button_view_progress_bars.setStyleSheet(u"QPushButton {\n"
+"    background-color: #808080;\n"
+"    color: white;\n"
+"    border-radius: 8px;\n"
+"    border: 2px solid #a9a9a9;\n"
+"    padding: 8px 10px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #a9a9a9;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #696969;\n"
+"}\n"
+"")
         self.button_view_progress_bars.setIconSize(QSize(32, 32))
 
         self.gridLayout_14.addWidget(self.button_view_progress_bars, 0, 5, 1, 1)
@@ -701,7 +794,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_treewidget.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 1606, 449))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 1606, 446))
         self.gridLayout_4 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.verticallayout_treewidget_settings = QVBoxLayout()
@@ -736,34 +829,13 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_16.addWidget(self.radio_tree_show_all, 0, 1, 1, 1)
 
-        self.checkbox_tree_do_not_clear_videos = QCheckBox(self.scrollAreaWidgetContents_3)
-        self.checkbox_tree_do_not_clear_videos.setObjectName(u"checkbox_tree_do_not_clear_videos")
-
-        self.gridLayout_16.addWidget(self.checkbox_tree_do_not_clear_videos, 1, 1, 1, 1)
-
-        self.checkbox_tree_show_videos_reversed = QCheckBox(self.scrollAreaWidgetContents_3)
-        self.checkbox_tree_show_videos_reversed.setObjectName(u"checkbox_tree_show_videos_reversed")
-        self.checkbox_tree_show_videos_reversed.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_16.addWidget(self.checkbox_tree_show_videos_reversed, 1, 2, 1, 1)
-
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridLayout_16.addItem(self.horizontalSpacer, 0, 3, 1, 1)
 
-        self.checkbox_tree_allow_sorting = QCheckBox(self.scrollAreaWidgetContents_3)
-        self.checkbox_tree_allow_sorting.setObjectName(u"checkbox_tree_allow_sorting")
-
-        self.gridLayout_16.addWidget(self.checkbox_tree_allow_sorting, 1, 0, 1, 1)
-
         self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.gridLayout_16.addItem(self.horizontalSpacer_2, 1, 3, 1, 1)
-
-        self.button_tree_export_video_urls = QPushButton(self.scrollAreaWidgetContents_3)
-        self.button_tree_export_video_urls.setObjectName(u"button_tree_export_video_urls")
-
-        self.gridLayout_16.addWidget(self.button_tree_export_video_urls, 0, 2, 1, 1)
 
         self.radio_tree_show_title = QRadioButton(self.scrollAreaWidgetContents_3)
         self.radio_tree_show_title.setObjectName(u"radio_tree_show_title")
@@ -773,6 +845,22 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_tree_show_title.setChecked(True)
 
         self.gridLayout_16.addWidget(self.radio_tree_show_title, 0, 0, 1, 1)
+
+        self.checkbox_tree_do_not_clear_videos = QCheckBox(self.scrollAreaWidgetContents_3)
+        self.checkbox_tree_do_not_clear_videos.setObjectName(u"checkbox_tree_do_not_clear_videos")
+
+        self.gridLayout_16.addWidget(self.checkbox_tree_do_not_clear_videos, 1, 0, 1, 1)
+
+        self.checkbox_tree_show_videos_reversed = QCheckBox(self.scrollAreaWidgetContents_3)
+        self.checkbox_tree_show_videos_reversed.setObjectName(u"checkbox_tree_show_videos_reversed")
+        self.checkbox_tree_show_videos_reversed.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout_16.addWidget(self.checkbox_tree_show_videos_reversed, 1, 1, 1, 1)
+
+        self.button_tree_export_video_urls = QPushButton(self.scrollAreaWidgetContents_3)
+        self.button_tree_export_video_urls.setObjectName(u"button_tree_export_video_urls")
+
+        self.gridLayout_16.addWidget(self.button_tree_export_video_urls, 0, 2, 1, 1)
 
 
         self.gridLayout_4.addLayout(self.gridLayout_16, 1, 0, 1, 1)
@@ -1437,11 +1525,10 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_tree_show_all.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.radio_tree_show_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Get Title, Author, Duration", None))
+        self.radio_tree_show_title.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Only Title (a lot faster)", None))
         self.checkbox_tree_do_not_clear_videos.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Do not clear videos", None))
         self.checkbox_tree_show_videos_reversed.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Show videos in reverse", None))
-        self.checkbox_tree_allow_sorting.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Allow Sorting", None))
         self.button_tree_export_video_urls.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Export video URLs", None))
-        self.radio_tree_show_title.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Only Title (a lot faster)", None))
 #if QT_CONFIG(tooltip)
         self.button_tree_stop.setToolTip(QCoreApplication.translate("Porn_Fetch_Widget", u"Does not stop downloading videos", None))
 #endif // QT_CONFIG(tooltip)

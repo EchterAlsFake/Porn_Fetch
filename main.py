@@ -188,13 +188,11 @@ class AddToTreeWidget(QRunnable):
         # Checks which mode is selected by the user and loads the video attributes
         if self.data_mode == 1:
             author = data[1]
-            logger_debug(f"Unparsed duration: {data[2]}")
             duration = str(parse_length(data[2]))
-            logger_debug(f"Parsed duration: {duration}")
 
-        #print(
-           # f"\r\033[K[{Fore.LIGHTCYAN_EX}{index}/{self.search_limit}]{Fore.RESET}{str(title)} Successfully processed!",
-            #end='', flush=True)
+        print(
+            f"\r\033[K[{Fore.LIGHTCYAN_EX}{index}/{self.search_limit}]{Fore.RESET}{str(title)} Successfully processed!",
+            end='', flush=True)
 
         return [str(title), str(author), str(duration), str(index), video]
 
@@ -783,7 +781,6 @@ class Porn_Fetch(QWidget):
         self.ui.button_open_file.clicked.connect(self.open_file_dialog)
 
         # Other stuff idk
-        self.ui.checkbox_tree_allow_sorting.checkStateChanged.connect(self.toggle_sorting)
         self.ui.button_tree_select_range.clicked.connect(self.select_range_of_items)
         self.ui.button_tree_stop.clicked.connect(switch_stop_state)
         self.ui.button_tree_export_video_urls.clicked.connect(export_urls)
@@ -1073,15 +1070,6 @@ This warning won't be shown again.
 
     def configure_ui_for_android(self, path):
         ""
-
-    def toggle_sorting(self):
-        if self.ui.checkbox_tree_allow_sorting.isChecked():
-            logger_debug("Enabling sorting on the tree widget")
-            self.ui.treeWidget.setSortingEnabled(True)
-
-        else:
-            logger_debug("Disabling sorting on the tree widget")
-            self.ui.treeWidget.setSortingEnabled(False)
 
     def switch_to_home(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)

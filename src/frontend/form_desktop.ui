@@ -38,7 +38,10 @@
        </property>
        <layout class="QGridLayout" name="gridLayout_14">
         <property name="bottomMargin">
-         <number>0</number>
+         <number>3</number>
+        </property>
+        <property name="spacing">
+         <number>3</number>
         </property>
         <item row="0" column="3">
          <widget class="QPushButton" name="button_switch_settings">
@@ -64,7 +67,23 @@
            <cursorShape>PointingHandCursor</cursorShape>
           </property>
           <property name="styleSheet">
-           <string notr="true">border: none;</string>
+           <string notr="true">QPushButton {
+    background-color: #800080;
+    color: white;
+    border-radius: 8px;
+    border: 3px solid #dda0dd;
+    padding: 8px 10px;
+}
+
+QPushButton:hover {
+    background-color: #9932cc;
+    border: 3px solid #ba55d3;
+}
+
+QPushButton:pressed {
+    background-color: #4b0082;
+}
+</string>
           </property>
           <property name="text">
            <string/>
@@ -106,7 +125,22 @@
            <cursorShape>PointingHandCursor</cursorShape>
           </property>
           <property name="styleSheet">
-           <string notr="true">border: none</string>
+           <string notr="true">QPushButton {
+    background-color: #000000;
+    color: #ffffff;
+    border-radius: 8px;
+    border: 2px solid #ffffff;
+    padding: 8px 10px;
+}
+
+QPushButton:hover {
+    background-color: #333333;
+}
+
+QPushButton:pressed {
+    background-color: #666666;
+}
+</string>
           </property>
           <property name="text">
            <string/>
@@ -143,7 +177,23 @@
            <cursorShape>PointingHandCursor</cursorShape>
           </property>
           <property name="styleSheet">
-           <string notr="true">border: none;</string>
+           <string notr="true">QPushButton {
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 8px;
+    border: 2px solid #0078d7;
+    padding: 8px 10px;
+}
+
+QPushButton:hover {
+    background-color: #66BB6A;
+    border: 2px solid #005bb5;
+}
+
+QPushButton:pressed {
+    background-color: #388E3C;
+}
+</string>
           </property>
           <property name="text">
            <string/>
@@ -180,7 +230,22 @@
            <cursorShape>PointingHandCursor</cursorShape>
           </property>
           <property name="styleSheet">
-           <string notr="true">border: none;</string>
+           <string notr="true">QPushButton {
+    background-color: #008CBA;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    padding: 8px 10px;
+}
+
+QPushButton:hover {
+    background-color: #00A3CC;
+}
+
+QPushButton:pressed {
+    background-color: #005F8C;
+}
+</string>
           </property>
           <property name="text">
            <string/>
@@ -217,7 +282,22 @@
            <cursorShape>PointingHandCursor</cursorShape>
           </property>
           <property name="styleSheet">
-           <string notr="true">border: none</string>
+           <string notr="true">QPushButton {
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 #ff7f50, stop:1 #ff4500);
+    color: white;
+    border-radius: 8px;
+    border: none;
+    padding: 8px 10px;
+}
+
+QPushButton:hover {
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 #ffa07a, stop:1 #ff6347);
+}
+
+QPushButton:pressed {
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 #cd5c5c, stop:1 #b22222);
+}
+</string>
           </property>
           <property name="text">
            <string/>
@@ -254,7 +334,22 @@
            <cursorShape>PointingHandCursor</cursorShape>
           </property>
           <property name="styleSheet">
-           <string notr="true">border: none;</string>
+           <string notr="true">QPushButton {
+    background-color: #808080;
+    color: white;
+    border-radius: 8px;
+    border: 2px solid #a9a9a9;
+    padding: 8px 10px;
+}
+
+QPushButton:hover {
+    background-color: #a9a9a9;
+}
+
+QPushButton:pressed {
+    background-color: #696969;
+}
+</string>
           </property>
           <property name="text">
            <string/>
@@ -1403,7 +1498,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>1606</width>
-                <height>449</height>
+                <height>446</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -1472,23 +1567,6 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="1" column="1">
-                  <widget class="QCheckBox" name="checkbox_tree_do_not_clear_videos">
-                   <property name="text">
-                    <string>Do not clear videos</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="2">
-                  <widget class="QCheckBox" name="checkbox_tree_show_videos_reversed">
-                   <property name="cursor">
-                    <cursorShape>PointingHandCursor</cursorShape>
-                   </property>
-                   <property name="text">
-                    <string>Show videos in reverse</string>
-                   </property>
-                  </widget>
-                 </item>
                  <item row="0" column="3">
                   <spacer name="horizontalSpacer">
                    <property name="orientation">
@@ -1502,13 +1580,6 @@
                    </property>
                   </spacer>
                  </item>
-                 <item row="1" column="0">
-                  <widget class="QCheckBox" name="checkbox_tree_allow_sorting">
-                   <property name="text">
-                    <string>Allow Sorting</string>
-                   </property>
-                  </widget>
-                 </item>
                  <item row="1" column="3">
                   <spacer name="horizontalSpacer_2">
                    <property name="orientation">
@@ -1521,13 +1592,6 @@
                     </size>
                    </property>
                   </spacer>
-                 </item>
-                 <item row="0" column="2">
-                  <widget class="QPushButton" name="button_tree_export_video_urls">
-                   <property name="text">
-                    <string>Export video URLs</string>
-                   </property>
-                  </widget>
                  </item>
                  <item row="0" column="0">
                   <widget class="QRadioButton" name="radio_tree_show_title">
@@ -1545,6 +1609,30 @@
                    </property>
                    <property name="checked">
                     <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QCheckBox" name="checkbox_tree_do_not_clear_videos">
+                   <property name="text">
+                    <string>Do not clear videos</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QCheckBox" name="checkbox_tree_show_videos_reversed">
+                   <property name="cursor">
+                    <cursorShape>PointingHandCursor</cursorShape>
+                   </property>
+                   <property name="text">
+                    <string>Show videos in reverse</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="2">
+                  <widget class="QPushButton" name="button_tree_export_video_urls">
+                   <property name="text">
+                    <string>Export video URLs</string>
                    </property>
                   </widget>
                  </item>

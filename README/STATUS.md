@@ -8,7 +8,7 @@
 - [x] Trying to optimize the UI performance with more threading and slower UI repainting
 - [] Supporting more websites
 - [x] Writing the thumbnail into the video metadata
-- [] Improving the sorting mechanism, to be less confusing
+- [x] Improving the sorting mechanism, to be less confusing
 - []  --Entirely reworking the progressbars and progress reporting in general-- (Won't do that fr)
 - [x] Fixing the errors with the playlist
 - [] Fixing file progress
