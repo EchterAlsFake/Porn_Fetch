@@ -32,7 +32,6 @@ of progress. Since some websites don't use HLS streaming (for good reasons), the
 make sense to mix them. I don't want to go in too much detail, but it has its reasons.
 
 
-## Q: Why is macOS only "untested" available?
+## Q; Will XHamster be supported?
 
-Because I don't have an Apple device with macOS nor a friend with macOS, so I am not able to run Porn Fetch on it.
-I can just give you the compiled binary and hope that it works.
+Unfortunately xhamster encrypts its videos, so we can't access the content.
