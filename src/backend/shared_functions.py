@@ -253,6 +253,7 @@ def load_video_attributes(video):
         length = video.duration.seconds / 60
         tags = ",".join([tag.name for tag in video.tags])
         publish_date = video.date
+        video.refresh()  # Throws an error otherwise. I have no idea why.
         thumbnail = video.image.url
 
     elif isinstance(video, ep_Video):
@@ -305,28 +306,49 @@ def write_tags(path, video):
 
 def parse_length(length):
     try:
-        if str(length).isdigit():
+        # Check if length is a valid integer string representing minutes
+        if isinstance(length, int) or (isinstance(length, str) and length.isdigit()):
             return int(length)
 
+        # Check for decimal format like "9.3333334" which represents minutes and fractions of minutes
+        if isinstance(length, float) or (isinstance(length, str) and '.' in length):
+            try:
+                return int(round(length))
+            except ValueError:
+                pass
+
+        # Initialize a dictionary for time units conversion
         time_units = {'s': 1 / 60, 'm': 1, 'h': 60}
         total_minutes = 0
+
+        # Split the length string by spaces
         parts = length.split()
         for part in parts:
+            # Extract the numeric value and the time unit
             value = int(part[:-1])
             unit = part[-1]
+
+            # Convert the value to minutes if the unit is valid
             if unit in time_units:
                 total_minutes += value * time_units[unit]
 
+        # If a valid time conversion was found, return the total minutes
         if total_minutes > 0:
-            return int(total_minutes)
+            return total_minutes
 
+        # Check for format ending with 'min'
         if length.endswith('min'):
             return int(length[:-3])
+
+        # Check for format like '24 seconds'
+        if length.endswith('seconds'):
+            value = int(length.split()[0])
+            return value / 60  # Convert seconds to minutes
 
         return None
 
     except Exception:
-        return int(00000)
+        return 0
 
 
 def resolve_threading_mode(video, mode, workers, timeout):

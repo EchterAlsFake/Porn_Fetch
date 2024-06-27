@@ -919,8 +919,8 @@
                    <rect>
                     <x>0</x>
                     <y>0</y>
-                    <width>1588</width>
-                    <height>257</height>
+                    <width>387</width>
+                    <height>206</height>
                    </rect>
                   </property>
                   <layout class="QGridLayout" name="gridLayout_18">
@@ -1435,7 +1435,7 @@
                    </column>
                    <column>
                     <property name="text">
-                     <string>Duration</string>
+                     <string>Duration (minutes)</string>
                     </property>
                    </column>
                   </widget>
@@ -1692,8 +1692,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>1608</width>
-              <height>781</height>
+              <width>721</width>
+              <height>575</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_19">

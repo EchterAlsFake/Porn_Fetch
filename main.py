@@ -188,11 +188,13 @@ class AddToTreeWidget(QRunnable):
         # Checks which mode is selected by the user and loads the video attributes
         if self.data_mode == 1:
             author = data[1]
+            logger_debug(f"Unparsed duration: {data[2]}")
             duration = str(parse_length(data[2]))
+            logger_debug(f"Parsed duration: {duration}")
 
-        print(
-            f"\r\033[K[{Fore.LIGHTCYAN_EX}{index}/{self.search_limit}]{Fore.RESET}{str(title)} Successfully processed!",
-            end='', flush=True)
+        #print(
+           # f"\r\033[K[{Fore.LIGHTCYAN_EX}{index}/{self.search_limit}]{Fore.RESET}{str(title)} Successfully processed!",
+            #end='', flush=True)
 
         return [str(title), str(author), str(duration), str(index), video]
 
@@ -660,8 +662,6 @@ class Porn_Fetch(QWidget):
         self.threading_mode_map = None
         self.threading_map = None
         self.quality_map = None
-        self.selected_category = None
-        self.excluded_categories_filter = None
         self.client = None
         self.api_language = "en"
         self.delay = None
@@ -1147,10 +1147,11 @@ This warning won't be shown again.
         title = data[0]
         author = data[1]
         try:
-            duration = int(data[2])  # Ensure duration is an integer
-
+            duration = float(data[2])  # Ensure duration is a float
+            print(duration)
         except ValueError:
-            duration = int(00000)
+            logger_error("Value Error occurred :(")
+            duration = parse_length(data[2])
 
         index = data[3]
         video = data[4]
@@ -1158,11 +1159,21 @@ This warning won't be shown again.
         item = QTreeWidgetItem(self.ui.treeWidget)
         item.setText(0, f"{index}) {title}")
         item.setText(1, author)
-        # Format duration as a fixed-width string with leading zeros for better sorting, e.g., "00104"
-        formatted_duration = f"{duration:05d}"
-        item.setText(2, formatted_duration)  # Set the text as the zero-padded number
-        item.setData(2, Qt.UserRole, int(duration))  # Store the actual integer value in UserRole if needed later
 
+        # Determine how many zeros are needed based on the type and value of duration
+        if isinstance(duration, float):
+            formatted_duration = f"{int(duration):05d}"
+            # Handle the decimal part separately if needed
+            decimal_part = str(duration).split('.')[1]
+            if decimal_part != '0':
+                formatted_duration += '.' + decimal_part
+
+        else:
+            formatted_duration = f"{duration:05d}"
+
+        duration = str(duration).strip("0").strip(".")
+        item.setText(2, duration)  # Set the text as the zero-padded number or float
+        item.setData(2, Qt.UserRole, formatted_duration)  # Store the original duration for sorting
         item.setCheckState(0, Qt.Unchecked)
         item.setData(0, Qt.UserRole, video)
 

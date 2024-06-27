@@ -5,14 +5,14 @@
 - [x] Fixing searching for xvideos
 - [] Huge code refactoring
 - [] Splitting functions into other .py files
-- [] Trying to optimize the UI performance with more threading and slower UI repainting
+- [x] Trying to optimize the UI performance with more threading and slower UI repainting
 - [] Supporting more websites
 - [x] Writing the thumbnail into the video metadata
 - [] Improving the sorting mechanism, to be less confusing
-- [] Entirely reworking the progressbars and progress reporting in general
-- [] Fixing the errors with the playlist
+- []  --Entirely reworking the progressbars and progress reporting in general-- (Won't do that fr)
+- [x] Fixing the errors with the playlist
 - [] Fixing file progress
-- [] Fixing the tag writing function
+- [x] Fixing the tag writing function
 - [] Entirely reworking the Layout, the UI design AND the Android Layout
 
 """
@@ -27,6 +27,6 @@ In 2 weeks I have summer holidays (21th June) and then we can bring some 🔥 in
 """""
 
 # Maybe or maybe not:
-- [] Enabling optional downloading over the tor network or proxies
+- [] Enabling optional downloading over the tor network or proxies (Nope, won't do that, sorry)
 - [] Distributing Porn Fetch over the p2p network too
-- [] Supporting FFmpeg on Android
+- [] -- Supporting FFmpeg on Android -- (Nope, won't do that)
