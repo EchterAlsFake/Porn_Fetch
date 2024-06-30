@@ -807,7 +807,6 @@ class Porn_Fetch(QWidget):
         }
         for button, icon_name in icons.items():
             if icon_name == "settings.svg" or icon_name == "tools.svg":
-                button.setIcon(QIcon(f":/images/graphics/{icon_name}"),)
                 button.setIconSize(QSize(24, 24))
 
             button.setIcon(QIcon(f":/images/graphics/{icon_name}"))
