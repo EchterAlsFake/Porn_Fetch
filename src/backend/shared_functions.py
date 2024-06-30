@@ -30,9 +30,9 @@ as they are indeed needed for the main applications!
 
 sections = ["Performance", "License", "Video", "UI"]
 options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries", "ffmpeg_warning"]
-options_video = ["quality", "language", "output_path", "directory_system", "search_limit", "delay"]
+options_video = ["quality", "output_path", "directory_system", "search_limit", "delay"]
 options_license = ["accepted"]
-options_ui = ["language", "discord"]
+options_ui = ["language"]
 
 pornhub_pattern = re.compile(r'(.*?)pornhub(.*)') # can also be .org
 hqporner_pattern = re.compile(r'(.*?)hqporner.com(.*)')
@@ -88,8 +88,7 @@ def logger_debug(e):
     print(f"{datetime.now()} : {Fore.LIGHTCYAN_EX}[DEBUG] : {return_color()} : {e} {reset()}")
 
 
-def check_video(url, language, is_url=True, delay=False):
-
+def check_video(url, is_url=True, delay=False):
     if is_url:
 
         if hqporner_pattern.search(str(url)):
@@ -122,7 +121,7 @@ def check_video(url, language, is_url=True, delay=False):
 
         elif isinstance(url, str) and not str(url).endswith(".html"):
             try:
-                video = Client(language=language, delay=delay).get(url)
+                video = Client(delay=delay).get(url)
                 video.fetch("page@")
                 return video
 

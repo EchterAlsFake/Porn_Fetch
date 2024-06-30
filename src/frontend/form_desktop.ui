@@ -27,12 +27,12 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0">
-    <layout class="QGridLayout" name="gridLayout_13">
+    <layout class="QGridLayout" name="gridlayout_main">
      <property name="bottomMargin">
       <number>0</number>
      </property>
      <item row="0" column="0">
-      <widget class="QGroupBox" name="groupBox_3">
+      <widget class="QGroupBox" name="groupbox_top_bar">
        <property name="title">
         <string>Porn Fetch Menu</string>
        </property>
@@ -374,7 +374,7 @@ QPushButton:pressed {
         <number>1</number>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="widget">
         <layout class="QGridLayout" name="gridLayout_8">
@@ -416,7 +416,7 @@ QPushButton:pressed {
               <number>1</number>
              </property>
              <property name="currentIndex">
-              <number>0</number>
+              <number>3</number>
              </property>
              <widget class="QWidget" name="page_download">
               <layout class="QGridLayout" name="gridLayout_5">
@@ -638,7 +638,7 @@ QPushButton:pressed {
                     </widget>
                    </item>
                    <item>
-                    <spacer name="horizontalSpacer_3">
+                    <spacer name="horizontalspacer_search">
                      <property name="orientation">
                       <enum>Qt::Horizontal</enum>
                      </property>
@@ -1014,8 +1014,8 @@ QPushButton:pressed {
                    <rect>
                     <x>0</x>
                     <y>0</y>
-                    <width>387</width>
-                    <height>206</height>
+                    <width>1606</width>
+                    <height>257</height>
                    </rect>
                   </property>
                   <layout class="QGridLayout" name="gridLayout_18">
@@ -1114,7 +1114,7 @@ QPushButton:pressed {
                       </widget>
                      </item>
                      <item row="6" column="1">
-                      <spacer name="verticalSpacer_2">
+                      <spacer name="verticalspacer_progress_bars">
                        <property name="orientation">
                         <enum>Qt::Vertical</enum>
                        </property>
@@ -1254,13 +1254,13 @@ QPushButton:pressed {
                 </widget>
                </item>
                <item row="0" column="1">
-                <widget class="QGroupBox" name="groupBox">
+                <widget class="QGroupBox" name="groupbox_tools">
                  <property name="title">
                   <string>HQPorner</string>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_7">
                   <item row="0" column="0">
-                   <layout class="QGridLayout" name="gridLayout">
+                   <layout class="QGridLayout" name="gridlayout_tools_hqporner">
                     <item row="0" column="2">
                      <widget class="QRadioButton" name="radio_top_porn_month">
                       <property name="minimumSize">
@@ -1538,7 +1538,7 @@ QPushButton:pressed {
                 </layout>
                </item>
                <item row="1" column="0">
-                <layout class="QGridLayout" name="gridLayout_16">
+                <layout class="QGridLayout" name="gridlayout_tree_settings">
                  <item row="0" column="1">
                   <widget class="QRadioButton" name="radio_tree_show_all">
                    <property name="sizePolicy">
@@ -1568,7 +1568,7 @@ QPushButton:pressed {
                   </widget>
                  </item>
                  <item row="0" column="3">
-                  <spacer name="horizontalSpacer">
+                  <spacer name="horizontalspacer_tree_1">
                    <property name="orientation">
                     <enum>Qt::Horizontal</enum>
                    </property>
@@ -1581,7 +1581,7 @@ QPushButton:pressed {
                   </spacer>
                  </item>
                  <item row="1" column="3">
-                  <spacer name="horizontalSpacer_2">
+                  <spacer name="horizontalspacer_tree_2">
                    <property name="orientation">
                     <enum>Qt::Horizontal</enum>
                    </property>
@@ -1629,7 +1629,7 @@ QPushButton:pressed {
                    </property>
                   </widget>
                  </item>
-                 <item row="0" column="2">
+                 <item row="1" column="2">
                   <widget class="QPushButton" name="button_tree_export_video_urls">
                    <property name="text">
                     <string>Export video URLs</string>
@@ -1643,7 +1643,7 @@ QPushButton:pressed {
             </widget>
            </item>
            <item>
-            <layout class="QGridLayout" name="gridLayout_17">
+            <layout class="QGridLayout" name="gridlayout_tree_buttons">
              <item row="1" column="2">
               <widget class="QPushButton" name="button_tree_stop">
                <property name="sizePolicy">
@@ -1780,8 +1780,8 @@ QPushButton:pressed {
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>721</width>
-              <height>575</height>
+              <width>1608</width>
+              <height>787</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_19">
@@ -1982,7 +1982,7 @@ QPushButton:pressed {
                    </layout>
                   </item>
                   <item row="6" column="0">
-                   <layout class="QHBoxLayout" name="horizontalLayout_2">
+                   <layout class="QHBoxLayout" name="horizontallayout_maximal_retries">
                     <item>
                      <widget class="QLabel" name="label_maximal_retries">
                       <property name="text">
@@ -2140,7 +2140,7 @@ QPushButton:pressed {
                  </layout>
                 </item>
                 <item row="3" column="0">
-                 <layout class="QHBoxLayout" name="horizontalLayout_9">
+                 <layout class="QHBoxLayout" name="horizontallayout_result_limit">
                   <item>
                    <widget class="QLabel" name="label_searching_limit">
                     <property name="text">

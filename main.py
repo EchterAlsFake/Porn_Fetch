@@ -69,6 +69,7 @@ ffmpeg_linux = "ffmpeg-6.1-amd64-static"
 ffmpeg_windows = "ffmpeg-7.0-essentials_build"
 android_arch = None
 session_urls = []  # This list saves all URls used in the current session. Used for the URL export function
+total_downloaded_videos = 0
 
 
 class Signals(QObject):
@@ -478,11 +479,10 @@ class VideoLoaderSignals(QObject):
 
 
 class VideoLoader(QRunnable):
-    def __init__(self, url, output_path, api_language, threading_mode, directory_system, quality, delay):
+    def __init__(self, url, output_path, threading_mode, directory_system, quality, delay):
         super(VideoLoader, self).__init__()
         self.url = url
         self.output_path = output_path
-        self.api_language = api_language
         self.threading_mode = threading_mode
         self.directory_system = directory_system
         self.quality = quality
@@ -491,7 +491,7 @@ class VideoLoader(QRunnable):
 
     def run(self):
         try:
-            video = check_video(self.url, language=self.api_language, delay=self.delay)
+            video = check_video(self.url, delay=self.delay)
 
             if video is False:
                 ui_popup(invalid_input_string)
@@ -598,11 +598,10 @@ class AddUrls(QRunnable):
     all URLs / Models / Search terms have been processed. This is why I made this threading class
     """
 
-    def __init__(self, file, api_language, delay):
+    def __init__(self, file, delay):
         super(AddUrls, self).__init__()
         self.signals = Signals()
         self.file = file
-        self.api_language = api_language
         self.delay = delay
 
     def run(self):
@@ -632,7 +631,7 @@ class AddUrls(QRunnable):
                                          "query": query})
 
             else:
-                video = check_video(line, language=self.api_language, delay=self.delay)
+                video = check_video(line, delay=self.delay)
 
                 if video is not False:
                     iterator.append(video)
@@ -661,7 +660,6 @@ class Porn_Fetch(QWidget):
         self.threading_map = None
         self.quality_map = None
         self.client = None
-        self.api_language = "en"
         self.delay = None
         self.search_limit = None
         self.semaphore_limit = None
@@ -678,6 +676,7 @@ class Porn_Fetch(QWidget):
 
         self.ui = Ui_Porn_Fetch_Widget()
         self.ui.setupUi(self)
+        self.default_max_height = self.ui.stacked_widget_top.maximumHeight()
         self.button_connectors()  # Connects the buttons to their functions
         self.button_groups()  # Groups the buttons, so that the Radio buttons are split from themselves (hard to explain)
         self.load_style()  # Loads all the User Interface stylesheets
@@ -931,7 +930,6 @@ class Porn_Fetch(QWidget):
         self.gui_language = self.conf.get("UI", "language")
         self.quality = self.conf["Video"]["quality"]
         self.threading_mode = self.conf["Performance"]["threading_mode"]
-        self.api_language = self.conf["Video"]["language"]
         self.semaphore = QSemaphore(int(self.semaphore_limit))
         self.delay = int(self.conf["Video"]["delay"])
         self.timeout = int(self.conf["Performance"]["timeout"])
@@ -945,7 +943,7 @@ class Porn_Fetch(QWidget):
         bs_consts.REQUEST_DELAY = self.delay
         bs_consts.MAX_RETRIES = self.max_retries
         consts.FFMPEG_EXECUTABLE = ffmpeg_path
-        self.client = Client(delay=self.delay, language=self.api_language)
+        self.client = Client(delay=self.delay)
 
     def save_user_settings(self):
         """Saves the user settings to the configuration file based on the UI state."""
@@ -1078,14 +1076,17 @@ This warning won't be shown again.
     def switch_to_home(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(0)
+        self.ui.stacked_widget_top.setMaximumHeight(self.default_max_height)
 
     def switch_to_account(self):
         self.ui.stacked_widget_top.setCurrentIndex(1)
         self.ui.stacked_widget_main.setCurrentIndex(0)
+        self.ui.stacked_widget_top.setMaximumHeight(140)
 
     def switch_to_tools(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(3)
+        self.ui.stacked_widget_top.setMaximumHeight(self.default_max_height)
 
     def switch_to_settings(self):
         self.ui.stacked_widget_main.setCurrentIndex(1)
@@ -1098,6 +1099,7 @@ This warning won't be shown again.
         self.ui.stacked_widget_main.setCurrentIndex(3)
 
     def switch_to_all_progress_bars(self):
+        self.ui.stacked_widget_top.setMaximumHeight(self.default_max_height)
         self.ui.stacked_widget_top.setCurrentIndex(2)
         self.ui.stacked_widget_main.setCurrentIndex(0)
 
@@ -1296,10 +1298,9 @@ This warning won't be shown again.
         implemented this feature into the tree widget and I don't want to write code 2 times
         """
         url = self.ui.lineedit_url.text()
-        api_language = self.api_language
         one_time_iterator = []
 
-        video = check_video(url=url, language=api_language, delay=self.delay)
+        video = check_video(url=url, delay=self.delay)
         if video is False:  # If a video url is invalid, check_video will return it as False
             ui_popup(invalid_input_string)
 
@@ -1318,9 +1319,8 @@ This warning won't be shown again.
         search_limit = self.search_limit
 
         if pornhub_pattern.match(model):
-            api_language = self.api_language
             if not isinstance(self.client, Client):
-                client = Client(language=api_language, delay=self.delay)
+                client = Client(delay=self.delay)
 
             else:
                 client = self.client
@@ -1352,7 +1352,7 @@ This warning won't be shown again.
 
     def load_video(self, url):
         """This starts the thread to load a video"""
-        video_loader = VideoLoader(url, self.output_path, self.api_language, self.threading_mode, self.directory_system,
+        video_loader = VideoLoader(url, self.output_path, self.threading_mode, self.directory_system,
                                    self.quality, delay=self.delay)
 
         # Connect signals to your slots
@@ -1435,6 +1435,9 @@ This warning won't be shown again.
     def download_completed(self):
         """If a video is downloaded, the semaphore is released"""
         logger_debug("Download Completed!")
+        global total_downloaded_videos
+        total_downloaded_videos += 1
+        self.ui.lineedit_download_info.setText(f"Downloaded: {total_downloaded_videos} video(s) this session.")
         self.ui.progressbar_total.setMaximum(100)
         self.semaphore.release()
 
@@ -1469,7 +1472,7 @@ This warning won't be shown again.
 
     def start_it(self):
         file = self.ui.lineedit_file.text()
-        self.url_thread = AddUrls(file, api_language=self.api_language, delay=self.delay)
+        self.url_thread = AddUrls(file, delay=self.delay)
         self.url_thread.signals.total_progress.connect(self.update_total_progressbar)
         self.url_thread.signals.url_iterators.connect(self.receive_url_result)
         self.threadpool.start(self.url_thread)
@@ -1527,7 +1530,7 @@ This warning won't be shown again.
             return
 
         try:
-            self.client = Client(username, password, language=self.api_language, delay=self.delay)
+            self.client = Client(username, password, delay=self.delay)
             logger_debug("Login Successful!")
             ui_popup(QCoreApplication.tr(self, "Login Successful!", None))
             self.switch_login_button_state()
