@@ -25,7 +25,7 @@ from src.frontend.License import Ui_License
 from src.frontend.range_selector import Ui_Form
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
-                            QTranslator, QCoreApplication)
+                            QTranslator, QCoreApplication, QSize)
 from PySide6.QtWidgets import QWidget, QApplication, QInputDialog, QTreeWidgetItem, QButtonGroup, QFileDialog
 from PySide6.QtGui import QIcon, QFont
 
@@ -807,6 +807,10 @@ class Porn_Fetch(QWidget):
             self.ui.button_view_progress_bars: "progressbars.svg"
         }
         for button, icon_name in icons.items():
+            if icon_name == "settings.svg" or icon_name == "tools.svg":
+                button.setIcon(QIcon(f":/images/graphics/{icon_name}"),)
+                button.setIconSize(QSize(24, 24))
+
             button.setIcon(QIcon(f":/images/graphics/{icon_name}"))
 
         self.setWindowIcon(QIcon(":/images/graphics/logo_transparent.ico"))
