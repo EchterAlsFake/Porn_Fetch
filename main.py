@@ -160,11 +160,15 @@ class CheckUpdates(QRunnable):
 
     def run(self):
         url = f"https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/{__next_release__}"
-        if requests.get(url).status_code == 200:
-            self.signals.result.emit(True)
+        try:
+            if requests.get(url).status_code == 200:
+                self.signals.result.emit(True)
 
-        else:
-            self.signals.result.emit(False)
+            else:
+                self.signals.result.emit(False)
+
+        except requests.exceptions.ConnectionError:
+            logger_error("Couldn't check for updates, because of a Connection Error")
 
 
 class AddToTreeWidget(QRunnable):
@@ -784,6 +788,7 @@ class Porn_Fetch(QWidget):
         self.ui.button_tree_stop.clicked.connect(switch_stop_state)
         self.ui.button_tree_export_video_urls.clicked.connect(export_urls)
         self.ui.button_download_ffmpeg.clicked.connect(self.download_ffmpeg)
+        self.ui.button_range_apply_everything.clicked.connect(self.select_all_items)
 
     def load_style(self):
         """Refactored function to load icons and stylesheets."""
@@ -847,7 +852,7 @@ class Porn_Fetch(QWidget):
         self.ui.button_threading_mode_help.setStyleSheet(stylesheets["button_green"])
         self.ui.button_directory_system_help.setStyleSheet(stylesheets["button_green"])
         self.ui.button_semaphore_help.setStyleSheet(stylesheets["button_green"])
-        self.ui.button_tree_download.setStyleSheet(stylesheets["button_orange"])
+        self.ui.button_tree_download.setStyleSheet(stylesheets["button_purple"])
         self.ui.button_tree_unselect_all.setStyleSheet(stylesheets["button_blue"])
         self.ui.button_tree_select_range.setStyleSheet(stylesheets["button_green"])
         self.ui.button_output_path_select.setStyleSheet(stylesheets["button_blue"])
@@ -874,6 +879,7 @@ class Porn_Fetch(QWidget):
         self.ui.button_timeout_maximal_retries_help.setStyleSheet(stylesheets["button_green"])
         self.ui.button_help_file.setStyleSheet(stylesheets["button_green"])
         self.ui.button_download_ffmpeg.setStyleSheet(stylesheets["button_purple"])
+        self.ui.button_range_apply_everything.setStyleSheet(stylesheets["button_orange"])
         self.header = self.ui.treeWidget.header()
         self.header.resizeSection(0, 300)
         self.header.resizeSection(1, 150)
@@ -1076,6 +1082,7 @@ This warning won't be shown again.
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(0)
         self.ui.stacked_widget_top.setMaximumHeight(self.default_max_height)
+        self.ui.stacked_widget_top.setMinimumHeight(225)
 
     def switch_to_account(self):
         self.ui.stacked_widget_top.setCurrentIndex(1)
@@ -1086,6 +1093,7 @@ This warning won't be shown again.
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(3)
         self.ui.stacked_widget_top.setMaximumHeight(self.default_max_height)
+        self.ui.stacked_widget_top.setMinimumHeight(258)
 
     def switch_to_settings(self):
         self.ui.stacked_widget_main.setCurrentIndex(1)
@@ -1169,6 +1177,7 @@ This warning won't be shown again.
         item.setData(2, Qt.UserRole, formatted_duration)  # Store the original duration for sorting
         item.setCheckState(0, Qt.Unchecked)
         item.setData(0, Qt.UserRole, video)
+        item.setData(1, Qt.UserRole, author)
 
     def download_tree_widget(self):
         """
@@ -1239,7 +1248,7 @@ This warning won't be shown again.
         self.range_ui.spinbox_range_end.setMaximum(item_count)
         self.range_ui.button_range_apply_index.clicked.connect(self.process_range_of_items_selection_index)
         self.range_ui.button_range_apply_time.clicked.connect(self.process_range_of_items_selection_time)
-        self.range_ui.button_range_apply_everything.clicked.connect(self.select_all_items)
+        self.range_ui.button_range_apply_author.clicked.connect(self.process_range_of_items_author)
 
         # Show the new widget
         self.widget.show()
@@ -1284,10 +1293,20 @@ This warning won't be shown again.
             # Check if the duration is within the specified start and end times
             if start_time <= duration <= end_time:
                 item.setCheckState(0, Qt.Checked)
-            else:
-                item.setCheckState(0, Qt.Unchecked)  # Optionally uncheck items outside the range
 
         # Assuming this is meant to close the widget, but it might be better to handle this outside this function
+        self.widget.deleteLater()
+
+    def process_range_of_items_author(self):
+        name = str(self.range_ui.lineedit_range_author.text())
+        root = self.ui.treeWidget.invisibleRootItem()
+
+        for i in range(root.childCount()):
+            item = root.child(i)
+            author = str(item.data(1, Qt.UserRole))
+            if str(author).lower() == str(name).lower():
+                item.setCheckState(0, Qt.Checked)
+
         self.widget.deleteLater()
 
     def start_single_video(self):

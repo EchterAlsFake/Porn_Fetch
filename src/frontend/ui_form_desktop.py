@@ -26,15 +26,15 @@ class Ui_Porn_Fetch_Widget(object):
     def setupUi(self, Porn_Fetch_Widget):
         if not Porn_Fetch_Widget.objectName():
             Porn_Fetch_Widget.setObjectName(u"Porn_Fetch_Widget")
-        Porn_Fetch_Widget.resize(1630, 963)
+        Porn_Fetch_Widget.resize(1210, 869)
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Porn_Fetch_Widget.sizePolicy().hasHeightForWidth())
         Porn_Fetch_Widget.setSizePolicy(sizePolicy)
         Porn_Fetch_Widget.setMinimumSize(QSize(100, 50))
-        self.gridLayout_3 = QGridLayout(Porn_Fetch_Widget)
-        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.gridLayout = QGridLayout(Porn_Fetch_Widget)
+        self.gridLayout.setObjectName(u"gridLayout")
         self.gridlayout_main = QGridLayout()
         self.gridlayout_main.setObjectName(u"gridlayout_main")
         self.gridlayout_main.setContentsMargins(-1, -1, -1, 0)
@@ -527,7 +527,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1606, 257))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 387, 206))
         self.gridLayout_18 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_18.setObjectName(u"gridLayout_18")
         self.gridlayout_progressbar = QGridLayout()
@@ -794,7 +794,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_treewidget.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 1606, 446))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 1186, 352))
         self.gridLayout_4 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.verticallayout_treewidget_settings = QVBoxLayout()
@@ -862,6 +862,14 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridlayout_tree_settings.addWidget(self.button_tree_export_video_urls, 1, 2, 1, 1)
 
+        self.button_tree_stop = QPushButton(self.scrollAreaWidgetContents_3)
+        self.button_tree_stop.setObjectName(u"button_tree_stop")
+        sizePolicy1.setHeightForWidth(self.button_tree_stop.sizePolicy().hasHeightForWidth())
+        self.button_tree_stop.setSizePolicy(sizePolicy1)
+        self.button_tree_stop.setMinimumSize(QSize(0, 30))
+
+        self.gridlayout_tree_settings.addWidget(self.button_tree_stop, 0, 2, 1, 1)
+
 
         self.gridLayout_4.addLayout(self.gridlayout_tree_settings, 1, 0, 1, 1)
 
@@ -871,14 +879,6 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridlayout_tree_buttons = QGridLayout()
         self.gridlayout_tree_buttons.setObjectName(u"gridlayout_tree_buttons")
-        self.button_tree_stop = QPushButton(self.widget)
-        self.button_tree_stop.setObjectName(u"button_tree_stop")
-        sizePolicy1.setHeightForWidth(self.button_tree_stop.sizePolicy().hasHeightForWidth())
-        self.button_tree_stop.setSizePolicy(sizePolicy1)
-        self.button_tree_stop.setMinimumSize(QSize(0, 30))
-
-        self.gridlayout_tree_buttons.addWidget(self.button_tree_stop, 1, 2, 1, 1)
-
         self.button_tree_select_range = QPushButton(self.widget)
         self.button_tree_select_range.setObjectName(u"button_tree_select_range")
         sizePolicy1.setHeightForWidth(self.button_tree_select_range.sizePolicy().hasHeightForWidth())
@@ -887,17 +887,12 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_tree_select_range.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.button_tree_select_range.setStyleSheet(u"")
 
-        self.gridlayout_tree_buttons.addWidget(self.button_tree_select_range, 1, 0, 1, 1)
+        self.gridlayout_tree_buttons.addWidget(self.button_tree_select_range, 2, 1, 1, 1)
 
-        self.button_tree_unselect_all = QPushButton(self.widget)
-        self.button_tree_unselect_all.setObjectName(u"button_tree_unselect_all")
-        sizePolicy1.setHeightForWidth(self.button_tree_unselect_all.sizePolicy().hasHeightForWidth())
-        self.button_tree_unselect_all.setSizePolicy(sizePolicy1)
-        self.button_tree_unselect_all.setMinimumSize(QSize(0, 30))
-        self.button_tree_unselect_all.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.button_tree_unselect_all.setStyleSheet(u"")
+        self.button_range_apply_everything = QPushButton(self.widget)
+        self.button_range_apply_everything.setObjectName(u"button_range_apply_everything")
 
-        self.gridlayout_tree_buttons.addWidget(self.button_tree_unselect_all, 1, 1, 1, 1)
+        self.gridlayout_tree_buttons.addWidget(self.button_range_apply_everything, 2, 0, 1, 1)
 
         self.button_tree_download = QPushButton(self.widget)
         self.button_tree_download.setObjectName(u"button_tree_download")
@@ -907,7 +902,17 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_tree_download.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.button_tree_download.setStyleSheet(u"")
 
-        self.gridlayout_tree_buttons.addWidget(self.button_tree_download, 0, 0, 1, 3)
+        self.gridlayout_tree_buttons.addWidget(self.button_tree_download, 1, 0, 1, 3)
+
+        self.button_tree_unselect_all = QPushButton(self.widget)
+        self.button_tree_unselect_all.setObjectName(u"button_tree_unselect_all")
+        sizePolicy1.setHeightForWidth(self.button_tree_unselect_all.sizePolicy().hasHeightForWidth())
+        self.button_tree_unselect_all.setSizePolicy(sizePolicy1)
+        self.button_tree_unselect_all.setMinimumSize(QSize(0, 30))
+        self.button_tree_unselect_all.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.button_tree_unselect_all.setStyleSheet(u"")
+
+        self.gridlayout_tree_buttons.addWidget(self.button_tree_unselect_all, 2, 2, 1, 1)
 
 
         self.verticallayout_treewidget.addLayout(self.gridlayout_tree_buttons)
@@ -1368,7 +1373,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridlayout_main.addLayout(self.gridlayout_status, 3, 0, 1, 1)
 
 
-        self.gridLayout_3.addLayout(self.gridlayout_main, 0, 0, 1, 1)
+        self.gridLayout.addLayout(self.gridlayout_main, 0, 0, 1, 1)
 
         QWidget.setTabOrder(self.lineedit_url, self.button_download)
         QWidget.setTabOrder(self.button_download, self.lineedit_playlist_url)
@@ -1444,7 +1449,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.retranslateUi(Porn_Fetch_Widget)
 
-        self.stacked_widget_main.setCurrentIndex(1)
+        self.stacked_widget_main.setCurrentIndex(0)
         self.stacked_widget_top.setCurrentIndex(3)
 
 
@@ -1537,11 +1542,12 @@ class Ui_Porn_Fetch_Widget(object):
         self.button_tree_select_range.setToolTip(QCoreApplication.translate("Porn_Fetch_Widget", u"Automatically checks a range of videos", None))
 #endif // QT_CONFIG(tooltip)
         self.button_tree_select_range.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Select a range of videos", None))
+        self.button_range_apply_everything.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Select everything", None))
+        self.button_tree_download.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download Selected Videos", None))
 #if QT_CONFIG(tooltip)
         self.button_tree_unselect_all.setToolTip(QCoreApplication.translate("Porn_Fetch_Widget", u"Unselects all videos in the tree widget", None))
 #endif // QT_CONFIG(tooltip)
         self.button_tree_unselect_all.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Unselect all", None))
-        self.button_tree_download.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download Selected Videos", None))
         self.button_download_ffmpeg.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Download and Setup FFmpeg", None))
         self.groupbox_performance.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Performance", None))
         self.label_semaphore.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Simultaneous downloads:", None))

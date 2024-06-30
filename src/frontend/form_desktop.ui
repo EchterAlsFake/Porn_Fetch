@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1630</width>
-    <height>963</height>
+    <width>1210</width>
+    <height>869</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -25,7 +25,7 @@
   <property name="windowTitle">
    <string>Porn Fetch V3.4 (C) Johannes Habel GPL 3</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_3">
+  <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridlayout_main">
      <property name="bottomMargin">
@@ -374,7 +374,7 @@ QPushButton:pressed {
         <number>1</number>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="widget">
         <layout class="QGridLayout" name="gridLayout_8">
@@ -1014,8 +1014,8 @@ QPushButton:pressed {
                    <rect>
                     <x>0</x>
                     <y>0</y>
-                    <width>1606</width>
-                    <height>257</height>
+                    <width>387</width>
+                    <height>206</height>
                    </rect>
                   </property>
                   <layout class="QGridLayout" name="gridLayout_18">
@@ -1497,8 +1497,8 @@ QPushButton:pressed {
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>1606</width>
-                <height>446</height>
+                <width>1186</width>
+                <height>352</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -1636,6 +1636,28 @@ QPushButton:pressed {
                    </property>
                   </widget>
                  </item>
+                 <item row="0" column="2">
+                  <widget class="QPushButton" name="button_tree_stop">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>Does not stop downloading videos</string>
+                   </property>
+                   <property name="text">
+                    <string>Stop loading videos</string>
+                   </property>
+                  </widget>
+                 </item>
                 </layout>
                </item>
               </layout>
@@ -1644,29 +1666,7 @@ QPushButton:pressed {
            </item>
            <item>
             <layout class="QGridLayout" name="gridlayout_tree_buttons">
-             <item row="1" column="2">
-              <widget class="QPushButton" name="button_tree_stop">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>30</height>
-                </size>
-               </property>
-               <property name="toolTip">
-                <string>Does not stop downloading videos</string>
-               </property>
-               <property name="text">
-                <string>Stop loading videos</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
+             <item row="2" column="1">
               <widget class="QPushButton" name="button_tree_select_range">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
@@ -1694,7 +1694,39 @@ QPushButton:pressed {
                </property>
               </widget>
              </item>
-             <item row="1" column="1">
+             <item row="2" column="0">
+              <widget class="QPushButton" name="button_range_apply_everything">
+               <property name="text">
+                <string>Select everything</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0" colspan="3">
+              <widget class="QPushButton" name="button_tree_download">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true"/>
+               </property>
+               <property name="text">
+                <string>Download Selected Videos</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
               <widget class="QPushButton" name="button_tree_unselect_all">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
@@ -1719,31 +1751,6 @@ QPushButton:pressed {
                </property>
                <property name="text">
                 <string>Unselect all</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0" colspan="3">
-              <widget class="QPushButton" name="button_tree_download">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>30</height>
-                </size>
-               </property>
-               <property name="cursor">
-                <cursorShape>PointingHandCursor</cursorShape>
-               </property>
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="text">
-                <string>Download Selected Videos</string>
                </property>
               </widget>
              </item>

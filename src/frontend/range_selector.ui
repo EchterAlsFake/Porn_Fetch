@@ -16,40 +16,6 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="9" column="1">
-      <widget class="QSpinBox" name="spinbox_range_start"/>
-     </item>
-     <item row="6" column="0" colspan="4">
-      <widget class="QLabel" name="label_apply_by_index">
-       <property name="text">
-        <string>Apply by Index:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="0">
-      <widget class="QLabel" name="label_range_start">
-       <property name="text">
-        <string>Start:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QLineEdit" name="lineedit_range_start">
-       <property name="text">
-        <string>0</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="3">
-      <widget class="QSpinBox" name="spinbox_range_end"/>
-     </item>
-     <item row="5" column="3">
-      <widget class="QLineEdit" name="lineedit_range_end">
-       <property name="text">
-        <string>0</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="0" colspan="5">
       <widget class="QTextBrowser" name="textbrowser_range">
        <property name="html">
@@ -72,10 +38,10 @@ p, li { white-space: pre-wrap; }
        </property>
       </widget>
      </item>
-     <item row="5" column="2">
-      <widget class="QLabel" name="label_range_time_end">
+     <item row="5" column="4">
+      <widget class="QPushButton" name="button_range_apply_time">
        <property name="text">
-        <string>End:</string>
+        <string>Apply</string>
        </property>
       </widget>
      </item>
@@ -86,10 +52,27 @@ p, li { white-space: pre-wrap; }
        </property>
       </widget>
      </item>
-     <item row="9" column="4">
-      <widget class="QPushButton" name="button_range_apply_index">
+     <item row="5" column="1">
+      <widget class="QLineEdit" name="lineedit_range_start">
        <property name="text">
-        <string>Apply</string>
+        <string>0</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="lineedit_range_author">
+       <property name="placeholderText">
+        <string>Enter the author's name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="3">
+      <widget class="QSpinBox" name="spinbox_range_end"/>
+     </item>
+     <item row="6" column="0" colspan="4">
+      <widget class="QLabel" name="label_apply_by_index">
+       <property name="text">
+        <string>Apply by Index:</string>
        </property>
       </widget>
      </item>
@@ -100,6 +83,44 @@ p, li { white-space: pre-wrap; }
        </property>
       </widget>
      </item>
+     <item row="9" column="4">
+      <widget class="QPushButton" name="button_range_apply_index">
+       <property name="text">
+        <string>Apply</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
+      <widget class="QLabel" name="label_range_time_end">
+       <property name="text">
+        <string>End:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0">
+      <widget class="QLabel" name="label_range_start">
+       <property name="text">
+        <string>Start:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2" colspan="3">
+      <widget class="QPushButton" name="button_range_apply_author">
+       <property name="text">
+        <string>Apply</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="1">
+      <widget class="QSpinBox" name="spinbox_range_start"/>
+     </item>
+     <item row="5" column="3">
+      <widget class="QLineEdit" name="lineedit_range_end">
+       <property name="text">
+        <string>0</string>
+       </property>
+      </widget>
+     </item>
      <item row="5" column="0">
       <widget class="QLabel" name="label_range_time_start">
        <property name="text">
@@ -107,17 +128,10 @@ p, li { white-space: pre-wrap; }
        </property>
       </widget>
      </item>
-     <item row="11" column="0" colspan="5">
-      <widget class="QPushButton" name="button_range_apply_everything">
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_range_by_author">
        <property name="text">
-        <string>Select everything</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="4">
-      <widget class="QPushButton" name="button_range_apply_time">
-       <property name="text">
-        <string>Apply</string>
+        <string>Apply by author:</string>
        </property>
       </widget>
      </item>
