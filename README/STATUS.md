@@ -14,6 +14,10 @@
 - [] Fixing file progress
 - [x] Fixing the tag writing function
 - [] Entirely reworking the Layout, the UI design AND the Android Layout
+- [] Adding support for Spankbang (easy)
+- [] Adding support for Porntrex (even easier) (I don't know who tf wrote their JS code, but this guy should be fire)
+- [] Adding support for Porngo (easy, but I am not so motivated, because the site is shit fr)
+- [] Adding support for Youjizz
 
 """
 Update:
