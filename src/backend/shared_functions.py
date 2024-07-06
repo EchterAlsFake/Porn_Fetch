@@ -19,6 +19,7 @@ from eporner_api.eporner_api import Client as ep_Client, Video as ep_Video
 from eporner_api.modules.locals import Category as ep_Category
 from xnxx_api.xnxx_api import Client as xn_Client, Video as xn_Video
 from xvideos_api.xvideos_api import Client as xv_Client, Video as xv_Video
+from spankbang_api.spankbang_api import Client as sp_Client, Video as sp_Video
 from base_api.modules.download import FFMPEG as bs_ffmpeg, default as bs_default, threaded as bs_threaded
 from base_api.modules.quality import Quality as bs_Quality
 from ffmpeg_progress_yield import FfmpegProgress
@@ -39,6 +40,7 @@ hqporner_pattern = re.compile(r'(.*?)hqporner.com(.*)')
 xnxx_pattern = re.compile(r'(.*?)xnxx.com(.*)')
 xvideos_pattern = re.compile(r'(.*?)xvideos.com(.*)')
 eporner_pattern = re.compile(r'(.*?)eporner.com(.*)')
+spankbang_pattern = re.compile(r'(.*?)spankbang.com(.*)')
 
 """
 Explanation:
@@ -103,6 +105,9 @@ def check_video(url, is_url=True, delay=False):
         elif xvideos_pattern.search(str(url)):
             return xv_Client().get_video(url)
 
+        elif spankbang_pattern.search(str(url)):
+            return sp_Client().get_video(url)
+
         if isinstance(url, Video):
             url.fetch("page@")
             return url
@@ -117,6 +122,9 @@ def check_video(url, is_url=True, delay=False):
             return url
 
         elif isinstance(url, xv_Video):
+            return url
+
+        elif isinstance(url, sp_Video):
             return url
 
         elif isinstance(url, str) and not str(url).endswith(".html"):
@@ -214,17 +222,6 @@ def correct_output_path(output_path):
         return output_path
 
 
-def get_element_safe(list, index):
-    """
-    I need this for the metadata functions, because not always are all values in the actual list, which need to be
-    extracted.
-    """
-    if 0 <= index < len(list):
-        return list[index]
-    else:
-        return ""
-
-
 def load_video_attributes(video):
     title = video.title
 
@@ -272,6 +269,16 @@ def load_video_attributes(video):
         tags = ",".join([category for category in video.categories])
         publish_date = video.publish_date
         thumbnail = video.get_thumbnails()[0]
+
+    elif isinstance(video, sp_Video):
+        author = video.author
+        _length = video.length.split(":")
+        length_minutes = _length[0] + "m"
+        length_seconds = _length[1] + "s"
+        length = length_minutes + " " + length_seconds
+        tags = ",".join([tag for tag in video.tags])
+        publish_date = video.publish_date
+        thumbnail = video.thumbnail
 
     data = [title, author, length, tags, publish_date, thumbnail]
     return data

@@ -416,7 +416,7 @@ QPushButton:pressed {
               <number>1</number>
              </property>
              <property name="currentIndex">
-              <number>3</number>
+              <number>2</number>
              </property>
              <widget class="QWidget" name="page_download">
               <layout class="QGridLayout" name="gridLayout_5">
@@ -1014,67 +1014,13 @@ QPushButton:pressed {
                    <rect>
                     <x>0</x>
                     <y>0</y>
-                    <width>387</width>
-                    <height>206</height>
+                    <width>1186</width>
+                    <height>236</height>
                    </rect>
                   </property>
                   <layout class="QGridLayout" name="gridLayout_18">
                    <item row="1" column="0">
                     <layout class="QGridLayout" name="gridlayout_progressbar">
-                     <item row="4" column="1">
-                      <widget class="QProgressBar" name="progressbar_xvideos">
-                       <property name="value">
-                        <number>0</number>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="0">
-                      <widget class="QLabel" name="label_progress_pornhub">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="text">
-                        <string>PornHub:</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="4" column="0">
-                      <widget class="QLabel" name="label_progress_xvideos">
-                       <property name="text">
-                        <string>XVideos</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="3" column="0">
-                      <widget class="QLabel" name="label_progress_xnxx">
-                       <property name="text">
-                        <string>XNXX</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="3" column="1">
-                      <widget class="QProgressBar" name="progressbar_xnxx">
-                       <property name="value">
-                        <number>0</number>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="0">
-                      <widget class="QLabel" name="label_progress_hqporner">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="text">
-                        <string>HQPorner:</string>
-                       </property>
-                      </widget>
-                     </item>
                      <item row="1" column="1">
                       <widget class="QProgressBar" name="progressbar_hqporner">
                        <property name="sizePolicy">
@@ -1091,6 +1037,32 @@ QPushButton:pressed {
                        </property>
                        <property name="value">
                         <number>0</number>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="8" column="1">
+                      <spacer name="verticalspacer_progress_bars">
+                       <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                       </property>
+                       <property name="sizeHint" stdset="0">
+                        <size>
+                         <width>20</width>
+                         <height>40</height>
+                        </size>
+                       </property>
+                      </spacer>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="label_progress_pornhub">
+                       <property name="sizePolicy">
+                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                         <horstretch>0</horstretch>
+                         <verstretch>0</verstretch>
+                        </sizepolicy>
+                       </property>
+                       <property name="text">
+                        <string>PornHub:</string>
                        </property>
                       </widget>
                      </item>
@@ -1113,18 +1085,12 @@ QPushButton:pressed {
                        </property>
                       </widget>
                      </item>
-                     <item row="6" column="1">
-                      <spacer name="verticalspacer_progress_bars">
-                       <property name="orientation">
-                        <enum>Qt::Vertical</enum>
+                     <item row="2" column="0">
+                      <widget class="QLabel" name="label_progress_eporner">
+                       <property name="text">
+                        <string>Eporner</string>
                        </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>20</width>
-                         <height>40</height>
-                        </size>
-                       </property>
-                      </spacer>
+                      </widget>
                      </item>
                      <item row="2" column="1">
                       <widget class="QProgressBar" name="progressbar_eporner">
@@ -1133,27 +1099,75 @@ QPushButton:pressed {
                        </property>
                       </widget>
                      </item>
-                     <item row="2" column="0">
-                      <widget class="QLabel" name="label_progress_eporner">
-                       <property name="text">
-                        <string>Eporner</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="5" column="0">
-                      <widget class="QLabel" name="label_info">
-                       <property name="text">
-                        <string>Info:</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="5" column="1">
+                     <item row="6" column="1">
                       <widget class="QLineEdit" name="lineedit_download_info">
                        <property name="text">
                         <string/>
                        </property>
                        <property name="readOnly">
                         <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="3" column="0">
+                      <widget class="QLabel" name="label_progress_xnxx">
+                       <property name="text">
+                        <string>XNXX</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="0">
+                      <widget class="QLabel" name="label_progress_hqporner">
+                       <property name="sizePolicy">
+                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                         <horstretch>0</horstretch>
+                         <verstretch>0</verstretch>
+                        </sizepolicy>
+                       </property>
+                       <property name="text">
+                        <string>HQPorner:</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="4" column="1">
+                      <widget class="QProgressBar" name="progressbar_xvideos">
+                       <property name="value">
+                        <number>0</number>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="6" column="0">
+                      <widget class="QLabel" name="label_info">
+                       <property name="text">
+                        <string>Info:</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="4" column="0">
+                      <widget class="QLabel" name="label_progress_xvideos">
+                       <property name="text">
+                        <string>XVideos</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="3" column="1">
+                      <widget class="QProgressBar" name="progressbar_xnxx">
+                       <property name="value">
+                        <number>0</number>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="5" column="0">
+                      <widget class="QLabel" name="label_progress_spankbang">
+                       <property name="text">
+                        <string>Spankbang:</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="5" column="1">
+                      <widget class="QProgressBar" name="progressbar_spankbang">
+                       <property name="value">
+                        <number>0</number>
                        </property>
                       </widget>
                      </item>
@@ -1498,7 +1512,7 @@ QPushButton:pressed {
                 <x>0</x>
                 <y>0</y>
                 <width>1186</width>
-                <height>352</height>
+                <height>385</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -1787,8 +1801,8 @@ QPushButton:pressed {
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>1608</width>
-              <height>787</height>
+              <width>1188</width>
+              <height>705</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_19">
