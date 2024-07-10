@@ -932,7 +932,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_settings.setWidgetResizable(True)
         self.scrollAreaWidgetContents_6 = QWidget()
         self.scrollAreaWidgetContents_6.setObjectName(u"scrollAreaWidgetContents_6")
-        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 1608, 787))
+        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 1188, 693))
         self.gridLayout_19 = QGridLayout(self.scrollAreaWidgetContents_6)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.button_download_ffmpeg = QPushButton(self.scrollAreaWidgetContents_6)
@@ -1107,33 +1107,28 @@ class Ui_Porn_Fetch_Widget(object):
         self.groupbox_videos.setObjectName(u"groupbox_videos")
         self.gridLayout_10 = QGridLayout(self.groupbox_videos)
         self.gridLayout_10.setObjectName(u"gridLayout_10")
-        self.horizontallayout_directory_system = QHBoxLayout()
-        self.horizontallayout_directory_system.setObjectName(u"horizontallayout_directory_system")
-        self.label_directory_system = QLabel(self.groupbox_videos)
-        self.label_directory_system.setObjectName(u"label_directory_system")
+        self.horizontallayout_result_limit = QHBoxLayout()
+        self.horizontallayout_result_limit.setObjectName(u"horizontallayout_result_limit")
+        self.label_searching_limit = QLabel(self.groupbox_videos)
+        self.label_searching_limit.setObjectName(u"label_searching_limit")
 
-        self.horizontallayout_directory_system.addWidget(self.label_directory_system)
+        self.horizontallayout_result_limit.addWidget(self.label_searching_limit)
 
-        self.radio_directory_system_yes = QRadioButton(self.groupbox_videos)
-        self.radio_directory_system_yes.setObjectName(u"radio_directory_system_yes")
-        self.radio_directory_system_yes.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.spinbox_treewidget_limit = QSpinBox(self.groupbox_videos)
+        self.spinbox_treewidget_limit.setObjectName(u"spinbox_treewidget_limit")
+        self.spinbox_treewidget_limit.setMinimum(1)
+        self.spinbox_treewidget_limit.setMaximum(5000)
 
-        self.horizontallayout_directory_system.addWidget(self.radio_directory_system_yes)
+        self.horizontallayout_result_limit.addWidget(self.spinbox_treewidget_limit)
 
-        self.radio_directory_system_no = QRadioButton(self.groupbox_videos)
-        self.radio_directory_system_no.setObjectName(u"radio_directory_system_no")
-        self.radio_directory_system_no.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.button_result_limit_help = QPushButton(self.groupbox_videos)
+        self.button_result_limit_help.setObjectName(u"button_result_limit_help")
+        self.button_result_limit_help.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.horizontallayout_directory_system.addWidget(self.radio_directory_system_no)
-
-        self.button_directory_system_help = QPushButton(self.groupbox_videos)
-        self.button_directory_system_help.setObjectName(u"button_directory_system_help")
-        self.button_directory_system_help.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.horizontallayout_directory_system.addWidget(self.button_directory_system_help)
+        self.horizontallayout_result_limit.addWidget(self.button_result_limit_help)
 
 
-        self.gridLayout_10.addLayout(self.horizontallayout_directory_system, 2, 0, 1, 1)
+        self.gridLayout_10.addLayout(self.horizontallayout_result_limit, 3, 0, 1, 1)
 
         self.horizontallayout_output_path = QHBoxLayout()
         self.horizontallayout_output_path.setObjectName(u"horizontallayout_output_path")
@@ -1186,28 +1181,58 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_10.addLayout(self.horizontallayout_quality, 0, 0, 1, 1)
 
-        self.horizontallayout_result_limit = QHBoxLayout()
-        self.horizontallayout_result_limit.setObjectName(u"horizontallayout_result_limit")
-        self.label_searching_limit = QLabel(self.groupbox_videos)
-        self.label_searching_limit.setObjectName(u"label_searching_limit")
+        self.horizontallayout_directory_system = QHBoxLayout()
+        self.horizontallayout_directory_system.setObjectName(u"horizontallayout_directory_system")
+        self.label_directory_system = QLabel(self.groupbox_videos)
+        self.label_directory_system.setObjectName(u"label_directory_system")
 
-        self.horizontallayout_result_limit.addWidget(self.label_searching_limit)
+        self.horizontallayout_directory_system.addWidget(self.label_directory_system)
 
-        self.spinbox_treewidget_limit = QSpinBox(self.groupbox_videos)
-        self.spinbox_treewidget_limit.setObjectName(u"spinbox_treewidget_limit")
-        self.spinbox_treewidget_limit.setMinimum(1)
-        self.spinbox_treewidget_limit.setMaximum(5000)
+        self.radio_directory_system_yes = QRadioButton(self.groupbox_videos)
+        self.radio_directory_system_yes.setObjectName(u"radio_directory_system_yes")
+        self.radio_directory_system_yes.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.horizontallayout_result_limit.addWidget(self.spinbox_treewidget_limit)
+        self.horizontallayout_directory_system.addWidget(self.radio_directory_system_yes)
 
-        self.button_result_limit_help = QPushButton(self.groupbox_videos)
-        self.button_result_limit_help.setObjectName(u"button_result_limit_help")
-        self.button_result_limit_help.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.radio_directory_system_no = QRadioButton(self.groupbox_videos)
+        self.radio_directory_system_no.setObjectName(u"radio_directory_system_no")
+        self.radio_directory_system_no.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.horizontallayout_result_limit.addWidget(self.button_result_limit_help)
+        self.horizontallayout_directory_system.addWidget(self.radio_directory_system_no)
+
+        self.button_directory_system_help = QPushButton(self.groupbox_videos)
+        self.button_directory_system_help.setObjectName(u"button_directory_system_help")
+        self.button_directory_system_help.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.horizontallayout_directory_system.addWidget(self.button_directory_system_help)
 
 
-        self.gridLayout_10.addLayout(self.horizontallayout_result_limit, 3, 0, 1, 1)
+        self.gridLayout_10.addLayout(self.horizontallayout_directory_system, 2, 0, 1, 1)
+
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.label_skip_existing_files = QLabel(self.groupbox_videos)
+        self.label_skip_existing_files.setObjectName(u"label_skip_existing_files")
+
+        self.horizontalLayout_2.addWidget(self.label_skip_existing_files)
+
+        self.radio_skip_existing_files_yes = QRadioButton(self.groupbox_videos)
+        self.radio_skip_existing_files_yes.setObjectName(u"radio_skip_existing_files_yes")
+
+        self.horizontalLayout_2.addWidget(self.radio_skip_existing_files_yes)
+
+        self.radio_skip_existing_files_no = QRadioButton(self.groupbox_videos)
+        self.radio_skip_existing_files_no.setObjectName(u"radio_skip_existing_files_no")
+
+        self.horizontalLayout_2.addWidget(self.radio_skip_existing_files_no)
+
+        self.button_help_skip_existing_files = QPushButton(self.groupbox_videos)
+        self.button_help_skip_existing_files.setObjectName(u"button_help_skip_existing_files")
+
+        self.horizontalLayout_2.addWidget(self.button_help_skip_existing_files)
+
+
+        self.gridLayout_10.addLayout(self.horizontalLayout_2, 4, 0, 1, 1)
 
 
         self.gridLayout_19.addWidget(self.groupbox_videos, 2, 0, 1, 1)
@@ -1449,7 +1474,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.retranslateUi(Porn_Fetch_Widget)
 
-        self.stacked_widget_main.setCurrentIndex(0)
+        self.stacked_widget_main.setCurrentIndex(1)
         self.stacked_widget_top.setCurrentIndex(3)
 
 
@@ -1566,10 +1591,8 @@ class Ui_Porn_Fetch_Widget(object):
         self.label_maximal_retries.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Maximal retries:", None))
         self.button_timeout_maximal_retries_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
         self.groupbox_videos.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Videos", None))
-        self.label_directory_system.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Use Directory system? ", None))
-        self.radio_directory_system_yes.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
-        self.radio_directory_system_no.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
-        self.button_directory_system_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
+        self.label_searching_limit.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Result Limit:", None))
+        self.button_result_limit_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
         self.label_output_path.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Output path:", None))
         self.lineedit_output_path.setPlaceholderText(QCoreApplication.translate("Porn_Fetch_Widget", u"Enter \"./\" for current directory", None))
         self.button_output_path_select.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Open", None))
@@ -1577,8 +1600,14 @@ class Ui_Porn_Fetch_Widget(object):
         self.radio_quality_best.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Best", None))
         self.radio_quality_half.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Half", None))
         self.radio_quality_worst.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Worst", None))
-        self.label_searching_limit.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Result Limit:", None))
-        self.button_result_limit_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
+        self.label_directory_system.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Use Directory system? ", None))
+        self.radio_directory_system_yes.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
+        self.radio_directory_system_no.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
+        self.button_directory_system_help.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
+        self.label_skip_existing_files.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Skip existing files:", None))
+        self.radio_skip_existing_files_yes.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Yes", None))
+        self.radio_skip_existing_files_no.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"No", None))
+        self.button_help_skip_existing_files.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Help", None))
         self.goroupbox_gui.setTitle(QCoreApplication.translate("Porn_Fetch_Widget", u"Graphical User Interface", None))
         self.radio_ui_language_german.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"German", None))
         self.radio_ui_language_chinese_simplified.setText(QCoreApplication.translate("Porn_Fetch_Widget", u"Chinese (simplified)", None))

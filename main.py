@@ -1,3 +1,4 @@
+import random
 import time
 import sys
 import os.path
@@ -8,7 +9,7 @@ import shutil
 import tarfile
 import src.frontend.resources
 
-from itertools import islice
+from itertools import islice, chain
 from threading import Event
 from pathlib import Path
 
@@ -275,7 +276,7 @@ There's a problem with your internet access... Are certain Porn sites blocked by
 class DownloadThread(QRunnable):
     """Refactored threading class to download videos with improved performance and logic."""
 
-    def __init__(self, video, quality, output_path, threading_mode, workers, timeout, stop_flag):
+    def __init__(self, video, quality, output_path, threading_mode, workers, timeout, stop_flag, skip_existing_files):
         super().__init__()
         self.video = video
         self.ffmpeg = None
@@ -284,6 +285,7 @@ class DownloadThread(QRunnable):
         self.threading_mode = threading_mode
         self.signals = Signals()
         self.stop_flag = stop_flag
+        self.skip_existing_files = skip_existing_files
         self.workers = int(workers)
         self.timeout = int(timeout)
         self.video_progress = {}
@@ -347,9 +349,16 @@ class DownloadThread(QRunnable):
         """Run the download in a thread, optimizing for different video sources and modes."""
         try:
             if os.path.isfile(self.output_path):
-                logger_debug("The file already exists, skipping...")
-                self.signals.completed.emit()
-                return
+                if self.skip_existing_files:
+                    logger_debug("The file already exists, skipping...")
+                    self.signals.completed.emit()
+                    return
+
+                else:
+                    logger_debug("The file already exists, appending random number...")
+                    path = str(self.output_path).split(".")
+                    path = path[0] + str(random.randint(0, 1000)) + ".mp4"
+                    self.output_path = path
 
             logger_debug(f"Downloading Video to: {self.output_path}")
             if self.threading_mode == "FFMPEG" or self.threading_mode == download.FFMPEG:
@@ -652,6 +661,7 @@ class Porn_Fetch(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         # Variable initialization:
+        self.skip_existing_files = None
         self.gui_language_map = None
         self.max_retries = None
         self.workers = None
@@ -753,6 +763,7 @@ class Porn_Fetch(QWidget):
         self.ui.button_result_limit_help.clicked.connect(result_limit_help)
         self.ui.button_help_file.clicked.connect(open_file_help)
         self.ui.button_timeout_maximal_retries_help.clicked.connect(max_retries_help)
+        self.ui.button_help_skip_existing_files.clicked.connect(skip_existing_files_help)
 
         # Settings
         self.ui.button_settings_apply.clicked.connect(self.save_user_settings)
@@ -940,6 +951,13 @@ class Porn_Fetch(QWidget):
         self.timeout = int(self.conf["Performance"]["timeout"])
         self.workers = int(self.conf["Performance"]["workers"])
         self.max_retries = int(self.conf["Performance"]["retries"])
+        self.skip_existing_files = True if self.conf["Video"]["skip_existing_files"] == "true" else False
+
+        if self.skip_existing_files:
+            self.ui.radio_skip_existing_files_yes.setChecked(True)
+
+        else:
+            self.ui.radio_skip_existing_files_no.setChecked(True)
 
         self.ui.spinbox_maximal_timeout.setValue(int(self.timeout))
         self.ui.spinbox_maximal_workers.setValue(int(self.workers))
@@ -971,6 +989,12 @@ class Porn_Fetch(QWidget):
             if radio_button.isChecked():
                 self.conf.set("UI", "language", language)
 
+        if self.ui.radio_skip_existing_files_no.isChecked():
+            self.conf.set("Video", "skip_existing_files", "false")
+
+        else:
+            self.conf.set("Video", "skip_existing_files", "true")
+
         # Save other settings
         self.conf.set("Performance", "semaphore", str(self.ui.spinbox_semaphore.value()))
         self.conf.set("Video", "search_limit", str(self.ui.spinbox_treewidget_limit.value()))
@@ -983,7 +1007,7 @@ class Porn_Fetch(QWidget):
         with open("config.ini", "w") as config_file:
             self.conf.write(config_file)
 
-        ui_popup(QCoreApplication.tr(self, "Saved User Settings, please restart Porn Fetch!", None))
+        ui_popup(QCoreApplication.tr("Saved User Settings, please restart Porn Fetch!", None))
         logger_debug("Saved User Settings, please restart Porn Fetch.")
 
     def check_for_updates(self):
@@ -1149,9 +1173,8 @@ This warning won't be shown again.
         author = data[1]
         try:
             duration = float(data[2])  # Ensure duration is a float
-            print(duration)
+
         except ValueError:
-            logger_error("Value Error occurred :(")
             duration = parse_length(data[2])
 
         index = data[3]
@@ -1334,8 +1357,6 @@ This warning won't be shown again.
         else:
             model = self.ui.lineedit_model_url.text()
 
-        search_limit = self.search_limit
-
         if pornhub_pattern.match(model):
             if not isinstance(self.client, Client):
                 client = Client(delay=self.delay)
@@ -1345,14 +1366,14 @@ This warning won't be shown again.
 
             model_object = client.get_user(model)
             videos = model_object.videos
+            uploads = model_object.uploads
+            videos = chain(uploads, videos)
 
         elif hqporner_pattern.match(model):
-            pages = round(search_limit / 46)
             videos = hq_Client().get_videos_by_actress(name=model)
 
         elif eporner_pattern.match(model):
-            pages = round(search_limit / 38)
-            videos = ep_Client.get_pornstar(url=model, enable_html_scraping=True).videos(pages=pages)
+            videos = ep_Client.get_pornstar(url=model, enable_html_scraping=True).videos()
 
         elif xnxx_pattern.match(model):
             videos = xn_Client.get_user(url=model).videos
@@ -1397,7 +1418,7 @@ This warning won't be shown again.
         """Checks which of the three types of threading the user selected and handles them."""
         self.download_thread = DownloadThread(video=video, output_path=output_path, quality=quality,
                                               threading_mode=threading_mode, workers=self.workers, timeout=self.timeout,
-                                              stop_flag=stop_flag)
+                                              stop_flag=stop_flag, skip_existing_files=self.skip_existing_files)
         self.download_thread.signals.progress.connect(self.update_progressbar)
         self.download_thread.signals.total_progress.connect(self.update_total_progressbar)
         self.download_thread.signals.progress_hqporner.connect(self.update_progressbar_hqporner)

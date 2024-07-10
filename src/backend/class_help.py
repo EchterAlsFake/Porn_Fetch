@@ -115,10 +115,17 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
     ui_popup(text)
 
 
-def discord_rich_presence_help():
+def skip_existing_files_help():
     text = QCoreApplication.tr("""
-Discord Rich Presence will show in your discord profile, that you are currently running Porn Fetch. I don't force 
-anyone to use it, as it is maybe a bit weird if your friends or some other people would see this, but it's useful for 
-advertising my project. It's disabled by default, but if you want, you can turn it on :)
+If you fetch a video and the exact same filename already exists, usually Porn Fetch would just skip this file.
+If you set this option to No, then Porn Fetch instead download the video and append a random number to it.
+
+For example you have downloded a video called:
+
+Spain_didnt_win_against_Germany.mp4
+
+and you download a video with the same title, then it would append a random number to it:
+
+Spain_didnt_win_against_Germany_118251.mp4
 """, None)
     ui_popup(text)

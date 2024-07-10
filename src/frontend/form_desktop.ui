@@ -374,7 +374,7 @@ QPushButton:pressed {
         <number>1</number>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="widget">
         <layout class="QGridLayout" name="gridLayout_8">
@@ -1787,8 +1787,8 @@ QPushButton:pressed {
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>1608</width>
-              <height>787</height>
+              <width>1188</width>
+              <height>693</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_19">
@@ -2030,37 +2030,27 @@ QPushButton:pressed {
                 <string>Videos</string>
                </property>
                <layout class="QGridLayout" name="gridLayout_10">
-                <item row="2" column="0">
-                 <layout class="QHBoxLayout" name="horizontallayout_directory_system">
+                <item row="3" column="0">
+                 <layout class="QHBoxLayout" name="horizontallayout_result_limit">
                   <item>
-                   <widget class="QLabel" name="label_directory_system">
+                   <widget class="QLabel" name="label_searching_limit">
                     <property name="text">
-                     <string>Use Directory system? </string>
+                     <string>Result Limit:</string>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QRadioButton" name="radio_directory_system_yes">
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
+                   <widget class="QSpinBox" name="spinbox_treewidget_limit">
+                    <property name="minimum">
+                     <number>1</number>
                     </property>
-                    <property name="text">
-                     <string>Yes</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QRadioButton" name="radio_directory_system_no">
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="text">
-                     <string>No</string>
+                    <property name="maximum">
+                     <number>5000</number>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="button_directory_system_help">
+                   <widget class="QPushButton" name="button_result_limit_help">
                     <property name="cursor">
                      <cursorShape>PointingHandCursor</cursorShape>
                     </property>
@@ -2146,30 +2136,72 @@ QPushButton:pressed {
                   </item>
                  </layout>
                 </item>
-                <item row="3" column="0">
-                 <layout class="QHBoxLayout" name="horizontallayout_result_limit">
+                <item row="2" column="0">
+                 <layout class="QHBoxLayout" name="horizontallayout_directory_system">
                   <item>
-                   <widget class="QLabel" name="label_searching_limit">
+                   <widget class="QLabel" name="label_directory_system">
                     <property name="text">
-                     <string>Result Limit:</string>
+                     <string>Use Directory system? </string>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QSpinBox" name="spinbox_treewidget_limit">
-                    <property name="minimum">
-                     <number>1</number>
-                    </property>
-                    <property name="maximum">
-                     <number>5000</number>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="button_result_limit_help">
+                   <widget class="QRadioButton" name="radio_directory_system_yes">
                     <property name="cursor">
                      <cursorShape>PointingHandCursor</cursorShape>
                     </property>
+                    <property name="text">
+                     <string>Yes</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="radio_directory_system_no">
+                    <property name="cursor">
+                     <cursorShape>PointingHandCursor</cursorShape>
+                    </property>
+                    <property name="text">
+                     <string>No</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="button_directory_system_help">
+                    <property name="cursor">
+                     <cursorShape>PointingHandCursor</cursorShape>
+                    </property>
+                    <property name="text">
+                     <string>Help</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item row="4" column="0">
+                 <layout class="QHBoxLayout" name="horizontalLayout_2">
+                  <item>
+                   <widget class="QLabel" name="label_skip_existing_files">
+                    <property name="text">
+                     <string>Skip existing files:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="radio_skip_existing_files_yes">
+                    <property name="text">
+                     <string>Yes</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="radio_skip_existing_files_no">
+                    <property name="text">
+                     <string>No</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="button_help_skip_existing_files">
                     <property name="text">
                      <string>Help</string>
                     </property>
