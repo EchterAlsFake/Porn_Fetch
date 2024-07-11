@@ -1497,8 +1497,8 @@ QPushButton:pressed {
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>1186</width>
-                <height>352</height>
+                <width>478</width>
+                <height>289</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -2030,6 +2030,34 @@ QPushButton:pressed {
                 <string>Videos</string>
                </property>
                <layout class="QGridLayout" name="gridLayout_10">
+                <item row="1" column="0">
+                 <layout class="QHBoxLayout" name="horizontallayout_output_path">
+                  <item>
+                   <widget class="QLabel" name="label_output_path">
+                    <property name="text">
+                     <string>Output path:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineedit_output_path">
+                    <property name="placeholderText">
+                     <string>Enter &quot;./&quot; for current directory</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="button_output_path_select">
+                    <property name="cursor">
+                     <cursorShape>PointingHandCursor</cursorShape>
+                    </property>
+                    <property name="text">
+                     <string>Open</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
                 <item row="3" column="0">
                  <layout class="QHBoxLayout" name="horizontallayout_result_limit">
                   <item>
@@ -2056,34 +2084,6 @@ QPushButton:pressed {
                     </property>
                     <property name="text">
                      <string>Help</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item row="1" column="0">
-                 <layout class="QHBoxLayout" name="horizontallayout_output_path">
-                  <item>
-                   <widget class="QLabel" name="label_output_path">
-                    <property name="text">
-                     <string>Output path:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="lineedit_output_path">
-                    <property name="placeholderText">
-                     <string>Enter &quot;./&quot; for current directory</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="button_output_path_select">
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="text">
-                     <string>Open</string>
                     </property>
                    </widget>
                   </item>
@@ -2136,6 +2136,38 @@ QPushButton:pressed {
                   </item>
                  </layout>
                 </item>
+                <item row="4" column="0">
+                 <layout class="QHBoxLayout" name="horizontalLayout_2">
+                  <item>
+                   <widget class="QLabel" name="label_skip_existing_files">
+                    <property name="text">
+                     <string>Skip existing files:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="radio_skip_existing_files_yes">
+                    <property name="text">
+                     <string>Yes</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="radio_skip_existing_files_no">
+                    <property name="text">
+                     <string>No</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="button_help_skip_existing_files">
+                    <property name="text">
+                     <string>Help</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
                 <item row="2" column="0">
                  <layout class="QHBoxLayout" name="horizontallayout_directory_system">
                   <item>
@@ -2177,31 +2209,38 @@ QPushButton:pressed {
                   </item>
                  </layout>
                 </item>
-                <item row="4" column="0">
-                 <layout class="QHBoxLayout" name="horizontalLayout_2">
+                <item row="5" column="0">
+                 <layout class="QHBoxLayout" name="horizontalLayout_3">
                   <item>
-                   <widget class="QLabel" name="label_skip_existing_files">
+                   <widget class="QLabel" name="labe_settings_videos_model">
                     <property name="text">
-                     <string>Skip existing files:</string>
+                     <string>Model videos (PornHub)</string>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QRadioButton" name="radio_skip_existing_files_yes">
+                   <widget class="QRadioButton" name="radio_model_uploads">
                     <property name="text">
-                     <string>Yes</string>
+                     <string>User uploads</string>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QRadioButton" name="radio_skip_existing_files_no">
+                   <widget class="QRadioButton" name="radio_model_featured">
                     <property name="text">
-                     <string>No</string>
+                     <string>Featured videos</string>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="button_help_skip_existing_files">
+                   <widget class="QRadioButton" name="radio_model_both">
+                    <property name="text">
+                     <string>Both</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="button_help_model_videos">
                     <property name="text">
                      <string>Help</string>
                     </property>

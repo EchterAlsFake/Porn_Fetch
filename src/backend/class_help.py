@@ -129,3 +129,15 @@ and you download a video with the same title, then it would append a random numb
 Spain_didnt_win_against_Germany_118251.mp4
 """, None)
     ui_popup(text)
+
+
+def model_videos_help():
+    text = QCoreApplication.tr("""
+User uploads and featured videos are two different things. User uploads are the videos which were really uploaded
+by the model and the featured videos are videos the model is part or featured in.
+
+For example the model Nancy Ace has like 10 self uploaded which she made by herself, but she is part in like thousands
+of videos from other studios.
+
+If you choose "User Uploads", only self uploaded videos will be fetched, and the other way around :)""", None)
+    ui_popup(text)

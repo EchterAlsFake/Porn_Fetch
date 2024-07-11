@@ -31,7 +31,8 @@ as they are indeed needed for the main applications!
 
 sections = ["Performance", "License", "Video", "UI"]
 options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries", "ffmpeg_warning"]
-options_video = ["quality", "output_path", "directory_system", "search_limit", "delay", "skip_existing_files"]
+options_video = ["quality", "output_path", "directory_system", "search_limit", "delay", "skip_existing_files",
+                 "model_videos"]
 options_license = ["accepted"]
 options_ui = ["language"]
 
@@ -77,6 +78,7 @@ directory_system = 0
 search_limit = 50
 delay = 0
 skip_existing_files = true
+model_videos = both
 
 [UI]
 language = system

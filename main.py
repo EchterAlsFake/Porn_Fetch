@@ -269,6 +269,10 @@ Error: {e}""")
 There's a problem with your internet access... Are certain Porn sites blocked by a firewall or your ISP?""")
                         break
 
+                    except errors.RegionBlocked:
+                        logger_error(f"Video: {video.url} is not available in your region, skipping...")
+                        try_attempt = False
+
         finally:
             self.signals.finished.emit()
 
@@ -661,6 +665,8 @@ class Porn_Fetch(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         # Variable initialization:
+        self.model_videos_map = None
+        self.model_videos_type = None
         self.skip_existing_files = None
         self.gui_language_map = None
         self.max_retries = None
@@ -736,6 +742,15 @@ class Porn_Fetch(QWidget):
         self.radio_hqporner.addButton(self.ui.radio_top_porn_month)
         self.radio_hqporner.addButton(self.ui.radio_top_porn_all_time)
 
+        self.radio_skip_existing_files = QButtonGroup()
+        self.radio_skip_existing_files.addButton(self.ui.radio_skip_existing_files_yes)
+        self.radio_skip_existing_files.addButton(self.ui.radio_skip_existing_files_no)
+
+        self.radio_model_videos = QButtonGroup()
+        self.radio_model_videos.addButton(self.ui.radio_model_both)
+        self.radio_model_videos.addButton(self.ui.radio_model_uploads)
+        self.radio_model_videos.addButton(self.ui.radio_model_featured)
+
     def button_connectors(self):
         """a function to link the buttons to their functions"""
         # Menu Bar Switch Button Connections
@@ -764,6 +779,7 @@ class Porn_Fetch(QWidget):
         self.ui.button_help_file.clicked.connect(open_file_help)
         self.ui.button_timeout_maximal_retries_help.clicked.connect(max_retries_help)
         self.ui.button_help_skip_existing_files.clicked.connect(skip_existing_files_help)
+        self.ui.button_help_model_videos.clicked.connect(model_videos_help)
 
         # Settings
         self.ui.button_settings_apply.clicked.connect(self.save_user_settings)
@@ -819,7 +835,9 @@ class Porn_Fetch(QWidget):
             self.ui.button_result_limit_help: "faq.svg",
             self.ui.button_timeout_maximal_retries_help: "faq.svg",
             self.ui.button_help_file: "faq.svg",
-            self.ui.button_view_progress_bars: "progressbars.svg"
+            self.ui.button_view_progress_bars: "progressbars.svg",
+            self.ui.button_help_model_videos: "faq.svg",
+            self.ui.button_help_skip_existing_files: "faq.svg",
         }
         for button, icon_name in icons.items():
             if icon_name == "settings.svg" or icon_name == "tools.svg":
@@ -927,6 +945,12 @@ class Porn_Fetch(QWidget):
             "system": self.ui.radio_ui_language_system_default
         }
 
+        self.model_videos_map = {
+            "both": self.ui.radio_model_both,
+            "uploads": self.ui.radio_model_uploads,
+            "featured": self.ui.radio_model_featured
+        }
+
     def load_user_settings(self):
         """Loads the user settings from the configuration file and applies them."""
 
@@ -935,6 +959,7 @@ class Porn_Fetch(QWidget):
         self.threading_mode_map.get(self.conf.get("Performance", "threading_mode")).setChecked(True)
         self.directory_system_map.get(self.conf.get("Video", "directory_system")).setChecked(True)
         self.gui_language_map.get(self.conf.get("UI", "language")).setChecked(True)
+        self.model_videos_map.get(self.conf.get("Video", "model_videos")).setChecked(True)
         self.ui.spinbox_semaphore.setValue(int(self.conf.get("Performance", "semaphore")))
         self.ui.spinbox_treewidget_limit.setValue(int(self.conf.get("Video", "search_limit")))
         self.ui.lineedit_output_path.setText(self.conf.get("Video", "output_path"))
@@ -952,6 +977,7 @@ class Porn_Fetch(QWidget):
         self.workers = int(self.conf["Performance"]["workers"])
         self.max_retries = int(self.conf["Performance"]["retries"])
         self.skip_existing_files = True if self.conf["Video"]["skip_existing_files"] == "true" else False
+        self.model_videos_type = self.conf["Video"]["model_videos"]
 
         if self.skip_existing_files:
             self.ui.radio_skip_existing_files_yes.setChecked(True)
@@ -988,6 +1014,10 @@ class Porn_Fetch(QWidget):
         for language, radio_button in self.gui_language_map.items():
             if radio_button.isChecked():
                 self.conf.set("UI", "language", language)
+
+        for model_video_type, radio_button in self.model_videos_map.items():
+            if radio_button.isChecked():
+                self.conf.set("Video", "model_videos", model_video_type)
 
         if self.ui.radio_skip_existing_files_no.isChecked():
             self.conf.set("Video", "skip_existing_files", "false")
@@ -1367,7 +1397,15 @@ This warning won't be shown again.
             model_object = client.get_user(model)
             videos = model_object.videos
             uploads = model_object.uploads
-            videos = chain(uploads, videos)
+
+            if self.model_videos_type == "both":
+                videos = chain(uploads, videos)
+
+            elif self.model_videos_type == "featured":
+                videos = videos
+
+            elif self.model_videos_type == "uploads":
+                videos = uploads
 
         elif hqporner_pattern.match(model):
             videos = hq_Client().get_videos_by_actress(name=model)
