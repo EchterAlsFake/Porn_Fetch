@@ -11,7 +11,7 @@
 - [x] Improving the sorting mechanism, to be less confusing
 - []  --Entirely reworking the progressbars and progress reporting in general-- (Won't do that fr)
 - [x] Fixing the errors with the playlist
-- [] Fixing file progress
+- [x] Fixing file progress
 - [x] Fixing the tag writing function
 - [] Entirely reworking the Layout, the UI design AND the Android Layout
 - [] Adding support for Spankbang (easy)
