@@ -21,6 +21,7 @@ fi
 # Convert to lowercase
 OS=$(echo $OS | tr '[:upper:]' '[:lower:]')
 
+echo $OS
 case $OS in
     "arch"|"archlinux"|"endeavouros")
         # Arch Linux commands
