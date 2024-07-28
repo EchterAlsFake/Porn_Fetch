@@ -22,12 +22,12 @@ fi
 OS=$(echo $OS | tr '[:upper:]' '[:lower:]')
 
 case $OS in
-    "arch"|"archlinux")
+    "arch"|"archlinux"|"endeavouros")
         # Arch Linux commands
         echo "Detected Arch Linux"
         sudo pacman -S python-virtualenv git
         ;;
-    "ubuntu")
+    "ubuntu"|"linuxmint")
         # Ubuntu commands
         echo "Detected Ubuntu"
         sudo apt-get update
