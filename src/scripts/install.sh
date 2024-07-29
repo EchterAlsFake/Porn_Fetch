@@ -44,23 +44,23 @@ case $OS in
         
 # For most Linux Distros
 # Detect Package Manager
-if command -v pacman ; then
+if $(command -v pacman) ; then
 # Arch Linux commands
     echo "Detected Arch Linux"
     sudo pacman -S python-virtualenv git
     ;;
-elif command -v apt ; then 
+elif $(command -v apt) ; then 
 # Ubuntu commands
     echo "Detected Ubuntu/Debian"
     sudo apt-get update
     sudo apt-get install build-essential cmake python3-dev libssl-dev qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev qt5-default git wget python3-venv -y
     ;;
-elif command -v dnf ; then
+elif $(command -v dnf) ; then
 # Fedora commands
     echo "Detected Fedora"
     sudo dnf install -y git python3-virtualenv qt5-devel
     ;;
-elif command -v zypper ; then
+elif $(command -v zypper) ; then
 # OpenSUSE commands
     echo "Detected OpenSUSE"
     sudo zypper install -y git python3-virtualenv libqt5-qtbase-devel
