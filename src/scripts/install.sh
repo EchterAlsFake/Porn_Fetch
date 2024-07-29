@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Automatic compile script
-# Detect distribution
+# If not on a Linux distro, the OS name is used to ensure compatibility
+
 if [ -f /etc/os-release ]; then
     . /etc/os-release
     OS=$ID
@@ -22,33 +23,12 @@ fi
 OS=$(echo $OS | tr '[:upper:]' '[:lower:]')
 
 case $OS in
-    "arch"|"archlinux"|"endeavouros")
-        # Arch Linux commands
-        echo "Detected Arch Linux"
-        sudo pacman -S python-virtualenv git
-        ;;
-    "ubuntu"|"linuxmint")
-        # Ubuntu commands
-        echo "Detected Ubuntu"
-        sudo apt-get update
-        sudo apt-get install build-essential cmake python3-dev libssl-dev qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev qt5-default git wget python3-venv -y
-        ;;
     "termux")
         # Termux commands
         echo "Detected Termux"
         apt-get update
         apt-get full-upgrade -y
         apt-get install python3 python-pip git wget ldd binutils
-        ;;
-    "fedora")
-        # Fedora commands
-        echo "Detected Fedora"
-        sudo dnf install -y git python3-virtualenv qt5-devel
-        ;;
-    "opensuse"|"suse")
-        # OpenSUSE commands
-        echo "Detected OpenSUSE"
-        sudo zypper install -y git python3-virtualenv libqt5-qtbase-devel
         ;;
     "darwin")
         # macOS commands
@@ -61,11 +41,29 @@ case $OS in
         fi
         brew install python3 git
         ;;
-    *)
-        echo "Unsupported distribution: $OS"
-        exit 1
-        ;;
-esac
+    esac
+        
+# For most Linux Distros
+# Detect Package Manager
+if command -v pacman ; then
+# Arch Linux commands
+    echo "Detected Arch Linux"
+    sudo pacman -S python-virtualenv git
+elif  command -v apt ; then 
+# Ubuntu commands
+    echo "Detected Ubuntu/Debian"
+    sudo apt-get update
+    sudo apt-get install build-essential cmake python3-dev libssl-dev qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev qt5-default git wget python3-venv -y
+elif  command -v dnf ; then
+# Fedora commands
+    echo "Detected Fedora"
+    sudo dnf install -y git python3-virtualenv qt5-devel
+elif  command -v zypper ; then
+# OpenSUSE commands
+    echo "Detected OpenSUSE"
+    sudo zypper install -y git python3-virtualenv libqt5-qtbase-devel
+fi
+
 
 # Common commands
 git clone https://github.com/EchterAlsFake/Porn_Fetch
