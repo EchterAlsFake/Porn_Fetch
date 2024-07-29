@@ -1,6 +1,6 @@
 [app]
 # title of your application
-title = main
+title = Porn Fetch
 # project directory. the general assumption is that project_dir is the parent directory
 # of input_file
 project_dir = .

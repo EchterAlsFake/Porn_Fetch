@@ -29,6 +29,13 @@ case $OS in
         apt-get update
         apt-get full-upgrade -y
         apt-get install python3 python-pip git wget ldd binutils
+        pip install -r requirements_cli.txt
+        pip install pyinstaller
+        pyinstaller -F main.py
+        cd dist
+        chmod +x main
+        mv main Porn_Fetch
+        echo "Porn Fetch is now installed in $(pwd)"
         ;;
     "darwin")
         # macOS commands
@@ -68,12 +75,12 @@ fi
 # Common commands
 git clone https://github.com/EchterAlsFake/Porn_Fetch
 cd Porn_Fetch
-python3 -m venv venv
-source venv/bin/activate
+git checkout 3.4  # This is only temporary for testing, don't worry...
+python3 -m venv /tmp/.venv # This is needed, because Qt has some issues if the virtual environment is in the same directory, as there the script gets executed in
+source /tmp/.venv/bin/activate
 pip install -r requirements.txt
-pip install pyinstaller
-pyinstaller -F main.py
-cd dist
-chmod +x main
-mv main Porn_Fetch
+pyside6-deploy main.py -c src/build/pysidedeploy_linux.spec -f -v
+deactivate
+echo "Deleting the temporary created virtual environment..."
+rm -rf /tmp/.venv
 echo "Porn Fetch is now installed in $(pwd)"
