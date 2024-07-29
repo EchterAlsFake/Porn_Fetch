@@ -83,4 +83,4 @@ pyside6-deploy main.py -c src/build/pysidedeploy_linux.spec -f -v
 deactivate
 echo "Deleting the temporary created virtual environment..."
 rm -rf /tmp/.venv
-echo "Porn Fetch is now installed in $(pwd)"
+echo "Porn Fetch is now installed in $(pwd)/main.bin"
