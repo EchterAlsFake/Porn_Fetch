@@ -7,6 +7,7 @@ import markdown
 import zipfile
 import shutil
 import tarfile
+import logging
 import src.frontend.resources
 
 from itertools import islice, chain
@@ -21,6 +22,7 @@ from base_api.base import Core
 from src.backend.shared_functions import *
 from src.backend.shared_gui import *
 from src.backend.class_help import *
+from src.backend.log_config import setup_logging
 from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
 from src.frontend.License import Ui_License
 from src.frontend.range_selector import Ui_Form
@@ -71,6 +73,7 @@ ffmpeg_windows = "ffmpeg-7.0-essentials_build"
 android_arch = None
 session_urls = []  # This list saves all URls used in the current session. Used for the URL export function
 total_downloaded_videos = 0
+logger = setup_logging()
 
 
 class Signals(QObject):
@@ -142,14 +145,14 @@ class License(QWidget):
         with open("config.ini", "w") as config_file:
             self.conf.write(config_file)
             config_file.close()
-            logger_error("License was denied, closing Porn Fetch")
+            logger.error("License was denied, closing Porn Fetch")
             self.close()
             sys.exit(0)  # exiting if user denied
 
     def show_main_window(self):
         """ If license was accepted, the License widget is closed and the main widget will be shown."""
         self.close()
-        logger_debug("Startup: [2/5] License accepted")
+        logger.debug("Startup: [2/5] License accepted")
         self.main_widget = Porn_Fetch()
         self.main_widget.show()
 
@@ -169,7 +172,7 @@ class CheckUpdates(QRunnable):
                 self.signals.result.emit(False)
 
         except requests.exceptions.ConnectionError:
-            logger_error("Couldn't check for updates, because of a Connection Error")
+            logger.error("Couldn't check for updates, because of a Connection Error")
 
 
 class AddToTreeWidget(QRunnable):
@@ -215,10 +218,10 @@ class AddToTreeWidget(QRunnable):
             start = 1
 
         try:
-            logger_debug(f"Result Limit: {str(self.search_limit)}")
+            logger.debug(f"Result Limit: {str(self.search_limit)}")
 
             if self.reverse:
-                logger_debug("Reversing Videos. This may take some time...")
+                logger.debug("Reversing Videos. This may take some time...")
 
                 # Use islice to limit the number of items fetched from the iterator
                 videos = list(islice(self.iterator, self.search_limit))
@@ -243,7 +246,7 @@ class AddToTreeWidget(QRunnable):
                         try:
                             text_data = self.process_video(video, i)
                         except errors.RegexError as e:
-                            logger_error(
+                            logger.error(
                                 f"Warning: a Regex Error occurred. This must not be an error, but could be one!"
                                 f" -->: {e}")
 
@@ -257,7 +260,7 @@ class AddToTreeWidget(QRunnable):
                         try_attempt = False  # No result, move to the next video
 
                     except (errors.MaxRetriesExceeded, IndexError, ConnectionError) as e:
-                        logger_error(f"""
+                        logger.error(f"""
 Rate limited by PornHub, waiting for 5 seconds...
 
 Note: If this error persists, please close the application and report the following error.
@@ -270,7 +273,7 @@ There's a problem with your internet access... Are certain Porn sites blocked by
                         break
 
                     except errors.RegionBlocked:
-                        logger_error(f"Video: {video.url} is not available in your region, skipping...")
+                        logger.error(f"Video: {video.url} is not available in your region, skipping...")
                         try_attempt = False
 
         finally:
@@ -354,17 +357,17 @@ class DownloadThread(QRunnable):
         try:
             if os.path.isfile(self.output_path):
                 if self.skip_existing_files:
-                    logger_debug("The file already exists, skipping...")
+                    logger.debug("The file already exists, skipping...")
                     self.signals.completed.emit()
                     return
 
                 else:
-                    logger_debug("The file already exists, appending random number...")
+                    logger.debug("The file already exists, appending random number...")
                     path = str(self.output_path).split(".")
                     path = path[0] + str(random.randint(0, 1000)) + ".mp4"
                     self.output_path = path
 
-            logger_debug(f"Downloading Video to: {self.output_path}")
+            logger.debug(f"Downloading Video to: {self.output_path}")
             if self.threading_mode == "FFMPEG" or self.threading_mode == download.FFMPEG:
                 self.ffmpeg = True
 
@@ -373,7 +376,7 @@ class DownloadThread(QRunnable):
                 self.timeout, mode=self.threading_mode, video=self.video)
                 video_source = "pornhub"
                 path = self.output_path
-                logger_debug("Starting the Download!")
+                logger.debug("Starting the Download!")
                 try:
                     self.video.download(downloader=self.threading_mode, path=path, quality=self.quality,
                                         display=lambda pos, total: self.generic_callback(pos, total,
@@ -422,7 +425,7 @@ class DownloadThread(QRunnable):
         finally:
             if ffmpeg_features:
                 os.rename(f"{self.output_path}", f"{self.output_path}_.tmp")
-                logger_debug(f"FFMPEG PATH: {ffmpeg_path}")
+                logger.debug(f"FFMPEG PATH: {ffmpeg_path}")
                 cmd = [ffmpeg_path, "-i", f"{self.output_path}_.tmp", "-c", "copy", self.output_path]
                 ff = FfmpegProgress(cmd)
                 for progress in ff.run_command_with_progress():
@@ -431,7 +434,7 @@ class DownloadThread(QRunnable):
                 os.remove(f"{self.output_path}_.tmp")
                 write_tags(path=self.output_path, video=self.video)
             else:
-                logger_debug("FFMPEG features disabled, writing tags and converting the video won't be available!")
+                logger.warning("FFMPEG features disabled, writing tags and converting the video won't be available!")
 
             self.signals.completed.emit()
 
@@ -459,17 +462,17 @@ class QTreeWidgetDownloadThread(QRunnable):
                 video_objects.append(item.data(0, Qt.UserRole))
 
         if not self.threading_mode == "FFMPEG":
-            logger_debug("Getting segments...")
+            logger.debug("Getting segments...")
             global total_segments, downloaded_segments
             total_segments = sum(
                 [len(list(video.get_segments(quality=self.quality))) for video in video_objects if
                  hasattr(video, 'get_segments')])
-            logger_debug("Got segments")
+            logger.debug("Got segments")
             # This basically looks how many segments exist in all videos together, so that we can calculate the total
             # progress
 
         else:
-            logger_debug("Progress tracking: FFMPEG")
+            logger.debug("Progress tracking: FFMPEG")
             # FFMPEG has always 0-100 as progress callback, that is why I specify 100 for each video instead of the
             # total segments
             counter = 0
@@ -485,7 +488,7 @@ class QTreeWidgetDownloadThread(QRunnable):
             self.semaphore.acquire()  # Trying to start the download if the thread isn't locked
             if stop_flag.is_set():
                 return
-            logger_debug("Semaphore Acquired")
+            logger.debug("Semaphore Acquired")
             self.signals.progress_video.emit(video)  # Now emits the video to the main class for further processing
 
 
@@ -549,8 +552,8 @@ class FFMPEGDownload(QRunnable):
 
     def run(self):
         # Download the file
-        logger_debug(f"Downloading: {self.url}")
-        logger_debug("FFMPEG: [1/4] Starting the download")
+        logger.debug(f"Downloading: {self.url}")
+        logger.debug("FFMPEG: [1/4] Starting the download")
         with requests.get(self.url, stream=True) as r:
             r.raise_for_status()
             try:
@@ -569,7 +572,7 @@ class FFMPEGDownload(QRunnable):
                         dl += len(chunk)
                         self.signals.total_progress.emit(dl, total_length)
 
-        logger_debug("FFMPEG: [2/4] Starting file extraction")
+        logger.debug("FFMPEG: [2/4] Starting file extraction")
         # Extract the file based on OS mode
         if self.mode == "linux" and filename.endswith(".tar.xz"):
             with tarfile.open(filename, "r:xz") as tar:
@@ -594,7 +597,7 @@ class FFMPEGDownload(QRunnable):
                         shutil.move(extracted_path, ".")
 
                     self.signals.total_progress.emit(idx, total)
-        logger_debug("FFMPEG: [3/4] Finished Extraction")
+        logger.debug("FFMPEG: [3/4] Finished Extraction")
         # Finalize
         self.signals.total_progress.emit(total_length, total_length)  # Ensure progress bar reaches 100%
         os.remove(filename)  # Clean up downloaded archive
@@ -605,7 +608,7 @@ class FFMPEGDownload(QRunnable):
         elif sys.platform == "win32":
             shutil.rmtree(ffmpeg_windows)
 
-        logger_debug("FFMPEG: [4/4] Cleaned Up")
+        logger.debug("FFMPEG: [4/4] Cleaned Up")
         self.signals.finished.emit()
 
 
@@ -700,14 +703,14 @@ class Porn_Fetch(QWidget):
         self.button_connectors()  # Connects the buttons to their functions
         self.button_groups()  # Groups the buttons, so that the Radio buttons are split from themselves (hard to explain)
         self.load_style()  # Loads all the User Interface stylesheets
-        logger_debug("Startup: [3/5] Initialized the User Interface")
+        logger.debug("Startup: [3/5] Initialized the User Interface")
         self.settings_maps_initialization()
         self.load_user_settings()  # Loads the user settings and applies selected values to the UI
-        logger_debug("Startup: [4/5] Loaded the user settings")
+        logger.debug("Startup: [4/5] Loaded the user settings")
         self.switch_to_home()  # Switches Porn Fetch to the home widget
         self.check_for_updates()
         self.check_ffmpeg()  # Checks and sets up FFmpeg
-        logger_debug("Startup: [5/5] ✔")
+        logger.debug("Startup: [5/5] ✔")
 
         if __build__ == "android":
             self.setup_android()  # Sets up Android, if build mode is Android (handles some UI stuff and things)
@@ -1038,7 +1041,7 @@ class Porn_Fetch(QWidget):
             self.conf.write(config_file)
 
         ui_popup(QCoreApplication.tr("Saved User Settings, please restart Porn Fetch!", None))
-        logger_debug("Saved User Settings, please restart Porn Fetch.")
+        logger.debug("Saved User Settings, please restart Porn Fetch.")
 
     def check_for_updates(self):
         """Checks for updates in a thread, so that the main UI isn't blocked, until update checks are done"""
@@ -1082,7 +1085,7 @@ This warning won't be shown again.
                 self.ui.radio_threading_mode_ffmpeg.setDisabled(True)
                 global ffmpeg_features
                 ffmpeg_features = False
-                logger_error("FFMPEG features have been disabled, because ffmpeg wasn't found on your system.")
+                logger.error("FFMPEG features have been disabled, because ffmpeg wasn't found on your system.")
             else:
                 # If ffmpeg binary is found in the current directory, set it as the ffmpeg path
                 ffmpeg_path = os.path.abspath(ffmpeg_binary)
@@ -1091,7 +1094,7 @@ This warning won't be shown again.
             ffmpeg_path = shutil.which("ffmpeg")
             consts.FFMPEG_EXECUTABLE = ffmpeg_path
             bs_consts.FFMPEG_PATH = ffmpeg_path
-            logger_debug(f"FFMPEG: {ffmpeg_path}")
+            logger.debug(f"FFMPEG: {ffmpeg_path}")
 
     def download_ffmpeg(self):
         if sys.platform == "linux":
@@ -1108,7 +1111,7 @@ This warning won't be shown again.
 
     def setup_android(self):
         """Sets up for Porn Fetch for Android devices"""
-        logger_debug(f"Running on Android: {sys.platform}")
+        logger.debug(f"Running on Android: {sys.platform}")
         if not get_output_path():
             self.handle_no_output_path()
             return  # Early return to avoid setting up UI components again at the end.
@@ -1448,7 +1451,7 @@ This warning won't be shown again.
 
     def on_video_load_error(self, error_message):
         # Handle errors, possibly show message to user
-        logger_debug(f"Error loading video: {error_message}")
+        logger.debug(f"Error loading video: {error_message}")
         ui_popup(QCoreApplication.tr(self, f"Some error occurred in loading a video. Please report this: {error_message}",
                                        None))
 
@@ -1467,7 +1470,7 @@ This warning won't be shown again.
         # ADAPTION
         self.download_thread.signals.completed.connect(self.download_completed)
         self.threadpool.start(self.download_thread)
-        logger_debug("Started Download Thread!")
+        logger.debug("Started Download Thread!")
 
     """
     The following functions are used to connect data between Threads and the Main UI
@@ -1511,7 +1514,7 @@ This warning won't be shown again.
     # ADAPTION
     def download_completed(self):
         """If a video is downloaded, the semaphore is released"""
-        logger_debug("Download Completed!")
+        logger.debug("Download Completed!")
         global total_downloaded_videos
         total_downloaded_videos += 1
         self.ui.lineedit_download_info.setText(f"Downloaded: {total_downloaded_videos} video(s) this session.")
@@ -1555,17 +1558,17 @@ This warning won't be shown again.
         self.threadpool.start(self.url_thread)
 
     def receive_url_result(self, iterator, model_iterator, search_iterator):
-        logger_debug(f"Received Video Iterator ({len(iterator)} videos)")
-        logger_debug(f"Received Model Iterator ({len(model_iterator)} urls)")
-        logger_debug(f"Received Search Iterator ({len(search_iterator)} keywords)")
+        logger.debug(f"Received Video Iterator ({len(iterator)} videos)")
+        logger.debug(f"Received Model Iterator ({len(model_iterator)} urls)")
+        logger.debug(f"Received Search Iterator ({len(search_iterator)} keywords)")
 
-        logger_debug("Processing Videos...")
+        logger.debug("Processing Videos...")
         self.add_to_tree_widget_thread(iterator)
-        logger_debug("Processing Models...")
+        logger.debug("Processing Models...")
         for url in model_iterator:
             self.start_model(url)
 
-        logger_debug("Processing Search queries....")
+        logger.debug("Processing Search queries....")
         for search in search_iterator:
             query = search.get("query")
             website = search.get("website")
@@ -1608,7 +1611,7 @@ This warning won't be shown again.
 
         try:
             self.client = Client(username, password, delay=self.delay)
-            logger_debug("Login Successful!")
+            logger.debug("Login Successful!")
             ui_popup(QCoreApplication.tr(self, "Login Successful!", None))
             self.switch_login_button_state()
 
@@ -1786,7 +1789,7 @@ def main():
         locale = QLocale.system()
         # Get the full locale name (e.g., "zh_CN" for Simplified Chinese)
         language_code = locale.name()
-        logger_debug(f"System Language: {language_code}")
+        logger.debug(f"System Language: {language_code}")
     else:
         language_code = language
 
@@ -1794,16 +1797,16 @@ def main():
     path = f":/translations/translations/{language_code}.qm"
     translator = QTranslator(app)
     if translator.load(path):
-        logger_debug(f"Startup: [1/5] {language_code} translation loaded")
+        logger.debug(f"Startup: [1/5] {language_code} translation loaded")
 
     else:
         # Try loading a more general translation if specific one fails
         general_language_code = language_code.split('_')[0]
         path = f":/translations/translations/{general_language_code}.qm"
         if translator.load(path):
-            logger_debug(f"{general_language_code} translation loaded as fallback")
+            logger.debug(f"{general_language_code} translation loaded as fallback")
         else:
-            logger_debug(f"Failed to load {language_code} translation")
+            logger.debug(f"Failed to load {language_code} translation")
 
     app.installTranslator(translator)
 
@@ -1840,7 +1843,7 @@ if __name__ == "__main__":
         """Load stylesheet from a given path with explicit open and close."""
         file = QFile(path)
         if not file.open(QFile.ReadOnly | QFile.Text):
-            logger_debug(f"Failed to open {path}")
+            logger.debug(f"Failed to open {path}")
             return ""
         stylesheet = QTextStream(file).readAll()
         file.close()
@@ -1882,13 +1885,13 @@ if __name__ == "__main__":
     def check_for_updates_result(value):
         """Receives the Update result from the thread"""
         if value:
-            logger_debug(f"Next release v{__next_release__} found!")
+            logger.debug(f"Next release v{__next_release__} found!")
             try:
                 changelog = (requests.get(f"https://github.com/EchterAlsFake/Porn_Fetch/tree/master/README/Changelog/"
                                           f"{__next_release__}/Changelog.md").text)
 
             except Exception as e:
-                logger_error(f"Couldn't fetch changelog of version: {__next_release__}")
+                logger.error(f"Couldn't fetch changelog of version: {__next_release__}")
                 changelog = f"Unknown Error: {e}"
 
             ui_popup(QCoreApplication.tr(f"""

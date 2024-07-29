@@ -5,6 +5,7 @@ If you know what you do, you can change a few things here :)
 
 import os
 import re
+import logging
 
 import requests
 from mutagen.mp4 import MP4, MP4Cover
@@ -84,13 +85,7 @@ model_videos = both
 language = system
 """
 
-
-def logger_error(e):
-    print(f"{datetime.now()} : {Fore.LIGHTRED_EX}[ERROR] : {reset()} : {e}")
-
-
-def logger_debug(e):
-    print(f"{datetime.now()} : {Fore.LIGHTCYAN_EX}[DEBUG] : {return_color()} : {e} {reset()}")
+logger = logging.getLogger(__name__)
 
 
 def check_video(url, is_url=True, delay=False):
@@ -150,7 +145,7 @@ def check_video(url, is_url=True, delay=False):
 
 def setup_config_file(force=False):
     if os.path.isfile("config.ini") is False or force:
-        logger_error("Configuration file is broken / not found. Automatically creating a new one with default "
+        logger.warning("Configuration file is broken / not found. Automatically creating a new one with default "
                      "configuration")
 
         try:
@@ -158,7 +153,7 @@ def setup_config_file(force=False):
                 config_file.write(default_configuration)
 
         except PermissionError:
-            logger_error("Can't write to config.ini due to permission issues.")
+            logger.error("Can't write to config.ini due to permission issues.")
             exit(1)
 
     else:
@@ -296,7 +291,7 @@ def write_tags(path, video):
     artist = data[1]
     date = data[3]
     thumbnail = data[5]
-    logger_debug("Tags [1/3]")
+    logging.debug("Tags [1/3]")
 
     audio = MP4(path)
     audio.tags["\xa9nam"] = title
@@ -305,12 +300,12 @@ def write_tags(path, video):
     audio.tags["\xa9gen"] = genre
     audio.tags["\xa9day"] = date
 
-    logger_debug("Tags: [2/3] - Writing Thumbnail")
+    logging.debug("Tags: [2/3] - Writing Thumbnail")
     content = requests.get(thumbnail).content
     cover = MP4Cover(content, imageformat=MP4Cover.FORMAT_JPEG)
     audio.tags["covr"] = [cover]
     audio.save()
-    logger_debug("Tags: [3/3] ✔")
+    logging.debug("Tags: [3/3] ✔")
 
 
 def parse_length(length):
