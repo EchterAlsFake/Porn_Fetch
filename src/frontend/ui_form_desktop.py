@@ -602,7 +602,10 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_7.addLayout(self.gridlayout_tools_hqporner, 0, 0, 1, 1)
 
-        self.groupBox_2 = QGroupBox(self.groupbox_tools)
+
+        self.gridLayout_29.addWidget(self.groupbox_tools, 0, 1, 1, 1)
+
+        self.groupBox_2 = QGroupBox(self.page_tools)
         self.groupBox_2.setObjectName(u"groupBox_2")
         self.gridLayout_15 = QGridLayout(self.groupBox_2)
         self.gridLayout_15.setObjectName(u"gridLayout_15")
@@ -652,10 +655,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridLayout_15.addItem(self.verticalSpacer_2, 1, 0, 1, 1)
 
 
-        self.gridLayout_7.addWidget(self.groupBox_2, 0, 2, 1, 1)
-
-
-        self.gridLayout_29.addWidget(self.groupbox_tools, 0, 1, 1, 1)
+        self.gridLayout_29.addWidget(self.groupBox_2, 0, 2, 1, 1)
 
         self.stacked_widget_top.addWidget(self.page_tools)
 

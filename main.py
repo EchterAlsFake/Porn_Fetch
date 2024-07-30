@@ -7,8 +7,7 @@ import markdown
 import zipfile
 import shutil
 import tarfile
-import logging
-import src.frontend.resources
+import src.frontend.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
 
 from itertools import islice, chain
 from threading import Event
@@ -59,11 +58,13 @@ __version__ = "3.4"
 __build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 __next_release__ = "3.5"
+context = "Porn Fetch"  # This is used to tell the Translator from what thing the translation actually comes
 total_segments = 0
 downloaded_segments = 0
 last_index = 0
 stop_flag = Event()
-invalid_input_string = QCoreApplication.tr("Wrong Input, please verify the URL, category or actress!", None)
+invalid_input_string = QCoreApplication.translate(context, "Wrong Input, please verify the URL, category or"
+                                                                       " actress!", None)
 ffmpeg_features = True
 ffmpeg_path = None
 url_linux = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
@@ -190,7 +191,7 @@ class AddToTreeWidget(QRunnable):
         data = load_video_attributes(video)
         session_urls.append(video.url)
         title = data[0]
-        disabled = QCoreApplication.tr("Disabled", None)
+        disabled = QCoreApplication.translate(context, "Disabled", None)
         duration = disabled
         author = disabled
 
@@ -1040,7 +1041,7 @@ class Porn_Fetch(QWidget):
         with open("config.ini", "w") as config_file:
             self.conf.write(config_file)
 
-        ui_popup(QCoreApplication.tr("Saved User Settings, please restart Porn Fetch!", None))
+        ui_popup(self.tr("Saved User Settings, please restart Porn Fetch!", None))
         logger.debug("Saved User Settings, please restart Porn Fetch.")
 
     def check_for_updates(self):
@@ -1062,7 +1063,7 @@ class Porn_Fetch(QWidget):
             if ffmpeg_binary is None:
                 # If ffmpeg binaries are not found in the current directory, display warning and disable features
                 if self.conf.get("Performance", "ffmpeg_warning") == "true":
-                    ffmpeg_warning_message = QCoreApplication.tr(self,
+                    ffmpeg_warning_message = self.tr(
                         """
 FFmpeg isn't installed on your system... Some features won't be available:
 
@@ -1119,17 +1120,14 @@ This warning won't be shown again.
         self.configure_ui_for_android("/storage/emulated/0/Download/")
 
     def handle_no_output_path(self):
-        ui_popup(
-            QCoreApplication.tr(self, "The output path does not exist or is not writable.", None))
+        ui_popup(self.tr( "The output path does not exist or is not writable.", None))
         text, ok = QInputDialog.getText(self, "Enter custom Path",
-                                        QCoreApplication.tr(self, "Enter custom Path:", None))
+                                        self.tr( "Enter custom Path:", None))
         if ok and get_output_path(text):
-            ui_popup(
-                QCoreApplication.tr(self, f"Success: {text} will be used for this session!", None))
+            ui_popup(self.tr(f"Success: {text} will be used for this session!", None))
             self.configure_ui_for_android(text)
         else:
-            ui_popup(
-                QCoreApplication.tr(self, "Invalid path. The application will now exit.", None))
+            ui_popup(self.tr("Invalid path. The application will now exit.", None))
             sys.exit()
 
     def configure_ui_for_android(self, path):
@@ -1452,7 +1450,7 @@ This warning won't be shown again.
     def on_video_load_error(self, error_message):
         # Handle errors, possibly show message to user
         logger.debug(f"Error loading video: {error_message}")
-        ui_popup(QCoreApplication.tr(self, f"Some error occurred in loading a video. Please report this: {error_message}",
+        ui_popup(self.tr( f"Some error occurred in loading a video. Please report this: {error_message}",
                                        None))
 
     def process_video_thread(self, output_path, video, threading_mode, quality):
@@ -1589,11 +1587,13 @@ This warning won't be shown again.
                 self.ui.radio_search_website_eporner.setChecked(True)
 
             else:
-                ui_popup(f"Information: The Website {website} specified in the URL file isn't valid.")
+                ui_popup(self.tr(f"Information: The Website {website} specified in the URL file isn't valid.", None))
                 return
 
             self.ui.lineedit_search_query.setText(query)
             self.basic_search()
+
+        self.ui.lineedit_search_query.clear()
 
     def login(self):
         """
@@ -1605,21 +1605,20 @@ This warning won't be shown again.
         username = self.ui.lineedit_username.text()
         password = self.ui.lineedit_password.text()
         if len(username) <= 2 or len(password) <= 2:
-            ui_popup(
-                QCoreApplication.tr(self, "Those credentials don't seem to be valid...", None))
+            ui_popup(self.tr("Those credentials don't seem to be valid...", None))
             return
 
         try:
             self.client = Client(username, password, delay=self.delay)
             logger.debug("Login Successful!")
-            ui_popup(QCoreApplication.tr(self, "Login Successful!", None))
+            ui_popup(self.tr( "Login Successful!", None))
             self.switch_login_button_state()
 
         except errors.LoginFailed:
-            ui_popup(QCoreApplication.tr(self, "Login Failed, please check your credentials and try again!", None))
+            ui_popup(self.tr("Login Failed, please check your credentials and try again!", None))
 
         except errors.ClientAlreadyLogged:
-            ui_popup(QCoreApplication.tr(self, "You are already logged in!", None))
+            ui_popup(self.tr("You are already logged in!", None))
 
     def switch_login_button_state(self):
         """If the user is logged in, I'll change the stylesheets of the buttons"""
@@ -1640,9 +1639,8 @@ This warning won't be shown again.
         elif not self.client.logged:
             self.login()
             if not self.client.logged:
-                text = (QCoreApplication.tr(self,
-                    "There's a problem with the login. Please make sure you login first and then you try to "
-                    "get videos based on your account.", None))
+                text = self.tr("There's a problem with the login. Please make sure you login first and then "
+                               "you try to get videos based on your account.", None)
                 ui_popup(text)
                 return False
 
@@ -1711,8 +1709,8 @@ This warning won't be shown again.
 
     def get_by_category_hqporner(self):
         """Returns video by category from HQPorner. I want to add support for EPorner"""  # TODO
-        self.list_all_categories_string = (QCoreApplication.tr(self,
-            "Invalid Category. Press 'list categories' to see all possible ones.", None))
+        self.list_all_categories_string = self.tr("Invalid Category. Press 'list categories' to see all "
+                                                  "possible ones.", None)
         category_name = self.ui.lineedit_hqporner_category.text()
         all_categories = hq_Client().get_all_categories()
 
@@ -1776,10 +1774,7 @@ def main():
     setup_config_file()
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
-    """
-    I had many problems with coding in general where something didn't work but the translations are the hardest
-    thing I've ever done. Now where I've understand it it makes sense but the Qt documentation is a piece of shit...
-    """
+
     conf = ConfigParser()
     conf.read("config.ini")
     language = conf["UI"]["language"]
@@ -1831,7 +1826,6 @@ def main():
 
 
 if __name__ == "__main__":
-
     """
     These functions are static functions which I won't need while coding.
     These just exist for some reason, but I don't want to scroll through endless lines of code,
@@ -1852,7 +1846,7 @@ if __name__ == "__main__":
 
     def reset_pornfetch():
         setup_config_file(force=True)
-        ui_popup(QCoreApplication.tr("Done! Please restart.", None))
+        ui_popup(QCoreApplication.translate("Done! Please restart.", None))
 
 
     def switch_stop_state_2():
@@ -1876,10 +1870,10 @@ if __name__ == "__main__":
             ui_popup(f"Success! Saved: {len(session_urls)} URLs")
 
         else:
-            ui_popup(QCoreApplication.tr("No URLs in the current session...", None))
+            ui_popup(QCoreApplication.translate(context, "No URLs in the current session...", None))
 
     def ffmpeg_finished():
-        ui_popup(QCoreApplication.tr("FFmpeg has been installed. Please restart Porn Fetch :)", None))
+        ui_popup(QCoreApplication.translate(context, "FFmpeg has been installed. Please restart Porn Fetch :)", None))
 
 
     def check_for_updates_result(value):
@@ -1894,7 +1888,7 @@ if __name__ == "__main__":
                 logger.error(f"Couldn't fetch changelog of version: {__next_release__}")
                 changelog = f"Unknown Error: {e}"
 
-            ui_popup(QCoreApplication.tr(f"""
+            ui_popup(QCoreApplication.translate(context, f"""
             Information: A new version of Porn Fetch (v{__next_release__}) is out. I recommend you to update Porn Fetch. 
             Go to: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/ {__next_release__}
 
