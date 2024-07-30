@@ -13,6 +13,7 @@
 - [x] Fixing the errors with the playlist
 - [x] Fixing file progress
 - [x] Fixing the tag writing function
+- [x] Fixed the build scripts
 - [] Entirely reworking the Layout, the UI design AND the Android Layout
 - [] Adding support for Spankbang (easy)
 - [] Adding support for Porntrex (even easier) (I don't know who tf wrote their JS code, but this guy should be fire)
