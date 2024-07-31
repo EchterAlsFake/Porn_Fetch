@@ -1,4 +1,5 @@
 import random
+import re
 import time
 import sys
 import os.path
@@ -69,8 +70,6 @@ ffmpeg_features = True
 ffmpeg_path = None
 url_linux = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
 url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
-ffmpeg_linux = "ffmpeg-6.1-amd64-static"
-ffmpeg_windows = "ffmpeg-7.0-essentials_build"
 android_arch = None
 session_urls = []  # This list saves all URls used in the current session. Used for the URL export function
 total_downloaded_videos = 0
@@ -551,6 +550,28 @@ class FFMPEGDownload(QRunnable):
         self.mode = mode
         self.signals = Signals()
 
+    def delete_dir(self):
+        files = os.listdir("./")
+
+        for file in files:
+            try:
+                search = re.search(pattern=r'ffmpeg-(.*?)-', string=file)  # It's all about the version number
+                if len(search.groups()) == 1:
+
+                    if sys.platform == "win32":
+                        shutil.rmtree(f"ffmpeg-{search.group(1)}-essentials_build")
+                        return True
+
+                    elif sys.platform == "linux" or sys.platform == "linux2":
+                        shutil.rmtree(f"ffmpeg-{search.group(1)}-amd64-static")
+                        return True
+
+            except AttributeError:
+                pass
+
+        return False
+
+
     def run(self):
         # Download the file
         logger.debug(f"Downloading: {self.url}")
@@ -603,13 +624,13 @@ class FFMPEGDownload(QRunnable):
         self.signals.total_progress.emit(total_length, total_length)  # Ensure progress bar reaches 100%
         os.remove(filename)  # Clean up downloaded archive
 
-        if sys.platform == "linux":
-            shutil.rmtree(ffmpeg_linux)
 
-        elif sys.platform == "win32":
-            shutil.rmtree(ffmpeg_windows)
+        if self.delete_dir():
+            logger.debug("FFMPEG: [4/4] Cleaned Up")
 
-        logger.debug("FFMPEG: [4/4] Cleaned Up")
+        else:
+            logger.error("The Regex for finding the FFmpeg version failed. Please report this on GitHub!, Thanks.")
+
         self.signals.finished.emit()
 
 
