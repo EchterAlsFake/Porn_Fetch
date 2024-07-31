@@ -26,7 +26,7 @@ class Ui_Porn_Fetch_Widget(object):
     def setupUi(self, Porn_Fetch_Widget):
         if not Porn_Fetch_Widget.objectName():
             Porn_Fetch_Widget.setObjectName(u"Porn_Fetch_Widget")
-        Porn_Fetch_Widget.resize(1210, 869)
+        Porn_Fetch_Widget.resize(1044, 795)
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -799,12 +799,14 @@ class Ui_Porn_Fetch_Widget(object):
         self.gridLayout_25.setSpacing(0)
         self.gridLayout_25.setObjectName(u"gridLayout_25")
         self.gridLayout_25.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.setObjectName(u"verticalLayout")
         self.scrollarea_settings = QScrollArea(self.page_settings)
         self.scrollarea_settings.setObjectName(u"scrollarea_settings")
         self.scrollarea_settings.setWidgetResizable(True)
         self.scrollAreaWidgetContents_6 = QWidget()
         self.scrollAreaWidgetContents_6.setObjectName(u"scrollAreaWidgetContents_6")
-        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 1188, 693))
+        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, -24, 1006, 647))
         self.gridLayout_19 = QGridLayout(self.scrollAreaWidgetContents_6)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.gridlayout_settings = QGridLayout()
@@ -1238,6 +1240,10 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.gridLayout_12.addLayout(self.gridlayout_gui_settings, 0, 0, 1, 1)
 
+        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.gridLayout_12.addItem(self.verticalSpacer_3, 1, 0, 1, 1)
+
 
         self.gridLayout_19.addWidget(self.goroupbox_gui, 3, 0, 1, 2)
 
@@ -1248,7 +1254,10 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.scrollarea_settings.setWidget(self.scrollAreaWidgetContents_6)
 
-        self.gridLayout_25.addWidget(self.scrollarea_settings, 0, 0, 1, 1)
+        self.verticalLayout.addWidget(self.scrollarea_settings)
+
+
+        self.gridLayout_25.addLayout(self.verticalLayout, 0, 0, 1, 1)
 
         self.stacked_widget_main.addWidget(self.page_settings)
         self.page_credits = QWidget()
@@ -1496,8 +1505,7 @@ class Ui_Porn_Fetch_Widget(object):
         QWidget.setTabOrder(self.button_list_categories, self.lineedit_videos_by_category_eporner)
         QWidget.setTabOrder(self.lineedit_videos_by_category_eporner, self.button_eporner_category_get_videos)
         QWidget.setTabOrder(self.button_eporner_category_get_videos, self.button_list_categories_eporner)
-        QWidget.setTabOrder(self.button_list_categories_eporner, self.scrollarea_settings)
-        QWidget.setTabOrder(self.scrollarea_settings, self.button_download_ffmpeg)
+        QWidget.setTabOrder(self.button_list_categories_eporner, self.button_download_ffmpeg)
         QWidget.setTabOrder(self.button_download_ffmpeg, self.radio_threading_mode_high_performance)
         QWidget.setTabOrder(self.radio_threading_mode_high_performance, self.radio_threading_mode_ffmpeg)
         QWidget.setTabOrder(self.radio_threading_mode_ffmpeg, self.radio_threading_mode_default)
@@ -1534,7 +1542,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.retranslateUi(Porn_Fetch_Widget)
 
-        self.stacked_widget_main.setCurrentIndex(0)
+        self.stacked_widget_main.setCurrentIndex(1)
         self.stacked_widget_top.setCurrentIndex(3)
 
 
