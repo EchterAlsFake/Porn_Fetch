@@ -85,6 +85,7 @@ class Signals(QObject):
     progress_eporner = Signal(int, int)
     progress_xnxx = Signal(int, int)
     progress_xvideos = Signal(int, int)
+    progress_spankbang = Signal(int, int)
     total_progress = Signal(int, int)
     progress_video = Signal(object)
     ffmpeg_progress = Signal(int, int)
@@ -302,6 +303,7 @@ class DownloadThread(QRunnable):
             'eporner': self.signals.progress_eporner,
             'xnxx': self.signals.progress_xnxx,
             'xvideos': self.signals.progress_xvideos,
+            'spankbang': self.signals.progress_spankbang
         }
 
     def generic_callback(self, pos, total, signal, video_source, ffmpeg=False):
@@ -405,19 +407,24 @@ class DownloadThread(QRunnable):
 
             elif isinstance(self.video, xn_Video):
                 video_source = "xnxx"
-                self.video.download(downloader=self.threading_mode, path=self.output_path,
-                                    quality=self.quality,
+                self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality,
                                     callback=lambda pos, total: self.generic_callback(pos, total,
                                                                                       self.signals.progress_xnxx,
                                                                                       video_source, self.ffmpeg))
 
             elif isinstance(self.video, xv_Video):
                 video_source = "xvideos"
-                self.video.download(downloader=self.threading_mode, path=self.output_path,
-                                    quality=self.quality,
+                self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality,
                                     callback=lambda pos, total: self.generic_callback(pos, total,
                                                                                       self.signals.progress_xvideos,
                                                                                       video_source, self.ffmpeg))
+            elif isinstance(self.video, sp_Video):
+                video_source = "spankbang"
+                self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality,
+                                    callback=lambda pos, total: self.generic_callback(pos, total,
+                                                                                      self.signals.progress_spankbang,
+                                                                                      video_source, self.ffmpeg),
+                                    no_title=True, use_hls=True)
 
                 # ... other video types ...
 
@@ -876,6 +883,7 @@ class Porn_Fetch(QWidget):
             "progressbar_total": ":/style/stylesheets/progressbar_total.qss",
             "progressbar_xnxx": ":/style/stylesheets/progressbar_xnxx.qss",
             "progressbar_xvideos": ":/style/stylesheets/progressbar_xvideos.qss",
+            "progressbar_spankbang": ":/style/stylesheets/progressbar_spankbang.qss",
             "progressbar_converting": ":/style/stylesheets/progressbar_converting.qss",
             "button_blue": ":/style/stylesheets/stylesheet_button_blue.qss",
             "button_orange": ":/style/stylesheets/stylesheet_button_orange.qss",
@@ -896,6 +904,7 @@ class Porn_Fetch(QWidget):
         self.ui.progressbar_eporner.setStyleSheet(stylesheets["progressbar_eporner"])
         self.ui.progressbar_hqporner.setStyleSheet(stylesheets["progressbar_hqporner"])
         self.ui.progressbar_xvideos.setStyleSheet(stylesheets["progressbar_xvideos"])
+        self.ui.progressbar_spankbang.setStyleSheet(stylesheets["progressbar_spankbang"])
         self.ui.progressbar_converting.setStyleSheet(stylesheets["progressbar_converting"])
         self.ui.button_model.setStyleSheet(stylesheets["button_purple"])
         self.ui.button_search.setStyleSheet(stylesheets["button_purple"])
@@ -1482,6 +1491,7 @@ This warning won't be shown again.
         self.download_thread.signals.progress_eporner.connect(self.update_progressbar_eporner)
         self.download_thread.signals.progress_xnxx.connect(self.update_progressbar_xnxx)
         self.download_thread.signals.progress_xvideos.connect(self.update_progressbar_xvideos)
+        self.download_thread.signals.progress_spankbang.connect(self.update_progressbar_spankbang)
         self.download_thread.signals.ffmpeg_progress.connect(self.update_converting)
         # ADAPTION
         self.download_thread.signals.completed.connect(self.download_completed)
@@ -1526,6 +1536,10 @@ This warning won't be shown again.
         """This updates the xvideos progressbar"""
         self.ui.progressbar_xvideos.setMaximum(maximum)
         self.ui.progressbar_xvideos.setValue(value)
+
+    def update_progressbar_spankbang(self, value, maximum):
+        self.ui.progressbar_spankbang.setMaximum(maximum)
+        self.ui.progressbar_spankbang.setValue(value)
 
     # ADAPTION
     def download_completed(self):

@@ -106,7 +106,7 @@
         <number>1</number>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="widget">
         <layout class="QGridLayout" name="gridLayout_8">
@@ -148,7 +148,7 @@
               <number>1</number>
              </property>
              <property name="currentIndex">
-              <number>3</number>
+              <number>2</number>
              </property>
              <widget class="QWidget" name="page_download">
               <layout class="QGridLayout" name="gridLayout_5">
@@ -746,8 +746,8 @@
                    <rect>
                     <x>0</x>
                     <y>0</y>
-                    <width>383</width>
-                    <height>206</height>
+                    <width>1020</width>
+                    <height>246</height>
                    </rect>
                   </property>
                   <layout class="QGridLayout" name="gridLayout_18">
@@ -757,6 +757,16 @@
                       <widget class="QProgressBar" name="progressbar_xvideos">
                        <property name="value">
                         <number>0</number>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="6" column="1">
+                      <widget class="QLineEdit" name="lineedit_download_info">
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="readOnly">
+                        <bool>true</bool>
                        </property>
                       </widget>
                      </item>
@@ -770,40 +780,6 @@
                        </property>
                        <property name="text">
                         <string>PornHub:</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="4" column="0">
-                      <widget class="QLabel" name="label_progress_xvideos">
-                       <property name="text">
-                        <string>XVideos</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="3" column="0">
-                      <widget class="QLabel" name="label_progress_xnxx">
-                       <property name="text">
-                        <string>XNXX</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="3" column="1">
-                      <widget class="QProgressBar" name="progressbar_xnxx">
-                       <property name="value">
-                        <number>0</number>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="0">
-                      <widget class="QLabel" name="label_progress_hqporner">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="text">
-                        <string>HQPorner:</string>
                        </property>
                       </widget>
                      </item>
@@ -826,6 +802,26 @@
                        </property>
                       </widget>
                      </item>
+                     <item row="4" column="0">
+                      <widget class="QLabel" name="label_progress_xvideos">
+                       <property name="text">
+                        <string>XVideos:</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="7" column="1">
+                      <spacer name="verticalspacer_progress_bars">
+                       <property name="orientation">
+                        <enum>Qt::Orientation::Vertical</enum>
+                       </property>
+                       <property name="sizeHint" stdset="0">
+                        <size>
+                         <width>20</width>
+                         <height>40</height>
+                        </size>
+                       </property>
+                      </spacer>
+                     </item>
                      <item row="0" column="1">
                       <widget class="QProgressBar" name="progressbar_pornhub">
                        <property name="sizePolicy">
@@ -845,19 +841,6 @@
                        </property>
                       </widget>
                      </item>
-                     <item row="6" column="1">
-                      <spacer name="verticalspacer_progress_bars">
-                       <property name="orientation">
-                        <enum>Qt::Orientation::Vertical</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>20</width>
-                         <height>40</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
                      <item row="2" column="1">
                       <widget class="QProgressBar" name="progressbar_eporner">
                        <property name="value">
@@ -868,24 +851,55 @@
                      <item row="2" column="0">
                       <widget class="QLabel" name="label_progress_eporner">
                        <property name="text">
-                        <string>Eporner</string>
+                        <string>Eporner:</string>
                        </property>
                       </widget>
                      </item>
-                     <item row="5" column="0">
+                     <item row="3" column="0">
+                      <widget class="QLabel" name="label_progress_xnxx">
+                       <property name="text">
+                        <string>XNXX:</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="3" column="1">
+                      <widget class="QProgressBar" name="progressbar_xnxx">
+                       <property name="value">
+                        <number>0</number>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="6" column="0">
                       <widget class="QLabel" name="label_info">
                        <property name="text">
                         <string>Info:</string>
                        </property>
                       </widget>
                      </item>
-                     <item row="5" column="1">
-                      <widget class="QLineEdit" name="lineedit_download_info">
-                       <property name="text">
-                        <string/>
+                     <item row="1" column="0">
+                      <widget class="QLabel" name="label_progress_hqporner">
+                       <property name="sizePolicy">
+                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                         <horstretch>0</horstretch>
+                         <verstretch>0</verstretch>
+                        </sizepolicy>
                        </property>
-                       <property name="readOnly">
-                        <bool>true</bool>
+                       <property name="text">
+                        <string>HQPorner:</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="5" column="0">
+                      <widget class="QLabel" name="label_progress_spankbang">
+                       <property name="text">
+                        <string>Spankbang:</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="5" column="1">
+                      <widget class="QProgressBar" name="progressbar_spankbang">
+                       <property name="value">
+                        <number>0</number>
                        </property>
                       </widget>
                      </item>
@@ -1255,8 +1269,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>1186</width>
-                <height>363</height>
+                <width>1020</width>
+                <height>289</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">

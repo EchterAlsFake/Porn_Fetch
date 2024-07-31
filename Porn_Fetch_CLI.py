@@ -3,11 +3,14 @@ import threading
 import phub.consts
 
 from src.backend.shared_functions import *
+from src.backend.log_config import setup_logging
 from base_api.modules.download import *
 from base_api.modules.progress_bars import *
 from base_api.base import Core
 from rich import print as rprint
 from rich.markdown import Markdown
+
+logger = setup_logging()
 
 
 class CLI:
@@ -127,8 +130,8 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
             phub.consts.FFMPEG_EXECUTABLE = self.ffmpeg_path
 
         else:
-            logger_error("FFMPEG wasn't found... Have you extracted it from the .zip file?")
-            logger_error("FFMPEG Features won't be available!")
+            logger.warning("FFMPEG wasn't found... Have you extracted it from the .zip file?")
+            logger.warning("FFMPEG Features won't be available!")
             self.ffmpeg_features = False
 
     def save_user_settings(self):
@@ -333,7 +336,7 @@ for example: 1,5,94,3{Fore.WHITE}
             self.iterate_generator(Client().search(query))
 
         elif website == "2":
-            self.iterate_generator(hq_Client().search_videos(query=query, pages=10))
+            self.iterate_generator(hq_Client().search_videos(query=query))
 
         elif website == "3":
             self.iterate_generator(xv_Client().search(query))
@@ -342,9 +345,9 @@ for example: 1,5,94,3{Fore.WHITE}
             self.iterate_generator(xn_Client().search(query).videos)
 
         elif website == "5":
-            self.iterate_generator(ep_Client().search_videos(query, page=1, per_page=self.result_limit,
+            self.iterate_generator(ep_Client().search_videos(query, per_page=self.result_limit,
                                                              sorting_order="", sorting_gay="", sorting_low_quality="",
-                                                             enable_html_scraping=True))
+                                                             enable_html_scraping=True, page=1))
 
     def process_file(self):
         videos = []
@@ -364,14 +367,14 @@ for example: 1,5,94,3{Fore.WHITE}
             else:
                 videos.append(line)
 
-        logger_debug(f"{return_color()}Processing Models / Videos...")
+        logger.debug(f"{return_color()}Processing Models / Videos...")
         for video in videos:
-            objects.append(check_video(video, language=self.language, delay=self.delay))
+            objects.append(check_video(video, delay=self.delay))
 
         for video in models:
             objects.append(video)
 
-        logger_debug(f"{return_color()}Done!")
+        logger.debug(f"{return_color()}Done!")
         self.iterate_generator(objects)
 
     def download(self, video, output_path):
@@ -390,7 +393,7 @@ for example: 1,5,94,3{Fore.WHITE}
                                callback=Callback.text_progress_bar)
 
         finally:
-            logger_debug(f"{return_color()}Finished downloading for: {video.title}")
+            logger.debug(f"{return_color()}Finished downloading for: {video.title}")
             self.semaphore.release()
             if self.ffmpeg_features:
                 os.rename(f"{output_path}", f"{output_path}_.tmp")
@@ -403,7 +406,7 @@ for example: 1,5,94,3{Fore.WHITE}
                 os.remove(f"{output_path}_.tmp")
                 write_tags(path=output_path, video=video, ffmpeg_path=None)
             else:
-                logger_debug("FFMPEG features disabled, writing tags and converting the video won't be available!")
+                logger.debug("FFMPEG features disabled, writing tags and converting the video won't be available!")
 
     @staticmethod
     def credits():
