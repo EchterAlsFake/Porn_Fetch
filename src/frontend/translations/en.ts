@@ -4,12 +4,12 @@
 <context>
     <name>Porn_Fetch</name>
     <message>
-        <location filename="../../../main.py" line="1044"/>
+        <location filename="../../../main.py" line="1062"/>
         <source>Saved User Settings, please restart Porn Fetch!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1081"/>
+        <location filename="../../../main.py" line="1099"/>
         <source>
 FFmpeg isn&apos;t installed on your system... Some features won&apos;t be available:
 
@@ -27,62 +27,62 @@ This warning won&apos;t be shown again.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1123"/>
+        <location filename="../../../main.py" line="1141"/>
         <source>The output path does not exist or is not writable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1125"/>
+        <location filename="../../../main.py" line="1143"/>
         <source>Enter custom Path:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1127"/>
+        <location filename="../../../main.py" line="1145"/>
         <source>Success: {text} will be used for this session!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1130"/>
+        <location filename="../../../main.py" line="1148"/>
         <source>Invalid path. The application will now exit.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1454"/>
+        <location filename="../../../main.py" line="1472"/>
         <source>Some error occurred in loading a video. Please report this: {error_message}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1590"/>
+        <location filename="../../../main.py" line="1608"/>
         <source>Information: The Website {website} specified in the URL file isn&apos;t valid.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1608"/>
+        <location filename="../../../main.py" line="1626"/>
         <source>Those credentials don&apos;t seem to be valid...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1614"/>
+        <location filename="../../../main.py" line="1632"/>
         <source>Login Successful!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1618"/>
+        <location filename="../../../main.py" line="1636"/>
         <source>Login Failed, please check your credentials and try again!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1621"/>
+        <location filename="../../../main.py" line="1639"/>
         <source>You are already logged in!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1644"/>
+        <location filename="../../../main.py" line="1662"/>
         <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1714"/>
+        <location filename="../../../main.py" line="1732"/>
         <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
         <translation type="unfinished"></translation>
     </message>

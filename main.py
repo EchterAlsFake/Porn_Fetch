@@ -1,5 +1,4 @@
 import random
-import re
 import time
 import sys
 import os.path
@@ -550,9 +549,9 @@ class FFMPEGDownload(QRunnable):
         self.mode = mode
         self.signals = Signals()
 
-    def delete_dir(self):
+    @staticmethod
+    def delete_dir():
         files = os.listdir("./")
-
         for file in files:
             try:
                 search = re.search(pattern=r'ffmpeg-(.*?)-', string=file)  # It's all about the version number
@@ -570,7 +569,6 @@ class FFMPEGDownload(QRunnable):
                 pass
 
         return False
-
 
     def run(self):
         # Download the file
@@ -602,7 +600,7 @@ class FFMPEGDownload(QRunnable):
 
                 for idx, member in enumerate(tar.getmembers()):
                     if 'ffmpeg' in member.name and (member.name.endswith('ffmpeg')):
-                        tar.extract(member, self.extract_path)
+                        tar.extract(member, self.extract_path, filter="data")
                         extracted_path = os.path.join(self.extract_path, member.path)
                         shutil.move(extracted_path, "./")
 
@@ -623,7 +621,6 @@ class FFMPEGDownload(QRunnable):
         # Finalize
         self.signals.total_progress.emit(total_length, total_length)  # Ensure progress bar reaches 100%
         os.remove(filename)  # Clean up downloaded archive
-
 
         if self.delete_dir():
             logger.debug("FFMPEG: [4/4] Cleaned Up")
@@ -1867,7 +1864,7 @@ if __name__ == "__main__":
 
     def reset_pornfetch():
         setup_config_file(force=True)
-        ui_popup(QCoreApplication.translate("Done! Please restart.", None))
+        ui_popup(QCoreApplication.translate(context, "Done! Please restart.", None))
 
 
     def switch_stop_state_2():
