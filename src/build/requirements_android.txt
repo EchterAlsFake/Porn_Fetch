@@ -19,4 +19,4 @@ Those are the requirements. Add them to buildozer. DO NOT CHANGE VERSION NUMBERS
 
 The wheels I am using can be found here: https://github.com/EchterAlsFake/PySide6-to-Android/releases/1.0
 
-,charset-normalizer==2.1.1,git+https://github.com/EchterAlsFake/PHUB,idna,urllib3,certifi,hue_shift,markdown,colorama,requests,git+https://github.com/EchterAlsFake/hqporner_api,ffmpeg-progress-yield,tqdm,git+https://github.com/EchterAlsFake/eporner_api,git+https://github.com/EchterAlsFake/xnxx_api,git+https://github.com/EchterAlsFake/xvideos_api,beautifulsoup4,mutagen,git+https://github.com/EchterAlsFake/eaf_base_api,pypresence
+,charset-normalizer==2.1.1,git+https://github.com/EchterAlsFake/PHUB,idna,urllib3,certifi,hue_shift,markdown,colorama,requests,git+https://github.com/EchterAlsFake/hqporner_api,ffmpeg-progress-yield,tqdm,git+https://github.com/EchterAlsFake/eporner_api,git+https://github.com/EchterAlsFake/xnxx_api,git+https://github.com/EchterAlsFake/xvideos_api,beautifulsoup4,mutagen,git+https://github.com/EchterAlsFake/eaf_base_api

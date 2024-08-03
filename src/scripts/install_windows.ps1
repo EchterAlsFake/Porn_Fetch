@@ -5,41 +5,86 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     exit
 }
 
-# Check if Python is already installed
-$pythonInstalled = $true
-try {
-    python --version | Out-Null
-} catch {
-    $pythonInstalled = $false
+$userDir = [Environment]::GetFolderPath('UserProfile')
+$desktopDir = [System.IO.Path]::Combine($userDir, "Desktop")
+$tempDir = [System.IO.Path]::GetTempPath()
+
+# Define the downloads directory
+$downloadsDir = "$env:TEMP"
+
+function Check-PythonInstalled {
+    try {
+        $pythonVersion = py --version 2>&1
+        if ($pythonVersion -match "Python (\d+\.\d+\.\d+)") {
+            return $true
+        } else {
+            return $false
+        }
+    } catch {
+        return $false
+    }
 }
 
-if (-not $pythonInstalled) {
+function Install-Python {
     # Download and install Python
-    Write-Output "Downloading Python 3.11.6..."
-    Invoke-WebRequest -Uri "https://www.python.org/ftp/python/3.11.6/python-3.11.6-amd64.exe" -OutFile "python-3.11.6-amd64.exe"
-    
-    Write-Output "Installing Python 3.11.6 silently..."
-    Start-Process -Wait "python-3.11.6-amd64.exe" -ArgumentList "/quiet InstallAllUsers=1 PrependPath=1"
+    Write-Output "Downloading Python 3.12.4..."
+    $pythonInstallerPath = [System.IO.Path]::Combine($downloadsDir, "python-3.12.4-amd64.exe")
+    try {
+        Invoke-WebRequest -Uri "https://www.python.org/ftp/python/3.12.4/python-3.12.4-amd64.exe" -OutFile $pythonInstallerPath -ErrorAction Stop
+    } catch {
+        Write-Output "Failed to download Python installer. Please check your internet connection."
+        return
+    }
+
+    Write-Output "Installing Python 3.12.4 silently..."
+    try {
+        Start-Process -FilePath $pythonInstallerPath -ArgumentList "/quiet InstallAllUsers=1 PrependPath=1" -Wait -ErrorAction Stop
+    } catch {
+        Write-Output "Python installation failed. Please run the installer manually."
+        return
+    }
+
+    # Verify installation
+    if (Check-PythonInstalled) {
+        Write-Output "Python installation succeeded. Version: $(py --version 2>&1)"
+    } else {
+        Write-Output "Python installation failed. Please install it manually from https://www.python.org/downloads/"
+    }
+}
+
+if (Check-PythonInstalled) {
+    Write-Output "Python is already installed. Version: $(py --version 2>&1)"
 } else {
-    Write-Output "Python is already installed."
+    Write-Output "Python is not installed."
+    Install-Python
 }
 
 # Download and extract the project ZIP
 Write-Output "Downloading project ZIP..."
-Invoke-WebRequest -Uri "https://github.com/EchterAlsFake/Porn_Fetch/archive/refs/heads/master.zip" -OutFile "master.zip"
-
+$projectZipPath = [System.IO.Path]::Combine($downloadsDir, "master.zip")
+Invoke-WebRequest -Uri "https://github.com/EchterAlsFake/Porn_Fetch/archive/refs/heads/master.zip" -OutFile $projectZipPath
 Write-Output "Extracting project ZIP..."
-Expand-Archive -Path "master.zip" -DestinationPath "."
+Expand-Archive -Path $projectZipPath -DestinationPath $downloadsDir -Force
 
-# Install pip requirements
-Set-Location -Path ".\Porn_Fetch-master"
-
-Write-Output "Installing pip requirements..."
+# Use Invoke-Command to run commands within the virtual environment
+$projectDir = Join-Path -Path $downloadsDir -ChildPath "Porn_Fetch-master"
+Set-Location -Path $projectDir
+py -m venv ..\venv\
+..\venv\Scripts\activate.ps1
 pip install -r requirements.txt
-pip install pyinstaller
+echo Y | pyside6-deploy main.py -c src/build/pysidedeploy_windows.spec -f -v
 
-# Build the project
-Write-Output "Building the project..."
-pyinstaller -F main.py
+# Move the final executable to the user's Desktop
+$finalExePath = Join-Path -Path $projectDir -ChildPath "main.exe"
+$renamedExe = Join-Path -Path $projectDir -ChildPath "Porn Fetch.exe"
+if (Test-Path -Path $finalExePath) {
+    Rename-Item -Path $finalExePath -NewName "Porn Fetch.exe"
+    Move-Item -Path $renamedExe -Destination (Join-Path $desktopDir "Porn Fetch.exe")
+}
 
+#Set-Location -Path $userDir
+# Clean up
+Write-Output "Cleaning up..."
+Remove-Item -Path $projectZipPath -Force
+Remove-Item -Recurse -Force -Path (Join-Path $downloadsDir "Porn_Fetch-master")
 Write-Output "Done!"
