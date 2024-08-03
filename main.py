@@ -1,3 +1,4 @@
+import random
 import time
 import sys
 import os.path
@@ -6,12 +7,11 @@ import markdown
 import zipfile
 import shutil
 import tarfile
-import src.frontend.resources
+import src.frontend.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
 
-from itertools import islice
+from itertools import islice, chain
 from threading import Event
 from pathlib import Path
-from pypresence import Presence, exceptions
 
 from hqporner_api.api import Sort as hq_Sort
 from phub import consts
@@ -21,14 +21,14 @@ from base_api.base import Core
 from src.backend.shared_functions import *
 from src.backend.shared_gui import *
 from src.backend.class_help import *
+from src.backend.log_config import setup_logging
 from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
 from src.frontend.License import Ui_License
 from src.frontend.range_selector import Ui_Form
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
-                            QTranslator, QCoreApplication)
-from PySide6.QtWidgets import (QWidget, QApplication, QInputDialog, QTreeWidgetItem, QButtonGroup, QFileDialog,
-                               QPushButton)
+                            QTranslator, QCoreApplication, QSize)
+from PySide6.QtWidgets import QWidget, QApplication, QInputDialog, QTreeWidgetItem, QButtonGroup, QFileDialog
 from PySide6.QtGui import QIcon, QFont
 
 """
@@ -58,23 +58,20 @@ __version__ = "3.4"
 __build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 __next_release__ = "3.5"
-discord_id = "1224629014032023563"  # Used for rich presence
-discord_image = "logo_transparent"
 total_segments = 0
 downloaded_segments = 0
 last_index = 0
 stop_flag = Event()
-invalid_input_string = QCoreApplication.tr("Wrong Input, please verify the URL, category or actress!", None)
+invalid_input_string = QCoreApplication.translate("main", "Wrong Input, please verify the URL, category or"
+                                                                       " actress!", None)
 ffmpeg_features = True
 ffmpeg_path = None
-urls = ["https://www.pornhub.com", "https://www.eporner.com", "https://www.hqporner.com", "https://www.xnxx.com",
-        "https://www.xvideos.com"]
-
 url_linux = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
 url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
-ffmpeg_linux = "ffmpeg-6.1-amd64-static"
-ffmpeg_windows = "ffmpeg-7.0-essentials_build"
 android_arch = None
+session_urls = []  # This list saves all URls used in the current session. Used for the URL export function
+total_downloaded_videos = 0
+logger = setup_logging()
 
 
 class Signals(QObject):
@@ -87,6 +84,7 @@ class Signals(QObject):
     progress_eporner = Signal(int, int)
     progress_xnxx = Signal(int, int)
     progress_xvideos = Signal(int, int)
+    progress_spankbang = Signal(int, int)
     total_progress = Signal(int, int)
     progress_video = Signal(object)
     ffmpeg_progress = Signal(int, int)
@@ -146,14 +144,14 @@ class License(QWidget):
         with open("config.ini", "w") as config_file:
             self.conf.write(config_file)
             config_file.close()
-            logger_error("License was denied, closing Porn Fetch")
+            logger.error("License was denied, closing Porn Fetch")
             self.close()
             sys.exit(0)  # exiting if user denied
 
     def show_main_window(self):
         """ If license was accepted, the License widget is closed and the main widget will be shown."""
         self.close()
-        logger_debug("Startup: [2/5] License accepted")
+        logger.debug("Startup: [2/5] License accepted")
         self.main_widget = Porn_Fetch()
         self.main_widget.show()
 
@@ -165,31 +163,15 @@ class CheckUpdates(QRunnable):
 
     def run(self):
         url = f"https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/{__next_release__}"
-        if requests.get(url).status_code == 200:
-            self.signals.result.emit(True)
-
-        else:
-            self.signals.result.emit(False)
-
-
-class CheckInternet(QRunnable):
-    def __init__(self):
-        super(CheckInternet, self).__init__()
-        self.signals = Signals()
-
-    def run(self):
         try:
-            for url in urls:
-                if not requests.get(url).status_code == 200:
-                    self.signals.result.emit(False)
-                    return
+            if requests.get(url).status_code == 200:
+                self.signals.result.emit(True)
 
-        except (requests.exceptions.SSLError, requests.exceptions.ConnectionError, ConnectionResetError,
-                ConnectionError, requests.exceptions.HTTPError):
-            self.signals.result.emit(False)
+            else:
+                self.signals.result.emit(False)
 
-        else:
-            self.signals.result.emit(True)
+        except requests.exceptions.ConnectionError:
+            logger.error("Couldn't check for updates, because of a Connection Error")
 
 
 class AddToTreeWidget(QRunnable):
@@ -204,40 +186,21 @@ class AddToTreeWidget(QRunnable):
         self.is_checked = is_checked
 
     def process_video(self, video, index):
-        title = video.title
-        disabled = QCoreApplication.tr("Disabled", None)
+        data = load_video_attributes(video)
+        session_urls.append(video.url)
+        title = data[0]
+        disabled = QCoreApplication.translate("main", "Disabled", None)
         duration = disabled
         author = disabled
 
         # Checks which mode is selected by the user and loads the video attributes
         if self.data_mode == 1:
-            if isinstance(video, (hq_Video, xn_Video, xv_Video)):
-                duration = str(video.length)
-
-                if hasattr(video, 'pornstars'):
-                    author = video.pornstars[0] if video.pornstars else "unknown"
-
-                else:
-                    author = video.author if hasattr(video, 'author') and video.author else "unknown"
-
-            elif isinstance(video, Video):
-                duration = round(video.duration.seconds / 60)
-                author = video.author.name
-
-            elif isinstance(video, ep_Video):
-                duration = round(int(video.length) / 60)
-                author = video.author
-
-        # Handling exceptions for missing author in xn_Video
-        if isinstance(video, xn_Video) and not hasattr(video, 'pornstars'):
-            author = "unknown"
+            author = data[1]
+            duration = str(parse_length(data[2]))
 
         print(
             f"\r\033[K[{Fore.LIGHTCYAN_EX}{index}/{self.search_limit}]{Fore.RESET}{str(title)} Successfully processed!",
             end='', flush=True)
-
-        if self.data_mode == 1:
-            duration = str(parse_length(duration))
 
         return [str(title), str(author), str(duration), str(index), video]
 
@@ -254,10 +217,10 @@ class AddToTreeWidget(QRunnable):
             start = 1
 
         try:
-            logger_debug(f"Result Limit: {str(self.search_limit)}")
+            logger.debug(f"Result Limit: {str(self.search_limit)}")
 
             if self.reverse:
-                logger_debug("Reversing Videos. This may take some time...")
+                logger.debug("Reversing Videos. This may take some time...")
 
                 # Use islice to limit the number of items fetched from the iterator
                 videos = list(islice(self.iterator, self.search_limit))
@@ -282,8 +245,9 @@ class AddToTreeWidget(QRunnable):
                         try:
                             text_data = self.process_video(video, i)
                         except errors.RegexError as e:
-                            logger_error(f"Warning: a Regex Error occurred. This must not be an error, but could be one!"
-                                         f" -->: {e}")
+                            logger.error(
+                                f"Warning: a Regex Error occurred. This must not be an error, but could be one!"
+                                f" -->: {e}")
 
                             text_data = [str(video.title), str("Unknown"), str("Unknown"), str(i), video]
 
@@ -295,7 +259,7 @@ class AddToTreeWidget(QRunnable):
                         try_attempt = False  # No result, move to the next video
 
                     except (errors.MaxRetriesExceeded, IndexError, ConnectionError) as e:
-                        logger_error(f"""
+                        logger.error(f"""
 Rate limited by PornHub, waiting for 5 seconds...
 
 Note: If this error persists, please close the application and report the following error.
@@ -307,6 +271,10 @@ Error: {e}""")
 There's a problem with your internet access... Are certain Porn sites blocked by a firewall or your ISP?""")
                         break
 
+                    except errors.RegionBlocked:
+                        logger.error(f"Video: {video.url} is not available in your region, skipping...")
+                        try_attempt = False
+
         finally:
             self.signals.finished.emit()
 
@@ -314,7 +282,7 @@ There's a problem with your internet access... Are certain Porn sites blocked by
 class DownloadThread(QRunnable):
     """Refactored threading class to download videos with improved performance and logic."""
 
-    def __init__(self, video, quality, output_path, threading_mode, workers, timeout, stop_flag):
+    def __init__(self, video, quality, output_path, threading_mode, workers, timeout, stop_flag, skip_existing_files):
         super().__init__()
         self.video = video
         self.ffmpeg = None
@@ -323,6 +291,7 @@ class DownloadThread(QRunnable):
         self.threading_mode = threading_mode
         self.signals = Signals()
         self.stop_flag = stop_flag
+        self.skip_existing_files = skip_existing_files
         self.workers = int(workers)
         self.timeout = int(timeout)
         self.video_progress = {}
@@ -333,6 +302,7 @@ class DownloadThread(QRunnable):
             'eporner': self.signals.progress_eporner,
             'xnxx': self.signals.progress_xnxx,
             'xvideos': self.signals.progress_xvideos,
+            'spankbang': self.signals.progress_spankbang
         }
 
     def generic_callback(self, pos, total, signal, video_source, ffmpeg=False):
@@ -386,11 +356,18 @@ class DownloadThread(QRunnable):
         """Run the download in a thread, optimizing for different video sources and modes."""
         try:
             if os.path.isfile(self.output_path):
-                logger_debug("The file already exists, skipping...")
-                self.signals.completed.emit()
-                return
+                if self.skip_existing_files:
+                    logger.debug("The file already exists, skipping...")
+                    self.signals.completed.emit()
+                    return
 
-            logger_debug(f"Downloading Video to: {self.output_path}")
+                else:
+                    logger.debug("The file already exists, appending random number...")
+                    path = str(self.output_path).split(".")
+                    path = path[0] + str(random.randint(0, 1000)) + ".mp4"
+                    self.output_path = path
+
+            logger.debug(f"Downloading Video to: {self.output_path}")
             if self.threading_mode == "FFMPEG" or self.threading_mode == download.FFMPEG:
                 self.ffmpeg = True
 
@@ -399,7 +376,7 @@ class DownloadThread(QRunnable):
                 self.timeout, mode=self.threading_mode, video=self.video)
                 video_source = "pornhub"
                 path = self.output_path
-                logger_debug("Starting the Download!")
+                logger.debug("Starting the Download!")
                 try:
                     self.video.download(downloader=self.threading_mode, path=path, quality=self.quality,
                                         display=lambda pos, total: self.generic_callback(pos, total,
@@ -429,35 +406,40 @@ class DownloadThread(QRunnable):
 
             elif isinstance(self.video, xn_Video):
                 video_source = "xnxx"
-                self.video.download(downloader=self.threading_mode, path=self.output_path,
-                                    quality=self.quality,
+                self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality,
                                     callback=lambda pos, total: self.generic_callback(pos, total,
                                                                                       self.signals.progress_xnxx,
                                                                                       video_source, self.ffmpeg))
 
             elif isinstance(self.video, xv_Video):
                 video_source = "xvideos"
-                self.video.download(downloader=self.threading_mode, path=self.output_path,
-                                    quality=self.quality,
+                self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality,
                                     callback=lambda pos, total: self.generic_callback(pos, total,
                                                                                       self.signals.progress_xvideos,
                                                                                       video_source, self.ffmpeg))
+            elif isinstance(self.video, sp_Video):
+                video_source = "spankbang"
+                self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality,
+                                    callback=lambda pos, total: self.generic_callback(pos, total,
+                                                                                      self.signals.progress_spankbang,
+                                                                                      video_source, self.ffmpeg),
+                                    no_title=True, use_hls=True)
 
                 # ... other video types ...
 
         finally:
             if ffmpeg_features:
                 os.rename(f"{self.output_path}", f"{self.output_path}_.tmp")
-                logger_debug(f"FFMPEG PATH: {ffmpeg_path}")
+                logger.debug(f"FFMPEG PATH: {ffmpeg_path}")
                 cmd = [ffmpeg_path, "-i", f"{self.output_path}_.tmp", "-c", "copy", self.output_path]
                 ff = FfmpegProgress(cmd)
                 for progress in ff.run_command_with_progress():
                     self.signals.ffmpeg_progress.emit(round(progress), 100)
 
                 os.remove(f"{self.output_path}_.tmp")
-                write_tags(path=self.output_path, video=self.video, ffmpeg_path=ffmpeg_path)
+                write_tags(path=self.output_path, video=self.video)
             else:
-                logger_debug("FFMPEG features disabled, writing tags and converting the video won't be available!")
+                logger.warning("FFMPEG features disabled, writing tags and converting the video won't be available!")
 
             self.signals.completed.emit()
 
@@ -485,17 +467,17 @@ class QTreeWidgetDownloadThread(QRunnable):
                 video_objects.append(item.data(0, Qt.UserRole))
 
         if not self.threading_mode == "FFMPEG":
-            logger_debug("Getting segments...")
+            logger.debug("Getting segments...")
             global total_segments, downloaded_segments
             total_segments = sum(
                 [len(list(video.get_segments(quality=self.quality))) for video in video_objects if
                  hasattr(video, 'get_segments')])
-            logger_debug("Got segments")
+            logger.debug("Got segments")
             # This basically looks how many segments exist in all videos together, so that we can calculate the total
             # progress
 
         else:
-            logger_debug("Progress tracking: FFMPEG")
+            logger.debug("Progress tracking: FFMPEG")
             # FFMPEG has always 0-100 as progress callback, that is why I specify 100 for each video instead of the
             # total segments
             counter = 0
@@ -511,7 +493,7 @@ class QTreeWidgetDownloadThread(QRunnable):
             self.semaphore.acquire()  # Trying to start the download if the thread isn't locked
             if stop_flag.is_set():
                 return
-            logger_debug("Semaphore Acquired")
+            logger.debug("Semaphore Acquired")
             self.signals.progress_video.emit(video)  # Now emits the video to the main class for further processing
 
 
@@ -522,11 +504,10 @@ class VideoLoaderSignals(QObject):
 
 
 class VideoLoader(QRunnable):
-    def __init__(self, url, output_path, api_language, threading_mode, directory_system, quality, delay):
+    def __init__(self, url, output_path, threading_mode, directory_system, quality, delay):
         super(VideoLoader, self).__init__()
         self.url = url
         self.output_path = output_path
-        self.api_language = api_language
         self.threading_mode = threading_mode
         self.directory_system = directory_system
         self.quality = quality
@@ -535,23 +516,15 @@ class VideoLoader(QRunnable):
 
     def run(self):
         try:
-            video = check_video(self.url, language=self.api_language, delay=self.delay)
+            video = check_video(self.url, delay=self.delay)
 
             if video is False:
                 ui_popup(invalid_input_string)
 
             else:
-                title = video.title
-
-                if isinstance(video, Video):
-                    author = video.author.name
-
-                elif isinstance(video, hq_Video):
-                    pornstars = video.pornstars
-                    author = pornstars[0] if pornstars else "no_author_found"
-                else:
-                    author = video.author
-
+                data = load_video_attributes(video)
+                title = data[0]
+                author = data[1]
                 output_path = Path(self.output_path)
                 stripped_title = Core().strip_title(title)  # Strip the title so that videos with special chars can be
                 # saved on windows. It would raise an OSError otherwise
@@ -582,14 +555,36 @@ class FFMPEGDownload(QRunnable):
         self.mode = mode
         self.signals = Signals()
 
+    @staticmethod
+    def delete_dir():
+        files = os.listdir("./")
+        for file in files:
+            try:
+                search = re.search(pattern=r'ffmpeg-(.*?)-', string=file)  # It's all about the version number
+                if len(search.groups()) == 1:
+
+                    if sys.platform == "win32":
+                        shutil.rmtree(f"ffmpeg-{search.group(1)}-essentials_build")
+                        return True
+
+                    elif sys.platform == "linux" or sys.platform == "linux2":
+                        shutil.rmtree(f"ffmpeg-{search.group(1)}-amd64-static")
+                        return True
+
+            except AttributeError:
+                pass
+
+        return False
+
     def run(self):
         # Download the file
-        logger_debug(f"Downloading: {self.url}")
-        logger_debug("FFMPEG: [1/4] Starting the download")
+        logger.debug(f"Downloading: {self.url}")
+        logger.debug("FFMPEG: [1/4] Starting the download")
         with requests.get(self.url, stream=True) as r:
             r.raise_for_status()
             try:
                 total_length = int(r.headers.get('content-length'))
+
             except Exception:
                 total_length = 41313894
 
@@ -603,7 +598,7 @@ class FFMPEGDownload(QRunnable):
                         dl += len(chunk)
                         self.signals.total_progress.emit(dl, total_length)
 
-        logger_debug("FFMPEG: [2/4] Starting file extraction")
+        logger.debug("FFMPEG: [2/4] Starting file extraction")
         # Extract the file based on OS mode
         if self.mode == "linux" and filename.endswith(".tar.xz"):
             with tarfile.open(filename, "r:xz") as tar:
@@ -611,7 +606,7 @@ class FFMPEGDownload(QRunnable):
 
                 for idx, member in enumerate(tar.getmembers()):
                     if 'ffmpeg' in member.name and (member.name.endswith('ffmpeg')):
-                        tar.extract(member, self.extract_path)
+                        tar.extract(member, self.extract_path, filter="data")
                         extracted_path = os.path.join(self.extract_path, member.path)
                         shutil.move(extracted_path, "./")
 
@@ -628,47 +623,18 @@ class FFMPEGDownload(QRunnable):
                         shutil.move(extracted_path, ".")
 
                     self.signals.total_progress.emit(idx, total)
-        logger_debug("FFMPEG: [3/4] Finished Extraction")
+        logger.debug("FFMPEG: [3/4] Finished Extraction")
         # Finalize
         self.signals.total_progress.emit(total_length, total_length)  # Ensure progress bar reaches 100%
         os.remove(filename)  # Clean up downloaded archive
 
-        if sys.platform == "linux":
-            shutil.rmtree(ffmpeg_linux)
+        if self.delete_dir():
+            logger.debug("FFMPEG: [4/4] Cleaned Up")
 
-        elif sys.platform == "win32":
-            shutil.rmtree(ffmpeg_windows)
+        else:
+            logger.error("The Regex for finding the FFmpeg version failed. Please report this on GitHub!, Thanks.")
 
-        logger_debug("FFMPEG: [4/4] Cleaned Up")
         self.signals.finished.emit()
-
-
-class Discord(QRunnable):
-    """
-    The Discord class handles the Pypresence, which is a feature that allows to show your current activity in Discord.
-    If enabled, discord will show on your profile, that you are 'playing' Porn Fetch.
-    """
-
-    def __init__(self):
-        super(Discord, self).__init__()
-
-    def run(self):
-        while True:
-            try:
-                presence = Presence(discord_id)
-                presence.connect()
-                presence.update(details=f"Porn Fetch (v{__version__})", large_image=discord_image, buttons=
-                [{"label": "Visit Project", "url": "https://github.com/EchterAlsFake/Porn_Fetch"}])
-                time.sleep(60)  # Delay of 60 seconds, so that the Discord API doesn't get spammed
-
-            except exceptions.DiscordNotFound:
-                logger_error("Discord was not found... Pypresence won't be started!")
-
-            except exceptions.InvalidID:
-                logger_error("Invalid Discord Application ID. Please report this error, as it shouldn't happen!")
-
-            except exceptions.PyPresenceException as e:
-                logger_error(f"Pypresence exception... {e}")
 
 
 class AddUrls(QRunnable):
@@ -677,11 +643,10 @@ class AddUrls(QRunnable):
     all URLs / Models / Search terms have been processed. This is why I made this threading class
     """
 
-    def __init__(self, file, api_language, delay):
+    def __init__(self, file, delay):
         super(AddUrls, self).__init__()
         self.signals = Signals()
         self.file = file
-        self.api_language = api_language
         self.delay = delay
 
     def run(self):
@@ -707,11 +672,11 @@ class AddUrls(QRunnable):
             elif line.startswith("search#"):
                 query = line.split("#")[1]
                 site = line.split("#")[2]
-                search_iterators.append({"website" : site,
+                search_iterators.append({"website": site,
                                          "query": query})
 
             else:
-                video = check_video(line, language=self.api_language, delay=self.delay)
+                video = check_video(line, delay=self.delay)
 
                 if video is not False:
                     iterator.append(video)
@@ -727,10 +692,11 @@ class AddUrls(QRunnable):
 class Porn_Fetch(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-
         # Variable initialization:
+        self.model_videos_map = None
+        self.model_videos_type = None
+        self.skip_existing_files = None
         self.gui_language_map = None
-        self.discord_map = None
         self.max_retries = None
         self.workers = None
         self.timeout = None
@@ -740,12 +706,8 @@ class Porn_Fetch(QWidget):
         self.directory_system_map = None
         self.threading_mode_map = None
         self.threading_map = None
-        self.language_map = None
         self.quality_map = None
-        self.selected_category = None
-        self.excluded_categories_filter = None
         self.client = None
-        self.api_language = None
         self.delay = None
         self.search_limit = None
         self.semaphore_limit = None
@@ -762,33 +724,126 @@ class Porn_Fetch(QWidget):
 
         self.ui = Ui_Porn_Fetch_Widget()
         self.ui.setupUi(self)
+        self.default_max_height = self.ui.stacked_widget_top.maximumHeight()
         self.button_connectors()  # Connects the buttons to their functions
         self.button_groups()  # Groups the buttons, so that the Radio buttons are split from themselves (hard to explain)
         self.load_style()  # Loads all the User Interface stylesheets
-        logger_debug("Startup: [3/5] Initialized the User Interface")
+        logger.debug("Startup: [3/5] Initialized the User Interface")
         self.settings_maps_initialization()
         self.load_user_settings()  # Loads the user settings and applies selected values to the UI
-        logger_debug("Startup: [4/5] Loaded the user settings")
+        logger.debug("Startup: [4/5] Loaded the user settings")
         self.switch_to_home()  # Switches Porn Fetch to the home widget
-        self.check_for_updates()  # Checks if a new version is out, by using the GitHub release tags
-        self.check_internet()  # Checks if Porn Fetch can reach all websites
+        self.check_for_updates()
         self.check_ffmpeg()  # Checks and sets up FFmpeg
-        self.discord_()  # Discord Rich Presence
-        logger_debug("Startup: [5/5] ✔")
+        logger.debug("Startup: [5/5] ✔")
 
         if __build__ == "android":
             self.setup_android()  # Sets up Android, if build mode is Android (handles some UI stuff and things)
 
-    @classmethod
-    def load_stylesheet(cls, path):
-        """Load stylesheet from a given path with explicit open and close."""
-        file = QFile(path)
-        if not file.open(QFile.ReadOnly | QFile.Text):
-            logger_debug(f"Failed to open {path}")
-            return ""
-        stylesheet = QTextStream(file).readAll()
-        file.close()
-        return stylesheet
+    def button_groups(self):
+        """
+        The button groups are needed to tell the radio button which of them are in a group.
+        If I don't do this, then you could check all redio buttons at the same time lol"""
+        self.group_threading_mode = QButtonGroup()
+        self.group_threading_mode.addButton(self.ui.radio_threading_mode_ffmpeg)
+        self.group_threading_mode.addButton(self.ui.radio_threading_mode_default)
+        self.group_threading_mode.addButton(self.ui.radio_threading_mode_high_performance)
+
+        self.group_quality = QButtonGroup()
+        self.group_quality.addButton(self.ui.radio_quality_worst)
+        self.group_quality.addButton(self.ui.radio_quality_half)
+        self.group_quality.addButton(self.ui.radio_quality_best)
+
+        self.directory_system_group = QButtonGroup()
+        self.directory_system_group.addButton(self.ui.radio_directory_system_no)
+        self.directory_system_group.addButton(self.ui.radio_directory_system_yes)
+
+        self.language_group = QButtonGroup()
+        self.language_group.addButton(self.ui.radio_ui_language_english)
+        self.language_group.addButton(self.ui.radio_ui_language_german)
+        self.language_group.addButton(self.ui.radio_ui_language_french)
+        self.language_group.addButton(self.ui.radio_ui_language_system_default)
+        self.language_group.addButton(self.ui.radio_ui_language_chinese_simplified)
+
+        self.radio_hqporner = QButtonGroup()
+        self.radio_hqporner.addButton(self.ui.radio_top_porn_week)
+        self.radio_hqporner.addButton(self.ui.radio_top_porn_month)
+        self.radio_hqporner.addButton(self.ui.radio_top_porn_all_time)
+
+        self.radio_skip_existing_files = QButtonGroup()
+        self.radio_skip_existing_files.addButton(self.ui.radio_skip_existing_files_yes)
+        self.radio_skip_existing_files.addButton(self.ui.radio_skip_existing_files_no)
+
+        self.radio_model_videos = QButtonGroup()
+        self.radio_model_videos.addButton(self.ui.radio_model_both)
+        self.radio_model_videos.addButton(self.ui.radio_model_uploads)
+        self.radio_model_videos.addButton(self.ui.radio_model_featured)
+
+    def button_connectors(self):
+        """a function to link the buttons to their functions"""
+        # Menu Bar Switch Button Connections
+        self.ui.button_switch_home.clicked.connect(self.switch_to_home)
+        self.ui.button_switch_settings.clicked.connect(self.switch_to_settings)
+        self.ui.button_switch_credits.clicked.connect(self.switch_to_credits)
+        self.ui.button_switch_account.clicked.connect(self.switch_to_account)
+        self.ui.button_switch_supported_websites.clicked.connect(self.switch_to_supported_websites)
+        self.ui.button_view_progress_bars.clicked.connect(self.switch_to_all_progress_bars)
+
+        # Video Download Button Connections
+        self.ui.button_download.clicked.connect(self.start_single_video)
+        self.ui.button_model.clicked.connect(self.start_model)
+        self.ui.button_tree_download.clicked.connect(self.download_tree_widget)
+        self.ui.button_tree_unselect_all.clicked.connect(self.unselect_all_items)
+        self.ui.button_playlist_get_videos.clicked.connect(self.start_playlist)
+
+        # Help Buttons Connections
+        self.ui.button_semaphore_help.clicked.connect(button_semaphore_help)
+        self.ui.button_threading_mode_help.clicked.connect(button_threading_mode_help)
+        self.ui.button_directory_system_help.clicked.connect(button_directory_system_help)
+        self.ui.button_workers_help.clicked.connect(maximal_workers_help)
+        self.ui.button_timeout_help.clicked.connect(timeout_help)
+        self.ui.button_pornhub_delay_help.clicked.connect(pornhub_delay_help)
+        self.ui.button_result_limit_help.clicked.connect(result_limit_help)
+        self.ui.button_help_file.clicked.connect(open_file_help)
+        self.ui.button_timeout_maximal_retries_help.clicked.connect(max_retries_help)
+        self.ui.button_help_skip_existing_files.clicked.connect(skip_existing_files_help)
+        self.ui.button_help_model_videos.clicked.connect(model_videos_help)
+
+        # Settings
+        self.ui.button_settings_apply.clicked.connect(self.save_user_settings)
+        self.ui.button_settings_reset.clicked.connect(reset_pornfetch)
+
+        # Account
+        self.ui.button_login.clicked.connect(self.login)
+        self.ui.button_get_watched_videos.clicked.connect(self.get_watched_videos)
+        self.ui.button_get_liked_videos.clicked.connect(self.get_liked_videos)
+        self.ui.button_get_recommended_videos.clicked.connect(self.get_recommended_videos)
+
+        # Search
+        self.ui.button_search.clicked.connect(self.basic_search)
+
+        # HQPorner
+        self.ui.button_hqporner_category_get_videos.clicked.connect(self.get_by_category_hqporner)
+        self.ui.button_top_porn_get_videos.clicked.connect(self.get_top_porn_hqporner)
+        self.ui.button_get_brazzers_videos.clicked.connect(self.get_brazzers_videos)
+        self.ui.button_list_categories.clicked.connect(self.list_categories_hqporner)
+        self.ui.button_switch_tools.clicked.connect(self.switch_to_tools)
+        self.ui.button_get_random_videos.clicked.connect(self.get_random_video)
+
+        # EPorner
+        self.ui.button_list_categories_eporner.clicked.connect(self.list_categories_eporner)
+        self.ui.button_eporner_category_get_videos.clicked.connect(self.get_by_category_eporner)
+
+        # File Dialog
+        self.ui.button_output_path_select.clicked.connect(self.open_output_path_dialog)
+        self.ui.button_open_file.clicked.connect(self.open_file_dialog)
+
+        # Other stuff idk
+        self.ui.button_tree_select_range.clicked.connect(self.select_range_of_items)
+        self.ui.button_tree_stop.clicked.connect(switch_stop_state)
+        self.ui.button_tree_export_video_urls.clicked.connect(export_urls)
+        self.ui.button_download_ffmpeg.clicked.connect(self.download_ffmpeg)
+        self.ui.button_range_apply_everything.clicked.connect(self.select_all_items)
 
     def load_style(self):
         """Refactored function to load icons and stylesheets."""
@@ -808,9 +863,14 @@ class Porn_Fetch(QWidget):
             self.ui.button_result_limit_help: "faq.svg",
             self.ui.button_timeout_maximal_retries_help: "faq.svg",
             self.ui.button_help_file: "faq.svg",
-            self.ui.discord_rich_presence_help: "faq.svg",
+            self.ui.button_view_progress_bars: "progressbars.svg",
+            self.ui.button_help_model_videos: "faq.svg",
+            self.ui.button_help_skip_existing_files: "faq.svg",
         }
         for button, icon_name in icons.items():
+            if icon_name == "settings.svg" or icon_name == "tools.svg":
+                button.setIconSize(QSize(24, 24))
+
             button.setIcon(QIcon(f":/images/graphics/{icon_name}"))
 
         self.setWindowIcon(QIcon(":/images/graphics/logo_transparent.ico"))
@@ -822,6 +882,7 @@ class Porn_Fetch(QWidget):
             "progressbar_total": ":/style/stylesheets/progressbar_total.qss",
             "progressbar_xnxx": ":/style/stylesheets/progressbar_xnxx.qss",
             "progressbar_xvideos": ":/style/stylesheets/progressbar_xvideos.qss",
+            "progressbar_spankbang": ":/style/stylesheets/progressbar_spankbang.qss",
             "progressbar_converting": ":/style/stylesheets/progressbar_converting.qss",
             "button_blue": ":/style/stylesheets/stylesheet_button_blue.qss",
             "button_orange": ":/style/stylesheets/stylesheet_button_orange.qss",
@@ -831,7 +892,7 @@ class Porn_Fetch(QWidget):
             "button_reset": ":/style/stylesheets/stylesheet_button_reset.qss"
         }
 
-        stylesheets = {key: self.load_stylesheet(path) for key, path in stylesheet_paths.items()}
+        stylesheets = {key: load_stylesheet(path) for key, path in stylesheet_paths.items()}
 
         # Applying stylesheets to specific buttons
         # Simplify this part based on actual UI structure and naming
@@ -842,15 +903,15 @@ class Porn_Fetch(QWidget):
         self.ui.progressbar_eporner.setStyleSheet(stylesheets["progressbar_eporner"])
         self.ui.progressbar_hqporner.setStyleSheet(stylesheets["progressbar_hqporner"])
         self.ui.progressbar_xvideos.setStyleSheet(stylesheets["progressbar_xvideos"])
+        self.ui.progressbar_spankbang.setStyleSheet(stylesheets["progressbar_spankbang"])
         self.ui.progressbar_converting.setStyleSheet(stylesheets["progressbar_converting"])
-
         self.ui.button_model.setStyleSheet(stylesheets["button_purple"])
         self.ui.button_search.setStyleSheet(stylesheets["button_purple"])
         self.ui.button_download.setStyleSheet(stylesheets["button_purple"])
         self.ui.button_threading_mode_help.setStyleSheet(stylesheets["button_green"])
         self.ui.button_directory_system_help.setStyleSheet(stylesheets["button_green"])
         self.ui.button_semaphore_help.setStyleSheet(stylesheets["button_green"])
-        self.ui.button_tree_download.setStyleSheet(stylesheets["button_orange"])
+        self.ui.button_tree_download.setStyleSheet(stylesheets["button_purple"])
         self.ui.button_tree_unselect_all.setStyleSheet(stylesheets["button_blue"])
         self.ui.button_tree_select_range.setStyleSheet(stylesheets["button_green"])
         self.ui.button_output_path_select.setStyleSheet(stylesheets["button_blue"])
@@ -872,12 +933,12 @@ class Porn_Fetch(QWidget):
         self.ui.button_result_limit_help.setStyleSheet(stylesheets["button_green"])
         self.ui.button_settings_reset.setStyleSheet(stylesheets["button_reset"])
         self.ui.button_playlist_get_videos.setStyleSheet(stylesheets["button_purple"])
-        self.ui.button_view_all_progress_bars.setStyleSheet(stylesheets["button_blue"])
         self.ui.button_tree_stop.setStyleSheet(stylesheets["button_reset"])
         self.ui.button_tree_export_video_urls.setStyleSheet(stylesheets["button_purple"])
         self.ui.button_timeout_maximal_retries_help.setStyleSheet(stylesheets["button_green"])
         self.ui.button_help_file.setStyleSheet(stylesheets["button_green"])
         self.ui.button_download_ffmpeg.setStyleSheet(stylesheets["button_purple"])
+        self.ui.button_range_apply_everything.setStyleSheet(stylesheets["button_orange"])
         self.header = self.ui.treeWidget.header()
         self.header.resizeSection(0, 300)
         self.header.resizeSection(1, 150)
@@ -887,42 +948,133 @@ class Porn_Fetch(QWidget):
         # Sort by the 'Length' column in ascending order
         self.ui.treeWidget.sortByColumn(2, Qt.AscendingOrder)
 
+    def settings_maps_initialization(self):
+        # Maps for settings and corresponding UI elements
+        self.quality_map = {
+            "best": self.ui.radio_quality_best,
+            "half": self.ui.radio_quality_half,
+            "worst": self.ui.radio_quality_worst
+        }
+
+        self.threading_mode_map = {
+            "threaded": self.ui.radio_threading_mode_high_performance,
+            "FFMPEG": self.ui.radio_threading_mode_ffmpeg,
+            "default": self.ui.radio_threading_mode_default
+        }
+
+        self.directory_system_map = {
+            "1": self.ui.radio_directory_system_yes,
+            "0": self.ui.radio_directory_system_no
+        }
+
+        self.gui_language_map = {
+            "en": self.ui.radio_ui_language_english,
+            "de_DE": self.ui.radio_ui_language_german,
+            "fr": self.ui.radio_ui_language_french,
+            "zh_CN": self.ui.radio_ui_language_chinese_simplified,
+            "system": self.ui.radio_ui_language_system_default
+        }
+
+        self.model_videos_map = {
+            "both": self.ui.radio_model_both,
+            "uploads": self.ui.radio_model_uploads,
+            "featured": self.ui.radio_model_featured
+        }
+
+    def load_user_settings(self):
+        """Loads the user settings from the configuration file and applies them."""
+
+        # Apply settings
+        self.quality_map.get(self.conf.get("Video", "quality")).setChecked(True)
+        self.threading_mode_map.get(self.conf.get("Performance", "threading_mode")).setChecked(True)
+        self.directory_system_map.get(self.conf.get("Video", "directory_system")).setChecked(True)
+        self.gui_language_map.get(self.conf.get("UI", "language")).setChecked(True)
+        self.model_videos_map.get(self.conf.get("Video", "model_videos")).setChecked(True)
+        self.ui.spinbox_semaphore.setValue(int(self.conf.get("Performance", "semaphore")))
+        self.ui.spinbox_treewidget_limit.setValue(int(self.conf.get("Video", "search_limit")))
+        self.ui.lineedit_output_path.setText(self.conf.get("Video", "output_path"))
+
+        self.semaphore_limit = self.conf.get("Performance", "semaphore")
+        self.search_limit = int(self.conf.get("Video", "search_limit"))
+        self.output_path = self.conf.get("Video", "output_path")
+
+        self.gui_language = self.conf.get("UI", "language")
+        self.quality = self.conf["Video"]["quality"]
+        self.threading_mode = self.conf["Performance"]["threading_mode"]
+        self.semaphore = QSemaphore(int(self.semaphore_limit))
+        self.delay = int(self.conf["Video"]["delay"])
+        self.timeout = int(self.conf["Performance"]["timeout"])
+        self.workers = int(self.conf["Performance"]["workers"])
+        self.max_retries = int(self.conf["Performance"]["retries"])
+        self.skip_existing_files = True if self.conf["Video"]["skip_existing_files"] == "true" else False
+        self.model_videos_type = self.conf["Video"]["model_videos"]
+
+        if self.skip_existing_files:
+            self.ui.radio_skip_existing_files_yes.setChecked(True)
+
+        else:
+            self.ui.radio_skip_existing_files_no.setChecked(True)
+
+        self.ui.spinbox_maximal_timeout.setValue(int(self.timeout))
+        self.ui.spinbox_maximal_workers.setValue(int(self.workers))
+        self.ui.spinbox_pornhub_delay.setValue(int(self.delay))
+        consts.MAX_CALL_RETRIES = self.max_retries
+        bs_consts.REQUEST_DELAY = self.delay
+        bs_consts.MAX_RETRIES = self.max_retries
+        consts.FFMPEG_EXECUTABLE = ffmpeg_path
+        self.client = Client(delay=self.delay)
+
+    def save_user_settings(self):
+        """Saves the user settings to the configuration file based on the UI state."""
+        # Save quality setting
+        for quality, radio_button in self.quality_map.items():
+            if radio_button.isChecked():
+                self.conf.set("Video", "quality", quality)
+
+        # Save threading mode
+        for mode, radio_button in self.threading_mode_map.items():
+            if radio_button.isChecked():
+                self.conf.set("Performance", "threading_mode", mode)
+
+        # Save directory system setting
+        for system, radio_button in self.directory_system_map.items():
+            if radio_button.isChecked():
+                self.conf.set("Video", "directory_system", system)
+
+        for language, radio_button in self.gui_language_map.items():
+            if radio_button.isChecked():
+                self.conf.set("UI", "language", language)
+
+        for model_video_type, radio_button in self.model_videos_map.items():
+            if radio_button.isChecked():
+                self.conf.set("Video", "model_videos", model_video_type)
+
+        if self.ui.radio_skip_existing_files_no.isChecked():
+            self.conf.set("Video", "skip_existing_files", "false")
+
+        else:
+            self.conf.set("Video", "skip_existing_files", "true")
+
+        # Save other settings
+        self.conf.set("Performance", "semaphore", str(self.ui.spinbox_semaphore.value()))
+        self.conf.set("Video", "search_limit", str(self.ui.spinbox_treewidget_limit.value()))
+        self.conf.set("Video", "output_path", self.ui.lineedit_output_path.text())
+        self.conf.set("Performance", "timeout", str(self.ui.spinbox_maximal_timeout.value()))
+        self.conf.set("Performance", "workers", str(self.ui.spinbox_maximal_workers.value()))
+        self.conf.set("Video", "delay", str(self.ui.spinbox_pornhub_delay.value()))
+        self.conf.set("Performance", "retries", str(self.ui.spinbox_maximal_retries.value()))
+
+        with open("config.ini", "w") as config_file:
+            self.conf.write(config_file)
+
+        ui_popup(self.tr("Saved User Settings, please restart Porn Fetch!", None))
+        logger.debug("Saved User Settings, please restart Porn Fetch.")
+
     def check_for_updates(self):
         """Checks for updates in a thread, so that the main UI isn't blocked, until update checks are done"""
         self.update_thread = CheckUpdates()
-        self.update_thread.signals.result.connect(self.check_for_updates_result)
+        self.update_thread.signals.result.connect(check_for_updates_result)
         self.threadpool.start(self.update_thread)
-
-    def check_for_updates_result(self, value):
-        """Receives the Update result from the thread"""
-        if value:
-            logger_debug(f"Next release v{__next_release__} found!")
-            ui_popup(QCoreApplication.tr(f"""
-            Information: A new version of Porn Fetch (v{__next_release__}) is out. I recommend you to update Porn Fetch. 
-            Go to: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/ {__next_release__}""", None))
-            self.ui.lineedit_status_update.setText(f"✔, V{__next_release__} is out!")
-
-        else:
-            logger_debug("No updates found...")
-            self.ui.lineedit_status_update.setText("❌")
-
-    def check_internet(self):
-        """Checks the internet access for all sites"""
-        self.internet_thread = CheckInternet()
-        self.internet_thread.signals.result.connect(self.check_internet_result)
-        self.threadpool.start(self.internet_thread)
-
-    def check_internet_result(self, value):
-        if value:
-            logger_debug("All Internet connection tests passed: ✔")
-            self.ui.lineedit_status_internet.setText("✔")
-
-        else:
-            logger_error("""
-Couldn't access one of the supported websites, make sure you have a stable internet connection and you are outside of 
-a firewall. If you are at a public place or using your universities WiFi, your IT-Administrator may have forbidden 
-access to specific sites. In this case you can use a VPN / Proxy.""")
-            self.ui.lineedit_status_internet.setText("❌, please check your Internet connection!")
 
     def check_ffmpeg(self):
         # Check if ffmpeg is available in the system PATH
@@ -937,7 +1089,7 @@ access to specific sites. In this case you can use a VPN / Proxy.""")
             if ffmpeg_binary is None:
                 # If ffmpeg binaries are not found in the current directory, display warning and disable features
                 if self.conf.get("Performance", "ffmpeg_warning") == "true":
-                    ffmpeg_warning_message = QCoreApplication.tr(
+                    ffmpeg_warning_message = self.tr(
                         """
 FFmpeg isn't installed on your system... Some features won't be available:
 
@@ -960,19 +1112,16 @@ This warning won't be shown again.
                 self.ui.radio_threading_mode_ffmpeg.setDisabled(True)
                 global ffmpeg_features
                 ffmpeg_features = False
-                logger_error("FFMPEG features have been disabled, because ffmpeg wasn't found on your system.")
-                self.ui.lineedit_status_ffmpeg.setText("❌, FFmpeg features won't be available!")
+                logger.error("FFMPEG features have been disabled, because ffmpeg wasn't found on your system.")
             else:
                 # If ffmpeg binary is found in the current directory, set it as the ffmpeg path
                 ffmpeg_path = os.path.abspath(ffmpeg_binary)
-                self.ui.lineedit_status_ffmpeg.setText(f"✔ -->: {ffmpeg_path}")
         else:
             # If ffmpeg is found in system PATH, use it directly
             ffmpeg_path = shutil.which("ffmpeg")
             consts.FFMPEG_EXECUTABLE = ffmpeg_path
             bs_consts.FFMPEG_PATH = ffmpeg_path
-            self.ui.lineedit_status_ffmpeg.setText(f"✔ -->: {ffmpeg_path}")
-            logger_debug(f"FFMPEG: {ffmpeg_path}")
+            logger.debug(f"FFMPEG: {ffmpeg_path}")
 
     def download_ffmpeg(self):
         if sys.platform == "linux":
@@ -984,68 +1133,12 @@ This warning won't be shown again.
                 self.downloader = FFMPEGDownload(url=url_windows, extract_path=".", mode="windows")
 
         self.downloader.signals.total_progress.connect(self.update_total_progressbar)
-        self.downloader.signals.finished.connect(self.ffmpeg_finished)
+        self.downloader.signals.finished.connect(ffmpeg_finished)
         self.threadpool.start(self.downloader)
-
-    @classmethod
-    def ffmpeg_finished(cls):
-        ui_popup(QCoreApplication.tr("FFmpeg has been installed. Please restart Porn Fetch :)"))
-
-    def discord_(self):
-        """
-        I don't force anyone to use this. It's disabled by default :)
-        """
-        if self.discord:
-            self.discord_thread = Discord()
-            self.threadpool.start(self.discord_thread)
-            logger_debug("Started Discord thread")
-
-    def button_groups(self):
-        """
-        The button groups are needed to tell the radio button which of them are in a group.
-        If I don't do this, then you could check all redio buttons at the same time lol"""
-        self.group_threading_mode = QButtonGroup()
-        self.group_threading_mode.addButton(self.ui.radio_threading_mode_ffmpeg)
-        self.group_threading_mode.addButton(self.ui.radio_threading_mode_default)
-        self.group_threading_mode.addButton(self.ui.radio_threading_mode_high_performance)
-
-        self.group_quality = QButtonGroup()
-        self.group_quality.addButton(self.ui.radio_quality_worst)
-        self.group_quality.addButton(self.ui.radio_quality_half)
-        self.group_quality.addButton(self.ui.radio_quality_best)
-
-        self.group_api_language = QButtonGroup()
-        self.group_api_language.addButton(self.ui.radio_api_language_chinese)
-        self.group_api_language.addButton(self.ui.radio_api_language_german)
-        self.group_api_language.addButton(self.ui.radio_api_language_french)
-        self.group_api_language.addButton(self.ui.radio_api_language_english)
-        self.group_api_language.addButton(self.ui.radio_api_language_russian)
-        self.group_api_language.addButton(self.ui.radio_api_language_czech)
-        self.group_api_language.addButton(self.ui.radio_api_language_italian)
-        self.group_api_language.addButton(self.ui.radio_api_language_spanish)
-        self.group_api_language.addButton(self.ui.radio_api_language_portuguese)
-        self.group_api_language.addButton(self.ui.radio_api_language_dutch)
-        self.group_api_language.addButton(self.ui.radio_api_language_japanese)
-
-        self.directory_system_group = QButtonGroup()
-        self.directory_system_group.addButton(self.ui.radio_directory_system_no)
-        self.directory_system_group.addButton(self.ui.radio_directory_system_yes)
-
-        self.language_group = QButtonGroup()
-        self.language_group.addButton(self.ui.radio_ui_language_english)
-        self.language_group.addButton(self.ui.radio_ui_language_german)
-        self.language_group.addButton(self.ui.radio_ui_language_french)
-        self.language_group.addButton(self.ui.radio_ui_language_system_default)
-        self.language_group.addButton(self.ui.radio_ui_language_chinese_simplified)
-
-        self.radio_hqporner = QButtonGroup()
-        self.radio_hqporner.addButton(self.ui.radio_top_porn_week)
-        self.radio_hqporner.addButton(self.ui.radio_top_porn_month)
-        self.radio_hqporner.addButton(self.ui.radio_top_porn_all_time)
 
     def setup_android(self):
         """Sets up for Porn Fetch for Android devices"""
-        logger_debug(f"Running on Android: {sys.platform}")
+        logger.debug(f"Running on Android: {sys.platform}")
         if not get_output_path():
             self.handle_no_output_path()
             return  # Early return to avoid setting up UI components again at the end.
@@ -1053,321 +1146,58 @@ This warning won't be shown again.
         self.configure_ui_for_android("/storage/emulated/0/Download/")
 
     def handle_no_output_path(self):
-        ui_popup(
-            QCoreApplication.tr("The output path does not exist or is not writable.", None))
+        ui_popup(self.tr( "The output path does not exist or is not writable.", None))
         text, ok = QInputDialog.getText(self, "Enter custom Path",
-                                        QCoreApplication.tr("Enter custom Path:", None))
+                                        self.tr( "Enter custom Path:", None))
         if ok and get_output_path(text):
-            ui_popup(
-                QCoreApplication.tr(f"Success: {text} will be used for this session!", None))
+            ui_popup(self.tr(f"Success: {text} will be used for this session!", None))
             self.configure_ui_for_android(text)
         else:
-            ui_popup(
-                QCoreApplication.tr("Invalid path. The application will now exit.", None))
+            ui_popup(self.tr("Invalid path. The application will now exit.", None))
             sys.exit()
 
     def configure_ui_for_android(self, path):
-        """Disables some things on Android which just don't work yet"""
-        self.output_path = path
-        self.ui.lineedit_output_path.setText(self.output_path)
-        self.ui.lineedit_output_path.setReadOnly(True)
-        self.ui.button_open_file.setDisabled(True)
-        self.ui.lineedit_file.setText(QCoreApplication.tr("Not supported on Android", None))
-        self.ui.radio_threading_mode_ffmpeg.setDisabled(True)
-        self.warn_about_high_performance_threading()
-
-        self.ui.gridlayout_progressbar.addWidget(self.ui.label_progress_pornhub)
-        self.ui.gridlayout_progressbar.addWidget(self.ui.progressbar_pornhub)
-        self.ui.gridlayout_progressbar.addWidget(self.ui.label_total_progress)
-        self.ui.gridlayout_progressbar.addWidget(self.ui.progressbar_total)
-        self.ui.gridlayout_progressbar.addWidget(self.ui.label_progress_converting)
-        self.ui.gridlayout_progressbar.addWidget(self.ui.progressbar_converting)
-
-        self.progress_button = QPushButton("Show Progress")
-        self.ui.verticallayout_sidebar.addWidget(self.progress_button)
-        self.progress_button.clicked.connect(self.switch_to_all_progress_bars)
-        self.ui.scrollarea_status.deleteLater()
-
-    def warn_about_high_performance_threading(self):
-        if self.ui.radio_threading_mode_high_performance.isChecked():
-            ui_popup(
-                QCoreApplication.tr("High Performance threading may cause issues on Android devices.", None))
-
-    @staticmethod
-    def reset_pornfetch():
-        ui_popup(
-            QCoreApplication.tr("Porn Fetch will now reset to its default settings...", None))
-        setup_config_file(force=True)
-        ui_popup(QCoreApplication.tr("Done! Please restart.", None))
-
-    def toggle_sorting(self):
-        if self.ui.checkbox_tree_allow_sorting.isChecked():
-            logger_debug("Enabling sorting on the tree widget")
-            self.ui.treeWidget.setSortingEnabled(True)
-
-        else:
-            logger_debug("Disabling sorting on the tree widget")
-            self.ui.treeWidget.setSortingEnabled(False)
-
-    def button_connectors(self):
-        """a function to link the buttons to their functions"""
-        # Menu Bar Switch Button Connections
-        self.ui.button_switch_home.clicked.connect(self.switch_to_home)
-        self.ui.button_switch_settings.clicked.connect(self.switch_to_settings)
-        self.ui.button_switch_credits.clicked.connect(self.switch_to_credits)
-        self.ui.button_switch_account.clicked.connect(self.switch_to_account)
-        self.ui.button_switch_supported_websites.clicked.connect(self.switch_to_supported_websites)
-        self.ui.button_view_all_progress_bars.clicked.connect(self.switch_to_all_progress_bars)
-
-        # Video Download Button Connections
-        self.ui.button_download.clicked.connect(self.start_single_video)
-        self.ui.button_model.clicked.connect(self.start_model)
-        self.ui.button_tree_download.clicked.connect(self.download_tree_widget)
-        self.ui.button_tree_unselect_all.clicked.connect(self.unselect_all_items)
-        self.ui.button_playlist_get_videos.clicked.connect(self.start_playlist)
-
-        # Help Buttons Connections
-        self.ui.button_semaphore_help.clicked.connect(button_semaphore_help)
-        self.ui.button_threading_mode_help.clicked.connect(button_threading_mode_help)
-        self.ui.button_directory_system_help.clicked.connect(button_directory_system_help)
-        self.ui.button_workers_help.clicked.connect(maximal_workers_help)
-        self.ui.button_timeout_help.clicked.connect(timeout_help)
-        self.ui.button_pornhub_delay_help.clicked.connect(pornhub_delay_help)
-        self.ui.button_result_limit_help.clicked.connect(result_limit_help)
-        self.ui.button_help_file.clicked.connect(open_file_help)
-        self.ui.button_timeout_maximal_retries_help.clicked.connect(max_retries_help)
-        self.ui.discord_rich_presence_help.clicked.connect(discord_rich_presence_help)
-
-        # Settings
-        self.ui.button_settings_apply.clicked.connect(self.save_user_settings)
-        self.ui.button_settings_reset.clicked.connect(self.reset_pornfetch)
-
-        # Account
-        self.ui.button_login.clicked.connect(self.login)
-        self.ui.button_get_watched_videos.clicked.connect(self.get_watched_videos)
-        self.ui.button_get_liked_videos.clicked.connect(self.get_liked_videos)
-        self.ui.button_get_recommended_videos.clicked.connect(self.get_recommended_videos)
-
-        # Search
-        self.ui.button_search.clicked.connect(self.basic_search)
-
-        # HQPorner
-        self.ui.button_hqporner_category_get_videos.clicked.connect(self.get_by_category_hqporner)
-        self.ui.button_top_porn_get_videos.clicked.connect(self.get_top_porn_hqporner)
-        self.ui.button_get_brazzers_videos.clicked.connect(self.get_brazzers_videos)
-        self.ui.button_list_categories.clicked.connect(self.list_categories_hqporner)
-        self.ui.button_switch_tools.clicked.connect(self.switch_to_hqporner)
-        self.ui.button_get_random_videos.clicked.connect(self.get_random_video)
-
-        # EPorner
-        self.ui.button_list_categories_eporner.clicked.connect(self.list_categories_eporner)
-        self.ui.button_eporner_category_get_videos.clicked.connect(self.get_by_category_eporner)
-
-        # File Dialog
-        self.ui.button_output_path_select.clicked.connect(self.open_output_path_dialog)
-        self.ui.button_open_file.clicked.connect(self.open_file_dialog)
-
-        # Other stuff idk
-        self.ui.checkbox_tree_allow_sorting.checkStateChanged.connect(self.toggle_sorting)
-        self.ui.button_tree_select_range.clicked.connect(self.select_range_of_items)
-        self.ui.button_tree_stop.clicked.connect(self.switch_stop_state)
-        self.ui.button_tree_export_video_urls.clicked.connect(self.export_urls)
-        self.ui.button_download_ffmpeg.clicked.connect(self.download_ffmpeg)
-
-    def switch_login_button_state(self):
-        """If the user is logged in, I'll change the stylesheets of the buttons"""
-        file = QFile(":/style/stylesheets/stylesheet_switch_buttons_login_state.qss")
-        file.open(QFile.ReadOnly | QFile.Text)
-        stream = QTextStream(file)
-        stylesheet = stream.readAll()
-
-        self.ui.button_get_liked_videos.setStyleSheet(stylesheet)
-        self.ui.button_get_watched_videos.setStyleSheet(stylesheet)
-        self.ui.button_get_recommended_videos.setStyleSheet(stylesheet)
-
-    @classmethod
-    def switch_stop_state_2(cls):
-        global stop_flag
-        stop_flag = Event()
+        ""
 
     def switch_to_home(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(0)
-        self.ui.stacked_widget_top.setMinimumHeight(220)
-        self.ui.scrollarea_stacked_top.setMaximumHeight(220)
-
-    def settings_maps_initialization(self):
-        # Maps for settings and corresponding UI elements
-        self.quality_map = {
-            "best": self.ui.radio_quality_best,
-            "half": self.ui.radio_quality_half,
-            "worst": self.ui.radio_quality_worst
-        }
-
-        self.language_map = {
-            "en": self.ui.radio_api_language_english,
-            "fr": self.ui.radio_api_language_french,
-            "de": self.ui.radio_api_language_german,
-            "zh": self.ui.radio_api_language_chinese,
-            "nl": self.ui.radio_api_language_dutch,
-            "ru": self.ui.radio_api_language_russian,
-            "jp": self.ui.radio_api_language_japanese,
-            "pt": self.ui.radio_api_language_portuguese,
-            "es": self.ui.radio_api_language_spanish,
-            "cz": self.ui.radio_api_language_czech,
-            "it": self.ui.radio_api_language_italian
-        }
-
-        self.threading_mode_map = {
-            "threaded": self.ui.radio_threading_mode_high_performance,
-            "FFMPEG": self.ui.radio_threading_mode_ffmpeg,
-            "default": self.ui.radio_threading_mode_default
-        }
-
-        self.directory_system_map = {
-            "1": self.ui.radio_directory_system_yes,
-            "0": self.ui.radio_directory_system_no
-        }
-
-        self.discord_map = {
-            "false": self.ui.radio_discord_no,
-            "true": self.ui.radio_discord_yes
-        }
-
-        self.gui_language_map = {
-            "en": self.ui.radio_ui_language_english,
-            "de_DE": self.ui.radio_ui_language_german,
-            "fr": self.ui.radio_ui_language_french,
-            "zh_CN": self.ui.radio_ui_language_chinese_simplified,
-            "system": self.ui.radio_ui_language_system_default
-        }
-
-    def load_user_settings(self):
-        """Loads the user settings from the configuration file and applies them."""
-
-        # Apply settings
-        self.quality_map.get(self.conf.get("Video", "quality")).setChecked(True)
-        self.threading_mode_map.get(self.conf.get("Performance", "threading_mode")).setChecked(True)
-        self.directory_system_map.get(self.conf.get("Video", "directory_system")).setChecked(True)
-        self.language_map.get(self.conf.get("Video", "language")).setChecked(True)
-        self.discord_map.get(self.conf.get("UI", "discord")).setChecked(True)
-        self.gui_language_map.get(self.conf.get("UI", "language")).setChecked(True)
-        self.ui.spinbox_semaphore.setValue(int(self.conf.get("Performance", "semaphore")))
-        self.ui.spinbox_treewidget_limit.setValue(int(self.conf.get("Video", "search_limit")))
-        self.ui.lineedit_output_path.setText(self.conf.get("Video", "output_path"))
-
-        self.semaphore_limit = self.conf.get("Performance", "semaphore")
-        self.search_limit = int(self.conf.get("Video", "search_limit"))
-        self.output_path = self.conf.get("Video", "output_path")
-
-        self.gui_language = self.conf.get("UI", "language")
-        self.quality = self.conf["Video"]["quality"]
-        self.threading_mode = self.conf["Performance"]["threading_mode"]
-        self.api_language = self.conf["Video"]["language"]
-        self.semaphore = QSemaphore(int(self.semaphore_limit))
-        self.delay = int(self.conf["Video"]["delay"])
-        self.timeout = int(self.conf["Performance"]["timeout"])
-        self.workers = int(self.conf["Performance"]["workers"])
-        self.max_retries = int(self.conf["Performance"]["retries"])
-
-        self.discord = True if self.conf["UI"]["discord"] == "yes" else False
-        self.ui.spinbox_maximal_timeout.setValue(int(self.timeout))
-        self.ui.spinbox_maximal_workers.setValue(int(self.workers))
-        self.ui.spinbox_pornhub_delay.setValue(int(self.delay))
-        consts.MAX_CALL_RETRIES = self.max_retries
-        bs_consts.REQUEST_DELAY = self.delay
-        bs_consts.MAX_RETRIES = self.max_retries
-        consts.FFMPEG_EXECUTABLE = ffmpeg_path
-        self.client = Client(delay=self.delay, language=self.api_language)
-
-    def save_user_settings(self):
-        """Saves the user settings to the configuration file based on the UI state."""
-        # Save quality setting
-        for quality, radio_button in self.quality_map.items():
-            if radio_button.isChecked():
-                self.conf.set("Video", "quality", quality)
-
-        # Save language setting
-        for language, radio_button in self.language_map.items():
-            if radio_button.isChecked():
-                self.conf.set("Video", "language", language)
-
-        # Save threading mode
-        for mode, radio_button in self.threading_mode_map.items():
-            if radio_button.isChecked():
-                self.conf.set("Performance", "threading_mode", mode)
-
-        # Save directory system setting
-        for system, radio_button in self.directory_system_map.items():
-            if radio_button.isChecked():
-                self.conf.set("Video", "directory_system", system)
-
-        for language, radio_button in self.gui_language_map.items():
-            if radio_button.isChecked():
-                self.conf.set("UI", "language", language)
-
-        for mode, radio_button in self.discord_map.items():
-            if radio_button.isChecked():
-                self.conf.set("UI", "discord", mode)
-
-        # Save other settings
-        self.conf.set("Performance", "semaphore", str(self.ui.spinbox_semaphore.value()))
-        self.conf.set("Video", "search_limit", str(self.ui.spinbox_treewidget_limit.value()))
-        self.conf.set("Video", "output_path", self.ui.lineedit_output_path.text())
-        self.conf.set("Performance", "timeout", str(self.ui.spinbox_maximal_timeout.value()))
-        self.conf.set("Performance", "workers", str(self.ui.spinbox_maximal_workers.value()))
-        self.conf.set("Video", "delay", str(self.ui.spinbox_pornhub_delay.value()))
-        self.conf.set("Performance", "retries", str(self.ui.spinbox_maximal_retries.value()))
-
-        with open("config.ini", "w") as config_file:
-            self.conf.write(config_file)
-
-        ui_popup(QCoreApplication.tr("Saved User Settings, please restart Porn Fetch!", None))
-        logger_debug("Saved User Settings, please restart Porn Fetch.")
-
-    """
-    Switchers for the Stacked Widgets
-    """
+        self.ui.stacked_widget_top.setMaximumHeight(self.default_max_height)
+        self.ui.stacked_widget_top.setMinimumHeight(225)
 
     def switch_to_account(self):
         self.ui.stacked_widget_top.setCurrentIndex(1)
         self.ui.stacked_widget_main.setCurrentIndex(0)
-        self.ui.stacked_widget_top.setMinimumHeight(150)
-        self.ui.scrollarea_stacked_top.setMaximumHeight(150)
+        self.ui.stacked_widget_top.setMaximumHeight(140)
 
-    def switch_to_hqporner(self):
+    def switch_to_tools(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(3)
-        self.ui.stacked_widget_top.setMinimumHeight(300)
-        self.ui.scrollarea_stacked_top.setMaximumHeight(300)
+        self.ui.stacked_widget_top.setMaximumHeight(self.default_max_height)
+        self.ui.stacked_widget_top.setMinimumHeight(258)
 
     def switch_to_settings(self):
         self.ui.stacked_widget_main.setCurrentIndex(1)
-
-    def switch_to_metadata(self):
-        self.ui.stacked_widget_main.setCurrentIndex(3)
 
     def switch_to_credits(self):
         self.ui.stacked_widget_main.setCurrentIndex(2)
         self.show_credits()
 
     def switch_to_supported_websites(self):
-        self.ui.stacked_widget_main.setCurrentIndex(4)
-        self.ui.stackedWidget.setCurrentIndex(0)
+        self.ui.stacked_widget_main.setCurrentIndex(3)
 
     def switch_to_all_progress_bars(self):
+        self.ui.stacked_widget_top.setMaximumHeight(self.default_max_height)
         self.ui.stacked_widget_top.setCurrentIndex(2)
-
-    def switch_stop_state(self):
-        stop_flag.set()
-        time.sleep(1)
-        self.switch_stop_state_2()
+        self.ui.stacked_widget_main.setCurrentIndex(0)
 
     """
     The following functions are related to the tree widget    
     """
 
-    def add_to_tree_widget_thread(self, iterator, search_limit):
+    def add_to_tree_widget_thread(self, iterator):
+        search_limit = self.search_limit
+
         if self.ui.radio_tree_show_title.isChecked():
             data_mode = 0
 
@@ -1399,10 +1229,10 @@ This warning won't be shown again.
         title = data[0]
         author = data[1]
         try:
-            duration = int(data[2])  # Ensure duration is an integer
+            duration = float(data[2])  # Ensure duration is a float
 
         except ValueError:
-            duration = int(00000)
+            duration = parse_length(data[2])
 
         index = data[3]
         video = data[4]
@@ -1410,13 +1240,24 @@ This warning won't be shown again.
         item = QTreeWidgetItem(self.ui.treeWidget)
         item.setText(0, f"{index}) {title}")
         item.setText(1, author)
-        # Format duration as a fixed-width string with leading zeros for better sorting, e.g., "00104"
-        formatted_duration = f"{duration:05d}"
-        item.setText(2, formatted_duration)  # Set the text as the zero-padded number
-        item.setData(2, Qt.UserRole, int(duration))  # Store the actual integer value in UserRole if needed later
 
+        # Determine how many zeros are needed based on the type and value of duration
+        if isinstance(duration, float):
+            formatted_duration = f"{int(duration):05d}"
+            # Handle the decimal part separately if needed
+            decimal_part = str(duration).split('.')[1]
+            if decimal_part != '0':
+                formatted_duration += '.' + decimal_part
+
+        else:
+            formatted_duration = f"{duration:05d}"
+
+        duration = str(duration).strip("0").strip(".")
+        item.setText(2, duration)  # Set the text as the zero-padded number or float
+        item.setData(2, Qt.UserRole, formatted_duration)  # Store the original duration for sorting
         item.setCheckState(0, Qt.Unchecked)
         item.setData(0, Qt.UserRole, video)
+        item.setData(1, Qt.UserRole, author)
 
     def download_tree_widget(self):
         """
@@ -1436,8 +1277,7 @@ This warning won't be shown again.
 
     def clear_tree_widget(self):
         """
-        This (like the name says) clears the tree widget. I try to improve this in the future, to allow the user
-        the adding of multiple videos, so that the tree widget doesn't get cleared instantly.
+        This (like the name says) clears the tree widget.
         """
         if not self.ui.checkbox_tree_do_not_clear_videos.isChecked():
             self.ui.treeWidget.clear()
@@ -1457,30 +1297,6 @@ This warning won't be shown again.
             current_text = item.text(0)
             original_title = current_text.split(') ', 1)[1] if ') ' in current_text else current_text
             item.setText(0, f"{new_index}) {original_title}")
-
-    def export_urls(self):
-        video_urls = []
-
-        for i in range(self.ui.treeWidget.topLevelItemCount()):
-            item = self.ui.treeWidget.topLevelItem(i)
-            video_object = item.data(0, Qt.UserRole)
-            video_urls.append(video_object.url)
-
-        if len(video_urls) == 0:
-            ui_popup(QCoreApplication.tr("No video URLs found. Are there videos in the tree widget?", None))
-            return
-
-        file, mode = QFileDialog().getSaveFileName(self)
-
-        try:
-            with open(file, "a") as file:
-                for url in video_urls:
-                    file.write(f"{url}\n")
-
-        except PermissionError:
-            ui_popup(QCoreApplication.tr(f"Permission Error, please select a file from your user space,"
-                                         f"or run Porn Fetch with admin permissions (not recommended!)",
-                                         None))
 
     def progress_tree_widget(self, total, current):
         """This tracks the progress of the tree widget data"""
@@ -1512,7 +1328,7 @@ This warning won't be shown again.
         self.range_ui.spinbox_range_end.setMaximum(item_count)
         self.range_ui.button_range_apply_index.clicked.connect(self.process_range_of_items_selection_index)
         self.range_ui.button_range_apply_time.clicked.connect(self.process_range_of_items_selection_time)
-        self.range_ui.button_range_apply_everything.clicked.connect(self.select_all_items)
+        self.range_ui.button_range_apply_author.clicked.connect(self.process_range_of_items_author)
 
         # Show the new widget
         self.widget.show()
@@ -1557,10 +1373,20 @@ This warning won't be shown again.
             # Check if the duration is within the specified start and end times
             if start_time <= duration <= end_time:
                 item.setCheckState(0, Qt.Checked)
-            else:
-                item.setCheckState(0, Qt.Unchecked)  # Optionally uncheck items outside the range
 
         # Assuming this is meant to close the widget, but it might be better to handle this outside this function
+        self.widget.deleteLater()
+
+    def process_range_of_items_author(self):
+        name = str(self.range_ui.lineedit_range_author.text())
+        root = self.ui.treeWidget.invisibleRootItem()
+
+        for i in range(root.childCount()):
+            item = root.child(i)
+            author = str(item.data(1, Qt.UserRole))
+            if str(author).lower() == str(name).lower():
+                item.setCheckState(0, Qt.Checked)
+
         self.widget.deleteLater()
 
     def start_single_video(self):
@@ -1570,16 +1396,15 @@ This warning won't be shown again.
         implemented this feature into the tree widget and I don't want to write code 2 times
         """
         url = self.ui.lineedit_url.text()
-        api_language = self.api_language
         one_time_iterator = []
 
-        video = check_video(url=url, language=api_language, delay=self.delay)
+        video = check_video(url=url, delay=self.delay)
         if video is False:  # If a video url is invalid, check_video will return it as False
             ui_popup(invalid_input_string)
 
         else:
             one_time_iterator.append(video)
-            self.add_to_tree_widget_thread(iterator=one_time_iterator, search_limit=self.search_limit)
+            self.add_to_tree_widget_thread(iterator=one_time_iterator)
 
     def start_model(self, url=None):
         """Starts the model downloads"""
@@ -1589,26 +1414,31 @@ This warning won't be shown again.
         else:
             model = self.ui.lineedit_model_url.text()
 
-        search_limit = self.search_limit
-
         if pornhub_pattern.match(model):
-            api_language = self.api_language
             if not isinstance(self.client, Client):
-                client = Client(language=api_language, delay=self.delay)
+                client = Client(delay=self.delay)
 
             else:
                 client = self.client
 
             model_object = client.get_user(model)
             videos = model_object.videos
+            uploads = model_object.uploads
+
+            if self.model_videos_type == "both":
+                videos = chain(uploads, videos)
+
+            elif self.model_videos_type == "featured":
+                videos = videos
+
+            elif self.model_videos_type == "uploads":
+                videos = uploads
 
         elif hqporner_pattern.match(model):
-            pages = round(search_limit / 46)
-            videos = hq_Client().get_videos_by_actress(name=model, pages=pages)
+            videos = hq_Client().get_videos_by_actress(name=model)
 
         elif eporner_pattern.match(model):
-            pages = round(search_limit / 38)
-            videos = ep_Client.get_pornstar(url=model, enable_html_scraping=True).videos(pages=pages)
+            videos = ep_Client.get_pornstar(url=model, enable_html_scraping=True).videos()
 
         elif xnxx_pattern.match(model):
             videos = xn_Client.get_user(url=model).videos
@@ -1616,17 +1446,17 @@ This warning won't be shown again.
         elif xvideos_pattern.match(model):
             videos = xv_Client().get_pornstar(url=model).videos
 
-        self.add_to_tree_widget_thread(videos, search_limit=search_limit)
+        self.add_to_tree_widget_thread(videos)
 
     def start_playlist(self):
         url = self.ui.lineedit_playlist_url.text()
         playlist = self.client.get_playlist(url)
         videos = playlist.sample()
-        self.add_to_tree_widget_thread(iterator=videos, search_limit=self.search_limit)
+        self.add_to_tree_widget_thread(iterator=videos)
 
     def load_video(self, url):
         """This starts the thread to load a video"""
-        video_loader = VideoLoader(url, self.output_path, self.api_language, self.threading_mode, self.directory_system,
+        video_loader = VideoLoader(url, self.output_path, self.threading_mode, self.directory_system,
                                    self.quality, delay=self.delay)
 
         # Connect signals to your slots
@@ -1645,26 +1475,27 @@ This warning won't be shown again.
 
     def on_video_load_error(self, error_message):
         # Handle errors, possibly show message to user
-        logger_debug(f"Error loading video: {error_message}")
-        ui_popup(QCoreApplication.tr(f"Some error occurred in loading a video. Please report this: {error_message}",
-                                     None))
+        logger.debug(f"Error loading video: {error_message}")
+        ui_popup(self.tr( f"Some error occurred in loading a video. Please report this: {error_message}",
+                                       None))
 
     def process_video_thread(self, output_path, video, threading_mode, quality):
         """Checks which of the three types of threading the user selected and handles them."""
         self.download_thread = DownloadThread(video=video, output_path=output_path, quality=quality,
                                               threading_mode=threading_mode, workers=self.workers, timeout=self.timeout,
-                                              stop_flag=stop_flag)
+                                              stop_flag=stop_flag, skip_existing_files=self.skip_existing_files)
         self.download_thread.signals.progress.connect(self.update_progressbar)
         self.download_thread.signals.total_progress.connect(self.update_total_progressbar)
         self.download_thread.signals.progress_hqporner.connect(self.update_progressbar_hqporner)
         self.download_thread.signals.progress_eporner.connect(self.update_progressbar_eporner)
         self.download_thread.signals.progress_xnxx.connect(self.update_progressbar_xnxx)
         self.download_thread.signals.progress_xvideos.connect(self.update_progressbar_xvideos)
+        self.download_thread.signals.progress_spankbang.connect(self.update_progressbar_spankbang)
         self.download_thread.signals.ffmpeg_progress.connect(self.update_converting)
         # ADAPTION
         self.download_thread.signals.completed.connect(self.download_completed)
         self.threadpool.start(self.download_thread)
-        logger_debug("Started Download Thread!")
+        logger.debug("Started Download Thread!")
 
     """
     The following functions are used to connect data between Threads and the Main UI
@@ -1705,10 +1536,17 @@ This warning won't be shown again.
         self.ui.progressbar_xvideos.setMaximum(maximum)
         self.ui.progressbar_xvideos.setValue(value)
 
+    def update_progressbar_spankbang(self, value, maximum):
+        self.ui.progressbar_spankbang.setMaximum(maximum)
+        self.ui.progressbar_spankbang.setValue(value)
+
     # ADAPTION
     def download_completed(self):
         """If a video is downloaded, the semaphore is released"""
-        logger_debug("Download Completed!")
+        logger.debug("Download Completed!")
+        global total_downloaded_videos
+        total_downloaded_videos += 1
+        self.ui.lineedit_download_info.setText(f"Downloaded: {total_downloaded_videos} video(s) this session.")
         self.ui.progressbar_total.setMaximum(100)
         self.semaphore.release()
 
@@ -1718,10 +1556,10 @@ This warning won't be shown again.
 
     def stop_undefined_range(self):
         """This stops the undefined range (loading animation) of the total progressbar"""
-        logger_debug("Repainting the total progressbar")
         self.ui.progressbar_total.setMinimum(0)
         self.ui.progressbar_total.setMaximum(100)
         self.ui.progressbar_total.setValue(0)
+
     """
     The following functions are used for opening files / directories with the QFileDialog
     """
@@ -1743,23 +1581,23 @@ This warning won't be shown again.
 
     def start_it(self):
         file = self.ui.lineedit_file.text()
-        self.url_thread = AddUrls(file, api_language=self.api_language, delay=self.delay)
+        self.url_thread = AddUrls(file, delay=self.delay)
         self.url_thread.signals.total_progress.connect(self.update_total_progressbar)
         self.url_thread.signals.url_iterators.connect(self.receive_url_result)
         self.threadpool.start(self.url_thread)
 
     def receive_url_result(self, iterator, model_iterator, search_iterator):
-        logger_debug(f"Received Video Iterator ({len(iterator)} videos)")
-        logger_debug(f"Received Model Iterator ({len(model_iterator)} urls)")
-        logger_debug(f"Received Search Iterator ({len(search_iterator)} keywords)")
+        logger.debug(f"Received Video Iterator ({len(iterator)} videos)")
+        logger.debug(f"Received Model Iterator ({len(model_iterator)} urls)")
+        logger.debug(f"Received Search Iterator ({len(search_iterator)} keywords)")
 
-        logger_debug("Processing Videos...")
-        self.add_to_tree_widget_thread(iterator, search_limit=self.search_limit)
-        logger_debug("Processing Models...")
+        logger.debug("Processing Videos...")
+        self.add_to_tree_widget_thread(iterator)
+        logger.debug("Processing Models...")
         for url in model_iterator:
             self.start_model(url)
 
-        logger_debug("Processing Search queries....")
+        logger.debug("Processing Search queries....")
         for search in search_iterator:
             query = search.get("query")
             website = search.get("website")
@@ -1780,11 +1618,13 @@ This warning won't be shown again.
                 self.ui.radio_search_website_eporner.setChecked(True)
 
             else:
-                ui_popup(f"Information: The Website {website} specified in the URL file isn't valid.")
+                ui_popup(self.tr(f"Information: The Website {website} specified in the URL file isn't valid.", None))
                 return
 
             self.ui.lineedit_search_query.setText(query)
             self.basic_search()
+
+        self.ui.lineedit_search_query.clear()
 
     def login(self):
         """
@@ -1796,21 +1636,31 @@ This warning won't be shown again.
         username = self.ui.lineedit_username.text()
         password = self.ui.lineedit_password.text()
         if len(username) <= 2 or len(password) <= 2:
-            ui_popup(
-                QCoreApplication.tr("Those credentials don't seem to be valid...", None))
+            ui_popup(self.tr("Those credentials don't seem to be valid...", None))
             return
 
         try:
-            self.client = Client(username, password, language=self.api_language, delay=self.delay)
-            logger_debug("Login Successful!")
-            ui_popup(QCoreApplication.tr("Login Successful!", None))
+            self.client = Client(username, password, delay=self.delay)
+            logger.debug("Login Successful!")
+            ui_popup(self.tr( "Login Successful!", None))
             self.switch_login_button_state()
 
         except errors.LoginFailed:
-            ui_popup(QCoreApplication.tr("Login Failed, please check your credentials and try again!", None))
+            ui_popup(self.tr("Login Failed, please check your credentials and try again!", None))
 
         except errors.ClientAlreadyLogged:
-            ui_popup(QCoreApplication.tr("You are already logged in!", None))
+            ui_popup(self.tr("You are already logged in!", None))
+
+    def switch_login_button_state(self):
+        """If the user is logged in, I'll change the stylesheets of the buttons"""
+        file = QFile(":/style/stylesheets/stylesheet_switch_buttons_login_state.qss")
+        file.open(QFile.ReadOnly | QFile.Text)
+        stream = QTextStream(file)
+        stylesheet = stream.readAll()
+
+        self.ui.button_get_liked_videos.setStyleSheet(stylesheet)
+        self.ui.button_get_watched_videos.setStyleSheet(stylesheet)
+        self.ui.button_get_recommended_videos.setStyleSheet(stylesheet)
 
     def check_login(self):
         """Checks if the user is logged in, so that no errors are threw if not"""
@@ -1820,8 +1670,8 @@ This warning won't be shown again.
         elif not self.client.logged:
             self.login()
             if not self.client.logged:
-                text = QCoreApplication.tr("There's a problem with the login. Please make sure you login first "
-                                           "and then you try to get videos based on your account.", None)
+                text = self.tr("There's a problem with the login. Please make sure you login first and then "
+                               "you try to get videos based on your account.", None)
                 ui_popup(text)
                 return False
 
@@ -1832,19 +1682,19 @@ This warning won't be shown again.
         """Returns the videos watched by the user"""
         if self.check_login():
             watched = self.client.account.watched
-            self.add_to_tree_widget_thread(watched, search_limit=self.search_limit)
+            self.add_to_tree_widget_thread(watched)
 
     def get_liked_videos(self):
         """Returns the videos liked by the user"""
         if self.check_login():
             liked = self.client.account.liked
-            self.add_to_tree_widget_thread(liked, search_limit=self.search_limit)
+            self.add_to_tree_widget_thread(liked)
 
     def get_recommended_videos(self):
         """Returns the videos recommended for the user"""
         if self.check_login():
             recommended = self.client.account.recommended
-            self.add_to_tree_widget_thread(recommended, search_limit=self.search_limit)
+            self.add_to_tree_widget_thread(recommended)
 
     """
     The following functions are related to the search functionality
@@ -1853,25 +1703,24 @@ This warning won't be shown again.
     def basic_search(self):
         """Does a simple search for videos without filters on selected website"""
         query = self.ui.lineedit_search_query.text()
-        search_limit = self.search_limit
 
         if self.ui.radio_search_website_pornhub.isChecked():
             videos = Client().search(query)
 
         elif self.ui.radio_search_website_xvideos.isChecked():
-            videos = xv_Client.search(query, pages=99)
+            videos = xv_Client.search(query)
 
         elif self.ui.radio_search_website_hqporner.isChecked():
-            videos = hq_Client.search_videos(query, pages=99)
+            videos = hq_Client.search_videos(query)
 
         elif self.ui.radio_search_website_eporner.isChecked():
             videos = ep_Client().search_videos(query, sorting_gay="", sorting_order="", sorting_low_quality="", page=1,
-                                               per_page=search_limit, enable_html_scraping=True)
+                                               per_page=self.search_limit, enable_html_scraping=True)
 
         elif self.ui.radio_search_website_xnxx.isChecked():
             videos = xn_Client().search(query).videos
 
-        self.add_to_tree_widget_thread(videos, search_limit=search_limit)
+        self.add_to_tree_widget_thread(videos)
 
     def get_top_porn_hqporner(self):
         if self.ui.radio_top_porn_week.isChecked():
@@ -1886,39 +1735,33 @@ This warning won't be shown again.
         else:
             sort = None
 
-        search_limit = self.search_limit
-        pages = round(search_limit / 46)
-        videos = hq_Client().get_top_porn(sort_by=sort, pages=pages)
-        self.add_to_tree_widget_thread(iterator=videos, search_limit=search_limit)
+        videos = hq_Client().get_top_porn(sort_by=sort)
+        self.add_to_tree_widget_thread(iterator=videos)
 
     def get_by_category_hqporner(self):
         """Returns video by category from HQPorner. I want to add support for EPorner"""  # TODO
-        self.list_all_categories_string = QCoreApplication.tr(
-            "Invalid Category. Press 'list categories' to see all possible ones.", None)
+        self.list_all_categories_string = self.tr("Invalid Category. Press 'list categories' to see all "
+                                                  "possible ones.", None)
         category_name = self.ui.lineedit_hqporner_category.text()
         all_categories = hq_Client().get_all_categories()
-        search_limit = self.search_limit
-        pages = round(search_limit / 46)
 
         if not category_name in all_categories:
             ui_popup(self.list_all_categories_string)
 
         else:
-            videos = hq_Client().get_videos_by_category(category=category_name, pages=pages)
-            self.add_to_tree_widget_thread(videos, search_limit)
+            videos = hq_Client().get_videos_by_category(category=category_name)
+            self.add_to_tree_widget_thread(videos)
 
     def get_by_category_eporner(self):
         """Returns video by category from EPorner"""
-        search_limit = self.search_limit
-        pages = round(search_limit / 63)
         category_name = self.ui.lineedit_videos_by_category_eporner.text()
 
         if not category_name in self.all_cateogories_eporner:
             ui_popup(self.list_all_categories_string)
 
         else:
-            videos = ep_Client().get_videos_by_category(category=category_name, pages=pages, enable_html_scraping=True)
-            self.add_to_tree_widget_thread(iterator=videos, search_limit=search_limit)
+            videos = ep_Client().get_videos_by_category(category=category_name, enable_html_scraping=True)
+            self.add_to_tree_widget_thread(iterator=videos)
 
     def list_categories_eporner(self):
         """Lists all video categories from EPorner"""
@@ -1930,10 +1773,8 @@ This warning won't be shown again.
 
     def get_brazzers_videos(self):
         """Get brazzers videos from HQPorner"""
-        search_limit = self.search_limit
-        pages = round(search_limit / 46)
-        videos = hq_Client().get_brazzers_videos(pages)
-        self.add_to_tree_widget_thread(videos, search_limit)
+        videos = hq_Client().get_brazzers_videos()
+        self.add_to_tree_widget_thread(videos)
 
     @classmethod
     def list_categories_hqporner(cls):
@@ -1944,10 +1785,8 @@ This warning won't be shown again.
 
     def get_random_video(self):
         """Gets a random video from HQPorner"""
-        list_object = []
         video = hq_Client().get_random_video()
-        list_object.append(video)
-        self.add_to_tree_widget_thread(list_object, search_limit=2)
+        self.add_to_tree_widget_thread([].append(video))
 
     def show_credits(self):
         """Loads the credits from the CREDITS.md.  Credits need to be recompiled in qresource file every time"""
@@ -1966,10 +1805,7 @@ def main():
     setup_config_file()
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
-    """
-    I had many problems with coding in general where something didn't work but the translations are the hardest
-    thing I've ever done. Now where I've understand it it makes sense but the Qt documentation is a piece of shit...
-    """
+
     conf = ConfigParser()
     conf.read("config.ini")
     language = conf["UI"]["language"]
@@ -1979,7 +1815,7 @@ def main():
         locale = QLocale.system()
         # Get the full locale name (e.g., "zh_CN" for Simplified Chinese)
         language_code = locale.name()
-        logger_debug(f"System Language: {language_code}")
+        logger.debug(f"System Language: {language_code}")
     else:
         language_code = language
 
@@ -1987,16 +1823,16 @@ def main():
     path = f":/translations/translations/{language_code}.qm"
     translator = QTranslator(app)
     if translator.load(path):
-        logger_debug(f"Startup: [1/5] {language_code} translation loaded")
+        logger.debug(f"Startup: [1/5] {language_code} translation loaded")
 
     else:
         # Try loading a more general translation if specific one fails
         general_language_code = language_code.split('_')[0]
         path = f":/translations/translations/{general_language_code}.qm"
         if translator.load(path):
-            logger_debug(f"{general_language_code} translation loaded as fallback")
+            logger.debug(f"{general_language_code} translation loaded as fallback")
         else:
-            logger_debug(f"Failed to load {language_code} translation")
+            logger.debug(f"Failed to load {language_code} translation")
 
     app.installTranslator(translator)
 
@@ -2021,6 +1857,78 @@ def main():
 
 
 if __name__ == "__main__":
+    """
+    These functions are static functions which I won't need while coding.
+    These just exist for some reason, but I don't want to scroll through endless lines of code,
+    which is why I placed them here.
+    """
+
+
+    def load_stylesheet(path):
+        """Load stylesheet from a given path with explicit open and close."""
+        file = QFile(path)
+        if not file.open(QFile.ReadOnly | QFile.Text):
+            logger.debug(f"Failed to open {path}")
+            return ""
+        stylesheet = QTextStream(file).readAll()
+        file.close()
+        return stylesheet
+
+
+    def reset_pornfetch():
+        setup_config_file(force=True)
+        ui_popup(QCoreApplication.translate("main", "Done! Please restart.", None))
+
+
+    def switch_stop_state_2():
+        global stop_flag
+        stop_flag = Event()
+
+
+    def switch_stop_state():
+        stop_flag.set()
+        time.sleep(1)
+        switch_stop_state_2()
+
+
+    def export_urls():
+        if not len(session_urls) == 0:
+            file, type = QFileDialog().getOpenFileName()
+            with open(file, "w") as url_export_file:
+                for url in session_urls:
+                    url_export_file.write(f"{url}\n")
+
+            ui_popup(f"Success! Saved: {len(session_urls)} URLs")
+
+        else:
+            ui_popup(QCoreApplication.translate("main", "No URLs in the current session...", None))
+
+    def ffmpeg_finished():
+        ui_popup(QCoreApplication.translate("main", "FFmpeg has been installed. Please restart Porn Fetch :)", None))
+
+
+    def check_for_updates_result(value):
+        """Receives the Update result from the thread"""
+        if value:
+            logger.debug(f"Next release v{__next_release__} found!")
+            try:
+                changelog = (requests.get(f"https://github.com/EchterAlsFake/Porn_Fetch/tree/master/README/Changelog/"
+                                          f"{__next_release__}/Changelog.md").text)
+
+            except Exception as e:
+                logger.error(f"Couldn't fetch changelog of version: {__next_release__}")
+                changelog = f"Unknown Error: {e}"
+
+            ui_popup(QCoreApplication.translate("main", f"""
+            Information: A new version of Porn Fetch (v{__next_release__}) is out. I recommend you to update Porn Fetch. 
+            Go to: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/ {__next_release__}
+
+            Changelog:
+            {markdown.markdown(changelog)}
+
+            """, None))
+
+
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", "--version", help="Shows the version information", action="store_true")
     args = parser.parse_args()
@@ -2029,14 +1937,4 @@ if __name__ == "__main__":
         print(__version__)
 
     setup_config_file()
-    try:
-        main()
-
-    except FileNotFoundError as e:
-        ui_popup(f"a File Not Found Error occured. This shouldn't happenn. If you see this error, please report it: {e}")
-
-    except PermissionError as e:
-        ui_popup(f"Permission Error: {e}, please report this error.")
-
-    except OverflowError:
-        ui_popup("OverFlow Error, please report this immediately, as it's supposed to be fixed!")
+    main()

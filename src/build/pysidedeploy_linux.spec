@@ -1,25 +1,25 @@
 [app]
 # title of your application
-title = main
+title = Porn Fetch
 # project directory. the general assumption is that project_dir is the parent directory
 # of input_file
 project_dir = .
 # source file path
-input_file =
+input_file = /home/asuna/Porn_Fetch/src/scripts/Porn_Fetch/main.py
 # directory where exec is stored
 exec_directory = .
 # path to .pyproject project file
 project_file = 
 # application icon
-icon = src/frontend/graphics/logo_transparent.png
+icon = /home/asuna/Porn_Fetch/src/scripts/Porn_Fetch/src/frontend/graphics/logo_transparent.png
 
 [python]
 # python path
-python_path =
+python_path = /tmp/.venv/bin/python3.11
 # python packages to install
 # ordered-set = increase compile time performance of nuitka packaging
 # zstandard = provides final executable size optimization
-packages = Nuitka==2.1
+packages = Nuitka==2.3.7
 # buildozer = for deploying Android application
 android_packages = buildozer==1.5.0,cython==0.29.33
 

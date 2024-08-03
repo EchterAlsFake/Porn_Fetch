@@ -1,6 +1,6 @@
 [app]
 # title of your application
-title = main
+title = Porn Fetch
 # project directory. the general assumption is that project_dir is the parent directory
 # of input_file
 project_dir = .
@@ -19,7 +19,7 @@ python_path =
 # python packages to install
 # ordered-set = increase compile time performance of nuitka packaging
 # zstandard = provides final executable size optimization
-packages = Nuitka==2.1
+packages = Nuitka==2.3.7
 # buildozer = for deploying Android application
 android_packages = buildozer==1.5.0,cython==0.29.33
 

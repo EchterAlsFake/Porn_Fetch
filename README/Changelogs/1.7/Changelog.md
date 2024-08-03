@@ -1,0 +1,13 @@
+# 1.7
+- Implemented an automated fix for the IndexError exception
+- Improved overall code quality
+- Split the code into multiple files, to be better readable 
+- A lot of grammar fixes
+- Added native support for Termux (See building from source : Android)
+- Changed Qt Version from 6.5.1 to 6.5.2
+- Changed Python version from 3.11.3 to 3.11.4
+- Added automatic error reporting with Sentry.io
+- Changed License to GPL 3
+- Added CI/CD Actions for build and security checks
+- Made the Readme.md A LOT more readable and more professionally
+- Added license agreement script (implemented in 1.8)
