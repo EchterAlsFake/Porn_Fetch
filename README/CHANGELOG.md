@@ -8,6 +8,7 @@ Initial Release
 - Fixed typo issues
 - Fixed the output path issue
 - Changed License to LGPLv3 (The reason for this is, that I am stupid and I used the wrong license. Creative Commons is not valid to be used for developing with Qt. I didn't know that, I am sorry...)
+
 # 1.2
 - Added additional stuff to the metadata function (Likes, Image URL, Tags)
 - Added border colours for input fields
@@ -15,20 +16,16 @@ Initial Release
 # 1.3
 - Added Threading Modes
 - Single: Downloads will be executed within the main thread, and the GUI won't respond to your actions if the download isn't finished.
-
 - Multiple: Download(s) will be executed with separate Threads (QThreads). This is mostly intended for single downloads. You can use that function also for multiple downloads, but that will ruin the progress bar, because it will jump between the different videos.
 
 # 1.4
-
 - Changed UI (stackedWidget)
 
-# 1.5 
-
+# 1.5
 - Added CI 
 - Made Readme.md and Build process simpler to understand
 
 # 1.6
-
 - Fixed 7 Bugs
 - CLI is more stable
 - Code refactoring
@@ -40,7 +37,6 @@ Initial Release
 
 
 # 1.7
-
 - Implemented an automated fix for the IndexError exception
 - Improved overall code quality
 - Split the code into multiple files, to be better readable 
@@ -56,7 +52,6 @@ Initial Release
 
 
 # 1.8
-
 - Implemented final License agreement
 - Persistent settings (untested)
 - Added Ubuntu to Install script
@@ -68,16 +63,13 @@ Initial Release
 - Added some basic exceptions
 
 # 1.9
-
 - Fixed OS Error issue
 - Added function to strip out special symbols in title, to prevent path issues
 
 # 2.0
-
 This release exists, but I don't remember the changes anymore.
 
 # 2.1
-
 - A complete new UI design
 - UI is more fluent / flexible
 - API updated to v3.1
@@ -97,7 +89,6 @@ This release exists, but I don't remember the changes anymore.
 - added more filters, to prevent OS Error
 
 # 2.2
-
 - You can now log in with your PornHub Account
 - You can now fetch your watched, liked, and recommended videos for your PornHub Account
 - updated the CLI a little bit (not finished. It's my priority for the next release)
@@ -106,16 +97,13 @@ This release exists, but I don't remember the changes anymore.
 - removed Security.md, because it was useless, and I don't really remember why I even added it
 - added all files to the release page (thanks to Egsagon for telling me that I should do that :)
 
-# 2.3 
-
+# 2.3
 - fixed some issues...
 
 
 # 2.4
-
 - If you use the file / model - user - channel functionality, then the TreeWidget will be used
   to let you select the videos that you want to download instead of downloading everything
-
 - fixed an issue in the termux build script
 - API updated to v3.1-4
 - You can now select if you want to have a delay or not (enabling it is recommended!)
@@ -127,7 +115,6 @@ The next update will focus more on features / compatibility to other systems.
 I hope that most issues are now fixed.
 
 # 2.5
-
 - Added search filters
 - Move settings to a new page of stacked Widget
 - Added keyboard shortcut and some buttons for it
@@ -138,14 +125,12 @@ I hope that most issues are now fixed.
 - Recoded CLI
 
 # 2.6
-
 - API Updated to v3.2.1
 - Redesign of the settings widget
 - removed some things from the roadmap
 - added a connection error exception
 
 # 2.7
-
 - API Updated to v4
 - Huge stability and performance boost
 - fixed setting Delay not working issue
@@ -200,7 +185,6 @@ I hope that most issues are now fixed.
 - improved visual look and progressbar
 
 # 2.9
-
 - API updated to 4.1.3
 - Added Enhancement request from #11 (Skips already downloaded videos...)
 - huge Performance increase when downloading (thanks to Egsagon's threaded preset) 
@@ -400,3 +384,35 @@ I tested it on Android 12 & 13 on two devices.
 
 ## Deprecations
 - removed all metadata functionality from Porn Fetch, because it's useless and hard to maintain.
+
+# 3.4
+
+## New Features
+- Added support for spankbang
+- You can now choose between user uploads, featured videos or both of them when downloading from a PornHub model account
+- You can now decide if already existing files will be skipped, or if the title will be slightly changed to download both of them
+- Thumbnail of videos will be written into the mp4 file
+- You can now automatically select all videos from an author by a certain name
+
+## Design
+- switched the sidebar to a top bar (looks better)
+- removed the progressbars at the bottom, but added a second widget for it (more space)
+- added a new button into the menu which can switch to the previous mentioned widget
+- fixed the whole layout for the desktop application. 
+- Video titles will now be shown in the progress report in the CLI
+
+## Deprecations
+- removed internet checks, because it triggers AV
+- removed status bar at the top, because it's useless
+- removed discord rich presence. I don't even remember why I added it :skull:
+
+## Bug fixes
+- Fixed a bug where you couldn't search on xvideos
+- Porn Fetch now handles 2002 errors from PornHub (when a video is blocked in your region) Thanks #44 @WatsonSola
+- Fixed several issues in the tag writing function (The thing that converts the video with ffmpeg)
+- All APIs will now use infinite paging, so that always all videos until the defined search limit will be fetched
+- Fixed playlist downloading
+- Fixed file progress
+- Fixed an issue where the semaphore wouldn't release in the CLI which makes downloading almost impossible, because
+the thread is permanently locked
+- Fixed the build scripts for Windows and Linux | Thanks @omar-st [Pull Request #48](https://github.com/EchterAlsFake/Porn_Fetch/commit/2d9cc2885c1383369020a5c26e957fe5cdf0f886) [Related Issue #46](https://github.com/EchterAlsFake/Porn_Fetch/issues/46)

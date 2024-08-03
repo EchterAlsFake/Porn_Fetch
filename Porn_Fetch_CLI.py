@@ -3,15 +3,19 @@ import threading
 import phub.consts
 
 from src.backend.shared_functions import *
+from src.backend.log_config import setup_logging
 from base_api.modules.download import *
 from base_api.modules.progress_bars import *
 from base_api.base import Core
 from rich import print as rprint
 from rich.markdown import Markdown
 
+logger = setup_logging()
+
 
 class CLI:
     def __init__(self):
+        self.skip_existing_files = None
         self.threading_mode = None
         self.result_limit = None
         self.directory_system = None
@@ -106,7 +110,6 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
             sys.exit(0)
 
     def load_user_settings(self):
-        self.language = self.conf.get("Video", "language")
         self.delay = int(self.conf.get("Video", "delay"))
         self.workers = int(self.conf.get("Performance", "workers"))
         self.timeout = int(self.conf.get("Performance", "timeout"))
@@ -115,6 +118,7 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
         self.quality = self.conf.get("Video", "quality")
         self.output_path = correct_output_path(output_path=self.conf.get("Video", "output_path"))
         self.directory_system = True if self.conf.get("Video", "directory_system") == "1" else False
+        self.skip_existing_files = True if self.conf.get("Video", "skip_existing_files") == "true" else False
         self.result_limit = int(self.conf.get("Video", "search_limit"))
         self.threading_mode = self.conf.get("Performance", "threading_mode")
 
@@ -127,24 +131,11 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
             phub.consts.FFMPEG_EXECUTABLE = self.ffmpeg_path
 
         else:
-            logger_error("FFMPEG wasn't found... Have you extracted it from the .zip file?")
-            logger_error("FFMPEG Features won't be available!")
+            logger.warning("FFMPEG wasn't found... Have you extracted it from the .zip file?")
+            logger.warning("FFMPEG Features won't be available!")
             self.ffmpeg_features = False
 
     def save_user_settings(self):
-        languages = f"""{Fore.WHITE}
-de: German
-en: English
-fr: French
-zh: Chinese
-rt: Russian
-nl: Dutch
-es: Spanish
-it: Italian
-pt: Portuguese
-cz: Czech
-jp: Japanese
-"""
         while True:
             settings_options = input(f"""
 {Fore.WHITE}--------- {Fore.LIGHTGREEN_EX}Quality {Fore.WHITE}----------
@@ -161,10 +152,8 @@ jp: Japanese
 {return_color()}9) Enable / Disable directory system
 {Fore.WHITE}-------- {return_color()}Result Limit {Fore.WHITE}-------
 {return_color()}10) Change result limit
-{Fore.WHITE}-------- {return_color()}Language (Video titles for PornHub){Fore.WHITE}
-{return_color()}11) Change Language
 {Fore.WHITE}-------- {return_color()}Output Path {Fore.WHITE}--------
-{return_color()}12) Change output path
+{return_color()}11) Change output path
 
 {Fore.LIGHTRED_EX}99) Exit
 {return_color()}------------->:""")
@@ -211,15 +200,9 @@ jp: Japanese
                     self.conf.set("Video", "search_limit", limit)
 
                 elif settings_options == "11":
-                    print("Please enter a language code from the list below:")
-                    print(languages)
-                    language = input(f"Enter the new language code -->:")
-                    self.conf.set("Video", "language", language)
-
-                elif settings_options == "12":
                     path = input(f"Enter a new output path -->:")
                     if not os.path.exists(path):
-                        raise FileNotFoundError("The specified output path doesn't exist!")
+                        raise "The specified output path doesn't exist!"
 
                     self.conf.set("Video", "output_path", path)
 
@@ -234,7 +217,7 @@ jp: Japanese
         if url is None:
             url = input(f"{return_color()}Please enter the Video URL -->:")
 
-        video = check_video(url=url, language=self.language, delay=self.delay)
+        video = check_video(url=url, delay=self.delay)
         title = Core().strip_title(video.title)
 
         if isinstance(video, Video):
@@ -255,10 +238,10 @@ jp: Japanese
             output_path = pathlib.Path(output_path + title + ".mp4")
 
         if os.path.exists(output_path):
-            logger_debug(f"{return_color()}File: {output_path} already exists, skipping...")
+            logger.debug(f"{return_color()}File: {output_path} already exists, skipping...")
             return
 
-        logger_debug(f"{return_color()}Trying to acquire the semaphore...")
+        logger.debug(f"{return_color()}Trying to acquire the semaphore...")
         self.semaphore.acquire()
         self.thread = threading.Thread(target=self.download, args=(video, output_path,))
         self.thread.start()
@@ -333,7 +316,7 @@ for example: 1,5,94,3{Fore.WHITE}
             self.iterate_generator(Client().search(query))
 
         elif website == "2":
-            self.iterate_generator(hq_Client().search_videos(query=query, pages=10))
+            self.iterate_generator(hq_Client().search_videos(query=query))
 
         elif website == "3":
             self.iterate_generator(xv_Client().search(query))
@@ -342,9 +325,9 @@ for example: 1,5,94,3{Fore.WHITE}
             self.iterate_generator(xn_Client().search(query).videos)
 
         elif website == "5":
-            self.iterate_generator(ep_Client().search_videos(query, page=1, per_page=self.result_limit,
+            self.iterate_generator(ep_Client().search_videos(query, per_page=self.result_limit,
                                                              sorting_order="", sorting_gay="", sorting_low_quality="",
-                                                             enable_html_scraping=True))
+                                                             enable_html_scraping=True, page=1))
 
     def process_file(self):
         videos = []
@@ -364,14 +347,14 @@ for example: 1,5,94,3{Fore.WHITE}
             else:
                 videos.append(line)
 
-        logger_debug(f"{return_color()}Processing Models / Videos...")
+        logger.debug(f"{return_color()}Processing Models / Videos...")
         for video in videos:
-            objects.append(check_video(video, language=self.language, delay=self.delay))
+            objects.append(check_video(video, delay=self.delay))
 
         for video in models:
             objects.append(video)
 
-        logger_debug(f"{return_color()}Done!")
+        logger.debug(f"{return_color()}Done!")
         self.iterate_generator(objects)
 
     def download(self, video, output_path):
@@ -380,17 +363,18 @@ for example: 1,5,94,3{Fore.WHITE}
                 self.threading_mode = resolve_threading_mode(mode=self.threading_mode, video=video,
                                                              workers=self.workers, timeout=self.timeout)
                 video.download(path=output_path, quality=self.quality, downloader=self.threading_mode,
-                               display=Callback.text_progress_bar)
+                               display=self.callback_wrapper(video.title, Callback.text_progress_bar))
 
             elif isinstance(video, ep_Video) or isinstance(video, hq_Video):
-                video.download(path=output_path, quality=self.quality, callback=Callback.text_progress_bar)
+                video.download(path=output_path, quality=self.quality, callback=self.callback_wrapper(video.title,
+                                Callback.text_progress_bar))
 
             else:
                 video.download(downloader=self.threading_mode, path=output_path, quality=self.quality,
-                               callback=Callback.text_progress_bar)
+                               callback=self.callback_wrapper(video.title, Callback.text_progress_bar))
 
         finally:
-            logger_debug(f"{return_color()}Finished downloading for: {video.title}")
+            logger.debug(f"{return_color()}Finished downloading for: {video.title}")
             self.semaphore.release()
             if self.ffmpeg_features:
                 os.rename(f"{output_path}", f"{output_path}_.tmp")
@@ -401,9 +385,16 @@ for example: 1,5,94,3{Fore.WHITE}
                     print(f"\r\033[K[Converting: {progress}/100", end='', flush=True)
 
                 os.remove(f"{output_path}_.tmp")
-                write_tags(path=output_path, video=video, ffmpeg_path=None)
+                write_tags(path=output_path, video=video)
             else:
-                logger_debug("FFMPEG features disabled, writing tags and converting the video won't be available!")
+                logger.debug("FFMPEG features disabled, writing tags and converting the video won't be available!")
+
+    @staticmethod
+    def callback_wrapper(title, callback):
+        def wrapped_callback(pos, total):
+            callback(pos, total, title)
+
+        return wrapped_callback
 
     @staticmethod
     def credits():

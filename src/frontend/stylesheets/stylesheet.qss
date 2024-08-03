@@ -70,13 +70,11 @@ QTreeWidget {
 
 QTreeWidget QHeaderView::section {
     background-color: #333;
-    border: 1px solid #5A2A82;
 }
 
 QTreeView::indicator {
     width: 15px;
     height: 15px;
-    border: 1px solid #555;
     border-radius: 4px; }
 
 QTreeView::indicator:unchecked:hover {
@@ -176,7 +174,6 @@ QSpinBox:focus {
 }
 
 QScrollArea, QScrollBar {
-    border: 1px solid #5D1049; /* Dark purple for visibility */
     background-color: #333;
 }
 
