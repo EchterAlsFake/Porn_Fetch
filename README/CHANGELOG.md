@@ -399,6 +399,7 @@ I tested it on Android 12 & 13 on two devices.
 - removed the progressbars at the bottom, but added a second widget for it (more space)
 - added a new button into the menu which can switch to the previous mentioned widget
 - fixed the whole layout for the desktop application. 
+- Video titles will now be shown in the progress report in the CLI
 
 ## Deprecations
 - removed internet checks, because it triggers AV

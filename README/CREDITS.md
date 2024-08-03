@@ -1,4 +1,4 @@
-# Porn Fetch V3.3
+# Porn Fetch V3.4
 
 Copyright (C) 2023-2024 Johannes Habel (EchterAlsFake)
 
@@ -42,6 +42,7 @@ but I didn't want to remove them.
 - [RonLar1132](https://github.com/RonLar1132) Enhancement [#20](https://github.com/EchterAlsFake/Porn_Fetch/issues/20) (Playlist Support), Enhancement [#28](https://github.com/EchterAlsFake/Porn_Fetch/issues/28) (Custom retry limit)
 - [xxIndirect](https://github.com/xxIndirect) Enhancement [#32](https://github.com/EchterAlsFake/Porn_Fetch/issues/32)
 - [efraxs](https://github.com/efraxs) Enhancement [#37](https://github.com/EchterAlsFake/Porn_Fetch/issues/37) (Range selecting and time sorting)
+- [omar-st](https://github.com/omar-st) Pull Request / Enhancement [#46](https://github.com/EchterAlsFake/Porn_Fetch/issues/46) [#48](https://github.com/EchterAlsFake/Porn_Fetch/pull/48)
 
 # Libraries
 - [PHUB](https://github.com/EchterAlsFake/PHUB) (GPLv3)
@@ -58,6 +59,7 @@ but I didn't want to remove them.
 - [XVideos_API](https://github.com/EchterAlsFake/xvideos_api) (LGPLv3)
 - [eaf_base_api](https://github.com/echteralsfake/eaf_base_api) (LGPLv3)
 - [pypresence](https://github.com/qwertyquerty/pypresence) (MIT)
+- [spankbang_api](https://github.com/EchterAlsFake/spankbang_api)
 - [ffmpeg-progress-yield](https://github.com/slhck/ffmpeg-progress-yield) (MIT)
 - [Mutagen](https://github.com/quodlibet/mutagen) (GPLv2)
 <br>ANDROID:
@@ -68,3 +70,6 @@ but I didn't want to remove them.
 - [FFMPEG](https://ffmpeg.org/) (GPL)
 
 ** All other libraries are built in to Python.
+
+Some libraries may not be used in the current release, but have been used in an older release.
+For the fairness to these authors, I will still list them here, although they don't play a role anymore.

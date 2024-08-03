@@ -1,11 +1,9 @@
 from PySide6.QtCore import QCoreApplication
 from src.backend.shared_gui import ui_popup
 
-context = "Porn Fetch"
-
 
 def result_limit_help():
-    text = QCoreApplication.translate(context, f"""
+    text = QCoreApplication.translate("main", f"""
 The result limit defines how many videos will be returned when performing a search or doing other operations which
 involves loading multiple videos. This also affects models / channels and your liked videos. The result limit is
 basically the number of videos which can be loaded into the tree widget (this thing where videos are displayed).
@@ -14,7 +12,7 @@ basically the number of videos which can be loaded into the tree widget (this th
 
 
 def pornhub_delay_help():
-    text = QCoreApplication.translate(context, f"""
+    text = QCoreApplication.translate("main", f"""
 You can set a delay between requests from you to PornHub. If you are downloading a lot of videos or experiencing 
 'client.call' errors, you should enable a delay. By default the delay is turned off with the value 0
 
@@ -27,7 +25,7 @@ This does NOT affect other sites!
 
 
 def maximal_workers_help():
-    text = QCoreApplication.translate(context, f"""
+    text = QCoreApplication.translate("main", f"""
 The maximal workers define the amount of maximal threads which can be started when using the threaded download mode.
 One thread handles downloading one segment, so (in theory) 20 threads can download 20 segments at the same time.
 This can of course be helpful when you have a very fast internet connection, but when you have a poor PC or running on
@@ -39,7 +37,7 @@ I recommend '3' for Android and 5 for low bandwidth connections < 15000 bit/s
 
 
 def timeout_help():
-    text = QCoreApplication.translate(context, f"""
+    text = QCoreApplication.translate("main", f"""
 The timeout handles the timeout for retrieving segments when using the threaded download mode. If you have a poor 
 internet connection you can set this higher than 10. But this isn't required for most users!
 """, None)
@@ -47,7 +45,7 @@ internet connection you can set this higher than 10. But this isn't required for
 
 
 def button_semaphore_help():
-    text = QCoreApplication.translate(context, f"""
+    text = QCoreApplication.translate("main", f"""
 The Semaphore is a tool to limit the number of simultaneous actions / downloads.
 
 For example: If the semaphore is set to 1, only 1 video will be downloaded at the same time.
@@ -58,7 +56,7 @@ you have a really good internet connection and a good system.
 
 
 def button_threading_mode_help():
-    text = QCoreApplication.translate(context, """
+    text = QCoreApplication.translate("main", """
 The different threading modes are used for different scenarios. 
 
 1) High Performance:  Uses a class of workers to download multiple video segments at a time. Can be really fast if you
@@ -76,7 +74,7 @@ With the High Performance method, we can just download other segments while wait
 
 
 def button_directory_system_help():
-    text = QCoreApplication.translate(context, """
+    text = QCoreApplication.translate("main", """
 The directory system will save videos in an intelligent way. If you download 3 videos form one Pornstar and 5 videos 
 from another, Porn Fetch will automatically make folders for it and move the 3 videos into that one folder and the other
 5 into the other. (This will still apply with your selected output path)
@@ -87,7 +85,7 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 
 
 def open_file_help():
-    text = QCoreApplication.translate(context, """
+    text = QCoreApplication.translate("main", """
 Create a .txt file and add URLs like this:
 
 url1
@@ -110,7 +108,7 @@ model#https://de.pornhub.com/pornstar/nancy-a
 
 
 def max_retries_help():
-    text = QCoreApplication.translate(context, """
+    text = QCoreApplication.translate("main", """
 The maximal retries defines how much attempts will be used for a network request. For example if an API calls
 a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
 """, None)
@@ -118,7 +116,7 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
 
 
 def skip_existing_files_help():
-    text = QCoreApplication.translate(context, """
+    text = QCoreApplication.translate("main" """
 If you fetch a video and the exact same filename already exists, usually Porn Fetch would just skip this file.
 If you set this option to No, then Porn Fetch instead download the video and append a random number to it.
 
@@ -134,7 +132,7 @@ Spain_didnt_win_against_Germany_118251.mp4
 
 
 def model_videos_help():
-    text = QCoreApplication.translate(context, """
+    text = QCoreApplication.translate("main", """
 User uploads and featured videos are two different things. User uploads are the videos which were really uploaded
 by the model and the featured videos are videos the model is part or featured in.
 

@@ -58,12 +58,11 @@ __version__ = "3.4"
 __build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 __next_release__ = "3.5"
-context = "Porn Fetch"  # This is used to tell the Translator from what thing the translation actually comes
 total_segments = 0
 downloaded_segments = 0
 last_index = 0
 stop_flag = Event()
-invalid_input_string = QCoreApplication.translate(context, "Wrong Input, please verify the URL, category or"
+invalid_input_string = QCoreApplication.translate("main", "Wrong Input, please verify the URL, category or"
                                                                        " actress!", None)
 ffmpeg_features = True
 ffmpeg_path = None
@@ -190,7 +189,7 @@ class AddToTreeWidget(QRunnable):
         data = load_video_attributes(video)
         session_urls.append(video.url)
         title = data[0]
-        disabled = QCoreApplication.translate(context, "Disabled", None)
+        disabled = QCoreApplication.translate("main", "Disabled", None)
         duration = disabled
         author = disabled
 
@@ -1878,7 +1877,7 @@ if __name__ == "__main__":
 
     def reset_pornfetch():
         setup_config_file(force=True)
-        ui_popup(QCoreApplication.translate(context, "Done! Please restart.", None))
+        ui_popup(QCoreApplication.translate("main", "Done! Please restart.", None))
 
 
     def switch_stop_state_2():
@@ -1902,10 +1901,10 @@ if __name__ == "__main__":
             ui_popup(f"Success! Saved: {len(session_urls)} URLs")
 
         else:
-            ui_popup(QCoreApplication.translate(context, "No URLs in the current session...", None))
+            ui_popup(QCoreApplication.translate("main", "No URLs in the current session...", None))
 
     def ffmpeg_finished():
-        ui_popup(QCoreApplication.translate(context, "FFmpeg has been installed. Please restart Porn Fetch :)", None))
+        ui_popup(QCoreApplication.translate("main", "FFmpeg has been installed. Please restart Porn Fetch :)", None))
 
 
     def check_for_updates_result(value):
@@ -1920,7 +1919,7 @@ if __name__ == "__main__":
                 logger.error(f"Couldn't fetch changelog of version: {__next_release__}")
                 changelog = f"Unknown Error: {e}"
 
-            ui_popup(QCoreApplication.translate(context, f"""
+            ui_popup(QCoreApplication.translate("main", f"""
             Information: A new version of Porn Fetch (v{__next_release__}) is out. I recommend you to update Porn Fetch. 
             Go to: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/ {__next_release__}
 
