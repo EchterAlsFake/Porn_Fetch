@@ -4,6 +4,7 @@ git+https://github.com/EchterAlsfake/eporner_api.git
 git+https://github.com/EchterAlsFake/xnxx_api.git
 git+https://github.com/EchterAlsFake/xvideos_api.git
 git+https://github.com/EchterAlsFake/eaf_base_api.git
+git+https://github.com/EchterAlsFake/spankbang_api.git
 colorama
 PySide6
 requests
@@ -13,4 +14,3 @@ rich
 tqdm
 ffmpeg-progress-yield
 mutagen
-pypresence

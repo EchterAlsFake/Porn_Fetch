@@ -12,6 +12,7 @@
         <file>graphics/tools.svg</file>
         <file>graphics/faq.svg</file>
         <file>graphics/done.svg</file>
+        <file>graphics/progressbars.svg</file>
     </qresource>
     <qresource prefix="/style">
         <file>stylesheets/stylesheet.qss</file>
@@ -20,6 +21,7 @@
         <file>stylesheets/progressbar_eporner.qss</file>
         <file>stylesheets/progressbar_xnxx.qss</file>
         <file>stylesheets/progressbar_xvideos.qss</file>
+        <file>stylesheets/progressbar_spankbang.qss</file>
         <file>stylesheets/progressbar_total.qss</file>
         <file>stylesheets/progressbar_converting.qss</file>
         <file>stylesheets/stylesheet_button_blue.qss</file>

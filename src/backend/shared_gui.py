@@ -1,7 +1,9 @@
 import os
+import logging
 
 from PySide6.QtWidgets import QMessageBox
-from src.backend.shared_functions import logger_error, logger_debug
+
+logger = logging.getLogger(__name__)
 
 
 def ui_popup(text):
@@ -24,7 +26,7 @@ def get_output_path(path="/storage/emulated/0/Download"):
             return False
 
         if os.path.isfile(test_file_path):
-            logger_debug("Android output path tests successful")
+            logger.debug("Android output path tests successful")
             return True
 
         with open(test_file_path, "w") as test_file:
@@ -32,5 +34,5 @@ def get_output_path(path="/storage/emulated/0/Download"):
         return True
 
     except Exception as e:
-        logger_error(e)
+        logger.error(e)
         return False

@@ -56,6 +56,7 @@
 - Multiple user interface languages
 - Native Android application
 - modern looking user interface
+- Supports over 115 MB/s download speed thanks to well optimized HLS downloading
 
 ## General Information
 > [!NOTE]
@@ -63,7 +64,7 @@
 
 - Windows (10 / 11)
 - Linux   (X11 / Wayland)
-- Android
+- Android (Android is very unstable, please consider using the CLI on Termux instead!)
 - macOS (Untested)
 
 The Graphical User Interface is only for 64bit systems. The CLI supports 64 and 32bit systems.
