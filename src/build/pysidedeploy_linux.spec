@@ -11,7 +11,7 @@ exec_directory = .
 # path to .pyproject project file
 project_file = 
 # application icon
-icon = /home/asuna/Porn_Fetch/src/scripts/Porn_Fetch/src/frontend/graphics/logo_transparent.png
+icon = src/frontend/graphics/logo_transparent.png
 
 [python]
 # python path
