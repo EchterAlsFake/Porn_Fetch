@@ -22,6 +22,7 @@ from xnxx_api.xnxx_api import Client as xn_Client, Video as xn_Video
 from xvideos_api.xvideos_api import Client as xv_Client, Video as xv_Video
 from spankbang_api.spankbang_api import Client as sp_Client, Video as sp_Video
 from base_api.modules.download import FFMPEG as bs_ffmpeg, default as bs_default, threaded as bs_threaded
+from base_api.modules import consts
 from base_api.modules.quality import Quality as bs_Quality
 from ffmpeg_progress_yield import FfmpegProgress
 

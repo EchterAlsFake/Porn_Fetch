@@ -1021,6 +1021,7 @@ class Porn_Fetch(QWidget):
         consts.MAX_CALL_RETRIES = self.max_retries
         bs_consts.REQUEST_DELAY = self.delay
         bs_consts.MAX_RETRIES = self.max_retries
+        bs_consts.FFMPEG_PATH = ffmpeg_path
         consts.FFMPEG_EXECUTABLE = ffmpeg_path
         self.client = Client(delay=self.delay)
 

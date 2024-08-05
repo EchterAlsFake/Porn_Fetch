@@ -1,4 +1,6 @@
+import os.path
 import pathlib
+import shutil
 import threading
 import phub.consts
 
@@ -7,10 +9,12 @@ from src.backend.log_config import setup_logging
 from base_api.modules.download import *
 from base_api.modules.progress_bars import *
 from base_api.base import Core
+from colorama import init
 from rich import print as rprint
 from rich.markdown import Markdown
 
 logger = setup_logging()
+init(autoreset=True)
 
 
 class CLI:
@@ -34,6 +38,7 @@ class CLI:
             self.conf = ConfigParser()
             self.conf.read("config.ini")
             self.license()
+            self.ffmpeg_recommendation()
             self.load_user_settings()
             self.menu()
 
@@ -109,6 +114,28 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
         elif options == "99":
             sys.exit(0)
 
+    def ffmpeg_recommendation(self):
+        if os.path.exists("/data/data/com.termux/files/home"):
+            ffmpeg = input(f"""
+Hey,
+
+It seems like you are using Termux... I highly recommend you to use FFmpeg as your threading mode, because downloading
+HLS segments is very slow on Android devices, because the processor and the system in general can't handle so many
+threads at the same time.
+
+You can install FFmpeg with: 'apt-get install ffmpeg'
+
+If you accept, Porn Fetch will close and automatically set ffmpeg as your downloader.
+
+Do you want to use FFmpeg? [yes,no]        
+    """)
+
+            if ffmpeg.lower() == "yes":
+                self.conf.set("Performance", "threading_mode", "FFMPEG")
+                with open("config.ini", "w") as config_file:
+                    self.conf.write(config_file)
+                    print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTYELLOW_EX}Done!")
+
     def load_user_settings(self):
         self.delay = int(self.conf.get("Video", "delay"))
         self.workers = int(self.conf.get("Performance", "workers"))
@@ -122,18 +149,26 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
         self.result_limit = int(self.conf.get("Video", "search_limit"))
         self.threading_mode = self.conf.get("Performance", "threading_mode")
 
-        if os.path.isfile("ffmpeg"):
-            self.ffmpeg_path = "ffmpeg"
-            phub.consts.FFMPEG_EXECUTABLE = self.ffmpeg_path
+        try:
+            if shutil.which("ffmpeg"):
+                self.ffmpeg_path = shutil.which("ffmpeg")
 
-        elif os.path.isfile("ffmpeg.exe"):
-            self.ffmpeg_path = "ffmpeg.exe"
-            phub.consts.FFMPEG_EXECUTABLE = self.ffmpeg_path
+            else:
+                if os.path.isfile("ffmpeg"):
+                    self.ffmpeg_path = "ffmpeg"
 
-        else:
-            logger.warning("FFMPEG wasn't found... Have you extracted it from the .zip file?")
-            logger.warning("FFMPEG Features won't be available!")
-            self.ffmpeg_features = False
+                elif os.path.isfile("ffmpeg.exe"):
+                    self.ffmpeg_path = "ffmpeg.exe"
+
+                else:
+                    logger.warning("FFMPEG wasn't found... Have you extracted it from the .zip file?")
+                    logger.warning("FFMPEG Features won't be available!")
+                    self.ffmpeg_features = False
+        finally:
+            if not self.ffmpeg_path == "":
+                phub.consts.FFMPEG_EXECUTABLE = self.ffmpeg_path
+                consts.FFMPEG_PATH = self.ffmpeg_path
+                self.ffmpeg_features = True
 
     def save_user_settings(self):
         while True:
@@ -154,6 +189,11 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
 {return_color()}10) Change result limit
 {Fore.WHITE}-------- {return_color()}Output Path {Fore.WHITE}--------
 {return_color()}11) Change output path
+{Fore.WHITE}---------{return_color()}Threading Mode {Fore.WHITE}---------
+{return_color()}12) Change to threaded (Not recommended on Android!
+{return_color()}13) Change to FFmpeg (Recommended on Android
+{return_color()}14) Change to default (really slow)
+{Fore.WHITE}
 
 {Fore.LIGHTRED_EX}99) Exit
 {return_color()}------------->:""")
@@ -205,6 +245,15 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
                         raise "The specified output path doesn't exist!"
 
                     self.conf.set("Video", "output_path", path)
+
+                elif settings_options == "12":
+                    self.conf.set("Performance", "threading_mode", "threaded")
+
+                elif settings_options == "13":
+                    self.conf.set("Performance", "threading_mode", "FFMPEG")
+
+                elif settings_options == "14":
+                    self.conf.set("Performance", "threading_mode", "default")
 
                 elif settings_options == "99":
                     self.menu()
