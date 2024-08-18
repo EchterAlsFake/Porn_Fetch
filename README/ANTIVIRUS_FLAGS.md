@@ -17,7 +17,6 @@ Porn Fetch also is not known by any AV or by any browser as it only has like 7k 
 
 (This explanation is also for people who are not in tech, so read carefully)
 
-
 GitHub is a platform where developers can host their code. To say it extremely simple, GitHub manages your code and let people
 interact with it (really simple explained). GitHub has a feature called "GitHub Actions" (CI/CD). This lets you automate things 
 using a script. 
@@ -28,8 +27,9 @@ if I made any changes to the code before publishing it. This is of course not go
 to automatically convert the source code into the binary file, but here comes the best:
 
 I am technically not able to modify this process. The code compilation in the GitHub actions is defined by the scripts which are
-available under ".github/workflows" in my repository. The workflow will also calculate the SHA 512 sum. The SHA 512 sum is a fingerprint
-of the file. It's technically not possible for anyone in the world to "fake" this sha sum. It's cryptographically safe.
+available under ".github/workflows" in my repository. So what you can do is, you can after every release go to the workflow
+which created the binary file. (I'll link to it) And then you can download it, and compare the sha sum from this GitHub actions
+release with the official release.
 
 So if you compare the SHA sum from the file from GitHub actions and the SHA sum from the releases and the SHA sum matches, then
 you know that the file is by 100% the same. It's completely identical.
@@ -39,7 +39,7 @@ Now what if a hacker hacks into my account and publishes his own file?
 
 My files are also signed using a PGP key. Now I won't explain what this is, but basically you can do:
 
-gpg --verify "filename"
+gpg --verify "filename.sig" "filename"
 
 If it says something like signed by "Johannes Habel <EchterAlsFake@proton.me>" with this key ID: 1E04D0A679846BC0
 then you know it was me who published it. 
