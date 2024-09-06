@@ -16,13 +16,18 @@
     </qresource>
     <qresource prefix="/style">
         <file>stylesheets/stylesheet.qss</file>
+        <file>stylesheets/menu_button_account.qss</file>
+        <file>stylesheets/menu_button_download.qss</file>
+        <file>stylesheets/menu_button_credits.qss</file>
+        <file>stylesheets/menu_button_tools.qss</file>
+        <file>stylesheets/menu_button_progress.qss</file>
         <file>stylesheets/progressbar_hqporner.qss</file>
         <file>stylesheets/progressbar_pornhub.qss</file>
         <file>stylesheets/progressbar_eporner.qss</file>
         <file>stylesheets/progressbar_xnxx.qss</file>
         <file>stylesheets/progressbar_xvideos.qss</file>
-        <file>stylesheets/progressbar_spankbang.qss</file>
         <file>stylesheets/progressbar_total.qss</file>
+        <file>stylesheets/progressbar_spankbang.qss</file>
         <file>stylesheets/progressbar_converting.qss</file>
         <file>stylesheets/stylesheet_button_blue.qss</file>
         <file>stylesheets/stylesheet_button_orange.qss</file>

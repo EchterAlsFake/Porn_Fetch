@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1044</width>
+    <width>1221</width>
     <height>795</height>
    </rect>
   </property>
@@ -25,6 +25,63 @@
   <property name="windowTitle">
    <string>Porn Fetch V3.4 (C) Johannes Habel GPL 3</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget {
+    color: #ECECEC;  /* Brightened for better contrast */
+    border: none;
+    font-size: 15px;
+}
+
+QLineEdit {
+    padding: 5px;
+    border-radius: 4px;
+}
+
+QRadioButton {
+    spacing: 5px;
+
+}
+
+QSlider::groove:horizontal {
+    height: 8px;
+}
+
+QSlider::handle:horizontal {
+    width: 18px;
+    margin: -6px 0;
+    border-radius: 9px;
+}
+
+QGroupBox {
+    margin-top: 10px;
+    padding: 5px;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+}
+
+QGroupBox QPushButton {
+    padding: 5px 10px;
+}
+
+QLabel {
+    padding: 2px;
+}
+
+QPushButton {
+    padding: 5px;
+}
+
+QCheckBox {
+    spacing: 5px;
+}
+
+QSpinBox {
+    padding: 5px;
+}</string>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridlayout_main">
@@ -38,6 +95,9 @@
        </property>
        <item row="3" column="1">
         <widget class="QProgressBar" name="progressbar_converting">
+         <property name="styleSheet">
+          <string notr="true">text-align: center; /* Centered text */</string>
+         </property>
          <property name="value">
           <number>0</number>
          </property>
@@ -56,6 +116,9 @@
            <width>300</width>
            <height>0</height>
           </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">text-align: center; /* Centered text */</string>
          </property>
          <property name="value">
           <number>0</number>
@@ -106,7 +169,7 @@
         <number>1</number>
        </property>
        <property name="currentIndex">
-        <number>3</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="widget">
         <layout class="QGridLayout" name="gridLayout_8">
@@ -148,7 +211,7 @@
               <number>1</number>
              </property>
              <property name="currentIndex">
-              <number>1</number>
+              <number>3</number>
              </property>
              <widget class="QWidget" name="page_download">
               <layout class="QGridLayout" name="gridLayout_5">
@@ -746,8 +809,8 @@
                    <rect>
                     <x>0</x>
                     <y>0</y>
-                    <width>391</width>
-                    <height>237</height>
+                    <width>1199</width>
+                    <height>278</height>
                    </rect>
                   </property>
                   <layout class="QGridLayout" name="gridLayout_18">
@@ -755,6 +818,9 @@
                     <layout class="QGridLayout" name="gridlayout_progressbar">
                      <item row="4" column="1">
                       <widget class="QProgressBar" name="progressbar_xvideos">
+                       <property name="styleSheet">
+                        <string notr="true">text-align: center; /* Centered text */</string>
+                       </property>
                        <property name="value">
                         <number>0</number>
                        </property>
@@ -797,6 +863,9 @@
                          <height>0</height>
                         </size>
                        </property>
+                       <property name="styleSheet">
+                        <string notr="true">text-align: center; /* Centered text */</string>
+                       </property>
                        <property name="value">
                         <number>0</number>
                        </property>
@@ -836,6 +905,9 @@
                          <height>0</height>
                         </size>
                        </property>
+                       <property name="styleSheet">
+                        <string notr="true">text-align: center; /* Centered text */</string>
+                       </property>
                        <property name="value">
                         <number>0</number>
                        </property>
@@ -843,6 +915,9 @@
                      </item>
                      <item row="2" column="1">
                       <widget class="QProgressBar" name="progressbar_eporner">
+                       <property name="styleSheet">
+                        <string notr="true">text-align: center; /* Centered text */</string>
+                       </property>
                        <property name="value">
                         <number>0</number>
                        </property>
@@ -864,6 +939,9 @@
                      </item>
                      <item row="3" column="1">
                       <widget class="QProgressBar" name="progressbar_xnxx">
+                       <property name="styleSheet">
+                        <string notr="true">text-align: center; /* Centered text */</string>
+                       </property>
                        <property name="value">
                         <number>0</number>
                        </property>
@@ -898,6 +976,9 @@
                      </item>
                      <item row="5" column="1">
                       <widget class="QProgressBar" name="progressbar_spankbang">
+                       <property name="styleSheet">
+                        <string notr="true">text-align: center; /* Centered text */</string>
+                       </property>
                        <property name="value">
                         <number>0</number>
                        </property>
@@ -1269,8 +1350,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>1006</width>
-                <height>289</height>
+                <width>1185</width>
+                <height>292</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -1561,8 +1642,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>1006</width>
-                <height>647</height>
+                <width>1185</width>
+                <height>704</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_19">
@@ -2139,14 +2220,76 @@ QPushButton:pressed {
                  </layout>
                 </widget>
                </item>
+               <item row="0" column="0">
+                <widget class="QPushButton" name="button_download_ffmpeg">
+                 <property name="text">
+                  <string>Download and Setup FFmpeg</string>
+                 </property>
+                </widget>
+               </item>
                <item row="3" column="0" colspan="2">
                 <widget class="QGroupBox" name="goroupbox_gui">
                  <property name="title">
                   <string>Graphical User Interface</string>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_12">
+                  <item row="1" column="0">
+                   <layout class="QHBoxLayout" name="horizontallayout_design">
+                    <item>
+                     <widget class="QLabel" name="label_settings_design">
+                      <property name="text">
+                       <string>Porn Fetch Design:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="radio_ui_design_native">
+                      <property name="text">
+                       <string>Native</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="radio_ui_design_dark_mode">
+                      <property name="text">
+                       <string>System's dark mode</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="radio_ui_design_light_mode">
+                      <property name="text">
+                       <string>System's light mode</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer">
+                      <property name="orientation">
+                       <enum>Qt::Orientation::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </item>
                   <item row="0" column="0">
                    <layout class="QGridLayout" name="gridlayout_gui_settings">
+                    <item row="1" column="2">
+                     <widget class="QRadioButton" name="radio_ui_language_english">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="text">
+                       <string>English</string>
+                      </property>
+                     </widget>
+                    </item>
                     <item row="1" column="3">
                      <widget class="QRadioButton" name="radio_ui_language_german">
                       <property name="cursor">
@@ -2157,6 +2300,16 @@ QPushButton:pressed {
                       </property>
                      </widget>
                     </item>
+                    <item row="1" column="5">
+                     <widget class="QRadioButton" name="radio_ui_language_french">
+                      <property name="enabled">
+                       <bool>true</bool>
+                      </property>
+                      <property name="text">
+                       <string>French</string>
+                      </property>
+                     </widget>
+                    </item>
                     <item row="1" column="4">
                      <widget class="QRadioButton" name="radio_ui_language_chinese_simplified">
                       <property name="cursor">
@@ -2164,16 +2317,6 @@ QPushButton:pressed {
                       </property>
                       <property name="text">
                        <string>Chinese (simplified)</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="2">
-                     <widget class="QRadioButton" name="radio_ui_language_english">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="text">
-                       <string>English</string>
                       </property>
                      </widget>
                     </item>
@@ -2200,20 +2343,10 @@ QPushButton:pressed {
                       </property>
                      </widget>
                     </item>
-                    <item row="1" column="5">
-                     <widget class="QRadioButton" name="radio_ui_language_french">
-                      <property name="enabled">
-                       <bool>true</bool>
-                      </property>
-                      <property name="text">
-                       <string>French</string>
-                      </property>
-                     </widget>
-                    </item>
                    </layout>
                   </item>
-                  <item row="1" column="0">
-                   <spacer name="verticalSpacer_3">
+                  <item row="2" column="0">
+                   <spacer name="vertical_spacer_design">
                     <property name="orientation">
                      <enum>Qt::Orientation::Vertical</enum>
                     </property>
@@ -2226,13 +2359,6 @@ QPushButton:pressed {
                    </spacer>
                   </item>
                  </layout>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QPushButton" name="button_download_ffmpeg">
-                 <property name="text">
-                  <string>Download and Setup FFmpeg</string>
-                 </property>
                 </widget>
                </item>
               </layout>
@@ -2295,48 +2421,48 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Supported Websites:&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Downloading:&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- PornHub.com (supports total progress)&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- HQPorner.com&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Eporner.com&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- XNXX.com (supports total progress)&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- XVideos.com (supports total progress)&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Spankbang.com (supports total progress)&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;All sites support *threaded* downloads and selectable quality!&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;* hqporner and eporner running in QThreads, but they don't fetch segments. The video is directly&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;downloaded, therefore threading in a segment isn't needed.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Model / Channel Downloads&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- PornHub.com&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- HQPorner.com&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- EPorner.com&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- XNXX.com&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- XVideos.com&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Searching:&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- PornHub.com&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- HQPorner.com&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Xvideos.com&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Eporner.com&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- XNXX.com&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;I am constantly working to support more websites.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;If you want a specific site to be supported, just ask:&lt;br /&gt;&lt;br /&gt;Discord: echteralsfake&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GitHub.com/echteralsfake/Porn_Fetch/issues&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Cantarell'; font-size:15px; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;Supported Websites:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;Downloading:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;- PornHub.com (supports total progress)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;- HQPorner.com&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;- Eporner.com&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;- XNXX.com (supports total progress)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;- XVideos.com (supports total progress)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;- Spankbang.com (supports total progress)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;All sites support *threaded* downloads and selectable quality!&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;* hqporner and eporner running in QThreads, but they don't fetch segments. The video is directly&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;downloaded, therefore threading in a segment isn't needed.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;Model / Channel Downloads&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;- PornHub.com&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;- HQPorner.com&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;- EPorner.com&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;- XNXX.com&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;- XVideos.com&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;Searching:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;- PornHub.com&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;- HQPorner.com&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;- Xvideos.com&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;- Eporner.com&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;- XNXX.com&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;I am constantly working to support more websites.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;If you want a specific site to be supported, just ask:&lt;br /&gt;&lt;br /&gt;Discord: echteralsfake&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;GitHub.com/echteralsfake/Porn_Fetch/issues&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </widget>
          </item>
@@ -2381,20 +2507,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </property>
           <property name="styleSheet">
            <string notr="true">QPushButton {
-    background-color: #800080;
-    color: white;
     border-radius: 8px;
-    border: 3px solid #dda0dd;
+    border: 2px solid #a9a9a9;
     padding: 8px 10px;
-}
-
-QPushButton:hover {
-    background-color: #9932cc;
-    border: 3px solid #ba55d3;
-}
-
-QPushButton:pressed {
-    background-color: #4b0082;
 }
 </string>
           </property>
@@ -2431,7 +2546,7 @@ QPushButton:pressed {
           </property>
           <property name="font">
            <font>
-            <pointsize>9</pointsize>
+            <pointsize>-1</pointsize>
            </font>
           </property>
           <property name="cursor">
@@ -2439,19 +2554,9 @@ QPushButton:pressed {
           </property>
           <property name="styleSheet">
            <string notr="true">QPushButton {
-    background-color: #000000;
-    color: #ffffff;
     border-radius: 8px;
-    border: 2px solid #ffffff;
+    border: 2px solid #a9a9a9;
     padding: 8px 10px;
-}
-
-QPushButton:hover {
-    background-color: #333333;
-}
-
-QPushButton:pressed {
-    background-color: #666666;
 }
 </string>
           </property>
@@ -2491,22 +2596,10 @@ QPushButton:pressed {
           </property>
           <property name="styleSheet">
            <string notr="true">QPushButton {
-    background-color: #4CAF50;
-    color: white;
+    border: 2px solid #a9a9a9;
     border-radius: 8px;
-    border: 2px solid #0078d7;
     padding: 8px 10px;
-}
-
-QPushButton:hover {
-    background-color: #66BB6A;
-    border: 2px solid #005bb5;
-}
-
-QPushButton:pressed {
-    background-color: #388E3C;
-}
-</string>
+}</string>
           </property>
           <property name="text">
            <string/>
@@ -2544,19 +2637,9 @@ QPushButton:pressed {
           </property>
           <property name="styleSheet">
            <string notr="true">QPushButton {
-    background-color: #008CBA;
-    color: white;
     border-radius: 8px;
-    border: none;
+    border: 2px solid #a9a9a9;
     padding: 8px 10px;
-}
-
-QPushButton:hover {
-    background-color: #00A3CC;
-}
-
-QPushButton:pressed {
-    background-color: #005F8C;
 }
 </string>
           </property>
@@ -2596,19 +2679,9 @@ QPushButton:pressed {
           </property>
           <property name="styleSheet">
            <string notr="true">QPushButton {
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 #ff7f50, stop:1 #ff4500);
-    color: white;
     border-radius: 8px;
-    border: none;
     padding: 8px 10px;
-}
-
-QPushButton:hover {
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 #ffa07a, stop:1 #ff6347);
-}
-
-QPushButton:pressed {
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 #cd5c5c, stop:1 #b22222);
+    border: 2px solid #a9a9a9;
 }
 </string>
           </property>
@@ -2648,21 +2721,10 @@ QPushButton:pressed {
           </property>
           <property name="styleSheet">
            <string notr="true">QPushButton {
-    background-color: #808080;
-    color: white;
     border-radius: 8px;
     border: 2px solid #a9a9a9;
     padding: 8px 10px;
-}
-
-QPushButton:hover {
-    background-color: #a9a9a9;
-}
-
-QPushButton:pressed {
-    background-color: #696969;
-}
-</string>
+}</string>
           </property>
           <property name="text">
            <string/>

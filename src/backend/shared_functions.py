@@ -36,7 +36,7 @@ options_performance = ["semaphore", "threading_mode", "workers", "timeout", "ret
 options_video = ["quality", "output_path", "directory_system", "search_limit", "delay", "skip_existing_files",
                  "model_videos"]
 options_license = ["accepted"]
-options_ui = ["language"]
+options_ui = ["language", "design"]
 
 pornhub_pattern = re.compile(r'(.*?)pornhub(.*)') # can also be .org
 hqporner_pattern = re.compile(r'(.*?)hqporner.com(.*)')
@@ -84,6 +84,7 @@ model_videos = both
 
 [UI]
 language = system
+design = native
 """
 
 logger = logging.getLogger(__name__)

@@ -693,6 +693,7 @@ class Porn_Fetch(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         # Variable initialization:
+        self.gui_design_map = None
         self.model_videos_map = None
         self.model_videos_type = None
         self.skip_existing_files = None
@@ -876,6 +877,11 @@ class Porn_Fetch(QWidget):
         self.setWindowIcon(QIcon(":/images/graphics/logo_transparent.ico"))
         # Stylesheets
         stylesheet_paths = {
+            "stylesheet_menu_button_download": ":/style/stylesheets/menu_button_download.qss",
+            "stylesheet_menu_button_account": ":/style/stylesheets/menu_button_account.qss",
+            "stylesheet_menu_button_tools": ":/style/stylesheets/menu_button_tools.qss",
+            "stylesheet_menu_button_credits": ":/style/stylesheets/menu_button_credits.qss",
+            "stylesheet_menu_button_progress": ":/style/stylesheets/menu_button_progress.qss",
             "progressbar_pornhub": ":/style/stylesheets/progressbar_pornhub.qss",
             "progressbar_hqporner": ":/style/stylesheets/progressbar_hqporner.qss",
             "progressbar_eporner": ":/style/stylesheets/progressbar_eporner.qss",
@@ -896,49 +902,61 @@ class Porn_Fetch(QWidget):
 
         # Applying stylesheets to specific buttons
         # Simplify this part based on actual UI structure and naming
-        self.ui.button_login.setStyleSheet(stylesheets["button_green"])
-        self.ui.progressbar_pornhub.setStyleSheet(stylesheets["progressbar_pornhub"])
-        self.ui.progressbar_total.setStyleSheet(stylesheets["progressbar_total"])
-        self.ui.progressbar_xnxx.setStyleSheet(stylesheets["progressbar_xnxx"])
-        self.ui.progressbar_eporner.setStyleSheet(stylesheets["progressbar_eporner"])
-        self.ui.progressbar_hqporner.setStyleSheet(stylesheets["progressbar_hqporner"])
-        self.ui.progressbar_xvideos.setStyleSheet(stylesheets["progressbar_xvideos"])
-        self.ui.progressbar_spankbang.setStyleSheet(stylesheets["progressbar_spankbang"])
-        self.ui.progressbar_converting.setStyleSheet(stylesheets["progressbar_converting"])
-        self.ui.button_model.setStyleSheet(stylesheets["button_purple"])
-        self.ui.button_search.setStyleSheet(stylesheets["button_purple"])
-        self.ui.button_download.setStyleSheet(stylesheets["button_purple"])
-        self.ui.button_threading_mode_help.setStyleSheet(stylesheets["button_green"])
-        self.ui.button_directory_system_help.setStyleSheet(stylesheets["button_green"])
-        self.ui.button_semaphore_help.setStyleSheet(stylesheets["button_green"])
-        self.ui.button_tree_download.setStyleSheet(stylesheets["button_purple"])
-        self.ui.button_tree_unselect_all.setStyleSheet(stylesheets["button_blue"])
-        self.ui.button_tree_select_range.setStyleSheet(stylesheets["button_green"])
-        self.ui.button_output_path_select.setStyleSheet(stylesheets["button_blue"])
-        self.ui.button_login.setStyleSheet(stylesheets["button_blue"])
-        self.ui.button_settings_apply.setStyleSheet(stylesheets["button_blue"])
-        self.ui.button_get_random_videos.setStyleSheet(stylesheets["button_purple"])
-        self.ui.button_get_brazzers_videos.setStyleSheet(stylesheets["button_purple"])
-        self.ui.button_list_categories.setStyleSheet(stylesheets["button_purple"])
-        self.ui.button_open_file.setStyleSheet(stylesheets["button_purple"])
-        self.ui.button_switch_supported_websites.setStyleSheet(stylesheets["button_blue"])
-        self.ui.button_hqporner_category_get_videos.setStyleSheet(stylesheets["button_purple"])
-        self.ui.button_top_porn_get_videos.setStyleSheet(stylesheets["button_purple"])
-        self.ui.button_get_watched_videos.setStyleSheet(stylesheets["buttons_login"])
-        self.ui.button_get_liked_videos.setStyleSheet(stylesheets["buttons_login"])
-        self.ui.button_get_recommended_videos.setStyleSheet(stylesheets["buttons_login"])
-        self.ui.button_timeout_help.setStyleSheet(stylesheets["button_green"])
-        self.ui.button_workers_help.setStyleSheet(stylesheets["button_green"])
-        self.ui.button_pornhub_delay_help.setStyleSheet(stylesheets["button_green"])
-        self.ui.button_result_limit_help.setStyleSheet(stylesheets["button_green"])
-        self.ui.button_settings_reset.setStyleSheet(stylesheets["button_reset"])
-        self.ui.button_playlist_get_videos.setStyleSheet(stylesheets["button_purple"])
-        self.ui.button_tree_stop.setStyleSheet(stylesheets["button_reset"])
-        self.ui.button_tree_export_video_urls.setStyleSheet(stylesheets["button_purple"])
-        self.ui.button_timeout_maximal_retries_help.setStyleSheet(stylesheets["button_green"])
-        self.ui.button_help_file.setStyleSheet(stylesheets["button_green"])
-        self.ui.button_download_ffmpeg.setStyleSheet(stylesheets["button_purple"])
-        self.ui.button_range_apply_everything.setStyleSheet(stylesheets["button_orange"])
+
+        if self.conf["UI"]["design"] == "native":
+
+            # Applying top buttons
+            self.ui.button_login.setStyleSheet(stylesheets["button_green"])
+            self.ui.progressbar_pornhub.setStyleSheet(stylesheets["progressbar_pornhub"])
+            self.ui.progressbar_total.setStyleSheet(stylesheets["progressbar_total"])
+            self.ui.progressbar_xnxx.setStyleSheet(stylesheets["progressbar_xnxx"])
+            self.ui.progressbar_eporner.setStyleSheet(stylesheets["progressbar_eporner"])
+            self.ui.progressbar_hqporner.setStyleSheet(stylesheets["progressbar_hqporner"])
+            self.ui.progressbar_xvideos.setStyleSheet(stylesheets["progressbar_xvideos"])
+            self.ui.progressbar_spankbang.setStyleSheet(stylesheets["progressbar_spankbang"])
+            self.ui.progressbar_converting.setStyleSheet(stylesheets["progressbar_converting"])
+            self.ui.button_model.setStyleSheet(stylesheets["button_purple"])
+            self.ui.button_search.setStyleSheet(stylesheets["button_purple"])
+            self.ui.button_download.setStyleSheet(stylesheets["button_purple"])
+            self.ui.button_threading_mode_help.setStyleSheet(stylesheets["button_green"])
+            self.ui.button_directory_system_help.setStyleSheet(stylesheets["button_green"])
+            self.ui.button_semaphore_help.setStyleSheet(stylesheets["button_green"])
+            self.ui.button_tree_download.setStyleSheet(stylesheets["button_purple"])
+            self.ui.button_tree_unselect_all.setStyleSheet(stylesheets["button_blue"])
+            self.ui.button_tree_select_range.setStyleSheet(stylesheets["button_green"])
+            self.ui.button_output_path_select.setStyleSheet(stylesheets["button_blue"])
+            self.ui.button_login.setStyleSheet(stylesheets["button_blue"])
+            self.ui.button_settings_apply.setStyleSheet(stylesheets["button_blue"])
+            self.ui.button_get_random_videos.setStyleSheet(stylesheets["button_purple"])
+            self.ui.button_get_brazzers_videos.setStyleSheet(stylesheets["button_purple"])
+            self.ui.button_list_categories.setStyleSheet(stylesheets["button_purple"])
+            self.ui.button_open_file.setStyleSheet(stylesheets["button_purple"])
+            self.ui.button_switch_supported_websites.setStyleSheet(stylesheets["button_blue"])
+            self.ui.button_hqporner_category_get_videos.setStyleSheet(stylesheets["button_purple"])
+            self.ui.button_top_porn_get_videos.setStyleSheet(stylesheets["button_purple"])
+            self.ui.button_get_watched_videos.setStyleSheet(stylesheets["buttons_login"])
+            self.ui.button_get_liked_videos.setStyleSheet(stylesheets["buttons_login"])
+            self.ui.button_get_recommended_videos.setStyleSheet(stylesheets["buttons_login"])
+            self.ui.button_timeout_help.setStyleSheet(stylesheets["button_green"])
+            self.ui.button_workers_help.setStyleSheet(stylesheets["button_green"])
+            self.ui.button_pornhub_delay_help.setStyleSheet(stylesheets["button_green"])
+            self.ui.button_result_limit_help.setStyleSheet(stylesheets["button_green"])
+            self.ui.button_settings_reset.setStyleSheet(stylesheets["button_reset"])
+            self.ui.button_playlist_get_videos.setStyleSheet(stylesheets["button_purple"])
+            self.ui.button_tree_stop.setStyleSheet(stylesheets["button_reset"])
+            self.ui.button_tree_export_video_urls.setStyleSheet(stylesheets["button_purple"])
+            self.ui.button_timeout_maximal_retries_help.setStyleSheet(stylesheets["button_green"])
+            self.ui.button_help_file.setStyleSheet(stylesheets["button_green"])
+            self.ui.button_download_ffmpeg.setStyleSheet(stylesheets["button_purple"])
+            self.ui.button_range_apply_everything.setStyleSheet(stylesheets["button_orange"])
+            self.ui.button_list_categories_eporner.setStyleSheet(stylesheets["button_purple"])
+
+            self.ui.button_switch_home.setStyleSheet(stylesheets["stylesheet_menu_button_download"])
+            self.ui.button_switch_account.setStyleSheet(stylesheets["stylesheet_menu_button_account"])
+            self.ui.button_switch_tools.setStyleSheet(stylesheets["stylesheet_menu_button_tools"])
+            self.ui.button_switch_credits.setStyleSheet(stylesheets["stylesheet_menu_button_credits"])
+            self.ui.button_view_progress_bars.setStyleSheet(stylesheets["stylesheet_menu_button_progress"])
+
         self.header = self.ui.treeWidget.header()
         self.header.resizeSection(0, 300)
         self.header.resizeSection(1, 150)
@@ -981,6 +999,13 @@ class Porn_Fetch(QWidget):
             "featured": self.ui.radio_model_featured
         }
 
+        self.gui_design_map = {
+            "native": self.ui.radio_ui_design_native,
+            "dark": self.ui.radio_ui_design_dark_mode,
+            "light": self.ui.radio_ui_design_light_mode
+        }
+
+
     def load_user_settings(self):
         """Loads the user settings from the configuration file and applies them."""
 
@@ -990,6 +1015,7 @@ class Porn_Fetch(QWidget):
         self.directory_system_map.get(self.conf.get("Video", "directory_system")).setChecked(True)
         self.gui_language_map.get(self.conf.get("UI", "language")).setChecked(True)
         self.model_videos_map.get(self.conf.get("Video", "model_videos")).setChecked(True)
+        self.gui_design_map.get(self.conf.get("UI", "design")).setChecked(True)
         self.ui.spinbox_semaphore.setValue(int(self.conf.get("Performance", "semaphore")))
         self.ui.spinbox_treewidget_limit.setValue(int(self.conf.get("Video", "search_limit")))
         self.ui.lineedit_output_path.setText(self.conf.get("Video", "output_path"))
@@ -1049,6 +1075,10 @@ class Porn_Fetch(QWidget):
         for model_video_type, radio_button in self.model_videos_map.items():
             if radio_button.isChecked():
                 self.conf.set("Video", "model_videos", model_video_type)
+
+        for design, radio_button in self.gui_design_map.items():
+            if radio_button.isChecked():
+                self.conf.set("UI", "design", design)
 
         if self.ui.radio_skip_existing_files_no.isChecked():
             self.conf.set("Video", "skip_existing_files", "false")
@@ -1806,7 +1836,6 @@ def main():
     setup_config_file()
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
-
     conf = ConfigParser()
     conf.read("config.ini")
     language = conf["UI"]["language"]
@@ -1837,10 +1866,11 @@ def main():
 
     app.installTranslator(translator)
 
-    file = QFile(":/style/stylesheets/stylesheet.qss")
-    file.open(QFile.ReadOnly | QFile.Text)
-    stream = QTextStream(file)
-    app.setStyleSheet(stream.readAll())
+    if conf["UI"]["design"] == "native":
+        file = QFile(":/style/stylesheets/stylesheet.qss")
+        file.open(QFile.ReadOnly | QFile.Text)
+        stream = QTextStream(file)
+        app.setStyleSheet(stream.readAll())
 
     if __build__ == "android":
         font = QFont("arial", 12)
