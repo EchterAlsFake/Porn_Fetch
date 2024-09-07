@@ -88,6 +88,7 @@ class Signals(QObject):
     total_progress = Signal(int, int)
     progress_video = Signal(object)
     ffmpeg_progress = Signal(int, int)
+    internet_check = Signal(dict)
 
     # Ranges
     start_undefined_range = Signal()
@@ -689,6 +690,48 @@ class AddUrls(QRunnable):
         self.signals.url_iterators.emit(iterator, model_iterators, search_iterators)
 
 
+class InternetCheck(QRunnable):
+    def __init__(self):
+        super(InternetCheck, self).__init__()
+        self.websites = [
+            "https://www.spankbang.com",
+            "https://www.pornhub.com",
+            "https://hqporner.com",
+            "https://www.xvideos.com",
+            "https://www.xnxx.com",
+            # Append new URLs here
+        ]
+
+        self.website_results = {}
+        self.signals = Signals()
+
+
+    def run(self):
+        for idx, website in enumerate(self.websites):
+            logger.debug(f"[{idx}|{len(self.websites)}] Testing: {website}")
+
+            try:
+                status = requests.get(website)
+
+                if status.status_code == 200:
+                    self.website_results.update({website: 200})
+
+                elif status.status_code == 404:
+                    self.website_results.update({website: "Failed, website doesn't exist? Please report this error"})
+
+                elif status.status_code == 403:
+                    self.website_results.update({website: "The website blocked access, please change your IP or wait"})
+
+            except requests.exceptions.SSLError:
+                self.website_results.update({website: "SSL Error, your ISP / Router / Firewall blocks access to the site"
+                                                      " Are you at a university, school or in a public WiFi?"})
+
+            except Exception as e:
+                self.website_results.update({website: f"Unknown Error: {e}"})
+
+        self.signals.internet_check.emit(self.website_results)
+
+
 class Porn_Fetch(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -735,6 +778,7 @@ class Porn_Fetch(QWidget):
         logger.debug("Startup: [4/5] Loaded the user settings")
         self.switch_to_home()  # Switches Porn Fetch to the home widget
         self.check_for_updates()
+        self.check_internet()
         self.check_ffmpeg()  # Checks and sets up FFmpeg
         logger.debug("Startup: [5/5] ✔")
 
@@ -1106,6 +1150,33 @@ class Porn_Fetch(QWidget):
         self.update_thread = CheckUpdates()
         self.update_thread.signals.result.connect(check_for_updates_result)
         self.threadpool.start(self.update_thread)
+
+    def check_internet(self):
+        """Checks if the porn sites are accessible"""
+        self.internet_check_thread = InternetCheck()
+        self.internet_check_thread.signals.internet_check.connect(self.internet_check_result)
+        self.threadpool.start(self.internet_check_thread)
+
+    def internet_check_result(self, results: dict):
+        show = False
+        formatted_results = ""
+
+        for website, status in results.items():
+            if status == 200:
+                formatted_results += f"{website}: Code 200: no issues\n"
+            else:
+                formatted_results += f"{website}: error, status code {status}"
+                show = True
+
+        if show:
+            ui_popup(self.tr(f"""
+! Warning !
+Some websites couldn't be accessed. Here's a detailed report:
+Websites marked in green had no issues, red means there was an error
+
+
+{formatted_results}
+"""))
 
     def check_ffmpeg(self):
         # Check if ffmpeg is available in the system PATH
