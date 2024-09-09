@@ -8,7 +8,7 @@
 - [] Full support for spankbang
 - [] Harden the tag writing function
 - [] Allow for different format converting e.g, mov and mkv
-- [] Fix the progress reporting on the file-read function
+- [x] Fix the progress reporting on the file-read function
 - [] Optimize the CLI and fix some of its errors
 - [] Rework the entire progress reporting system (probably the hardest thing to do)
 - [] Re-implement the internet and status checks, but in a better way

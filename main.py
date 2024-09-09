@@ -663,7 +663,6 @@ class AddUrls(QRunnable):
                 continue
 
             total = len(content)
-            self.signals.total_progress.emit(0, total)
 
             if line.startswith("model#"):
                 line = line.split("#")[1]
@@ -1679,9 +1678,9 @@ This warning won't be shown again.
         dialog = QFileDialog()
         file, types = dialog.getOpenFileName()
         self.ui.lineedit_file.setText(file)
-        self.start_it()
+        self.start_file_processing()
 
-    def start_it(self):
+    def start_file_processing(self):
         file = self.ui.lineedit_file.text()
         self.url_thread = AddUrls(file, delay=self.delay)
         self.url_thread.signals.total_progress.connect(self.update_total_progressbar)
