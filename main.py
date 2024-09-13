@@ -692,6 +692,11 @@ class AddUrls(QRunnable):
 class InternetCheck(QRunnable):
     def __init__(self):
         super(InternetCheck, self).__init__()
+
+        self.headers = {
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
+        }
+
         self.websites = [
             "https://www.spankbang.com",
             "https://www.pornhub.com",
@@ -706,14 +711,14 @@ class InternetCheck(QRunnable):
 
 
     def run(self):
-        for idx, website in enumerate(self.websites):
+        for idx, website in enumerate(self.websites, start=1):
             logger.debug(f"[{idx}|{len(self.websites)}] Testing: {website}")
 
             try:
-                status = requests.get(website)
+                status = requests.get(website, headers=self.headers)
 
                 if status.status_code == 200:
-                    self.website_results.update({website: 200})
+                    self.website_results.update({website: "✔"})
 
                 elif status.status_code == 404:
                     self.website_results.update({website: "Failed, website doesn't exist? Please report this error"})
@@ -1161,19 +1166,15 @@ class Porn_Fetch(QWidget):
         formatted_results = ""
 
         for website, status in results.items():
-            if status == 200:
-                formatted_results += f"{website}: Code 200: no issues\n"
-            else:
-                formatted_results += f"{website}: error, status code {status}"
+            if status != "✔":
+                formatted_results += f"{website} -->: {status}\n\n"
                 show = True
 
         if show:
             ui_popup(self.tr(f"""
 ! Warning !
 Some websites couldn't be accessed. Here's a detailed report:
-Websites marked in green had no issues, red means there was an error
-
-
+------------------------------------------------------------
 {formatted_results}
 """))
 
@@ -1217,6 +1218,7 @@ This warning won't be shown again.
             else:
                 # If ffmpeg binary is found in the current directory, set it as the ffmpeg path
                 ffmpeg_path = os.path.abspath(ffmpeg_binary)
+
         else:
             # If ffmpeg is found in system PATH, use it directly
             ffmpeg_path = shutil.which("ffmpeg")
