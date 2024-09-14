@@ -28,7 +28,7 @@ jobs:
           pyinstaller -F Porn_Fetch_CLI.py && cd dist && mv Porn_Fetch_CLI PornFetch_Linux_CLI_x64 && chmod +x PornFetch_Linux_CLI_x64
 
       - name: Archive Porn Fetch CLI (Linux_64) build
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: PornFetch_Linux_CLI_x64
           path: dist/PornFetch_Linux_CLI_x64
@@ -72,7 +72,7 @@ jobs:
           pyinstaller -F Porn_Fetch_CLI.py && cd dist && mv Porn_Fetch_CLI PornFetch_Linux_CLI_x32 && chmod +x PornFetch_Linux_CLI_x32
 
       - name: Archive Porn Fetch CLI (Linux_32) build
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: PornFetch_Linux_CLI_x32
           path: dist/PornFetch_Linux_CLI_x32

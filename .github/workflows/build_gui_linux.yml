@@ -42,7 +42,7 @@ jobs:
           pyside6-deploy -c src/build/pysidedeploy_linux.spec main.py
 
       - name: Archive x64 build
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: pyside6-application-x64
           path: deploy/main.bin

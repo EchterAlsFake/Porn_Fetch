@@ -30,7 +30,7 @@ jobs:
           pyinstaller -F Porn_Fetch_CLI.py && cd dist && mv Porn_Fetch_CLI.exe PornFetch_Windows_CLI_x64.exe
 
       - name: Archive Porn Fetch CLI (Windows X64) build
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: PornFetch_Windows_CLI_x64
           path: dist/PornFetch_Windows_CLI_x64.exe
@@ -56,7 +56,7 @@ jobs:
           pyinstaller -F Porn_Fetch_CLI.py && cd dist && mv Porn_Fetch_CLI.exe PornFetch_Windows_CLI_x32.exe
 
       - name: Archive Porn Fetch CLI (Windows X32) build
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: PornFetch_Windows_CLI_x32
           path: dist/PornFetch_Windows_CLI_x32.exe

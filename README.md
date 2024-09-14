@@ -54,7 +54,7 @@
 - Cross-platform compatibility
 - Multiple supported websites
 - Multiple user interface languages
-- Native Android application
+- Native Android application (Not on >=v3.3)
 - modern looking user interface
 - Supports over 115 MB/s download speed thanks to well optimized HLS downloading
 
@@ -79,6 +79,7 @@ The Graphical User Interface is only for 64bit systems. The CLI supports 64 and 
 - [xnxx.com](https://github.com/EchterAlsFake/xnxx_api)
 - [Eporner.com](https://github.com/EchterAlsFake/eporner_api)
 - [XVideos.com](https://github.com/EchterAlsFake/xvideos_api)
+- [Spankbang.com](https://github.com/EchterAlsFake/spankbang_api)
 
 > [!IMPORTANT] 
 > Not all websites support every feature. 
@@ -141,6 +142,9 @@ Invoke-Expression (Invoke-WebRequest -Uri https://raw.githubusercontent.com/Echt
 ## 📱 Android
 The Android app is the exact same as the desktop app. Thanks to Qt's Android developing Guide, you'll be able to simply
 install the .apk file, and you have the full version of Porn Fetch on your device.
+
+> [!IMPORTANT]
+> Android is currently broken, use Termux instead!
 
 ### Building for Android
 Building the PySide6 application by yourself isn't possible through a simple script. If you really want
