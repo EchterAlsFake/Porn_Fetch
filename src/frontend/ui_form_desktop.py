@@ -26,7 +26,7 @@ class Ui_Porn_Fetch_Widget(object):
     def setupUi(self, Porn_Fetch_Widget):
         if not Porn_Fetch_Widget.objectName():
             Porn_Fetch_Widget.setObjectName(u"Porn_Fetch_Widget")
-        Porn_Fetch_Widget.resize(1406, 689)
+        Porn_Fetch_Widget.resize(1586, 738)
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -37,6 +37,8 @@ class Ui_Porn_Fetch_Widget(object):
 "    color: black;}")
         self.gridLayout_7 = QGridLayout(Porn_Fetch_Widget)
         self.gridLayout_7.setObjectName(u"gridLayout_7")
+        self.verticalLayout_4 = QVBoxLayout()
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.button_switch_home = QPushButton(Porn_Fetch_Widget)
@@ -155,7 +157,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.horizontalLayout.addWidget(self.button_switch_supported_websites)
 
 
-        self.gridLayout_7.addLayout(self.horizontalLayout, 0, 0, 1, 1)
+        self.verticalLayout_4.addLayout(self.horizontalLayout)
 
         self.stacked_widget_main = QStackedWidget(Porn_Fetch_Widget)
         self.stacked_widget_main.setObjectName(u"stacked_widget_main")
@@ -747,7 +749,7 @@ class Ui_Porn_Fetch_Widget(object):
         self.scrollarea_treewidget.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 1368, 220))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 1560, 225))
         self.gridLayout_4 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.verticallayout_treewidget_settings = QVBoxLayout()
@@ -856,10 +858,6 @@ class Ui_Porn_Fetch_Widget(object):
         self.checkbox_tree_do_not_clear_videos.setObjectName(u"checkbox_tree_do_not_clear_videos")
 
         self.gridlayout_tree_settings.addWidget(self.checkbox_tree_do_not_clear_videos, 1, 0, 1, 1)
-
-        self.horizontalSpacer = QSpacerItem(600, 20, QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Minimum)
-
-        self.gridlayout_tree_settings.addItem(self.horizontalSpacer, 0, 3, 1, 1)
 
 
         self.verticalLayout_3.addLayout(self.gridlayout_tree_settings)
@@ -1338,7 +1336,7 @@ class Ui_Porn_Fetch_Widget(object):
 
         self.stacked_widget_main.addWidget(self.page_supported_websites)
 
-        self.gridLayout_7.addWidget(self.stacked_widget_main, 1, 0, 1, 1)
+        self.verticalLayout_4.addWidget(self.stacked_widget_main)
 
         self.formLayout = QFormLayout()
         self.formLayout.setObjectName(u"formLayout")
@@ -1370,7 +1368,10 @@ class Ui_Porn_Fetch_Widget(object):
         self.formLayout.setWidget(1, QFormLayout.FieldRole, self.progressbar_total)
 
 
-        self.gridLayout_7.addLayout(self.formLayout, 2, 0, 1, 1)
+        self.verticalLayout_4.addLayout(self.formLayout)
+
+
+        self.gridLayout_7.addLayout(self.verticalLayout_4, 0, 0, 1, 1)
 
         QWidget.setTabOrder(self.lineedit_url, self.lineedit_playlist_url)
         QWidget.setTabOrder(self.lineedit_playlist_url, self.lineedit_model_url)
