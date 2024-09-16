@@ -1265,19 +1265,16 @@ This warning won't be shown again.
     def switch_to_home(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(0)
-        self.ui.stacked_widget_top.setMaximumHeight(self.default_max_height)
-        self.ui.stacked_widget_top.setMinimumHeight(225)
+        self.ui.stacked_widget_top.setMaximumHeight(260)
 
     def switch_to_account(self):
         self.ui.stacked_widget_top.setCurrentIndex(1)
         self.ui.stacked_widget_main.setCurrentIndex(0)
-        self.ui.stacked_widget_top.setMaximumHeight(140)
+        self.ui.stacked_widget_top.setMaximumHeight(170)
 
     def switch_to_tools(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
         self.ui.stacked_widget_top.setCurrentIndex(3)
-        self.ui.stacked_widget_top.setMaximumHeight(self.default_max_height)
-        self.ui.stacked_widget_top.setMinimumHeight(258)
 
     def switch_to_settings(self):
         self.ui.stacked_widget_main.setCurrentIndex(1)
@@ -1290,7 +1287,6 @@ This warning won't be shown again.
         self.ui.stacked_widget_main.setCurrentIndex(3)
 
     def switch_to_all_progress_bars(self):
-        self.ui.stacked_widget_top.setMaximumHeight(self.default_max_height)
         self.ui.stacked_widget_top.setCurrentIndex(2)
         self.ui.stacked_widget_main.setCurrentIndex(0)
 
