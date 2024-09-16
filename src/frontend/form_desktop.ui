@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1586</width>
-    <height>738</height>
+    <width>1131</width>
+    <height>877</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -297,21 +297,34 @@
          </property>
          <property name="minimumSize">
           <size>
-           <width>0</width>
-           <height>25</height>
+           <width>50</width>
+           <height>35</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>20</height>
+           <height>35</height>
           </size>
          </property>
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    border-radius: 8px;
+    border: 2px solid #a9a9a9;
+    padding: 8px 10px;
+}</string>
+         </property>
          <property name="text">
-          <string>See Supported Websites</string>
+          <string>Switch supported websites</string>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
          </property>
         </widget>
        </item>
@@ -368,7 +381,7 @@
               <number>1</number>
              </property>
              <property name="currentIndex">
-              <number>3</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="page_download">
               <layout class="QGridLayout" name="gridLayout_5">
@@ -912,7 +925,7 @@
                    <rect>
                     <x>0</x>
                     <y>0</y>
-                    <width>393</width>
+                    <width>391</width>
                     <height>237</height>
                    </rect>
                   </property>
@@ -1478,8 +1491,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>1546</width>
-                  <height>220</height>
+                  <width>1105</width>
+                  <height>318</height>
                  </rect>
                 </property>
                 <layout class="QGridLayout" name="gridLayout_4">
@@ -1526,8 +1539,8 @@
            </item>
            <item>
             <layout class="QGridLayout" name="gridlayout_tree_settings">
-             <item row="2" column="2">
-              <widget class="QPushButton" name="button_tree_unselect_all">
+             <item row="2" column="0">
+              <widget class="QPushButton" name="button_tree_select_range">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
                  <horstretch>0</horstretch>
@@ -1544,13 +1557,13 @@
                 <cursorShape>PointingHandCursor</cursorShape>
                </property>
                <property name="toolTip">
-                <string>Unselects all videos in the tree widget</string>
+                <string>Automatically checks a range of videos</string>
                </property>
                <property name="styleSheet">
                 <string notr="true"/>
                </property>
                <property name="text">
-                <string>Unselect all</string>
+                <string>Select a range of videos</string>
                </property>
               </widget>
              </item>
@@ -1582,32 +1595,10 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="2">
-              <widget class="QPushButton" name="button_tree_stop">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>30</height>
-                </size>
-               </property>
-               <property name="toolTip">
-                <string>Does not stop downloading videos</string>
-               </property>
+             <item row="1" column="0">
+              <widget class="QCheckBox" name="checkbox_tree_do_not_clear_videos">
                <property name="text">
-                <string>Stop loading videos</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QPushButton" name="button_range_apply_everything">
-               <property name="text">
-                <string>Select everything</string>
+                <string>Do not clear videos</string>
                </property>
               </widget>
              </item>
@@ -1627,13 +1618,6 @@
                </property>
                <property name="checked">
                 <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QPushButton" name="button_tree_export_video_urls">
-               <property name="text">
-                <string>Export video URLs</string>
                </property>
               </widget>
              </item>
@@ -1662,8 +1646,8 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="0">
-              <widget class="QPushButton" name="button_tree_select_range">
+             <item row="2" column="2">
+              <widget class="QPushButton" name="button_tree_unselect_all">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
                  <horstretch>0</horstretch>
@@ -1680,13 +1664,27 @@
                 <cursorShape>PointingHandCursor</cursorShape>
                </property>
                <property name="toolTip">
-                <string>Automatically checks a range of videos</string>
+                <string>Unselects all videos in the tree widget</string>
                </property>
                <property name="styleSheet">
                 <string notr="true"/>
                </property>
                <property name="text">
-                <string>Select a range of videos</string>
+                <string>Unselect all</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QPushButton" name="button_tree_export_video_urls">
+               <property name="text">
+                <string>Export video URLs</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QPushButton" name="button_range_apply_everything">
+               <property name="text">
+                <string>Select everything</string>
                </property>
               </widget>
              </item>
@@ -1700,10 +1698,25 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="0">
-              <widget class="QCheckBox" name="checkbox_tree_do_not_clear_videos">
+             <item row="0" column="2">
+              <widget class="QPushButton" name="button_tree_stop">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string>Does not stop downloading videos</string>
+               </property>
                <property name="text">
-                <string>Do not clear videos</string>
+                <string>Stop loading videos</string>
                </property>
               </widget>
              </item>
@@ -1742,8 +1755,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>795</width>
-                <height>660</height>
+                <width>1107</width>
+                <height>746</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_19">
@@ -2466,28 +2479,18 @@ li.checked::marker { content: &quot;\2612&quot;; }
        <item row="0" column="0">
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>TextLabel</string>
+          <string>Total:</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>TextLabel</string>
+          <string>Converting:</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QProgressBar" name="progressbar_converting">
-         <property name="styleSheet">
-          <string notr="true">text-align: center; /* Centered text */</string>
-         </property>
-         <property name="value">
-          <number>0</number>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
         <widget class="QProgressBar" name="progressbar_total">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -2501,6 +2504,16 @@ li.checked::marker { content: &quot;\2612&quot;; }
            <height>0</height>
           </size>
          </property>
+         <property name="styleSheet">
+          <string notr="true">text-align: center; /* Centered text */</string>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QProgressBar" name="progressbar_converting">
          <property name="styleSheet">
           <string notr="true">text-align: center; /* Centered text */</string>
          </property>
