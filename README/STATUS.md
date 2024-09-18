@@ -13,6 +13,14 @@
 - [] Rework the entire progress reporting system (probably the hardest thing to do)
 - [] Re-implement the internet and status checks, but in a better way
 - [] Display thumbnails when searching (optionally)
+- [] Fix [#53](https://github.com/EchterAlsFake/Porn_Fetch/issues/53)
+  - [] Fix remote connection closed without response
+  - [] Fix logging
+  - [] Fix image URLs from PornHub
+  - [] Improving installation instructions
+- [] Make a first-use tutorial
+
+- [] Fix the Porn Fetch layout
 
 - [] Make Porn Fetch fully installable and runable from context menu on Windows and Linux
 - [] Make an "evasion" mode, to hide Porn Fetch from your PC / Android device
