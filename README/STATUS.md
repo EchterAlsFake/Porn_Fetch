@@ -18,6 +18,10 @@
   - [] Fix logging
   - [] Fix image URLs from PornHub
   - [] Improving installation instructions
+    - [] Add instruction which file to pick from the releases
+    - [] Tell about the .sig and gpg verification
+    - [] Tell about the .config file and why it's important
+    - [] Tell how to make Porn Fetch executable on Linux systems
 - [] Make a first-use tutorial
 
 - [] Fix the Porn Fetch layout
@@ -30,3 +34,8 @@
 - [] Verify that every single setting in Porn Fetch works and has an effect
 - [] Test how much simultaneous downloads Porn Fetch is capable of
 - [] Test how robust the code is against user errors and improve traceback
+- [] Get Porn Fetch back on Android
+  - [] Enabling the QFile picker (currently has a crash bug)
+  - [] Fixing threading and segment downloading in general
+  - [] Make a separate layout for Porn Fetch on Android
+  <br>**DEPENDS ON QT, NOT MY FAULT IF IT DOESN'T WORK, SERIOUSLY**
