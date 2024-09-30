@@ -1270,7 +1270,7 @@ This warning won't be shown again.
     def switch_to_account(self):
         self.ui.stacked_widget_top.setCurrentIndex(1)
         self.ui.stacked_widget_main.setCurrentIndex(0)
-        self.ui.stacked_widget_top.setMaximumHeight(170)
+        self.ui.stacked_widget_top.setMaximumHeight(220)
 
     def switch_to_tools(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)
@@ -1289,6 +1289,7 @@ This warning won't be shown again.
     def switch_to_all_progress_bars(self):
         self.ui.stacked_widget_top.setCurrentIndex(2)
         self.ui.stacked_widget_main.setCurrentIndex(0)
+        self.ui.stacked_widget_top.setMaximumHeight(280)
 
     """
     The following functions are related to the tree widget    

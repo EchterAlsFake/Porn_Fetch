@@ -75,7 +75,6 @@ The Graphical User Interface is only for 64bit systems. The CLI supports 64 and 
 
 > Downloading on Windows is generally slower because Windows doesn't have a good I/O network handling
 
-
 ## 🌐 Supported Websites
 - [PornHub.com](https://github.com/Egsagon/PHUB)
 - [HQPorner.com](https://github.com/EchterAlsFake/hqporner_api)
@@ -88,12 +87,11 @@ The Graphical User Interface is only for 64bit systems. The CLI supports 64 and 
 > Not all websites support every feature. 
 > Some might only support downloading, while others support searching
 
-### You can see more information [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/WEBSITES.md)
+### You can find more information [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/WEBSITES.md)
 
 
-## Working with Files
-Porn Fetch allows you to use a URL or kind of batch file to programmatically download all videos, models, and search
-terms listed in there.
+## Batch processing
+Porn Fetch allows you to use batch / automatic processing of videos, models and search queries
 
 Here's a short documentation on how to use it:
 
@@ -117,22 +115,23 @@ Porn Fetch supports all URLs, Models and search terms like it would if you use t
 > When using the search function, make sure the website is the exact same name like in the URL between www. and .com
 > e., for "https://www.pornhub.com" it would be just "pornhub" or for "https://xvideos.com" it would be just "xvideos"
 
-
 If you still need a real example file, [here you go](https://github.com/EchterAlsFake/Porn_Fetch/blob/eac6fa2ccf644e4b30816a7bd2fa0257b2a03e36/src/backend/urls.txt)
 
 ## 🔨 Building from Source
 Easy-to-use build scripts are available for various platforms. Run these in your terminal:
 
-### For Ubuntu, Windows, Arch Linux, Termux, Fedora, OpenSUSE:
+### Ubuntu, Windows, Arch Linux, Termux, Fedora, OpenSUSE:
 ```bash
 wget "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install.sh" -O install.sh
 bash install.sh
 ```
-### For Termux:
+
+### Termux:
 ```bash
-wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_termux.sh" | bash
+apt install wget -y && wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_termux.sh" | bash
 ```
-### For Windows (Powershell as Admin)
+
+### Windows (Powershell as Admin)
 ```
 # Enable script execution
 Set-ExecutionPolicy RemoteSigned 
@@ -169,6 +168,7 @@ Currently available in:
 - API: [PHUB](https://github.com/EchterAlsFake/PHUB)
 - GUI: [Qt](https://qt.io) for Python
 - FFmpeg: [FFmpeg](https://ffmpeg.org/) GPL
+
 ### See [Credits](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/CREDITS.md)
 
 ## 📚 License
