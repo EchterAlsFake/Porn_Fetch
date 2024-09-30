@@ -1,6 +1,6 @@
 # Porn Fetch Installation & Usage Guide
 
-Hi. in this document you will find detailed instructions how to download and use Porn Fetch 
+Hi, in this document you will find detailed instructions how to download and use Porn Fetch 
 on different platforms.
 
 
