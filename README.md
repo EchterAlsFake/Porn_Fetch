@@ -58,6 +58,9 @@
 - modern looking user interface
 - Supports over 115 MB/s download speed thanks to well optimized HLS downloading
 
+## Installation
+A detailed installation guide for all platforms can be found [HERE]()
+
 ## General Information
 > [!NOTE]
 > Supported Platforms:

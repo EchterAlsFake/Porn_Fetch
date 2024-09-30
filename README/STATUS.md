@@ -18,14 +18,13 @@
   - [] Fix logging
   - [] Fix image URLs from PornHub
   - [] Improving installation instructions
-    - [] Add instruction which file to pick from the releases
-    - [] Tell about the .sig and gpg verification
-    - [] Tell about the .config file and why it's important
-    - [] Tell how to make Porn Fetch executable on Linux systems
+    - [x] Add instruction which file to pick from the releases
+    - [x] Tell about the .sig and gpg verification
+    - [x] Tell about the .config file and why it's important
+    - [x] Tell how to make Porn Fetch executable on Linux systems
+
 - [] Make a first-use tutorial
-
 - [] Fix the Porn Fetch layout
-
 - [] Make Porn Fetch fully installable and runable from context menu on Windows and Linux
 - [] Make an "evasion" mode, to hide Porn Fetch from your PC / Android device
 
