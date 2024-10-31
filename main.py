@@ -12,6 +12,7 @@ import src.frontend.resources  # Your IDE may tell you that this is an unused im
 from itertools import islice, chain
 from threading import Event
 from pathlib import Path
+from io import TextIOWrapper
 
 from hqporner_api.api import Sort as hq_Sort
 from phub import consts
@@ -134,17 +135,16 @@ class License(QWidget):
 
     def accept(self):
         self.conf.set("License", "accepted", "true")
-        with open("config.ini", "w") as config_file:
+        with open("config.ini", "w") as config_file:  # type: TextIOWrapper
             self.conf.write(config_file)
-            config_file.close()
 
         self.show_main_window()
 
     def denied(self):
         self.conf.set("License", "accepted", "false")
-        with open("config.ini", "w") as config_file:
+        with open("config.ini", "w") as config_file: # type: TextIOWrapper
             self.conf.write(config_file)
-            config_file.close()
+
             logger.error("License was denied, closing Porn Fetch")
             self.close()
             sys.exit(0)  # exiting if user denied
@@ -1143,7 +1143,7 @@ class Porn_Fetch(QWidget):
         self.conf.set("Video", "delay", str(self.ui.spinbox_pornhub_delay.value()))
         self.conf.set("Performance", "retries", str(self.ui.spinbox_maximal_retries.value()))
 
-        with open("config.ini", "w") as config_file:
+        with open("config.ini", "w") as config_file: # type: TextIOWrapper
             self.conf.write(config_file)
 
         ui_popup(self.tr("Saved User Settings, please restart Porn Fetch!", None))

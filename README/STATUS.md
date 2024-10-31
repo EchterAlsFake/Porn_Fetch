@@ -3,8 +3,6 @@
 - [] Support for system's native UI design
 - [] Geo block bypass
 - [] Allow for custom proxy lists to help people in censored countries
-- [] Fix Porn Fetch on Android
-- [] Own Android stylesheet (UI) -> Switch to portrait mode
 - [] Full support for spankbang
 - [] Harden the tag writing function
 - [] Allow for different format converting e.g, mov and mkv

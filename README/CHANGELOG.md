@@ -416,3 +416,14 @@ I tested it on Android 12 & 13 on two devices.
 - Fixed an issue where the semaphore wouldn't release in the CLI which makes downloading almost impossible, because
 the thread is permanently locked
 - Fixed the build scripts for Windows and Linux | Thanks @omar-st [Pull Request #48](https://github.com/EchterAlsFake/Porn_Fetch/commit/2d9cc2885c1383369020a5c26e957fe5cdf0f886) [Related Issue #46](https://github.com/EchterAlsFake/Porn_Fetch/issues/46)>
+
+# 3.5
+
+## New Features
+
+## Design
+- fixed the layout
+- fixed resizing, minimum button height
+
+## Other
+- added installation guide
