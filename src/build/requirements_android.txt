@@ -1,22 +1,12 @@
-Additionally, to PySide6, shiboken6 and Python3 also some other third party libraries
-are needed by Buildozer and Porn Fetch. Those are listed down below. Please note, that
-you should NEVER change the version numbers. If a package has a specific version number, it has
-a good reason for it.
+Command:
+pyside6-android-deploy --wheel-pyside PySide6-6.8.0-6.8.0-cp311-cp311-android_aarch64.whl --wheel-shiboken shiboken6-6.8.0-6.8.0-cp311-cp311-android_aarch64.whl --name=test --ndk-path /home/asuna/.pyside6_android_deploy/android-ndk/android-ndk-r26b/ --sdk-path /home/asuna/.pyside6_android_deploy/android-sdk/
 
-Usually I don't give version numbers, cuz why. But here it's mandatory.
+requirements:
+,charset-normalizer==2.1.1,git+https://github.com/EchterAlsFake/PHUB,idna,urllib3,certifi,hue_shift,markdown,colorama,requests,git+https://github.com/EchterAlsFake/hqporner_api,ffmpeg-progress-yield,tqdm,git+https://github.com/EchterAlsFake/eporner_api,git+https://github.com/EchterAlsFake/xnxx_api,git+https://github.com/EchterAlsFake/xvideos_api,beautifulsoup4,mutagen,git+https://github.com/EchterAlsFake/eaf_base_api,httpx,httpcore,h11,certifi,idna,sniffio,git+https://github.com/EchterAlsFake/spankbang_api
 
-Information:
+package domain:
+com.pornfetch
 
-If you want to build the App by yourself, please use the pre-compiled PySide and Shiboken6 wheels. Trust me, it makes
-your life 200% easier.
+icon.filename:
+/home/asuna/PycharmProjects/Porn_Fetch/src/frontend/graphics/android_app_icon.png
 
-Your NDK version needs to be r25c
-Your PySide6 Version needs to be 6.6.1
-
-:)
-
-Those are the requirements. Add them to buildozer. DO NOT CHANGE VERSION NUMBERS!!!
-
-The wheels I am using can be found here: https://github.com/EchterAlsFake/PySide6-to-Android/releases/1.0
-
-,charset-normalizer==2.1.1,git+https://github.com/EchterAlsFake/PHUB,idna,urllib3,certifi,hue_shift,markdown,colorama,requests,git+https://github.com/EchterAlsFake/hqporner_api,ffmpeg-progress-yield,tqdm,git+https://github.com/EchterAlsFake/eporner_api,git+https://github.com/EchterAlsFake/xnxx_api,git+https://github.com/EchterAlsFake/xvideos_api,beautifulsoup4,mutagen,git+https://github.com/EchterAlsFake/eaf_base_api
