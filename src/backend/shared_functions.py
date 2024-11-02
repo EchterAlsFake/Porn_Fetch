@@ -6,6 +6,8 @@ If you know what you do, you can change a few things here :)
 import os
 import re
 import logging
+import http.client
+import json
 
 import requests
 from mutagen.mp4 import MP4, MP4Cover
@@ -88,7 +90,34 @@ design = native
 """
 
 logger = logging.getLogger(__name__)
+do_not_log = False
 
+def send_error_log(message):
+    """
+    This function is made for the Android development of Porn Fetch and is used for debugging.
+    You can of course change or remove it, but I wouldn't recommend it.
+    """
+
+    if do_not_log is False:
+        url = "192.168.0.19:8000"
+        endpoint = "/error-log/"
+        data = json.dumps({"message": message})
+        headers = {"Content-type": "application/json"}
+
+        conn = http.client.HTTPConnection(url)
+
+        try:
+            conn.request("POST", endpoint, data, headers)
+            response = conn.getresponse()
+
+            if response.status == 200:
+                print("Error log sent successfully")
+            else:
+                print(f"Failed to send error log: Status {response.status}, Reason: {response.reason}")
+
+            conn.close()
+        except Exception as e:
+            print(f"Request failed: {e}")
 
 def check_video(url, is_url=True, delay=False):
     if is_url:

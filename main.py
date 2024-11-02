@@ -23,9 +23,9 @@ from src.backend.shared_functions import *
 from src.backend.shared_gui import *
 from src.backend.class_help import *
 from src.backend.log_config import setup_logging
-from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
 from src.frontend.License import Ui_License
 from src.frontend.range_selector import Ui_Form
+from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                             QTranslator, QCoreApplication, QSize)
@@ -1912,9 +1912,8 @@ def main():
     if language == "system":
         # Obtain the system's locale
         locale = QLocale.system()
-        # Get the full locale name (e.g., "zh_CN" for Simplified Chinese)
         language_code = locale.name()
-        logger.debug(f"System Language: {language_code}")
+
     else:
         language_code = language
 
@@ -1944,7 +1943,6 @@ def main():
     if __build__ == "android":
         font = QFont("arial", 12)
         app.setFont(font)
-
     widget = License()  # Starts License widget and checks if license was accepted.
     widget.check_license_and_proceed()
 
@@ -1956,13 +1954,14 @@ def main():
     sys.exit(app.exec())
 
 
+send_error_log("Initialized the code")
+
 if __name__ == "__main__":
     """
     These functions are static functions which I won't need while coding.
     These just exist for some reason, but I don't want to scroll through endless lines of code,
     which is why I placed them here.
     """
-
 
     def load_stylesheet(path):
         """Load stylesheet from a given path with explicit open and close."""
@@ -2028,13 +2027,11 @@ if __name__ == "__main__":
 
             """, None))
 
-
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", "--version", help="Shows the version information", action="store_true")
     args = parser.parse_args()
 
     if args.version:
         print(__version__)
-
-    setup_config_file()
     main()
+

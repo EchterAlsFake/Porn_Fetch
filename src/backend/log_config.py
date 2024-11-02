@@ -1,13 +1,19 @@
 import logging
-
+android = True
 
 def setup_logging():
-    # Create a custom logger
+    # Check if running on Android, either from platform or a flag
+    if android:
+        # Return a dummy logger that ignores all logs
+        logger = logging.getLogger("dummy")
+        logger.addHandler(logging.NullHandler())  # Null handler ignores all logs
+        return logger
+
+    # Create a custom logger for desktop
     logger = logging.getLogger(__name__)
 
-    # Avoid adding handlers multiple times
     if not logger.hasHandlers():
-        logger.setLevel(logging.DEBUG)  # Set the default logging level
+        logger.setLevel(logging.DEBUG)
 
         # Create handlers
         c_handler = logging.StreamHandler()
@@ -26,4 +32,5 @@ def setup_logging():
         # Add handlers to the logger
         logger.addHandler(c_handler)
         logger.addHandler(f_handler)
-        return logger
+
+    return logger
