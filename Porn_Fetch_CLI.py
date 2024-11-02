@@ -2,6 +2,8 @@ import os.path
 import pathlib
 import shutil
 import threading
+from io import TextIOWrapper
+
 import phub.consts
 
 from src.backend.shared_functions import *
@@ -132,7 +134,7 @@ Do you want to use FFmpeg? [yes,no]
 
             if ffmpeg.lower() == "yes":
                 self.conf.set("Performance", "threading_mode", "FFMPEG")
-                with open("config.ini", "w") as config_file:
+                with open("config.ini", "w") as config_file: #type: TextIOWrapper
                     self.conf.write(config_file)
                     print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTYELLOW_EX}Done!")
 
@@ -172,31 +174,42 @@ Do you want to use FFmpeg? [yes,no]
 
     def save_user_settings(self):
         while True:
-            settings_options = input(f"""
-{Fore.WHITE}--------- {Fore.LIGHTGREEN_EX}Quality {Fore.WHITE}----------
-{Fore.LIGHTMAGENTA_EX}1) Best
-{return_color()}2) Half
-{Fore.LIGHTRED_EX}3) Worst
-{Fore.WHITE}-------- {Fore.LIGHTCYAN_EX}Performance {Fore.WHITE}--------
-{return_color()}4) Change Semaphore
-{return_color()}5) Change Delay
-{return_color()}6) Change Workers
-{return_color()}7) Change Retries
-{return_color()}8) Change Timeout
-{Fore.WHITE}-------- {Fore.LIGHTYELLOW_EX}Directory System {Fore.WHITE}---
-{return_color()}9) Enable / Disable directory system
-{Fore.WHITE}-------- {return_color()}Result Limit {Fore.WHITE}-------
-{return_color()}10) Change result limit
-{Fore.WHITE}-------- {return_color()}Output Path {Fore.WHITE}--------
-{return_color()}11) Change output path
-{Fore.WHITE}---------{return_color()}Threading Mode {Fore.WHITE}---------
-{return_color()}12) Change to threaded (Not recommended on Android!
-{return_color()}13) Change to FFmpeg (Recommended on Android
-{return_color()}14) Change to default (really slow)
-{Fore.WHITE}
+            quality_color = {  # Highlight the current quality option in yellow
+                "Best": Fore.LIGHTYELLOW_EX if self.quality == "best" else Fore.LIGHTWHITE_EX,
+                "Half": Fore.LIGHTYELLOW_EX if self.quality == "balf" else Fore.LIGHTWHITE_EX,
+                "Worst": Fore.LIGHTYELLOW_EX if self.quality == "borst" else Fore.LIGHTWHITE_EX
+            }
+            threading_mode_color = {  # Highlight the current threading mode in yellow
+                "threaded": Fore.LIGHTYELLOW_EX if self.threading_mode == "threaded" else Fore.LIGHTWHITE_EX,
+                "ffmpeg": Fore.LIGHTYELLOW_EX if self.threading_mode == "ffmpeg" else Fore.LIGHTWHITE_EX,
+                "default": Fore.LIGHTYELLOW_EX if self.threading_mode == "default" else Fore.LIGHTWHITE_EX
+            }
 
+            settings_options = input(f"""
+{Fore.LIGHTYELLOW_EX}YELLOW {Fore.LIGHTWHITE_EX} = Currently selected / Current value
+            
+{Fore.LIGHTWHITE_EX}--------- {Fore.LIGHTGREEN_EX}Quality {Fore.LIGHTWHITE_EX}----------
+1) {quality_color["Best"]}Best{Fore.LIGHTWHITE_EX}
+2) {quality_color["Half"]}Half{Fore.LIGHTWHITE_EX}
+3) {quality_color["Worst"]}Worst{Fore.LIGHTWHITE_EX}
+{Fore.LIGHTWHITE_EX}-------- {Fore.LIGHTCYAN_EX}Performance {Fore.LIGHTWHITE_EX}--------
+4) Change Semaphore {Fore.LIGHTYELLOW_EX}(current: {self.semaphore._value}){Fore.LIGHTWHITE_EX}
+5) Change Delay {Fore.LIGHTYELLOW_EX}(current: {self.delay}){Fore.LIGHTWHITE_EX}
+6) Change Workers {Fore.LIGHTYELLOW_EX}(current: {self.workers}){Fore.LIGHTWHITE_EX}
+7) Change Retries {Fore.LIGHTYELLOW_EX}(current: {self.retries}){Fore.LIGHTWHITE_EX}
+8) Change Timeout {Fore.LIGHTYELLOW_EX}(current: {self.timeout}){Fore.LIGHTWHITE_EX}
+-------- {Fore.LIGHTYELLOW_EX}Directory System {Fore.LIGHTWHITE_EX}---
+9) Enable / Disable directory system {Fore.LIGHTYELLOW_EX}(current: {"Enabled" if self.directory_system else "Disabled"}){Fore.LIGHTWHITE_EX}
+{Fore.LIGHTWHITE_EX}-------- {Fore.LIGHTGREEN_EX}Result Limit {Fore.LIGHTWHITE_EX}-------
+10) Change result limit {Fore.LIGHTYELLOW_EX}(current: {self.result_limit}){Fore.LIGHTWHITE_EX}
+{Fore.LIGHTWHITE_EX}-------- {Fore.LIGHTBLUE_EX}Output Path {Fore.LIGHTWHITE_EX}--------
+11) Change output path {Fore.LIGHTYELLOW_EX}(current: {self.output_path}){Fore.LIGHTWHITE_EX}
+{Fore.LIGHTWHITE_EX}---------{Fore.LIGHTMAGENTA_EX}Threading Mode {Fore.LIGHTWHITE_EX}---------
+12) {threading_mode_color["threaded"]}Change to threaded (Not recommended on Android!){Fore.LIGHTWHITE_EX}
+13) {threading_mode_color["ffmpeg"]}Change to FFmpeg (Recommended on Android){Fore.LIGHTWHITE_EX}
+14) {threading_mode_color["default"]}Change to default (really slow){Fore.LIGHTWHITE_EX}
 {Fore.LIGHTRED_EX}99) Exit
-{return_color()}------------->:""")
+{Fore.WHITE}------------->:""")
 
             try:
                 if settings_options == "1":
