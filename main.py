@@ -26,11 +26,13 @@ from src.backend.log_config import setup_logging
 from src.frontend.License import Ui_License
 from src.frontend.range_selector import Ui_Form
 from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
+from src.frontend.ui_form_android import Ui_UI_android
+from src.frontend.ui_form_android_startup import Ui_Widget
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                             QTranslator, QCoreApplication, QSize)
 from PySide6.QtWidgets import QWidget, QApplication, QInputDialog, QTreeWidgetItem, QButtonGroup, QFileDialog
-from PySide6.QtGui import QIcon, QFont
+from PySide6.QtGui import QIcon, QFont, QGuiApplication
 
 """
 Copyright (C) 2023-2024 Johannes Habel
@@ -56,7 +58,7 @@ Discord: echteralsfake (faster response)
 
 __license__ = "GPL 3"
 __version__ = "3.4"
-__build__ = "desktop"  # android or desktop
+__build__ = "android"  # android or desktop
 __author__ = "Johannes Habel"
 __next_release__ = "3.5"
 total_segments = 0
@@ -121,6 +123,7 @@ class License(QWidget):
         self.conf = ConfigParser()
         self.conf.read("config.ini")
 
+        # Set up the UI for License widget
         self.ui = Ui_License()
         self.ui.setupUi(self)
         self.ui.button_accept.clicked.connect(self.accept)
@@ -128,34 +131,51 @@ class License(QWidget):
 
     def check_license_and_proceed(self):
         if self.conf["License"]["accepted"] == "true":
-            self.show_main_window()
-
+            # License accepted, proceed with Android or main widget
+            self.show_android_startup_or_main()
         else:
-            self.show()  # Show the license widget
+            # License not accepted, show the license widget
+            self.show()
 
     def accept(self):
         self.conf.set("License", "accepted", "true")
-        with open("config.ini", "w") as config_file:  # type: TextIOWrapper
+        with open("config.ini", "w") as config_file: # type: TextIOWrapper
             self.conf.write(config_file)
-
-        self.show_main_window()
+        self.show_android_startup_or_main()
 
     def denied(self):
         self.conf.set("License", "accepted", "false")
-        with open("config.ini", "w") as config_file: # type: TextIOWrapper
+        with open("config.ini", "w") as config_file:  #type: TextIOWrapper
             self.conf.write(config_file)
-
-            logger.error("License was denied, closing Porn Fetch")
-            self.close()
-            sys.exit(0)  # exiting if user denied
-
-    def show_main_window(self):
-        """ If license was accepted, the License widget is closed and the main widget will be shown."""
+        logger.error("License was denied, closing application")
         self.close()
-        logger.debug("Startup: [2/5] License accepted")
+        sys.exit(0)
+
+    def show_android_startup_or_main(self):
+        """ Check if running on Android and show the appropriate startup screen. """
+        self.close()
+        if __build__ == "android":
+            self.android_startup = Android_Startup()
+            self.android_startup.show()
+        else:
+            self.show_main()
+
+    def show_main(self):
         self.main_widget = Porn_Fetch()
         self.main_widget.show()
 
+
+class Android_Startup(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.ui = Ui_Widget()
+        self.ui.setupUi(self)
+        self.ui.pushButton.clicked.connect(self.launch_main)
+
+    def launch_main(self):
+        self.close()
+        self.main_widget = Porn_Fetch()
+        self.main_widget.show()
 
 class CheckUpdates(QRunnable):
     def __init__(self):
@@ -770,24 +790,37 @@ class Porn_Fetch(QWidget):
         self.conf = ConfigParser()
         self.conf.read("config.ini")
 
-        self.ui = Ui_Porn_Fetch_Widget()
-        self.ui.setupUi(self)
-        self.default_max_height = self.ui.stacked_widget_top.maximumHeight()
-        self.button_connectors()  # Connects the buttons to their functions
-        self.button_groups()  # Groups the buttons, so that the Radio buttons are split from themselves (hard to explain)
-        self.load_style()  # Loads all the User Interface stylesheets
-        logger.debug("Startup: [3/5] Initialized the User Interface")
-        self.settings_maps_initialization()
-        self.load_user_settings()  # Loads the user settings and applies selected values to the UI
-        logger.debug("Startup: [4/5] Loaded the user settings")
-        self.switch_to_home()  # Switches Porn Fetch to the home widget
-        self.check_for_updates()
-        self.check_internet()
-        self.check_ffmpeg()  # Checks and sets up FFmpeg
-        logger.debug("Startup: [5/5] ✔")
-
         if __build__ == "android":
-            self.setup_android()  # Sets up Android, if build mode is Android (handles some UI stuff and things)
+            self.ui = Ui_UI_android()
+            self.ui.setupUi(self)
+            self.ui.button_clipboard.clicked.connect(self.get_clipboard)
+
+        else:
+            self.ui = Ui_Porn_Fetch_Widget()
+            self.ui.setupUi(self)
+            self.default_max_height = self.ui.stacked_widget_top.maximumHeight()
+            self.button_connectors()  # Connects the buttons to their functions
+            self.button_groups()  # Groups the buttons, so that the Radio buttons are split from themselves (hard to explain)
+            self.load_style()  # Loads all the User Interface stylesheets
+            logger.debug("Startup: [3/5] Initialized the User Interface")
+            self.settings_maps_initialization()
+            self.load_user_settings()  # Loads the user settings and applies selected values to the UI
+            logger.debug("Startup: [4/5] Loaded the user settings")
+            self.switch_to_home()  # Switches Porn Fetch to the home widget
+            self.check_for_updates()
+            self.check_internet()
+            self.check_ffmpeg()  # Checks and sets up FFmpeg
+            logger.debug("Startup: [5/5] ✔")
+
+            if __build__ == "android":
+                self.setup_android()  # Sets up Android, if build mode is Android (handles some UI stuff and things)
+
+    def get_clipboard(self):
+        clipboard = QGuiApplication.clipboard()
+        text = clipboard.text()
+        send_error_log(f"Got clipboard text: {text}")
+        self.ui.lineedit_url.setText(str(text))
+
 
     def button_groups(self):
         """
@@ -1943,9 +1976,9 @@ def main():
     if __build__ == "android":
         font = QFont("arial", 12)
         app.setFont(font)
+
     widget = License()  # Starts License widget and checks if license was accepted.
     widget.check_license_and_proceed()
-
     """
     The following exceptions are just general exceptions to handle some basic errors. They are not so relevant for
     most cases.
