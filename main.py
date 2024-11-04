@@ -7,9 +7,6 @@ import markdown
 import zipfile
 import shutil
 import tarfile
-
-from urllib3 import request
-
 import src.frontend.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
 
 from itertools import islice, chain
@@ -874,8 +871,28 @@ Categories=Utility;
                 os.chmod(mode=0o755, path=destination_path_final + "PornFetch_Linux_GUI_x64.bin")
                 # Setting executable permission
 
+            elif sys.platform == "win32":
+                import win32com.client
 
+                target_dir = os.path.join(os.getenv("LOCALAPPDATA"), "pornfetch")
+                os.makedirs(target_dir, exist_ok=True)
 
+                # Copy the executable to the target directory
+                shutil.move("PornFetch_Windows_GUI_x64.exe", target_dir)
+
+                # Define paths for the shortcut creation
+                app_name = "Porn Fetch"
+                app_exe_path = os.path.join(target_dir, "PornFetch_Windows_GUI_x64.exe")  # Full path to the executable
+                start_menu_path = os.path.join(os.getenv("APPDATA"), "Microsoft", "Windows", "Start Menu", "Programs")
+                shortcut_path = os.path.join(start_menu_path, f"{app_name}.lnk")
+
+                # Create the shortcut
+                shell = win32com.client.Dispatch("WScript.Shell")
+                shortcut = shell.CreateShortcut(shortcut_path)
+                shortcut.TargetPath = app_exe_path  # Path to the executable
+                shortcut.WorkingDirectory = target_dir  # Set working directory to the target directory
+                shortcut.IconLocation = app_exe_path
+                shortcut.Save()
 
 
 
