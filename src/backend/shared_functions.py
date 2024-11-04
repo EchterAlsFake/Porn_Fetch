@@ -33,11 +33,11 @@ The following are the sections and options for the configuration file. Please do
 as they are indeed needed for the main applications!
 """
 
-sections = ["Performance", "License", "Video", "UI"]
+sections = ["Setup", "Performance", "Video", "UI"]
 options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries", "ffmpeg_warning"]
 options_video = ["quality", "output_path", "directory_system", "search_limit", "delay", "skip_existing_files",
                  "model_videos"]
-options_license = ["accepted"]
+options_setup = ["license_accepted", "install"]
 options_ui = ["language", "design"]
 
 pornhub_pattern = re.compile(r'(.*?)pornhub(.*)') # can also be .org
@@ -63,9 +63,9 @@ If you set it to 3, three videos will be downloaded at the same time (You get th
 
 """
 
-default_configuration = f"""
-[License]
-accepted = no
+default_configuration = f"""[Setup]
+license_accepted = no
+install = unknown
 
 [Performance]
 threading_mode = threaded
@@ -192,54 +192,27 @@ def setup_config_file(force=False):
         config.read("config.ini")
 
         for idx, section in enumerate(sections):
-            section_processed = False
-            if config.has_section(section) and idx == 0:
+            if idx == 0:
+                for option in options_setup:
+                    if not config.has_option(section, option):
+                        setup_config_file(force=True)
+
+            if idx == 1:
                 for option in options_performance:
-                    if config.has_option(section=section, option=option):
-                        pass
-
-                    else:
+                    if not config.has_option(section, option):
                         setup_config_file(force=True)
-                        break
 
-                else:
-                    section_processed = True
-
-            if config.has_section(section) and idx == 1:
-                for option in options_license:
-                    if config.has_option(section=section, option=option):
-                        pass
-
-                    else:
-                        setup_config_file(force=True)
-                        break
-
-                else:
-                    section_processed = True
-
-            if config.has_section(section) and idx == 2:
+            if idx == 2:
                 for option in options_video:
-                    if config.has_option(section=section, option=option):
-                        pass
-
-                    else:
+                    if not config.has_option(section, option):
                         setup_config_file(force=True)
-                        break
 
-                else:
-                    section_processed = True
-
-            if config.has_section(section) and idx == 3:
+            if idx == 3:
                 for option in options_ui:
-                    if config.has_option(section=section, option=option):
-                        pass
-
-                    else:
+                    if not config.has_option(section, option):
                         setup_config_file(force=True)
-                        break
 
-                else:
-                    section_processed = True
+
 
 
 def correct_output_path(output_path):

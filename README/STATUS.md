@@ -24,7 +24,7 @@
 - [] Make a first-use tutorial
 - [x] Fix the Porn Fetch layout
 - [] Rework Porn Fetch buttons and some UI design
-- [] Make Porn Fetch fully installable and runable from context menu on Windows and Linux
+- [x] Make Porn Fetch fully installable and runable from the start menu on Windows and Linux
 - [] Make an "evasion" mode, to hide Porn Fetch from your PC / Android device
 
 ### I don't want to do this, but I have to.

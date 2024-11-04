@@ -28,6 +28,7 @@ from src.frontend.range_selector import Ui_Form
 from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
 from src.frontend.ui_form_android import Ui_UI_android
 from src.frontend.ui_form_android_startup import Ui_Widget
+from src.frontend.ui_form_install_dialog import Ui_UI_InstallDialog
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                             QTranslator, QCoreApplication, QSize)
@@ -130,7 +131,7 @@ class License(QWidget):
         self.ui.button_deny.clicked.connect(self.denied)
 
     def check_license_and_proceed(self):
-        if self.conf["License"]["accepted"] == "true":
+        if self.conf["Setup"]["license_accepted"] == "true":
             # License accepted, proceed with Android or main widget
             self.show_android_startup_or_main()
         else:
@@ -138,13 +139,13 @@ class License(QWidget):
             self.show()
 
     def accept(self):
-        self.conf.set("License", "accepted", "true")
+        self.conf.set("Setup", "license_accepted", "true")
         with open("config.ini", "w") as config_file: # type: TextIOWrapper
             self.conf.write(config_file)
         self.show_android_startup_or_main()
 
     def denied(self):
-        self.conf.set("License", "accepted", "false")
+        self.conf.set("Setup", "license_accepted", "false")
         with open("config.ini", "w") as config_file:  #type: TextIOWrapper
             self.conf.write(config_file)
         logger.error("License was denied, closing application")
@@ -154,13 +155,53 @@ class License(QWidget):
     def show_android_startup_or_main(self):
         """ Check if running on Android and show the appropriate startup screen. """
         self.close()
+
         if __build__ == "android":
             self.android_startup = Android_Startup()
             self.android_startup.show()
+
+        else:
+            self.show_install_dialog()
+
+    def show_install_dialog(self):
+        if self.conf["Setup"]["install"] == "unknown":
+            self.installwidget = InstallDialog()
+            self.installwidget.show()
+
         else:
             self.show_main()
 
     def show_main(self):
+        self.main_widget = Porn_Fetch()
+        self.main_widget.show()
+
+
+class InstallDialog(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.conf = ConfigParser()
+        self.conf.read("config.ini")
+
+        self.ui = Ui_UI_InstallDialog()
+        self.ui.setupUi(self)
+        self.ui.button_install.clicked.connect(self.start_install)
+        self.ui.button_portable.clicked.connect(self.start)
+
+    def start_install(self):
+        self.conf.set("Setup", "install", "installed")
+        with open("config.ini", "w") as config: #type: TextIOWrapper
+            self.conf.write(config)
+
+        self.close()
+        self.main_widget = Porn_Fetch(start_installation=True)
+        self.main_widget.show()
+
+    def start(self):
+        self.conf.set("Setup", "install", "portable")
+        with open("config.ini", "w") as config: #type: TextIOWrapper
+            self.conf.write(config)
+
+        self.close()
         self.main_widget = Porn_Fetch()
         self.main_widget.show()
 
@@ -176,23 +217,6 @@ class Android_Startup(QWidget):
         self.close()
         self.main_widget = Porn_Fetch()
         self.main_widget.show()
-
-class CheckUpdates(QRunnable):
-    def __init__(self):
-        super(CheckUpdates, self).__init__()
-        self.signals = Signals()
-
-    def run(self):
-        url = f"https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/{__next_release__}"
-        try:
-            if requests.get(url).status_code == 200:
-                self.signals.result.emit(True)
-
-            else:
-                self.signals.result.emit(False)
-
-        except requests.exceptions.ConnectionError:
-            logger.error("Couldn't check for updates, because of a Connection Error")
 
 
 class AddToTreeWidget(QRunnable):
@@ -756,8 +780,26 @@ class InternetCheck(QRunnable):
         self.signals.internet_check.emit(self.website_results)
 
 
+class CheckUpdates(QRunnable):
+    def __init__(self):
+        super(CheckUpdates, self).__init__()
+        self.signals = Signals()
+
+    def run(self):
+        url = f"https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/{__next_release__}"
+        try:
+            if requests.get(url).status_code == 200:
+                self.signals.result.emit(True)
+
+            else:
+                self.signals.result.emit(False)
+
+        except requests.exceptions.ConnectionError:
+            logger.error("Couldn't check for updates, because of a Connection Error")
+
+
 class Porn_Fetch(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, start_installation=False):
         super().__init__(parent)
         # Variable initialization:
         self.gui_design_map = None
@@ -798,6 +840,14 @@ class Porn_Fetch(QWidget):
         else:
             self.ui = Ui_Porn_Fetch_Widget()
             self.ui.setupUi(self)
+
+            if start_installation:
+                self.install_pornfetch()
+                ui_popup("Porn Fetch has been installed. The app will now close! Please start Porn Fetch from"
+                         "your context menu again.")
+
+                self.close()
+                exit(0)
             self.default_max_height = self.ui.stacked_widget_top.maximumHeight()
             self.button_connectors()  # Connects the buttons to their functions
             self.button_groups()  # Groups the buttons, so that the Radio buttons are split from themselves (hard to explain)
@@ -811,96 +861,94 @@ class Porn_Fetch(QWidget):
             self.check_internet()
             self.check_ffmpeg()  # Checks and sets up FFmpeg
             logger.debug("Startup: [5/5] ✔")
-            self.install_pornfetch()
 
             if __build__ == "android":
                 self.setup_android()  # Sets up Android, if build mode is Android (handles some UI stuff and things)
 
-    def install_pornfetch(self):
-        if __build__ == "desktop":
-            if sys.platform == "linux":
-                destination_path_tmp = os.path.expanduser("~/.local/share/")
-                destination_path_final = os.path.expanduser("~/.local/share/pornfetch/")
+    @staticmethod
+    def install_pornfetch():
+            if __build__ == "desktop":
+                if sys.platform == "linux":
+                    destination_path_tmp = os.path.expanduser("~/.local/share/")
+                    destination_path_final = os.path.expanduser("~/.local/share/pornfetch/")
 
-                if not os.path.exists(destination_path_tmp):
-                    ui_popup("""
-The path ~/.local/share/ does not exist. This path is typically used for installing applications and their settings
-in a users local account. Since you don't have that, you can't install it. 
-If you believe, that this is a mistake, please report it on GitHub, so that I can fix it :)""")
-                    return
+                    if not os.path.exists(destination_path_tmp):
+                        ui_popup("""
+    The path ~/.local/share/ does not exist. This path is typically used for installing applications and their settings
+    in a users local account. Since you don't have that, you can't install it. 
+    If you believe, that this is a mistake, please report it on GitHub, so that I can fix it :)""")
+                        return
 
-                try:
-                    os.makedirs(destination_path_final)
+                    try:
+                        os.makedirs(destination_path_final)
 
-                except PermissionError:
-                    ui_popup(f"You do not have permissions to create the folder 'pornfetch' inside {destination_path_tmp}!")
-                    ui_popup("Installation aborted.")
-                    return
+                    except PermissionError:
+                        ui_popup(
+                            f"You do not have permissions to create the folder 'pornfetch' inside {destination_path_tmp}!")
+                        ui_popup("Installation aborted.")
+                        return
 
+                    shutil.move("PornFetch_Linux_GUI_x64.bin", dst=destination_path_final)
+                    shutil.move("config.ini", dst=destination_path_final)
+                    logger.info(f"Moved the PornFetch binary and configs to: {destination_path_final}")
+                    logger.info(f"Downloading additional asset: icon")
 
-                shutil.move("PornFetch_Linux_GUI_x64.bin", dst=destination_path_final)
-                logger.info(f"Moved the PornFetch binary to: {destination_path_final}")
-                logger.info(f"Downloading additional asset: icon")
+                    img = requests.get(
+                        "https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/android_app_icon.png?raw=true")
+                    if not img.status_code == 200:
+                        ui_popup(
+                            "Couldn't download the Porn Fetch logo. Installation will still be successfully, but please"
+                            "report this error on GitHub. Thank you.")
 
-                img = requests.get("https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/android_app_icon.png?raw=true")
-                if not img.status_code == 200:
-                    ui_popup("Couldn't download the Porn Fetch logo. Installation will still be successfully, but please"
-                             "report this error on GitHub. Thank you.")
+                    elif img.status_code == 200:
+                        with open("Logo.png", "wb") as logo:
+                            logo.write(img.content)
+                            shutil.move("Logo.png", dst=destination_path_final)
 
-                elif img.status_code == 200:
-                    with open("Logo.png", "wb") as logo:
-                        logo.write(img.content)
-                        shutil.move("Logo.png", dst=destination_path_final)
+                    entry_content = f"""
+    [Desktop Entry]
+    Name=Porn Fetch
+    Exec={destination_path_final}PornFetch_Linux_GUI_x64.bin %F
+    Icon={destination_path_final}Logo.png
+    Type=Application
+    Terminal=false
+    Categories=Utility;
+    """
+                    with open("pornfetch.desktop", "w") as entry_file:
+                        entry_file.write(entry_content)
 
-                entry_content = f"""
-[Desktop Entry]
-Name=Porn Fetch
-Exec={destination_path_final}PornFetch_Linux_GUI_x64.bin %F
-Icon={destination_path_final}Logo.png
-Type=Application
-Terminal=false
-Categories=Utility;
-"""
-                with open("pornfetch.desktop", "w") as entry_file:
-                    entry_file.write(entry_content)
+                    desktop_entry_path = os.path.join(os.path.expanduser("~/.local/share/applications/"),
+                                                      "pornfetch.desktop")
+                    shutil.move("pornfetch.desktop", desktop_entry_path)
+                    logger.info("Successfully installed Porn Fetch!")
+                    os.chmod(mode=0o755, path=destination_path_final + "PornFetch_Linux_GUI_x64.bin")
+                    # Setting executable permission
 
-                desktop_entry_path = os.path.join(os.path.expanduser("~/.local/share/applications/"),
-                                                  "pornfetch.desktop")
-                shutil.move("pornfetch.desktop", desktop_entry_path)
-                logger.info("Successfully installed Porn Fetch!")
-                os.chmod(mode=0o755, path=destination_path_final + "PornFetch_Linux_GUI_x64.bin")
-                # Setting executable permission
+                elif sys.platform == "win32":
+                    import win32com.client
 
-            elif sys.platform == "win32":
-                import win32com.client
+                    target_dir = os.path.join(os.getenv("LOCALAPPDATA"), "pornfetch")
+                    os.makedirs(target_dir, exist_ok=True)
 
-                target_dir = os.path.join(os.getenv("LOCALAPPDATA"), "pornfetch")
-                os.makedirs(target_dir, exist_ok=True)
+                    # Copy the executable to the target directory
+                    shutil.move("PornFetch_Windows_GUI_x64.exe", target_dir)
+                    shutil.move("config.ini", target_dir)
 
-                # Copy the executable to the target directory
-                shutil.move("PornFetch_Windows_GUI_x64.exe", target_dir)
+                    # Define paths for the shortcut creation
+                    app_name = "Porn Fetch"
+                    app_exe_path = os.path.join(target_dir,
+                                                "PornFetch_Windows_GUI_x64.exe")  # Full path to the executable
+                    start_menu_path = os.path.join(os.getenv("APPDATA"), "Microsoft", "Windows", "Start Menu",
+                                                   "Programs")
+                    shortcut_path = os.path.join(start_menu_path, f"{app_name}.lnk")
 
-                # Define paths for the shortcut creation
-                app_name = "Porn Fetch"
-                app_exe_path = os.path.join(target_dir, "PornFetch_Windows_GUI_x64.exe")  # Full path to the executable
-                start_menu_path = os.path.join(os.getenv("APPDATA"), "Microsoft", "Windows", "Start Menu", "Programs")
-                shortcut_path = os.path.join(start_menu_path, f"{app_name}.lnk")
-
-                # Create the shortcut
-                shell = win32com.client.Dispatch("WScript.Shell")
-                shortcut = shell.CreateShortcut(shortcut_path)
-                shortcut.TargetPath = app_exe_path  # Path to the executable
-                shortcut.WorkingDirectory = target_dir  # Set working directory to the target directory
-                shortcut.IconLocation = app_exe_path
-                shortcut.Save()
-
-
-
-
-
-
-
-
+                    # Create the shortcut
+                    shell = win32com.client.Dispatch("WScript.Shell")
+                    shortcut = shell.CreateShortcut(shortcut_path)
+                    shortcut.TargetPath = app_exe_path  # Path to the executable
+                    shortcut.WorkingDirectory = target_dir  # Set working directory to the target directory
+                    shortcut.IconLocation = app_exe_path
+                    shortcut.Save()
 
 
     def get_clipboard(self):
