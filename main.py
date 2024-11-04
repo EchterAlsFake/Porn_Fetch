@@ -7,6 +7,9 @@ import markdown
 import zipfile
 import shutil
 import tarfile
+
+from urllib3 import request
+
 import src.frontend.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
 
 from itertools import islice, chain
@@ -58,7 +61,7 @@ Discord: echteralsfake (faster response)
 
 __license__ = "GPL 3"
 __version__ = "3.4"
-__build__ = "android"  # android or desktop
+__build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 __next_release__ = "3.5"
 total_segments = 0
@@ -811,9 +814,77 @@ class Porn_Fetch(QWidget):
             self.check_internet()
             self.check_ffmpeg()  # Checks and sets up FFmpeg
             logger.debug("Startup: [5/5] ✔")
+            self.install_pornfetch()
 
             if __build__ == "android":
                 self.setup_android()  # Sets up Android, if build mode is Android (handles some UI stuff and things)
+
+    def install_pornfetch(self):
+        if __build__ == "desktop":
+            if sys.platform == "linux":
+                destination_path_tmp = os.path.expanduser("~/.local/share/")
+                destination_path_final = os.path.expanduser("~/.local/share/pornfetch/")
+
+                if not os.path.exists(destination_path_tmp):
+                    ui_popup("""
+The path ~/.local/share/ does not exist. This path is typically used for installing applications and their settings
+in a users local account. Since you don't have that, you can't install it. 
+If you believe, that this is a mistake, please report it on GitHub, so that I can fix it :)""")
+                    return
+
+                try:
+                    os.makedirs(destination_path_final)
+
+                except PermissionError:
+                    ui_popup(f"You do not have permissions to create the folder 'pornfetch' inside {destination_path_tmp}!")
+                    ui_popup("Installation aborted.")
+                    return
+
+
+                shutil.move("PornFetch_Linux_GUI_x64.bin", dst=destination_path_final)
+                logger.info(f"Moved the PornFetch binary to: {destination_path_final}")
+                logger.info(f"Downloading additional asset: icon")
+
+                img = requests.get("https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/android_app_icon.png?raw=true")
+                if not img.status_code == 200:
+                    ui_popup("Couldn't download the Porn Fetch logo. Installation will still be successfully, but please"
+                             "report this error on GitHub. Thank you.")
+
+                elif img.status_code == 200:
+                    with open("Logo.png", "wb") as logo:
+                        logo.write(img.content)
+                        shutil.move("Logo.png", dst=destination_path_final)
+
+                entry_content = f"""
+[Desktop Entry]
+Name=Porn Fetch
+Exec={destination_path_final}PornFetch_Linux_GUI_x64.bin %F
+Icon={destination_path_final}Logo.png
+Type=Application
+Terminal=false
+Categories=Utility;
+"""
+                with open("pornfetch.desktop", "w") as entry_file:
+                    entry_file.write(entry_content)
+
+                desktop_entry_path = os.path.join(os.path.expanduser("~/.local/share/applications/"),
+                                                  "pornfetch.desktop")
+                shutil.move("pornfetch.desktop", desktop_entry_path)
+                logger.info("Successfully installed Porn Fetch!")
+                os.chmod(mode=0o755, path=destination_path_final + "PornFetch_Linux_GUI_x64.bin")
+                # Setting executable permission
+
+
+
+
+
+
+
+
+
+
+
+
 
     def get_clipboard(self):
         clipboard = QGuiApplication.clipboard()

@@ -90,7 +90,7 @@ design = native
 """
 
 logger = logging.getLogger(__name__)
-do_not_log = False
+do_not_log = True
 
 def send_error_log(message):
     """
