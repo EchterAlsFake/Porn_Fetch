@@ -1,4 +1,3 @@
-import logging
 import random
 import time
 import sys
@@ -8,15 +7,11 @@ import markdown
 import zipfile
 import shutil
 import tarfile
-
-from Cython.Compiler.Naming import api_name
-
-import src.frontend.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
-
 from itertools import islice, chain
 from threading import Event
 from pathlib import Path
 from io import TextIOWrapper
+import src.frontend.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
 
 from hqporner_api.api import Sort as hq_Sort
 from phub import consts
@@ -755,6 +750,7 @@ class InternetCheck(QRunnable):
             logger.debug(f"[{idx}|{len(self.websites)}] Testing: {website}")
 
             try:
+                logging.info(f"Testing Internet [{idx / len(self.websites)}] : {website}")
                 status = requests.get(website, headers=self.headers)
 
                 if status.status_code == 200:
@@ -783,15 +779,22 @@ class CheckUpdates(QRunnable):
 
     def run(self):
         url = f"https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/{__next_release__}"
+
         try:
-            if requests.get(url).status_code == 200:
+            print("Trying a request")
+            request = requests.get(url)
+            print("Got request")
+
+            if request.status_code == 200:
+                logger.info("NEW UPDATE IS AVAILABLE!")
                 self.signals.result.emit(True)
 
             else:
+                logger.info("Checked for updates, no update is available.")
                 self.signals.result.emit(False)
 
-        except requests.exceptions.ConnectionError:
-            logger.error("Couldn't check for updates, because of a Connection Error")
+        except Exception as e:
+            logger.error(f"Could not check for updates. Please report the following error on GitHub: {e}")
 
 
 class Porn_Fetch(QWidget):
@@ -970,7 +973,6 @@ Categories=Utility;"""
         text = clipboard.text()
         send_error_log(f"Got clipboard text: {text}")
         self.ui.lineedit_url.setText(str(text))
-
 
     def button_groups(self):
         """
@@ -1358,8 +1360,7 @@ Categories=Utility;"""
 ! Warning !
 Some websites couldn't be accessed. Here's a detailed report:
 ------------------------------------------------------------
-{formatted_results}
-"""))
+{formatted_results}"""))
 
     def check_ffmpeg(self):
         # Check if ffmpeg is available in the system PATH
@@ -1391,7 +1392,7 @@ This warning won't be shown again.
                         """, None)
                     ui_popup(ffmpeg_warning_message)
                     self.conf.set("Performance", "ffmpeg_warning", "false")
-                    with open("config.ini", "w") as config_file:
+                    with open("config.ini", "w") as config_file: #type: TextIOWrapper
                         self.conf.write(config_file)
 
                 self.ui.radio_threading_mode_ffmpeg.setDisabled(True)
@@ -1421,29 +1422,6 @@ This warning won't be shown again.
         self.downloader.signals.total_progress.connect(self.update_total_progressbar)
         self.downloader.signals.finished.connect(ffmpeg_finished)
         self.threadpool.start(self.downloader)
-
-    def setup_android(self):
-        """Sets up for Porn Fetch for Android devices"""
-        logger.debug(f"Running on Android: {sys.platform}")
-        if not get_output_path():
-            self.handle_no_output_path()
-            return  # Early return to avoid setting up UI components again at the end.
-
-        self.configure_ui_for_android("/storage/emulated/0/Download/")
-
-    def handle_no_output_path(self):
-        ui_popup(self.tr( "The output path does not exist or is not writable.", None))
-        text, ok = QInputDialog.getText(self, "Enter custom Path",
-                                        self.tr( "Enter custom Path:", None))
-        if ok and get_output_path(text):
-            ui_popup(self.tr(f"Success: {text} will be used for this session!", None))
-            self.configure_ui_for_android(text)
-        else:
-            ui_popup(self.tr("Invalid path. The application will now exit.", None))
-            sys.exit()
-
-    def configure_ui_for_android(self, path):
-        ""
 
     def switch_to_home(self):
         self.ui.stacked_widget_main.setCurrentIndex(0)

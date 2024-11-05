@@ -9,7 +9,7 @@
 - [x] Fix the progress reporting on the file-read function
 - [] Optimize the CLI and fix some of its errors
 - [] Rework the entire progress reporting system (probably the hardest thing to do)
-- [] Re-implement the internet and status checks, but in a better way
+- [x] Re-implement the internet and status checks, but in a better way
 - [] Display thumbnails when searching (optionally)
 - [] Fix [#53](https://github.com/EchterAlsFake/Porn_Fetch/issues/53)
   - [] Fix remote connection closed without response

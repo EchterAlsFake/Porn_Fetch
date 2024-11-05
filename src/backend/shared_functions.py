@@ -95,7 +95,7 @@ do_not_log = True
 def send_error_log(message):
     """
     This function is made for the Android development of Porn Fetch and is used for debugging.
-    You can of course change or remove it, but I wouldn't recommend it.
+    You can, of course, change or remove it, but I wouldn't recommend it.
     """
 
     if do_not_log is False:
@@ -305,9 +305,16 @@ def write_tags(path, video):
     audio.tags["\xa9day"] = date
 
     logging.debug("Tags: [2/3] - Writing Thumbnail")
-    content = requests.get(thumbnail).content
-    cover = MP4Cover(content, imageformat=MP4Cover.FORMAT_JPEG)
-    audio.tags["covr"] = [cover]
+
+    try:
+        content = requests.get(thumbnail).content
+        cover = MP4Cover(content, imageformat=MP4Cover.FORMAT_JPEG)
+        audio.tags["covr"] = cover
+
+    except Exception as e:
+        logger.error("Could not download / write thumbnail into the metadata tags of the video. Please report the"
+                     f"following error on GitHub: {e}")
+
     audio.save()
     logging.debug("Tags: [3/3] ✔")
 
