@@ -116,13 +116,16 @@ class Signals(QObject):
 
 
 class License(QWidget):
-    """License class to display the GPL 3 License to the user."""
+    """License class to display the GPL 3 License to the user.
+       And handle the other UI popups"""
 
     def __init__(self, parent=None):
         super().__init__(parent)
         self.main_widget = None
         self.conf = ConfigParser()
         self.conf.read("config.ini")
+        self.android_startup = None
+        self.install_widget = None
 
         # Set up the UI for License widget
         self.ui = Ui_License()
@@ -132,11 +135,10 @@ class License(QWidget):
 
     def check_license_and_proceed(self):
         if self.conf["Setup"]["license_accepted"] == "true":
-            # License accepted, proceed with Android or main widget
-            self.show_android_startup_or_main()
+            self.show_android_startup_or_main() # License accepted, proceed with Android or main widget
+
         else:
-            # License not accepted, show the license widget
-            self.show()
+            self.show() # License not accepted, show the license widget
 
     def accept(self):
         self.conf.set("Setup", "license_accepted", "true")
@@ -157,16 +159,15 @@ class License(QWidget):
         self.close()
 
         if __build__ == "android":
-            self.android_startup = Android_Startup()
-            self.android_startup.show()
+            pass
 
         else:
             self.show_install_dialog()
 
     def show_install_dialog(self):
         if self.conf["Setup"]["install"] == "unknown":
-            self.installwidget = InstallDialog()
-            self.installwidget.show()
+            self.install_widget = InstallDialog()
+            self.install_widget.show()
 
         else:
             self.show_main()
@@ -181,6 +182,7 @@ class InstallDialog(QWidget):
         super().__init__()
         self.conf = ConfigParser()
         self.conf.read("config.ini")
+        self.main_widget = None
 
         self.ui = Ui_UI_InstallDialog()
         self.ui.setupUi(self)
@@ -201,19 +203,6 @@ class InstallDialog(QWidget):
         with open("config.ini", "w") as config: #type: TextIOWrapper
             self.conf.write(config)
 
-        self.close()
-        self.main_widget = Porn_Fetch()
-        self.main_widget.show()
-
-
-class Android_Startup(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.ui = Ui_Widget()
-        self.ui.setupUi(self)
-        self.ui.pushButton.clicked.connect(self.launch_main)
-
-    def launch_main(self):
         self.close()
         self.main_widget = Porn_Fetch()
         self.main_widget.show()
@@ -862,39 +851,52 @@ class Porn_Fetch(QWidget):
             self.check_ffmpeg()  # Checks and sets up FFmpeg
             logger.debug("Startup: [5/5] ✔")
 
-            if __build__ == "android":
-                self.setup_android()  # Sets up Android, if build mode is Android (handles some UI stuff and things)
-
     @staticmethod
     def install_pornfetch():
             if __build__ == "desktop":
                 if sys.platform == "linux":
+                    filename = "PornFetch_Linux_GUI_x64.bin"
                     destination_path_tmp = os.path.expanduser("~/.local/share/")
                     destination_path_final = os.path.expanduser("~/.local/share/pornfetch/")
-
+                    destination_install = os.path.expanduser("~/.local/share/applications/")
+                    shortcut_path = os.path.join(destination_install, "pornfetch.desktop")
+                      
                     if not os.path.exists(destination_path_tmp):
                         ui_popup("""
-    The path ~/.local/share/ does not exist. This path is typically used for installing applications and their settings
-    in a users local account. Since you don't have that, you can't install it. 
-    If you believe, that this is a mistake, please report it on GitHub, so that I can fix it :)""")
+The path ~/.local/share/ does not exist. This path is typically used for installing applications and their settings
+in a users local account. Since you don't have that, you can't install it. Probably because your Linux does not follow
+the XDG Desktop Portal specifications. It's your own decision and I don't create the directory for you, or force you to
+do that. If you still wish to install Porn Fetch, look Online how to setup XDK-Desktop-Portal on your Linux distribution,
+head over to the setting and down there you will be able to try the installation again. Otherwise, you can just keep
+using the portable version, which will work just fine.
+
+If you believe, that this is a mistake, please report it on GitHub, so that I can fix it :)""")
                         return
 
                     try:
-                        os.makedirs(destination_path_final)
+                        os.makedirs(destination_path_final, exist_ok=True)
 
                     except PermissionError:
-                        ui_popup(
-                            f"You do not have permissions to create the folder 'pornfetch' inside {destination_path_tmp}!")
-                        ui_popup("Installation aborted.")
+                        ui_popup("""
+You do not have permissions to create the folder 'pornfetch' inside {destination_path_tmp}!
+The installation process will stop now. You can either run Porn Fetch with elevated privileges, or use the portable
+version.""")
                         return
+                    
+                    pornfetch_exe = os.path.join(destination_path_final, filename)
+                    if os.path.exists(pornfetch_exe):
+                        os.remove(pornfetch_exe)
 
                     shutil.move("PornFetch_Linux_GUI_x64.bin", dst=destination_path_final)
-                    shutil.move("config.ini", dst=destination_path_final)
-                    logger.info(f"Moved the PornFetch binary and configs to: {destination_path_final}")
+                    logger.info(f"Moved the PornFetch binary to: {destination_path_final}")
+
+                    if not os.path.exists(os.path.join(destination_path_final, "config.ini")):
+                        shutil.move("config.ini", dst=destination_path_final)
+                        logger.info("Moved configuration file")
+                        
                     logger.info(f"Downloading additional asset: icon")
 
-                    img = requests.get(
-                        "https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/android_app_icon.png?raw=true")
+                    img = requests.get("https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/android_app_icon.png?raw=true")
                     if not img.status_code == 200:
                         ui_popup(
                             "Couldn't download the Porn Fetch logo. Installation will still be successfully, but please"
@@ -905,41 +907,44 @@ class Porn_Fetch(QWidget):
                             logo.write(img.content)
                             shutil.move("Logo.png", dst=destination_path_final)
 
-                    entry_content = f"""
-    [Desktop Entry]
-    Name=Porn Fetch
-    Exec={destination_path_final}PornFetch_Linux_GUI_x64.bin %F
-    Icon={destination_path_final}Logo.png
-    Type=Application
-    Terminal=false
-    Categories=Utility;
-    """
-                    with open("pornfetch.desktop", "w") as entry_file:
-                        entry_file.write(entry_content)
+                    entry_content = f"""[Desktop Entry]
+Name=Porn Fetch
+Exec={destination_path_final}PornFetch_Linux_GUI_x64.bin %F
+Icon={destination_path_final}Logo.png
+Type=Application
+Terminal=false
+Categories=Utility;"""
 
-                    desktop_entry_path = os.path.join(os.path.expanduser("~/.local/share/applications/"),
-                                                      "pornfetch.desktop")
-                    shutil.move("pornfetch.desktop", desktop_entry_path)
+
+                    if not os.path.exists(shortcut_path):
+                        with open("pornfetch.desktop", "w") as entry_file:
+                            entry_file.write(entry_content)
+
+                        shutil.move("pornfetch.desktop", shortcut_path)
+
                     logger.info("Successfully installed Porn Fetch!")
-                    os.chmod(mode=0o755, path=destination_path_final + "PornFetch_Linux_GUI_x64.bin")
-                    # Setting executable permission
+                    os.chmod(mode=0o755, path=destination_path_final + "PornFetch_Linux_GUI_x64.bin") # Setting executable permission
 
                 elif sys.platform == "win32":
-                    import win32com.client
+                    import win32com.client # Only available on Windows
 
+                    filename = "PornFetch_Windows_GUI_x64.exe"
                     target_dir = os.path.join(os.getenv("LOCALAPPDATA"), "pornfetch")
                     os.makedirs(target_dir, exist_ok=True)
 
-                    # Copy the executable to the target directory
-                    shutil.move("PornFetch_Windows_GUI_x64.exe", target_dir)
-                    shutil.move("config.ini", target_dir)
+                    if os.path.exists(os.path.join(target_dir, filename)):
+                        os.remove(os.path.join(target_dir, filename))
+
+                    # Move the executable to the target directory
+                    shutil.move(filename, target_dir)
+
+                    if not os.path.exists(os.path.join(target_dir, "config.ini")):
+                        shutil.move("config.ini", target_dir) # Prevent overriding the old configuration file
 
                     # Define paths for the shortcut creation
                     app_name = "Porn Fetch"
-                    app_exe_path = os.path.join(target_dir,
-                                                "PornFetch_Windows_GUI_x64.exe")  # Full path to the executable
-                    start_menu_path = os.path.join(os.getenv("APPDATA"), "Microsoft", "Windows", "Start Menu",
-                                                   "Programs")
+                    app_exe_path = os.path.join(target_dir, filename)  # Full path to the executable
+                    start_menu_path = os.path.join(os.getenv("APPDATA"), "Microsoft", "Windows", "Start Menu", "Programs")
                     shortcut_path = os.path.join(start_menu_path, f"{app_name}.lnk")
 
                     # Create the shortcut
@@ -949,7 +954,6 @@ class Porn_Fetch(QWidget):
                     shortcut.WorkingDirectory = target_dir  # Set working directory to the target directory
                     shortcut.IconLocation = app_exe_path
                     shortcut.Save()
-
 
     def get_clipboard(self):
         clipboard = QGuiApplication.clipboard()
