@@ -27,7 +27,7 @@ class Ui_PornFetch_Desktop(object):
         if not PornFetch_Desktop.objectName():
             PornFetch_Desktop.setObjectName(u"PornFetch_Desktop")
         PornFetch_Desktop.resize(1409, 918)
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(PornFetch_Desktop.sizePolicy().hasHeightForWidth())
@@ -35,8 +35,8 @@ class Ui_PornFetch_Desktop(object):
         PornFetch_Desktop.setMinimumSize(QSize(670, 580))
         PornFetch_Desktop.setStyleSheet(u"QLbel {\n"
 "    color: black;}")
-        self.gridLayout_7 = QGridLayout(PornFetch_Desktop)
-        self.gridLayout_7.setObjectName(u"gridLayout_7")
+        self.gridLayout_14 = QGridLayout(PornFetch_Desktop)
+        self.gridLayout_14.setObjectName(u"gridLayout_14")
         self.verticalLayout_4 = QVBoxLayout()
         self.verticalLayout_4.setSpacing(0)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
@@ -181,18 +181,21 @@ class Ui_PornFetch_Desktop(object):
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.stacked_widget_top = QStackedWidget(self.widget)
         self.stacked_widget_top.setObjectName(u"stacked_widget_top")
-        sizePolicy.setHeightForWidth(self.stacked_widget_top.sizePolicy().hasHeightForWidth())
-        self.stacked_widget_top.setSizePolicy(sizePolicy)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.stacked_widget_top.sizePolicy().hasHeightForWidth())
+        self.stacked_widget_top.setSizePolicy(sizePolicy2)
         self.stacked_widget_top.setMinimumSize(QSize(650, 20))
         self.stacked_widget_top.setStyleSheet(u"b")
         self.stacked_widget_top.setLineWidth(1)
         self.page_download = QWidget()
         self.page_download.setObjectName(u"page_download")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.page_download.sizePolicy().hasHeightForWidth())
-        self.page_download.setSizePolicy(sizePolicy2)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.page_download.sizePolicy().hasHeightForWidth())
+        self.page_download.setSizePolicy(sizePolicy3)
         self.page_download.setMinimumSize(QSize(0, 0))
         self.gridLayout_5 = QGridLayout(self.page_download)
         self.gridLayout_5.setSpacing(0)
@@ -205,24 +208,24 @@ class Ui_PornFetch_Desktop(object):
         self.gridlayout_downloading.setContentsMargins(-1, 14, -1, -1)
         self.radio_search_website_xvideos = QRadioButton(self.page_download)
         self.radio_search_website_xvideos.setObjectName(u"radio_search_website_xvideos")
-        sizePolicy.setHeightForWidth(self.radio_search_website_xvideos.sizePolicy().hasHeightForWidth())
-        self.radio_search_website_xvideos.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.radio_search_website_xvideos.sizePolicy().hasHeightForWidth())
+        self.radio_search_website_xvideos.setSizePolicy(sizePolicy2)
         self.radio_search_website_xvideos.setMinimumSize(QSize(0, 30))
 
         self.gridlayout_downloading.addWidget(self.radio_search_website_xvideos, 8, 3, 1, 1)
 
         self.button_help_file = QPushButton(self.page_download)
         self.button_help_file.setObjectName(u"button_help_file")
-        sizePolicy.setHeightForWidth(self.button_help_file.sizePolicy().hasHeightForWidth())
-        self.button_help_file.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.button_help_file.sizePolicy().hasHeightForWidth())
+        self.button_help_file.setSizePolicy(sizePolicy2)
         self.button_help_file.setMinimumSize(QSize(0, 30))
 
         self.gridlayout_downloading.addWidget(self.button_help_file, 6, 4, 1, 1)
 
         self.radio_search_website_pornhub = QRadioButton(self.page_download)
         self.radio_search_website_pornhub.setObjectName(u"radio_search_website_pornhub")
-        sizePolicy.setHeightForWidth(self.radio_search_website_pornhub.sizePolicy().hasHeightForWidth())
-        self.radio_search_website_pornhub.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.radio_search_website_pornhub.sizePolicy().hasHeightForWidth())
+        self.radio_search_website_pornhub.setSizePolicy(sizePolicy2)
         self.radio_search_website_pornhub.setMinimumSize(QSize(0, 30))
         self.radio_search_website_pornhub.setChecked(True)
 
@@ -230,43 +233,43 @@ class Ui_PornFetch_Desktop(object):
 
         self.button_playlist_get_videos = QPushButton(self.page_download)
         self.button_playlist_get_videos.setObjectName(u"button_playlist_get_videos")
-        sizePolicy.setHeightForWidth(self.button_playlist_get_videos.sizePolicy().hasHeightForWidth())
-        self.button_playlist_get_videos.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.button_playlist_get_videos.sizePolicy().hasHeightForWidth())
+        self.button_playlist_get_videos.setSizePolicy(sizePolicy2)
         self.button_playlist_get_videos.setMinimumSize(QSize(0, 30))
 
         self.gridlayout_downloading.addWidget(self.button_playlist_get_videos, 4, 5, 1, 1)
 
         self.label_model_url = QLabel(self.page_download)
         self.label_model_url.setObjectName(u"label_model_url")
-        sizePolicy.setHeightForWidth(self.label_model_url.sizePolicy().hasHeightForWidth())
-        self.label_model_url.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.label_model_url.sizePolicy().hasHeightForWidth())
+        self.label_model_url.setSizePolicy(sizePolicy2)
         self.label_model_url.setMinimumSize(QSize(100, 30))
 
         self.gridlayout_downloading.addWidget(self.label_model_url, 5, 0, 1, 1)
 
         self.lineedit_url = QLineEdit(self.page_download)
         self.lineedit_url.setObjectName(u"lineedit_url")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Minimum)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.lineedit_url.sizePolicy().hasHeightForWidth())
-        self.lineedit_url.setSizePolicy(sizePolicy3)
+        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Minimum)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.lineedit_url.sizePolicy().hasHeightForWidth())
+        self.lineedit_url.setSizePolicy(sizePolicy4)
         self.lineedit_url.setMinimumSize(QSize(300, 30))
 
         self.gridlayout_downloading.addWidget(self.lineedit_url, 2, 1, 1, 4)
 
         self.label_playlist_url = QLabel(self.page_download)
         self.label_playlist_url.setObjectName(u"label_playlist_url")
-        sizePolicy2.setHeightForWidth(self.label_playlist_url.sizePolicy().hasHeightForWidth())
-        self.label_playlist_url.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.label_playlist_url.sizePolicy().hasHeightForWidth())
+        self.label_playlist_url.setSizePolicy(sizePolicy3)
         self.label_playlist_url.setMinimumSize(QSize(0, 30))
 
         self.gridlayout_downloading.addWidget(self.label_playlist_url, 4, 0, 1, 1)
 
         self.button_search = QPushButton(self.page_download)
         self.button_search.setObjectName(u"button_search")
-        sizePolicy.setHeightForWidth(self.button_search.sizePolicy().hasHeightForWidth())
-        self.button_search.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.button_search.sizePolicy().hasHeightForWidth())
+        self.button_search.setSizePolicy(sizePolicy2)
         self.button_search.setMinimumSize(QSize(0, 30))
         self.button_search.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
@@ -274,40 +277,40 @@ class Ui_PornFetch_Desktop(object):
 
         self.radio_search_website_eporner = QRadioButton(self.page_download)
         self.radio_search_website_eporner.setObjectName(u"radio_search_website_eporner")
-        sizePolicy.setHeightForWidth(self.radio_search_website_eporner.sizePolicy().hasHeightForWidth())
-        self.radio_search_website_eporner.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.radio_search_website_eporner.sizePolicy().hasHeightForWidth())
+        self.radio_search_website_eporner.setSizePolicy(sizePolicy2)
         self.radio_search_website_eporner.setMinimumSize(QSize(0, 30))
 
         self.gridlayout_downloading.addWidget(self.radio_search_website_eporner, 8, 4, 1, 1)
 
         self.label_file = QLabel(self.page_download)
         self.label_file.setObjectName(u"label_file")
-        sizePolicy.setHeightForWidth(self.label_file.sizePolicy().hasHeightForWidth())
-        self.label_file.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.label_file.sizePolicy().hasHeightForWidth())
+        self.label_file.setSizePolicy(sizePolicy2)
         self.label_file.setMinimumSize(QSize(100, 30))
 
         self.gridlayout_downloading.addWidget(self.label_file, 6, 0, 1, 1)
 
         self.radio_search_website_xnxx = QRadioButton(self.page_download)
         self.radio_search_website_xnxx.setObjectName(u"radio_search_website_xnxx")
-        sizePolicy.setHeightForWidth(self.radio_search_website_xnxx.sizePolicy().hasHeightForWidth())
-        self.radio_search_website_xnxx.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.radio_search_website_xnxx.sizePolicy().hasHeightForWidth())
+        self.radio_search_website_xnxx.setSizePolicy(sizePolicy2)
         self.radio_search_website_xnxx.setMinimumSize(QSize(0, 30))
 
         self.gridlayout_downloading.addWidget(self.radio_search_website_xnxx, 8, 5, 1, 1)
 
         self.lineedit_model_url = QLineEdit(self.page_download)
         self.lineedit_model_url.setObjectName(u"lineedit_model_url")
-        sizePolicy3.setHeightForWidth(self.lineedit_model_url.sizePolicy().hasHeightForWidth())
-        self.lineedit_model_url.setSizePolicy(sizePolicy3)
+        sizePolicy4.setHeightForWidth(self.lineedit_model_url.sizePolicy().hasHeightForWidth())
+        self.lineedit_model_url.setSizePolicy(sizePolicy4)
         self.lineedit_model_url.setMinimumSize(QSize(300, 30))
 
         self.gridlayout_downloading.addWidget(self.lineedit_model_url, 5, 1, 1, 4)
 
         self.button_open_file = QPushButton(self.page_download)
         self.button_open_file.setObjectName(u"button_open_file")
-        sizePolicy.setHeightForWidth(self.button_open_file.sizePolicy().hasHeightForWidth())
-        self.button_open_file.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.button_open_file.sizePolicy().hasHeightForWidth())
+        self.button_open_file.setSizePolicy(sizePolicy2)
         self.button_open_file.setMinimumSize(QSize(60, 30))
         self.button_open_file.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.button_open_file.setStyleSheet(u"")
@@ -316,8 +319,8 @@ class Ui_PornFetch_Desktop(object):
 
         self.button_model = QPushButton(self.page_download)
         self.button_model.setObjectName(u"button_model")
-        sizePolicy.setHeightForWidth(self.button_model.sizePolicy().hasHeightForWidth())
-        self.button_model.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.button_model.sizePolicy().hasHeightForWidth())
+        self.button_model.setSizePolicy(sizePolicy2)
         self.button_model.setMinimumSize(QSize(60, 30))
         self.button_model.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.button_model.setStyleSheet(u"")
@@ -326,8 +329,8 @@ class Ui_PornFetch_Desktop(object):
 
         self.lineedit_file = QLineEdit(self.page_download)
         self.lineedit_file.setObjectName(u"lineedit_file")
-        sizePolicy3.setHeightForWidth(self.lineedit_file.sizePolicy().hasHeightForWidth())
-        self.lineedit_file.setSizePolicy(sizePolicy3)
+        sizePolicy4.setHeightForWidth(self.lineedit_file.sizePolicy().hasHeightForWidth())
+        self.lineedit_file.setSizePolicy(sizePolicy4)
         self.lineedit_file.setMinimumSize(QSize(300, 30))
         self.lineedit_file.setReadOnly(True)
 
@@ -335,8 +338,8 @@ class Ui_PornFetch_Desktop(object):
 
         self.button_download = QPushButton(self.page_download)
         self.button_download.setObjectName(u"button_download")
-        sizePolicy.setHeightForWidth(self.button_download.sizePolicy().hasHeightForWidth())
-        self.button_download.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.button_download.sizePolicy().hasHeightForWidth())
+        self.button_download.setSizePolicy(sizePolicy2)
         self.button_download.setMinimumSize(QSize(60, 30))
         self.button_download.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.button_download.setStyleSheet(u"")
@@ -345,19 +348,16 @@ class Ui_PornFetch_Desktop(object):
 
         self.labell_search = QLabel(self.page_download)
         self.labell_search.setObjectName(u"labell_search")
-        sizePolicy2.setHeightForWidth(self.labell_search.sizePolicy().hasHeightForWidth())
-        self.labell_search.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.labell_search.sizePolicy().hasHeightForWidth())
+        self.labell_search.setSizePolicy(sizePolicy3)
         self.labell_search.setMinimumSize(QSize(0, 30))
 
         self.gridlayout_downloading.addWidget(self.labell_search, 7, 0, 1, 1)
 
         self.label_search_website = QLabel(self.page_download)
         self.label_search_website.setObjectName(u"label_search_website")
-        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-        sizePolicy4.setHorizontalStretch(0)
-        sizePolicy4.setVerticalStretch(0)
-        sizePolicy4.setHeightForWidth(self.label_search_website.sizePolicy().hasHeightForWidth())
-        self.label_search_website.setSizePolicy(sizePolicy4)
+        sizePolicy.setHeightForWidth(self.label_search_website.sizePolicy().hasHeightForWidth())
+        self.label_search_website.setSizePolicy(sizePolicy)
         self.label_search_website.setMinimumSize(QSize(0, 0))
 
         self.gridlayout_downloading.addWidget(self.label_search_website, 8, 0, 1, 1)
@@ -368,8 +368,8 @@ class Ui_PornFetch_Desktop(object):
 
         self.radio_search_website_hqporner = QRadioButton(self.page_download)
         self.radio_search_website_hqporner.setObjectName(u"radio_search_website_hqporner")
-        sizePolicy.setHeightForWidth(self.radio_search_website_hqporner.sizePolicy().hasHeightForWidth())
-        self.radio_search_website_hqporner.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.radio_search_website_hqporner.sizePolicy().hasHeightForWidth())
+        self.radio_search_website_hqporner.setSizePolicy(sizePolicy2)
         self.radio_search_website_hqporner.setMinimumSize(QSize(0, 30))
 
         self.gridlayout_downloading.addWidget(self.radio_search_website_hqporner, 8, 2, 1, 1)
@@ -387,16 +387,16 @@ class Ui_PornFetch_Desktop(object):
 
         self.lineedit_search_query = QLineEdit(self.page_download)
         self.lineedit_search_query.setObjectName(u"lineedit_search_query")
-        sizePolicy3.setHeightForWidth(self.lineedit_search_query.sizePolicy().hasHeightForWidth())
-        self.lineedit_search_query.setSizePolicy(sizePolicy3)
+        sizePolicy4.setHeightForWidth(self.lineedit_search_query.sizePolicy().hasHeightForWidth())
+        self.lineedit_search_query.setSizePolicy(sizePolicy4)
         self.lineedit_search_query.setMinimumSize(QSize(300, 30))
 
         self.gridlayout_downloading.addWidget(self.lineedit_search_query, 7, 1, 1, 4)
 
         self.label_url = QLabel(self.page_download)
         self.label_url.setObjectName(u"label_url")
-        sizePolicy.setHeightForWidth(self.label_url.sizePolicy().hasHeightForWidth())
-        self.label_url.setSizePolicy(sizePolicy)
+        sizePolicy2.setHeightForWidth(self.label_url.sizePolicy().hasHeightForWidth())
+        self.label_url.setSizePolicy(sizePolicy2)
         self.label_url.setMinimumSize(QSize(100, 30))
 
         self.gridlayout_downloading.addWidget(self.label_url, 2, 0, 1, 1)
@@ -951,7 +951,7 @@ class Ui_PornFetch_Desktop(object):
         self.scrollarea_settings.setWidgetResizable(True)
         self.scrollAreaWidgetContents_6 = QWidget()
         self.scrollAreaWidgetContents_6.setObjectName(u"scrollAreaWidgetContents_6")
-        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 795, 660))
+        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 1385, 805))
         self.gridLayout_19 = QGridLayout(self.scrollAreaWidgetContents_6)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.horizontallayout_settings_apply = QHBoxLayout()
@@ -1132,7 +1132,7 @@ class Ui_PornFetch_Desktop(object):
         self.gridLayout_10.addLayout(self.gridLayout, 6, 0, 1, 1)
 
 
-        self.gridlayout_settings.addWidget(self.groupbox_videos, 2, 0, 1, 1)
+        self.gridlayout_settings.addWidget(self.groupbox_videos, 1, 0, 1, 1)
 
         self.goroupbox_gui = QGroupBox(self.scrollAreaWidgetContents_6)
         self.goroupbox_gui.setObjectName(u"goroupbox_gui")
@@ -1201,7 +1201,7 @@ class Ui_PornFetch_Desktop(object):
         self.gridLayout_12.addLayout(self.gridLayout_3, 0, 0, 1, 1)
 
 
-        self.gridlayout_settings.addWidget(self.goroupbox_gui, 3, 0, 1, 1)
+        self.gridlayout_settings.addWidget(self.goroupbox_gui, 2, 0, 1, 1)
 
         self.groupbox_performance = QGroupBox(self.scrollAreaWidgetContents_6)
         self.groupbox_performance.setObjectName(u"groupbox_performance")
@@ -1359,12 +1359,109 @@ class Ui_PornFetch_Desktop(object):
         self.gridLayout_9.addLayout(self.horizontallayout_threading_mode, 1, 0, 1, 1)
 
 
-        self.gridlayout_settings.addWidget(self.groupbox_performance, 1, 0, 1, 1)
+        self.gridlayout_settings.addWidget(self.groupbox_performance, 0, 0, 1, 1)
 
-        self.button_download_ffmpeg = QPushButton(self.scrollAreaWidgetContents_6)
+        self.groupBox = QGroupBox(self.scrollAreaWidgetContents_6)
+        self.groupBox.setObjectName(u"groupBox")
+        self.gridLayout_7 = QGridLayout(self.groupBox)
+        self.gridLayout_7.setObjectName(u"gridLayout_7")
+        self.verticalLayout_6 = QVBoxLayout()
+        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
+        self.button_download_ffmpeg = QPushButton(self.groupBox)
         self.button_download_ffmpeg.setObjectName(u"button_download_ffmpeg")
 
-        self.gridlayout_settings.addWidget(self.button_download_ffmpeg, 0, 0, 1, 1)
+        self.verticalLayout_6.addWidget(self.button_download_ffmpeg)
+
+        self.button_install_pornfetch = QPushButton(self.groupBox)
+        self.button_install_pornfetch.setObjectName(u"button_install_pornfetch")
+
+        self.verticalLayout_6.addWidget(self.button_install_pornfetch)
+
+
+        self.gridLayout_7.addLayout(self.verticalLayout_6, 0, 0, 1, 1)
+
+        self.gridLayout_13 = QGridLayout()
+        self.gridLayout_13.setObjectName(u"gridLayout_13")
+        self.checkbox_settings_internet_checks = QCheckBox(self.groupBox)
+        self.checkbox_settings_internet_checks.setObjectName(u"checkbox_settings_internet_checks")
+
+        self.gridLayout_13.addWidget(self.checkbox_settings_internet_checks, 0, 1, 1, 1)
+
+        self.checkbox_settings_system_update_checks = QCheckBox(self.groupBox)
+        self.checkbox_settings_system_update_checks.setObjectName(u"checkbox_settings_system_update_checks")
+
+        self.gridLayout_13.addWidget(self.checkbox_settings_system_update_checks, 0, 2, 1, 1)
+
+        self.label_settings_startup = QLabel(self.groupBox)
+        self.label_settings_startup.setObjectName(u"label_settings_startup")
+        sizePolicy15 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
+        sizePolicy15.setHorizontalStretch(0)
+        sizePolicy15.setVerticalStretch(0)
+        sizePolicy15.setHeightForWidth(self.label_settings_startup.sizePolicy().hasHeightForWidth())
+        self.label_settings_startup.setSizePolicy(sizePolicy15)
+
+        self.gridLayout_13.addWidget(self.label_settings_startup, 0, 0, 1, 1)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_13.addItem(self.horizontalSpacer, 0, 3, 1, 1)
+
+
+        self.gridLayout_7.addLayout(self.gridLayout_13, 1, 0, 1, 1)
+
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.label_settings_system_privacy = QLabel(self.groupBox)
+        self.label_settings_system_privacy.setObjectName(u"label_settings_system_privacy")
+        sizePolicy15.setHeightForWidth(self.label_settings_system_privacy.sizePolicy().hasHeightForWidth())
+        self.label_settings_system_privacy.setSizePolicy(sizePolicy15)
+
+        self.horizontalLayout_4.addWidget(self.label_settings_system_privacy)
+
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.checkbox_settings_system_anonymous_mode = QCheckBox(self.groupBox)
+        self.checkbox_settings_system_anonymous_mode.setObjectName(u"checkbox_settings_system_anonymous_mode")
+
+        self.horizontalLayout_3.addWidget(self.checkbox_settings_system_anonymous_mode)
+
+        self.button_settings_help_anonymous_mode = QPushButton(self.groupBox)
+        self.button_settings_help_anonymous_mode.setObjectName(u"button_settings_help_anonymous_mode")
+
+        self.horizontalLayout_3.addWidget(self.button_settings_help_anonymous_mode)
+
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.checkbox_settings_system_enable_tor = QCheckBox(self.groupBox)
+        self.checkbox_settings_system_enable_tor.setObjectName(u"checkbox_settings_system_enable_tor")
+
+        self.horizontalLayout_2.addWidget(self.checkbox_settings_system_enable_tor)
+
+        self.button_settings_help_tor = QPushButton(self.groupBox)
+        self.button_settings_help_tor.setObjectName(u"button_settings_help_tor")
+
+        self.horizontalLayout_2.addWidget(self.button_settings_help_tor)
+
+
+        self.horizontalLayout_3.addLayout(self.horizontalLayout_2)
+
+        self.horizontalLayout_5 = QHBoxLayout()
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+
+        self.horizontalLayout_3.addLayout(self.horizontalLayout_5)
+
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_3.addItem(self.horizontalSpacer_2)
+
+
+        self.horizontalLayout_4.addLayout(self.horizontalLayout_3)
+
+
+        self.gridLayout_7.addLayout(self.horizontalLayout_4, 2, 0, 1, 1)
+
+
+        self.gridlayout_settings.addWidget(self.groupBox, 3, 0, 1, 1)
 
 
         self.gridLayout_19.addLayout(self.gridlayout_settings, 0, 0, 1, 2)
@@ -1448,7 +1545,7 @@ class Ui_PornFetch_Desktop(object):
         self.verticalLayout_4.addLayout(self.formLayout)
 
 
-        self.gridLayout_7.addLayout(self.verticalLayout_4, 0, 0, 1, 1)
+        self.gridLayout_14.addLayout(self.verticalLayout_4, 0, 0, 1, 1)
 
         QWidget.setTabOrder(self.lineedit_url, self.lineedit_playlist_url)
         QWidget.setTabOrder(self.lineedit_playlist_url, self.lineedit_model_url)
@@ -1489,7 +1586,7 @@ class Ui_PornFetch_Desktop(object):
 
         self.retranslateUi(PornFetch_Desktop)
 
-        self.stacked_widget_main.setCurrentIndex(0)
+        self.stacked_widget_main.setCurrentIndex(1)
         self.stacked_widget_top.setCurrentIndex(2)
 
 
@@ -1638,7 +1735,17 @@ class Ui_PornFetch_Desktop(object):
         self.radio_threading_mode_ffmpeg.setText(QCoreApplication.translate("PornFetch_Desktop", u"FFMPEG", None))
         self.radio_threading_mode_default.setText(QCoreApplication.translate("PornFetch_Desktop", u"Default", None))
         self.button_threading_mode_help.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
+        self.groupBox.setTitle(QCoreApplication.translate("PornFetch_Desktop", u"System / Porn Fetch", None))
         self.button_download_ffmpeg.setText(QCoreApplication.translate("PornFetch_Desktop", u"Download and Setup FFmpeg", None))
+        self.button_install_pornfetch.setText(QCoreApplication.translate("PornFetch_Desktop", u"Install Porn Fetch", None))
+        self.checkbox_settings_internet_checks.setText(QCoreApplication.translate("PornFetch_Desktop", u"Internet checks", None))
+        self.checkbox_settings_system_update_checks.setText(QCoreApplication.translate("PornFetch_Desktop", u"Update checks", None))
+        self.label_settings_startup.setText(QCoreApplication.translate("PornFetch_Desktop", u"Startup:", None))
+        self.label_settings_system_privacy.setText(QCoreApplication.translate("PornFetch_Desktop", u"Privacy:", None))
+        self.checkbox_settings_system_anonymous_mode.setText(QCoreApplication.translate("PornFetch_Desktop", u"Enable Anonymous mode", None))
+        self.button_settings_help_anonymous_mode.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
+        self.checkbox_settings_system_enable_tor.setText(QCoreApplication.translate("PornFetch_Desktop", u"Enable Tor", None))
+        self.button_settings_help_tor.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
         self.textbrowser_websites.setHtml(QCoreApplication.translate("PornFetch_Desktop", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"

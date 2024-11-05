@@ -78,17 +78,14 @@ color: white;</string>
     border-radius: 5px;
     padding: 8px 16px;
     font-size: 16px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 QPushButton:hover {
     background-color: #218838; /* Darker green for hover */
-    transform: scale(1.05); /* Slightly bigger on hover */
 }
 
 QPushButton:pressed {
     background-color: #1e7e34; /* Even darker green for active press */
-    transform: scale(0.95); /* Slightly smaller on press */
 }
 </string>
            </property>
@@ -107,17 +104,14 @@ QPushButton:pressed {
     border-radius: 5px;
     padding: 8px 16px;
     font-size: 16px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 QPushButton:hover {
     background-color: #c82333; /* Darker red for hover */
-    transform: scale(1.05); /* Slightly bigger on hover */
 }
 
 QPushButton:pressed {
     background-color: #bd2130; /* Even darker red for active press */
-    transform: scale(0.95); /* Slightly smaller on press */
 }
 </string>
            </property>

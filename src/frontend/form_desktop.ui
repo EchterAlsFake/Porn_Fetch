@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+   <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -29,7 +29,7 @@
    <string notr="true">QLbel {
     color: black;}</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_7">
+  <layout class="QGridLayout" name="gridLayout_14">
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout_4">
      <property name="spacing">
@@ -345,7 +345,7 @@
         <number>1</number>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="widget">
         <layout class="QGridLayout" name="gridLayout_8">
@@ -2055,8 +2055,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>795</width>
-                <height>660</height>
+                <width>1385</width>
+                <height>805</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_19">
@@ -2105,7 +2105,7 @@ QPushButton:pressed {
                </item>
                <item row="0" column="0" colspan="2">
                 <layout class="QGridLayout" name="gridlayout_settings">
-                 <item row="2" column="0">
+                 <item row="1" column="0">
                   <widget class="QGroupBox" name="groupbox_videos">
                    <property name="title">
                     <string>Videos</string>
@@ -2318,7 +2318,7 @@ QPushButton:pressed {
                    </layout>
                   </widget>
                  </item>
-                 <item row="3" column="0">
+                 <item row="2" column="0">
                   <widget class="QGroupBox" name="goroupbox_gui">
                    <property name="title">
                     <string>Graphical User Interface</string>
@@ -2422,7 +2422,7 @@ QPushButton:pressed {
                    </layout>
                   </widget>
                  </item>
-                 <item row="1" column="0">
+                 <item row="0" column="0">
                   <widget class="QGroupBox" name="groupbox_performance">
                    <property name="title">
                     <string>Performance</string>
@@ -2643,11 +2643,144 @@ QPushButton:pressed {
                    </layout>
                   </widget>
                  </item>
-                 <item row="0" column="0">
-                  <widget class="QPushButton" name="button_download_ffmpeg">
-                   <property name="text">
-                    <string>Download and Setup FFmpeg</string>
+                 <item row="3" column="0">
+                  <widget class="QGroupBox" name="groupBox">
+                   <property name="title">
+                    <string>System / Porn Fetch</string>
                    </property>
+                   <layout class="QGridLayout" name="gridLayout_7">
+                    <item row="0" column="0">
+                     <layout class="QVBoxLayout" name="verticalLayout_6">
+                      <item>
+                       <widget class="QPushButton" name="button_download_ffmpeg">
+                        <property name="text">
+                         <string>Download and Setup FFmpeg</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="button_install_pornfetch">
+                        <property name="text">
+                         <string>Install Porn Fetch</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item row="1" column="0">
+                     <layout class="QGridLayout" name="gridLayout_13">
+                      <item row="0" column="1">
+                       <widget class="QCheckBox" name="checkbox_settings_internet_checks">
+                        <property name="text">
+                         <string>Internet checks</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="2">
+                       <widget class="QCheckBox" name="checkbox_settings_system_update_checks">
+                        <property name="text">
+                         <string>Update checks</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="0">
+                       <widget class="QLabel" name="label_settings_startup">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="text">
+                         <string>Startup:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="3">
+                       <spacer name="horizontalSpacer">
+                        <property name="orientation">
+                         <enum>Qt::Orientation::Horizontal</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>40</width>
+                          <height>20</height>
+                         </size>
+                        </property>
+                       </spacer>
+                      </item>
+                     </layout>
+                    </item>
+                    <item row="2" column="0">
+                     <layout class="QHBoxLayout" name="horizontalLayout_4">
+                      <item>
+                       <widget class="QLabel" name="label_settings_system_privacy">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="text">
+                         <string>Privacy:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <layout class="QHBoxLayout" name="horizontalLayout_3">
+                        <item>
+                         <widget class="QCheckBox" name="checkbox_settings_system_anonymous_mode">
+                          <property name="text">
+                           <string>Enable Anonymous mode</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QPushButton" name="button_settings_help_anonymous_mode">
+                          <property name="text">
+                           <string>Help</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <layout class="QHBoxLayout" name="horizontalLayout_2">
+                          <item>
+                           <widget class="QCheckBox" name="checkbox_settings_system_enable_tor">
+                            <property name="text">
+                             <string>Enable Tor</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QPushButton" name="button_settings_help_tor">
+                            <property name="text">
+                             <string>Help</string>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </item>
+                        <item>
+                         <layout class="QHBoxLayout" name="horizontalLayout_5"/>
+                        </item>
+                        <item>
+                         <spacer name="horizontalSpacer_2">
+                          <property name="orientation">
+                           <enum>Qt::Orientation::Horizontal</enum>
+                          </property>
+                          <property name="sizeHint" stdset="0">
+                           <size>
+                            <width>40</width>
+                            <height>20</height>
+                           </size>
+                          </property>
+                         </spacer>
+                        </item>
+                       </layout>
+                      </item>
+                     </layout>
+                    </item>
+                   </layout>
                   </widget>
                  </item>
                 </layout>

@@ -420,10 +420,14 @@ the thread is permanently locked
 # 3.5
 
 ## New Features
+- You can now install Porn Fetch into your System (Linux, Windows)
+- You can now disable the internet and update checks
 
 ## Design
-- fixed the layout
-- fixed resizing, minimum button height
+- Fixed the layout
+- Fixed resizing, minimum button height
+- Improved the look of the License widget
+- Improved the settings page of the Porn Fetch CL09ßü+#
 
-## Other
+# Other
 - added installation guide

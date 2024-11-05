@@ -855,8 +855,13 @@ class Porn_Fetch(QWidget):
             self.load_user_settings()  # Loads the user settings and applies selected values to the UI
             logger.debug("Startup: [4/5] Loaded the user settings")
             self.switch_to_home()  # Switches Porn Fetch to the home widget
-            self.check_for_updates()
-            self.check_internet()
+
+            if self.conf.get("Setup", "internet_checks") == "true":
+                self.check_internet()
+
+            if self.conf.get("Setup", "update_checks") == "true":
+                self.check_for_updates()
+
             self.check_ffmpeg()  # Checks and sets up FFmpeg
             logger.debug("Startup: [5/5] ✔")
 
@@ -1236,7 +1241,6 @@ Categories=Utility;"""
             "light": self.ui.radio_ui_design_light_mode
         }
 
-
     def load_user_settings(self):
         """Loads the user settings from the configuration file and applies them."""
 
@@ -1250,6 +1254,10 @@ Categories=Utility;"""
         self.ui.spinbox_semaphore.setValue(int(self.conf.get("Performance", "semaphore")))
         self.ui.spinbox_treewidget_limit.setValue(int(self.conf.get("Video", "search_limit")))
         self.ui.lineedit_output_path.setText(self.conf.get("Video", "output_path"))
+        self.ui.checkbox_settings_internet_checks.setChecked(True) if self.conf.get("Setup", "internet_checks") == "true" else self.ui.checkbox_settings_internet_checks.setChecked(False)
+        self.ui.checkbox_settings_system_update_checks.setChecked(True) if self.conf.get("Setup", "update_checks") == "true" else self.ui.checkbox_settings_system_update_checks.setChecked(False)
+        self.ui.checkbox_settings_system_anonymous_mode.setChecked(True) if self.conf.get("Setup", "anonymous_mode") == "true" else self.ui.checkbox_settings_system_anonymous_mode.setChecked(False)
+        self.ui.checkbox_settings_system_enable_tor.setChecked(True) if self.conf.get("Setup", "tor") == "true" else self.ui.checkbox_settings_system_enable_tor.setChecked(False)
 
         self.semaphore_limit = self.conf.get("Performance", "semaphore")
         self.search_limit = int(self.conf.get("Video", "search_limit"))
@@ -1325,6 +1333,10 @@ Categories=Utility;"""
         self.conf.set("Performance", "workers", str(self.ui.spinbox_maximal_workers.value()))
         self.conf.set("Video", "delay", str(self.ui.spinbox_pornhub_delay.value()))
         self.conf.set("Performance", "retries", str(self.ui.spinbox_maximal_retries.value()))
+        self.conf.set("Setup", "update_checks", "true" if self.ui.checkbox_settings_system_update_checks.isChecked() else "false")
+        self.conf.set("Setup", "internet_checks", "true" if self.ui.checkbox_settings_internet_checks.isChecked() else "false")
+        self.conf.set("Setup", "anonymous_mode", "true" if self.ui.checkbox_settings_system_anonymous_mode.isChecked() else "false")
+        self.conf.set("Setup", "tor", "true" if self.ui.checkbox_settings_system_enable_tor.isChecked() else "false")
 
         with open("config.ini", "w") as config_file: # type: TextIOWrapper
             self.conf.write(config_file)

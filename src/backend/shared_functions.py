@@ -37,7 +37,7 @@ sections = ["Setup", "Performance", "Video", "UI"]
 options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries", "ffmpeg_warning"]
 options_video = ["quality", "output_path", "directory_system", "search_limit", "delay", "skip_existing_files",
                  "model_videos"]
-options_setup = ["license_accepted", "install"]
+options_setup = ["license_accepted", "install", "update_checks", "internet_checks", "anonymous_mode", "tor"]
 options_ui = ["language", "design"]
 
 pornhub_pattern = re.compile(r'(.*?)pornhub(.*)') # can also be .org
@@ -66,6 +66,10 @@ If you set it to 3, three videos will be downloaded at the same time (You get th
 default_configuration = f"""[Setup]
 license_accepted = no
 install = unknown
+update_checks = true
+internet_checks = true
+tor = false
+anonymous_mode = false
 
 [Performance]
 threading_mode = threaded
