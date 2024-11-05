@@ -45,7 +45,7 @@ class CLI:
             self.menu()
 
     def license(self):
-        if not self.conf["License"]["accepted"] == "true":
+        if not self.conf["Setup"]["license_accepted"] == "true":
             license_text = input(f"""{Fore.WHITE}
 GPL License Agreement for Porn Fetch
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
@@ -68,13 +68,13 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
 ---------------------------------->:""")
 
             if license_text == "yes":
-                self.conf.set("License", "accepted", "true")
-                with open("config.ini", "w") as config_file:
+                self.conf.set("Setup", "license_accepted", "true")
+                with open("config.ini", "w") as config_file: #type: TextIOWrapper
                     self.conf.write(config_file)
 
             else:
-                self.conf.set("License", "accepted", "false")
-                with open("config.ini", "w") as config_file:
+                self.conf.set("Setup", "license_accepted", "false")
+                with open("config.ini", "w") as config_file: #type: TextIOWrapper
                     self.conf.write(config_file)
 
                 sys.exit()
@@ -272,7 +272,7 @@ Do you want to use FFmpeg? [yes,no]
                     self.menu()
 
             finally:
-                with open("config.ini", "w") as config_file:
+                with open("config.ini", "w") as config_file: #type: TextIOWrapper
                     self.conf.write(config_file)
 
     def process_video(self, url=None):
