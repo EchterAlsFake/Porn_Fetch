@@ -1,3 +1,4 @@
+import logging
 import random
 import time
 import sys
@@ -7,6 +8,9 @@ import markdown
 import zipfile
 import shutil
 import tarfile
+
+from Cython.Compiler.Naming import api_name
+
 import src.frontend.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
 
 from itertools import islice, chain
@@ -159,7 +163,7 @@ class License(QWidget):
         self.close()
 
         if __build__ == "android":
-            pass
+            pass # TODO
 
         else:
             self.show_install_dialog()
@@ -195,7 +199,10 @@ class InstallDialog(QWidget):
             self.conf.write(config)
 
         self.close()
-        self.main_widget = Porn_Fetch(start_installation=True)
+        app_name = self.ui.lineedit_custom_app_name.text() or "Porn Fetch"
+        logging.info(f"App Name: {app_name}")
+
+        self.main_widget = Porn_Fetch(start_installation=True, app_name=app_name)
         self.main_widget.show()
 
     def start(self):
@@ -788,9 +795,10 @@ class CheckUpdates(QRunnable):
 
 
 class Porn_Fetch(QWidget):
-    def __init__(self, parent=None, start_installation=False):
+    def __init__(self, parent=None, start_installation=False, app_name="Porn Fetch"):
         super().__init__(parent)
         # Variable initialization:
+        self.app_name = app_name
         self.gui_design_map = None
         self.model_videos_map = None
         self.model_videos_type = None
@@ -851,8 +859,8 @@ class Porn_Fetch(QWidget):
             self.check_ffmpeg()  # Checks and sets up FFmpeg
             logger.debug("Startup: [5/5] ✔")
 
-    @staticmethod
-    def install_pornfetch():
+
+    def install_pornfetch(self):
             if __build__ == "desktop":
                 if sys.platform == "linux":
                     filename = "PornFetch_Linux_GUI_x64.bin"
@@ -896,31 +904,33 @@ version.""")
                         
                     logger.info(f"Downloading additional asset: icon")
 
-                    img = requests.get("https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/android_app_icon.png?raw=true")
-                    if not img.status_code == 200:
-                        ui_popup(
-                            "Couldn't download the Porn Fetch logo. Installation will still be successfully, but please"
-                            "report this error on GitHub. Thank you.")
+                    if not os.path.exists(os.path.join(destination_path_final, "Logo.png")):
+                        img = requests.get("https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/android_app_icon.png?raw=true")
+                        if not img.status_code == 200:
+                            ui_popup(
+                                "Couldn't download the Porn Fetch logo. Installation will still be successfully, but please"
+                                "report this error on GitHub. Thank you.")
 
-                    elif img.status_code == 200:
-                        with open("Logo.png", "wb") as logo:
-                            logo.write(img.content)
-                            shutil.move("Logo.png", dst=destination_path_final)
+                        elif img.status_code == 200:
+                            with open("Logo.png", "wb") as logo:
+                                logo.write(img.content)
+                                shutil.move("Logo.png", dst=destination_path_final)
 
                     entry_content = f"""[Desktop Entry]
-Name=Porn Fetch
+Name={self.app_name}
 Exec={destination_path_final}PornFetch_Linux_GUI_x64.bin %F
 Icon={destination_path_final}Logo.png
 Type=Application
 Terminal=false
 Categories=Utility;"""
 
+                    if os.path.exists(shortcut_path):
+                        os.remove(shortcut_path)
 
-                    if not os.path.exists(shortcut_path):
-                        with open("pornfetch.desktop", "w") as entry_file:
-                            entry_file.write(entry_content)
+                    with open("pornfetch.desktop", "w") as entry_file:
+                        entry_file.write(entry_content)
 
-                        shutil.move("pornfetch.desktop", shortcut_path)
+                    shutil.move("pornfetch.desktop", shortcut_path)
 
                     logger.info("Successfully installed Porn Fetch!")
                     os.chmod(mode=0o755, path=destination_path_final + "PornFetch_Linux_GUI_x64.bin") # Setting executable permission
@@ -942,7 +952,7 @@ Categories=Utility;"""
                         shutil.move("config.ini", target_dir) # Prevent overriding the old configuration file
 
                     # Define paths for the shortcut creation
-                    app_name = "Porn Fetch"
+                    app_name = self.app_name
                     app_exe_path = os.path.join(target_dir, filename)  # Full path to the executable
                     start_menu_path = os.path.join(os.getenv("APPDATA"), "Microsoft", "Windows", "Start Menu", "Programs")
                     shortcut_path = os.path.join(start_menu_path, f"{app_name}.lnk")
