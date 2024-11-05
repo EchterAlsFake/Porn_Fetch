@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Porn_Fetch_Widget</class>
- <widget class="QWidget" name="Porn_Fetch_Widget">
+ <class>PornFetch_Desktop</class>
+ <widget class="QWidget" name="PornFetch_Desktop">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Porn Fetch V3.4 (C) Johannes Habel GPL 3</string>
+   <string>Porn Fetch V3.5 (C) Johannes Habel GPL 3</string>
   </property>
   <property name="styleSheet">
    <string notr="true">QLbel {
@@ -2055,8 +2055,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>1166</width>
-                <height>756</height>
+                <width>795</width>
+                <height>660</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_19">

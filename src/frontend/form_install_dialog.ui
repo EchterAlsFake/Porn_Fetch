@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>UI_InstallDialog</class>
- <widget class="QWidget" name="UI_InstallDialog">
+ <class>SetupInstallDialog</class>
+ <widget class="QWidget" name="SetupInstallDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -54,7 +54,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
       </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <layout class="QHBoxLayout" name="horizontallayout_app_name">
        <item>
         <widget class="QLabel" name="label_custom_app_name">
          <property name="text">
@@ -75,7 +75,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout" name="horizontallayout_buttons">
        <item>
         <widget class="QPushButton" name="button_install">
          <property name="text">

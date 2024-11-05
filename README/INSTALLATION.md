@@ -85,7 +85,7 @@ The command is: `gpg --verify PornFetch_Windows_GUI_x64.exe.sig PornFetch_Window
 
 You should get a result like this:
 
-![img.png](img.png)
+![img.png](../src/backend/img.png)
 
 The RSA Key must be: `BFEB6DE816281A3E0EEEC3FB1E04D0A679846BC0`
 

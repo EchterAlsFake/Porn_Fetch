@@ -19,17 +19,17 @@ from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QLabel,
     QLayout, QLineEdit, QPushButton, QRadioButton,
     QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 
-class Ui_UI_android(object):
-    def setupUi(self, UI_android):
-        if not UI_android.objectName():
-            UI_android.setObjectName(u"UI_android")
-        UI_android.resize(720, 1280)
-        UI_android.setStyleSheet(u"QWidget {background-color: rgb(59, 59, 59) }\n"
+class Ui_PornFetch_Android(object):
+    def setupUi(self, PornFetch_Android):
+        if not PornFetch_Android.objectName():
+            PornFetch_Android.setObjectName(u"PornFetch_Android")
+        PornFetch_Android.resize(720, 1280)
+        PornFetch_Android.setStyleSheet(u"QWidget {background-color: rgb(59, 59, 59) }\n"
 "QLabel {color: white}\n"
 "QLineEdit {color: white} \n"
 "QRadioButton {color: white}\n"
 "QPushButton {color: white}")
-        self.gridLayout = QGridLayout(UI_android)
+        self.gridLayout = QGridLayout(PornFetch_Android)
         self.gridLayout.setObjectName(u"gridLayout")
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -41,7 +41,7 @@ class Ui_UI_android(object):
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.button_switch_home = QPushButton(UI_android)
+        self.button_switch_home = QPushButton(PornFetch_Android)
         self.button_switch_home.setObjectName(u"button_switch_home")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Maximum)
         sizePolicy.setHorizontalStretch(0)
@@ -60,7 +60,7 @@ class Ui_UI_android(object):
 
         self.horizontalLayout.addWidget(self.button_switch_home)
 
-        self.button_switch_account = QPushButton(UI_android)
+        self.button_switch_account = QPushButton(PornFetch_Android)
         self.button_switch_account.setObjectName(u"button_switch_account")
         sizePolicy.setHeightForWidth(self.button_switch_account.sizePolicy().hasHeightForWidth())
         self.button_switch_account.setSizePolicy(sizePolicy)
@@ -77,7 +77,7 @@ class Ui_UI_android(object):
 
         self.horizontalLayout.addWidget(self.button_switch_account)
 
-        self.button_switch_tools = QPushButton(UI_android)
+        self.button_switch_tools = QPushButton(PornFetch_Android)
         self.button_switch_tools.setObjectName(u"button_switch_tools")
         sizePolicy.setHeightForWidth(self.button_switch_tools.sizePolicy().hasHeightForWidth())
         self.button_switch_tools.setSizePolicy(sizePolicy)
@@ -96,7 +96,7 @@ class Ui_UI_android(object):
 
         self.horizontalLayout.addWidget(self.button_switch_tools)
 
-        self.button_switch_settings = QPushButton(UI_android)
+        self.button_switch_settings = QPushButton(PornFetch_Android)
         self.button_switch_settings.setObjectName(u"button_switch_settings")
         sizePolicy.setHeightForWidth(self.button_switch_settings.sizePolicy().hasHeightForWidth())
         self.button_switch_settings.setSizePolicy(sizePolicy)
@@ -113,7 +113,7 @@ class Ui_UI_android(object):
 
         self.horizontalLayout.addWidget(self.button_switch_settings)
 
-        self.button_switch_credits = QPushButton(UI_android)
+        self.button_switch_credits = QPushButton(PornFetch_Android)
         self.button_switch_credits.setObjectName(u"button_switch_credits")
         sizePolicy.setHeightForWidth(self.button_switch_credits.sizePolicy().hasHeightForWidth())
         self.button_switch_credits.setSizePolicy(sizePolicy)
@@ -130,7 +130,7 @@ class Ui_UI_android(object):
 
         self.horizontalLayout.addWidget(self.button_switch_credits)
 
-        self.button_view_progress_bars = QPushButton(UI_android)
+        self.button_view_progress_bars = QPushButton(PornFetch_Android)
         self.button_view_progress_bars.setObjectName(u"button_view_progress_bars")
         sizePolicy.setHeightForWidth(self.button_view_progress_bars.sizePolicy().hasHeightForWidth())
         self.button_view_progress_bars.setSizePolicy(sizePolicy)
@@ -146,7 +146,7 @@ class Ui_UI_android(object):
 
         self.horizontalLayout.addWidget(self.button_view_progress_bars)
 
-        self.button_switch_supported_websites = QPushButton(UI_android)
+        self.button_switch_supported_websites = QPushButton(PornFetch_Android)
         self.button_switch_supported_websites.setObjectName(u"button_switch_supported_websites")
         sizePolicy.setHeightForWidth(self.button_switch_supported_websites.sizePolicy().hasHeightForWidth())
         self.button_switch_supported_websites.setSizePolicy(sizePolicy)
@@ -165,7 +165,7 @@ class Ui_UI_android(object):
 
         self.gridlayout_downloading.addLayout(self.horizontalLayout, 7, 0, 1, 6)
 
-        self.label_url = QLabel(UI_android)
+        self.label_url = QLabel(PornFetch_Android)
         self.label_url.setObjectName(u"label_url")
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
         sizePolicy1.setHorizontalStretch(0)
@@ -180,27 +180,27 @@ class Ui_UI_android(object):
 
         self.gridlayout_downloading.addItem(self.verticalSpacer_4, 8, 2, 1, 1)
 
-        self.lineEdit = QLineEdit(UI_android)
+        self.lineEdit = QLineEdit(PornFetch_Android)
         self.lineEdit.setObjectName(u"lineEdit")
 
         self.gridlayout_downloading.addWidget(self.lineEdit, 0, 0, 1, 6)
 
-        self.radioButton_2 = QRadioButton(UI_android)
+        self.radioButton_2 = QRadioButton(PornFetch_Android)
         self.radioButton_2.setObjectName(u"radioButton_2")
 
         self.gridlayout_downloading.addWidget(self.radioButton_2, 3, 1, 1, 1)
 
-        self.radioButton_3 = QRadioButton(UI_android)
+        self.radioButton_3 = QRadioButton(PornFetch_Android)
         self.radioButton_3.setObjectName(u"radioButton_3")
 
         self.gridlayout_downloading.addWidget(self.radioButton_3, 3, 2, 1, 4)
 
-        self.pushButton = QPushButton(UI_android)
+        self.pushButton = QPushButton(PornFetch_Android)
         self.pushButton.setObjectName(u"pushButton")
 
         self.gridlayout_downloading.addWidget(self.pushButton, 4, 4, 1, 2)
 
-        self.lineedit_url = QLineEdit(UI_android)
+        self.lineedit_url = QLineEdit(PornFetch_Android)
         self.lineedit_url.setObjectName(u"lineedit_url")
         sizePolicy2 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Minimum)
         sizePolicy2.setHorizontalStretch(0)
@@ -211,12 +211,12 @@ class Ui_UI_android(object):
 
         self.gridlayout_downloading.addWidget(self.lineedit_url, 2, 1, 1, 5)
 
-        self.button_clipboard = QPushButton(UI_android)
+        self.button_clipboard = QPushButton(PornFetch_Android)
         self.button_clipboard.setObjectName(u"button_clipboard")
 
         self.gridlayout_downloading.addWidget(self.button_clipboard, 4, 2, 1, 2)
 
-        self.button_download = QPushButton(UI_android)
+        self.button_download = QPushButton(PornFetch_Android)
         self.button_download.setObjectName(u"button_download")
         sizePolicy1.setHeightForWidth(self.button_download.sizePolicy().hasHeightForWidth())
         self.button_download.setSizePolicy(sizePolicy1)
@@ -226,7 +226,7 @@ class Ui_UI_android(object):
 
         self.gridlayout_downloading.addWidget(self.button_download, 4, 0, 1, 2)
 
-        self.radioButton = QRadioButton(UI_android)
+        self.radioButton = QRadioButton(PornFetch_Android)
         self.radioButton.setObjectName(u"radioButton")
 
         self.gridlayout_downloading.addWidget(self.radioButton, 3, 0, 1, 1)
@@ -238,28 +238,28 @@ class Ui_UI_android(object):
         self.gridLayout.addLayout(self.verticalLayout, 0, 0, 1, 1)
 
 
-        self.retranslateUi(UI_android)
+        self.retranslateUi(PornFetch_Android)
 
-        QMetaObject.connectSlotsByName(UI_android)
+        QMetaObject.connectSlotsByName(PornFetch_Android)
     # setupUi
 
-    def retranslateUi(self, UI_android):
-        UI_android.setWindowTitle(QCoreApplication.translate("UI_android", u"UI_android", None))
+    def retranslateUi(self, PornFetch_Android):
+        PornFetch_Android.setWindowTitle(QCoreApplication.translate("PornFetch_Android", u"UI_android", None))
         self.button_switch_home.setText("")
         self.button_switch_account.setText("")
         self.button_switch_tools.setText("")
         self.button_switch_settings.setText("")
         self.button_switch_credits.setText("")
         self.button_view_progress_bars.setText("")
-        self.button_switch_supported_websites.setText(QCoreApplication.translate("UI_android", u"Supported websites", None))
-        self.label_url.setText(QCoreApplication.translate("UI_android", u"URL:", None))
-        self.lineEdit.setPlaceholderText(QCoreApplication.translate("UI_android", u"This line will show you debug messages, please read it (only on Android)", None))
-        self.radioButton_2.setText(QCoreApplication.translate("UI_android", u"Playlist", None))
-        self.radioButton_3.setText(QCoreApplication.translate("UI_android", u"Model URL", None))
-        self.pushButton.setText(QCoreApplication.translate("UI_android", u"Reset URL", None))
-        self.lineedit_url.setPlaceholderText(QCoreApplication.translate("UI_android", u"Enter video URL", None))
-        self.button_clipboard.setText(QCoreApplication.translate("UI_android", u"Copy clipbaord", None))
-        self.button_download.setText(QCoreApplication.translate("UI_android", u"Download", None))
-        self.radioButton.setText(QCoreApplication.translate("UI_android", u"Video", None))
+        self.button_switch_supported_websites.setText(QCoreApplication.translate("PornFetch_Android", u"Supported websites", None))
+        self.label_url.setText(QCoreApplication.translate("PornFetch_Android", u"URL:", None))
+        self.lineEdit.setPlaceholderText(QCoreApplication.translate("PornFetch_Android", u"This line will show you debug messages, please read it (only on Android)", None))
+        self.radioButton_2.setText(QCoreApplication.translate("PornFetch_Android", u"Playlist", None))
+        self.radioButton_3.setText(QCoreApplication.translate("PornFetch_Android", u"Model URL", None))
+        self.pushButton.setText(QCoreApplication.translate("PornFetch_Android", u"Reset URL", None))
+        self.lineedit_url.setPlaceholderText(QCoreApplication.translate("PornFetch_Android", u"Enter video URL", None))
+        self.button_clipboard.setText(QCoreApplication.translate("PornFetch_Android", u"Copy clipbaord", None))
+        self.button_download.setText(QCoreApplication.translate("PornFetch_Android", u"Download", None))
+        self.radioButton.setText(QCoreApplication.translate("PornFetch_Android", u"Video", None))
     # retranslateUi
 

@@ -19,64 +19,64 @@ from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QLabel,
     QLineEdit, QPushButton, QSizePolicy, QTextBrowser,
     QVBoxLayout, QWidget)
 
-class Ui_UI_InstallDialog(object):
-    def setupUi(self, UI_InstallDialog):
-        if not UI_InstallDialog.objectName():
-            UI_InstallDialog.setObjectName(u"UI_InstallDialog")
-        UI_InstallDialog.resize(936, 682)
-        UI_InstallDialog.setStyleSheet(u"background-color: rgb(42, 42, 42);\n"
+class Ui_SetupInstallDialog(object):
+    def setupUi(self, SetupInstallDialog):
+        if not SetupInstallDialog.objectName():
+            SetupInstallDialog.setObjectName(u"SetupInstallDialog")
+        SetupInstallDialog.resize(936, 682)
+        SetupInstallDialog.setStyleSheet(u"background-color: rgb(42, 42, 42);\n"
 "color: rgb(255, 255, 255)")
-        self.gridLayout = QGridLayout(UI_InstallDialog)
+        self.gridLayout = QGridLayout(SetupInstallDialog)
         self.gridLayout.setObjectName(u"gridLayout")
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.textBrowser = QTextBrowser(UI_InstallDialog)
+        self.textBrowser = QTextBrowser(SetupInstallDialog)
         self.textBrowser.setObjectName(u"textBrowser")
 
         self.verticalLayout.addWidget(self.textBrowser)
 
-        self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.label_custom_app_name = QLabel(UI_InstallDialog)
+        self.horizontallayout_app_name = QHBoxLayout()
+        self.horizontallayout_app_name.setObjectName(u"horizontallayout_app_name")
+        self.label_custom_app_name = QLabel(SetupInstallDialog)
         self.label_custom_app_name.setObjectName(u"label_custom_app_name")
 
-        self.horizontalLayout_2.addWidget(self.label_custom_app_name)
+        self.horizontallayout_app_name.addWidget(self.label_custom_app_name)
 
-        self.lineedit_custom_app_name = QLineEdit(UI_InstallDialog)
+        self.lineedit_custom_app_name = QLineEdit(SetupInstallDialog)
         self.lineedit_custom_app_name.setObjectName(u"lineedit_custom_app_name")
 
-        self.horizontalLayout_2.addWidget(self.lineedit_custom_app_name)
+        self.horizontallayout_app_name.addWidget(self.lineedit_custom_app_name)
 
 
-        self.verticalLayout.addLayout(self.horizontalLayout_2)
+        self.verticalLayout.addLayout(self.horizontallayout_app_name)
 
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.button_install = QPushButton(UI_InstallDialog)
+        self.horizontallayout_buttons = QHBoxLayout()
+        self.horizontallayout_buttons.setObjectName(u"horizontallayout_buttons")
+        self.button_install = QPushButton(SetupInstallDialog)
         self.button_install.setObjectName(u"button_install")
 
-        self.horizontalLayout.addWidget(self.button_install)
+        self.horizontallayout_buttons.addWidget(self.button_install)
 
-        self.button_portable = QPushButton(UI_InstallDialog)
+        self.button_portable = QPushButton(SetupInstallDialog)
         self.button_portable.setObjectName(u"button_portable")
 
-        self.horizontalLayout.addWidget(self.button_portable)
+        self.horizontallayout_buttons.addWidget(self.button_portable)
 
 
-        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.verticalLayout.addLayout(self.horizontallayout_buttons)
 
 
         self.gridLayout.addLayout(self.verticalLayout, 0, 0, 1, 1)
 
 
-        self.retranslateUi(UI_InstallDialog)
+        self.retranslateUi(SetupInstallDialog)
 
-        QMetaObject.connectSlotsByName(UI_InstallDialog)
+        QMetaObject.connectSlotsByName(SetupInstallDialog)
     # setupUi
 
-    def retranslateUi(self, UI_InstallDialog):
-        UI_InstallDialog.setWindowTitle(QCoreApplication.translate("UI_InstallDialog", u"Widget", None))
-        self.textBrowser.setHtml(QCoreApplication.translate("UI_InstallDialog", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+    def retranslateUi(self, SetupInstallDialog):
+        SetupInstallDialog.setWindowTitle(QCoreApplication.translate("SetupInstallDialog", u"Widget", None))
+        self.textBrowser.setHtml(QCoreApplication.translate("SetupInstallDialog", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "hr { height: 1px; border-width: 0; }\n"
@@ -108,10 +108,10 @@ class Ui_UI_InstallDialog(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:14pt; text-decoration: underline; color:#aa0000;\">NOTE:</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">Installation was implemented in this release and might still be experimental. If you run into any issues, please report it on my GitHub. Thank you :</span><span style=\" font-family:'Segoe UI';\">) </span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI';\"><br /></p></body></html>", None))
-        self.label_custom_app_name.setText(QCoreApplication.translate("UI_InstallDialog", u"Custom App Name:", None))
+        self.label_custom_app_name.setText(QCoreApplication.translate("SetupInstallDialog", u"Custom App Name:", None))
         self.lineedit_custom_app_name.setText("")
-        self.lineedit_custom_app_name.setPlaceholderText(QCoreApplication.translate("UI_InstallDialog", u"Enter your custom App Name here. Leave it empty to keep \"Porn Fetch\"", None))
-        self.button_install.setText(QCoreApplication.translate("UI_InstallDialog", u"Install", None))
-        self.button_portable.setText(QCoreApplication.translate("UI_InstallDialog", u"Portable", None))
+        self.lineedit_custom_app_name.setPlaceholderText(QCoreApplication.translate("SetupInstallDialog", u"Enter your custom App Name here. Leave it empty to keep \"Porn Fetch\"", None))
+        self.button_install.setText(QCoreApplication.translate("SetupInstallDialog", u"Install", None))
+        self.button_portable.setText(QCoreApplication.translate("SetupInstallDialog", u"Portable", None))
     # retranslateUi
 

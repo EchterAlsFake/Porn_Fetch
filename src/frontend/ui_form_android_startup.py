@@ -18,17 +18,17 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QGridLayout, QPushButton, QScrollArea,
     QSizePolicy, QTextBrowser, QVBoxLayout, QWidget)
 
-class Ui_Widget(object):
-    def setupUi(self, Widget):
-        if not Widget.objectName():
-            Widget.setObjectName(u"Widget")
-        Widget.resize(720, 1280)
-        Widget.setStyleSheet(u"background-color: rgb(56, 56, 56);")
-        self.gridLayout_2 = QGridLayout(Widget)
+class Ui_SetupAndroidStartup(object):
+    def setupUi(self, SetupAndroidStartup):
+        if not SetupAndroidStartup.objectName():
+            SetupAndroidStartup.setObjectName(u"SetupAndroidStartup")
+        SetupAndroidStartup.resize(720, 1280)
+        SetupAndroidStartup.setStyleSheet(u"background-color: rgb(56, 56, 56);")
+        self.gridLayout_2 = QGridLayout(SetupAndroidStartup)
         self.gridLayout_2.setSpacing(0)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.scrollArea = QScrollArea(Widget)
+        self.scrollArea = QScrollArea(SetupAndroidStartup)
         self.scrollArea.setObjectName(u"scrollArea")
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
@@ -71,14 +71,14 @@ class Ui_Widget(object):
         self.gridLayout_2.addWidget(self.scrollArea, 0, 0, 1, 1)
 
 
-        self.retranslateUi(Widget)
+        self.retranslateUi(SetupAndroidStartup)
 
-        QMetaObject.connectSlotsByName(Widget)
+        QMetaObject.connectSlotsByName(SetupAndroidStartup)
     # setupUi
 
-    def retranslateUi(self, Widget):
-        Widget.setWindowTitle(QCoreApplication.translate("Widget", u"Widget", None))
-        self.textBrowser.setHtml(QCoreApplication.translate("Widget", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+    def retranslateUi(self, SetupAndroidStartup):
+        SetupAndroidStartup.setWindowTitle(QCoreApplication.translate("SetupAndroidStartup", u"Widget", None))
+        self.textBrowser.setHtml(QCoreApplication.translate("SetupAndroidStartup", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "hr { height: 1px; border-width: 0; }\n"
@@ -114,6 +114,6 @@ class Ui_Widget(object):
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0"
                         "px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt; color:#ff00ff;\">Thank you for reading. I can hopefully improve Porn Fetch on Android over the next months, but this depends on Qt.</span></p></body></html>", None))
-        self.pushButton.setText(QCoreApplication.translate("Widget", u"Continue", None))
+        self.pushButton.setText(QCoreApplication.translate("SetupAndroidStartup", u"Continue", None))
     # retranslateUi
 

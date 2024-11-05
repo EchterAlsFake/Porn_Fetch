@@ -22,16 +22,16 @@ from src.backend.shared_functions import *
 from src.backend.shared_gui import *
 from src.backend.class_help import *
 from src.backend.log_config import setup_logging
-from src.frontend.License import Ui_License
-from src.frontend.range_selector import Ui_Form
-from src.frontend.ui_form_desktop import Ui_Porn_Fetch_Widget
-from src.frontend.ui_form_android import Ui_UI_android
-from src.frontend.ui_form_android_startup import Ui_Widget
-from src.frontend.ui_form_install_dialog import Ui_UI_InstallDialog
+from src.frontend.ui_form_license import Ui_SetupLicense
+from src.frontend.ui_form_range_selector import Ui_PornFetchRangeSelector
+from src.frontend.ui_form_desktop import Ui_PornFetch_Desktop
+from src.frontend.ui_form_android import Ui_PornFetch_Android
+from src.frontend.ui_form_android_startup import Ui_SetupAndroidStartup
+from src.frontend.ui_form_install_dialog import Ui_SetupInstallDialog
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                             QTranslator, QCoreApplication, QSize)
-from PySide6.QtWidgets import QWidget, QApplication, QInputDialog, QTreeWidgetItem, QButtonGroup, QFileDialog
+from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog
 from PySide6.QtGui import QIcon, QFont, QGuiApplication
 
 """
@@ -127,7 +127,7 @@ class License(QWidget):
         self.install_widget = None
 
         # Set up the UI for License widget
-        self.ui = Ui_License()
+        self.ui = Ui_SetupLicense()
         self.ui.setupUi(self)
         self.ui.button_accept.clicked.connect(self.accept)
         self.ui.button_deny.clicked.connect(self.denied)
@@ -183,7 +183,7 @@ class InstallDialog(QWidget):
         self.conf.read("config.ini")
         self.main_widget = None
 
-        self.ui = Ui_UI_InstallDialog()
+        self.ui = Ui_SetupInstallDialog()
         self.ui.setupUi(self)
         self.ui.button_install.clicked.connect(self.start_install)
         self.ui.button_portable.clicked.connect(self.start)
@@ -377,7 +377,7 @@ class DownloadThread(QRunnable):
         print(f"\r\033[KProgress: [{pos} / 100]", end='', flush=True)  # I don't know why, but this fixes the progress.
         video_title = self.video.title
         self.video_progress[
-            video_title] = pos / total * 100  # video title as video id, to keep track which video has how many progress done
+            video_title] = pos / total * 100  # video title as video id, to keep track which video has how much progress done
         total_progress = sum(self.video_progress.values()) / len(self.video_progress)
         self.signals.total_progress.emit(total_progress, 100)
 
@@ -781,9 +781,7 @@ class CheckUpdates(QRunnable):
         url = f"https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/{__next_release__}"
 
         try:
-            print("Trying a request")
             request = requests.get(url)
-            print("Got request")
 
             if request.status_code == 200:
                 logger.info("NEW UPDATE IS AVAILABLE!")
@@ -833,12 +831,12 @@ class Porn_Fetch(QWidget):
         self.conf.read("config.ini")
 
         if __build__ == "android":
-            self.ui = Ui_UI_android()
+            self.ui = Ui_PornFetch_Android()
             self.ui.setupUi(self)
             self.ui.button_clipboard.clicked.connect(self.get_clipboard)
 
         else:
-            self.ui = Ui_Porn_Fetch_Widget()
+            self.ui = Ui_PornFetch_Desktop()
             self.ui.setupUi(self)
 
             if start_installation:
@@ -1072,7 +1070,7 @@ Categories=Utility;"""
         self.ui.button_output_path_select.clicked.connect(self.open_output_path_dialog)
         self.ui.button_open_file.clicked.connect(self.open_file_dialog)
 
-        # Other stuff idk
+        # Other stuff IDK
         self.ui.button_tree_select_range.clicked.connect(self.select_range_of_items)
         self.ui.button_tree_stop.clicked.connect(switch_stop_state)
         self.ui.button_tree_export_video_urls.clicked.connect(export_urls)
@@ -1582,7 +1580,7 @@ This warning won't be shown again.
     def select_range_of_items(self):
         # Create an instance of the UI form widget
         self.widget = QWidget()
-        self.range_ui = Ui_Form()
+        self.range_ui = Ui_PornFetchRangeSelector()
         self.range_ui.setupUi(self.widget)
         root = self.ui.treeWidget.invisibleRootItem()
         item_count = root.childCount()
@@ -1613,7 +1611,7 @@ This warning won't be shown again.
         start -= 1
         end -= 1
 
-        for i in range(start, end + 1):  # Adjust range to be inclusive of end
+        for i in range(start, end + 1):  # Adjust the range to be inclusive of the end
             item = root.child(i)
             item.setCheckState(0, Qt.Checked)
 
@@ -1735,7 +1733,7 @@ This warning won't be shown again.
                                   quality=quality)
 
     def on_video_load_error(self, error_message):
-        # Handle errors, possibly show message to user
+        # Handle errors, possibly show a message to user
         logger.debug(f"Error loading video: {error_message}")
         ui_popup(self.tr( f"Some error occurred in loading a video. Please report this: {error_message}",
                                        None))
@@ -2050,7 +2048,7 @@ This warning won't be shown again.
         self.add_to_tree_widget_thread([].append(video))
 
     def show_credits(self):
-        """Loads the credits from the CREDITS.md.  Credits need to be recompiled in qresource file every time"""
+        """Loads the credits from the CREDITS.md.  Credits need to be recompiled in the resource file every time"""
         self.ui.textBrowser.setOpenExternalLinks(True)
         file = QFile(":/credits/README/CREDITS.md")
         file.open(QFile.ReadOnly | QFile.Text)
@@ -2071,7 +2069,7 @@ def main():
     language = conf["UI"]["language"]
 
     if language == "system":
-        # Obtain the system's locale
+        # Get the system's locale
         locale = QLocale.system()
         language_code = locale.name()
 
