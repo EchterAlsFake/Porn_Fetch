@@ -428,7 +428,7 @@ class DownloadThread(QRunnable):
             # We need to specify the sources, so that it knows which individual progressbar to use
             elif isinstance(self.video, hq_Video):
                 video_source = "hqporner"
-                self.video.download(quality=self.quality, path=self.output_path,
+                self.video.download(quality=self.quality, path=self.output_path, no_title=True,
                                     callback=lambda pos, total: self.generic_callback(pos, total,
                                                                                       self.signals.progress_hqporner,
                                                                                       video_source, self.ffmpeg))
@@ -464,20 +464,30 @@ class DownloadThread(QRunnable):
                 # ... other video types ...
 
         finally:
-            if ffmpeg_features:
-                os.rename(f"{self.output_path}", f"{self.output_path}_.tmp")
-                logger.debug(f"FFMPEG PATH: {ffmpeg_path}")
-                cmd = [ffmpeg_path, "-i", f"{self.output_path}_.tmp", "-c", "copy", self.output_path]
-                ff = FfmpegProgress(cmd)
-                for progress in ff.run_command_with_progress():
-                    self.signals.ffmpeg_progress.emit(round(progress), 100)
-
-                os.remove(f"{self.output_path}_.tmp")
-                write_tags(path=self.output_path, video=self.video)
-            else:
-                logger.warning("FFMPEG features disabled, writing tags and converting the video won't be available!")
-
             self.signals.completed.emit()
+
+class ProcessVideoThread(QRunnable):
+    """
+    This class will be executed (if enabled by the user) to convert the final video into different formats and apply
+    metadata to it.
+    """
+
+    def __init__(self, path, format):
+        super(ProcessVideoThread, self).__init__()
+        self.path = path
+        self.format = format
+
+    def run(self):
+        os.rename(f"{self.output_path}", f"{self.output_path}_.tmp")
+        logger.debug(f"FFMPEG PATH: {ffmpeg_path}")
+        cmd = [ffmpeg_path, "-i", f"{self.output_path}_.tmp", "-c", "copy", self.output_path]
+        ff = FfmpegProgress(cmd)
+        for progress in ff.run_command_with_progress():
+            self.signals.ffmpeg_progress.emit(round(progress), 100)
+
+        os.remove(f"{self.output_path}_.tmp")
+        write_tags(path=self.output_path, video=self.video)
+
 
 
 class QTreeWidgetDownloadThread(QRunnable):
@@ -1819,7 +1829,12 @@ This warning won't be shown again.
         total_downloaded_videos += 1
         self.ui.lineedit_download_info.setText(f"Downloaded: {total_downloaded_videos} video(s) this session.")
         self.ui.progressbar_total.setMaximum(100)
+        self.ui.progressbar_hqporner.setValue(0)
+        self.ui.progressbar_eporner.setValue(0)
+
+
         self.semaphore.release()
+
 
     def start_undefined_range(self):
         """This starts the undefined range (loading animation) of the total progressbar"""

@@ -3,7 +3,7 @@
 ## Bug fixes
 - [x] Fix the progress reporting on the file-read function
 - [] Optimize the CLI and fix some of its errors
-- [] Fix HQporner progress issue stopping at 99%
+- [x] Fix HQporner / Eporner progress issue stopping at 99%
 - [] Fix [#53](https://github.com/EchterAlsFake/Porn_Fetch/issues/53)
   - [] Fix remote connection closed without response
   - [] Fix logging
