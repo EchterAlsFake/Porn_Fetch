@@ -33,11 +33,12 @@ The following are the sections and options for the configuration file. Please do
 as they are indeed needed for the main applications!
 """
 
-sections = ["Setup", "Performance", "Video", "UI"]
-options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries", "ffmpeg_warning"]
-options_video = ["quality", "output_path", "directory_system", "search_limit", "delay", "skip_existing_files",
-                 "model_videos"]
+sections = ["Setup", "Performance", "PostProcessing", "Video", "UI"]
+
 options_setup = ["license_accepted", "install", "update_checks", "internet_checks", "anonymous_mode", "tor"]
+options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries", "ffmpeg_warning"]
+options_post_processing = ["convert", "format", "write_metadata", "unfinished_videos", "path"]
+options_video = ["quality", "output_path", "directory_system", "search_limit", "delay", "skip_existing_files", "model_videos"]
 options_ui = ["language", "design"]
 
 pornhub_pattern = re.compile(r'(.*?)pornhub(.*)') # can also be .org
@@ -78,6 +79,13 @@ workers = 20
 timeout = 10
 retries = 4
 ffmpeg_warning = true
+
+[PostProcessing]
+convert = true
+format = mp4
+write_metadata = true
+unfinished_videos = false
+path = None
 
 [Video]
 quality = best
@@ -205,13 +213,17 @@ def setup_config_file(force=False):
                 for option in options_performance:
                     if not config.has_option(section, option):
                         setup_config_file(force=True)
-
             if idx == 2:
-                for option in options_video:
+                for option in options_post_processing:
                     if not config.has_option(section, option):
                         setup_config_file(force=True)
 
             if idx == 3:
+                for option in options_video:
+                    if not config.has_option(section, option):
+                        setup_config_file(force=True)
+
+            if idx == 4:
                 for option in options_ui:
                     if not config.has_option(section, option):
                         setup_config_file(force=True)
@@ -286,12 +298,14 @@ def load_video_attributes(video):
         publish_date = video.publish_date
         thumbnail = video.thumbnail
 
+    else:
+        raise "Instance Error! Please report this immediately on GitHub!"
+
     data = [title, author, length, tags, publish_date, thumbnail]
     return data
 
 
-def write_tags(path, video):
-    data = load_video_attributes(video)
+def write_tags(path, data):
     comment = "Downloaded with Porn Fetch (GPLv3)"
     genre = "Porn"
 

@@ -472,21 +472,34 @@ class ProcessVideoThread(QRunnable):
     metadata to it.
     """
 
-    def __init__(self, path, format):
+    def __init__(self, path, format, video, write_tags_):
         super(ProcessVideoThread, self).__init__()
+        self.signals = Signals()
         self.path = path
         self.format = format
+        self.data = load_video_attributes(video)
+        self.write_tags_ = write_tags_
 
     def run(self):
-        os.rename(f"{self.output_path}", f"{self.output_path}_.tmp")
+        os.rename(f"{self.path}", f"{self.path}_.tmp")
         logger.debug(f"FFMPEG PATH: {ffmpeg_path}")
-        cmd = [ffmpeg_path, "-i", f"{self.output_path}_.tmp", "-c", "copy", self.output_path]
+
+        if self.format == "mp4":
+            cmd = [ffmpeg_path, "-i", f"{self.path}_.tmp", "-c", "copy", self.path]
+
+        else:
+            self.path = str(self.path).replace(".mp4", f"{self.format}")
+            cmd = [ffmpeg_path, '-i', f"{self.path}_.tmp", self.path]
+
+
         ff = FfmpegProgress(cmd)
         for progress in ff.run_command_with_progress():
             self.signals.ffmpeg_progress.emit(round(progress), 100)
 
-        os.remove(f"{self.output_path}_.tmp")
-        write_tags(path=self.output_path, video=self.video)
+        os.remove(f"{self.path}_.tmp")
+
+        if self.write_tags_:
+            write_tags(path=self.path, data=self.data)
 
 
 
@@ -820,6 +833,7 @@ class Porn_Fetch(QWidget):
         self.timeout = None
         self.gui_language = None
         self.semaphore = None
+        self.format = None
         self.native_languages = None
         self.directory_system_map = None
         self.threading_mode_map = None
@@ -1207,7 +1221,7 @@ Categories=Utility;"""
         self.header.resizeSection(0, 300)
         self.header.resizeSection(1, 150)
         self.header.resizeSection(2, 50)
-        self.header.sortIndicatorChanged.connect(self.reindex)
+        self.header.sortIndicatorChanged.connect(self.reindex) # This does not make any sense and I need to refactor it!
 
         # Sort by the 'Length' column in ascending order
         self.ui.treeWidget.sortByColumn(2, Qt.AscendingOrder)
@@ -1268,6 +1282,22 @@ Categories=Utility;"""
         self.ui.checkbox_settings_system_update_checks.setChecked(True) if self.conf.get("Setup", "update_checks") == "true" else self.ui.checkbox_settings_system_update_checks.setChecked(False)
         self.ui.checkbox_settings_system_anonymous_mode.setChecked(True) if self.conf.get("Setup", "anonymous_mode") == "true" else self.ui.checkbox_settings_system_anonymous_mode.setChecked(False)
         self.ui.checkbox_settings_system_enable_tor.setChecked(True) if self.conf.get("Setup", "tor") == "true" else self.ui.checkbox_settings_system_enable_tor.setChecked(False)
+        self.ui.checkbox_settings_post_processing_unfinished_videos.setChecked(True) if self.conf.get("PostProcessing", "unfinished_videos") == "true" else self.ui.checkbox_settings_post_processing_unfinished_videos.setChecked(False)
+        self.ui.checkbox_settings_post_processing_write_metadata_tags.setChecked(True) if self.conf.get("PostProcessing", "write_metadata") == "true" else self.ui.checkbox_settings_post_processing_write_metadata_tags.setChecked(False)
+
+        if self.conf.get("PostProcessing", "convert") == "false":
+            self.ui.radio_settings_post_rocessing_do_not_convert.setChecked(True)
+            self.format = False
+
+        elif self.conf.get("PostProcessing", "convert") == "true" and self.conf.get("PostProcessing", "format") == "mp4":
+            self.ui.radio_settings_post_processing_convert_to_mp4.setChecked(True)
+            self.format = ".mp4"
+
+        elif self.conf.get("PostProcessing", "format") != "mp4" and self.conf.get("PostProcessing", "convert") == "true":
+            self.ui.radio_settings_post_processing_use_custom_format.setChecked(True)
+            self.format = f'.{self.conf.get("PostProcessing", "format")}'
+            self.ui.lineedit_settings_post_processing_use_custom_format.setText(self.format)
+
 
         self.semaphore_limit = self.conf.get("Performance", "semaphore")
         self.search_limit = int(self.conf.get("Video", "search_limit"))
@@ -1347,6 +1377,18 @@ Categories=Utility;"""
         self.conf.set("Setup", "internet_checks", "true" if self.ui.checkbox_settings_internet_checks.isChecked() else "false")
         self.conf.set("Setup", "anonymous_mode", "true" if self.ui.checkbox_settings_system_anonymous_mode.isChecked() else "false")
         self.conf.set("Setup", "tor", "true" if self.ui.checkbox_settings_system_enable_tor.isChecked() else "false")
+
+        if self.ui.radio_settings_post_processing_convert_to_mp4.isChecked():
+            self.conf.set("PostProcessing", "convert", "true")
+            self.conf.set("PostProcessing", "format", "mp4")
+
+        elif self.ui.radio_settings_post_rocessing_do_not_convert.isChecked():
+            self.conf.set("PostProcessing", "convert", "false")
+
+        elif self.ui.radio_settings_post_processing_use_custom_format.isChecked():
+            self.conf.set("PostProcessing", "convert", "true")
+            self.conf.set("PostProcessing", "format", str(self.ui.lineedit_settings_post_processing_use_custom_format.text()))
+
 
         with open("config.ini", "w") as config_file: # type: TextIOWrapper
             self.conf.write(config_file)

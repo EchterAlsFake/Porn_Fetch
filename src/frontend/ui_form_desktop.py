@@ -35,8 +35,8 @@ class Ui_PornFetch_Desktop(object):
         PornFetch_Desktop.setMinimumSize(QSize(670, 580))
         PornFetch_Desktop.setStyleSheet(u"QLbel {\n"
 "    color: black;}")
-        self.gridLayout_14 = QGridLayout(PornFetch_Desktop)
-        self.gridLayout_14.setObjectName(u"gridLayout_14")
+        self.gridLayout_15 = QGridLayout(PornFetch_Desktop)
+        self.gridLayout_15.setObjectName(u"gridLayout_15")
         self.verticalLayout_4 = QVBoxLayout()
         self.verticalLayout_4.setSpacing(0)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
@@ -506,7 +506,7 @@ class Ui_PornFetch_Desktop(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1385, 334))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 634, 272))
         self.gridLayout_18 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_18.setObjectName(u"gridLayout_18")
         self.gridlayout_progressbar = QGridLayout()
@@ -819,7 +819,7 @@ class Ui_PornFetch_Desktop(object):
         self.scrollarea_treewidget.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 1383, 332))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 120, 220))
         self.gridLayout_4 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.verticallayout_treewidget_settings = QVBoxLayout()
@@ -951,7 +951,7 @@ class Ui_PornFetch_Desktop(object):
         self.scrollarea_settings.setWidgetResizable(True)
         self.scrollAreaWidgetContents_6 = QWidget()
         self.scrollAreaWidgetContents_6.setObjectName(u"scrollAreaWidgetContents_6")
-        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 1385, 805))
+        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 1371, 975))
         self.gridLayout_19 = QGridLayout(self.scrollAreaWidgetContents_6)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.horizontallayout_settings_apply = QHBoxLayout()
@@ -990,218 +990,107 @@ class Ui_PornFetch_Desktop(object):
 
         self.gridlayout_settings = QGridLayout()
         self.gridlayout_settings.setObjectName(u"gridlayout_settings")
-        self.groupbox_videos = QGroupBox(self.scrollAreaWidgetContents_6)
-        self.groupbox_videos.setObjectName(u"groupbox_videos")
-        self.gridLayout_10 = QGridLayout(self.groupbox_videos)
-        self.gridLayout_10.setObjectName(u"gridLayout_10")
-        self.gridLayout = QGridLayout()
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.radio_model_uploads = QRadioButton(self.groupbox_videos)
-        self.radio_model_uploads.setObjectName(u"radio_model_uploads")
+        self.groupBox = QGroupBox(self.scrollAreaWidgetContents_6)
+        self.groupBox.setObjectName(u"groupBox")
+        self.gridLayout_7 = QGridLayout(self.groupBox)
+        self.gridLayout_7.setObjectName(u"gridLayout_7")
+        self.verticalLayout_6 = QVBoxLayout()
+        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
+        self.button_download_ffmpeg = QPushButton(self.groupBox)
+        self.button_download_ffmpeg.setObjectName(u"button_download_ffmpeg")
 
-        self.gridLayout.addWidget(self.radio_model_uploads, 5, 1, 1, 1)
+        self.verticalLayout_6.addWidget(self.button_download_ffmpeg)
 
-        self.radio_quality_worst = QRadioButton(self.groupbox_videos)
-        self.radio_quality_worst.setObjectName(u"radio_quality_worst")
-        self.radio_quality_worst.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.button_install_pornfetch = QPushButton(self.groupBox)
+        self.button_install_pornfetch.setObjectName(u"button_install_pornfetch")
 
-        self.gridLayout.addWidget(self.radio_quality_worst, 0, 3, 1, 2)
+        self.verticalLayout_6.addWidget(self.button_install_pornfetch)
 
-        self.radio_quality_best = QRadioButton(self.groupbox_videos)
-        self.radio_quality_best.setObjectName(u"radio_quality_best")
-        self.radio_quality_best.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.gridLayout.addWidget(self.radio_quality_best, 0, 1, 1, 1)
+        self.gridLayout_7.addLayout(self.verticalLayout_6, 0, 0, 1, 1)
 
-        self.labe_settings_videos_model = QLabel(self.groupbox_videos)
-        self.labe_settings_videos_model.setObjectName(u"labe_settings_videos_model")
+        self.gridLayout_13 = QGridLayout()
+        self.gridLayout_13.setObjectName(u"gridLayout_13")
+        self.checkbox_settings_internet_checks = QCheckBox(self.groupBox)
+        self.checkbox_settings_internet_checks.setObjectName(u"checkbox_settings_internet_checks")
 
-        self.gridLayout.addWidget(self.labe_settings_videos_model, 5, 0, 1, 1)
+        self.gridLayout_13.addWidget(self.checkbox_settings_internet_checks, 0, 1, 1, 1)
 
-        self.button_directory_system_help = QPushButton(self.groupbox_videos)
-        self.button_directory_system_help.setObjectName(u"button_directory_system_help")
-        self.button_directory_system_help.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.checkbox_settings_system_update_checks = QCheckBox(self.groupBox)
+        self.checkbox_settings_system_update_checks.setObjectName(u"checkbox_settings_system_update_checks")
 
-        self.gridLayout.addWidget(self.button_directory_system_help, 2, 3, 1, 2)
+        self.gridLayout_13.addWidget(self.checkbox_settings_system_update_checks, 0, 2, 1, 1)
 
-        self.radio_model_featured = QRadioButton(self.groupbox_videos)
-        self.radio_model_featured.setObjectName(u"radio_model_featured")
-
-        self.gridLayout.addWidget(self.radio_model_featured, 5, 2, 1, 1)
-
-        self.spinbox_treewidget_limit = QSpinBox(self.groupbox_videos)
-        self.spinbox_treewidget_limit.setObjectName(u"spinbox_treewidget_limit")
-        self.spinbox_treewidget_limit.setMinimum(1)
-        self.spinbox_treewidget_limit.setMaximum(5000)
-
-        self.gridLayout.addWidget(self.spinbox_treewidget_limit, 6, 1, 1, 2)
-
-        self.radio_directory_system_yes = QRadioButton(self.groupbox_videos)
-        self.radio_directory_system_yes.setObjectName(u"radio_directory_system_yes")
-        self.radio_directory_system_yes.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout.addWidget(self.radio_directory_system_yes, 2, 1, 1, 1)
-
-        self.radio_skip_existing_files_yes = QRadioButton(self.groupbox_videos)
-        self.radio_skip_existing_files_yes.setObjectName(u"radio_skip_existing_files_yes")
-
-        self.gridLayout.addWidget(self.radio_skip_existing_files_yes, 3, 1, 1, 1)
-
-        self.label_skip_existing_files = QLabel(self.groupbox_videos)
-        self.label_skip_existing_files.setObjectName(u"label_skip_existing_files")
-
-        self.gridLayout.addWidget(self.label_skip_existing_files, 3, 0, 1, 1)
-
-        self.label_directory_system = QLabel(self.groupbox_videos)
-        self.label_directory_system.setObjectName(u"label_directory_system")
-
-        self.gridLayout.addWidget(self.label_directory_system, 2, 0, 1, 1)
-
-        self.button_output_path_select = QPushButton(self.groupbox_videos)
-        self.button_output_path_select.setObjectName(u"button_output_path_select")
-        self.button_output_path_select.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout.addWidget(self.button_output_path_select, 7, 3, 1, 2)
-
-        self.radio_skip_existing_files_no = QRadioButton(self.groupbox_videos)
-        self.radio_skip_existing_files_no.setObjectName(u"radio_skip_existing_files_no")
-
-        self.gridLayout.addWidget(self.radio_skip_existing_files_no, 3, 2, 1, 1)
-
-        self.radio_quality_half = QRadioButton(self.groupbox_videos)
-        self.radio_quality_half.setObjectName(u"radio_quality_half")
-        self.radio_quality_half.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout.addWidget(self.radio_quality_half, 0, 2, 1, 1)
-
-        self.label_quality = QLabel(self.groupbox_videos)
-        self.label_quality.setObjectName(u"label_quality")
-        sizePolicy6.setHeightForWidth(self.label_quality.sizePolicy().hasHeightForWidth())
-        self.label_quality.setSizePolicy(sizePolicy6)
-
-        self.gridLayout.addWidget(self.label_quality, 0, 0, 1, 1)
-
-        self.lineedit_output_path = QLineEdit(self.groupbox_videos)
-        self.lineedit_output_path.setObjectName(u"lineedit_output_path")
-        sizePolicy14 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.label_settings_startup = QLabel(self.groupBox)
+        self.label_settings_startup.setObjectName(u"label_settings_startup")
+        sizePolicy14 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
         sizePolicy14.setHorizontalStretch(0)
         sizePolicy14.setVerticalStretch(0)
-        sizePolicy14.setHeightForWidth(self.lineedit_output_path.sizePolicy().hasHeightForWidth())
-        self.lineedit_output_path.setSizePolicy(sizePolicy14)
+        sizePolicy14.setHeightForWidth(self.label_settings_startup.sizePolicy().hasHeightForWidth())
+        self.label_settings_startup.setSizePolicy(sizePolicy14)
 
-        self.gridLayout.addWidget(self.lineedit_output_path, 7, 1, 1, 2)
+        self.gridLayout_13.addWidget(self.label_settings_startup, 0, 0, 1, 1)
 
-        self.label_searching_limit = QLabel(self.groupbox_videos)
-        self.label_searching_limit.setObjectName(u"label_searching_limit")
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.gridLayout.addWidget(self.label_searching_limit, 6, 0, 1, 1)
-
-        self.button_help_skip_existing_files = QPushButton(self.groupbox_videos)
-        self.button_help_skip_existing_files.setObjectName(u"button_help_skip_existing_files")
-
-        self.gridLayout.addWidget(self.button_help_skip_existing_files, 3, 3, 1, 2)
-
-        self.label_output_path = QLabel(self.groupbox_videos)
-        self.label_output_path.setObjectName(u"label_output_path")
-
-        self.gridLayout.addWidget(self.label_output_path, 7, 0, 1, 1)
-
-        self.button_result_limit_help = QPushButton(self.groupbox_videos)
-        self.button_result_limit_help.setObjectName(u"button_result_limit_help")
-        self.button_result_limit_help.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout.addWidget(self.button_result_limit_help, 6, 3, 1, 2)
-
-        self.radio_directory_system_no = QRadioButton(self.groupbox_videos)
-        self.radio_directory_system_no.setObjectName(u"radio_directory_system_no")
-        self.radio_directory_system_no.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout.addWidget(self.radio_directory_system_no, 2, 2, 1, 1)
-
-        self.button_help_model_videos = QPushButton(self.groupbox_videos)
-        self.button_help_model_videos.setObjectName(u"button_help_model_videos")
-
-        self.gridLayout.addWidget(self.button_help_model_videos, 5, 4, 1, 1)
-
-        self.radio_model_both = QRadioButton(self.groupbox_videos)
-        self.radio_model_both.setObjectName(u"radio_model_both")
-
-        self.gridLayout.addWidget(self.radio_model_both, 5, 3, 1, 1)
+        self.gridLayout_13.addItem(self.horizontalSpacer, 0, 3, 1, 1)
 
 
-        self.gridLayout_10.addLayout(self.gridLayout, 6, 0, 1, 1)
+        self.gridLayout_7.addLayout(self.gridLayout_13, 1, 0, 1, 1)
+
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.label_settings_system_privacy = QLabel(self.groupBox)
+        self.label_settings_system_privacy.setObjectName(u"label_settings_system_privacy")
+        sizePolicy14.setHeightForWidth(self.label_settings_system_privacy.sizePolicy().hasHeightForWidth())
+        self.label_settings_system_privacy.setSizePolicy(sizePolicy14)
+
+        self.horizontalLayout_4.addWidget(self.label_settings_system_privacy)
+
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.checkbox_settings_system_anonymous_mode = QCheckBox(self.groupBox)
+        self.checkbox_settings_system_anonymous_mode.setObjectName(u"checkbox_settings_system_anonymous_mode")
+
+        self.horizontalLayout_3.addWidget(self.checkbox_settings_system_anonymous_mode)
+
+        self.button_settings_help_anonymous_mode = QPushButton(self.groupBox)
+        self.button_settings_help_anonymous_mode.setObjectName(u"button_settings_help_anonymous_mode")
+
+        self.horizontalLayout_3.addWidget(self.button_settings_help_anonymous_mode)
+
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.checkbox_settings_system_enable_tor = QCheckBox(self.groupBox)
+        self.checkbox_settings_system_enable_tor.setObjectName(u"checkbox_settings_system_enable_tor")
+
+        self.horizontalLayout_2.addWidget(self.checkbox_settings_system_enable_tor)
+
+        self.button_settings_help_tor = QPushButton(self.groupBox)
+        self.button_settings_help_tor.setObjectName(u"button_settings_help_tor")
+
+        self.horizontalLayout_2.addWidget(self.button_settings_help_tor)
 
 
-        self.gridlayout_settings.addWidget(self.groupbox_videos, 1, 0, 1, 1)
+        self.horizontalLayout_3.addLayout(self.horizontalLayout_2)
 
-        self.goroupbox_gui = QGroupBox(self.scrollAreaWidgetContents_6)
-        self.goroupbox_gui.setObjectName(u"goroupbox_gui")
-        self.gridLayout_12 = QGridLayout(self.goroupbox_gui)
-        self.gridLayout_12.setObjectName(u"gridLayout_12")
-        self.gridLayout_3 = QGridLayout()
-        self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.label_ui_language = QLabel(self.goroupbox_gui)
-        self.label_ui_language.setObjectName(u"label_ui_language")
-        sizePolicy6.setHeightForWidth(self.label_ui_language.sizePolicy().hasHeightForWidth())
-        self.label_ui_language.setSizePolicy(sizePolicy6)
+        self.horizontalLayout_5 = QHBoxLayout()
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
 
-        self.gridLayout_3.addWidget(self.label_ui_language, 0, 0, 1, 1)
+        self.horizontalLayout_3.addLayout(self.horizontalLayout_5)
 
-        self.radio_ui_language_system_default = QRadioButton(self.goroupbox_gui)
-        self.radio_ui_language_system_default.setObjectName(u"radio_ui_language_system_default")
-        self.radio_ui_language_system_default.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.gridLayout_3.addWidget(self.radio_ui_language_system_default, 0, 1, 1, 1)
-
-        self.radio_ui_language_english = QRadioButton(self.goroupbox_gui)
-        self.radio_ui_language_english.setObjectName(u"radio_ui_language_english")
-        self.radio_ui_language_english.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_3.addWidget(self.radio_ui_language_english, 0, 2, 1, 1)
-
-        self.radio_ui_language_french = QRadioButton(self.goroupbox_gui)
-        self.radio_ui_language_french.setObjectName(u"radio_ui_language_french")
-        self.radio_ui_language_french.setEnabled(True)
-
-        self.gridLayout_3.addWidget(self.radio_ui_language_french, 0, 5, 1, 1)
-
-        self.radio_ui_language_chinese_simplified = QRadioButton(self.goroupbox_gui)
-        self.radio_ui_language_chinese_simplified.setObjectName(u"radio_ui_language_chinese_simplified")
-        self.radio_ui_language_chinese_simplified.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_3.addWidget(self.radio_ui_language_chinese_simplified, 0, 4, 1, 1)
-
-        self.radio_ui_language_german = QRadioButton(self.goroupbox_gui)
-        self.radio_ui_language_german.setObjectName(u"radio_ui_language_german")
-        self.radio_ui_language_german.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_3.addWidget(self.radio_ui_language_german, 0, 3, 1, 1)
-
-        self.label_settings_design = QLabel(self.goroupbox_gui)
-        self.label_settings_design.setObjectName(u"label_settings_design")
-
-        self.gridLayout_3.addWidget(self.label_settings_design, 1, 0, 1, 1)
-
-        self.radio_ui_design_native = QRadioButton(self.goroupbox_gui)
-        self.radio_ui_design_native.setObjectName(u"radio_ui_design_native")
-
-        self.gridLayout_3.addWidget(self.radio_ui_design_native, 1, 1, 1, 1)
-
-        self.radio_ui_design_dark_mode = QRadioButton(self.goroupbox_gui)
-        self.radio_ui_design_dark_mode.setObjectName(u"radio_ui_design_dark_mode")
-
-        self.gridLayout_3.addWidget(self.radio_ui_design_dark_mode, 1, 2, 1, 1)
-
-        self.radio_ui_design_light_mode = QRadioButton(self.goroupbox_gui)
-        self.radio_ui_design_light_mode.setObjectName(u"radio_ui_design_light_mode")
-
-        self.gridLayout_3.addWidget(self.radio_ui_design_light_mode, 1, 3, 1, 3)
+        self.horizontalLayout_3.addItem(self.horizontalSpacer_2)
 
 
-        self.gridLayout_12.addLayout(self.gridLayout_3, 0, 0, 1, 1)
+        self.horizontalLayout_4.addLayout(self.horizontalLayout_3)
 
 
-        self.gridlayout_settings.addWidget(self.goroupbox_gui, 2, 0, 1, 1)
+        self.gridLayout_7.addLayout(self.horizontalLayout_4, 2, 0, 1, 1)
+
+
+        self.gridlayout_settings.addWidget(self.groupBox, 4, 0, 1, 1)
 
         self.groupbox_performance = QGroupBox(self.scrollAreaWidgetContents_6)
         self.groupbox_performance.setObjectName(u"groupbox_performance")
@@ -1361,107 +1250,303 @@ class Ui_PornFetch_Desktop(object):
 
         self.gridlayout_settings.addWidget(self.groupbox_performance, 0, 0, 1, 1)
 
-        self.groupBox = QGroupBox(self.scrollAreaWidgetContents_6)
-        self.groupBox.setObjectName(u"groupBox")
-        self.gridLayout_7 = QGridLayout(self.groupBox)
-        self.gridLayout_7.setObjectName(u"gridLayout_7")
-        self.verticalLayout_6 = QVBoxLayout()
-        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
-        self.button_download_ffmpeg = QPushButton(self.groupBox)
-        self.button_download_ffmpeg.setObjectName(u"button_download_ffmpeg")
+        self.groupbox_post_processing = QGroupBox(self.scrollAreaWidgetContents_6)
+        self.groupbox_post_processing.setObjectName(u"groupbox_post_processing")
+        self.gridLayout_14 = QGridLayout(self.groupbox_post_processing)
+        self.gridLayout_14.setObjectName(u"gridLayout_14")
+        self.horizontalLayout_6 = QHBoxLayout()
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+        self.label = QLabel(self.groupbox_post_processing)
+        self.label.setObjectName(u"label")
 
-        self.verticalLayout_6.addWidget(self.button_download_ffmpeg)
+        self.horizontalLayout_6.addWidget(self.label)
 
-        self.button_install_pornfetch = QPushButton(self.groupBox)
-        self.button_install_pornfetch.setObjectName(u"button_install_pornfetch")
+        self.radio_settings_post_rocessing_do_not_convert = QRadioButton(self.groupbox_post_processing)
+        self.radio_settings_post_rocessing_do_not_convert.setObjectName(u"radio_settings_post_rocessing_do_not_convert")
 
-        self.verticalLayout_6.addWidget(self.button_install_pornfetch)
+        self.horizontalLayout_6.addWidget(self.radio_settings_post_rocessing_do_not_convert)
+
+        self.radio_settings_post_processing_convert_to_mp4 = QRadioButton(self.groupbox_post_processing)
+        self.radio_settings_post_processing_convert_to_mp4.setObjectName(u"radio_settings_post_processing_convert_to_mp4")
+
+        self.horizontalLayout_6.addWidget(self.radio_settings_post_processing_convert_to_mp4)
+
+        self.radio_settings_post_processing_use_custom_format = QRadioButton(self.groupbox_post_processing)
+        self.radio_settings_post_processing_use_custom_format.setObjectName(u"radio_settings_post_processing_use_custom_format")
+
+        self.horizontalLayout_6.addWidget(self.radio_settings_post_processing_use_custom_format)
+
+        self.lineedit_settings_post_processing_use_custom_format = QLineEdit(self.groupbox_post_processing)
+        self.lineedit_settings_post_processing_use_custom_format.setObjectName(u"lineedit_settings_post_processing_use_custom_format")
+
+        self.horizontalLayout_6.addWidget(self.lineedit_settings_post_processing_use_custom_format)
+
+        self.pushButton = QPushButton(self.groupbox_post_processing)
+        self.pushButton.setObjectName(u"pushButton")
+
+        self.horizontalLayout_6.addWidget(self.pushButton)
 
 
-        self.gridLayout_7.addLayout(self.verticalLayout_6, 0, 0, 1, 1)
+        self.gridLayout_14.addLayout(self.horizontalLayout_6, 0, 0, 1, 1)
 
-        self.gridLayout_13 = QGridLayout()
-        self.gridLayout_13.setObjectName(u"gridLayout_13")
-        self.checkbox_settings_internet_checks = QCheckBox(self.groupBox)
-        self.checkbox_settings_internet_checks.setObjectName(u"checkbox_settings_internet_checks")
+        self.horizontalLayout_7 = QHBoxLayout()
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+        self.checkbox_settings_post_processing_write_metadata_tags = QCheckBox(self.groupbox_post_processing)
+        self.checkbox_settings_post_processing_write_metadata_tags.setObjectName(u"checkbox_settings_post_processing_write_metadata_tags")
 
-        self.gridLayout_13.addWidget(self.checkbox_settings_internet_checks, 0, 1, 1, 1)
+        self.horizontalLayout_7.addWidget(self.checkbox_settings_post_processing_write_metadata_tags)
 
-        self.checkbox_settings_system_update_checks = QCheckBox(self.groupBox)
-        self.checkbox_settings_system_update_checks.setObjectName(u"checkbox_settings_system_update_checks")
+        self.button_help_write_metadata_tags = QPushButton(self.groupbox_post_processing)
+        self.button_help_write_metadata_tags.setObjectName(u"button_help_write_metadata_tags")
 
-        self.gridLayout_13.addWidget(self.checkbox_settings_system_update_checks, 0, 2, 1, 1)
+        self.horizontalLayout_7.addWidget(self.button_help_write_metadata_tags)
 
-        self.label_settings_startup = QLabel(self.groupBox)
-        self.label_settings_startup.setObjectName(u"label_settings_startup")
-        sizePolicy15 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
+        self.spacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_7.addItem(self.spacer)
+
+
+        self.gridLayout_14.addLayout(self.horizontalLayout_7, 1, 0, 1, 1)
+
+        self.horizontalLayout_8 = QHBoxLayout()
+        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
+        self.checkbox_settings_post_processing_unfinished_videos = QCheckBox(self.groupbox_post_processing)
+        self.checkbox_settings_post_processing_unfinished_videos.setObjectName(u"checkbox_settings_post_processing_unfinished_videos")
+
+        self.horizontalLayout_8.addWidget(self.checkbox_settings_post_processing_unfinished_videos)
+
+        self.lineedit_settings_post_processing_unfinished_path_ = QLineEdit(self.groupbox_post_processing)
+        self.lineedit_settings_post_processing_unfinished_path_.setObjectName(u"lineedit_settings_post_processing_unfinished_path_")
+
+        self.horizontalLayout_8.addWidget(self.lineedit_settings_post_processing_unfinished_path_)
+
+        self.button_settings_post_processing_output_path = QPushButton(self.groupbox_post_processing)
+        self.button_settings_post_processing_output_path.setObjectName(u"button_settings_post_processing_output_path")
+
+        self.horizontalLayout_8.addWidget(self.button_settings_post_processing_output_path)
+
+        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_8.addItem(self.horizontalSpacer_4)
+
+
+        self.gridLayout_14.addLayout(self.horizontalLayout_8, 2, 0, 1, 1)
+
+
+        self.gridlayout_settings.addWidget(self.groupbox_post_processing, 2, 0, 1, 1)
+
+        self.goroupbox_gui = QGroupBox(self.scrollAreaWidgetContents_6)
+        self.goroupbox_gui.setObjectName(u"goroupbox_gui")
+        self.gridLayout_12 = QGridLayout(self.goroupbox_gui)
+        self.gridLayout_12.setObjectName(u"gridLayout_12")
+        self.gridLayout_3 = QGridLayout()
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.label_ui_language = QLabel(self.goroupbox_gui)
+        self.label_ui_language.setObjectName(u"label_ui_language")
+        sizePolicy6.setHeightForWidth(self.label_ui_language.sizePolicy().hasHeightForWidth())
+        self.label_ui_language.setSizePolicy(sizePolicy6)
+
+        self.gridLayout_3.addWidget(self.label_ui_language, 0, 0, 1, 1)
+
+        self.radio_ui_language_system_default = QRadioButton(self.goroupbox_gui)
+        self.radio_ui_language_system_default.setObjectName(u"radio_ui_language_system_default")
+        self.radio_ui_language_system_default.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout_3.addWidget(self.radio_ui_language_system_default, 0, 1, 1, 1)
+
+        self.radio_ui_language_english = QRadioButton(self.goroupbox_gui)
+        self.radio_ui_language_english.setObjectName(u"radio_ui_language_english")
+        self.radio_ui_language_english.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout_3.addWidget(self.radio_ui_language_english, 0, 2, 1, 1)
+
+        self.radio_ui_language_french = QRadioButton(self.goroupbox_gui)
+        self.radio_ui_language_french.setObjectName(u"radio_ui_language_french")
+        self.radio_ui_language_french.setEnabled(True)
+
+        self.gridLayout_3.addWidget(self.radio_ui_language_french, 0, 5, 1, 1)
+
+        self.radio_ui_language_chinese_simplified = QRadioButton(self.goroupbox_gui)
+        self.radio_ui_language_chinese_simplified.setObjectName(u"radio_ui_language_chinese_simplified")
+        self.radio_ui_language_chinese_simplified.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout_3.addWidget(self.radio_ui_language_chinese_simplified, 0, 4, 1, 1)
+
+        self.radio_ui_language_german = QRadioButton(self.goroupbox_gui)
+        self.radio_ui_language_german.setObjectName(u"radio_ui_language_german")
+        self.radio_ui_language_german.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout_3.addWidget(self.radio_ui_language_german, 0, 3, 1, 1)
+
+        self.label_settings_design = QLabel(self.goroupbox_gui)
+        self.label_settings_design.setObjectName(u"label_settings_design")
+
+        self.gridLayout_3.addWidget(self.label_settings_design, 1, 0, 1, 1)
+
+        self.radio_ui_design_native = QRadioButton(self.goroupbox_gui)
+        self.radio_ui_design_native.setObjectName(u"radio_ui_design_native")
+
+        self.gridLayout_3.addWidget(self.radio_ui_design_native, 1, 1, 1, 1)
+
+        self.radio_ui_design_dark_mode = QRadioButton(self.goroupbox_gui)
+        self.radio_ui_design_dark_mode.setObjectName(u"radio_ui_design_dark_mode")
+
+        self.gridLayout_3.addWidget(self.radio_ui_design_dark_mode, 1, 2, 1, 1)
+
+        self.radio_ui_design_light_mode = QRadioButton(self.goroupbox_gui)
+        self.radio_ui_design_light_mode.setObjectName(u"radio_ui_design_light_mode")
+
+        self.gridLayout_3.addWidget(self.radio_ui_design_light_mode, 1, 3, 1, 3)
+
+
+        self.gridLayout_12.addLayout(self.gridLayout_3, 0, 0, 1, 1)
+
+
+        self.gridlayout_settings.addWidget(self.goroupbox_gui, 3, 0, 1, 1)
+
+        self.groupbox_videos = QGroupBox(self.scrollAreaWidgetContents_6)
+        self.groupbox_videos.setObjectName(u"groupbox_videos")
+        self.gridLayout_10 = QGridLayout(self.groupbox_videos)
+        self.gridLayout_10.setObjectName(u"gridLayout_10")
+        self.gridLayout = QGridLayout()
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.label_searching_limit = QLabel(self.groupbox_videos)
+        self.label_searching_limit.setObjectName(u"label_searching_limit")
+
+        self.gridLayout.addWidget(self.label_searching_limit, 6, 0, 1, 1)
+
+        self.label_skip_existing_files = QLabel(self.groupbox_videos)
+        self.label_skip_existing_files.setObjectName(u"label_skip_existing_files")
+
+        self.gridLayout.addWidget(self.label_skip_existing_files, 3, 0, 1, 1)
+
+        self.radio_quality_half = QRadioButton(self.groupbox_videos)
+        self.radio_quality_half.setObjectName(u"radio_quality_half")
+        self.radio_quality_half.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout.addWidget(self.radio_quality_half, 0, 2, 1, 1)
+
+        self.radio_skip_existing_files_yes = QRadioButton(self.groupbox_videos)
+        self.radio_skip_existing_files_yes.setObjectName(u"radio_skip_existing_files_yes")
+
+        self.gridLayout.addWidget(self.radio_skip_existing_files_yes, 3, 1, 1, 1)
+
+        self.radio_skip_existing_files_no = QRadioButton(self.groupbox_videos)
+        self.radio_skip_existing_files_no.setObjectName(u"radio_skip_existing_files_no")
+
+        self.gridLayout.addWidget(self.radio_skip_existing_files_no, 3, 2, 1, 1)
+
+        self.button_help_skip_existing_files = QPushButton(self.groupbox_videos)
+        self.button_help_skip_existing_files.setObjectName(u"button_help_skip_existing_files")
+
+        self.gridLayout.addWidget(self.button_help_skip_existing_files, 3, 3, 1, 2)
+
+        self.radio_directory_system_no = QRadioButton(self.groupbox_videos)
+        self.radio_directory_system_no.setObjectName(u"radio_directory_system_no")
+        self.radio_directory_system_no.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout.addWidget(self.radio_directory_system_no, 2, 2, 1, 1)
+
+        self.spinbox_treewidget_limit = QSpinBox(self.groupbox_videos)
+        self.spinbox_treewidget_limit.setObjectName(u"spinbox_treewidget_limit")
+        self.spinbox_treewidget_limit.setMinimum(1)
+        self.spinbox_treewidget_limit.setMaximum(5000)
+
+        self.gridLayout.addWidget(self.spinbox_treewidget_limit, 6, 1, 1, 2)
+
+        self.radio_quality_worst = QRadioButton(self.groupbox_videos)
+        self.radio_quality_worst.setObjectName(u"radio_quality_worst")
+        self.radio_quality_worst.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout.addWidget(self.radio_quality_worst, 0, 3, 1, 2)
+
+        self.radio_model_both = QRadioButton(self.groupbox_videos)
+        self.radio_model_both.setObjectName(u"radio_model_both")
+
+        self.gridLayout.addWidget(self.radio_model_both, 5, 3, 1, 1)
+
+        self.radio_model_featured = QRadioButton(self.groupbox_videos)
+        self.radio_model_featured.setObjectName(u"radio_model_featured")
+
+        self.gridLayout.addWidget(self.radio_model_featured, 5, 2, 1, 1)
+
+        self.button_result_limit_help = QPushButton(self.groupbox_videos)
+        self.button_result_limit_help.setObjectName(u"button_result_limit_help")
+        self.button_result_limit_help.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout.addWidget(self.button_result_limit_help, 6, 3, 1, 2)
+
+        self.radio_quality_best = QRadioButton(self.groupbox_videos)
+        self.radio_quality_best.setObjectName(u"radio_quality_best")
+        self.radio_quality_best.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout.addWidget(self.radio_quality_best, 0, 1, 1, 1)
+
+        self.labe_settings_videos_model = QLabel(self.groupbox_videos)
+        self.labe_settings_videos_model.setObjectName(u"labe_settings_videos_model")
+
+        self.gridLayout.addWidget(self.labe_settings_videos_model, 5, 0, 1, 1)
+
+        self.label_quality = QLabel(self.groupbox_videos)
+        self.label_quality.setObjectName(u"label_quality")
+        sizePolicy6.setHeightForWidth(self.label_quality.sizePolicy().hasHeightForWidth())
+        self.label_quality.setSizePolicy(sizePolicy6)
+
+        self.gridLayout.addWidget(self.label_quality, 0, 0, 1, 1)
+
+        self.button_directory_system_help = QPushButton(self.groupbox_videos)
+        self.button_directory_system_help.setObjectName(u"button_directory_system_help")
+        self.button_directory_system_help.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout.addWidget(self.button_directory_system_help, 2, 3, 1, 2)
+
+        self.lineedit_output_path = QLineEdit(self.groupbox_videos)
+        self.lineedit_output_path.setObjectName(u"lineedit_output_path")
+        sizePolicy15 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
         sizePolicy15.setHorizontalStretch(0)
         sizePolicy15.setVerticalStretch(0)
-        sizePolicy15.setHeightForWidth(self.label_settings_startup.sizePolicy().hasHeightForWidth())
-        self.label_settings_startup.setSizePolicy(sizePolicy15)
+        sizePolicy15.setHeightForWidth(self.lineedit_output_path.sizePolicy().hasHeightForWidth())
+        self.lineedit_output_path.setSizePolicy(sizePolicy15)
 
-        self.gridLayout_13.addWidget(self.label_settings_startup, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.lineedit_output_path, 7, 1, 1, 2)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.radio_model_uploads = QRadioButton(self.groupbox_videos)
+        self.radio_model_uploads.setObjectName(u"radio_model_uploads")
 
-        self.gridLayout_13.addItem(self.horizontalSpacer, 0, 3, 1, 1)
+        self.gridLayout.addWidget(self.radio_model_uploads, 5, 1, 1, 1)
 
+        self.label_output_path = QLabel(self.groupbox_videos)
+        self.label_output_path.setObjectName(u"label_output_path")
 
-        self.gridLayout_7.addLayout(self.gridLayout_13, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_output_path, 7, 0, 1, 1)
 
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.label_settings_system_privacy = QLabel(self.groupBox)
-        self.label_settings_system_privacy.setObjectName(u"label_settings_system_privacy")
-        sizePolicy15.setHeightForWidth(self.label_settings_system_privacy.sizePolicy().hasHeightForWidth())
-        self.label_settings_system_privacy.setSizePolicy(sizePolicy15)
+        self.button_help_model_videos = QPushButton(self.groupbox_videos)
+        self.button_help_model_videos.setObjectName(u"button_help_model_videos")
 
-        self.horizontalLayout_4.addWidget(self.label_settings_system_privacy)
+        self.gridLayout.addWidget(self.button_help_model_videos, 5, 4, 1, 1)
 
-        self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.checkbox_settings_system_anonymous_mode = QCheckBox(self.groupBox)
-        self.checkbox_settings_system_anonymous_mode.setObjectName(u"checkbox_settings_system_anonymous_mode")
+        self.button_output_path_select = QPushButton(self.groupbox_videos)
+        self.button_output_path_select.setObjectName(u"button_output_path_select")
+        self.button_output_path_select.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.horizontalLayout_3.addWidget(self.checkbox_settings_system_anonymous_mode)
+        self.gridLayout.addWidget(self.button_output_path_select, 7, 3, 1, 2)
 
-        self.button_settings_help_anonymous_mode = QPushButton(self.groupBox)
-        self.button_settings_help_anonymous_mode.setObjectName(u"button_settings_help_anonymous_mode")
+        self.radio_directory_system_yes = QRadioButton(self.groupbox_videos)
+        self.radio_directory_system_yes.setObjectName(u"radio_directory_system_yes")
+        self.radio_directory_system_yes.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.horizontalLayout_3.addWidget(self.button_settings_help_anonymous_mode)
+        self.gridLayout.addWidget(self.radio_directory_system_yes, 2, 1, 1, 1)
 
-        self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.checkbox_settings_system_enable_tor = QCheckBox(self.groupBox)
-        self.checkbox_settings_system_enable_tor.setObjectName(u"checkbox_settings_system_enable_tor")
+        self.label_directory_system = QLabel(self.groupbox_videos)
+        self.label_directory_system.setObjectName(u"label_directory_system")
 
-        self.horizontalLayout_2.addWidget(self.checkbox_settings_system_enable_tor)
-
-        self.button_settings_help_tor = QPushButton(self.groupBox)
-        self.button_settings_help_tor.setObjectName(u"button_settings_help_tor")
-
-        self.horizontalLayout_2.addWidget(self.button_settings_help_tor)
+        self.gridLayout.addWidget(self.label_directory_system, 2, 0, 1, 1)
 
 
-        self.horizontalLayout_3.addLayout(self.horizontalLayout_2)
-
-        self.horizontalLayout_5 = QHBoxLayout()
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-
-        self.horizontalLayout_3.addLayout(self.horizontalLayout_5)
-
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_3.addItem(self.horizontalSpacer_2)
+        self.gridLayout_10.addLayout(self.gridLayout, 6, 0, 1, 1)
 
 
-        self.horizontalLayout_4.addLayout(self.horizontalLayout_3)
-
-
-        self.gridLayout_7.addLayout(self.horizontalLayout_4, 2, 0, 1, 1)
-
-
-        self.gridlayout_settings.addWidget(self.groupBox, 3, 0, 1, 1)
+        self.gridlayout_settings.addWidget(self.groupbox_videos, 1, 0, 1, 1)
 
 
         self.gridLayout_19.addLayout(self.gridlayout_settings, 0, 0, 1, 2)
@@ -1519,11 +1604,6 @@ class Ui_PornFetch_Desktop(object):
 
         self.formLayout.setWidget(0, QFormLayout.LabelRole, self.label_2)
 
-        self.label_4 = QLabel(PornFetch_Desktop)
-        self.label_4.setObjectName(u"label_4")
-
-        self.formLayout.setWidget(1, QFormLayout.LabelRole, self.label_4)
-
         self.progressbar_total = QProgressBar(PornFetch_Desktop)
         self.progressbar_total.setObjectName(u"progressbar_total")
         sizePolicy7.setHeightForWidth(self.progressbar_total.sizePolicy().hasHeightForWidth())
@@ -1533,6 +1613,11 @@ class Ui_PornFetch_Desktop(object):
         self.progressbar_total.setValue(0)
 
         self.formLayout.setWidget(0, QFormLayout.FieldRole, self.progressbar_total)
+
+        self.label_4 = QLabel(PornFetch_Desktop)
+        self.label_4.setObjectName(u"label_4")
+
+        self.formLayout.setWidget(1, QFormLayout.LabelRole, self.label_4)
 
         self.progressbar_converting = QProgressBar(PornFetch_Desktop)
         self.progressbar_converting.setObjectName(u"progressbar_converting")
@@ -1545,7 +1630,7 @@ class Ui_PornFetch_Desktop(object):
         self.verticalLayout_4.addLayout(self.formLayout)
 
 
-        self.gridLayout_14.addLayout(self.verticalLayout_4, 0, 0, 1, 1)
+        self.gridLayout_15.addLayout(self.verticalLayout_4, 0, 0, 1, 1)
 
         QWidget.setTabOrder(self.lineedit_url, self.lineedit_playlist_url)
         QWidget.setTabOrder(self.lineedit_playlist_url, self.lineedit_model_url)
@@ -1685,40 +1770,17 @@ class Ui_PornFetch_Desktop(object):
         self.checkbox_tree_do_not_clear_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Do not clear videos", None))
         self.button_settings_apply.setText(QCoreApplication.translate("PornFetch_Desktop", u"Apply  (needs restart)", None))
         self.button_settings_reset.setText(QCoreApplication.translate("PornFetch_Desktop", u"Reset Porn Fetch to default settings", None))
-        self.groupbox_videos.setTitle(QCoreApplication.translate("PornFetch_Desktop", u"Videos", None))
-        self.radio_model_uploads.setText(QCoreApplication.translate("PornFetch_Desktop", u"User uploads", None))
-        self.radio_quality_worst.setText(QCoreApplication.translate("PornFetch_Desktop", u"Worst", None))
-        self.radio_quality_best.setText(QCoreApplication.translate("PornFetch_Desktop", u"Best", None))
-        self.labe_settings_videos_model.setText(QCoreApplication.translate("PornFetch_Desktop", u"Model videos (PornHub)", None))
-        self.button_directory_system_help.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
-        self.radio_model_featured.setText(QCoreApplication.translate("PornFetch_Desktop", u"Featured videos", None))
-        self.radio_directory_system_yes.setText(QCoreApplication.translate("PornFetch_Desktop", u"Yes", None))
-        self.radio_skip_existing_files_yes.setText(QCoreApplication.translate("PornFetch_Desktop", u"Yes", None))
-        self.label_skip_existing_files.setText(QCoreApplication.translate("PornFetch_Desktop", u"Skip existing files:", None))
-        self.label_directory_system.setText(QCoreApplication.translate("PornFetch_Desktop", u"Use Directory system? ", None))
-        self.button_output_path_select.setText(QCoreApplication.translate("PornFetch_Desktop", u"Open", None))
-        self.radio_skip_existing_files_no.setText(QCoreApplication.translate("PornFetch_Desktop", u"No", None))
-        self.radio_quality_half.setText(QCoreApplication.translate("PornFetch_Desktop", u"Half", None))
-        self.label_quality.setText(QCoreApplication.translate("PornFetch_Desktop", u"Quality:", None))
-        self.lineedit_output_path.setPlaceholderText(QCoreApplication.translate("PornFetch_Desktop", u"Enter \"./\" for current directory", None))
-        self.label_searching_limit.setText(QCoreApplication.translate("PornFetch_Desktop", u"Result Limit:", None))
-        self.button_help_skip_existing_files.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
-        self.label_output_path.setText(QCoreApplication.translate("PornFetch_Desktop", u"Output path:", None))
-        self.button_result_limit_help.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
-        self.radio_directory_system_no.setText(QCoreApplication.translate("PornFetch_Desktop", u"No", None))
-        self.button_help_model_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
-        self.radio_model_both.setText(QCoreApplication.translate("PornFetch_Desktop", u"Both", None))
-        self.goroupbox_gui.setTitle(QCoreApplication.translate("PornFetch_Desktop", u"Graphical User Interface", None))
-        self.label_ui_language.setText(QCoreApplication.translate("PornFetch_Desktop", u"Graphical User Interface Language:", None))
-        self.radio_ui_language_system_default.setText(QCoreApplication.translate("PornFetch_Desktop", u"System default", None))
-        self.radio_ui_language_english.setText(QCoreApplication.translate("PornFetch_Desktop", u"English", None))
-        self.radio_ui_language_french.setText(QCoreApplication.translate("PornFetch_Desktop", u"French", None))
-        self.radio_ui_language_chinese_simplified.setText(QCoreApplication.translate("PornFetch_Desktop", u"Chinese (simplified)", None))
-        self.radio_ui_language_german.setText(QCoreApplication.translate("PornFetch_Desktop", u"German", None))
-        self.label_settings_design.setText(QCoreApplication.translate("PornFetch_Desktop", u"Porn Fetch Design:", None))
-        self.radio_ui_design_native.setText(QCoreApplication.translate("PornFetch_Desktop", u"LSD", None))
-        self.radio_ui_design_dark_mode.setText(QCoreApplication.translate("PornFetch_Desktop", u"System's dark mode", None))
-        self.radio_ui_design_light_mode.setText(QCoreApplication.translate("PornFetch_Desktop", u"System's light mode", None))
+        self.groupBox.setTitle(QCoreApplication.translate("PornFetch_Desktop", u"System / Porn Fetch", None))
+        self.button_download_ffmpeg.setText(QCoreApplication.translate("PornFetch_Desktop", u"Download and Setup FFmpeg", None))
+        self.button_install_pornfetch.setText(QCoreApplication.translate("PornFetch_Desktop", u"Install Porn Fetch", None))
+        self.checkbox_settings_internet_checks.setText(QCoreApplication.translate("PornFetch_Desktop", u"Internet checks", None))
+        self.checkbox_settings_system_update_checks.setText(QCoreApplication.translate("PornFetch_Desktop", u"Update checks", None))
+        self.label_settings_startup.setText(QCoreApplication.translate("PornFetch_Desktop", u"Startup:", None))
+        self.label_settings_system_privacy.setText(QCoreApplication.translate("PornFetch_Desktop", u"Privacy:", None))
+        self.checkbox_settings_system_anonymous_mode.setText(QCoreApplication.translate("PornFetch_Desktop", u"Enable Anonymous mode", None))
+        self.button_settings_help_anonymous_mode.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
+        self.checkbox_settings_system_enable_tor.setText(QCoreApplication.translate("PornFetch_Desktop", u"Enable Tor", None))
+        self.button_settings_help_tor.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
         self.groupbox_performance.setTitle(QCoreApplication.translate("PornFetch_Desktop", u"Performance", None))
         self.label_semaphore.setText(QCoreApplication.translate("PornFetch_Desktop", u"Simultaneous downloads:", None))
         self.button_semaphore_help.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
@@ -1735,73 +1797,107 @@ class Ui_PornFetch_Desktop(object):
         self.radio_threading_mode_ffmpeg.setText(QCoreApplication.translate("PornFetch_Desktop", u"FFMPEG", None))
         self.radio_threading_mode_default.setText(QCoreApplication.translate("PornFetch_Desktop", u"Default", None))
         self.button_threading_mode_help.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
-        self.groupBox.setTitle(QCoreApplication.translate("PornFetch_Desktop", u"System / Porn Fetch", None))
-        self.button_download_ffmpeg.setText(QCoreApplication.translate("PornFetch_Desktop", u"Download and Setup FFmpeg", None))
-        self.button_install_pornfetch.setText(QCoreApplication.translate("PornFetch_Desktop", u"Install Porn Fetch", None))
-        self.checkbox_settings_internet_checks.setText(QCoreApplication.translate("PornFetch_Desktop", u"Internet checks", None))
-        self.checkbox_settings_system_update_checks.setText(QCoreApplication.translate("PornFetch_Desktop", u"Update checks", None))
-        self.label_settings_startup.setText(QCoreApplication.translate("PornFetch_Desktop", u"Startup:", None))
-        self.label_settings_system_privacy.setText(QCoreApplication.translate("PornFetch_Desktop", u"Privacy:", None))
-        self.checkbox_settings_system_anonymous_mode.setText(QCoreApplication.translate("PornFetch_Desktop", u"Enable Anonymous mode", None))
-        self.button_settings_help_anonymous_mode.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
-        self.checkbox_settings_system_enable_tor.setText(QCoreApplication.translate("PornFetch_Desktop", u"Enable Tor", None))
-        self.button_settings_help_tor.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
+        self.groupbox_post_processing.setTitle(QCoreApplication.translate("PornFetch_Desktop", u"Post Processing", None))
+        self.label.setText("")
+        self.radio_settings_post_rocessing_do_not_convert.setText(QCoreApplication.translate("PornFetch_Desktop", u"Do not convert", None))
+        self.radio_settings_post_processing_convert_to_mp4.setText(QCoreApplication.translate("PornFetch_Desktop", u"Convert to mp4", None))
+        self.radio_settings_post_processing_use_custom_format.setText(QCoreApplication.translate("PornFetch_Desktop", u"Use Custom format", None))
+        self.pushButton.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
+        self.checkbox_settings_post_processing_write_metadata_tags.setText(QCoreApplication.translate("PornFetch_Desktop", u"Write metadata tags", None))
+        self.button_help_write_metadata_tags.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
+        self.checkbox_settings_post_processing_unfinished_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Use a different output path for unfinished videos:", None))
+        self.button_settings_post_processing_output_path.setText(QCoreApplication.translate("PornFetch_Desktop", u"Open", None))
+        self.goroupbox_gui.setTitle(QCoreApplication.translate("PornFetch_Desktop", u"Graphical User Interface", None))
+        self.label_ui_language.setText(QCoreApplication.translate("PornFetch_Desktop", u"Graphical User Interface Language:", None))
+        self.radio_ui_language_system_default.setText(QCoreApplication.translate("PornFetch_Desktop", u"System default", None))
+        self.radio_ui_language_english.setText(QCoreApplication.translate("PornFetch_Desktop", u"English", None))
+        self.radio_ui_language_french.setText(QCoreApplication.translate("PornFetch_Desktop", u"French", None))
+        self.radio_ui_language_chinese_simplified.setText(QCoreApplication.translate("PornFetch_Desktop", u"Chinese (simplified)", None))
+        self.radio_ui_language_german.setText(QCoreApplication.translate("PornFetch_Desktop", u"German", None))
+        self.label_settings_design.setText(QCoreApplication.translate("PornFetch_Desktop", u"Porn Fetch Design:", None))
+        self.radio_ui_design_native.setText(QCoreApplication.translate("PornFetch_Desktop", u"LSD", None))
+        self.radio_ui_design_dark_mode.setText(QCoreApplication.translate("PornFetch_Desktop", u"System's dark mode", None))
+        self.radio_ui_design_light_mode.setText(QCoreApplication.translate("PornFetch_Desktop", u"System's light mode", None))
+        self.groupbox_videos.setTitle(QCoreApplication.translate("PornFetch_Desktop", u"Videos", None))
+        self.label_searching_limit.setText(QCoreApplication.translate("PornFetch_Desktop", u"Result Limit:", None))
+        self.label_skip_existing_files.setText(QCoreApplication.translate("PornFetch_Desktop", u"Skip existing files:", None))
+        self.radio_quality_half.setText(QCoreApplication.translate("PornFetch_Desktop", u"Half", None))
+        self.radio_skip_existing_files_yes.setText(QCoreApplication.translate("PornFetch_Desktop", u"Yes", None))
+        self.radio_skip_existing_files_no.setText(QCoreApplication.translate("PornFetch_Desktop", u"No", None))
+        self.button_help_skip_existing_files.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
+        self.radio_directory_system_no.setText(QCoreApplication.translate("PornFetch_Desktop", u"No", None))
+        self.radio_quality_worst.setText(QCoreApplication.translate("PornFetch_Desktop", u"Worst", None))
+        self.radio_model_both.setText(QCoreApplication.translate("PornFetch_Desktop", u"Both", None))
+        self.radio_model_featured.setText(QCoreApplication.translate("PornFetch_Desktop", u"Featured videos", None))
+        self.button_result_limit_help.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
+        self.radio_quality_best.setText(QCoreApplication.translate("PornFetch_Desktop", u"Best", None))
+        self.labe_settings_videos_model.setText(QCoreApplication.translate("PornFetch_Desktop", u"Model videos (PornHub)", None))
+        self.label_quality.setText(QCoreApplication.translate("PornFetch_Desktop", u"Quality:", None))
+        self.button_directory_system_help.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
+        self.lineedit_output_path.setPlaceholderText(QCoreApplication.translate("PornFetch_Desktop", u"Enter \"./\" for current directory", None))
+        self.radio_model_uploads.setText(QCoreApplication.translate("PornFetch_Desktop", u"User uploads", None))
+        self.label_output_path.setText(QCoreApplication.translate("PornFetch_Desktop", u"Output path:", None))
+        self.button_help_model_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
+        self.button_output_path_select.setText(QCoreApplication.translate("PornFetch_Desktop", u"Open", None))
+        self.radio_directory_system_yes.setText(QCoreApplication.translate("PornFetch_Desktop", u"Yes", None))
+        self.label_directory_system.setText(QCoreApplication.translate("PornFetch_Desktop", u"Use Directory system? ", None))
         self.textbrowser_websites.setHtml(QCoreApplication.translate("PornFetch_Desktop", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">Supported Websites:</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:15px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">Dow"
-                        "nloading:</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:15px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">- PornHub.com (supports total progress)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">- HQPorner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">- Eporner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">- XNXX.com (supports total progress)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom"
-                        ":0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">- XVideos.com (supports total progress)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">- Spankbang.com (supports total progress)</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:15px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">All sites support *threaded* downloads and selectable quality!</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:15px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0"
-                        "px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">* hqporner and eporner running in QThreads, but they don't fetch segments. The video is directly</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">downloaded, therefore threading in a segment isn't needed.</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:15px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">Model / Channel Downloads</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:15px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:"
-                        "0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">- PornHub.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">- HQPorner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">- EPorner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">- XNXX.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">- XVideos.com</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:"
-                        "15px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">Searching:</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:15px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">- PornHub.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">- HQPorner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">- Xvideos.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-ind"
-                        "ent:0; text-indent:0px;\"><span style=\" font-size:15px;\">- Eporner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">- XNXX.com</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:15px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">I am constantly working to support more websites.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:15px;\">If you want a specific site to be supported, just ask:<br /><br />Discord: echteralsfake</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; t"
-                        "ext-indent:0px;\"><span style=\" font-size:15px;\">GitHub.com/echteralsfake/Porn_Fetch/issues</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:15px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:15px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:15px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:15px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:15px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:e"
-                        "mpty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:15px;\"><br /></p></body></html>", None))
+"</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Supported Websites:</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+                        "indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Downloading:</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- PornHub.com (supports total progress)</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- HQPorner.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- Eporner.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-r"
+                        "ight:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- XNXX.com (supports total progress)</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- XVideos.com (supports total progress)</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- Spankbang.com (supports total progress)</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">All sites suppo"
+                        "rt *threaded* downloads and selectable quality!</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">* hqporner and eporner running in QThreads, but they don't fetch segments. The video is directly</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">downloaded, therefore threading in a segment isn't needed.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\" ma"
+                        "rgin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Model / Channel Downloads</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- PornHub.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- HQPorner.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- EPorner.com</span><"
+                        "/p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- XNXX.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- XVideos.com</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Searching:</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>"
+                        "\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- PornHub.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- HQPorner.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- Xvideos.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- Eporner.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- XNXX.c"
+                        "om</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">I am constantly working to support more websites.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">If you want a specific site to be supported, just ask:<br /><br />Discord: echteralsfake</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">GitHub.com/echteralsfake/Porn_Fetch/issues</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; marg"
+                        "in-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; mar"
+                        "gin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p></body></html>", None))
         self.label_2.setText(QCoreApplication.translate("PornFetch_Desktop", u"Total:", None))
         self.label_4.setText(QCoreApplication.translate("PornFetch_Desktop", u"Converting:", None))
     # retranslateUi
