@@ -31,17 +31,17 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_15">
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout_4">
+    <layout class="QVBoxLayout" name="verticallayout_main">
      <property name="spacing">
       <number>0</number>
      </property>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout" name="main_horizontallayout_menu_buttons">
        <property name="spacing">
         <number>0</number>
        </property>
        <item>
-        <widget class="QPushButton" name="button_switch_home">
+        <widget class="QPushButton" name="main_button_switch_home">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
            <horstretch>0</horstretch>
@@ -82,7 +82,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="button_switch_account">
+        <widget class="QPushButton" name="main_button_switch_account">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
            <horstretch>0</horstretch>
@@ -124,7 +124,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="button_switch_tools">
+        <widget class="QPushButton" name="main_button_switch_tools">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
            <horstretch>0</horstretch>
@@ -169,7 +169,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="button_switch_settings">
+        <widget class="QPushButton" name="main_button_switch_settings">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
            <horstretch>0</horstretch>
@@ -211,7 +211,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="button_switch_credits">
+        <widget class="QPushButton" name="main_button_switch_credits">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
            <horstretch>0</horstretch>
@@ -253,7 +253,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="button_view_progress_bars">
+        <widget class="QPushButton" name="main_button_view_progress_bars">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
            <horstretch>0</horstretch>
@@ -294,7 +294,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="button_switch_supported_websites">
+        <widget class="QPushButton" name="main_button_switch_supported_websites">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
            <horstretch>0</horstretch>
@@ -2041,29 +2041,29 @@
           <number>0</number>
          </property>
          <item row="0" column="0">
-          <layout class="QVBoxLayout" name="verticalLayout">
+          <layout class="QVBoxLayout" name="settings_verticallayout">
            <property name="spacing">
             <number>0</number>
            </property>
            <item>
-            <widget class="QScrollArea" name="scrollarea_settings">
+            <widget class="QScrollArea" name="settings_scrollarea">
              <property name="widgetResizable">
               <bool>true</bool>
              </property>
-             <widget class="QWidget" name="scrollAreaWidgetContents_6">
+             <widget class="QWidget" name="settings_scrollarea_widget_contents">
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-172</y>
                 <width>1371</width>
                 <height>975</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_19">
                <item row="3" column="0" colspan="2">
-                <layout class="QHBoxLayout" name="horizontallayout_settings_apply">
+                <layout class="QHBoxLayout" name="settings_horizontallayout_apply">
                  <item>
-                  <widget class="QPushButton" name="button_settings_apply">
+                  <widget class="QPushButton" name="settings_button_apply">
                    <property name="cursor">
                     <cursorShape>PointingHandCursor</cursorShape>
                    </property>
@@ -2073,7 +2073,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="button_settings_reset">
+                  <widget class="QPushButton" name="settings_button_reset">
                    <property name="cursor">
                     <cursorShape>PointingHandCursor</cursorShape>
                    </property>
@@ -2104,9 +2104,9 @@ QPushButton:pressed {
                 </layout>
                </item>
                <item row="0" column="0" colspan="2">
-                <layout class="QGridLayout" name="gridlayout_settings">
+                <layout class="QGridLayout" name="settings_scrollarea_gridlayout">
                  <item row="4" column="0">
-                  <widget class="QGroupBox" name="groupBox">
+                  <widget class="QGroupBox" name="settings_groupbox_system_pornfetch">
                    <property name="title">
                     <string>System / Porn Fetch</string>
                    </property>
@@ -2130,23 +2130,23 @@ QPushButton:pressed {
                      </layout>
                     </item>
                     <item row="1" column="0">
-                     <layout class="QGridLayout" name="gridLayout_13">
+                     <layout class="QGridLayout" name="settings_gridlayout_startup">
                       <item row="0" column="1">
-                       <widget class="QCheckBox" name="checkbox_settings_internet_checks">
+                       <widget class="QCheckBox" name="settings_checkbox_internet_checks">
                         <property name="text">
                          <string>Internet checks</string>
                         </property>
                        </widget>
                       </item>
                       <item row="0" column="2">
-                       <widget class="QCheckBox" name="checkbox_settings_system_update_checks">
+                       <widget class="QCheckBox" name="settings_checkbox_system_update_checks">
                         <property name="text">
                          <string>Update checks</string>
                         </property>
                        </widget>
                       </item>
                       <item row="0" column="0">
-                       <widget class="QLabel" name="label_settings_startup">
+                       <widget class="QLabel" name="settings_label_startup">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
                           <horstretch>0</horstretch>
@@ -2159,7 +2159,7 @@ QPushButton:pressed {
                        </widget>
                       </item>
                       <item row="0" column="3">
-                       <spacer name="horizontalSpacer">
+                       <spacer name="settings_spacer_startup_horizontal">
                         <property name="orientation">
                          <enum>Qt::Orientation::Horizontal</enum>
                         </property>
@@ -2174,7 +2174,7 @@ QPushButton:pressed {
                      </layout>
                     </item>
                     <item row="2" column="0">
-                     <layout class="QHBoxLayout" name="horizontalLayout_4">
+                     <layout class="QHBoxLayout" name="settings_horizontallayout_privacy">
                       <item>
                        <widget class="QLabel" name="label_settings_system_privacy">
                         <property name="sizePolicy">
@@ -2189,7 +2189,7 @@ QPushButton:pressed {
                        </widget>
                       </item>
                       <item>
-                       <layout class="QHBoxLayout" name="horizontalLayout_3">
+                       <layout class="QHBoxLayout" name="settings_horizontallayout_privacy_">
                         <item>
                          <widget class="QCheckBox" name="checkbox_settings_system_anonymous_mode">
                           <property name="text">
@@ -2198,14 +2198,14 @@ QPushButton:pressed {
                          </widget>
                         </item>
                         <item>
-                         <widget class="QPushButton" name="button_settings_help_anonymous_mode">
+                         <widget class="QPushButton" name="settings_button_help_anonymous_mode">
                           <property name="text">
                            <string>Help</string>
                           </property>
                          </widget>
                         </item>
                         <item>
-                         <layout class="QHBoxLayout" name="horizontalLayout_2">
+                         <layout class="QHBoxLayout" name="settings_horizontallayout_tor">
                           <item>
                            <widget class="QCheckBox" name="checkbox_settings_system_enable_tor">
                             <property name="text">
@@ -2583,7 +2583,7 @@ QPushButton:pressed {
                   </widget>
                  </item>
                  <item row="3" column="0">
-                  <widget class="QGroupBox" name="goroupbox_gui">
+                  <widget class="QGroupBox" name="settings_groupbox_ui">
                    <property name="title">
                     <string>Graphical User Interface</string>
                    </property>
@@ -2942,7 +2942,7 @@ QPushButton:pressed {
          <item row="0" column="0">
           <layout class="QGridLayout" name="gridlayout_textbrowser">
            <item row="0" column="0">
-            <widget class="QTextBrowser" name="textBrowser"/>
+            <widget class="QTextBrowser" name="textbrowser_credits"/>
            </item>
           </layout>
          </item>
@@ -3024,7 +3024,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
       </widget>
      </item>
      <item>
-      <layout class="QFormLayout" name="formLayout">
+      <layout class="QFormLayout" name="formlayout_progressbar">
        <property name="horizontalSpacing">
         <number>0</number>
        </property>
@@ -3032,14 +3032,14 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <number>0</number>
        </property>
        <item row="0" column="0">
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="main_label_progressbar_total">
          <property name="text">
           <string>Total:</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QProgressBar" name="progressbar_total">
+        <widget class="QProgressBar" name="main_progressbar_total">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -3061,14 +3061,14 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="label_4">
+        <widget class="QLabel" name="main_label_progressbar_converting">
          <property name="text">
           <string>Converting:</string>
          </property>
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QProgressBar" name="progressbar_converting">
+        <widget class="QProgressBar" name="main_progressbar_converting">
          <property name="styleSheet">
           <string notr="true">text-align: center; /* Centered text */</string>
          </property>
@@ -3117,9 +3117,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
   <tabstop>button_timeout_help</tabstop>
   <tabstop>spinbox_maximal_retries</tabstop>
   <tabstop>button_timeout_maximal_retries_help</tabstop>
-  <tabstop>button_settings_apply</tabstop>
-  <tabstop>button_settings_reset</tabstop>
-  <tabstop>textBrowser</tabstop>
+  <tabstop>settings_button_apply</tabstop>
+  <tabstop>settings_button_reset</tabstop>
+  <tabstop>textbrowser_credits</tabstop>
   <tabstop>textbrowser_websites</tabstop>
  </tabstops>
  <resources/>

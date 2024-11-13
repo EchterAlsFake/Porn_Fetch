@@ -995,6 +995,18 @@ Categories=Utility;"""
                     shortcut.IconLocation = app_exe_path
                     shortcut.Save()
 
+    def anonymous_mode(self):
+        """
+        This mode will hide that you are using Porn Fetch by hiding video title names, hiding author names,
+        hiding the window title and removing all placeholders from lineedits. May not be the most efficient approach,
+        but works.
+        """
+
+        self.ui.lineedit_url.setPlaceholderText(" ")
+        self.ui.label_settings_
+
+
+
     def get_clipboard(self):
         clipboard = QGuiApplication.clipboard()
         text = clipboard.text()
