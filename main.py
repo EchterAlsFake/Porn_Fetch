@@ -1055,12 +1055,12 @@ Categories=Utility;"""
     def button_connectors(self):
         """a function to link the buttons to their functions"""
         # Menu Bar Switch Button Connections
-        self.ui.button_switch_home.clicked.connect(self.switch_to_home)
-        self.ui.button_switch_settings.clicked.connect(self.switch_to_settings)
-        self.ui.button_switch_credits.clicked.connect(self.switch_to_credits)
-        self.ui.button_switch_account.clicked.connect(self.switch_to_account)
-        self.ui.button_switch_supported_websites.clicked.connect(self.switch_to_supported_websites)
-        self.ui.button_view_progress_bars.clicked.connect(self.switch_to_all_progress_bars)
+        self.ui.main_button_switch_home.clicked.connect(self.switch_to_home)
+        self.ui.main_button_switch_settings.clicked.connect(self.switch_to_settings)
+        self.ui.main_button_switch_credits.clicked.connect(self.switch_to_credits)
+        self.ui.main_button_switch_account.clicked.connect(self.switch_to_account)
+        self.ui.main_button_switch_supported_websites.clicked.connect(self.switch_to_supported_websites)
+        self.ui.main_button_view_progress_bars.clicked.connect(self.switch_to_all_progress_bars)
 
         # Video Download Button Connections
         self.ui.button_download.clicked.connect(self.start_single_video)
@@ -1083,8 +1083,8 @@ Categories=Utility;"""
         self.ui.button_help_model_videos.clicked.connect(model_videos_help)
 
         # Settings
-        self.ui.button_settings_apply.clicked.connect(self.save_user_settings)
-        self.ui.button_settings_reset.clicked.connect(reset_pornfetch)
+        self.ui.settings_button_apply.clicked.connect(self.save_user_settings)
+        self.ui.settings_button_reset.clicked.connect(reset_pornfetch)
 
         # Account
         self.ui.button_login.clicked.connect(self.login)
@@ -1100,7 +1100,7 @@ Categories=Utility;"""
         self.ui.button_top_porn_get_videos.clicked.connect(self.get_top_porn_hqporner)
         self.ui.button_get_brazzers_videos.clicked.connect(self.get_brazzers_videos)
         self.ui.button_list_categories.clicked.connect(self.list_categories_hqporner)
-        self.ui.button_switch_tools.clicked.connect(self.switch_to_tools)
+        self.ui.main_button_switch_tools.clicked.connect(self.switch_to_tools)
         self.ui.button_get_random_videos.clicked.connect(self.get_random_video)
 
         # EPorner
@@ -1122,11 +1122,11 @@ Categories=Utility;"""
         """Refactored function to load icons and stylesheets."""
         # Setting icons with a loop if applicable
         icons = {
-            self.ui.button_switch_home: "download.svg",
-            self.ui.button_switch_settings: "settings.svg",
-            self.ui.button_switch_credits: "information.svg",
-            self.ui.button_switch_account: "account.svg",
-            self.ui.button_switch_tools: "tools.svg",
+            self.ui.main_button_switch_home: "download.svg",
+            self.ui.main_button_switch_settings: "settings.svg",
+            self.ui.main_button_switch_credits: "information.svg",
+            self.ui.main_button_switch_account: "account.svg",
+            self.ui.main_button_switch_tools: "tools.svg",
             self.ui.button_workers_help: "faq.svg",
             self.ui.button_pornhub_delay_help: "faq.svg",
             self.ui.button_threading_mode_help: "faq.svg",
@@ -1136,7 +1136,7 @@ Categories=Utility;"""
             self.ui.button_result_limit_help: "faq.svg",
             self.ui.button_timeout_maximal_retries_help: "faq.svg",
             self.ui.button_help_file: "faq.svg",
-            self.ui.button_view_progress_bars: "progressbars.svg",
+            self.ui.main_button_view_progress_bars: "progressbars.svg",
             self.ui.button_help_model_videos: "faq.svg",
             self.ui.button_help_skip_existing_files: "faq.svg",
         }
@@ -1180,13 +1180,13 @@ Categories=Utility;"""
             # Applying top buttons
             self.ui.button_login.setStyleSheet(stylesheets["button_green"])
             self.ui.progressbar_pornhub.setStyleSheet(stylesheets["progressbar_pornhub"])
-            self.ui.progressbar_total.setStyleSheet(stylesheets["progressbar_total"])
+            self.ui.main_progressbar_total.setStyleSheet(stylesheets["progressbar_total"])
             self.ui.progressbar_xnxx.setStyleSheet(stylesheets["progressbar_xnxx"])
             self.ui.progressbar_eporner.setStyleSheet(stylesheets["progressbar_eporner"])
             self.ui.progressbar_hqporner.setStyleSheet(stylesheets["progressbar_hqporner"])
             self.ui.progressbar_xvideos.setStyleSheet(stylesheets["progressbar_xvideos"])
             self.ui.progressbar_spankbang.setStyleSheet(stylesheets["progressbar_spankbang"])
-            self.ui.progressbar_converting.setStyleSheet(stylesheets["progressbar_converting"])
+            self.ui.main_progressbar_converting.setStyleSheet(stylesheets["progressbar_converting"])
             self.ui.button_model.setStyleSheet(stylesheets["button_purple"])
             self.ui.button_search.setStyleSheet(stylesheets["button_purple"])
             self.ui.button_download.setStyleSheet(stylesheets["button_purple"])
@@ -1198,12 +1198,12 @@ Categories=Utility;"""
             self.ui.button_tree_select_range.setStyleSheet(stylesheets["button_green"])
             self.ui.button_output_path_select.setStyleSheet(stylesheets["button_blue"])
             self.ui.button_login.setStyleSheet(stylesheets["button_blue"])
-            self.ui.button_settings_apply.setStyleSheet(stylesheets["button_blue"])
+            self.ui.settings_button_apply.setStyleSheet(stylesheets["button_blue"])
             self.ui.button_get_random_videos.setStyleSheet(stylesheets["button_purple"])
             self.ui.button_get_brazzers_videos.setStyleSheet(stylesheets["button_purple"])
             self.ui.button_list_categories.setStyleSheet(stylesheets["button_purple"])
             self.ui.button_open_file.setStyleSheet(stylesheets["button_purple"])
-            self.ui.button_switch_supported_websites.setStyleSheet(stylesheets["button_blue"])
+            self.ui.main_button_switch_supported_websites.setStyleSheet(stylesheets["button_blue"])
             self.ui.button_hqporner_category_get_videos.setStyleSheet(stylesheets["button_purple"])
             self.ui.button_top_porn_get_videos.setStyleSheet(stylesheets["button_purple"])
             self.ui.button_get_watched_videos.setStyleSheet(stylesheets["buttons_login"])
@@ -1213,7 +1213,7 @@ Categories=Utility;"""
             self.ui.button_workers_help.setStyleSheet(stylesheets["button_green"])
             self.ui.button_pornhub_delay_help.setStyleSheet(stylesheets["button_green"])
             self.ui.button_result_limit_help.setStyleSheet(stylesheets["button_green"])
-            self.ui.button_settings_reset.setStyleSheet(stylesheets["button_reset"])
+            self.ui.settings_button_reset.setStyleSheet(stylesheets["button_reset"])
             self.ui.button_playlist_get_videos.setStyleSheet(stylesheets["button_purple"])
             self.ui.button_tree_stop.setStyleSheet(stylesheets["button_reset"])
             self.ui.button_tree_export_video_urls.setStyleSheet(stylesheets["button_purple"])
@@ -1223,11 +1223,11 @@ Categories=Utility;"""
             self.ui.button_range_apply_everything.setStyleSheet(stylesheets["button_orange"])
             self.ui.button_list_categories_eporner.setStyleSheet(stylesheets["button_purple"])
 
-            self.ui.button_switch_home.setStyleSheet(stylesheets["stylesheet_menu_button_download"])
-            self.ui.button_switch_account.setStyleSheet(stylesheets["stylesheet_menu_button_account"])
-            self.ui.button_switch_tools.setStyleSheet(stylesheets["stylesheet_menu_button_tools"])
-            self.ui.button_switch_credits.setStyleSheet(stylesheets["stylesheet_menu_button_credits"])
-            self.ui.button_view_progress_bars.setStyleSheet(stylesheets["stylesheet_menu_button_progress"])
+            self.ui.main_button_switch_home.setStyleSheet(stylesheets["stylesheet_menu_button_download"])
+            self.ui.main_button_switch_account.setStyleSheet(stylesheets["stylesheet_menu_button_account"])
+            self.ui.main_button_switch_tools.setStyleSheet(stylesheets["stylesheet_menu_button_tools"])
+            self.ui.main_button_switch_credits.setStyleSheet(stylesheets["stylesheet_menu_button_credits"])
+            self.ui.main_button_view_progress_bars.setStyleSheet(stylesheets["stylesheet_menu_button_progress"])
 
         self.header = self.ui.treeWidget.header()
         self.header.resizeSection(0, 300)
@@ -1290,8 +1290,8 @@ Categories=Utility;"""
         self.ui.spinbox_semaphore.setValue(int(self.conf.get("Performance", "semaphore")))
         self.ui.spinbox_treewidget_limit.setValue(int(self.conf.get("Video", "search_limit")))
         self.ui.lineedit_output_path.setText(self.conf.get("Video", "output_path"))
-        self.ui.checkbox_settings_internet_checks.setChecked(True) if self.conf.get("Setup", "internet_checks") == "true" else self.ui.checkbox_settings_internet_checks.setChecked(False)
-        self.ui.checkbox_settings_system_update_checks.setChecked(True) if self.conf.get("Setup", "update_checks") == "true" else self.ui.checkbox_settings_system_update_checks.setChecked(False)
+        self.ui.settings_checkbox_internet_checks.setChecked(True) if self.conf.get("Setup", "internet_checks") == "true" else self.ui.settings_checkbox_internet_checks.setChecked(False)
+        self.ui.settings_checkbox_system_update_checks.setChecked(True) if self.conf.get("Setup", "update_checks") == "true" else self.ui.settings_checkbox_system_update_checks.setChecked(False)
         self.ui.checkbox_settings_system_anonymous_mode.setChecked(True) if self.conf.get("Setup", "anonymous_mode") == "true" else self.ui.checkbox_settings_system_anonymous_mode.setChecked(False)
         self.ui.checkbox_settings_system_enable_tor.setChecked(True) if self.conf.get("Setup", "tor") == "true" else self.ui.checkbox_settings_system_enable_tor.setChecked(False)
         self.ui.checkbox_settings_post_processing_unfinished_videos.setChecked(True) if self.conf.get("PostProcessing", "unfinished_videos") == "true" else self.ui.checkbox_settings_post_processing_unfinished_videos.setChecked(False)
@@ -1302,7 +1302,7 @@ Categories=Utility;"""
             self.format = False
 
         elif self.conf.get("PostProcessing", "convert") == "true" and self.conf.get("PostProcessing", "format") == "mp4":
-            self.ui.radio_settings_post_processing_convert_to_mp4.setChecked(True)
+            self
             self.format = ".mp4"
 
         elif self.conf.get("PostProcessing", "format") != "mp4" and self.conf.get("PostProcessing", "convert") == "true":
@@ -1390,7 +1390,7 @@ Categories=Utility;"""
         self.conf.set("Setup", "anonymous_mode", "true" if self.ui.checkbox_settings_system_anonymous_mode.isChecked() else "false")
         self.conf.set("Setup", "tor", "true" if self.ui.checkbox_settings_system_enable_tor.isChecked() else "false")
 
-        if self.ui.radio_settings_post_processing_convert_to_mp4.isChecked():
+        if self.ui.radio_ui_design_native.isChecked():
             self.conf.set("PostProcessing", "convert", "true")
             self.conf.set("PostProcessing", "format", "mp4")
 
@@ -1635,8 +1635,8 @@ This warning won't be shown again.
 
     def progress_tree_widget(self, total, current):
         """This tracks the progress of the tree widget data"""
-        self.ui.progressbar_total.setMaximum(total)
-        self.ui.progressbar_total.setValue(current)
+        self.ui.main_progressbar_total.setMaximum(total)
+        self.ui.main_progressbar_total.setValue(current)
 
     def tree_widget_completed(self, video):
         """
@@ -1838,13 +1838,13 @@ This warning won't be shown again.
 
     def update_total_progressbar(self, value, maximum):
         """This updates the total progressbar"""
-        self.ui.progressbar_total.setMaximum(maximum)
-        self.ui.progressbar_total.setValue(value)
+        self.ui.main_progressbar_total.setMaximum(maximum)
+        self.ui.main_progressbar_total.setValue(value)
 
     def update_converting(self, value, maximum):
         """This updates the converting progressbar"""
-        self.ui.progressbar_converting.setMaximum(maximum)
-        self.ui.progressbar_converting.setValue(value)
+        self.ui.main_progressbar_converting.setMaximum(maximum)
+        self.ui.main_progressbar_converting.setValue(value)
 
     def update_progressbar(self, value, maximum):
         """This updates the PornHub progressbar"""
@@ -1882,7 +1882,7 @@ This warning won't be shown again.
         global total_downloaded_videos
         total_downloaded_videos += 1
         self.ui.lineedit_download_info.setText(f"Downloaded: {total_downloaded_videos} video(s) this session.")
-        self.ui.progressbar_total.setMaximum(100)
+        self.ui.main_progressbar_total.setMaximum(100)
         self.ui.progressbar_hqporner.setValue(0)
         self.ui.progressbar_eporner.setValue(0)
 
@@ -1892,13 +1892,13 @@ This warning won't be shown again.
 
     def start_undefined_range(self):
         """This starts the undefined range (loading animation) of the total progressbar"""
-        self.ui.progressbar_total.setRange(0, 0)
+        self.ui.main_progressbar_total.setRange(0, 0)
 
     def stop_undefined_range(self):
         """This stops the undefined range (loading animation) of the total progressbar"""
-        self.ui.progressbar_total.setMinimum(0)
-        self.ui.progressbar_total.setMaximum(100)
-        self.ui.progressbar_total.setValue(0)
+        self.ui.main_progressbar_total.setMinimum(0)
+        self.ui.main_progressbar_total.setMaximum(100)
+        self.ui.main_progressbar_total.setValue(0)
 
     """
     The following functions are used for opening files / directories with the QFileDialog
