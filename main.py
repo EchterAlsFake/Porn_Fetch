@@ -1003,7 +1003,7 @@ Categories=Utility;"""
         """
 
         self.ui.lineedit_url.setPlaceholderText(" ")
-        self.ui.label_settings_
+        #self.ui.label_settings_
 
 
 
@@ -1385,8 +1385,8 @@ Categories=Utility;"""
         self.conf.set("Performance", "workers", str(self.ui.spinbox_maximal_workers.value()))
         self.conf.set("Video", "delay", str(self.ui.spinbox_pornhub_delay.value()))
         self.conf.set("Performance", "retries", str(self.ui.spinbox_maximal_retries.value()))
-        self.conf.set("Setup", "update_checks", "true" if self.ui.checkbox_settings_system_update_checks.isChecked() else "false")
-        self.conf.set("Setup", "internet_checks", "true" if self.ui.checkbox_settings_internet_checks.isChecked() else "false")
+        self.conf.set("Setup", "update_checks", "true" if self.ui.settings_checkbox_system_update_checks.isChecked() else "false")
+        self.conf.set("Setup", "internet_checks", "true" if self.ui.settings_checkbox_internet_checks.isChecked() else "false")
         self.conf.set("Setup", "anonymous_mode", "true" if self.ui.checkbox_settings_system_anonymous_mode.isChecked() else "false")
         self.conf.set("Setup", "tor", "true" if self.ui.checkbox_settings_system_enable_tor.isChecked() else "false")
 
@@ -2130,11 +2130,11 @@ This warning won't be shown again.
 
     def show_credits(self):
         """Loads the credits from the CREDITS.md.  Credits need to be recompiled in the resource file every time"""
-        self.ui.textBrowser.setOpenExternalLinks(True)
+        self.ui.main_textbrowser_credits.setOpenExternalLinks(True)
         file = QFile(":/credits/README/CREDITS.md")
         file.open(QFile.ReadOnly | QFile.Text)
         stream = QTextStream(file)
-        self.ui.textBrowser.setHtml(markdown.markdown(stream.readAll()))
+        self.ui.main_textbrowser_credits.setHtml(markdown.markdown(stream.readAll()))
 
         """
         The following functions are used for the help messages
