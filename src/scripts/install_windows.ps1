@@ -72,7 +72,9 @@ Set-Location -Path $projectDir
 py -m venv ..\venv\
 ..\venv\Scripts\activate.ps1
 pip install -r requirements.txt
-echo -e "Yes\nYes" | pyside6-deploy main.py -c src/build/pysidedeploy_windows.spec -f -v
+$env:NUITKA_ASSUME_YES_FOR_DOWNLOADS = "1"
+Write-Host "NUITKA_ASSUME_YES_FOR_DOWNLOADS is set to $env:NUITKA_ASSUME_YES_FOR_DOWNLOADS"
+pyside6-deploy main.py -c src/build/pysidedeploy_windows.spec -f -v
 
 # Move the final executable to the user's Desktop
 $finalExePath = Join-Path -Path $projectDir -ChildPath "main.exe"
