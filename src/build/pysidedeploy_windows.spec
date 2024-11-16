@@ -8,6 +8,7 @@ title = Porn Fetch
 project_dir = .
 
 # source file path
+input_file = main.py
 
 # directory where exec is stored
 exec_directory = .
@@ -41,7 +42,7 @@ qml_files =
 excluded_qml_plugins = 
 
 # qt modules used. comma separated
-modules = Core,Widgets,Gui
+modules = Core,Gui,Widgets
 
 # qt plugins used by the application
 plugins = egldeviceintegrations,iconengines,platforms/darwin,xcbglintegrations,imageformats,platforms,platformthemes,styles,platforminputcontexts,accessiblebridge,generic
@@ -65,7 +66,7 @@ plugins =
 macos.permissions = 
 
 # (str) specify any extra nuitka arguments
-extra_args = --quiet --noinclude-qt-translations --assume-yes-for-downloads
+extra_args = --noinclude-qt-translations --assume-yes-for-downloads --disable-cache=all --clean-cache=all --warn-unusual-code --remove-output --force-dll-dependency-cache-update --show-memory --windows-console-mode=disable --mingw64 --company-name=None --product-name=PornFetch --file-version=2.5 --product-version=2.5 --copyright=JohannesHabel
 
 [buildozer]
 
