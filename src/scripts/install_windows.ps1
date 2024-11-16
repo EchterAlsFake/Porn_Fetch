@@ -72,7 +72,7 @@ Set-Location -Path $projectDir
 py -m venv ..\venv\
 ..\venv\Scripts\activate.ps1
 pip install -r requirements.txt
-echo Yes | pyside6-deploy main.py -c src/build/pysidedeploy_windows.spec -f -v
+echo -e "Yes\nYes" | pyside6-deploy main.py -c src/build/pysidedeploy_windows.spec -f -v
 
 # Move the final executable to the user's Desktop
 $finalExePath = Join-Path -Path $projectDir -ChildPath "main.exe"
@@ -85,6 +85,7 @@ if (Test-Path -Path $finalExePath) {
 #Set-Location -Path $userDir
 # Clean up
 deactivate
+cd C:\ # Just leaves the directory, so that I can remove the downloaded archive
 Write-Output "Cleaning up..."
 Remove-Item -Path $projectZipPath -Force
 Remove-Item -Recurse -Force -Path (Join-Path $downloadsDir "Porn_Fetch-master")
