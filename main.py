@@ -870,7 +870,8 @@ class Porn_Fetch(QWidget):
 
                 self.close()
                 exit(0)
-            self.default_max_height = self.ui.stacked_widget_top.maximumHeight()
+
+            self.default_max_height = self.ui.main_stacked_widget_top.maximumHeight()
             self.button_connectors()  # Connects the buttons to their functions
             self.button_groups()  # Groups the buttons, so that the Radio buttons are split from themselves (hard to explain)
             self.load_style()  # Loads all the User Interface stylesheets
@@ -885,6 +886,12 @@ class Porn_Fetch(QWidget):
 
             if self.conf.get("Setup", "update_checks") == "true":
                 self.check_for_updates()
+
+            if self.conf.get("Setup", "anonymous_mode") == "true":
+                self.anonymous_mode()
+
+            if self.conf.get("Setup", "tor") == "true":
+                logger.warning("You have enabled Tor! This feature is NOT implemented yet!")
 
             self.check_ffmpeg()  # Checks and sets up FFmpeg
             logger.debug("Startup: [5/5] ✔")
@@ -999,11 +1006,33 @@ Categories=Utility;"""
         """
         This mode will hide that you are using Porn Fetch by hiding video title names, hiding author names,
         hiding the window title and removing all placeholders from lineedits. May not be the most efficient approach,
-        but works.
+         but it works.
         """
+        self.setWindowTitle("Running in Anonymous mode...")
 
-        self.ui.lineedit_url.setPlaceholderText(" ")
-        #self.ui.label_settings_
+
+        self.ui.download_lineedit_url.setPlaceholderText(" ")
+        self.ui.login_lineedit_password.setPlaceholderText(" ")
+        self.ui.login_lineedit_username.setPlaceholderText(" ")
+        self.ui.settings_label_pornhub_delay.setText("Delay (0 = Disabled) in seconds:")
+        self.ui.settings_label_settings_videos_model.setText("Actors video types:")
+        self.ui.settings_button_install_pornfetch.setText("Install Program")
+        self.ui.settings_groupbox_system_pornfetch.setWindowTitle("System")
+        self.ui.settings_label_design.setText("Design:")
+        self.ui.main_textbrowser_supported_websites.setText("Running in anonymous mode, please deactivate to display...")
+        self.ui.download_lineedit_playlist_url.setPlaceholderText("Enter playlist URL")
+        self.ui.download_radio_search_website_eporner.setText("4")
+        self.ui.download_radio_search_website_hqporner.setText("2")
+        self.ui.download_radio_search_website_pornhub.setText("1")
+        self.ui.download_radio_search_website_xvideos.setText("3")
+        self.ui.download_radio_search_website_xnxx.setText("5")
+        self.ui.progress_label_pornhub.setText("1")
+        self.ui.progress_label_hqporner.setText("2")
+        self.ui.progress_label_eporner.setText("3")
+        self.ui.progress_label_xnxx.setText("4")
+        self.ui.progress_label_xvideos.setText("5")
+        self.ui.progress_label_spankbang.setText("6")
+
 
 
 
@@ -1011,46 +1040,46 @@ Categories=Utility;"""
         clipboard = QGuiApplication.clipboard()
         text = clipboard.text()
         send_error_log(f"Got clipboard text: {text}")
-        self.ui.lineedit_url.setText(str(text))
+        self.ui.download_lineedit_url.setText(str(text))
 
     def button_groups(self):
         """
         The button groups are needed to tell the radio button which of them are in a group.
         If I don't do this, then you could check all redio buttons at the same time lol"""
         self.group_threading_mode = QButtonGroup()
-        self.group_threading_mode.addButton(self.ui.radio_threading_mode_ffmpeg)
-        self.group_threading_mode.addButton(self.ui.radio_threading_mode_default)
-        self.group_threading_mode.addButton(self.ui.radio_threading_mode_high_performance)
+        self.group_threading_mode.addButton(self.ui.settings_radio_threading_mode_ffmpeg)
+        self.group_threading_mode.addButton(self.ui.settings_radio_threading_mode_default)
+        self.group_threading_mode.addButton(self.ui.settings_radio_threading_mode_high_performance)
 
         self.group_quality = QButtonGroup()
-        self.group_quality.addButton(self.ui.radio_quality_worst)
-        self.group_quality.addButton(self.ui.radio_quality_half)
-        self.group_quality.addButton(self.ui.radio_quality_best)
+        self.group_quality.addButton(self.ui.settings_radio_quality_worst)
+        self.group_quality.addButton(self.ui.settings_radio_quality_half)
+        self.group_quality.addButton(self.ui.settings_radio_quality_best)
 
         self.directory_system_group = QButtonGroup()
-        self.directory_system_group.addButton(self.ui.radio_directory_system_no)
-        self.directory_system_group.addButton(self.ui.radio_directory_system_yes)
+        self.directory_system_group.addButton(self.ui.settings_radio_directory_system_no)
+        self.directory_system_group.addButton(self.ui.settings_radio_directory_system_yes)
 
         self.language_group = QButtonGroup()
-        self.language_group.addButton(self.ui.radio_ui_language_english)
-        self.language_group.addButton(self.ui.radio_ui_language_german)
-        self.language_group.addButton(self.ui.radio_ui_language_french)
-        self.language_group.addButton(self.ui.radio_ui_language_system_default)
-        self.language_group.addButton(self.ui.radio_ui_language_chinese_simplified)
+        self.language_group.addButton(self.ui.settings_radio_ui_language_english)
+        self.language_group.addButton(self.ui.settings_radio_ui_language_german)
+        self.language_group.addButton(self.ui.settings_radio_ui_language_french)
+        self.language_group.addButton(self.ui.settings_radio_ui_language_system_default)
+        self.language_group.addButton(self.ui.settings_radio_ui_language_chinese_simplified)
 
         self.radio_hqporner = QButtonGroup()
-        self.radio_hqporner.addButton(self.ui.radio_top_porn_week)
-        self.radio_hqporner.addButton(self.ui.radio_top_porn_month)
-        self.radio_hqporner.addButton(self.ui.radio_top_porn_all_time)
+        self.radio_hqporner.addButton(self.ui.tools_radio_top_porn_week)
+        self.radio_hqporner.addButton(self.ui.tools_radio_top_porn_month)
+        self.radio_hqporner.addButton(self.ui.tools_radio_top_porn_all_time)
 
         self.radio_skip_existing_files = QButtonGroup()
-        self.radio_skip_existing_files.addButton(self.ui.radio_skip_existing_files_yes)
-        self.radio_skip_existing_files.addButton(self.ui.radio_skip_existing_files_no)
+        self.radio_skip_existing_files.addButton(self.ui.settings_radio_skip_existing_files_yes)
+        self.radio_skip_existing_files.addButton(self.ui.settings_radio_skip_existing_files_no)
 
         self.radio_model_videos = QButtonGroup()
-        self.radio_model_videos.addButton(self.ui.radio_model_both)
-        self.radio_model_videos.addButton(self.ui.radio_model_uploads)
-        self.radio_model_videos.addButton(self.ui.radio_model_featured)
+        self.radio_model_videos.addButton(self.ui.settings_radio_model_both)
+        self.radio_model_videos.addButton(self.ui.settings_radio_model_uploads)
+        self.radio_model_videos.addButton(self.ui.settings_radio_model_featured)
 
     def button_connectors(self):
         """a function to link the buttons to their functions"""
@@ -1063,60 +1092,60 @@ Categories=Utility;"""
         self.ui.main_button_view_progress_bars.clicked.connect(self.switch_to_all_progress_bars)
 
         # Video Download Button Connections
-        self.ui.button_download.clicked.connect(self.start_single_video)
-        self.ui.button_model.clicked.connect(self.start_model)
-        self.ui.button_tree_download.clicked.connect(self.download_tree_widget)
-        self.ui.button_tree_unselect_all.clicked.connect(self.unselect_all_items)
-        self.ui.button_playlist_get_videos.clicked.connect(self.start_playlist)
+        self.ui.main_button_tree_download.clicked.connect(self.download_tree_widget)
+        self.ui.main_button_tree_unselect_all.clicked.connect(self.unselect_all_items)
+        self.ui.download_button_download.clicked.connect(self.start_single_video)
+        self.ui.download_button_model.clicked.connect(self.start_model)
+        self.ui.download_button_playlist_get_videos.clicked.connect(self.start_playlist)
 
         # Help Buttons Connections
-        self.ui.button_semaphore_help.clicked.connect(button_semaphore_help)
-        self.ui.button_threading_mode_help.clicked.connect(button_threading_mode_help)
-        self.ui.button_directory_system_help.clicked.connect(button_directory_system_help)
-        self.ui.button_workers_help.clicked.connect(maximal_workers_help)
-        self.ui.button_timeout_help.clicked.connect(timeout_help)
-        self.ui.button_pornhub_delay_help.clicked.connect(pornhub_delay_help)
-        self.ui.button_result_limit_help.clicked.connect(result_limit_help)
-        self.ui.button_help_file.clicked.connect(open_file_help)
-        self.ui.button_timeout_maximal_retries_help.clicked.connect(max_retries_help)
-        self.ui.button_help_skip_existing_files.clicked.connect(skip_existing_files_help)
-        self.ui.button_help_model_videos.clicked.connect(model_videos_help)
+        self.ui.settings_button_semaphore_help.clicked.connect(button_semaphore_help)
+        self.ui.settings_button_threading_mode_help.clicked.connect(button_threading_mode_help)
+        self.ui.settings_button_directory_system_help.clicked.connect(button_directory_system_help)
+        self.ui.settings_button_workers_help.clicked.connect(maximal_workers_help)
+        self.ui.settings_button_timeout_help.clicked.connect(timeout_help)
+        self.ui.settings_button_pornhub_delay_help.clicked.connect(pornhub_delay_help)
+        self.ui.settings_button_result_limit_help.clicked.connect(result_limit_help)
+        self.ui.download_button_help_file.clicked.connect(open_file_help)
+        self.ui.settings_button_timeout_maximal_retries_help.clicked.connect(max_retries_help)
+        self.ui.settings_button_help_skip_existing_files.clicked.connect(skip_existing_files_help)
+        self.ui.settings_button_help_model_videos.clicked.connect(model_videos_help)
 
         # Settings
         self.ui.settings_button_apply.clicked.connect(self.save_user_settings)
         self.ui.settings_button_reset.clicked.connect(reset_pornfetch)
 
         # Account
-        self.ui.button_login.clicked.connect(self.login)
-        self.ui.button_get_watched_videos.clicked.connect(self.get_watched_videos)
-        self.ui.button_get_liked_videos.clicked.connect(self.get_liked_videos)
-        self.ui.button_get_recommended_videos.clicked.connect(self.get_recommended_videos)
+        self.ui.login_button_login.clicked.connect(self.login)
+        self.ui.login_button_get_watched_videos.clicked.connect(self.get_watched_videos)
+        self.ui.login_button_get_liked_videos.clicked.connect(self.get_liked_videos)
+        self.ui.login_button_get_recommended_videos.clicked.connect(self.get_recommended_videos)
 
         # Search
         self.ui.button_search.clicked.connect(self.basic_search)
 
         # HQPorner
-        self.ui.button_hqporner_category_get_videos.clicked.connect(self.get_by_category_hqporner)
-        self.ui.button_top_porn_get_videos.clicked.connect(self.get_top_porn_hqporner)
-        self.ui.button_get_brazzers_videos.clicked.connect(self.get_brazzers_videos)
-        self.ui.button_list_categories.clicked.connect(self.list_categories_hqporner)
         self.ui.main_button_switch_tools.clicked.connect(self.switch_to_tools)
-        self.ui.button_get_random_videos.clicked.connect(self.get_random_video)
+        self.ui.tools_button_hqporner_category_get_videos.clicked.connect(self.get_by_category_hqporner)
+        self.ui.tools_button_top_porn_get_videos.clicked.connect(self.get_top_porn_hqporner)
+        self.ui.tools_button_get_brazzers_videos.clicked.connect(self.get_brazzers_videos)
+        self.ui.tools_button_list_categories.clicked.connect(self.list_categories_hqporner)
+        self.ui.tools_button_get_random_videos.clicked.connect(self.get_random_video)
 
         # EPorner
-        self.ui.button_list_categories_eporner.clicked.connect(self.list_categories_eporner)
-        self.ui.button_eporner_category_get_videos.clicked.connect(self.get_by_category_eporner)
+        self.ui.tools_button_list_categories_eporner.clicked.connect(self.list_categories_eporner)
+        self.ui.tools_button_eporner_category_get_videos.clicked.connect(self.get_by_category_eporner)
 
         # File Dialog
-        self.ui.button_output_path_select.clicked.connect(self.open_output_path_dialog)
-        self.ui.button_open_file.clicked.connect(self.open_file_dialog)
+        self.ui.settings_button_output_path_select.clicked.connect(self.open_output_path_dialog)
+        self.ui.download_button_open_file.clicked.connect(self.open_file_dialog)
 
         # Other stuff IDK
-        self.ui.button_tree_select_range.clicked.connect(self.select_range_of_items)
-        self.ui.button_tree_stop.clicked.connect(switch_stop_state)
-        self.ui.button_tree_export_video_urls.clicked.connect(export_urls)
-        self.ui.button_download_ffmpeg.clicked.connect(self.download_ffmpeg)
-        self.ui.button_range_apply_everything.clicked.connect(self.select_all_items)
+        self.ui.main_button_tree_select_range.clicked.connect(self.select_range_of_items)
+        self.ui.main_button_tree_stop.clicked.connect(switch_stop_state)
+        self.ui.main_button_tree_export_video_urls.clicked.connect(export_urls)
+        self.ui.main_button_range_apply_everything.clicked.connect(self.select_all_items)
+        self.ui.settings_button_download_ffmpeg.clicked.connect(self.download_ffmpeg)
 
     def load_style(self):
         """Refactored function to load icons and stylesheets."""
@@ -1127,18 +1156,18 @@ Categories=Utility;"""
             self.ui.main_button_switch_credits: "information.svg",
             self.ui.main_button_switch_account: "account.svg",
             self.ui.main_button_switch_tools: "tools.svg",
-            self.ui.button_workers_help: "faq.svg",
-            self.ui.button_pornhub_delay_help: "faq.svg",
-            self.ui.button_threading_mode_help: "faq.svg",
-            self.ui.button_semaphore_help: "faq.svg",
-            self.ui.button_timeout_help: "faq.svg",
-            self.ui.button_directory_system_help: "faq.svg",
-            self.ui.button_result_limit_help: "faq.svg",
-            self.ui.button_timeout_maximal_retries_help: "faq.svg",
-            self.ui.button_help_file: "faq.svg",
+            self.ui.settings_button_workers_help: "faq.svg",
+            self.ui.settings_button_pornhub_delay_help: "faq.svg",
+            self.ui.settings_button_threading_mode_help: "faq.svg",
+            self.ui.settings_button_semaphore_help: "faq.svg",
+            self.ui.settings_button_timeout_help: "faq.svg",
+            self.ui.settings_button_directory_system_help: "faq.svg",
+            self.ui.settings_button_result_limit_help: "faq.svg",
+            self.ui.settings_button_timeout_maximal_retries_help: "faq.svg",
+            self.ui.download_button_help_file: "faq.svg",
             self.ui.main_button_view_progress_bars: "progressbars.svg",
-            self.ui.button_help_model_videos: "faq.svg",
-            self.ui.button_help_skip_existing_files: "faq.svg",
+            self.ui.settings_button_help_model_videos: "faq.svg",
+            self.ui.settings_button_help_skip_existing_files: "faq.svg",
         }
         for button, icon_name in icons.items():
             if icon_name == "settings.svg" or icon_name == "tools.svg":
@@ -1178,7 +1207,7 @@ Categories=Utility;"""
         if self.conf["UI"]["design"] == "native":
 
             # Applying top buttons
-            self.ui.button_login.setStyleSheet(stylesheets["button_green"])
+            self.ui.login_button_login.setStyleSheet(stylesheets["button_green"])
             self.ui.progressbar_pornhub.setStyleSheet(stylesheets["progressbar_pornhub"])
             self.ui.main_progressbar_total.setStyleSheet(stylesheets["progressbar_total"])
             self.ui.progressbar_xnxx.setStyleSheet(stylesheets["progressbar_xnxx"])
@@ -1187,41 +1216,41 @@ Categories=Utility;"""
             self.ui.progressbar_xvideos.setStyleSheet(stylesheets["progressbar_xvideos"])
             self.ui.progressbar_spankbang.setStyleSheet(stylesheets["progressbar_spankbang"])
             self.ui.main_progressbar_converting.setStyleSheet(stylesheets["progressbar_converting"])
-            self.ui.button_model.setStyleSheet(stylesheets["button_purple"])
+            self.ui.download_button_model.setStyleSheet(stylesheets["button_purple"])
             self.ui.button_search.setStyleSheet(stylesheets["button_purple"])
-            self.ui.button_download.setStyleSheet(stylesheets["button_purple"])
-            self.ui.button_threading_mode_help.setStyleSheet(stylesheets["button_green"])
-            self.ui.button_directory_system_help.setStyleSheet(stylesheets["button_green"])
-            self.ui.button_semaphore_help.setStyleSheet(stylesheets["button_green"])
-            self.ui.button_tree_download.setStyleSheet(stylesheets["button_purple"])
-            self.ui.button_tree_unselect_all.setStyleSheet(stylesheets["button_blue"])
-            self.ui.button_tree_select_range.setStyleSheet(stylesheets["button_green"])
-            self.ui.button_output_path_select.setStyleSheet(stylesheets["button_blue"])
-            self.ui.button_login.setStyleSheet(stylesheets["button_blue"])
+            self.ui.download_button_download.setStyleSheet(stylesheets["button_purple"])
+            self.ui.settings_button_threading_mode_help.setStyleSheet(stylesheets["button_green"])
+            self.ui.settings_button_directory_system_help.setStyleSheet(stylesheets["button_green"])
+            self.ui.settings_button_semaphore_help.setStyleSheet(stylesheets["button_green"])
+            self.ui.main_button_tree_download.setStyleSheet(stylesheets["button_purple"])
+            self.ui.main_button_tree_unselect_all.setStyleSheet(stylesheets["button_blue"])
+            self.ui.main_button_tree_select_range.setStyleSheet(stylesheets["button_green"])
+            self.ui.settings_button_output_path_select.setStyleSheet(stylesheets["button_blue"])
+            self.ui.login_button_login.setStyleSheet(stylesheets["button_blue"])
             self.ui.settings_button_apply.setStyleSheet(stylesheets["button_blue"])
-            self.ui.button_get_random_videos.setStyleSheet(stylesheets["button_purple"])
-            self.ui.button_get_brazzers_videos.setStyleSheet(stylesheets["button_purple"])
-            self.ui.button_list_categories.setStyleSheet(stylesheets["button_purple"])
-            self.ui.button_open_file.setStyleSheet(stylesheets["button_purple"])
+            self.ui.tools_button_get_random_videos.setStyleSheet(stylesheets["button_purple"])
+            self.ui.tools_button_get_brazzers_videos.setStyleSheet(stylesheets["button_purple"])
+            self.ui.tools_button_list_categories.setStyleSheet(stylesheets["button_purple"])
+            self.ui.download_button_open_file.setStyleSheet(stylesheets["button_purple"])
             self.ui.main_button_switch_supported_websites.setStyleSheet(stylesheets["button_blue"])
-            self.ui.button_hqporner_category_get_videos.setStyleSheet(stylesheets["button_purple"])
-            self.ui.button_top_porn_get_videos.setStyleSheet(stylesheets["button_purple"])
-            self.ui.button_get_watched_videos.setStyleSheet(stylesheets["buttons_login"])
-            self.ui.button_get_liked_videos.setStyleSheet(stylesheets["buttons_login"])
-            self.ui.button_get_recommended_videos.setStyleSheet(stylesheets["buttons_login"])
-            self.ui.button_timeout_help.setStyleSheet(stylesheets["button_green"])
-            self.ui.button_workers_help.setStyleSheet(stylesheets["button_green"])
-            self.ui.button_pornhub_delay_help.setStyleSheet(stylesheets["button_green"])
-            self.ui.button_result_limit_help.setStyleSheet(stylesheets["button_green"])
+            self.ui.tools_button_hqporner_category_get_videos.setStyleSheet(stylesheets["button_purple"])
+            self.ui.tools_button_top_porn_get_videos.setStyleSheet(stylesheets["button_purple"])
+            self.ui.login_button_get_watched_videos.setStyleSheet(stylesheets["buttons_login"])
+            self.ui.login_button_get_liked_videos.setStyleSheet(stylesheets["buttons_login"])
+            self.ui.login_button_get_recommended_videos.setStyleSheet(stylesheets["buttons_login"])
+            self.ui.settings_button_timeout_help.setStyleSheet(stylesheets["button_green"])
+            self.ui.settings_button_workers_help.setStyleSheet(stylesheets["button_green"])
+            self.ui.settings_button_pornhub_delay_help.setStyleSheet(stylesheets["button_green"])
+            self.ui.settings_button_result_limit_help.setStyleSheet(stylesheets["button_green"])
             self.ui.settings_button_reset.setStyleSheet(stylesheets["button_reset"])
-            self.ui.button_playlist_get_videos.setStyleSheet(stylesheets["button_purple"])
-            self.ui.button_tree_stop.setStyleSheet(stylesheets["button_reset"])
-            self.ui.button_tree_export_video_urls.setStyleSheet(stylesheets["button_purple"])
-            self.ui.button_timeout_maximal_retries_help.setStyleSheet(stylesheets["button_green"])
-            self.ui.button_help_file.setStyleSheet(stylesheets["button_green"])
-            self.ui.button_download_ffmpeg.setStyleSheet(stylesheets["button_purple"])
-            self.ui.button_range_apply_everything.setStyleSheet(stylesheets["button_orange"])
-            self.ui.button_list_categories_eporner.setStyleSheet(stylesheets["button_purple"])
+            self.ui.download_button_playlist_get_videos.setStyleSheet(stylesheets["button_purple"])
+            self.ui.main_button_tree_stop.setStyleSheet(stylesheets["button_reset"])
+            self.ui.main_button_tree_export_video_urls.setStyleSheet(stylesheets["button_purple"])
+            self.ui.settings_button_timeout_maximal_retries_help.setStyleSheet(stylesheets["button_green"])
+            self.ui.download_button_help_file.setStyleSheet(stylesheets["button_green"])
+            self.ui.settings_button_download_ffmpeg.setStyleSheet(stylesheets["button_purple"])
+            self.ui.main_button_range_apply_everything.setStyleSheet(stylesheets["button_orange"])
+            self.ui.tools_button_list_categories_eporner.setStyleSheet(stylesheets["button_purple"])
 
             self.ui.main_button_switch_home.setStyleSheet(stylesheets["stylesheet_menu_button_download"])
             self.ui.main_button_switch_account.setStyleSheet(stylesheets["stylesheet_menu_button_account"])
@@ -1241,40 +1270,40 @@ Categories=Utility;"""
     def settings_maps_initialization(self):
         # Maps for settings and corresponding UI elements
         self.quality_map = {
-            "best": self.ui.radio_quality_best,
-            "half": self.ui.radio_quality_half,
-            "worst": self.ui.radio_quality_worst
+            "best": self.ui.settings_radio_quality_best,
+            "half": self.ui.settings_radio_quality_half,
+            "worst": self.ui.settings_radio_quality_worst
         }
 
         self.threading_mode_map = {
-            "threaded": self.ui.radio_threading_mode_high_performance,
-            "FFMPEG": self.ui.radio_threading_mode_ffmpeg,
-            "default": self.ui.radio_threading_mode_default
+            "threaded": self.ui.settings_radio_threading_mode_high_performance,
+            "FFMPEG": self.ui.settings_radio_threading_mode_ffmpeg,
+            "default": self.ui.settings_radio_threading_mode_default
         }
 
         self.directory_system_map = {
-            "1": self.ui.radio_directory_system_yes,
-            "0": self.ui.radio_directory_system_no
+            "1": self.ui.settings_radio_directory_system_yes,
+            "0": self.ui.settings_radio_directory_system_no
         }
 
         self.gui_language_map = {
-            "en": self.ui.radio_ui_language_english,
-            "de_DE": self.ui.radio_ui_language_german,
-            "fr": self.ui.radio_ui_language_french,
-            "zh_CN": self.ui.radio_ui_language_chinese_simplified,
-            "system": self.ui.radio_ui_language_system_default
+            "en": self.ui.settings_radio_ui_language_english,
+            "de_DE": self.ui.settings_radio_ui_language_german,
+            "fr": self.ui.settings_radio_ui_language_french,
+            "zh_CN": self.ui.settings_radio_ui_language_chinese_simplified,
+            "system": self.ui.settings_radio_ui_language_system_default
         }
 
         self.model_videos_map = {
-            "both": self.ui.radio_model_both,
-            "uploads": self.ui.radio_model_uploads,
-            "featured": self.ui.radio_model_featured
+            "both": self.ui.settings_radio_model_both,
+            "uploads": self.ui.settings_radio_model_uploads,
+            "featured": self.ui.settings_radio_model_featured
         }
 
         self.gui_design_map = {
-            "native": self.ui.radio_ui_design_native,
-            "dark": self.ui.radio_ui_design_dark_mode,
-            "light": self.ui.radio_ui_design_light_mode
+            "native": self.ui.settings_radio_ui_design_native,
+            "dark": self.ui.settings_radio_ui_design_dark_mode,
+            "light": self.ui.settings_radio_ui_design_light_mode
         }
 
     def load_user_settings(self):
@@ -1287,13 +1316,13 @@ Categories=Utility;"""
         self.gui_language_map.get(self.conf.get("UI", "language")).setChecked(True)
         self.model_videos_map.get(self.conf.get("Video", "model_videos")).setChecked(True)
         self.gui_design_map.get(self.conf.get("UI", "design")).setChecked(True)
-        self.ui.spinbox_semaphore.setValue(int(self.conf.get("Performance", "semaphore")))
-        self.ui.spinbox_treewidget_limit.setValue(int(self.conf.get("Video", "search_limit")))
-        self.ui.lineedit_output_path.setText(self.conf.get("Video", "output_path"))
+        self.ui.settings_spinbox_semaphore.setValue(int(self.conf.get("Performance", "semaphore")))
+        self.ui.settings_spinbox_treewidget_limit.setValue(int(self.conf.get("Video", "search_limit")))
+        self.ui.settings_lineedit_output_path.setText(self.conf.get("Video", "output_path"))
         self.ui.settings_checkbox_internet_checks.setChecked(True) if self.conf.get("Setup", "internet_checks") == "true" else self.ui.settings_checkbox_internet_checks.setChecked(False)
         self.ui.settings_checkbox_system_update_checks.setChecked(True) if self.conf.get("Setup", "update_checks") == "true" else self.ui.settings_checkbox_system_update_checks.setChecked(False)
-        self.ui.checkbox_settings_system_anonymous_mode.setChecked(True) if self.conf.get("Setup", "anonymous_mode") == "true" else self.ui.checkbox_settings_system_anonymous_mode.setChecked(False)
-        self.ui.checkbox_settings_system_enable_tor.setChecked(True) if self.conf.get("Setup", "tor") == "true" else self.ui.checkbox_settings_system_enable_tor.setChecked(False)
+        self.ui.settings_checkbox_system_anonymous_mode.setChecked(True) if self.conf.get("Setup", "anonymous_mode") == "true" else self.ui.settings_checkbox_system_anonymous_mode.setChecked(False)
+        self.ui.settings_checkbox_system_enable_tor.setChecked(True) if self.conf.get("Setup", "tor") == "true" else self.ui.settings_checkbox_system_enable_tor.setChecked(False)
         self.ui.checkbox_settings_post_processing_unfinished_videos.setChecked(True) if self.conf.get("PostProcessing", "unfinished_videos") == "true" else self.ui.checkbox_settings_post_processing_unfinished_videos.setChecked(False)
         self.ui.checkbox_settings_post_processing_write_metadata_tags.setChecked(True) if self.conf.get("PostProcessing", "write_metadata") == "true" else self.ui.checkbox_settings_post_processing_write_metadata_tags.setChecked(False)
 
@@ -1302,7 +1331,7 @@ Categories=Utility;"""
             self.format = False
 
         elif self.conf.get("PostProcessing", "convert") == "true" and self.conf.get("PostProcessing", "format") == "mp4":
-            self
+            self #? I am stupid
             self.format = ".mp4"
 
         elif self.conf.get("PostProcessing", "format") != "mp4" and self.conf.get("PostProcessing", "convert") == "true":
@@ -1327,14 +1356,14 @@ Categories=Utility;"""
         self.model_videos_type = self.conf["Video"]["model_videos"]
 
         if self.skip_existing_files:
-            self.ui.radio_skip_existing_files_yes.setChecked(True)
+            self.ui.settings_radio_skip_existing_files_yes.setChecked(True)
 
         else:
-            self.ui.radio_skip_existing_files_no.setChecked(True)
+            self.ui.settings_radio_skip_existing_files_no.setChecked(True)
 
-        self.ui.spinbox_maximal_timeout.setValue(int(self.timeout))
-        self.ui.spinbox_maximal_workers.setValue(int(self.workers))
-        self.ui.spinbox_pornhub_delay.setValue(int(self.delay))
+        self.ui.settings_spinbox_maximal_timeout.setValue(int(self.timeout))
+        self.ui.settings_spinbox_maximal_workers.setValue(int(self.workers))
+        self.ui.settings_spinbox_pornhub_delay.setValue(int(self.delay))
         consts.MAX_CALL_RETRIES = self.max_retries
         bs_consts.REQUEST_DELAY = self.delay
         bs_consts.MAX_RETRIES = self.max_retries
@@ -1371,26 +1400,26 @@ Categories=Utility;"""
             if radio_button.isChecked():
                 self.conf.set("UI", "design", design)
 
-        if self.ui.radio_skip_existing_files_no.isChecked():
+        if self.ui.settings_radio_skip_existing_files_no.isChecked():
             self.conf.set("Video", "skip_existing_files", "false")
 
         else:
             self.conf.set("Video", "skip_existing_files", "true")
 
         # Save other settings
-        self.conf.set("Performance", "semaphore", str(self.ui.spinbox_semaphore.value()))
-        self.conf.set("Video", "search_limit", str(self.ui.spinbox_treewidget_limit.value()))
-        self.conf.set("Video", "output_path", self.ui.lineedit_output_path.text())
-        self.conf.set("Performance", "timeout", str(self.ui.spinbox_maximal_timeout.value()))
-        self.conf.set("Performance", "workers", str(self.ui.spinbox_maximal_workers.value()))
-        self.conf.set("Video", "delay", str(self.ui.spinbox_pornhub_delay.value()))
-        self.conf.set("Performance", "retries", str(self.ui.spinbox_maximal_retries.value()))
+        self.conf.set("Performance", "semaphore", str(self.ui.settings_spinbox_semaphore.value()))
+        self.conf.set("Video", "search_limit", str(self.ui.settings_spinbox_treewidget_limit.value()))
+        self.conf.set("Video", "output_path", self.ui.settings_lineedit_output_path.text())
+        self.conf.set("Performance", "timeout", str(self.ui.settings_spinbox_maximal_timeout.value()))
+        self.conf.set("Performance", "workers", str(self.ui.settings_spinbox_maximal_workers.value()))
+        self.conf.set("Video", "delay", str(self.ui.settings_spinbox_pornhub_delay.value()))
+        self.conf.set("Performance", "retries", str(self.ui.settings_spinbox_maximal_retries.value()))
         self.conf.set("Setup", "update_checks", "true" if self.ui.settings_checkbox_system_update_checks.isChecked() else "false")
         self.conf.set("Setup", "internet_checks", "true" if self.ui.settings_checkbox_internet_checks.isChecked() else "false")
-        self.conf.set("Setup", "anonymous_mode", "true" if self.ui.checkbox_settings_system_anonymous_mode.isChecked() else "false")
-        self.conf.set("Setup", "tor", "true" if self.ui.checkbox_settings_system_enable_tor.isChecked() else "false")
+        self.conf.set("Setup", "anonymous_mode", "true" if self.ui.settings_checkbox_system_anonymous_mode.isChecked() else "false")
+        self.conf.set("Setup", "tor", "true" if self.ui.settings_checkbox_system_enable_tor.isChecked() else "false")
 
-        if self.ui.radio_ui_design_native.isChecked():
+        if self.ui.settings_radio_ui_design_native.isChecked():
             self.conf.set("PostProcessing", "convert", "true")
             self.conf.set("PostProcessing", "format", "mp4")
 
@@ -1469,7 +1498,7 @@ This warning won't be shown again.
                     with open("config.ini", "w") as config_file: #type: TextIOWrapper
                         self.conf.write(config_file)
 
-                self.ui.radio_threading_mode_ffmpeg.setDisabled(True)
+                self.ui.settings_radio_threading_mode_ffmpeg.setDisabled(True)
                 global ffmpeg_features
                 ffmpeg_features = False
                 logger.error("FFMPEG features have been disabled, because ffmpeg wasn't found on your system.")
@@ -1498,33 +1527,33 @@ This warning won't be shown again.
         self.threadpool.start(self.downloader)
 
     def switch_to_home(self):
-        self.ui.stacked_widget_main.setCurrentIndex(0)
-        self.ui.stacked_widget_top.setCurrentIndex(0)
-        self.ui.stacked_widget_top.setMaximumHeight(260)
+        self.ui.main_stacked_widget_main.setCurrentIndex(0)
+        self.ui.main_stacked_widget_top.setCurrentIndex(0)
+        self.ui.main_stacked_widget_top.setMaximumHeight(260)
 
     def switch_to_account(self):
-        self.ui.stacked_widget_top.setCurrentIndex(1)
-        self.ui.stacked_widget_main.setCurrentIndex(0)
-        self.ui.stacked_widget_top.setMaximumHeight(220)
+        self.ui.main_stacked_widget_top.setCurrentIndex(1)
+        self.ui.main_stacked_widget_main.setCurrentIndex(0)
+        self.ui.main_stacked_widget_top.setMaximumHeight(220)
 
     def switch_to_tools(self):
-        self.ui.stacked_widget_main.setCurrentIndex(0)
-        self.ui.stacked_widget_top.setCurrentIndex(3)
+        self.ui.main_stacked_widget_main.setCurrentIndex(0)
+        self.ui.main_stacked_widget_top.setCurrentIndex(3)
 
     def switch_to_settings(self):
-        self.ui.stacked_widget_main.setCurrentIndex(1)
+        self.ui.main_stacked_widget_main.setCurrentIndex(1)
 
     def switch_to_credits(self):
-        self.ui.stacked_widget_main.setCurrentIndex(2)
+        self.ui.main_stacked_widget_main.setCurrentIndex(2)
         self.show_credits()
 
     def switch_to_supported_websites(self):
-        self.ui.stacked_widget_main.setCurrentIndex(3)
+        self.ui.main_stacked_widget_main.setCurrentIndex(3)
 
     def switch_to_all_progress_bars(self):
-        self.ui.stacked_widget_top.setCurrentIndex(2)
-        self.ui.stacked_widget_main.setCurrentIndex(0)
-        self.ui.stacked_widget_top.setMaximumHeight(280)
+        self.ui.main_stacked_widget_top.setCurrentIndex(2)
+        self.ui.main_stacked_widget_main.setCurrentIndex(0)
+        self.ui.main_stacked_widget_top.setMaximumHeight(280)
 
     """
     The following functions are related to the tree widget    
@@ -1533,19 +1562,19 @@ This warning won't be shown again.
     def add_to_tree_widget_thread(self, iterator):
         search_limit = self.search_limit
 
-        if self.ui.radio_tree_show_title.isChecked():
+        if self.ui.main_radio_tree_show_title.isChecked():
             data_mode = 0
 
-        elif self.ui.radio_tree_show_all.isChecked():
+        elif self.ui.main_radio_tree_show_all.isChecked():
             data_mode = 1
 
-        if self.ui.checkbox_tree_show_videos_reversed.isChecked():
+        if self.ui.main_checkbox_tree_show_videos_reversed.isChecked():
             reverse = True
 
         else:
             reverse = False
 
-        is_checked = self.ui.checkbox_tree_do_not_clear_videos.isChecked()
+        is_checked = self.ui.main_checkbox_tree_do_not_clear_videos.isChecked()
 
         self.thread = AddToTreeWidget(iterator=iterator, search_limit=search_limit, data_mode=data_mode,
                                       reverse=reverse, is_checked=is_checked, stop_flag=stop_flag)
@@ -1614,7 +1643,7 @@ This warning won't be shown again.
         """
         This (like the name says) clears the tree widget.
         """
-        if not self.ui.checkbox_tree_do_not_clear_videos.isChecked():
+        if not self.ui.main_checkbox_tree_do_not_clear_videos.isChecked():
             self.ui.treeWidget.clear()
 
     def reindex(self):
@@ -1730,7 +1759,7 @@ This warning won't be shown again.
         This still uses the tree widget because this makes it easier to track the total progress, as I've already
         implemented this feature into the tree widget and I don't want to write code 2 times
         """
-        url = self.ui.lineedit_url.text()
+        url = self.ui.download_lineedit_url.text()
         one_time_iterator = []
 
         video = check_video(url=url, delay=self.delay)
@@ -1747,7 +1776,7 @@ This warning won't be shown again.
             model = url
 
         else:
-            model = self.ui.lineedit_model_url.text()
+            model = self.ui.download_lineedit_model_url.text()
 
         if pornhub_pattern.match(model):
             if not isinstance(self.client, Client):
@@ -1784,7 +1813,7 @@ This warning won't be shown again.
         self.add_to_tree_widget_thread(videos)
 
     def start_playlist(self):
-        url = self.ui.lineedit_playlist_url.text()
+        url = self.ui.download_lineedit_playlist_url.text()
         playlist = self.client.get_playlist(url)
         videos = playlist.sample()
         self.add_to_tree_widget_thread(iterator=videos)
@@ -1881,7 +1910,7 @@ This warning won't be shown again.
         logger.debug("Download Completed!")
         global total_downloaded_videos
         total_downloaded_videos += 1
-        self.ui.lineedit_download_info.setText(f"Downloaded: {total_downloaded_videos} video(s) this session.")
+        self.ui.progress_lineedit_download_info.setText(f"Downloaded: {total_downloaded_videos} video(s) this session.")
         self.ui.main_progressbar_total.setMaximum(100)
         self.ui.progressbar_hqporner.setValue(0)
         self.ui.progressbar_eporner.setValue(0)
@@ -1908,7 +1937,7 @@ This warning won't be shown again.
         """This handles the output path from the settings widget"""
         dialog = QFileDialog()
         path = dialog.getExistingDirectory()
-        self.ui.lineedit_output_path.setText(str(path))
+        self.ui.settings_lineedit_output_path.setText(str(path))
         self.output_path = path
         self.save_user_settings()
 
@@ -1916,11 +1945,11 @@ This warning won't be shown again.
         """This opens and processes urls in the file"""
         dialog = QFileDialog()
         file, types = dialog.getOpenFileName()
-        self.ui.lineedit_file.setText(file)
+        self.ui.download_lineedit_file.setText(file)
         self.start_file_processing()
 
     def start_file_processing(self):
-        file = self.ui.lineedit_file.text()
+        file = self.ui.download_lineedit_file.text()
         self.url_thread = AddUrls(file, delay=self.delay)
         self.url_thread.signals.total_progress.connect(self.update_total_progressbar)
         self.url_thread.signals.url_iterators.connect(self.receive_url_result)
@@ -1943,28 +1972,28 @@ This warning won't be shown again.
             website = search.get("website")
 
             if website == "hqporner":
-                self.ui.radio_search_website_hqporner.setChecked(True)
+                self.ui.download_radio_search_website_hqporner.setChecked(True)
 
             elif website == "xvideos":
-                self.ui.radio_search_website_xvideos.setChecked(True)
+                self.ui.download_radio_search_website_xvideos.setChecked(True)
 
             elif website == "pornhub":
-                self.ui.radio_search_website_pornhub.setChecked(True)
+                self.ui.download_radio_search_website_pornhub.setChecked(True)
 
             elif website == "xnxx":
-                self.ui.radio_search_website_xnxx.setChecked(True)
+                self.ui.download_radio_search_website_xnxx.setChecked(True)
 
             elif website == "eporner":
-                self.ui.radio_search_website_eporner.setChecked(True)
+                self.ui.download_radio_search_website_eporner.setChecked(True)
 
             else:
                 ui_popup(self.tr(f"Information: The Website {website} specified in the URL file isn't valid.", None))
                 return
 
-            self.ui.lineedit_search_query.setText(query)
+            self.ui.download_lineedit_search_query.setText(query)
             self.basic_search()
 
-        self.ui.lineedit_search_query.clear()
+        self.ui.download_lineedit_search_query.clear()
 
     def login(self):
         """
@@ -1973,8 +2002,8 @@ This warning won't be shown again.
         """
         # TODO
 
-        username = self.ui.lineedit_username.text()
-        password = self.ui.lineedit_password.text()
+        username = self.ui.login_lineedit_username.text()
+        password = self.ui.login_lineedit_password.text()
         if len(username) <= 2 or len(password) <= 2:
             ui_popup(self.tr("Those credentials don't seem to be valid...", None))
             return
@@ -1998,9 +2027,9 @@ This warning won't be shown again.
         stream = QTextStream(file)
         stylesheet = stream.readAll()
 
-        self.ui.button_get_liked_videos.setStyleSheet(stylesheet)
-        self.ui.button_get_watched_videos.setStyleSheet(stylesheet)
-        self.ui.button_get_recommended_videos.setStyleSheet(stylesheet)
+        self.ui.login_button_get_liked_videos.setStyleSheet(stylesheet)
+        self.ui.login_button_get_watched_videos.setStyleSheet(stylesheet)
+        self.ui.login_button_get_recommended_videos.setStyleSheet(stylesheet)
 
     def check_login(self):
         """Checks if the user is logged in, so that no errors are threw if not"""
@@ -2042,34 +2071,34 @@ This warning won't be shown again.
 
     def basic_search(self):
         """Does a simple search for videos without filters on selected website"""
-        query = self.ui.lineedit_search_query.text()
+        query = self.ui.download_lineedit_search_query.text()
 
-        if self.ui.radio_search_website_pornhub.isChecked():
+        if self.ui.download_radio_search_website_pornhub.isChecked():
             videos = Client().search(query)
 
-        elif self.ui.radio_search_website_xvideos.isChecked():
+        elif self.ui.download_radio_search_website_xvideos.isChecked():
             videos = xv_Client.search(query)
 
-        elif self.ui.radio_search_website_hqporner.isChecked():
+        elif self.ui.download_radio_search_website_hqporner.isChecked():
             videos = hq_Client.search_videos(query)
 
-        elif self.ui.radio_search_website_eporner.isChecked():
+        elif self.ui.download_radio_search_website_eporner.isChecked():
             videos = ep_Client().search_videos(query, sorting_gay="", sorting_order="", sorting_low_quality="", page=1,
                                                per_page=self.search_limit, enable_html_scraping=True)
 
-        elif self.ui.radio_search_website_xnxx.isChecked():
+        elif self.ui.download_radio_search_website_xnxx.isChecked():
             videos = xn_Client().search(query).videos
 
         self.add_to_tree_widget_thread(videos)
 
     def get_top_porn_hqporner(self):
-        if self.ui.radio_top_porn_week.isChecked():
+        if self.ui.tools_radio_top_porn_week.isChecked():
             sort = hq_Sort.WEEK
 
-        elif self.ui.radio_top_porn_month.isChecked():
+        elif self.ui.tools_radio_top_porn_month.isChecked():
             sort = hq_Sort.MONTH
 
-        elif self.ui.radio_top_porn_all_time:
+        elif self.ui.tools_radio_top_porn_all_time:
             sort = hq_Sort.ALL_TIME
 
         else:
@@ -2082,7 +2111,7 @@ This warning won't be shown again.
         """Returns video by category from HQPorner. I want to add support for EPorner"""  # TODO
         self.list_all_categories_string = self.tr("Invalid Category. Press 'list categories' to see all "
                                                   "possible ones.", None)
-        category_name = self.ui.lineedit_hqporner_category.text()
+        category_name = self.ui.tools_lineedit_hqporner_category.text()
         all_categories = hq_Client().get_all_categories()
 
         if not category_name in all_categories:
@@ -2094,7 +2123,7 @@ This warning won't be shown again.
 
     def get_by_category_eporner(self):
         """Returns video by category from EPorner"""
-        category_name = self.ui.lineedit_videos_by_category_eporner.text()
+        category_name = self.ui.tools_lineedit_videos_by_category_eporner.text()
 
         if not category_name in self.all_cateogories_eporner:
             ui_popup(self.list_all_categories_string)
@@ -2130,15 +2159,15 @@ This warning won't be shown again.
 
     def show_credits(self):
         """Loads the credits from the CREDITS.md.  Credits need to be recompiled in the resource file every time"""
-        self.ui.main_textbrowser_credits.setOpenExternalLinks(True)
-        file = QFile(":/credits/README/CREDITS.md")
-        file.open(QFile.ReadOnly | QFile.Text)
-        stream = QTextStream(file)
-        self.ui.main_textbrowser_credits.setHtml(markdown.markdown(stream.readAll()))
+        if self.ui.settings_checkbox_system_anonymous_mode.isChecked():
+            self.ui.main_textbrowser_credits.setText("Running in anonymous mode...")
 
-        """
-        The following functions are used for the help messages
-        """
+        else:
+            self.ui.main_textbrowser_credits.setOpenExternalLinks(True)
+            file = QFile(":/credits/README/CREDITS.md")
+            file.open(QFile.ReadOnly | QFile.Text)
+            stream = QTextStream(file)
+            self.ui.main_textbrowser_credits.setHtml(markdown.markdown(stream.readAll()))
 
 
 def main():

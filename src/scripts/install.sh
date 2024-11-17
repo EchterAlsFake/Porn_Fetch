@@ -79,7 +79,7 @@ git checkout 3.4  # This is only temporary for testing, don't worry...
 python3 -m venv /tmp/.venv # This is needed, because Qt has some issues if the virtual environment is in the same directory, as there the script gets executed in
 source /tmp/.venv/bin/activate
 pip install -r requirements.txt
-pyside6-deploy main.py -c src/build/pysidedeploy_linux.spec -f -v
+pyside6-deploy -c src/build/pysidedeploy_linux.spec -f -v
 deactivate
 echo "Deleting the temporary created virtual environment..."
 rm -rf /tmp/.venv

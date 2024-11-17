@@ -29,11 +29,11 @@
 - [] Allow for optional tag writing
 - [] When downloading a new video / loading in and videos are already downloading, the total progress should be appended
 by that instead of calculating the new total progress. This will require a rework of the progress system, but is a huge QOL update.
-- [] Make an "evasion" mode, to hide Porn Fetch from your PC / Android device
+- [x] Make an "evasion" mode, to hide Porn Fetch from your PC / Android device
 
 ## Code improvements and design updates
 - [x] Fix the Porn Fetch layout
-- [] Rename **ALL** UI elements to be more consistent and easier to handle within code
+- [x] Rename **ALL** UI elements to be more consistent and easier to handle within code
 - [] Make Porn Fetch's codebase more structured. In Germany, we say "Roter faden"
 - [] Improving and hardening the tag writing function (with exceptions)
 - [] Generalizing the backend Porn APIs to work more equally to optimize Porn Fetch to write lesser lines of code

@@ -423,11 +423,17 @@ the thread is permanently locked
 - You can now install Porn Fetch into your System (Linux, Windows)
 - You can now disable the internet and update checks
 
+# Bug fixes
+- Fixed HQPorner / Eporner progress issue
+- Fixed build issues from Windows and Linux
+- Fixed an issue where the terminal would open up every time you launch Porn Fetch on Windows
+
 ## Design
 - Fixed the layout
 - Fixed resizing, minimum button height
 - Improved the look of the License widget
-- Improved the settings page of the Porn Fetch CL09ßü+#
+- Improved the settings page of the Porn Fetch
 
 # Other
 - added installation guide
+- renamed all UI elements to make more sense and be consistent in code
