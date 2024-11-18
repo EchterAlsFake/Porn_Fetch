@@ -7,12 +7,13 @@ import markdown
 import zipfile
 import shutil
 import tarfile
+import requests.exceptions
+import src.frontend.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
+
 from itertools import islice, chain
 from threading import Event
 from pathlib import Path
 from io import TextIOWrapper
-import src.frontend.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
-
 from hqporner_api.api import Sort as hq_Sort
 from phub import consts
 from base_api.modules import consts as bs_consts
@@ -65,15 +66,14 @@ total_segments = 0
 downloaded_segments = 0
 last_index = 0
 stop_flag = Event()
-invalid_input_string = QCoreApplication.translate("main", "Wrong Input, please verify the URL, category or"
-                                                                       " actress!", None)
+
 ffmpeg_features = True
 ffmpeg_path = None
 url_linux = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
 url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
-android_arch = None
 session_urls = []  # This list saves all URls used in the current session. Used for the URL export function
-total_downloaded_videos = 0
+total_downloaded_videos = 0 # All videos that actually successfully downloaded
+total_downloaded_videos_attempt = 0 # All videos the user tries to download
 logger = setup_logging()
 
 
@@ -94,18 +94,17 @@ class Signals(QObject):
     internet_check = Signal(dict)
 
     # Ranges
-    start_undefined_range = Signal()
-    stop_undefined_range = Signal()
-    data = Signal(list)
+    start_undefined_range = Signal() # Starts the loading animation
+    stop_undefined_range = Signal() # Stops the loading animation
+    data = Signal(list) # Data for the tree widget (I think)
 
     # Other (I don't remember)
-    text_data = Signal(list)
+    text_data = Signal(list) # Data returned from the AddToTreeWidget class
 
     # URL Thread
     url_iterators = Signal(list, list, list)
 
     # Operations
-    finished = Signal()
     clear_signal = Signal()
     get_total = Signal(str, str)
     result = Signal(bool)
@@ -213,17 +212,28 @@ class InstallDialog(QWidget):
 class AddToTreeWidget(QRunnable):
     def __init__(self, iterator, search_limit, data_mode, reverse, stop_flag, is_checked):
         super(AddToTreeWidget, self).__init__()
-        self.signals = Signals()
-        self.iterator = iterator
-        self.search_limit = search_limit
-        self.data_mode = data_mode
-        self.reverse = reverse
-        self.stop_flag = stop_flag
-        self.is_checked = is_checked
+        self.signals = Signals() # Processing signals for progress and information
+        self.iterator = iterator # The video iterator (Search or model object yk)
+        self.search_limit = search_limit # The total number of videos displayed
+        self.data_mode = data_mode # If the user wants only title or full data
+        self.reverse = reverse # If the user wants to display the videos in reverse
+        self.stop_flag = stop_flag # If the user pressed the stop process button
+        self.is_checked = is_checked # If the "do not clear videos" checkbox is checked
 
     def process_video(self, video, index):
-        data = load_video_attributes(video)
-        session_urls.append(video.url)
+        session_urls.append(video.url) # Appends the URL to the total session URL list, to export it later if needed
+        data = load_video_attributes(video, self.data_mode) # Loads the video data. Can be: 0 = title only; 1 = all data
+
+        """
+        Short documentation:
+        0 = title
+        1 = author 
+        2 = length 
+        3 = tags (or categories)
+        4 = publish date 
+        5 = thumbnail
+        """
+
         title = data[0]
         disabled = QCoreApplication.translate("main", "Disabled", None)
         duration = disabled
@@ -241,8 +251,10 @@ class AddToTreeWidget(QRunnable):
         return [str(title), str(author), str(duration), str(index), video]
 
     def run(self):
-        self.signals.clear_signal.emit()
-        self.signals.start_undefined_range.emit()
+        if not self.is_checked:
+            self.signals.clear_signal.emit() # Clears the tree widget
+
+        self.signals.start_undefined_range.emit() # Starts the progressbar, but with a loading animation
         global last_index
 
         if self.is_checked:
@@ -259,17 +271,17 @@ class AddToTreeWidget(QRunnable):
                 logger.debug("Reversing Videos. This may take some time...")
 
                 # Use islice to limit the number of items fetched from the iterator
-                videos = list(islice(self.iterator, self.search_limit))
+                videos = list(islice(self.iterator, self.search_limit)) # Can take A LOT of time (like really)
                 videos.reverse()  # Reverse the list (to show videos in reverse order)
 
             else:
                 videos = islice(self.iterator, self.search_limit)
 
-            self.signals.stop_undefined_range.emit()
+            self.signals.stop_undefined_range.emit() # Stop the loading animation
 
             for i, video in enumerate(videos, start=start):
                 if self.stop_flag.is_set():
-                    return
+                    return # Stop processing videos, since user pressed stop button
 
                 last_index += 1
                 try_attempt = True
@@ -280,12 +292,42 @@ class AddToTreeWidget(QRunnable):
 
                         try:
                             text_data = self.process_video(video, i)
-                        except errors.RegexError as e:
-                            logger.error(
-                                f"Warning: a Regex Error occurred. This must not be an error, but could be one!"
-                                f" -->: {e}")
 
-                            text_data = [str(video.title), str("Unknown"), str("Unknown"), str(i), video]
+                        except errors.RegionBlocked as e:
+                            logger.error(f"RegionBlocked error for PornHub: {e}")
+                            self.signals.error_signal.emit(f"""
+                            The video is very likely blocked in your region. I am not 100% sure about this, so if you
+                            think I make a mistake here, please report it along with the URL / video which caused it!
+                            {e}""")
+                            continue
+
+                        except errors.RegexError as e:
+                            logger.error(f"Regex error: {e}")
+                            self.signals.error_signal.emit(f"A PornHub Regex error happened: {e} Please report this"
+                                                           f"issue. It shouldn't happen anymore...")
+                            continue
+
+                        except (ConnectionResetError, ConnectionAbortedError, ConnectionRefusedError, ConnectionError) as e:
+                            logger.error(f"Connection error: {e}")
+                            self.signals.error_signal.emit(f"""
+A connection error happened! This might happen if the website recognized you as a bot or your internet connection might
+be unstable. In 99% of cases this is not an issue from Porn Fetch. However, if you are sure that it is, please
+report the following error: {e}. If I am not able to reproduce the issue with your Video URL I won't be ale
+to do anything about it.
+
+Porn Fetch will now sleep for 20 seconds and try it again. If the error happens again this video will be skipped.""")
+                            logger.debug("Sleeping for 20 seconds...")
+                            time.sleep(20)
+                            continue
+
+                        except requests.exceptions.SSLError as e:
+                            logger.error(f"SSL error: {e}")
+                            self.signals.error_signal.emit("""
+An SSL Error occurred. This typically indicates, that your ISP / Firewall blocked the connection to a porn site, because
+of a filter software. There is nothing I can do about this. Please try using a VPN. There are some free ones like
+ProtonVPN which you can use...""")
+
+
 
                         self.signals.progress.emit(self.search_limit, i)  # sends the current progress
                         self.signals.text_data.emit(text_data)  # sends the data to the main class
@@ -294,25 +336,8 @@ class AddToTreeWidget(QRunnable):
                     except errors.NoResult:
                         try_attempt = False  # No result, move to the next video
 
-                    except (errors.MaxRetriesExceeded, IndexError, ConnectionError) as e:
-                        logger.error(f"""
-Rate limited by PornHub, waiting for 5 seconds...
-
-Note: If this error persists, please close the application and report the following error.
-
-Error: {e}""")
-
-                    except (ConnectionResetError, ConnectionAbortedError, ConnectionRefusedError):
-                        self.signals.error_signal("""
-There's a problem with your internet access... Are certain Porn sites blocked by a firewall or your ISP?""")
-                        break
-
-                    except errors.RegionBlocked:
-                        logger.error(f"Video: {video.url} is not available in your region, skipping...")
-                        try_attempt = False
-
         finally:
-            self.signals.finished.emit()
+            self.signals.stop_undefined_range.emit()
 
 
 class DownloadThread(QRunnable):
@@ -576,12 +601,13 @@ class VideoLoader(QRunnable):
     def run(self):
         try:
             video = check_video(self.url, delay=self.delay)
+            x = 1
 
-            if video is False:
-                ui_popup(invalid_input_string)
+            if x == 0:
+                pass
 
             else:
-                data = load_video_attributes(video)
+                data = load_video_attributes(video, 1)
                 title = data[0]
                 author = data[1]
                 output_path = Path(self.output_path)
@@ -739,8 +765,6 @@ class AddUrls(QRunnable):
                 if video is not False:
                     iterator.append(video)
 
-                else:
-                    ui_popup(invalid_input_string)
 
             self.signals.total_progress.emit(idx, total)
 
@@ -1081,6 +1105,11 @@ Categories=Utility;"""
         self.radio_model_videos.addButton(self.ui.settings_radio_model_uploads)
         self.radio_model_videos.addButton(self.ui.settings_radio_model_featured)
 
+        self.radio_tree_data_mode = QButtonGroup()
+        self.radio_tree_data_mode.addButton(self.ui.main_radio_tree_show_title)
+        self.radio_tree_data_mode.addButton(self.ui.main_radio_tree_show_all)
+
+
     def button_connectors(self):
         """a function to link the buttons to their functions"""
         # Menu Bar Switch Button Connections
@@ -1266,6 +1295,7 @@ Categories=Utility;"""
 
         # Sort by the 'Length' column in ascending order
         self.ui.treeWidget.sortByColumn(2, Qt.AscendingOrder)
+        self.ui.main_radio_tree_show_title.setChecked(True)
 
     def settings_maps_initialization(self):
         # Maps for settings and corresponding UI elements
@@ -1568,6 +1598,10 @@ This warning won't be shown again.
         elif self.ui.main_radio_tree_show_all.isChecked():
             data_mode = 1
 
+        else:
+            ui_popup("I don't know how you did this, but please report it!")
+            data_mode = 0
+
         if self.ui.main_checkbox_tree_show_videos_reversed.isChecked():
             reverse = True
 
@@ -1583,7 +1617,6 @@ This warning won't be shown again.
         self.thread.signals.clear_signal.connect(self.clear_tree_widget)
         self.thread.signals.start_undefined_range.connect(self.start_undefined_range)
         self.thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
-        self.thread.signals.finished.connect(self.stop_undefined_range)
         self.threadpool.start(self.thread)
 
     def add_to_tree_widget_signal(self, data):
@@ -1763,12 +1796,8 @@ This warning won't be shown again.
         one_time_iterator = []
 
         video = check_video(url=url, delay=self.delay)
-        if video is False:  # If a video url is invalid, check_video will return it as False
-            ui_popup(invalid_input_string)
-
-        else:
-            one_time_iterator.append(video)
-            self.add_to_tree_widget_thread(iterator=one_time_iterator)
+        one_time_iterator.append(video)
+        self.add_to_tree_widget_thread(iterator=one_time_iterator)
 
     def start_model(self, url=None):
         """Starts the model downloads"""

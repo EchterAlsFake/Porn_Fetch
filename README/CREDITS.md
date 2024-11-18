@@ -26,8 +26,8 @@ Copyright (C) 2023-2024 Johannes Habel (EchterAlsFake)
 - <a href="https://iconscout.com/icons/tools" class="text-underline font-size-sm" target="_blank">Tools</a> by <a href="https://iconscout.com/contributors/adms-icon" class="text-underline font-size-sm" target="_blank">ADMS Icons</a>
 - <a href="https://iconscout.com/icons/faq" class="text-underline font-size-sm" target="_blank">Faq</a> by <a href="https://iconscout.com/contributors/petai-jantrapoon" class="text-underline font-size-sm">Petai Jantrapoon</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
 - Download Icon by [Tutukof](https://iconscout.com/contributors/fersusart)
-- Free [Settings Icon](https://iconscout.com/free-icon/settings-2856913) in Gradient Style
-By [Haca Studio](https://iconscout.com/contributors/boosticon)
+- Free [Settings Icon](https://iconscout.com/free-icon/settings-2856913) in Gradient Style By [Haca Studio](https://iconscout.com/contributors/boosticon)
+- <a href="https://iconscout.com/icons/checkmark" class="text-underline font-size-sm" target="_blank">Checkmark</a> by <a href="https://iconscout.com/contributors/benjamin-j-sperry" class="text-underline font-size-sm">Benjamin J sperry</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
 - <a href="https://iconscout.com/icons/done" class="text-underline font-size-sm" target="_blank">Done</a> by <a href="https://iconscout.com/contributors/google-inc" class="text-underline font-size-sm">Google Inc.</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
 - <a href="https://iconscout.com/icons/progressbar" class="text-underline font-size-sm" target="_blank">Progressbar</a> by <a href="https://iconscout.com/contributors/vaadin-icons" class="text-underline font-size-sm">Vaadin Icons</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
 

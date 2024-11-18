@@ -51,7 +51,7 @@ QSlider::groove:horizontal {
 }
 
 QSlider::handle:horizontal {
-    background: #5A2A82;
+    background: #5A2A82;<
     border: 1px solid #5A2A82;
     width: 18px;
     margin: -6px 0;
@@ -73,16 +73,33 @@ QTreeWidget QHeaderView::section {
 }
 
 QTreeView::indicator {
-    width: 15px;
-    height: 15px;
-    border-radius: 4px; }
+    width: 18px; /* Larger size */
+    height: 18px;
+    border: 2px solid #5EBE47; /* Softer green for better contrast */
+    border-radius: 4px;
+    background-color: #444; /* Base background */
+    }
+
+QTreeView::indicator:unchecked {
+    background-color: #555; /* Subtle gray for unchecked state */
+    border-color: #5EBE47;
+}
 
 QTreeView::indicator:unchecked:hover {
-    background-color: #555;
+    background-color: #666; /* Brighter gray for hover state */
+    border-color: #77D269; /* Lighter green border on hover */
 }
+
 QTreeView::indicator:checked {
-    image: url(':/images/graphics/done.svg');
+    border-color: #5EBE47;
+    image: url(':/images/graphics/done.svg'); /* Optional icon */
 }
+
+QTreeView::indicator:checked:hover {
+    background-color: rgb(255, 191, 0);
+    border-color: #77D269;
+}
+
 
 QGroupBox {
     border: 2px solid #4CAF50;  /* More vivid green for emphasis */

@@ -240,8 +240,11 @@ def correct_output_path(output_path):
         return output_path
 
 
-def load_video_attributes(video):
+def load_video_attributes(video, data_mode):
     title = video.title
+
+    if data_mode == 0:
+        return [title, None, None, None, None]
 
     if isinstance(video, xn_Video):
         author = video.author

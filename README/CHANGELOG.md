@@ -432,7 +432,8 @@ the thread is permanently locked
 - Fixed the layout
 - Fixed resizing, minimum button height
 - Improved the look of the License widget
-- Improved the settings page of the Porn Fetch
+- Improved the settings page of Porn Fetch
+- Improved the checkbox visibility of the tree widget
 
 # Other
 - added installation guide
