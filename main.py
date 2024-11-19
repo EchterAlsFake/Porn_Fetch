@@ -100,6 +100,7 @@ class Signals(QObject):
 
     # Other (I don't remember)
     text_data = Signal(list) # Data returned from the AddToTreeWidget class
+    install_finished = Signal(list)
 
     # URL Thread
     url_iterators = Signal(list, list, list)
@@ -207,6 +208,130 @@ class InstallDialog(QWidget):
         self.close()
         self.main_widget = Porn_Fetch()
         self.main_widget.show()
+
+
+class InstallThread(QRunnable):
+    def __init__(self, app_name):
+        super(InstallThread, self).__init__()
+        self.app_name = app_name
+        self.signals = Signals()
+
+    def run(self):
+        try:
+            self.signals.start_undefined_range.emit()
+
+            if sys.platform == "linux":
+                filename = "PornFetch_Linux_GUI_x64.bin"
+                destination_path_tmp = os.path.expanduser("~/.local/share/")
+                destination_path_final = os.path.expanduser("~/.local/share/pornfetch/")
+                destination_install = os.path.expanduser("~/.local/share/applications/")
+                shortcut_path = os.path.join(destination_install, "pornfetch.desktop")
+
+                if not os.path.exists(destination_path_tmp):
+                    ui_popup("""
+            The path ~/.local/share/ does not exist. This path is typically used for installing applications and their settings
+            in a users local account. Since you don't have that, you can't install it. Probably because your Linux does not follow
+            the XDG Desktop Portal specifications. It's your own decision and I don't create the directory for you, or force you to
+            do that. If you still wish to install Porn Fetch, look Online how to setup XDK-Desktop-Portal on your Linux distribution,
+            head over to the setting and down there you will be able to try the installation again. Otherwise, you can just keep
+            using the portable version, which will work just fine.
+    
+            If you believe, that this is a mistake, please report it on GitHub, so that I can fix it :)""")
+                    return
+
+                try:
+                    os.makedirs(destination_path_final, exist_ok=True)
+
+                except PermissionError:
+                    ui_popup("""
+            You do not have permissions to create the folder 'pornfetch' inside {destination_path_tmp}!
+            The installation process will stop now. You can either run Porn Fetch with elevated privileges, or use the portable
+            version.""")
+                    return
+
+                pornfetch_exe = os.path.join(destination_path_final, filename)
+                if os.path.exists(pornfetch_exe):
+                    os.remove(pornfetch_exe)
+
+                shutil.move("PornFetch_Linux_GUI_x64.bin", dst=destination_path_final)
+                logger.info(f"Moved the PornFetch binary to: {destination_path_final}")
+
+                if not os.path.exists(os.path.join(destination_path_final, "config.ini")):
+                    shutil.move("config.ini", dst=destination_path_final)
+                    logger.info("Moved configuration file")
+
+                logger.info(f"Downloading additional asset: icon")
+
+                if not os.path.exists(os.path.join(destination_path_final, "Logo.png")):
+                    img = requests.get(
+                        "https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/android_app_icon.png?raw=true")
+                    if not img.status_code == 200:
+                        ui_popup(
+                            "Couldn't download the Porn Fetch logo. Installation will still be successfully, but please"
+                            "report this error on GitHub. Thank you.")
+
+                    elif img.status_code == 200:
+                        with open("Logo.png", "wb") as logo:
+                            logo.write(img.content)
+                            shutil.move("Logo.png", dst=destination_path_final)
+
+                entry_content = f"""[Desktop Entry]
+            Name={self.app_name}
+            Exec={destination_path_final}PornFetch_Linux_GUI_x64.bin %F
+            Icon={destination_path_final}Logo.png
+            Type=Application
+            Terminal=false
+            Categories=Utility;"""
+
+                if os.path.exists(shortcut_path):
+                    os.remove(shortcut_path)
+
+                with open("pornfetch.desktop", "w") as entry_file:
+                    entry_file.write(entry_content)
+
+                shutil.move("pornfetch.desktop", shortcut_path)
+
+                logger.info("Successfully installed Porn Fetch!")
+                os.chmod(mode=0o755,
+                         path=destination_path_final + "PornFetch_Linux_GUI_x64.bin")  # Setting executable permission
+
+            elif sys.platform == "win32":
+                import win32com.client  # Only available on Windows
+
+                filename = "PornFetch_Windows_GUI_x64.exe"
+                target_dir = os.path.join(os.getenv("LOCALAPPDATA"), "pornfetch")
+                os.makedirs(target_dir, exist_ok=True)
+
+                if os.path.exists(os.path.join(target_dir, filename)):
+                    os.remove(os.path.join(target_dir, filename))
+
+                # Move the executable to the target directory
+                shutil.move(filename, target_dir)
+
+                if not os.path.exists(os.path.join(target_dir, "config.ini")):
+                    shutil.move("config.ini", target_dir)  # Prevent overriding the old configuration file
+
+                # Define paths for the shortcut creation
+                app_name = self.app_name
+                app_exe_path = os.path.join(target_dir, filename)  # Full path to the executable
+                start_menu_path = os.path.join(os.getenv("APPDATA"), "Microsoft", "Windows", "Start Menu", "Programs")
+                shortcut_path = os.path.join(start_menu_path, f"{app_name}.lnk")
+
+                # Create the shortcut
+                shell = win32com.client.Dispatch("WScript.Shell")
+                shortcut = shell.CreateShortcut(shortcut_path)
+                shortcut.TargetPath = app_exe_path  # Path to the executable
+                shortcut.WorkingDirectory = target_dir  # Set working directory to the target directory
+                shortcut.IconLocation = app_exe_path
+                shortcut.Save()
+
+        except Exception as e:
+            self.signals.install_finished.emit([False, e])
+            self.signals.stop_undefined_range.emit()
+
+        self.signals.stop_undefined_range.emit()
+        self.signals.install_finished.emit([True, ""])
+        # Porn Fetch installation is finished
 
 
 class AddToTreeWidget(QRunnable):
@@ -922,109 +1047,23 @@ class Porn_Fetch(QWidget):
 
 
     def install_pornfetch(self):
-            if __build__ == "desktop":
-                if sys.platform == "linux":
-                    filename = "PornFetch_Linux_GUI_x64.bin"
-                    destination_path_tmp = os.path.expanduser("~/.local/share/")
-                    destination_path_final = os.path.expanduser("~/.local/share/pornfetch/")
-                    destination_install = os.path.expanduser("~/.local/share/applications/")
-                    shortcut_path = os.path.join(destination_install, "pornfetch.desktop")
-                      
-                    if not os.path.exists(destination_path_tmp):
-                        ui_popup("""
-The path ~/.local/share/ does not exist. This path is typically used for installing applications and their settings
-in a users local account. Since you don't have that, you can't install it. Probably because your Linux does not follow
-the XDG Desktop Portal specifications. It's your own decision and I don't create the directory for you, or force you to
-do that. If you still wish to install Porn Fetch, look Online how to setup XDK-Desktop-Portal on your Linux distribution,
-head over to the setting and down there you will be able to try the installation again. Otherwise, you can just keep
-using the portable version, which will work just fine.
+        if __build__ == "desktop":
+            self.install_thread = InstallThread(self.app_name)
+            self.install_thread.signals.install_finished.connect(self.install_pornfetch_result)
+            self.install_thread.signals.start_undefined_range.connect(self.start_undefined_range)
+            self.install_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
+            self.threadpool.start(self.install_thread)
 
-If you believe, that this is a mistake, please report it on GitHub, so that I can fix it :)""")
-                        return
+        else:
+            ui_popup(self.tr("You are running on Android! You can not install Porn Fetch", disambiguation=None))
 
-                    try:
-                        os.makedirs(destination_path_final, exist_ok=True)
+    def install_pornfetch_result(self, result):
+        if result[0]:
+            ui_popup(self.tr("Porn Fetch installation successful!", disambiguation=None))
 
-                    except PermissionError:
-                        ui_popup("""
-You do not have permissions to create the folder 'pornfetch' inside {destination_path_tmp}!
-The installation process will stop now. You can either run Porn Fetch with elevated privileges, or use the portable
-version.""")
-                        return
-                    
-                    pornfetch_exe = os.path.join(destination_path_final, filename)
-                    if os.path.exists(pornfetch_exe):
-                        os.remove(pornfetch_exe)
+        else:
+            ui_popup(self.tr(f"Porn Fetch installation failed, because of: {result[1]}", disambiguation=None))
 
-                    shutil.move("PornFetch_Linux_GUI_x64.bin", dst=destination_path_final)
-                    logger.info(f"Moved the PornFetch binary to: {destination_path_final}")
-
-                    if not os.path.exists(os.path.join(destination_path_final, "config.ini")):
-                        shutil.move("config.ini", dst=destination_path_final)
-                        logger.info("Moved configuration file")
-                        
-                    logger.info(f"Downloading additional asset: icon")
-
-                    if not os.path.exists(os.path.join(destination_path_final, "Logo.png")):
-                        img = requests.get("https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/android_app_icon.png?raw=true")
-                        if not img.status_code == 200:
-                            ui_popup(
-                                "Couldn't download the Porn Fetch logo. Installation will still be successfully, but please"
-                                "report this error on GitHub. Thank you.")
-
-                        elif img.status_code == 200:
-                            with open("Logo.png", "wb") as logo:
-                                logo.write(img.content)
-                                shutil.move("Logo.png", dst=destination_path_final)
-
-                    entry_content = f"""[Desktop Entry]
-Name={self.app_name}
-Exec={destination_path_final}PornFetch_Linux_GUI_x64.bin %F
-Icon={destination_path_final}Logo.png
-Type=Application
-Terminal=false
-Categories=Utility;"""
-
-                    if os.path.exists(shortcut_path):
-                        os.remove(shortcut_path)
-
-                    with open("pornfetch.desktop", "w") as entry_file:
-                        entry_file.write(entry_content)
-
-                    shutil.move("pornfetch.desktop", shortcut_path)
-
-                    logger.info("Successfully installed Porn Fetch!")
-                    os.chmod(mode=0o755, path=destination_path_final + "PornFetch_Linux_GUI_x64.bin") # Setting executable permission
-
-                elif sys.platform == "win32":
-                    import win32com.client # Only available on Windows
-
-                    filename = "PornFetch_Windows_GUI_x64.exe"
-                    target_dir = os.path.join(os.getenv("LOCALAPPDATA"), "pornfetch")
-                    os.makedirs(target_dir, exist_ok=True)
-
-                    if os.path.exists(os.path.join(target_dir, filename)):
-                        os.remove(os.path.join(target_dir, filename))
-
-                    # Move the executable to the target directory
-                    shutil.move(filename, target_dir)
-
-                    if not os.path.exists(os.path.join(target_dir, "config.ini")):
-                        shutil.move("config.ini", target_dir) # Prevent overriding the old configuration file
-
-                    # Define paths for the shortcut creation
-                    app_name = self.app_name
-                    app_exe_path = os.path.join(target_dir, filename)  # Full path to the executable
-                    start_menu_path = os.path.join(os.getenv("APPDATA"), "Microsoft", "Windows", "Start Menu", "Programs")
-                    shortcut_path = os.path.join(start_menu_path, f"{app_name}.lnk")
-
-                    # Create the shortcut
-                    shell = win32com.client.Dispatch("WScript.Shell")
-                    shortcut = shell.CreateShortcut(shortcut_path)
-                    shortcut.TargetPath = app_exe_path  # Path to the executable
-                    shortcut.WorkingDirectory = target_dir  # Set working directory to the target directory
-                    shortcut.IconLocation = app_exe_path
-                    shortcut.Save()
 
     def anonymous_mode(self):
         """
@@ -1057,14 +1096,6 @@ Categories=Utility;"""
         self.ui.progress_label_xvideos.setText("5")
         self.ui.progress_label_spankbang.setText("6")
 
-
-
-
-    def get_clipboard(self):
-        clipboard = QGuiApplication.clipboard()
-        text = clipboard.text()
-        send_error_log(f"Got clipboard text: {text}")
-        self.ui.download_lineedit_url.setText(str(text))
 
     def button_groups(self):
         """
@@ -1143,6 +1174,7 @@ Categories=Utility;"""
         # Settings
         self.ui.settings_button_apply.clicked.connect(self.save_user_settings)
         self.ui.settings_button_reset.clicked.connect(reset_pornfetch)
+        self.ui.settings_button_install_pornfetch.clicked.connect(self.install_pornfetch)
 
         # Account
         self.ui.login_button_login.clicked.connect(self.login)
