@@ -322,12 +322,20 @@ Do you want to use FFmpeg? [yes,no]
 {return_color()}Please enter the numbers of videos you want to download with a comma separated.
 for example: 1,5,94,3{Fore.WHITE}
 
+Enter 'all' to download all videos
+
 {return_color()}------------------------>:{Fore.WHITE}""")
 
-        selected_videos = vids.split(",")
-        for number in selected_videos:
-            video = videos[int(number)]
-            self.process_video(video)
+        if vids == "all":
+            for video in videos:
+                self.process_video(video)
+
+        else:
+            selected_videos = vids.split(",")
+
+            for number in selected_videos:
+                video = videos[int(number)]
+                self.process_video(video)
 
     def process_model(self, url=None, do_return=False):
         if url is None:
@@ -349,7 +357,7 @@ for example: 1,5,94,3{Fore.WHITE}
             model = hq_Client().get_videos_by_actress(model)
 
         elif xvideos_pattern.match(model):
-            model = xv_Client().get_pornstar(model).videos
+            model = xv_Client().get_pornstar(model).videosH
 
         if do_return:
             return model
