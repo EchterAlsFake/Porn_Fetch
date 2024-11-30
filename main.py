@@ -334,6 +334,77 @@ class InstallThread(QRunnable):
         # Porn Fetch installation is finished
 
 
+class InternetCheck(QRunnable):
+    def __init__(self):
+        super(InternetCheck, self).__init__()
+
+        self.headers = {
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
+        }
+
+        self.websites = [
+            "https://www.spankbang.com",
+            "https://www.pornhub.com",
+            "https://hqporner.com",
+            "https://www.xvideos.com",
+            "https://www.xnxx.com",
+            # Append new URLs here
+        ]
+
+        self.website_results = {}
+        self.signals = Signals()
+
+
+    def run(self):
+        for idx, website in enumerate(self.websites, start=1):
+            logger.debug(f"[{idx}|{len(self.websites)}] Testing: {website}")
+
+            try:
+                logging.info(f"Testing Internet [{idx / len(self.websites)}] : {website}")
+                status = requests.get(website, headers=self.headers)
+
+                if status.status_code == 200:
+                    self.website_results.update({website: "✔"})
+
+                elif status.status_code == 404:
+                    self.website_results.update({website: "Failed, website doesn't exist? Please report this error"})
+
+                elif status.status_code == 403:
+                    self.website_results.update({website: "The website blocked access, please change your IP or wait"})
+
+            except requests.exceptions.SSLError:
+                self.website_results.update({website: "SSL Error, your ISP / Router / Firewall blocks access to the site"
+                                                      " Are you at a university, school or in a public WiFi?"})
+
+            except Exception as e:
+                self.website_results.update({website: f"Unknown Error: {e}"})
+
+        self.signals.internet_check.emit(self.website_results)
+
+
+class CheckUpdates(QRunnable):
+    def __init__(self):
+        super(CheckUpdates, self).__init__()
+        self.signals = Signals()
+
+    def run(self):
+        url = f"https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/{__next_release__}"
+
+        try:
+            request = requests.get(url)
+
+            if request.status_code == 200:
+                logger.info("NEW UPDATE IS AVAILABLE!")
+                self.signals.result.emit(True)
+
+            else:
+                logger.info("Checked for updates, no update is available.")
+                self.signals.result.emit(False)
+
+        except Exception as e:
+            logger.error(f"Could not check for updates. Please report the following error on GitHub: {e}")
+
+
 class AddToTreeWidget(QRunnable):
     def __init__(self, iterator, search_limit, data_mode, reverse, stop_flag, is_checked):
         super(AddToTreeWidget, self).__init__()
@@ -616,6 +687,7 @@ class DownloadThread(QRunnable):
         finally:
             self.signals.completed.emit()
 
+
 class ProcessVideoThread(QRunnable):
     """
     This class will be executed (if enabled by the user) to convert the final video into different formats and apply
@@ -650,7 +722,6 @@ class ProcessVideoThread(QRunnable):
 
         if self.write_tags_:
             write_tags(path=self.path, data=self.data)
-
 
 
 class QTreeWidgetDownloadThread(QRunnable):
@@ -896,77 +967,6 @@ class AddUrls(QRunnable):
         self.signals.url_iterators.emit(iterator, model_iterators, search_iterators)
 
 
-class InternetCheck(QRunnable):
-    def __init__(self):
-        super(InternetCheck, self).__init__()
-
-        self.headers = {
-            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
-        }
-
-        self.websites = [
-            "https://www.spankbang.com",
-            "https://www.pornhub.com",
-            "https://hqporner.com",
-            "https://www.xvideos.com",
-            "https://www.xnxx.com",
-            # Append new URLs here
-        ]
-
-        self.website_results = {}
-        self.signals = Signals()
-
-
-    def run(self):
-        for idx, website in enumerate(self.websites, start=1):
-            logger.debug(f"[{idx}|{len(self.websites)}] Testing: {website}")
-
-            try:
-                logging.info(f"Testing Internet [{idx / len(self.websites)}] : {website}")
-                status = requests.get(website, headers=self.headers)
-
-                if status.status_code == 200:
-                    self.website_results.update({website: "✔"})
-
-                elif status.status_code == 404:
-                    self.website_results.update({website: "Failed, website doesn't exist? Please report this error"})
-
-                elif status.status_code == 403:
-                    self.website_results.update({website: "The website blocked access, please change your IP or wait"})
-
-            except requests.exceptions.SSLError:
-                self.website_results.update({website: "SSL Error, your ISP / Router / Firewall blocks access to the site"
-                                                      " Are you at a university, school or in a public WiFi?"})
-
-            except Exception as e:
-                self.website_results.update({website: f"Unknown Error: {e}"})
-
-        self.signals.internet_check.emit(self.website_results)
-
-
-class CheckUpdates(QRunnable):
-    def __init__(self):
-        super(CheckUpdates, self).__init__()
-        self.signals = Signals()
-
-    def run(self):
-        url = f"https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/{__next_release__}"
-
-        try:
-            request = requests.get(url)
-
-            if request.status_code == 200:
-                logger.info("NEW UPDATE IS AVAILABLE!")
-                self.signals.result.emit(True)
-
-            else:
-                logger.info("Checked for updates, no update is available.")
-                self.signals.result.emit(False)
-
-        except Exception as e:
-            logger.error(f"Could not check for updates. Please report the following error on GitHub: {e}")
-
-
 class Porn_Fetch(QWidget):
     def __init__(self, parent=None, start_installation=False, app_name="Porn Fetch"):
         super().__init__(parent)
@@ -1006,7 +1006,6 @@ class Porn_Fetch(QWidget):
         if __build__ == "android":
             self.ui = Ui_PornFetch_Android()
             self.ui.setupUi(self)
-            self.ui.button_clipboard.clicked.connect(self.get_clipboard)
 
         else:
             self.ui = Ui_PornFetch_Desktop()
