@@ -330,11 +330,11 @@ def write_tags(path, data):
     try:
         content = requests.get(thumbnail).content
         cover = MP4Cover(content, imageformat=MP4Cover.FORMAT_JPEG)
-        audio.tags["covr"] = cover
+        audio.tags["covr"] = [cover] # Yes, it needs to be in a list
 
     except Exception as e:
         logger.error("Could not download / write thumbnail into the metadata tags of the video. Please report the"
-                     f"following error on GitHub: {e}")
+                     f"following error on GitHub: {e} - Image URL: {thumbnail}")
 
     audio.save()
     logging.debug("Tags: [3/3] ✔")

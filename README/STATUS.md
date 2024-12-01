@@ -2,8 +2,9 @@
 
 ## Bug fixes
 - [x] Fix the progress reporting on the file-read function
-- [] Optimize the CLI and fix some of its errors
-- [x] Fix HQporner / Eporner progress issue stopping at 99%
+- [x] Optimize the CLI and fix some of its errors (#61) (#62)
+- [x] Fixed output path issue in CLI
+- [x] Fixed HQporner / Eporner progress issue stopping at 99%
 - [] Fix [#53](https://github.com/EchterAlsFake/Porn_Fetch/issues/53)
   - [] Fix remote connection closed without response
   - [] Fix logging
@@ -20,6 +21,9 @@
 ## New Features
 - [x] Make Porn Fetch fully installable and runable from the start menu on Windows and Linux
 - [x] Re-implement the internet and status checks, but in a better way
+- [x] Porn Fetch CLI now supports batch processing through arguments
+- [x] Porn Fetch CLI is now completely thread-safe and uses rich progressbar
+- [x] Porn Fetch CLI now also tracks the total progress with a separate bar
 - [] Display thumbnails when searching (optionally)
 - [] Support for system's native UI design
 - [] Geo block bypass

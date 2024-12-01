@@ -1,11 +1,14 @@
+import configparser
 import os.path
-import pathlib
 import shutil
 import threading
-from io import TextIOWrapper
-
+import argparse
 import phub.consts
+import traceback
+import itertools
 
+import queue
+from io import TextIOWrapper
 from src.backend.shared_functions import *
 from src.backend.log_config import setup_logging
 from base_api.modules.download import *
@@ -14,13 +17,18 @@ from base_api.base import Core
 from colorama import init
 from rich import print as rprint
 from rich.markdown import Markdown
+from rich.progress import Progress, BarColumn, TextColumn, SpinnerColumn, TimeElapsedColumn, TimeRemainingColumn
 
 logger = setup_logging()
 init(autoreset=True)
 
-
 class CLI:
     def __init__(self):
+        self.downloaded_segments = 0
+        self.total_segments = 0 # Used for total progress tracking
+        self.to_be_downloaded = 0
+        self.finished_downloading = 0
+        self.progress_queue = queue.Queue()
         self.skip_existing_files = None
         self.threading_mode = None
         self.result_limit = None
@@ -35,6 +43,19 @@ class CLI:
         self.language = None
         self.ffmpeg_features = True
         self.ffmpeg_path = None
+        self.progress = Progress(
+            TextColumn("[progress.description]{task.description}", style="bold cyan"),  # Display task description here
+            TextColumn("[progress.percentage]{task.percentage:>3.0f}%", style="bold cyan"),
+            BarColumn(bar_width=20, finished_style="bold green"),
+            TextColumn("[bold green]{task.completed}[/] / {task.total}", style="bold yellow"),
+            TimeElapsedColumn(),
+            TimeRemainingColumn(),
+            SpinnerColumn(spinner_name="dots")
+        )
+        self.task_total_progres = self.progress.add_task("[progress.description]{task.description}", total=self.total_segments)
+        # Please just don't ask, thank you :)
+
+    def init(self):
         while True:
             setup_config_file()
             self.conf = ConfigParser()
@@ -275,7 +296,9 @@ Do you want to use FFmpeg? [yes,no]
                 with open("config.ini", "w") as config_file: #type: TextIOWrapper
                     self.conf.write(config_file)
 
-    def process_video(self, url=None):
+    def process_video(self, url=None, batch=False):
+        self.semaphore.acquire()
+
         if url is None:
             url = input(f"{return_color()}Please enter the Video URL -->:")
 
@@ -294,21 +317,46 @@ Do you want to use FFmpeg? [yes,no]
         output_path = self.output_path
 
         if self.directory_system:
-            output_path = pathlib.Path(output_path + title + author + ".mp4")
+            path_author = os.path.join(output_path, author)
+            if not os.path.exists(path_author):
+                os.makedirs(path_author, exist_ok=True) # doesn't make sense ik
+
+            output_path = os.path.join(str(path_author), title + ".mp4")
 
         else:
-            output_path = pathlib.Path(output_path + title + ".mp4")
+            output_path = os.path.join(output_path, title + ".mp4")
 
         if os.path.exists(output_path):
             logger.debug(f"{return_color()}File: {output_path} already exists, skipping...")
+            self.semaphore.release()
             return
 
-        logger.debug(f"{return_color()}Trying to acquire the semaphore...")
-        self.semaphore.acquire()
-        self.thread = threading.Thread(target=self.download, args=(video, output_path,))
-        self.thread.start()
+        # Create the progress task
+        task = self.progress.add_task(description=f"[bold cyan]Downloading: {video.title}[/bold cyan]", total=100)
 
-    def iterate_generator(self, generator):
+        # Start the download thread
+        self.progress.start()
+        self.download_thread = threading.Thread(target=self.download, args=(video, output_path, task))
+        self.download_thread.start()
+
+        self.progress_thread = threading.Thread(target=self._update_progress)
+        self.progress_thread.start()
+
+
+        if batch:
+            self.download_thread.join()
+
+    def process_video_with_error_handling(self, video, batch, ignore_errors):
+        try:
+            print(f"processing video: {video.title}")
+            self.process_video(video, batch=batch)
+        except Exception as e:
+            if ignore_errors:
+                print(f"{Fore.LIGHTRED_EX}[~]{Fore.RED}Ignoring Error: {e}")
+            else:
+                raise f"{Fore.LIGHTRED_EX}[~]{Fore.RED}Error: {e}, please report the full traceback --: {traceback.print_exc()}"
+
+    def iterate_generator(self, generator, auto=False, ignore_errors=False, batch=False):
         videos = []
 
         for idx, video in enumerate(generator):
@@ -318,26 +366,48 @@ Do you want to use FFmpeg? [yes,no]
             if idx >= self.result_limit:
                 break
 
-        vids = input(f"""
-{return_color()}Please enter the numbers of videos you want to download with a comma separated.
-for example: 1,5,94,3{Fore.WHITE}
+        print(f"Videos loaded: {len(videos)}")
 
-Enter 'all' to download all videos
+        if not auto:
+            vids = input(f"""
+    {return_color()}Please enter the numbers of videos you want to download with a comma separated.
+    for example: 1,5,94,3{Fore.WHITE}
 
-{return_color()}------------------------>:{Fore.WHITE}""")
+    Enter 'all' to download all videos
 
-        if vids == "all":
+    {return_color()}------------------------>:{Fore.WHITE}""")
+        else:
+            vids = "all"
+
+        if vids == "all" or auto:
+            print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTYELLOW_EX}Calculating the total progress... This may take some time!")
+
+            self.total_segments = sum(
+                [len(list(video.get_segments(quality=self.quality))) for video in videos if
+                 hasattr(video, 'get_segments')])
+            logger.debug(f"Got segments: {self.total_segments}")
+
+            self.to_be_downloaded = len(videos)
+
             for video in videos:
-                self.process_video(video)
-
+                self.process_video_with_error_handling(video, batch, ignore_errors)
         else:
             selected_videos = vids.split(",")
+            videos_ = []
+            for number in selected_videos:
+                videos_.append(videos[int(number)])
 
+            self.total_segments = sum(
+                [len(list(video.get_segments(quality=self.quality))) for video in videos_ if
+                 hasattr(video, 'get_segments')])
+
+            self.to_be_downloaded = len(selected_videos)
             for number in selected_videos:
                 video = videos[int(number)]
-                self.process_video(video)
+                self.process_video_with_error_handling(video, batch, ignore_errors)
 
-    def process_model(self, url=None, do_return=False):
+
+    def process_model(self, url=None, do_return=False, auto=False, ignore_errors=False, batch=False):
         if url is None:
             model = input(f"{return_color()}Enter the model URL -->:")
 
@@ -351,7 +421,7 @@ Enter 'all' to download all videos
             model = xn_Client().get_user(model).videos
 
         elif pornhub_pattern.match(model):
-            model = Client().get_user(model).videos
+            model = itertools.chain(Client().get_user(model).videos, Client().get_user(model).uploads)
 
         elif hqporner_pattern.match(model):
             model = hq_Client().get_videos_by_actress(model)
@@ -362,13 +432,14 @@ Enter 'all' to download all videos
         if do_return:
             return model
 
-        self.iterate_generator(model)
+        self.iterate_generator(model, auto=auto, ignore_errors=ignore_errors, batch=batch)
 
-    def process_playlist(self):
-        url = input(f"{return_color()}Enter the (PornHub) playlist URL -->:")
+    def process_playlist(self, url=None, auto=False, ignore_errors=False, batch=False):
+        if url is None:
+            url = input(f"{return_color()}Enter the (PornHub) playlist URL -->:")
         playlist = Client().get_playlist(url)
         print(f"{return_color()}Processing: {playlist.title}")
-        self.iterate_generator(playlist.sample())
+        self.iterate_generator(playlist.sample(), auto=auto, ignore_errors=ignore_errors, batch=batch)
 
     def search_videos(self):
         website = input(f"""
@@ -427,44 +498,67 @@ Enter 'all' to download all videos
         logger.debug(f"{return_color()}Done!")
         self.iterate_generator(objects)
 
-    def download(self, video, output_path):
+    def download(self, video, output_path, task):
         try:
+
+            def callback_wrapper(pos, total):
+                self.progress_queue.put((task, pos, total))
+                self.downloaded_segments += 1
+                # This shit took me over 7 hours!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                # Making this stupid thing thread safe was the most exhausting thing in my entire life :skull:
+
             if isinstance(video, Video):
                 self.threading_mode = resolve_threading_mode(mode=self.threading_mode, video=video,
                                                              workers=self.workers, timeout=self.timeout)
                 video.download(path=output_path, quality=self.quality, downloader=self.threading_mode,
-                               display=self.callback_wrapper(video.title, Callback.text_progress_bar))
+                               display=callback_wrapper)
 
             elif isinstance(video, ep_Video) or isinstance(video, hq_Video):
-                video.download(path=output_path, quality=self.quality, callback=self.callback_wrapper(video.title,
-                                Callback.text_progress_bar))
+                video.download(path=output_path, quality=self.quality, callback=callback_wrapper)
 
             else:
                 video.download(downloader=self.threading_mode, path=output_path, quality=self.quality,
-                               callback=self.callback_wrapper(video.title, Callback.text_progress_bar))
+                               callback=callback_wrapper)
 
         finally:
             logger.debug(f"{return_color()}Finished downloading for: {video.title}")
-            self.semaphore.release()
             if self.ffmpeg_features:
                 os.rename(f"{output_path}", f"{output_path}_.tmp")
                 cmd = [self.ffmpeg_path, "-i", f"{output_path}_.tmp", "-c", "copy", output_path, '-hide_banner',
                        '-loglevel', 'error']
                 ff = FfmpegProgress(cmd)
                 for progress in ff.run_command_with_progress():
-                    print(f"\r\033[K[Converting: {progress}/100", end='', flush=True)
+                    pass
 
                 os.remove(f"{output_path}_.tmp")
-                write_tags(path=output_path, video=video)
+                write_tags(path=output_path, data=load_video_attributes(video, data_mode=1))
             else:
                 logger.debug("FFMPEG features disabled, writing tags and converting the video won't be available!")
 
-    @staticmethod
-    def callback_wrapper(title, callback):
-        def wrapped_callback(pos, total):
-            callback(pos, total, title)
+            self.progress_queue.put(None)
+            self.finished_downloading += 1
+            self.semaphore.release()
 
-        return wrapped_callback
+
+    def _update_progress(self):
+        # This method reads from the queue and updates the progress bar
+        while True:
+            try:
+                task, pos, total = self.progress_queue.get()
+
+            except TypeError: # Stupid implementation I know<r
+                break
+
+            # Update progress bar based on queue data
+            self.progress.update(task, advance=pos - self.progress.tasks[task].completed, total=total)
+            self.progress.update(task_id=self.task_total_progres,
+                                 advance=self.downloaded_segments - self.progress.tasks[self.task_total_progres].completed,
+                                 total=self.total_segments,
+                                 description=f"Total progress | Downloaded: {self.finished_downloading}|{self.to_be_downloaded} videos")
+            self.progress.refresh()  # Force a screen update after each progress change
+
+
+
 
     @staticmethod
     def credits():
@@ -474,4 +568,141 @@ Enter 'all' to download all videos
         rprint(md)
 
 
-CLI()
+
+class Batch(CLI):
+    def __init__(self):
+        super().__init__()
+        self.conf = ConfigParser()
+        self.conf.read("config.ini")
+        self.main()
+
+    def main(self):
+            description = """
+Porn Fetch CLI - Download Porn from your terminal / batch processing
+
+Disclaimer:
+I strictly forbid you to mass-scrape content from other sites. I do not encourage this in any way. If you use this tool
+to redistribute copyright protected content, you are responsible for your actions. I am not liable for any damages caused!
+
+CLI GUIDE (Please read this if it's your first time)
+
+1.
+All options like --url; --playlist; ... can be put together. Porn Fetch will process all of your inputs starting from 
+a URL. a URL given with '--url' will download a single video. If you put a URL and a Playlist at the same time,
+Porn Fetch will start downloading the single video from '--url' and then continue with the videos from the submitted
+playlist. 
+
+2. 
+You can give a lot of options from the configuration file manually into the CLI. This allows for a lot of flexibility.
+If you don't give any of the options Porn Fetch will attempt to read from an existing 'config.ini' file. 
+If neither a configuration file is found nor you provided any options manually, Porn Fetch will create a 'config.ini' 
+file which you can use in the next run. Please use this file to change your options accordingly. 
+I do not want to implement all options as a command line option as it would be too much work for such a small thing. 
+If you wanna implement it, feel free to PR lol
+
+
+Here are the options:
+
+OPTION            | TYPE  | DESCRIPTION
+--url             | (str) | A video URL
+--model           | (str) | A model URL
+--playlist        | (str) | A playlist URL
+--quality         | (str) | The quality of the videos [best, half, worst] > Default: best
+--output          | (str) | The path to a folder where to save the downloaded videos. > Default: current directory (./) 
+--threading_mode  | (str) | The threading mode (backend, how to download the videos) [threaded,ffmpeg,default]
+                            Note: The threading mode 'ffmpeg' requires ffmpeg installed in your path!
+
+--auto_process    | (bool) | Whether to automatically download all videos from playlists, files, models or ask you 
+                             to select a range of videos
+
+
+Note:
+By using the CLI batch mode you automatically accept the GPLv3 License of Porn Fetch!
+        """
+
+            parser = argparse.ArgumentParser("Porn Fetch CLI - Batch processing")
+            parser.add_argument("--info", help="A help message. READ THIS ON YOUR FIRST RUN!!!!!!!!!!!!!!!!!!!!!!!!",
+                                action="store_true")
+            parser.add_argument("--batch",
+                                help="Whether to start the interactive CLI or batch processing (Read documentation)",
+                                action="store_true")
+            parser.add_argument("--url", help="a Video URL", type=str)
+            parser.add_argument("--model", help="a model URL", type=str)
+            parser.add_argument("--playlist", help="a Playlist URL", type=str)
+            parser.add_argument("--output", help="the path to a folder where to save the downloaded videos",
+                                type=str, default=os.getcwd())
+            parser.add_argument("--quality", help="The quality of the videos", default="best",
+                                choices=["best", "half", "worst"], type=str)
+            parser.add_argument("--threading_mode", help="the threading mode", default="threaded",
+                                choices=["threaded", "ffmpeg", "default"], type=str)
+            parser.add_argument("--ignore_errors", help="Whether to ignore errors during downloads",
+                                action="store_false")
+            parser.add_argument("--auto_process", help="Whether to automatically download all videos from playlists,"
+                                                       "files, models or ask you to select each videos individually",
+                                action="store_true")
+
+            args = parser.parse_args()
+
+            if args.info:
+                print(description)
+                exit(0)
+
+            if args.batch is False:
+                CLI().init()
+
+            url = args.url
+            model = args.model
+            playlist = args.playlist
+            quality = args.quality
+            threading_mode = args.threading_mode
+            output = args.output
+            ignore = args.ignore_errors
+            auto_process = args.auto_process
+
+            print("Checking and loading configuration...")
+            try:
+                self.conf = configparser.ConfigParser()
+                self.conf.read("config.ini")
+                self.load_user_settings()
+
+            except Exception as e:
+                print(f"Error in loading configuration..., creating a new configuration file... Error:")
+                logger.error(e)
+                setup_config_file(force=True)
+                self.conf = configparser.ConfigParser()
+                self.conf.read("config.ini")
+                self.load_user_settings()
+
+            # Overriding the values from configuration file with CLI values
+            self.quality = quality
+            self.threading_mode = threading_mode
+            self.output_path = output
+
+            if url:
+                print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTCYAN_EX}Downloading URL -->: {url}")
+                self.process_video(url=url, batch=True)
+
+            if model:
+                print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTYELLOW_EX}Processing model -->: {model}")
+                if auto_process:
+                    print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTMAGENTA_EX}! Using auto processing !")
+
+                self.process_model(url=model, auto=auto_process, ignore_errors=ignore, batch=True)
+
+            if playlist:
+                print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTBLUE_EX}Processing Playlist -->: {playlist}")
+                if auto_process:
+                    print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTMAGENTA_EX}! Using auto processing !")
+
+                self.process_playlist(url=playlist, auto=auto_process, ignore_errors=ignore, batch=True)
+
+
+
+
+if __name__ == '__main__':
+    Batch()
+
+
+
+
+
