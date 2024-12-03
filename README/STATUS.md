@@ -34,6 +34,13 @@
 - [] When downloading a new video / loading in and videos are already downloading, the total progress should be appended
 by that instead of calculating the new total progress. This will require a rework of the progress system, but is a huge QOL update.
 - [x] Make an "evasion" mode, to hide Porn Fetch from your PC / Android device
+- [] Support for macOS
+  - [] Add build script
+  - [] Make Porn Fetch installable (systemwide)
+  - [] Improve UI
+  - [] Add it to `INSTALLATION.md`
+  - [] Add it to `SCREENSHOTS.md`
+  - [] Test everything
 
 ## Code improvements and design updates
 - [x] Fix the Porn Fetch layout

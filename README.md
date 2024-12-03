@@ -68,7 +68,9 @@ A detailed installation guide for all platforms can be found [HERE](https://gith
 - Windows (10 / 11)
 - Linux   (X11 / Wayland)
 - Android (Android is very unstable, please consider using the CLI on Termux instead!)
-- macOS (Untested)
+
+> [!NOTE]
+> macOS will be officially supported in version 3.5
 
 The Graphical User Interface is only for 64bit systems. The CLI supports 64 and 32bit systems.
 <br>Porn Fetch is developed on Arch Linux (Hyprland) and cross-compiled using GitHub CI/CD
