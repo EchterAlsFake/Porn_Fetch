@@ -51,7 +51,7 @@ QSlider::groove:horizontal {
 }
 
 QSlider::handle:horizontal {
-    background: #5A2A82;<
+    background: #5A2A82;
     border: 1px solid #5A2A82;
     width: 18px;
     margin: -6px 0;
@@ -174,11 +174,6 @@ QSpinBox {
     background-color: #333;
     border: 1px solid #555;
     padding: 5px;
-}
-
-QSpinBox::up-button, QSpinBox::down-button {
-    background-color: #555;
-    image: url(':/images/graphics/arrow.ico'); /* Unified the icons */
 }
 
 QSpinBox::up-button:hover, QSpinBox::down-button:hover {
