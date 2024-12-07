@@ -1,12 +1,8 @@
 #!/bin/bash
 
-# Function to print progress messages
-function info {
-    echo "[INFO] $1"
-}
 
 # Install Python 3.12.8
-info "Installing Python 3.12.8..."
+echo "Installing Python 3.12.8..."
 PYTHON_VERSION="3.12.8"
 PYTHON_DMG="python-${PYTHON_VERSION}-macos11.pkg"
 PYTHON_URL="https://www.python.org/ftp/python/${PYTHON_VERSION}/${PYTHON_DMG}"
@@ -17,7 +13,7 @@ curl -o "/tmp/${PYTHON_DMG}" "${PYTHON_URL}" --silent
 # Install Python
 sudo installer -pkg "/tmp/${PYTHON_DMG}" -target / > /dev/null 2>&1
 if [ $? -eq 0 ]; then
-    info "Python 3.12.8 installed successfully."
+    echo "Python 3.12.8 installed successfully."
 else
     echo "[ERROR] Python installation failed."
     exit 1
@@ -27,11 +23,24 @@ fi
 rm "/tmp/${PYTHON_DMG}"
 
 # Verify Python installation
-info "Verifying Python installation..."
+echo "Verifying Python installation..."
 python3 --version
 
-info "Python installation script completed successfully."
-info "Building Porn Fetch!"
+echo "Python installation script completed successfully."
+
+# Fix SSL Certificate Issue
+echo "Fixing SSL certificate issue for Python's requests library..."
+/Applications/Python\ 3.12/Install\ Certificates.command > /dev/null 2>&1
+
+if [ $? -eq 0 ]; then
+    echo "SSL certificates updated successfully."
+else
+    echo "[ERROR] Failed to update SSL certificates."
+    exit 1
+fi
+
+
+echo "Building Porn Fetch!"
 
 cd "${HOME}" || { echo "[ERROR] Failed to change directory to ${HOME}"; exit 1; }
 git clone https://github.com/EchterAlsFake/Porn_Fetch
