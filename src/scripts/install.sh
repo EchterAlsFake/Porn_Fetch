@@ -46,7 +46,7 @@ case $OS in
             echo "Homebrew is not installed. Installing now..."
             /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         fi
-        brew install python3 git
+        brew install python@3.12 git # Python3.13 is not yet supported by nuitka
         ;;
     esac
 
@@ -75,11 +75,12 @@ fi
 # Common commands
 git clone https://github.com/EchterAlsFake/Porn_Fetch
 cd Porn_Fetch
-git checkout 3.4  # This is only temporary for testing, don't worry...
+git checkout  # This is only temporary for testing, don't worry...
 python3 -m venv /tmp/.venv # This is needed, because Qt has some issues if the virtual environment is in the same directory, as there the script gets executed in
 source /tmp/.venv/bin/activate
 pip install -r requirements.txt
 pyside6-deploy -c src/build/pysidedeploy_linux.spec -f -v
+mv "main.bin" "PornFetch_Linux_GUI_x64.bin"
 deactivate
 echo "Deleting the temporary created virtual environment..."
 rm -rf /tmp/.venv

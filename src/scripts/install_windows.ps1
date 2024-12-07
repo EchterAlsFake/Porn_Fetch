@@ -71,6 +71,7 @@ Set-Location -Path $projectDir
 py -m venv ..\venv\
 ..\venv\Scripts\activate.ps1
 pip install -r requirements.txt
+pip install pywin32
 $env:NUITKA_ASSUME_YES_FOR_DOWNLOADS = "1"
 Write-Host "NUITKA_ASSUME_YES_FOR_DOWNLOADS is set to $env:NUITKA_ASSUME_YES_FOR_DOWNLOADS"
 
@@ -87,7 +88,9 @@ Set-Location -Path $projectDir
 pyside6-deploy -c src/build/pysidedeploy_windows.spec -f -v
 
 # Move the final executable to the user's Desktop
+$finalExePath = Join-Path -Path $projectDir -ChildPath "Porn Fetch.exe"
 $renamedExe = Join-Path -Path $projectDir -ChildPath "Porn Fetch.exe"
+Rename-Item -Path $finalExePath -NewName "PornFetch_Windows_GUI_x64.exe"
 Move-Item -Path $renamedExe -Destination (Join-Path $desktopDir "Porn Fetch.exe")
 
 # Clean up
@@ -97,5 +100,3 @@ Write-Output "Cleaning up..."
 Remove-Item -Path $projectZipPath -Force
 Remove-Item -Recurse -Force -Path (Join-Path $downloadsDir "Porn_Fetch-master")
 Write-Output "Done!"
-Write-Output "Porn Fetch is now on your Desktop. It's named 'Porn Fetch.exe'"
-Write-Output "You can now close the terminal..."
