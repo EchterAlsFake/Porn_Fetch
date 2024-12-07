@@ -122,7 +122,7 @@ If you still need a real example file, [here you go](https://github.com/EchterAl
 ## 🔨 Building from Source
 Easy-to-use build scripts are available for various platforms. Run these in your terminal:
 
-### Ubuntu, Windows, Arch Linux, Termux, Fedora, OpenSUSE:
+### Ubuntu, Arch Linux, Fedora, OpenSUSE (and others):
 ```bash
 wget "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install.sh" -O install.sh
 bash install.sh
@@ -142,6 +142,21 @@ Invoke-Expression (Invoke-WebRequest -Uri https://raw.githubusercontent.com/Echt
 ```
 
 > Scripts aren't maintained very often. Please report errors immediately!
+
+### macOS
+> [!CAUTION]
+> This installation script is currently being tested. `DO NOT RUN IT!`
+
+> [!NOTE]
+> If you already have Python installed on your macOS system you need to uninstall it,
+> because only Cpython builds are supported which Porn Fetch will automatically install
+> during compilation.
+
+```bash
+wget "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_macos.sh" -O install.sh
+bash install.sh
+```
+
 
 ## 📱 Android
 The Android app is the exact same as the desktop app. Thanks to Qt's Android developing Guide, you'll be able to simply
