@@ -17,7 +17,7 @@ exec_directory = .
 project_file = 
 
 # application icon
-icon = src/frontend/graphics/logo_transparent.icns
+icon = src/frontend/graphics/logo_transparent.ico
 
 [python]
 

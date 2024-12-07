@@ -41,6 +41,8 @@ case $OS in
         # macOS commands
         echo "Detected macOS"
         echo "macOS is not supported with this script! Please use the other one. See GitHub Readme!"
+        ;;
+    esac
 
 # For most Linux Distros
 # Detect Package Manager
