@@ -51,7 +51,7 @@ info "Python installation script completed successfully."
 info "Building Porn Fetch!"
 
 # Common commands
-cd $(TARGET_DIR)
+cd ${TARGET_DIR}
 python3 -m venv /tmp/.venv # This is needed, because Qt has some issues if the virtual environment is in the same directory, as there the script gets executed in
 source /tmp/.venv/bin/activate
 pip install -r requirements.txt
