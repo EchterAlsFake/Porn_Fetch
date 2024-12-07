@@ -50,8 +50,9 @@ python3 --version
 info "Python installation script completed successfully."
 info "Building Porn Fetch!"
 
+TARGET_DIR="${HOME}/Porn_Fetch"
 # Common commands
-cd "${TARGET_DIR}"
+cd "${TARGET_DIR}" || { echo "[ERROR] Failed to change directory to ${TARGET_DIR}"; exit 1; }
 python3 -m venv /tmp/.venv # This is needed, because Qt has some issues if the virtual environment is in the same directory, as there the script gets executed in
 source /tmp/.venv/bin/activate
 pip install -r requirements.txt
