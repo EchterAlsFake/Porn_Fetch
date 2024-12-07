@@ -26,23 +26,6 @@ fi
 # Clean up
 rm "/tmp/${PYTHON_DMG}"
 
-# Fetch repository ZIP and extract it
-REPO_URL="https://github.com/EchterAlsFake/Porn_Fetch/archive/refs/heads/master.zip"
-ZIP_FILE="/tmp/Porn_Fetch-master.zip"
-TARGET_DIR="${HOME}/Porn_Fetch"
-
-info "Downloading repository ZIP from ${REPO_URL}..."
-curl -o "${ZIP_FILE}" -L "${REPO_URL}" --silent
-
-info "Extracting ZIP file..."
-unzip -q "${ZIP_FILE}" -d "/tmp"
-mv "/tmp/Porn_Fetch-master" "${TARGET_DIR}"
-
-info "Repository extracted to ${TARGET_DIR}."
-
-# Clean up
-rm "${ZIP_FILE}"
-
 # Verify Python installation
 info "Verifying Python installation..."
 python3 --version
@@ -50,9 +33,10 @@ python3 --version
 info "Python installation script completed successfully."
 info "Building Porn Fetch!"
 
-TARGET_DIR="${HOME}/Porn_Fetch"
-# Common commands
-cd "${TARGET_DIR}" || { echo "[ERROR] Failed to change directory to ${TARGET_DIR}"; exit 1; }
+cd "${HOME}" || { echo "[ERROR] Failed to change directory to ${HOME}"; exit 1; }
+git clone https://github.com/EchterAlsFake/Porn_Fetch
+cd "Porn_Fetch"
+
 python3 -m venv /tmp/.venv # This is needed, because Qt has some issues if the virtual environment is in the same directory, as there the script gets executed in
 source /tmp/.venv/bin/activate
 pip install -r requirements.txt

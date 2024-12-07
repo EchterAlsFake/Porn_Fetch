@@ -152,6 +152,15 @@ Invoke-Expression (Invoke-WebRequest -Uri https://raw.githubusercontent.com/Echt
 > because only Cpython builds are supported which Porn Fetch will automatically install
 > during compilation.
 
+> [!IMPORTANT]
+> You need to have the command line developer tools installed. I tried everything to get
+> around it, but it's really not possible. 
+
+Go into a Terminal and run the following command and accept the prompt:
+
+`xcode-select --install`
+
+
 ```bash
 curl "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_macos.sh" -o install.sh
 bash install.sh
