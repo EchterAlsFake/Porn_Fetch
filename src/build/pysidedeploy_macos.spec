@@ -5,7 +5,7 @@ title = Porn Fetch
 # of input_file
 project_dir = .
 # source file path
-input_file =
+input_file = main.py
 # directory where exec is stored
 exec_directory = .
 # path to .pyproject project file
