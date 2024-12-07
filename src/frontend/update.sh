@@ -7,6 +7,13 @@ pyside6-uic form_install_dialog.ui -o ui_form_install_dialog.py
 pyside6-uic form_license.ui -o ui_form_license.py
 pyside6-uic form_range_selector.ui -o ui_form_range_selector.py
 
+# Resource file
 pyside6-rcc resources.qrc -o resources.py
 
-# TODO: translations
+# Translations
+pyside6-lupdate ../../main.py ../backend/class_help.py ui_form_desktop.py ui_form_install_dialog.py ui_form_license.py ui_form_range_selector.py form_desktop.ui form_install_dialog.ui form_license.ui form_range_selector.ui -ts translations/en.ts -no-obsolete
+
+pyside6-lrelease translations/de_DE.ts -qm translations/de_DE.qm
+pyside6-lrelease translations/zh_CN.ts -qm translations/zh_CN.qm
+pyside6-lrelease translations/fr.ts -qm translations/fr.qm
+

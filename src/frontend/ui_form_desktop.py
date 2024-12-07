@@ -506,7 +506,7 @@ class Ui_PornFetch_Desktop(object):
         self.progress_scrollarea.setWidgetResizable(True)
         self.progress_scrollarea_widgedcontents = QWidget()
         self.progress_scrollarea_widgedcontents.setObjectName(u"progress_scrollarea_widgedcontents")
-        self.progress_scrollarea_widgedcontents.setGeometry(QRect(0, 0, 1385, 334))
+        self.progress_scrollarea_widgedcontents.setGeometry(QRect(0, 0, 393, 272))
         self.gridLayout_18 = QGridLayout(self.progress_scrollarea_widgedcontents)
         self.gridLayout_18.setObjectName(u"gridLayout_18")
         self.progress_gridlayout_progressbar = QGridLayout()
@@ -819,7 +819,7 @@ class Ui_PornFetch_Desktop(object):
         self.main_scrollarea_treewidget.setWidgetResizable(True)
         self.main_scrollarea_treewidget_content = QWidget()
         self.main_scrollarea_treewidget_content.setObjectName(u"main_scrollarea_treewidget_content")
-        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 1383, 332))
+        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 102, 202))
         self.gridLayout_4 = QGridLayout(self.main_scrollarea_treewidget_content)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.gridLayout_4.setContentsMargins(0, 0, 0, 0)
@@ -1125,12 +1125,11 @@ class Ui_PornFetch_Desktop(object):
         self.gridLayout_12.setContentsMargins(0, 0, 0, 0)
         self.settings_gridlayout_graphical_userinterface = QGridLayout()
         self.settings_gridlayout_graphical_userinterface.setObjectName(u"settings_gridlayout_graphical_userinterface")
-        self.settings_label_ui_language = QLabel(self.settings_groupbox_ui)
-        self.settings_label_ui_language.setObjectName(u"settings_label_ui_language")
-        sizePolicy6.setHeightForWidth(self.settings_label_ui_language.sizePolicy().hasHeightForWidth())
-        self.settings_label_ui_language.setSizePolicy(sizePolicy6)
+        self.settings_radio_ui_language_english = QRadioButton(self.settings_groupbox_ui)
+        self.settings_radio_ui_language_english.setObjectName(u"settings_radio_ui_language_english")
+        self.settings_radio_ui_language_english.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.settings_gridlayout_graphical_userinterface.addWidget(self.settings_label_ui_language, 0, 0, 1, 1)
+        self.settings_gridlayout_graphical_userinterface.addWidget(self.settings_radio_ui_language_english, 0, 2, 1, 1)
 
         self.settings_radio_ui_language_system_default = QRadioButton(self.settings_groupbox_ui)
         self.settings_radio_ui_language_system_default.setObjectName(u"settings_radio_ui_language_system_default")
@@ -1138,17 +1137,11 @@ class Ui_PornFetch_Desktop(object):
 
         self.settings_gridlayout_graphical_userinterface.addWidget(self.settings_radio_ui_language_system_default, 0, 1, 1, 1)
 
-        self.settings_radio_ui_language_english = QRadioButton(self.settings_groupbox_ui)
-        self.settings_radio_ui_language_english.setObjectName(u"settings_radio_ui_language_english")
-        self.settings_radio_ui_language_english.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.settings_radio_ui_language_german = QRadioButton(self.settings_groupbox_ui)
+        self.settings_radio_ui_language_german.setObjectName(u"settings_radio_ui_language_german")
+        self.settings_radio_ui_language_german.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.settings_gridlayout_graphical_userinterface.addWidget(self.settings_radio_ui_language_english, 0, 2, 1, 1)
-
-        self.settings_radio_ui_language_french = QRadioButton(self.settings_groupbox_ui)
-        self.settings_radio_ui_language_french.setObjectName(u"settings_radio_ui_language_french")
-        self.settings_radio_ui_language_french.setEnabled(True)
-
-        self.settings_gridlayout_graphical_userinterface.addWidget(self.settings_radio_ui_language_french, 0, 5, 1, 1)
+        self.settings_gridlayout_graphical_userinterface.addWidget(self.settings_radio_ui_language_german, 0, 3, 1, 1)
 
         self.settings_radio_ui_language_chinese_simplified = QRadioButton(self.settings_groupbox_ui)
         self.settings_radio_ui_language_chinese_simplified.setObjectName(u"settings_radio_ui_language_chinese_simplified")
@@ -1156,31 +1149,18 @@ class Ui_PornFetch_Desktop(object):
 
         self.settings_gridlayout_graphical_userinterface.addWidget(self.settings_radio_ui_language_chinese_simplified, 0, 4, 1, 1)
 
-        self.settings_radio_ui_language_german = QRadioButton(self.settings_groupbox_ui)
-        self.settings_radio_ui_language_german.setObjectName(u"settings_radio_ui_language_german")
-        self.settings_radio_ui_language_german.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.settings_label_ui_language = QLabel(self.settings_groupbox_ui)
+        self.settings_label_ui_language.setObjectName(u"settings_label_ui_language")
+        sizePolicy6.setHeightForWidth(self.settings_label_ui_language.sizePolicy().hasHeightForWidth())
+        self.settings_label_ui_language.setSizePolicy(sizePolicy6)
 
-        self.settings_gridlayout_graphical_userinterface.addWidget(self.settings_radio_ui_language_german, 0, 3, 1, 1)
+        self.settings_gridlayout_graphical_userinterface.addWidget(self.settings_label_ui_language, 0, 0, 1, 1)
 
-        self.settings_label_design = QLabel(self.settings_groupbox_ui)
-        self.settings_label_design.setObjectName(u"settings_label_design")
+        self.settings_radio_ui_language_french = QRadioButton(self.settings_groupbox_ui)
+        self.settings_radio_ui_language_french.setObjectName(u"settings_radio_ui_language_french")
+        self.settings_radio_ui_language_french.setEnabled(True)
 
-        self.settings_gridlayout_graphical_userinterface.addWidget(self.settings_label_design, 1, 0, 1, 1)
-
-        self.settings_radio_ui_design_native = QRadioButton(self.settings_groupbox_ui)
-        self.settings_radio_ui_design_native.setObjectName(u"settings_radio_ui_design_native")
-
-        self.settings_gridlayout_graphical_userinterface.addWidget(self.settings_radio_ui_design_native, 1, 1, 1, 1)
-
-        self.settings_radio_ui_design_dark_mode = QRadioButton(self.settings_groupbox_ui)
-        self.settings_radio_ui_design_dark_mode.setObjectName(u"settings_radio_ui_design_dark_mode")
-
-        self.settings_gridlayout_graphical_userinterface.addWidget(self.settings_radio_ui_design_dark_mode, 1, 2, 1, 1)
-
-        self.settings_radio_ui_design_light_mode = QRadioButton(self.settings_groupbox_ui)
-        self.settings_radio_ui_design_light_mode.setObjectName(u"settings_radio_ui_design_light_mode")
-
-        self.settings_gridlayout_graphical_userinterface.addWidget(self.settings_radio_ui_design_light_mode, 1, 3, 1, 3)
+        self.settings_gridlayout_graphical_userinterface.addWidget(self.settings_radio_ui_language_french, 0, 5, 1, 1)
 
 
         self.gridLayout_12.addLayout(self.settings_gridlayout_graphical_userinterface, 0, 0, 1, 1)
@@ -1223,6 +1203,7 @@ class Ui_PornFetch_Desktop(object):
 
         self.settings_checkbox_system_enable_tor = QCheckBox(self.settings_groupbox_system_pornfetch)
         self.settings_checkbox_system_enable_tor.setObjectName(u"settings_checkbox_system_enable_tor")
+        self.settings_checkbox_system_enable_tor.setCheckable(False)
 
         self.settings_gridlayout_system_pornfetch.addWidget(self.settings_checkbox_system_enable_tor, 3, 1, 1, 1)
 
@@ -1621,7 +1602,7 @@ class Ui_PornFetch_Desktop(object):
 
         self.retranslateUi(PornFetch_Desktop)
 
-        self.main_stacked_widget_main.setCurrentIndex(2)
+        self.main_stacked_widget_main.setCurrentIndex(1)
         self.main_stacked_widget_top.setCurrentIndex(0)
 
 
@@ -1735,22 +1716,18 @@ class Ui_PornFetch_Desktop(object):
         self.settings_radio_threading_mode_default.setText(QCoreApplication.translate("PornFetch_Desktop", u"Default", None))
         self.settings_button_threading_mode_help.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
         self.settings_groupbox_ui.setTitle(QCoreApplication.translate("PornFetch_Desktop", u"Graphical User Interface", None))
-        self.settings_label_ui_language.setText(QCoreApplication.translate("PornFetch_Desktop", u"Graphical User Interface Language:", None))
-        self.settings_radio_ui_language_system_default.setText(QCoreApplication.translate("PornFetch_Desktop", u"System default", None))
         self.settings_radio_ui_language_english.setText(QCoreApplication.translate("PornFetch_Desktop", u"English", None))
-        self.settings_radio_ui_language_french.setText(QCoreApplication.translate("PornFetch_Desktop", u"French", None))
-        self.settings_radio_ui_language_chinese_simplified.setText(QCoreApplication.translate("PornFetch_Desktop", u"Chinese (simplified)", None))
+        self.settings_radio_ui_language_system_default.setText(QCoreApplication.translate("PornFetch_Desktop", u"System default", None))
         self.settings_radio_ui_language_german.setText(QCoreApplication.translate("PornFetch_Desktop", u"German", None))
-        self.settings_label_design.setText(QCoreApplication.translate("PornFetch_Desktop", u"Porn Fetch Design:", None))
-        self.settings_radio_ui_design_native.setText(QCoreApplication.translate("PornFetch_Desktop", u"LSD", None))
-        self.settings_radio_ui_design_dark_mode.setText(QCoreApplication.translate("PornFetch_Desktop", u"System's dark mode", None))
-        self.settings_radio_ui_design_light_mode.setText(QCoreApplication.translate("PornFetch_Desktop", u"System's light mode", None))
+        self.settings_radio_ui_language_chinese_simplified.setText(QCoreApplication.translate("PornFetch_Desktop", u"Chinese (simplified)", None))
+        self.settings_label_ui_language.setText(QCoreApplication.translate("PornFetch_Desktop", u"Graphical User Interface Language:", None))
+        self.settings_radio_ui_language_french.setText(QCoreApplication.translate("PornFetch_Desktop", u"French", None))
         self.settings_groupbox_system_pornfetch.setTitle(QCoreApplication.translate("PornFetch_Desktop", u"System / Porn Fetch", None))
         self.settings_checkbox_system_update_checks.setText(QCoreApplication.translate("PornFetch_Desktop", u"Update checks", None))
         self.settings_checkbox_internet_checks.setText(QCoreApplication.translate("PornFetch_Desktop", u"Internet checks", None))
         self.settings_checkbox_system_anonymous_mode.setText(QCoreApplication.translate("PornFetch_Desktop", u"Enable Anonymous mode", None))
         self.settings_label_system_privacy.setText(QCoreApplication.translate("PornFetch_Desktop", u"Privacy:", None))
-        self.settings_checkbox_system_enable_tor.setText(QCoreApplication.translate("PornFetch_Desktop", u"Enable Tor", None))
+        self.settings_checkbox_system_enable_tor.setText(QCoreApplication.translate("PornFetch_Desktop", u"Enable Tor (Not implemented yet) ", None))
         self.settings_label_startup.setText(QCoreApplication.translate("PornFetch_Desktop", u"Startup:", None))
         self.settings_button_settings_help_tor.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
         self.settings_button_help_anonymous_mode.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))

@@ -74,6 +74,17 @@ py -m venv ..\venv\
 pip install -r requirements.txt
 $env:NUITKA_ASSUME_YES_FOR_DOWNLOADS = "1"
 Write-Host "NUITKA_ASSUME_YES_FOR_DOWNLOADS is set to $env:NUITKA_ASSUME_YES_FOR_DOWNLOADS"
+
+# Invoke the UI update script
+Write-Output "Running UI update script..."
+$uiUpdateScriptPath = Join-Path -Path $PSScriptRoot -ChildPath "src/frontend/update.ps1"
+if (Test-Path -Path $uiUpdateScriptPath) {
+    & $uiUpdateScriptPath
+} else {
+    Write-Error "UI update script not found at $uiUpdateScriptPath. Please ensure it exists."
+    exit 1
+}
+
 pyside6-deploy main.py -c src/build/pysidedeploy_windows.spec -f -v
 
 # Move the final executable to the user's Desktop
