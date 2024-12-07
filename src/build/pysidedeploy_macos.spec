@@ -48,7 +48,7 @@ plugins =
 # eg = extra_args = --show-modules --follow-stdlib
 macos.permissions = 
 # (str) specify any extra nuitka arguments
-extra_args = --quiet --noinclude-qt-translations
+extra_args = --noinclude-qt-translations --assume-yes-for-downloads --disable-cache=all --clean-cache=all --warn-unusual-code --remove-output --show-memory --windows-console-mode=disable --company-name=None --product-name=PornFetch --file-version=2.5 --product-version=2.5 --copyright=JohannesHabel
 
 [buildozer]
 # build mode

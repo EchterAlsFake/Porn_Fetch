@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 # Install Python 3.12.8
 echo "Installing Python 3.12.8..."
 PYTHON_VERSION="3.12.8"
@@ -24,7 +23,7 @@ rm "/tmp/${PYTHON_DMG}"
 
 # Verify Python installation
 echo "Verifying Python installation..."
-python3 --version
+python3.12 --version
 
 echo "Python installation script completed successfully."
 
@@ -46,9 +45,12 @@ cd "${HOME}" || { echo "[ERROR] Failed to change directory to ${HOME}"; exit 1; 
 git clone https://github.com/EchterAlsFake/Porn_Fetch
 cd "Porn_Fetch"
 
-python3 -m venv /tmp/.venv # This is needed, because Qt has some issues if the virtual environment is in the same directory, as there the script gets executed in
+python3.12 -m venv /tmp/.venv # This is needed, because Qt has some issues if the virtual environment is in the same directory, as there the script gets executed in
 source /tmp/.venv/bin/activate
 pip install -r requirements.txt
+cd src/frontend
+bash update.sh
+cd ../../
 pyside6-deploy -c src/build/pysidedeploy_macOS.spec -f -v
 deactivate
 echo "Deleting the temporary created virtual environment..."
