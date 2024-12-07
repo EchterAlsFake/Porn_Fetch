@@ -19,7 +19,7 @@ python_path =
 # python packages to install
 # ordered-set = increase compile time performance of nuitka packaging
 # zstandard = provides final executable size optimization
-packages = Nuitka
+packages = Nuitka==2.5.6
 # buildozer = for deploying Android application
 android_packages = buildozer==1.5.0,cython==0.29.33
 
@@ -49,7 +49,7 @@ plugins =
 macos.permissions =
 mode = onefile
 # (str) specify any extra nuitka arguments
-extra_args = --noinclude-qt-translations --assume-yes-for-downloads --disable-cache=all --clean-cache=all --warn-unusual-code --remove-output --show-memory --windows-console-mode=disable --company-name=None --product-name=PornFetch --file-version=2.5 --product-version=2.5 --copyright=JohannesHabel
+extra_args = --noinclude-qt-translations --assume-yes-for-downloads --disable-cache=all --clean-cache=all --warn-unusual-code --remove-output --show-memory --windows-console-mode=disable --company-name=None --product-name=PornFetch --file-version=3.5 --product-version=3.5 --copyright=JohannesHabel
 
 [buildozer]
 # build mode

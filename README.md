@@ -120,20 +120,34 @@ Porn Fetch supports all URLs, Models and search terms like it would if you use t
 If you still need a real example file, [here you go](https://github.com/EchterAlsFake/Porn_Fetch/blob/eac6fa2ccf644e4b30816a7bd2fa0257b2a03e36/src/backend/urls.txt)
 
 ## 🔨 Building from Source
-Easy-to-use build scripts are available for various platforms. Run these in your terminal:
+Easy-to-use build scripts are available for various platforms.
 
-### Ubuntu, Arch Linux, Fedora, OpenSUSE (and others):
+> [!NOTE]
+> Building will be done using Python3.13 and [Nuitka](https://github.com/Nuitka/Nuitka) using Qt's `pyside6-deploy` tool.
+
+Hardware requirements:
+- ~1.5 GB of hard disk space
+- ~2–3 GB of RAM
+- A processor that can do some math
+
+> Compilation takes around 5–20 minutes depending on your system and hardware.
+
+### Linux (Ubuntu, Arch-based, Debian-based, OpenSUSE)
+> [!NOTE]
+> There is no official list of tested Linux distributions. I develop Porn Fetch only on Arch Linux. If you come across
+> an issue, you can always report it and I will distro-hop to solve it.
+
 ```bash
 wget "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install.sh" -O install.sh
 bash install.sh
 ```
 
-### Termux:
+### Termux
 ```bash
 apt install wget -y && wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_termux.sh" | bash
 ```
 
-### Windows (Powershell as Admin)
+### Windows (PowerShell as Admin)
 ```
 # Enable script execution
 Set-ExecutionPolicy RemoteSigned 
@@ -141,24 +155,10 @@ Set-ExecutionPolicy Bypass -Scope Process
 Invoke-Expression (Invoke-WebRequest -Uri https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_windows.ps1 -UseBasicParsing).Content
 ```
 
-> Scripts aren't maintained very often. Please report errors immediately!
-
 ### macOS
-> [!CAUTION]
-> This installation script is currently being tested. `DO NOT RUN IT!`
-
 > [!NOTE]
-> If you already have Python installed on your macOS system you need to uninstall it,
-> because only Cpython builds are supported which Porn Fetch will automatically install
-> during compilation.
-
-> [!IMPORTANT]
-> You need to have the command line developer tools installed. I tried everything to get
-> around it, but it's really not possible. 
-
-Go into a Terminal and run the following command and accept the prompt:
-
-`xcode-select --install`
+> You need to have the Apple Developer command line tools installed. You can install them by going into your terminal
+> and run `xcode-select --install`
 
 
 ```bash
@@ -166,6 +166,17 @@ curl "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scri
 bash install.sh
 ```
 
+> [!CAUTION]
+> macOS support is experimental and not tested on real certified Apple Hardware...
+
+**Please Read:**
+<br>The created file will be a `.app` file. You cannot usually run it as you would, because it doesn't work for some reason...
+Instead you need to go inside the `.app` package using a Terminal and run the main file in it.
+
+You can do that with something like `./<the_app_package.app/Contents/MacOS/main`
+
+At the moment, this is unfortunately the only way how I can support macOS. I will try to make this easier in the future, but it 
+doesn't depend on me.
 
 ## 📱 Android
 The Android app is the exact same as the desktop app. Thanks to Qt's Android developing Guide, you'll be able to simply
