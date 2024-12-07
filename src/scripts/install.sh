@@ -79,7 +79,13 @@ git checkout  # This is only temporary for testing, don't worry...
 python3 -m venv /tmp/.venv # This is needed, because Qt has some issues if the virtual environment is in the same directory, as there the script gets executed in
 source /tmp/.venv/bin/activate
 pip install -r requirements.txt
-pyside6-deploy -c src/build/pysidedeploy_linux.spec -f -v
+
+if [ "$OS" = "darwin" ]; then
+  pyside6-deploy -c src/build/pysidedeploy_macos.spec -f -v
+else
+  pyside6-deploy -c src/build/pysidedeploy_linux.spec -f -v
+fi
+
 mv "main.bin" "PornFetch_Linux_GUI_x64.bin"
 deactivate
 echo "Deleting the temporary created virtual environment..."

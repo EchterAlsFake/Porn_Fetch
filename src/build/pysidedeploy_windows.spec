@@ -17,7 +17,7 @@ exec_directory = .
 project_file = 
 
 # application icon
-icon = src/frontend/graphics/logo_transparent.ico
+icon = src/frontend/graphics/logo_transparent.icns
 
 [python]
 
@@ -63,10 +63,10 @@ plugins =
 # usage description for permissions requested by the app as found in the info.plist file
 # of the app bundle
 # eg = extra_args = --show-modules --follow-stdlib
-macos.permissions = 
+macos.permissions = macos.permissions = com.apple.security.network.client, com.apple.security.files.user-selected.read-write
 
 # (str) specify any extra nuitka arguments
-extra_args = --noinclude-qt-translations --assume-yes-for-downloads --disable-cache=all --clean-cache=all --warn-unusual-code --remove-output --force-dll-dependency-cache-update --show-memory --windows-console-mode=disable --mingw64 --company-name=None --product-name=PornFetch --file-version=2.5 --product-version=2.5 --copyright=JohannesHabel
+extra_args = --noinclude-qt-translations --assume-yes-for-downloads --disable-cache=all --clean-cache=all --remove-output --show-memory  --company-name=None --product-name=PornFetch --file-version=3.5 --product-version=3.5 --copyright=JohannesHabel
 
 [buildozer]
 
