@@ -26,16 +26,16 @@ function Check-PythonInstalled {
 
 function Install-Python {
     # Download and install Python
-    Write-Output "Downloading Python 3.13.1..."
-    $pythonInstallerPath = [System.IO.Path]::Combine($downloadsDir, "python-3.13.1-amd64.exe")
+    Write-Output "Downloading Python 3.12.8..."
+    $pythonInstallerPath = [System.IO.Path]::Combine($downloadsDir, "python-3.12.8-amd64.exe")
     try {
-        Invoke-WebRequest -Uri "https://www.python.org/ftp/python/3.13.1/python-3.13.1-amd64.exe" -OutFile $pythonInstallerPath -ErrorAction Stop
+        Invoke-WebRequest -Uri "https://www.python.org/ftp/python/3.12.8/python-3.12.8-amd64.exe" -OutFile $pythonInstallerPath -ErrorAction Stop
     } catch {
         Write-Output "Failed to download Python installer. Please check your internet connection."
         return
     }
 
-    Write-Output "Installing Python 3.13.1 silently..."
+    Write-Output "Installing Python 3.12.8 silently..."
     try {
         Start-Process -FilePath $pythonInstallerPath -ArgumentList "/quiet InstallAllUsers=1 PrependPath=1" -Wait -ErrorAction Stop
     } catch {
@@ -71,7 +71,6 @@ Set-Location -Path $projectDir
 py -m venv ..\venv\
 ..\venv\Scripts\activate.ps1
 pip install -r requirements.txt
-pip install nuitka --upgrade
 pip install pywin32
 $env:NUITKA_ASSUME_YES_FOR_DOWNLOADS = "1"
 Write-Host "NUITKA_ASSUME_YES_FOR_DOWNLOADS is set to $env:NUITKA_ASSUME_YES_FOR_DOWNLOADS"

@@ -27,7 +27,7 @@ python_path = /home/asuna/PycharmProjects/venv/bin/python3.11
 # python packages to install
 # ordered-set = increase compile time performance of nuitka packaging
 # zstandard = provides final executable size optimization
-packages = Nuitka==2.5.6
+packages = Nuitka==2.4.8
 
 # buildozer = for deploying Android application
 android_packages = buildozer==1.5.0,cython==0.29.33
@@ -42,10 +42,10 @@ qml_files =
 excluded_qml_plugins = 
 
 # qt modules used. comma separated
-modules = DBus,Widgets,Core,Gui
+modules = Widgets,Core,Gui,DBus
 
 # qt plugins used by the application
-plugins = egldeviceintegrations,iconengines,platforms/darwin,xcbglintegrations,imageformats,platforms,platformthemes,styles,platforminputcontexts,accessiblebridge,generic
+plugins = xcbglintegrations,platforms/darwin,iconengines,accessiblebridge,styles,platformthemes,platforms,imageformats,generic,platforminputcontexts,egldeviceintegrations
 
 [android]
 

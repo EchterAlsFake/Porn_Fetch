@@ -123,7 +123,7 @@ If you still need a real example file, [here you go](https://github.com/EchterAl
 Easy-to-use build scripts are available for various platforms.
 
 > [!NOTE]
-> Building will be done using Python3.13 and [Nuitka](https://github.com/Nuitka/Nuitka) using Qt's `pyside6-deploy` tool.
+> Building will be done using Python3.12 and [Nuitka](https://github.com/Nuitka/Nuitka) using Qt's `pyside6-deploy` tool.
 
 Hardware requirements:
 - ~1.5 GB of hard disk space
