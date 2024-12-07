@@ -699,7 +699,7 @@ class ProcessVideoThread(QRunnable):
         self.signals = Signals()
         self.path = path
         self.format = format
-        self.data = load_video_attributes(video)
+        self.data = load_video_attributes(video, 1)
         self.write_tags_ = write_tags_
 
     def run(self):
@@ -972,7 +972,6 @@ class Porn_Fetch(QWidget):
         super().__init__(parent)
         # Variable initialization:
         self.app_name = app_name
-        self.gui_design_map = None
         self.model_videos_map = None
         self.model_videos_type = None
         self.skip_existing_files = None
@@ -1080,7 +1079,6 @@ class Porn_Fetch(QWidget):
         self.ui.settings_label_settings_videos_model.setText("Actors video types:")
         self.ui.settings_button_install_pornfetch.setText("Install Program")
         self.ui.settings_groupbox_system_pornfetch.setWindowTitle("System")
-        self.ui.settings_label_design.setText("Design:")
         self.ui.main_textbrowser_supported_websites.setText("Running in anonymous mode, please deactivate to display...")
         self.ui.download_lineedit_playlist_url.setPlaceholderText("Enter playlist URL")
         self.ui.download_radio_search_website_eporner.setText("4")
@@ -1361,11 +1359,6 @@ class Porn_Fetch(QWidget):
             "featured": self.ui.settings_radio_model_featured
         }
 
-        self.gui_design_map = {
-            "native": self.ui.settings_radio_ui_design_native,
-            "dark": self.ui.settings_radio_ui_design_dark_mode,
-            "light": self.ui.settings_radio_ui_design_light_mode
-        }
 
     def load_user_settings(self):
         """Loads the user settings from the configuration file and applies them."""
@@ -1376,7 +1369,6 @@ class Porn_Fetch(QWidget):
         self.directory_system_map.get(self.conf.get("Video", "directory_system")).setChecked(True)
         self.gui_language_map.get(self.conf.get("UI", "language")).setChecked(True)
         self.model_videos_map.get(self.conf.get("Video", "model_videos")).setChecked(True)
-        self.gui_design_map.get(self.conf.get("UI", "design")).setChecked(True)
         self.ui.settings_spinbox_semaphore.setValue(int(self.conf.get("Performance", "semaphore")))
         self.ui.settings_spinbox_treewidget_limit.setValue(int(self.conf.get("Video", "search_limit")))
         self.ui.settings_lineedit_output_path.setText(self.conf.get("Video", "output_path"))
@@ -1457,10 +1449,6 @@ class Porn_Fetch(QWidget):
             if radio_button.isChecked():
                 self.conf.set("Video", "model_videos", model_video_type)
 
-        for design, radio_button in self.gui_design_map.items():
-            if radio_button.isChecked():
-                self.conf.set("UI", "design", design)
-
         if self.ui.settings_radio_skip_existing_files_no.isChecked():
             self.conf.set("Video", "skip_existing_files", "false")
 
@@ -1480,17 +1468,18 @@ class Porn_Fetch(QWidget):
         self.conf.set("Setup", "anonymous_mode", "true" if self.ui.settings_checkbox_system_anonymous_mode.isChecked() else "false")
         self.conf.set("Setup", "tor", "true" if self.ui.settings_checkbox_system_enable_tor.isChecked() else "false")
 
-        if self.ui.settings_radio_ui_design_native.isChecked():
+        """
+        if self.ui.radio_settings.isChecked():
             self.conf.set("PostProcessing", "convert", "true")
             self.conf.set("PostProcessing", "format", "mp4")
+
 
         elif self.ui.radio_settings_post_rocessing_do_not_convert.isChecked():
             self.conf.set("PostProcessing", "convert", "false")
 
         elif self.ui.radio_settings_post_processing_use_custom_format.isChecked():
             self.conf.set("PostProcessing", "convert", "true")
-            self.conf.set("PostProcessing", "format", str(self.ui.lineedit_settings_post_processing_use_custom_format.text()))
-
+            self.conf.set("PostProcessing", "format", str(self.ui.lineedit_settings_post_processing_use_custom_format.text()))"""
 
         with open("config.ini", "w") as config_file: # type: TextIOWrapper
             self.conf.write(config_file)
