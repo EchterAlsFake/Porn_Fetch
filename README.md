@@ -153,7 +153,7 @@ Invoke-Expression (Invoke-WebRequest -Uri https://raw.githubusercontent.com/Echt
 > during compilation.
 
 ```bash
-wget "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_macos.sh" -O install.sh
+curl "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_macos.sh" -o install.sh
 bash install.sh
 ```
 
