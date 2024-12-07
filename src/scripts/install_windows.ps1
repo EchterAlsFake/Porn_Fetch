@@ -7,7 +7,6 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 
 $userDir = [Environment]::GetFolderPath('UserProfile')
 $desktopDir = [System.IO.Path]::Combine($userDir, "Desktop")
-$tempDir = [System.IO.Path]::GetTempPath()
 
 # Define the downloads directory
 $downloadsDir = "$env:TEMP"
@@ -77,29 +76,26 @@ Write-Host "NUITKA_ASSUME_YES_FOR_DOWNLOADS is set to $env:NUITKA_ASSUME_YES_FOR
 
 # Invoke the UI update script
 Write-Output "Running UI update script..."
-$uiUpdateScriptPath = Join-Path -Path $PSScriptRoot -ChildPath "src/frontend/update.ps1"
+$uiUpdateScriptPath = Join-Path -Path $projectDir -ChildPath "src/frontend/update.ps1"
 if (Test-Path -Path $uiUpdateScriptPath) {
     & $uiUpdateScriptPath
 } else {
     Write-Error "UI update script not found at $uiUpdateScriptPath. Please ensure it exists."
     exit 1
 }
-
-pyside6-deploy main.py -c src/build/pysidedeploy_windows.spec -f -v
+Set-Location -Path $projectDir
+pyside6-deploy -c src/build/pysidedeploy_windows.spec -f -v
 
 # Move the final executable to the user's Desktop
-$finalExePath = Join-Path -Path $projectDir -ChildPath "main.exe"
 $renamedExe = Join-Path -Path $projectDir -ChildPath "Porn Fetch.exe"
-if (Test-Path -Path $finalExePath) {
-    Rename-Item -Path $finalExePath -NewName "Porn Fetch.exe"
-    Move-Item -Path $renamedExe -Destination (Join-Path $desktopDir "Porn Fetch.exe")
-}
+Move-Item -Path $renamedExe -Destination (Join-Path $desktopDir "Porn Fetch.exe")
 
-#Set-Location -Path $userDir
 # Clean up
 deactivate
-cd C:\ # Just leaves the directory, so that I can remove the downloaded archive
+Set-Location C:\ # Just leaves the directory, so that I can remove the downloaded archive
 Write-Output "Cleaning up..."
 Remove-Item -Path $projectZipPath -Force
 Remove-Item -Recurse -Force -Path (Join-Path $downloadsDir "Porn_Fetch-master")
 Write-Output "Done!"
+Write-Output "Porn Fetch is now on your Desktop. It's named 'Porn Fetch.exe'"
+Write-Output "You can now close the terminal..."

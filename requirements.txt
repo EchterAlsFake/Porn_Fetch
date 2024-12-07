@@ -10,7 +10,7 @@ PySide6
 requests
 hue_shift
 Markdown
-rich
-tqdm
+rich # Only needed by CLI
 ffmpeg-progress-yield
 mutagen
+pywin32 # Only needed on Windows for Porn Fetch installation
