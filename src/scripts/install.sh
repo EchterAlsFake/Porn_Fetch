@@ -73,7 +73,9 @@ python3 -m venv /tmp/.venv # This is needed, because Qt has some issues if the v
 source /tmp/.venv/bin/activate
 pip install -r requirements.txt
 pyside6-deploy -c src/build/pysidedeploy_linux.spec -f -v
-mv "main.bin" "PornFetch_Linux_GUI_x64.bin"
+ls -la
+ls -la deployment
+mv "deployment/main.bin" "PornFetch_Linux_GUI_x64.bin"
 deactivate
 echo "Deleting the temporary created virtual environment..."
 rm -rf /tmp/.venv

@@ -972,6 +972,10 @@ class Porn_Fetch(QWidget):
         super().__init__(parent)
         # Variable initialization:
         self.app_name = app_name
+        self.internet_checks = None
+        self.update_checks = None
+        self.enable_tor = None
+        self._anonymous_mode = None
         self.model_videos_map = None
         self.model_videos_type = None
         self.skip_existing_files = None
@@ -979,9 +983,11 @@ class Porn_Fetch(QWidget):
         self.max_retries = None
         self.workers = None
         self.timeout = None
+        self.write_metadata = None
         self.gui_language = None
         self.semaphore = None
         self.format = None
+        self.convert_videos = None
         self.native_languages = None
         self.directory_system_map = None
         self.threading_mode_map = None
@@ -1028,13 +1034,13 @@ class Porn_Fetch(QWidget):
             logger.debug("Startup: [4/5] Loaded the user settings")
             self.switch_to_home()  # Switches Porn Fetch to the home widget
 
-            if self.conf.get("Setup", "internet_checks") == "true":
+            if self.internet_checks:
                 self.check_internet()
 
-            if self.conf.get("Setup", "update_checks") == "true":
+            if self.update_checks:
                 self.check_for_updates()
 
-            if self.conf.get("Setup", "anonymous_mode") == "true":
+            if self._anonymous_mode:
                 self.anonymous_mode()
 
             if self.conf.get("Setup", "tor") == "true":
@@ -1372,25 +1378,37 @@ class Porn_Fetch(QWidget):
         self.ui.settings_spinbox_semaphore.setValue(int(self.conf.get("Performance", "semaphore")))
         self.ui.settings_spinbox_treewidget_limit.setValue(int(self.conf.get("Video", "search_limit")))
         self.ui.settings_lineedit_output_path.setText(self.conf.get("Video", "output_path"))
-        self.ui.settings_checkbox_internet_checks.setChecked(True) if self.conf.get("Setup", "internet_checks") == "true" else self.ui.settings_checkbox_internet_checks.setChecked(False)
-        self.ui.settings_checkbox_system_update_checks.setChecked(True) if self.conf.get("Setup", "update_checks") == "true" else self.ui.settings_checkbox_system_update_checks.setChecked(False)
-        self.ui.settings_checkbox_system_anonymous_mode.setChecked(True) if self.conf.get("Setup", "anonymous_mode") == "true" else self.ui.settings_checkbox_system_anonymous_mode.setChecked(False)
-        self.ui.settings_checkbox_system_enable_tor.setChecked(True) if self.conf.get("Setup", "tor") == "true" else self.ui.settings_checkbox_system_enable_tor.setChecked(False)
-        self.ui.checkbox_settings_post_processing_unfinished_videos.setChecked(True) if self.conf.get("PostProcessing", "unfinished_videos") == "true" else self.ui.checkbox_settings_post_processing_unfinished_videos.setChecked(False)
-        self.ui.checkbox_settings_post_processing_write_metadata_tags.setChecked(True) if self.conf.get("PostProcessing", "write_metadata") == "true" else self.ui.checkbox_settings_post_processing_write_metadata_tags.setChecked(False)
+        self.internet_checks = self.conf.get("Setup", "internet_checks") == "true"
+        self.ui.settings_checkbox_internet_checks.setChecked(self.internet_checks)
 
-        if self.conf.get("PostProcessing", "convert") == "false":
-            self.ui.radio_settings_post_rocessing_do_not_convert.setChecked(True)
-            self.format = False
+        self.update_checks = self.conf.get("Setup", "update_checks") == "true"
+        self.ui.settings_checkbox_system_update_checks.setChecked(self.update_checks)
 
-        elif self.conf.get("PostProcessing", "convert") == "true" and self.conf.get("PostProcessing", "format") == "mp4":
-            self #? I am stupid
-            self.format = ".mp4"
+        self._anonymous_mode = self.conf.get("Setup", "anonymous_mode") == "true"
+        self.ui.settings_checkbox_system_anonymous_mode.setChecked(self._anonymous_mode)
 
-        elif self.conf.get("PostProcessing", "format") != "mp4" and self.conf.get("PostProcessing", "convert") == "true":
+        self.enable_tor = self.conf.get("Setup", "tor") == "true"
+        self.ui.settings_checkbox_system_enable_tor.setChecked(self.enable_tor)
+
+        if self.conf["PostProcessing"]["write_metadata"] == "true":
+            self.write_metadata = True
+            self.ui.checkbox_settings_post_processing_write_metadata_tags.setChecked(True) if self.conf.get("PostProcessing","write_metadata") == "true" else self.ui.checkbox_settings_post_processing_write_metadata_tags.setChecked(False)
+
+        if self.conf["PostProcessing"]["convert"] == "true":
+            self.format = self.conf["PostProcessing"]["format"]
+            self.convert_videos = True
             self.ui.radio_settings_post_processing_use_custom_format.setChecked(True)
-            self.format = f'.{self.conf.get("PostProcessing", "format")}'
-            self.ui.lineedit_settings_post_processing_use_custom_format.setText(self.format)
+            self.ui.lineedit_settings_post_processing_use_custom_format.setText(str(self.format))
+
+
+        else:
+            self.ui.radio_settings_post_processing_do_not_convert.setChecked(True)
+            self.convert_videos = False
+
+            if self.write_metadata:
+                ui_popup(ui_popup(self.tr("You have enabled writing metadata tags to videos, but not converting videos. "
+                                          "To use metadata writing, you need to enable converting videos. Writing metadata"
+                                          "will be disabled, unless you change it in settings", disambiguation=None)))
 
 
         self.semaphore_limit = self.conf.get("Performance", "semaphore")
@@ -1410,7 +1428,7 @@ class Porn_Fetch(QWidget):
 
         if self.skip_existing_files:
             self.ui.settings_radio_skip_existing_files_yes.setChecked(True)
-
+            # TODO
         else:
             self.ui.settings_radio_skip_existing_files_no.setChecked(True)
 
@@ -1468,18 +1486,12 @@ class Porn_Fetch(QWidget):
         self.conf.set("Setup", "anonymous_mode", "true" if self.ui.settings_checkbox_system_anonymous_mode.isChecked() else "false")
         self.conf.set("Setup", "tor", "true" if self.ui.settings_checkbox_system_enable_tor.isChecked() else "false")
 
-        """
-        if self.ui.radio_settings.isChecked():
-            self.conf.set("PostProcessing", "convert", "true")
-            self.conf.set("PostProcessing", "format", "mp4")
-
-
-        elif self.ui.radio_settings_post_rocessing_do_not_convert.isChecked():
+        if self.ui.radio_settings_post_processing_do_not_convert.isChecked():
             self.conf.set("PostProcessing", "convert", "false")
 
         elif self.ui.radio_settings_post_processing_use_custom_format.isChecked():
             self.conf.set("PostProcessing", "convert", "true")
-            self.conf.set("PostProcessing", "format", str(self.ui.lineedit_settings_post_processing_use_custom_format.text()))"""
+            self.conf.set("PostProcessing", "format", str(self.ui.lineedit_settings_post_processing_use_custom_format.text()))
 
         with open("config.ini", "w") as config_file: # type: TextIOWrapper
             self.conf.write(config_file)
