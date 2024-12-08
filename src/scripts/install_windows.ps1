@@ -88,7 +88,7 @@ Set-Location -Path $projectDir
 pyside6-deploy -c src/build/pysidedeploy_windows.spec -f -v
 
 # Move the final executable to the user's Desktop
-$finalExePath = Join-Path -Path $projectDir -ChildPath "Porn Fetch.exe"
+$finalExePath = Join-Path -Path $projectDir -ChildPath "main.exe"
 $renamedExe = Join-Path -Path $projectDir -ChildPath "Porn Fetch.exe"
 Rename-Item -Path $finalExePath -NewName "PornFetch_Windows_GUI_x64.exe"
 Move-Item -Path $renamedExe -Destination (Join-Path $desktopDir "Porn Fetch.exe")
