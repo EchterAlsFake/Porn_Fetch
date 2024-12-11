@@ -11,7 +11,6 @@ fi
 git clone https://github.com/EchterAlsFake/Porn_Fetch
 cd Porn_Fetch
 echo "Installing requirements..."
-sudo pacman -S base-devel android-tools android-udev clang jdk17-openjdk llvm openssl wget git
 echo "Downloading Qt's PySide6-setup to download the Android NDK/SDK"
 git clone https://code.qt.io/pyside/pyside-setup
 cd pyside-setup
@@ -21,7 +20,7 @@ source venv/bin/activate
 source venv/bin/activate
 pip install -r tools/cross_compile_android/requirements.txt
 pip install -r requirements.txt
-python3 tools/cross_compile_android/main.py --download-only --auto-accept-license
+python3 tools/cross_compile_android/main.py --download-only --auto-accept-license --clean-cache all
 echo "Installed Android NDK / SDK in ~/pyside6_android_deploy/"
 
 ANDROID_SDK="$HOME/.pyside6_android_deploy/android-sdk"
@@ -34,6 +33,7 @@ rm -rf pyside-setup
 echo "Creating a new virtual environment for the android build"
 python3.11 -m venv /tmp/venv
 source /tmp/venv/bin/activate
+pip install PySide6
 
 echo "Please choose the architecture you want to build for"
 
