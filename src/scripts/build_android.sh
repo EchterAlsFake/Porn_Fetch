@@ -32,6 +32,8 @@ cd ../
 echo "Cleaning pyside-setup directory"
 rm -rf pyside-setup
 echo "Creating a new virtual environment for the android build"
+python3.11 -m venv /tmp/venv
+source /tmp/venv/bin/activate
 
 echo "Please choose the architecture you want to build for"
 
