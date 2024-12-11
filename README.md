@@ -169,6 +169,22 @@ bash install.sh
 > [!CAUTION]
 > macOS support is experimental and not tested on real certified Apple Hardware...
 
+### Android
+> [!NOTE]
+> Building for Android is currently being tested, please do not do it yet!
+
+**Make sure your host system has the following dependencies installed**
+- jdk17-openjdk
+- llvm
+- openssl
+- python3.11
+
+```bash
+curl "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/build_android.sh" -o build_android.sh
+bash build_android.sh
+```
+
+
 **Please Read:**
 <br>The created file will be a `.app` file. You cannot usually run it as you would, because it doesn't work for some reason...
 Instead you need to go inside the `.app` package using a Terminal and run the main file in it.
@@ -184,10 +200,6 @@ install the .apk file, and you have the full version of Porn Fetch on your devic
 
 > [!IMPORTANT]
 > Android is currently broken, use Termux instead!
-
-### Building for Android
-Building the PySide6 application by yourself isn't possible through a simple script. If you really want
-to do it, please refer to my [Pyside6-to-Android](https://github.com/EchterAlsFake/PySide6-to-Android) repository.
 
 ## 🌍 Translating
 Currently available in:

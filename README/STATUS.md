@@ -25,9 +25,6 @@
 - [x] Porn Fetch CLI is now completely thread-safe and uses rich progressbar
 - [x] Porn Fetch CLI now also tracks the total progress with a separate bar
 - [] Display thumbnails when searching (optionally)
-- [] Support for system's native UI design
-- [] Geo block bypass
-- [] Allow for custom proxy lists to help people in censored countries
 - [] Full support for spankbang
 - [] Allow for different format converting e.g, mov and mkv
 - [] Allow for optional tag writing
@@ -67,3 +64,9 @@ by that instead of calculating the new total progress. This will require a rewor
   - [] Fixing threading and segment downloading in general
   - [] Make a separate layout for Porn Fetch on Android
   <br>**DEPENDS ON QT, NOT MY FAULT IF IT DOESN'T WORK, SERIOUSLY**
+
+
+# v3.6
+- [] Support for system's native UI design
+- [] Geo block bypass
+- [] Allow for custom proxy lists to help people in censored countries

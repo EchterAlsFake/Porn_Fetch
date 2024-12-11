@@ -749,7 +749,7 @@ class QTreeWidgetDownloadThread(QRunnable):
         if not self.threading_mode == "FFMPEG":
             logger.debug("Getting segments...")
             global total_segments, downloaded_segments
-            total_segments = sum(
+            total_segments += sum(
                 [len(list(video.get_segments(quality=self.quality))) for video in video_objects if
                  hasattr(video, 'get_segments')])
             logger.debug("Got segments")
