@@ -34,7 +34,30 @@ echo "Creating a new virtual environment for the android build"
 python3.11 -m venv /tmp/venv
 source /tmp/venv/bin/activate
 pip install PySide6
+echo """
+[ACTION]
+You need to edit the file in '/tmp/venv/lib/python3.11/site-packages/PySide6/scripts/android_deploy.py'
+and write this: 'input(\"edit requirements\")' after line 129.
 
+Here's an example:
+
+        # run buildozer
+        logging.info(\"[DEPLOY] Running buildozer deployment\")
+        input(\"edit requirements\")
+        Buildozer.create_executable(config.mode)
+
+Now save that file. When the build process starts you will at some point see this input statement and then you need
+to go into \$HOME/Porn_Fetch/ and edit the file 'buildozer.spec'. In this file you will see a line named 'requirments = PySide6....'
+After the last requirement write exactly this:
+
+,charset-normalizer==2.1.1,git+https://github.com/EchterAlsFake/PHUB,idna,urllib3,certifi,hue_shift,markdown,colorama,requests,git+https://github.com/EchterAlsFake/hqporner_api,ffmpeg-progress-yield,tqdm,git+https://github.com/EchterAlsFake/eporner_api,git+https://github.com/EchterAlsFake/xnxx_api,git+https://github.com/EchterAlsFake/xvideos_api,beautifulsoup4,mutagen,git+https://github.com/EchterAlsFake/eaf_base_api,httpx,httpcore,h11,certifi,idna,sniffio,git+https://github.com/EchterAlsFake/spankbang_api
+
+Then save that file and hit ENTER in this window to continue the build process. If you need help, feel free to contact me
+on Discord: 'echteralsfake'
+"""
+
+
+read -r fortnite
 echo "Please choose the architecture you want to build for"
 
 options=("aarch64" "armv7a" "x86_64" "i686" "quit")
