@@ -47,8 +47,8 @@ Here's an example:
         Buildozer.create_executable(config.mode)
 
 Now save that file. When the build process starts you will at some point see this input statement and then you need
-to go into \$HOME/Porn_Fetch/ and edit the file 'buildozer.spec'. In this file you will see a line named 'requirments = PySide6....'
-After the last requirement write exactly this:
+to go into \$HOME/Porn_Fetch/ and edit the file 'buildozer.spec'. In this file you will see a line named 'requirments = python3,shiboken6,PySide6'
+After the PySide6 requirement write exactly this:
 
 ,charset-normalizer==2.1.1,git+https://github.com/EchterAlsFake/PHUB,idna,urllib3,certifi,hue_shift,markdown,colorama,requests,git+https://github.com/EchterAlsFake/hqporner_api,ffmpeg-progress-yield,tqdm,git+https://github.com/EchterAlsFake/eporner_api,git+https://github.com/EchterAlsFake/xnxx_api,git+https://github.com/EchterAlsFake/xvideos_api,beautifulsoup4,mutagen,git+https://github.com/EchterAlsFake/eaf_base_api,httpx,httpcore,h11,certifi,idna,sniffio,git+https://github.com/EchterAlsFake/spankbang_api
 
@@ -68,28 +68,28 @@ select choice in "${options[@]}"; do
             wget "https://github.com/EchterAlsFake/PySide6-to-Android/releases/download/6.8.1_3.11/PySide6-6.8.0a1-6.8.1-cp311-cp311-android_aarch64.whl"
             wget "https://github.com/EchterAlsFake/PySide6-to-Android/releases/download/6.8.1_3.11/shiboken6-6.8.0a1-6.8.1-cp311-cp311-android_aarch64.whl"
             echo "Starting to build the Android application for aarch64 architecture"
-            pyside6-android-deploy -c src/build/pysidedeploy_android_aarch64.spec --ndk-path "$HOME"/.pyside6_android_deploy/android-ndk/android-ndk-r26b/ --sdk-path "$HOME"/.pyside6_android_deploy/android-sdk/
+            pyside6-android-deploy -c src/build/pysidedeploy_android_aarch64.spec
 
             ;;
         "armv7a")
             wget "https://github.com/EchterAlsFake/PySide6-to-Android/releases/download/6.8.1_3.11/PySide6-6.8.0a1-6.8.1-cp311-cp311-android_armv7a.whl"
             wget "https://github.com/EchterAlsFake/PySide6-to-Android/releases/download/6.8.1_3.11/shiboken6-6.8.0a1-6.8.1-cp311-cp311-android_armv7a.whl"
             echo "Starting to build the Android application for armv7a architecture"
-            pyside6-android-deploy -c src/build/pysidedeploy_android_armv7a.spec --ndk-path "$HOME"/.pyside6_android_deploy/android-ndk/android-ndk-r26b/ --sdk-path "$HOME"/.pyside6_android_deploy/android-sdk/
+            pyside6-android-deploy -c src/build/pysidedeploy_android_armv7a.spec
 
             ;;
         "i686")
             wget "https://github.com/EchterAlsFake/PySide6-to-Android/releases/download/6.8.1_3.11/PySide6-6.8.0a1-6.8.1-cp311-cp311-android_i686.whl"
             wget "https://github.com/EchterAlsFake/PySide6-to-Android/releases/download/6.8.1_3.11/shiboken6-6.8.0a1-6.8.1-cp311-cp311-android_i686.whl"
             echo "Starting to build the Android application for i686 architecture"
-            pyside6-android-deploy -c src/build/pysidedeploy_android_i686.spec --ndk-path "$HOME"/.pyside6_android_deploy/android-ndk/android-ndk-r26b/ --sdk-path "$HOME"/.pyside6_android_deploy/android-sdk/
+            pyside6-android-deploy -c src/build/pysidedeploy_android_i686.spec
 
             ;;
         "x86_64")
             wget "https://github.com/EchterAlsFake/PySide6-to-Android/releases/download/6.8.1_3.11/PySide6-6.8.0a1-6.8.1-cp311-cp311-android_x86_64.whl"
             wget "https://github.com/EchterAlsFake/PySide6-to-Android/releases/download/6.8.1_3.11/shiboken6-6.8.0a1-6.8.1-cp311-cp311-android_x86_64.whl"
             echo "Starting to build the Android application for x86_64 architecture"
-            pyside6-android-deploy -c src/build/pysidedeploy_android_x86_64.spec --ndk-path "$HOME"/.pyside6_android_deploy/android-ndk/android-ndk-r26b/ --sdk-path "$HOME"/.pyside6_android_deploy/android-sdk/
+            pyside6-android-deploy -c src/build/pysidedeploy_android_x86_64.spec
 
             ;;
         "quit")
