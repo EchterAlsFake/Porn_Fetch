@@ -33,7 +33,7 @@ from src.frontend.ui_form_install_dialog import Ui_SetupInstallDialog
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                             QTranslator, QCoreApplication, QSize)
 from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog
-from PySide6.QtGui import QIcon, QFont, QGuiApplication
+from PySide6.QtGui import QIcon, QFont, QFontDatabase
 
 """
 Copyright (C) 2023-2024 Johannes Habel
@@ -2273,6 +2273,16 @@ def main():
     if __build__ == "android":
         font = QFont("arial", 12)
         app.setFont(font)
+
+    font_id = QFontDatabase.addApplicationFont(":/fonts/graphics/JetBrainsMono-Regular.ttf")
+    if font_id == -1:
+        print("Failed to load font, please report") # TODO
+    else:
+
+        # Get the family name of the loaded font
+        font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
+        print(f"Font loaded: {font_family}")
+        app.setFont(QFont(font_family))
 
     widget = License()  # Starts License widget and checks if license was accepted.
     widget.check_license_and_proceed()

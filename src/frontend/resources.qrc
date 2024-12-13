@@ -14,6 +14,9 @@
         <file>graphics/done.svg</file>
         <file>graphics/progressbars.svg</file>
     </qresource>
+    <qresource prefix="/fonts">
+        <file>graphics/JetBrainsMono-Regular.ttf</file>
+    </qresource>
     <qresource prefix="/style">
         <file>stylesheets/stylesheet.qss</file>
         <file>stylesheets/menu_button_account.qss</file>

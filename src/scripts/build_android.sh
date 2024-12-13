@@ -101,3 +101,5 @@ select choice in "${options[@]}"; do
             ;;
     esac
 done
+
+echo "Porn Fetch is now compiled for Android!, you can install the .apk file "
