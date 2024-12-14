@@ -32,8 +32,8 @@ from src.frontend.ui_form_install_dialog import Ui_SetupInstallDialog
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                             QTranslator, QCoreApplication, QSize)
-from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog
-from PySide6.QtGui import QIcon, QFont, QFontDatabase
+from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView
+from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap
 
 """
 Copyright (C) 2023-2024 Johannes Habel
@@ -228,25 +228,23 @@ class InstallThread(QRunnable):
                 shortcut_path = os.path.join(destination_install, "pornfetch.desktop")
 
                 if not os.path.exists(destination_path_tmp):
-                    ui_popup("""
-            The path ~/.local/share/ does not exist. This path is typically used for installing applications and their settings
-            in a users local account. Since you don't have that, you can't install it. Probably because your Linux does not follow
-            the XDG Desktop Portal specifications. It's your own decision and I don't create the directory for you, or force you to
-            do that. If you still wish to install Porn Fetch, look Online how to setup XDK-Desktop-Portal on your Linux distribution,
-            head over to the setting and down there you will be able to try the installation again. Otherwise, you can just keep
-            using the portable version, which will work just fine.
-    
-            If you believe, that this is a mistake, please report it on GitHub, so that I can fix it :)""")
+                    ui_popup(QCoreApplication.translate(context="main", key="""The path ~/.local/share/ does not exist. This path is typically used for installing applications and their settings
+in a users local account. Since you don't have that, you can't install it. Probably because your Linux does not follow
+the XDG Desktop Portal specifications. It's your own decision and I don't create the directory for you, or force you to
+do that. If you still wish to install Porn Fetch, look Online how to setup XDK-Desktop-Portal on your Linux distribution,
+head over to the setting and down there you will be able to try the installation again. Otherwise, you can just keep
+using the portable version, which will work just fine.
+
+If you believe, that this is a mistake, please report it on GitHub, so that I can fix it :)""", disambiguation=None))
                     return
 
                 try:
                     os.makedirs(destination_path_final, exist_ok=True)
 
                 except PermissionError:
-                    ui_popup("""
-            You do not have permissions to create the folder 'pornfetch' inside {destination_path_tmp}!
-            The installation process will stop now. You can either run Porn Fetch with elevated privileges, or use the portable
-            version.""")
+                    ui_popup("""You do not have permissions to create the folder 'pornfetch' inside {destination_path_tmp}!
+The installation process will stop now. You can either run Porn Fetch with elevated privileges, or use the portable
+version.""")
                     return
 
                 pornfetch_exe = os.path.join(destination_path_final, filename)
@@ -266,8 +264,7 @@ class InstallThread(QRunnable):
                     img = requests.get(
                         "https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/android_app_icon.png?raw=true")
                     if not img.status_code == 200:
-                        ui_popup(
-                            "Couldn't download the Porn Fetch logo. Installation will still be successfully, but please"
+                        ui_popup("Couldn't download the Porn Fetch logo. Installation will still be successfully, but please"
                             "report this error on GitHub. Thank you.")
 
                     elif img.status_code == 200:
@@ -276,12 +273,12 @@ class InstallThread(QRunnable):
                             shutil.move("Logo.png", dst=destination_path_final)
 
                 entry_content = f"""[Desktop Entry]
-            Name={self.app_name}
-            Exec={destination_path_final}PornFetch_Linux_GUI_x64.bin %F
-            Icon={destination_path_final}Logo.png
-            Type=Application
-            Terminal=false
-            Categories=Utility;"""
+Name={self.app_name}
+Exec={destination_path_final}PornFetch_Linux_GUI_x64.bin %F
+Icon={destination_path_final}Logo.png
+Type=Application
+Terminal=false
+Categories=Utility;"""
 
                 if os.path.exists(shortcut_path):
                     os.remove(shortcut_path)
@@ -434,17 +431,19 @@ class AddToTreeWidget(QRunnable):
         disabled = QCoreApplication.translate("main", "Disabled", None)
         duration = disabled
         author = disabled
+        thumbnail = disabled
 
         # Checks which mode is selected by the user and loads the video attributes
         if self.data_mode == 1:
             author = data[1]
             duration = str(parse_length(data[2]))
+            thumbnail = str(data[5])
 
         print(
             f"\r\033[K[{Fore.LIGHTCYAN_EX}{index}/{self.search_limit}]{Fore.RESET}{str(title)} Successfully processed!",
             end='', flush=True)
 
-        return [str(title), str(author), str(duration), str(index), video]
+        return [str(title), str(author), str(duration), str(index), video, thumbnail]
 
     def run(self):
         if not self.is_checked:
@@ -1156,7 +1155,7 @@ class Porn_Fetch(QWidget):
 
         # Video Download Button Connections
         self.ui.main_button_tree_download.clicked.connect(self.download_tree_widget)
-        self.ui.main_button_tree_unselect_all.clicked.connect(self.unselect_all_items)
+        #self.ui.main_button_tree_unselect_all.clicked.connect(self.unselect_all_items)
         self.ui.download_button_download.clicked.connect(self.start_single_video)
         self.ui.download_button_model.clicked.connect(self.start_model)
         self.ui.download_button_playlist_get_videos.clicked.connect(self.start_playlist)
@@ -1205,10 +1204,10 @@ class Porn_Fetch(QWidget):
         self.ui.download_button_open_file.clicked.connect(self.open_file_dialog)
 
         # Other stuff IDK
-        self.ui.main_button_tree_select_range.clicked.connect(self.select_range_of_items)
+        #self.ui.main_button_tree_select_range.clicked.connect(self.select_range_of_items)
         self.ui.main_button_tree_stop.clicked.connect(switch_stop_state)
-        self.ui.main_button_tree_export_video_urls.clicked.connect(export_urls)
-        self.ui.main_button_range_apply_everything.clicked.connect(self.select_all_items)
+        #self.ui.main_button_tree_export_video_urls.clicked.connect(export_urls)
+        #self.ui.main_button_range_apply_everything.clicked.connect(self.select_all_items)
         self.ui.settings_button_download_ffmpeg.clicked.connect(self.download_ffmpeg)
 
     def load_style(self):
@@ -1287,8 +1286,8 @@ class Porn_Fetch(QWidget):
             self.ui.settings_button_directory_system_help.setStyleSheet(stylesheets["button_green"])
             self.ui.settings_button_semaphore_help.setStyleSheet(stylesheets["button_green"])
             self.ui.main_button_tree_download.setStyleSheet(stylesheets["button_purple"])
-            self.ui.main_button_tree_unselect_all.setStyleSheet(stylesheets["button_blue"])
-            self.ui.main_button_tree_select_range.setStyleSheet(stylesheets["button_green"])
+            #self.ui.main_button_tree_unselect_all.setStyleSheet(stylesheets["button_blue"])
+            #self.ui.main_button_tree_select_range.setStyleSheet(stylesheets["button_green"])
             self.ui.settings_button_output_path_select.setStyleSheet(stylesheets["button_blue"])
             self.ui.login_button_login.setStyleSheet(stylesheets["button_blue"])
             self.ui.settings_button_apply.setStyleSheet(stylesheets["button_blue"])
@@ -1309,12 +1308,19 @@ class Porn_Fetch(QWidget):
             self.ui.settings_button_reset.setStyleSheet(stylesheets["button_reset"])
             self.ui.download_button_playlist_get_videos.setStyleSheet(stylesheets["button_purple"])
             self.ui.main_button_tree_stop.setStyleSheet(stylesheets["button_reset"])
-            self.ui.main_button_tree_export_video_urls.setStyleSheet(stylesheets["button_purple"])
+
+            #self.ui.main_button_tree_export_video_urls.setStyleSheet(stylesheets["button_purple"])
             self.ui.settings_button_timeout_maximal_retries_help.setStyleSheet(stylesheets["button_green"])
             self.ui.download_button_help_file.setStyleSheet(stylesheets["button_green"])
             self.ui.settings_button_download_ffmpeg.setStyleSheet(stylesheets["button_purple"])
-            self.ui.main_button_range_apply_everything.setStyleSheet(stylesheets["button_orange"])
+            #self.ui.main_button_range_apply_everything.setStyleSheet(stylesheets["button_orange"])
             self.ui.tools_button_list_categories_eporner.setStyleSheet(stylesheets["button_purple"])
+            self.ui.button_help_write_metadata_tags.setStyleSheet(stylesheets["button_green"])
+            self.ui.settings_button_help_model_videos.setStyleSheet(stylesheets["button_green"])
+            self.ui.settings_button_help_skip_existing_files.setStyleSheet(stylesheets["button_green"])
+            self.ui.settings_button_install_pornfetch.setStyleSheet(stylesheets["button_green"])
+            self.ui.settings_button_help_tor.setStyleSheet(stylesheets["button_green"])
+            self.ui.settings_button_help_anonymous_mode.setStyleSheet(stylesheets["button_green"])
 
             self.ui.main_button_switch_home.setStyleSheet(stylesheets["stylesheet_menu_button_download"])
             self.ui.main_button_switch_account.setStyleSheet(stylesheets["stylesheet_menu_button_account"])
@@ -1326,7 +1332,10 @@ class Porn_Fetch(QWidget):
         self.header.resizeSection(0, 300)
         self.header.resizeSection(1, 150)
         self.header.resizeSection(2, 50)
+        self.header.setSectionResizeMode(3, QHeaderView.Fixed)
+        self.ui.treeWidget.setColumnWidth(3, 150)
         self.header.sortIndicatorChanged.connect(self.reindex) # This does not make any sense and I need to refactor it!
+        self.ui.treeWidget.itemClicked.connect(self.set_thumbnail)
 
         # Sort by the 'Length' column in ascending order
         self.ui.treeWidget.sortByColumn(2, Qt.AscendingOrder)
@@ -1665,6 +1674,7 @@ This warning won't be shown again.
 
         index = data[3]
         video = data[4]
+        thumbnail = data[5]
 
         item = QTreeWidgetItem(self.ui.treeWidget)
         item.setText(0, f"{index}) {title}")
@@ -1682,11 +1692,12 @@ This warning won't be shown again.
             formatted_duration = f"{duration:05d}"
 
         duration = str(duration).strip("0").strip(".")
-        item.setText(2, duration)  # Set the text as the zero-padded number or float
-        item.setData(2, Qt.UserRole, formatted_duration)  # Store the original duration for sorting
         item.setCheckState(0, Qt.Unchecked)
         item.setData(0, Qt.UserRole, video)
         item.setData(1, Qt.UserRole, author)
+        item.setText(2, duration)  # Set the text as the zero-padded number or float
+        item.setData(2, Qt.UserRole, formatted_duration)  # Store the original duration for sorting
+        item.setData(3, Qt.UserRole, thumbnail)
 
     def download_tree_widget(self):
         """
@@ -1903,6 +1914,44 @@ This warning won't be shown again.
         logger.debug(f"Error loading video: {error_message}")
         ui_popup(self.tr( f"Some error occurred in loading a video. Please report this: {error_message}",
                                        None))
+
+    def set_thumbnail(self, item, column):
+        """Set the thumbnail for the selected video."""
+        self.ui.main_label_tree_show_thumbnail.setScaledContents(False)  # Ensure manual scaling
+        self.ui.main_label_tree_show_thumbnail.setFixedWidth(500)
+        self.ui.main_label_tree_show_thumbnail.setFixedHeight(281.25)
+
+        if item is None:  # Handle no selection
+            return
+
+        if self._anonymous_mode:
+            self.ui.main_label_tree_show_thumbnail.setText(self.tr("Can't show thumbnail, due to your privacy settings ;)",
+                                                                   disambiguation=None))
+            return
+
+        thumbnail = item.data(3, Qt.UserRole)  # Retrieve the thumbnail URL
+
+        if not thumbnail:
+            self.ui.main_label_tree_show_thumbnail.setText(
+                self.tr("No thumbnail available", disambiguation=None)
+            )
+        else:
+            # Load the thumbnail image dynamically
+            try:
+                pixmap = QPixmap()
+                pixmap.loadFromData(requests.get(thumbnail).content)
+
+                # Scale the pixmap to fit the fixed QLabel size while maintaining aspect ratio
+                scaled_pixmap = pixmap.scaled(
+                    self.ui.main_label_tree_show_thumbnail.width(),
+                    self.ui.main_label_tree_show_thumbnail.height(),
+                    Qt.KeepAspectRatio,
+                    Qt.SmoothTransformation
+                )
+                self.ui.main_label_tree_show_thumbnail.setPixmap(scaled_pixmap)
+            except Exception as e:
+                self.ui.main_label_tree_show_thumbnail.setText(f"Failed to load image: {e}")
+
 
     def process_video_thread(self, output_path, video, threading_mode, quality):
         """Checks which of the three types of threading the user selected and handles them."""

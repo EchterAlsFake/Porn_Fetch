@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'form_license.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.0
+## Created by: Qt User Interface Compiler version 6.8.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -89,7 +89,8 @@ class Ui_SetupLicense(object):
         self.textBrowser = QTextBrowser(self.scrollAreaWidgetContents)
         self.textBrowser.setObjectName(u"textBrowser")
         font = QFont()
-        font.setFamilies([u"Droid Naskh Shift Alt"])
+        font.setFamilies([u"JetBrainsMono Nerd Font Propo"])
+        font.setPointSize(11)
         font.setKerning(True)
         self.textBrowser.setFont(font)
 
@@ -118,40 +119,38 @@ class Ui_SetupLicense(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Droid Naskh Shift Alt'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:22pt; font-weight:700;\">GPL License Agreement for Porn Fetch</span></h2>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">This program is free software: you may redistribute it and/or modify it under"
-                        " the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License or (at your option) any later version.</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">This program is distributed in the hope that it will be useful, but it is provided &quot;AS IS&quot; WITHOUT ANY WARRANTY; without even the implied warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. For more details, see the GNU General Public License.</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">You should have received a copy of the GNU General Public License along with this program. If not, visit </span><a href=\"https://www.gnu.org/licenses/\"><span style=\" font-family:'Sans Serif'; font-si"
-                        "ze:9pt; text-decoration: underline; color:#0000ff;\">https://www.gnu.org/licenses/</span></a><span style=\" font-family:'Sans Serif'; font-size:9pt;\">.</span></p>\n"
-"<hr />\n"
-"<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">Limitation of Liability</span></h2>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Under no circumstances and under no legal theory\u2014whether in tort, contract, or otherwise\u2014shall the copyright holder or contributors be held liable for any direct, indirect, special, incidental, consequential, or exemplary damages of any kind. This includes, but is not limited to: damages for loss of goodwill, work stoppage, computer failure or malfunction, loss of data, or any other commercial damages or losses, "
-                        "even if such parties were informed of the possibility of such damages.</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">This limitation does not apply to liability for death or personal injury resulting from the negligence of such parties, where applicable law prohibits such a limitation. In some jurisdictions, the exclusion or limitation of incidental or consequential damages is not allowed. Therefore, these exclusions may not apply to you.</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">This Agreement constitutes the complete and exclusive understanding between the parties regarding the subject matter contained herein.</span></p>\n"
-"<hr />\n"
-"<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-r"
-                        "ight:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">Disclaimer</span></h2>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Porn Fetch violates the Terms of Service of all the websites it supports, including but not limited to:</span></p>\n"
-"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\">\n"
-"<li style=\" font-family:'Sans Serif'; font-size:9pt;\" style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">spankbang.com</li>\n"
-"<li style=\" font-family:'Sans Serif'; font-size:9pt;\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">pornhub.com</li>\n"
-"<li style=\" font-family:'Sans Serif'; font-size:9pt;\" style=\" mar"
-                        "gin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">hqporner.com</li>\n"
-"<li style=\" font-family:'Sans Serif'; font-size:9pt;\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">eporner.com</li>\n"
-"<li style=\" font-family:'Sans Serif'; font-size:9pt;\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">xnxx.com</li>\n"
-"<li style=\" font-family:'Sans Serif'; font-size:9pt;\" style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">xvideos.com</li></ul>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Usage Warning: Using Porn Fetch may result in legal action being taken against you. The creator of this software is not liable f"
-                        "or any damages or legal consequences resulting from its use.</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Porn Fetch was created solely for the purpose of enabling offline access to videos in scenarios where internet access is unavailable. The redistribution of copyright-protected content obtained through Porn Fetch is strictly forbidden. Any misuse of this software to steal and redistribute copyrighted material is against its intended purpose and is not endorsed by the creator.</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">The batch processing feature in Porn Fetch is intended to assist users without graphical user interfaces in downloading content for personal use, not for large-scale video theft or redistributio"
-                        "n.</span></p>\n"
-"<hr />\n"
-"<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">Third-Party Software</span></h2>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Porn Fetch utilizes FFmpeg for video processing and conversion. FFmpeg is free software licensed under the GPL. For more information about FFmpeg, visit </span><a href=\"https://ffmpeg.org\"><span style=\" font-family:'Sans Serif'; font-size:9pt; text-decoration: underline; color:#0000ff;\">https://ffmpeg.org</span></a><span style=\" font-family:'Sans Serif'; font-size:9pt;\">.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Cantarell';\">The JetBrains Mono f"
-                        "ont is used in this application. Copyright \u00a9 2019 JetBrains. All Rights Reserved. Licensed under the SIL Open Font License, Version 1.1. You can find a copy of the license at: https://scripts.sil.org/OFL</span></p></body></html>", None))
+"</style></head><body style=\" font-family:'JetBrainsMono Nerd Font Propo'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Droid Naskh Shift Alt'; font-size:22pt;\">GPL License Agreement for Porn Fetch</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Droid Naskh Shift Alt'; font-size:12pt;\">This program is free software: you may redistribute it and/or mod"
+                        "ify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License or (at your option) any later version.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Droid Naskh Shift Alt'; font-size:12pt;\">This program is distributed in the hope that it will be useful, but it is provided &quot;AS IS&quot; WITHOUT ANY WARRANTY; without even the implied warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. For more details, see the GNU General Public License.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Droid Naskh Shift Alt'; font-size:12pt;\">You should have received a copy of the GNU General Public License along with this program. If not, visit https://www.gnu.org/licenses/.</span></p>\n"
+"<p style=\" mar"
+                        "gin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Droid Naskh Shift Alt'; font-size:14pt; color:#a51d2d;\">Limitation of Liability</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Droid Naskh Shift Alt'; font-size:12pt; text-decoration: underline;\">Under no circumstances and under no legal theory\u2014whether in tort, contract, or otherwise\u2014shall the copyright holder or contributors be held liable for any direct, indirect, special, incidental, consequential, or exemplary damages of any kind. This includes, but is not limited to: damages for loss of goodwill, work stoppage, computer failure or malfunction, loss of data, or any other commercial damages or losses, even if such parties were informed of the possibility of such damages.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left"
+                        ":0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Droid Naskh Shift Alt'; font-size:12pt;\">This limitation does not apply to liability for death or personal injury resulting from the negligence of such parties, where applicable law prohibits such a limitation. In some jurisdictions, the exclusion or limitation of incidental or consequential damages is not allowed. Therefore, these exclusions may not apply to you.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Droid Naskh Shift Alt'; font-size:12pt;\">This Agreement constitutes the complete and exclusive understanding between the parties regarding the subject matter contained herein.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\"><br /></span></p>\n"
+"<p style=\" margin-top:12px; m"
+                        "argin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Droid Naskh Shift Alt'; font-size:14pt;\">Disclaimer</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Droid Naskh Shift Alt'; font-size:14pt;\">Porn Fetch violates the Terms of Service of all the websites it supports, including but not limited to:</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Droid Naskh Shift Alt'; font-size:14pt;\">spankbang.com</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Droid Naskh Shift Alt'; font-size:14pt;\">pornhub.com</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px"
+                        "; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Droid Naskh Shift Alt'; font-size:14pt;\">hqporner.com</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Droid Naskh Shift Alt'; font-size:14pt;\">eporner.com</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Droid Naskh Shift Alt'; font-size:14pt;\">xnxx.com</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Droid Naskh Shift Alt'; font-size:14pt;\">xvideos.com</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Droid Naskh Shift Alt'; font-size:14pt;\">Usage Warning: <br /></span><span st"
+                        "yle=\" font-family:'Droid Naskh Shift Alt'; font-size:12pt; text-decoration: underline;\">Using Porn Fetch may result in legal action being taken against you. The creator of this software is not liable for any damages or legal consequences resulting from its use.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Droid Naskh Shift Alt'; font-size:12pt; text-decoration: underline;\">Porn Fetch was created solely for the purpose of enabling offline access to videos in scenarios where internet access is unavailable. The redistribution of copyright-protected content obtained through Porn Fetch is strictly forbidden. Any misuse of this software to steal and redistribute copyrighted material is against its intended purpose and is not endorsed by the creator.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span sty"
+                        "le=\" font-family:'Droid Naskh Shift Alt'; font-size:12pt; text-decoration: underline;\">The batch processing feature in Porn Fetch is intended to assist users without graphical user interfaces in downloading content for personal use, not for large-scale video theft or redistribution.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt; text-decoration: underline;\"><br /></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Droid Naskh Shift Alt'; font-size:14pt;\">Third-Party Software</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Droid Naskh Shift Alt'; font-size:12pt;\">Porn Fetch utilizes FFmpeg for video processing and conversion. FFmpeg is free software license"
+                        "d under the GPL. For more information about FFmpeg, visit https://ffmpeg.org.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Droid Naskh Shift Alt'; font-size:12pt;\">The JetBrains Mono font is used in this application. Copyright \u00a9 2019 JetBrains. All Rights Reserved. Licensed under the SIL Open Font License, Version 1.1. You can find a copy of the license at: https://scripts.sil.org/OFL</span></p></body></html>", None))
     # retranslateUi
 

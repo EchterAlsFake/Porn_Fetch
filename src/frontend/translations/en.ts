@@ -90,36 +90,36 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="450"/>
+        <location filename="../form_desktop.ui" line="576"/>
         <source>XVideos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="469"/>
-        <location filename="../form_desktop.ui" line="2123"/>
-        <location filename="../form_desktop.ui" line="2166"/>
-        <location filename="../form_desktop.ui" line="2209"/>
-        <location filename="../form_desktop.ui" line="2252"/>
-        <location filename="../form_desktop.ui" line="2295"/>
-        <location filename="../form_desktop.ui" line="2364"/>
-        <location filename="../form_desktop.ui" line="2571"/>
-        <location filename="../form_desktop.ui" line="2578"/>
-        <location filename="../form_desktop.ui" line="2641"/>
-        <location filename="../form_desktop.ui" line="2685"/>
-        <location filename="../form_desktop.ui" line="2732"/>
-        <location filename="../form_desktop.ui" line="2749"/>
-        <location filename="../form_desktop.ui" line="2862"/>
+        <location filename="../form_desktop.ui" line="661"/>
+        <location filename="../form_desktop.ui" line="2089"/>
+        <location filename="../form_desktop.ui" line="2132"/>
+        <location filename="../form_desktop.ui" line="2178"/>
+        <location filename="../form_desktop.ui" line="2221"/>
+        <location filename="../form_desktop.ui" line="2264"/>
+        <location filename="../form_desktop.ui" line="2333"/>
+        <location filename="../form_desktop.ui" line="2540"/>
+        <location filename="../form_desktop.ui" line="2547"/>
+        <location filename="../form_desktop.ui" line="2610"/>
+        <location filename="../form_desktop.ui" line="2654"/>
+        <location filename="../form_desktop.ui" line="2701"/>
+        <location filename="../form_desktop.ui" line="2718"/>
+        <location filename="../form_desktop.ui" line="2831"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="488"/>
+        <location filename="../form_desktop.ui" line="639"/>
         <source>PornHub</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="510"/>
-        <location filename="../form_desktop.ui" line="715"/>
+        <location filename="../form_desktop.ui" line="494"/>
+        <location filename="../form_desktop.ui" line="876"/>
         <location filename="../form_desktop.ui" line="1425"/>
         <location filename="../form_desktop.ui" line="1491"/>
         <location filename="../form_desktop.ui" line="1652"/>
@@ -128,87 +128,87 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="529"/>
+        <location filename="../form_desktop.ui" line="450"/>
         <source>Model URL:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="548"/>
+        <location filename="../form_desktop.ui" line="825"/>
         <source>Enter video URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="567"/>
+        <location filename="../form_desktop.ui" line="724"/>
         <source>Playlist URL:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="589"/>
+        <location filename="../form_desktop.ui" line="765"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="608"/>
+        <location filename="../form_desktop.ui" line="895"/>
         <source>EPorner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="627"/>
+        <location filename="../form_desktop.ui" line="844"/>
         <source>File:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="646"/>
+        <location filename="../form_desktop.ui" line="469"/>
         <source>XNXX</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="665"/>
+        <location filename="../form_desktop.ui" line="743"/>
         <source>Enter Model / Channel / Actress URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="690"/>
+        <location filename="../form_desktop.ui" line="557"/>
         <source>Open File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="740"/>
+        <location filename="../form_desktop.ui" line="620"/>
         <source>URLs in the file must be separated with new lines!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="765"/>
+        <location filename="../form_desktop.ui" line="686"/>
         <source>Download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="784"/>
+        <location filename="../form_desktop.ui" line="705"/>
         <source>Search Query:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="803"/>
+        <location filename="../form_desktop.ui" line="784"/>
         <source>Search Website</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="835"/>
+        <location filename="../form_desktop.ui" line="595"/>
         <source>HQPorner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="854"/>
+        <location filename="../form_desktop.ui" line="513"/>
         <source>Enter a PornHub Playlist URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="876"/>
+        <location filename="../form_desktop.ui" line="806"/>
         <source>Search for Videos. Select Website below</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="895"/>
+        <location filename="../form_desktop.ui" line="532"/>
         <source>URL:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -335,329 +335,314 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1831"/>
+        <location filename="../form_desktop.ui" line="1828"/>
         <source>Author</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1836"/>
+        <location filename="../form_desktop.ui" line="1833"/>
         <source>Duration (minutes)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1872"/>
+        <location filename="../form_desktop.ui" line="1961"/>
+        <source>Click on a video to show a thumbnail...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1988"/>
         <source>Download Selected Videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1894"/>
-        <source>Automatically checks a range of videos</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1900"/>
-        <source>Select a range of videos</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1910"/>
-        <source>Show videos in reverse</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1917"/>
-        <source>Select everything</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1924"/>
-        <source>Export video URLs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1940"/>
-        <source>Only Title (a lot faster)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1965"/>
-        <source>Unselects all videos in the tree widget</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1971"/>
-        <source>Unselect all</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1993"/>
-        <source>Get Title, Author, Duration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="2018"/>
-        <source>Does not stop downloading videos</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="2021"/>
-        <source>Stop loading videos</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="2028"/>
+        <location filename="../form_desktop.ui" line="1853"/>
         <source>Do not clear videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2080"/>
+        <location filename="../form_desktop.ui" line="1933"/>
+        <source>Does not stop downloading videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1936"/>
+        <source>Stop loading videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1894"/>
+        <source>Get Title, Author, Duration, Thumbnails</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1914"/>
+        <source>Keyboard shortcuts for selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1869"/>
+        <source>Only Title (a lot faster)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1907"/>
+        <source>Automated selection tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1846"/>
+        <source>Show videos in reverse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2046"/>
         <source>Performance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2103"/>
+        <location filename="../form_desktop.ui" line="2069"/>
         <source>Simultaneous downloads:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2146"/>
+        <location filename="../form_desktop.ui" line="2112"/>
         <source>Maximal workers:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2189"/>
+        <location filename="../form_desktop.ui" line="2155"/>
         <source>Maximal timeout:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2232"/>
+        <location filename="../form_desktop.ui" line="2201"/>
         <source>Maximal retries:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2275"/>
+        <location filename="../form_desktop.ui" line="2244"/>
         <source>PornHub Delay (0 = Disabled) in seconds:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2324"/>
+        <location filename="../form_desktop.ui" line="2293"/>
         <source>Threading Mode:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2334"/>
+        <location filename="../form_desktop.ui" line="2303"/>
         <source>High Performance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2344"/>
+        <location filename="../form_desktop.ui" line="2313"/>
         <source>FFMPEG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2354"/>
+        <location filename="../form_desktop.ui" line="2323"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2376"/>
+        <location filename="../form_desktop.ui" line="2345"/>
         <source>Graphical User Interface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2414"/>
+        <location filename="../form_desktop.ui" line="2383"/>
         <source>English</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2424"/>
+        <location filename="../form_desktop.ui" line="2393"/>
         <source>System default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2434"/>
+        <location filename="../form_desktop.ui" line="2403"/>
         <source>German</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2444"/>
+        <location filename="../form_desktop.ui" line="2413"/>
         <source>Chinese (simplified)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2457"/>
+        <location filename="../form_desktop.ui" line="2426"/>
         <source>Graphical User Interface Language:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2467"/>
+        <location filename="../form_desktop.ui" line="2436"/>
         <source>French</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2479"/>
+        <location filename="../form_desktop.ui" line="2448"/>
         <source>System / Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2514"/>
+        <location filename="../form_desktop.ui" line="2483"/>
         <source>Update checks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2521"/>
+        <location filename="../form_desktop.ui" line="2490"/>
         <source>Internet checks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2528"/>
+        <location filename="../form_desktop.ui" line="2497"/>
         <source>Enable Anonymous mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2541"/>
+        <location filename="../form_desktop.ui" line="2510"/>
         <source>Privacy:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2548"/>
+        <location filename="../form_desktop.ui" line="2517"/>
         <source>Enable Tor (Not implemented yet) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2564"/>
+        <location filename="../form_desktop.ui" line="2533"/>
         <source>Startup:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2585"/>
+        <location filename="../form_desktop.ui" line="2554"/>
         <source>Download and Setup FFmpeg</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2592"/>
+        <location filename="../form_desktop.ui" line="2561"/>
         <source>Install Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2606"/>
+        <location filename="../form_desktop.ui" line="2575"/>
         <source>Videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2790"/>
-        <location filename="../form_desktop.ui" line="2800"/>
+        <location filename="../form_desktop.ui" line="2759"/>
+        <location filename="../form_desktop.ui" line="2769"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2766"/>
-        <location filename="../form_desktop.ui" line="2776"/>
+        <location filename="../form_desktop.ui" line="2735"/>
+        <location filename="../form_desktop.ui" line="2745"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2848"/>
+        <location filename="../form_desktop.ui" line="2817"/>
         <source>Model videos (PornHub)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2722"/>
+        <location filename="../form_desktop.ui" line="2691"/>
         <source>Half</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2831"/>
+        <location filename="../form_desktop.ui" line="2800"/>
         <source>Both</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2807"/>
+        <location filename="../form_desktop.ui" line="2776"/>
         <source>Output path:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2841"/>
+        <location filename="../form_desktop.ui" line="2810"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2678"/>
+        <location filename="../form_desktop.ui" line="2647"/>
         <source>Worst</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2824"/>
+        <location filename="../form_desktop.ui" line="2793"/>
         <source>Use Directory system? </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2712"/>
+        <location filename="../form_desktop.ui" line="2681"/>
         <source>Featured videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2698"/>
+        <location filename="../form_desktop.ui" line="2667"/>
         <source>Enter &quot;./&quot; for current directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2759"/>
+        <location filename="../form_desktop.ui" line="2728"/>
         <source>Best</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2783"/>
+        <location filename="../form_desktop.ui" line="2752"/>
         <source>Skip existing files:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2655"/>
+        <location filename="../form_desktop.ui" line="2624"/>
         <source>User uploads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2668"/>
+        <location filename="../form_desktop.ui" line="2637"/>
         <source>Quality:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2648"/>
+        <location filename="../form_desktop.ui" line="2617"/>
         <source>Result Limit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2739"/>
+        <location filename="../form_desktop.ui" line="2708"/>
         <source>Use custom format:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2705"/>
+        <location filename="../form_desktop.ui" line="2674"/>
         <source>Do not convert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2869"/>
+        <location filename="../form_desktop.ui" line="2838"/>
         <source>mp4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2855"/>
+        <location filename="../form_desktop.ui" line="2824"/>
         <source>Write metadata tags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2903"/>
+        <location filename="../form_desktop.ui" line="2872"/>
         <source>Apply  (needs restart)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2932"/>
+        <location filename="../form_desktop.ui" line="2901"/>
         <source>Reset Porn Fetch to default settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2992"/>
+        <location filename="../form_desktop.ui" line="2961"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -709,12 +694,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="3058"/>
+        <location filename="../form_desktop.ui" line="3027"/>
         <source>Total:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="3087"/>
+        <location filename="../form_desktop.ui" line="3056"/>
         <source>Converting:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -722,12 +707,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>Porn_Fetch</name>
     <message>
-        <location filename="../../../main.py" line="1499"/>
+        <location filename="../../../main.py" line="1508"/>
         <source>Saved User Settings, please restart Porn Fetch!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1558"/>
+        <location filename="../../../main.py" line="1567"/>
         <source>
 FFmpeg isn&apos;t installed on your system... Some features won&apos;t be available:
 
@@ -745,27 +730,27 @@ This warning won&apos;t be shown again.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1062"/>
+        <location filename="../../../main.py" line="1061"/>
         <source>You are running on Android! You can not install Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1066"/>
+        <location filename="../../../main.py" line="1065"/>
         <source>Porn Fetch installation successful!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1069"/>
+        <location filename="../../../main.py" line="1068"/>
         <source>Porn Fetch installation failed, because of: {result[1]}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1411"/>
+        <location filename="../../../main.py" line="1420"/>
         <source>You have enabled writing metadata tags to videos, but not converting videos. To use metadata writing, you need to enable converting videos. Writing metadatawill be disabled, unless you change it in settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1528"/>
+        <location filename="../../../main.py" line="1537"/>
         <source>
 ! Warning !
 Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
@@ -774,42 +759,47 @@ Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1905"/>
+        <location filename="../../../main.py" line="1916"/>
         <source>Some error occurred in loading a video. Please report this: {error_message}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2051"/>
+        <location filename="../../../main.py" line="1934"/>
+        <source>No thumbnail available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2123"/>
         <source>Information: The Website {website} specified in the URL file isn&apos;t valid.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2069"/>
+        <location filename="../../../main.py" line="2141"/>
         <source>Those credentials don&apos;t seem to be valid...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2075"/>
+        <location filename="../../../main.py" line="2147"/>
         <source>Login Successful!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2079"/>
+        <location filename="../../../main.py" line="2151"/>
         <source>Login Failed, please check your credentials and try again!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2082"/>
+        <location filename="../../../main.py" line="2154"/>
         <source>You are already logged in!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2105"/>
+        <location filename="../../../main.py" line="2177"/>
         <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2175"/>
+        <location filename="../../../main.py" line="2247"/>
         <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -891,67 +881,65 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_license.ui" line="132"/>
+        <location filename="../form_license.ui" line="133"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:22pt; font-weight:700;&quot;&gt;GPL License Agreement for Porn Fetch&lt;/span&gt;&lt;/h2&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;This program is free software: you may redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License or (at your option) any later version.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;This program is distributed in the hope that it will be useful, but it is provided &amp;quot;AS IS&amp;quot; WITHOUT ANY WARRANTY; without even the implied warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. For more details, see the GNU General Public License.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;You should have received a copy of the GNU General Public License along with this program. If not, visit &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; text-decoration: underline; color:#0000ff;&quot;&gt;https://www.gnu.org/licenses/&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;
-&lt;hr /&gt;
-&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Limitation of Liability&lt;/span&gt;&lt;/h2&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;Under no circumstances and under no legal theory—whether in tort, contract, or otherwise—shall the copyright holder or contributors be held liable for any direct, indirect, special, incidental, consequential, or exemplary damages of any kind. This includes, but is not limited to: damages for loss of goodwill, work stoppage, computer failure or malfunction, loss of data, or any other commercial damages or losses, even if such parties were informed of the possibility of such damages.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;This limitation does not apply to liability for death or personal injury resulting from the negligence of such parties, where applicable law prohibits such a limitation. In some jurisdictions, the exclusion or limitation of incidental or consequential damages is not allowed. Therefore, these exclusions may not apply to you.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;This Agreement constitutes the complete and exclusive understanding between the parties regarding the subject matter contained herein.&lt;/span&gt;&lt;/p&gt;
-&lt;hr /&gt;
-&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Disclaimer&lt;/span&gt;&lt;/h2&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;Porn Fetch violates the Terms of Service of all the websites it supports, including but not limited to:&lt;/span&gt;&lt;/p&gt;
-&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;spankbang.com&lt;/li&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;pornhub.com&lt;/li&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;hqporner.com&lt;/li&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;eporner.com&lt;/li&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;xnxx.com&lt;/li&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;xvideos.com&lt;/li&gt;&lt;/ul&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;Usage Warning: Using Porn Fetch may result in legal action being taken against you. The creator of this software is not liable for any damages or legal consequences resulting from its use.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;Porn Fetch was created solely for the purpose of enabling offline access to videos in scenarios where internet access is unavailable. The redistribution of copyright-protected content obtained through Porn Fetch is strictly forbidden. Any misuse of this software to steal and redistribute copyrighted material is against its intended purpose and is not endorsed by the creator.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;The batch processing feature in Porn Fetch is intended to assist users without graphical user interfaces in downloading content for personal use, not for large-scale video theft or redistribution.&lt;/span&gt;&lt;/p&gt;
-&lt;hr /&gt;
-&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Third-Party Software&lt;/span&gt;&lt;/h2&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;Porn Fetch utilizes FFmpeg for video processing and conversion. FFmpeg is free software licensed under the GPL. For more information about FFmpeg, visit &lt;/span&gt;&lt;a href=&quot;https://ffmpeg.org&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; text-decoration: underline; color:#0000ff;&quot;&gt;https://ffmpeg.org&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;;&quot;&gt;The JetBrains Mono font is used in this application. Copyright © 2019 JetBrains. All Rights Reserved. Licensed under the SIL Open Font License, Version 1.1. You can find a copy of the license at: https://scripts.sil.org/OFL&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;JetBrainsMono Nerd Font Propo&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:22pt;&quot;&gt;GPL License Agreement for Porn Fetch&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:12pt;&quot;&gt;This program is free software: you may redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License or (at your option) any later version.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:12pt;&quot;&gt;This program is distributed in the hope that it will be useful, but it is provided &amp;quot;AS IS&amp;quot; WITHOUT ANY WARRANTY; without even the implied warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. For more details, see the GNU General Public License.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:12pt;&quot;&gt;You should have received a copy of the GNU General Public License along with this program. If not, visit https://www.gnu.org/licenses/.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:14pt; color:#a51d2d;&quot;&gt;Limitation of Liability&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:12pt; text-decoration: underline;&quot;&gt;Under no circumstances and under no legal theory—whether in tort, contract, or otherwise—shall the copyright holder or contributors be held liable for any direct, indirect, special, incidental, consequential, or exemplary damages of any kind. This includes, but is not limited to: damages for loss of goodwill, work stoppage, computer failure or malfunction, loss of data, or any other commercial damages or losses, even if such parties were informed of the possibility of such damages.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:12pt;&quot;&gt;This limitation does not apply to liability for death or personal injury resulting from the negligence of such parties, where applicable law prohibits such a limitation. In some jurisdictions, the exclusion or limitation of incidental or consequential damages is not allowed. Therefore, these exclusions may not apply to you.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:12pt;&quot;&gt;This Agreement constitutes the complete and exclusive understanding between the parties regarding the subject matter contained herein.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:14pt;&quot;&gt;Disclaimer&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:14pt;&quot;&gt;Porn Fetch violates the Terms of Service of all the websites it supports, including but not limited to:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:14pt;&quot;&gt;spankbang.com&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:14pt;&quot;&gt;pornhub.com&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:14pt;&quot;&gt;hqporner.com&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:14pt;&quot;&gt;eporner.com&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:14pt;&quot;&gt;xnxx.com&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:14pt;&quot;&gt;xvideos.com&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:14pt;&quot;&gt;Usage Warning: &lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:12pt; text-decoration: underline;&quot;&gt;Using Porn Fetch may result in legal action being taken against you. The creator of this software is not liable for any damages or legal consequences resulting from its use.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:12pt; text-decoration: underline;&quot;&gt;Porn Fetch was created solely for the purpose of enabling offline access to videos in scenarios where internet access is unavailable. The redistribution of copyright-protected content obtained through Porn Fetch is strictly forbidden. Any misuse of this software to steal and redistribute copyrighted material is against its intended purpose and is not endorsed by the creator.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:12pt; text-decoration: underline;&quot;&gt;The batch processing feature in Porn Fetch is intended to assist users without graphical user interfaces in downloading content for personal use, not for large-scale video theft or redistribution.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt; text-decoration: underline;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:14pt;&quot;&gt;Third-Party Software&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:12pt;&quot;&gt;Porn Fetch utilizes FFmpeg for video processing and conversion. FFmpeg is free software licensed under the GPL. For more information about FFmpeg, visit https://ffmpeg.org.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Droid Naskh Shift Alt&apos;; font-size:12pt;&quot;&gt;The JetBrains Mono font is used in this application. Copyright © 2019 JetBrains. All Rights Reserved. Licensed under the SIL Open Font License, Version 1.1. You can find a copy of the license at: https://scripts.sil.org/OFL&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <location filename="../../../main.py" line="435"/>
+        <location filename="../../../main.py" line="432"/>
         <source>Disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2319"/>
+        <location filename="../../../main.py" line="2391"/>
         <source>Done! Please restart.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2343"/>
+        <location filename="../../../main.py" line="2415"/>
         <source>No URLs in the current session...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2346"/>
+        <location filename="../../../main.py" line="2418"/>
         <source>FFmpeg has been installed. Please restart Porn Fetch :)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2368"/>
+        <location filename="../../../main.py" line="2440"/>
         <source>
             Information: A new version of Porn Fetch (v{__next_release__}) is out. I recommend you to update Porn Fetch. 
             Go to: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/ {__next_release__}

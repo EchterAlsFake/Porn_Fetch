@@ -1,5 +1,5 @@
 QPushButton {
-    background-color: #2196F3; /* Vivid blue */
+    background-color: rgb(0, 19, 191);
     color: white;
     font-size: 14px;
     border-radius: 4px;
@@ -13,5 +13,5 @@ QPushButton:hover {
 }
 
 QPushButton:pressed {
-    background-color: #1976D2; /* Darker blue */
+    background-color: rgb(193, 138, 0); /* Darker blue */
 }

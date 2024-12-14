@@ -287,7 +287,7 @@ def load_video_attributes(video, data_mode):
             author = "No pornstars / author"  # This can sometimes happen. Very rarely, but can happen...
 
         length = video.length
-        tags = ",".join([category for category in video.categories])
+        tags = ",".join([category for category in video.tags])
         publish_date = video.publish_date
         thumbnail = video.get_thumbnails()[0]
 
