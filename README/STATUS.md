@@ -5,6 +5,7 @@
 - [x] Optimize the CLI and fix some of its errors (#61) (#62)
 - [x] Fixed output path issue in CLI
 - [x] Fixed HQporner / Eporner progress issue stopping at 99%
+- [x] Fixed get random video (HQPorner)
 - [] Fix [#53](https://github.com/EchterAlsFake/Porn_Fetch/issues/53)
   - [] Fix remote connection closed without response
   - [] Fix logging
@@ -42,6 +43,10 @@ by that instead of calculating the new total progress. This will require a rewor
 ## Code improvements and design updates
 - [x] Fix the Porn Fetch layout
 - [x] Rename **ALL** UI elements to be more consistent and easier to handle within code
+- [] Code refactoring
+ - [] Remove useless code
+ - [] Improve code comments
+
 - [] Update translations
 - [] Make Porn Fetch's codebase more structured. In Germany, we say "Roter faden"
 - [] Improving and hardening the tag writing function (with exceptions)

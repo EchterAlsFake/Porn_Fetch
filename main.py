@@ -2265,7 +2265,10 @@ This warning won't be shown again.
     def get_random_video(self):
         """Gets a random video from HQPorner"""
         video = hq_Client().get_random_video()
-        self.add_to_tree_widget_thread([].append(video))
+        print(video.title)
+        some_list = []
+        some_list.append(video)
+        self.add_to_tree_widget_thread(some_list)
 
     def show_credits(self):
         """Loads the credits from the CREDITS.md.  Credits need to be recompiled in the resource file every time"""
@@ -2313,11 +2316,10 @@ def main():
 
     app.installTranslator(translator)
 
-    if conf["UI"]["design"] == "native":
-        file = QFile(":/style/stylesheets/stylesheet.qss")
-        file.open(QFile.ReadOnly | QFile.Text)
-        stream = QTextStream(file)
-        app.setStyleSheet(stream.readAll())
+    file = QFile(":/style/stylesheets/stylesheet.qss")
+    file.open(QFile.ReadOnly | QFile.Text)
+    stream = QTextStream(file)
+    app.setStyleSheet(stream.readAll())
 
     if __build__ == "android":
         font = QFont("arial", 12)
@@ -2342,8 +2344,6 @@ def main():
 
     sys.exit(app.exec())
 
-
-send_error_log("Initialized the code")
 
 if __name__ == "__main__":
     """
@@ -2380,6 +2380,7 @@ if __name__ == "__main__":
 
 
     def export_urls():
+        # TODO
         if not len(session_urls) == 0:
             file, type = QFileDialog().getOpenFileName()
             with open(file, "w") as url_export_file:
