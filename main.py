@@ -409,6 +409,98 @@ class CheckUpdates(QRunnable):
             logger.error(f"Could not check for updates. Please report the following error on GitHub: {e}")
 
 
+class FFMPEGDownload(QRunnable):
+    """Downloads ffmpeg into the execution path of Porn Fetch"""
+
+    def __init__(self, url, extract_path, mode):
+        super().__init__()
+        self.url = url
+        self.extract_path = extract_path
+        self.mode = mode
+        self.signals = Signals()
+
+    @staticmethod
+    def delete_dir():
+        files = os.listdir("./")
+        for file in files:
+            try:
+                search = re.search(pattern=r'ffmpeg-(.*?)-', string=file)  # It's all about the version number
+                if len(search.groups()) == 1:
+
+                    if sys.platform == "win32":
+                        shutil.rmtree(f"ffmpeg-{search.group(1)}-essentials_build")
+                        return True
+
+                    elif sys.platform == "linux" or sys.platform == "linux2":
+                        shutil.rmtree(f"ffmpeg-{search.group(1)}-amd64-static")
+                        return True
+
+            except AttributeError:
+                pass
+
+        return False
+
+    def run(self):
+        # Download the file
+        logger.debug(f"Downloading: {self.url}")
+        logger.debug("FFMPEG: [1/4] Starting the download")
+        with requests.get(self.url, stream=True) as r:
+            r.raise_for_status()
+            try:
+                total_length = int(r.headers.get('content-length'))
+
+            except Exception:
+                total_length = 41313894
+
+            self.signals.total_progress.emit(0, total_length)  # Initialize progress bar
+            dl = 0
+            filename = self.url.split('/')[-1]
+            with open(filename, 'wb') as f:
+                for chunk in r.iter_content(chunk_size=8192):
+                    if chunk:  # filter out keep-alive new chunks
+                        f.write(chunk)
+                        dl += len(chunk)
+                        self.signals.total_progress.emit(dl, total_length)
+
+        logger.debug("FFMPEG: [2/4] Starting file extraction")
+        # Extract the file based on OS mode
+        if self.mode == "linux" and filename.endswith(".tar.xz"):
+            with tarfile.open(filename, "r:xz") as tar:
+                total_members = len(tar.getmembers())
+
+                for idx, member in enumerate(tar.getmembers()):
+                    if 'ffmpeg' in member.name and (member.name.endswith('ffmpeg')):
+                        tar.extract(member, self.extract_path, filter="data")
+                        extracted_path = os.path.join(self.extract_path, member.path)
+                        shutil.move(extracted_path, "./")
+
+                    self.signals.total_progress.emit(idx, total_members)
+
+        elif self.mode == "windows" and filename.endswith(".zip"):
+            with zipfile.ZipFile(filename, 'r') as zip_ref:
+                total = len(zip_ref.namelist())
+
+                for idx, member in enumerate(zip_ref.namelist()):
+                    if 'ffmpeg.exe' in member:
+                        zip_ref.extract(member, self.extract_path)
+                        extracted_path = os.path.join(self.extract_path, member)
+                        shutil.move(extracted_path, ".")
+
+                    self.signals.total_progress.emit(idx, total)
+        logger.debug("FFMPEG: [3/4] Finished Extraction")
+        # Finalize
+        self.signals.total_progress.emit(total_length, total_length)  # Ensure progress bar reaches 100%
+        os.remove(filename)  # Clean up downloaded archive
+
+        if self.delete_dir():
+            logger.debug("FFMPEG: [4/4] Cleaned Up")
+
+        else:
+            logger.error("The Regex for finding the FFmpeg version failed. Please report this on GitHub!, Thanks.")
+
+        self.signals.finished.emit()
+
+
 class AddToTreeWidget(QRunnable):
     def __init__(self, iterator, search_limit, data_mode, is_reverse, stop_flag, is_checked, last_index):
         super(AddToTreeWidget, self).__init__()
@@ -543,7 +635,7 @@ class DownloadThread(QRunnable):
     def __init__(self, video, quality, output_path, threading_mode, workers, timeout, stop_flag, skip_existing_files):
         super().__init__()
         self.video = video
-        self.ffmpeg = None
+        self.ffmpeg = ffmpeg_path
         self.quality = quality
         self.output_path = output_path
         self.threading_mode = threading_mode
@@ -675,6 +767,7 @@ class DownloadThread(QRunnable):
                                     callback=lambda pos, total: self.generic_callback(pos, total,
                                                                                       self.signals.progress_xvideos,
                                                                                       video_source, self.ffmpeg))
+
             elif isinstance(self.video, sp_Video):
                 video_source = "spankbang"
                 self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality,
@@ -822,98 +915,6 @@ class VideoLoader(QRunnable):
             self.signals.error.emit(str(e))
 
 
-class FFMPEGDownload(QRunnable):
-    """Downloads ffmpeg into the execution path of Porn Fetch"""
-
-    def __init__(self, url, extract_path, mode):
-        super().__init__()
-        self.url = url
-        self.extract_path = extract_path
-        self.mode = mode
-        self.signals = Signals()
-
-    @staticmethod
-    def delete_dir():
-        files = os.listdir("./")
-        for file in files:
-            try:
-                search = re.search(pattern=r'ffmpeg-(.*?)-', string=file)  # It's all about the version number
-                if len(search.groups()) == 1:
-
-                    if sys.platform == "win32":
-                        shutil.rmtree(f"ffmpeg-{search.group(1)}-essentials_build")
-                        return True
-
-                    elif sys.platform == "linux" or sys.platform == "linux2":
-                        shutil.rmtree(f"ffmpeg-{search.group(1)}-amd64-static")
-                        return True
-
-            except AttributeError:
-                pass
-
-        return False
-
-    def run(self):
-        # Download the file
-        logger.debug(f"Downloading: {self.url}")
-        logger.debug("FFMPEG: [1/4] Starting the download")
-        with requests.get(self.url, stream=True) as r:
-            r.raise_for_status()
-            try:
-                total_length = int(r.headers.get('content-length'))
-
-            except Exception:
-                total_length = 41313894
-
-            self.signals.total_progress.emit(0, total_length)  # Initialize progress bar
-            dl = 0
-            filename = self.url.split('/')[-1]
-            with open(filename, 'wb') as f:
-                for chunk in r.iter_content(chunk_size=8192):
-                    if chunk:  # filter out keep-alive new chunks
-                        f.write(chunk)
-                        dl += len(chunk)
-                        self.signals.total_progress.emit(dl, total_length)
-
-        logger.debug("FFMPEG: [2/4] Starting file extraction")
-        # Extract the file based on OS mode
-        if self.mode == "linux" and filename.endswith(".tar.xz"):
-            with tarfile.open(filename, "r:xz") as tar:
-                total_members = len(tar.getmembers())
-
-                for idx, member in enumerate(tar.getmembers()):
-                    if 'ffmpeg' in member.name and (member.name.endswith('ffmpeg')):
-                        tar.extract(member, self.extract_path, filter="data")
-                        extracted_path = os.path.join(self.extract_path, member.path)
-                        shutil.move(extracted_path, "./")
-
-                    self.signals.total_progress.emit(idx, total_members)
-
-        elif self.mode == "windows" and filename.endswith(".zip"):
-            with zipfile.ZipFile(filename, 'r') as zip_ref:
-                total = len(zip_ref.namelist())
-
-                for idx, member in enumerate(zip_ref.namelist()):
-                    if 'ffmpeg.exe' in member:
-                        zip_ref.extract(member, self.extract_path)
-                        extracted_path = os.path.join(self.extract_path, member)
-                        shutil.move(extracted_path, ".")
-
-                    self.signals.total_progress.emit(idx, total)
-        logger.debug("FFMPEG: [3/4] Finished Extraction")
-        # Finalize
-        self.signals.total_progress.emit(total_length, total_length)  # Ensure progress bar reaches 100%
-        os.remove(filename)  # Clean up downloaded archive
-
-        if self.delete_dir():
-            logger.debug("FFMPEG: [4/4] Cleaned Up")
-
-        else:
-            logger.error("The Regex for finding the FFmpeg version failed. Please report this on GitHub!, Thanks.")
-
-        self.signals.finished.emit()
-
-
 class AddUrls(QRunnable):
     """
     This class is used to add the URLs from the 'open file' function, because the UI doesn't respond until
@@ -977,6 +978,7 @@ class Porn_Fetch(QWidget):
         self.url_thread = None
         self.download_thread = None
         self.video_loader_thread = None
+        self.video_converting_thread = None
 
         # Button groups
         self.group_threading_mode = None
@@ -1198,7 +1200,7 @@ class Porn_Fetch(QWidget):
         self.ui.login_button_get_recommended_videos.clicked.connect(self.get_recommended_videos)
 
         # Search
-        self.ui.button_search.clicked.connect(self.basic_search)
+        self.ui.button_search.clicked.connect(self.search)
 
         # HQPorner
         self.ui.main_button_switch_tools.clicked.connect(self.switch_to_tools)
@@ -1516,94 +1518,6 @@ class Porn_Fetch(QWidget):
         ui_popup(self.tr("Saved User Settings, please restart Porn Fetch!", None))
         logger.debug("Saved User Settings, please restart Porn Fetch.")
 
-    def check_for_updates(self):
-        """Checks for updates in a thread, so that the main UI isn't blocked, until update checks are done"""
-        self.update_thread = CheckUpdates()
-        self.update_thread.signals.result.connect(check_for_updates_result)
-        self.threadpool.start(self.update_thread)
-
-    def check_internet(self):
-        """Checks if the porn sites are accessible"""
-        self.internet_check_thread = InternetCheck()
-        self.internet_check_thread.signals.internet_check.connect(self.internet_check_result)
-        self.threadpool.start(self.internet_check_thread)
-
-    def internet_check_result(self, results: dict):
-        show = False
-        formatted_results = ""
-
-        for website, status in results.items():
-            if status != "✔":
-                formatted_results += f"{website} -->: {status}\n\n"
-                show = True
-
-        if show:
-            ui_popup(self.tr(f"""
-! Warning !
-Some websites couldn't be accessed. Here's a detailed report:
-------------------------------------------------------------
-{formatted_results}"""))
-
-    def check_ffmpeg(self):
-        # Check if ffmpeg is available in the system PATH
-        global ffmpeg_path
-        ffmpeg_path = shutil.which("ffmpeg")
-
-        if ffmpeg_path is None:
-            # If ffmpeg is not in PATH, check the current directory for ffmpeg binaries
-            ffmpeg_binary = "ffmpeg.exe" if os.path.isfile("ffmpeg.exe") else "ffmpeg" if os.path.isfile(
-                "ffmpeg") else None
-
-            if ffmpeg_binary is None:
-                # If ffmpeg binaries are not found in the current directory, display warning and disable features
-                if self.conf.get("Performance", "ffmpeg_warning") == "true":
-                    ffmpeg_warning_message = self.tr(
-                        """
-FFmpeg isn't installed on your system... Some features won't be available:
-
-- The FFmpeg threading mode
-- Converting videos into a valid .mp4 format
-- Writing tags / metadata into the videos
-
-These features aren't necessary for Porn Fetch, but can be useful for some people.
-
-To automatically install ffmpeg, just head over to the settings and press the magical button, or install ffmpeg in your
-local PATH (e.g, through your linux package manager, or through the Windows PATH)
-
-This warning won't be shown again.
-                        """, None)
-                    ui_popup(ffmpeg_warning_message)
-                    self.conf.set("Performance", "ffmpeg_warning", "false")
-                    with open("config.ini", "w") as config_file: #type: TextIOWrapper
-                        self.conf.write(config_file)
-
-                self.ui.settings_radio_threading_mode_ffmpeg.setDisabled(True)
-                global ffmpeg_features
-                ffmpeg_features = False
-                logger.error("FFMPEG features have been disabled, because ffmpeg wasn't found on your system.")
-            else:
-                # If ffmpeg binary is found in the current directory, set it as the ffmpeg path
-                ffmpeg_path = os.path.abspath(ffmpeg_binary)
-
-        else:
-            # If ffmpeg is found in system PATH, use it directly
-            ffmpeg_path = shutil.which("ffmpeg")
-            consts.FFMPEG_EXECUTABLE = ffmpeg_path
-            bs_consts.FFMPEG_PATH = ffmpeg_path
-            logger.debug(f"FFMPEG: {ffmpeg_path}")
-
-    def download_ffmpeg(self):
-        if sys.platform == "linux":
-            if not os.path.isfile("ffmpeg"):
-                self.downloader = FFMPEGDownload(url=url_linux, extract_path=".", mode="linux")
-
-        elif sys.platform == "win32":
-            if not os.path.isfile("ffmpeg.exe"):
-                self.downloader = FFMPEGDownload(url=url_windows, extract_path=".", mode="windows")
-
-        self.downloader.signals.total_progress.connect(self.update_total_progressbar)
-        self.downloader.signals.finished.connect(ffmpeg_finished)
-        self.threadpool.start(self.downloader)
 
     def switch_to_home(self):
         self.ui.main_stacked_widget_main.setCurrentIndex(0)
@@ -1910,11 +1824,10 @@ This warning won't be shown again.
         self.threadpool.start(self.video_loader_thread)
 
 
-    def on_video_loaded(self, video, output_file_path, threading_mode, quality):
+    def on_video_loaded(self, video):
         # Handle the loaded video and start download
         self.stop_undefined_range()
-        self.process_video_thread(video=video, output_path=output_file_path, threading_mode=threading_mode,
-                                  quality=quality)
+        self.process_video_thread(video=video)
 
     def on_video_load_error(self, error_message):
         # Handle errors and show a message to user
@@ -1960,10 +1873,10 @@ This warning won't be shown again.
                 self.ui.main_label_tree_show_thumbnail.setText(f"Failed to load image: {e}")
 
 
-    def process_video_thread(self, output_path, video, threading_mode, quality):
+    def process_video_thread(self, video):
         """Checks which of the three types of threading the user selected and handles them."""
-        self.download_thread = DownloadThread(video=video, output_path=output_path, quality=self.quality,
-                                              threading_mode=threading_mode, workers=self.workers, timeout=self.timeout,
+        self.download_thread = DownloadThread(video=video, output_path=self.output_path, quality=self.quality,
+                                              threading_mode=self.threading_mode, workers=self.workers, timeout=self.timeout,
                                               stop_flag=stop_flag, skip_existing_files=self.skip_existing_files)
         self.download_thread.signals.progress.connect(self.update_progressbar)
         self.download_thread.signals.total_progress.connect(self.update_total_progressbar)
@@ -2022,7 +1935,7 @@ This warning won't be shown again.
         self.ui.progressbar_spankbang.setValue(value)
 
     # ADAPTION
-    def download_completed(self):
+    def download_completed(self, data):
         """If a video is downloaded, the semaphore is released"""
         logger.debug("Download Completed!")
         global total_downloaded_videos
@@ -2032,8 +1945,15 @@ This warning won't be shown again.
         self.ui.progressbar_hqporner.setValue(0)
         self.ui.progressbar_eporner.setValue(0)
 
+        self.video_converting_thread = ProcessVideoThread(write_tags_=self.write_metadata, format=self.format, data=data)
+        self.video_converting_thread.signals.ffmpeg_progress.connect(self.update_converting)
+        self.threadpool.start(self.video_converting_thread)
+
+
 
         self.semaphore.release()
+
+
 
 
     def start_undefined_range(self):
@@ -2117,8 +2037,6 @@ This warning won't be shown again.
         This handles logging in into the users PornHub accounts
         I need to update this to support more websites
         """
-        # TODO
-
         username = self.ui.login_lineedit_username.text()
         password = self.ui.login_lineedit_password.text()
         if len(username) <= 2 or len(password) <= 2:
@@ -2137,17 +2055,6 @@ This warning won't be shown again.
         except errors.ClientAlreadyLogged:
             ui_popup(self.tr("You are already logged in!", None))
 
-    def switch_login_button_state(self):
-        """If the user is logged in, I'll change the stylesheets of the buttons"""
-        file = QFile(":/style/stylesheets/stylesheet_switch_buttons_login_state.qss")
-        file.open(QFile.ReadOnly | QFile.Text)
-        stream = QTextStream(file)
-        stylesheet = stream.readAll()
-
-        self.ui.login_button_get_liked_videos.setStyleSheet(stylesheet)
-        self.ui.login_button_get_watched_videos.setStyleSheet(stylesheet)
-        self.ui.login_button_get_recommended_videos.setStyleSheet(stylesheet)
-
     def check_login(self):
         """Checks if the user is logged in, so that no errors are threw if not"""
         if self.client.logged:
@@ -2163,6 +2070,16 @@ This warning won't be shown again.
 
             else:
                 return True
+
+    def switch_login_button_state(self):
+        """If the user is logged in, I'll change the stylesheets of the buttons"""
+        file = ":/style/stylesheets/stylesheet_switch_buttons_login_state.qss"
+        stylesheet = load_stylesheet(file)
+
+        self.ui.login_button_get_liked_videos.setStyleSheet(stylesheet)
+        self.ui.login_button_get_watched_videos.setStyleSheet(stylesheet)
+        self.ui.login_button_get_recommended_videos.setStyleSheet(stylesheet)
+
 
     def get_watched_videos(self):
         """Returns the videos watched by the user"""
@@ -2186,7 +2103,7 @@ This warning won't be shown again.
     The following functions are related to the search functionality
     """
 
-    def basic_search(self):
+    def search(self):
         """Does a simple search for videos without filters on selected website"""
         query = self.ui.download_lineedit_search_query.text()
 
@@ -2276,6 +2193,13 @@ This warning won't be shown again.
         some_list = [video]
         self.add_to_tree_widget_thread(some_list)
 
+
+    """
+    These function don't need to be maintained very often or better say I don't need them very often in code,
+    so I moved them down here to get a better focus on the important things yk
+    
+    """
+
     def show_credits(self):
         """Loads the credits from the CREDITS.md.  Credits need to be recompiled in the resource file every time"""
         if self.ui.settings_checkbox_system_anonymous_mode.isChecked():
@@ -2294,6 +2218,94 @@ This warning won't be shown again.
         self.keyboard_widget_.setupUi(self.keyboard_widget)
         self.keyboard_widget.show()
 
+    def check_for_updates(self):
+        """Checks for updates in a thread, so that the main UI isn't blocked, until update checks are done"""
+        self.update_thread = CheckUpdates()
+        self.update_thread.signals.result.connect(check_for_updates_result)
+        self.threadpool.start(self.update_thread)
+
+    def check_internet(self):
+        """Checks if the porn sites are accessible"""
+        self.internet_check_thread = InternetCheck()
+        self.internet_check_thread.signals.internet_check.connect(self.internet_check_result)
+        self.threadpool.start(self.internet_check_thread)
+
+    def internet_check_result(self, results: dict):
+        show = False
+        formatted_results = ""
+
+        for website, status in results.items():
+            if status != "✔":
+                formatted_results += f"{website} -->: {status}\n\n"
+                show = True
+
+        if show:
+            ui_popup(self.tr(f"""
+! Warning !
+Some websites couldn't be accessed. Here's a detailed report:
+------------------------------------------------------------
+{formatted_results}"""))
+
+    def check_ffmpeg(self):
+        # Check if ffmpeg is available in the system PATH
+        global ffmpeg_path
+        ffmpeg_path = shutil.which("ffmpeg")
+
+        if ffmpeg_path is None:
+            # If ffmpeg is not in PATH, check the current directory for ffmpeg binaries
+            ffmpeg_binary = "ffmpeg.exe" if os.path.isfile("ffmpeg.exe") else "ffmpeg" if os.path.isfile(
+                "ffmpeg") else None
+
+            if ffmpeg_binary is None:
+                # If ffmpeg binaries are not found in the current directory, display warning and disable features
+                if self.conf.get("Performance", "ffmpeg_warning") == "true":
+                    ffmpeg_warning_message = self.tr(
+                        """
+FFmpeg isn't installed on your system... Some features won't be available:
+
+- The FFmpeg threading mode
+- Converting videos into a valid .mp4 format
+- Writing tags / metadata into the videos
+
+These features aren't necessary for Porn Fetch, but can be useful for some people.
+
+To automatically install ffmpeg, just head over to the settings and press the magical button, or install ffmpeg in your
+local PATH (e.g, through your linux package manager, or through the Windows PATH)
+
+This warning won't be shown again.
+                        """, None)
+                    ui_popup(ffmpeg_warning_message)
+                    self.conf.set("Performance", "ffmpeg_warning", "false")
+                    with open("config.ini", "w") as config_file:  # type: TextIOWrapper
+                        self.conf.write(config_file)
+
+                self.ui.settings_radio_threading_mode_ffmpeg.setDisabled(True)
+                global ffmpeg_features
+                ffmpeg_features = False
+                logger.error("FFMPEG features have been disabled, because ffmpeg wasn't found on your system.")
+            else:
+                # If ffmpeg binary is found in the current directory, set it as the ffmpeg path
+                ffmpeg_path = os.path.abspath(ffmpeg_binary)
+
+        else:
+            # If ffmpeg is found in system PATH, use it directly
+            ffmpeg_path = shutil.which("ffmpeg")
+            consts.FFMPEG_EXECUTABLE = ffmpeg_path
+            bs_consts.FFMPEG_PATH = ffmpeg_path
+            logger.debug(f"FFMPEG: {ffmpeg_path}")
+
+    def download_ffmpeg(self):
+        if sys.platform == "linux":
+            if not os.path.isfile("ffmpeg"):
+                self.downloader = FFMPEGDownload(url=url_linux, extract_path=".", mode="linux")
+
+        elif sys.platform == "win32":
+            if not os.path.isfile("ffmpeg.exe"):
+                self.downloader = FFMPEGDownload(url=url_windows, extract_path=".", mode="windows")
+
+        self.downloader.signals.total_progress.connect(self.update_total_progressbar)
+        self.downloader.signals.finished.connect(ffmpeg_finished)
+        self.threadpool.start(self.downloader)
 
 def main():
     setup_config_file()
