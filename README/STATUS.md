@@ -9,13 +9,13 @@
 - [] Fix [#53](https://github.com/EchterAlsFake/Porn_Fetch/issues/53)
   - [] Fix remote connection closed without response
   - [] Fix logging
-  - [] Fix image URLs from PornHub
+  - [x] Fix image URLs from PornHub
   - [x] Improving installation instructions
     - [x] Add instruction which file to pick from the releases
     - [x] Tell about the .sig and gpg verification
     - [x] Tell about the .config file and why it's important
     - [x] Tell how to make Porn Fetch executable on Linux systems
-- [] Fix an index issue in the tree widget:
+- [x] Fix an index issue in the tree widget:
  When a video was loaded in index 1 and a user checked the box for not clearing videos, the next loaded
  Video would have an index of 11, although it should have an index of 2
 

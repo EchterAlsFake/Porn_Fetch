@@ -64,7 +64,6 @@ __author__ = "Johannes Habel"
 __next_release__ = "3.5"
 total_segments = 0
 downloaded_segments = 0
-last_index = 0
 stop_flag = Event()
 
 ffmpeg_features = True
@@ -403,7 +402,7 @@ class CheckUpdates(QRunnable):
 
 
 class AddToTreeWidget(QRunnable):
-    def __init__(self, iterator, search_limit, data_mode, reverse, stop_flag, is_checked):
+    def __init__(self, iterator, search_limit, data_mode, reverse, stop_flag, is_checked, last_index):
         super(AddToTreeWidget, self).__init__()
         self.signals = Signals() # Processing signals for progress and information
         self.iterator = iterator # The video iterator (Search or model object yk)
@@ -412,6 +411,7 @@ class AddToTreeWidget(QRunnable):
         self.reverse = reverse # If the user wants to display the videos in reverse
         self.stop_flag = stop_flag # If the user pressed the stop process button
         self.is_checked = is_checked # If the "do not clear videos" checkbox is checked
+        self.last_index = last_index # The last index (video) of the tree widget to maintain a correct order of numbers
 
     def process_video(self, video, index):
         session_urls.append(video.url) # Appends the URL to the total session URL list, to export it later if needed
@@ -450,14 +450,16 @@ class AddToTreeWidget(QRunnable):
             self.signals.clear_signal.emit() # Clears the tree widget
 
         self.signals.start_undefined_range.emit() # Starts the progressbar, but with a loading animation
-        global last_index
+
 
         if self.is_checked:
-            start = last_index + 1  # Videos won't be cleared from tree widget, so we need to set the last known index
-            self.search_limit += last_index + 1
+            index = self.last_index
+            start = index
+            self.search_limit += self.search_limit
 
         else:
             start = 1
+            self.last_index = start
 
         try:
             logger.debug(f"Result Limit: {str(self.search_limit)}")
@@ -478,11 +480,10 @@ class AddToTreeWidget(QRunnable):
                 if self.stop_flag.is_set():
                     return # Stop processing videos, since user pressed stop button
 
-                last_index += 1
                 try_attempt = True
                 while try_attempt:
                     try:
-                        if i == self.search_limit + 1:
+                        if i >= self.search_limit + 1:
                             break  # The search limit prevents an infinite loop
 
                         try:
@@ -1002,6 +1003,7 @@ class Porn_Fetch(QWidget):
         self.threading = None
         self.directory_system = None
         self.total_progress = 0
+        self.last_index = 0
         self.threadpool = QThreadPool()
 
         self.conf = ConfigParser()
@@ -1652,7 +1654,7 @@ This warning won't be shown again.
         is_checked = self.ui.main_checkbox_tree_do_not_clear_videos.isChecked()
 
         self.thread = AddToTreeWidget(iterator=iterator, search_limit=search_limit, data_mode=data_mode,
-                                      reverse=reverse, is_checked=is_checked, stop_flag=stop_flag)
+                                      reverse=reverse, is_checked=is_checked, stop_flag=stop_flag, last_index=self.last_index)
         self.thread.signals.text_data.connect(self.add_to_tree_widget_signal)
         self.thread.signals.progress.connect(self.progress_tree_widget)
         self.thread.signals.clear_signal.connect(self.clear_tree_widget)
@@ -1664,6 +1666,9 @@ This warning won't be shown again.
         """
         This is the signal for the Tree Widget thread. It receives the data and applies it to the GUI
         """
+
+        self.last_index += 1
+
         title = data[0]
         author = data[1]
         try:
