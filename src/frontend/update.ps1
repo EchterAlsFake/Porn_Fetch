@@ -12,6 +12,7 @@ pyside6-uic form_desktop.ui -o ui_form_desktop.py
 pyside6-uic form_install_dialog.ui -o ui_form_install_dialog.py
 pyside6-uic form_license.ui -o ui_form_license.py
 pyside6-uic form_range_selector.ui -o ui_form_range_selector.py
+pyside6-uic form_keyboard_shortcuts.ui -o ui_form_keyboard_shortcuts.py
 
 # Process resource file
 Write-Output "Processing resource file..."
@@ -26,10 +27,12 @@ pyside6-lupdate `
     ui_form_install_dialog.py `
     ui_form_license.py `
     ui_form_range_selector.py `
+    ui_form_keyboard_shortcuts.py `
     form_desktop.ui `
     form_install_dialog.ui `
     form_license.ui `
     form_range_selector.ui `
+    form_keyboard_shortcuts.ui `
     -ts translations/en.ts -no-obsolete
 
 pyside6-lrelease translations/de_DE.ts -qm translations/de_DE.qm

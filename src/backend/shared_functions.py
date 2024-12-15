@@ -37,9 +37,9 @@ sections = ["Setup", "Performance", "PostProcessing", "Video", "UI"]
 
 options_setup = ["license_accepted", "install", "update_checks", "internet_checks", "anonymous_mode", "tor"]
 options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries", "ffmpeg_warning"]
-options_post_processing = ["convert", "format", "write_metadata", "unfinished_videos", "path"]
+options_post_processing = ["convert", "format", "write_metadata"]
 options_video = ["quality", "output_path", "directory_system", "search_limit", "delay", "skip_existing_files", "model_videos"]
-options_ui = ["language", "design"]
+options_ui = ["language", "custom_font"]
 
 pornhub_pattern = re.compile(r'(.*?)pornhub(.*)') # can also be .org
 hqporner_pattern = re.compile(r'(.*?)hqporner.com(.*)')
@@ -47,22 +47,6 @@ xnxx_pattern = re.compile(r'(.*?)xnxx.com(.*)')
 xvideos_pattern = re.compile(r'(.*?)xvideos.com(.*)')
 eporner_pattern = re.compile(r'(.*?)eporner.com(.*)')
 spankbang_pattern = re.compile(r'(.*?)spankbang.com(.*)')
-
-"""
-Explanation:
-
-Directory System:
-
-1 = Yes
-0 = No
-
-Semaphore:
-
-Integer value.
-
-If you set it to 3, three videos will be downloaded at the same time (You get the point)
-
-"""
 
 default_configuration = f"""[Setup]
 license_accepted = no
@@ -84,13 +68,11 @@ ffmpeg_warning = true
 convert = true
 format = mp4
 write_metadata = true
-unfinished_videos = false
-path = None
 
 [Video]
 quality = best
 output_path = ./
-directory_system = 0
+directory_system = false
 search_limit = 50
 delay = 0
 skip_existing_files = true
@@ -98,7 +80,7 @@ model_videos = both
 
 [UI]
 language = system
-design = native
+custom_font = true
 """
 
 logger = logging.getLogger(__name__)
@@ -169,13 +151,10 @@ def check_video(url, is_url=True, delay=False):
             return url
 
         elif isinstance(url, str) and not str(url).endswith(".html"):
-            try:
-                video = Client(delay=delay).get(url)
-                video.fetch("page@")
-                return video
+            video = Client(delay=delay).get(url)
+            video.fetch("page@")
+            return video
 
-            except Exception:
-                return False
 
         else:
             return False

@@ -166,10 +166,6 @@ QCheckBox::indicator:checked {
 }
 
 
-QCheckBox::indicator:unchecked:hover {
-    background-color: #555;
-}
-
 QSpinBox {
     background-color: #333;
     border: 1px solid #555;
