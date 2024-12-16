@@ -1027,7 +1027,7 @@ class Porn_Fetch(QWidget):
         self.downloader = None
         self.directory_system = None
 
-        self.last_index = 0
+        self.last_index = 0 # Keeps track of the last index of videos added to the tree widget
         self.threadpool = QThreadPool()
 
         self.conf = ConfigParser()
@@ -1520,34 +1520,6 @@ class Porn_Fetch(QWidget):
         logger.debug("Saved User Settings, please restart Porn Fetch.")
 
 
-    def switch_to_home(self):
-        self.ui.main_stacked_widget_main.setCurrentIndex(0)
-        self.ui.main_stacked_widget_top.setCurrentIndex(0)
-        self.ui.main_stacked_widget_top.setMaximumHeight(260)
-
-    def switch_to_account(self):
-        self.ui.main_stacked_widget_top.setCurrentIndex(1)
-        self.ui.main_stacked_widget_main.setCurrentIndex(0)
-        self.ui.main_stacked_widget_top.setMaximumHeight(220)
-
-    def switch_to_tools(self):
-        self.ui.main_stacked_widget_main.setCurrentIndex(0)
-        self.ui.main_stacked_widget_top.setCurrentIndex(3)
-
-    def switch_to_settings(self):
-        self.ui.main_stacked_widget_main.setCurrentIndex(1)
-
-    def switch_to_credits(self):
-        self.ui.main_stacked_widget_main.setCurrentIndex(2)
-        self.show_credits()
-
-    def switch_to_supported_websites(self):
-        self.ui.main_stacked_widget_main.setCurrentIndex(3)
-
-    def switch_to_all_progress_bars(self):
-        self.ui.main_stacked_widget_top.setCurrentIndex(2)
-        self.ui.main_stacked_widget_main.setCurrentIndex(0)
-        self.ui.main_stacked_widget_top.setMaximumHeight(280)
 
     """
     The following functions are related to the tree widget    
@@ -2307,6 +2279,42 @@ This warning won't be shown again.
         self.downloader.signals.total_progress.connect(self.update_total_progressbar)
         self.downloader.signals.finished.connect(ffmpeg_finished)
         self.threadpool.start(self.downloader)
+
+
+    """
+    These functions are used for switching the index of the stacked widget. This basically is the menu bar
+    """
+
+    def switch_to_home(self):
+        self.ui.main_stacked_widget_main.setCurrentIndex(0)
+        self.ui.main_stacked_widget_top.setCurrentIndex(0)
+        self.ui.main_stacked_widget_top.setMaximumHeight(260)
+
+    def switch_to_account(self):
+        self.ui.main_stacked_widget_top.setCurrentIndex(1)
+        self.ui.main_stacked_widget_main.setCurrentIndex(0)
+        self.ui.main_stacked_widget_top.setMaximumHeight(220)
+
+    def switch_to_tools(self):
+        self.ui.main_stacked_widget_main.setCurrentIndex(0)
+        self.ui.main_stacked_widget_top.setCurrentIndex(3)
+
+    def switch_to_settings(self):
+        self.ui.main_stacked_widget_main.setCurrentIndex(1)
+
+    def switch_to_credits(self):
+        self.ui.main_stacked_widget_main.setCurrentIndex(2)
+        self.show_credits()
+
+    def switch_to_supported_websites(self):
+        self.ui.main_stacked_widget_main.setCurrentIndex(3)
+
+    def switch_to_all_progress_bars(self):
+        self.ui.main_stacked_widget_top.setCurrentIndex(2)
+        self.ui.main_stacked_widget_main.setCurrentIndex(0)
+        self.ui.main_stacked_widget_top.setMaximumHeight(280)
+
+
 
 def main():
     setup_config_file()
