@@ -3,10 +3,10 @@ import time
 import sys
 import os.path
 import argparse
-import markdown
 import zipfile
 import shutil
 import tarfile
+import markdown
 import requests.exceptions
 import src.frontend.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
 
@@ -17,7 +17,7 @@ from io import TextIOWrapper
 from hqporner_api.api import Sort as hq_Sort
 from phub import consts
 from base_api.modules import consts as bs_consts
-from base_api.base import Core
+from base_api.base import  Core
 
 from src.backend.shared_functions import *
 from src.backend.shared_gui import *
@@ -1504,6 +1504,7 @@ class Porn_Fetch(QWidget):
         self.conf.set("PostProcessing", "write_metadata", "true" if self.ui.checkbox_settings_post_processing_write_metadata_tags.isChecked() else "false")
         self.conf.set("Video", "skip_existing_files", "true" if self.ui.settings_checkbox_videos_skip_existing_files.isChecked() else "false")
         self.conf.set("Video", "directory_system", "true" if self.ui.settings_checkbox_videos_use_directory_system.isChecked() else "false")
+        self.conf.set("UI", "custom_font", "true" if self.ui.settings_checkbox_ui_custom_font.isChecked() else "false")
 
         if self.ui.radio_settings_post_processing_do_not_convert.isChecked():
             self.conf.set("PostProcessing", "convert", "false")
