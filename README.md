@@ -31,6 +31,7 @@
 
 ## 🚀 Quick Links
 - [Features](#-features)
+- [Donations](#sponsoring--donations)
 - [Supported Websites](#-supported-websites)
 - [Building from Source](#-building-from-source)
   - [Linux](#for-ubuntu-windows-arch-linux-termux-fedora-opensuse)
@@ -225,3 +226,16 @@ Licensed under [GPL 3](https://www.gnu.org/licenses/gpl-3.0.en.html).
 <br>Copyright (C) 2023–2024 Johannes Habel 
 
 Porn Fetch uses [FFmpeg](https://ffmpeg.org/), which is licensed under the GPL license
+
+# Sponsoring / Donations
+Porn Fetch is developed entirely Open-Source and will always be free, because I like what
+I am doing here. I will never ever charge money for this software.
+
+However, I kindly ask every one of you to donate a small amount of money. If you have Monero (crypto)
+or PayPal, you can donate me here:
+
+- Paypal: `https://paypal.me/EchterAlsFake`
+- Monero: `46xL2reuanxZgFxXBBaoagiEJK9c7bL7aiwKNR15neyX2wUsX2QVzkeRMVG2Cro44qLUNYvsP1BQa12KPbNat2ML41nyEeq`
+
+Even if it's just 10 cents, for me, it matters, because I do not work yet and it means a lot
+to me :)
