@@ -498,11 +498,12 @@ class FFMPEGDownload(QRunnable):
         else:
             logger.error("The Regex for finding the FFmpeg version failed. Please report this on GitHub!, Thanks.")
 
-        self.signals.finished.emit()
+        # TODO
 
 
 class AddToTreeWidget(QRunnable):
-    def __init__(self, iterator, search_limit, data_mode, is_reverse, stop_flag, is_checked, last_index):
+    def __init__(self, iterator, search_limit, data_mode, is_reverse, stop_flag, is_checked, last_index, delay,
+                 output_path, directory_system, url):
         super(AddToTreeWidget, self).__init__()
         self.signals = Signals() # Processing signals for progress and information
         self.iterator = iterator # The video iterator (Search or model object yk)
@@ -512,38 +513,57 @@ class AddToTreeWidget(QRunnable):
         self.stop_flag = stop_flag # If the user pressed the stop process button
         self.is_checked = is_checked # If the "do not clear videos" checkbox is checked
         self.last_index = last_index # The last index (video) of the tree widget to maintain a correct order of numbers
+        self.delay = delay
+        self.output_path = output_path
+        self.directory_system = directory_system
+        self.url = url
 
-    def process_video(self, video, index):
+    def process_video(self, index):
+        video = check_video(self.url, delay=self.delay)
+
         try:
-            if video is False:
-                self.signals.error_signal.emit("Error: Video could not be processed due to an unknown issue.")
-                return False
+            data = load_video_attributes(video, self.data_mode)
 
-            session_urls.append(video.url)  # Append the URL for later use
-            data = load_video_attributes(video, self.data_mode)  # Load video data
-
-            # Defaults for disabled attributes
             title = data[0]
-            disabled = QCoreApplication.translate("main", "Disabled", None)
-            author = disabled
-            duration = disabled
-            thumbnail = disabled
+            author = None
+            length = None
+            tags = None
+            publish_date = None
+            thumbnail = None
 
-            # Full data mode
             if self.data_mode == 1:
-                try:
-                    author = data[1]
-                    duration = str(parse_length(data[2]))
-                    thumbnail = str(data[5])
-                except IndexError:
-                    logger.warning(f"Warning: Some attributes are missing for video: {video.url}")
+                author = data[1]
+                length = data[2]
+                tags = data[3]
+                publish_date = data[4]
+                thumbnail = data[5]
 
-            print(
-                f"\r\033[K[{Fore.LIGHTCYAN_EX}{index}/{self.search_limit}]{Fore.RESET}{str(title)} Successfully processed!",
-                end='', flush=True
-            )
+            output_path = Path(self.output_path)
+            stripped_title = Core().strip_title(title)  # Strip the title so that videos with special chars can be
+            # saved on windows. it would raise an OSError otherwise
 
-            return [str(title), str(author), str(duration), str(index), video, thumbnail]
+            if self.directory_system:  # If the directory system is enabled, this will create an additional folder
+                author_path = output_path / author
+                author_path.mkdir(parents=True, exist_ok=True)
+                output_file_path = author_path / f"{stripped_title}.mp4"
+
+            else:
+                output_file_path = output_path / f"{stripped_title}.mp4"
+
+            # Emit the loaded signal with all the required information
+            data = {
+                "title": stripped_title,
+                "author": author,
+                "length": length,
+                "tags": tags,
+                "publish_date": publish_date,
+                "thumbnail": thumbnail,
+                "output_path": output_file_path,
+                "index": index,
+                "video": video
+            }
+
+            return data
 
         except (errors.PremiumVideo, IndexError):
             logger.error(f"Warning: The video {video.url} is a Premium-only video and will be skipped.")
@@ -559,7 +579,6 @@ class AddToTreeWidget(QRunnable):
             logger.exception(f"Unexpected error while processing video: {e}")
             self.signals.error_signal.emit(f"Unexpected error occurred: {e}")
             return False
-
 
     def run(self):
         if not self.is_checked:
@@ -601,7 +620,8 @@ class AddToTreeWidget(QRunnable):
                         if i >= self.search_limit + 1:
                             break  # Respect search limit
 
-                        text_data = self.process_video(video, i)
+
+                        text_data = self.process_video(i)
                         if text_data is False:
                             break  # Skip to the next video if processing failed
 
@@ -837,8 +857,8 @@ class QTreeWidgetDownloadThread(QRunnable):
         for i in range(self.treeWidget.topLevelItemCount()):
             item = self.treeWidget.topLevelItem(i)
             checkState = item.checkState(0)
-            if checkState == Qt.Checked:
-                video_objects.append(item.data(0, Qt.UserRole))
+            if checkState == Qt.CheckState.Checked:
+                video_objects.append(item.data(0, Qt.ItemDataRole.UserRole))
 
         if not self.threading_mode == "FFMPEG":
             logger.debug("Getting segments...")
@@ -870,49 +890,6 @@ class QTreeWidgetDownloadThread(QRunnable):
                 return
             logger.debug("Semaphore Acquired")
             self.signals.progress_video.emit(video)  # Now emits the video to the main class for further processing
-
-
-class VideoLoader(QRunnable):
-    def __init__(self, url, output_path, threading_mode, directory_system, quality, delay):
-        super(VideoLoader, self).__init__()
-        self.url = url
-        self.output_path = output_path
-        self.threading_mode = threading_mode
-        self.directory_system = directory_system
-        self.quality = quality
-        self.signals = Signals()
-        self.delay = delay
-
-    def run(self):
-        try:
-            video = check_video(self.url, delay=self.delay)
-            x = 1
-
-            if x == 0:
-                pass
-
-            else:
-                data = load_video_attributes(video, 1)
-                title = data[0]
-                author = data[1]
-                output_path = Path(self.output_path)
-                stripped_title = Core().strip_title(title)  # Strip the title so that videos with special chars can be
-                # saved on windows. it would raise an OSError otherwise
-
-                if self.directory_system:  # If the directory system is enabled, this will create an additional folder
-                    author_path = output_path / author
-                    author_path.mkdir(parents=True, exist_ok=True)
-                    output_file_path = author_path / f"{stripped_title}.mp4"
-
-                else:
-                    output_file_path = output_path / f"{stripped_title}.mp4"
-
-                # Emit the loaded signal with all the required information
-                self.signals.loaded.emit(video, author, stripped_title, output_file_path, self.threading_mode,
-                                         self.directory_system, self.quality)
-
-        except Exception as e:
-            self.signals.error.emit(str(e))
 
 
 class AddUrls(QRunnable):
@@ -1047,7 +1024,6 @@ class Porn_Fetch(QWidget):
                          "your context menu again.")
 
                 self.close()
-                exit(0)
 
             self.default_max_height = self.ui.main_stacked_widget_top.maximumHeight()
             self.button_connectors()  # Connects the buttons to their functions
@@ -1366,13 +1342,13 @@ class Porn_Fetch(QWidget):
         self.header.resizeSection(0, 300)
         self.header.resizeSection(1, 150)
         self.header.resizeSection(2, 50)
-        self.header.setSectionResizeMode(3, QHeaderView.Fixed)
+        self.header.setSectionResizeMode(3, QHeaderView.ResizeMode.Fixed)
         self.ui.treeWidget.setColumnWidth(3, 150)
         self.header.sortIndicatorChanged.connect(self.reindex) # This does not make any sense and I need to refactor it!
         self.ui.treeWidget.itemClicked.connect(self.set_thumbnail)
 
         # Sort by the 'Length' column in ascending order
-        self.ui.treeWidget.sortByColumn(2, Qt.AscendingOrder)
+        self.ui.treeWidget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
         self.ui.main_radio_tree_show_title.setChecked(True)
 
     def settings_maps_initialization(self):
@@ -1519,200 +1495,9 @@ class Porn_Fetch(QWidget):
         ui_popup(self.tr("Saved User Settings, please restart Porn Fetch!", None))
         logger.debug("Saved User Settings, please restart Porn Fetch.")
 
-
-
     """
-    The following functions are related to the tree widget    
+    These are the core functions of Porn Fetch outside of the UI stuff. They are used to process user input.
     """
-
-    def add_to_tree_widget_thread(self, iterator):
-        search_limit = self.search_limit
-        data_mode = 0 if self.ui.main_radio_tree_show_title.isChecked() else 1
-        is_reverse = self.ui.main_checkbox_tree_show_videos_reversed.isChecked()
-        is_checked = self.ui.main_checkbox_tree_do_not_clear_videos.isChecked()
-
-        self.thread = AddToTreeWidget(iterator=iterator, search_limit=search_limit, data_mode=data_mode,
-                                      is_reverse=is_reverse, is_checked=is_checked, last_index=self.last_index,
-                                      stop_flag=stop_flag)
-        self.thread.signals.text_data.connect(self.add_to_tree_widget_signal)
-        self.thread.signals.progress.connect(self.progress_tree_widget)
-        self.thread.signals.clear_signal.connect(self.clear_tree_widget)
-        self.thread.signals.start_undefined_range.connect(self.start_undefined_range)
-        self.thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
-        self.thread.signals.error_signal.connect(self.on_video_load_error)
-        self.threadpool.start(self.thread)
-
-    def add_to_tree_widget_signal(self, data):
-        """
-        This is the signal for the Tree Widget thread. It receives the data and applies it to the GUI
-        """
-        self.last_index += 1
-        title = data[0]
-        author = data[1]
-        try:
-            duration = float(data[2])  # Ensure duration is a float
-
-        except ValueError:
-            duration = parse_length(data[2])
-
-        index = data[3]
-        video = data[4]
-        thumbnail = data[5]
-
-        item = QTreeWidgetItem(self.ui.treeWidget)
-        item.setText(0, f"{index}) {title}")
-        item.setText(1, author)
-
-        # Determine how many zeros are needed based on the type and value of duration
-        if isinstance(duration, float):
-            formatted_duration = f"{int(duration):05d}"
-            # Handle the decimal part separately if needed
-            decimal_part = str(duration).split('.')[1]
-            if decimal_part != '0':
-                formatted_duration += '.' + decimal_part
-
-        else:
-            formatted_duration = f"{duration:05d}"
-
-        duration = round(duration)
-        duration = str(duration).strip("0").strip(".")
-        item.setCheckState(0, Qt.Unchecked)
-        item.setData(0, Qt.UserRole, video)
-        item.setData(1, Qt.UserRole, author)
-        item.setText(2, duration)  # Set the text as the zero-padded number or float
-        item.setData(2, Qt.UserRole, formatted_duration)  # Store the original duration for sorting
-        item.setData(3, Qt.UserRole, thumbnail)
-
-    def download_tree_widget(self):
-        """
-        Starts the thread for downloading the tree widget (All selected videos)
-        """
-        treeWidget = self.ui.treeWidget
-        download_tree_thread = QTreeWidgetDownloadThread(treeWidget=treeWidget, quality=self.quality,
-                                                         semaphore=self.semaphore, threading_mode=self.threading_mode)
-        download_tree_thread.signals.progress_video.connect(self.tree_widget_receive_video)
-        download_tree_thread.signals.start_undefined_range.connect(self.start_undefined_range)
-        download_tree_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
-        self.threadpool.start(download_tree_thread)
-        self.threadpool.releaseThread()
-
-    def clear_tree_widget(self):
-        """
-        This (like the name says) clears the tree widget.
-        """
-        if not self.ui.main_checkbox_tree_do_not_clear_videos.isChecked():
-            self.ui.treeWidget.clear()
-
-    def reindex(self):
-        ascending = self.ui.treeWidget.header().sortIndicatorOrder() == Qt.AscendingOrder
-        count = self.ui.treeWidget.topLevelItemCount()
-        for i in range(count):
-            if ascending:
-                # When sorting in ascending order, start indexes at 1 and increment
-                new_index = i + 1
-            else:
-                # When sorting in descending order, start indexes at the count and decrement
-                new_index = count - i
-
-            item = self.ui.treeWidget.topLevelItem(i)
-            current_text = item.text(0)
-            original_title = current_text.split(') ', 1)[1] if ') ' in current_text else current_text
-            item.setText(0, f"{new_index}) {original_title}")
-
-    def progress_tree_widget(self, total, current):
-        """This tracks the progress of the tree widget data"""
-        self.ui.main_progressbar_total.setMaximum(total)
-        self.ui.main_progressbar_total.setValue(current)
-
-    def tree_widget_receive_video(self, video):
-        """
-        This emits the video. If the semaphore is released, this function is called, so that the next video can be
-        downloaded.
-        """
-        self.load_video(video)
-
-    def unselect_all_items(self):
-        """Unselects all items from the tree widget"""
-        root = self.ui.treeWidget.invisibleRootItem()
-        item_count = root.childCount()
-        for i in range(item_count):
-            item = root.child(i)
-            item.setCheckState(0, Qt.Unchecked)
-
-    def select_range_of_items(self):
-        # Create an instance of the UI form widget
-        self.widget = QWidget()
-        self.range_ui = Ui_PornFetchRangeSelector()
-        self.range_ui.setupUi(self.widget)
-        root = self.ui.treeWidget.invisibleRootItem()
-        item_count = root.childCount()
-        self.range_ui.spinbox_range_end.setMaximum(item_count)
-        self.range_ui.button_range_apply_index.clicked.connect(self.process_range_of_items_selection_index)
-        self.range_ui.button_range_apply_time.clicked.connect(self.process_range_of_items_selection_time)
-        self.range_ui.button_range_apply_author.clicked.connect(self.process_range_of_items_author)
-
-        # Show the new widget
-        self.widget.show()
-
-    def select_all_items(self):
-        """Selects all items from the tree widget"""
-        root = self.ui.treeWidget.invisibleRootItem()
-        item_count = root.childCount()
-        for i in range(item_count):
-            item = root.child(i)
-            item.setCheckState(0, Qt.Checked)
-
-        try:
-            self.widget.deleteLater()
-
-        except AttributeError:
-            pass # This is expected when using the Keyboard shortcuts
-
-    def process_range_of_items_selection_index(self):
-        start = self.range_ui.spinbox_range_start.value()
-        end = self.range_ui.spinbox_range_end.value()
-        root = self.ui.treeWidget.invisibleRootItem()
-
-        # Adjust start and end indices to match tree widget indexing
-        start -= 1
-        end -= 1
-
-        for i in range(start, end + 1):  # Adjust the range to be inclusive of the end
-            item = root.child(i)
-            item.setCheckState(0, Qt.Checked)
-
-        self.widget.deleteLater()
-
-    def process_range_of_items_selection_time(self):
-        start_time = int(self.range_ui.lineedit_range_start.text())
-        end_time = int(self.range_ui.lineedit_range_end.text())
-        root = self.ui.treeWidget.invisibleRootItem()
-
-        # Loop through all items in the QTreeWidget
-        for i in range(root.childCount()):
-            item = root.child(i)
-
-            # Retrieve the duration from the item, assuming it's stored as an integer in UserRole
-            duration = int(item.data(2, Qt.UserRole))
-
-            # Check if the duration is within the specified start and end times
-            if start_time <= duration <= end_time:
-                item.setCheckState(0, Qt.Checked)
-
-        # Assuming this is meant to close the widget, but it might be better to handle this outside this function
-        self.widget.deleteLater()
-
-    def process_range_of_items_author(self):
-        name = str(self.range_ui.lineedit_range_author.text())
-        root = self.ui.treeWidget.invisibleRootItem()
-
-        for i in range(root.childCount()):
-            item = root.child(i)
-            author = str(item.data(1, Qt.UserRole))
-            if str(author).lower() == str(name).lower():
-                item.setCheckState(0, Qt.Checked)
-
-        self.widget.deleteLater()
 
     def start_single_video(self):
         """
@@ -1721,24 +1506,12 @@ class Porn_Fetch(QWidget):
         implemented this feature into the tree widget and I don't want to write code 2 times
         """
         url = self.ui.download_lineedit_url.text()
-        one_time_iterator = []
-
-        try:
-            video = check_video(url=url, delay=self.delay)
-
-        except errors.PremiumVideo:
-            ui_popup(self.tr("The video can not be downloaded, because it's a PornHub Premium video"))
-            return
-
-        except errors.RegionBlocked:
-            ui_popup(self.tr("The video can not be downloaded, because it's either blocked in your region, or set private by the uploader"))
-            return
-
-        one_time_iterator.append(video)
-        self.add_to_tree_widget_thread(iterator=one_time_iterator)
+        self.add_to_tree_widget_thread(iterator=url)
 
     def start_model(self, url=None):
         """Starts the model downloads"""
+        # TODO: Needs to be refactored using dictionary comprehensions and the shared_functions.py file
+
         if isinstance(url, str):
             model = url
 
@@ -1777,6 +1550,9 @@ class Porn_Fetch(QWidget):
         elif xvideos_pattern.match(model):
             videos = xv_Client().get_pornstar(url=model).videos
 
+        else:
+            pass # TODO
+
         self.add_to_tree_widget_thread(videos)
 
     def start_playlist(self):
@@ -1785,28 +1561,283 @@ class Porn_Fetch(QWidget):
         videos = playlist.sample()
         self.add_to_tree_widget_thread(iterator=videos)
 
-    def load_video(self, url):
-        """This starts the thread to load a video"""
+    def open_file_dialog(self):
+        """This opens and processes urls in the file"""
+        dialog = QFileDialog()
+        file, types = dialog.getOpenFileName()
+        self.ui.download_lineedit_file.setText(file)
+        self.start_file_processing()
 
-        self.video_loader_thread = VideoLoader(url=url, output_path=self.output_path, quality=self.quality,
-                                               directory_system=self.directory_system, delay=self.delay,
-                                               threading_mode=self.threading_mode)
-        # Connect signals to your slots
-        self.video_loader_thread.signals.loaded.connect(self.on_video_loaded)
-        self.video_loader_thread.signals.error.connect(self.on_video_load_error)
-        self.threadpool.start(self.video_loader_thread)
+    def start_file_processing(self):
+        file = self.ui.download_lineedit_file.text()
+        self.url_thread = AddUrls(file, delay=self.delay)
+        self.url_thread.signals.total_progress.connect(self.update_total_progressbar)
+        self.url_thread.signals.url_iterators.connect(self.receive_url_result)
+        self.threadpool.start(self.url_thread)
+
+    def receive_url_result(self, iterator, model_iterator, search_iterator):
+        logger.debug(f"Received Video Iterator ({len(iterator)} videos)")
+        logger.debug(f"Received Model Iterator ({len(model_iterator)} urls)")
+        logger.debug(f"Received Search Iterator ({len(search_iterator)} keywords)")
+
+        logger.debug("Processing Videos...")
+        self.add_to_tree_widget_thread(iterator)
+        logger.debug("Processing Models...")
+        for url in model_iterator:
+            self.start_model(url)
+
+        logger.debug("Processing Search queries....")
+        for search in search_iterator:
+            query = search.get("query")
+            website = search.get("website")
+
+            if website == "hqporner":
+                self.ui.download_radio_search_website_hqporner.setChecked(True)
+
+            elif website == "xvideos":
+                self.ui.download_radio_search_website_xvideos.setChecked(True)
+
+            elif website == "pornhub":
+                self.ui.download_radio_search_website_pornhub.setChecked(True)
+
+            elif website == "xnxx":
+                self.ui.download_radio_search_website_xnxx.setChecked(True)
+
+            elif website == "eporner":
+                self.ui.download_radio_search_website_eporner.setChecked(True)
+
+            else:
+                ui_popup(self.tr(f"Information: The Website {website} specified in the URL file isn't valid.", None))
+                return
+
+            self.ui.download_lineedit_search_query.setText(query)
+            self.search()
+
+        self.ui.download_lineedit_search_query.clear()
+
+    def search(self):
+        """Does a simple search for videos without filters on selected website"""
+        query = self.ui.download_lineedit_search_query.text()
+
+        if self.ui.download_radio_search_website_pornhub.isChecked():
+            videos = Client().search(query)
+
+        elif self.ui.download_radio_search_website_xvideos.isChecked():
+            videos = xv_Client.search(query)
+
+        elif self.ui.download_radio_search_website_hqporner.isChecked():
+            videos = hq_Client.search_videos(query)
+
+        elif self.ui.download_radio_search_website_eporner.isChecked():
+            videos = ep_Client().search_videos(query, sorting_gay="", sorting_order="", sorting_low_quality="", page=1,
+                                               per_page=self.search_limit, enable_html_scraping=True) # TODO - Need to refactor Eporner API
+
+        elif self.ui.download_radio_search_website_xnxx.isChecked():
+            videos = xn_Client().search(query).videos
+
+        else:
+            pass # TODO
+
+        self.add_to_tree_widget_thread(videos)
+
+    def add_to_tree_widget_thread(self, iterator):
+        """
+        The add_to_tree_widget function is basically the whole magic behind Porn Fetch. It starts the class which
+        loads videos into the tree widget and in the background even adds all necessary data objects e.g.,
+        title, author, duration, etc. to it, so that it can be processed and used later.
+        This makes it possible to only use one network request and use the videos across entire Porn Fetch
+        """
+        search_limit = self.search_limit
+        data_mode = 0 if self.ui.main_radio_tree_show_title.isChecked() else 1
+        is_reverse = self.ui.main_checkbox_tree_show_videos_reversed.isChecked()
+        is_checked = self.ui.main_checkbox_tree_do_not_clear_videos.isChecked()
+
+        self.thread = AddToTreeWidget(iterator=iterator, search_limit=search_limit, data_mode=data_mode,
+                                      is_reverse=is_reverse, is_checked=is_checked, last_index=self.last_index,
+                                      stop_flag=stop_flag, directory_system=self.directory_system,
+                                      delay=self.delay, output_path=self.output_path, url=iterator)
+        self.thread.signals.text_data.connect(self.add_to_tree_widget_signal)
+        self.thread.signals.progress.connect(self.progress_tree_widget)
+        self.thread.signals.clear_signal.connect(self.clear_tree_widget)
+        self.thread.signals.start_undefined_range.connect(self.start_undefined_range)
+        self.thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
+        self.thread.signals.error_signal.connect(self.on_video_load_error)
+        self.threadpool.start(self.thread)
+
+    def add_to_tree_widget_signal(self, data: dict):
+        """
+        This is the signal for the Tree Widget thread. It receives the data and applies it to the GUI
+        """
+        self.last_index += 1
+        title = data.get("title")
+        author = data.get("author")
+        length = parse_length(data.get("length"))
+        index = data.get("index")
+        video = data.get("video")
 
 
-    def on_video_loaded(self, video):
-        # Handle the loaded video and start download
-        self.stop_undefined_range()
-        self.process_video_thread(video=video)
+        item = QTreeWidgetItem(self.ui.treeWidget)
+        item.setText(0, f"{index}) {title}")
+        item.setText(1, author)
 
-    def on_video_load_error(self, error_message):
-        # Handle errors and show a message to user
-        logger.debug(f"Error loading video: {error_message}")
-        ui_popup(self.tr( f"Some error occurred in loading a video. Please report this: {error_message}",
-                                       None))
+        # Determine how many zeros are needed based on the type and value of duration
+        if isinstance(length, float):
+            formatted_duration = f"{int(length):05d}"
+            # Handle the decimal part separately if needed
+            decimal_part = str(length).split('.')[1]
+            if decimal_part != '0':
+                formatted_duration += '.' + decimal_part
+
+        else:
+            formatted_duration = f"{length:05d}"
+
+        duration = round(length)
+        duration = str(duration).strip("0").strip(".")
+        item.setCheckState(0, Qt.CheckState.Unchecked)
+        item.setData(0, Qt.ItemDataRole.UserRole, video)
+        item.setData(1, Qt.ItemDataRole.UserRole, data)
+        item.setText(2, duration)  # Set the text as the zero-padded number or float
+        item.setData(2, Qt.ItemDataRole.UserRole, formatted_duration)  # Store the original duration for sorting
+
+    def download_tree_widget(self):
+        """
+        Starts the thread for downloading the tree widget (All selected videos)
+        """
+        treeWidget = self.ui.treeWidget
+        download_tree_thread = QTreeWidgetDownloadThread(treeWidget=treeWidget, quality=self.quality,
+                                                         semaphore=self.semaphore, threading_mode=self.threading_mode)
+        download_tree_thread.signals.progress_video.connect(self.tree_widget_receive_video)
+        download_tree_thread.signals.start_undefined_range.connect(self.start_undefined_range)
+        download_tree_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
+        self.threadpool.start(download_tree_thread)
+        self.threadpool.releaseThread()
+
+    def clear_tree_widget(self):
+        """
+        This (like the name says) clears the tree widget.
+        """
+        if not self.ui.main_checkbox_tree_do_not_clear_videos.isChecked():
+            self.ui.treeWidget.clear()
+
+    def download_completed(self, data):
+        """If a video is downloaded, the semaphore is released"""
+        logger.debug("Download Completed!")
+        global total_downloaded_videos
+        total_downloaded_videos += 1
+        self.ui.progress_lineedit_download_info.setText(f"Downloaded: {total_downloaded_videos} video(s) this session.")
+        self.ui.main_progressbar_total.setMaximum(100)
+        self.ui.progressbar_hqporner.setValue(0)
+        self.ui.progressbar_eporner.setValue(0)
+
+        self.video_converting_thread = ProcessVideoThread(write_tags_=self.write_metadata, format=self.format, data=data) # TODO
+        self.video_converting_thread.signals.ffmpeg_progress.connect(self.update_converting)
+        self.threadpool.start(self.video_converting_thread)
+
+
+
+        self.semaphore.release()
+
+
+    def reindex(self):
+        ascending = self.ui.treeWidget.header().sortIndicatorOrder() == Qt.SortOrder.AscendingOrder
+        count = self.ui.treeWidget.topLevelItemCount()
+        for i in range(count):
+            if ascending:
+                # When sorting in ascending order, start indexes at 1 and increment
+                new_index = i + 1
+            else:
+                # When sorting in descending order, start indexes at the count and decrement
+                new_index = count - i
+
+            item = self.ui.treeWidget.topLevelItem(i)
+            current_text = item.text(0)
+            original_title = current_text.split(') ', 1)[1] if ') ' in current_text else current_text
+            item.setText(0, f"{new_index}) {original_title}")
+
+
+    """These functions are related to selecting video items within the tree widget"""
+    def unselect_all_items(self):
+        """Unselects all items from the tree widget"""
+        root = self.ui.treeWidget.invisibleRootItem()
+        item_count = root.childCount()
+        for i in range(item_count):
+            item = root.child(i)
+            item.setCheckState(0, Qt.CheckState.Unchecked)
+
+    def select_range_of_items(self):
+        # Create an instance of the UI form widget
+        self.widget = QWidget()
+        self.range_ui = Ui_PornFetchRangeSelector()
+        self.range_ui.setupUi(self.widget)
+        root = self.ui.treeWidget.invisibleRootItem()
+        item_count = root.childCount()
+        self.range_ui.spinbox_range_end.setMaximum(item_count)
+        self.range_ui.button_range_apply_index.clicked.connect(self.process_range_of_items_selection_index)
+        self.range_ui.button_range_apply_time.clicked.connect(self.process_range_of_items_selection_time)
+        self.range_ui.button_range_apply_author.clicked.connect(self.process_range_of_items_author)
+
+        # Show the new widget
+        self.widget.show()
+
+    def select_all_items(self):
+        """Selects all items from the tree widget"""
+        root = self.ui.treeWidget.invisibleRootItem()
+        item_count = root.childCount()
+        for i in range(item_count):
+            item = root.child(i)
+            item.setCheckState(0, Qt.CheckState.Checked)
+
+        try:
+            self.widget.deleteLater()
+
+        except AttributeError:
+            pass # This is expected when using the Keyboard shortcuts
+
+    def process_range_of_items_selection_index(self):
+        start = self.range_ui.spinbox_range_start.value()
+        end = self.range_ui.spinbox_range_end.value()
+        root = self.ui.treeWidget.invisibleRootItem()
+
+        # Adjust start and end indices to match tree widget indexing
+        start -= 1
+        end -= 1
+
+        for i in range(start, end + 1):  # Adjust the range to be inclusive of the end
+            item = root.child(i)
+            item.setCheckState(0, Qt.CheckState.Checked)
+
+        self.widget.deleteLater()
+
+    def process_range_of_items_selection_time(self):
+        start_time = int(self.range_ui.lineedit_range_start.text())
+        end_time = int(self.range_ui.lineedit_range_end.text())
+        root = self.ui.treeWidget.invisibleRootItem()
+
+        # Loop through all items in the QTreeWidget
+        for i in range(root.childCount()):
+            item = root.child(i)
+
+            # Retrieve the duration from the item, assuming it's stored as an integer in UserRole
+            duration = int(item.data(2, Qt.ItemDataRole.UserRole))
+
+            # Check if the duration is within the specified start and end times
+            if start_time <= duration <= end_time:
+                item.setCheckState(0, Qt.CheckState.Checked)
+
+        # Assuming this is meant to close the widget, but it might be better to handle this outside this function
+        self.widget.deleteLater()
+
+    def process_range_of_items_author(self):
+        name = str(self.range_ui.lineedit_range_author.text())
+        root = self.ui.treeWidget.invisibleRootItem()
+
+        for i in range(root.childCount()):
+            item = root.child(i)
+            author = str(item.data(1, Qt.ItemDataRole.UserRole))
+            if str(author).lower() == str(name).lower():
+                item.setCheckState(0, Qt.CheckState.Checked)
+
+        self.widget.deleteLater()
 
     def set_thumbnail(self, item, column):
         """Set the thumbnail for the selected video."""
@@ -1822,7 +1853,7 @@ class Porn_Fetch(QWidget):
                                                                    disambiguation=None))
             return
 
-        thumbnail = item.data(3, Qt.UserRole)  # Retrieve the thumbnail URL
+        thumbnail = item.data(3, Qt.ItemDataRole.UserRole)  # Retrieve the thumbnail URL
 
         if not thumbnail:
             self.ui.main_label_tree_show_thumbnail.setText(
@@ -1838,8 +1869,8 @@ class Porn_Fetch(QWidget):
                 scaled_pixmap = pixmap.scaled(
                     self.ui.main_label_tree_show_thumbnail.width(),
                     self.ui.main_label_tree_show_thumbnail.height(),
-                    Qt.KeepAspectRatio,
-                    Qt.SmoothTransformation
+                    Qt.AspectRatioMode.KeepAspectRatio,
+                    Qt.TransformationMode.SmoothTransformation
                 )
                 self.ui.main_label_tree_show_thumbnail.setPixmap(scaled_pixmap)
             except Exception as e:
@@ -1908,24 +1939,6 @@ class Porn_Fetch(QWidget):
         self.ui.progressbar_spankbang.setValue(value)
 
     # ADAPTION
-    def download_completed(self, data):
-        """If a video is downloaded, the semaphore is released"""
-        logger.debug("Download Completed!")
-        global total_downloaded_videos
-        total_downloaded_videos += 1
-        self.ui.progress_lineedit_download_info.setText(f"Downloaded: {total_downloaded_videos} video(s) this session.")
-        self.ui.main_progressbar_total.setMaximum(100)
-        self.ui.progressbar_hqporner.setValue(0)
-        self.ui.progressbar_eporner.setValue(0)
-
-        self.video_converting_thread = ProcessVideoThread(write_tags_=self.write_metadata, format=self.format, data=data)
-        self.video_converting_thread.signals.ffmpeg_progress.connect(self.update_converting)
-        self.threadpool.start(self.video_converting_thread)
-
-
-
-        self.semaphore.release()
-
 
 
 
@@ -1950,60 +1963,6 @@ class Porn_Fetch(QWidget):
         self.ui.settings_lineedit_output_path.setText(str(path))
         self.output_path = path
         self.save_user_settings()
-
-    def open_file_dialog(self):
-        """This opens and processes urls in the file"""
-        dialog = QFileDialog()
-        file, types = dialog.getOpenFileName()
-        self.ui.download_lineedit_file.setText(file)
-        self.start_file_processing()
-
-    def start_file_processing(self):
-        file = self.ui.download_lineedit_file.text()
-        self.url_thread = AddUrls(file, delay=self.delay)
-        self.url_thread.signals.total_progress.connect(self.update_total_progressbar)
-        self.url_thread.signals.url_iterators.connect(self.receive_url_result)
-        self.threadpool.start(self.url_thread)
-
-    def receive_url_result(self, iterator, model_iterator, search_iterator):
-        logger.debug(f"Received Video Iterator ({len(iterator)} videos)")
-        logger.debug(f"Received Model Iterator ({len(model_iterator)} urls)")
-        logger.debug(f"Received Search Iterator ({len(search_iterator)} keywords)")
-
-        logger.debug("Processing Videos...")
-        self.add_to_tree_widget_thread(iterator)
-        logger.debug("Processing Models...")
-        for url in model_iterator:
-            self.start_model(url)
-
-        logger.debug("Processing Search queries....")
-        for search in search_iterator:
-            query = search.get("query")
-            website = search.get("website")
-
-            if website == "hqporner":
-                self.ui.download_radio_search_website_hqporner.setChecked(True)
-
-            elif website == "xvideos":
-                self.ui.download_radio_search_website_xvideos.setChecked(True)
-
-            elif website == "pornhub":
-                self.ui.download_radio_search_website_pornhub.setChecked(True)
-
-            elif website == "xnxx":
-                self.ui.download_radio_search_website_xnxx.setChecked(True)
-
-            elif website == "eporner":
-                self.ui.download_radio_search_website_eporner.setChecked(True)
-
-            else:
-                ui_popup(self.tr(f"Information: The Website {website} specified in the URL file isn't valid.", None))
-                return
-
-            self.ui.download_lineedit_search_query.setText(query)
-            self.basic_search()
-
-        self.ui.download_lineedit_search_query.clear()
 
     def login(self):
         """
@@ -2053,7 +2012,6 @@ class Porn_Fetch(QWidget):
         self.ui.login_button_get_watched_videos.setStyleSheet(stylesheet)
         self.ui.login_button_get_recommended_videos.setStyleSheet(stylesheet)
 
-
     def get_watched_videos(self):
         """Returns the videos watched by the user"""
         if self.check_login():
@@ -2076,27 +2034,6 @@ class Porn_Fetch(QWidget):
     The following functions are related to the search functionality
     """
 
-    def search(self):
-        """Does a simple search for videos without filters on selected website"""
-        query = self.ui.download_lineedit_search_query.text()
-
-        if self.ui.download_radio_search_website_pornhub.isChecked():
-            videos = Client().search(query)
-
-        elif self.ui.download_radio_search_website_xvideos.isChecked():
-            videos = xv_Client.search(query)
-
-        elif self.ui.download_radio_search_website_hqporner.isChecked():
-            videos = hq_Client.search_videos(query)
-
-        elif self.ui.download_radio_search_website_eporner.isChecked():
-            videos = ep_Client().search_videos(query, sorting_gay="", sorting_order="", sorting_low_quality="", page=1,
-                                               per_page=self.search_limit, enable_html_scraping=True)
-
-        elif self.ui.download_radio_search_website_xnxx.isChecked():
-            videos = xn_Client().search(query).videos
-
-        self.add_to_tree_widget_thread(videos)
 
     def get_top_porn_hqporner(self):
         if self.ui.tools_radio_top_porn_week.isChecked():
@@ -2162,7 +2099,6 @@ class Porn_Fetch(QWidget):
     def get_random_video(self):
         """Gets a random video from HQPorner"""
         video = hq_Client().get_random_video()
-        print(video.title)
         some_list = [video]
         self.add_to_tree_widget_thread(some_list)
 
@@ -2181,7 +2117,7 @@ class Porn_Fetch(QWidget):
         else:
             self.ui.main_textbrowser_credits.setOpenExternalLinks(True)
             file = QFile(":/credits/README/CREDITS.md")
-            file.open(QFile.ReadOnly | QFile.Text)
+            file.open(QFile.OpenModeFlag.ReadOnly | QFile.OpenModeFlag.Text)
             stream = QTextStream(file)
             self.ui.main_textbrowser_credits.setHtml(markdown.markdown(stream.readAll()))
 
@@ -2350,7 +2286,7 @@ def main():
     app.installTranslator(translator)
 
     file = QFile(":/style/stylesheets/stylesheet.qss")
-    file.open(QFile.ReadOnly | QFile.Text)
+    file.open(QFile.OpenModeFlag.ReadOnly | QFile.OpenModeFlag.Text)
     stream = QTextStream(file)
     app.setStyleSheet(stream.readAll())
 
@@ -2389,7 +2325,7 @@ if __name__ == "__main__":
     def load_stylesheet(path):
         """Load stylesheet from a given path with explicit open and close."""
         file = QFile(path)
-        if not file.open(QFile.ReadOnly | QFile.Text):
+        if not file.open(QFile.OpenModeFlag.ReadOnly | QFile.OpenModeFlag.Text):
             logger.debug(f"Failed to open {path}")
             return ""
         stylesheet = QTextStream(file).readAll()
