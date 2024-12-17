@@ -1,5 +1,5 @@
 <div align = center>
-<img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/V3.0/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
+<img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
 <br>
 <h1 align="center">Porn Fetch - The Ultimate Open-Source Porn(Hub) Downloader</h1>
 <a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui_windows.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui_windows.yml/badge.svg" alt="Build GUI Windows Status"/></a>
