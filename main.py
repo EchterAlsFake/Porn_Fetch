@@ -73,6 +73,13 @@ total_downloaded_videos = 0 # All videos that actually successfully downloaded
 total_downloaded_videos_attempt = 0 # All videos the user tries to download
 logger = setup_logging()
 
+# TODO: Fix FFmpeg path
+# TODO: Fix FFmpeg install signals
+# TODO: Implement error signals for all threading classes
+# TODO: Implement data dictionary and basic objects for all threading classes
+# TODO: Rework the get_model function using list comprehensions
+
+
 
 class Signals(QObject):
     """Signals for the Download class"""
@@ -90,15 +97,15 @@ class Signals(QObject):
     ffmpeg_converting_progress = Signal(int, int) # Video converting progress for FFmpeg
 
     # Animations
-    start_undefined_range = Signal(object) # Starts the loading animation progressbar
-    stop_undefined_range = Signal(object) # Stops the loading animation progressbar
+    start_undefined_range = Signal() # Starts the loading animation progressbar
+    stop_undefined_range = Signal() # Stops the loading animation progressbar
 
     # Operations / Reportings
     install_finished = Signal(object) # Reports if the Porn Fetch installation was finished
     internet_check = Signal(object) # Reports if the internet checks were successful
-    result = Signal(object) # Reports the result of the internet checks if something went wrong
-    error_signal = Signal(object) # A general error signal, which will show errors using a Pop-up
-    clear_tree_widget_signal = Signal(object) # A signal to clear the tree widget
+    result = Signal(dict) # Reports the result of the internet checks if something went wrong
+    error_signal = Signal(str) # A general error signal, which will show errors using a Pop-up
+    clear_tree_widget_signal = Signal() # A signal to clear the tree widget
     text_data_to_tree_widget = Signal(dict) # Sends the text data in the form of a dictionary to the main class
     download_completed = Signal(object) # Reports a successfully downloaded video
     progress_send_video = Signal(object) # Sends the selected video objects from the tree widget to the main class
@@ -586,6 +593,8 @@ class AddToTreeWidget(QRunnable):
         else:
             start = 1
             self.last_index = start
+        print(type(self.iterator))
+        print(f"Iterator: {self.iterator}")
 
         try:
             logger.debug(f"Result Limit: {str(self.search_limit)}")
@@ -601,8 +610,10 @@ class AddToTreeWidget(QRunnable):
                 videos = islice(self.iterator, self.search_limit)
 
             self.signals.stop_undefined_range.emit() # Stop the loading animation
+            print(type(videos))
 
             for i, video in enumerate(videos, start=start):
+                print(f"Running for index: {i}")
                 if self.stop_flag.is_set():
                     return  # Stop processing if user pressed the stop button
 
@@ -620,6 +631,7 @@ class AddToTreeWidget(QRunnable):
                         self.signals.progress_add_to_tree_widget.emit(self.search_limit, i)
                         self.signals.text_data_to_tree_widget.emit(text_data)
                         try_attempt = False  # Processing succeeded
+                        print("Set try attempt to false!")
 
                     except errors.RegexError as e:
                         logger.error(f"Regex error: {e}")
@@ -998,6 +1010,7 @@ class PornFetch(QWidget):
         self.client = None
         self.downloader = None
         self.directory_system = None
+        self.ffmpeg_path = None
 
         self.last_index = 0 # Keeps track of the last index of videos added to the tree widget
         self.threadpool = QThreadPool()
@@ -1501,7 +1514,9 @@ class PornFetch(QWidget):
         implemented this feature into the tree widget and I don't want to write code 2 times
         """
         url = self.ui.download_lineedit_url.text()
-        self.add_to_tree_widget_thread(iterator=url)
+        video = check_video(url)
+        list_ = [video]
+        self.add_to_tree_widget_thread(iterator=list_)
 
     def start_model(self, url=None):
         """Starts the model downloads"""
@@ -2183,7 +2198,7 @@ This warning won't be shown again.
             else:
                 # If ffmpeg binary is found in the current directory, set it as the ffmpeg path
                 ffmpeg_path = os.path.abspath(ffmpeg_binary)
-                # TODO
+
         else:
             # If ffmpeg is found in system PATH, use it directly
             ffmpeg_path = shutil.which("ffmpeg")
