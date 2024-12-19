@@ -33,6 +33,7 @@ The following are the sections and options for the configuration file. Please do
 as they are indeed needed for the main applications!
 """
 
+# TODO: Implement logging
 sections = ["Setup", "Performance", "PostProcessing", "Video", "UI"]
 
 options_setup = ["license_accepted", "install", "update_checks", "internet_checks", "anonymous_mode", "tor"]
@@ -115,7 +116,7 @@ def send_error_log(message):
 
 def check_video(url, is_url=True, delay=False):
     if is_url:
-
+        print(type(url))
         if hqporner_pattern.search(str(url)):
             return hq_Client().get_video(url)
 
@@ -287,14 +288,14 @@ def load_video_attributes(video, data_mode):
     return data
 
 
-def write_tags(path, data):
+def write_tags(path, data: dict):
     comment = "Downloaded with Porn Fetch (GPLv3)"
     genre = "Porn"
 
-    title = data[0]
-    artist = data[1]
-    date = data[3]
-    thumbnail = data[5]
+    title = data.get("title")
+    artist = data.get("author")
+    date = data.get("publish_date")
+    thumbnail = data.get("thumbnail")
     logging.debug("Tags [1/3]")
 
     audio = MP4(path)

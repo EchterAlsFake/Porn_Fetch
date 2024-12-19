@@ -515,11 +515,11 @@ class AddToTreeWidget(QRunnable):
         self.delay = delay
         self.output_path = output_path
         self.directory_system = directory_system
-        self.url = url
 
-    def process_video(self, index):
-        video = check_video(self.url, delay=self.delay)
-
+    def process_video(self, video, index):
+        print(f"Requesting processing of video: {video.url}")
+        video = check_video(video, delay=self.delay)
+        print(type(video))
         try:
             data = load_video_attributes(video, self.data_mode)
 
@@ -624,7 +624,7 @@ class AddToTreeWidget(QRunnable):
                             break  # Respect search limit
 
 
-                        text_data = self.process_video(i)
+                        text_data = self.process_video(video, i) # Passes video and index object / int
                         if text_data is False:
                             break  # Skip to the next video if processing failed
 
@@ -656,7 +656,7 @@ class AddToTreeWidget(QRunnable):
 class DownloadThread(QRunnable):
     """Refactored threading class to download videos with improved performance and logic."""
 
-    def __init__(self, video, quality, output_path, threading_mode, workers, timeout, skip_existing_files):
+    def __init__(self, video, quality, output_path, threading_mode, workers, timeout, skip_existing_files, data):
         super().__init__()
         self.ffmpeg = None
         self.video = video
@@ -668,6 +668,7 @@ class DownloadThread(QRunnable):
         self.skip_existing_files = skip_existing_files
         self.workers = int(workers)
         self.timeout = int(timeout)
+        self.data = data
         self.video_progress = {}
         self.last_update_time = 0
         self.progress_signals = {
@@ -803,7 +804,7 @@ class DownloadThread(QRunnable):
                 # ... other video types ...
 
         finally:
-            self.signals.download_completed.emit()
+            self.signals.download_completed.emit(self.data)
 
 
 class PostProcessVideoThread(QRunnable):
@@ -824,25 +825,33 @@ class PostProcessVideoThread(QRunnable):
 
 
     def run(self):
-        os.rename(f"{self.path}", f"{self.path}_.tmp")
-        logger.debug(f"FFMPEG PATH: {self.ffmpeg_path}")
+        if self.ffmpeg_path is None:
+            logger.warning("FFmpeg couldn't be found during initialization. Video post processing will be skipped!")
+            return
 
-        if self.format == "mp4":
-            cmd = [self.ffmpeg_path, "-i", f"{self.path}_.tmp", "-c", "copy", self.path]
+        try:
+            os.rename(f"{self.path}", f"{self.path}_.tmp")
+            logger.debug(f"FFMPEG PATH: {self.ffmpeg_path}")
 
-        else:
-            self.path = str(self.path).replace(".mp4", f"{self.format}")
-            cmd = [self.ffmpeg_path, '-i', f"{self.path}_.tmp", self.path]
+            if self.format == "mp4":
+                cmd = [self.ffmpeg_path, "-i", f"{self.path}_.tmp", "-c", "copy", self.path]
+
+            else:
+                self.path = str(self.path).replace(".mp4", f"{self.format}")
+                cmd = [self.ffmpeg_path, '-i', f"{self.path}_.tmp", self.path]
 
 
-        ff = FfmpegProgress(cmd)
-        for progress in ff.run_command_with_progress():
-            self.signals.ffmpeg_converting_progress.emit(round(progress), 100)
+            ff = FfmpegProgress(cmd)
+            for progress in ff.run_command_with_progress():
+                self.signals.ffmpeg_converting_progress.emit(round(progress), 100)
 
-        os.remove(f"{self.path}_.tmp")
+            os.remove(f"{self.path}_.tmp")
 
-        if self.write_tags_:
-            write_tags(path=self.path, data=self.data)
+            if self.write_tags_:
+                write_tags(path=self.path, data=self.data)
+
+        except Exception as e:
+            self.signals.error_signal.emit(e)
 
 
 class QTreeWidgetDownloadThread(QRunnable):
@@ -859,12 +868,14 @@ class QTreeWidgetDownloadThread(QRunnable):
     def run(self):
         self.signals.start_undefined_range.emit()
         video_objects = []
+        data_objects = []
 
         for i in range(self.treeWidget.topLevelItemCount()):
             item = self.treeWidget.topLevelItem(i)
             check_state = item.checkState(0)
             if check_state == Qt.CheckState.Checked:
                 video_objects.append(item.data(0, Qt.ItemDataRole.UserRole))
+                data_objects.append(item.data(2, Qt.ItemDataRole.UserRole))
 
         if not self.threading_mode == "FFMPEG":
             logger.debug("Getting segments...")
@@ -890,12 +901,12 @@ class QTreeWidgetDownloadThread(QRunnable):
         downloaded_segments = 0
         self.signals.stop_undefined_range.emit()
 
-        for video in video_objects:
+        for idx, video in enumerate(video_objects):
             self.semaphore.acquire()  # Trying to start the download if the thread isn't locked
             if stop_flag.is_set():
                 return
             logger.debug("Semaphore Acquired")
-            self.signals.progress_send_video.emit(video)  # Now emits the video to the main class for further processing
+            self.signals.progress_send_video.emit(video, data_objects[idx])  # Now emits the video to the main class for further processing
 
 
 class AddUrls(QRunnable):
@@ -962,6 +973,8 @@ class PornFetch(QWidget):
         self.download_thread = None
         self.video_loader_thread = None
         self.video_converting_thread = None
+        self.post_processing_thread = None
+        self.download_tree_thread = None
 
         # Button groups
         self.group_threading_mode = None
@@ -1715,17 +1728,20 @@ class PornFetch(QWidget):
         Starts the thread for downloading the tree widget (All selected videos)
         """
         tree_widget = self.ui.treeWidget
-        download_tree_thread = QTreeWidgetDownloadThread(tree_widget=tree_widget, quality=self.quality,
+        self.download_tree_thread = QTreeWidgetDownloadThread(tree_widget=tree_widget, quality=self.quality,
                                                          semaphore=self.semaphore, threading_mode=self.threading_mode)
-        download_tree_thread.signals.start_undefined_range.connect(self.start_undefined_range)
-        download_tree_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
-        self.threadpool.start(download_tree_thread)
+        self.download_tree_thread.signals.start_undefined_range.connect(self.start_undefined_range)
+        self.download_tree_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
+        self.download_tree_thread.signals.progress_send_video.connect(self.process_video_thread)
+
+        self.threadpool.start(self.download_tree_thread)
 
     def process_video_thread(self, video, data):
         """Checks which of the three types of threading the user selected and handles them."""
         self.download_thread = DownloadThread(video=video, output_path=self.output_path, quality=self.quality,
                                               threading_mode=self.threading_mode, workers=self.workers,
-                                              timeout=self.timeout, skip_existing_files=self.skip_existing_files)
+                                              timeout=self.timeout, skip_existing_files=self.skip_existing_files,
+                                              data=data)
         self.download_thread.signals.progress_pornhub.connect(self.update_progressbar)
         self.download_thread.signals.total_progress.connect(self.update_total_progressbar)
         self.download_thread.signals.progress_hqporner.connect(self.update_progressbar_hqporner)
@@ -1750,8 +1766,22 @@ class PornFetch(QWidget):
         self.ui.progressbar_hqporner.setValue(0)
         self.ui.progressbar_eporner.setValue(0)
 
+        self.post_processing_thread = PostProcessVideoThread(ffmpeg_path=self.ffmpeg_path, write_tags_=self.write_metadata,
+                                                             data=data, video_format=self.format)
+        self.post_processing_thread.signals.ffmpeg_converting_progress.connect(self.update_converting)
+        self.post_processing_thread.signals.error_signal.connect(self.show_error)
+        self.threadpool.start(self.post_processing_thread)
+
         # TODO: Add the post processing into this method
         self.semaphore.release()
+
+    def show_error(self, error):
+        err = self.tr(f"""
+An error happened inside of Porn Fetch! 
+
+{error}""")
+        ui_popup(err)
+
 
 
 
@@ -2167,14 +2197,18 @@ Some websites couldn't be accessed. Here's a detailed report:
 
         if ffmpeg_path is None:
             # If ffmpeg is not in PATH, check the current directory for ffmpeg binaries
-            ffmpeg_binary = "ffmpeg.exe" if os.path.isfile("ffmpeg.exe") else "ffmpeg" if os.path.isfile(
+            ffmpeg_path = "ffmpeg.exe" if os.path.isfile("ffmpeg.exe") else "ffmpeg" if os.path.isfile(
                 "ffmpeg") else None
 
-            if ffmpeg_binary is None:
-                # If ffmpeg binaries are not found in the current directory, display warning and disable features
-                if self.conf.get("Performance", "ffmpeg_warning") == "true":
-                    ffmpeg_warning_message = self.tr(
-                        """
+            if not ffmpeg_path is None:
+                ffmpeg_path = os.path.abspath(ffmpeg_path)
+
+
+        if ffmpeg_path is None:
+            # If ffmpeg binaries are not found in the current directory, display warning and disable features
+            if self.conf.get("Performance", "ffmpeg_warning") == "true":
+                ffmpeg_warning_message = self.tr(
+                    """
 FFmpeg isn't installed on your system... Some features won't be available:
 
 - The FFmpeg threading mode
@@ -2187,24 +2221,20 @@ To automatically install ffmpeg, just head over to the settings and press the ma
 local PATH (e.g, through your linux package manager, or through the Windows PATH)
 
 This warning won't be shown again.
-                        """, None)
-                    ui_popup(ffmpeg_warning_message)
-                    self.conf.set("Performance", "ffmpeg_warning", "false")
-                    with open("config.ini", "w") as config_file:  # type: TextIOWrapper
-                        self.conf.write(config_file)
+                    """, None)
+                ui_popup(ffmpeg_warning_message)
+                self.conf.set("Performance", "ffmpeg_warning", "false")
+                with open("config.ini", "w") as config_file:  # type: TextIOWrapper
+                    self.conf.write(config_file)
 
-                self.ui.settings_radio_threading_mode_ffmpeg.setDisabled(True)
-
-            else:
-                # If ffmpeg binary is found in the current directory, set it as the ffmpeg path
-                ffmpeg_path = os.path.abspath(ffmpeg_binary)
+            self.ui.settings_radio_threading_mode_ffmpeg.setDisabled(True)
+            self.ffmpeg_path = None
 
         else:
-            # If ffmpeg is found in system PATH, use it directly
-            ffmpeg_path = shutil.which("ffmpeg")
             consts.FFMPEG_EXECUTABLE = ffmpeg_path
             bs_consts.FFMPEG_PATH = ffmpeg_path
-            logger.debug(f"FFMPEG: {ffmpeg_path}")
+            self.ffmpeg_path = ffmpeg_path
+            logger.debug(f"FFmpeg found at: {ffmpeg_path}")
 
     def download_ffmpeg(self):
         if sys.platform == "linux":
