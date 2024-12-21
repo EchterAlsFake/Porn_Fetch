@@ -73,13 +73,6 @@ total_downloaded_videos = 0 # All videos that actually successfully downloaded
 total_downloaded_videos_attempt = 0 # All videos the user tries to download
 logger = setup_logging()
 
-# TODO: Fix FFmpeg path
-# TODO: Fix FFmpeg install signals
-# TODO: Implement error signals for all threading classes
-# TODO: Implement data dictionary and basic objects for all threading classes
-# TODO: Rework the get_model function using list comprehensions
-
-
 
 class Signals(QObject):
     """Signals for the Download class"""
@@ -378,7 +371,7 @@ class InternetCheck(QRunnable):
                                                       " Are you at a university, school or in a public WiFi?"})
 
             except Exception as e:
-                self.website_results.update({website: f"Unknown Error: {e}"})
+                self.signals.error_signal.emit(e)
 
         self.signals.internet_check.emit(self.website_results)
 
@@ -404,6 +397,7 @@ class CheckUpdates(QRunnable):
 
         except Exception as e:
             logger.error(f"Could not check for updates. Please report the following error on GitHub: {e}")
+            self.signals.error_signal.emit(e)
 
 
 class FFMPEGDownload(QRunnable):
@@ -432,8 +426,9 @@ class FFMPEGDownload(QRunnable):
                         shutil.rmtree(f"ffmpeg-{search.group(1)}-amd64-static")
                         return True
 
-            except AttributeError:
-                pass
+            except AttributeError as e:
+                logger.error("Couldn't find the ffmpeg directories for cleaning them up! This may not be a serious issue, "
+                             f"please report it anyways: {e}")
 
         return False
 
@@ -497,7 +492,7 @@ class FFMPEGDownload(QRunnable):
         else:
             logger.error("The Regex for finding the FFmpeg version failed. Please report this on GitHub!, Thanks.")
 
-        # TODO
+        self.signals.ffmpeg_download_finished.emit()
 
 
 class AddToTreeWidget(QRunnable):
@@ -517,9 +512,9 @@ class AddToTreeWidget(QRunnable):
         self.directory_system = directory_system
 
     def process_video(self, video, index):
-        print(f"Requesting processing of video: {video.url}")
+        logger.debug(f"Requesting video processing of: {video.url}")
         video = check_video(video, delay=self.delay)
-        print(type(video))
+
         try:
             data = load_video_attributes(video, self.data_mode)
 
@@ -584,7 +579,6 @@ class AddToTreeWidget(QRunnable):
             self.signals.clear_tree_widget_signal.emit() # Clears the tree widget
 
         self.signals.start_undefined_range.emit() # Starts the progressbar, but with a loading animation
-
         if self.is_checked:
             index = self.last_index
             start = index
@@ -593,8 +587,6 @@ class AddToTreeWidget(QRunnable):
         else:
             start = 1
             self.last_index = start
-        print(type(self.iterator))
-        print(f"Iterator: {self.iterator}")
 
         try:
             logger.debug(f"Result Limit: {str(self.search_limit)}")
@@ -966,7 +958,6 @@ class PornFetch(QWidget):
 
         # Threads
         self.install_thread = None
-        self.thread = None
         self.internet_check_thread = None
         self.update_thread = None
         self.url_thread = None
@@ -975,6 +966,7 @@ class PornFetch(QWidget):
         self.video_converting_thread = None
         self.post_processing_thread = None
         self.download_tree_thread = None
+        self.add_to_tree_widget_thread_ = None
 
         # Button groups
         self.group_threading_mode = None
@@ -1533,8 +1525,6 @@ class PornFetch(QWidget):
 
     def start_model(self, url=None):
         """Starts the model downloads"""
-        # TODO: Needs to be refactored using dictionary comprehensions and the shared_functions.py file
-
         if isinstance(url, str):
             model = url
 
@@ -1643,7 +1633,7 @@ class PornFetch(QWidget):
     def search(self):
         """Does a simple search for videos without filters on selected website"""
         query = self.ui.download_lineedit_search_query.text()
-
+        logger.debug(f"Searching with query: {query}")
         if self.ui.download_radio_search_website_pornhub.isChecked():
             videos = Client().search(query)
 
@@ -1678,15 +1668,17 @@ class PornFetch(QWidget):
         is_reverse = self.ui.main_checkbox_tree_show_videos_reversed.isChecked()
         is_checked = self.ui.main_checkbox_tree_do_not_clear_videos.isChecked()
 
-        self.thread = AddToTreeWidget(iterator=iterator, search_limit=search_limit, data_mode=data_mode,
+        self.add_to_tree_widget_thread_ = AddToTreeWidget(iterator=iterator, search_limit=search_limit, data_mode=data_mode,
                                       is_reverse=is_reverse, is_checked=is_checked, last_index=self.last_index,
                                       directory_system=self.directory_system, delay=self.delay, url=iterator,
                                       output_path=self.output_path)
-        self.thread.signals.text_data_to_tree_widget.connect(self.add_to_tree_widget_signal)
-        self.thread.signals.clear_tree_widget_signal.connect(self.clear_tree_widget)
-        self.thread.signals.start_undefined_range.connect(self.start_undefined_range)
-        self.thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
+        self.add_to_tree_widget_thread_.signals.text_data_to_tree_widget.connect(self.add_to_tree_widget_signal)
+        self.add_to_tree_widget_thread_.signals.clear_tree_widget_signal.connect(self.clear_tree_widget)
+        self.add_to_tree_widget_thread_.signals.start_undefined_range.connect(self.start_undefined_range)
+        self.add_to_tree_widget_thread_.signals.stop_undefined_range.connect(self.stop_undefined_range)
+        self.add_to_tree_widget_thread_.signals.error_signal.connect(self.show_error)
         self.threadpool.start(self.thread)
+        logger.debug("Started the thread for adding videos...")
 
     def add_to_tree_widget_signal(self, data: dict):
         """
@@ -1733,6 +1725,7 @@ class PornFetch(QWidget):
         self.download_tree_thread.signals.start_undefined_range.connect(self.start_undefined_range)
         self.download_tree_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
         self.download_tree_thread.signals.progress_send_video.connect(self.process_video_thread)
+        self.download_tree_thread.signals.error_signal.connect(self.show_error)
 
         self.threadpool.start(self.download_tree_thread)
 
@@ -1750,6 +1743,7 @@ class PornFetch(QWidget):
         self.download_thread.signals.progress_xvideos.connect(self.update_progressbar_xvideos)
         self.download_thread.signals.progress_spankbang.connect(self.update_progressbar_spankbang)
         self.download_thread.signals.ffmpeg_converting_progress.connect(self.update_converting)
+        self.download_thread.signals.error_signal.connect(self.show_error)
         # ADAPTION
         self.download_thread.signals.download_completed.connect(self.download_completed)
         self.threadpool.start(self.download_thread)
@@ -1771,8 +1765,6 @@ class PornFetch(QWidget):
         self.post_processing_thread.signals.ffmpeg_converting_progress.connect(self.update_converting)
         self.post_processing_thread.signals.error_signal.connect(self.show_error)
         self.threadpool.start(self.post_processing_thread)
-
-        # TODO: Add the post processing into this method
         self.semaphore.release()
 
     def show_error(self, error):
@@ -1781,9 +1773,6 @@ An error happened inside of Porn Fetch!
 
 {error}""")
         ui_popup(err)
-
-
-
 
     def reindex(self):
         ascending = self.ui.treeWidget.header().sortIndicatorOrder() == Qt.SortOrder.AscendingOrder
@@ -1976,8 +1965,6 @@ An error happened inside of Porn Fetch!
 
     # ADAPTION
 
-
-
     def start_undefined_range(self):
         """This starts the undefined range (loading animation) of the total progressbar"""
         self.ui.main_progressbar_total.setRange(0, 0)
@@ -2167,12 +2154,14 @@ An error happened inside of Porn Fetch!
         """Checks for updates in a thread, so that the main UI isn't blocked, until update checks are done"""
         self.update_thread = CheckUpdates()
         self.update_thread.signals.result.connect(check_for_updates_result)
+        self.update_thread.signals.error_signal.connect(self.show_error)
         self.threadpool.start(self.update_thread)
 
     def check_internet(self):
         """Checks if the porn sites are accessible"""
         self.internet_check_thread = InternetCheck()
         self.internet_check_thread.signals.internet_check.connect(self.internet_check_result)
+        self.internet_check_thread.signals.error_signal.connect(self.show_error)
         self.threadpool.start(self.internet_check_thread)
 
     def internet_check_result(self, results: dict):
