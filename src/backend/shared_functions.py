@@ -116,7 +116,6 @@ def send_error_log(message):
 
 def check_video(url, is_url=True, delay=False):
     if is_url:
-        print(type(url))
         if hqporner_pattern.search(str(url)):
             return hq_Client().get_video(url)
 

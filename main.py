@@ -97,14 +97,14 @@ class Signals(QObject):
     install_finished = Signal(object) # Reports if the Porn Fetch installation was finished
     internet_check = Signal(object) # Reports if the internet checks were successful
     result = Signal(dict) # Reports the result of the internet checks if something went wrong
-    error_signal = Signal(str) # A general error signal, which will show errors using a Pop-up
+    error_signal = Signal(object) # A general error signal, which will show errors using a Pop-up
     clear_tree_widget_signal = Signal() # A signal to clear the tree widget
     text_data_to_tree_widget = Signal(dict) # Sends the text data in the form of a dictionary to the main class
     download_completed = Signal(object) # Reports a successfully downloaded video
     progress_send_video = Signal(object) # Sends the selected video objects from the tree widget to the main class
                                          # to download them
     url_iterators = Signal(object) # Sends the processed URLs from the file to Porn Fetch
-    ffmpeg_download_finished = Signal(object) # Reports the successful download / install of FFmpeg
+    ffmpeg_download_finished = Signal() # Reports the successful download / install of FFmpeg
 
 
 class License(QWidget):
@@ -427,8 +427,7 @@ class FFMPEGDownload(QRunnable):
                         return True
 
             except AttributeError as e:
-                logger.error("Couldn't find the ffmpeg directories for cleaning them up! This may not be a serious issue, "
-                             f"please report it anyways: {e}")
+                pass # This is expected and (99%) not an issue
 
         return False
 
@@ -602,10 +601,8 @@ class AddToTreeWidget(QRunnable):
                 videos = islice(self.iterator, self.search_limit)
 
             self.signals.stop_undefined_range.emit() # Stop the loading animation
-            print(type(videos))
 
             for i, video in enumerate(videos, start=start):
-                print(f"Running for index: {i}")
                 if self.stop_flag.is_set():
                     return  # Stop processing if user pressed the stop button
 
@@ -623,7 +620,6 @@ class AddToTreeWidget(QRunnable):
                         self.signals.progress_add_to_tree_widget.emit(self.search_limit, i)
                         self.signals.text_data_to_tree_widget.emit(text_data)
                         try_attempt = False  # Processing succeeded
-                        print("Set try attempt to false!")
 
                     except errors.RegexError as e:
                         logger.error(f"Regex error: {e}")
@@ -1645,7 +1641,7 @@ class PornFetch(QWidget):
 
         elif self.ui.download_radio_search_website_eporner.isChecked():
             videos = ep_Client().search_videos(query, sorting_gay="", sorting_order="", sorting_low_quality="", page=1,
-                                               per_page=self.search_limit, enable_html_scraping=True) # TODO - Need to refactor Eporner API
+                                               per_page=self.search_limit, enable_html_scraping=True)
 
         elif self.ui.download_radio_search_website_xnxx.isChecked():
             videos = xn_Client().search(query).videos
@@ -1677,7 +1673,7 @@ class PornFetch(QWidget):
         self.add_to_tree_widget_thread_.signals.start_undefined_range.connect(self.start_undefined_range)
         self.add_to_tree_widget_thread_.signals.stop_undefined_range.connect(self.stop_undefined_range)
         self.add_to_tree_widget_thread_.signals.error_signal.connect(self.show_error)
-        self.threadpool.start(self.thread)
+        self.threadpool.start(self.add_to_tree_widget_thread_)
         logger.debug("Started the thread for adding videos...")
 
     def add_to_tree_widget_signal(self, data: dict):

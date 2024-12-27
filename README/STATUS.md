@@ -43,14 +43,14 @@ by that instead of calculating the new total progress. This will require a rewor
 ## Code improvements and design updates
 - [x] Fix the Porn Fetch layout
 - [x] Rename **ALL** UI elements to be more consistent and easier to handle within code
-- [] Code refactoring
- - [] Remove useless code
+- [x] Code refactoring
+ - [x] Remove useless code
  - [] Improve code comments
 
 - [] Update translations
-- [] Make Porn Fetch's codebase more structured. In Germany, we say "Roter faden"
+- [x] Make Porn Fetch's codebase more structured. In Germany, we say "Roter faden"
 - [] Improving and hardening the tag writing function (with exceptions)
-- [] Generalizing the backend Porn APIs to work more equally to optimize Porn Fetch to write lesser lines of code
+- [x] Generalizing the backend Porn APIs to work more equally to optimize Porn Fetch to write lesser lines of code
 - [] Rework the entire progress reporting system (probably the hardest thing to do)
 - [] searching for ways to improve Android display reaction time for UI elements
 - [] Improve code for the part when a video finished downloading
