@@ -12,7 +12,6 @@ import src.frontend.resources  # Your IDE may tell you that this is an unused im
 
 from itertools import islice, chain
 from threading import Event
-from pathlib import Path
 from io import TextIOWrapper
 from hqporner_api.api import Sort as hq_Sort
 from phub import consts
@@ -101,7 +100,7 @@ class Signals(QObject):
     clear_tree_widget_signal = Signal() # A signal to clear the tree widget
     text_data_to_tree_widget = Signal(dict) # Sends the text data in the form of a dictionary to the main class
     download_completed = Signal(object) # Reports a successfully downloaded video
-    progress_send_video = Signal(object) # Sends the selected video objects from the tree widget to the main class
+    progress_send_video = Signal(object, object) # Sends the selected video objects from the tree widget to the main class
                                          # to download them
     url_iterators = Signal(object) # Sends the processed URLs from the file to Porn Fetch
     ffmpeg_download_finished = Signal() # Reports the successful download / install of FFmpeg
@@ -426,7 +425,7 @@ class FFMPEGDownload(QRunnable):
                         shutil.rmtree(f"ffmpeg-{search.group(1)}-amd64-static")
                         return True
 
-            except AttributeError as e:
+            except AttributeError:
                 pass # This is expected and (99%) not an issue
 
         return False
@@ -496,7 +495,7 @@ class FFMPEGDownload(QRunnable):
 
 class AddToTreeWidget(QRunnable):
     def __init__(self, iterator, search_limit, data_mode, is_reverse, is_checked, last_index, delay,
-                 output_path, directory_system, url):
+                 output_path, directory_system):
         super(AddToTreeWidget, self).__init__()
         self.signals = Signals() # Processing signals for progress and information
         self.iterator = iterator # The video iterator (Search or model object yk)
@@ -531,17 +530,16 @@ class AddToTreeWidget(QRunnable):
                 publish_date = data[4]
                 thumbnail = data[5]
 
-            output_path = Path(self.output_path)
             stripped_title = Core().strip_title(title)  # Strip the title so that videos with special chars can be
             # saved on windows. it would raise an OSError otherwise
 
             if self.directory_system:  # If the directory system is enabled, this will create an additional folder
-                author_path = output_path / author
-                author_path.mkdir(parents=True, exist_ok=True)
-                output_file_path = author_path / f"{stripped_title}.mp4"
+                author_path = os.path.join(self.output_path, author)
+                os.makedirs(author_path, exist_ok=True)
+                self.output_path = os.path.join(author_path, stripped_title + ".mp4")
 
             else:
-                output_file_path = output_path / f"{stripped_title}.mp4"
+                self.output_path = os.path.join(self.output_path, stripped_title + ".mp4")
 
             # Emit the loaded signal with all the required information
             data = {
@@ -551,7 +549,7 @@ class AddToTreeWidget(QRunnable):
                 "tags": tags,
                 "publish_date": publish_date,
                 "thumbnail": thumbnail,
-                "output_path": output_file_path,
+                "output_path": self.output_path,
                 "index": index,
                 "video": video
             }
@@ -649,12 +647,12 @@ class AddToTreeWidget(QRunnable):
 class DownloadThread(QRunnable):
     """Refactored threading class to download videos with improved performance and logic."""
 
-    def __init__(self, video, quality, output_path, threading_mode, workers, timeout, skip_existing_files, data):
+    def __init__(self, video, quality, threading_mode, workers, timeout, skip_existing_files, data: dict):
         super().__init__()
         self.ffmpeg = None
         self.video = video
         self.quality = quality
-        self.output_path = output_path
+        self.output_path = data.get("output_path")
         self.threading_mode = threading_mode
         self.signals = Signals()
         self.stop_flag = stop_flag
@@ -809,8 +807,7 @@ class PostProcessVideoThread(QRunnable):
     def __init__(self, write_tags_, data, ffmpeg_path, video_format):
         super(PostProcessVideoThread, self).__init__()
         self.signals = Signals()
-        self.path = ffmpeg_path
-        self.format = format
+        self.path = None
         self.write_tags_ = write_tags_
         self.data = data
         self.ffmpeg_path = ffmpeg_path
@@ -822,15 +819,21 @@ class PostProcessVideoThread(QRunnable):
             logger.warning("FFmpeg couldn't be found during initialization. Video post processing will be skipped!")
             return
 
+        self.path = self.data.get("output_path")
         try:
+            print(f"Trying to rename: {self.path} -> {self.path}_.tmp")
             os.rename(f"{self.path}", f"{self.path}_.tmp")
             logger.debug(f"FFMPEG PATH: {self.ffmpeg_path}")
 
-            if self.format == "mp4":
+            if self.video_format == "mp4":#
+                print(f"Ffmpeg at: {self.ffmpeg_path}")
+                print(f"Using path: {self.path}")
                 cmd = [self.ffmpeg_path, "-i", f"{self.path}_.tmp", "-c", "copy", self.path]
 
             else:
-                self.path = str(self.path).replace(".mp4", f"{self.format}")
+                self.path = str(self.path).replace(".mp4", f"{self.video_format}")
+                print(f"Using custom path: {self.path}")
+                print(f"Using custom format: {self.video_format}")
                 cmd = [self.ffmpeg_path, '-i', f"{self.path}_.tmp", self.path]
 
 
@@ -868,7 +871,7 @@ class QTreeWidgetDownloadThread(QRunnable):
             check_state = item.checkState(0)
             if check_state == Qt.CheckState.Checked:
                 video_objects.append(item.data(0, Qt.ItemDataRole.UserRole))
-                data_objects.append(item.data(2, Qt.ItemDataRole.UserRole))
+                data_objects.append(item.data(1, Qt.ItemDataRole.UserRole))
 
         if not self.threading_mode == "FFMPEG":
             logger.debug("Getting segments...")
@@ -896,8 +899,6 @@ class QTreeWidgetDownloadThread(QRunnable):
 
         for idx, video in enumerate(video_objects):
             self.semaphore.acquire()  # Trying to start the download if the thread isn't locked
-            if stop_flag.is_set():
-                return
             logger.debug("Semaphore Acquired")
             self.signals.progress_send_video.emit(video, data_objects[idx])  # Now emits the video to the main class for further processing
 
@@ -1293,8 +1294,6 @@ class PornFetch(QWidget):
         # Applying stylesheets to specific buttons
         # Simplify this part based on actual UI structure and naming
 
-
-
         # Applying top buttons
         self.ui.login_button_login.setStyleSheet(stylesheets["button_green"])
         self.ui.progressbar_pornhub.setStyleSheet(stylesheets["progressbar_pornhub"])
@@ -1671,8 +1670,7 @@ class PornFetch(QWidget):
 
         self.add_to_tree_widget_thread_ = AddToTreeWidget(iterator=iterator, search_limit=search_limit, data_mode=data_mode,
                                       is_reverse=is_reverse, is_checked=is_checked, last_index=self.last_index,
-                                      directory_system=self.directory_system, delay=self.delay, url=iterator,
-                                      output_path=self.output_path)
+                                      directory_system=self.directory_system, delay=self.delay, output_path=self.output_path)
         self.add_to_tree_widget_thread_.signals.text_data_to_tree_widget.connect(self.add_to_tree_widget_signal)
         self.add_to_tree_widget_thread_.signals.clear_tree_widget_signal.connect(self.clear_tree_widget)
         self.add_to_tree_widget_thread_.signals.start_undefined_range.connect(self.start_undefined_range)
@@ -1691,7 +1689,7 @@ class PornFetch(QWidget):
         length = parse_length(data.get("length"))
         index = data.get("index")
         video = data.get("video")
-
+        thumbnail = data.get("thumbnail")
 
         item = QTreeWidgetItem(self.ui.treeWidget)
         item.setText(0, f"{index}) {title}")
@@ -1715,6 +1713,7 @@ class PornFetch(QWidget):
         item.setData(1, Qt.ItemDataRole.UserRole, data)
         item.setText(2, duration)  # Set the text as the zero-padded number or float
         item.setData(2, Qt.ItemDataRole.UserRole, formatted_duration)  # Store the original duration for sorting
+        item.setData(3, Qt.ItemDataRole.UserRole, str(thumbnail))
 
     def download_tree_widget(self):
         """
@@ -1727,12 +1726,11 @@ class PornFetch(QWidget):
         self.download_tree_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
         self.download_tree_thread.signals.progress_send_video.connect(self.process_video_thread)
         self.download_tree_thread.signals.error_signal.connect(self.show_error)
-
         self.threadpool.start(self.download_tree_thread)
 
     def process_video_thread(self, video, data):
         """Checks which of the three types of threading the user selected and handles them."""
-        self.download_thread = DownloadThread(video=video, output_path=self.output_path, quality=self.quality,
+        self.download_thread = DownloadThread(video=video, quality=self.quality,
                                               threading_mode=self.threading_mode, workers=self.workers,
                                               timeout=self.timeout, skip_existing_files=self.skip_existing_files,
                                               data=data)
@@ -1898,7 +1896,7 @@ An error happened inside of Porn Fetch!
 
         thumbnail = item.data(3, Qt.ItemDataRole.UserRole)  # Retrieve the thumbnail URL
 
-        if not thumbnail:
+        if not thumbnail or thumbnail is None:
             self.ui.main_label_tree_show_thumbnail.setText(
                 self.tr("No thumbnail available", disambiguation=None)
             )
