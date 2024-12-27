@@ -600,7 +600,7 @@ class AddToTreeWidget(QRunnable):
             else:
                 videos = islice(self.iterator, self.search_limit)
 
-            self.signals.stop_undefined_range.emit() # Stop the loading animation
+            success = False
 
             for i, video in enumerate(videos, start=start):
                 if self.stop_flag.is_set():
@@ -614,6 +614,11 @@ class AddToTreeWidget(QRunnable):
 
 
                         text_data = self.process_video(video, i) # Passes video and index object / int
+                        if success is False:
+                            self.signals.stop_undefined_range.emit()  # Stop the loading animation
+
+                        success = True
+
                         if text_data is False:
                             break  # Skip to the next video if processing failed
 

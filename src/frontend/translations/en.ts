@@ -33,6 +33,120 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </message>
 </context>
 <context>
+    <name>PornFetch</name>
+    <message>
+        <location filename="../../../main.py" line="1078"/>
+        <source>You are running on Android! You can not install Porn Fetch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1082"/>
+        <source>Porn Fetch installation successful!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1085"/>
+        <source>Porn Fetch installation failed, because of: {result[1]}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1509"/>
+        <source>Saved User Settings, please restart Porn Fetch!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1569"/>
+        <source>The model URL you entered seems to be invalid. Please check your output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1626"/>
+        <source>Information: The Website {website} specified in the URL file isn&apos;t valid.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1656"/>
+        <source>Couldn&apos;t determine which site you want to search on??? Please report this immediately!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1776"/>
+        <source>
+An error happened inside of Porn Fetch! 
+
+{error}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1896"/>
+        <source>Can&apos;t show thumbnail, due to your privacy settings ;)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1903"/>
+        <source>No thumbnail available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1999"/>
+        <source>Those credentials don&apos;t seem to be valid...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2005"/>
+        <source>Login Successful!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2009"/>
+        <source>Login Failed, please check your credentials and try again!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2012"/>
+        <source>You are already logged in!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2024"/>
+        <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2085"/>
+        <location filename="../../../main.py" line="2097"/>
+        <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2182"/>
+        <source>
+! Warning !
+Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
+------------------------------------------------------------
+{formatted_results}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2215"/>
+        <source>
+FFmpeg isn&apos;t installed on your system... Some features won&apos;t be available:
+
+- The FFmpeg threading mode
+- Converting videos into a valid .mp4 format
+- Writing tags / metadata into the videos
+
+These features aren&apos;t necessary for Porn Fetch, but can be useful for some people.
+
+To automatically install ffmpeg, just head over to the settings and press the magical button, or install ffmpeg in your
+local PATH (e.g, through your linux package manager, or through the Windows PATH)
+
+This warning won&apos;t be shown again.
+                    </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PornFetchRangeSelector</name>
     <message>
         <location filename="../form_range_selector.ui" line="14"/>
@@ -729,102 +843,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </message>
 </context>
 <context>
-    <name>Porn_Fetch</name>
-    <message>
-        <location filename="../../../main.py" line="1495"/>
-        <source>Saved User Settings, please restart Porn Fetch!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="2186"/>
-        <source>
-FFmpeg isn&apos;t installed on your system... Some features won&apos;t be available:
-
-- The FFmpeg threading mode
-- Converting videos into a valid .mp4 format
-- Writing tags / metadata into the videos
-
-These features aren&apos;t necessary for Porn Fetch, but can be useful for some people.
-
-To automatically install ffmpeg, just head over to the settings and press the magical button, or install ffmpeg in your
-local PATH (e.g, through your linux package manager, or through the Windows PATH)
-
-This warning won&apos;t be shown again.
-                        </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1064"/>
-        <source>You are running on Android! You can not install Porn Fetch</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1068"/>
-        <source>Porn Fetch installation successful!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1071"/>
-        <source>Porn Fetch installation failed, because of: {result[1]}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="2156"/>
-        <source>
-! Warning !
-Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
-------------------------------------------------------------
-{formatted_results}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1853"/>
-        <source>Can&apos;t show thumbnail, due to your privacy settings ;)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1860"/>
-        <source>No thumbnail available</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1607"/>
-        <source>Information: The Website {website} specified in the URL file isn&apos;t valid.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1975"/>
-        <source>Those credentials don&apos;t seem to be valid...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1981"/>
-        <source>Login Successful!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1985"/>
-        <source>Login Failed, please check your credentials and try again!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1988"/>
-        <source>You are already logged in!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="2000"/>
-        <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="2061"/>
-        <location filename="../../../main.py" line="2073"/>
-        <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>SetupInstallDialog</name>
     <message>
         <location filename="../form_install_dialog.ui" line="14"/>
@@ -964,22 +982,22 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>main</name>
     <message>
-        <location filename="../../../main.py" line="2338"/>
+        <location filename="../../../main.py" line="2361"/>
         <source>Done! Please restart.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2363"/>
+        <location filename="../../../main.py" line="2386"/>
         <source>No URLs in the current session...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2366"/>
+        <location filename="../../../main.py" line="2389"/>
         <source>FFmpeg has been installed. Please restart Porn Fetch :)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2388"/>
+        <location filename="../../../main.py" line="2411"/>
         <source>
             Information: A new version of Porn Fetch (v{__next_release__}) is out. I recommend you to update Porn Fetch. 
             Go to: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/ {__next_release__}
