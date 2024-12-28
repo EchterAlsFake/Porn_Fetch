@@ -72,6 +72,31 @@ total_downloaded_videos = 0 # All videos that actually successfully downloaded
 total_downloaded_videos_attempt = 0 # All videos the user tries to download
 logger = setup_logging()
 
+class VideoData:
+    """
+    This class stores the video objects and their loaded data across Porn Fetch.
+    It allows for re-fetching data if needed, update data if needed and handles caching thanks to
+    a dictionary.
+
+    (Okay, I am overhyping it a bit, but yeah, let's put that away xD)
+    """
+
+    def __init__(self):
+        self.data_objects = {}
+
+    """
+    If a video object isn't used anymore e.g., the video finished downloading or the tree widget was loaded with other
+    videos, than those videos will be cleaned up in the dictionary, to be as memory and performance efficient as
+    possible.
+    """
+
+    def clean_dict(self, video_titles):
+        if not isinstance(video_titles, list): # In case we only have one video title to delete
+            video_titles = [video_titles]
+
+        for video_title in video_titles:
+            del self.data_objects[video_title] # Del is faster than pop :)
+
 
 class Signals(QObject):
     """Signals for the Download class"""
@@ -1665,10 +1690,11 @@ class PornFetch(QWidget):
         data_mode = 0 if self.ui.main_radio_tree_show_title.isChecked() else 1
         is_reverse = self.ui.main_checkbox_tree_show_videos_reversed.isChecked()
         is_checked = self.ui.main_checkbox_tree_do_not_clear_videos.isChecked()
-
+        path = self.output_path
+        print(f"Added: {path} as output path into the tree widget thread")
         self.add_to_tree_widget_thread_ = AddToTreeWidget(iterator=iterator, search_limit=search_limit, data_mode=data_mode,
                                       is_reverse=is_reverse, is_checked=is_checked, last_index=self.last_index,
-                                      directory_system=self.directory_system, delay=self.delay, output_path=self.output_path)
+                                      directory_system=self.directory_system, delay=self.delay, output_path=path)
         self.add_to_tree_widget_thread_.signals.text_data_to_tree_widget.connect(self.add_to_tree_widget_signal)
         self.add_to_tree_widget_thread_.signals.clear_tree_widget_signal.connect(self.clear_tree_widget)
         self.add_to_tree_widget_thread_.signals.start_undefined_range.connect(self.start_undefined_range)
