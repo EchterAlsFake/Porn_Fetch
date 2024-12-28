@@ -65,8 +65,8 @@ total_segments = 0
 downloaded_segments = 0
 stop_flag = Event()
 
-url_linux = "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
-url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
+url_linux = "https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-amd64-static.tar.xz"
+url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z"
 session_urls = []  # This list saves all URls used in the current session. Used for the URL export function
 total_downloaded_videos = 0 # All videos that actually successfully downloaded
 total_downloaded_videos_attempt = 0 # All videos the user tries to download
@@ -436,13 +436,11 @@ class FFMPEGDownload(QRunnable):
         logger.debug("FFMPEG: [1/4] Starting the download")
         with requests.get(self.url, stream=True) as r:
             r.raise_for_status()
-            try:
+            if self.url == url_windows:
                 total_length = int(r.headers.get('content-length'))
 
-            except Exception as e:
-                logger.error("Couldn't fetch ffmpeg package size, using a fixed (but maybe incorrect) value for "
-                             f"progress calculation! Error: {e}")
-                total_length = 41313894
+            else:
+                total_length = 41964060
 
             self.signals.total_progress.emit(0, total_length)  # Initialize progress bar
             dl = 0
