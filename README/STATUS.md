@@ -25,17 +25,16 @@
 - [x] Porn Fetch CLI now supports batch processing through arguments
 - [x] Porn Fetch CLI is now completely thread-safe and uses rich progressbar
 - [x] Porn Fetch CLI now also tracks the total progress with a separate bar
-- [] Display thumbnails when searching (optionally)
-- [] Full support for spankbang
-- [] Allow for different format converting e.g, mov and mkv
-- [] Allow for optional tag writing
-- [] When downloading a new video / loading in and videos are already downloading, the total progress should be appended
-by that instead of calculating the new total progress. This will require a rework of the progress system, but is a huge QOL update.
+- [x] Display thumbnails when searching (optionally)
+- [x] Allow for optional tag writing
+- [x] Allow for different format converting e.g, mov and mkv
+- [x] When downloading a new video / loading in and videos are already downloading, the total progress should be appended
+  by that instead of calculating the new total progress. This will require a rework of the progress system, but is a huge QOL update.
 - [x] Make an "evasion" mode to hide Porn Fetch from your PC / Android device
+- [] Full support for spankbang
 - [] Support for macOS
-  - [] Add build script
-  - [] Make Porn Fetch installable (systemwide)
-  - [] Improve UI
+  - [x] Add build script
+  - [x] Improve UI
   - [] Add it to `INSTALLATION.md`
   - [] Add it to `SCREENSHOTS.md`
   - [] Test everything
@@ -45,19 +44,19 @@ by that instead of calculating the new total progress. This will require a rewor
 - [x] Rename **ALL** UI elements to be more consistent and easier to handle within code
 - [x] Code refactoring
  - [x] Remove useless code
- - [] Improve code comments
+ - [x] Improve code comments
 
-- [] Update translations
 - [x] Make Porn Fetch's codebase more structured. In Germany, we say "Roter faden"
-- [] Improving and hardening the tag writing function (with exceptions)
+- [x] Improving and hardening the tag writing function (with exceptions)
 - [x] Generalizing the backend Porn APIs to work more equally to optimize Porn Fetch to write lesser lines of code
+- [x] Improve code for the part when a video finished downloading
+- [x] Make a threading class for every function that could take more time than ~350 ms to prevent UI delays
+- [x] Rework Porn Fetch buttons and some UI design
+- [x] Show a status for how many of the total downloads already succeeded (probably at the bottom of Porn Fetch)
 - [] Rework the entire progress reporting system (probably the hardest thing to do)
 - [] searching for ways to improve Android display reaction time for UI elements
-- [] Improve code for the part when a video finished downloading
-- [] Make a threading class for every function that could take more time than ~350 ms to prevent UI delays
+- [] Update translations
 - [] Make a first-use tutorial
-- [] Rework Porn Fetch buttons and some UI design
-- [] Show a status for how many of the total downloads already succeeded (probably at the bottom of Porn Fetch)
 
 
 ### Testing (Really don't want to do that)
@@ -73,6 +72,5 @@ by that instead of calculating the new total progress. This will require a rewor
 
 
 # v3.6
-- [] Support for system's native UI design
 - [] Geo block bypass
 - [] Allow for custom proxy lists to help people in censored countries
