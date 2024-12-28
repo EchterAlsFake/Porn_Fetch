@@ -35,8 +35,8 @@ class Ui_PornFetch_Desktop(object):
         PornFetch_Desktop.setMinimumSize(QSize(500, 281))
         PornFetch_Desktop.setStyleSheet(u"QLbel {\n"
 "    color: black;}")
-        self.gridLayout_3 = QGridLayout(PornFetch_Desktop)
-        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.gridLayout_14 = QGridLayout(PornFetch_Desktop)
+        self.gridLayout_14.setObjectName(u"gridLayout_14")
         self.verticallayout_main = QVBoxLayout()
         self.verticallayout_main.setSpacing(0)
         self.verticallayout_main.setObjectName(u"verticallayout_main")
@@ -840,52 +840,34 @@ class Ui_PornFetch_Desktop(object):
         self.treeWidget.setSizePolicy(sizePolicy14)
         self.treeWidget.setMinimumSize(QSize(100, 200))
 
-        self.gridLayout.addWidget(self.treeWidget, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.treeWidget, 0, 1, 1, 1)
 
-        self.formLayout = QFormLayout()
-        self.formLayout.setObjectName(u"formLayout")
-        self.main_checkbox_tree_show_videos_reversed = QCheckBox(self.main_scrollarea_treewidget_content)
-        self.main_checkbox_tree_show_videos_reversed.setObjectName(u"main_checkbox_tree_show_videos_reversed")
-        self.main_checkbox_tree_show_videos_reversed.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.formLayout.setWidget(0, QFormLayout.LabelRole, self.main_checkbox_tree_show_videos_reversed)
-
+        self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.gridLayout_13 = QGridLayout()
+        self.gridLayout_13.setObjectName(u"gridLayout_13")
         self.main_checkbox_tree_do_not_clear_videos = QCheckBox(self.main_scrollarea_treewidget_content)
         self.main_checkbox_tree_do_not_clear_videos.setObjectName(u"main_checkbox_tree_do_not_clear_videos")
 
-        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.main_checkbox_tree_do_not_clear_videos)
-
-        self.main_radio_tree_show_title = QRadioButton(self.main_scrollarea_treewidget_content)
-        self.main_radio_tree_show_title.setObjectName(u"main_radio_tree_show_title")
-        sizePolicy7.setHeightForWidth(self.main_radio_tree_show_title.sizePolicy().hasHeightForWidth())
-        self.main_radio_tree_show_title.setSizePolicy(sizePolicy7)
-        self.main_radio_tree_show_title.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.main_radio_tree_show_title.setChecked(True)
-
-        self.formLayout.setWidget(1, QFormLayout.LabelRole, self.main_radio_tree_show_title)
-
-        self.main_radio_tree_show_all = QRadioButton(self.main_scrollarea_treewidget_content)
-        self.main_radio_tree_show_all.setObjectName(u"main_radio_tree_show_all")
-        sizePolicy7.setHeightForWidth(self.main_radio_tree_show_all.sizePolicy().hasHeightForWidth())
-        self.main_radio_tree_show_all.setSizePolicy(sizePolicy7)
-        self.main_radio_tree_show_all.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.main_radio_tree_show_all.setStyleSheet(u"")
-        self.main_radio_tree_show_all.setCheckable(True)
-        self.main_radio_tree_show_all.setChecked(False)
-
-        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.main_radio_tree_show_all)
+        self.gridLayout_13.addWidget(self.main_checkbox_tree_do_not_clear_videos, 0, 1, 1, 1)
 
         self.main_button_tree_automated_selection = QPushButton(self.main_scrollarea_treewidget_content)
         self.main_button_tree_automated_selection.setObjectName(u"main_button_tree_automated_selection")
         sizePolicy9.setHeightForWidth(self.main_button_tree_automated_selection.sizePolicy().hasHeightForWidth())
         self.main_button_tree_automated_selection.setSizePolicy(sizePolicy9)
 
-        self.formLayout.setWidget(2, QFormLayout.LabelRole, self.main_button_tree_automated_selection)
+        self.gridLayout_13.addWidget(self.main_button_tree_automated_selection, 1, 0, 1, 1)
+
+        self.main_checkbox_tree_show_videos_reversed = QCheckBox(self.main_scrollarea_treewidget_content)
+        self.main_checkbox_tree_show_videos_reversed.setObjectName(u"main_checkbox_tree_show_videos_reversed")
+        self.main_checkbox_tree_show_videos_reversed.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout_13.addWidget(self.main_checkbox_tree_show_videos_reversed, 0, 0, 1, 1)
 
         self.main_button_tree_keyboard_shortcuts = QPushButton(self.main_scrollarea_treewidget_content)
         self.main_button_tree_keyboard_shortcuts.setObjectName(u"main_button_tree_keyboard_shortcuts")
 
-        self.formLayout.setWidget(2, QFormLayout.FieldRole, self.main_button_tree_keyboard_shortcuts)
+        self.gridLayout_13.addWidget(self.main_button_tree_keyboard_shortcuts, 1, 1, 1, 1)
 
         self.main_button_tree_stop = QPushButton(self.main_scrollarea_treewidget_content)
         self.main_button_tree_stop.setObjectName(u"main_button_tree_stop")
@@ -893,7 +875,10 @@ class Ui_PornFetch_Desktop(object):
         self.main_button_tree_stop.setSizePolicy(sizePolicy1)
         self.main_button_tree_stop.setMinimumSize(QSize(0, 30))
 
-        self.formLayout.setWidget(3, QFormLayout.SpanningRole, self.main_button_tree_stop)
+        self.gridLayout_13.addWidget(self.main_button_tree_stop, 2, 0, 1, 2)
+
+
+        self.verticalLayout.addLayout(self.gridLayout_13)
 
         self.main_label_tree_show_thumbnail = QLabel(self.main_scrollarea_treewidget_content)
         self.main_label_tree_show_thumbnail.setObjectName(u"main_label_tree_show_thumbnail")
@@ -902,10 +887,10 @@ class Ui_PornFetch_Desktop(object):
         self.main_label_tree_show_thumbnail.setMinimumSize(QSize(400, 225))
         self.main_label_tree_show_thumbnail.setMaximumSize(QSize(400, 225))
 
-        self.formLayout.setWidget(4, QFormLayout.SpanningRole, self.main_label_tree_show_thumbnail)
+        self.verticalLayout.addWidget(self.main_label_tree_show_thumbnail)
 
 
-        self.gridLayout.addLayout(self.formLayout, 0, 1, 1, 1)
+        self.gridLayout.addLayout(self.verticalLayout, 0, 2, 1, 1)
 
         self.main_button_tree_download = QPushButton(self.main_scrollarea_treewidget_content)
         self.main_button_tree_download.setObjectName(u"main_button_tree_download")
@@ -915,7 +900,7 @@ class Ui_PornFetch_Desktop(object):
         self.main_button_tree_download.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.main_button_tree_download.setStyleSheet(u"")
 
-        self.gridLayout.addWidget(self.main_button_tree_download, 1, 0, 1, 2)
+        self.gridLayout.addWidget(self.main_button_tree_download, 1, 0, 1, 3)
 
 
         self.gridLayout_4.addLayout(self.gridLayout, 0, 0, 1, 1)
@@ -945,7 +930,7 @@ class Ui_PornFetch_Desktop(object):
         self.settings_scrollarea.setWidgetResizable(True)
         self.settings_scrollarea_widget_contents = QWidget()
         self.settings_scrollarea_widget_contents.setObjectName(u"settings_scrollarea_widget_contents")
-        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 1625, 921))
+        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 844, 921))
         self.gridLayout_19 = QGridLayout(self.settings_scrollarea_widget_contents)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.settings_scrollarea_gridlayout = QGridLayout()
@@ -1517,7 +1502,7 @@ class Ui_PornFetch_Desktop(object):
         self.verticallayout_main.addLayout(self.formlayout_progressbar)
 
 
-        self.gridLayout_3.addLayout(self.verticallayout_main, 0, 0, 1, 1)
+        self.gridLayout_14.addLayout(self.verticallayout_main, 0, 0, 1, 1)
 
         QWidget.setTabOrder(self.download_lineedit_url, self.download_lineedit_playlist_url)
         QWidget.setTabOrder(self.download_lineedit_playlist_url, self.download_lineedit_model_url)
@@ -1633,14 +1618,9 @@ class Ui_PornFetch_Desktop(object):
         ___qtreewidgetitem = self.treeWidget.headerItem()
         ___qtreewidgetitem.setText(2, QCoreApplication.translate("PornFetch_Desktop", u"Duration (minutes)", None));
         ___qtreewidgetitem.setText(1, QCoreApplication.translate("PornFetch_Desktop", u"Author", None));
-        self.main_checkbox_tree_show_videos_reversed.setText(QCoreApplication.translate("PornFetch_Desktop", u"Show videos in reverse", None))
         self.main_checkbox_tree_do_not_clear_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Do not clear videos", None))
-        self.main_radio_tree_show_title.setText(QCoreApplication.translate("PornFetch_Desktop", u"Only Title (a lot faster)", None))
-#if QT_CONFIG(tooltip)
-        self.main_radio_tree_show_all.setToolTip("")
-#endif // QT_CONFIG(tooltip)
-        self.main_radio_tree_show_all.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get Title, Author, Duration, Thumbnails", None))
         self.main_button_tree_automated_selection.setText(QCoreApplication.translate("PornFetch_Desktop", u"Automated selection tool", None))
+        self.main_checkbox_tree_show_videos_reversed.setText(QCoreApplication.translate("PornFetch_Desktop", u"Show videos in reverse", None))
         self.main_button_tree_keyboard_shortcuts.setText(QCoreApplication.translate("PornFetch_Desktop", u"Keyboard shortcuts", None))
 #if QT_CONFIG(tooltip)
         self.main_button_tree_stop.setToolTip(QCoreApplication.translate("PornFetch_Desktop", u"Does not stop downloading videos", None))

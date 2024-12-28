@@ -208,24 +208,23 @@ def setup_config_file(force=False):
                         setup_config_file(force=True)
 
 
-
-
-def correct_output_path(output_path):
-    if not str(output_path).endswith(os.sep):
-        output_path += os.sep
-        return output_path
-
-    else:
-        return output_path
-
-
-def load_video_attributes(video, data_mode):
+def load_video_attributes(video):
     title = video.title
 
-    if data_mode == 0:
-        return [title, None, None, None, None]
+    if isinstance(video, Video):
+        try:
+            author = video.author.name
 
-    if isinstance(video, xn_Video):
+        except Exception:
+            author = video.pornstars[0]
+
+        length = video.duration.seconds / 60
+        tags = ",".join([tag.name for tag in video.tags])
+        publish_date = video.date
+        video.refresh()  # Throws an error otherwise. I have no idea why.
+        thumbnail = video.image.url
+
+    elif isinstance(video, xn_Video):
         author = video.author
         length = video.length
         tags = video.tags
@@ -238,19 +237,6 @@ def load_video_attributes(video, data_mode):
         tags = video.tags
         publish_date = video.publish_date
         thumbnail = video.thumbnail_url
-
-    elif isinstance(video, Video):
-        try:
-            author = video.author.name
-
-        except Exception:
-            author = video.pornstars[0]
-
-        length = video.duration.seconds / 60
-        tags = ",".join([tag.name for tag in video.tags])
-        publish_date = video.date
-        video.refresh()  # Throws an error otherwise. I have no idea why.
-        thumbnail = video.image.url
 
     elif isinstance(video, ep_Video):
         author = video.author
@@ -283,7 +269,15 @@ def load_video_attributes(video, data_mode):
     else:
         raise "Instance Error! Please report this immediately on GitHub!"
 
-    data = [title, author, length, tags, publish_date, thumbnail]
+    data = {
+        "title": title,
+        "author": author,
+        "length": round(length), # Make sure the video duration is not something like 6.7777777779
+        "tags": tags,
+        "publish_date": publish_date,
+        "thumbnail": thumbnail,
+    }
+
     return data
 
 
@@ -298,11 +292,11 @@ def write_tags(path, data: dict):
     logging.debug("Tags [1/3]")
 
     audio = MP4(path)
-    audio.tags["\xa9nam"] = title
-    audio.tags["\xa9ART"] = artist
-    audio.tags["\xa9cmt"] = comment
-    audio.tags["\xa9gen"] = genre
-    audio.tags["\xa9day"] = date
+    audio.tags["\xa9nam"] = str(title)
+    audio.tags["\xa9ART"] = str(artist)
+    audio.tags["\xa9cmt"] = str(comment)
+    audio.tags["\xa9gen"] = str(genre)
+    audio.tags["\xa9day"] = str(date)
 
     logging.debug("Tags: [2/3] - Writing Thumbnail")
 

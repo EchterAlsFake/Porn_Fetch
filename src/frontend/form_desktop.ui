@@ -29,7 +29,7 @@
    <string notr="true">QLbel {
     color: black;}</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_3">
+  <layout class="QGridLayout" name="gridLayout_14">
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticallayout_main">
      <property name="spacing">
@@ -1804,7 +1804,7 @@
                  </property>
                  <item row="0" column="0">
                   <layout class="QGridLayout" name="gridLayout">
-                   <item row="0" column="0">
+                   <item row="0" column="1">
                     <widget class="QTreeWidget" name="treeWidget">
                      <property name="sizePolicy">
                       <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
@@ -1835,115 +1835,72 @@
                      </column>
                     </widget>
                    </item>
-                   <item row="0" column="1">
-                    <layout class="QFormLayout" name="formLayout">
-                     <item row="0" column="0">
-                      <widget class="QCheckBox" name="main_checkbox_tree_show_videos_reversed">
-                       <property name="cursor">
-                        <cursorShape>PointingHandCursor</cursorShape>
-                       </property>
-                       <property name="text">
-                        <string>Show videos in reverse</string>
-                       </property>
-                      </widget>
+                   <item row="0" column="2">
+                    <layout class="QVBoxLayout" name="verticalLayout">
+                     <item>
+                      <layout class="QGridLayout" name="gridLayout_13">
+                       <item row="0" column="1">
+                        <widget class="QCheckBox" name="main_checkbox_tree_do_not_clear_videos">
+                         <property name="text">
+                          <string>Do not clear videos</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="0">
+                        <widget class="QPushButton" name="main_button_tree_automated_selection">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="text">
+                          <string>Automated selection tool</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="0">
+                        <widget class="QCheckBox" name="main_checkbox_tree_show_videos_reversed">
+                         <property name="cursor">
+                          <cursorShape>PointingHandCursor</cursorShape>
+                         </property>
+                         <property name="text">
+                          <string>Show videos in reverse</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="1" column="1">
+                        <widget class="QPushButton" name="main_button_tree_keyboard_shortcuts">
+                         <property name="text">
+                          <string>Keyboard shortcuts</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="2" column="0" colspan="2">
+                        <widget class="QPushButton" name="main_button_tree_stop">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>30</height>
+                          </size>
+                         </property>
+                         <property name="toolTip">
+                          <string>Does not stop downloading videos</string>
+                         </property>
+                         <property name="text">
+                          <string>Stop loading videos</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
                      </item>
-                     <item row="0" column="1">
-                      <widget class="QCheckBox" name="main_checkbox_tree_do_not_clear_videos">
-                       <property name="text">
-                        <string>Do not clear videos</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="0">
-                      <widget class="QRadioButton" name="main_radio_tree_show_title">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="cursor">
-                        <cursorShape>PointingHandCursor</cursorShape>
-                       </property>
-                       <property name="text">
-                        <string>Only Title (a lot faster)</string>
-                       </property>
-                       <property name="checked">
-                        <bool>true</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="1">
-                      <widget class="QRadioButton" name="main_radio_tree_show_all">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="cursor">
-                        <cursorShape>PointingHandCursor</cursorShape>
-                       </property>
-                       <property name="toolTip">
-                        <string/>
-                       </property>
-                       <property name="styleSheet">
-                        <string notr="true"/>
-                       </property>
-                       <property name="text">
-                        <string>Get Title, Author, Duration, Thumbnails</string>
-                       </property>
-                       <property name="checkable">
-                        <bool>true</bool>
-                       </property>
-                       <property name="checked">
-                        <bool>false</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="2" column="0">
-                      <widget class="QPushButton" name="main_button_tree_automated_selection">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="text">
-                        <string>Automated selection tool</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="2" column="1">
-                      <widget class="QPushButton" name="main_button_tree_keyboard_shortcuts">
-                       <property name="text">
-                        <string>Keyboard shortcuts</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="3" column="0" colspan="2">
-                      <widget class="QPushButton" name="main_button_tree_stop">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="minimumSize">
-                        <size>
-                         <width>0</width>
-                         <height>30</height>
-                        </size>
-                       </property>
-                       <property name="toolTip">
-                        <string>Does not stop downloading videos</string>
-                       </property>
-                       <property name="text">
-                        <string>Stop loading videos</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="4" column="0" colspan="2">
+                     <item>
                       <widget class="QLabel" name="main_label_tree_show_thumbnail">
                        <property name="sizePolicy">
                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1970,7 +1927,7 @@
                      </item>
                     </layout>
                    </item>
-                   <item row="1" column="0" colspan="2">
+                   <item row="1" column="0" colspan="3">
                     <widget class="QPushButton" name="main_button_tree_download">
                      <property name="sizePolicy">
                       <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
@@ -2039,7 +1996,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>1625</width>
+                <width>844</width>
                 <height>921</height>
                </rect>
               </property>
