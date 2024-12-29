@@ -2260,15 +2260,15 @@ This warning won't be shown again.
             logger.debug(f"FFmpeg found at: {ffmpeg_path}")
 
     def download_ffmpeg(self):
-        """        if sys.platform == "linux":
+        if sys.platform == "linux":
             if not os.path.isfile("ffmpeg"):
                 self.downloader = FFMPEGDownload(url=url_linux, extract_path=".", mode="linux")
 
         elif sys.platform == "win32":
             if not os.path.isfile("ffmpeg.exe"):
                 self.downloader = FFMPEGDownload(url=url_windows, extract_path=".", mode="windows")
-       """
-        if sys.platform == "linux":
+
+        elif sys.platform == "darwin":
             if not os.path.isfile("ffmpeg"):
                 self.downloader = FFMPEGDownload(url=url_macOS, extract_path=".", mode="macOS")
 
