@@ -1,79 +1,41 @@
-import http.client
-import json
+import sys
+import time
+import random
+import shutil
+import tarfile
+import os.path
+import zipfile
+import argparse
+import markdown
+import traceback
+import requests.exceptions
+import src.frontend.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
 
+from phub import consts
+from threading import Event
+from io import TextIOWrapper
+from base_api.base import Core
+from itertools import islice, chain
+from hqporner_api.api import Sort as hq_Sort
+from base_api.modules import consts as bs_consts
 
-do_not_log = False
-def send_error_log(message):
-    """
-    This function is made for the Android development of Porn Fetch and is used for debugging.
-    You can, of course, change or remove it, but I wouldn't recommend it.
-    """
+from src.backend.shared_gui import *
+from src.backend.class_help import *
+from src.backend.shared_functions import *
 
-    if do_not_log is False:
-        url = "192.168.2.139:8000"
-        endpoint = "/error-log/"
-        data = json.dumps({"message": message})
-        headers = {"Content-type": "application/json"}
+from src.backend.log_config import setup_logging
+from src.frontend.ui_form_license import Ui_SetupLicense
+from src.frontend.ui_form_desktop import Ui_PornFetch_Desktop
+from src.frontend.ui_form_android import Ui_PornFetch_Android
+from src.frontend.ui_form_range_selector import Ui_PornFetchRangeSelector
+from src.frontend.ui_form_install_dialog import Ui_SetupInstallDialog
+from src.frontend.ui_form_keyboard_shortcuts import Ui_KeyboardShortcuts
 
-        conn = http.client.HTTPConnection(url)
+from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
+                        QTranslator, QCoreApplication, QSize, QTimer)
+from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView
+from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut
 
-        try:
-            conn.request("POST", endpoint, data, headers)
-            response = conn.getresponse()
-
-            if response.status == 200:
-                print("Error log sent successfully")
-            else:
-                print(f"Failed to send error log: Status {response.status}, Reason: {response.reason}")
-
-            conn.close()
-        except Exception as e:
-            print(f"Request failed: {e}")
-
-send_error_log("Hi")
-
-try:
-    import sys
-    import time
-    import random
-    import shutil
-    import tarfile
-    import os.path
-    import zipfile
-    import argparse
-    import markdown
-    import traceback
-    import requests.exceptions
-    import src.frontend.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
-
-    from phub import consts
-    from threading import Event
-    from io import TextIOWrapper
-    from base_api.base import Core
-    from itertools import islice, chain
-    from hqporner_api.api import Sort as hq_Sort
-    from base_api.modules import consts as bs_consts
-
-    from src.backend.shared_gui import *
-    from src.backend.class_help import *
-    from src.backend.shared_functions import *
-
-    from src.backend.log_config import setup_logging
-    from src.frontend.ui_form_license import Ui_SetupLicense
-    from src.frontend.ui_form_desktop import Ui_PornFetch_Desktop
-    from src.frontend.ui_form_android import Ui_PornFetch_Android
-    from src.frontend.ui_form_range_selector import Ui_PornFetchRangeSelector
-    from src.frontend.ui_form_install_dialog import Ui_SetupInstallDialog
-    from src.frontend.ui_form_keyboard_shortcuts import Ui_KeyboardShortcuts
-
-    from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
-                            QTranslator, QCoreApplication, QSize, QTimer)
-    from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView
-    from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut
-
-except Exception:
-    error = traceback.format_exc()
-    send_error_log(error)
 
 """
 Copyright (C) 2023-2024 Johannes Habel
@@ -99,15 +61,21 @@ Discord: echteralsfake (faster response)
 
 __license__ = "GPL 3"
 __version__ = "3.5"
-__build__ = "android"  # android or desktop
+__build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 __next_release__ = "3.5"
 total_segments = 0
 downloaded_segments = 0
 stop_flag = Event()
 
+os.environ['QT_ANDROID_ENABLE_WORKAROUND_TO_DISABLE_PREDICTIVE_TEXT'] = '1'
+os.environ['QT_ANDROID_DISABLE_GLYPH_CACHE_WORKAROUND'] = '1'
+os.environ['QT_ANDROID_BACKGROUND_ACTIONS_QUEUE_SIZE'] = '3'
+# Just don't ask, thank you :)
+
 url_linux = "https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-amd64-static.tar.xz"
 url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z"
+url_macOS = "https://evermeet.cx/ffmpeg/ffmpeg-7.1.zip"
 session_urls = []  # This list saves all URls used in the current session. Used for the URL export function
 total_downloaded_videos = 0 # All videos that actually successfully downloaded
 total_downloaded_videos_attempt = 0 # All videos the user tries to download
@@ -226,6 +194,7 @@ class License(QWidget):
     def show_install_dialog(self):
         if sys.platform == "darwin":
             self.show_main() # Installation not supported on macOS
+            return
 
         if self.conf["Setup"]["install"] == "unknown":
             self.install_widget = InstallDialog()
@@ -499,6 +468,10 @@ class FFMPEGDownload(QRunnable):
                         shutil.rmtree(f"ffmpeg-{search.group(1)}-amd64-static")
                         return True
 
+                    elif sys.platform == "darwin":
+                        shutil.rmtree("ffmpeg-7.1.7z")
+                        return True
+
             except AttributeError:
                 pass # This is expected and (99%) not an issue
 
@@ -510,7 +483,7 @@ class FFMPEGDownload(QRunnable):
         logger.debug("FFMPEG: [1/4] Starting the download")
         with requests.get(self.url, stream=True) as r:
             r.raise_for_status()
-            if self.url == url_windows:
+            if self.url == url_windows or self.url == url_macOS:
                 total_length = int(r.headers.get('content-length'))
 
             else:
@@ -551,6 +524,11 @@ class FFMPEGDownload(QRunnable):
                         shutil.move(extracted_path, ".")
 
                     self.signals.total_progress.emit(idx, total)
+
+        elif self.mode == "macOS" and filename.endswith(".zip"):
+            with zipfile.ZipFile(filename, mode='r') as archive:
+                archive.extractall(path=self.extract_path)
+
         logger.debug("FFMPEG: [3/4] Finished Extraction")
         # Finalize
         self.signals.total_progress.emit(total_length, total_length)  # Ensure progress bar reaches 100%
@@ -2282,13 +2260,18 @@ This warning won't be shown again.
             logger.debug(f"FFmpeg found at: {ffmpeg_path}")
 
     def download_ffmpeg(self):
-        if sys.platform == "linux":
+        """        if sys.platform == "linux":
             if not os.path.isfile("ffmpeg"):
                 self.downloader = FFMPEGDownload(url=url_linux, extract_path=".", mode="linux")
 
         elif sys.platform == "win32":
             if not os.path.isfile("ffmpeg.exe"):
                 self.downloader = FFMPEGDownload(url=url_windows, extract_path=".", mode="windows")
+       """
+        if sys.platform == "linux":
+            if not os.path.isfile("ffmpeg"):
+                self.downloader = FFMPEGDownload(url=url_macOS, extract_path=".", mode="macOS")
+
 
         self.downloader.signals.total_progress.connect(self.update_total_progressbar)
         self.downloader.signals.ffmpeg_download_finished.connect(ffmpeg_finished)
