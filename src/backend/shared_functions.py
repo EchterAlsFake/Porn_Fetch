@@ -13,9 +13,6 @@ import requests
 from mutagen.mp4 import MP4, MP4Cover
 from phub import Client, errors, Video
 from phub.modules import download as download
-from colorama import Fore
-from hue_shift import return_color, reset
-from datetime import datetime
 from configparser import ConfigParser
 from hqporner_api import Client as hq_Client, Video as hq_Video
 from eporner_api import Client as ep_Client, Video as ep_Video
@@ -85,8 +82,7 @@ custom_font = true
 """
 
 logger = logging.getLogger(__name__)
-do_not_log = True
-
+do_not_log = False
 def send_error_log(message):
     """
     This function is made for the Android development of Porn Fetch and is used for debugging.
@@ -94,7 +90,7 @@ def send_error_log(message):
     """
 
     if do_not_log is False:
-        url = "192.168.0.19:8000"
+        url = "192.168.2.139:8000"
         endpoint = "/error-log/"
         data = json.dumps({"message": message})
         headers = {"Content-type": "application/json"}

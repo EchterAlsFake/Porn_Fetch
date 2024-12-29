@@ -14,10 +14,11 @@ from src.backend.log_config import setup_logging
 from base_api.modules.download import *
 from base_api.modules.progress_bars import *
 from base_api.base import Core
-from colorama import init
 from rich import print as rprint
 from rich.markdown import Markdown
 from rich.progress import Progress, BarColumn, TextColumn, SpinnerColumn, TimeElapsedColumn, TimeRemainingColumn
+from colorama import *
+from hue_shift import return_color
 
 logger = setup_logging()
 init(autoreset=True)
@@ -34,9 +35,11 @@ class CLI:
         self.result_limit = None
         self.directory_system = None
         self.output_path = None
+        self.progress_thread = None
         self.quality = None
         self.semaphore = None
         self.retries = None
+        self.conf = None
         self.timeout = None
         self.workers = None
         self.delay = None
@@ -166,7 +169,7 @@ Do you want to use FFmpeg? [yes,no]
         self.retries = int(self.conf.get("Performance", "retries"))
         self.semaphore = threading.Semaphore(int(self.conf.get("Performance", "semaphore")))
         self.quality = self.conf.get("Video", "quality")
-        self.output_path = correct_output_path(output_path=self.conf.get("Video", "output_path"))
+        self.output_path = self.conf.get("Video", "output_path")
         self.directory_system = True if self.conf.get("Video", "directory_system") == "1" else False
         self.skip_existing_files = True if self.conf.get("Video", "skip_existing_files") == "true" else False
         self.result_limit = int(self.conf.get("Video", "search_limit"))
@@ -197,8 +200,8 @@ Do you want to use FFmpeg? [yes,no]
         while True:
             quality_color = {  # Highlight the current quality option in yellow
                 "Best": Fore.LIGHTYELLOW_EX if self.quality == "best" else Fore.LIGHTWHITE_EX,
-                "Half": Fore.LIGHTYELLOW_EX if self.quality == "balf" else Fore.LIGHTWHITE_EX,
-                "Worst": Fore.LIGHTYELLOW_EX if self.quality == "borst" else Fore.LIGHTWHITE_EX
+                "Half": Fore.LIGHTYELLOW_EX if self.quality == "half" else Fore.LIGHTWHITE_EX,
+                "Worst": Fore.LIGHTYELLOW_EX if self.quality == "worst" else Fore.LIGHTWHITE_EX
             }
             threading_mode_color = {  # Highlight the current threading mode in yellow
                 "threaded": Fore.LIGHTYELLOW_EX if self.threading_mode == "threaded" else Fore.LIGHTWHITE_EX,
@@ -528,10 +531,10 @@ Do you want to use FFmpeg? [yes,no]
                        '-loglevel', 'error']
                 ff = FfmpegProgress(cmd)
                 for progress in ff.run_command_with_progress():
-                    pass
+                    logger.debug(f"Converting progress: {progress}")
 
                 os.remove(f"{output_path}_.tmp")
-                write_tags(path=output_path, data=load_video_attributes(video, data_mode=1))
+                write_tags(path=output_path, data=load_video_attributes(video))
             else:
                 logger.debug("FFMPEG features disabled, writing tags and converting the video won't be available!")
 

@@ -1,39 +1,79 @@
-import sys
-import time
-import random
-import shutil
-import tarfile
-import os.path
-import zipfile
-import argparse
-import markdown
-import traceback
-import requests.exceptions
-import src.frontend.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
+import http.client
+import json
 
-from phub import consts
-from threading import Event
-from io import TextIOWrapper
-from base_api.base import Core
-from itertools import islice, chain
-from hqporner_api.api import Sort as hq_Sort
-from base_api.modules import consts as bs_consts
 
-from src.backend.shared_gui import *
-from src.backend.class_help import *
-from src.backend.shared_functions import *
-from src.backend.log_config import setup_logging
-from src.frontend.ui_form_license import Ui_SetupLicense
-from src.frontend.ui_form_desktop import Ui_PornFetch_Desktop
-from src.frontend.ui_form_android import Ui_PornFetch_Android
-from src.frontend.ui_form_range_selector import Ui_PornFetchRangeSelector
-from src.frontend.ui_form_install_dialog import Ui_SetupInstallDialog
-from src.frontend.ui_form_keyboard_shortcuts import Ui_KeyboardShortcuts
+do_not_log = False
+def send_error_log(message):
+    """
+    This function is made for the Android development of Porn Fetch and is used for debugging.
+    You can, of course, change or remove it, but I wouldn't recommend it.
+    """
 
-from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
-                            QTranslator, QCoreApplication, QSize)
-from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView
-from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut
+    if do_not_log is False:
+        url = "192.168.2.139:8000"
+        endpoint = "/error-log/"
+        data = json.dumps({"message": message})
+        headers = {"Content-type": "application/json"}
+
+        conn = http.client.HTTPConnection(url)
+
+        try:
+            conn.request("POST", endpoint, data, headers)
+            response = conn.getresponse()
+
+            if response.status == 200:
+                print("Error log sent successfully")
+            else:
+                print(f"Failed to send error log: Status {response.status}, Reason: {response.reason}")
+
+            conn.close()
+        except Exception as e:
+            print(f"Request failed: {e}")
+
+send_error_log("Hi")
+
+try:
+    import sys
+    import time
+    import random
+    import shutil
+    import tarfile
+    import os.path
+    import zipfile
+    import argparse
+    import markdown
+    import traceback
+    import requests.exceptions
+    import src.frontend.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
+
+    from phub import consts
+    from threading import Event
+    from io import TextIOWrapper
+    from base_api.base import Core
+    from itertools import islice, chain
+    from hqporner_api.api import Sort as hq_Sort
+    from base_api.modules import consts as bs_consts
+
+    from src.backend.shared_gui import *
+    from src.backend.class_help import *
+    from src.backend.shared_functions import *
+
+    from src.backend.log_config import setup_logging
+    from src.frontend.ui_form_license import Ui_SetupLicense
+    from src.frontend.ui_form_desktop import Ui_PornFetch_Desktop
+    from src.frontend.ui_form_android import Ui_PornFetch_Android
+    from src.frontend.ui_form_range_selector import Ui_PornFetchRangeSelector
+    from src.frontend.ui_form_install_dialog import Ui_SetupInstallDialog
+    from src.frontend.ui_form_keyboard_shortcuts import Ui_KeyboardShortcuts
+
+    from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
+                            QTranslator, QCoreApplication, QSize, QTimer)
+    from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView
+    from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut
+
+except Exception:
+    error = traceback.format_exc()
+    send_error_log(error)
 
 """
 Copyright (C) 2023-2024 Johannes Habel
@@ -59,7 +99,7 @@ Discord: echteralsfake (faster response)
 
 __license__ = "GPL 3"
 __version__ = "3.5"
-__build__ = "desktop"  # android or desktop
+__build__ = "android"  # android or desktop
 __author__ = "Johannes Habel"
 __next_release__ = "3.5"
 total_segments = 0
@@ -177,12 +217,16 @@ class License(QWidget):
         self.close()
 
         if __build__ == "android":
-            pass # TODO
+            self.show_main()
 
         else:
             self.show_install_dialog()
 
+
     def show_install_dialog(self):
+        if sys.platform == "darwin":
+            self.show_main() # Installation not supported on macOS
+
         if self.conf["Setup"]["install"] == "unknown":
             self.install_widget = InstallDialog()
             self.install_widget.show()
@@ -1034,7 +1078,6 @@ class PornFetch(QWidget):
 
         self.conf = ConfigParser()
         self.conf.read("config.ini")
-
         if __build__ == "android":
             self.ui = Ui_PornFetch_Android()
             self.ui.setupUi(self)
@@ -2288,12 +2331,15 @@ This warning won't be shown again.
 
 
 def main():
+    send_error_log("Running in main function")
     setup_config_file()
+    send_error_log("Finished setting up configuration file")
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
     conf = ConfigParser()
     conf.read("config.ini")
     language = conf["UI"]["language"]
+    send_error_log("3")
 
     if language == "system":
         # Get the system's locale
@@ -2302,13 +2348,13 @@ def main():
 
     else:
         language_code = language
-
+    send_error_log("Got language code")
     # Try loading the specific regional translation
     path = f":/translations/translations/{language_code}.qm"
     translator = QTranslator(app)
     if translator.load(path):
         logger.debug(f"Startup: [1/5] {language_code} translation loaded")
-
+        send_error_log("Applied translation")
     else:
         # Try loading a more general translation if specific one fails
         general_language_code = language_code.split('_')[0]
@@ -2319,16 +2365,16 @@ def main():
             logger.debug(f"Failed to load {language_code} translation")
 
     app.installTranslator(translator)
-
+    send_error_log("Installed translation")
     file = QFile(":/style/stylesheets/stylesheet.qss")
     file.open(QFile.OpenModeFlag.ReadOnly | QFile.OpenModeFlag.Text)
     stream = QTextStream(file)
     app.setStyleSheet(stream.readAll())
-
+    send_error_log("Set main stylesheet")
     if __build__ == "android":
         font = QFont("arial", 12)
         app.setFont(font)
-
+        send_error_log("Applied Arial font")
     if conf["UI"]["custom_font"] == "true":
         font_id = QFontDatabase.addApplicationFont(":/fonts/graphics/JetBrainsMono-Regular.ttf")
         if font_id == -1:
@@ -2339,9 +2385,10 @@ def main():
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
             logger.info(f"Using custom font -->: {font_family}")
             app.setFont(QFont(font_family))
-
+            send_error_log("Loaded custom font")
     widget = License()  # Starts License widget and checks if license was accepted.
     widget.check_license_and_proceed()
+    send_error_log("Did License stuff yk")
     """
     The following exceptions are just general exceptions to handle some basic errors. They are not so relevant for
     most cases.

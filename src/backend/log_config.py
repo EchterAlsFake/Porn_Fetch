@@ -1,5 +1,5 @@
 import logging
-android = False
+android = True
 
 def setup_logging():
     # Check if running on Android, either from platform or a flag
