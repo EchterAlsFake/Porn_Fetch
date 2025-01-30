@@ -7,8 +7,8 @@
 - [x] Fixed HQporner / Eporner progress issue stopping at 99%
 - [x] Fixed get random video (HQPorner)
 - [] Fix [#53](https://github.com/EchterAlsFake/Porn_Fetch/issues/53)
-  - [] Fix remote connection closed without response
-  - [] Fix logging
+  - [] ~~Fix remote connection closed without response~~
+  - [x] Fix logging
   - [x] Fix image URLs from PornHub
   - [x] Improving installation instructions
     - [x] Add instruction which file to pick from the releases
@@ -31,7 +31,7 @@
 - [x] When downloading a new video / loading in and videos are already downloading, the total progress should be appended
   by that instead of calculating the new total progress. This will require a rework of the progress system, but is a huge QOL update.
 - [x] Make an "evasion" mode to hide Porn Fetch from your PC / Android device
-- [] Full support for spankbang
+- [] ~~Full support for spankbang~~ 
 - [] Support for macOS
   - [x] Add build script
   - [x] Improve UI
@@ -53,10 +53,10 @@
 - [x] Make a threading class for every function that could take more time than ~350 ms to prevent UI delays
 - [x] Rework Porn Fetch buttons and some UI design
 - [x] Show a status for how many of the total downloads already succeeded (probably at the bottom of Porn Fetch)
-- [] Rework the entire progress reporting system (probably the hardest thing to do)
-- [] searching for ways to improve Android display reaction time for UI elements
+- [] ~~Rework the entire progress reporting system (probably the hardest thing to do)~~
+- [] ~~searching for ways to improve Android display reaction time for UI elements~~ (There is no way)
 - [] Update translations
-- [] Make a first-use tutorial
+- [] ~~Make a first-use tutorial~~ Nah, people can use their brain
 
 
 ### Testing (Really don't want to do that)
@@ -72,5 +72,5 @@
 
 
 # v3.6
-- [] Geo block bypass
-- [] Allow for custom proxy lists to help people in censored countries
+- [] ~~Geo block bypass~~
+- [x] Allow for custom proxy lists to help people in censored countries

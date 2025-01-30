@@ -30,8 +30,3 @@ Because some websites are using HLS streaming and some are just using a Content 
 splits videos into segments to allow a variable bitrate. The total number of segments is used to determine the total amount
 of progress. Since some websites don't use HLS streaming (for good reasons), the progress tracking would be different, and it doesn't
 make sense to mix them. I don't want to go in too much detail, but it has its reasons.
-
-
-## Q; Will XHamster be supported?
-
-Unfortunately xhamster encrypts its videos, so we can't access the content.

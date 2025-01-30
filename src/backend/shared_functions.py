@@ -5,25 +5,62 @@ If you know what you do, you can change a few things here :)
 
 import os
 import re
+import json
 import logging
 import http.client
-import json
 
-import requests
 from mutagen.mp4 import MP4, MP4Cover
-from phub import Client, errors, Video
-from phub.modules import download as download
 from configparser import ConfigParser
+from phub import Client, errors, Video, consts as phub_consts
+from phub.modules import download as download
+from ffmpeg_progress_yield import FfmpegProgress
+
+from base_api.base import BaseCore
+from base_api.modules import consts as bs_consts
 from hqporner_api import Client as hq_Client, Video as hq_Video
-from eporner_api import Client as ep_Client, Video as ep_Video
-from eporner_api.modules.locals import Category as ep_Category
 from xnxx_api import Client as xn_Client, Video as xn_Video
 from xvideos_api import Client as xv_Client, Video as xv_Video
-from spankbang_api import Client as sp_Client, Video as sp_Video
-from base_api import FFMPEG as bs_ffmpeg, default as bs_default, threaded as bs_threaded
-from base_api.modules import consts
-from base_api.modules.quality import Quality as bs_Quality
-from ffmpeg_progress_yield import FfmpegProgress
+from eporner_api import Client as ep_Client, Video as ep_Video, Category as ep_Category # Used in the main file
+
+# Initialize clients globally
+client = Client()
+hq_client = hq_Client()
+ep_client = ep_Client()
+xn_client = xn_Client()
+xv_client = xv_Client()
+
+
+
+def refresh_clients():
+    """
+    Reinitializes all API clients with updated BaseCore settings.
+    Call this after modifying consts.PROXY.
+    """
+    global hq_client, ep_client, xn_client, xv_client, client
+
+    # Refresh BaseCore first
+    BaseCore().initialize_session()
+
+    import hqporner_api
+    import xnxx_api
+    import eporner_api
+    import xvideos_api
+
+    hqporner_api.api.refresh_core()
+    xnxx_api.xnxx_api.refresh_core()
+    eporner_api.refresh_core()
+    xvideos_api.xvideos_api.refresh_core()
+
+    # Reinitialize all clients so they get a fresh BaseCore instance
+    hq_client = hqporner_api.Client()
+    ep_client = eporner_api.Client()
+    xn_client = xnxx_api.Client()
+    xv_client = xvideos_api.Client()
+    client = Client()
+    client.reset()
+    logger.info(f"Initialized new sessions with Proxy value: {bs_consts.PROXY} | {phub_consts.PROXY}")
+    print(f"Initialized new sessions with Proxy value: {bs_consts.PROXY} | {phub_consts.PROXY}")
+
 
 """
 The following are the sections and options for the configuration file. Please don't change anything here, 
@@ -33,7 +70,7 @@ as they are indeed needed for the main applications!
 # TODO: Implement logging
 sections = ["Setup", "Performance", "PostProcessing", "Video", "UI"]
 
-options_setup = ["license_accepted", "install", "update_checks", "internet_checks", "anonymous_mode", "tor"]
+options_setup = ["license_accepted", "install", "update_checks", "internet_checks", "anonymous_mode"]
 options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries", "ffmpeg_warning"]
 options_post_processing = ["convert", "format", "write_metadata"]
 options_video = ["quality", "output_path", "directory_system", "search_limit", "delay", "skip_existing_files", "model_videos"]
@@ -51,7 +88,6 @@ license_accepted = no
 install = unknown
 update_checks = true
 internet_checks = true
-tor = false
 anonymous_mode = false
 
 [Performance]
@@ -82,7 +118,7 @@ custom_font = true
 """
 
 logger = logging.getLogger(__name__)
-do_not_log = False
+do_not_log = True
 def send_error_log(message):
     """
     This function is made for the Android development of Porn Fetch and is used for debugging.
@@ -124,9 +160,6 @@ def check_video(url, is_url=True, delay=False):
         elif xvideos_pattern.search(str(url)):
             return xv_Client().get_video(url)
 
-        elif spankbang_pattern.search(str(url)):
-            return sp_Client().get_video(url)
-
         if isinstance(url, Video):
             url.fetch("page@")
             return url
@@ -143,11 +176,9 @@ def check_video(url, is_url=True, delay=False):
         elif isinstance(url, xv_Video):
             return url
 
-        elif isinstance(url, sp_Video):
-            return url
 
         elif isinstance(url, str) and not str(url).endswith(".html"):
-            video = Client(delay=delay).get(url)
+            video = Client().get(url)
             video.fetch("page@")
             return video
 
@@ -252,23 +283,13 @@ def load_video_attributes(video):
         publish_date = video.publish_date
         thumbnail = video.get_thumbnails()[0]
 
-    elif isinstance(video, sp_Video):
-        author = video.author
-        _length = video.length.split(":")
-        length_minutes = _length[0] + "m"
-        length_seconds = _length[1] + "s"
-        length = length_minutes + " " + length_seconds
-        tags = ",".join([tag for tag in video.tags])
-        publish_date = video.publish_date
-        thumbnail = video.thumbnail
-
     else:
         raise "Instance Error! Please report this immediately on GitHub!"
 
     data = {
         "title": title,
         "author": author,
-        "length": round(length), # Make sure the video duration is not something like 6.7777777779
+        "length": parse_length(length), # Make sure the video duration is not something like 6.7777777779
         "tags": tags,
         "publish_date": publish_date,
         "thumbnail": thumbnail,
@@ -277,7 +298,7 @@ def load_video_attributes(video):
     return data
 
 
-def write_tags(path, data: dict):
+def write_tags(path, data: dict): # Using core from Porn Fetch to keep proxy support
     comment = "Downloaded with Porn Fetch (GPLv3)"
     genre = "Porn"
 
@@ -297,7 +318,7 @@ def write_tags(path, data: dict):
     logging.debug("Tags: [2/3] - Writing Thumbnail")
 
     try:
-        content = requests.get(thumbnail).content
+        content = BaseCore().fetch(url=thumbnail, get_bytes=True)
         cover = MP4Cover(content, imageformat=MP4Cover.FORMAT_JPEG)
         audio.tags["covr"] = [cover] # Yes, it needs to be in a list
 
@@ -311,63 +332,53 @@ def write_tags(path, data: dict):
 
 def parse_length(length):
     try:
-        # Check if length is a valid integer string representing minutes
-        if isinstance(length, int) or (isinstance(length, str) and length.isdigit()):
+        # Directly return if length is an integer
+        if isinstance(length, int):
+            return length
+
+        # Handle string representations of integers
+        if isinstance(length, str) and length.isdigit():
             return int(length)
 
-        # Check for decimal format like "9.3333334" which represents minutes and fractions of minutes
+        # Handle decimal formats like "9.3333334"
         if isinstance(length, float) or (isinstance(length, str) and '.' in length):
             try:
-                return int(round(length))
+                return round(float(length))  # Convert and round float values
             except ValueError:
                 pass
 
-        # Initialize a dictionary for time units conversion
+        if "Min" in str(length):
+            return int(str(length).strip(" ").strip("Min"))
+
+        # Dictionary for time unit conversion
         time_units = {'s': 1 / 60, 'm': 1, 'h': 60}
         total_minutes = 0
 
-        # Split the length string by spaces
+        # Split the length string by spaces (e.g., "59m 40s")
         parts = length.split()
         for part in parts:
             # Extract the numeric value and the time unit
-            value = int(part[:-1])
-            unit = part[-1]
+            value = ''.join(filter(str.isdigit, part))  # Extract digits
+            unit = ''.join(filter(str.isalpha, part))  # Extract letters
 
-            # Convert the value to minutes if the unit is valid
-            if unit in time_units:
-                total_minutes += value * time_units[unit]
+            if value.isdigit() and unit in time_units:
+                total_minutes += int(value) * time_units[unit]
 
         # If a valid time conversion was found, return the total minutes
         if total_minutes > 0:
-            return total_minutes
+            return round(total_minutes)
 
-        # Check for format ending with 'min'
+        # Handle formats like '24 seconds'
+        if length.endswith('seconds'):
+            value = ''.join(filter(str.isdigit, length))
+            return int(value) / 60 if value.isdigit() else 0  # Convert seconds to minutes
+
+        # Handle formats ending with 'min'
         if length.endswith('min'):
             return int(length[:-3])
-
-        # Check for format like '24 seconds'
-        if length.endswith('seconds'):
-            value = int(length.split()[0])
-            return value / 60  # Convert seconds to minutes
 
         return None
 
     except Exception:
         return 0
 
-
-def resolve_threading_mode(video, mode, workers, timeout):
-    """Resolve the appropriate threading mode based on input."""
-    if isinstance(video, Video):
-        return {
-            "threaded": download.threaded(max_workers=workers, timeout=timeout),
-            "FFMPEG": download.FFMPEG,
-            "default": download.default
-        }.get(mode, download.default)
-
-    else:
-        return {
-            "threaded": bs_threaded(max_workers=workers, timeout=timeout, retries=5),
-            "FFMPEG": bs_ffmpeg,
-            "default": bs_default
-        }.get(mode, download.default)

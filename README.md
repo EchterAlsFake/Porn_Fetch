@@ -84,7 +84,6 @@ The Graphical User Interface is only for 64bit systems. The CLI supports 64 and 
 - [xnxx.com](https://github.com/EchterAlsFake/xnxx_api)
 - [Eporner.com](https://github.com/EchterAlsFake/eporner_api)
 - [XVideos.com](https://github.com/EchterAlsFake/xvideos_api)
-- [Spankbang.com](https://github.com/EchterAlsFake/spankbang_api)
 
 > [!IMPORTANT] 
 > Not all websites support every feature. 

@@ -26,22 +26,23 @@ class Ui_PornFetch_Desktop(object):
     def setupUi(self, PornFetch_Desktop):
         if not PornFetch_Desktop.objectName():
             PornFetch_Desktop.setObjectName(u"PornFetch_Desktop")
-        PornFetch_Desktop.resize(1663, 870)
+        PornFetch_Desktop.resize(1622, 727)
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(PornFetch_Desktop.sizePolicy().hasHeightForWidth())
         PornFetch_Desktop.setSizePolicy(sizePolicy)
-        PornFetch_Desktop.setMinimumSize(QSize(500, 281))
+        PornFetch_Desktop.setMinimumSize(QSize(978, 585))
         PornFetch_Desktop.setStyleSheet(u"QLbel {\n"
 "    color: black;}")
         self.gridLayout_14 = QGridLayout(PornFetch_Desktop)
         self.gridLayout_14.setObjectName(u"gridLayout_14")
+        self.gridLayout_14.setContentsMargins(-1, 0, -1, -1)
         self.verticallayout_main = QVBoxLayout()
         self.verticallayout_main.setSpacing(0)
         self.verticallayout_main.setObjectName(u"verticallayout_main")
         self.main_horizontallayout_menu_buttons = QHBoxLayout()
-        self.main_horizontallayout_menu_buttons.setSpacing(0)
+        self.main_horizontallayout_menu_buttons.setSpacing(5)
         self.main_horizontallayout_menu_buttons.setObjectName(u"main_horizontallayout_menu_buttons")
         self.main_button_switch_home = QPushButton(PornFetch_Desktop)
         self.main_button_switch_home.setObjectName(u"main_button_switch_home")
@@ -177,8 +178,9 @@ class Ui_PornFetch_Desktop(object):
         self.gridLayout_8.setObjectName(u"gridLayout_8")
         self.gridLayout_8.setContentsMargins(0, 0, 0, 0)
         self.main_verticallayout = QVBoxLayout()
-        self.main_verticallayout.setSpacing(0)
+        self.main_verticallayout.setSpacing(5)
         self.main_verticallayout.setObjectName(u"main_verticallayout")
+        self.main_verticallayout.setContentsMargins(-1, 3, -1, -1)
         self.main_stacked_widget_top = QStackedWidget(self.main_widget)
         self.main_stacked_widget_top.setObjectName(u"main_stacked_widget_top")
         sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
@@ -186,7 +188,7 @@ class Ui_PornFetch_Desktop(object):
         sizePolicy2.setVerticalStretch(0)
         sizePolicy2.setHeightForWidth(self.main_stacked_widget_top.sizePolicy().hasHeightForWidth())
         self.main_stacked_widget_top.setSizePolicy(sizePolicy2)
-        self.main_stacked_widget_top.setMinimumSize(QSize(650, 20))
+        self.main_stacked_widget_top.setMinimumSize(QSize(650, 220))
         self.main_stacked_widget_top.setStyleSheet(u"b")
         self.main_stacked_widget_top.setLineWidth(1)
         self.page_download = QWidget()
@@ -205,7 +207,64 @@ class Ui_PornFetch_Desktop(object):
         self.gridlayout_downloading.setSpacing(6)
         self.gridlayout_downloading.setObjectName(u"gridlayout_downloading")
         self.gridlayout_downloading.setSizeConstraint(QLayout.SizeConstraint.SetMinimumSize)
-        self.gridlayout_downloading.setContentsMargins(-1, 14, -1, -1)
+        self.gridlayout_downloading.setContentsMargins(-1, 3, -1, -1)
+        self.download_button_download = QPushButton(self.page_download)
+        self.download_button_download.setObjectName(u"download_button_download")
+        sizePolicy2.setHeightForWidth(self.download_button_download.sizePolicy().hasHeightForWidth())
+        self.download_button_download.setSizePolicy(sizePolicy2)
+        self.download_button_download.setMinimumSize(QSize(60, 30))
+        self.download_button_download.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.download_button_download.setStyleSheet(u"")
+
+        self.gridlayout_downloading.addWidget(self.download_button_download, 2, 5, 1, 1)
+
+        self.download_radio_search_website_pornhub = QRadioButton(self.page_download)
+        self.download_radio_search_website_pornhub.setObjectName(u"download_radio_search_website_pornhub")
+        sizePolicy2.setHeightForWidth(self.download_radio_search_website_pornhub.sizePolicy().hasHeightForWidth())
+        self.download_radio_search_website_pornhub.setSizePolicy(sizePolicy2)
+        self.download_radio_search_website_pornhub.setMinimumSize(QSize(0, 30))
+        self.download_radio_search_website_pornhub.setChecked(True)
+
+        self.gridlayout_downloading.addWidget(self.download_radio_search_website_pornhub, 8, 1, 1, 1)
+
+        self.download_lineedit_search_query = QLineEdit(self.page_download)
+        self.download_lineedit_search_query.setObjectName(u"download_lineedit_search_query")
+        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Minimum)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.download_lineedit_search_query.sizePolicy().hasHeightForWidth())
+        self.download_lineedit_search_query.setSizePolicy(sizePolicy4)
+        self.download_lineedit_search_query.setMinimumSize(QSize(300, 30))
+
+        self.gridlayout_downloading.addWidget(self.download_lineedit_search_query, 7, 1, 1, 4)
+
+        self.download_label_playlist_url = QLabel(self.page_download)
+        self.download_label_playlist_url.setObjectName(u"download_label_playlist_url")
+        sizePolicy3.setHeightForWidth(self.download_label_playlist_url.sizePolicy().hasHeightForWidth())
+        self.download_label_playlist_url.setSizePolicy(sizePolicy3)
+        self.download_label_playlist_url.setMinimumSize(QSize(0, 30))
+
+        self.gridlayout_downloading.addWidget(self.download_label_playlist_url, 4, 0, 1, 1)
+
+        self.download_label_search_website = QLabel(self.page_download)
+        self.download_label_search_website.setObjectName(u"download_label_search_website")
+        sizePolicy5 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        sizePolicy5.setHorizontalStretch(0)
+        sizePolicy5.setVerticalStretch(0)
+        sizePolicy5.setHeightForWidth(self.download_label_search_website.sizePolicy().hasHeightForWidth())
+        self.download_label_search_website.setSizePolicy(sizePolicy5)
+        self.download_label_search_website.setMinimumSize(QSize(0, 0))
+
+        self.gridlayout_downloading.addWidget(self.download_label_search_website, 8, 0, 1, 1)
+
+        self.download_label_file = QLabel(self.page_download)
+        self.download_label_file.setObjectName(u"download_label_file")
+        sizePolicy2.setHeightForWidth(self.download_label_file.sizePolicy().hasHeightForWidth())
+        self.download_label_file.setSizePolicy(sizePolicy2)
+        self.download_label_file.setMinimumSize(QSize(100, 30))
+
+        self.gridlayout_downloading.addWidget(self.download_label_file, 6, 0, 1, 1)
+
         self.download_label_model_url = QLabel(self.page_download)
         self.download_label_model_url.setObjectName(u"download_label_model_url")
         sizePolicy2.setHeightForWidth(self.download_label_model_url.sizePolicy().hasHeightForWidth())
@@ -214,13 +273,47 @@ class Ui_PornFetch_Desktop(object):
 
         self.gridlayout_downloading.addWidget(self.download_label_model_url, 5, 0, 1, 1)
 
-        self.download_radio_search_website_xnxx = QRadioButton(self.page_download)
-        self.download_radio_search_website_xnxx.setObjectName(u"download_radio_search_website_xnxx")
-        sizePolicy2.setHeightForWidth(self.download_radio_search_website_xnxx.sizePolicy().hasHeightForWidth())
-        self.download_radio_search_website_xnxx.setSizePolicy(sizePolicy2)
-        self.download_radio_search_website_xnxx.setMinimumSize(QSize(0, 30))
+        self.button_search = QPushButton(self.page_download)
+        self.button_search.setObjectName(u"button_search")
+        sizePolicy2.setHeightForWidth(self.button_search.sizePolicy().hasHeightForWidth())
+        self.button_search.setSizePolicy(sizePolicy2)
+        self.button_search.setMinimumSize(QSize(0, 30))
+        self.button_search.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.gridlayout_downloading.addWidget(self.download_radio_search_website_xnxx, 8, 5, 1, 1)
+        self.gridlayout_downloading.addWidget(self.button_search, 7, 5, 1, 1)
+
+        self.download_radio_search_website_hqporner = QRadioButton(self.page_download)
+        self.download_radio_search_website_hqporner.setObjectName(u"download_radio_search_website_hqporner")
+        sizePolicy2.setHeightForWidth(self.download_radio_search_website_hqporner.sizePolicy().hasHeightForWidth())
+        self.download_radio_search_website_hqporner.setSizePolicy(sizePolicy2)
+        self.download_radio_search_website_hqporner.setMinimumSize(QSize(0, 30))
+
+        self.gridlayout_downloading.addWidget(self.download_radio_search_website_hqporner, 8, 2, 1, 1)
+
+        self.download_label_url = QLabel(self.page_download)
+        self.download_label_url.setObjectName(u"download_label_url")
+        sizePolicy2.setHeightForWidth(self.download_label_url.sizePolicy().hasHeightForWidth())
+        self.download_label_url.setSizePolicy(sizePolicy2)
+        self.download_label_url.setMinimumSize(QSize(100, 30))
+
+        self.gridlayout_downloading.addWidget(self.download_label_url, 2, 0, 1, 1)
+
+        self.download_lineedit_file = QLineEdit(self.page_download)
+        self.download_lineedit_file.setObjectName(u"download_lineedit_file")
+        sizePolicy4.setHeightForWidth(self.download_lineedit_file.sizePolicy().hasHeightForWidth())
+        self.download_lineedit_file.setSizePolicy(sizePolicy4)
+        self.download_lineedit_file.setMinimumSize(QSize(300, 30))
+        self.download_lineedit_file.setReadOnly(True)
+
+        self.gridlayout_downloading.addWidget(self.download_lineedit_file, 6, 1, 1, 3)
+
+        self.download_radio_search_website_xvideos = QRadioButton(self.page_download)
+        self.download_radio_search_website_xvideos.setObjectName(u"download_radio_search_website_xvideos")
+        sizePolicy2.setHeightForWidth(self.download_radio_search_website_xvideos.sizePolicy().hasHeightForWidth())
+        self.download_radio_search_website_xvideos.setSizePolicy(sizePolicy2)
+        self.download_radio_search_website_xvideos.setMinimumSize(QSize(0, 30))
+
+        self.gridlayout_downloading.addWidget(self.download_radio_search_website_xvideos, 8, 3, 1, 1)
 
         self.download_button_model = QPushButton(self.page_download)
         self.download_button_model.setObjectName(u"download_button_model")
@@ -234,22 +327,54 @@ class Ui_PornFetch_Desktop(object):
 
         self.download_lineedit_playlist_url = QLineEdit(self.page_download)
         self.download_lineedit_playlist_url.setObjectName(u"download_lineedit_playlist_url")
-        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-        sizePolicy4.setHorizontalStretch(0)
-        sizePolicy4.setVerticalStretch(0)
-        sizePolicy4.setHeightForWidth(self.download_lineedit_playlist_url.sizePolicy().hasHeightForWidth())
-        self.download_lineedit_playlist_url.setSizePolicy(sizePolicy4)
+        sizePolicy6 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        sizePolicy6.setHorizontalStretch(0)
+        sizePolicy6.setVerticalStretch(0)
+        sizePolicy6.setHeightForWidth(self.download_lineedit_playlist_url.sizePolicy().hasHeightForWidth())
+        self.download_lineedit_playlist_url.setSizePolicy(sizePolicy6)
         self.download_lineedit_playlist_url.setMinimumSize(QSize(0, 30))
 
         self.gridlayout_downloading.addWidget(self.download_lineedit_playlist_url, 4, 1, 1, 4)
 
-        self.download_label_url = QLabel(self.page_download)
-        self.download_label_url.setObjectName(u"download_label_url")
-        sizePolicy2.setHeightForWidth(self.download_label_url.sizePolicy().hasHeightForWidth())
-        self.download_label_url.setSizePolicy(sizePolicy2)
-        self.download_label_url.setMinimumSize(QSize(100, 30))
+        self.download_button_help_file = QPushButton(self.page_download)
+        self.download_button_help_file.setObjectName(u"download_button_help_file")
+        sizePolicy2.setHeightForWidth(self.download_button_help_file.sizePolicy().hasHeightForWidth())
+        self.download_button_help_file.setSizePolicy(sizePolicy2)
+        self.download_button_help_file.setMinimumSize(QSize(0, 30))
 
-        self.gridlayout_downloading.addWidget(self.download_label_url, 2, 0, 1, 1)
+        self.gridlayout_downloading.addWidget(self.download_button_help_file, 6, 4, 1, 1)
+
+        self.download_radio_search_website_xnxx = QRadioButton(self.page_download)
+        self.download_radio_search_website_xnxx.setObjectName(u"download_radio_search_website_xnxx")
+        sizePolicy2.setHeightForWidth(self.download_radio_search_website_xnxx.sizePolicy().hasHeightForWidth())
+        self.download_radio_search_website_xnxx.setSizePolicy(sizePolicy2)
+        self.download_radio_search_website_xnxx.setMinimumSize(QSize(0, 30))
+
+        self.gridlayout_downloading.addWidget(self.download_radio_search_website_xnxx, 8, 5, 1, 1)
+
+        self.download_lineedit_url = QLineEdit(self.page_download)
+        self.download_lineedit_url.setObjectName(u"download_lineedit_url")
+        sizePolicy4.setHeightForWidth(self.download_lineedit_url.sizePolicy().hasHeightForWidth())
+        self.download_lineedit_url.setSizePolicy(sizePolicy4)
+        self.download_lineedit_url.setMinimumSize(QSize(300, 30))
+
+        self.gridlayout_downloading.addWidget(self.download_lineedit_url, 2, 1, 1, 4)
+
+        self.download_lineedit_model_url = QLineEdit(self.page_download)
+        self.download_lineedit_model_url.setObjectName(u"download_lineedit_model_url")
+        sizePolicy4.setHeightForWidth(self.download_lineedit_model_url.sizePolicy().hasHeightForWidth())
+        self.download_lineedit_model_url.setSizePolicy(sizePolicy4)
+        self.download_lineedit_model_url.setMinimumSize(QSize(300, 30))
+
+        self.gridlayout_downloading.addWidget(self.download_lineedit_model_url, 5, 1, 1, 4)
+
+        self.download_label_search = QLabel(self.page_download)
+        self.download_label_search.setObjectName(u"download_label_search")
+        sizePolicy3.setHeightForWidth(self.download_label_search.sizePolicy().hasHeightForWidth())
+        self.download_label_search.setSizePolicy(sizePolicy3)
+        self.download_label_search.setMinimumSize(QSize(0, 30))
+
+        self.gridlayout_downloading.addWidget(self.download_label_search, 7, 0, 1, 1)
 
         self.download_button_open_file = QPushButton(self.page_download)
         self.download_button_open_file.setObjectName(u"download_button_open_file")
@@ -261,132 +386,13 @@ class Ui_PornFetch_Desktop(object):
 
         self.gridlayout_downloading.addWidget(self.download_button_open_file, 6, 5, 1, 1)
 
-        self.download_radio_search_website_xvideos = QRadioButton(self.page_download)
-        self.download_radio_search_website_xvideos.setObjectName(u"download_radio_search_website_xvideos")
-        sizePolicy2.setHeightForWidth(self.download_radio_search_website_xvideos.sizePolicy().hasHeightForWidth())
-        self.download_radio_search_website_xvideos.setSizePolicy(sizePolicy2)
-        self.download_radio_search_website_xvideos.setMinimumSize(QSize(0, 30))
+        self.download_radio_search_website_eporner = QRadioButton(self.page_download)
+        self.download_radio_search_website_eporner.setObjectName(u"download_radio_search_website_eporner")
+        sizePolicy2.setHeightForWidth(self.download_radio_search_website_eporner.sizePolicy().hasHeightForWidth())
+        self.download_radio_search_website_eporner.setSizePolicy(sizePolicy2)
+        self.download_radio_search_website_eporner.setMinimumSize(QSize(0, 30))
 
-        self.gridlayout_downloading.addWidget(self.download_radio_search_website_xvideos, 8, 3, 1, 1)
-
-        self.download_radio_search_website_hqporner = QRadioButton(self.page_download)
-        self.download_radio_search_website_hqporner.setObjectName(u"download_radio_search_website_hqporner")
-        sizePolicy2.setHeightForWidth(self.download_radio_search_website_hqporner.sizePolicy().hasHeightForWidth())
-        self.download_radio_search_website_hqporner.setSizePolicy(sizePolicy2)
-        self.download_radio_search_website_hqporner.setMinimumSize(QSize(0, 30))
-
-        self.gridlayout_downloading.addWidget(self.download_radio_search_website_hqporner, 8, 2, 1, 1)
-
-        self.download_lineedit_file = QLineEdit(self.page_download)
-        self.download_lineedit_file.setObjectName(u"download_lineedit_file")
-        sizePolicy5 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Minimum)
-        sizePolicy5.setHorizontalStretch(0)
-        sizePolicy5.setVerticalStretch(0)
-        sizePolicy5.setHeightForWidth(self.download_lineedit_file.sizePolicy().hasHeightForWidth())
-        self.download_lineedit_file.setSizePolicy(sizePolicy5)
-        self.download_lineedit_file.setMinimumSize(QSize(300, 30))
-        self.download_lineedit_file.setReadOnly(True)
-
-        self.gridlayout_downloading.addWidget(self.download_lineedit_file, 6, 1, 1, 3)
-
-        self.download_radio_search_website_pornhub = QRadioButton(self.page_download)
-        self.download_radio_search_website_pornhub.setObjectName(u"download_radio_search_website_pornhub")
-        sizePolicy2.setHeightForWidth(self.download_radio_search_website_pornhub.sizePolicy().hasHeightForWidth())
-        self.download_radio_search_website_pornhub.setSizePolicy(sizePolicy2)
-        self.download_radio_search_website_pornhub.setMinimumSize(QSize(0, 30))
-        self.download_radio_search_website_pornhub.setChecked(True)
-
-        self.gridlayout_downloading.addWidget(self.download_radio_search_website_pornhub, 8, 1, 1, 1)
-
-        self.download_button_help_file = QPushButton(self.page_download)
-        self.download_button_help_file.setObjectName(u"download_button_help_file")
-        sizePolicy2.setHeightForWidth(self.download_button_help_file.sizePolicy().hasHeightForWidth())
-        self.download_button_help_file.setSizePolicy(sizePolicy2)
-        self.download_button_help_file.setMinimumSize(QSize(0, 30))
-
-        self.gridlayout_downloading.addWidget(self.download_button_help_file, 6, 4, 1, 1)
-
-        self.download_button_download = QPushButton(self.page_download)
-        self.download_button_download.setObjectName(u"download_button_download")
-        sizePolicy2.setHeightForWidth(self.download_button_download.sizePolicy().hasHeightForWidth())
-        self.download_button_download.setSizePolicy(sizePolicy2)
-        self.download_button_download.setMinimumSize(QSize(60, 30))
-        self.download_button_download.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.download_button_download.setStyleSheet(u"")
-
-        self.gridlayout_downloading.addWidget(self.download_button_download, 2, 5, 1, 1)
-
-        self.download_label_search = QLabel(self.page_download)
-        self.download_label_search.setObjectName(u"download_label_search")
-        sizePolicy3.setHeightForWidth(self.download_label_search.sizePolicy().hasHeightForWidth())
-        self.download_label_search.setSizePolicy(sizePolicy3)
-        self.download_label_search.setMinimumSize(QSize(0, 30))
-
-        self.gridlayout_downloading.addWidget(self.download_label_search, 7, 0, 1, 1)
-
-        self.download_label_playlist_url = QLabel(self.page_download)
-        self.download_label_playlist_url.setObjectName(u"download_label_playlist_url")
-        sizePolicy3.setHeightForWidth(self.download_label_playlist_url.sizePolicy().hasHeightForWidth())
-        self.download_label_playlist_url.setSizePolicy(sizePolicy3)
-        self.download_label_playlist_url.setMinimumSize(QSize(0, 30))
-
-        self.gridlayout_downloading.addWidget(self.download_label_playlist_url, 4, 0, 1, 1)
-
-        self.download_lineedit_model_url = QLineEdit(self.page_download)
-        self.download_lineedit_model_url.setObjectName(u"download_lineedit_model_url")
-        sizePolicy5.setHeightForWidth(self.download_lineedit_model_url.sizePolicy().hasHeightForWidth())
-        self.download_lineedit_model_url.setSizePolicy(sizePolicy5)
-        self.download_lineedit_model_url.setMinimumSize(QSize(300, 30))
-
-        self.gridlayout_downloading.addWidget(self.download_lineedit_model_url, 5, 1, 1, 4)
-
-        self.button_search = QPushButton(self.page_download)
-        self.button_search.setObjectName(u"button_search")
-        sizePolicy2.setHeightForWidth(self.button_search.sizePolicy().hasHeightForWidth())
-        self.button_search.setSizePolicy(sizePolicy2)
-        self.button_search.setMinimumSize(QSize(0, 30))
-        self.button_search.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridlayout_downloading.addWidget(self.button_search, 7, 5, 1, 1)
-
-        self.download_label_search_website = QLabel(self.page_download)
-        self.download_label_search_website.setObjectName(u"download_label_search_website")
-        sizePolicy6 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-        sizePolicy6.setHorizontalStretch(0)
-        sizePolicy6.setVerticalStretch(0)
-        sizePolicy6.setHeightForWidth(self.download_label_search_website.sizePolicy().hasHeightForWidth())
-        self.download_label_search_website.setSizePolicy(sizePolicy6)
-        self.download_label_search_website.setMinimumSize(QSize(0, 0))
-
-        self.gridlayout_downloading.addWidget(self.download_label_search_website, 8, 0, 1, 1)
-
-        self.download_lineedit_search_query = QLineEdit(self.page_download)
-        self.download_lineedit_search_query.setObjectName(u"download_lineedit_search_query")
-        sizePolicy5.setHeightForWidth(self.download_lineedit_search_query.sizePolicy().hasHeightForWidth())
-        self.download_lineedit_search_query.setSizePolicy(sizePolicy5)
-        self.download_lineedit_search_query.setMinimumSize(QSize(300, 30))
-
-        self.gridlayout_downloading.addWidget(self.download_lineedit_search_query, 7, 1, 1, 4)
-
-        self.download_lineedit_url = QLineEdit(self.page_download)
-        self.download_lineedit_url.setObjectName(u"download_lineedit_url")
-        sizePolicy5.setHeightForWidth(self.download_lineedit_url.sizePolicy().hasHeightForWidth())
-        self.download_lineedit_url.setSizePolicy(sizePolicy5)
-        self.download_lineedit_url.setMinimumSize(QSize(300, 30))
-
-        self.gridlayout_downloading.addWidget(self.download_lineedit_url, 2, 1, 1, 4)
-
-        self.download_label_file = QLabel(self.page_download)
-        self.download_label_file.setObjectName(u"download_label_file")
-        sizePolicy2.setHeightForWidth(self.download_label_file.sizePolicy().hasHeightForWidth())
-        self.download_label_file.setSizePolicy(sizePolicy2)
-        self.download_label_file.setMinimumSize(QSize(100, 30))
-
-        self.gridlayout_downloading.addWidget(self.download_label_file, 6, 0, 1, 1)
-
-        self.download_spacer_main = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.gridlayout_downloading.addItem(self.download_spacer_main, 9, 2, 1, 1)
+        self.gridlayout_downloading.addWidget(self.download_radio_search_website_eporner, 8, 4, 1, 1)
 
         self.download_button_playlist_get_videos = QPushButton(self.page_download)
         self.download_button_playlist_get_videos.setObjectName(u"download_button_playlist_get_videos")
@@ -396,13 +402,9 @@ class Ui_PornFetch_Desktop(object):
 
         self.gridlayout_downloading.addWidget(self.download_button_playlist_get_videos, 4, 5, 1, 1)
 
-        self.download_radio_search_website_eporner = QRadioButton(self.page_download)
-        self.download_radio_search_website_eporner.setObjectName(u"download_radio_search_website_eporner")
-        sizePolicy2.setHeightForWidth(self.download_radio_search_website_eporner.sizePolicy().hasHeightForWidth())
-        self.download_radio_search_website_eporner.setSizePolicy(sizePolicy2)
-        self.download_radio_search_website_eporner.setMinimumSize(QSize(0, 30))
+        self.download_spacer_main = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.gridlayout_downloading.addWidget(self.download_radio_search_website_eporner, 8, 4, 1, 1)
+        self.gridlayout_downloading.addItem(self.download_spacer_main, 9, 2, 1, 1)
 
 
         self.gridLayout_5.addLayout(self.gridlayout_downloading, 0, 0, 1, 1)
@@ -418,7 +420,7 @@ class Ui_PornFetch_Desktop(object):
         self.login_gridlayout_login_box = QGridLayout()
         self.login_gridlayout_login_box.setSpacing(6)
         self.login_gridlayout_login_box.setObjectName(u"login_gridlayout_login_box")
-        self.login_gridlayout_login_box.setContentsMargins(-1, 14, -1, -1)
+        self.login_gridlayout_login_box.setContentsMargins(-1, 0, -1, -1)
         self.login_button_get_liked_videos = QPushButton(self.page_login)
         self.login_button_get_liked_videos.setObjectName(u"login_button_get_liked_videos")
         self.login_button_get_liked_videos.setMinimumSize(QSize(0, 30))
@@ -492,7 +494,7 @@ class Ui_PornFetch_Desktop(object):
 
         self.login_spacer_main = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.login_gridlayout_login_box.addItem(self.login_spacer_main, 4, 2, 1, 1)
+        self.login_gridlayout_login_box.addItem(self.login_spacer_main, 4, 1, 1, 1)
 
 
         self.gridLayout_2.addLayout(self.login_gridlayout_login_box, 0, 0, 1, 1)
@@ -509,12 +511,38 @@ class Ui_PornFetch_Desktop(object):
         self.progress_scrollarea.setWidgetResizable(True)
         self.progress_scrollarea_widgedcontents = QWidget()
         self.progress_scrollarea_widgedcontents.setObjectName(u"progress_scrollarea_widgedcontents")
-        self.progress_scrollarea_widgedcontents.setGeometry(QRect(0, 0, 404, 272))
+        self.progress_scrollarea_widgedcontents.setGeometry(QRect(0, 0, 387, 236))
         self.gridLayout_18 = QGridLayout(self.progress_scrollarea_widgedcontents)
         self.gridLayout_18.setObjectName(u"gridLayout_18")
         self.progress_gridlayout_progressbar = QGridLayout()
         self.progress_gridlayout_progressbar.setObjectName(u"progress_gridlayout_progressbar")
         self.progress_gridlayout_progressbar.setHorizontalSpacing(6)
+        self.progressbar_xvideos = QProgressBar(self.progress_scrollarea_widgedcontents)
+        self.progressbar_xvideos.setObjectName(u"progressbar_xvideos")
+        self.progressbar_xvideos.setMinimumSize(QSize(0, 30))
+        self.progressbar_xvideos.setStyleSheet(u"text-align: center; /* Centered text */")
+        self.progressbar_xvideos.setValue(0)
+
+        self.progress_gridlayout_progressbar.addWidget(self.progressbar_xvideos, 4, 1, 1, 1)
+
+        self.progress_lineedit_download_info = QLineEdit(self.progress_scrollarea_widgedcontents)
+        self.progress_lineedit_download_info.setObjectName(u"progress_lineedit_download_info")
+        self.progress_lineedit_download_info.setReadOnly(True)
+
+        self.progress_gridlayout_progressbar.addWidget(self.progress_lineedit_download_info, 5, 1, 1, 1)
+
+        self.progress_label_xnxx = QLabel(self.progress_scrollarea_widgedcontents)
+        self.progress_label_xnxx.setObjectName(u"progress_label_xnxx")
+        self.progress_label_xnxx.setMinimumSize(QSize(0, 30))
+
+        self.progress_gridlayout_progressbar.addWidget(self.progress_label_xnxx, 3, 0, 1, 1)
+
+        self.progress_label_xvideos = QLabel(self.progress_scrollarea_widgedcontents)
+        self.progress_label_xvideos.setObjectName(u"progress_label_xvideos")
+        self.progress_label_xvideos.setMinimumSize(QSize(0, 30))
+
+        self.progress_gridlayout_progressbar.addWidget(self.progress_label_xvideos, 4, 0, 1, 1)
+
         self.progressbar_eporner = QProgressBar(self.progress_scrollarea_widgedcontents)
         self.progressbar_eporner.setObjectName(u"progressbar_eporner")
         self.progressbar_eporner.setMinimumSize(QSize(0, 30))
@@ -529,13 +557,11 @@ class Ui_PornFetch_Desktop(object):
 
         self.progress_gridlayout_progressbar.addWidget(self.progress_label_eporner, 2, 0, 1, 1)
 
-        self.progressbar_xnxx = QProgressBar(self.progress_scrollarea_widgedcontents)
-        self.progressbar_xnxx.setObjectName(u"progressbar_xnxx")
-        self.progressbar_xnxx.setMinimumSize(QSize(0, 30))
-        self.progressbar_xnxx.setStyleSheet(u"text-align: center; /* Centered text */")
-        self.progressbar_xnxx.setValue(0)
+        self.progress_label_info = QLabel(self.progress_scrollarea_widgedcontents)
+        self.progress_label_info.setObjectName(u"progress_label_info")
+        self.progress_label_info.setMinimumSize(QSize(0, 30))
 
-        self.progress_gridlayout_progressbar.addWidget(self.progressbar_xnxx, 3, 1, 1, 1)
+        self.progress_gridlayout_progressbar.addWidget(self.progress_label_info, 5, 0, 1, 1)
 
         self.progressbar_pornhub = QProgressBar(self.progress_scrollarea_widgedcontents)
         self.progressbar_pornhub.setObjectName(u"progressbar_pornhub")
@@ -557,33 +583,13 @@ class Ui_PornFetch_Desktop(object):
 
         self.progress_gridlayout_progressbar.addWidget(self.progressbar_hqporner, 1, 1, 1, 1)
 
-        self.progressbar_spankbang = QProgressBar(self.progress_scrollarea_widgedcontents)
-        self.progressbar_spankbang.setObjectName(u"progressbar_spankbang")
-        self.progressbar_spankbang.setMinimumSize(QSize(0, 30))
-        self.progressbar_spankbang.setStyleSheet(u"text-align: center; /* Centered text */")
-        self.progressbar_spankbang.setValue(0)
+        self.progressbar_xnxx = QProgressBar(self.progress_scrollarea_widgedcontents)
+        self.progressbar_xnxx.setObjectName(u"progressbar_xnxx")
+        self.progressbar_xnxx.setMinimumSize(QSize(0, 30))
+        self.progressbar_xnxx.setStyleSheet(u"text-align: center; /* Centered text */")
+        self.progressbar_xnxx.setValue(0)
 
-        self.progress_gridlayout_progressbar.addWidget(self.progressbar_spankbang, 5, 1, 1, 1)
-
-        self.progressbar_xvideos = QProgressBar(self.progress_scrollarea_widgedcontents)
-        self.progressbar_xvideos.setObjectName(u"progressbar_xvideos")
-        self.progressbar_xvideos.setMinimumSize(QSize(0, 30))
-        self.progressbar_xvideos.setStyleSheet(u"text-align: center; /* Centered text */")
-        self.progressbar_xvideos.setValue(0)
-
-        self.progress_gridlayout_progressbar.addWidget(self.progressbar_xvideos, 4, 1, 1, 1)
-
-        self.progress_label_info = QLabel(self.progress_scrollarea_widgedcontents)
-        self.progress_label_info.setObjectName(u"progress_label_info")
-        self.progress_label_info.setMinimumSize(QSize(0, 30))
-
-        self.progress_gridlayout_progressbar.addWidget(self.progress_label_info, 6, 0, 1, 1)
-
-        self.progress_label_xvideos = QLabel(self.progress_scrollarea_widgedcontents)
-        self.progress_label_xvideos.setObjectName(u"progress_label_xvideos")
-        self.progress_label_xvideos.setMinimumSize(QSize(0, 30))
-
-        self.progress_gridlayout_progressbar.addWidget(self.progress_label_xvideos, 4, 0, 1, 1)
+        self.progress_gridlayout_progressbar.addWidget(self.progressbar_xnxx, 3, 1, 1, 1)
 
         self.progress_label_pornhub = QLabel(self.progress_scrollarea_widgedcontents)
         self.progress_label_pornhub.setObjectName(u"progress_label_pornhub")
@@ -593,17 +599,9 @@ class Ui_PornFetch_Desktop(object):
 
         self.progress_gridlayout_progressbar.addWidget(self.progress_label_pornhub, 0, 0, 1, 1)
 
-        self.progress_lineedit_download_info = QLineEdit(self.progress_scrollarea_widgedcontents)
-        self.progress_lineedit_download_info.setObjectName(u"progress_lineedit_download_info")
-        self.progress_lineedit_download_info.setReadOnly(True)
+        self.progress_vertical_spacer_main = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.progress_gridlayout_progressbar.addWidget(self.progress_lineedit_download_info, 6, 1, 1, 1)
-
-        self.progress_label_xnxx = QLabel(self.progress_scrollarea_widgedcontents)
-        self.progress_label_xnxx.setObjectName(u"progress_label_xnxx")
-        self.progress_label_xnxx.setMinimumSize(QSize(0, 30))
-
-        self.progress_gridlayout_progressbar.addWidget(self.progress_label_xnxx, 3, 0, 1, 1)
+        self.progress_gridlayout_progressbar.addItem(self.progress_vertical_spacer_main, 6, 1, 1, 1)
 
         self.progress_label_hqporner = QLabel(self.progress_scrollarea_widgedcontents)
         self.progress_label_hqporner.setObjectName(u"progress_label_hqporner")
@@ -612,16 +610,6 @@ class Ui_PornFetch_Desktop(object):
         self.progress_label_hqporner.setMinimumSize(QSize(0, 30))
 
         self.progress_gridlayout_progressbar.addWidget(self.progress_label_hqporner, 1, 0, 1, 1)
-
-        self.progress_label_spankbang = QLabel(self.progress_scrollarea_widgedcontents)
-        self.progress_label_spankbang.setObjectName(u"progress_label_spankbang")
-        self.progress_label_spankbang.setMinimumSize(QSize(0, 30))
-
-        self.progress_gridlayout_progressbar.addWidget(self.progress_label_spankbang, 5, 0, 1, 1)
-
-        self.progress_vertical_spacer_main = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.progress_gridlayout_progressbar.addItem(self.progress_vertical_spacer_main, 7, 1, 1, 1)
 
 
         self.gridLayout_18.addLayout(self.progress_gridlayout_progressbar, 1, 0, 1, 1)
@@ -644,7 +632,7 @@ class Ui_PornFetch_Desktop(object):
         self.tools_gridlayout_tools = QGridLayout()
         self.tools_gridlayout_tools.setSpacing(6)
         self.tools_gridlayout_tools.setObjectName(u"tools_gridlayout_tools")
-        self.tools_gridlayout_tools.setContentsMargins(-1, 14, -1, -1)
+        self.tools_gridlayout_tools.setContentsMargins(-1, 0, -1, -1)
         self.tools_button_get_brazzers_videos = QPushButton(self.page_tools)
         self.tools_button_get_brazzers_videos.setObjectName(u"tools_button_get_brazzers_videos")
         sizePolicy10 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
@@ -822,7 +810,7 @@ class Ui_PornFetch_Desktop(object):
         self.main_scrollarea_treewidget.setWidgetResizable(True)
         self.main_scrollarea_treewidget_content = QWidget()
         self.main_scrollarea_treewidget_content.setObjectName(u"main_scrollarea_treewidget_content")
-        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 1637, 393))
+        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 516, 369))
         self.gridLayout_4 = QGridLayout(self.main_scrollarea_treewidget_content)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.gridLayout_4.setContentsMargins(0, 0, 0, 0)
@@ -889,6 +877,10 @@ class Ui_PornFetch_Desktop(object):
 
         self.verticalLayout.addWidget(self.main_label_tree_show_thumbnail)
 
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
+
 
         self.gridLayout.addLayout(self.verticalLayout, 0, 2, 1, 1)
 
@@ -930,7 +922,7 @@ class Ui_PornFetch_Desktop(object):
         self.settings_scrollarea.setWidgetResizable(True)
         self.settings_scrollarea_widget_contents = QWidget()
         self.settings_scrollarea_widget_contents.setObjectName(u"settings_scrollarea_widget_contents")
-        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 844, 921))
+        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, -272, 1584, 895))
         self.gridLayout_19 = QGridLayout(self.settings_scrollarea_widget_contents)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.settings_scrollarea_gridlayout = QGridLayout()
@@ -1167,63 +1159,62 @@ class Ui_PornFetch_Desktop(object):
         self.settings_gridlayout_system_pornfetch = QGridLayout()
         self.settings_gridlayout_system_pornfetch.setObjectName(u"settings_gridlayout_system_pornfetch")
         self.settings_gridlayout_system_pornfetch.setContentsMargins(6, 3, 6, 6)
-        self.settings_checkbox_system_update_checks = QCheckBox(self.settings_groupbox_system_pornfetch)
-        self.settings_checkbox_system_update_checks.setObjectName(u"settings_checkbox_system_update_checks")
-
-        self.settings_gridlayout_system_pornfetch.addWidget(self.settings_checkbox_system_update_checks, 2, 1, 1, 1)
-
-        self.settings_checkbox_internet_checks = QCheckBox(self.settings_groupbox_system_pornfetch)
-        self.settings_checkbox_internet_checks.setObjectName(u"settings_checkbox_internet_checks")
-
-        self.settings_gridlayout_system_pornfetch.addWidget(self.settings_checkbox_internet_checks, 2, 2, 1, 1)
-
-        self.settings_checkbox_system_anonymous_mode = QCheckBox(self.settings_groupbox_system_pornfetch)
-        self.settings_checkbox_system_anonymous_mode.setObjectName(u"settings_checkbox_system_anonymous_mode")
-
-        self.settings_gridlayout_system_pornfetch.addWidget(self.settings_checkbox_system_anonymous_mode, 3, 2, 1, 1)
-
-        self.settings_label_system_privacy = QLabel(self.settings_groupbox_system_pornfetch)
-        self.settings_label_system_privacy.setObjectName(u"settings_label_system_privacy")
-        sizePolicy15 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
-        sizePolicy15.setHorizontalStretch(0)
-        sizePolicy15.setVerticalStretch(0)
-        sizePolicy15.setHeightForWidth(self.settings_label_system_privacy.sizePolicy().hasHeightForWidth())
-        self.settings_label_system_privacy.setSizePolicy(sizePolicy15)
-
-        self.settings_gridlayout_system_pornfetch.addWidget(self.settings_label_system_privacy, 3, 0, 1, 1)
-
-        self.settings_checkbox_system_enable_tor = QCheckBox(self.settings_groupbox_system_pornfetch)
-        self.settings_checkbox_system_enable_tor.setObjectName(u"settings_checkbox_system_enable_tor")
-        self.settings_checkbox_system_enable_tor.setCheckable(False)
-
-        self.settings_gridlayout_system_pornfetch.addWidget(self.settings_checkbox_system_enable_tor, 3, 1, 1, 1)
-
-        self.settings_label_startup = QLabel(self.settings_groupbox_system_pornfetch)
-        self.settings_label_startup.setObjectName(u"settings_label_startup")
-        sizePolicy15.setHeightForWidth(self.settings_label_startup.sizePolicy().hasHeightForWidth())
-        self.settings_label_startup.setSizePolicy(sizePolicy15)
-
-        self.settings_gridlayout_system_pornfetch.addWidget(self.settings_label_startup, 2, 0, 1, 1)
-
         self.settings_button_help_tor = QPushButton(self.settings_groupbox_system_pornfetch)
         self.settings_button_help_tor.setObjectName(u"settings_button_help_tor")
 
         self.settings_gridlayout_system_pornfetch.addWidget(self.settings_button_help_tor, 4, 1, 1, 1)
 
-        self.settings_button_help_anonymous_mode = QPushButton(self.settings_groupbox_system_pornfetch)
-        self.settings_button_help_anonymous_mode.setObjectName(u"settings_button_help_anonymous_mode")
+        self.settings_label_startup = QLabel(self.settings_groupbox_system_pornfetch)
+        self.settings_label_startup.setObjectName(u"settings_label_startup")
+        sizePolicy15 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
+        sizePolicy15.setHorizontalStretch(0)
+        sizePolicy15.setVerticalStretch(0)
+        sizePolicy15.setHeightForWidth(self.settings_label_startup.sizePolicy().hasHeightForWidth())
+        self.settings_label_startup.setSizePolicy(sizePolicy15)
 
-        self.settings_gridlayout_system_pornfetch.addWidget(self.settings_button_help_anonymous_mode, 4, 2, 1, 1)
+        self.settings_gridlayout_system_pornfetch.addWidget(self.settings_label_startup, 2, 0, 1, 1)
 
         self.settings_button_download_ffmpeg = QPushButton(self.settings_groupbox_system_pornfetch)
         self.settings_button_download_ffmpeg.setObjectName(u"settings_button_download_ffmpeg")
 
         self.settings_gridlayout_system_pornfetch.addWidget(self.settings_button_download_ffmpeg, 0, 0, 1, 3)
 
+        self.settings_button_help_anonymous_mode = QPushButton(self.settings_groupbox_system_pornfetch)
+        self.settings_button_help_anonymous_mode.setObjectName(u"settings_button_help_anonymous_mode")
+
+        self.settings_gridlayout_system_pornfetch.addWidget(self.settings_button_help_anonymous_mode, 4, 2, 1, 1)
+
+        self.settings_checkbox_internet_checks = QCheckBox(self.settings_groupbox_system_pornfetch)
+        self.settings_checkbox_internet_checks.setObjectName(u"settings_checkbox_internet_checks")
+
+        self.settings_gridlayout_system_pornfetch.addWidget(self.settings_checkbox_internet_checks, 2, 2, 1, 1)
+
+        self.settings_checkbox_system_update_checks = QCheckBox(self.settings_groupbox_system_pornfetch)
+        self.settings_checkbox_system_update_checks.setObjectName(u"settings_checkbox_system_update_checks")
+
+        self.settings_gridlayout_system_pornfetch.addWidget(self.settings_checkbox_system_update_checks, 2, 1, 1, 1)
+
         self.settings_button_install_pornfetch = QPushButton(self.settings_groupbox_system_pornfetch)
         self.settings_button_install_pornfetch.setObjectName(u"settings_button_install_pornfetch")
 
         self.settings_gridlayout_system_pornfetch.addWidget(self.settings_button_install_pornfetch, 1, 0, 1, 3)
+
+        self.settings_label_system_privacy = QLabel(self.settings_groupbox_system_pornfetch)
+        self.settings_label_system_privacy.setObjectName(u"settings_label_system_privacy")
+        sizePolicy15.setHeightForWidth(self.settings_label_system_privacy.sizePolicy().hasHeightForWidth())
+        self.settings_label_system_privacy.setSizePolicy(sizePolicy15)
+
+        self.settings_gridlayout_system_pornfetch.addWidget(self.settings_label_system_privacy, 3, 0, 1, 1)
+
+        self.settings_checkbox_system_anonymous_mode = QCheckBox(self.settings_groupbox_system_pornfetch)
+        self.settings_checkbox_system_anonymous_mode.setObjectName(u"settings_checkbox_system_anonymous_mode")
+
+        self.settings_gridlayout_system_pornfetch.addWidget(self.settings_checkbox_system_anonymous_mode, 3, 1, 1, 1)
+
+        self.settings_checkbox_system_activate_proxy = QCheckBox(self.settings_groupbox_system_pornfetch)
+        self.settings_checkbox_system_activate_proxy.setObjectName(u"settings_checkbox_system_activate_proxy")
+
+        self.settings_gridlayout_system_pornfetch.addWidget(self.settings_checkbox_system_activate_proxy, 3, 2, 1, 1)
 
 
         self.gridLayout_7.addLayout(self.settings_gridlayout_system_pornfetch, 2, 0, 1, 1)
@@ -1543,8 +1534,8 @@ class Ui_PornFetch_Desktop(object):
 
         self.retranslateUi(PornFetch_Desktop)
 
-        self.main_stacked_widget_main.setCurrentIndex(0)
-        self.main_stacked_widget_top.setCurrentIndex(0)
+        self.main_stacked_widget_main.setCurrentIndex(1)
+        self.main_stacked_widget_top.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(PornFetch_Desktop)
@@ -1560,30 +1551,30 @@ class Ui_PornFetch_Desktop(object):
         self.main_button_view_progress_bars.setText("")
         self.main_button_switch_supported_websites.setText(QCoreApplication.translate("PornFetch_Desktop", u"Supported websites", None))
         self.main_stacked_widget_main.setStyleSheet("")
-        self.download_label_model_url.setText(QCoreApplication.translate("PornFetch_Desktop", u"Model URL:", None))
-        self.download_radio_search_website_xnxx.setText(QCoreApplication.translate("PornFetch_Desktop", u"XNXX", None))
-        self.download_button_model.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get Videos", None))
-        self.download_lineedit_playlist_url.setPlaceholderText(QCoreApplication.translate("PornFetch_Desktop", u"Enter a PornHub Playlist URL", None))
-        self.download_label_url.setText(QCoreApplication.translate("PornFetch_Desktop", u"URL:", None))
-        self.download_button_open_file.setText(QCoreApplication.translate("PornFetch_Desktop", u"Open File", None))
-        self.download_radio_search_website_xvideos.setText(QCoreApplication.translate("PornFetch_Desktop", u"XVideos", None))
-        self.download_radio_search_website_hqporner.setText(QCoreApplication.translate("PornFetch_Desktop", u"HQPorner", None))
-        self.download_lineedit_file.setText("")
-        self.download_lineedit_file.setPlaceholderText(QCoreApplication.translate("PornFetch_Desktop", u"URLs in the file must be separated with new lines!", None))
-        self.download_radio_search_website_pornhub.setText(QCoreApplication.translate("PornFetch_Desktop", u"PornHub", None))
-        self.download_button_help_file.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
         self.download_button_download.setText(QCoreApplication.translate("PornFetch_Desktop", u"Download", None))
-        self.download_label_search.setText(QCoreApplication.translate("PornFetch_Desktop", u"Search Query:", None))
-        self.download_label_playlist_url.setText(QCoreApplication.translate("PornFetch_Desktop", u"Playlist URL:", None))
-        self.download_lineedit_model_url.setPlaceholderText(QCoreApplication.translate("PornFetch_Desktop", u"Enter Model / Channel / Actress URL", None))
-        self.button_search.setText(QCoreApplication.translate("PornFetch_Desktop", u"Start", None))
-        self.download_label_search_website.setText(QCoreApplication.translate("PornFetch_Desktop", u"Search Website", None))
+        self.download_radio_search_website_pornhub.setText(QCoreApplication.translate("PornFetch_Desktop", u"PornHub", None))
         self.download_lineedit_search_query.setText("")
         self.download_lineedit_search_query.setPlaceholderText(QCoreApplication.translate("PornFetch_Desktop", u"Search for Videos. Select Website below", None))
-        self.download_lineedit_url.setPlaceholderText(QCoreApplication.translate("PornFetch_Desktop", u"Enter video URL", None))
+        self.download_label_playlist_url.setText(QCoreApplication.translate("PornFetch_Desktop", u"Playlist URL:", None))
+        self.download_label_search_website.setText(QCoreApplication.translate("PornFetch_Desktop", u"Search Website", None))
         self.download_label_file.setText(QCoreApplication.translate("PornFetch_Desktop", u"File:", None))
-        self.download_button_playlist_get_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get Videos", None))
+        self.download_label_model_url.setText(QCoreApplication.translate("PornFetch_Desktop", u"Model URL:", None))
+        self.button_search.setText(QCoreApplication.translate("PornFetch_Desktop", u"Start", None))
+        self.download_radio_search_website_hqporner.setText(QCoreApplication.translate("PornFetch_Desktop", u"HQPorner", None))
+        self.download_label_url.setText(QCoreApplication.translate("PornFetch_Desktop", u"URL:", None))
+        self.download_lineedit_file.setText("")
+        self.download_lineedit_file.setPlaceholderText(QCoreApplication.translate("PornFetch_Desktop", u"URLs in the file must be separated with new lines!", None))
+        self.download_radio_search_website_xvideos.setText(QCoreApplication.translate("PornFetch_Desktop", u"XVideos", None))
+        self.download_button_model.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get Videos", None))
+        self.download_lineedit_playlist_url.setPlaceholderText(QCoreApplication.translate("PornFetch_Desktop", u"Enter a PornHub Playlist URL", None))
+        self.download_button_help_file.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
+        self.download_radio_search_website_xnxx.setText(QCoreApplication.translate("PornFetch_Desktop", u"XNXX", None))
+        self.download_lineedit_url.setPlaceholderText(QCoreApplication.translate("PornFetch_Desktop", u"Enter video URL", None))
+        self.download_lineedit_model_url.setPlaceholderText(QCoreApplication.translate("PornFetch_Desktop", u"Enter Model / Channel / Actress URL", None))
+        self.download_label_search.setText(QCoreApplication.translate("PornFetch_Desktop", u"Search Query:", None))
+        self.download_button_open_file.setText(QCoreApplication.translate("PornFetch_Desktop", u"Open File", None))
         self.download_radio_search_website_eporner.setText(QCoreApplication.translate("PornFetch_Desktop", u"EPorner", None))
+        self.download_button_playlist_get_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get Videos", None))
         self.login_button_get_liked_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get Liked videos", None))
         self.login_button_get_watched_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get watched videos", None))
         self.login_label_username.setText(QCoreApplication.translate("PornFetch_Desktop", u"E-Mail:", None))
@@ -1592,14 +1583,13 @@ class Ui_PornFetch_Desktop(object):
         self.login_button_get_recommended_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get recommended videos", None))
         self.login_label_password.setText(QCoreApplication.translate("PornFetch_Desktop", u"Password:", None))
         self.login_lineedit_password.setPlaceholderText(QCoreApplication.translate("PornFetch_Desktop", u"Enter your PornHub Password", None))
-        self.progress_label_eporner.setText(QCoreApplication.translate("PornFetch_Desktop", u"Eporner:", None))
-        self.progress_label_info.setText(QCoreApplication.translate("PornFetch_Desktop", u"Info:", None))
-        self.progress_label_xvideos.setText(QCoreApplication.translate("PornFetch_Desktop", u"XVideos:", None))
-        self.progress_label_pornhub.setText(QCoreApplication.translate("PornFetch_Desktop", u"PornHub:", None))
         self.progress_lineedit_download_info.setText("")
         self.progress_label_xnxx.setText(QCoreApplication.translate("PornFetch_Desktop", u"XNXX:", None))
+        self.progress_label_xvideos.setText(QCoreApplication.translate("PornFetch_Desktop", u"XVideos:", None))
+        self.progress_label_eporner.setText(QCoreApplication.translate("PornFetch_Desktop", u"Eporner:", None))
+        self.progress_label_info.setText(QCoreApplication.translate("PornFetch_Desktop", u"Info:", None))
+        self.progress_label_pornhub.setText(QCoreApplication.translate("PornFetch_Desktop", u"PornHub:", None))
         self.progress_label_hqporner.setText(QCoreApplication.translate("PornFetch_Desktop", u"HQPorner:", None))
-        self.progress_label_spankbang.setText(QCoreApplication.translate("PornFetch_Desktop", u"Spankbang:", None))
         self.tools_button_get_brazzers_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get Videos", None))
         self.tools_radio_top_porn_month.setText(QCoreApplication.translate("PornFetch_Desktop", u"Month", None))
         self.tools_button_list_categories.setText(QCoreApplication.translate("PornFetch_Desktop", u"List of all categories", None))
@@ -1653,16 +1643,16 @@ class Ui_PornFetch_Desktop(object):
         self.settings_radio_ui_language_german.setText(QCoreApplication.translate("PornFetch_Desktop", u"German", None))
         self.settings_checkbox_ui_custom_font.setText(QCoreApplication.translate("PornFetch_Desktop", u"Enable custom font (Jetbrains Mono)", None))
         self.settings_groupbox_system_pornfetch.setTitle(QCoreApplication.translate("PornFetch_Desktop", u"System / Porn Fetch", None))
-        self.settings_checkbox_system_update_checks.setText(QCoreApplication.translate("PornFetch_Desktop", u"Update checks", None))
-        self.settings_checkbox_internet_checks.setText(QCoreApplication.translate("PornFetch_Desktop", u"Internet checks", None))
-        self.settings_checkbox_system_anonymous_mode.setText(QCoreApplication.translate("PornFetch_Desktop", u"Enable Anonymous mode", None))
-        self.settings_label_system_privacy.setText(QCoreApplication.translate("PornFetch_Desktop", u"Privacy:", None))
-        self.settings_checkbox_system_enable_tor.setText(QCoreApplication.translate("PornFetch_Desktop", u"Enable Tor (Not implemented yet) ", None))
-        self.settings_label_startup.setText(QCoreApplication.translate("PornFetch_Desktop", u"Startup:", None))
         self.settings_button_help_tor.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
-        self.settings_button_help_anonymous_mode.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
+        self.settings_label_startup.setText(QCoreApplication.translate("PornFetch_Desktop", u"Startup:", None))
         self.settings_button_download_ffmpeg.setText(QCoreApplication.translate("PornFetch_Desktop", u"Download and Setup FFmpeg", None))
+        self.settings_button_help_anonymous_mode.setText(QCoreApplication.translate("PornFetch_Desktop", u"Help", None))
+        self.settings_checkbox_internet_checks.setText(QCoreApplication.translate("PornFetch_Desktop", u"Internet checks", None))
+        self.settings_checkbox_system_update_checks.setText(QCoreApplication.translate("PornFetch_Desktop", u"Update checks", None))
         self.settings_button_install_pornfetch.setText(QCoreApplication.translate("PornFetch_Desktop", u"Install Porn Fetch", None))
+        self.settings_label_system_privacy.setText(QCoreApplication.translate("PornFetch_Desktop", u"Privacy:", None))
+        self.settings_checkbox_system_anonymous_mode.setText(QCoreApplication.translate("PornFetch_Desktop", u"Enable Anonymous mode", None))
+        self.settings_checkbox_system_activate_proxy.setText(QCoreApplication.translate("PornFetch_Desktop", u"Activate Proxy", None))
         self.settings_groupbox_videos.setTitle(QCoreApplication.translate("PornFetch_Desktop", u"Videos", None))
         self.settings_radio_quality_worst.setText(QCoreApplication.translate("PornFetch_Desktop", u"Worst", None))
         self.settings_radio_quality_best.setText(QCoreApplication.translate("PornFetch_Desktop", u"Best", None))
@@ -1695,57 +1685,53 @@ class Ui_PornFetch_Desktop(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Supported Websites:</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
-                        "indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Downloading:</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- PornHub.com (supports total progress)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- HQPorner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- Eporner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-r"
-                        "ight:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- XNXX.com (supports total progress)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- XVideos.com (supports total progress)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- Spankbang.com (supports total progress)</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">All sites suppo"
-                        "rt *threaded* downloads and selectable quality!</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">* hqporner and eporner running in QThreads, but they don't fetch segments. The video is directly</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">downloaded, therefore threading in a segment isn't needed.</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
-"<p style=\" ma"
-                        "rgin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Model / Channel Downloads</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- PornHub.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- HQPorner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- EPorner.com</span><"
-                        "/p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- XNXX.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- XVideos.com</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Searching:</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>"
-                        "\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- PornHub.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- HQPorner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- Xvideos.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- Eporner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- XNXX.c"
-                        "om</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">I am constantly working to support more websites.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">If you want a specific site to be supported, just ask:<br /><br />Discord: echteralsfake</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">GitHub.com/echteralsfake/Porn_Fetch/issues</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; marg"
-                        "in-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; mar"
-                        "gin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p></body></html>", None))
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Supported Websites:</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Downloading:</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px;"
+                        " margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com (supports total progress)</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Eporner.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XNXX.com (supports total progress)</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XVideos.com (supports total progress)</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\""
+                        "><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">All sites support *threaded* downloads and selectable quality!</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">* hqporner and eporner running in QThreads, but they don't fetch segments. The video is directly</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">downloaded, therefore threading in a segment isn't needed.</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;"
+                        " -qt-block-indent:0; text-indent:0px;\">Model / Channel Downloads</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- EPorner.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XNXX.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XVideos.com</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margi"
+                        "n-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Searching:</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Xvideos.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Eporner.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; mar"
+                        "gin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XNXX.com</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I am constantly working to support more websites.</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">If you want a specific site to be supported, just ask:<br /><br />Discord: echteralsfake</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">GitHub.com/echteralsfake/Porn_Fetch/issues</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-b"
+                        "ottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
         self.main_label_progressbar_total.setText(QCoreApplication.translate("PornFetch_Desktop", u"Total:", None))
         self.main_label_progressbar_converting.setText(QCoreApplication.translate("PornFetch_Desktop", u"Converting:", None))
     # retranslateUi

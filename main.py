@@ -1,5 +1,6 @@
 import sys
 import time
+import httpx
 import random
 import shutil
 import tarfile
@@ -11,13 +12,11 @@ import traceback
 import requests.exceptions
 import src.frontend.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
 
-from phub import consts
 from threading import Event
 from io import TextIOWrapper
-from base_api.base import Core
 from itertools import islice, chain
 from hqporner_api.api import Sort as hq_Sort
-from base_api.modules import consts as bs_consts
+
 
 from src.backend.shared_gui import *
 from src.backend.class_help import *
@@ -32,13 +31,13 @@ from src.frontend.ui_form_install_dialog import Ui_SetupInstallDialog
 from src.frontend.ui_form_keyboard_shortcuts import Ui_KeyboardShortcuts
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
-                        QTranslator, QCoreApplication, QSize, QTimer)
-from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView
+                        QTranslator, QCoreApplication, QSize)
+from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QInputDialog
 from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut
 
 
 """
-Copyright (C) 2023-2024 Johannes Habel
+Copyright (C) 2023-2025 Johannes Habel
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -63,15 +62,16 @@ __license__ = "GPL 3"
 __version__ = "3.5"
 __build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
-__next_release__ = "3.5"
+__next_release__ = "3.6"
 total_segments = 0
 downloaded_segments = 0
 stop_flag = Event()
 
-os.environ['QT_ANDROID_ENABLE_WORKAROUND_TO_DISABLE_PREDICTIVE_TEXT'] = '1'
-os.environ['QT_ANDROID_DISABLE_GLYPH_CACHE_WORKAROUND'] = '1'
-os.environ['QT_ANDROID_BACKGROUND_ACTIONS_QUEUE_SIZE'] = '3'
-# Just don't ask, thank you :)
+if __build__ == "android":
+    os.environ['QT_ANDROID_ENABLE_WORKAROUND_TO_DISABLE_PREDICTIVE_TEXT'] = '1'
+    os.environ['QT_ANDROID_DISABLE_GLYPH_CACHE_WORKAROUND'] = '1'
+    os.environ['QT_ANDROID_BACKGROUND_ACTIONS_QUEUE_SIZE'] = '3'
+    # Just don't ask, thank you :)
 
 url_linux = "https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-amd64-static.tar.xz"
 url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z"
@@ -80,6 +80,8 @@ session_urls = []  # This list saves all URls used in the current session. Used 
 total_downloaded_videos = 0 # All videos that actually successfully downloaded
 total_downloaded_videos_attempt = 0 # All videos the user tries to download
 logger = setup_logging()
+logger.setLevel(logging.DEBUG)
+
 
 class VideoData:
     """
@@ -120,7 +122,6 @@ class Signals(QObject):
     progress_eporner = Signal(int, int) # Video download progress for eporner
     progress_xnxx = Signal(int, int) # Video download progress for xnxx
     progress_xvideos = Signal(int, int) # Video download progress for xvideos
-    progress_spankbang = Signal(int, int) # Video download progress for spankbang
     ffmpeg_converting_progress = Signal(int, int) # Video converting progress for FFmpeg
 
     # Animations
@@ -376,7 +377,6 @@ class InternetCheck(QRunnable):
         }
 
         self.websites = [
-            "https://de.spankbang.com",
             "https://www.pornhub.com",
             "https://hqporner.com",
             "https://www.xvideos.com",
@@ -402,9 +402,6 @@ class InternetCheck(QRunnable):
                 elif status.status_code == 404:
                         self.website_results.update({website: "Failed, website doesn't exist? Please report this error"})
 
-                elif status.status_code == 403:
-                    if not website == "https://de.spankbang.com": # I don't know why, but they block connection for no reason
-                        self.website_results.update({website: "The website blocked access, please change your IP or wait"})
 
             except requests.exceptions.SSLError:
                 self.website_results.update({website: "SSL Error, your ISP / Router / Firewall blocks access to the site"
@@ -564,7 +561,7 @@ class AddToTreeWidget(QRunnable):
         try:
             data = load_video_attributes(video)
             video_id = random.randint(0, 99999999) # Creates a random ID for each video
-            stripped_title = Core().strip_title(data.get("title"))  # Strip the title so that videos with special chars can be
+            stripped_title = BaseCore().strip_title(data.get("title"))  # Strip the title so that videos with special chars can be
             # saved on windows. it would raise an OSError otherwise
             logger.debug(f"Created ID: {video_id} for: {stripped_title}")
 
@@ -703,7 +700,6 @@ class DownloadThread(QRunnable):
             'eporner': self.signals.progress_eporner,
             'xnxx': self.signals.progress_xnxx,
             'xvideos': self.signals.progress_xvideos,
-            'spankbang': self.signals.progress_spankbang
         }
 
     def generic_callback(self, pos, total, signal, video_source, ffmpeg=False):
@@ -773,8 +769,6 @@ class DownloadThread(QRunnable):
                 self.ffmpeg = True
 
             if isinstance(self.video, Video):  # Assuming 'Video' is the class for Pornhub
-                self.threading_mode = resolve_threading_mode(workers=self.workers, timeout=
-                self.timeout, mode=self.threading_mode, video=self.video)
                 video_source = "pornhub"
                 path = self.output_path
                 logger.debug("Starting the Download!")
@@ -800,32 +794,24 @@ class DownloadThread(QRunnable):
 
             elif isinstance(self.video, ep_Video):
                 video_source = "eporner"
-                self.video.download(quality=self.quality, path=self.output_path,
+                self.video.download(quality=self.quality, path=self.output_path, no_title=True,
                                     callback=lambda pos, total: self.generic_callback(pos, total,
                                                                                       self.signals.progress_eporner,
                                                                                       video_source, self.ffmpeg))
 
             elif isinstance(self.video, xn_Video):
                 video_source = "xnxx"
-                self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality,
+                self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality, no_title=True,
                                     callback=lambda pos, total: self.generic_callback(pos, total,
                                                                                       self.signals.progress_xnxx,
                                                                                       video_source, self.ffmpeg))
 
             elif isinstance(self.video, xv_Video):
                 video_source = "xvideos"
-                self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality,
+                self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality, no_title=True,
                                     callback=lambda pos, total: self.generic_callback(pos, total,
                                                                                       self.signals.progress_xvideos,
                                                                                       video_source, self.ffmpeg))
-
-            elif isinstance(self.video, sp_Video):
-                video_source = "spankbang"
-                self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality,
-                                    callback=lambda pos, total: self.generic_callback(pos, total,
-                                                                                      self.signals.progress_spankbang,
-                                                                                      video_source, self.ffmpeg),
-                                    no_title=True, use_hls=True)
 
                 # ... other video types ...
 
@@ -1029,7 +1015,6 @@ class PornFetch(QWidget):
         self.internet_checks = None
         self.update_checks = None
         self._anonymous_mode = None
-        self.enable_tor = None
         self.write_metadata = None
         self.convert_videos = None
         self.format = None
@@ -1046,7 +1031,6 @@ class PornFetch(QWidget):
         self.max_retries = None
         self.skip_existing_files = None
         self.model_videos_type = None
-        self.client = None
         self.downloader = None
         self.directory_system = None
         self.ffmpeg_path = None
@@ -1159,7 +1143,6 @@ class PornFetch(QWidget):
         self.ui.progress_label_eporner.setText("3")
         self.ui.progress_label_xnxx.setText("4")
         self.ui.progress_label_xvideos.setText("5")
-        self.ui.progress_label_spankbang.setText("6")
         self._anonymous_mode = True # Makes sense, trust
 
     def button_groups(self):
@@ -1227,6 +1210,7 @@ class PornFetch(QWidget):
         self.ui.settings_button_apply.clicked.connect(self.save_user_settings)
         self.ui.settings_button_reset.clicked.connect(reset_pornfetch)
         self.ui.settings_button_install_pornfetch.clicked.connect(self.install_pornfetch)
+        self.ui.settings_checkbox_system_activate_proxy.clicked.connect(self.set_proxies)
 
         # Account
         self.ui.login_button_login.clicked.connect(self.login)
@@ -1323,7 +1307,6 @@ class PornFetch(QWidget):
             "progressbar_total": ":/style/stylesheets/progressbar_total.qss",
             "progressbar_xnxx": ":/style/stylesheets/progressbar_xnxx.qss",
             "progressbar_xvideos": ":/style/stylesheets/progressbar_xvideos.qss",
-            "progressbar_spankbang": ":/style/stylesheets/progressbar_spankbang.qss",
             "progressbar_converting": ":/style/stylesheets/progressbar_converting.qss",
             "button_blue": ":/style/stylesheets/stylesheet_button_blue.qss",
             "button_orange": ":/style/stylesheets/stylesheet_button_orange.qss",
@@ -1346,7 +1329,6 @@ class PornFetch(QWidget):
         self.ui.progressbar_eporner.setStyleSheet(stylesheets["progressbar_eporner"])
         self.ui.progressbar_hqporner.setStyleSheet(stylesheets["progressbar_hqporner"])
         self.ui.progressbar_xvideos.setStyleSheet(stylesheets["progressbar_xvideos"])
-        self.ui.progressbar_spankbang.setStyleSheet(stylesheets["progressbar_spankbang"])
         self.ui.main_progressbar_converting.setStyleSheet(stylesheets["progressbar_converting"])
         self.ui.download_button_model.setStyleSheet(stylesheets["button_purple"])
         self.ui.button_search.setStyleSheet(stylesheets["button_purple"])
@@ -1455,14 +1437,13 @@ class PornFetch(QWidget):
         self._anonymous_mode = self.conf.get("Setup", "anonymous_mode") == "true"
         self.ui.settings_checkbox_system_anonymous_mode.setChecked(self._anonymous_mode)
 
-        self.enable_tor = self.conf.get("Setup", "tor") == "true"
-        self.ui.settings_checkbox_system_enable_tor.setChecked(self.enable_tor)
-
         self.skip_existing_files = self.conf.get("Video", "skip_existing_files") == "true"
         self.ui.settings_checkbox_videos_skip_existing_files.setChecked(self.skip_existing_files)
 
         self.directory_system = self.conf.get("Video", "directory_system") == "true"
         self.ui.settings_checkbox_videos_use_directory_system.setChecked(self.directory_system)
+
+        self.ui.settings_checkbox_ui_custom_font.setChecked(True if self.conf.get("UI", "custom_font") == "true" else False)
 
         if self.conf["PostProcessing"]["write_metadata"] == "true":
             self.write_metadata = True
@@ -1494,10 +1475,11 @@ class PornFetch(QWidget):
         self.ui.settings_spinbox_maximal_timeout.setValue(int(self.timeout))
         self.ui.settings_spinbox_maximal_workers.setValue(int(self.workers))
         self.ui.settings_spinbox_pornhub_delay.setValue(int(self.delay))
-        consts.MAX_CALL_RETRIES = self.max_retries
+        phub_consts.MAX_CALL_RETRIES = self.max_retries
+        phub_consts.DELAY = self.delay
         bs_consts.REQUEST_DELAY = self.delay
         bs_consts.MAX_RETRIES = self.max_retries
-        self.client = Client(delay=self.delay)
+        bs_consts.TIMEOUT = self.timeout
 
     def save_user_settings(self):
         """Saves the user settings to the configuration file based on the UI state."""
@@ -1530,7 +1512,6 @@ class PornFetch(QWidget):
         self.conf.set("Setup", "update_checks", "true" if self.ui.settings_checkbox_system_update_checks.isChecked() else "false")
         self.conf.set("Setup", "internet_checks", "true" if self.ui.settings_checkbox_internet_checks.isChecked() else "false")
         self.conf.set("Setup", "anonymous_mode", "true" if self.ui.settings_checkbox_system_anonymous_mode.isChecked() else "false")
-        self.conf.set("Setup", "tor", "true" if self.ui.settings_checkbox_system_enable_tor.isChecked() else "false")
         self.conf.set("PostProcessing", "write_metadata", "true" if self.ui.checkbox_settings_post_processing_write_metadata_tags.isChecked() else "false")
         self.conf.set("Video", "skip_existing_files", "true" if self.ui.settings_checkbox_videos_skip_existing_files.isChecked() else "false")
         self.conf.set("Video", "directory_system", "true" if self.ui.settings_checkbox_videos_use_directory_system.isChecked() else "false")
@@ -1548,6 +1529,96 @@ class PornFetch(QWidget):
 
         ui_popup(self.tr("Saved User Settings, please restart Porn Fetch!", None))
         logger.debug("Saved User Settings, please restart Porn Fetch.")
+
+    def set_proxies(self):
+        message = self.tr("""
+!!! ONLY SOCKS5 IS SUPPORTED !!!
+        
+Warning:
+Your entire traffic will be routed through the proxy, except if your threading mode is set to 'ffmpeg'. There's no
+guarantee for your IP not being exposed. If you live in a country where downloading Porn is a crime, please consider
+using a VPN or Tor for a more safe approach. 
+
+After submitting the proxy, Porn Fetch will do a short test if your IP is leaked by making a request to 
+'http://httpbin.org/ip' with and without proxy to compare your IP address. 
+
+All traffic will be sent with encryption, however, SSL won't be verified, meaning someone could break your encryption
+and you won't get notified about it. Basically all SSL related errors will be completely ignored, but if your
+proxy is good, SSL should work. 
+
+Proxy implementation will be improved in the next release. All of it is currently in BETA. Please report any issues unless
+they are related to the proxy itself e.g., closed connections and such things. You might want to higher the timeout
+in Porn Fetch settings, because some proxies are just really slow
+
+Please set your threading mode to 'Default'. Most proxies can't handle what the threaded mode is capable of.
+Seriously this thing can go up to 115 MB/s. Proxies can't handle that xD
+If you want to see by yourself, use wireshark and monitor your network traffic.
+
+DO NOT REPORT ANY ERRORS WHEN USING A PUBLIC PROXY!
+They are just shit, and don't work well. If you come across connection errors with them it is by 99.9% the fault
+of the proxy and not my fault ;)
+
+If you still want to proceed, click O.K. Otherwise, close Porn Fetch now and restart it.""", disambiguation=None)
+        ui_popup(message)
+
+
+        proxy_input, ok = QInputDialog.getText(
+            self,
+            "Enter Proxies",
+            "Enter (socks5 only) proxy in the format <ip:port>, e.g., 192.168.0.1:80")
+
+        if not ok:
+            return None  # User canceled the input dialog
+
+        # Validate the proxy input
+        proxy_pattern = r"^((\d{1,3}\.){3}\d{1,3}:\d+)(,\s*(\d{1,3}\.){3}\d{1,3}:\d+)*$"
+        if re.match(proxy_pattern, proxy_input):
+            proxy = proxy_input.split(":")
+            ip = proxy[0]
+            port = proxy[1]
+            final_proxy = f"socks5://{ip}:{port}"
+
+            # Testing if proxy works
+            logger.info("[1/5] Requesting IP without Proxy")
+            ip_unmasked = httpx.Client().get("http://httpbin.org/ip").json()["origin"] # Using independent httpx session, because of the caching system from BaseCore
+            logger.info(f"[1/5] Retrieved IP: {ip_unmasked}")
+
+            logger.info(f"[2/5] Requesting IP with Proxy: {final_proxy}")
+            bs_consts.PROXY = final_proxy
+            ip_masked = json.loads(BaseCore().fetch("http://httpbin.org/ip"))["origin"]
+            logger.info(f"[2/5] Retrieved IP: {ip_masked}")
+
+            logger.info(f"[3/5] Requesting IP with Proxy (independent httpx environment)")
+            xz_session = httpx.Client(proxy=final_proxy, timeout=20)
+            ip = xz_session.get("http://httpbin.org/ip").json()["origin"]
+            logger.info(f"[3/5] Retrieved IP: {ip}")
+
+            message_2 = f"""
+Your unmasked IP is: {ip_unmasked}
+Your proxy IP is:    {ip_masked}
+Independent Session: {ip}
+
+If your proxy IP is the same as the unmasked IP, the proxy failed.
+If the proxy IP is different than your unmasked IP the proxy successfully works and you can continue!
+If your Proxy ip is the same as the unmasked IP, but the independent session has the proxy IP, please report this.
+This is an error in the BaseModule and it shouldn't happen, but if it does, please report it. Thanks :) 
+
+"""
+            ui_popup(message_2)
+
+            logger.info("[4/5] Refreshing all API sessions to apply the new proxy to their session objects...")
+            phub_consts.PROXY = final_proxy
+            logger.info(f"Set PHUB to: {phub_consts.PROXY}")
+            refresh_clients()
+            logger.info("[5/5] All API sessions refreshed, DONE!")
+
+
+        else:
+            # Show an error message if the format is incorrect
+            QMessageBox.warning(
+                self,
+                "Invalid Format",
+                "The proxies are not in the correct format. Please enter them as <ip:port>, separated by commas.")
 
     """
     These are the core functions of Porn Fetch outside of the UI stuff. They are used to process user input.
@@ -1573,11 +1644,6 @@ class PornFetch(QWidget):
             model = self.ui.download_lineedit_model_url.text()
 
         if pornhub_pattern.match(model):
-            if not isinstance(self.client, Client):
-                client = Client(delay=self.delay)
-
-            else:
-                client = self.client
 
             model_object = client.get_user(model)
             videos = model_object.videos
@@ -1593,7 +1659,7 @@ class PornFetch(QWidget):
                 videos = uploads
 
         elif hqporner_pattern.match(model):
-            videos = hq_Client().get_videos_by_actress(name=model)
+            videos = hq_Client.get_videos_by_actress(name=model)
 
         elif eporner_pattern.match(model):
             videos = ep_Client.get_pornstar(url=model, enable_html_scraping=True).videos()
@@ -1602,7 +1668,7 @@ class PornFetch(QWidget):
             videos = xn_Client.get_user(url=model).videos
 
         elif xvideos_pattern.match(model):
-            videos = xv_Client().get_pornstar(url=model).videos
+            videos = xv_Client.get_pornstar(url=model).videos
 
         else:
             videos = None
@@ -1613,7 +1679,7 @@ class PornFetch(QWidget):
 
     def start_playlist(self):
         url = self.ui.download_lineedit_playlist_url.text()
-        playlist = self.client.get_playlist(url)
+        playlist = client.get_playlist(url)
         videos = playlist.sample()
         self.add_to_tree_widget_thread(iterator=videos)
 
@@ -1676,7 +1742,7 @@ class PornFetch(QWidget):
         query = self.ui.download_lineedit_search_query.text()
         logger.debug(f"Searching with query: {query}")
         if self.ui.download_radio_search_website_pornhub.isChecked():
-            videos = Client().search(query)
+            videos = client.search(query)
 
         elif self.ui.download_radio_search_website_xvideos.isChecked():
             videos = xv_Client.search(query)
@@ -1685,11 +1751,11 @@ class PornFetch(QWidget):
             videos = hq_Client.search_videos(query)
 
         elif self.ui.download_radio_search_website_eporner.isChecked():
-            videos = ep_Client().search_videos(query, sorting_gay="", sorting_order="", sorting_low_quality="", page=1,
+            videos = ep_Client.search_videos(query, sorting_gay="", sorting_order="", sorting_low_quality="", page=1,
                                                per_page=self.search_limit, enable_html_scraping=True)
 
         elif self.ui.download_radio_search_website_xnxx.isChecked():
-            videos = xn_Client().search(query).videos
+            videos = xn_Client.search(query).videos
 
         else:
             videos = None
@@ -1745,7 +1811,7 @@ class PornFetch(QWidget):
             formatted_duration = f"{length:05d}"
 
         duration = round(length)
-        duration = str(duration).strip("0").strip(".")
+        duration = str(duration)
         item.setCheckState(0, Qt.CheckState.Unchecked)
         item.setData(0, Qt.ItemDataRole.UserRole, video)
         item.setData(1, Qt.ItemDataRole.UserRole, identifier)
@@ -1774,7 +1840,6 @@ class PornFetch(QWidget):
         self.download_thread.signals.progress_eporner.connect(self.update_progressbar_eporner)
         self.download_thread.signals.progress_xnxx.connect(self.update_progressbar_xnxx)
         self.download_thread.signals.progress_xvideos.connect(self.update_progressbar_xvideos)
-        self.download_thread.signals.progress_spankbang.connect(self.update_progressbar_spankbang)
         self.download_thread.signals.ffmpeg_converting_progress.connect(self.update_converting)
         self.download_thread.signals.error_signal.connect(self.show_error)
         # ADAPTION
@@ -1914,7 +1979,7 @@ An error happened inside of Porn Fetch!
 
         self.widget.deleteLater()
 
-    def set_thumbnail(self, item): # TODO (may need to add column parameter idk)
+    def set_thumbnail(self, item):
         """Set the thumbnail for the selected video."""
         self.ui.main_label_tree_show_thumbnail.setScaledContents(False)  # Ensure manual scaling
         self.ui.main_label_tree_show_thumbnail.setFixedWidth(500)
@@ -1993,10 +2058,6 @@ An error happened inside of Porn Fetch!
         self.ui.progressbar_xvideos.setMaximum(maximum)
         self.ui.progressbar_xvideos.setValue(value)
 
-    def update_progressbar_spankbang(self, value, maximum):
-        self.ui.progressbar_spankbang.setMaximum(maximum)
-        self.ui.progressbar_spankbang.setValue(value)
-
     # ADAPTION
 
     def start_undefined_range(self):
@@ -2033,7 +2094,7 @@ An error happened inside of Porn Fetch!
             return
 
         try:
-            self.client = Client(username, password, delay=self.delay)
+            client.login(username, password)
             logger.debug("Login Successful!")
             ui_popup(self.tr( "Login Successful!", None))
             self.switch_login_button_state()
@@ -2046,12 +2107,12 @@ An error happened inside of Porn Fetch!
 
     def check_login(self):
         """Checks if the user is logged in, so that no errors are threw if not"""
-        if self.client.logged:
+        if client.logged:
             return True
 
-        elif not self.client.logged:
+        elif not client.logged:
             self.login()
-            if not self.client.logged:
+            if not client.logged:
                 text = self.tr("There's a problem with the login. Please make sure you login first and then "
                                "you try to get videos based on your account.", None)
                 ui_popup(text)
@@ -2072,19 +2133,19 @@ An error happened inside of Porn Fetch!
     def get_watched_videos(self):
         """Returns the videos watched by the user"""
         if self.check_login():
-            watched = self.client.account.watched
+            watched = client.account.watched
             self.add_to_tree_widget_thread(watched)
 
     def get_liked_videos(self):
         """Returns the videos liked by the user"""
         if self.check_login():
-            liked = self.client.account.liked
+            liked = client.account.liked
             self.add_to_tree_widget_thread(liked)
 
     def get_recommended_videos(self):
         """Returns the videos recommended for the user"""
         if self.check_login():
-            recommended = self.client.account.recommended
+            recommended = client.account.recommended
             self.add_to_tree_widget_thread(recommended)
 
     """
@@ -2105,20 +2166,20 @@ An error happened inside of Porn Fetch!
         else:
             sort = None
 
-        videos = hq_Client().get_top_porn(sort_by=sort)
+        videos = hq_Client.get_top_porn(sort_by=sort)
         self.add_to_tree_widget_thread(iterator=videos)
 
     def get_by_category_hqporner(self):
         """Returns video by category from HQPorner. I want to add support for EPorner"""  # TODO
         category_name = self.ui.tools_lineedit_hqporner_category.text()
-        all_categories = hq_Client().get_all_categories()
+        all_categories = hq_Client.get_all_categories()
 
         if not category_name in all_categories:
             ui_popup(self.tr("Invalid Category. Press 'list categories' to see all "
                                                   "possible ones.", None))
 
         else:
-            videos = hq_Client().get_videos_by_category(category=category_name)
+            videos = hq_Client.get_videos_by_category(category=category_name)
             self.add_to_tree_widget_thread(videos)
 
     def get_by_category_eporner(self):
@@ -2130,7 +2191,7 @@ An error happened inside of Porn Fetch!
                                                   "possible ones.", None))
 
         else:
-            videos = ep_Client().get_videos_by_category(category=category_name, enable_html_scraping=True)
+            videos = ep_Client.get_videos_by_category(category=category_name, enable_html_scraping=True)
             self.add_to_tree_widget_thread(iterator=videos)
 
     def list_categories_eporner(self):
@@ -2143,19 +2204,19 @@ An error happened inside of Porn Fetch!
 
     def get_brazzers_videos(self):
         """Get brazzers videos from HQPorner"""
-        videos = hq_Client().get_brazzers_videos()
+        videos = hq_Client.get_brazzers_videos()
         self.add_to_tree_widget_thread(videos)
 
     @classmethod
     def list_categories_hqporner(cls):
         """Get all available categories. I want to also extend that for EPorner (and maybe even more sites)"""
-        categories_ = hq_Client().get_all_categories()
+        categories_ = hq_Client.get_all_categories()
         categories = ",".join(categories_)
         ui_popup(categories)
 
     def get_random_video(self):
         """Gets a random video from HQPorner"""
-        video = hq_Client().get_random_video()
+        video = hq_Client.get_random_video()
         some_list = [video]
         self.add_to_tree_widget_thread(some_list)
 
@@ -2254,7 +2315,7 @@ This warning won't be shown again.
             self.ffmpeg_path = None
 
         else:
-            consts.FFMPEG_EXECUTABLE = ffmpeg_path
+            phub_consts.FFMPEG_EXECUTABLE = ffmpeg_path
             bs_consts.FFMPEG_PATH = ffmpeg_path
             self.ffmpeg_path = ffmpeg_path
             logger.debug(f"FFmpeg found at: {ffmpeg_path}")
@@ -2285,12 +2346,11 @@ This warning won't be shown again.
     def switch_to_home(self):
         self.ui.main_stacked_widget_main.setCurrentIndex(0)
         self.ui.main_stacked_widget_top.setCurrentIndex(0)
-        self.ui.main_stacked_widget_top.setMaximumHeight(260)
+        self.ui.main_stacked_widget_top.setMaximumHeight(220)
 
     def switch_to_account(self):
         self.ui.main_stacked_widget_top.setCurrentIndex(1)
         self.ui.main_stacked_widget_main.setCurrentIndex(0)
-        self.ui.main_stacked_widget_top.setMaximumHeight(220)
 
     def switch_to_tools(self):
         self.ui.main_stacked_widget_main.setCurrentIndex(0)

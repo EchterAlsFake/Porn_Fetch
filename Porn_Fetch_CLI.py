@@ -11,9 +11,8 @@ import queue
 from io import TextIOWrapper
 from src.backend.shared_functions import *
 from src.backend.log_config import setup_logging
-from base_api.modules.download import *
 from base_api.modules.progress_bars import *
-from base_api.base import Core
+from base_api.base import BaseCore
 from rich import print as rprint
 from rich.markdown import Markdown
 from rich.progress import Progress, BarColumn, TextColumn, SpinnerColumn, TimeElapsedColumn, TimeRemainingColumn
@@ -306,7 +305,7 @@ Do you want to use FFmpeg? [yes,no]
             url = input(f"{return_color()}Please enter the Video URL -->:")
 
         video = check_video(url=url, delay=self.delay)
-        title = Core().strip_title(video.title)
+        title = BaseCore().strip_title(video.title)
 
         if isinstance(video, Video):
             author = video.author.name
@@ -430,7 +429,7 @@ Do you want to use FFmpeg? [yes,no]
             model = hq_Client().get_videos_by_actress(model)
 
         elif xvideos_pattern.match(model):
-            model = xv_Client().get_pornstar(model).videosH
+            model = xv_Client().get_pornstar(model).videos
 
         if do_return:
             return model
@@ -503,24 +502,22 @@ Do you want to use FFmpeg? [yes,no]
 
     def download(self, video, output_path, task):
         try:
-
             def callback_wrapper(pos, total):
                 self.progress_queue.put((task, pos, total))
                 self.downloaded_segments += 1
                 # This shit took me over 7 hours!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 # Making this stupid thing thread safe was the most exhausting thing in my entire life :skull:
 
+
             if isinstance(video, Video):
-                self.threading_mode = resolve_threading_mode(mode=self.threading_mode, video=video,
-                                                             workers=self.workers, timeout=self.timeout)
                 video.download(path=output_path, quality=self.quality, downloader=self.threading_mode,
                                display=callback_wrapper)
 
             elif isinstance(video, ep_Video) or isinstance(video, hq_Video):
-                video.download(path=output_path, quality=self.quality, callback=callback_wrapper)
+                video.download(path=output_path, quality=self.quality, no_title=True, callback=Callback.text_progress_bar)
 
             else:
-                video.download(downloader=self.threading_mode, path=output_path, quality=self.quality,
+                video.download(downloader=self.threading_mode, path=output_path, no_title=True, quality=self.quality,
                                callback=callback_wrapper)
 
         finally:
@@ -549,7 +546,7 @@ Do you want to use FFmpeg? [yes,no]
             try:
                 task, pos, total = self.progress_queue.get()
 
-            except TypeError: # Stupid implementation I know<r
+            except TypeError: # Stupid implementation I know
                 break
 
             # Update progress bar based on queue data
@@ -565,11 +562,9 @@ Do you want to use FFmpeg? [yes,no]
 
     @staticmethod
     def credits():
-        content = (requests.get("https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/README/CREDITS.md")
-                   .text)
+        content = BaseCore().fetch("https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/README/CREDITS.md")
         md = Markdown(content)
         rprint(md)
-
 
 
 class Batch(CLI):

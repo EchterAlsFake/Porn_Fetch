@@ -1,12 +1,9 @@
 # Porn Fetch supported websites
-
-
 - PornHub.com
 - HQporner.com (2.8) 
 - Eporner.com (3.0)
 - xnxx.com (3.0)
 - xvideos.com (3.0)
-- spankbang.com (3.4)
 
 
 > Porn Fetch was built for PornHub in the first place, but I decided to support as many websites as possible
@@ -21,4 +18,3 @@
 | Eporner    |     Yes     |    Yes    |      No       |       No       |  Yes  |
 | xnxx       |     Yes     |    Yes    |      No       |      Yes       |  Yes  |
 | xvideos    |     Yes     |    Yes    |      No       |      Yes       |  Yes  |
-| Spankbang  |    Yes      | No (v3.5) |      No       |       No       |  No   |
