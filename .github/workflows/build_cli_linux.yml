@@ -44,7 +44,7 @@ jobs:
           sudo dpkg --add-architecture i386
           sudo apt-get update
           sudo apt-get install -y build-essential gcc-multilib libffi-dev zlib1g-dev libbz2-dev libsqlite3-dev binutils-dev libsqlite3-dev libgdbm-dev libc6-dev libbz2-dev
-          sudo apt-get install -y libfl-dev libncurses5:i386 libncursesw5:i386 libtinfo5:i386 zlib1g:i386 zlib1g-dev:i386 openssl libssl-dev libbz2-dev:i386 libgdbm-compat-dev:i386 libgdbm-dev:i386 libssl-dev:i386 libsqlite3-dev:i386 tk-dev:i386 libx11-dev:i386 libreadline-dev:i386 libffi-dev:i386 libncurses5-dev:i386 libncursesw5-dev:i386 liblzma-dev:i386 uuid-dev:i386
+          sudo apt-get install -y libfl-dev zlib1g:i386 zlib1g-dev:i386 openssl libssl-dev libbz2-dev:i386 libgdbm-compat-dev:i386 libgdbm-dev:i386 libssl-dev:i386 libsqlite3-dev:i386 tk-dev:i386 libx11-dev:i386 libreadline-dev:i386 libffi-dev:i386 libncurses5-dev:i386 libncursesw5-dev:i386 liblzma-dev:i386 uuid-dev:i386
       - name: Download and build Python 3.11 for x32
         run: |
           wget https://www.python.org/ftp/python/3.11.6/Python-3.11.6.tgz
