@@ -1796,6 +1796,14 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
         thumbnail = data.get("thumbnail")
 
         item = QTreeWidgetItem(self.ui.treeWidget)
+
+        if self._anonymous_mode:
+            item.setToolTip(0, title)
+            item.setToolTip(1, author)
+
+            title = "[redacted]"
+            author = "[redacted]"
+
         item.setText(0, f"{index}) {title}")
         item.setText(1, author)
 
