@@ -1985,7 +1985,7 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-272</y>
+                <y>0</y>
                 <width>1584</width>
                 <height>895</height>
                </rect>
@@ -2194,7 +2194,7 @@
                       <item>
                        <widget class="QLabel" name="settings_label_pornhub_delay">
                         <property name="text">
-                         <string>PornHub Delay (0 = Disabled) in seconds:</string>
+                         <string>Network delay (per Request, in seconds):</string>
                         </property>
                        </widget>
                       </item>
@@ -2243,7 +2243,7 @@
                          </sizepolicy>
                         </property>
                         <property name="text">
-                         <string>Threading Mode:</string>
+                         <string>Download Mode:</string>
                         </property>
                        </widget>
                       </item>

@@ -1672,7 +1672,7 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
 
         else:
             videos = None
-            ui_popup(self.tr("The model URL you entered seems to be invalid. Please check your output", disambiguation=None))
+            ui_popup(self.tr("The model URL you entered seems to be invalid. Please check your input", disambiguation=None))
 
 
         self.add_to_tree_widget_thread(videos)

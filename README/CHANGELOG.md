@@ -423,6 +423,7 @@ the thread is permanently locked
 - macOS is now fully supported and functional (hopefully functional)
 - You can now install Porn Fetch into your system (Windows, Linux)
 - Proxy Support
+- High Performance download mode is now async and allows for much higher speeds while reducing CPU power (only XNXX and XVideos)
 - Re-implemented the internet and status checks, but in a better way
 - Porn Fetch CLI now supports batch processing through arguments
 - Porn Fetch CLI is now completely thread-safe and uses rich progressbar

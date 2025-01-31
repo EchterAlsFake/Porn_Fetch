@@ -2,14 +2,215 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="de_DE" sourcelanguage="en_US">
 <context>
-    <name>Porn_Fetch</name>
+    <name>KeyboardShortcuts</name>
     <message>
-        <location filename="../../../main.py" line="1070"/>
+        <location filename="../form_keyboard_shortcuts.ui" line="32"/>
+        <source>Keyboard Shortcuts</source>
+        <translation>Tastenkürzel</translation>
+    </message>
+    <message>
+        <location filename="../form_keyboard_shortcuts.ui" line="70"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:700;&quot;&gt;Keyboard Shortcuts&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:14pt; font-weight:700;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;CTRL + Q     Closes the application&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;CTRL + E      Exports all current video URLs from the tree widget into a .txt file &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;CTRL + T      Downloads all videos in the tree widget (same as clicking the button)&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;CTRL + A     Quickly enables the anonymous mode (temporarily)&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;CTRL + S     Saves Porn Fetch settings&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;CTRL + X     Selects all items in the tree widget as checked&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;CTRL + Z     Unchecks all items in the tree widget&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:700;&quot;&gt;Keyboard Shortcuts&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:14pt; font-weight:700;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;CTRL + Q     Schließt das Programm&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;CTRL + E      Exportiert alle aktuellen URLs from TreeWidget in eine Textdatei&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;CTRL + T      Lädt alle Videos from TreeWidget herunter (dasselbe wie das Klicken vom Button)&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;CTRL + A     Aktiviert den anonymen Modus temporär)&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;CTRL + S     Speichert die Porn Fetch einstellungen&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;CTRL + X     Markiert alle Videos im TreeWidget&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;CTRL + Z     Setzt alle Videos im TreeWidget als nicht ausgewählt zurück&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>PornFetch</name>
+    <message>
+        <location filename="../../../main.py" line="1109"/>
+        <source>You are running on Android! You can not install Porn Fetch</source>
+        <translation>Du kannst Porn Fetch nicht auf Android installieren (es ist ja schon installiert ;)</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1113"/>
+        <source>Porn Fetch installation successful!</source>
+        <translation>Die Installation von Porn Fetch war erfolgreich!</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1116"/>
+        <source>Porn Fetch installation failed, because of: {result[1]}</source>
+        <translation>Die Installation von Porn Fetch ist fehlgeschlafen{result[1]}</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1530"/>
         <source>Saved User Settings, please restart Porn Fetch!</source>
         <translation>Einstellungen wurden gespeichert. Bitte starte Porn Fetch neu!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1107"/>
+        <location filename="../../../main.py" line="1561"/>
+        <source>
+!!! ONLY SOCKS5 IS SUPPORTED !!!
+        
+Warning:
+Your entire traffic will be routed through the proxy, except if your threading mode is set to &apos;ffmpeg&apos;. There&apos;s no
+guarantee for your IP not being exposed. If you live in a country where downloading Porn is a crime, please consider
+using a VPN or Tor for a more safe approach. 
+
+After submitting the proxy, Porn Fetch will do a short test if your IP is leaked by making a request to 
+&apos;http://httpbin.org/ip&apos; with and without proxy to compare your IP address. 
+
+All traffic will be sent with encryption, however, SSL won&apos;t be verified, meaning someone could break your encryption
+and you won&apos;t get notified about it. Basically all SSL related errors will be completely ignored, but if your
+proxy is good, SSL should work. 
+
+Proxy implementation will be improved in the next release. All of it is currently in BETA. Please report any issues unless
+they are related to the proxy itself e.g., closed connections and such things. You might want to higher the timeout
+in Porn Fetch settings, because some proxies are just really slow
+
+Please set your threading mode to &apos;Default&apos;. Most proxies can&apos;t handle what the threaded mode is capable of.
+Seriously this thing can go up to 115 MB/s. Proxies can&apos;t handle that xD
+If you want to see by yourself, use wireshark and monitor your network traffic.
+
+DO NOT REPORT ANY ERRORS WHEN USING A PUBLIC PROXY!
+They are just shit, and don&apos;t work well. If you come across connection errors with them it is by 99.9% the fault
+of the proxy and not my fault ;)
+
+If you still want to proceed, click O.K. Otherwise, close Porn Fetch now and restart it.</source>
+        <translation>
+!!! Nur SOCKS5 wird unterstützt!!!
+        
+WARNUNG:
+Dein gesamter Datenverkehr wird durch den Proxy geleitet, außer wenn dein threading modus zu &apos;ffmpeg&apos; gesetzt ist Es gibt k eine
+Garantie, dass deine IP nicht offengelgt wird.. Wenn du in einem Land lebst, wo das herunterladen von Pornos ein Verbrechen ist, überlege besser
+einen VPN oder das Tor Netzwerk für eine sichere Variante zu nutzen. 
+
+Nachdem du deinen Proxy eingegeben hast wird Porn Fetch einen kurzen Test machen, indem es Anfragen an 
+&apos;http://httpbin.org/ip&apos; mit und ohne Proxy sendet um deine IP zu vergleichen. 
+
+Dein gesamter Datenverkehr wird mit Verschlüsselung gesendet, allerdings ohne diese auch zu verifizieren. Das liegt leider daran,
+dass viele Proxies keine gültige Lösung für SSL haben was zu Verifizierungsfehlern führt. Jedem in deinem Netzwerk, als auch dem Proxy selbst,
+ist es unter umständen möglich deinen Datenverkehr mitzulesen!
+
+Die Proxy Implementierung wird in den nächsten Versionen verbessert. Aktuell befinet sich das hier in einer BETA Phase. Bitte melde auftretende Fehler, außer
+wenn sie aufgrund des Proxys selbst auftreten, z.B. durch unerwartet geschlossene Verbindungen. Du solltest außerdem die Zeitüberschreitung in den Porn Fetch Einstellungen
+erhöhen, weil Proxies in der Regel deutlich langsamer sind.
+
+Bitte setze deinen Threading Mudus auf &quot;Standart&quot;. Der Peformance Modus kann bis zu 115 MB/s und darüber hinaus. Proxys können damit meist
+nicht umgehen, weswegen ich dir das empfehle.
+
+MELDE KEINE FEHLER SOLANGE DU EINEN ÖFFENTLICHEN PROXY NUTZT!
+Sie sind einfach schlecht und meistens sind Fehler nicht meine, sondern deren Schuld Sei dir also bitte wirklich sicher!
+
+Wenn du trotzdem fortfharen möchtest, drücke bitte auf OK um deinen Proxy einzugeben...</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1675"/>
+        <source>The model URL you entered seems to be invalid. Please check your input</source>
+        <translation>Die Model uRL, welche du eingegeben hast  scheint ungültig zu sein. Bitte überpfrüfe deine Eingaben</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1732"/>
+        <source>Information: The Website {website} specified in the URL file isn&apos;t valid.</source>
+        <translation>Information: Die Webseite {website}, die in der URL Datei angegeben worden ist, ist ungültig.</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1762"/>
+        <source>Couldn&apos;t determine which site you want to search on??? Please report this immediately!</source>
+        <translation>Ich konnte nicht herausfinden, auf welcher Seite du suchen willst??? Bitte melde das sofort!</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1881"/>
+        <source>
+An error happened inside of Porn Fetch! 
+
+{error}</source>
+        <translation>
+Ein Fehler trat in Porn Fetch auf
+
+{error}</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2001"/>
+        <source>Can&apos;t show thumbnail, due to your privacy settings ;)</source>
+        <translation>Ich kann dir das Vorschaubild aufgrund deiner Privatsphäre Einstellungen nicht anzeigen :)</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2008"/>
+        <source>No thumbnail available</source>
+        <translation>Kein Vorschaubild verfügbar</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2101"/>
+        <source>Those credentials don&apos;t seem to be valid...</source>
+        <translation>Diese Zugangsdaten sehen ungültig aus...</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2107"/>
+        <source>Login Successful!</source>
+        <translation>Login erfolgreich!</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2111"/>
+        <source>Login Failed, please check your credentials and try again!</source>
+        <translation>Login gescheitert, bitte überprüfe deine Eingaben!</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2114"/>
+        <source>You are already logged in!</source>
+        <translation>Du bist bereits angemeldet!</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2126"/>
+        <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
+        <translation>Es gibt ein Problem mit dem Login. Bitte logge dich erst ein und versuche dann Videos von deinem Account zu laden.</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2187"/>
+        <location filename="../../../main.py" line="2199"/>
+        <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
+        <translation>Ungültige Kategorie. Drücke &quot;Kategorien auflisten&quot; um alle möglichen zu sehen.</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2284"/>
+        <source>
+! Warning !
+Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
+------------------------------------------------------------
+{formatted_results}</source>
+        <translation>
+! Warnung!
+Einige Webseiten konnten nicht aufgerufen werden. Hier ist ein detailierter Bericht:
+------------------------------------------------------------
+{formatted_results}</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2317"/>
         <source>
 FFmpeg isn&apos;t installed on your system... Some features won&apos;t be available:
 
@@ -23,344 +224,663 @@ To automatically install ffmpeg, just head over to the settings and press the ma
 local PATH (e.g, through your linux package manager, or through the Windows PATH)
 
 This warning won&apos;t be shown again.
-                        </source>
+                    </source>
         <translation>
-FFmpeg ist nicht auf deinem System installiert... Einige Funktionen werden nicht verfügbar sein:
+FFmpeg ist nicht auf deinem System installiert... Einige Features werden nicht verfügbar sein
 
-- Der FFmpeg threading Modus
-- Das Konvertieren von Videos in ein valides MP4 Format
-- Metadaten / Tags in das Video schreiben
+- Der FFmpeg Download Modus
+- Das konvertieren der Videos in ein valides .mp4 Format
+- Das Schreiben von Tags bzw. Metadaten in die Videos
 
-Diese Funktionen werden nicht grundlegend von Porn Fetch benötigt, aber einige Personen könnten diese nutzen wollen
+Diese Features sind optional für Porn Fetch, sind aber auch für einige Peorsonen sehr nützlich.
 
-Um FFmpeg automatisch zu installieren, gehe einfach in die Einstellungen und klick den magischen Button oder installiere FFmpeg lokal und füg es in deinen Systempfad hinzu
-(z.B. über deinen Linux Paketmanager, oder über den Windows PATH)
+Du kannst FFmpeg automatisch über die Porn Fetch Einstellungen herunterladen, aber auch indem
+du es manuell in Windows 7 Linux in deine Umgebungsvariablen setzt. Unter Windows z.B. im Terminal: &apos;winget install ffmpeg&apos; 
 
 Diese Warnung wird nicht erneut angezeigt.
-                        </translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1149"/>
-        <source>The output path does not exist or is not writable.</source>
-        <translation>Der Ausgabepfad existiert nicht oder ist nicht beschreibbar.</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1151"/>
-        <source>Enter custom Path:</source>
-        <translation>Gib einen benutzerdefinierten Pfad ein:</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1153"/>
-        <source>Success: {text} will be used for this session!</source>
-        <translation>Erfolg: {text} wird für diese Sitzung genutzt!</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1156"/>
-        <source>Invalid path. The application will now exit.</source>
-        <translation>Ungültiger Pfad. Die Anwendung wird nun geschlossen.</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1480"/>
-        <source>Some error occurred in loading a video. Please report this: {error_message}</source>
-        <translation>Ein unerwarteter Fehler trat beim Laden des Videos auf. Bilde melde das folgende: {error_message}</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1621"/>
-        <source>Information: The Website {website} specified in the URL file isn&apos;t valid.</source>
-        <translation>Information: Die Webseite {website}, die in der UrL Datei angegeben worden ist, ist ungültig.</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1639"/>
-        <source>Those credentials don&apos;t seem to be valid...</source>
-        <translation>Diese Zugangsdaten sehen ungültig aus...</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1645"/>
-        <source>Login Successful!</source>
-        <translation>Login erfolgreich!</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1649"/>
-        <source>Login Failed, please check your credentials and try again!</source>
-        <translation>Login gescheitert, bitte überprüfe deine Eingaben!</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1652"/>
-        <source>You are already logged in!</source>
-        <translation>Du bist bereits eingeloggt!</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1675"/>
-        <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
-        <translation>Es gibt ein Problem mit dem Login. Bitte logge dich erst ein und versuche dann Videos von deinem Account zu laden.</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1745"/>
-        <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
-        <translation>Ungültige Kategorie. Drücke &quot;Kategorien auflisten&quot; um alle möglichen zu sehen.</translation>
+                    </translation>
     </message>
 </context>
 <context>
-    <name>Porn_Fetch_Widget</name>
+    <name>PornFetchRangeSelector</name>
     <message>
-        <location filename="../form_desktop.ui" line="543"/>
-        <source>File:</source>
-        <translation>Datei:</translation>
+        <location filename="../form_range_selector.ui" line="14"/>
+        <source>Video selector...</source>
+        <translation>Video Auwahl...</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="237"/>
-        <source>Open File</source>
-        <translation>Öffne Datei</translation>
+        <location filename="../form_range_selector.ui" line="22"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;;&quot;&gt;Select the range of videos to be automatically selected.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;;&quot;&gt;For example, if you set the start to 5 and the end to 20, then all videos between 5-20 will be checked for downloading :)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;;&quot;&gt;Or select by a range in time:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;;&quot;&gt;For example if you want to download all videos in between 10 and 20 minutes do:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;;&quot;&gt;Start: 10&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;;&quot;&gt;End: 20&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;;&quot;&gt;And click Apply.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;;&quot;&gt;Wähle den Bereich von Videos aus, welche automatisch zum Herunterladen markiert werden sollen.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;;&quot;&gt;Zum Beispiel, wenn du den Start auf 5 und das Ende auf 20 setzt, dann werden alle Videos mit dem Index 5-20 zum Herunterladen markiert :)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;;&quot;&gt;Du kannst den Bereich aber auch nach Zeit wählen:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;;&quot;&gt;Wenn du zum Beispiel alle Videos zwischen 10 and 20 Minuten herunterladen willst, dann mach:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;;&quot;&gt;Start: 10&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;;&quot;&gt;Ende: 20&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;;&quot;&gt;Und klick Anwenden.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="275"/>
-        <location filename="../form_desktop.ui" line="502"/>
-        <location filename="../form_desktop.ui" line="987"/>
-        <location filename="../form_desktop.ui" line="1016"/>
-        <location filename="../form_desktop.ui" line="1137"/>
-        <location filename="../form_desktop.ui" line="1201"/>
-        <source>Get Videos</source>
-        <translation>Videos abrufen</translation>
+        <location filename="../form_range_selector.ui" line="47"/>
+        <location filename="../form_range_selector.ui" line="92"/>
+        <location filename="../form_range_selector.ui" line="113"/>
+        <source>Apply</source>
+        <translation>Anwenden</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="300"/>
+        <location filename="../form_range_selector.ui" line="54"/>
+        <source>Apply by time:</source>
+        <translation>Nach Zeit  auswählen:</translation>
+    </message>
+    <message>
+        <location filename="../form_range_selector.ui" line="61"/>
+        <location filename="../form_range_selector.ui" line="123"/>
+        <source>0</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../form_range_selector.ui" line="68"/>
+        <source>Enter the author&apos;s name</source>
+        <translation>Gibt den Name des Autor ein</translation>
+    </message>
+    <message>
+        <location filename="../form_range_selector.ui" line="78"/>
+        <source>Apply by Index:</source>
+        <translation>Nach Index auswählen:</translation>
+    </message>
+    <message>
+        <location filename="../form_range_selector.ui" line="85"/>
+        <location filename="../form_range_selector.ui" line="99"/>
+        <source>End:</source>
+        <translation>Ende:</translation>
+    </message>
+    <message>
+        <location filename="../form_range_selector.ui" line="106"/>
+        <location filename="../form_range_selector.ui" line="130"/>
+        <source>Start:</source>
+        <translation>Start:</translation>
+    </message>
+    <message>
+        <location filename="../form_range_selector.ui" line="137"/>
+        <source>Apply by author:</source>
+        <translation>Nach Autor auswählen:</translation>
+    </message>
+</context>
+<context>
+    <name>PornFetch_Desktop</name>
+    <message>
+        <location filename="../form_desktop.ui" line="26"/>
+        <source>Porn Fetch V3.5 (C) Johannes Habel GPL 3</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="330"/>
+        <source>Supported websites</source>
+        <translation>Unterstützte Webseiten</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="462"/>
         <source>Download</source>
         <translation>Herunterladen</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="469"/>
-        <source>Search Query:</source>
-        <translation>Suchbegriff:</translation>
+        <location filename="../form_desktop.ui" line="481"/>
+        <source>PornHub</source>
+        <translation>PornHub</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="666"/>
-        <source>Get recommended videos</source>
-        <translation>vorgeschlagene Videos abrufen</translation>
+        <location filename="../form_desktop.ui" line="506"/>
+        <source>Search for Videos. Select Website below</source>
+        <translation>Suche nach Videos. Wähle die Seite weiter unten aus</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="679"/>
-        <source>Password:</source>
-        <translation>Passwort:</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="193"/>
-        <source>Start</source>
-        <translation>Start</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="436"/>
-        <source>URLs in the file must be separated with new lines!</source>
-        <translation>URLs in der Datei müssen mit einer neuen Zeile separiert werden!</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="589"/>
-        <source>Get Liked videos</source>
-        <translation>Gelikte Videos abrufen</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="602"/>
-        <source>Get watched videos</source>
-        <translation>geschaute Videos abrufen</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="634"/>
-        <source>Login</source>
-        <translation>Anmelden</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="701"/>
-        <source>Enter your PornHub Password</source>
-        <translation>Gib dein PornnHub Passwort ein</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1380"/>
-        <source>Only Title (a lot faster)</source>
-        <translation>Nur Titel (deutlich schneller)</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1332"/>
-        <source>Get Title, Author, Duration</source>
-        <translation>Titel, Autor und Länge</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1400"/>
-        <source>Show videos in reverse</source>
-        <translation>Video in umgedrehter Reihenfolge zeigen</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1300"/>
-        <source>Author</source>
-        <translation>Autor</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1497"/>
-        <source>Download Selected Videos</source>
-        <translation>Lade ausgewählte Videos herunter</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1525"/>
-        <source>Unselect all</source>
-        <translation>Auswahl aufheben</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1753"/>
-        <source>High Performance</source>
-        <translation>Hohe Leistung</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1773"/>
-        <source>Default</source>
-        <translation>Standard</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="550"/>
-        <location filename="../form_desktop.ui" line="1602"/>
-        <location filename="../form_desktop.ui" line="1633"/>
-        <location filename="../form_desktop.ui" line="1664"/>
-        <location filename="../form_desktop.ui" line="1695"/>
-        <location filename="../form_desktop.ui" line="1726"/>
-        <location filename="../form_desktop.ui" line="1783"/>
-        <location filename="../form_desktop.ui" line="1909"/>
-        <location filename="../form_desktop.ui" line="2014"/>
-        <location filename="../form_desktop.ui" line="2068"/>
-        <location filename="../form_desktop.ui" line="2120"/>
-        <source>Help</source>
-        <translation>Hilfe</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="2007"/>
-        <location filename="../form_desktop.ui" line="2058"/>
-        <source>No</source>
-        <translation>Nein</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="2000"/>
-        <location filename="../form_desktop.ui" line="2048"/>
-        <source>Yes</source>
-        <translation>Ja</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="26"/>
-        <source>Porn Fetch V3.4 (C) Johannes Habel GPL 3</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="94"/>
-        <source>Total:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="455"/>
-        <source>URL:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="476"/>
+        <location filename="../form_desktop.ui" line="525"/>
         <source>Playlist URL:</source>
-        <translation></translation>
+        <translation>Widergabeliste URL:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="495"/>
+        <location filename="../form_desktop.ui" line="544"/>
+        <source>Search Website</source>
+        <translation>Suche auf Webseite</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="563"/>
+        <source>File:</source>
+        <translation>Datei:</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="582"/>
         <source>Model URL:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="615"/>
+        <location filename="../form_desktop.ui" line="604"/>
+        <source>Start</source>
+        <translation>Start</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="623"/>
+        <source>HQPorner</source>
+        <translation>HQPorner</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="642"/>
+        <source>URL:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="667"/>
+        <source>URLs in the file must be separated with new lines!</source>
+        <translation>URLs in der Datei müssen mit einer neuen Zeile separiert werden!</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="686"/>
+        <source>XVideos</source>
+        <translation>XVideos</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="711"/>
+        <location filename="../form_desktop.ui" line="888"/>
+        <location filename="../form_desktop.ui" line="1402"/>
+        <location filename="../form_desktop.ui" line="1468"/>
+        <location filename="../form_desktop.ui" line="1629"/>
+        <location filename="../form_desktop.ui" line="1670"/>
+        <source>Get Videos</source>
+        <translation>Videos abrufen</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="730"/>
+        <source>Enter a PornHub Playlist URL</source>
+        <translation>Gib eine PornHub Playlist URL ein</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="749"/>
+        <location filename="../form_desktop.ui" line="2042"/>
+        <location filename="../form_desktop.ui" line="2085"/>
+        <location filename="../form_desktop.ui" line="2131"/>
+        <location filename="../form_desktop.ui" line="2174"/>
+        <location filename="../form_desktop.ui" line="2217"/>
+        <location filename="../form_desktop.ui" line="2286"/>
+        <location filename="../form_desktop.ui" line="2443"/>
+        <location filename="../form_desktop.ui" line="2470"/>
+        <location filename="../form_desktop.ui" line="2590"/>
+        <location filename="../form_desktop.ui" line="2604"/>
+        <location filename="../form_desktop.ui" line="2659"/>
+        <location filename="../form_desktop.ui" line="2723"/>
+        <location filename="../form_desktop.ui" line="2761"/>
+        <source>Help</source>
+        <translation>Hilfe</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="768"/>
+        <source>XNXX</source>
+        <translation>XNXX</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="787"/>
+        <source>Enter video URL</source>
+        <translation>Gib eine Video URL ein</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="806"/>
+        <source>Enter Model / Channel / Actress URL</source>
+        <translation>Gib eine Model / Kanal oder Darsteller URL ein</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="825"/>
+        <source>Search Query:</source>
+        <translation>Suchbegriff:</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="850"/>
+        <source>Open File</source>
+        <translation>Öffne Datei</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="869"/>
+        <source>EPorner</source>
+        <translation>EPorner</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="955"/>
+        <source>Get Liked videos</source>
+        <translation>gelikte Videos abrufen</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="974"/>
+        <source>Get watched videos</source>
+        <translation>geschaute Videos abrufen</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="993"/>
         <source>E-Mail:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="782"/>
-        <source>PornHub:</source>
-        <translation></translation>
+        <location filename="../form_desktop.ui" line="1012"/>
+        <source>Login</source>
+        <translation>Anmelden</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="808"/>
-        <source>XVideos:</source>
-        <translation></translation>
+        <location filename="../form_desktop.ui" line="1031"/>
+        <source>Enter your PornHub E-Mail address (not your username, pornhub changed it) </source>
+        <translation>Gib deine PornHub E-Mail Adresse ein (nicht deinen Nutzernamen, PornHub hat das geändert) </translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="854"/>
-        <source>Eporner:</source>
-        <translation></translation>
+        <location filename="../form_desktop.ui" line="1050"/>
+        <source>Get recommended videos</source>
+        <translation>vorgeschlagene Videos abrufen</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="861"/>
+        <location filename="../form_desktop.ui" line="1069"/>
+        <source>Password:</source>
+        <translation>Passwort:</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1091"/>
+        <source>Enter your PornHub Password</source>
+        <translation>Gib dein PornnHub Passwort ein</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1184"/>
         <source>XNXX:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="875"/>
-        <source>Info:</source>
+        <location filename="../form_desktop.ui" line="1197"/>
+        <source>XVideos:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="888"/>
+        <location filename="../form_desktop.ui" line="1226"/>
+        <source>Eporner:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1239"/>
+        <source>Info:</source>
+        <translation>Information:</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1318"/>
+        <source>PornHub:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1350"/>
         <source>HQPorner:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="895"/>
-        <source>Spankbang:</source>
-        <translation></translation>
+        <location filename="../form_desktop.ui" line="1424"/>
+        <source>Month</source>
+        <translation>Monat</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1305"/>
+        <location filename="../form_desktop.ui" line="1446"/>
+        <location filename="../form_desktop.ui" line="1531"/>
+        <source>List of all categories</source>
+        <translation>Alle Kategorien auflisten</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1490"/>
+        <source>All Time</source>
+        <translation>Gesamtzeit</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1509"/>
+        <location filename="../form_desktop.ui" line="1550"/>
+        <source>Get videos by category</source>
+        <translation>Erhalte Videos einer Kategorie</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1588"/>
+        <source>Week</source>
+        <translation>Woche</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1648"/>
+        <source>Get random video</source>
+        <translation>Zufälliges Video</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1689"/>
+        <source>Get Brazzers videos</source>
+        <translation>Brazzers Videos</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1708"/>
+        <source>Get Top Porn:</source>
+        <translation>Top Porn:</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1730"/>
+        <source>Get Video</source>
+        <translation>Zufälliges Video abrufen</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1805"/>
+        <source>Author</source>
+        <translation>Autor</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1810"/>
         <source>Duration (minutes)</source>
         <translation>Länge (minuten)</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1472"/>
-        <source>Select everything</source>
-        <translation>Alles auswählen</translation>
+        <location filename="../form_desktop.ui" line="1822"/>
+        <source>Do not clear videos</source>
+        <translation>Videos nicht leeren</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1763"/>
+        <location filename="../form_desktop.ui" line="1835"/>
+        <source>Automated selection tool</source>
+        <translation>Automatisiertes Auswählen</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1845"/>
+        <source>Show videos in reverse</source>
+        <translation>Video in umgedrehter Reihenfolge zeigen</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1852"/>
+        <source>Keyboard shortcuts</source>
+        <translation>Tastenkürzel</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1871"/>
+        <source>Does not stop downloading videos</source>
+        <translation>Stoppt nicht das Herunterladen von Videos</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1874"/>
+        <source>Stop loading videos</source>
+        <translation>Stoppe das Laden von Videos</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1901"/>
+        <source>Click on a video to show a thumbnail...</source>
+        <translation>Klicke auf ein Video um das Vorschaubild anzuzeigen...</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1941"/>
+        <source>Download Selected Videos</source>
+        <translation>Lade ausgewählte Videos herunter</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1999"/>
+        <source>Performance</source>
+        <translation>Leistung</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2022"/>
+        <source>Simultaneous downloads:</source>
+        <translation>Gleichzeitige Downloads:</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2065"/>
+        <source>Maximal workers:</source>
+        <translation>Maximale Arbeiter:</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2108"/>
+        <source>Maximal timeout:</source>
+        <translation>Maximale Zeitüberschreitung:</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2154"/>
+        <source>Maximal retries:</source>
+        <translation>Maximale Wiederholungen von Netzwerkanfragen:</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2197"/>
+        <source>Network delay (per Request, in seconds):</source>
+        <translation>Netzwerk Verzögerung (pro Anfrage, in Sekunden):</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2246"/>
+        <source>Download Mode:</source>
+        <translation>Download Modus:</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2256"/>
+        <source>High Performance</source>
+        <translation>Hohe Leistung</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2266"/>
         <source>FFMPEG</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1993"/>
-        <source>Skip existing files:</source>
-        <translation>Überspringe bereits existierende Dateien:</translation>
+        <location filename="../form_desktop.ui" line="2276"/>
+        <source>Default</source>
+        <translation>Standard</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2092"/>
-        <source>Model videos (PornHub)</source>
-        <translation></translation>
+        <location filename="../form_desktop.ui" line="2298"/>
+        <source>Graphical User Interface</source>
+        <translation>Benutzeroberfläche</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2099"/>
-        <source>User uploads</source>
-        <translation>Vom Nutzer hochgeladen</translation>
+        <location filename="../form_desktop.ui" line="2336"/>
+        <source>System default</source>
+        <translation>Systemstandard</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2106"/>
-        <source>Featured videos</source>
-        <translation>Videos mit Feature parts</translation>
+        <location filename="../form_desktop.ui" line="2349"/>
+        <source>Graphical User Interface Language:</source>
+        <translation>Sprache der graphischen Oberfläche:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2113"/>
-        <source>Both</source>
-        <translation>Beide</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="2156"/>
-        <source>German</source>
-        <translation>Deutsch</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="2176"/>
+        <location filename="../form_desktop.ui" line="2359"/>
         <source>English</source>
         <translation>Englisch</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2209"/>
+        <location filename="../form_desktop.ui" line="2369"/>
         <source>French</source>
         <translation>Französisch</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2292"/>
+        <location filename="../form_desktop.ui" line="2379"/>
+        <source>Chinese (simplified)</source>
+        <translation>Chinesisch (vereinfacht)</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2389"/>
+        <source>German</source>
+        <translation>Deutsch</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2396"/>
+        <source>Enable custom font (Jetbrains Mono)</source>
+        <translation>Aktiviere spezielle Schriftart 
+(Jetbrains Mono)</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2408"/>
+        <source>System / Porn Fetch</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2456"/>
+        <source>Startup:</source>
+        <translation>Start:</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2463"/>
+        <source>Download and Setup FFmpeg</source>
+        <translation>FFmpeg installieren</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2477"/>
+        <source>Internet checks</source>
+        <translation>Überprüfe Netzwerkzugriff</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2484"/>
+        <source>Update checks</source>
+        <translation>Suche nach Updates</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2491"/>
+        <source>Install Porn Fetch</source>
+        <translation>Porn Fetch Installieren</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2504"/>
+        <source>Privacy:</source>
+        <translation>Privatsphäre:</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2511"/>
+        <source>Enable Anonymous mode</source>
+        <translation>Anonymen Modus aktivieren</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2518"/>
+        <source>Activate Proxy</source>
+        <translation>Proxy aktivieren</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2532"/>
+        <source>Videos</source>
+        <translation>Videos</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2570"/>
+        <source>Worst</source>
+        <translation>Schlechteste</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2580"/>
+        <source>Best</source>
+        <translation>Bestmöglich</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2597"/>
+        <source>Use directory system</source>
+        <translation>Ordnersystem nutzen</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2611"/>
+        <source>Output path:</source>
+        <translation>Ausgabe Pfad:</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2618"/>
+        <source>Do not convert</source>
+        <translation>Nicht konvertieren</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2625"/>
+        <source>Write metadata tags</source>
+        <translation>Schreibe Metadaten</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2632"/>
+        <source>Model videos (PornHub)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2642"/>
+        <source>Open</source>
+        <translation>Öffnen</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2649"/>
+        <source>Result Limit:</source>
+        <translation>Ergebniss Limit:</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2666"/>
+        <source>Use custom format:</source>
+        <translation>Eigenes Format nutzen:</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2679"/>
+        <source>Quality:</source>
+        <translation>Qualität:</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2686"/>
+        <source>Both</source>
+        <translation>Beide</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2693"/>
+        <source>Featured videos</source>
+        <translation>Videos mit Feature parts</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2716"/>
+        <source>Enter &quot;./&quot; for current directory</source>
+        <translation>Gib &quot;./&quot; für das aktuelle Verzeichnis ein</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2733"/>
+        <source>Half</source>
+        <translation>Hälfte</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2740"/>
+        <source>mp4</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2747"/>
+        <source>User uploads</source>
+        <translation>Vom Nutzer hochgeladen</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2754"/>
+        <source>Skip existing files</source>
+        <translation>Überspringe existierende
+Dateien</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2795"/>
+        <source>Apply  (needs restart)</source>
+        <translation>Anwenden (benötigt Neustart)</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2824"/>
+        <source>Reset Porn Fetch to default settings</source>
+        <translation>Porn Fetch auf Werkseinstellungen zurücksetzen</translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="2884"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -377,7 +897,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Eporner.com&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- XNXX.com (supports total progress)&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- XVideos.com (supports total progress)&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Spankbang.com (supports total progress)&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;All sites support *threaded* downloads and selectable quality!&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
@@ -412,283 +931,177 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2350"/>
-        <source>Porn Fetch Menu</source>
-        <translation></translation>
+        <location filename="../form_desktop.ui" line="2949"/>
+        <source>Total:</source>
+        <translation>Insgesamt:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2038"/>
-        <source>Use Directory system? </source>
-        <translation>Ordner System nutzen? </translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1855"/>
-        <source>Enter &quot;./&quot; for current directory</source>
-        <translation>Gib &quot;./&quot; für das aktuelle Verzeichnis ein</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1848"/>
-        <source>Output path:</source>
-        <translation>Ausgabe Pfad:</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1959"/>
-        <source>Half</source>
-        <translation>Hälfte</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1949"/>
-        <source>Best</source>
-        <translation>Bestmöglich</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1051"/>
-        <location filename="../form_desktop.ui" line="1163"/>
-        <source>Get videos by category</source>
-        <translation>Erhalte Videos einer Kategorie</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1038"/>
-        <location filename="../form_desktop.ui" line="1223"/>
-        <source>List of all categories</source>
-        <translation>Alle Kategorien auflisten</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="994"/>
-        <source>Get Top Porn:</source>
-        <translation>Top Porn:</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="968"/>
-        <source>Week</source>
-        <translation>Woche</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="653"/>
-        <source>Enter your PornHub E-Mail address (not your username, pornhub changed it) </source>
-        <translation>Gib deine PornHub E-Mail Adresse ein (nicht deinen Nutzernamen, PornHub hat das geändert) </translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="936"/>
-        <source>Month</source>
-        <translation>Monat</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="952"/>
-        <source>All Time</source>
-        <translation>Gesamtzeit</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1093"/>
-        <source>Get random video</source>
-        <translation>Zufälliges Video</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1115"/>
-        <source>Get Video</source>
-        <translation>Zufälliges Video abrufen</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1080"/>
-        <source>Get Brazzers videos</source>
-        <translation>Brazzers Videos</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1743"/>
-        <source>Threading Mode:</source>
-        <translation>Threading Modus:</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1969"/>
-        <source>Worst</source>
-        <translation>Schlechteste</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1939"/>
-        <source>Quality:</source>
-        <translation>Qualität:</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="2199"/>
-        <source>Graphical User Interface Language:</source>
-        <translation>Sprache der graphischen Oberfläche:</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="2186"/>
-        <source>System default</source>
-        <translation>Systemstandard</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="2166"/>
-        <source>Chinese (simplified)</source>
-        <translation>Chinesisch (vereinfacht)</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1865"/>
-        <source>Open</source>
-        <translation>Öffnen</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1889"/>
-        <source>Result Limit:</source>
-        <translation>Ergebniss Limit:</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="368"/>
-        <source>XNXX</source>
-        <translation>XNXX</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="354"/>
-        <source>XVideos</source>
-        <translation>XVideos</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="212"/>
-        <source>Enter video URL</source>
-        <translation>Gib eine Video URL ein</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="250"/>
-        <source>Search Website</source>
-        <translation>Suche auf Webseite</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="409"/>
-        <source>See Supported Websites</source>
-        <translation>Liste der unterstützten Webseiten</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="524"/>
-        <source>Search for Videos. Select Website below</source>
-        <translation>Suche nach Videos. Wähle die Seite weiter unten aus</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="319"/>
-        <source>Enter Model / Channel / Actress URL</source>
-        <translation>Gib eine Model / Kanal oder Darsteller URL ein</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="337"/>
-        <source>PornHub</source>
-        <translation>PornHub</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="347"/>
-        <location filename="../form_desktop.ui" line="919"/>
-        <source>HQPorner</source>
-        <translation>HQPorner</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="361"/>
-        <location filename="../form_desktop.ui" line="1149"/>
-        <source>EPorner</source>
-        <translation>EPorner</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="81"/>
-        <source>Information: The total progressbar does not count for Eporner and HQPorner, because they are using different mechanisms for downloading.</source>
-        <translation>Information: Der totale Fortschritt zählt nicht für Eporner und HQPorner, weil diese einen anderen Mechanismus fürs herunterladen nutzen.</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="68"/>
+        <location filename="../form_desktop.ui" line="2978"/>
         <source>Converting:</source>
         <translation>Konvertieren:</translation>
     </message>
+</context>
+<context>
+    <name>SetupInstallDialog</name>
     <message>
-        <location filename="../form_desktop.ui" line="1407"/>
-        <source>Export video URLs</source>
-        <translation>Video URLs exportieren</translation>
+        <location filename="../form_install_dialog.ui" line="14"/>
+        <source>Widget</source>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1390"/>
-        <source>Do not clear videos</source>
-        <translation>Videos nicht leeren</translation>
+        <location filename="../form_install_dialog.ui" line="26"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:24pt; font-weight:700;&quot;&gt;Installation Mode&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:16pt; text-decoration: underline; color:#0000ff;&quot;&gt;1) Inst&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:14pt; text-decoration: underline; color:#0000ff;&quot;&gt;all&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;This will install Porn Fetch into your system, meaning that you can run it directly from your Start Menu. e.g, press Windows key, type Porn Fetch and directly start it and on Linux it will be the same.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;Porn Fetch will be installed into the following path(s):&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;Windows: C:\Users\&amp;lt;user&amp;gt;\AppData\Local\pornfetch\&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;Linux: ~/.local/share/pornfetch&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:16pt; text-decoration: underline; color:#00ff00;&quot;&gt;2) Portable&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;This means, that Porn Fetch will not be installed and in order to use and start Porn Fetch you always need to double click on the file you have downloaded. This has some benefits as the uninstallation is easier and you have more control over it, but for the average user I do not recommend this.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:16pt; font-weight:700; color:#a100ff;&quot;&gt;Custom App name&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt; color:#ffffff;&quot;&gt;Down below you can enter  a custom name for Porn Fetch. You can then search with this name for Porn Fetch and Porn Fetch will not be found anymore when someone enters &amp;quot;Porn Fetch&amp;quot; on your PC. This can be useful if multiple persons use your PC and you don&apos;t want them to know you are using this application. It can also help if you are in public and people stare at your PC. Porn Fetch has also an option to fully hide, that it&apos;s a PornHub downloader.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:12pt; color:#ffffff;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; color:#ffffff;&quot;&gt;If you leave it empty, Porn Fetch will remain as &amp;quot;Porn Fetch&amp;quot; in your short menu.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:14pt; text-decoration: underline; color:#aa0000;&quot;&gt;NOTE:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;Installation was implemented in this release and might still be experimental. If you run into any issues, please report it on my GitHub. Thank you :&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;;&quot;&gt;) &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:24pt; font-weight:700;&quot;&gt;Installationsmodus&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:16pt; text-decoration: underline; color:#0000ff;&quot;&gt;1) Inst&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:14pt; text-decoration: underline; color:#0000ff;&quot;&gt;all&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;Dies wird Porn Fetch auf deinem System installierern. Das bedeutet, dass du es direkt von deinem Startmenü starten kannst. z.B. drücke Windows Taste, schreibe Porn Fetch und start es direkt von da. Auf Linux ist es dasselbe Prinzip.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;Porn Fetch wird in den folgenden Dateipfaden installiert:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;Windows: C:\Users\&amp;lt;user&amp;gt;\AppData\Local\pornfetch\&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;Linux: ~/.local/share/pornfetch&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:16pt; text-decoration: underline; color:#00ff00;&quot;&gt;2) Portabel&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;Das bedeutet, dass Porn Fetch NICHT fest installiert wird, sondern du immer doppelt auf die heruntergeladene Datei klicken musst. Dies hat Vorteile z.B. dass es leichter ist Porn Fetch zu deinstallieren, aber ich empfehle es nicht dem alltäglichen Nutzer.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:16pt; font-weight:700; color:#a100ff;&quot;&gt;Eigener App name&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt; color:#ffffff;&quot;&gt;Weiter unten kannst du einen eigenen App Namen für Porn Fetch eingeben. Du kannst dann mit diesem Namen nach Porn Fetch suchen und Porn Fetch kann von niemandem außer dir gefunden werden. Das kann nützlich sein, wenn mehrere Personen deinen PC nutzen..Es kann auch helfen, wenn du dich in der Öffentlichkeit befindest und Leute auf deinen PC starren. Porn Fetch hat in den Einstellungen auch eine Option sich selbst zu verstecken, indem es alle UI Elemente dur ch anderen Text ersetzt.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:12pt; color:#ffffff;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; color:#ffffff;&quot;&gt;Wenn du es Leer lässt wird Porn Fetch als &amp;quot;Porn Fetch&amp;quot; installiert.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:14pt; text-decoration: underline; color:#aa0000;&quot;&gt;Bitte beachte::&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;Die Installation wurde erst in dieser Version implementiert und ist noch experimentell. Wenn irgendwelche Fehler auftreten, melde dies bitte. Danke :):&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;;&quot;&gt;) &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="462"/>
-        <source>Enter a PornHub Playlist URL</source>
-        <translation>Gib eine PornHub Playlist URL ein</translation>
+        <location filename="../form_install_dialog.ui" line="61"/>
+        <source>Custom App Name:</source>
+        <translation>Eigener App Name:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2145"/>
-        <source>Graphical User Interface</source>
-        <translation>Benutzeroberfläche</translation>
+        <location filename="../form_install_dialog.ui" line="71"/>
+        <source>Enter your custom App Name here. Leave it empty to keep &quot;Porn Fetch&quot;</source>
+        <translation>Gib deinen eigenen App Namen ein. Lasse es Frei um &quot;Porn Fetch&quot; zu behalten</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1840"/>
-        <source>Videos</source>
-        <translation>Videos</translation>
+        <location filename="../form_install_dialog.ui" line="82"/>
+        <source>Install</source>
+        <translation>Installieren</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1574"/>
-        <source>Performance</source>
-        <translation>Leistung</translation>
+        <location filename="../form_install_dialog.ui" line="89"/>
+        <source>Portable</source>
+        <translation>Portabel</translation>
+    </message>
+</context>
+<context>
+    <name>SetupLicense</name>
+    <message>
+        <location filename="../form_license.ui" line="14"/>
+        <source>Porn Fetch License Agreement (GPLv3)</source>
+        <translation>Porn Fetch Lizenzvereinbarung</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1519"/>
-        <source>Unselects all videos in the tree widget</source>
-        <translation>Hebt die Auswahl aller Videos auf</translation>
+        <location filename="../form_license.ui" line="93"/>
+        <source>Accept</source>
+        <translation>Akzeptieren</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1426"/>
-        <source>Does not stop downloading videos</source>
-        <translation>Stoppt nicht das Herunterladen von Videos</translation>
+        <location filename="../form_license.ui" line="119"/>
+        <source>Deny and Exit</source>
+        <translation>Ablehnen und beenden</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1429"/>
-        <source>Stop loading videos</source>
-        <translation>Stoppe das Laden von Videos</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1459"/>
-        <source>Automatically checks a range of videos</source>
-        <translation>Wählt automatisiert einen Bereich von Videos aus</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1465"/>
-        <source>Select a range of videos</source>
-        <translation>Wähle Bereich von Videos aus</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1582"/>
-        <source>Simultaneous downloads:</source>
-        <translation>Gleichzeitige Downloads:</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1613"/>
-        <source>Maximal workers:</source>
-        <translation>Maximale Arbeiter:</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1706"/>
-        <source>PornHub Delay (0 = Disabled) in seconds:</source>
-        <translation>PornHub Verzögerung (0 = Deaktiviert) in Sekunden:</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1644"/>
-        <source>Maximal timeout:</source>
-        <translation>Maximale Zeitüberschreitung:</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1675"/>
-        <source>Maximal retries:</source>
-        <translation>Maximale Netzwerk wiederholungen:</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1802"/>
-        <source>Apply  (needs restart)</source>
-        <translation>Anwenden (benötigt Neustart)</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="1831"/>
-        <source>Reset Porn Fetch to default settings</source>
-        <translation>Porn Fetch auf Werkseinstellungen zurücksetzen</translation>
-    </message>
-    <message>
-        <location filename="../form_desktop.ui" line="2234"/>
-        <source>Download and Setup FFmpeg</source>
-        <translation>FFmpeg installieren</translation>
+        <location filename="../form_license.ui" line="133"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;JetBrainsMono Nerd Font Propo&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;GPL License Agreement for Porn Fetch&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This program is free software: you may redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License or (at your option) any later version.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This program is distributed in the hope that it will be useful, but it is provided &lt;span style=&quot; font-weight:700;&quot;&gt;&amp;quot;AS IS&amp;quot; WITHOUT ANY WARRANTY&lt;/span&gt;; without even the implied warranties of &lt;span style=&quot; font-weight:700;&quot;&gt;MERCHANTABILITY&lt;/span&gt; or &lt;span style=&quot; font-weight:700;&quot;&gt;FITNESS FOR A PARTICULAR PURPOSE&lt;/span&gt;. For more details, see the GNU General Public License.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You should have received a copy of the GNU General Public License along with this program. If not, visit &lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;https://www.gnu.org/licenses/&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:x-large; font-weight:700;&quot;&gt;Limitation of Liability&lt;/span&gt;&lt;/h2&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Under no circumstances and under no legal theory—whether in tort, contract, or otherwise—shall the copyright holder or contributors be held liable for any direct, indirect, special, incidental, consequential, or exemplary damages of any kind. &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This includes, but is not limited to:&lt;/p&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Damages for loss of goodwill &lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Work stoppage &lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Computer failure or malfunction &lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Loss of data &lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Any other commercial damages or losses &lt;/li&gt;&lt;/ul&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Even if such parties were informed of the possibility of such damages.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This limitation does not apply to liability for death or personal injury resulting from the negligence of such parties, where applicable law prohibits such a limitation. &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Note:&lt;/span&gt; In some jurisdictions, the exclusion or limitation of incidental or consequential damages is not allowed. Therefore, these exclusions may not apply to you.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This Agreement constitutes the complete and exclusive understanding between the parties regarding the subject matter contained herein.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:x-large; font-weight:700;&quot;&gt;Disclaimer&lt;/span&gt;&lt;/h2&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Porn Fetch&lt;/span&gt; violates the Terms of Service of all the websites it supports, including but not limited to:&lt;/p&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://spankbang.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;spankbang.com&lt;/span&gt;&lt;/a&gt; &lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://pornhub.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;pornhub.com&lt;/span&gt;&lt;/a&gt; &lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://hqporner.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;hqporner.com&lt;/span&gt;&lt;/a&gt; &lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://eporner.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;eporner.com&lt;/span&gt;&lt;/a&gt; &lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://xnxx.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;xnxx.com&lt;/span&gt;&lt;/a&gt; &lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://xvideos.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;xvideos.com&lt;/span&gt;&lt;/a&gt; &lt;/li&gt;&lt;/ul&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;Usage Warning&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Using &lt;span style=&quot; font-weight:700;&quot;&gt;Porn Fetch&lt;/span&gt; may result in &lt;span style=&quot; font-weight:700;&quot;&gt;legal action&lt;/span&gt; being taken against you. The creator of this software is not liable for any damages or legal consequences resulting from its use.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Porn Fetch&lt;/span&gt; was created solely for the purpose of enabling offline access to videos in scenarios where internet access is unavailable. &lt;/p&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The redistribution of copyright-protected content obtained through Porn Fetch is &lt;span style=&quot; font-weight:700;&quot;&gt;strictly forbidden&lt;/span&gt;. &lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Any misuse of this software to steal and redistribute copyrighted material is against its intended purpose and is not endorsed by the creator. &lt;/li&gt;&lt;/ul&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The &lt;span style=&quot; font-weight:700;&quot;&gt;batch processing feature&lt;/span&gt; in Porn Fetch is intended to assist users without graphical user interfaces in downloading content for personal use, not for large-scale video theft or redistribution.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:x-large; font-weight:700;&quot;&gt;Third-Party Software&lt;/span&gt;&lt;/h2&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Porn Fetch&lt;/span&gt; utilizes the following third-party tools and resources:&lt;/p&gt;
+&lt;ol style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;FFmpeg&lt;/span&gt; &lt;/li&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;&quot;&gt;Used for video processing and conversion. &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;&quot;&gt;FFmpeg is free software licensed under the GPL. &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;&quot;&gt;For more information, visit &lt;a href=&quot;https://ffmpeg.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;https://ffmpeg.org&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;JetBrains Mono Font&lt;/span&gt; &lt;/li&gt;&lt;/ol&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;&quot;&gt;Copyright © 2019 JetBrains. All Rights Reserved. &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;&quot;&gt;Licensed under the SIL Open Font License, Version 1.1. &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;&quot;&gt;License details: &lt;a href=&quot;https://scripts.sil.org/OFL&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;https://scripts.sil.org/OFL&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Thank you for using &lt;span style=&quot; font-weight:700;&quot;&gt;Porn Fetch&lt;/span&gt; responsibly!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -850,32 +1263,22 @@ Zum Beispiel hat das Model Nancy Ace ungefähr 10 selbst hochgeladene Videos, di
 Wenn du &quot;Nutzer-Uploads&quot; wählst, werden nur selbst hochgeladene Videos abgerufen, und andersherum :)</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="67"/>
-        <source>Wrong Input, please verify the URL, category or actress!</source>
-        <translation>Falsche Eingabe, bitte verifiziere die URL, Kategorie oder die Darstellerin!</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="193"/>
-        <source>Disabled</source>
-        <translation>Deaktiviert</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1880"/>
+        <location filename="../../../main.py" line="2471"/>
         <source>Done! Please restart.</source>
         <translation>Fertig, Bitte neustarten.</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1904"/>
+        <location filename="../../../main.py" line="2496"/>
         <source>No URLs in the current session...</source>
         <translation>Keine URLs in der aktuellen Session...</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1907"/>
+        <location filename="../../../main.py" line="2499"/>
         <source>FFmpeg has been installed. Please restart Porn Fetch :)</source>
         <translation>FFmpeg wurde installiert. Bitte starte Porn Fetch neu :)</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1929"/>
+        <location filename="../../../main.py" line="2522"/>
         <source>
             Information: A new version of Porn Fetch (v{__next_release__}) is out. I recommend you to update Porn Fetch. 
             Go to: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/ {__next_release__}
