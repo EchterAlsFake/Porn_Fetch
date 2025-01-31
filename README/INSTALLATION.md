@@ -1,6 +1,6 @@
 # Porn Fetch Installation & Usage Guide
 
-Hi, in this document you will find detailed instructions how to download and use Porn Fetch 
+Hi, in this document, you will find detailed instructions on how to download and use Porn Fetch 
 on different platforms.
 
 
@@ -19,14 +19,14 @@ is the classic graphical interface like any other application has too. You proba
 
 32-bit and 64-bit:
 
-Most processors and systems are running on 64-bit. In some very specific use cases some people need
-the 32-bit version, and those can download it. For the average person the 64-bit version is the best!
+Most processors and systems are running on 64-bit. In some very specific use cases, some people need
+the 32-bit version, and those can download it. For the average person, the 64-bit version is the best!
 
 
 # Windows
 The relevant file for you is: `PornFetch_Windows_GUI_x64.exe`
 
-After downloading it you can just double-click on it and Porn Fetch will open and is ready to be used.
+After downloading it, you can just double-click on it, and Porn Fetch will open and is ready to be used.
 
 ### other files...
 `PornFetch_Windows_CLI_x32.exe` = CLI version for 32-bit processors
@@ -36,10 +36,10 @@ After downloading it you can just double-click on it and Porn Fetch will open an
 The relevant file for you is: `PornFetch_Linux_GUI_x64.bin`
 
 After downloading the file, you need to make it executable. You can either right-click the
-file and there should be a checkbox saying something like "Allow run this file as an application".
+file, and there should be a checkbox saying something like "Allow running this file as an application."
 Check it, and then you can just double-click on Porn Fetch and you are ready to use it.
 
-If you can not find the box, or double-clicking Porn Fetch does not work, you need to do it using a 
+If you cannot find the box, or double-clicking Porn Fetch does not work, you need to do it using a 
 terminal.
 
 Open a terminal in the directory where the Porn Fetch file is saved.
@@ -95,6 +95,7 @@ Porn Fetch saves all of its settings into a file called `config.ini`. It will au
 created when you first launch Porn Fetch. Deleting this file will reset all your settings.
 Please make sure, that if you move Porn Fetch to another directory, that you also move the `config.ini` file
 along with it.
+
 
 
 

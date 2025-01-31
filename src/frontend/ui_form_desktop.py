@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'form_desktop.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.1
+## Created by: Qt User Interface Compiler version 6.8.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -511,78 +511,12 @@ class Ui_PornFetch_Desktop(object):
         self.progress_scrollarea.setWidgetResizable(True)
         self.progress_scrollarea_widgedcontents = QWidget()
         self.progress_scrollarea_widgedcontents.setObjectName(u"progress_scrollarea_widgedcontents")
-        self.progress_scrollarea_widgedcontents.setGeometry(QRect(0, 0, 387, 236))
+        self.progress_scrollarea_widgedcontents.setGeometry(QRect(0, 0, 1584, 298))
         self.gridLayout_18 = QGridLayout(self.progress_scrollarea_widgedcontents)
         self.gridLayout_18.setObjectName(u"gridLayout_18")
         self.progress_gridlayout_progressbar = QGridLayout()
         self.progress_gridlayout_progressbar.setObjectName(u"progress_gridlayout_progressbar")
         self.progress_gridlayout_progressbar.setHorizontalSpacing(6)
-        self.progressbar_xvideos = QProgressBar(self.progress_scrollarea_widgedcontents)
-        self.progressbar_xvideos.setObjectName(u"progressbar_xvideos")
-        self.progressbar_xvideos.setMinimumSize(QSize(0, 30))
-        self.progressbar_xvideos.setStyleSheet(u"text-align: center; /* Centered text */")
-        self.progressbar_xvideos.setValue(0)
-
-        self.progress_gridlayout_progressbar.addWidget(self.progressbar_xvideos, 4, 1, 1, 1)
-
-        self.progress_lineedit_download_info = QLineEdit(self.progress_scrollarea_widgedcontents)
-        self.progress_lineedit_download_info.setObjectName(u"progress_lineedit_download_info")
-        self.progress_lineedit_download_info.setReadOnly(True)
-
-        self.progress_gridlayout_progressbar.addWidget(self.progress_lineedit_download_info, 5, 1, 1, 1)
-
-        self.progress_label_xnxx = QLabel(self.progress_scrollarea_widgedcontents)
-        self.progress_label_xnxx.setObjectName(u"progress_label_xnxx")
-        self.progress_label_xnxx.setMinimumSize(QSize(0, 30))
-
-        self.progress_gridlayout_progressbar.addWidget(self.progress_label_xnxx, 3, 0, 1, 1)
-
-        self.progress_label_xvideos = QLabel(self.progress_scrollarea_widgedcontents)
-        self.progress_label_xvideos.setObjectName(u"progress_label_xvideos")
-        self.progress_label_xvideos.setMinimumSize(QSize(0, 30))
-
-        self.progress_gridlayout_progressbar.addWidget(self.progress_label_xvideos, 4, 0, 1, 1)
-
-        self.progressbar_eporner = QProgressBar(self.progress_scrollarea_widgedcontents)
-        self.progressbar_eporner.setObjectName(u"progressbar_eporner")
-        self.progressbar_eporner.setMinimumSize(QSize(0, 30))
-        self.progressbar_eporner.setStyleSheet(u"text-align: center; /* Centered text */")
-        self.progressbar_eporner.setValue(0)
-
-        self.progress_gridlayout_progressbar.addWidget(self.progressbar_eporner, 2, 1, 1, 1)
-
-        self.progress_label_eporner = QLabel(self.progress_scrollarea_widgedcontents)
-        self.progress_label_eporner.setObjectName(u"progress_label_eporner")
-        self.progress_label_eporner.setMinimumSize(QSize(0, 30))
-
-        self.progress_gridlayout_progressbar.addWidget(self.progress_label_eporner, 2, 0, 1, 1)
-
-        self.progress_label_info = QLabel(self.progress_scrollarea_widgedcontents)
-        self.progress_label_info.setObjectName(u"progress_label_info")
-        self.progress_label_info.setMinimumSize(QSize(0, 30))
-
-        self.progress_gridlayout_progressbar.addWidget(self.progress_label_info, 5, 0, 1, 1)
-
-        self.progressbar_pornhub = QProgressBar(self.progress_scrollarea_widgedcontents)
-        self.progressbar_pornhub.setObjectName(u"progressbar_pornhub")
-        sizePolicy8.setHeightForWidth(self.progressbar_pornhub.sizePolicy().hasHeightForWidth())
-        self.progressbar_pornhub.setSizePolicy(sizePolicy8)
-        self.progressbar_pornhub.setMinimumSize(QSize(300, 30))
-        self.progressbar_pornhub.setStyleSheet(u"text-align: center; /* Centered text */")
-        self.progressbar_pornhub.setValue(0)
-
-        self.progress_gridlayout_progressbar.addWidget(self.progressbar_pornhub, 0, 1, 1, 1)
-
-        self.progressbar_hqporner = QProgressBar(self.progress_scrollarea_widgedcontents)
-        self.progressbar_hqporner.setObjectName(u"progressbar_hqporner")
-        sizePolicy8.setHeightForWidth(self.progressbar_hqporner.sizePolicy().hasHeightForWidth())
-        self.progressbar_hqporner.setSizePolicy(sizePolicy8)
-        self.progressbar_hqporner.setMinimumSize(QSize(300, 30))
-        self.progressbar_hqporner.setStyleSheet(u"text-align: center; /* Centered text */")
-        self.progressbar_hqporner.setValue(0)
-
-        self.progress_gridlayout_progressbar.addWidget(self.progressbar_hqporner, 1, 1, 1, 1)
-
         self.progressbar_xnxx = QProgressBar(self.progress_scrollarea_widgedcontents)
         self.progressbar_xnxx.setObjectName(u"progressbar_xnxx")
         self.progressbar_xnxx.setMinimumSize(QSize(0, 30))
@@ -599,9 +533,55 @@ class Ui_PornFetch_Desktop(object):
 
         self.progress_gridlayout_progressbar.addWidget(self.progress_label_pornhub, 0, 0, 1, 1)
 
+        self.progress_label_xvideos = QLabel(self.progress_scrollarea_widgedcontents)
+        self.progress_label_xvideos.setObjectName(u"progress_label_xvideos")
+        self.progress_label_xvideos.setMinimumSize(QSize(0, 30))
+
+        self.progress_gridlayout_progressbar.addWidget(self.progress_label_xvideos, 4, 0, 1, 1)
+
+        self.progress_label_eporner = QLabel(self.progress_scrollarea_widgedcontents)
+        self.progress_label_eporner.setObjectName(u"progress_label_eporner")
+        self.progress_label_eporner.setMinimumSize(QSize(0, 30))
+
+        self.progress_gridlayout_progressbar.addWidget(self.progress_label_eporner, 2, 0, 1, 1)
+
         self.progress_vertical_spacer_main = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.progress_gridlayout_progressbar.addItem(self.progress_vertical_spacer_main, 6, 1, 1, 1)
+        self.progress_gridlayout_progressbar.addItem(self.progress_vertical_spacer_main, 8, 1, 1, 1)
+
+        self.progressbar_eporner = QProgressBar(self.progress_scrollarea_widgedcontents)
+        self.progressbar_eporner.setObjectName(u"progressbar_eporner")
+        self.progressbar_eporner.setMinimumSize(QSize(0, 30))
+        self.progressbar_eporner.setStyleSheet(u"text-align: center; /* Centered text */")
+        self.progressbar_eporner.setValue(0)
+
+        self.progress_gridlayout_progressbar.addWidget(self.progressbar_eporner, 2, 1, 1, 1)
+
+        self.progress_label_info = QLabel(self.progress_scrollarea_widgedcontents)
+        self.progress_label_info.setObjectName(u"progress_label_info")
+        self.progress_label_info.setMinimumSize(QSize(0, 30))
+
+        self.progress_gridlayout_progressbar.addWidget(self.progress_label_info, 7, 0, 1, 1)
+
+        self.progressbar_hqporner = QProgressBar(self.progress_scrollarea_widgedcontents)
+        self.progressbar_hqporner.setObjectName(u"progressbar_hqporner")
+        sizePolicy8.setHeightForWidth(self.progressbar_hqporner.sizePolicy().hasHeightForWidth())
+        self.progressbar_hqporner.setSizePolicy(sizePolicy8)
+        self.progressbar_hqporner.setMinimumSize(QSize(300, 30))
+        self.progressbar_hqporner.setStyleSheet(u"text-align: center; /* Centered text */")
+        self.progressbar_hqporner.setValue(0)
+
+        self.progress_gridlayout_progressbar.addWidget(self.progressbar_hqporner, 1, 1, 1, 1)
+
+        self.progressbar_pornhub = QProgressBar(self.progress_scrollarea_widgedcontents)
+        self.progressbar_pornhub.setObjectName(u"progressbar_pornhub")
+        sizePolicy8.setHeightForWidth(self.progressbar_pornhub.sizePolicy().hasHeightForWidth())
+        self.progressbar_pornhub.setSizePolicy(sizePolicy8)
+        self.progressbar_pornhub.setMinimumSize(QSize(300, 30))
+        self.progressbar_pornhub.setStyleSheet(u"text-align: center; /* Centered text */")
+        self.progressbar_pornhub.setValue(0)
+
+        self.progress_gridlayout_progressbar.addWidget(self.progressbar_pornhub, 0, 1, 1, 1)
 
         self.progress_label_hqporner = QLabel(self.progress_scrollarea_widgedcontents)
         self.progress_label_hqporner.setObjectName(u"progress_label_hqporner")
@@ -610,6 +590,48 @@ class Ui_PornFetch_Desktop(object):
         self.progress_label_hqporner.setMinimumSize(QSize(0, 30))
 
         self.progress_gridlayout_progressbar.addWidget(self.progress_label_hqporner, 1, 0, 1, 1)
+
+        self.progress_label_missav = QLabel(self.progress_scrollarea_widgedcontents)
+        self.progress_label_missav.setObjectName(u"progress_label_missav")
+
+        self.progress_gridlayout_progressbar.addWidget(self.progress_label_missav, 5, 0, 1, 1)
+
+        self.progressbar_xvideos = QProgressBar(self.progress_scrollarea_widgedcontents)
+        self.progressbar_xvideos.setObjectName(u"progressbar_xvideos")
+        self.progressbar_xvideos.setMinimumSize(QSize(0, 30))
+        self.progressbar_xvideos.setStyleSheet(u"text-align: center; /* Centered text */")
+        self.progressbar_xvideos.setValue(0)
+
+        self.progress_gridlayout_progressbar.addWidget(self.progressbar_xvideos, 4, 1, 1, 1)
+
+        self.progress_lineedit_download_info = QLineEdit(self.progress_scrollarea_widgedcontents)
+        self.progress_lineedit_download_info.setObjectName(u"progress_lineedit_download_info")
+        self.progress_lineedit_download_info.setReadOnly(True)
+
+        self.progress_gridlayout_progressbar.addWidget(self.progress_lineedit_download_info, 7, 1, 1, 1)
+
+        self.progress_label_xnxx = QLabel(self.progress_scrollarea_widgedcontents)
+        self.progress_label_xnxx.setObjectName(u"progress_label_xnxx")
+        self.progress_label_xnxx.setMinimumSize(QSize(0, 30))
+
+        self.progress_gridlayout_progressbar.addWidget(self.progress_label_xnxx, 3, 0, 1, 1)
+
+        self.progress_label_xhamster = QLabel(self.progress_scrollarea_widgedcontents)
+        self.progress_label_xhamster.setObjectName(u"progress_label_xhamster")
+
+        self.progress_gridlayout_progressbar.addWidget(self.progress_label_xhamster, 6, 0, 1, 1)
+
+        self.progressbar_missav = QProgressBar(self.progress_scrollarea_widgedcontents)
+        self.progressbar_missav.setObjectName(u"progressbar_missav")
+        self.progressbar_missav.setValue(0)
+
+        self.progress_gridlayout_progressbar.addWidget(self.progressbar_missav, 5, 1, 1, 1)
+
+        self.progressbar_xhamster = QProgressBar(self.progress_scrollarea_widgedcontents)
+        self.progressbar_xhamster.setObjectName(u"progressbar_xhamster")
+        self.progressbar_xhamster.setValue(0)
+
+        self.progress_gridlayout_progressbar.addWidget(self.progressbar_xhamster, 6, 1, 1, 1)
 
 
         self.gridLayout_18.addLayout(self.progress_gridlayout_progressbar, 1, 0, 1, 1)
@@ -810,7 +832,7 @@ class Ui_PornFetch_Desktop(object):
         self.main_scrollarea_treewidget.setWidgetResizable(True)
         self.main_scrollarea_treewidget_content = QWidget()
         self.main_scrollarea_treewidget_content.setObjectName(u"main_scrollarea_treewidget_content")
-        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 516, 369))
+        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 1596, 371))
         self.gridLayout_4 = QGridLayout(self.main_scrollarea_treewidget_content)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.gridLayout_4.setContentsMargins(0, 0, 0, 0)
@@ -1534,7 +1556,7 @@ class Ui_PornFetch_Desktop(object):
 
         self.retranslateUi(PornFetch_Desktop)
 
-        self.main_stacked_widget_main.setCurrentIndex(1)
+        self.main_stacked_widget_main.setCurrentIndex(3)
         self.main_stacked_widget_top.setCurrentIndex(2)
 
 
@@ -1583,13 +1605,15 @@ class Ui_PornFetch_Desktop(object):
         self.login_button_get_recommended_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get recommended videos", None))
         self.login_label_password.setText(QCoreApplication.translate("PornFetch_Desktop", u"Password:", None))
         self.login_lineedit_password.setPlaceholderText(QCoreApplication.translate("PornFetch_Desktop", u"Enter your PornHub Password", None))
-        self.progress_lineedit_download_info.setText("")
-        self.progress_label_xnxx.setText(QCoreApplication.translate("PornFetch_Desktop", u"XNXX:", None))
+        self.progress_label_pornhub.setText(QCoreApplication.translate("PornFetch_Desktop", u"PornHub:", None))
         self.progress_label_xvideos.setText(QCoreApplication.translate("PornFetch_Desktop", u"XVideos:", None))
         self.progress_label_eporner.setText(QCoreApplication.translate("PornFetch_Desktop", u"Eporner:", None))
         self.progress_label_info.setText(QCoreApplication.translate("PornFetch_Desktop", u"Info:", None))
-        self.progress_label_pornhub.setText(QCoreApplication.translate("PornFetch_Desktop", u"PornHub:", None))
         self.progress_label_hqporner.setText(QCoreApplication.translate("PornFetch_Desktop", u"HQPorner:", None))
+        self.progress_label_missav.setText(QCoreApplication.translate("PornFetch_Desktop", u"MissAV", None))
+        self.progress_lineedit_download_info.setText("")
+        self.progress_label_xnxx.setText(QCoreApplication.translate("PornFetch_Desktop", u"XNXX:", None))
+        self.progress_label_xhamster.setText(QCoreApplication.translate("PornFetch_Desktop", u"XHamster", None))
         self.tools_button_get_brazzers_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get Videos", None))
         self.tools_radio_top_porn_month.setText(QCoreApplication.translate("PornFetch_Desktop", u"Month", None))
         self.tools_button_list_categories.setText(QCoreApplication.translate("PornFetch_Desktop", u"List of all categories", None))
@@ -1696,38 +1720,39 @@ class Ui_PornFetch_Desktop(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Eporner.com</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XNXX.com (supports total progress)</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XVideos.com (supports total progress)</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\""
-                        "><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Missav.ws (and all of"
+                        " it's subsites, supports total progress)</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Xhamster.com<br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">All sites support *threaded* downloads and selectable quality!</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">* hqporner and eporner running in QThreads, but they don't fetch segments. The video is directly</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">downloaded, therefore threading in a segment isn't needed.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;"
-                        " -qt-block-indent:0; text-indent:0px;\">Model / Channel Downloads</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin"
+                        "-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Model / Channel Downloads</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- EPorner.com</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XNXX.com</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XVideos.com</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margi"
-                        "n-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bo"
+                        "ttom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XVideos.com</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Searching:</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Xvideos.com</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Eporner.com</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; mar"
-                        "gin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XNXX.com</p>\n"
+"<p style=\" margin-top:0px;"
+                        " margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Eporner.com</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XNXX.com</p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I am constantly working to support more websites.</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">If you want a specific site to be supported, just ask:<br /><br />Discord: echteralsfake</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">GitHub.com/echteralsfake/Porn_Fetch/issues</p>\n"
+"<p style=\"-qt-paragraph-type:empty; ma"
+                        "rgin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-b"
-                        "ottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"

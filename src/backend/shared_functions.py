@@ -21,6 +21,8 @@ from hqporner_api import Client as hq_Client, Video as hq_Video
 from xnxx_api import Client as xn_Client, Video as xn_Video
 from xvideos_api import Client as xv_Client, Video as xv_Video
 from eporner_api import Client as ep_Client, Video as ep_Video, Category as ep_Category # Used in the main file
+from missav_api import Client as mv_Client, Video as mv_Video
+from xhamster_api import Client as xh_Client, Video as xh_Video
 
 # Initialize clients globally
 client = Client()
@@ -28,6 +30,8 @@ hq_client = hq_Client()
 ep_client = ep_Client()
 xn_client = xn_Client()
 xv_client = xv_Client()
+mv_client = mv_Client()
+xh_client = xh_Client()
 
 
 
@@ -36,7 +40,7 @@ def refresh_clients():
     Reinitializes all API clients with updated BaseCore settings.
     Call this after modifying consts.PROXY.
     """
-    global hq_client, ep_client, xn_client, xv_client, client
+    global hq_client, ep_client, xn_client, xv_client, client, xh_client, mv_client
 
     # Refresh BaseCore first
     BaseCore().initialize_session()
@@ -45,6 +49,8 @@ def refresh_clients():
     import xnxx_api
     import eporner_api
     import xvideos_api
+    import xhamster_api
+    import missav_api
 
     hqporner_api.api.refresh_core()
     xnxx_api.xnxx_api.refresh_core()
@@ -56,10 +62,11 @@ def refresh_clients():
     ep_client = eporner_api.Client()
     xn_client = xnxx_api.Client()
     xv_client = xvideos_api.Client()
+    xh_client = xhamster_api.Client()
+    mv_client = missav_api.Client()
     client = Client()
     client.reset()
     logger.info(f"Initialized new sessions with Proxy value: {bs_consts.PROXY} | {phub_consts.PROXY}")
-    print(f"Initialized new sessions with Proxy value: {bs_consts.PROXY} | {phub_consts.PROXY}")
 
 
 """
@@ -81,7 +88,9 @@ hqporner_pattern = re.compile(r'(.*?)hqporner.com(.*)')
 xnxx_pattern = re.compile(r'(.*?)xnxx.com(.*)')
 xvideos_pattern = re.compile(r'(.*?)xvideos.com(.*)')
 eporner_pattern = re.compile(r'(.*?)eporner.com(.*)')
-spankbang_pattern = re.compile(r'(.*?)spankbang.com(.*)')
+missav_pattern = re.compile(r'(.*?)missav(.*?)')
+xhamster_pattern = re.compile(r'(.*?)xhamster(.*?)')
+
 
 default_configuration = f"""[Setup]
 license_accepted = no
@@ -126,7 +135,7 @@ def send_error_log(message):
     """
 
     if do_not_log is False:
-        url = "192.168.2.139:8000"
+        url = "192.168.0.19:8000"
         endpoint = "/error-log/"
         data = json.dumps({"message": message})
         headers = {"Content-type": "application/json"}
@@ -146,19 +155,25 @@ def send_error_log(message):
         except Exception as e:
             print(f"Request failed: {e}")
 
-def check_video(url, is_url=True, delay=False):
+def check_video(url, is_url=True):
     if is_url:
         if hqporner_pattern.search(str(url)):
-            return hq_Client().get_video(url)
+            return hq_Client.get_video(url)
 
         elif eporner_pattern.search(str(url)):
-            return ep_Client().get_video(url, enable_html_scraping=True)
+            return ep_Client.get_video(url, enable_html_scraping=True)
 
         elif xnxx_pattern.search(str(url)):
-            return xn_Client().get_video(url)
+            return xn_Client.get_video(url)
 
         elif xvideos_pattern.search(str(url)):
-            return xv_Client().get_video(url)
+            return xv_Client.get_video(url)
+
+        elif missav_pattern.search(str(url)):
+            return mv_Client.get_video(url)
+
+        elif xhamster_pattern.search(str(url)):
+            return xh_client.get_video(url)
 
         if isinstance(url, Video):
             url.fetch("page@")
@@ -174,6 +189,12 @@ def check_video(url, is_url=True, delay=False):
             return url
 
         elif isinstance(url, xv_Video):
+            return url
+
+        elif isinstance(url, xh_Video):
+            return url
+
+        elif isinstance(url, mv_Video):
             return url
 
 
@@ -283,6 +304,20 @@ def load_video_attributes(video):
         publish_date = video.publish_date
         thumbnail = video.get_thumbnails()[0]
 
+    elif isinstance(video, mv_Video):
+        author = "Not available"
+        length = "Not available"
+        tags = "Not available"
+        thumbnail = video.thumbnail
+        publish_date = video.publish_date
+
+    elif isinstance(video, xh_Video):
+        author = ",".join(video.pornstars)
+        length = "Not available"
+        tags = "Not available"
+        thumbnail = video.thumbnail
+        publish_date = "Not available"
+
     else:
         raise "Instance Error! Please report this immediately on GitHub!"
 
@@ -295,6 +330,7 @@ def load_video_attributes(video):
         "thumbnail": thumbnail,
     }
 
+    print(f"Data: {data}")
     return data
 
 
@@ -331,6 +367,9 @@ def write_tags(path, data: dict): # Using core from Porn Fetch to keep proxy sup
 
 
 def parse_length(length):
+    if length == "Not available":
+        return length
+
     try:
         # Directly return if length is an integer
         if isinstance(length, int):

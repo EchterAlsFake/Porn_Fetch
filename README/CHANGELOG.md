@@ -420,15 +420,17 @@ the thread is permanently locked
 # 3.5
 
 ## New Features
+- Support for missav.ws
+- Support for xhamster.com (finally)
 - macOS is now fully supported and functional (hopefully functional)
 - You can now install Porn Fetch into your system (Windows, Linux)
 - Proxy Support
-- High Performance download mode is now async and allows for much higher speeds while reducing CPU power (only XNXX and XVideos)
+- Display thumbnails when searching (optionally)
+- High Performance download mode is now async and allows for much higher speeds while reducing CPU power (only XNXX, XVideos, xhamster, missav.ws)
 - Re-implemented the internet and status checks, but in a better way
 - Porn Fetch CLI now supports batch processing through arguments
 - Porn Fetch CLI is now completely thread-safe and uses rich progressbar
 - Porn Fetch CLI now also tracks the total progress with a separate bar
-- Display thumbnails when searching (optionally)
 - Allow for optional tag writing
 - Allow for different format converting e.g, mov and mkv
 - When downloading a new video / loading in and videos are already downloading, the total progress will now be accounted for that

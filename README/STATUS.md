@@ -37,7 +37,6 @@
   - [x] Improve UI
   - [] Add it to `INSTALLATION.md`
   - [] Add it to `SCREENSHOTS.md`
-  - [] Test everything
 
 ## Code improvements and design updates
 - [x] Fix the Porn Fetch layout
@@ -55,7 +54,7 @@
 - [x] Show a status for how many of the total downloads already succeeded (probably at the bottom of Porn Fetch)
 - [] ~~Rework the entire progress reporting system (probably the hardest thing to do)~~
 - [] ~~searching for ways to improve Android display reaction time for UI elements~~ (There is no way)
-- [] Update translations
+- [x] Update translations
 - [] ~~Make a first-use tutorial~~ Nah, people can use their brain
 
 

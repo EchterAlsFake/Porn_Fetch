@@ -33,7 +33,7 @@ from src.frontend.ui_form_keyboard_shortcuts import Ui_KeyboardShortcuts
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                         QTranslator, QCoreApplication, QSize)
 from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QInputDialog
-from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut
+from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence
 
 
 """
@@ -122,6 +122,8 @@ class Signals(QObject):
     progress_eporner = Signal(int, int) # Video download progress for eporner
     progress_xnxx = Signal(int, int) # Video download progress for xnxx
     progress_xvideos = Signal(int, int) # Video download progress for xvideos
+    progress_missav = Signal(int, int) # Video download progress for missav
+    progress_xhamster = Signal(int, int) # Video download progress for xhamster
     ffmpeg_converting_progress = Signal(int, int) # Video converting progress for FFmpeg
 
     # Animations
@@ -381,6 +383,8 @@ class InternetCheck(QRunnable):
             "https://hqporner.com",
             "https://www.xvideos.com",
             "https://www.xnxx.com",
+            "https://www.missav.ws",
+            "https://www.xhamster.com"
             # Append new URLs here
         ]
 
@@ -400,6 +404,7 @@ class InternetCheck(QRunnable):
                     self.website_results.update({website: "✔"})
 
                 elif status.status_code == 404:
+                    if not website == "https://www.missav.ws": # Could get taken down, so yeah ;)
                         self.website_results.update({website: "Failed, website doesn't exist? Please report this error"})
 
 
@@ -556,7 +561,6 @@ class AddToTreeWidget(QRunnable):
 
     def process_video(self, video, index):
         logger.debug(f"Requesting video processing of: {video.url}")
-        video = check_video(video, delay=self.consistent_data.get("delay"))
 
         try:
             data = load_video_attributes(video)
@@ -700,6 +704,8 @@ class DownloadThread(QRunnable):
             'eporner': self.signals.progress_eporner,
             'xnxx': self.signals.progress_xnxx,
             'xvideos': self.signals.progress_xvideos,
+            'missav': self.signals.progress_missav,
+            'xhamster': self.signals.progress_xhamster
         }
 
     def generic_callback(self, pos, total, signal, video_source, ffmpeg=False):
@@ -813,6 +819,19 @@ class DownloadThread(QRunnable):
                                                                                       self.signals.progress_xvideos,
                                                                                       video_source, self.ffmpeg))
 
+            elif isinstance(self.video, mv_Video):
+                video_source = "missav"
+                self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality, no_title=True,
+                                    callback=lambda pos, total: self.generic_callback(pos, total,
+                                                                                      self.signals.progress_xvideos,
+                                                                                      video_source, self.ffmpeg))
+
+            elif isinstance(self.video, xh_Video):
+                video_source = "xhamster"
+                self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality, no_title=True,
+                                    callback=lambda pos, total: self.generic_callback(pos, total,
+                                                                                      self.signals.progress_xvideos,
+                                                                                      video_source, self.ffmpeg))
                 # ... other video types ...
 
         finally:
@@ -959,7 +978,7 @@ class AddUrls(QRunnable):
                                          "query": query})
 
             else:
-                video = check_video(line, delay=self.delay)
+                video = check_video(line)
 
                 if video is not False:
                     iterator.append(video)
@@ -1816,9 +1835,13 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
                 formatted_duration += '.' + decimal_part
 
         else:
-            formatted_duration = f"{length:05d}"
+            if not length == "Not available":
+                formatted_duration = f"{length:05d}"
 
-        duration = round(length)
+            else:
+                formatted_duration = "000000000"
+
+        duration = round(length) if not length == "Not available" else "Not available"
         duration = str(duration)
         item.setCheckState(0, Qt.CheckState.Unchecked)
         item.setData(0, Qt.ItemDataRole.UserRole, video)

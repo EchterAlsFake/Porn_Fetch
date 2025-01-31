@@ -35,27 +35,27 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>PornFetch</name>
     <message>
-        <location filename="../../../main.py" line="1109"/>
+        <location filename="../../../main.py" line="1128"/>
         <source>You are running on Android! You can not install Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1113"/>
+        <location filename="../../../main.py" line="1132"/>
         <source>Porn Fetch installation successful!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1116"/>
+        <location filename="../../../main.py" line="1135"/>
         <source>Porn Fetch installation failed, because of: {result[1]}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1530"/>
+        <location filename="../../../main.py" line="1549"/>
         <source>Saved User Settings, please restart Porn Fetch!</source>
         <translation type="unfinished">已保存用户设置，请重新启动 Porn Fetch！</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1561"/>
+        <location filename="../../../main.py" line="1580"/>
         <source>
 !!! ONLY SOCKS5 IS SUPPORTED !!!
         
@@ -87,22 +87,22 @@ If you still want to proceed, click O.K. Otherwise, close Porn Fetch now and res
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1675"/>
+        <location filename="../../../main.py" line="1694"/>
         <source>The model URL you entered seems to be invalid. Please check your input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1732"/>
+        <location filename="../../../main.py" line="1751"/>
         <source>Information: The Website {website} specified in the URL file isn&apos;t valid.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1762"/>
+        <location filename="../../../main.py" line="1781"/>
         <source>Couldn&apos;t determine which site you want to search on??? Please report this immediately!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1881"/>
+        <location filename="../../../main.py" line="1904"/>
         <source>
 An error happened inside of Porn Fetch! 
 
@@ -110,48 +110,48 @@ An error happened inside of Porn Fetch!
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2001"/>
+        <location filename="../../../main.py" line="2024"/>
         <source>Can&apos;t show thumbnail, due to your privacy settings ;)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2008"/>
+        <location filename="../../../main.py" line="2031"/>
         <source>No thumbnail available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2101"/>
+        <location filename="../../../main.py" line="2124"/>
         <source>Those credentials don&apos;t seem to be valid...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2107"/>
+        <location filename="../../../main.py" line="2130"/>
         <source>Login Successful!</source>
         <translation type="unfinished">登陆成功！</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2111"/>
+        <location filename="../../../main.py" line="2134"/>
         <source>Login Failed, please check your credentials and try again!</source>
         <translation type="unfinished">登录失败，请检查您的凭据并重试！</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2114"/>
+        <location filename="../../../main.py" line="2137"/>
         <source>You are already logged in!</source>
         <translation type="unfinished">您已经登录！</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2126"/>
+        <location filename="../../../main.py" line="2149"/>
         <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
         <translation type="unfinished">登录有问题。请确保您先登录，然后尝试根据您的帐户获取视频。</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2187"/>
-        <location filename="../../../main.py" line="2199"/>
+        <location filename="../../../main.py" line="2210"/>
+        <location filename="../../../main.py" line="2222"/>
         <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
         <translation type="unfinished">类别无效。按“列出类别”查看所有可能的类别。</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2284"/>
+        <location filename="../../../main.py" line="2307"/>
         <source>
 ! Warning !
 Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
@@ -160,7 +160,7 @@ Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2317"/>
+        <location filename="../../../main.py" line="2340"/>
         <source>
 FFmpeg isn&apos;t installed on your system... Some features won&apos;t be available:
 
@@ -329,10 +329,10 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <message>
         <location filename="../form_desktop.ui" line="711"/>
         <location filename="../form_desktop.ui" line="888"/>
-        <location filename="../form_desktop.ui" line="1402"/>
-        <location filename="../form_desktop.ui" line="1468"/>
-        <location filename="../form_desktop.ui" line="1629"/>
-        <location filename="../form_desktop.ui" line="1670"/>
+        <location filename="../form_desktop.ui" line="1430"/>
+        <location filename="../form_desktop.ui" line="1496"/>
+        <location filename="../form_desktop.ui" line="1657"/>
+        <location filename="../form_desktop.ui" line="1698"/>
         <source>Get Videos</source>
         <translation type="unfinished">获取视频</translation>
     </message>
@@ -343,19 +343,19 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </message>
     <message>
         <location filename="../form_desktop.ui" line="749"/>
-        <location filename="../form_desktop.ui" line="2042"/>
-        <location filename="../form_desktop.ui" line="2085"/>
-        <location filename="../form_desktop.ui" line="2131"/>
-        <location filename="../form_desktop.ui" line="2174"/>
-        <location filename="../form_desktop.ui" line="2217"/>
-        <location filename="../form_desktop.ui" line="2286"/>
-        <location filename="../form_desktop.ui" line="2443"/>
-        <location filename="../form_desktop.ui" line="2470"/>
-        <location filename="../form_desktop.ui" line="2590"/>
-        <location filename="../form_desktop.ui" line="2604"/>
-        <location filename="../form_desktop.ui" line="2659"/>
-        <location filename="../form_desktop.ui" line="2723"/>
-        <location filename="../form_desktop.ui" line="2761"/>
+        <location filename="../form_desktop.ui" line="2070"/>
+        <location filename="../form_desktop.ui" line="2113"/>
+        <location filename="../form_desktop.ui" line="2159"/>
+        <location filename="../form_desktop.ui" line="2202"/>
+        <location filename="../form_desktop.ui" line="2245"/>
+        <location filename="../form_desktop.ui" line="2314"/>
+        <location filename="../form_desktop.ui" line="2471"/>
+        <location filename="../form_desktop.ui" line="2498"/>
+        <location filename="../form_desktop.ui" line="2618"/>
+        <location filename="../form_desktop.ui" line="2632"/>
+        <location filename="../form_desktop.ui" line="2687"/>
+        <location filename="../form_desktop.ui" line="2751"/>
+        <location filename="../form_desktop.ui" line="2789"/>
         <source>Help</source>
         <translation type="unfinished">帮助</translation>
     </message>
@@ -430,374 +430,384 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished">请输入你的PornHub密码</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1184"/>
+        <location filename="../form_desktop.ui" line="1357"/>
         <source>XNXX:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1197"/>
+        <location filename="../form_desktop.ui" line="1193"/>
         <source>XVideos:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1226"/>
+        <location filename="../form_desktop.ui" line="1206"/>
         <source>Eporner:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1239"/>
+        <location filename="../form_desktop.ui" line="1248"/>
         <source>Info:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1318"/>
+        <location filename="../form_desktop.ui" line="1180"/>
         <source>PornHub:</source>
         <translation type="unfinished">PornHub:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1350"/>
+        <location filename="../form_desktop.ui" line="1311"/>
         <source>HQPorner:</source>
         <translation type="unfinished">HQPorner:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1424"/>
+        <location filename="../form_desktop.ui" line="1318"/>
+        <source>MissAV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1364"/>
+        <source>XHamster</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../form_desktop.ui" line="1452"/>
         <source>Month</source>
         <translation type="unfinished">本月</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1446"/>
-        <location filename="../form_desktop.ui" line="1531"/>
+        <location filename="../form_desktop.ui" line="1474"/>
+        <location filename="../form_desktop.ui" line="1559"/>
         <source>List of all categories</source>
         <translation type="unfinished">列出所有类别</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1490"/>
+        <location filename="../form_desktop.ui" line="1518"/>
         <source>All Time</source>
         <translation type="unfinished">至今</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1509"/>
-        <location filename="../form_desktop.ui" line="1550"/>
+        <location filename="../form_desktop.ui" line="1537"/>
+        <location filename="../form_desktop.ui" line="1578"/>
         <source>Get videos by category</source>
         <translation type="unfinished">获取分类视频</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1588"/>
+        <location filename="../form_desktop.ui" line="1616"/>
         <source>Week</source>
         <translation type="unfinished">本周</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1648"/>
+        <location filename="../form_desktop.ui" line="1676"/>
         <source>Get random video</source>
         <translation type="unfinished">获取随机视频</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1689"/>
+        <location filename="../form_desktop.ui" line="1717"/>
         <source>Get Brazzers videos</source>
         <translation type="unfinished">获取Brazzers视频</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1708"/>
+        <location filename="../form_desktop.ui" line="1736"/>
         <source>Get Top Porn:</source>
         <translation type="unfinished">获取最最热视频:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1730"/>
+        <location filename="../form_desktop.ui" line="1758"/>
         <source>Get Video</source>
         <translation type="unfinished">获取视频</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1805"/>
+        <location filename="../form_desktop.ui" line="1833"/>
         <source>Author</source>
         <translation type="unfinished">作者</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1810"/>
+        <location filename="../form_desktop.ui" line="1838"/>
         <source>Duration (minutes)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1822"/>
+        <location filename="../form_desktop.ui" line="1850"/>
         <source>Do not clear videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1835"/>
+        <location filename="../form_desktop.ui" line="1863"/>
         <source>Automated selection tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1845"/>
+        <location filename="../form_desktop.ui" line="1873"/>
         <source>Show videos in reverse</source>
         <translation type="unfinished">以相反顺序显示视频</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1852"/>
+        <location filename="../form_desktop.ui" line="1880"/>
         <source>Keyboard shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1871"/>
+        <location filename="../form_desktop.ui" line="1899"/>
         <source>Does not stop downloading videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1874"/>
+        <location filename="../form_desktop.ui" line="1902"/>
         <source>Stop loading videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1901"/>
+        <location filename="../form_desktop.ui" line="1929"/>
         <source>Click on a video to show a thumbnail...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1941"/>
+        <location filename="../form_desktop.ui" line="1969"/>
         <source>Download Selected Videos</source>
         <translation type="unfinished">下载选择视频</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="1999"/>
+        <location filename="../form_desktop.ui" line="2027"/>
         <source>Performance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2022"/>
+        <location filename="../form_desktop.ui" line="2050"/>
         <source>Simultaneous downloads:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2065"/>
+        <location filename="../form_desktop.ui" line="2093"/>
         <source>Maximal workers:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2108"/>
+        <location filename="../form_desktop.ui" line="2136"/>
         <source>Maximal timeout:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2154"/>
+        <location filename="../form_desktop.ui" line="2182"/>
         <source>Maximal retries:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2197"/>
+        <location filename="../form_desktop.ui" line="2225"/>
         <source>Network delay (per Request, in seconds):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2246"/>
+        <location filename="../form_desktop.ui" line="2274"/>
         <source>Download Mode:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2256"/>
+        <location filename="../form_desktop.ui" line="2284"/>
         <source>High Performance</source>
         <translation type="unfinished">高性能</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2266"/>
+        <location filename="../form_desktop.ui" line="2294"/>
         <source>FFMPEG</source>
         <translation type="unfinished">FFMPEG</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2276"/>
+        <location filename="../form_desktop.ui" line="2304"/>
         <source>Default</source>
         <translation type="unfinished">默认</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2298"/>
+        <location filename="../form_desktop.ui" line="2326"/>
         <source>Graphical User Interface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2336"/>
+        <location filename="../form_desktop.ui" line="2364"/>
         <source>System default</source>
         <translation type="unfinished">系统默认</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2349"/>
+        <location filename="../form_desktop.ui" line="2377"/>
         <source>Graphical User Interface Language:</source>
         <translation type="unfinished">用户界面语言:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2359"/>
+        <location filename="../form_desktop.ui" line="2387"/>
         <source>English</source>
         <translation type="unfinished">英语</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2369"/>
+        <location filename="../form_desktop.ui" line="2397"/>
         <source>French</source>
         <translation type="unfinished">法语</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2379"/>
+        <location filename="../form_desktop.ui" line="2407"/>
         <source>Chinese (simplified)</source>
         <translation type="unfinished">中文(简体)</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2389"/>
+        <location filename="../form_desktop.ui" line="2417"/>
         <source>German</source>
         <translation type="unfinished">德语</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2396"/>
+        <location filename="../form_desktop.ui" line="2424"/>
         <source>Enable custom font (Jetbrains Mono)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2408"/>
+        <location filename="../form_desktop.ui" line="2436"/>
         <source>System / Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2456"/>
+        <location filename="../form_desktop.ui" line="2484"/>
         <source>Startup:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2463"/>
+        <location filename="../form_desktop.ui" line="2491"/>
         <source>Download and Setup FFmpeg</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2477"/>
+        <location filename="../form_desktop.ui" line="2505"/>
         <source>Internet checks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2484"/>
+        <location filename="../form_desktop.ui" line="2512"/>
         <source>Update checks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2491"/>
+        <location filename="../form_desktop.ui" line="2519"/>
         <source>Install Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2504"/>
+        <location filename="../form_desktop.ui" line="2532"/>
         <source>Privacy:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2511"/>
+        <location filename="../form_desktop.ui" line="2539"/>
         <source>Enable Anonymous mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2518"/>
+        <location filename="../form_desktop.ui" line="2546"/>
         <source>Activate Proxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2532"/>
+        <location filename="../form_desktop.ui" line="2560"/>
         <source>Videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2570"/>
+        <location filename="../form_desktop.ui" line="2598"/>
         <source>Worst</source>
         <translation type="unfinished">最差</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2580"/>
+        <location filename="../form_desktop.ui" line="2608"/>
         <source>Best</source>
         <translation type="unfinished">最好</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2597"/>
+        <location filename="../form_desktop.ui" line="2625"/>
         <source>Use directory system</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2611"/>
+        <location filename="../form_desktop.ui" line="2639"/>
         <source>Output path:</source>
         <translation type="unfinished">输出路径:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2618"/>
+        <location filename="../form_desktop.ui" line="2646"/>
         <source>Do not convert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2625"/>
+        <location filename="../form_desktop.ui" line="2653"/>
         <source>Write metadata tags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2632"/>
+        <location filename="../form_desktop.ui" line="2660"/>
         <source>Model videos (PornHub)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2642"/>
+        <location filename="../form_desktop.ui" line="2670"/>
         <source>Open</source>
         <translation type="unfinished">打开</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2649"/>
+        <location filename="../form_desktop.ui" line="2677"/>
         <source>Result Limit:</source>
         <translation type="unfinished">结果限制:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2666"/>
+        <location filename="../form_desktop.ui" line="2694"/>
         <source>Use custom format:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2679"/>
+        <location filename="../form_desktop.ui" line="2707"/>
         <source>Quality:</source>
         <translation type="unfinished">质量:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2686"/>
+        <location filename="../form_desktop.ui" line="2714"/>
         <source>Both</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2693"/>
+        <location filename="../form_desktop.ui" line="2721"/>
         <source>Featured videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2716"/>
+        <location filename="../form_desktop.ui" line="2744"/>
         <source>Enter &quot;./&quot; for current directory</source>
         <translation type="unfinished">输入&quot;./&quot;以使用当前目录</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2733"/>
+        <location filename="../form_desktop.ui" line="2761"/>
         <source>Half</source>
         <translation type="unfinished">中等</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2740"/>
+        <location filename="../form_desktop.ui" line="2768"/>
         <source>mp4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2747"/>
+        <location filename="../form_desktop.ui" line="2775"/>
         <source>User uploads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2754"/>
+        <location filename="../form_desktop.ui" line="2782"/>
         <source>Skip existing files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2795"/>
+        <location filename="../form_desktop.ui" line="2823"/>
         <source>Apply  (needs restart)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2824"/>
+        <location filename="../form_desktop.ui" line="2852"/>
         <source>Reset Porn Fetch to default settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2884"/>
+        <location filename="../form_desktop.ui" line="2912"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -814,7 +824,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Eporner.com&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- XNXX.com (supports total progress)&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- XVideos.com (supports total progress)&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Missav.ws (and all of it&apos;s subsites, supports total progress)&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Xhamster.com&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;All sites support *threaded* downloads and selectable quality!&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;* hqporner and eporner running in QThreads, but they don&apos;t fetch segments. The video is directly&lt;/p&gt;
@@ -848,12 +859,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2949"/>
+        <location filename="../form_desktop.ui" line="2978"/>
         <source>Total:</source>
         <translation type="unfinished">合计:</translation>
     </message>
     <message>
-        <location filename="../form_desktop.ui" line="2978"/>
+        <location filename="../form_desktop.ui" line="3007"/>
         <source>Converting:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -998,22 +1009,22 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>main</name>
     <message>
-        <location filename="../../../main.py" line="2471"/>
+        <location filename="../../../main.py" line="2494"/>
         <source>Done! Please restart.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2496"/>
+        <location filename="../../../main.py" line="2519"/>
         <source>No URLs in the current session...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2499"/>
+        <location filename="../../../main.py" line="2522"/>
         <source>FFmpeg has been installed. Please restart Porn Fetch :)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2522"/>
+        <location filename="../../../main.py" line="2545"/>
         <source>
             Information: A new version of Porn Fetch (v{__next_release__}) is out. I recommend you to update Porn Fetch. 
             Go to: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/ {__next_release__}
