@@ -846,22 +846,34 @@ class PostProcessVideoThread(QRunnable):
             os.rename(f"{self.path}", f"{self.path}_.tmp")
             logger.debug(f"FFMPEG PATH: {self.ffmpeg_path}")
 
-            if self.video_format == "mp4":#
-                cmd = [self.ffmpeg_path, "-i", f"{self.path}_.tmp", "-c", "copy", self.path]
+
+            # Keeping a local variable space, because otherwise variables get messed up
+            temp_path = f"{self.path}_.tmp"
+            target_mp4_path = self.path
+            other_format_path_ = str(self.path).replace(".mp4", "") # Videos are by default downloaded in .mp4, that's why I need to strip the mp4 out
+            other_format_path = f"{other_format_path_}.{self.video_format}"
+
+            if self.video_format == "mp4":
+                cmd = [self.ffmpeg_path, "-i", temp_path, "-c", "copy", target_mp4_path]
+                path_for_tags = target_mp4_path
 
             else:
-                self.path = str(self.path).replace(".mp4", f"{self.video_format}")
-                cmd = [self.ffmpeg_path, '-i', f"{self.path}_.tmp", self.path]
-
+                cmd = [self.ffmpeg_path, '-i', temp_path, other_format_path]
+                path_for_tags = other_format_path
 
             ff = FfmpegProgress(cmd)
             for progress in ff.run_command_with_progress():
                 self.signals.ffmpeg_converting_progress.emit(round(progress), 100)
 
-            os.remove(f"{self.path}_.tmp")
+            os.remove(temp_path)
 
-            if self.write_tags_:
-                write_tags(path=self.path, data=self.data)
+
+            if self.video_format == "mp4":
+                if self.write_tags_:
+                    write_tags(path=path_for_tags, data=self.data)
+
+            else:
+                logger.warning(f"You've set your format to: {self.video_format}. Writing metadata tags is not supported in this case!")
 
         except Exception:
             error = traceback.format_exc()

@@ -26,7 +26,7 @@
    <string>Porn Fetch V3.5 (C) Johannes Habel GPL 3</string>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">background-color: #262626;</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_14">
    <property name="topMargin">
@@ -2017,7 +2017,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>746</width>
-                <height>901</height>
+                <height>895</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_19">
