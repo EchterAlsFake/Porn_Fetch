@@ -18,7 +18,9 @@ from rich.markdown import Markdown
 from rich.progress import Progress, BarColumn, TextColumn, SpinnerColumn, TimeElapsedColumn, TimeRemainingColumn
 from colorama import *
 from hue_shift import return_color
+from base_api import base
 
+#base.disable_logging()
 logger = setup_logging()
 init(autoreset=True)
 
@@ -192,7 +194,7 @@ Do you want to use FFmpeg? [yes,no]
         finally:
             if not self.ffmpeg_path == "":
                 phub.consts.FFMPEG_EXECUTABLE = self.ffmpeg_path
-                consts.FFMPEG_PATH = self.ffmpeg_path
+                bs_consts.FFMPEG_PATH = self.ffmpeg_path
                 self.ffmpeg_features = True
 
     def save_user_settings(self):
@@ -304,17 +306,11 @@ Do you want to use FFmpeg? [yes,no]
         if url is None:
             url = input(f"{return_color()}Please enter the Video URL -->:")
 
-        video = check_video(url=url, delay=self.delay)
-        title = BaseCore().strip_title(video.title)
-
-        if isinstance(video, Video):
-            author = video.author.name
-
-        elif isinstance(video, hq_Video):
-            author = video.pornstars[0] if len(video.pornstars) > 0 else "Unknown"
-
-        else:
-            author = video.author
+        video = check_video(url=url)
+        print(f"Got video object: {video}")
+        data = load_video_attributes(video)
+        author = data.get("author")
+        title = data.get("title")
 
         output_path = self.output_path
 
@@ -492,7 +488,7 @@ Do you want to use FFmpeg? [yes,no]
 
         logger.debug(f"{return_color()}Processing Models / Videos...")
         for video in videos:
-            objects.append(check_video(video, delay=self.delay))
+            objects.append(check_video(video))
 
         for video in models:
             objects.append(video)
