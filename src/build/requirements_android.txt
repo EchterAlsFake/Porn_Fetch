@@ -2,7 +2,7 @@ Command:
 pyside6-android-deploy --wheel-pyside PySide6-6.8.0a1-6.8.1-cp311-cp311-android_aarch64.whl --wheel-shiboken shiboken6-6.8.0a1-6.8.1-cp311-cp311-android_aarch64.whl --name=test --ndk-path /home/asuna/.pyside6_android_deploy/android-ndk/android-ndk-r26b/ --sdk-path /home/asuna/.pyside6_android_deploy/android-sdk/
 
 requirements:
-,charset-normalizer==2.1.1,git+https://github.com/EchterAlsFake/PHUB,idna,urllib3,certifi,hue_shift,markdown,colorama,requests,git+https://github.com/EchterAlsFake/hqporner_api,ffmpeg-progress-yield,tqdm,git+https://github.com/EchterAlsFake/eporner_api,git+https://github.com/EchterAlsFake/xnxx_api,git+https://github.com/EchterAlsFake/xvideos_api,beautifulsoup4,mutagen,git+https://github.com/EchterAlsFake/eaf_base_api,httpx,httpcore,h11,certifi,idna,sniffio,git+https://github.com/EchterAlsFake/spankbang_api,json5
+,charset-normalizer==2.1.1,git+https://github.com/EchterAlsFake/PHUB,idna,urllib3,certifi,hue_shift,markdown,colorama,requests,git+https://github.com/EchterAlsFake/hqporner_api,ffmpeg-progress-yield,tqdm,git+https://github.com/EchterAlsFake/eporner_api,git+https://github.com/EchterAlsFake/xnxx_api,git+https://github.com/EchterAlsFake/xvideos_api,beautifulsoup4,mutagen,git+https://github.com/EchterAlsFake/eaf_base_api,httpx,httpcore,h11,certifi,idna,sniffio,git+https://github.com/EchterAlsFake/missav_api,git+https://github.com/EchterAlsFake/xhamster_api,m3u8
 
 package domain:
 com.pornfetch
