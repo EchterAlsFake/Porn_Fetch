@@ -60,15 +60,18 @@
 
 ### Testing (Really don't want to do that)
 
-- [] Verify that every single setting in Porn Fetch works and has an effect
-- [] Test how much simultaneous downloads Porn Fetch is capable of
-- [] Test how robust the code is against user errors and improve traceback
-- [] Get Porn Fetch back on Android
+- [x] Verify that every single setting in Porn Fetch works and has an effect
+- [x] Test how much simultaneous downloads Porn Fetch is capable of
+- [] ~~Test how robust the code is against user errors and improve traceback~~
+- [] ~~Get Porn Fetch back on Android~~
   - [] Enabling the QFile picker (currently has a crash bug)
   - [] Fixing threading and segment downloading in general
   - [] Make a separate layout for Porn Fetch on Android
   <br>**DEPENDS ON QT, NOT MY FAULT IF IT DOESN'T WORK, SERIOUSLY**
 
+- [] Testing installation on Windows
+- [] Testing installation on Linux
+- [] Testing macOS
 
 # v3.6
 - [] ~~Geo block bypass~~
