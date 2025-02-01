@@ -1219,6 +1219,7 @@ class PornFetch(QWidget):
         self.ui.settings_button_timeout_maximal_retries_help.clicked.connect(max_retries_help)
         self.ui.settings_button_help_skip_existing_files.clicked.connect(skip_existing_files_help)
         self.ui.settings_button_help_model_videos.clicked.connect(model_videos_help)
+        self.ui.button_help_write_metadata_tags.clicked.connect(metadata_help)
 
         # Settings
         self.ui.settings_button_apply.clicked.connect(self.save_user_settings)
@@ -1300,6 +1301,7 @@ class PornFetch(QWidget):
             self.ui.main_button_view_progress_bars: "progressbars.svg",
             self.ui.settings_button_help_model_videos: "faq.svg",
             self.ui.settings_button_help_skip_existing_files: "faq.svg",
+            self.ui.button_help_write_metadata_tags: "faq.svg",
         }
         for button, icon_name in icons.items():
             if icon_name == "settings.svg" or icon_name == "tools.svg":

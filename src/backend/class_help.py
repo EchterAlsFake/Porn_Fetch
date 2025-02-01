@@ -116,7 +116,7 @@ a URL for a website there will be <AMOUNT> of attempts until an error is thrown.
 
 
 def skip_existing_files_help():
-    text = QCoreApplication.translate("main" """
+    text = QCoreApplication.translate("main", """
 If you fetch a video and the exact same filename already exists, usually Porn Fetch would just skip this file.
 If you set this option to No, then Porn Fetch instead download the video and append a random number to it.
 
@@ -127,7 +127,7 @@ Spain_didnt_win_against_Germany.mp4
 and you download a video with the same title, then it would append a random number to it:
 
 Spain_didnt_win_against_Germany_118251.mp4
-""", None)
+""", disambiguation=None)
     ui_popup(text)
 
 
@@ -140,4 +140,17 @@ For example the model Nancy Ace has like 10 self uploaded which she made by hers
 of videos from other studios.
 
 If you choose "User Uploads", only self uploaded videos will be fetched, and the other way around :)""", None)
+    ui_popup(text)
+
+
+def metadata_help():
+    text = QCoreApplication.translate("main", """
+Metadata tags are saved inside of the file itself. These are tags that video players can read from and provide you information.
+Some folder viewers also give you the ability to search files by specific metadata tags. Those tags can help organize and structure files.
+Porn Fetch will by default save those tags inside of your video files. 
+
+Tag writing is not supported for formats that are not mp4 files. Porn Fetch allows you to convert video files into other
+formats, however, they use other standardization for metadata keys (a specifier), which is why I can't support other
+video 'containers'. 
+""")
     ui_popup(text)
