@@ -334,7 +334,6 @@ def load_video_attributes(video):
         "thumbnail": thumbnail,
     }
 
-    print(f"Data: {data}")
     return data
 
 
