@@ -439,6 +439,7 @@ the thread is permanently locked
 ## Bug fixes
 - Fixed the progress reporting on the file-read function
 - Optimized the CLI and fix some of its errors (#61) (#62)
+- Fixed issues with video length parsing
 - Fixed output path issue in CLI
 - Fixed HQporner / Eporner progress issue stopping at 99%
 - Fixed get random video (HQPorner)
@@ -446,7 +447,7 @@ the thread is permanently locked
 - Fixed an index issue in the tree widget:
  When a video was loaded in index 1 and a user checked the box for not clearing videos, the next loaded
  Video would have an index of 11, although it should have an index of 2
-
+- Generally stabilized and improved Porn Fetch a lot
 
 
 ## Code improvements and design updates
