@@ -1802,51 +1802,53 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
 
     def add_to_tree_widget_signal(self, identifier: int):
         """
-        This is the signal for the Tree Widget thread. It receives the data and applies it to the GUI
+        Receives video data (by identifier) and applies it to the GUI tree widget.
+
+        The video length is parsed using parse_length(), which now handles multiple formats:
+          - "mm:ss" (e.g. "16:19")
+          - Digits-only strings that are interpreted based on video source (xnxx vs. eporner/phub)
+          - Decimal, mixed-unit, and other formats.
+
+        A display string and a zero-padded sorting key are then generated.
         """
         self.last_index += 1
         data = VideoData().data_objects.get(identifier)
         title = data.get("title")
         author = data.get("author")
-        length = data.get("length")
+        raw_length = data.get("length")  # Raw length from the data source.
         index = data.get("index")
-        video = data.get("video")
+        video = data.get("video")  # e.g. a URL or identifier that may contain "xnxx", "eporner", etc.
         thumbnail = data.get("thumbnail")
+
+        # Parse the raw length, passing video as a hint for the source.
+        parsed_length = parse_length(raw_length, video)
 
         item = QTreeWidgetItem(self.ui.treeWidget)
 
+        # If in anonymous mode, set tooltips and redact title/author.
         if self._anonymous_mode:
             item.setToolTip(0, title)
             item.setToolTip(1, author)
-
             title = "[redacted]"
             author = "[redacted]"
 
         item.setText(0, f"{index}) {title}")
         item.setText(1, author)
 
-        # Determine how many zeros are needed based on the type and value of duration
-        if isinstance(length, float):
-            formatted_duration = f"{int(length):05d}"
-            # Handle the decimal part separately if needed
-            decimal_part = str(length).split('.')[1]
-            if decimal_part != '0':
-                formatted_duration += '.' + decimal_part
-
+        # Prepare display and sort keys for the duration.
+        if parsed_length == "Not available" or parsed_length is None:
+            display_duration = "Not available"
+            formatted_duration = "000000000"
         else:
-            if not length == "Not available":
-                formatted_duration = f"{length:05d}"
+            # Use the parsed_length (which should be an integer representing minutes).
+            display_duration = str(parsed_length)
+            formatted_duration = f"{parsed_length:05d}"
 
-            else:
-                formatted_duration = "000000000"
-
-        duration = round(length) if not length == "Not available" else "Not available"
-        duration = str(duration)
         item.setCheckState(0, Qt.CheckState.Unchecked)
         item.setData(0, Qt.ItemDataRole.UserRole, video)
         item.setData(1, Qt.ItemDataRole.UserRole, identifier)
-        item.setText(2, duration)  # Set the text as the zero-padded number or float
-        item.setData(2, Qt.ItemDataRole.UserRole, formatted_duration)  # Store the original duration for sorting
+        item.setText(2, display_duration)  # What the user sees.
+        item.setData(2, Qt.ItemDataRole.UserRole, formatted_duration)  # Hidden sort key.
         item.setData(3, Qt.ItemDataRole.UserRole, str(thumbnail))
 
     def download_tree_widget(self):

@@ -370,58 +370,143 @@ def write_tags(path, data: dict): # Using core from Porn Fetch to keep proxy sup
     logging.debug("Tags: [3/3] ✔")
 
 
-def parse_length(length):
-    if length == "Not available":
-        return length
+def parse_length(length, video_source=None):
+    "Entirely written and copied from ChatGPT. My brain is not ready to fix that myself now, seriously..."
+    """
+    Parse a video length value and return its duration in minutes (rounded).
+
+    Notes:
+      - If length is already numeric (int/float), it is assumed to be in minutes.
+      - If length is a string:
+          * A string of the format "mm:ss" (e.g. "16:19") is parsed as minutes and seconds.
+          * A digits-only string is treated based on the source:
+              - If video_source contains "xnxx", then the value is already in minutes.
+              - If video_source contains "eporner" or "phub", then the value is in seconds.
+              - Otherwise, digits-only defaults to minutes.
+          * A string with a decimal point is assumed to be a minute value.
+          * If the string contains "min" (case-insensitive), the numeric part is extracted and used as minutes.
+          * Otherwise, we try to extract components from mixed formats such as "59m 40s" or "24 seconds".
+      - If no valid duration is found (or if the video source provides no length information),
+        returns "Not available".
+
+    In all conversions, if the computed minute value is > 0 but rounds to 0, returns 1 instead.
+    """
+    if length in (None, "", "Not available"):
+        return "Not available"
 
     try:
-        # Directly return if length is an integer
-        if isinstance(length, int):
-            return length
+        # If already numeric (non-string) assume minutes.
+        if isinstance(length, (int, float)):
+            # Ensure that a small positive value returns at least 1 minute.
+            result = round(length)
+            return result if result > 0 else (1 if length > 0 else 0)
 
-        # Handle string representations of integers
-        if isinstance(length, str) and length.isdigit():
-            return int(length)
+        # Work with a stripped string.
+        s = str(length).strip()
 
-        # Handle decimal formats like "9.3333334"
-        if isinstance(length, float) or (isinstance(length, str) and '.' in length):
+        # -------------------------------
+        # Case 1: "mm:ss" format (e.g. "16:19")
+        if ":" in s:
+            parts = s.split(":")
+            if len(parts) == 2 and parts[0].isdigit() and parts[1].isdigit():
+                minutes = int(parts[0])
+                seconds = int(parts[1])
+                total = minutes + seconds / 60.0
+                result = round(total)
+                if result == 0 and total > 0:
+                    result = 1
+                return result
+
+        # -------------------------------
+        # Case 2: Digits-only string.
+        if s.isdigit():
+            num = int(s)
+            if video_source:
+                src = str(video_source).lower()
+                if "xnxx" in src:
+                    # xnxx provides minutes directly.
+                    return num
+                elif "eporner" in src or "phub" in src:
+                    # These sites give seconds; convert to minutes.
+                    result = round(num / 60)
+                    if result == 0 and num > 0:
+                        result = 1
+                    return result
+                else:
+                    # Default: assume minutes.
+                    return num
+            else:
+                # Without a source hint, default to minutes.
+                return num
+
+        # -------------------------------
+        # Case 3: Value with a decimal point (assumed to be minutes).
+        if '.' in s:
             try:
-                return round(float(length))  # Convert and round float values
+                val = float(s)
+                result = round(val)
+                if result == 0 and val > 0:
+                    result = 1
+                return result
             except ValueError:
                 pass
 
-        if "Min" in str(length):
-            return int(str(length).strip(" ").strip("Min"))
+        # -------------------------------
+        # Case 4: Contains "min" (e.g. "9 Min").
+        if "min" in s.lower():
+            num_str = ''.join(ch for ch in s if ch.isdigit() or ch == '.')
+            if num_str:
+                try:
+                    val = float(num_str)
+                    result = round(val)
+                    if result == 0 and val > 0:
+                        result = 1
+                    return result
+                except ValueError:
+                    pass
 
-        # Dictionary for time unit conversion
+        # -------------------------------
+        # Case 5: Mixed time units such as "59m 40s" or "1h 2m 3s"
         time_units = {'s': 1 / 60, 'm': 1, 'h': 60}
-        total_minutes = 0
-
-        # Split the length string by spaces (e.g., "59m 40s")
-        parts = length.split()
-        for part in parts:
-            # Extract the numeric value and the time unit
-            value = ''.join(filter(str.isdigit, part))  # Extract digits
-            unit = ''.join(filter(str.isalpha, part))  # Extract letters
-
-            if value.isdigit() and unit in time_units:
-                total_minutes += int(value) * time_units[unit]
-
-        # If a valid time conversion was found, return the total minutes
+        total_minutes = 0.0
+        for part in s.split():
+            # Extract numeric (or decimal) part and letter part.
+            value_str = ''.join(ch for ch in part if ch.isdigit() or ch == '.')
+            unit_str = ''.join(ch for ch in part if ch.isalpha()).lower()
+            if value_str and unit_str in time_units:
+                try:
+                    total_minutes += float(value_str) * time_units[unit_str]
+                except ValueError:
+                    continue
         if total_minutes > 0:
-            return round(total_minutes)
+            result = round(total_minutes)
+            if result == 0 and total_minutes > 0:
+                result = 1
+            return result
 
-        # Handle formats like '24 seconds'
-        if length.endswith('seconds'):
-            value = ''.join(filter(str.isdigit, length))
-            return int(value) / 60 if value.isdigit() else 0  # Convert seconds to minutes
+        # -------------------------------
+        # Case 6: Formats like "24 seconds"
+        if s.endswith("seconds"):
+            num_str = ''.join(ch for ch in s if ch.isdigit() or ch == '.')
+            if num_str:
+                try:
+                    sec = float(num_str)
+                    result = round(sec / 60)
+                    if result == 0 and sec > 0:
+                        result = 1
+                    return result
+                except ValueError:
+                    pass
 
-        # Handle formats ending with 'min'
-        if length.endswith('min'):
-            return int(length[:-3])
+        # -------------------------------
+        # Case 7: Formats ending with "min" (e.g. "17 min")
+        if s.endswith("min"):
+            num_part = s[:-3].strip()
+            if num_part.isdigit():
+                return int(num_part)
 
+        # If nothing matches, return None.
         return None
 
     except Exception:
         return 0
-
