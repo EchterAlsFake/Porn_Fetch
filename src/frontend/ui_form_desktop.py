@@ -33,8 +33,7 @@ class Ui_PornFetch_Desktop(object):
         sizePolicy.setHeightForWidth(PornFetch_Desktop.sizePolicy().hasHeightForWidth())
         PornFetch_Desktop.setSizePolicy(sizePolicy)
         PornFetch_Desktop.setMinimumSize(QSize(978, 585))
-        PornFetch_Desktop.setStyleSheet(u"QLbel {\n"
-"    color: black;}")
+        PornFetch_Desktop.setStyleSheet(u"")
         self.gridLayout_14 = QGridLayout(PornFetch_Desktop)
         self.gridLayout_14.setObjectName(u"gridLayout_14")
         self.gridLayout_14.setContentsMargins(-1, 0, -1, -1)
@@ -623,6 +622,7 @@ class Ui_PornFetch_Desktop(object):
 
         self.progressbar_missav = QProgressBar(self.progress_scrollarea_widgedcontents)
         self.progressbar_missav.setObjectName(u"progressbar_missav")
+        self.progressbar_missav.setStyleSheet(u"")
         self.progressbar_missav.setValue(0)
 
         self.progress_gridlayout_progressbar.addWidget(self.progressbar_missav, 5, 1, 1, 1)
@@ -832,7 +832,7 @@ class Ui_PornFetch_Desktop(object):
         self.main_scrollarea_treewidget.setWidgetResizable(True)
         self.main_scrollarea_treewidget_content = QWidget()
         self.main_scrollarea_treewidget_content.setObjectName(u"main_scrollarea_treewidget_content")
-        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 1596, 371))
+        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 1582, 369))
         self.gridLayout_4 = QGridLayout(self.main_scrollarea_treewidget_content)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.gridLayout_4.setContentsMargins(0, 0, 0, 0)
@@ -944,7 +944,7 @@ class Ui_PornFetch_Desktop(object):
         self.settings_scrollarea.setWidgetResizable(True)
         self.settings_scrollarea_widget_contents = QWidget()
         self.settings_scrollarea_widget_contents.setObjectName(u"settings_scrollarea_widget_contents")
-        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 1584, 895))
+        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 746, 901))
         self.gridLayout_19 = QGridLayout(self.settings_scrollarea_widget_contents)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.settings_scrollarea_gridlayout = QGridLayout()
@@ -1556,7 +1556,7 @@ class Ui_PornFetch_Desktop(object):
 
         self.retranslateUi(PornFetch_Desktop)
 
-        self.main_stacked_widget_main.setCurrentIndex(3)
+        self.main_stacked_widget_main.setCurrentIndex(0)
         self.main_stacked_widget_top.setCurrentIndex(2)
 
 

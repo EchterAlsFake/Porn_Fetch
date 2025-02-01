@@ -9,7 +9,6 @@ import zipfile
 import argparse
 import markdown
 import traceback
-import requests.exceptions
 import src.frontend.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
 
 from threading import Event
@@ -296,8 +295,8 @@ version.""")
                 logger.info(f"Downloading additional asset: icon")
 
                 if not os.path.exists(os.path.join(destination_path_final, "Logo.png")):
-                    img = requests.get(
-                        "https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/android_app_icon.png?raw=true")
+                    img = BaseCore().fetch(
+                        "https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/android_app_icon.png?raw=true", get_response=True)
                     if not img.status_code == 200:
                         ui_popup("Couldn't download the Porn Fetch logo. Installation will still be successfully, but please"
                             "report this error on GitHub. Thank you.")
@@ -370,14 +369,6 @@ Categories=Utility;"""
 class InternetCheck(QRunnable):
     def __init__(self):
         super(InternetCheck, self).__init__()
-
-        self.headers = {
-            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
-            "Accept-Encoding": "gzip, deflate, br, zstd",
-            "Accept-Language": "en-US,en;q=0.5",
-        }
-
         self.websites = [
             "https://www.pornhub.com",
             "https://hqporner.com",
@@ -398,7 +389,7 @@ class InternetCheck(QRunnable):
 
             try:
                 logging.info(f"Testing Internet [{idx / len(self.websites)}] : {website}")
-                status = requests.get(website, headers=self.headers)
+                status = BaseCore().fetch(website, get_response=True)
 
                 if status.status_code == 200:
                     self.website_results.update({website: "✔"})
@@ -406,11 +397,6 @@ class InternetCheck(QRunnable):
                 elif status.status_code == 404:
                     if not website == "https://www.missav.ws": # Could get taken down, so yeah ;)
                         self.website_results.update({website: "Failed, website doesn't exist? Please report this error"})
-
-
-            except requests.exceptions.SSLError:
-                self.website_results.update({website: "SSL Error, your ISP / Router / Firewall blocks access to the site"
-                                                      " Are you at a university, school or in a public WiFi?"})
 
             except Exception:
                 error = traceback.format_exc()
@@ -428,7 +414,7 @@ class CheckUpdates(QRunnable):
         url = f"https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/{__next_release__}"
 
         try:
-            request = requests.get(url)
+            request = BaseCore().fetch(url, get_response=True)
 
             if request.status_code == 200:
                 logger.info("NEW UPDATE IS AVAILABLE!")
@@ -438,10 +424,15 @@ class CheckUpdates(QRunnable):
                 logger.info("Checked for updates, no update is available.")
                 self.signals.result.emit(False)
 
+        except AttributeError:
+            logger.info("Checked for updates, no update is available.")
+            self.signals.result.emit(False) # Please just don't ask, thanks :)
+
         except Exception:
             error = traceback.format_exc()
             logger.error(f"Could not check for updates. Please report the following error on GitHub: {error}")
             self.signals.error_signal.emit(error)
+
 
 
 class FFMPEGDownload(QRunnable):
@@ -456,34 +447,26 @@ class FFMPEGDownload(QRunnable):
 
     @staticmethod
     def delete_dir():
-        files = os.listdir("./")
-        for file in files:
-            try:
-                search = re.search(pattern=r'ffmpeg-(.*?)-', string=file)  # It's all about the version number
-                if len(search.groups()) == 1:
+        deleted_any = False
+        cwd = os.getcwd()
 
-                    if sys.platform == "win32":
-                        shutil.rmtree(f"ffmpeg-{search.group(1)}-essentials_build")
-                        return True
-
-                    elif sys.platform == "linux" or sys.platform == "linux2":
-                        shutil.rmtree(f"ffmpeg-{search.group(1)}-amd64-static")
-                        return True
-
-                    elif sys.platform == "darwin":
-                        shutil.rmtree("ffmpeg-7.1.7z")
-                        return True
-
-            except AttributeError:
-                pass # This is expected and (99%) not an issue
-
-        return False
+        for entry in os.listdir(cwd):
+            if "ffmpeg" in entry.lower():
+                full_path = os.path.join(cwd, entry)
+                if os.path.isdir(full_path):
+                    try:
+                        shutil.rmtree(full_path)
+                        logger.info(f"Deleted folder: {full_path}")
+                        deleted_any = True
+                    except Exception as e:
+                        logger.error(f"Error deleting folder {full_path}: {e}")
+        return deleted_any
 
     def run(self):
         # Download the file
         logger.debug(f"Downloading: {self.url}")
         logger.debug("FFMPEG: [1/4] Starting the download")
-        with requests.get(self.url, stream=True) as r:
+        with httpx.stream("GET", self.url) as r:
             r.raise_for_status()
             if self.url == url_windows or self.url == url_macOS:
                 total_length = int(r.headers.get('content-length'))
@@ -495,7 +478,7 @@ class FFMPEGDownload(QRunnable):
             dl = 0
             filename = self.url.split('/')[-1]
             with open(filename, 'wb') as f:
-                for chunk in r.iter_content(chunk_size=8192):
+                for chunk in r.iter_bytes(chunk_size=8192):
                     if chunk:  # filter out keep-alive new chunks
                         f.write(chunk)
                         dl += len(chunk)
@@ -761,7 +744,7 @@ class DownloadThread(QRunnable):
             if os.path.isfile(self.output_path):
                 if self.skip_existing_files:
                     logger.debug("The file already exists, skipping...")
-                    self.signals.download_completed.emit()
+                    self.signals.download_completed.emit(True)
                     return
 
                 else:
@@ -823,14 +806,14 @@ class DownloadThread(QRunnable):
                 video_source = "missav"
                 self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality, no_title=True,
                                     callback=lambda pos, total: self.generic_callback(pos, total,
-                                                                                      self.signals.progress_xvideos,
+                                                                                      self.signals.progress_missav,
                                                                                       video_source, self.ffmpeg))
 
             elif isinstance(self.video, xh_Video):
                 video_source = "xhamster"
                 self.video.download(downloader=self.threading_mode, path=self.output_path, quality=self.quality, no_title=True,
                                     callback=lambda pos, total: self.generic_callback(pos, total,
-                                                                                      self.signals.progress_xvideos,
+                                                                                      self.signals.progress_xhamster,
                                                                                       video_source, self.ffmpeg))
                 # ... other video types ...
 
@@ -1325,6 +1308,8 @@ class PornFetch(QWidget):
             "progressbar_eporner": ":/style/stylesheets/progressbar_eporner.qss",
             "progressbar_total": ":/style/stylesheets/progressbar_total.qss",
             "progressbar_xnxx": ":/style/stylesheets/progressbar_xnxx.qss",
+            "progressbar_missav": ":/style/stylesheets/progressbar_missav.qss",
+            "progressbar_xhamster": ":/style/stylesheets/progressbar_xhamster.qss",
             "progressbar_xvideos": ":/style/stylesheets/progressbar_xvideos.qss",
             "progressbar_converting": ":/style/stylesheets/progressbar_converting.qss",
             "button_blue": ":/style/stylesheets/stylesheet_button_blue.qss",
@@ -1348,6 +1333,8 @@ class PornFetch(QWidget):
         self.ui.progressbar_eporner.setStyleSheet(stylesheets["progressbar_eporner"])
         self.ui.progressbar_hqporner.setStyleSheet(stylesheets["progressbar_hqporner"])
         self.ui.progressbar_xvideos.setStyleSheet(stylesheets["progressbar_xvideos"])
+        self.ui.progressbar_missav.setStyleSheet(stylesheets["progressbar_missav"])
+        self.ui.progressbar_xhamster.setStyleSheet(stylesheets["progressbar_xhamster"])
         self.ui.main_progressbar_converting.setStyleSheet(stylesheets["progressbar_converting"])
         self.ui.download_button_model.setStyleSheet(stylesheets["button_purple"])
         self.ui.button_search.setStyleSheet(stylesheets["button_purple"])
@@ -1871,6 +1858,8 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
         self.download_thread.signals.progress_eporner.connect(self.update_progressbar_eporner)
         self.download_thread.signals.progress_xnxx.connect(self.update_progressbar_xnxx)
         self.download_thread.signals.progress_xvideos.connect(self.update_progressbar_xvideos)
+        self.download_thread.signals.progress_missav.connect(self.update_progressbar_missav)
+        self.download_thread.signals.progress_xhamster.connect(self.update_progressbar_xhamster)
         self.download_thread.signals.ffmpeg_converting_progress.connect(self.update_converting)
         self.download_thread.signals.error_signal.connect(self.show_error)
         # ADAPTION
@@ -2034,7 +2023,7 @@ An error happened inside of Porn Fetch!
             # Load the thumbnail image dynamically
             try:
                 pixmap = QPixmap()
-                pixmap.loadFromData(requests.get(thumbnail).content)
+                pixmap.loadFromData(httpx.get(thumbnail).content) # Using httpx here, cuz BaseCore headers don't work with HQPorner (for some reason idk
 
                 # Scale the pixmap to fit the fixed QLabel size while maintaining the aspect ratio
                 scaled_pixmap = pixmap.scaled(
@@ -2047,7 +2036,6 @@ An error happened inside of Porn Fetch!
             except Exception:
                 error = traceback.format_exc()
                 self.ui.main_label_tree_show_thumbnail.setText(f"Failed to load image: {error}")
-
 
 
     """
@@ -2088,6 +2076,14 @@ An error happened inside of Porn Fetch!
         """This updates the xvideos progressbar"""
         self.ui.progressbar_xvideos.setMaximum(maximum)
         self.ui.progressbar_xvideos.setValue(value)
+
+    def update_progressbar_missav(self, value, maximum):
+        self.ui.progressbar_missav.setMaximum(maximum)
+        self.ui.progressbar_missav.setValue(value)
+
+    def update_progressbar_xhamster(self, value, maximum):
+        self.ui.progressbar_xhamster.setMaximum(maximum)
+        self.ui.progressbar_xhamster.setValue(value)
 
     # ADAPTION
 
@@ -2527,8 +2523,8 @@ if __name__ == "__main__":
         if value:
             logger.debug(f"Next release v{__next_release__} found!")
             try:
-                changelog = (requests.get(f"https://github.com/EchterAlsFake/Porn_Fetch/tree/master/README/Changelog/"
-                                          f"{__next_release__}/Changelog.md").text)
+                changelog = BaseCore().fetch(f"https://github.com/EchterAlsFake/Porn_Fetch/tree/master/README/Changelog/"
+                                          f"{__next_release__}/Changelog.md")
 
             except Exception:
                 error = traceback.format_exc()

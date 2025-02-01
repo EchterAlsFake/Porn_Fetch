@@ -302,7 +302,11 @@ def load_video_attributes(video):
         length = video.length
         tags = ",".join([category for category in video.tags])
         publish_date = video.publish_date
-        thumbnail = video.get_thumbnails()[0]
+        try:
+            thumbnail = video.get_thumbnails()[0]
+
+        except TypeError:
+            thumbnail = "Not available" # Expected, it's an error on HQPorners end.
 
     elif isinstance(video, mv_Video):
         author = "Not available"
