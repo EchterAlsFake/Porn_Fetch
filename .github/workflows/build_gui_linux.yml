@@ -39,7 +39,7 @@ jobs:
           pwd
           ls -la
           source ../venv/bin/activate
-          pyside6-deploy -c src/build/pysidedeploy_linux.spec main.py
+          pyside6-deploy -c src/build/pysidedeploy_linux.spec -f -v
 
       - name: Archive x64 build
         uses: actions/upload-artifact@v4

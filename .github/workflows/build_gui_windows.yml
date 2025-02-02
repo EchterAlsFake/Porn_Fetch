@@ -36,7 +36,7 @@ jobs:
           Get-ChildItem -Path . -Exclude deploy,venv | Move-Item -Destination deploy
           cd deploy
           ..\venv\Scripts\activate
-          echo "yes" | pyside6-deploy -c src/build/pysidedeploy_windows.spec main.py
+          echo "yes" | pyside6-deploy -c src/build/pysidedeploy_windows.spec -f -v
 
       - name: Archive Windows x64 build
         uses: actions/upload-artifact@v4
