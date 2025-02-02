@@ -1089,9 +1089,6 @@ class PornFetch(QWidget):
             if self._anonymous_mode:
                 self.anonymous_mode()
 
-            if self.conf.get("Setup", "tor") == "true":
-                logger.warning("You have enabled Tor! This feature is NOT implemented yet!")
-
             self.check_ffmpeg()  # Checks and sets up FFmpeg
 
             VideoData().consistent_data.update({
@@ -1386,7 +1383,6 @@ class PornFetch(QWidget):
         self.ui.settings_button_help_model_videos.setStyleSheet(stylesheets["button_green"])
         self.ui.settings_button_help_skip_existing_files.setStyleSheet(stylesheets["button_green"])
         self.ui.settings_button_install_pornfetch.setStyleSheet(stylesheets["button_green"])
-        self.ui.settings_button_help_tor.setStyleSheet(stylesheets["button_green"])
         self.ui.settings_button_help_anonymous_mode.setStyleSheet(stylesheets["button_green"])
         self.ui.main_button_tree_automated_selection.setStyleSheet(stylesheets["button_purple"])
         self.ui.main_button_tree_keyboard_shortcuts.setStyleSheet(stylesheets["button_blue"])
