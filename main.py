@@ -2137,7 +2137,8 @@ An error happened inside of Porn Fetch!
             return
 
         try:
-            client.login(username, password)
+            global client
+            client = Client(username, password)
             logger.debug("Login Successful!")
             ui_popup(self.tr( "Login Successful!", None))
             self.switch_login_button_state()
@@ -2150,6 +2151,7 @@ An error happened inside of Porn Fetch!
 
     def check_login(self):
         """Checks if the user is logged in, so that no errors are threw if not"""
+        global client
         if client.logged:
             return True
 
@@ -2175,18 +2177,21 @@ An error happened inside of Porn Fetch!
 
     def get_watched_videos(self):
         """Returns the videos watched by the user"""
+        global client
         if self.check_login():
             watched = client.account.watched
             self.add_to_tree_widget_thread(watched)
 
     def get_liked_videos(self):
         """Returns the videos liked by the user"""
+        global client
         if self.check_login():
             liked = client.account.liked
             self.add_to_tree_widget_thread(liked)
 
     def get_recommended_videos(self):
         """Returns the videos recommended for the user"""
+        global client
         if self.check_login():
             recommended = client.account.recommended
             self.add_to_tree_widget_thread(recommended)
