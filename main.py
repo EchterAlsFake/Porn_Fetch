@@ -498,6 +498,8 @@ class FFMPEGDownload(QRunnable):
 
                     self.signals.total_progress.emit(idx, total_members)
 
+                os.chmod("ffmpeg", 0o755)
+
         elif self.mode == "windows" and filename.endswith(".zip"):
             with zipfile.ZipFile(filename, 'r') as zip_ref:
                 total = len(zip_ref.namelist())
@@ -513,6 +515,8 @@ class FFMPEGDownload(QRunnable):
         elif self.mode == "macOS" and filename.endswith(".zip"):
             with zipfile.ZipFile(filename, mode='r') as archive:
                 archive.extractall(path=self.extract_path)
+
+            os.chmod("ffmpeg", 0o755) # Sets executable, read and write permissions
 
         logger.debug("FFMPEG: [3/4] Finished Extraction")
         # Finalize
