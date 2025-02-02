@@ -1,3 +1,5 @@
+import gc
+gc.disable()
 import sys
 import time
 import httpx
