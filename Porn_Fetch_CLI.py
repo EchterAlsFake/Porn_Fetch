@@ -20,7 +20,7 @@ from colorama import *
 from hue_shift import return_color
 from base_api import base
 
-#base.disable_logging()
+base.disable_logging()
 logger = setup_logging()
 init(autoreset=True)
 
@@ -118,7 +118,9 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
 {return_color()}------------------>:""")
 
         if options == "1":
-            self.process_video()
+            url = input(f"{return_color()}Please the enter video URL -->: {return_color()}")
+            video = [check_video(url)]
+            self.iterate_generator(auto=True, generator=video)
 
         elif options == "2":
             self.process_model(None, False)
@@ -307,7 +309,6 @@ Do you want to use FFmpeg? [yes,no]
             url = input(f"{return_color()}Please enter the Video URL -->:")
 
         video = check_video(url=url)
-        print(f"Got video object: {video}")
         data = load_video_attributes(video)
         author = data.get("author")
         title = data.get("title")
@@ -326,6 +327,7 @@ Do you want to use FFmpeg? [yes,no]
 
         if os.path.exists(output_path):
             logger.debug(f"{return_color()}File: {output_path} already exists, skipping...")
+            print(f"{return_color()}File: {output_path} already exists, skipping...")
             self.semaphore.release()
             return
 
@@ -346,7 +348,7 @@ Do you want to use FFmpeg? [yes,no]
 
     def process_video_with_error_handling(self, video, batch, ignore_errors):
         try:
-            print(f"processing video: {video.title}")
+            print(f"Processing video: {video.title}")
             self.process_video(video, batch=batch)
         except Exception as e:
             if ignore_errors:

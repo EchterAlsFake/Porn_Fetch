@@ -157,22 +157,22 @@ def send_error_log(message):
 
 def check_video(url, is_url=True):
     if is_url:
-        if hqporner_pattern.search(str(url)):
+        if hqporner_pattern.search(str(url)) and not isinstance(url, hq_Video):
             return hq_Client.get_video(url)
 
-        elif eporner_pattern.search(str(url)):
+        elif eporner_pattern.search(str(url)) and not isinstance(url, ep_Video):
             return ep_Client.get_video(url, enable_html_scraping=True)
 
-        elif xnxx_pattern.search(str(url)):
+        elif xnxx_pattern.search(str(url)) and not isinstance(url, xn_Video):
             return xn_Client.get_video(url)
 
-        elif xvideos_pattern.search(str(url)):
+        elif xvideos_pattern.search(str(url)) and not isinstance(url, xv_Video):
             return xv_Client.get_video(url)
 
-        elif missav_pattern.search(str(url)):
+        elif missav_pattern.search(str(url)) and not isinstance(url, mv_Video):
             return mv_Client.get_video(url)
 
-        elif xhamster_pattern.search(str(url)):
+        elif xhamster_pattern.search(str(url)) and not isinstance(url, xh_Video):
             return xh_client.get_video(url)
 
         if isinstance(url, Video):
