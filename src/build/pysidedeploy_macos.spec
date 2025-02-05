@@ -8,13 +8,13 @@ title = Porn Fetch
 project_dir = .
 
 # source file path
-input_file = /home/asuna/PycharmProjects/Porn_Fetch/main.py
+input_file = main.py
 
 # directory where exec is stored
 exec_directory = .
 
 # path to .pyproject project file
-project_file = 
+project_file =
 
 # application icon
 icon = src/frontend/graphics/logo_transparent.icns
@@ -22,7 +22,7 @@ icon = src/frontend/graphics/logo_transparent.icns
 [python]
 
 # python path
-python_path = /home/asuna/PycharmProjects/venv/bin/python3.11
+python_path =
 
 # python packages to install
 # ordered-set = increase compile time performance of nuitka packaging
@@ -36,10 +36,10 @@ android_packages = buildozer==1.5.0,cython==0.29.33
 
 # comma separated path to qml files required
 # normally all the qml files required by the project are added automatically
-qml_files = 
+qml_files =
 
 # excluded qml plugin binaries
-excluded_qml_plugins = 
+excluded_qml_plugins =
 
 # qt modules used. comma separated
 modules = Widgets,Gui,Core,DBus
@@ -50,20 +50,20 @@ plugins = egldeviceintegrations,iconengines,platforms/darwin,xcbglintegrations,i
 [android]
 
 # path to pyside wheel
-wheel_pyside = 
+wheel_pyside =
 
 # path to shiboken wheel
-wheel_shiboken = 
+wheel_shiboken =
 
 # plugins to be copied to libs folder of the packaged application. comma separated
-plugins = 
+plugins =
 
 [nuitka]
 
 # usage description for permissions requested by the app as found in the info.plist file
 # of the app bundle
 # eg = extra_args = --show-modules --follow-stdlib
-macos.permissions = 
+macos.permissions =
 mode = onefile
 
 # (str) specify any extra nuitka arguments
@@ -77,22 +77,21 @@ extra_args = --noinclude-qt-translations --assume-yes-for-downloads --disable-ca
 mode = debug
 
 # contrains path to pyside6 and shiboken6 recipe dir
-recipe_dir = 
+recipe_dir =
 
 # path to extra qt android jars to be loaded by the application
-jars_dir = 
+jars_dir =
 
 # if empty uses default ndk path downloaded by buildozer
-ndk_path = 
+ndk_path =
 
 # if empty uses default sdk path downloaded by buildozer
-sdk_path = 
+sdk_path =
 
 # other libraries to be loaded. comma separated.
 # loaded at app startup
-local_libs = 
+local_libs =
 
 # architecture of deployed platform
 # possible values = ["aarch64", "armv7a", "i686", "x86_64"]
-arch = 
-
+arch =
