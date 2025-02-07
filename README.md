@@ -166,12 +166,22 @@ curl "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scri
 bash install.sh
 ```
 
-> [!CAUTION]
-> macOS support is experimental and not tested on real certified Apple Hardware...
+**Please Read:**
+<br>The created file will be a `.app` file. You cannot usually run it as you would, because it doesn't work for some reason...
+Instead, you need to go inside the `.app` package using a Terminal and run the main file in it.
 
-### Android
+You can do that with something like `./<the_app_package.app/Contents/MacOS/main`
+
+At the moment, this is unfortunately the only way how I can support macOS. I will try to make this easier in the future, but it
+doesn't depend on me.
+
+
+## 📱 Android
+The Android app is the exact same as the desktop app. Thanks to Qt's Android developing Guide, you'll be able to simply
+install the .apk file, and you have the full version of Porn Fetch on your device.
+
 > [!NOTE]
-> Building for Android is currently being tested, please do not do it yet!
+> Building for Android is experimental, please report any errors, if you can't fix them by yourself
 
 **Make sure your host system has the following dependencies installed**
 - jdk17-openjdk
@@ -183,20 +193,6 @@ bash install.sh
 curl "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/build_android.sh" -o build_android.sh
 bash build_android.sh
 ```
-
-
-**Please Read:**
-<br>The created file will be a `.app` file. You cannot usually run it as you would, because it doesn't work for some reason...
-Instead you need to go inside the `.app` package using a Terminal and run the main file in it.
-
-You can do that with something like `./<the_app_package.app/Contents/MacOS/main`
-
-At the moment, this is unfortunately the only way how I can support macOS. I will try to make this easier in the future, but it 
-doesn't depend on me.
-
-## 📱 Android
-The Android app is the exact same as the desktop app. Thanks to Qt's Android developing Guide, you'll be able to simply
-install the .apk file, and you have the full version of Porn Fetch on your device.
 
 > [!IMPORTANT]
 > Android is currently broken, use Termux instead!
@@ -222,7 +218,7 @@ Currently available in:
 
 ## 📚 License
 Licensed under [GPL 3](https://www.gnu.org/licenses/gpl-3.0.en.html).
-<br>Copyright (C) 2023–2024 Johannes Habel 
+<br>Copyright (C) 2023–2025 Johannes Habel 
 
 Porn Fetch uses [FFmpeg](https://ffmpeg.org/), which is licensed under the GPL license
 
