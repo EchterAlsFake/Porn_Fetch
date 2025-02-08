@@ -23,6 +23,9 @@
 ---
 </div>
 
+# about 3.5
+- because life sucks and I have to do so much useless shit for school I won't be able to release the new version in the next 5 weeks. I've scheduled release for next saturday / sunday lmao
+  
 > [!WARNING]
 > Porn Fetch is NOT associated with the websites. Porn Fetch is AGAINST the Terms of Services of EVERY website! Usage is on YOUR risk.
 
