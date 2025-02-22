@@ -233,7 +233,7 @@ However, I kindly ask every one of you to donate a small amount of money. If you
 or PayPal, you can donate me here:
 
 - Paypal: `https://paypal.me/EchterAlsFake`
-- Monero: `46xL2reuanxZgFxXBBaoagiEJK9c7bL7aiwKNR15neyX2wUsX2QVzkeRMVG2Cro44qLUNYvsP1BQa12KPbNat2ML41nyEeq`
+- Monero: `42XwGZYbSxpMvhn9eeP4DwMwZV91tQgAm3UQr6Zwb2wzBf5HcuZCHrsVxa4aV2jhP4gLHsWWELxSoNjfnkt4rMfDDwXy9jR`
 
 Even if it's just 10 cents, for me, it matters, because I do not work yet and it means a lot
 to me :)
