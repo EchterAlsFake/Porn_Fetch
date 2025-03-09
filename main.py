@@ -1,5 +1,3 @@
-import gc
-gc.disable()
 import sys
 import time
 import httpx
@@ -18,7 +16,6 @@ from io import TextIOWrapper
 from itertools import islice, chain
 from hqporner_api.api import Sort as hq_Sort
 
-
 from src.backend.shared_gui import *
 from src.backend.class_help import *
 from src.backend.shared_functions import *
@@ -27,14 +24,14 @@ from src.backend.log_config import setup_logging
 from src.frontend.ui_form_license import Ui_SetupLicense
 from src.frontend.ui_form_desktop import Ui_PornFetch_Desktop
 from src.frontend.ui_form_android import Ui_PornFetch_Android
-from src.frontend.ui_form_range_selector import Ui_PornFetchRangeSelector
 from src.frontend.ui_form_install_dialog import Ui_SetupInstallDialog
 from src.frontend.ui_form_keyboard_shortcuts import Ui_KeyboardShortcuts
+from src.frontend.ui_form_range_selector import Ui_PornFetchRangeSelector
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                         QTranslator, QCoreApplication, QSize)
-from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QInputDialog
-from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence
+from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QInputDialog, QTextBrowser
+from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QScreen
 
 
 """
@@ -1112,7 +1109,8 @@ class PornFetch(QWidget):
                 "skip_existing_files": self.skip_existing_files
             })
             logger.debug("Startup: [5/5] ✔")
-
+            self.check_for_sponsoring_notice()
+            self.check_for_disclaimer_notice()
 
     def install_pornfetch(self):
         if __build__ == "desktop":
@@ -1902,6 +1900,12 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
         self.threadpool.start(self.post_processing_thread)
         VideoData().clean_dict(video_id)
         self.semaphore.release()
+        downloaded_videos = int(self.conf.get("Sponsoring", "downloaded_videos"))
+        downloaded_videos += 1
+        self.conf.set("Sponsoring", "downloaded_videos", str(downloaded_videos))
+        with open("config.ini", "w") as config_file: # type:TextIOWrapper
+            self.conf.write(config_file)
+
 
     def show_error(self, error):
         err = self.tr(f"""
@@ -2421,6 +2425,107 @@ This warning won't be shown again.
         self.ui.main_stacked_widget_main.setCurrentIndex(0)
         self.ui.main_stacked_widget_top.setMaximumHeight(280)
 
+    def show_sponsoring_text(self):
+        self.textbrowser = QTextBrowser()
+        self.textbrowser.setHtml(
+            u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+            "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+            "p, li { white-space: pre-wrap; }\n"
+            "hr { height: 1px; border-width: 0; }\n"
+            "li.unchecked::marker { content: \"\\2610\"; }\n"
+            "li.checked::marker { content: \"\\2612\"; }\n"
+            "</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:24pt;\">Sponsoring Notice</span></p>\n"
+            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt; color:#a51d2d;\">Hey, you...</span></p>\n"
+            "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent"
+            ":0; text-indent:0px; font-size:16pt; color:#a51d2d;\"><br /></p>\n"
+            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">It looks like you've already downloaded more than 20 videos. I don\u2019t want to annoy you, and you can simply close this window if you\u2019d like :)</span></p>\n"
+            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">But if you have a moment, I would really appreciate it!</p>\n"
+            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I started developing <span style=\" font-style:italic;\">Porn Fetch</span> as a fun project two years ago\u2014partly to learn graphical programming, but also because there was no free alternative available. I never expected this project to grow as much as it has, with over 20,000 downloads now.</p>\n"
+            "<p style=\" margin-"
+            "top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I develop everything in my free time, and I would be incredibly grateful if you considered leaving a small donation. Even just 50 cents makes a huge difference and helps me keep this project alive.</p>\n"
+            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Alternatively, you can support me by sharing this project with your friends or giving it a star on GitHub. That also helps a lot!</p>\n"
+            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">You can donate via PayPal or anonymously with Monero:</p>\n"
+            "<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\">\n"
+            "<li style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">PayPal: <span style=\" color:#26a"
+            "269;\">https://paypal.me/EchterAlsFake</span></li>\n"
+            "<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Monero:</span> <span style=\" font-family:'monospace'; color:#613583;\">42XwGZYbSxpMvhn9eeP4DwMwZV91tQgAm3UQr6Zwb2wzBf5HcuZCHrsVxa4aV2jhP4gLHsWWELxSoNjfnkt4rMfDDwXy9jR</span></li></ul>\n"
+            "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Thank you so much for your support! \u2764\ufe0f</p>\n"
+            "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">(Th"
+            "is dialog won't be shown again, except if you update Porn Fetch, because that overrides the configuration file)</p></body></html>")
+        self.textbrowser.setFixedHeight(600)
+        self.textbrowser.setFixedWidth(800)
+        screen = QApplication.primaryScreen()
+        screen_geometry = screen.availableGeometry()
+
+        # Calculate the center position
+        x = (screen_geometry.width() - self.textbrowser.width()) // 2
+        y = (screen_geometry.height() - self.textbrowser.height()) // 2
+
+        # Move the window to the center
+        self.textbrowser.move(x, y)
+        self.textbrowser.setWindowFlag(Qt.WindowStaysOnTopHint, True)  # Keep it on top
+        self.textbrowser.show()  # Show before setting focus
+        self.textbrowser.setFocus()  # Ensure it receives input focus
+        self.textbrowser.raise_()  # Bring to front
+        self.textbrowser.activateWindow()  # Activate
+
+    def show_disclaimer_text(self):
+        self.textbrowser = QTextBrowser()
+        self.textbrowser.setHtml(
+            u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+            "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+            "p, li { white-space: pre-wrap; }\n"
+            "hr { height: 1px; border-width: 0; }\n"
+            "li.unchecked::marker { content: \"\\2610\"; }\n"
+            "li.checked::marker { content: \"\\2612\"; }\n"
+            "</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+            "<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:24pt; font-weight:700; color:#a51d2d;\">DISCLAIMER</span></p>\n"
+            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Porn Fetch may violate the Terms of Service of the websites it interacts with.<br />Downloading copyright-protected content without proper authorization is illegal under"
+            " the <span style=\" font-weight:700;\">DMCA (Digital Millennium Copyright Act)</span> and other applicable laws.</p>\n"
+            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">However, some jurisdictions allow downloading content for strictly <span style=\" font-weight:700;\">private, personal use</span>. By using Porn Fetch, you explicitly agree to use this software <span style=\" font-weight:700;\">only for personal purposes</span>, such as saving videos for offline viewing.</p>\n"
+            "<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">Prohibited Use</span></h3>\n"
+            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I <span style=\" font-weight:700;\">strictly forbid</span> the redistribution, sharing, or commercial use of any content downloaded using "
+            "Porn Fetch.<br />If users exploit this software for unauthorized distribution, I may discontinue development and take the project offline. Please respect this to ensure its continued availability.</p>\n"
+            "<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">Liability Disclaimer</span></h3>\n"
+            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This software is provided under the <span style=\" font-weight:700;\">GPL license</span> and comes <span style=\" font-weight:700;\">without any warranty</span>. I am not liable for any legal consequences, damages, or misuse resulting from its use. <span style=\" font-weight:700;\">You are solely responsible for your actions.</span></p>\n"
+            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">By using Porn Fetch"
+            ", you confirm that you will <span style=\" font-weight:700;\">only use it for private purposes</span> and comply with all applicable laws. </p></body></html>")
+
+        self.textbrowser.setFixedHeight(600)
+        self.textbrowser.setFixedWidth(800)
+        screen = QApplication.primaryScreen()
+        screen_geometry = screen.availableGeometry()
+
+        # Calculate the center position
+        x = (screen_geometry.width() - self.textbrowser.width()) // 2
+        y = (screen_geometry.height() - self.textbrowser.height()) // 2
+
+        # Move the window to the center
+        self.textbrowser.move(x, y)
+        self.textbrowser.setWindowFlag(Qt.WindowStaysOnTopHint, True)
+        self.textbrowser.show()
+        self.textbrowser.setFocus()
+        self.textbrowser.raise_()
+        self.textbrowser.activateWindow()
+
+    def check_for_sponsoring_notice(self):
+        downloaded_videos = int(self.conf.get("Sponsoring", "downloaded_videos"))
+        if downloaded_videos >= 20:
+            if not self.conf.get("Sponsoring", "notice_shown") == "true":
+                self.show_sponsoring_text()
+                self.conf.set("Sponsoring", "notice_shown", "true")
+                with open("config.ini", "w") as config_file:  # type:TextIOWrapper
+                    self.conf.write(config_file)
+
+    def check_for_disclaimer_notice(self):
+        if self.conf.get("Disclaimer", "shown") == "false":
+            self.show_disclaimer_text()
+            self.conf.set("Disclaimer", "shown", "true")
+            with open("config.ini", "w") as config_file:  # type:TextIOWrapper
+                self.conf.write(config_file)
 
 
 def main():

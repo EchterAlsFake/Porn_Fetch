@@ -76,3 +76,24 @@
 # v3.6
 - [] ~~Geo block bypass~~
 - [x] Allow for custom proxy lists to help people in censored countries
+
+
+### Important things
+- [] Entirely rework and fix the error reporting system
+- [] Bring Porn Fetch back on Android
+  - [] Make an Android compatible Layout
+  - [] Fix threading
+  - [] Fix UI flickering and loading issues
+
+  
+- [] Support Thumbnail when navigating with Arrow keys
+- [] Fix XNXX progress reporting
+- [] Improve failed segment retrying
+- [] Improve download from file implementation
+- [] Change Icons
+- [] Fix TypeError: Incoming markup is of an invalid type: None. Markup must be a string, a bytestring, or an open filehandle.
+- [] Finalize proxy support
+- [] Improving installation
+- [] Fix and improve the CLI
+- [] Implement transition animations for the Stacked Widget
+- [] Splash screen loading animation? (maybe idk yet)

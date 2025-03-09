@@ -1,0 +1,16 @@
+This is just a simple file for myself, you don't need that
+
+Linux name: PornFetch_Linux_GUI_x64.bin
+Windows name: PornFetch_Windows_GUI_x64.exe
+
+Update information:
+
+- Make sure version is set in:
+  - Window title
+  - Credit notice
+  - In the app itself (source code)
+  - In the macOS build stuff yk what I mean
+  - on the README
+
+- Changelog needs to be put in the correct directory
+- Make sure to use the correct tag name when releasing a new version

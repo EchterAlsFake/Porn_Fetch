@@ -75,13 +75,16 @@ as they are indeed needed for the main applications!
 """
 
 # TODO: Implement logging
-sections = ["Setup", "Performance", "PostProcessing", "Video", "UI"]
+sections = ["Setup", "Performance", "PostProcessing", "Video", "UI", "Sponsoring", "Disclaimer"]
 
 options_setup = ["license_accepted", "install", "update_checks", "internet_checks", "anonymous_mode"]
 options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries", "ffmpeg_warning"]
 options_post_processing = ["convert", "format", "write_metadata"]
 options_video = ["quality", "output_path", "directory_system", "search_limit", "delay", "skip_existing_files", "model_videos"]
 options_ui = ["language", "custom_font"]
+options_sponsoring = ["downloaded_videos", "notice_shown"]
+options_disclaimer = ["shown"]
+
 
 pornhub_pattern = re.compile(r'(.*?)pornhub(.*)') # can also be .org
 hqporner_pattern = re.compile(r'(.*?)hqporner.com(.*)')
@@ -124,6 +127,13 @@ model_videos = both
 [UI]
 language = system
 custom_font = true
+
+[Sponsoring]
+downloaded_videos = 0
+notice_shown = false
+
+[Disclaimer]
+shown = false
 """
 
 logger = logging.getLogger(__name__)
@@ -252,6 +262,16 @@ def setup_config_file(force=False):
 
             if idx == 4:
                 for option in options_ui:
+                    if not config.has_option(section, option):
+                        setup_config_file(force=True)
+
+            if idx == 5:
+                for option in options_sponsoring:
+                    if not config.has_option(section, option):
+                        setup_config_file(force=True)
+
+            if idx == 6:
+                for option in options_disclaimer:
                     if not config.has_option(section, option):
                         setup_config_file(force=True)
 
