@@ -294,8 +294,8 @@ version.""")
                 logger.info(f"Downloading additional asset: icon")
 
                 if not os.path.exists(os.path.join(destination_path_final, "Logo.png")):
-                    img = BaseCore().fetch(
-                        "https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/android_app_icon.png?raw=true", get_response=True)
+                    img = httpx.get(
+                        "https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/android_app_icon.png?raw=true")
                     if not img.status_code == 200:
                         ui_popup("Couldn't download the Porn Fetch logo. Installation will still be successfully, but please"
                             "report this error on GitHub. Thank you.")
@@ -397,9 +397,17 @@ class InternetCheck(QRunnable):
                     if not website == "https://www.missav.ws": # Could get taken down, so yeah ;)
                         self.website_results.update({website: "Failed, website doesn't exist? Please report this error"})
 
+                elif status.status_code == 403 and website == "https://www.missav.ws":
+                    ui_popup("""
+Warning! The website https://missav.ws returned a 403 (Forbidden) request. This may indicate that it has blocked you.
+This is a current issue that will be fixed in the next release. If you don't use missav or downloading works fine,
+you can ignore this error.
+""")
+
             except Exception:
-                error = traceback.format_exc()
-                self.signals.error_signal.emit(error)
+                if not website == "https://www.missav.ws":
+                    error = traceback.format_exc()
+                    self.signals.error_signal.emit(error)
 
         self.signals.internet_check.emit(self.website_results)
 
