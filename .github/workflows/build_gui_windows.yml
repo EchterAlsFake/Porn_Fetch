@@ -42,4 +42,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: pyside6-application-windows-x64
-          path: "deploy\Porn Fetch.exe"
+          path: "deploy\\Porn Fetch.exe"

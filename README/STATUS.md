@@ -97,3 +97,5 @@
 - [] Fix and improve the CLI
 - [] Implement transition animations for the Stacked Widget
 - [] Splash screen loading animation? (maybe idk yet)
+- [] Upgrade Python version from 3.11 -> 3.13
+- [] Fix tools section layout

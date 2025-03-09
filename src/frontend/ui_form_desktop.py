@@ -510,7 +510,7 @@ class Ui_PornFetch_Desktop(object):
         self.progress_scrollarea.setWidgetResizable(True)
         self.progress_scrollarea_widgedcontents = QWidget()
         self.progress_scrollarea_widgedcontents.setObjectName(u"progress_scrollarea_widgedcontents")
-        self.progress_scrollarea_widgedcontents.setGeometry(QRect(0, 0, 1584, 298))
+        self.progress_scrollarea_widgedcontents.setGeometry(QRect(0, 0, 1584, 300))
         self.gridLayout_18 = QGridLayout(self.progress_scrollarea_widgedcontents)
         self.gridLayout_18.setObjectName(u"gridLayout_18")
         self.progress_gridlayout_progressbar = QGridLayout()
@@ -649,92 +649,107 @@ class Ui_PornFetch_Desktop(object):
         sizePolicy9.setHeightForWidth(self.page_tools.sizePolicy().hasHeightForWidth())
         self.page_tools.setSizePolicy(sizePolicy9)
         self.page_tools.setMinimumSize(QSize(100, 30))
-        self.gridLayout_29 = QGridLayout(self.page_tools)
-        self.gridLayout_29.setObjectName(u"gridLayout_29")
-        self.tools_gridlayout_tools = QGridLayout()
-        self.tools_gridlayout_tools.setSpacing(6)
-        self.tools_gridlayout_tools.setObjectName(u"tools_gridlayout_tools")
-        self.tools_gridlayout_tools.setContentsMargins(-1, 0, -1, -1)
-        self.tools_button_get_brazzers_videos = QPushButton(self.page_tools)
-        self.tools_button_get_brazzers_videos.setObjectName(u"tools_button_get_brazzers_videos")
-        sizePolicy10 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        self.gridLayout_17 = QGridLayout(self.page_tools)
+        self.gridLayout_17.setObjectName(u"gridLayout_17")
+        self.verticalLayout_2 = QVBoxLayout()
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.groupBox = QGroupBox(self.page_tools)
+        self.groupBox.setObjectName(u"groupBox")
+        self.gridLayout_15 = QGridLayout(self.groupBox)
+        self.gridLayout_15.setSpacing(0)
+        self.gridLayout_15.setObjectName(u"gridLayout_15")
+        self.gridLayout_15.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_3 = QGridLayout()
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.tools_radio_top_porn_week = QRadioButton(self.groupBox)
+        self.tools_radio_top_porn_week.setObjectName(u"tools_radio_top_porn_week")
+        sizePolicy10 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
         sizePolicy10.setHorizontalStretch(0)
         sizePolicy10.setVerticalStretch(0)
-        sizePolicy10.setHeightForWidth(self.tools_button_get_brazzers_videos.sizePolicy().hasHeightForWidth())
-        self.tools_button_get_brazzers_videos.setSizePolicy(sizePolicy10)
-        self.tools_button_get_brazzers_videos.setMinimumSize(QSize(0, 0))
-        self.tools_button_get_brazzers_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        sizePolicy10.setHeightForWidth(self.tools_radio_top_porn_week.sizePolicy().hasHeightForWidth())
+        self.tools_radio_top_porn_week.setSizePolicy(sizePolicy10)
+        self.tools_radio_top_porn_week.setMinimumSize(QSize(0, 0))
+        self.tools_radio_top_porn_week.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.tools_radio_top_porn_week.setChecked(True)
 
-        self.tools_gridlayout_tools.addWidget(self.tools_button_get_brazzers_videos, 3, 1, 1, 2)
+        self.gridLayout_3.addWidget(self.tools_radio_top_porn_week, 0, 1, 1, 1)
 
-        self.tools_radio_top_porn_month = QRadioButton(self.page_tools)
-        self.tools_radio_top_porn_month.setObjectName(u"tools_radio_top_porn_month")
+        self.tools_button_hqporner_category_get_videos = QPushButton(self.groupBox)
+        self.tools_button_hqporner_category_get_videos.setObjectName(u"tools_button_hqporner_category_get_videos")
         sizePolicy11 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
         sizePolicy11.setHorizontalStretch(0)
-        sizePolicy11.setVerticalStretch(0)
-        sizePolicy11.setHeightForWidth(self.tools_radio_top_porn_month.sizePolicy().hasHeightForWidth())
-        self.tools_radio_top_porn_month.setSizePolicy(sizePolicy11)
+        sizePolicy11.setVerticalStretch(2)
+        sizePolicy11.setHeightForWidth(self.tools_button_hqporner_category_get_videos.sizePolicy().hasHeightForWidth())
+        self.tools_button_hqporner_category_get_videos.setSizePolicy(sizePolicy11)
+        self.tools_button_hqporner_category_get_videos.setMinimumSize(QSize(0, 0))
+        self.tools_button_hqporner_category_get_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout_3.addWidget(self.tools_button_hqporner_category_get_videos, 1, 2, 1, 1)
+
+        self.tools_label_videos_by_category = QLabel(self.groupBox)
+        self.tools_label_videos_by_category.setObjectName(u"tools_label_videos_by_category")
+        sizePolicy12 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy12.setHorizontalStretch(0)
+        sizePolicy12.setVerticalStretch(0)
+        sizePolicy12.setHeightForWidth(self.tools_label_videos_by_category.sizePolicy().hasHeightForWidth())
+        self.tools_label_videos_by_category.setSizePolicy(sizePolicy12)
+        self.tools_label_videos_by_category.setMinimumSize(QSize(0, 0))
+
+        self.gridLayout_3.addWidget(self.tools_label_videos_by_category, 1, 0, 1, 1)
+
+        self.tools_label_get_top_porn = QLabel(self.groupBox)
+        self.tools_label_get_top_porn.setObjectName(u"tools_label_get_top_porn")
+        sizePolicy12.setHeightForWidth(self.tools_label_get_top_porn.sizePolicy().hasHeightForWidth())
+        self.tools_label_get_top_porn.setSizePolicy(sizePolicy12)
+        self.tools_label_get_top_porn.setMinimumSize(QSize(0, 0))
+
+        self.gridLayout_3.addWidget(self.tools_label_get_top_porn, 0, 0, 1, 1)
+
+        self.tools_radio_top_porn_month = QRadioButton(self.groupBox)
+        self.tools_radio_top_porn_month.setObjectName(u"tools_radio_top_porn_month")
+        sizePolicy10.setHeightForWidth(self.tools_radio_top_porn_month.sizePolicy().hasHeightForWidth())
+        self.tools_radio_top_porn_month.setSizePolicy(sizePolicy10)
         self.tools_radio_top_porn_month.setMinimumSize(QSize(0, 0))
         self.tools_radio_top_porn_month.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.tools_gridlayout_tools.addWidget(self.tools_radio_top_porn_month, 0, 2, 1, 1)
+        self.gridLayout_3.addWidget(self.tools_radio_top_porn_month, 0, 2, 1, 1)
 
-        self.tools_button_list_categories = QPushButton(self.page_tools)
-        self.tools_button_list_categories.setObjectName(u"tools_button_list_categories")
-        sizePolicy11.setHeightForWidth(self.tools_button_list_categories.sizePolicy().hasHeightForWidth())
-        self.tools_button_list_categories.setSizePolicy(sizePolicy11)
-        self.tools_button_list_categories.setMinimumSize(QSize(0, 0))
-        self.tools_button_list_categories.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.tools_label_get_random_video = QLabel(self.groupBox)
+        self.tools_label_get_random_video.setObjectName(u"tools_label_get_random_video")
+        sizePolicy12.setHeightForWidth(self.tools_label_get_random_video.sizePolicy().hasHeightForWidth())
+        self.tools_label_get_random_video.setSizePolicy(sizePolicy12)
+        self.tools_label_get_random_video.setMinimumSize(QSize(0, 0))
 
-        self.tools_gridlayout_tools.addWidget(self.tools_button_list_categories, 1, 4, 1, 1)
+        self.gridLayout_3.addWidget(self.tools_label_get_random_video, 2, 0, 1, 1)
 
-        self.tools_button_eporner_category_get_videos = QPushButton(self.page_tools)
-        self.tools_button_eporner_category_get_videos.setObjectName(u"tools_button_eporner_category_get_videos")
-        sizePolicy12 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
-        sizePolicy12.setHorizontalStretch(0)
-        sizePolicy12.setVerticalStretch(2)
-        sizePolicy12.setHeightForWidth(self.tools_button_eporner_category_get_videos.sizePolicy().hasHeightForWidth())
-        self.tools_button_eporner_category_get_videos.setSizePolicy(sizePolicy12)
-        self.tools_button_eporner_category_get_videos.setMinimumSize(QSize(0, 0))
-        self.tools_button_eporner_category_get_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.tools_gridlayout_tools.addWidget(self.tools_button_eporner_category_get_videos, 4, 4, 1, 1)
-
-        self.tools_radio_top_porn_all_time = QRadioButton(self.page_tools)
+        self.tools_radio_top_porn_all_time = QRadioButton(self.groupBox)
         self.tools_radio_top_porn_all_time.setObjectName(u"tools_radio_top_porn_all_time")
-        sizePolicy11.setHeightForWidth(self.tools_radio_top_porn_all_time.sizePolicy().hasHeightForWidth())
-        self.tools_radio_top_porn_all_time.setSizePolicy(sizePolicy11)
+        sizePolicy10.setHeightForWidth(self.tools_radio_top_porn_all_time.sizePolicy().hasHeightForWidth())
+        self.tools_radio_top_porn_all_time.setSizePolicy(sizePolicy10)
         self.tools_radio_top_porn_all_time.setMinimumSize(QSize(0, 0))
         self.tools_radio_top_porn_all_time.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.tools_gridlayout_tools.addWidget(self.tools_radio_top_porn_all_time, 0, 3, 1, 1)
+        self.gridLayout_3.addWidget(self.tools_radio_top_porn_all_time, 0, 3, 1, 1)
 
-        self.tools_label_videos_by_category_eporner = QLabel(self.page_tools)
-        self.tools_label_videos_by_category_eporner.setObjectName(u"tools_label_videos_by_category_eporner")
-        sizePolicy10.setHeightForWidth(self.tools_label_videos_by_category_eporner.sizePolicy().hasHeightForWidth())
-        self.tools_label_videos_by_category_eporner.setSizePolicy(sizePolicy10)
-        self.tools_label_videos_by_category_eporner.setMinimumSize(QSize(100, 0))
+        self.tools_button_list_categories = QPushButton(self.groupBox)
+        self.tools_button_list_categories.setObjectName(u"tools_button_list_categories")
+        sizePolicy10.setHeightForWidth(self.tools_button_list_categories.sizePolicy().hasHeightForWidth())
+        self.tools_button_list_categories.setSizePolicy(sizePolicy10)
+        self.tools_button_list_categories.setMinimumSize(QSize(0, 0))
+        self.tools_button_list_categories.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.tools_gridlayout_tools.addWidget(self.tools_label_videos_by_category_eporner, 4, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.tools_button_list_categories, 1, 3, 1, 1)
 
-        self.tools_button_list_categories_eporner = QPushButton(self.page_tools)
-        self.tools_button_list_categories_eporner.setObjectName(u"tools_button_list_categories_eporner")
-        sizePolicy11.setHeightForWidth(self.tools_button_list_categories_eporner.sizePolicy().hasHeightForWidth())
-        self.tools_button_list_categories_eporner.setSizePolicy(sizePolicy11)
-        self.tools_button_list_categories_eporner.setMinimumSize(QSize(0, 0))
-        self.tools_button_list_categories_eporner.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.tools_button_get_random_videos = QPushButton(self.groupBox)
+        self.tools_button_get_random_videos.setObjectName(u"tools_button_get_random_videos")
+        sizePolicy12.setHeightForWidth(self.tools_button_get_random_videos.sizePolicy().hasHeightForWidth())
+        self.tools_button_get_random_videos.setSizePolicy(sizePolicy12)
+        self.tools_button_get_random_videos.setMinimumSize(QSize(0, 0))
+        self.tools_button_get_random_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.tools_gridlayout_tools.addWidget(self.tools_button_list_categories_eporner, 4, 3, 1, 1)
+        self.gridLayout_3.addWidget(self.tools_button_get_random_videos, 2, 1, 1, 1)
 
-        self.tools_label_videos_by_category = QLabel(self.page_tools)
-        self.tools_label_videos_by_category.setObjectName(u"tools_label_videos_by_category")
-        sizePolicy10.setHeightForWidth(self.tools_label_videos_by_category.sizePolicy().hasHeightForWidth())
-        self.tools_label_videos_by_category.setSizePolicy(sizePolicy10)
-        self.tools_label_videos_by_category.setMinimumSize(QSize(0, 0))
-
-        self.tools_gridlayout_tools.addWidget(self.tools_label_videos_by_category, 1, 0, 1, 1)
-
-        self.tools_lineedit_hqporner_category = QLineEdit(self.page_tools)
+        self.tools_lineedit_hqporner_category = QLineEdit(self.groupBox)
         self.tools_lineedit_hqporner_category.setObjectName(u"tools_lineedit_hqporner_category")
         sizePolicy13 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         sizePolicy13.setHorizontalStretch(0)
@@ -743,19 +758,51 @@ class Ui_PornFetch_Desktop(object):
         self.tools_lineedit_hqporner_category.setSizePolicy(sizePolicy13)
         self.tools_lineedit_hqporner_category.setMinimumSize(QSize(100, 0))
 
-        self.tools_gridlayout_tools.addWidget(self.tools_lineedit_hqporner_category, 1, 1, 1, 2)
+        self.gridLayout_3.addWidget(self.tools_lineedit_hqporner_category, 1, 1, 1, 1)
 
-        self.tools_radio_top_porn_week = QRadioButton(self.page_tools)
-        self.tools_radio_top_porn_week.setObjectName(u"tools_radio_top_porn_week")
-        sizePolicy11.setHeightForWidth(self.tools_radio_top_porn_week.sizePolicy().hasHeightForWidth())
-        self.tools_radio_top_porn_week.setSizePolicy(sizePolicy11)
-        self.tools_radio_top_porn_week.setMinimumSize(QSize(0, 0))
-        self.tools_radio_top_porn_week.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.tools_radio_top_porn_week.setChecked(True)
+        self.tools_button_top_porn_get_videos = QPushButton(self.groupBox)
+        self.tools_button_top_porn_get_videos.setObjectName(u"tools_button_top_porn_get_videos")
+        sizePolicy10.setHeightForWidth(self.tools_button_top_porn_get_videos.sizePolicy().hasHeightForWidth())
+        self.tools_button_top_porn_get_videos.setSizePolicy(sizePolicy10)
+        self.tools_button_top_porn_get_videos.setMinimumSize(QSize(0, 0))
+        self.tools_button_top_porn_get_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.tools_gridlayout_tools.addWidget(self.tools_radio_top_porn_week, 0, 1, 1, 1)
+        self.gridLayout_3.addWidget(self.tools_button_top_porn_get_videos, 0, 4, 1, 1)
 
-        self.tools_lineedit_videos_by_category_eporner = QLineEdit(self.page_tools)
+        self.tools_label_get_brazzers_videos = QLabel(self.groupBox)
+        self.tools_label_get_brazzers_videos.setObjectName(u"tools_label_get_brazzers_videos")
+        sizePolicy12.setHeightForWidth(self.tools_label_get_brazzers_videos.sizePolicy().hasHeightForWidth())
+        self.tools_label_get_brazzers_videos.setSizePolicy(sizePolicy12)
+        self.tools_label_get_brazzers_videos.setMinimumSize(QSize(0, 0))
+
+        self.gridLayout_3.addWidget(self.tools_label_get_brazzers_videos, 3, 0, 1, 1)
+
+        self.tools_button_get_brazzers_videos = QPushButton(self.groupBox)
+        self.tools_button_get_brazzers_videos.setObjectName(u"tools_button_get_brazzers_videos")
+        sizePolicy12.setHeightForWidth(self.tools_button_get_brazzers_videos.sizePolicy().hasHeightForWidth())
+        self.tools_button_get_brazzers_videos.setSizePolicy(sizePolicy12)
+        self.tools_button_get_brazzers_videos.setMinimumSize(QSize(0, 0))
+        self.tools_button_get_brazzers_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout_3.addWidget(self.tools_button_get_brazzers_videos, 3, 1, 1, 1)
+
+
+        self.gridLayout_15.addLayout(self.gridLayout_3, 0, 0, 1, 1)
+
+
+        self.verticalLayout_2.addWidget(self.groupBox)
+
+        self.groupBox_2 = QGroupBox(self.page_tools)
+        self.groupBox_2.setObjectName(u"groupBox_2")
+        self.gridLayout_16 = QGridLayout(self.groupBox_2)
+        self.gridLayout_16.setSpacing(0)
+        self.gridLayout_16.setObjectName(u"gridLayout_16")
+        self.gridLayout_16.setContentsMargins(0, 0, 0, 0)
+        self.tools_gridlayout_tools = QGridLayout()
+        self.tools_gridlayout_tools.setSpacing(6)
+        self.tools_gridlayout_tools.setObjectName(u"tools_gridlayout_tools")
+        self.tools_gridlayout_tools.setContentsMargins(-1, 0, -1, -1)
+        self.tools_lineedit_videos_by_category_eporner = QLineEdit(self.groupBox_2)
         self.tools_lineedit_videos_by_category_eporner.setObjectName(u"tools_lineedit_videos_by_category_eporner")
         sizePolicy13.setHeightForWidth(self.tools_lineedit_videos_by_category_eporner.sizePolicy().hasHeightForWidth())
         self.tools_lineedit_videos_by_category_eporner.setSizePolicy(sizePolicy13)
@@ -763,63 +810,44 @@ class Ui_PornFetch_Desktop(object):
 
         self.tools_gridlayout_tools.addWidget(self.tools_lineedit_videos_by_category_eporner, 4, 1, 1, 2)
 
-        self.tools_button_hqporner_category_get_videos = QPushButton(self.page_tools)
-        self.tools_button_hqporner_category_get_videos.setObjectName(u"tools_button_hqporner_category_get_videos")
-        sizePolicy12.setHeightForWidth(self.tools_button_hqporner_category_get_videos.sizePolicy().hasHeightForWidth())
-        self.tools_button_hqporner_category_get_videos.setSizePolicy(sizePolicy12)
-        self.tools_button_hqporner_category_get_videos.setMinimumSize(QSize(0, 0))
-        self.tools_button_hqporner_category_get_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.tools_button_eporner_category_get_videos = QPushButton(self.groupBox_2)
+        self.tools_button_eporner_category_get_videos.setObjectName(u"tools_button_eporner_category_get_videos")
+        sizePolicy11.setHeightForWidth(self.tools_button_eporner_category_get_videos.sizePolicy().hasHeightForWidth())
+        self.tools_button_eporner_category_get_videos.setSizePolicy(sizePolicy11)
+        self.tools_button_eporner_category_get_videos.setMinimumSize(QSize(0, 0))
+        self.tools_button_eporner_category_get_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.tools_gridlayout_tools.addWidget(self.tools_button_hqporner_category_get_videos, 1, 3, 1, 1)
+        self.tools_gridlayout_tools.addWidget(self.tools_button_eporner_category_get_videos, 4, 4, 1, 1)
 
-        self.tools_label_get_random_video = QLabel(self.page_tools)
-        self.tools_label_get_random_video.setObjectName(u"tools_label_get_random_video")
-        sizePolicy10.setHeightForWidth(self.tools_label_get_random_video.sizePolicy().hasHeightForWidth())
-        self.tools_label_get_random_video.setSizePolicy(sizePolicy10)
-        self.tools_label_get_random_video.setMinimumSize(QSize(0, 0))
+        self.tools_label_videos_by_category_eporner = QLabel(self.groupBox_2)
+        self.tools_label_videos_by_category_eporner.setObjectName(u"tools_label_videos_by_category_eporner")
+        sizePolicy12.setHeightForWidth(self.tools_label_videos_by_category_eporner.sizePolicy().hasHeightForWidth())
+        self.tools_label_videos_by_category_eporner.setSizePolicy(sizePolicy12)
+        self.tools_label_videos_by_category_eporner.setMinimumSize(QSize(100, 0))
 
-        self.tools_gridlayout_tools.addWidget(self.tools_label_get_random_video, 2, 0, 1, 1)
+        self.tools_gridlayout_tools.addWidget(self.tools_label_videos_by_category_eporner, 4, 0, 1, 1)
 
-        self.tools_button_top_porn_get_videos = QPushButton(self.page_tools)
-        self.tools_button_top_porn_get_videos.setObjectName(u"tools_button_top_porn_get_videos")
-        sizePolicy11.setHeightForWidth(self.tools_button_top_porn_get_videos.sizePolicy().hasHeightForWidth())
-        self.tools_button_top_porn_get_videos.setSizePolicy(sizePolicy11)
-        self.tools_button_top_porn_get_videos.setMinimumSize(QSize(0, 0))
-        self.tools_button_top_porn_get_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.tools_button_list_categories_eporner = QPushButton(self.groupBox_2)
+        self.tools_button_list_categories_eporner.setObjectName(u"tools_button_list_categories_eporner")
+        sizePolicy10.setHeightForWidth(self.tools_button_list_categories_eporner.sizePolicy().hasHeightForWidth())
+        self.tools_button_list_categories_eporner.setSizePolicy(sizePolicy10)
+        self.tools_button_list_categories_eporner.setMinimumSize(QSize(0, 0))
+        self.tools_button_list_categories_eporner.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.tools_gridlayout_tools.addWidget(self.tools_button_top_porn_get_videos, 0, 4, 1, 1)
-
-        self.tools_label_get_brazzers_videos = QLabel(self.page_tools)
-        self.tools_label_get_brazzers_videos.setObjectName(u"tools_label_get_brazzers_videos")
-        sizePolicy10.setHeightForWidth(self.tools_label_get_brazzers_videos.sizePolicy().hasHeightForWidth())
-        self.tools_label_get_brazzers_videos.setSizePolicy(sizePolicy10)
-        self.tools_label_get_brazzers_videos.setMinimumSize(QSize(0, 0))
-
-        self.tools_gridlayout_tools.addWidget(self.tools_label_get_brazzers_videos, 3, 0, 1, 1)
-
-        self.tools_label_get_top_porn = QLabel(self.page_tools)
-        self.tools_label_get_top_porn.setObjectName(u"tools_label_get_top_porn")
-        sizePolicy10.setHeightForWidth(self.tools_label_get_top_porn.sizePolicy().hasHeightForWidth())
-        self.tools_label_get_top_porn.setSizePolicy(sizePolicy10)
-        self.tools_label_get_top_porn.setMinimumSize(QSize(0, 0))
-
-        self.tools_gridlayout_tools.addWidget(self.tools_label_get_top_porn, 0, 0, 1, 1)
-
-        self.tools_button_get_random_videos = QPushButton(self.page_tools)
-        self.tools_button_get_random_videos.setObjectName(u"tools_button_get_random_videos")
-        sizePolicy10.setHeightForWidth(self.tools_button_get_random_videos.sizePolicy().hasHeightForWidth())
-        self.tools_button_get_random_videos.setSizePolicy(sizePolicy10)
-        self.tools_button_get_random_videos.setMinimumSize(QSize(0, 0))
-        self.tools_button_get_random_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.tools_gridlayout_tools.addWidget(self.tools_button_get_random_videos, 2, 1, 1, 2)
+        self.tools_gridlayout_tools.addWidget(self.tools_button_list_categories_eporner, 4, 3, 1, 1)
 
 
-        self.gridLayout_29.addLayout(self.tools_gridlayout_tools, 0, 0, 1, 1)
+        self.gridLayout_16.addLayout(self.tools_gridlayout_tools, 0, 0, 1, 1)
+
+
+        self.verticalLayout_2.addWidget(self.groupBox_2)
+
+
+        self.gridLayout_17.addLayout(self.verticalLayout_2, 0, 1, 1, 1)
 
         self.tools_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.gridLayout_29.addItem(self.tools_vertical_spacer, 1, 0, 1, 1)
+        self.gridLayout_17.addItem(self.tools_vertical_spacer, 1, 1, 1, 1)
 
         self.main_stacked_widget_top.addWidget(self.page_tools)
 
@@ -832,7 +860,7 @@ class Ui_PornFetch_Desktop(object):
         self.main_scrollarea_treewidget.setWidgetResizable(True)
         self.main_scrollarea_treewidget_content = QWidget()
         self.main_scrollarea_treewidget_content.setObjectName(u"main_scrollarea_treewidget_content")
-        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 1582, 369))
+        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 1582, 371))
         self.gridLayout_4 = QGridLayout(self.main_scrollarea_treewidget_content)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.gridLayout_4.setContentsMargins(0, 0, 0, 0)
@@ -944,7 +972,7 @@ class Ui_PornFetch_Desktop(object):
         self.settings_scrollarea.setWidgetResizable(True)
         self.settings_scrollarea_widget_contents = QWidget()
         self.settings_scrollarea_widget_contents.setObjectName(u"settings_scrollarea_widget_contents")
-        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 746, 895))
+        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 844, 921))
         self.gridLayout_19 = QGridLayout(self.settings_scrollarea_widget_contents)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.settings_scrollarea_gridlayout = QGridLayout()
@@ -1528,14 +1556,7 @@ class Ui_PornFetch_Desktop(object):
         QWidget.setTabOrder(self.login_button_get_liked_videos, self.login_button_get_watched_videos)
         QWidget.setTabOrder(self.login_button_get_watched_videos, self.login_button_get_recommended_videos)
         QWidget.setTabOrder(self.login_button_get_recommended_videos, self.progress_scrollarea)
-        QWidget.setTabOrder(self.progress_scrollarea, self.tools_radio_top_porn_week)
-        QWidget.setTabOrder(self.tools_radio_top_porn_week, self.tools_radio_top_porn_month)
-        QWidget.setTabOrder(self.tools_radio_top_porn_month, self.tools_radio_top_porn_all_time)
-        QWidget.setTabOrder(self.tools_radio_top_porn_all_time, self.tools_button_top_porn_get_videos)
-        QWidget.setTabOrder(self.tools_button_top_porn_get_videos, self.tools_lineedit_hqporner_category)
-        QWidget.setTabOrder(self.tools_lineedit_hqporner_category, self.tools_button_hqporner_category_get_videos)
-        QWidget.setTabOrder(self.tools_button_hqporner_category_get_videos, self.tools_button_list_categories)
-        QWidget.setTabOrder(self.tools_button_list_categories, self.settings_radio_threading_mode_high_performance)
+        QWidget.setTabOrder(self.progress_scrollarea, self.settings_radio_threading_mode_high_performance)
         QWidget.setTabOrder(self.settings_radio_threading_mode_high_performance, self.settings_radio_threading_mode_ffmpeg)
         QWidget.setTabOrder(self.settings_radio_threading_mode_ffmpeg, self.settings_radio_threading_mode_default)
         QWidget.setTabOrder(self.settings_radio_threading_mode_default, self.settings_button_threading_mode_help)
@@ -1557,7 +1578,7 @@ class Ui_PornFetch_Desktop(object):
         self.retranslateUi(PornFetch_Desktop)
 
         self.main_stacked_widget_main.setCurrentIndex(0)
-        self.main_stacked_widget_top.setCurrentIndex(2)
+        self.main_stacked_widget_top.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(PornFetch_Desktop)
@@ -1614,21 +1635,23 @@ class Ui_PornFetch_Desktop(object):
         self.progress_lineedit_download_info.setText("")
         self.progress_label_xnxx.setText(QCoreApplication.translate("PornFetch_Desktop", u"XNXX:", None))
         self.progress_label_xhamster.setText(QCoreApplication.translate("PornFetch_Desktop", u"XHamster", None))
-        self.tools_button_get_brazzers_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get Videos", None))
-        self.tools_radio_top_porn_month.setText(QCoreApplication.translate("PornFetch_Desktop", u"Month", None))
-        self.tools_button_list_categories.setText(QCoreApplication.translate("PornFetch_Desktop", u"List of all categories", None))
-        self.tools_button_eporner_category_get_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get Videos", None))
-        self.tools_radio_top_porn_all_time.setText(QCoreApplication.translate("PornFetch_Desktop", u"All Time", None))
-        self.tools_label_videos_by_category_eporner.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get videos by category", None))
-        self.tools_button_list_categories_eporner.setText(QCoreApplication.translate("PornFetch_Desktop", u"List of all categories", None))
-        self.tools_label_videos_by_category.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get videos by category", None))
+        self.groupBox.setTitle(QCoreApplication.translate("PornFetch_Desktop", u"HQPorner", None))
         self.tools_radio_top_porn_week.setText(QCoreApplication.translate("PornFetch_Desktop", u"Week", None))
         self.tools_button_hqporner_category_get_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get Videos", None))
+        self.tools_label_videos_by_category.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get videos by category", None))
+        self.tools_label_get_top_porn.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get Top Porn:", None))
+        self.tools_radio_top_porn_month.setText(QCoreApplication.translate("PornFetch_Desktop", u"Month", None))
         self.tools_label_get_random_video.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get random video", None))
+        self.tools_radio_top_porn_all_time.setText(QCoreApplication.translate("PornFetch_Desktop", u"All Time", None))
+        self.tools_button_list_categories.setText(QCoreApplication.translate("PornFetch_Desktop", u"List of all categories", None))
+        self.tools_button_get_random_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get Video", None))
         self.tools_button_top_porn_get_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get Videos", None))
         self.tools_label_get_brazzers_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get Brazzers videos", None))
-        self.tools_label_get_top_porn.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get Top Porn:", None))
-        self.tools_button_get_random_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get Video", None))
+        self.tools_button_get_brazzers_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get Videos", None))
+        self.groupBox_2.setTitle(QCoreApplication.translate("PornFetch_Desktop", u"EPorner", None))
+        self.tools_button_eporner_category_get_videos.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get Videos", None))
+        self.tools_label_videos_by_category_eporner.setText(QCoreApplication.translate("PornFetch_Desktop", u"Get videos by category", None))
+        self.tools_button_list_categories_eporner.setText(QCoreApplication.translate("PornFetch_Desktop", u"List of all categories", None))
         ___qtreewidgetitem = self.treeWidget.headerItem()
         ___qtreewidgetitem.setText(2, QCoreApplication.translate("PornFetch_Desktop", u"Duration (minutes)", None));
         ___qtreewidgetitem.setText(1, QCoreApplication.translate("PornFetch_Desktop", u"Author", None));
@@ -1709,54 +1732,57 @@ class Ui_PornFetch_Desktop(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Supported Websites:</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Downloading:</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px;"
-                        " margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com (supports total progress)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Eporner.com</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XNXX.com (supports total progress)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XVideos.com (supports total progress)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Missav.ws (and all of"
-                        " it's subsites, supports total progress)</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Xhamster.com<br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">All sites support *threaded* downloads and selectable quality!</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">* hqporner and eporner running in QThreads, but they don't fetch segments. The video is directly</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">downloaded, therefore threading in a segment isn't needed.</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin"
-                        "-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Model / Channel Downloads</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- EPorner.com</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XNXX.com</p>\n"
-"<p style=\" margin-top:0px; margin-bo"
-                        "ttom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XVideos.com</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Searching:</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- PornHub.com</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- HQPorner.com</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Xvideos.com</p>\n"
-"<p style=\" margin-top:0px;"
-                        " margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Eporner.com</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- XNXX.com</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I am constantly working to support more websites.</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">If you want a specific site to be supported, just ask:<br /><br />Discord: echteralsfake</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">GitHub.com/echteralsfake/Porn_Fetch/issues</p>\n"
-"<p style=\"-qt-paragraph-type:empty; ma"
-                        "rgin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
+"</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Supported Websites:</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+                        "indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Downloading:</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- PornHub.com (supports total progress)</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- HQPorner.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- Eporner.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-r"
+                        "ight:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- XNXX.com (supports total progress)</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- XVideos.com (supports total progress)</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- Missav.ws (and all of it's subsites, supports total progress)</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- Xhamster.com<br /></span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif"
+                        "'; font-size:9pt;\">All sites support *threaded* downloads and selectable quality!</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">* hqporner and eporner running in QThreads, but they don't fetch segments. The video is directly</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">downloaded, therefore threading in a segment isn't needed.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9"
+                        "pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Model / Channel Downloads</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- PornHub.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- HQPorner.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; fon"
+                        "t-size:9pt;\">- EPorner.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- XNXX.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- XVideos.com</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Searching:</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans "
+                        "Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- PornHub.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- HQPorner.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- Xvideos.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">- Eporner.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'San"
+                        "s Serif'; font-size:9pt;\">- XNXX.com</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">I am constantly working to support more websites.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">If you want a specific site to be supported, just ask:<br /><br />Discord: echteralsfake</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">GitHub.com/echteralsfake/Porn_Fetch/issues</span></p>\n"
+"<p sty"
+                        "le=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\"-qt-paragr"
+                        "aph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p></body></html>", None))
         self.main_label_progressbar_total.setText(QCoreApplication.translate("PornFetch_Desktop", u"Total:", None))
         self.main_label_progressbar_converting.setText(QCoreApplication.translate("PornFetch_Desktop", u"Converting:", None))
     # retranslateUi

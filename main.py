@@ -1378,6 +1378,7 @@ class PornFetch(QWidget):
         self.ui.settings_button_reset.setStyleSheet(stylesheets["button_reset"])
         self.ui.download_button_playlist_get_videos.setStyleSheet(stylesheets["button_purple"])
         self.ui.main_button_tree_stop.setStyleSheet(stylesheets["button_reset"])
+        self.ui.tools_button_eporner_category_get_videos.setStyleSheet(stylesheets["button_purple"])
 
         self.ui.settings_button_timeout_maximal_retries_help.setStyleSheet(stylesheets["button_green"])
         self.ui.download_button_help_file.setStyleSheet(stylesheets["button_green"])
