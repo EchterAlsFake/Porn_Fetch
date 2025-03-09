@@ -261,7 +261,7 @@ class InstallThread(QRunnable):
                 shortcut_path = os.path.join(destination_install, "pornfetch.desktop")
 
                 if not os.path.exists(destination_path_tmp):
-                    ui_popup(QCoreApplication.translate(context="main", key="""The path ~/.local/share/ does not exist. This path is typically used for installing applications and their settings
+                    '''ui_popup(QCoreApplication.translate(context="main", key="""The path ~/.local/share/ does not exist. This path is typically used for installing applications and their settings
 in a users local account. Since you don't have that, you can't install it. Probably because your Linux does not follow
 the XDG Desktop Portal specifications. It's your own decision and I don't create the directory for you, or force you to
 do that. If you still wish to install Porn Fetch, look Online how to setup XDK-Desktop-Portal on your Linux distribution,
@@ -270,14 +270,15 @@ using the portable version, which will work just fine.
 
 If you believe, that this is a mistake, please report it on GitHub, so that I can fix it :)""", disambiguation=None))
                     return
-
+'''
                 try:
                     os.makedirs(destination_path_final, exist_ok=True)
 
                 except PermissionError:
-                    ui_popup("""You do not have permissions to create the folder 'pornfetch' inside {destination_path_tmp}!
+                    '''ui_popup("""You do not have permissions to create the folder 'pornfetch' inside {destination_path_tmp}!
 The installation process will stop now. You can either run Porn Fetch with elevated privileges, or use the portable
-version.""")
+version.""")'''
+                    print("Permission error")
                     return
 
                 pornfetch_exe = os.path.join(destination_path_final, filename)
@@ -286,24 +287,18 @@ version.""")
 
                 shutil.move("PornFetch_Linux_GUI_x64.bin", dst=destination_path_final)
                 logger.info(f"Moved the PornFetch binary to: {destination_path_final}")
-
-                if not os.path.exists(os.path.join(destination_path_final, "config.ini")):
-                    shutil.move("config.ini", dst=destination_path_final)
-                    logger.info("Moved configuration file")
-
+                shutil.move("config.ini", dst=destination_path_final)
+                logger.info("Moved configuration file")
                 logger.info(f"Downloading additional asset: icon")
 
                 if not os.path.exists(os.path.join(destination_path_final, "Logo.png")):
-                    img = httpx.get(
-                        "https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/android_app_icon.png?raw=true")
-                    if not img.status_code == 200:
-                        ui_popup("Couldn't download the Porn Fetch logo. Installation will still be successfully, but please"
-                            "report this error on GitHub. Thank you.")
-
-                    elif img.status_code == 200:
-                        with open("Logo.png", "wb") as logo:
-                            logo.write(img.content)
-                            shutil.move("Logo.png", dst=destination_path_final)
+                    print("Trying to download image")
+                    img = httpx.get("https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/refs/heads/master/src/frontend/graphics/android_app_icon.png")
+                    print(f"Got image status code: {img.status_code}")
+                    print("Trying to save icon")
+                    with open("Logo.png", "wb") as logo:
+                        logo.write(img.content)
+                        shutil.move("Logo.png", dst=destination_path_final)
 
                 entry_content = f"""[Desktop Entry]
 Name={self.app_name}
@@ -312,7 +307,6 @@ Icon={destination_path_final}Logo.png
 Type=Application
 Terminal=false
 Categories=Utility;"""
-
                 if os.path.exists(shortcut_path):
                     os.remove(shortcut_path)
 
@@ -320,7 +314,6 @@ Categories=Utility;"""
                     entry_file.write(entry_content)
 
                 shutil.move("pornfetch.desktop", shortcut_path)
-
                 logger.info("Successfully installed Porn Fetch!")
                 os.chmod(mode=0o755,
                          path=destination_path_final + "PornFetch_Linux_GUI_x64.bin")  # Setting executable permission
@@ -1075,9 +1068,6 @@ class PornFetch(QWidget):
 
             if start_installation:
                 self.install_pornfetch()
-                ui_popup("Porn Fetch has been installed. The app will now close! Please start Porn Fetch from"
-                         "your context menu again.")
-
                 self.close()
 
             self.default_max_height = self.ui.main_stacked_widget_top.maximumHeight()
@@ -1133,7 +1123,10 @@ class PornFetch(QWidget):
 
     def install_pornfetch_result(self, result):
         if result[0]:
-            ui_popup(self.tr("Porn Fetch installation successful!", disambiguation=None))
+            ui_popup("Porn Fetch has been installed. The app will now close! Please start Porn Fetch from"
+                     " your context menu again.")
+
+            self.close()
 
         else:
             ui_popup(self.tr(f"Porn Fetch installation failed, because of: {result[1]}", disambiguation=None))
