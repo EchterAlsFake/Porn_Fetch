@@ -24,9 +24,12 @@
 </div>
 
 # about 3.5
-- because life sucks and I have to do so much useless shit for school I won't be able to release the new version in the next 5 days. I've scheduled release for next saturday / sunday lmao
+So I finally found my motivation for coding again. I'll start the rework pt.2 for the Networking
+part of Porn Fetch and its sub APIs now, so that everything is entirely stable.
 
-  Edit: When this week is done (3-7 march) I'll finally be able to do shit again -_-
+You can expect the release of Porn Fetch on 15/16th of March.
+
+
 > [!WARNING]
 > Porn Fetch is NOT associated with the websites. Porn Fetch is AGAINST the Terms of Services of EVERY website! Usage is on YOUR risk.
 
