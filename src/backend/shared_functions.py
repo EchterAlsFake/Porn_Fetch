@@ -52,10 +52,12 @@ def refresh_clients():
     import xhamster_api
     import missav_api
 
-    hqporner_api.api.refresh_core()
-    xnxx_api.xnxx_api.refresh_core()
-    eporner_api.refresh_core()
-    xvideos_api.xvideos_api.refresh_core()
+    hqporner_api.api.refresh_core(enable_logging=True, log_file="hqporner_api.log", level=logging.DEBUG)
+    xnxx_api.xnxx_api.refresh_core(enable_logging=True, log_file="xnxx_api.log", level=logging.DEBUG)
+    eporner_api.refresh_core(enable_logging=True, log_file="eporner_api.log", log_level=logging.DEBUG)
+    xvideos_api.xvideos_api.refresh_core(enable_logging=True, log_file="xvideos_api.log", level=logging.DEBUG)
+    missav_api.missav_api.refresh_core(enable_logging=True, log_file="missav_api.log", level=logging.DEBUG)
+    xhamster_api.xhamster_api.refresh_core(enable_logging=True, log_file="xhamster_api.log", level=logging.DEBUG)
 
     # Reinitialize all clients so they get a fresh BaseCore instance
     hq_client = hqporner_api.Client()
@@ -64,6 +66,11 @@ def refresh_clients():
     xv_client = xvideos_api.Client()
     xh_client = xhamster_api.Client()
     mv_client = missav_api.Client()
+
+    hq_client.enable_logging(log_file="hqporner_api.log", level=logging.DEBUG)
+    ep_client.enable_logging(log_file="eporner_api.log", level=logging.DEBUG)
+    xv_client.enable_logging(log_file="xvideos_api.log", level=logging.DEBUG)
+
     client = Client()
     client.reset()
     logger.info(f"Initialized new sessions with Proxy value: {bs_consts.PROXY} | {phub_consts.PROXY}")

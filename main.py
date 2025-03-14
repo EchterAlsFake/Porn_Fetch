@@ -14,6 +14,7 @@ import src.frontend.resources  # Your IDE may tell you that this is an unused im
 from threading import Event
 from io import TextIOWrapper
 from itertools import islice, chain
+from base_api.base import setup_logger
 from hqporner_api.api import Sort as hq_Sort
 
 from src.backend.shared_gui import *
@@ -77,7 +78,7 @@ url_macOS = "https://evermeet.cx/ffmpeg/ffmpeg-7.1.zip"
 session_urls = []  # This list saves all URls used in the current session. Used for the URL export function
 total_downloaded_videos = 0 # All videos that actually successfully downloaded
 total_downloaded_videos_attempt = 0 # All videos the user tries to download
-logger = setup_logging()
+logger = setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG)
 logger.setLevel(logging.DEBUG)
 
 
@@ -153,6 +154,7 @@ class License(QWidget):
         self.conf.read("config.ini")
         self.android_startup = None
         self.install_widget = None
+        self.logger = setup_logger(name="Porn Fetch - [License]", log_file="PornFetch.log", level=logging.DEBUG)
 
         # Set up the UI for License widget
         self.ui = Ui_SetupLicense()
@@ -168,12 +170,14 @@ class License(QWidget):
             self.show() # License not accepted, show the license widget
 
     def accept(self):
+        self.logger.info("License was accepted, continuing...")
         self.conf.set("Setup", "license_accepted", "true")
         with open("config.ini", "w") as config_file: # type: TextIOWrapper
             self.conf.write(config_file)
         self.show_android_startup_or_main()
 
     def denied(self):
+        self.logger.warning("License was denied, exiting...")
         self.conf.set("Setup", "license_accepted", "false")
         with open("config.ini", "w") as config_file:  #type: TextIOWrapper
             self.conf.write(config_file)
@@ -198,6 +202,7 @@ class License(QWidget):
             return
 
         if self.conf["Setup"]["install"] == "unknown":
+            self.logger.debug("Showing installation dialog, because install type is unknown yet")
             self.install_widget = InstallDialog()
             self.install_widget.show()
 
@@ -215,6 +220,7 @@ class InstallDialog(QWidget):
         self.conf = ConfigParser()
         self.conf.read("config.ini")
         self.main_widget = None
+        self.logger =  setup_logger(name="Porn Fetch - [InstallDialog]", log_file="PornFetch.log", level=logging.DEBUG)
 
         self.ui = Ui_SetupInstallDialog()
         self.ui.setupUi(self)
@@ -222,13 +228,14 @@ class InstallDialog(QWidget):
         self.ui.button_portable.clicked.connect(self.start)
 
     def start_install(self):
+        self.logger.debug("Starting installation...")
         self.conf.set("Setup", "install", "installed")
         with open("config.ini", "w") as config: #type: TextIOWrapper
             self.conf.write(config)
 
         self.close()
         app_name = self.ui.lineedit_custom_app_name.text() or "Porn Fetch"
-        logging.info(f"App Name: {app_name}")
+        self.logger.info(f"App Name: {app_name}")
 
         self.main_widget = PornFetch(start_installation=True, app_name=app_name)
         self.main_widget.show()
@@ -248,12 +255,14 @@ class InstallThread(QRunnable):
         super(InstallThread, self).__init__()
         self.app_name = app_name
         self.signals = Signals()
+        self.logger = setup_logger(name="Porn Fetch - [InstallThread]", log_file="PornFetch.log", level=logging.DEBUG)
 
     def run(self):
         try:
             self.signals.start_undefined_range.emit()
 
             if sys.platform == "linux":
+                self.logger.info("Running installation for Platform: Linux")
                 filename = "PornFetch_Linux_GUI_x64.bin"
                 destination_path_tmp = os.path.expanduser("~/.local/share/")
                 destination_path_final = os.path.expanduser("~/.local/share/pornfetch/")
@@ -261,6 +270,7 @@ class InstallThread(QRunnable):
                 shortcut_path = os.path.join(destination_install, "pornfetch.desktop")
 
                 if not os.path.exists(destination_path_tmp):
+                    self.logger.warning("The needed installation path doesn't exist?!")
                     '''ui_popup(QCoreApplication.translate(context="main", key="""The path ~/.local/share/ does not exist. This path is typically used for installing applications and their settings
 in a users local account. Since you don't have that, you can't install it. Probably because your Linux does not follow
 the XDG Desktop Portal specifications. It's your own decision and I don't create the directory for you, or force you to
@@ -286,18 +296,16 @@ version.""")'''
                     os.remove(pornfetch_exe)
 
                 shutil.move("PornFetch_Linux_GUI_x64.bin", dst=destination_path_final)
-                logger.info(f"Moved the PornFetch binary to: {destination_path_final}")
+                self.logger.info(f"Moved the PornFetch binary to: {destination_path_final}")
                 shutil.move("config.ini", dst=destination_path_final)
-                logger.info("Moved configuration file")
-                logger.info(f"Downloading additional asset: icon")
+                self.logger.info("Moved configuration file")
+                self.logger.info(f"Downloading additional asset: icon")
 
                 if not os.path.exists(os.path.join(destination_path_final, "Logo.png")):
-                    print("Trying to download image")
-                    img = httpx.get("https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/refs/heads/master/src/frontend/graphics/android_app_icon.png")
-                    print(f"Got image status code: {img.status_code}")
-                    print("Trying to save icon")
+                    img = BaseCore().fetch("https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/refs/heads/master/src/frontend/graphics/android_app_icon.png", get_bytes=True)
+                    self.logger.debug("Got Porn Fetch logo, saving...")
                     with open("Logo.png", "wb") as logo:
-                        logo.write(img.content)
+                        logo.write(img)
                         shutil.move("Logo.png", dst=destination_path_final)
 
                 entry_content = f"""[Desktop Entry]
@@ -314,7 +322,7 @@ Categories=Utility;"""
                     entry_file.write(entry_content)
 
                 shutil.move("pornfetch.desktop", shortcut_path)
-                logger.info("Successfully installed Porn Fetch!")
+                self.logger.info("Successfully installed Porn Fetch!")
                 os.chmod(mode=0o755,
                          path=destination_path_final + "PornFetch_Linux_GUI_x64.bin")  # Setting executable permission
 
@@ -324,12 +332,14 @@ Categories=Utility;"""
                 filename = "PornFetch_Windows_GUI_x64.exe"
                 target_dir = os.path.join(os.getenv("LOCALAPPDATA"), "pornfetch")
                 os.makedirs(target_dir, exist_ok=True)
-
+                self.logger.info(f"Created path at: {target_dir}")
                 if os.path.exists(os.path.join(target_dir, filename)):
+                    self.logger.info("Removed old Porn Fetch executable")
                     os.remove(os.path.join(target_dir, filename))
 
                 # Move the executable to the target directory
                 shutil.move(filename, target_dir)
+                self.logger.info(f"Moved current Porn Fetch executable to: {target_dir}")
 
                 if not os.path.exists(os.path.join(target_dir, "config.ini")):
                     shutil.move("config.ini", target_dir)  # Prevent overriding the old configuration file
@@ -347,9 +357,11 @@ Categories=Utility;"""
                 shortcut.WorkingDirectory = target_dir  # Set working directory to the target directory
                 shortcut.IconLocation = app_exe_path
                 shortcut.Save()
+                self.logger.info(f"Created shortcut in -->: {shortcut_path}")
 
         except Exception:
             error = traceback.format_exc()
+            self.logger.error(error)
             self.signals.install_finished.emit([False, error])
             self.signals.stop_undefined_range.emit()
 
@@ -373,14 +385,15 @@ class InternetCheck(QRunnable):
 
         self.website_results = {}
         self.signals = Signals()
+        self.logger = setup_logger(name="Porn Fetch - [InternetCheck]", log_file="PornFetch.log", level=logging.DEBUG)
 
 
     def run(self):
         for idx, website in enumerate(self.websites, start=1):
-            logger.debug(f"[{idx}|{len(self.websites)}] Testing: {website}")
+            self.logger.debug(f"[{idx}|{len(self.websites)}] Testing: {website}")
 
             try:
-                logging.info(f"Testing Internet [{idx / len(self.websites)}] : {website}")
+                self.logger.info(f"Testing Internet [{idx}|{len(self.websites)}] : {website}")
                 status = BaseCore().fetch(website, get_response=True)
 
                 if status.status_code == 200:
@@ -409,6 +422,7 @@ class CheckUpdates(QRunnable):
     def __init__(self):
         super(CheckUpdates, self).__init__()
         self.signals = Signals()
+        self.logger = setup_logger(name="Porn Fetch - [CheckUpdates]", log_file="PornFetch.log", level=logging.DEBUG)
 
     def run(self):
         url = f"https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/{__next_release__}"
@@ -417,20 +431,20 @@ class CheckUpdates(QRunnable):
             request = BaseCore().fetch(url, get_response=True)
 
             if request.status_code == 200:
-                logger.info("NEW UPDATE IS AVAILABLE!")
+                self.logger.info("NEW UPDATE IS AVAILABLE!")
                 self.signals.result.emit(True)
 
             else:
-                logger.info("Checked for updates, no update is available.")
+                self.logger.info("Checked for updates, no update is available.")
                 self.signals.result.emit(False)
 
         except AttributeError:
-            logger.info("Checked for updates, no update is available.")
+            self.logger.info("Checked for updates, no update is available.")
             self.signals.result.emit(False) # Please just don't ask, thanks :)
 
         except Exception:
             error = traceback.format_exc()
-            logger.error(f"Could not check for updates. Please report the following error on GitHub: {error}")
+            self.logger.error(f"Could not check for updates. Please report the following error on GitHub: {error}")
             self.signals.error_signal.emit(error)
 
 
@@ -443,29 +457,32 @@ class FFMPEGDownload(QRunnable):
         self.url = url
         self.extract_path = extract_path
         self.mode = mode
+        self.logger = setup_logger(name="Porn Fetch - [FFMPEGDownload]", log_file="PornFetch.log", level=logging.DEBUG)
         self.signals = Signals()
 
-    @staticmethod
-    def delete_dir():
+    def delete_dir(self):
         deleted_any = False
         cwd = os.getcwd()
+        self.logger.info(f"Trying to delete FFMmpeg directory in: {cwd}")
 
         for entry in os.listdir(cwd):
             if "ffmpeg" in entry.lower():
                 full_path = os.path.join(cwd, entry)
                 if os.path.isdir(full_path):
                     try:
+                        self.logger.info(f"Found possible path: {full_path}, tryint to delete")
                         shutil.rmtree(full_path)
-                        logger.info(f"Deleted folder: {full_path}")
+                        self.logger.info(f"Deleted folder: {full_path}")
                         deleted_any = True
                     except Exception as e:
-                        logger.error(f"Error deleting folder {full_path}: {e}")
+                        self.logger.error(f"Error deleting folder {full_path}: {e}")
+
         return deleted_any
 
     def run(self):
         # Download the file
-        logger.debug(f"Downloading: {self.url}")
-        logger.debug("FFMPEG: [1/4] Starting the download")
+        self.logger.debug(f"Downloading: {self.url}")
+        self.logger.debug("FFMPEG: [1/4] Starting the download")
         with httpx.stream("GET", self.url) as r:
             r.raise_for_status()
             if self.url == url_windows or self.url == url_macOS:
@@ -484,7 +501,7 @@ class FFMPEGDownload(QRunnable):
                         dl += len(chunk)
                         self.signals.total_progress.emit(dl, total_length)
 
-        logger.debug("FFMPEG: [2/4] Starting file extraction")
+        self.logger.debug("FFMPEG: [2/4] Starting file extraction")
         # Extract the file based on OS mode
         if self.mode == "linux" and filename.endswith(".tar.xz"):
             with tarfile.open(filename, "r:xz") as tar:
@@ -518,16 +535,16 @@ class FFMPEGDownload(QRunnable):
 
             os.chmod("ffmpeg", 0o755) # Sets executable, read and write permissions
 
-        logger.debug("FFMPEG: [3/4] Finished Extraction")
+        self.logger.debug("FFMPEG: [3/4] Finished Extraction")
         # Finalize
         self.signals.total_progress.emit(total_length, total_length)  # Ensure progress bar reaches 100%
         os.remove(filename)  # Clean up downloaded archive
 
         if self.delete_dir():
-            logger.debug("FFMPEG: [4/4] Cleaned Up")
+            self.logger.debug("FFMPEG: [4/4] Cleaned Up")
 
         else:
-            logger.error("The Regex for finding the FFmpeg version failed. Please report this on GitHub!, Thanks.")
+            self.logger.error("The Regex for finding the FFmpeg version failed. Please report this on GitHub!, Thanks.")
 
         self.signals.ffmpeg_download_finished.emit()
 
@@ -544,17 +561,18 @@ class AddToTreeWidget(QRunnable):
         self.consistent_data = VideoData().consistent_data
         self.output_path = self.consistent_data.get("output_path")
         self.search_limit = self.consistent_data.get("search_limit")
+        self.logger = setup_logger(name="Porn Fetch - [AddToTreeWidget]", log_file="PornFetch.log", level=logging.DEBUG)
 
 
     def process_video(self, video, index):
-        logger.debug(f"Requesting video processing of: {video.url}")
+        self.logger.debug(f"Requesting video processing of: {video.url}")
 
         try:
             data = load_video_attributes(video)
             video_id = random.randint(0, 99999999) # Creates a random ID for each video
             stripped_title = BaseCore().strip_title(data.get("title"))  # Strip the title so that videos with special chars can be
             # saved on windows. it would raise an OSError otherwise
-            logger.debug(f"Created ID: {video_id} for: {stripped_title}")
+            self.logger.debug(f"Created ID: {video_id} for: {stripped_title}")
 
             if self.consistent_data.get("directory_system"):  # If the directory system is enabled, this will create an additional folder
                 author_path = os.path.join(self.output_path, data.get("author"))
@@ -578,18 +596,18 @@ class AddToTreeWidget(QRunnable):
             return video_id
 
         except (errors.PremiumVideo, IndexError):
-            logger.error(f"Warning: The video {video.url} is a Premium-only video and will be skipped.")
+            self.logger.error(f"Warning: The video {video.url} is a Premium-only video and will be skipped.")
             self.signals.error_signal.emit(f"Premium-only video skipped: {video.url}")
             return False
 
         except errors.RegionBlocked:
-            logger.error(f"Warning: The video {video.url} is region-blocked or private and will be skipped.")
+            self.logger.error(f"Warning: The video {video.url} is region-blocked or private and will be skipped.")
             self.signals.error_signal.emit(f"Region-blocked video skipped: {video.url}")
             return False
 
         except Exception:
             error = traceback.format_exc()
-            logger.exception(f"Unexpected error while processing video: {error}")
+            self.logger.exception(f"Unexpected error while processing video: {error}")
             self.signals.error_signal.emit(f"Unexpected error occurred: {error}")
             return False
 
@@ -608,10 +626,10 @@ class AddToTreeWidget(QRunnable):
             self.last_index = start
 
         try:
-            logger.debug(f"Result Limit: {str(self.search_limit)}")
+            self.logger.debug(f"Result Limit: {str(self.search_limit)}")
 
             if self.reverse:
-                logger.debug("Reversing Videos. This may take some time...")
+                self.logger.debug("Reversing Videos. This may take some time...")
 
                 # Use islice to limit the number of items fetched from the iterator
                 videos = list(islice(self.iterator, self.search_limit)) # Can take A LOT of time (like really)
@@ -644,12 +662,12 @@ class AddToTreeWidget(QRunnable):
                         try_attempt = False  # Processing succeeded
 
                     except errors.RegexError as e:
-                        logger.error(f"Regex error: {e}")
+                        self.logger.error(f"Regex error: {e}")
                         self.signals.error_signal.emit(f"Regex error: {e}. Please report this issue.")
                         continue
 
                     except (ConnectionError, ConnectionAbortedError, ConnectionResetError) as e:
-                        logger.error(f"Connection error: {e}")
+                        self.logger.error(f"Connection error: {e}")
                         self.signals.error_signal.emit(f"Connection error: {e}. Retrying in 20 seconds...")
                         time.sleep(20)
                         continue
@@ -657,7 +675,7 @@ class AddToTreeWidget(QRunnable):
 
         except Exception:
             error = traceback.format_exc()
-            logger.exception(f"Fatal error in run: {error}")
+            self.logger.exception(f"Fatal error in run: {error}")
             self.signals.error_signal.emit(f"Fatal error: {error}")
 
         finally:
@@ -676,6 +694,7 @@ class DownloadThread(QRunnable):
         self.quality = self.consistent_data.get("quality")
         data_object: dict = VideoData().data_objects[self.video_id]
         self.output_path = data_object.get("output_path")
+        self.logger = setup_logger(name="Porn Fetch - [DownloadThread]", log_file="PornFetch.log", level=logging.DEBUG)
 
         self.threading_mode = self.consistent_data.get("threading_mode")
         self.signals = Signals()
@@ -747,24 +766,24 @@ class DownloadThread(QRunnable):
         try:
             if os.path.isfile(self.output_path):
                 if self.skip_existing_files:
-                    logger.debug("The file already exists, skipping...")
+                    self.logger.debug("The file already exists, skipping...")
                     self.signals.download_completed.emit(True)
                     return
 
                 else:
-                    logger.debug("The file already exists, appending random number...")
+                    self.logger.debug("The file already exists, appending random number...")
                     path = str(self.output_path).split(".")
                     path = path[0] + str(random.randint(0, 1000)) + ".mp4"
                     self.output_path = path
 
-            logger.debug(f"Downloading Video to: {self.output_path}")
+            self.logger.debug(f"Downloading Video to: {self.output_path}")
             if self.threading_mode == "FFMPEG" or self.threading_mode == download.FFMPEG:
                 self.ffmpeg = True
 
             if isinstance(self.video, Video):  # Assuming 'Video' is the class for Pornhub
                 video_source = "pornhub"
                 path = self.output_path
-                logger.debug("Starting the Download!")
+                self.logger.debug("Starting the Download!")
                 try:
                     self.video.download(downloader=self.threading_mode, path=path, quality=self.quality,
                                         display=lambda pos, total: self.generic_callback(pos, total,
@@ -840,15 +859,16 @@ class PostProcessVideoThread(QRunnable):
         self.ffmpeg_path = self.consistent_data.get("ffmpeg_path")
         self.video_format = self.consistent_data.get("video_format")
         self.path = self.data.get("output_path")
+        self.logger = setup_logger(name="Porn Fetch - [PostProcessVideoThread]", log_file="PornFetch.log", level=logging.DEBUG)
 
     def run(self):
         if self.ffmpeg_path is None:
-            logger.warning("FFmpeg couldn't be found during initialization. Video post processing will be skipped!")
+            self.logger.warning("FFmpeg couldn't be found during initialization. Video post processing will be skipped!")
             return
 
         try:
             os.rename(f"{self.path}", f"{self.path}_.tmp")
-            logger.debug(f"FFMPEG PATH: {self.ffmpeg_path}")
+            self.logger.debug(f"FFMPEG PATH: {self.ffmpeg_path}")
 
 
             # Keeping a local variable space, because otherwise variables get messed up
@@ -877,7 +897,7 @@ class PostProcessVideoThread(QRunnable):
                     write_tags(path=path_for_tags, data=self.data)
 
             else:
-                logger.warning(f"You've set your format to: {self.video_format}. Writing metadata tags is not supported in this case!")
+                self.logger.warning(f"You've set your format to: {self.video_format}. Writing metadata tags is not supported in this case!")
 
         except Exception:
             error = traceback.format_exc()
@@ -895,12 +915,14 @@ class QTreeWidgetDownloadThread(QRunnable):
         self.threading_mode = self.consistent_data.get("threading_mode")
         self.quality = self.consistent_data.get("quality")
         self.semaphore = semaphore
+        self.logger = setup_logger(name="Porn Fetch - [QTreeWidgetDownloadThread]", log_file="PornFetch.log", level=logging.DEBUG)
 
 
     def run(self):
         self.signals.start_undefined_range.emit()
         video_objects = []
         data_objects = []
+        global total_segments, downloaded_segments
 
         for i in range(self.treeWidget.topLevelItemCount()):
             item = self.treeWidget.topLevelItem(i)
@@ -910,12 +932,11 @@ class QTreeWidgetDownloadThread(QRunnable):
                 data_objects.append(item.data(1, Qt.ItemDataRole.UserRole))
 
         if not self.threading_mode == "FFMPEG":
-            logger.debug("Getting segments...")
-            global total_segments, downloaded_segments
+            self.logger.debug("Retrieving total length of video segments to calculate total progress...")
             total_segments += sum(
                 [len(list(video.get_segments(quality=self.quality))) for video in video_objects if
                  hasattr(video, 'get_segments')])
-            logger.debug("Got segments")
+            self.logger.debug(f"Got {total_segments} segments...")
             # This basically looks how many segments exist in all videos together, so that we can calculate the total
             # progress
 
@@ -924,18 +945,16 @@ class QTreeWidgetDownloadThread(QRunnable):
             # FFMPEG has always 0-100 as progress callback, that is why I specify 100 for each video instead of the
             # total segments
 
-            counter = 0
-            for _ in video_objects:
-                counter += 100
 
-            total_segments = counter
+            for _ in video_objects:
+                total_segments += 100 # Progress for FFmpeg can only be 100%, so we just add +100 for every video.
 
         downloaded_segments = 0
         self.signals.stop_undefined_range.emit()
 
         for idx, video in enumerate(video_objects):
             self.semaphore.acquire()  # Trying to start the download if the thread isn't locked
-            logger.debug("Semaphore Acquired")
+            self.logger.debug("Semaphore Acquired")
             self.signals.progress_send_video.emit(video, data_objects[idx])  # Now emits the video to the main class for further processing
 
 
@@ -950,15 +969,18 @@ class AddUrls(QRunnable):
         self.signals = Signals()
         self.file = file
         self.delay = delay
+        self.logger = setup_logger(name="Porn Fetch - [AddUrls]", log_file="PornFetch.log", level=logging.DEBUG)
 
     def run(self):
         iterator = []
         model_iterators = []
         search_iterators = []
 
+        self.logger.info(f"Trying to read URL (Batch) file: {self.file}")
         with open(self.file, "r") as url_file:
             content = url_file.read().splitlines()
 
+        self.logger.info(f"Found: {len(content)} lines of iterables")
         for idx, line in enumerate(content):
             if len(line) == 0:
                 continue
@@ -969,17 +991,20 @@ class AddUrls(QRunnable):
                 line = line.split("#")[1]
                 model_iterators.append(line)
                 search_iterators.append(line)
+                self.logger.debug(f"Found model: {line}")
 
             elif line.startswith("search#"):
                 query = line.split("#")[1]
                 site = line.split("#")[2]
                 search_iterators.append({"website": site,
                                          "query": query})
+                self.logger.debug(f"Found search query: {query}, site: {site}")
 
             else:
                 video = check_video(line)
 
                 if video is not False:
+                    self.logger.debug("Found Video object!")
                     iterator.append(video)
 
 
@@ -1052,6 +1077,7 @@ class PornFetch(QWidget):
         self.downloader = None
         self.directory_system = None
         self.ffmpeg_path = None
+        self.logger = setup_logger(name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG)
 
         self.last_index = 0 # Keeps track of the last index of videos added to the tree widget
         self.threadpool = QThreadPool()
@@ -1075,19 +1101,22 @@ class PornFetch(QWidget):
             self.button_groups()  # Groups the buttons, so that the Radio buttons are split from themselves (hard to explain)
             self.shortcuts() # Activates the keyboard shortcuts
             self.load_style()  # Loads all the User Interface stylesheets
-            logger.debug("Startup: [3/5] Initialized the User Interface")
+            self.logger.debug("Startup: [3/5] Initialized the User Interface")
             self.settings_maps_initialization()
             self.load_user_settings()  # Loads the user settings and applies selected values to the UI
-            logger.debug("Startup: [4/5] Loaded the user settings")
+            self.logger.debug("Startup: [4/5] Loaded the user settings")
             self.switch_to_home()  # Switches Porn Fetch to the home widget
 
             if self.internet_checks:
+                self.logger.info("Running internet checks")
                 self.check_internet()
 
             if self.update_checks:
+                self.logger.info("Running update checks")
                 self.check_for_updates()
 
             if self._anonymous_mode:
+                self.logger.info("Enabling anonymous mode")
                 self.anonymous_mode()
 
             self.check_ffmpeg()  # Checks and sets up FFmpeg
@@ -1106,12 +1135,13 @@ class PornFetch(QWidget):
                 "search_limit": self.search_limit,
                 "skip_existing_files": self.skip_existing_files
             })
-            logger.debug("Startup: [5/5] ✔")
+            self.logger.debug("Startup: [5/5] ✔")
             self.check_for_sponsoring_notice()
             self.check_for_disclaimer_notice()
 
     def install_pornfetch(self):
         if __build__ == "desktop":
+            self.logger.info(f"Starting Porn Fetch installation with App name: {self.app_name}")
             self.install_thread = InstallThread(self.app_name)
             self.install_thread.signals.install_finished.connect(self.install_pornfetch_result)
             self.install_thread.signals.start_undefined_range.connect(self.start_undefined_range)
@@ -1138,8 +1168,6 @@ class PornFetch(QWidget):
          but it works.
         """
         self.setWindowTitle("Running in Anonymous mode...")
-
-
         self.ui.download_lineedit_url.setPlaceholderText(" ")
         self.ui.login_lineedit_password.setPlaceholderText(" ")
         self.ui.login_lineedit_username.setPlaceholderText(" ")
@@ -1160,6 +1188,7 @@ class PornFetch(QWidget):
         self.ui.progress_label_xnxx.setText("4")
         self.ui.progress_label_xvideos.setText("5")
         self._anonymous_mode = True # Makes sense, trust
+        self.logger.info("Enabled anonymous mode!")
 
     def button_groups(self):
         """
@@ -1550,7 +1579,7 @@ class PornFetch(QWidget):
             self.conf.write(config_file)
 
         ui_popup(self.tr("Saved User Settings, please restart Porn Fetch!", None))
-        logger.debug("Saved User Settings, please restart Porn Fetch.")
+        self.logger.debug("Saved User Settings, please restart Porn Fetch.")
 
     def set_proxies(self):
         message = self.tr("""
@@ -1601,19 +1630,19 @@ If you still want to proceed, click O.K. Otherwise, close Porn Fetch now and res
             final_proxy = f"socks5://{ip}:{port}"
 
             # Testing if proxy works
-            logger.info("[1/5] Requesting IP without Proxy")
+            self.logger.info("[1/5] Requesting IP without Proxy")
             ip_unmasked = httpx.Client().get("http://httpbin.org/ip").json()["origin"] # Using independent httpx session, because of the caching system from BaseCore
-            logger.info(f"[1/5] Retrieved IP: {ip_unmasked}")
+            self.logger.info(f"[1/5] Retrieved IP: {ip_unmasked}")
 
-            logger.info(f"[2/5] Requesting IP with Proxy: {final_proxy}")
+            self.logger.info(f"[2/5] Requesting IP with Proxy: {final_proxy}")
             bs_consts.PROXY = final_proxy
             ip_masked = json.loads(BaseCore().fetch("http://httpbin.org/ip"))["origin"]
-            logger.info(f"[2/5] Retrieved IP: {ip_masked}")
+            self.logger.info(f"[2/5] Retrieved IP: {ip_masked}")
 
-            logger.info(f"[3/5] Requesting IP with Proxy (independent httpx environment)")
+            self.logger.info(f"[3/5] Requesting IP with Proxy (independent httpx environment)")
             xz_session = httpx.Client(proxy=final_proxy, timeout=20)
             ip = xz_session.get("http://httpbin.org/ip").json()["origin"]
-            logger.info(f"[3/5] Retrieved IP: {ip}")
+            self.logger.info(f"[3/5] Retrieved IP: {ip}")
 
             message_2 = f"""
 Your unmasked IP is: {ip_unmasked}
@@ -1628,11 +1657,11 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
 """
             ui_popup(message_2)
 
-            logger.info("[4/5] Refreshing all API sessions to apply the new proxy to their session objects...")
+            self.logger.info("[4/5] Refreshing all API sessions to apply the new proxy to their session objects...")
             phub_consts.PROXY = final_proxy
-            logger.info(f"Set PHUB to: {phub_consts.PROXY}")
+            self.logger.info(f"Set PHUB to: {phub_consts.PROXY}")
             refresh_clients()
-            logger.info("[5/5] All API sessions refreshed, DONE!")
+            self.logger.info("[5/5] All API sessions refreshed, DONE!")
 
 
         else:
@@ -1653,6 +1682,7 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
         implemented this feature into the tree widget and I don't want to write code 2 times
         """
         url = self.ui.download_lineedit_url.text()
+        self.logger.info(f"Starting a single shot download for -->: {url}")
         video = check_video(url)
         list_ = [video]
         self.add_to_tree_widget_thread(iterator=list_)
@@ -1665,6 +1695,7 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
         else:
             model = self.ui.download_lineedit_model_url.text()
 
+        self.logger.info(f"Checking model: {url}")
         if pornhub_pattern.match(model):
 
             model_object = client.get_user(model)
@@ -1701,14 +1732,17 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
 
     def start_playlist(self):
         url = self.ui.download_lineedit_playlist_url.text()
+        self.logger.info(f"Requesting playlist videos for -->: {url}")
         playlist = client.get_playlist(url)
         videos = playlist.sample()
+        self.logger.debug("Got playlist videos!")
         self.add_to_tree_widget_thread(iterator=videos)
 
     def open_file_dialog(self):
         """This opens and processes urls in the file"""
         dialog = QFileDialog()
         file, types = dialog.getOpenFileName()
+        self.logger.info(f"Iterating over: {file}")
         self.ui.download_lineedit_file.setText(file)
         self.start_file_processing()
 
@@ -1720,17 +1754,17 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
         self.threadpool.start(self.url_thread)
 
     def receive_url_result(self, iterator, model_iterator, search_iterator):
-        logger.debug(f"Received Video Iterator ({len(iterator)} videos)")
-        logger.debug(f"Received Model Iterator ({len(model_iterator)} urls)")
-        logger.debug(f"Received Search Iterator ({len(search_iterator)} keywords)")
+        self.logger.debug(f"Received Video Iterator ({len(iterator)} videos)")
+        self.logger.debug(f"Received Model Iterator ({len(model_iterator)} urls)")
+        self.logger.debug(f"Received Search Iterator ({len(search_iterator)} keywords)")
 
-        logger.debug("Processing Videos...")
+        self.logger.debug("Processing Videos...")
         self.add_to_tree_widget_thread(iterator)
-        logger.debug("Processing Models...")
+        self.logger.debug("Processing Models...")
         for url in model_iterator:
             self.start_model(url)
 
-        logger.debug("Processing Search queries....")
+        self.logger.debug("Processing Search queries....")
         for search in search_iterator:
             query = search.get("query")
             website = search.get("website")
@@ -1762,7 +1796,7 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
     def search(self):
         """Does a simple search for videos without filters on selected website"""
         query = self.ui.download_lineedit_search_query.text()
-        logger.debug(f"Searching with query: {query}")
+        self.logger.debug(f"Searching with query: {query}")
         if self.ui.download_radio_search_website_pornhub.isChecked():
             videos = client.search(query)
 
@@ -1802,7 +1836,7 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
         self.add_to_tree_widget_thread_.signals.stop_undefined_range.connect(self.stop_undefined_range)
         self.add_to_tree_widget_thread_.signals.error_signal.connect(self.show_error)
         self.threadpool.start(self.add_to_tree_widget_thread_)
-        logger.debug("Started the thread for adding videos...")
+        self.logger.debug("Started the thread for adding videos...")
 
     def add_to_tree_widget_signal(self, identifier: int):
         """
@@ -1815,6 +1849,7 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
 
         A display string and a zero-padded sorting key are then generated.
         """
+        self.logger.info(f"Applying video data for ID -->: {identifier}")
         self.last_index += 1
         data = VideoData().data_objects.get(identifier)
         title = data.get("title")
@@ -1883,12 +1918,12 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
         # ADAPTION
         self.download_thread.signals.download_completed.connect(self.download_completed)
         self.threadpool.start(self.download_thread)
-        logger.debug("Started Download Thread!")
+        self.logger.debug("Started Download Thread!")
 
 
     def download_completed(self, video_id):
         """If a video is downloaded, the semaphore is released"""
-        logger.debug("Download Completed!")
+        self.logger.debug("Download Completed!")
         global total_downloaded_videos
         total_downloaded_videos += 1
         self.ui.progress_lineedit_download_info.setText(f"Downloaded: {total_downloaded_videos} video(s) this session.")
@@ -1936,12 +1971,14 @@ An error happened inside of Porn Fetch!
         """
         This (like the name says) clears the tree widget.
         """
+        self.logger.debug("Cleared the tree widget")
         if not self.ui.main_checkbox_tree_do_not_clear_videos.isChecked():
             self.ui.treeWidget.clear()
 
     """These functions are related to selecting video items within the tree widget"""
     def unselect_all_items(self):
         """Unselects all items from the tree widget"""
+        self.logger.info("Unselected all items")
         root = self.ui.treeWidget.invisibleRootItem()
         item_count = root.childCount()
         for i in range(item_count):
@@ -1965,6 +2002,7 @@ An error happened inside of Porn Fetch!
 
     def select_all_items(self):
         """Selects all items from the tree widget"""
+        self.logger.info("Selected all items")
         root = self.ui.treeWidget.invisibleRootItem()
         item_count = root.childCount()
         for i in range(item_count):
@@ -2035,6 +2073,7 @@ An error happened inside of Porn Fetch!
         if self._anonymous_mode:
             self.ui.main_label_tree_show_thumbnail.setText(self.tr("Can't show thumbnail, due to your privacy settings ;)",
                                                                    disambiguation=None))
+            self.logger.debug("Anonymous mode is enabled, won't show thumbnail")
             return
 
         thumbnail = item.data(3, Qt.ItemDataRole.UserRole)  # Retrieve the thumbnail URL
@@ -2047,8 +2086,8 @@ An error happened inside of Porn Fetch!
             # Load the thumbnail image dynamically
             try:
                 pixmap = QPixmap()
-                pixmap.loadFromData(httpx.get(thumbnail).content) # Using httpx here, cuz BaseCore headers don't work with HQPorner (for some reason idk
-
+                pixmap.loadFromData(BaseCore().fetch(thumbnail).content)
+                self.logger.info("Fetched thumbnail!")
                 # Scale the pixmap to fit the fixed QLabel size while maintaining the aspect ratio
                 scaled_pixmap = pixmap.scaled(
                     self.ui.main_label_tree_show_thumbnail.width(),
@@ -2113,10 +2152,12 @@ An error happened inside of Porn Fetch!
 
     def start_undefined_range(self):
         """This starts the undefined range (loading animation) of the total progressbar"""
+        self.logger.info("Starting infinite loading animation")
         self.ui.main_progressbar_total.setRange(0, 0)
 
     def stop_undefined_range(self):
         """This stops the undefined range (loading animation) of the total progressbar"""
+        self.logger.info("Stopped infinite loading animation")
         self.ui.main_progressbar_total.setMinimum(0)
         self.ui.main_progressbar_total.setMaximum(100)
         self.ui.main_progressbar_total.setValue(0)
@@ -2140,21 +2181,25 @@ An error happened inside of Porn Fetch!
         """
         username = self.ui.login_lineedit_username.text()
         password = self.ui.login_lineedit_password.text()
+        self.logger.info("Trying to login...")
         if len(username) <= 2 or len(password) <= 2:
             ui_popup(self.tr("Those credentials don't seem to be valid...", None))
             return
 
         try:
             global client
+            self.logger.debug("Associating a new client object with a logged in session")
             client = Client(username, password)
-            logger.debug("Login Successful!")
+            self.logger.debug("Login Successful!")
             ui_popup(self.tr( "Login Successful!", None))
             self.switch_login_button_state()
 
         except errors.LoginFailed:
-            ui_popup(self.tr("Login Failed, please check your credentials and try again!", None))
+            self.logger.error("Login Failed, because of invalid credentials")
+            ui_popup(self.tr("Login Failed, please check your cresdentials and try again!", None))
 
         except errors.ClientAlreadyLogged:
+            self.logger.warning("Client already logged in?!! wait what??")
             ui_popup(self.tr("You are already logged in!", None))
 
     def check_login(self):
@@ -2241,6 +2286,7 @@ An error happened inside of Porn Fetch!
     def get_by_category_eporner(self):
         """Returns video by category from EPorner"""
         category_name = self.ui.tools_lineedit_videos_by_category_eporner.text()
+        self.logger.info(f"Getting videos by category -->: {category_name}")
 
         if not category_name in self.all_categories_eporner:
             ui_popup(self.tr("Invalid Category. Press 'list categories' to see all "
@@ -2374,7 +2420,7 @@ This warning won't be shown again.
             phub_consts.FFMPEG_EXECUTABLE = ffmpeg_path
             bs_consts.FFMPEG_PATH = ffmpeg_path
             self.ffmpeg_path = ffmpeg_path
-            logger.debug(f"FFmpeg found at: {ffmpeg_path}")
+            self.logger.info(f"FFmpeg found at: {ffmpeg_path}")
 
     def download_ffmpeg(self):
         if sys.platform == "linux":
