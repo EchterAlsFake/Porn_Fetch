@@ -14,14 +14,12 @@ import src.frontend.resources  # Your IDE may tell you that this is an unused im
 from threading import Event
 from io import TextIOWrapper
 from itertools import islice, chain
-from base_api.base import setup_logger
 from hqporner_api.api import Sort as hq_Sort
 
 from src.backend.shared_gui import *
 from src.backend.class_help import *
 from src.backend.shared_functions import *
 
-from src.backend.log_config import setup_logging
 from src.frontend.ui_form_license import Ui_SetupLicense
 from src.frontend.ui_form_desktop import Ui_PornFetch_Desktop
 from src.frontend.ui_form_android import Ui_PornFetch_Android
@@ -32,7 +30,7 @@ from src.frontend.ui_form_range_selector import Ui_PornFetchRangeSelector
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                         QTranslator, QCoreApplication, QSize)
 from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QInputDialog, QTextBrowser
-from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QScreen
+from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence
 
 
 """
@@ -1290,25 +1288,25 @@ class PornFetch(QWidget):
         self.ui.main_button_tree_automated_selection.clicked.connect(self.select_range_of_items)
 
     def shortcuts(self):
-        quit_shortcut = QShortcut("Ctrl+Q", self)
+        quit_shortcut = QShortcut(QKeySequence("Ctrl+Q"), self)
         quit_shortcut.activated.connect(self.close)
 
-        export_urls_shortcut = QShortcut("Ctrl+E", self)
+        export_urls_shortcut = QShortcut(QKeySequence("Ctrl+E"), self)
         export_urls_shortcut.activated.connect(export_urls)
 
-        download_tree_widget = QShortcut("Ctrl+T", self)
+        download_tree_widget = QShortcut(QKeySequence("Ctrl+T"), self)
         download_tree_widget.activated.connect(self.download_tree_widget)
 
-        enable_anonymous_mode = QShortcut("Ctrl+A", self)
+        enable_anonymous_mode = QShortcut(QKeySequence("Ctrl+A"), self)
         enable_anonymous_mode.activated.connect(self.anonymous_mode)
 
-        save_settings = QShortcut("Ctrl+S", self)
+        save_settings = QShortcut(QKeySequence("Ctrl+S"), self)
         save_settings.activated.connect(self.save_user_settings)
 
-        select_all_items = QShortcut("Ctrl+X", self)
+        select_all_items = QShortcut(QKeySequence("Ctrl+X"), self)
         select_all_items.activated.connect(self.select_all_items)
 
-        unselect_all_items = QShortcut("Ctrl+Z", self)
+        unselect_all_items = QShortcut(QKeySequence("Ctrl+Z"), self)
         unselect_all_items.activated.connect(self.unselect_all_items)
 
     def load_style(self):
@@ -1712,16 +1710,16 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
                 videos = uploads
 
         elif hqporner_pattern.match(model):
-            videos = hq_Client.get_videos_by_actress(name=model)
+            videos = hq_client.get_videos_by_actress(name=model)
 
         elif eporner_pattern.match(model):
-            videos = ep_Client.get_pornstar(url=model, enable_html_scraping=True).videos()
+            videos = ep_client.get_pornstar(url=model, enable_html_scraping=True).videos()
 
         elif xnxx_pattern.match(model):
-            videos = xn_Client.get_user(url=model).videos
+            videos = xn_client.get_user(url=model).videos
 
         elif xvideos_pattern.match(model):
-            videos = xv_Client.get_pornstar(url=model).videos
+            videos = xv_client.get_pornstar(url=model).videos
 
         else:
             videos = None
@@ -1801,17 +1799,17 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
             videos = client.search(query)
 
         elif self.ui.download_radio_search_website_xvideos.isChecked():
-            videos = xv_Client.search(query)
+            videos = xv_client.search(query)
 
         elif self.ui.download_radio_search_website_hqporner.isChecked():
-            videos = hq_Client.search_videos(query)
+            videos = hq_client.search_videos(query)
 
         elif self.ui.download_radio_search_website_eporner.isChecked():
-            videos = ep_Client.search_videos(query, sorting_gay="", sorting_order="", sorting_low_quality="", page=1,
+            videos = ep_client.search_videos(query, sorting_gay="", sorting_order="", sorting_low_quality="", page=1,
                                                per_page=self.search_limit, enable_html_scraping=True)
 
         elif self.ui.download_radio_search_website_xnxx.isChecked():
-            videos = xn_Client.search(query).videos
+            videos = xn_client.search(query).videos
 
         else:
             videos = None
@@ -2267,20 +2265,20 @@ An error happened inside of Porn Fetch!
         else:
             sort = None
 
-        videos = hq_Client.get_top_porn(sort_by=sort)
+        videos = hq_client.get_top_porn(sort_by=sort)
         self.add_to_tree_widget_thread(iterator=videos)
 
     def get_by_category_hqporner(self):
         """Returns video by category from HQPorner. I want to add support for EPorner"""  # TODO
         category_name = self.ui.tools_lineedit_hqporner_category.text()
-        all_categories = hq_Client.get_all_categories()
+        all_categories = hq_client.get_all_categories()
 
         if not category_name in all_categories:
             ui_popup(self.tr("Invalid Category. Press 'list categories' to see all "
                                                   "possible ones.", None))
 
         else:
-            videos = hq_Client.get_videos_by_category(category=category_name)
+            videos = hq_client.get_videos_by_category(category=category_name)
             self.add_to_tree_widget_thread(videos)
 
     def get_by_category_eporner(self):
@@ -2293,7 +2291,7 @@ An error happened inside of Porn Fetch!
                                                   "possible ones.", None))
 
         else:
-            videos = ep_Client.get_videos_by_category(category=category_name, enable_html_scraping=True)
+            videos = ep_client.get_videos_by_category(category=category_name, enable_html_scraping=True)
             self.add_to_tree_widget_thread(iterator=videos)
 
     def list_categories_eporner(self):
@@ -2306,19 +2304,19 @@ An error happened inside of Porn Fetch!
 
     def get_brazzers_videos(self):
         """Get brazzers videos from HQPorner"""
-        videos = hq_Client.get_brazzers_videos()
+        videos = hq_client.get_brazzers_videos()
         self.add_to_tree_widget_thread(videos)
 
     @classmethod
     def list_categories_hqporner(cls):
         """Get all available categories. I want to also extend that for EPorner (and maybe even more sites)"""
-        categories_ = hq_Client.get_all_categories()
+        categories_ = hq_client.get_all_categories()
         categories = ",".join(categories_)
         ui_popup(categories)
 
     def get_random_video(self):
         """Gets a random video from HQPorner"""
-        video = hq_Client.get_random_video()
+        video = hq_client.get_random_video()
         some_list = [video]
         self.add_to_tree_widget_thread(some_list)
 
@@ -2514,7 +2512,7 @@ This warning won't be shown again.
 
         # Move the window to the center
         self.textbrowser.move(x, y)
-        self.textbrowser.setWindowFlag(Qt.WindowStaysOnTopHint, True)  # Keep it on top
+        self.textbrowser.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)  # Keep it on top
         self.textbrowser.show()  # Show before setting focus
         self.textbrowser.setFocus()  # Ensure it receives input focus
         self.textbrowser.raise_()  # Bring to front
@@ -2553,7 +2551,7 @@ This warning won't be shown again.
 
         # Move the window to the center
         self.textbrowser.move(x, y)
-        self.textbrowser.setWindowFlag(Qt.WindowStaysOnTopHint, True)
+        self.textbrowser.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
         self.textbrowser.show()
         self.textbrowser.setFocus()
         self.textbrowser.raise_()

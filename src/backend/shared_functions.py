@@ -15,7 +15,7 @@ from phub import Client, errors, Video, consts as phub_consts
 from phub.modules import download as download
 from ffmpeg_progress_yield import FfmpegProgress
 
-from base_api.base import BaseCore
+from base_api.base import BaseCore, setup_logger
 from base_api.modules import consts as bs_consts
 from hqporner_api import Client as hq_Client, Video as hq_Video
 from xnxx_api import Client as xn_Client, Video as xn_Video
@@ -33,6 +33,7 @@ xv_client = xv_Client()
 mv_client = mv_Client()
 xh_client = xh_Client()
 
+logger = setup_logger(name="Porn Fetch - [shared_functions]", log_file="PornFetch.log", level=logging.DEBUG)
 
 
 def refresh_clients():
@@ -143,57 +144,54 @@ notice_shown = false
 shown = false
 """
 
-logger = logging.getLogger(__name__)
-do_not_log = True
 def send_error_log(message):
     """
     This function is made for the Android development of Porn Fetch and is used for debugging.
     You can, of course, change or remove it, but I wouldn't recommend it.
     """
+    return
+    url = "192.168.0.19:8000"
+    endpoint = "/error-log/"
+    data = json.dumps({"message": message})
+    headers = {"Content-type": "application/json"}
 
-    if do_not_log is False:
-        url = "192.168.0.19:8000"
-        endpoint = "/error-log/"
-        data = json.dumps({"message": message})
-        headers = {"Content-type": "application/json"}
+    conn = http.client.HTTPConnection(url)
 
-        conn = http.client.HTTPConnection(url)
+    try:
+        conn.request("POST", endpoint, data, headers)
+        response = conn.getresponse()
 
-        try:
-            conn.request("POST", endpoint, data, headers)
-            response = conn.getresponse()
+        if response.status == 200:
+            print("Error log sent successfully")
+        else:
+            print(f"Failed to send error log: Status {response.status}, Reason: {response.reason}")
 
-            if response.status == 200:
-                print("Error log sent successfully")
-            else:
-                print(f"Failed to send error log: Status {response.status}, Reason: {response.reason}")
-
-            conn.close()
-        except Exception as e:
-            print(f"Request failed: {e}")
+        conn.close()
+    except Exception as e:
+        print(f"Request failed: {e}")
 
 def check_video(url, is_url=True):
     if is_url:
         if hqporner_pattern.search(str(url)) and not isinstance(url, hq_Video):
-            return hq_Client.get_video(url)
+            return hq_client.get_video(url)
 
         elif eporner_pattern.search(str(url)) and not isinstance(url, ep_Video):
-            return ep_Client.get_video(url, enable_html_scraping=True)
+            return ep_client.get_video(url, enable_html_scraping=True)
 
         elif xnxx_pattern.search(str(url)) and not isinstance(url, xn_Video):
-            return xn_Client.get_video(url)
+            return xn_client.get_video(url)
 
         elif xvideos_pattern.search(str(url)) and not isinstance(url, xv_Video):
-            return xv_Client.get_video(url)
+            return xv_client.get_video(url)
 
         elif missav_pattern.search(str(url)) and not isinstance(url, mv_Video):
-            return mv_Client.get_video(url)
+            return mv_client.get_video(url)
 
         elif xhamster_pattern.search(str(url)) and not isinstance(url, xh_Video):
             return xh_client.get_video(url)
 
         if isinstance(url, Video):
-            url.fetch("page@")
+            url.fetch("page@") # If url is a PornHub Video object it does have the `fetch` method
             return url
 
         elif isinstance(url, hq_Video):
@@ -360,6 +358,7 @@ def load_video_attributes(video):
         "publish_date": publish_date,
         "thumbnail": thumbnail,
     }
+    logger.debug(f"Loaded video data: {data}")
 
     return data
 
