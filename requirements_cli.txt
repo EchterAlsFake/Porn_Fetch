@@ -4,6 +4,8 @@ git+https://github.com/EchterAlsfake/eporner_api.git
 git+https://github.com/EchterAlsFake/xnxx_api.git
 git+https://github.com/EchterAlsFake/xvideos_api.git
 git+https://github.com/EchterAlsFake/eaf_base_api.git
+git+https://github.com/EchterAlsFake/missav_api.git
+git+https://github.com/EchterAlsFake/xhamster_api.git
 colorama
 requests
 hue_shift

@@ -10,19 +10,19 @@ import itertools
 import queue
 from io import TextIOWrapper
 from src.backend.shared_functions import *
-from src.backend.log_config import setup_logging
 from base_api.modules.progress_bars import *
-from base_api.base import BaseCore
+from base_api.base import BaseCore, setup_logger
 from rich import print as rprint
 from rich.markdown import Markdown
 from rich.progress import Progress, BarColumn, TextColumn, SpinnerColumn, TimeElapsedColumn, TimeRemainingColumn
 from colorama import *
 from hue_shift import return_color
-from base_api import base
 
-base.disable_logging()
-logger = setup_logging()
+
+logger = setup_logger(name="Porn Fetch - [CLI]", log_file=None, level=logging.INFO)
 init(autoreset=True)
+
+
 
 class CLI:
     def __init__(self):
@@ -503,16 +503,14 @@ Do you want to use FFmpeg? [yes,no]
             def callback_wrapper(pos, total):
                 self.progress_queue.put((task, pos, total))
                 self.downloaded_segments += 1
-                # This shit took me over 7 hours!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                # Making this stupid thing thread safe was the most exhausting thing in my entire life :skull:
-
 
             if isinstance(video, Video):
                 video.download(path=output_path, quality=self.quality, downloader=self.threading_mode,
                                display=callback_wrapper)
 
             elif isinstance(video, ep_Video) or isinstance(video, hq_Video):
-                video.download(path=output_path, quality=self.quality, no_title=True, callback=Callback.text_progress_bar)
+                video.download(path=output_path, quality=self.quality, no_title=True,
+                               callback=Callback.text_progress_bar)
 
             else:
                 video.download(downloader=self.threading_mode, path=output_path, no_title=True, quality=self.quality,
@@ -520,6 +518,8 @@ Do you want to use FFmpeg? [yes,no]
 
         finally:
             logger.debug(f"{return_color()}Finished downloading for: {video.title}")
+
+            # Handle FFMPEG processing
             if self.ffmpeg_features:
                 os.rename(f"{output_path}", f"{output_path}_.tmp")
                 cmd = [self.ffmpeg_path, "-i", f"{output_path}_.tmp", "-c", "copy", output_path, '-hide_banner',
@@ -533,30 +533,40 @@ Do you want to use FFmpeg? [yes,no]
             else:
                 logger.debug("FFMPEG features disabled, writing tags and converting the video won't be available!")
 
-            self.progress_queue.put(None)
+            # Mark task as completed
+            self.progress.update(task, completed=self.progress.tasks[task].total)
+            self.progress_queue.put(None)  # This signals _update_progress to stop when all tasks are done
             self.finished_downloading += 1
             self.semaphore.release()
+            print(f"{Fore.LIGHTGREEN_EX}[+] {Fore.LIGHTYELLOW_EX}Video download finished!, you can continue navigating through the menu :)")
 
 
     def _update_progress(self):
-        # This method reads from the queue and updates the progress bar
         while True:
             try:
-                task, pos, total = self.progress_queue.get()
+                task_data = self.progress_queue.get()
+                if task_data is None:
+                    break  # Stop when all tasks are done
 
-            except TypeError: # Stupid implementation I know
+                task, pos, total = task_data
+
+                # Ensure we only update when progress changes
+                progress_diff = pos - self.progress.tasks[task].completed
+                if progress_diff > 0:
+                    self.progress.update(task, advance=progress_diff, total=total)
+
+                total_progress_diff = self.downloaded_segments - self.progress.tasks[self.task_total_progres].completed
+                if total_progress_diff > 0:
+                    self.progress.update(self.task_total_progres, advance=total_progress_diff,
+                                         total=self.total_segments,
+                                         description=f"Total progress | Downloaded: {self.finished_downloading}/{self.to_be_downloaded} videos")
+
+                self.progress.refresh()
+
+            except TypeError:
                 break
 
-            # Update progress bar based on queue data
-            self.progress.update(task, advance=pos - self.progress.tasks[task].completed, total=total)
-            self.progress.update(task_id=self.task_total_progres,
-                                 advance=self.downloaded_segments - self.progress.tasks[self.task_total_progres].completed,
-                                 total=self.total_segments,
-                                 description=f"Total progress | Downloaded: {self.finished_downloading}|{self.to_be_downloaded} videos")
-            self.progress.refresh()  # Force a screen update after each progress change
-
-
-
+        self.progress.stop()  # Ensure the progress disappears when done
 
     @staticmethod
     def credits():
