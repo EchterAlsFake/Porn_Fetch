@@ -1,54 +1,38 @@
-try:
-    import sys
-    import time
-    import httpx
-    import random
-    import shutil
-    import tarfile
-    import os.path
-    import zipfile
-    import argparse
-    import markdown
-    import traceback
-    import src.frontend.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
+import sys
+import time
+import httpx
+import random
+import shutil
+import tarfile
+import os.path
+import zipfile
+import argparse
+import markdown
+import traceback
+import src.frontend.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
 
-    from threading import Event
-    from io import TextIOWrapper
-    from itertools import islice, chain
-    from hqporner_api.api import Sort as hq_Sort
+from threading import Event
+from io import TextIOWrapper
+from itertools import islice, chain
+from hqporner_api.api import Sort as hq_Sort
 
-    from src.backend.shared_gui import *
-    from src.backend.class_help import *
-    from src.backend.shared_functions import *
+from src.backend.shared_gui import *
+from src.backend.class_help import *
+from src.backend.shared_functions import *
 
-    from src.frontend.ui_form_license import Ui_SetupLicense
-    from src.frontend.ui_form_desktop import Ui_PornFetch_Desktop
-    from src.frontend.ui_form_android import Ui_PornFetch_Android
-    from src.frontend.ui_form_install_dialog import Ui_SetupInstallDialog
-    from src.frontend.ui_form_android_startup import Ui_SetupAndroidStartup
-    from src.frontend.ui_form_keyboard_shortcuts import Ui_KeyboardShortcuts
-    from src.frontend.ui_form_range_selector import Ui_PornFetchRangeSelector
+from src.frontend.ui_form_license import Ui_SetupLicense
+from src.frontend.ui_form_desktop import Ui_PornFetch_Desktop
+from src.frontend.ui_form_android import Ui_PornFetch_Android
+from src.frontend.ui_form_install_dialog import Ui_SetupInstallDialog
+from src.frontend.ui_form_android_startup import Ui_SetupAndroidStartup
+from src.frontend.ui_form_keyboard_shortcuts import Ui_KeyboardShortcuts
+from src.frontend.ui_form_range_selector import Ui_PornFetchRangeSelector
 
-    from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
-                            QTranslator, QCoreApplication, QSize)
-    from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QInputDialog, QTextBrowser
-    from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence
-except Exception as e:
-    import http.client
-    import json
+from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
+                        QTranslator, QCoreApplication, QSize)
+from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QInputDialog, QTextBrowser
+from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence
 
-
-    def send_error_log(message):
-        url = "192.168.0.19:8000"  # Don't forget to place the IP of the device your server runs on
-        endpoint = "/log"
-        data = json.dumps({"message": message})
-        headers = {"Content-type": "application/json"}
-
-        conn = http.client.HTTPConnection(url)
-
-        conn.request("POST", endpoint, data, headers)
-
-    send_error_log(str(e))
 
 
 """
@@ -75,7 +59,7 @@ Discord: echteralsfake (faster response)
 
 __license__ = "GPL 3"
 __version__ = "3.5"
-__build__ = "android"  # android or desktop
+__build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 __next_release__ = "3.6"
 total_segments = 0
@@ -94,8 +78,8 @@ url_macOS = "https://evermeet.cx/ffmpeg/ffmpeg-7.1.zip"
 session_urls = []  # This list saves all URls used in the current session. Used for the URL export function
 total_downloaded_videos = 0 # All videos that actually successfully downloaded
 total_downloaded_videos_attempt = 0 # All videos the user tries to download
-http_log_ip = "192.168.0.19" # I need this for Android development. Don't worry, in the release thill will of course be disabled :)
-http_log_port = 8000
+http_log_ip = None # I need this for Android development. Don't worry, in the release this will of course be disabled :)
+http_log_port = None
 logger = setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=http_log_ip, http_port=http_log_port)
 logger.setLevel(logging.DEBUG)
 
@@ -125,7 +109,6 @@ class VideoData:
 
         for video_title in video_titles:
             del self.data_objects[video_title] # Del is faster than pop :)
-
 
 class Signals(QObject):
     """Signals for the Download class"""

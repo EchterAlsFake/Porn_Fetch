@@ -41,6 +41,19 @@ jobs:
           source ../venv/bin/activate
           pyside6-deploy -c src/build/pysidedeploy_linux.spec -f -v
 
+      - name: Generate SHA256 Checksum
+        run: |
+          sha256sum "deploy/Porn Fetch.bin" > "deploy/Porn Fetch.sha256"
+
+      - name: Publish SHA256 to GitHub Actions Summary
+        run: |
+          echo "### SHA256 Checksum for PornFetch_Linux_GUI_x64.bin" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          cat "deploy/Porn Fetch.sha256" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+
+
       - name: Archive x64 build
         uses: actions/upload-artifact@v4
         with:

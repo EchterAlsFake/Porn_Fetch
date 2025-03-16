@@ -29,6 +29,18 @@ jobs:
         run: |
           pyinstaller -F Porn_Fetch_CLI.py && cd dist && mv Porn_Fetch_CLI.exe PornFetch_Windows_CLI_x64.exe
 
+      - name: Generate SHA256 Checksum
+        run: |
+          sha256sum dist/PornFetch_Windows_CLI_x64.exe > dist/PornFetch_Windows_CLI_x64.sha256
+
+      - name: Publish SHA256 to GitHub Actions Summary
+        run: |
+          echo "### SHA256 Checksum for PornFetch_Windows_CLI_x64.exe" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          cat dist/PornFetch_Windows_CLI_x64.sha256 >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+
       - name: Archive Porn Fetch CLI (Windows X64) build
         uses: actions/upload-artifact@v4
         with:
@@ -54,6 +66,18 @@ jobs:
       - name: Build Porn Fetch (CLI - Windows - X32) (PyInstaller)
         run: |
           pyinstaller -F Porn_Fetch_CLI.py && cd dist && mv Porn_Fetch_CLI.exe PornFetch_Windows_CLI_x32.exe
+
+      - name: Generate SHA256 Checksum
+        run: |
+          sha256sum dist/PornFetch_Windows_CLI_x32.exe > dist/PornFetch_Windows_CLI_x32.sha256
+
+      - name: Publish SHA256 to GitHub Actions Summary
+        run: |
+          echo "### SHA256 Checksum for PornFetch_Windows_CLI_x32.exe" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          cat dist/PornFetch_Windows_CLI_x32.sha256 >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
 
       - name: Archive Porn Fetch CLI (Windows X32) build
         uses: actions/upload-artifact@v4
