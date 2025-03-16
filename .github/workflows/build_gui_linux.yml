@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Python 3.11 x64
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
-          python-version: 3.11
+          python-version: "3.11"
           architecture: x64
 
       - name: Install Python dependencies
@@ -34,25 +34,21 @@ jobs:
         run: |
           mkdir deploy
           shopt -s extglob
-          mv !(deploy|venv) deploy/  # Ensure venv is not moved
+          mv !(deploy|venv) deploy/
           cd deploy
-          pwd
-          ls -la
           source ../venv/bin/activate
           pyside6-deploy -c src/build/pysidedeploy_linux.spec -f -v
 
       - name: Generate SHA256 Checksum
         run: |
-          sha256sum "deploy/Porn Fetch.bin" > "deploy/Porn Fetch.sha256"
+          sha256sum "deploy/Porn Fetch.bin" > "deploy/Porn_Fetch_Linux_GUI_x64.sha256"
 
       - name: Publish SHA256 to GitHub Actions Summary
         run: |
           echo "### SHA256 Checksum for PornFetch_Linux_GUI_x64.bin" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          cat "deploy/Porn Fetch.sha256" >> $GITHUB_STEP_SUMMARY
+          cat "deploy/Porn_Fetch_Linux_GUI_x64.sha256" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-
-
 
       - name: Archive x64 build
         uses: actions/upload-artifact@v4
