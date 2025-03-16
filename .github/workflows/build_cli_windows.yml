@@ -30,17 +30,18 @@ jobs:
       - name: Build Porn Fetch (CLI - Windows - X64) (PyInstaller)
         run: |
           pyinstaller -F Porn_Fetch_CLI.py
-          mv dist\Porn_Fetch_CLI.exe dist\PornFetch_Windows_CLI_x64.exe
+          Move-Item -Path dist\Porn_Fetch_CLI.exe -Destination dist\PornFetch_Windows_CLI_x64.exe
 
       - name: Generate SHA256 Checksum
         run: |
-          certUtil -hashfile dist\PornFetch_Windows_CLI_x64.exe SHA256 > dist\PornFetch_Windows_CLI_x64.sha256
+          certUtil -hashfile dist\PornFetch_Windows_CLI_x64.exe SHA256 | findstr /v "hashfile CertUtil" > dist\PornFetch_Windows_CLI_x64.sha256
 
       - name: Publish SHA256 to GitHub Actions Summary
+        shell: bash
         run: |
           echo "### SHA256 Checksum for PornFetch_Windows_CLI_x64.exe" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          type dist\PornFetch_Windows_CLI_x64.sha256 >> $GITHUB_STEP_SUMMARY
+          cat dist/PornFetch_Windows_CLI_x64.sha256 >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
 
       - name: Archive Porn Fetch CLI (Windows X64) build
@@ -70,17 +71,18 @@ jobs:
       - name: Build Porn Fetch (CLI - Windows - X32) (PyInstaller)
         run: |
           pyinstaller -F Porn_Fetch_CLI.py
-          mv dist\Porn_Fetch_CLI.exe dist\PornFetch_Windows_CLI_x32.exe
+          Move-Item -Path dist\Porn_Fetch_CLI.exe -Destination dist\PornFetch_Windows_CLI_x32.exe
 
       - name: Generate SHA256 Checksum
         run: |
-          certUtil -hashfile dist\PornFetch_Windows_CLI_x32.exe SHA256 > dist\PornFetch_Windows_CLI_x32.sha256
+          certUtil -hashfile dist\PornFetch_Windows_CLI_x32.exe SHA256 | findstr /v "hashfile CertUtil" > dist\PornFetch_Windows_CLI_x32.sha256
 
       - name: Publish SHA256 to GitHub Actions Summary
+        shell: bash
         run: |
           echo "### SHA256 Checksum for PornFetch_Windows_CLI_x32.exe" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          type dist\PornFetch_Windows_CLI_x32.sha256 >> $GITHUB_STEP_SUMMARY
+          cat dist/PornFetch_Windows_CLI_x32.sha256 >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
 
       - name: Archive Porn Fetch CLI (Windows X32) build
