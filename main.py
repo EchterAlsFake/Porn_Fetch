@@ -24,6 +24,7 @@ from src.frontend.ui_form_license import Ui_SetupLicense
 from src.frontend.ui_form_desktop import Ui_PornFetch_Desktop
 from src.frontend.ui_form_android import Ui_PornFetch_Android
 from src.frontend.ui_form_install_dialog import Ui_SetupInstallDialog
+from src.frontend.ui_form_android_startup import Ui_SetupAndroidStartup
 from src.frontend.ui_form_keyboard_shortcuts import Ui_KeyboardShortcuts
 from src.frontend.ui_form_range_selector import Ui_PornFetchRangeSelector
 
@@ -57,7 +58,7 @@ Discord: echteralsfake (faster response)
 
 __license__ = "GPL 3"
 __version__ = "3.5"
-__build__ = "desktop"  # android or desktop
+__build__ = "android"  # android or desktop
 __author__ = "Johannes Habel"
 __next_release__ = "3.6"
 total_segments = 0
@@ -188,10 +189,23 @@ class License(QWidget):
         self.close()
 
         if __build__ == "android":
-            self.show_main()
+            self.show_android_warning()
 
         else:
             self.show_install_dialog()
+
+    def show_android_warning(self):
+        if not self.conf["Android"]["warning_shown"] == "true":
+            self.conf.set("Android", "warning_shown", "true")
+            with open("config.ini", "w") as config_file: # type:TextIOWrapper
+                self.conf.write(config_file)
+
+            self.android_startup = AndroidStartup()
+            self.android_startup.show()
+
+
+        else:
+            self.show_main()
 
 
     def show_install_dialog(self):
@@ -208,6 +222,18 @@ class License(QWidget):
             self.show_main()
 
     def show_main(self):
+        self.main_widget = PornFetch()
+        self.main_widget.show()
+
+class AndroidStartup(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.ui = Ui_SetupAndroidStartup()
+        self.ui.setupUi(self)
+        self.ui.pushButton.clicked.connect(self.show_main)
+
+    def show_main(self):
+        self.close() # Closes the warning widget and proceeds to the main window
         self.main_widget = PornFetch()
         self.main_widget.show()
 
@@ -1385,7 +1411,7 @@ class PornFetch(QWidget):
         self.ui.settings_button_threading_mode_help.setStyleSheet(stylesheets["button_green"])
         self.ui.settings_button_directory_system_help.setStyleSheet(stylesheets["button_green"])
         self.ui.settings_button_semaphore_help.setStyleSheet(stylesheets["button_green"])
-        self.ui.main_button_tree_download.setStyleSheet(stylesheets["button_purple"])
+        self.ui.main_button_tree_download.setStyleSheet(stylesheets["button_orange"])
         self.ui.settings_button_output_path_select.setStyleSheet(stylesheets["button_blue"])
         self.ui.login_button_login.setStyleSheet(stylesheets["button_blue"])
         self.ui.settings_button_apply.setStyleSheet(stylesheets["button_blue"])
@@ -2084,7 +2110,15 @@ An error happened inside of Porn Fetch!
             # Load the thumbnail image dynamically
             try:
                 pixmap = QPixmap()
-                pixmap.loadFromData(BaseCore().fetch(thumbnail).content)
+                if not "hqporner" in thumbnail:
+                    pixmap.loadFromData(BaseCore().fetch(thumbnail).content)
+
+                else:
+                    self.logger.warning("HQPorner currently has an issue with internal network fetching, using independent httpx session instead."
+                                        "This will !! BYPASS ANY APPLIED PROXIES !!")
+
+                    pixmap.loadFromData(httpx.Client().get(thumbnail).content)
+
                 self.logger.info("Fetched thumbnail!")
                 # Scale the pixmap to fit the fixed QLabel size while maintaining the aspect ratio
                 scaled_pixmap = pixmap.scaled(

@@ -83,7 +83,7 @@ as they are indeed needed for the main applications!
 """
 
 # TODO: Implement logging
-sections = ["Setup", "Performance", "PostProcessing", "Video", "UI", "Sponsoring", "Disclaimer"]
+sections = ["Setup", "Performance", "PostProcessing", "Video", "UI", "Sponsoring", "Disclaimer", "Android"]
 
 options_setup = ["license_accepted", "install", "update_checks", "internet_checks", "anonymous_mode"]
 options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries", "ffmpeg_warning"]
@@ -92,6 +92,7 @@ options_video = ["quality", "output_path", "directory_system", "search_limit", "
 options_ui = ["language", "custom_font"]
 options_sponsoring = ["downloaded_videos", "notice_shown"]
 options_disclaimer = ["shown"]
+options_android = ["warning_shown"]
 
 
 pornhub_pattern = re.compile(r'(.*?)pornhub(.*)') # can also be .org
@@ -142,6 +143,9 @@ notice_shown = false
 
 [Disclaimer]
 shown = false
+
+[Android]
+warning_shown = false
 """
 
 def send_error_log(message):
@@ -277,6 +281,11 @@ def setup_config_file(force=False):
 
             if idx == 6:
                 for option in options_disclaimer:
+                    if not config.has_option(section, option):
+                        setup_config_file(force=True)
+
+            if idx == 7:
+                for option in options_android:
                     if not config.has_option(section, option):
                         setup_config_file(force=True)
 
