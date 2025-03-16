@@ -13,10 +13,9 @@ class ErrorLog(BaseModel):
 app = FastAPI()
 
 
-@app.post("/error-log/")
+@app.post("/log")
 def receive_error_log(error_log: ErrorLog):
-    print(f"Received error: {error_log.message}")
-    return {"detail": "Error log received"}
+    print(f"Received log: {error_log.message}")
 
 
 if __name__ == "__main__":

@@ -53,27 +53,22 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>PornFetch</name>
     <message>
-        <location filename="../../../main.py" line="1124"/>
+        <location filename="../../../main.py" line="1176"/>
         <source>You are running on Android! You can not install Porn Fetch</source>
         <translation>Du kannst Porn Fetch nicht auf Android installieren (es ist ja schon installiert ;)</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1128"/>
-        <source>Porn Fetch installation successful!</source>
-        <translation>Die Installation von Porn Fetch war erfolgreich!</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1131"/>
+        <location filename="../../../main.py" line="1186"/>
         <source>Porn Fetch installation failed, because of: {result[1]}</source>
         <translation>Die Installation von Porn Fetch ist fehlgeschlafen{result[1]}</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1550"/>
+        <location filename="../../../main.py" line="1605"/>
         <source>Saved User Settings, please restart Porn Fetch!</source>
         <translation>Einstellungen wurden gespeichert. Bitte starte Porn Fetch neu!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1581"/>
+        <location filename="../../../main.py" line="1636"/>
         <source>
 !!! ONLY SOCKS5 IS SUPPORTED !!!
         
@@ -130,22 +125,22 @@ Sie sind einfach schlecht und meistens sind Fehler nicht meine, sondern deren Sc
 Wenn du trotzdem fortfharen möchtest, drücke bitte auf OK um deinen Proxy einzugeben...</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1695"/>
+        <location filename="../../../main.py" line="1752"/>
         <source>The model URL you entered seems to be invalid. Please check your input</source>
         <translation>Die Model uRL, welche du eingegeben hast  scheint ungültig zu sein. Bitte überpfrüfe deine Eingaben</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1752"/>
+        <location filename="../../../main.py" line="1812"/>
         <source>Information: The Website {website} specified in the URL file isn&apos;t valid.</source>
         <translation>Information: Die Webseite {website}, die in der URL Datei angegeben worden ist, ist ungültig.</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1782"/>
+        <location filename="../../../main.py" line="1842"/>
         <source>Couldn&apos;t determine which site you want to search on??? Please report this immediately!</source>
         <translation>Ich konnte nicht herausfinden, auf welcher Seite du suchen willst??? Bitte melde das sofort!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1915"/>
+        <location filename="../../../main.py" line="1976"/>
         <source>
 An error happened inside of Porn Fetch! 
 
@@ -156,48 +151,48 @@ Ein Fehler trat in Porn Fetch auf
 {error}</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2035"/>
+        <location filename="../../../main.py" line="2099"/>
         <source>Can&apos;t show thumbnail, due to your privacy settings ;)</source>
         <translation>Ich kann dir das Vorschaubild aufgrund deiner Privatsphäre Einstellungen nicht anzeigen :)</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2042"/>
+        <location filename="../../../main.py" line="2107"/>
         <source>No thumbnail available</source>
         <translation>Kein Vorschaubild verfügbar</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2142"/>
+        <location filename="../../../main.py" line="2218"/>
         <source>Those credentials don&apos;t seem to be valid...</source>
         <translation>Diese Zugangsdaten sehen ungültig aus...</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2149"/>
+        <location filename="../../../main.py" line="2226"/>
         <source>Login Successful!</source>
         <translation>Login erfolgreich!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2153"/>
-        <source>Login Failed, please check your credentials and try again!</source>
-        <translation>Login gescheitert, bitte überprüfe deine Eingaben!</translation>
+        <location filename="../../../main.py" line="2231"/>
+        <source>Login Failed, please check your cresdentials and try again!</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2156"/>
+        <location filename="../../../main.py" line="2235"/>
         <source>You are already logged in!</source>
         <translation>Du bist bereits angemeldet!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2169"/>
+        <location filename="../../../main.py" line="2248"/>
         <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
         <translation>Es gibt ein Problem mit dem Login. Bitte logge dich erst ein und versuche dann Videos von deinem Account zu laden.</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2233"/>
-        <location filename="../../../main.py" line="2245"/>
+        <location filename="../../../main.py" line="2312"/>
+        <location filename="../../../main.py" line="2325"/>
         <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
         <translation>Ungültige Kategorie. Drücke &quot;Kategorien auflisten&quot; um alle möglichen zu sehen.</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2330"/>
+        <location filename="../../../main.py" line="2410"/>
         <source>
 ! Warning !
 Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
@@ -210,7 +205,7 @@ Einige Webseiten konnten nicht aufgerufen werden. Hier ist ein detailierter Beri
 {formatted_results}</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2363"/>
+        <location filename="../../../main.py" line="2443"/>
         <source>
 FFmpeg isn&apos;t installed on your system... Some features won&apos;t be available:
 
@@ -1294,22 +1289,22 @@ Porn Fetch wird standartmäßig diese Tags in die Videos schreiben.
 Das Schreiben von Tags ist allerdings nur für mp4 Video-Container unterstützt, da die andere Container ein andere Standartisierung nutzen.</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2618"/>
+        <location filename="../../../main.py" line="2698"/>
         <source>Done! Please restart.</source>
         <translation>Fertig, Bitte neustarten.</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2643"/>
+        <location filename="../../../main.py" line="2723"/>
         <source>No URLs in the current session...</source>
         <translation>Keine URLs in der aktuellen Session...</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2646"/>
+        <location filename="../../../main.py" line="2726"/>
         <source>FFmpeg has been installed. Please restart Porn Fetch :)</source>
         <translation>FFmpeg wurde installiert. Bitte starte Porn Fetch neu :)</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2669"/>
+        <location filename="../../../main.py" line="2749"/>
         <source>
             Information: A new version of Porn Fetch (v{__next_release__}) is out. I recommend you to update Porn Fetch. 
             Go to: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/ {__next_release__}

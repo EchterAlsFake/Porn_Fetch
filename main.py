@@ -1,37 +1,54 @@
-import sys
-import time
-import httpx
-import random
-import shutil
-import tarfile
-import os.path
-import zipfile
-import argparse
-import markdown
-import traceback
-import src.frontend.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
+try:
+    import sys
+    import time
+    import httpx
+    import random
+    import shutil
+    import tarfile
+    import os.path
+    import zipfile
+    import argparse
+    import markdown
+    import traceback
+    import src.frontend.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
 
-from threading import Event
-from io import TextIOWrapper
-from itertools import islice, chain
-from hqporner_api.api import Sort as hq_Sort
+    from threading import Event
+    from io import TextIOWrapper
+    from itertools import islice, chain
+    from hqporner_api.api import Sort as hq_Sort
 
-from src.backend.shared_gui import *
-from src.backend.class_help import *
-from src.backend.shared_functions import *
+    from src.backend.shared_gui import *
+    from src.backend.class_help import *
+    from src.backend.shared_functions import *
 
-from src.frontend.ui_form_license import Ui_SetupLicense
-from src.frontend.ui_form_desktop import Ui_PornFetch_Desktop
-from src.frontend.ui_form_android import Ui_PornFetch_Android
-from src.frontend.ui_form_install_dialog import Ui_SetupInstallDialog
-from src.frontend.ui_form_android_startup import Ui_SetupAndroidStartup
-from src.frontend.ui_form_keyboard_shortcuts import Ui_KeyboardShortcuts
-from src.frontend.ui_form_range_selector import Ui_PornFetchRangeSelector
+    from src.frontend.ui_form_license import Ui_SetupLicense
+    from src.frontend.ui_form_desktop import Ui_PornFetch_Desktop
+    from src.frontend.ui_form_android import Ui_PornFetch_Android
+    from src.frontend.ui_form_install_dialog import Ui_SetupInstallDialog
+    from src.frontend.ui_form_android_startup import Ui_SetupAndroidStartup
+    from src.frontend.ui_form_keyboard_shortcuts import Ui_KeyboardShortcuts
+    from src.frontend.ui_form_range_selector import Ui_PornFetchRangeSelector
 
-from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
-                        QTranslator, QCoreApplication, QSize)
-from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QInputDialog, QTextBrowser
-from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence
+    from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
+                            QTranslator, QCoreApplication, QSize)
+    from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QInputDialog, QTextBrowser
+    from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence
+except Exception as e:
+    import http.client
+    import json
+
+
+    def send_error_log(message):
+        url = "192.168.0.19:8000"  # Don't forget to place the IP of the device your server runs on
+        endpoint = "/log"
+        data = json.dumps({"message": message})
+        headers = {"Content-type": "application/json"}
+
+        conn = http.client.HTTPConnection(url)
+
+        conn.request("POST", endpoint, data, headers)
+
+    send_error_log(str(e))
 
 
 """
@@ -77,7 +94,9 @@ url_macOS = "https://evermeet.cx/ffmpeg/ffmpeg-7.1.zip"
 session_urls = []  # This list saves all URls used in the current session. Used for the URL export function
 total_downloaded_videos = 0 # All videos that actually successfully downloaded
 total_downloaded_videos_attempt = 0 # All videos the user tries to download
-logger = setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG)
+http_log_ip = "192.168.0.19" # I need this for Android development. Don't worry, in the release thill will of course be disabled :)
+http_log_port = 8000
+logger = setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=http_log_ip, http_port=http_log_port)
 logger.setLevel(logging.DEBUG)
 
 
@@ -153,7 +172,7 @@ class License(QWidget):
         self.conf.read("config.ini")
         self.android_startup = None
         self.install_widget = None
-        self.logger = setup_logger(name="Porn Fetch - [License]", log_file="PornFetch.log", level=logging.DEBUG)
+        self.logger = setup_logger(name="Porn Fetch - [License]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=http_log_ip, http_port=http_log_port)
 
         # Set up the UI for License widget
         self.ui = Ui_SetupLicense()
@@ -244,7 +263,7 @@ class InstallDialog(QWidget):
         self.conf = ConfigParser()
         self.conf.read("config.ini")
         self.main_widget = None
-        self.logger =  setup_logger(name="Porn Fetch - [InstallDialog]", log_file="PornFetch.log", level=logging.DEBUG)
+        self.logger =  setup_logger(name="Porn Fetch - [InstallDialog]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=http_log_ip, http_port=http_log_port)
 
         self.ui = Ui_SetupInstallDialog()
         self.ui.setupUi(self)
@@ -279,7 +298,7 @@ class InstallThread(QRunnable):
         super(InstallThread, self).__init__()
         self.app_name = app_name
         self.signals = Signals()
-        self.logger = setup_logger(name="Porn Fetch - [InstallThread]", log_file="PornFetch.log", level=logging.DEBUG)
+        self.logger = setup_logger(name="Porn Fetch - [InstallThread]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=http_log_ip, http_port=http_log_port)
 
     def run(self):
         try:
@@ -409,7 +428,7 @@ class InternetCheck(QRunnable):
 
         self.website_results = {}
         self.signals = Signals()
-        self.logger = setup_logger(name="Porn Fetch - [InternetCheck]", log_file="PornFetch.log", level=logging.DEBUG)
+        self.logger = setup_logger(name="Porn Fetch - [InternetCheck]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=http_log_ip, http_port=http_log_port)
 
 
     def run(self):
@@ -446,7 +465,7 @@ class CheckUpdates(QRunnable):
     def __init__(self):
         super(CheckUpdates, self).__init__()
         self.signals = Signals()
-        self.logger = setup_logger(name="Porn Fetch - [CheckUpdates]", log_file="PornFetch.log", level=logging.DEBUG)
+        self.logger = setup_logger(name="Porn Fetch - [CheckUpdates]", log_file="PornFetch.log", level=logging.DEBUG, http_port=http_log_port, http_ip=http_log_ip)
 
     def run(self):
         url = f"https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/{__next_release__}"
@@ -481,13 +500,13 @@ class FFMPEGDownload(QRunnable):
         self.url = url
         self.extract_path = extract_path
         self.mode = mode
-        self.logger = setup_logger(name="Porn Fetch - [FFMPEGDownload]", log_file="PornFetch.log", level=logging.DEBUG)
+        self.logger = setup_logger(name="Porn Fetch - [FFMPEGDownload]", log_file="PornFetch.log", level=logging.DEBUG, http_port=http_log_port, http_ip=http_log_ip)
         self.signals = Signals()
 
     def delete_dir(self):
         deleted_any = False
         cwd = os.getcwd()
-        self.logger.info(f"Trying to delete FFMmpeg directory in: {cwd}")
+        self.logger.info(f"Trying to delete FFmpeg directory in: {cwd}")
 
         for entry in os.listdir(cwd):
             if "ffmpeg" in entry.lower():
@@ -585,7 +604,7 @@ class AddToTreeWidget(QRunnable):
         self.consistent_data = VideoData().consistent_data
         self.output_path = self.consistent_data.get("output_path")
         self.search_limit = self.consistent_data.get("search_limit")
-        self.logger = setup_logger(name="Porn Fetch - [AddToTreeWidget]", log_file="PornFetch.log", level=logging.DEBUG)
+        self.logger = setup_logger(name="Porn Fetch - [AddToTreeWidget]", log_file="PornFetch.log", level=logging.DEBUG, http_port=http_log_port, http_ip=http_log_ip)
 
 
     def process_video(self, video, index):
@@ -718,7 +737,7 @@ class DownloadThread(QRunnable):
         self.quality = self.consistent_data.get("quality")
         data_object: dict = VideoData().data_objects[self.video_id]
         self.output_path = data_object.get("output_path")
-        self.logger = setup_logger(name="Porn Fetch - [DownloadThread]", log_file="PornFetch.log", level=logging.DEBUG)
+        self.logger = setup_logger(name="Porn Fetch - [DownloadThread]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=http_log_ip, http_port=http_log_port)
 
         self.threading_mode = self.consistent_data.get("threading_mode")
         self.signals = Signals()
@@ -883,7 +902,7 @@ class PostProcessVideoThread(QRunnable):
         self.ffmpeg_path = self.consistent_data.get("ffmpeg_path")
         self.video_format = self.consistent_data.get("video_format")
         self.path = self.data.get("output_path")
-        self.logger = setup_logger(name="Porn Fetch - [PostProcessVideoThread]", log_file="PornFetch.log", level=logging.DEBUG)
+        self.logger = setup_logger(name="Porn Fetch - [PostProcessVideoThread]", log_file="PornFetch.log", level=logging.DEBUG, http_port=http_log_port, http_ip=http_log_ip)
 
     def run(self):
         if self.ffmpeg_path is None:
@@ -939,7 +958,7 @@ class QTreeWidgetDownloadThread(QRunnable):
         self.threading_mode = self.consistent_data.get("threading_mode")
         self.quality = self.consistent_data.get("quality")
         self.semaphore = semaphore
-        self.logger = setup_logger(name="Porn Fetch - [QTreeWidgetDownloadThread]", log_file="PornFetch.log", level=logging.DEBUG)
+        self.logger = setup_logger(name="Porn Fetch - [QTreeWidgetDownloadThread]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=http_log_ip, http_port=http_log_port)
 
 
     def run(self):
@@ -993,7 +1012,7 @@ class AddUrls(QRunnable):
         self.signals = Signals()
         self.file = file
         self.delay = delay
-        self.logger = setup_logger(name="Porn Fetch - [AddUrls]", log_file="PornFetch.log", level=logging.DEBUG)
+        self.logger = setup_logger(name="Porn Fetch - [AddUrls]", log_file="PornFetch.log", level=logging.DEBUG, http_port=http_log_port, http_ip=http_log_ip)
 
     def run(self):
         iterator = []
@@ -1101,7 +1120,7 @@ class PornFetch(QWidget):
         self.downloader = None
         self.directory_system = None
         self.ffmpeg_path = None
-        self.logger = setup_logger(name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG)
+        self.logger = setup_logger(name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=http_log_ip, http_port=http_log_port)
 
         self.last_index = 0 # Keeps track of the last index of videos added to the tree widget
         self.threadpool = QThreadPool()
@@ -1120,48 +1139,48 @@ class PornFetch(QWidget):
                 self.install_pornfetch()
                 self.close()
 
-            self.default_max_height = self.ui.main_stacked_widget_top.maximumHeight()
-            self.button_connectors()  # Connects the buttons to their functions
-            self.button_groups()  # Groups the buttons, so that the Radio buttons are split from themselves (hard to explain)
-            self.shortcuts() # Activates the keyboard shortcuts
-            self.load_style()  # Loads all the User Interface stylesheets
-            self.logger.debug("Startup: [3/5] Initialized the User Interface")
-            self.settings_maps_initialization()
-            self.load_user_settings()  # Loads the user settings and applies selected values to the UI
-            self.logger.debug("Startup: [4/5] Loaded the user settings")
-            self.switch_to_home()  # Switches Porn Fetch to the home widget
+        self.default_max_height = self.ui.main_stacked_widget_top.maximumHeight()
+        self.button_connectors()  # Connects the buttons to their functions
+        self.button_groups()  # Groups the buttons, so that the Radio buttons are split from themselves (hard to explain)
+        self.shortcuts() # Activates the keyboard shortcuts
+        self.load_style()  # Loads all the User Interface stylesheets
+        self.logger.debug("Startup: [3/5] Initialized the User Interface")
+        self.settings_maps_initialization()
+        self.load_user_settings()  # Loads the user settings and applies selected values to the UI
+        self.logger.debug("Startup: [4/5] Loaded the user settings")
+        self.switch_to_home()  # Switches Porn Fetch to the home widget
 
-            if self.internet_checks:
-                self.logger.info("Running internet checks")
-                self.check_internet()
+        if self.internet_checks:
+            self.logger.info("Running internet checks")
+            self.check_internet()
 
-            if self.update_checks:
-                self.logger.info("Running update checks")
-                self.check_for_updates()
+        if self.update_checks:
+            self.logger.info("Running update checks")
+            self.check_for_updates()
 
-            if self._anonymous_mode:
-                self.logger.info("Enabling anonymous mode")
-                self.anonymous_mode()
+        if self._anonymous_mode:
+            self.logger.info("Enabling anonymous mode")
+            self.anonymous_mode()
 
-            self.check_ffmpeg()  # Checks and sets up FFmpeg
+        self.check_ffmpeg()  # Checks and sets up FFmpeg
 
-            VideoData().consistent_data.update({
-                "output_path": self.output_path,
-                "ffmpeg_path": self.ffmpeg_path,
-                "threading_mode": self.threading_mode,
-                "quality": self.quality,
-                "timeout": self.timeout,
-                "workers": self.workers,
-                "directory_system": self.directory_system,
-                "write_metadata": self.write_metadata,
-                "video_format": self.format,
-                "convert_videos": self.convert_videos,
-                "search_limit": self.search_limit,
-                "skip_existing_files": self.skip_existing_files
-            })
-            self.logger.debug("Startup: [5/5] ✔")
-            self.check_for_sponsoring_notice()
-            self.check_for_disclaimer_notice()
+        VideoData().consistent_data.update({
+            "output_path": self.output_path,
+            "ffmpeg_path": self.ffmpeg_path,
+            "threading_mode": self.threading_mode,
+            "quality": self.quality,
+            "timeout": self.timeout,
+            "workers": self.workers,
+            "directory_system": self.directory_system,
+            "write_metadata": self.write_metadata,
+            "video_format": self.format,
+            "convert_videos": self.convert_videos,
+            "search_limit": self.search_limit,
+            "skip_existing_files": self.skip_existing_files
+        })
+        self.logger.debug("Startup: [5/5] ✔")
+        self.check_for_sponsoring_notice()
+        self.check_for_disclaimer_notice()
 
     def install_pornfetch(self):
         if __build__ == "desktop":
