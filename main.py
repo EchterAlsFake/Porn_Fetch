@@ -2161,7 +2161,7 @@ An error happened inside of Porn Fetch!
                     Qt.AspectRatioMode.KeepAspectRatio,
                     Qt.TransformationMode.SmoothTransformation
                 )
-                self.ui.main_label_tree_show_thumbnail.setPixmap(scaled_pixmap)
+                self.ui.main_label_tree_show_thumbnail.seKIKtPixmap(scaled_pixmap)
             except Exception:
                 error = traceback.format_exc()
                 self.ui.main_label_tree_show_thumbnail.setText(f"Failed to load image: {error}")
