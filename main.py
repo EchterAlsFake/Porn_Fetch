@@ -59,7 +59,7 @@ Discord: echteralsfake (faster response)
 
 __license__ = "GPL 3"
 __version__ = "3.5"
-__build__ = "android"  # android or desktop
+__build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 __next_release__ = "3.6"
 total_segments = 0
@@ -73,8 +73,8 @@ url_macOS = "https://evermeet.cx/ffmpeg/ffmpeg-7.1.zip"
 session_urls = []  # This list saves all URls used in the current session. Used for the URL export function
 total_downloaded_videos = 0 # All videos that actually successfully downloaded
 total_downloaded_videos_attempt = 0 # All videos the user tries to download
-http_log_ip = "192.168.0.42" # I need this for Android development. Don't worry, in the release this will of course be disabled :)
-http_log_port = "8000"
+http_log_ip = None # I need this for Android development. Don't worry, in the release this will of course be disabled :)
+http_log_port = None
 logger = setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=http_log_ip, http_port=http_log_port)
 logger.setLevel(logging.DEBUG)
 
@@ -302,16 +302,7 @@ using the portable version, which will work just fine.
 If you believe, that this is a mistake, please report it on GitHub, so that I can fix it :)""", disambiguation=None))
                     return
 '''
-                try:
-                    os.makedirs(destination_path_final, exist_ok=True)
-
-                except PermissionError:
-                    '''ui_popup("""You do not have permissions to create the folder 'pornfetch' inside {destination_path_tmp}!
-The installation process will stop now. You can either run Porn Fetch with elevated privileges, or use the portable
-version.""")'''
-                    print("Permission error")
-                    return
-
+                os.makedirs(destination_path_final, exist_ok=True)
                 pornfetch_exe = os.path.join(destination_path_final, filename)
                 if os.path.exists(pornfetch_exe):
                     os.remove(pornfetch_exe)
@@ -2659,8 +2650,8 @@ def main():
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
             logger.info(f"Using custom font -->: {font_family}")
             app.setFont(QFont(font_family))
-    widget = PornFetch()  # Starts License widget and checks if license was accepted.
-    widget.show()
+    widget = License() # Starts License widget and checks if license was accepted.
+    widget.check_license_and_proceed()
     """
     The following exceptions are just general exceptions to handle some basic errors. They are not so relevant for
     most cases.
@@ -2679,12 +2670,10 @@ if __name__ == "__main__":
     def load_stylesheet(path):
         """Load stylesheet from a given path with explicit open and close."""
         file = QFile(path)
-        logger.info(f"Opening file: {path}")
         if not file.open(QFile.OpenModeFlag.ReadOnly | QFile.OpenModeFlag.Text):
             logger.error(f"Failed to open stylesheet.qss: {file.errorString()}")
             return ""
         stylesheet = QTextStream(file).readAll()
-        logger.info(f"Got stylesheet: {stylesheet}")
         file.close()
         return stylesheet
 

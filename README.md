@@ -26,13 +26,6 @@
 ---
 </div>
 
-# about 3.5
-So I finally found my motivation for coding again. I'll start the rework pt.2 for the Networking
-part of Porn Fetch and its sub APIs now, so that everything is entirely stable.
-
-You can expect the release of Porn Fetch on 15/16th of March.
-
-
 > [!WARNING]
 > Porn Fetch is NOT associated with the websites. Porn Fetch is AGAINST the Terms of Services of EVERY website! Usage is on YOUR risk.
 
@@ -68,6 +61,8 @@ You can expect the release of Porn Fetch on 15/16th of March.
 - Native Android application (Not on >=v3.3)
 - modern looking user interface
 - Supports over 115 MB/s download speed thanks to well optimized HLS downloading
+- Proxy support (Experimental)
+- Native macOS support (Experimental)
 
 ## Installation
 A detailed installation guide for all platforms can be found [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/INSTALLATION.md)
@@ -77,16 +72,16 @@ A detailed installation guide for all platforms can be found [HERE](https://gith
 > Supported Platforms:
 
 - Windows (10 / 11)
-- Linux   (X11 / Wayland)
-- Android (Android is very unstable, please consider using the CLI on Termux instead!)
+- Linux (X11 / Wayland)
+- macoS
 
 > [!NOTE]
-> macOS will be officially supported in version 3.5
+> Porn Fetch is mainly developed and tested on Arch Linux with Hyprland and Gnome. 
 
-The Graphical User Interface is only for 64bit systems. The CLI supports 64 and 32bit systems.
-<br>Porn Fetch is developed on Arch Linux (Hyprland) and cross-compiled using GitHub CI/CD
+> [!CRITICAL]
+> macOS is compiled on x64 AMD hardware. Apple has a translation layer, but I can't test that. If you have an Apple Silicon
+> chip, and you are willing to help, please get in touch with me.
 
-> Downloading on Windows is generally slower because Windows doesn't have a good I/O network handling
 
 ## 🌐 Supported Websites
 - [PornHub.com](https://github.com/Egsagon/PHUB)
@@ -94,6 +89,8 @@ The Graphical User Interface is only for 64bit systems. The CLI supports 64 and 
 - [xnxx.com](https://github.com/EchterAlsFake/xnxx_api)
 - [Eporner.com](https://github.com/EchterAlsFake/eporner_api)
 - [XVideos.com](https://github.com/EchterAlsFake/xvideos_api)
+- [missav.ws](https://github.com/EchterAlsFake/missav_api)
+- [xhamster.com](https://github.com/EchterAlsFake/xhamster_api)
 
 > [!IMPORTANT] 
 > Not all websites support every feature. 
@@ -108,7 +105,7 @@ Porn Fetch allows you to use batch / automatic processing of videos, models and 
 Here's a short documentation on how to use it:
 
 > [!NOTE]
-> The format ending of the file doesn't matter.
+> This feature is currently being reworked. New changes will apply in version 3.6
 
 Here's a quick example on how to use it. It should explain anything by itself:
 
@@ -153,6 +150,10 @@ bash install.sh
 ```
 
 ### Termux
+> [!NOTE]
+> You do **NOT** need a rooted Android device to compile and run Porn Fetch on Android
+
+
 ```bash
 apt install wget -y && wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_termux.sh" | bash
 ```
@@ -180,32 +181,28 @@ bash install.sh
 <br>The created file will be a `.app` file. You cannot usually run it as you would, because it doesn't work for some reason...
 Instead, you need to go inside the `.app` package using a Terminal and run the main file in it.
 
-You can do that with something like `./<the_app_package.app/Contents/MacOS/main`
-
-At the moment, this is unfortunately the only way how I can support macOS. I will try to make this easier in the future, but it
-doesn't depend on me.
+You can do that with something like `./<the_app_package.app/Contents/macOS/main`
 
 
 ## 📱 Android
-The Android app is the exact same as the desktop app. Thanks to Qt's Android developing Guide, you'll be able to simply
-install the .apk file, and you have the full version of Porn Fetch on your device.
-
-> [!NOTE]
-> Building for Android is experimental, please report any errors, if you can't fix them by yourself
+> [!IMPORTANT]
+> Building for Android is a hard and complex topic. If you need help feel free to ask me on Discord. However, I absolutely
+> **DO NOT** recommend you doing that now. Please wait until things get easier in the next months...
 
 **Make sure your host system has the following dependencies installed**
 - jdk17-openjdk
 - llvm
 - openssl
 - python3.11
+- zip
+- libtool
+- libssl-dev
+- openssl
 
 ```bash
 curl "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/build_android.sh" -o build_android.sh
 bash build_android.sh
 ```
-
-> [!IMPORTANT]
-> Android is currently broken, use Termux instead!
 
 ## 🌍 Translating
 Currently available in:
@@ -241,6 +238,7 @@ or PayPal, you can donate me here:
 
 - Paypal: `https://paypal.me/EchterAlsFake`
 - Monero: `42XwGZYbSxpMvhn9eeP4DwMwZV91tQgAm3UQr6Zwb2wzBf5HcuZCHrsVxa4aV2jhP4gLHsWWELxSoNjfnkt4rMfDDwXy9jR`
+- Ko-Fi : `https://ko-fi.com/EchterAlsFake`
 
 Even if it's just 10 cents, for me, it matters, because I do not work yet and it means a lot
 to me :)
