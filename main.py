@@ -1,4 +1,5 @@
 import sys
+sys.stdout.reconfigure(encoding='utf-8')
 import time
 import httpx
 import random
@@ -65,7 +66,6 @@ __next_release__ = "3.6"
 total_segments = 0
 downloaded_segments = 0
 stop_flag = Event()
-
 
 url_linux = "https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-amd64-static.tar.xz"
 url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z"
@@ -189,7 +189,7 @@ class License(QWidget):
             self.show_android_warning()
 
         else:
-            self.show_install_dialog()
+            self.show_disclaimer()
 
     def show_android_warning(self):
         if not self.conf["Android"]["warning_shown"] == "true":
@@ -204,6 +204,53 @@ class License(QWidget):
         else:
             self.show_main()
 
+    def show_disclaimer_text(self):
+        self.textbrowser = QTextBrowser()
+        self.textbrowser.setHtml(
+            u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+            "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+            "p, li { white-space: pre-wrap; }\n"
+            "hr { height: 1px; border-width: 0; }\n"
+            "li.unchecked::marker { content: \"\\2610\"; }\n"
+            "li.checked::marker { content: \"\\2612\"; }\n"
+            "</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+            "<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:24pt; font-weight:700; color:#a51d2d;\">DISCLAIMER</span></p>\n"
+            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Porn Fetch may violate the Terms of Service of the websites it interacts with.<br />Downloading copyright-protected content without proper authorization is illegal under"
+            " the <span style=\" font-weight:700;\">DMCA (Digital Millennium Copyright Act)</span> and other applicable laws.</p>\n"
+            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">However, some jurisdictions allow downloading content for strictly <span style=\" font-weight:700;\">private, personal use</span>. By using Porn Fetch, you explicitly agree to use this software <span style=\" font-weight:700;\">only for personal purposes</span>, such as saving videos for offline viewing.</p>\n"
+            "<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">Prohibited Use</span></h3>\n"
+            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I <span style=\" font-weight:700;\">strictly forbid</span> the redistribution, sharing, or commercial use of any content downloaded using "
+            "Porn Fetch.<br />If users exploit this software for unauthorized distribution, I may discontinue development and take the project offline. Please respect this to ensure its continued availability.</p>\n"
+            "<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">Liability Disclaimer</span></h3>\n"
+            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This software is provided under the <span style=\" font-weight:700;\">GPL license</span> and comes <span style=\" font-weight:700;\">without any warranty</span>. I am not liable for any legal consequences, damages, or misuse resulting from its use. <span style=\" font-weight:700;\">You are solely responsible for your actions.</span></p>\n"
+            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">By using Porn Fetch"
+            ", you confirm that you will <span style=\" font-weight:700;\">only use it for private purposes</span> and comply with all applicable laws. </p></body></html>")
+
+        self.textbrowser.setFixedHeight(600)
+        self.textbrowser.setFixedWidth(800)
+        screen = QApplication.primaryScreen()
+        screen_geometry = screen.availableGeometry()
+
+        # Calculate the center position
+        x = (screen_geometry.width() - self.textbrowser.width()) // 2
+        y = (screen_geometry.height() - self.textbrowser.height()) // 2
+
+        # Move the window to the center
+        self.textbrowser.move(x, y)
+        self.textbrowser.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
+        self.textbrowser.show()
+        self.textbrowser.setFocus()
+        self.textbrowser.raise_()
+        self.textbrowser.activateWindow()
+
+    def show_disclaimer(self):
+        if self.conf.get("Disclaimer", "shown") == "false":
+            self.show_disclaimer_text()
+            self.conf.set("Disclaimer", "shown", "true")
+            with open("config.ini", "w") as config_file:  # type:TextIOWrapper
+                self.conf.write(config_file)
+
+        self.show_install_dialog()
 
     def show_install_dialog(self):
         if sys.platform == "darwin":
@@ -409,7 +456,7 @@ class InternetCheck(QRunnable):
                 status = BaseCore().fetch(website, get_response=True)
 
                 if status.status_code == 200:
-                    self.website_results.update({website: "✔"})
+                    self.website_results.update({website: "OK"})
 
                 elif status.status_code == 404:
                     if not website == "https://www.missav.ws": # Could get taken down, so yeah ;)
@@ -495,7 +542,7 @@ class FFMPEGDownload(QRunnable):
         # Download the file
         self.logger.debug(f"Downloading: {self.url}")
         self.logger.debug("FFMPEG: [1/4] Starting the download")
-        with httpx.stream("GET", self.url) as r:
+        with httpx.stream("GET", self.url, follow_redirects=True) as r:
             r.raise_for_status()
             if self.url == url_windows or self.url == url_macOS:
                 total_length = int(r.headers.get('content-length'))
@@ -1147,9 +1194,8 @@ class PornFetch(QWidget):
             "search_limit": self.search_limit,
             "skip_existing_files": self.skip_existing_files
         })
-        self.logger.debug("Startup: [5/5] ✔")
+        self.logger.debug("Startup: [5/5] OK")
         self.check_for_sponsoring_notice()
-        self.check_for_disclaimer_notice()
 
     def install_pornfetch(self):
         if __build__ == "desktop":
@@ -2099,7 +2145,7 @@ An error happened inside of Porn Fetch!
             try:
                 pixmap = QPixmap()
                 if not "hqporner" in thumbnail:
-                    pixmap.loadFromData(BaseCore().fetch(thumbnail).content)
+                    pixmap.loadFromData(BaseCore().fetch(thumbnail, get_bytes=True))
 
                 else:
                     self.logger.warning("HQPorner currently has an issue with internal network fetching, using independent httpx session instead."
@@ -2386,7 +2432,7 @@ An error happened inside of Porn Fetch!
         formatted_results = ""
 
         for website, status in results.items():
-            if status != "✔":
+            if status != "OK":
                 formatted_results += f"{website} -->: {status}\n\n"
                 show = True
 
@@ -2540,45 +2586,6 @@ This warning won't be shown again.
         self.textbrowser.raise_()  # Bring to front
         self.textbrowser.activateWindow()  # Activate
 
-    def show_disclaimer_text(self):
-        self.textbrowser = QTextBrowser()
-        self.textbrowser.setHtml(
-            u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-            "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-            "p, li { white-space: pre-wrap; }\n"
-            "hr { height: 1px; border-width: 0; }\n"
-            "li.unchecked::marker { content: \"\\2610\"; }\n"
-            "li.checked::marker { content: \"\\2612\"; }\n"
-            "</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-            "<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:24pt; font-weight:700; color:#a51d2d;\">DISCLAIMER</span></p>\n"
-            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Porn Fetch may violate the Terms of Service of the websites it interacts with.<br />Downloading copyright-protected content without proper authorization is illegal under"
-            " the <span style=\" font-weight:700;\">DMCA (Digital Millennium Copyright Act)</span> and other applicable laws.</p>\n"
-            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">However, some jurisdictions allow downloading content for strictly <span style=\" font-weight:700;\">private, personal use</span>. By using Porn Fetch, you explicitly agree to use this software <span style=\" font-weight:700;\">only for personal purposes</span>, such as saving videos for offline viewing.</p>\n"
-            "<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">Prohibited Use</span></h3>\n"
-            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I <span style=\" font-weight:700;\">strictly forbid</span> the redistribution, sharing, or commercial use of any content downloaded using "
-            "Porn Fetch.<br />If users exploit this software for unauthorized distribution, I may discontinue development and take the project offline. Please respect this to ensure its continued availability.</p>\n"
-            "<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">Liability Disclaimer</span></h3>\n"
-            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This software is provided under the <span style=\" font-weight:700;\">GPL license</span> and comes <span style=\" font-weight:700;\">without any warranty</span>. I am not liable for any legal consequences, damages, or misuse resulting from its use. <span style=\" font-weight:700;\">You are solely responsible for your actions.</span></p>\n"
-            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">By using Porn Fetch"
-            ", you confirm that you will <span style=\" font-weight:700;\">only use it for private purposes</span> and comply with all applicable laws. </p></body></html>")
-
-        self.textbrowser.setFixedHeight(600)
-        self.textbrowser.setFixedWidth(800)
-        screen = QApplication.primaryScreen()
-        screen_geometry = screen.availableGeometry()
-
-        # Calculate the center position
-        x = (screen_geometry.width() - self.textbrowser.width()) // 2
-        y = (screen_geometry.height() - self.textbrowser.height()) // 2
-
-        # Move the window to the center
-        self.textbrowser.move(x, y)
-        self.textbrowser.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
-        self.textbrowser.show()
-        self.textbrowser.setFocus()
-        self.textbrowser.raise_()
-        self.textbrowser.activateWindow()
-
     def check_for_sponsoring_notice(self):
         downloaded_videos = int(self.conf.get("Sponsoring", "downloaded_videos"))
         if downloaded_videos >= 20:
@@ -2587,13 +2594,6 @@ This warning won't be shown again.
                 self.conf.set("Sponsoring", "notice_shown", "true")
                 with open("config.ini", "w") as config_file:  # type:TextIOWrapper
                     self.conf.write(config_file)
-
-    def check_for_disclaimer_notice(self):
-        if self.conf.get("Disclaimer", "shown") == "false":
-            self.show_disclaimer_text()
-            self.conf.set("Disclaimer", "shown", "true")
-            with open("config.ini", "w") as config_file:  # type:TextIOWrapper
-                self.conf.write(config_file)
 
 
 def main():
@@ -2612,15 +2612,6 @@ def main():
     else:
         language_code = language
     # Try loading the specific regional translation
-
-    if not QFile.exists(":/style/stylesheets/stylesheet.qss"):
-        logger.error("Main stylsheet doesn't exist")
-
-    else:
-        logger.info("Main stylesheet is there lmao")
-
-    if not QFile.exists(":/images/graphics/download.svg"):
-        logger.error("Download icon not found")
 
     path = f":/translations/translations/{language_code}.qm"
     translator = QTranslator(app)

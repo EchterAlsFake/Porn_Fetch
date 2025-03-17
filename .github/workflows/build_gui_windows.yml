@@ -28,7 +28,7 @@ jobs:
           virtualenv venv
           .\venv\Scripts\activate
           pip install -r requirements.txt
-          pip install PySide6 nuitka zstandard
+          pip install PySide6 nuitka zstandard pywin32
 
       - name: Build application for Windows x64
         run: |
