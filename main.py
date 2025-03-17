@@ -59,18 +59,13 @@ Discord: echteralsfake (faster response)
 
 __license__ = "GPL 3"
 __version__ = "3.5"
-__build__ = "desktop"  # android or desktop
+__build__ = "android"  # android or desktop
 __author__ = "Johannes Habel"
 __next_release__ = "3.6"
 total_segments = 0
 downloaded_segments = 0
 stop_flag = Event()
 
-if __build__ == "android":
-    os.environ['QT_ANDROID_ENABLE_WORKAROUND_TO_DISABLE_PREDICTIVE_TEXT'] = '1'
-    os.environ['QT_ANDROID_DISABLE_GLYPH_CACHE_WORKAROUND'] = '1'
-    os.environ['QT_ANDROID_BACKGROUND_ACTIONS_QUEUE_SIZE'] = '3'
-    # Just don't ask, thank you :)
 
 url_linux = "https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-amd64-static.tar.xz"
 url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z"
@@ -78,8 +73,8 @@ url_macOS = "https://evermeet.cx/ffmpeg/ffmpeg-7.1.zip"
 session_urls = []  # This list saves all URls used in the current session. Used for the URL export function
 total_downloaded_videos = 0 # All videos that actually successfully downloaded
 total_downloaded_videos_attempt = 0 # All videos the user tries to download
-http_log_ip = None # I need this for Android development. Don't worry, in the release this will of course be disabled :)
-http_log_port = None
+http_log_ip = "192.168.0.42" # I need this for Android development. Don't worry, in the release this will of course be disabled :)
+http_log_port = "8000"
 logger = setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=http_log_ip, http_port=http_log_port)
 logger.setLevel(logging.DEBUG)
 
@@ -2611,15 +2606,12 @@ This warning won't be shown again.
 
 
 def main():
-    send_error_log("Running in main function")
     setup_config_file()
-    send_error_log("Finished setting up configuration file")
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
     conf = ConfigParser()
     conf.read("config.ini")
     language = conf["UI"]["language"]
-    send_error_log("3")
 
     if language == "system":
         # Get the system's locale
@@ -2628,13 +2620,21 @@ def main():
 
     else:
         language_code = language
-    send_error_log("Got language code")
     # Try loading the specific regional translation
+
+    if not QFile.exists(":/style/stylesheets/stylesheet.qss"):
+        logger.error("Main stylsheet doesn't exist")
+
+    else:
+        logger.info("Main stylesheet is there lmao")
+
+    if not QFile.exists(":/images/graphics/download.svg"):
+        logger.error("Download icon not found")
+
     path = f":/translations/translations/{language_code}.qm"
     translator = QTranslator(app)
     if translator.load(path):
         logger.debug(f"Startup: [1/5] {language_code} translation loaded")
-        send_error_log("Applied translation")
     else:
         # Try loading a more general translation if specific one fails
         general_language_code = language_code.split('_')[0]
@@ -2646,15 +2646,9 @@ def main():
 
     app.installTranslator(translator)
     send_error_log("Installed translation")
-    file = QFile(":/style/stylesheets/stylesheet.qss")
-    file.open(QFile.OpenModeFlag.ReadOnly | QFile.OpenModeFlag.Text)
-    stream = QTextStream(file)
-    app.setStyleSheet(stream.readAll())
+    app.setStyleSheet(load_stylesheet(":/style/stylesheets/stylesheet.qss"))
     send_error_log("Set main stylesheet")
-    if __build__ == "android":
-        font = QFont("arial", 12)
-        app.setFont(font)
-        send_error_log("Applied Arial font")
+
     if conf["UI"]["custom_font"] == "true":
         font_id = QFontDatabase.addApplicationFont(":/fonts/graphics/JetBrainsMono-Regular.ttf")
         if font_id == -1:
@@ -2665,10 +2659,8 @@ def main():
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
             logger.info(f"Using custom font -->: {font_family}")
             app.setFont(QFont(font_family))
-            send_error_log("Loaded custom font")
-    widget = License()  # Starts License widget and checks if license was accepted.
-    widget.check_license_and_proceed()
-    send_error_log("Did License stuff yk")
+    widget = PornFetch()  # Starts License widget and checks if license was accepted.
+    widget.show()
     """
     The following exceptions are just general exceptions to handle some basic errors. They are not so relevant for
     most cases.
@@ -2687,10 +2679,12 @@ if __name__ == "__main__":
     def load_stylesheet(path):
         """Load stylesheet from a given path with explicit open and close."""
         file = QFile(path)
+        logger.info(f"Opening file: {path}")
         if not file.open(QFile.OpenModeFlag.ReadOnly | QFile.OpenModeFlag.Text):
-            logger.debug(f"Failed to open {path}")
+            logger.error(f"Failed to open stylesheet.qss: {file.errorString()}")
             return ""
         stylesheet = QTextStream(file).readAll()
+        logger.info(f"Got stylesheet: {stylesheet}")
         file.close()
         return stylesheet
 
