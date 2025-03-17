@@ -35,7 +35,7 @@
 - [] Support for macOS
   - [x] Add build script
   - [x] Improve UI
-  - [] Add it to `INSTALLATION.md`
+  - [x] Add it to `INSTALLATION.md`
   - [] Add it to `SCREENSHOTS.md`
 
 ## Code improvements and design updates

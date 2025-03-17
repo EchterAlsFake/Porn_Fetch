@@ -1,100 +1,193 @@
-# Porn Fetch Installation & Usage Guide
+# Porn Fetch installation guide
 
-Hi, in this document, you will find detailed instructions on how to download and use Porn Fetch 
-on different platforms.
-
-
-# Platforms & Verification
-- [Types of Porn Fetch and 32-bit stuff](#types-of-porn-fetch-and-32-bit-executables)
-- [Windows](#windows)
-- [Linux](#linux)
-- [Android](#android)
-- [Verify downloads](#verify-downloads)
-- [Configuration file](#porn-fetchs-configuration-file)
-
-# Types of Porn Fetch and 32-bit executables
-Porn Fetch has two versions. The `CLI` and the `GUI`. The CLI is a terminal interface of Porn Fetch.
-It has no graphics and is intended to be used on Android (Termux) or by advanced users. The GUI version
-is the classic graphical interface like any other application has too. You probably want the `GUI`!
-
-32-bit and 64-bit:
-
-Most processors and systems are running on 64-bit. In some very specific use cases, some people need
-the 32-bit version, and those can download it. For the average person, the 64-bit version is the best!
+You can find the download files in the GitHub releases.
+-->: https://github.com/EchterAlsFake/Porn_Fetch/releases/
 
 
-# Windows
-The relevant file for you is: `PornFetch_Windows_GUI_x64.exe`
-
-After downloading it, you can just double-click on it, and Porn Fetch will open and is ready to be used.
-
-### other files...
-`PornFetch_Windows_CLI_x32.exe` = CLI version for 32-bit processors
-<br>`PornFetch_Windows_CLI_x64.exe` = CLI version for 64-bit processors
-
-# Linux
-The relevant file for you is: `PornFetch_Linux_GUI_x64.bin`
-
-After downloading the file, you need to make it executable. You can either right-click the
-file, and there should be a checkbox saying something like "Allow running this file as an application."
-Check it, and then you can just double-click on Porn Fetch and you are ready to use it.
-
-If you cannot find the box, or double-clicking Porn Fetch does not work, you need to do it using a 
-terminal.
-
-Open a terminal in the directory where the Porn Fetch file is saved.
-<br>Type: `chmod +x PornFetch_Linux_GUI_x64.bin` (Only one time)
-<br>Execute with: `./PornFetch_Linux_GUI_x64.bin`
-
-# Android
 > [!NOTE]
-> Not every release of Porn Fetch supports Android!
+> Everyone needs to read the following 3 sections:
 
-The relevant files for you are:
+- [Versions of Porn Fetch](#versions-of-porn-fetch)
+- [The actual installation](#the-actual-installation-of-porn-fetch)
+- [Updating Porn Fetch](#updating-porn-fetch)
 
-`PornFetch_Android_aarch64.bin`
-<br>`PornFetch_Android_armv7.bin`
-<br>`PornFetch_Android_x86_64.bin`
-<br>`PornFetch_Android_i686.bin`
 
-Depending on your phone, your CPU has a different architecture. If you do not know which architecture
-your CPU has, I would recommend you to try `PornFetch_Android_aarch64.bin` first. 
-<br>If it doesn't install with some error saying "This application is not compatible with your device" try
-the other ones, until it works.
+After that you can continue selecting your system from the 3 (+1):
 
-If all 4 fail, please open an Issue on GitHub!
+- [Windows](#downloading-and-installing-on-windows)
+- [Linux](#downloading-and-installing-on-linux)
+- [macOS](#downloading-and-installing-on-macos)
+- [Android](#downloading-and-installing-on-android)
 
-> [!WARNING]
-> Porn Fetch may take a long time to open on its first run!
+Additionally, you may also be interested in:
 
-# Verify downloads
-If you want to verify the integrity of your downloaded files, you can follow this short guide.
-After you have downloaded one of the files for your system, you will find an equivalent file on GitHub, but
-ending with `.sig`
+- [Verifying Porn Fetch integrity](#verifying-porn-fetch-integrity)
+- [Torrent version of Porn Fetch](#torrent-version-of-porn-fetch)
 
-For example:
+# Versions of Porn Fetch
+Porn Fetch has two versions. The `GUI` (Graphical User Interface) and the `CLI` (Command Line Interface). The Graphical
+User interface is the full app that you probably want to use. The Terminal version as it says, runs purely in a terminal
+and is intended to be used by advanced users or in cases, where you don't have a graphical environment, e.g., iSH or Termux.
 
-`PornFetch_Windows_GUI_x64.exe` & `PornFetch_Windows_GUI_x64.exe.sig`
+Porn Fetch runs on different processor architectures:
+- `x64` -> For all new desktop processors
+- `x32` -> For 32bit versions of Windows / Linux and very old processors
 
-After you have both files, you can verify the signature using `gpg`.
-<br>If you do not already have gpg installed, please search Online how to do it.
+If you don't know the difference, pick `x64`
 
-The command is: `gpg --verify PornFetch_Windows_GUI_x64.exe.sig PornFetch_Windows_GUI_x64.exe`
 
-> The first file must be the one ending with `.sig`
 
-You should get a result like this:
+> [!IMPORTANT]
+> ### macOS USERS MUST READ THIS:
+As you might know, Apple uses their own M1, M2, M3 (so-called Apple Silicon) chips. These processors run differently than
+most others. I do not have a MacBook myself. Porn Fetch on macOS is tested thanks to a virtualized environment. That means
+that when I compile Porn Fetch, I do so on an x86_64 AMD processor.
 
+However, Apple has a translation layer that makes it in theory possible for you to run these application, but I have no
+way of testing that. If it doesn't work for you, but you have the time, please get in touch with me.
+
+
+# The actual installation of Porn Fetch
+As soon as you have downloaded the file for your operating system, and you started Porn Fetch, you'll
+be prompted for an installation mode.
+
+Porn Fetch itself only consists of two files. The `config.ini` and the main `.exe` / `.bin` file. However, to make
+Porn Fetch easily accessible on your system, you can install it. You can give it a custom App name, and then you can use
+this name to search for Porn Fetch on your PC. 
+
+For example on Windows you would press Windows key, and then you can search inside of this window. There you can
+search for the App name you have given Porn Fetch during the installation. If you left it empty, simply search 
+for "Porn Fetch". 
+
+However, you **DO NOT NEED** to install Porn Fetch. You can also select the portable mode. That means that Porn 
+Fetch will stay where you have downloaded it to and you just simply always click the downloaded executable file. 
+This gives you more control over it. 
+
+
+# Updating Porn Fetch
+Porn Fetch searches for updates everytime you start it. If a new version is out it will let you know and give
+you the download link.
+
+When you download the new file, and you install Porn Fetch into your system it will overwrite the old configuration and 
+executable file. That means that all your configuration will be lost and Porn Fetch basically resets itself to default settings.
+
+
+# Downloading and Installing on Windows
+You need to download the file: `PornFetch_Windows_GUI_x64.exe` from the GitHub releases. After downloading it,
+simply click the .exe file and select your installation mode.
+
+That's it! Now you can additionally install FFmpeg from the settings menu to correctly convert videos.
+
+Have fun! 
+
+
+# Downloading and Installing on Linux
+
+> [!NOTE]
+> Porn Fetch is made with Qt. Depending on your distro, you **may** (maybe not) need to additionally install some Qt related packages.
+> Please ask ChatGPT for more information.
+
+You need to download the file: `PornFetch_Linux_GUI_x64.bin` from the GitHub releases. After downloading it, you
+can try double-clicking the `.bin` file. If nothing happens you may need to set executable permissions. 
+
+You can do that by opening a Terminal in the current location and paste: `chmod +x PornFetch_Linux_GUI_x64.bin`.
+After that, try to open it again by double-clicking it.
+
+If still nothing happens go into a Terminal once again and type: `./PornFetch_Linux_GUI_x64.bin`. This will "execute"
+the Porn Fetch executable. If you see some output, but it seems to have crashed, create an Issue on GitHub and paste
+the output along with your Linux system information.
+
+After that select the installation mode and that's it! If you haven't already installed ffmpeg on your Linux distribution
+you can do so with the package manager e.g., Debian based: `sudo apt install ffmpeg` or you can install it automatically
+through Porn Fetch's settings menu.
+
+Have fun! 
+
+
+# Downloading and Installing on macOS
+So, macOS is currently not that easy to actually run....
+
+Because of some problems with Nuitka and pyside6-deploy you can not just install Porn Fetch on macOS like you would
+do with other packages, however you can still use it!
+
+Download the file: `PornFetch_macOS_GUI_x86_64.zip` and extract the zip. You will be given a directory named "Porn Fetch.app".
+This is where all Porn Fetch assets are stored. You need to go into a terminal and execute the `main` file inside the .app package.
+
+You can do so by typing: `cd Porn Fetch.app/Contents/MacOS && ./main`
+
+You need to always execute it via the terminal. There's unfortunately no other way...
+
+### Here's a video tutorial
+https://youtu.be/VvFJLEFECXg
+
+
+> [!IMPORTANT]
+> You really need to change the output path of videos in the settings of Porn Fetch. Set it to something like your desktop
+> or similar. Otherwise, videos will be saved into the .app package directory -_- 
+
+
+# Downloading and Installing on Android
+> [!CRITICAL]
+> Android is at the moment not supported due to UI rendering issues. This will be fixed in version 3.6 but is a 
+> lot of work.
+
+
+Experienced users can use Termux on Android to emulate the CLI. There will be an in depth guide when version 3.6
+is out, because I need to change some things...
+
+
+
+# Verifying Porn Fetch integrity
+If you live in a censored country or you are a high value target for your government / law enforcment
+it might be critical for you to verify that your Porn Fetch downloaded executable hasn't been modified by a
+third party.
+
+You can verify that using the .sig files from the GitHub release assets. Every file from Porn Fetch also has the same
+file with a `.sig` ending. 
+
+E.g.,:
+- `PornFetch_Windows_GUI_x64.exe` and `PornFetch_Windows_GUI_x64.exe.sig`
+
+The .sig file is a cryptographic proof with my gpg key that your downloaded Porn Fetch executable is 100% from me
+and is unmodified.
+
+> [!NOTE]
+> You need to have `gpg` installed on your system
+
+For example, for the Linux GUI version you would do something like:
+
+`gpg --verify PornFetch_Linux_GUI_x64.bin.sig PornFetch_Linux_GUI_x64.bin `
+
+It should show something like this:
 ![img.png](../src/backend/img.png)
 
-The RSA Key must be: `BFEB6DE816281A3E0EEEC3FB1E04D0A679846BC0`
+It may tell you that it can't really verify that the signature is from me. In that case you need to import my public gpg
+key and trust it. 
 
-# Porn Fetch's configuration file
+You can download it from here: https://github.com/EchterAlsFake/EchterAlsFake/blob/main/public_key.asc
 
-Porn Fetch saves all of its settings into a file called `config.ini`. It will automatically be
-created when you first launch Porn Fetch. Deleting this file will reset all your settings.
-Please make sure, that if you move Porn Fetch to another directory, that you also move the `config.ini` file
-along with it.
+
+# Torrent version of Porn Fetch
+A torrent is a file for the P2P network. Shortly explained, it's a decentralized network of people who have certain files 
+and others who want to have files.
+
+If you for whatever reason want to download Porn Fetch through this Network, you can download a torrent client
+such as `qBittorrent` and paste the `.torrent` file or the Magnet Link in there.
+
+You then need to wait to find seeds (the term for people who have 100% of the file/s). I will seed almost every day for
+at least 6 hours. But if you are lucky you might also find other seeds.
+
+> [!CRITICAL]
+> I am seeding with a VPN! (Yes, all the time...)
+
+
+
+
+
+
+
+
+
 
 
 

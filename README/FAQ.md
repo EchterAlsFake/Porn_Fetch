@@ -1,7 +1,4 @@
-# Common Issues / FAQ
-
-
-# FAQ:
+# FAQ
 
 
 ## Q: Is using Porn Fetch legal?

@@ -1,8 +1,4 @@
-Porn Fetch unfortunately gets flagged by Antivirus Software and even by your browser.
-Sometimes you won't even be able to download Porn Fetch.
-
 ## The Reason
-
 The reason for this is, that Porn Fetch isn't signed. Signing is the process of digitally verifying that a file is from a 
 respective author. For example if you start Porn Fetch the Windows Smart Screen will tell you that it is from an unknown source.
 The problem is, that signing costs money. If I want to go with a respected and established CA I need to pay estimated 300 dollars / euros
@@ -28,8 +24,11 @@ to automatically convert the source code into the binary file, but here comes th
 
 I am technically not able to modify this process. The code compilation in the GitHub actions is defined by the scripts which are
 available under ".github/workflows" in my repository. So what you can do is, you can after every release go to the workflow
-which created the binary file. (I'll link to it) And then you can download it, and compare the sha sum from this GitHub actions
-release with the official release.
+which created the binary file. (I'll link to it) and view the summary of it. The workflow file will generate
+the SHA256SUM which is a unique identifier for every file, and it will put this SHA sum into the GitHub Summary.
+
+In order to read the Summary you need to have an account on GitHub and be logged in. Unfortunately this is the easiest method
+for this. After verification, you can immediately delete your account if you like.
 
 So if you compare the SHA sum from the file from GitHub actions and the SHA sum from the releases and the SHA sum matches, then
 you know that the file is by 100% the same. It's completely identical.
@@ -44,11 +43,16 @@ gpg --verify "filename.sig" "filename"
 If it says something like signed by "Johannes Habel <EchterAlsFake@proton.me>" with this key ID: 1E04D0A679846BC0
 then you know it was me who published it. 
 
-## How to get around AV
+> [!CRITICAL]
+> There's an exception... I can currently not build macOS using GitHub actions because macOS is a very complex topic and
+> I don't even have real Apple hardware myself and need to use virtualization. However, if you don't trust me in that case, 
+> feel free to run Porn Fetch from source code or compile your own binary :) 
 
+
+## How to get around AV
 If you can't download the file because it's blocked by your antivirus or Browser you have two options:
 
-1. Turn off any AV (this also includes the Windows defender)
+1. Turn off any AV (this also includes the Windows defender real time protection)
 2. Download the file using the terminal or a separate download manager like FDM 
 
 

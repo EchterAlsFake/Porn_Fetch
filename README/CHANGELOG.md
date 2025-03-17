@@ -424,8 +424,8 @@ the thread is permanently locked
 - Support for xhamster.com (finally)
 - macOS is now fully supported and functional (hopefully functional)
 - You can now install Porn Fetch into your system (Windows, Linux)
-- Proxy Support
-- Display thumbnails when searching (optionally)
+- Proxy Support (very experimental!!!)
+- Display thumbnails when searching
 - High Performance download mode is now async and allows for much higher speeds while reducing CPU power (only XNXX, XVideos, xhamster, missav.ws)
 - Re-implemented the internet and status checks, but in a better way
 - Porn Fetch CLI now supports batch processing through arguments
@@ -437,6 +437,8 @@ the thread is permanently locked
 - Make an "evasion" / anonymous mode to hide Porn Fetch from your PC / Android device (Renames elements, so that people can't see you are using it)
 
 ## Bug fixes
+- Fixed logging encoding error on Windows
+- Fixed ffmpeg downloads
 - Fixed the progress reporting on the file-read function
 - Optimized the CLI and fix some of its errors (#61) (#62)
 - Fixed issues with video length parsing

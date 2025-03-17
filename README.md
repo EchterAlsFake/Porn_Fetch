@@ -181,7 +181,7 @@ bash install.sh
 <br>The created file will be a `.app` file. You cannot usually run it as you would, because it doesn't work for some reason...
 Instead, you need to go inside the `.app` package using a Terminal and run the main file in it.
 
-You can do that with something like `./<the_app_package.app/Contents/macOS/main`
+You can do that with something like `./<the_app_package.app/Contents/MacOS/main`
 
 
 ## 📱 Android
