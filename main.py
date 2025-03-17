@@ -400,9 +400,14 @@ Categories=Utility;"""
                 shutil.move(filename, target_dir)
                 self.logger.info(f"Moved current Porn Fetch executable to: {target_dir}")
 
-                if not os.path.exists(os.path.join(target_dir, "config.ini")):
-                    shutil.move("config.ini", target_dir)  # Prevent overriding the old configuration file
+                try:
+                    os.remove(os.path.join(target_dir, "config.ini"))
 
+                except Exception:
+                    "Don't care"
+                    pass
+
+                shutil.move("config.ini", target_dir)  # Prevent overriding the old configuration file
                 # Define paths for the shortcut creation
                 app_name = self.app_name
                 app_exe_path = os.path.join(target_dir, filename)  # Full path to the executable
