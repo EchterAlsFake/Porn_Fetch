@@ -135,7 +135,7 @@ class Signals(QObject):
     download_completed = Signal(object) # Reports a successfully downloaded video
     progress_send_video = Signal(object, object) # Sends the selected video objects from the tree widget to the main class
                                          # to download them
-    url_iterators = Signal(object) # Sends the processed URLs from the file to Porn Fetch
+    url_iterators = Signal(object, object, object) # Sends the processed URLs from the file to Porn Fetch
     ffmpeg_download_finished = Signal() # Reports the successful download / install of FFmpeg
 
 
