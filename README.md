@@ -78,7 +78,7 @@ A detailed installation guide for all platforms can be found [HERE](https://gith
 > [!NOTE]
 > Porn Fetch is mainly developed and tested on Arch Linux with Hyprland and Gnome. 
 
-> [!CRITICAL]
+> [!CAUTION]
 > macOS is compiled on x64 AMD hardware. Apple has a translation layer, but I can't test that. If you have an Apple Silicon
 > chip, and you are willing to help, please get in touch with me.
 
