@@ -2712,8 +2712,7 @@ if __name__ == "__main__":
         if value:
             logger.debug(f"Next release v{__next_release__} found!")
             try:
-                changelog = BaseCore().fetch(f"https://github.com/EchterAlsFake/Porn_Fetch/tree/master/README/Changelog/"
-                                          f"{__next_release__}/Changelog.md")
+                changelog = BaseCore().fetch(f"https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/refs/heads/master/README/Changelogs/{__next_release__}/Changelog.md", get_response=True)
 
             except Exception:
                 error = traceback.format_exc()
@@ -2725,7 +2724,7 @@ if __name__ == "__main__":
             Go to: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/ {__next_release__}
 
             Changelog:
-            {markdown.markdown(changelog)}
+            {markdown.markdown(changelog.text)}
 
             """, None))
 
