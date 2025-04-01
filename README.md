@@ -26,6 +26,12 @@
 ---
 </div>
 
+# IMPORTANT NOTICE
+
+> [!CAUTION]
+> A lot of my setup (Laptop, Keyboard, 2 phones, my mouse and other stuff) got broken in a very short period of time. I can currently not develop and I also don't have the motivation because my priorities in life changed...
+> Therefore this project is as of 1st April 2025 discontinued. Not forever, but for now. I might come back, when stuff is fixed. Thanks for your understanding
+
 > [!WARNING]
 > Porn Fetch is NOT associated with the websites. Porn Fetch is AGAINST the Terms of Services of EVERY website! Usage is on YOUR risk.
 
