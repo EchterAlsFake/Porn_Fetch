@@ -51,192 +51,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </message>
 </context>
 <context>
-    <name>PornFetch</name>
-    <message>
-        <location filename="../../../main.py" line="1173"/>
-        <source>You are running on Android! You can not install Porn Fetch</source>
-        <translation>Du kannst Porn Fetch nicht auf Android installieren (es ist ja schon installiert ;)</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1183"/>
-        <source>Porn Fetch installation failed, because of: {result[1]}</source>
-        <translation>Die Installation von Porn Fetch ist fehlgeschlafen{result[1]}</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1602"/>
-        <source>Saved User Settings, please restart Porn Fetch!</source>
-        <translation>Einstellungen wurden gespeichert. Bitte starte Porn Fetch neu!</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1633"/>
-        <source>
-!!! ONLY SOCKS5 IS SUPPORTED !!!
-        
-Warning:
-Your entire traffic will be routed through the proxy, except if your threading mode is set to &apos;ffmpeg&apos;. There&apos;s no
-guarantee for your IP not being exposed. If you live in a country where downloading Porn is a crime, please consider
-using a VPN or Tor for a more safe approach. 
-
-After submitting the proxy, Porn Fetch will do a short test if your IP is leaked by making a request to 
-&apos;http://httpbin.org/ip&apos; with and without proxy to compare your IP address. 
-
-All traffic will be sent with encryption, however, SSL won&apos;t be verified, meaning someone could break your encryption
-and you won&apos;t get notified about it. Basically all SSL related errors will be completely ignored, but if your
-proxy is good, SSL should work. 
-
-Proxy implementation will be improved in the next release. All of it is currently in BETA. Please report any issues unless
-they are related to the proxy itself e.g., closed connections and such things. You might want to higher the timeout
-in Porn Fetch settings, because some proxies are just really slow
-
-Please set your threading mode to &apos;Default&apos;. Most proxies can&apos;t handle what the threaded mode is capable of.
-Seriously this thing can go up to 115 MB/s. Proxies can&apos;t handle that xD
-If you want to see by yourself, use wireshark and monitor your network traffic.
-
-DO NOT REPORT ANY ERRORS WHEN USING A PUBLIC PROXY!
-They are just shit, and don&apos;t work well. If you come across connection errors with them it is by 99.9% the fault
-of the proxy and not my fault ;)
-
-If you still want to proceed, click O.K. Otherwise, close Porn Fetch now and restart it.</source>
-        <translation>
-!!! Nur SOCKS5 wird unterstützt!!!
-        
-WARNUNG:
-Dein gesamter Datenverkehr wird durch den Proxy geleitet, außer wenn dein threading modus zu &apos;ffmpeg&apos; gesetzt ist Es gibt k eine
-Garantie, dass deine IP nicht offengelgt wird.. Wenn du in einem Land lebst, wo das herunterladen von Pornos ein Verbrechen ist, überlege besser
-einen VPN oder das Tor Netzwerk für eine sichere Variante zu nutzen. 
-
-Nachdem du deinen Proxy eingegeben hast wird Porn Fetch einen kurzen Test machen, indem es Anfragen an 
-&apos;http://httpbin.org/ip&apos; mit und ohne Proxy sendet um deine IP zu vergleichen. 
-
-Dein gesamter Datenverkehr wird mit Verschlüsselung gesendet, allerdings ohne diese auch zu verifizieren. Das liegt leider daran,
-dass viele Proxies keine gültige Lösung für SSL haben was zu Verifizierungsfehlern führt. Jedem in deinem Netzwerk, als auch dem Proxy selbst,
-ist es unter umständen möglich deinen Datenverkehr mitzulesen!
-
-Die Proxy Implementierung wird in den nächsten Versionen verbessert. Aktuell befinet sich das hier in einer BETA Phase. Bitte melde auftretende Fehler, außer
-wenn sie aufgrund des Proxys selbst auftreten, z.B. durch unerwartet geschlossene Verbindungen. Du solltest außerdem die Zeitüberschreitung in den Porn Fetch Einstellungen
-erhöhen, weil Proxies in der Regel deutlich langsamer sind.
-
-Bitte setze deinen Threading Mudus auf &quot;Standart&quot;. Der Peformance Modus kann bis zu 115 MB/s und darüber hinaus. Proxys können damit meist
-nicht umgehen, weswegen ich dir das empfehle.
-
-MELDE KEINE FEHLER SOLANGE DU EINEN ÖFFENTLICHEN PROXY NUTZT!
-Sie sind einfach schlecht und meistens sind Fehler nicht meine, sondern deren Schuld Sei dir also bitte wirklich sicher!
-
-Wenn du trotzdem fortfharen möchtest, drücke bitte auf OK um deinen Proxy einzugeben...</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1749"/>
-        <source>The model URL you entered seems to be invalid. Please check your input</source>
-        <translation>Die Model uRL, welche du eingegeben hast  scheint ungültig zu sein. Bitte überpfrüfe deine Eingaben</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1809"/>
-        <source>Information: The Website {website} specified in the URL file isn&apos;t valid.</source>
-        <translation>Information: Die Webseite {website}, die in der URL Datei angegeben worden ist, ist ungültig.</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1839"/>
-        <source>Couldn&apos;t determine which site you want to search on??? Please report this immediately!</source>
-        <translation>Ich konnte nicht herausfinden, auf welcher Seite du suchen willst??? Bitte melde das sofort!</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1973"/>
-        <source>
-An error happened inside of Porn Fetch! 
-
-{error}</source>
-        <translation>
-Ein Fehler trat in Porn Fetch auf
-
-{error}</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="2096"/>
-        <source>Can&apos;t show thumbnail, due to your privacy settings ;)</source>
-        <translation>Ich kann dir das Vorschaubild aufgrund deiner Privatsphäre Einstellungen nicht anzeigen :)</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="2104"/>
-        <source>No thumbnail available</source>
-        <translation>Kein Vorschaubild verfügbar</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="2215"/>
-        <source>Those credentials don&apos;t seem to be valid...</source>
-        <translation>Diese Zugangsdaten sehen ungültig aus...</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="2223"/>
-        <source>Login Successful!</source>
-        <translation>Login erfolgreich!</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="2228"/>
-        <source>Login Failed, please check your cresdentials and try again!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="2232"/>
-        <source>You are already logged in!</source>
-        <translation>Du bist bereits angemeldet!</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="2245"/>
-        <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
-        <translation>Es gibt ein Problem mit dem Login. Bitte logge dich erst ein und versuche dann Videos von deinem Account zu laden.</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="2309"/>
-        <location filename="../../../main.py" line="2322"/>
-        <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
-        <translation>Ungültige Kategorie. Drücke &quot;Kategorien auflisten&quot; um alle möglichen zu sehen.</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="2407"/>
-        <source>
-! Warning !
-Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
-------------------------------------------------------------
-{formatted_results}</source>
-        <translation>
-! Warnung!
-Einige Webseiten konnten nicht aufgerufen werden. Hier ist ein detailierter Bericht:
-------------------------------------------------------------
-{formatted_results}</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="2440"/>
-        <source>
-FFmpeg isn&apos;t installed on your system... Some features won&apos;t be available:
-
-- The FFmpeg threading mode
-- Converting videos into a valid .mp4 format
-- Writing tags / metadata into the videos
-
-These features aren&apos;t necessary for Porn Fetch, but can be useful for some people.
-
-To automatically install ffmpeg, just head over to the settings and press the magical button, or install ffmpeg in your
-local PATH (e.g, through your linux package manager, or through the Windows PATH)
-
-This warning won&apos;t be shown again.
-                    </source>
-        <translation>
-FFmpeg ist nicht auf deinem System installiert... Einige Features werden nicht verfügbar sein
-
-- Der FFmpeg Download Modus
-- Das konvertieren der Videos in ein valides .mp4 Format
-- Das Schreiben von Tags bzw. Metadaten in die Videos
-
-Diese Features sind optional für Porn Fetch, sind aber auch für einige Peorsonen sehr nützlich.
-
-Du kannst FFmpeg automatisch über die Porn Fetch Einstellungen herunterladen, aber auch indem
-du es manuell in Windows 7 Linux in deine Umgebungsvariablen setzt. Unter Windows z.B. im Terminal: &apos;winget install ffmpeg&apos; 
-
-Diese Warnung wird nicht erneut angezeigt.
-                    </translation>
-    </message>
-</context>
-<context>
     <name>PornFetchRangeSelector</name>
     <message>
         <location filename="../form_range_selector.ui" line="14"/>
@@ -950,6 +764,192 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </message>
 </context>
 <context>
+    <name>PornFetchxD</name>
+    <message>
+        <location filename="../../../main.py" line="1215"/>
+        <source>You are running on Android! You can not install Porn Fetch</source>
+        <translation type="unfinished">Du kannst Porn Fetch nicht auf Android installieren (es ist ja schon installiert ;)</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1225"/>
+        <source>Porn Fetch installation failed, because of: {result[1]}</source>
+        <translation type="unfinished">Die Installation von Porn Fetch ist fehlgeschlafen{result[1]}</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1644"/>
+        <source>Saved User Settings, please restart Porn Fetch!</source>
+        <translation type="unfinished">Einstellungen wurden gespeichert. Bitte starte Porn Fetch neu!</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1675"/>
+        <source>
+!!! ONLY SOCKS5 IS SUPPORTED !!!
+        
+Warning:
+Your entire traffic will be routed through the proxy, except if your threading mode is set to &apos;ffmpeg&apos;. There&apos;s no
+guarantee for your IP not being exposed. If you live in a country where downloading Porn is a crime, please consider
+using a VPN or Tor for a more safe approach. 
+
+After submitting the proxy, Porn Fetch will do a short test if your IP is leaked by making a request to 
+&apos;http://httpbin.org/ip&apos; with and without proxy to compare your IP address. 
+
+All traffic will be sent with encryption, however, SSL won&apos;t be verified, meaning someone could break your encryption
+and you won&apos;t get notified about it. Basically all SSL related errors will be completely ignored, but if your
+proxy is good, SSL should work. 
+
+Proxy implementation will be improved in the next release. All of it is currently in BETA. Please report any issues unless
+they are related to the proxy itself e.g., closed connections and such things. You might want to higher the timeout
+in Porn Fetch settings, because some proxies are just really slow
+
+Please set your threading mode to &apos;Default&apos;. Most proxies can&apos;t handle what the threaded mode is capable of.
+Seriously this thing can go up to 115 MB/s. Proxies can&apos;t handle that xD
+If you want to see by yourself, use wireshark and monitor your network traffic.
+
+DO NOT REPORT ANY ERRORS WHEN USING A PUBLIC PROXY!
+They are just shit, and don&apos;t work well. If you come across connection errors with them it is by 99.9% the fault
+of the proxy and not my fault ;)
+
+If you still want to proceed, click O.K. Otherwise, close Porn Fetch now and restart it.</source>
+        <translation type="unfinished">
+!!! Nur SOCKS5 wird unterstützt!!!
+        
+WARNUNG:
+Dein gesamter Datenverkehr wird durch den Proxy geleitet, außer wenn dein threading modus zu &apos;ffmpeg&apos; gesetzt ist Es gibt k eine
+Garantie, dass deine IP nicht offengelgt wird.. Wenn du in einem Land lebst, wo das herunterladen von Pornos ein Verbrechen ist, überlege besser
+einen VPN oder das Tor Netzwerk für eine sichere Variante zu nutzen. 
+
+Nachdem du deinen Proxy eingegeben hast wird Porn Fetch einen kurzen Test machen, indem es Anfragen an 
+&apos;http://httpbin.org/ip&apos; mit und ohne Proxy sendet um deine IP zu vergleichen. 
+
+Dein gesamter Datenverkehr wird mit Verschlüsselung gesendet, allerdings ohne diese auch zu verifizieren. Das liegt leider daran,
+dass viele Proxies keine gültige Lösung für SSL haben was zu Verifizierungsfehlern führt. Jedem in deinem Netzwerk, als auch dem Proxy selbst,
+ist es unter umständen möglich deinen Datenverkehr mitzulesen!
+
+Die Proxy Implementierung wird in den nächsten Versionen verbessert. Aktuell befinet sich das hier in einer BETA Phase. Bitte melde auftretende Fehler, außer
+wenn sie aufgrund des Proxys selbst auftreten, z.B. durch unerwartet geschlossene Verbindungen. Du solltest außerdem die Zeitüberschreitung in den Porn Fetch Einstellungen
+erhöhen, weil Proxies in der Regel deutlich langsamer sind.
+
+Bitte setze deinen Threading Mudus auf &quot;Standart&quot;. Der Peformance Modus kann bis zu 115 MB/s und darüber hinaus. Proxys können damit meist
+nicht umgehen, weswegen ich dir das empfehle.
+
+MELDE KEINE FEHLER SOLANGE DU EINEN ÖFFENTLICHEN PROXY NUTZT!
+Sie sind einfach schlecht und meistens sind Fehler nicht meine, sondern deren Schuld Sei dir also bitte wirklich sicher!
+
+Wenn du trotzdem fortfharen möchtest, drücke bitte auf OK um deinen Proxy einzugeben...</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1791"/>
+        <source>The model URL you entered seems to be invalid. Please check your input</source>
+        <translation type="unfinished">Die Model uRL, welche du eingegeben hast  scheint ungültig zu sein. Bitte überpfrüfe deine Eingaben</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1851"/>
+        <source>Information: The Website {website} specified in the URL file isn&apos;t valid.</source>
+        <translation type="unfinished">Information: Die Webseite {website}, die in der URL Datei angegeben worden ist, ist ungültig.</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1881"/>
+        <source>Couldn&apos;t determine which site you want to search on??? Please report this immediately!</source>
+        <translation type="unfinished">Ich konnte nicht herausfinden, auf welcher Seite du suchen willst??? Bitte melde das sofort!</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2015"/>
+        <source>
+An error happened inside of Porn Fetch! 
+
+{error}</source>
+        <translation type="unfinished">
+Ein Fehler trat in Porn Fetch auf
+
+{error}</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2138"/>
+        <source>Can&apos;t show thumbnail, due to your privacy settings ;)</source>
+        <translation type="unfinished">Ich kann dir das Vorschaubild aufgrund deiner Privatsphäre Einstellungen nicht anzeigen :)</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2146"/>
+        <source>No thumbnail available</source>
+        <translation type="unfinished">Kein Vorschaubild verfügbar</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2257"/>
+        <source>Those credentials don&apos;t seem to be valid...</source>
+        <translation type="unfinished">Diese Zugangsdaten sehen ungültig aus...</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2265"/>
+        <source>Login Successful!</source>
+        <translation type="unfinished">Login erfolgreich!</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2270"/>
+        <source>Login Failed, please check your cresdentials and try again!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2274"/>
+        <source>You are already logged in!</source>
+        <translation type="unfinished">Du bist bereits angemeldet!</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2287"/>
+        <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
+        <translation type="unfinished">Es gibt ein Problem mit dem Login. Bitte logge dich erst ein und versuche dann Videos von deinem Account zu laden.</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2351"/>
+        <location filename="../../../main.py" line="2364"/>
+        <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
+        <translation type="unfinished">Ungültige Kategorie. Drücke &quot;Kategorien auflisten&quot; um alle möglichen zu sehen.</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2449"/>
+        <source>
+! Warning !
+Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
+------------------------------------------------------------
+{formatted_results}</source>
+        <translation type="unfinished">
+! Warnung!
+Einige Webseiten konnten nicht aufgerufen werden. Hier ist ein detailierter Bericht:
+------------------------------------------------------------
+{formatted_results}</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2482"/>
+        <source>
+FFmpeg isn&apos;t installed on your system... Some features won&apos;t be available:
+
+- The FFmpeg threading mode
+- Converting videos into a valid .mp4 format
+- Writing tags / metadata into the videos
+
+These features aren&apos;t necessary for Porn Fetch, but can be useful for some people.
+
+To automatically install ffmpeg, just head over to the settings and press the magical button, or install ffmpeg in your
+local PATH (e.g, through your linux package manager, or through the Windows PATH)
+
+This warning won&apos;t be shown again.
+                    </source>
+        <translation type="unfinished">
+FFmpeg ist nicht auf deinem System installiert... Einige Features werden nicht verfügbar sein
+
+- Der FFmpeg Download Modus
+- Das konvertieren der Videos in ein valides .mp4 Format
+- Das Schreiben von Tags bzw. Metadaten in die Videos
+
+Diese Features sind optional für Porn Fetch, sind aber auch für einige Peorsonen sehr nützlich.
+
+Du kannst FFmpeg automatisch über die Porn Fetch Einstellungen herunterladen, aber auch indem
+du es manuell in Windows 7 Linux in deine Umgebungsvariablen setzt. Unter Windows z.B. im Terminal: &apos;winget install ffmpeg&apos; 
+
+Diese Warnung wird nicht erneut angezeigt.
+                    </translation>
+    </message>
+</context>
+<context>
     <name>SetupInstallDialog</name>
     <message>
         <location filename="../form_install_dialog.ui" line="14"/>
@@ -1289,38 +1289,31 @@ Porn Fetch wird standartmäßig diese Tags in die Videos schreiben.
 Das Schreiben von Tags ist allerdings nur für mp4 Video-Container unterstützt, da die andere Container ein andere Standartisierung nutzen.</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2692"/>
+        <location filename="../../../main.py" line="2687"/>
         <source>Done! Please restart.</source>
         <translation>Fertig, Bitte neustarten.</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2717"/>
+        <location filename="../../../main.py" line="2712"/>
         <source>No URLs in the current session...</source>
         <translation>Keine URLs in der aktuellen Session...</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2720"/>
+        <location filename="../../../main.py" line="2715"/>
         <source>FFmpeg has been installed. Please restart Porn Fetch :)</source>
         <translation>FFmpeg wurde installiert. Bitte starte Porn Fetch neu :)</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2743"/>
+        <location filename="../../../main.py" line="2737"/>
         <source>
             Information: A new version of Porn Fetch (v{__next_release__}) is out. I recommend you to update Porn Fetch. 
             Go to: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/ {__next_release__}
 
             Changelog:
-            {markdown.markdown(changelog)}
+            {markdown.markdown(changelog.text)}
 
             </source>
-        <translation>
-            Information: Eine neue Version von Porn Fetch (v{__next_release__}) wurde veröffentlicht. Ich empfehle dir, Porn Fetch zu aktualisieren. 
-            Geh zu: https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/ {__next_release__}
-
-            Änderungsprotokoll:
-            {markdown.markdown(changelog)}
-
-            </translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -10,7 +10,7 @@ import zipfile
 import argparse
 import markdown
 import traceback
-import src.frontend.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
+import src.frontend.UI.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
 
 from threading import Event
 from io import TextIOWrapper
@@ -21,17 +21,19 @@ from src.backend.shared_gui import *
 from src.backend.class_help import *
 from src.backend.shared_functions import *
 
-from src.frontend.ui_form_license import Ui_SetupLicense
-from src.frontend.ui_form_desktop import Ui_PornFetch_Desktop
-from src.frontend.ui_form_android import Ui_PornFetch_Android
-from src.frontend.ui_form_install_dialog import Ui_SetupInstallDialog
-from src.frontend.ui_form_android_startup import Ui_SetupAndroidStartup
-from src.frontend.ui_form_keyboard_shortcuts import Ui_KeyboardShortcuts
-from src.frontend.ui_form_range_selector import Ui_PornFetchRangeSelector
+from src.frontend.UI.ui_form_license import Ui_SetupLicense
+from src.frontend.UI.ui_form_desktop import Ui_PornFetch_Desktop
+from src.frontend.UI.ui_form_android import Ui_PornFetch_Android
+from src.frontend.UI.ui_form_install_dialog import Ui_SetupInstallDialog
+from src.frontend.UI.ui_form_android_startup import Ui_SetupAndroidStartup
+from src.frontend.UI.ui_form_keyboard_shortcuts import Ui_KeyboardShortcuts
+from src.frontend.UI.ui_form_range_selector import Ui_PornFetchRangeSelector
+from src.frontend.UI.ui_form_main_window import Ui_MainWindow
+from src.frontend.UI.ui_form_donation import Ui_SponsoringDialog
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                         QTranslator, QCoreApplication, QSize)
-from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QInputDialog, QTextBrowser
+from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QInputDialog, QTextBrowser, QMainWindow, QStackedWidget
 from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence
 
 
@@ -59,10 +61,10 @@ Discord: echteralsfake (faster response)
 """
 
 __license__ = "GPL 3"
-__version__ = "3.5"
+__version__ = "3.6"
 __build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
-__next_release__ = "3.6"
+__next_release__ = "3.7"
 total_segments = 0
 downloaded_segments = 0
 stop_flag = Event()
@@ -1076,8 +1078,7 @@ class AddUrls(QRunnable):
 
         self.signals.url_iterators.emit(iterator, model_iterators, search_iterators)
 
-
-class PornFetch(QWidget):
+class PornFetchxD(QWidget):
     def __init__(self, parent=None, start_installation=False, app_name="Porn Fetch"):
         super().__init__(parent)
         # Variable initialization:
@@ -2544,61 +2545,39 @@ This warning won't be shown again.
         self.ui.main_stacked_widget_main.setCurrentIndex(0)
         self.ui.main_stacked_widget_top.setMaximumHeight(280)
 
-    def show_sponsoring_text(self):
-        self.textbrowser = QTextBrowser()
-        self.textbrowser.setHtml(
-            u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-            "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-            "p, li { white-space: pre-wrap; }\n"
-            "hr { height: 1px; border-width: 0; }\n"
-            "li.unchecked::marker { content: \"\\2610\"; }\n"
-            "li.checked::marker { content: \"\\2612\"; }\n"
-            "</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-            "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:24pt;\">Sponsoring Notice</span></p>\n"
-            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt; color:#a51d2d;\">Hey, you...</span></p>\n"
-            "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent"
-            ":0; text-indent:0px; font-size:16pt; color:#a51d2d;\"><br /></p>\n"
-            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">It looks like you've already downloaded more than 20 videos. I don\u2019t want to annoy you, and you can simply close this window if you\u2019d like :)</span></p>\n"
-            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">But if you have a moment, I would really appreciate it!</p>\n"
-            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I started developing <span style=\" font-style:italic;\">Porn Fetch</span> as a fun project two years ago\u2014partly to learn graphical programming, but also because there was no free alternative available. I never expected this project to grow as much as it has, with over 20,000 downloads now.</p>\n"
-            "<p style=\" margin-"
-            "top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I develop everything in my free time, and I would be incredibly grateful if you considered leaving a small donation. Even just 50 cents makes a huge difference and helps me keep this project alive.</p>\n"
-            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Alternatively, you can support me by sharing this project with your friends or giving it a star on GitHub. That also helps a lot!</p>\n"
-            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">You can donate via PayPal or anonymously with Monero:</p>\n"
-            "<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\">\n"
-            "<li style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">PayPal: <span style=\" color:#26a"
-            "269;\">https://paypal.me/EchterAlsFake</span></li>\n"
-            "<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Monero:</span> <span style=\" font-family:'monospace'; color:#613583;\">42XwGZYbSxpMvhn9eeP4DwMwZV91tQgAm3UQr6Zwb2wzBf5HcuZCHrsVxa4aV2jhP4gLHsWWELxSoNjfnkt4rMfDDwXy9jR</span></li></ul>\n"
-            "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Thank you so much for your support! \u2764\ufe0f</p>\n"
-            "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-            "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">(Th"
-            "is dialog won't be shown again, except if you update Porn Fetch, because that overrides the configuration file)</p></body></html>")
-        self.textbrowser.setFixedHeight(600)
-        self.textbrowser.setFixedWidth(800)
-        screen = QApplication.primaryScreen()
-        screen_geometry = screen.availableGeometry()
 
-        # Calculate the center position
-        x = (screen_geometry.width() - self.textbrowser.width()) // 2
-        y = (screen_geometry.height() - self.textbrowser.height()) // 2
+class DonationNag(QWidget):
+    """
+    This displays the Widget for the donation nag that asks the user kindly to donate a little bit
+    of money to this project.
+    """
+    def __init__(self):
+        super().__init__()
+        self.ui = Ui_SponsoringDialog()
+        self.ui.setupUi(self)
 
-        # Move the window to the center
-        self.textbrowser.move(x, y)
-        self.textbrowser.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)  # Keep it on top
-        self.textbrowser.show()  # Show before setting focus
-        self.textbrowser.setFocus()  # Ensure it receives input focus
-        self.textbrowser.raise_()  # Bring to front
-        self.textbrowser.activateWindow()  # Activate
 
-    def check_for_sponsoring_notice(self):
-        downloaded_videos = int(self.conf.get("Sponsoring", "downloaded_videos"))
-        if downloaded_videos >= 20:
-            if not self.conf.get("Sponsoring", "notice_shown") == "true":
-                self.show_sponsoring_text()
-                self.conf.set("Sponsoring", "notice_shown", "true")
-                with open("config.ini", "w") as config_file:  # type:TextIOWrapper
-                    self.conf.write(config_file)
+class PornFetch(QMainWindow):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle(f"Porn Fetch v{__version__} Copyright (C) Johannes Habel 2023-2025")
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+
+        self.UI_donation_nag = DonationNag()
+        self.UI_license = License()
+
+
+        self.StackedWidget = QStackedWidget() # This is the actual main stacked widget that also stores license and stuff...
+        self.setCentralWidget(self.StackedWidget)
+
+        self.StackedWidget.addWidget(self.UI_license)
+        
+
+
+
+
+
 
 
 def main():
@@ -2646,8 +2625,10 @@ def main():
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
             logger.info(f"Using custom font -->: {font_family}")
             app.setFont(QFont(font_family))
-    widget = License() # Starts License widget and checks if license was accepted.
-    widget.check_license_and_proceed()
+
+    w = PornFetch() # This actually starts Porn Fetch
+    w.show() # This shows the main widget
+
     """
     The following exceptions are just general exceptions to handle some basic errors. They are not so relevant for
     most cases.

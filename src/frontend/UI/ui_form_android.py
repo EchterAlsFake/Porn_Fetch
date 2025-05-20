@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'form_android.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.2
+## Created by: Qt User Interface Compiler version 6.9.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -1529,7 +1529,7 @@ class Ui_PornFetch_Android(object):
         self.main_label_progressbar_total = QLabel(self.groupBox_3)
         self.main_label_progressbar_total.setObjectName(u"main_label_progressbar_total")
 
-        self.formlayout_progressbar.setWidget(0, QFormLayout.LabelRole, self.main_label_progressbar_total)
+        self.formlayout_progressbar.setWidget(0, QFormLayout.ItemRole.LabelRole, self.main_label_progressbar_total)
 
         self.main_progressbar_total = QProgressBar(self.groupBox_3)
         self.main_progressbar_total.setObjectName(u"main_progressbar_total")
@@ -1539,19 +1539,19 @@ class Ui_PornFetch_Android(object):
         self.main_progressbar_total.setStyleSheet(u"text-align: center; /* Centered text */")
         self.main_progressbar_total.setValue(0)
 
-        self.formlayout_progressbar.setWidget(0, QFormLayout.FieldRole, self.main_progressbar_total)
+        self.formlayout_progressbar.setWidget(0, QFormLayout.ItemRole.FieldRole, self.main_progressbar_total)
 
         self.main_label_progressbar_converting = QLabel(self.groupBox_3)
         self.main_label_progressbar_converting.setObjectName(u"main_label_progressbar_converting")
 
-        self.formlayout_progressbar.setWidget(1, QFormLayout.LabelRole, self.main_label_progressbar_converting)
+        self.formlayout_progressbar.setWidget(1, QFormLayout.ItemRole.LabelRole, self.main_label_progressbar_converting)
 
         self.main_progressbar_converting = QProgressBar(self.groupBox_3)
         self.main_progressbar_converting.setObjectName(u"main_progressbar_converting")
         self.main_progressbar_converting.setStyleSheet(u"text-align: center; /* Centered text */")
         self.main_progressbar_converting.setValue(0)
 
-        self.formlayout_progressbar.setWidget(1, QFormLayout.FieldRole, self.main_progressbar_converting)
+        self.formlayout_progressbar.setWidget(1, QFormLayout.ItemRole.FieldRole, self.main_progressbar_converting)
 
 
         self.gridLayout_14.addLayout(self.formlayout_progressbar, 2, 0, 1, 1)

@@ -18,11 +18,16 @@
 - [] Fix TypeError: Incoming markup is of an invalid type: None. Markup must be a string, a bytestring, or an open filehandle.
 - [] Fix and improve the CLI
 - [] Implement transition animations for the Stacked Widget
+- [] Improve tree widget range selection and make it finally intuitive lol
 - [] Splash screen loading animation? (maybe idk yet)
+- [] Publish translation strings on Crowdin 
+- [] Allow for font size change
+- [] Optional processing delay for every video
 - [] Upgrade Python version from 3.11 -> 3.13
 - [] Fix tools section layout
 
 # Code optimizations
+- [] Allow ignoring specific exceptions (#74)
 - [] Entirely rework how settings are handled within Porn Fetch
 - [] Switch the whole application from QWidget-based to QMainWindow + stackedWidget (long story)
 - [] Generally improve how translations are handled
