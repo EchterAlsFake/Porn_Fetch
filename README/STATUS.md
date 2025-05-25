@@ -26,6 +26,11 @@
 - [] Upgrade Python version from 3.11 -> 3.13
 - [] Fix tools section layout
 
+# Other stuff
+- [] Allow for Video IDs as the filename [#76](https://github.com/EchterAlsFake/Porn_Fetch/issues/76)
+- [] Allow ignoring specific errors [#74](https://github.com/EchterAlsFake/Porn_Fetch/issues/74)
+- [] Rework the Batch processing features entirely (lol)
+
 # Code optimizations
 - [] Allow ignoring specific exceptions (#74)
 - [] Entirely rework how settings are handled within Porn Fetch
