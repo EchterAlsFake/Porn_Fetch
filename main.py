@@ -10,6 +10,7 @@ import zipfile
 import argparse
 import markdown
 import traceback
+import webbrowser
 import src.frontend.UI.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
 
 from threading import Event
@@ -34,7 +35,7 @@ from src.frontend.UI.ui_form_donation import Ui_SponsoringDialog
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                         QTranslator, QCoreApplication, QSize)
 from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QInputDialog, QTextBrowser, QMainWindow, QStackedWidget
-from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence
+from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence, QClipboard
 
 
 
@@ -2555,6 +2556,30 @@ class DonationNag(QWidget):
         super().__init__()
         self.ui = Ui_SponsoringDialog()
         self.ui.setupUi(self)
+        self.button_connectors()
+
+    def button_connectors(self):
+        """Connects the buttons to their functions"""
+        #self.ui.button_donate_close.clicked.connect() # Switch Index instead of closing the application
+        self.ui.button_donate_kofi.clicked.connect(self.open_kofi)
+        self.ui.button_donate_paypal.clicked.connect(self.open_paypal)
+        self.ui.button_donate_copy_xmr.clicked.connect(self.copy_xmr)
+        self.ui.button_donate_already_donated.clicked.connect(self.already_donated)
+
+    def open_kofi(self):
+        webbrowser.open("https://ko-fi.com/EchterAlsFake")
+
+    def open_paypal(self):
+        webbrowser.open("https://paypal.me/EchterAlsFake")
+
+    def copy_xmr(self):
+        """Copies the XMR address into the user's clipboard"""
+        xmr_address = "42XwGZYbSxpMvhn9eeP4DwMwZV91tQgAm3UQr6Zwb2wzBf5HcuZCHrsVxa4aV2jhP4gLHsWWELxSoNjfnkt4rMfDDwXy9jR"
+        QApplication.clipboard().setText(xmr_address)
+        ui_popup("XMR address has been copied into your clipboard!")
+
+    def already_donated(self):
+        ui_popup("Thank you very much for your donation!")
 
 
 class PornFetch(QMainWindow):
@@ -2563,16 +2588,30 @@ class PornFetch(QMainWindow):
         self.setWindowTitle(f"Porn Fetch v{__version__} Copyright (C) Johannes Habel 2023-2025")
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-
+        self.ui.CentralStackedWidget.removeWidget(self.ui.page) # Removes the default pages, cuz we use custom widgets
+        self.ui.CentralStackedWidget.removeWidget(self.ui.page_2)
         self.UI_donation_nag = DonationNag()
         self.UI_license = License()
 
-
-        self.StackedWidget = QStackedWidget() # This is the actual main stacked widget that also stores license and stuff...
-        self.setCentralWidget(self.StackedWidget)
-
-        self.StackedWidget.addWidget(self.UI_license)
+        """
+                     ! INDEX LIST !
         
+        0) Donation Nag
+        1) License
+        
+        
+        """
+
+        self.ui.CentralStackedWidget.addWidget(self.UI_donation_nag)
+        self.ui.CentralStackedWidget.addWidget(self.UI_license)
+        self.UI_donation_nag.ui.button_donate_close.clicked.connect(self.switch_to_license)
+        self.ui.CentralStackedWidget.setCurrentIndex(1)
+
+
+
+    def switch_to_license(self):
+        self.ui.CentralStackedWidget.setCurrentIndex(1)
+
 
 
 
