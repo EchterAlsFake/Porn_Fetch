@@ -1,4 +1,6 @@
 Donation Nag:
 
 UI = Finished
-(need to implement button connections and the copy XMR function to paste that in the users clipboard somehow idk)
+UX: Finished
+
+Need to split the widgets of main Porn Fetch and the other stuff into the Stacked Widget, so that it's cleaner lol

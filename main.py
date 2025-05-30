@@ -2560,7 +2560,6 @@ class DonationNag(QWidget):
 
     def button_connectors(self):
         """Connects the buttons to their functions"""
-        #self.ui.button_donate_close.clicked.connect() # Switch Index instead of closing the application
         self.ui.button_donate_kofi.clicked.connect(self.open_kofi)
         self.ui.button_donate_paypal.clicked.connect(self.open_paypal)
         self.ui.button_donate_copy_xmr.clicked.connect(self.copy_xmr)

@@ -27,6 +27,8 @@
 - [] Fix tools section layout
 
 # Other stuff
+- [] Automatic model download of new videos [#78](https://github.com/EchterAlsFake/Porn_Fetch/issues/78)
+- [] Allow for more parameters when starting Porn Fetch [#77](https://github.com/EchterAlsFake/Porn_Fetch/issues/77)
 - [] Allow for Video IDs as the filename [#76](https://github.com/EchterAlsFake/Porn_Fetch/issues/76)
 - [] Allow ignoring specific errors [#74](https://github.com/EchterAlsFake/Porn_Fetch/issues/74)
 - [] Rework the Batch processing features entirely (lol)
