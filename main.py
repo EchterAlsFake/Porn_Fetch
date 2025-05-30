@@ -21,21 +21,15 @@ from hqporner_api.api import Sort as hq_Sort
 from src.backend.shared_gui import *
 from src.backend.class_help import *
 from src.backend.shared_functions import *
-
-from src.frontend.UI.ui_form_license import Ui_SetupLicense
-from src.frontend.UI.ui_form_desktop import Ui_PornFetch_Desktop
-from src.frontend.UI.ui_form_android import Ui_PornFetch_Android
-from src.frontend.UI.ui_form_install_dialog import Ui_SetupInstallDialog
-from src.frontend.UI.ui_form_android_startup import Ui_SetupAndroidStartup
-from src.frontend.UI.ui_form_keyboard_shortcuts import Ui_KeyboardShortcuts
-from src.frontend.UI.ui_form_range_selector import Ui_PornFetchRangeSelector
 from src.frontend.UI.ui_form_main_window import Ui_MainWindow
-from src.frontend.UI.ui_form_donation import Ui_SponsoringDialog
+
+from src.backend.donation_nag import DonationNag
+
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                         QTranslator, QCoreApplication, QSize)
-from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QInputDialog, QTextBrowser, QMainWindow, QStackedWidget
-from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence, QClipboard
+from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QInputDialog, QTextBrowser, QMainWindow
+from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence
 
 
 
@@ -141,7 +135,7 @@ class Signals(QObject):
     url_iterators = Signal(object, object, object) # Sends the processed URLs from the file to Porn Fetch
     ffmpeg_download_finished = Signal() # Reports the successful download / install of FFmpeg
 
-
+'''
 class License(QWidget):
     """License class to display the GPL 3 License to the user.
        And handle the other UI popups"""
@@ -156,7 +150,7 @@ class License(QWidget):
         self.logger = setup_logger(name="Porn Fetch - [License]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=http_log_ip, http_port=http_log_port)
 
         # Set up the UI for License widget
-        self.ui = Ui_SetupLicense()
+        self.ui = 
         self.ui.setupUi(self)
         self.ui.button_accept.clicked.connect(self.accept)
         self.ui.button_deny.clicked.connect(self.denied)
@@ -200,8 +194,8 @@ class License(QWidget):
             with open("config.ini", "w") as config_file: # type:TextIOWrapper
                 self.conf.write(config_file)
 
-            self.android_startup = AndroidStartup()
-            self.android_startup.show()
+            #self.android_startup = AndroidStartup()
+            #self.android_startup.show()
 
 
         else:
@@ -271,54 +265,7 @@ class License(QWidget):
     def show_main(self):
         self.main_widget = PornFetch()
         self.main_widget.show()
-
-class AndroidStartup(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.ui = Ui_SetupAndroidStartup()
-        self.ui.setupUi(self)
-        self.ui.pushButton.clicked.connect(self.show_main)
-
-    def show_main(self):
-        self.close() # Closes the warning widget and proceeds to the main window
-        self.main_widget = PornFetch()
-        self.main_widget.show()
-
-
-class InstallDialog(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.conf = ConfigParser()
-        self.conf.read("config.ini")
-        self.main_widget = None
-        self.logger =  setup_logger(name="Porn Fetch - [InstallDialog]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=http_log_ip, http_port=http_log_port)
-
-        self.ui = Ui_SetupInstallDialog()
-        self.ui.setupUi(self)
-        self.ui.button_install.clicked.connect(self.start_install)
-        self.ui.button_portable.clicked.connect(self.start)
-
-    def start_install(self):
-        self.logger.debug("Starting installation...")
-        self.conf.set("Setup", "install", "installed")
-        with open("config.ini", "w") as config: #type: TextIOWrapper
-            self.conf.write(config)
-
-        self.close()
-        app_name = self.ui.lineedit_custom_app_name.text() or "Porn Fetch"
-        self.logger.info(f"App Name: {app_name}")
-
-        self.main_widget = PornFetch(start_installation=True, app_name=app_name)
-        self.main_widget.show()
-
-    def start(self):
-        self.conf.set("Setup", "install", "portable")
-        with open("config.ini", "w") as config: #type: TextIOWrapper
-            self.conf.write(config)
-
-        self.close()
-        self.main_widget = PornFetch()
-        self.main_widget.show()
+'''
 
 
 class InstallThread(QRunnable):
@@ -1079,7 +1026,7 @@ class AddUrls(QRunnable):
 
         self.signals.url_iterators.emit(iterator, model_iterators, search_iterators)
 
-class PornFetchxD(QWidget):
+'''class PornFetchxD(QWidget):
     def __init__(self, parent=None, start_installation=False, app_name="Porn Fetch"):
         super().__init__(parent)
         # Variable initialization:
@@ -2545,40 +2492,7 @@ This warning won't be shown again.
         self.ui.main_stacked_widget_top.setCurrentIndex(2)
         self.ui.main_stacked_widget_main.setCurrentIndex(0)
         self.ui.main_stacked_widget_top.setMaximumHeight(280)
-
-
-class DonationNag(QWidget):
-    """
-    This displays the Widget for the donation nag that asks the user kindly to donate a little bit
-    of money to this project.
-    """
-    def __init__(self):
-        super().__init__()
-        self.ui = Ui_SponsoringDialog()
-        self.ui.setupUi(self)
-        self.button_connectors()
-
-    def button_connectors(self):
-        """Connects the buttons to their functions"""
-        self.ui.button_donate_kofi.clicked.connect(self.open_kofi)
-        self.ui.button_donate_paypal.clicked.connect(self.open_paypal)
-        self.ui.button_donate_copy_xmr.clicked.connect(self.copy_xmr)
-        self.ui.button_donate_already_donated.clicked.connect(self.already_donated)
-
-    def open_kofi(self):
-        webbrowser.open("https://ko-fi.com/EchterAlsFake")
-
-    def open_paypal(self):
-        webbrowser.open("https://paypal.me/EchterAlsFake")
-
-    def copy_xmr(self):
-        """Copies the XMR address into the user's clipboard"""
-        xmr_address = "42XwGZYbSxpMvhn9eeP4DwMwZV91tQgAm3UQr6Zwb2wzBf5HcuZCHrsVxa4aV2jhP4gLHsWWELxSoNjfnkt4rMfDDwXy9jR"
-        QApplication.clipboard().setText(xmr_address)
-        ui_popup("XMR address has been copied into your clipboard!")
-
-    def already_donated(self):
-        ui_popup("Thank you very much for your donation!")
+'''
 
 
 class PornFetch(QMainWindow):
@@ -2587,34 +2501,36 @@ class PornFetch(QMainWindow):
         self.setWindowTitle(f"Porn Fetch v{__version__} Copyright (C) Johannes Habel 2023-2025")
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.ui.CentralStackedWidget.removeWidget(self.ui.page) # Removes the default pages, cuz we use custom widgets
-        self.ui.CentralStackedWidget.removeWidget(self.ui.page_2)
-        self.UI_donation_nag = DonationNag()
-        self.UI_license = License()
+        self.UI_donation_nag = DonationNag(self.ui)
 
         """
                      ! INDEX LIST !
         
-        0) Donation Nag
-        1) License
+        0) Main application (downloading, login, tree widget etc.)
+        :: Index list for main application ::
+        - 1: Download
+        - 2: Login
+        - 3: Progress Bars
+        - 4: Tools
         
-        
+        1) Settings
+        2) Credits
+        3) License
+        4) Range Selector (for automatically selecting videos in the tree widget)
+        5) Keyboard Shortcuts
+        6) Install Dialog
+        7) Supported websites
+        8) Donation Nag        
+        This may look a little bit confusing, but once you understand it, it makes sense, trust me :)
         """
 
-        self.ui.CentralStackedWidget.addWidget(self.UI_donation_nag)
-        self.ui.CentralStackedWidget.addWidget(self.UI_license)
         self.UI_donation_nag.ui.button_donate_close.clicked.connect(self.switch_to_license)
-        self.ui.CentralStackedWidget.setCurrentIndex(1)
+        self.ui.CentralStackedWidget.setCurrentIndex(8)
 
 
 
     def switch_to_license(self):
         self.ui.CentralStackedWidget.setCurrentIndex(1)
-
-
-
-
-
 
 
 

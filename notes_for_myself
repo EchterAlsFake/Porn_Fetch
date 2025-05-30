@@ -3,4 +3,8 @@ Donation Nag:
 UI = Finished
 UX: Finished
 
-Need to split the widgets of main Porn Fetch and the other stuff into the Stacked Widget, so that it's cleaner lol
+
+Alright, all widgets are now inside of the QMainWindow's stacked widget. The next goal is, to outsource all classes
+into external python files to clean up the code. This works by giving the self.ui into the other classes via the __init__
+method. However, I need to check if I can also connect Signals and Slots with it, but should be good.
+I'll probably need to outsource the Signals class too and then just import that class into other files and work with that.
