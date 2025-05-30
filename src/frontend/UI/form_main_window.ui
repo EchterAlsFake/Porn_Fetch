@@ -399,7 +399,7 @@ color: white</string>
     <item row="1" column="0">
      <widget class="QStackedWidget" name="CentralStackedWidget">
       <property name="currentIndex">
-       <number>8</number>
+       <number>9</number>
       </property>
       <widget class="QWidget" name="page_main">
        <layout class="QGridLayout" name="gridLayout_9">
@@ -3711,6 +3711,59 @@ li.checked::marker { content: &quot;\2612&quot;; }
                </widget>
               </item>
              </layout>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_disclaimer">
+       <layout class="QGridLayout" name="gridLayout_62">
+        <item row="0" column="0">
+         <widget class="QScrollArea" name="scrollArea_12">
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="scrollAreaWidgetContents_14">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>2007</width>
+             <height>726</height>
+            </rect>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_61">
+            <item row="0" column="0">
+             <widget class="QTextBrowser" name="textBrowser_5">
+              <property name="html">
+               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;h1 style=&quot; margin-top:18px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:xx-large; font-weight:700;&quot;&gt;DISCLAIMER&lt;/span&gt;&lt;/h1&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Porn Fetch may violate the Terms of Service of the websites it interacts with.&lt;br /&gt;Downloading copyright-protected content without proper authorization is illegal under the &lt;span style=&quot; font-weight:700;&quot;&gt;DMCA (Digital Millennium Copyright Act)&lt;/span&gt; and other applicable laws.&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;However, some jurisdictions allow downloading content for strictly &lt;span style=&quot; font-weight:700;&quot;&gt;private, personal use&lt;/span&gt;.&lt;br /&gt;By using Porn Fetch, you explicitly agree to use this software &lt;span style=&quot; font-weight:700;&quot;&gt;only for personal purposes&lt;/span&gt;, such as saving videos for offline viewing.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:x-large; font-weight:700;&quot;&gt;PROHIBITED USE&lt;/span&gt;&lt;/h2&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;I &lt;span style=&quot; font-weight:700;&quot;&gt;strictly forbid&lt;/span&gt; the redistribution, sharing, or commercial use of any content downloaded using Porn Fetch.&lt;br /&gt;If users exploit this software for unauthorized distribution, I may discontinue development and take the project offline.&lt;br /&gt;Please respect this to ensure its continued availability.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:x-large; font-weight:700;&quot;&gt;LIABILITY DISCLAIMER&lt;/span&gt;&lt;/h2&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This software is provided under the &lt;span style=&quot; font-weight:700;&quot;&gt;GPL license&lt;/span&gt; and comes &lt;span style=&quot; font-weight:700;&quot;&gt;without any warranty&lt;/span&gt;.&lt;br /&gt;I am not liable for any legal consequences, damages, or misuse resulting from its use.&lt;br /&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;You are solely responsible for your actions.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;By using Porn Fetch, you confirm that you will &lt;span style=&quot; font-weight:700;&quot;&gt;only use it for private purposes&lt;/span&gt; and comply with all applicable laws.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QPushButton" name="button_disclaimer_accept">
+              <property name="text">
+               <string>Accept</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>

@@ -10,20 +10,24 @@ import zipfile
 import argparse
 import markdown
 import traceback
-import webbrowser
 import src.frontend.UI.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
 
 from threading import Event
 from io import TextIOWrapper
 from itertools import islice, chain
-from hqporner_api.api import Sort as hq_Sort
+from functools import partial
+
 
 from src.backend.shared_gui import *
 from src.backend.class_help import *
 from src.backend.shared_functions import *
 from src.frontend.UI.ui_form_main_window import Ui_MainWindow
+from src.backend.one_time_functions import *
 
 from src.backend.donation_nag import DonationNag
+from src.backend.license import License
+from hqporner_api.api import Sort as hq_Sort
+
 
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
@@ -102,6 +106,7 @@ class VideoData:
         for video_title in video_titles:
             del self.data_objects[video_title] # Del is faster than pop :)
 
+
 class Signals(QObject):
     """Signals for the Download class"""
     # Progress Signal
@@ -134,138 +139,6 @@ class Signals(QObject):
                                          # to download them
     url_iterators = Signal(object, object, object) # Sends the processed URLs from the file to Porn Fetch
     ffmpeg_download_finished = Signal() # Reports the successful download / install of FFmpeg
-
-'''
-class License(QWidget):
-    """License class to display the GPL 3 License to the user.
-       And handle the other UI popups"""
-
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.main_widget = None
-        self.conf = ConfigParser()
-        self.conf.read("config.ini")
-        self.android_startup = None
-        self.install_widget = None
-        self.logger = setup_logger(name="Porn Fetch - [License]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=http_log_ip, http_port=http_log_port)
-
-        # Set up the UI for License widget
-        self.ui = 
-        self.ui.setupUi(self)
-        self.ui.button_accept.clicked.connect(self.accept)
-        self.ui.button_deny.clicked.connect(self.denied)
-
-    def check_license_and_proceed(self):
-        if self.conf["Setup"]["license_accepted"] == "true":
-            self.show_android_startup_or_main() # License accepted, proceed with Android or main widget
-
-        else:
-            self.show() # License not accepted, show the license widget
-
-    def accept(self):
-        self.logger.info("License was accepted, continuing...")
-        self.conf.set("Setup", "license_accepted", "true")
-        with open("config.ini", "w") as config_file: # type: TextIOWrapper
-            self.conf.write(config_file)
-        self.show_android_startup_or_main()
-
-    def denied(self):
-        self.logger.warning("License was denied, exiting...")
-        self.conf.set("Setup", "license_accepted", "false")
-        with open("config.ini", "w") as config_file:  #type: TextIOWrapper
-            self.conf.write(config_file)
-        logger.error("License was denied, closing application")
-        self.close()
-        sys.exit(0)
-
-    def show_android_startup_or_main(self):
-        """ Check if running on Android and show the appropriate startup screen. """
-        self.close()
-
-        if __build__ == "android":
-            self.show_android_warning()
-
-        else:
-            self.show_disclaimer()
-
-    def show_android_warning(self):
-        if not self.conf["Android"]["warning_shown"] == "true":
-            self.conf.set("Android", "warning_shown", "true")
-            with open("config.ini", "w") as config_file: # type:TextIOWrapper
-                self.conf.write(config_file)
-
-            #self.android_startup = AndroidStartup()
-            #self.android_startup.show()
-
-
-        else:
-            self.show_main()
-
-    def show_disclaimer_text(self):
-        self.textbrowser = QTextBrowser()
-        self.textbrowser.setHtml(
-            u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-            "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-            "p, li { white-space: pre-wrap; }\n"
-            "hr { height: 1px; border-width: 0; }\n"
-            "li.unchecked::marker { content: \"\\2610\"; }\n"
-            "li.checked::marker { content: \"\\2612\"; }\n"
-            "</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-            "<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:24pt; font-weight:700; color:#a51d2d;\">DISCLAIMER</span></p>\n"
-            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Porn Fetch may violate the Terms of Service of the websites it interacts with.<br />Downloading copyright-protected content without proper authorization is illegal under"
-            " the <span style=\" font-weight:700;\">DMCA (Digital Millennium Copyright Act)</span> and other applicable laws.</p>\n"
-            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">However, some jurisdictions allow downloading content for strictly <span style=\" font-weight:700;\">private, personal use</span>. By using Porn Fetch, you explicitly agree to use this software <span style=\" font-weight:700;\">only for personal purposes</span>, such as saving videos for offline viewing.</p>\n"
-            "<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">Prohibited Use</span></h3>\n"
-            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I <span style=\" font-weight:700;\">strictly forbid</span> the redistribution, sharing, or commercial use of any content downloaded using "
-            "Porn Fetch.<br />If users exploit this software for unauthorized distribution, I may discontinue development and take the project offline. Please respect this to ensure its continued availability.</p>\n"
-            "<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">Liability Disclaimer</span></h3>\n"
-            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This software is provided under the <span style=\" font-weight:700;\">GPL license</span> and comes <span style=\" font-weight:700;\">without any warranty</span>. I am not liable for any legal consequences, damages, or misuse resulting from its use. <span style=\" font-weight:700;\">You are solely responsible for your actions.</span></p>\n"
-            "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">By using Porn Fetch"
-            ", you confirm that you will <span style=\" font-weight:700;\">only use it for private purposes</span> and comply with all applicable laws. </p></body></html>")
-
-        self.textbrowser.setFixedHeight(600)
-        self.textbrowser.setFixedWidth(800)
-        screen = QApplication.primaryScreen()
-        screen_geometry = screen.availableGeometry()
-
-        # Calculate the center position
-        x = (screen_geometry.width() - self.textbrowser.width()) // 2
-        y = (screen_geometry.height() - self.textbrowser.height()) // 2
-
-        # Move the window to the center
-        self.textbrowser.move(x, y)
-        self.textbrowser.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
-        self.textbrowser.show()
-        self.textbrowser.setFocus()
-        self.textbrowser.raise_()
-        self.textbrowser.activateWindow()
-
-    def show_disclaimer(self):
-        if self.conf.get("Disclaimer", "shown") == "false":
-            self.show_disclaimer_text()
-            self.conf.set("Disclaimer", "shown", "true")
-            with open("config.ini", "w") as config_file:  # type:TextIOWrapper
-                self.conf.write(config_file)
-
-        self.show_install_dialog()
-
-    def show_install_dialog(self):
-        if sys.platform == "darwin":
-            self.show_main() # Installation not supported on macOS
-            return
-
-        if self.conf["Setup"]["install"] == "unknown":
-            self.logger.debug("Showing installation dialog, because install type is unknown yet")
-            self.install_widget = InstallDialog()
-            self.install_widget.show()
-
-        else:
-            self.show_main()
-
-    def show_main(self):
-        self.main_widget = PornFetch()
-        self.main_widget.show()
-'''
 
 
 class InstallThread(QRunnable):
@@ -460,7 +333,6 @@ class CheckUpdates(QRunnable):
             error = traceback.format_exc()
             self.logger.error(f"Could not check for updates. Please report the following error on GitHub: {error}")
             self.signals.error_signal.emit(error)
-
 
 
 class FFMPEGDownload(QRunnable):
@@ -1026,11 +898,19 @@ class AddUrls(QRunnable):
 
         self.signals.url_iterators.emit(iterator, model_iterators, search_iterators)
 
-'''class PornFetchxD(QWidget):
-    def __init__(self, parent=None, start_installation=False, app_name="Porn Fetch"):
+
+class PornFetch(QMainWindow):
+    def __init__(self, parent=None):
         super().__init__(parent)
-        # Variable initialization:
-        self.app_name = app_name
+        self.setWindowTitle(f"Porn Fetch v{__version__} Copyright (C) Johannes Habel 2023-2025")
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+
+        setup_config_file()
+        self.conf = ConfigParser()
+        self.conf.read("config.ini")
+
+        #self.app_name = app_name
 
         # Threads
         self.install_thread = None
@@ -1090,27 +970,48 @@ class AddUrls(QRunnable):
         self.downloader = None
         self.directory_system = None
         self.ffmpeg_path = None
-        self.logger = setup_logger(name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=http_log_ip, http_port=http_log_port)
+        self.logger = setup_logger(name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG,
+                                   http_ip=http_log_ip, http_port=http_log_port)
 
-        self.last_index = 0 # Keeps track of the last index of videos added to the tree widget
+        self.last_index = 0  # Keeps track of the last index of videos added to the tree widget
         self.threadpool = QThreadPool()
 
-        self.conf = ConfigParser()
-        self.conf.read("config.ini")
-        if __build__ == "android":
-            self.ui = Ui_PornFetch_Android()
-            self.ui.setupUi(self)
+        self.load_style()
+        self.donation_nag = DonationNag(self.ui)
+        self.license = License(self.ui)
+
+        # Checks if user accepted License. See `license.py` for more information (src.backend.license.py)
+        if self.license.check_license():
+            self.switch_to_main()
 
         else:
-            self.ui = Ui_PornFetch_Desktop()
-            self.ui.setupUi(self)
+            self.switch_to_license()
 
-            if start_installation:
-                self.install_pornfetch()
-                self.close()
 
+        """
+                     ! INDEX LIST !
+        
+        0) Main application (downloading, login, tree widget etc.)
+        :: Index list for main application ::
+        - 0: Download
+        - 1: Login
+        - 2: Progress Bars
+        - 3: Tools
+        
+        1) Settings
+        2) Credits
+        3) License
+        4) Range Selector (for automatically selecting videos in the tree widget)
+        5) Keyboard Shortcuts
+        6) Install Dialog
+        7) Supported websites
+        8) Donation Nag        
+        This may look a little bit confusing, but once you understand it, it makes sense, trust me :)
+        """
+
+        self.donation_nag.ui.button_donate_close.clicked.connect(self.switch_to_license)
         self.default_max_height = self.ui.main_stacked_widget_top.maximumHeight()
-        self.button_connectors()  # Connects the buttons to their functions
+        self.button_connections()  # Connects the buttons to their functions
         self.button_groups()  # Groups the buttons, so that the Radio buttons are split from themselves (hard to explain)
         self.shortcuts() # Activates the keyboard shortcuts
         self.load_style()  # Loads all the User Interface stylesheets
@@ -1118,7 +1019,6 @@ class AddUrls(QRunnable):
         self.settings_maps_initialization()
         self.load_user_settings()  # Loads the user settings and applies selected values to the UI
         self.logger.debug("Startup: [4/5] Loaded the user settings")
-        self.switch_to_home()  # Switches Porn Fetch to the home widget
 
         if self.internet_checks:
             self.logger.info("Running internet checks")
@@ -1149,179 +1049,57 @@ class AddUrls(QRunnable):
             "skip_existing_files": self.skip_existing_files
         })
         self.logger.debug("Startup: [5/5] OK")
-        self.check_for_sponsoring_notice()
-
-    def install_pornfetch(self):
-        if __build__ == "desktop":
-            self.logger.info(f"Starting Porn Fetch installation with App name: {self.app_name}")
-            self.install_thread = InstallThread(self.app_name)
-            self.install_thread.signals.install_finished.connect(self.install_pornfetch_result)
-            self.install_thread.signals.start_undefined_range.connect(self.start_undefined_range)
-            self.install_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
-            self.threadpool.start(self.install_thread)
-
-        else:
-            ui_popup(self.tr("You are running on Android! You can not install Porn Fetch", disambiguation=None))
-
-    def install_pornfetch_result(self, result):
-        if result[0]:
-            ui_popup("Porn Fetch has been installed. The app will now close! Please start Porn Fetch from"
-                     " your context menu again.")
-
-            self.close()
-
-        else:
-            ui_popup(self.tr(f"Porn Fetch installation failed, because of: {result[1]}", disambiguation=None))
-
-    def anonymous_mode(self):
-        """
-        This mode will hide that you are using Porn Fetch by hiding video title names, hiding author names,
-        hiding the window title and removing all placeholders from lineedits. May not be the most efficient approach,
-         but it works.
-        """
-        self.setWindowTitle("Running in Anonymous mode...")
-        self.ui.download_lineedit_url.setPlaceholderText(" ")
-        self.ui.login_lineedit_password.setPlaceholderText(" ")
-        self.ui.login_lineedit_username.setPlaceholderText(" ")
-        self.ui.settings_label_pornhub_delay.setText("Delay (0 = Disabled) in seconds:")
-        self.ui.settings_label_settings_videos_model.setText("Actors video types:")
-        self.ui.settings_button_install_pornfetch.setText("Install Program")
-        self.ui.settings_groupbox_system_pornfetch.setWindowTitle("System")
-        self.ui.main_textbrowser_supported_websites.setText("Running in anonymous mode, please deactivate to display...")
-        self.ui.download_lineedit_playlist_url.setPlaceholderText("Enter playlist URL")
-        self.ui.download_radio_search_website_eporner.setText("4")
-        self.ui.download_radio_search_website_hqporner.setText("2")
-        self.ui.download_radio_search_website_pornhub.setText("1")
-        self.ui.download_radio_search_website_xvideos.setText("3")
-        self.ui.download_radio_search_website_xnxx.setText("5")
-        self.ui.progress_label_pornhub.setText("1")
-        self.ui.progress_label_hqporner.setText("2")
-        self.ui.progress_label_eporner.setText("3")
-        self.ui.progress_label_xnxx.setText("4")
-        self.ui.progress_label_xvideos.setText("5")
-        self._anonymous_mode = True # Makes sense, trust
-        self.logger.info("Enabled anonymous mode!")
-
-    def button_groups(self):
-        """
-        The button groups are needed to tell the radio button which of them are in a group.
-        If I don't do this, then you could check all redio buttons at the same time lol"""
-        self.group_threading_mode = QButtonGroup()
-        self.group_threading_mode.addButton(self.ui.settings_radio_threading_mode_ffmpeg)
-        self.group_threading_mode.addButton(self.ui.settings_radio_threading_mode_default)
-        self.group_threading_mode.addButton(self.ui.settings_radio_threading_mode_high_performance)
-
-        self.group_quality = QButtonGroup()
-        self.group_quality.addButton(self.ui.settings_radio_quality_worst)
-        self.group_quality.addButton(self.ui.settings_radio_quality_half)
-        self.group_quality.addButton(self.ui.settings_radio_quality_best)
-
-        self.group_ui_language = QButtonGroup()
-        self.group_ui_language.addButton(self.ui.settings_radio_ui_language_english)
-        self.group_ui_language.addButton(self.ui.settings_radio_ui_language_german)
-        self.group_ui_language.addButton(self.ui.settings_radio_ui_language_french)
-        self.group_ui_language.addButton(self.ui.settings_radio_ui_language_system_default)
-        self.group_ui_language.addButton(self.ui.settings_radio_ui_language_chinese_simplified)
-
-        self.group_radio_hqporner = QButtonGroup()
-        self.group_radio_hqporner.addButton(self.ui.tools_radio_top_porn_week)
-        self.group_radio_hqporner.addButton(self.ui.tools_radio_top_porn_month)
-        self.group_radio_hqporner.addButton(self.ui.tools_radio_top_porn_all_time)
-
-        self.group_radio_model_videos = QButtonGroup()
-        self.group_radio_model_videos.addButton(self.ui.settings_radio_model_both)
-        self.group_radio_model_videos.addButton(self.ui.settings_radio_model_uploads)
-        self.group_radio_model_videos.addButton(self.ui.settings_radio_model_featured)
+        #self.check_for_sponsoring_notice()
 
 
-    def button_connectors(self):
-        """a function to link the buttons to their functions"""
-        # Menu Bar Switch Button Connections
-        self.ui.main_button_switch_home.clicked.connect(self.switch_to_home)
-        self.ui.main_button_switch_settings.clicked.connect(self.switch_to_settings)
-        self.ui.main_button_switch_credits.clicked.connect(self.switch_to_credits)
-        self.ui.main_button_switch_account.clicked.connect(self.switch_to_account)
-        self.ui.main_button_switch_supported_websites.clicked.connect(self.switch_to_supported_websites)
-        self.ui.main_button_view_progress_bars.clicked.connect(self.switch_to_all_progress_bars)
+    """
+    The following functions just switch the Stacked Widget to the different widgets
+    """
 
-        # Video Download Button Connections
-        self.ui.main_button_tree_download.clicked.connect(self.download_tree_widget)
-        self.ui.download_button_download.clicked.connect(self.start_single_video)
-        self.ui.download_button_model.clicked.connect(self.start_model)
-        self.ui.download_button_playlist_get_videos.clicked.connect(self.start_playlist)
+    def switch_to_main(self):
+        self.ui.CentralStackedWidget.setCurrentIndex(0)
 
-        # Help Buttons Connections
-        self.ui.settings_button_semaphore_help.clicked.connect(button_semaphore_help)
-        self.ui.settings_button_threading_mode_help.clicked.connect(button_threading_mode_help)
-        self.ui.settings_button_directory_system_help.clicked.connect(button_directory_system_help)
-        self.ui.settings_button_workers_help.clicked.connect(maximal_workers_help)
-        self.ui.settings_button_timeout_help.clicked.connect(timeout_help)
-        self.ui.settings_button_pornhub_delay_help.clicked.connect(pornhub_delay_help)
-        self.ui.settings_button_result_limit_help.clicked.connect(result_limit_help)
-        self.ui.download_button_help_file.clicked.connect(open_file_help)
-        self.ui.settings_button_timeout_maximal_retries_help.clicked.connect(max_retries_help)
-        self.ui.settings_button_help_skip_existing_files.clicked.connect(skip_existing_files_help)
-        self.ui.settings_button_help_model_videos.clicked.connect(model_videos_help)
-        self.ui.button_help_write_metadata_tags.clicked.connect(metadata_help)
+    def switch_to_settings(self):
+        self.ui.CentralStackedWidget.setCurrentIndex(1)
 
-        # Settings
-        self.ui.settings_button_apply.clicked.connect(self.save_user_settings)
-        self.ui.settings_button_reset.clicked.connect(reset_pornfetch)
-        self.ui.settings_button_install_pornfetch.clicked.connect(self.install_pornfetch)
-        self.ui.settings_checkbox_system_activate_proxy.clicked.connect(self.set_proxies)
+    def switch_to_credits(self):
+        self.ui.CentralStackedWidget.setCurrentIndex(2)
 
-        # Account
-        self.ui.login_button_login.clicked.connect(self.login)
-        self.ui.login_button_get_watched_videos.clicked.connect(self.get_watched_videos)
-        self.ui.login_button_get_liked_videos.clicked.connect(self.get_liked_videos)
-        self.ui.login_button_get_recommended_videos.clicked.connect(self.get_recommended_videos)
+    def switch_to_license(self):
+        self.ui.CentralStackedWidget.setCurrentIndex(3)
 
-        # Search
-        self.ui.button_search.clicked.connect(self.search)
+    def switch_to_range_selector(self):
+        self.ui.CentralStackedWidget.setCurrentIndex(4)
 
-        # HQPorner
-        self.ui.main_button_switch_tools.clicked.connect(self.switch_to_tools)
-        self.ui.tools_button_hqporner_category_get_videos.clicked.connect(self.get_by_category_hqporner)
-        self.ui.tools_button_top_porn_get_videos.clicked.connect(self.get_top_porn_hqporner)
-        self.ui.tools_button_get_brazzers_videos.clicked.connect(self.get_brazzers_videos)
-        self.ui.tools_button_list_categories.clicked.connect(self.list_categories_hqporner)
-        self.ui.tools_button_get_random_videos.clicked.connect(self.get_random_video)
+    def switch_to_keyboard_shortcuts(self):
+        self.ui.CentralStackedWidget.setCurrentIndex(5)
 
-        # EPorner
-        self.ui.tools_button_list_categories_eporner.clicked.connect(self.list_categories_eporner)
-        self.ui.tools_button_eporner_category_get_videos.clicked.connect(self.get_by_category_eporner)
+    def switch_to_install_dialog(self):
+        self.ui.CentralStackedWidget.setCurrentIndex(6)
 
-        # File Dialog
-        self.ui.settings_button_output_path_select.clicked.connect(self.open_output_path_dialog)
-        self.ui.download_button_open_file.clicked.connect(self.open_file_dialog)
+    def switch_to_supported_sites(self):
+        self.ui.CentralStackedWidget.setCurrentIndex(7)
 
-        # Other stuff IDK
-        self.ui.main_button_tree_stop.clicked.connect(switch_stop_state)
-        self.ui.settings_button_download_ffmpeg.clicked.connect(self.download_ffmpeg)
-        self.ui.main_button_tree_keyboard_shortcuts.clicked.connect(self.show_keyboard_shortcuts)
-        self.ui.main_button_tree_automated_selection.clicked.connect(self.select_range_of_items)
+    def switch_to_donation_nag(self):
+        self.ui.CentralStackedWidget.setCurrentIndex(8)
 
-    def shortcuts(self):
-        quit_shortcut = QShortcut(QKeySequence("Ctrl+Q"), self)
-        quit_shortcut.activated.connect(self.close)
+    def switch_to_download(self):
+        self.switch_to_main()
+        self.ui.main_stacked_widget_top.setCurrentIndex(0)
+        self.ui.main_stacked_widget_top.setMaximumHeight(220)
 
-        export_urls_shortcut = QShortcut(QKeySequence("Ctrl+E"), self)
-        export_urls_shortcut.activated.connect(export_urls)
+    def switch_to_login(self):
+        self.switch_to_main()
+        self.ui.main_stacked_widget_top.setCurrentIndex(1)
 
-        download_tree_widget = QShortcut(QKeySequence("Ctrl+T"), self)
-        download_tree_widget.activated.connect(self.download_tree_widget)
+    def switch_to_progressbars(self):
+        self.switch_to_main()
+        self.ui.main_stacked_widget_top.setCurrentIndex(2)
+        self.ui.main_stacked_widget_top.setMaximumHeight(280)
 
-        enable_anonymous_mode = QShortcut(QKeySequence("Ctrl+A"), self)
-        enable_anonymous_mode.activated.connect(self.anonymous_mode)
-
-        save_settings = QShortcut(QKeySequence("Ctrl+S"), self)
-        save_settings.activated.connect(self.save_user_settings)
-
-        select_all_items = QShortcut(QKeySequence("Ctrl+X"), self)
-        select_all_items.activated.connect(self.select_all_items)
-
-        unselect_all_items = QShortcut(QKeySequence("Ctrl+Z"), self)
-        unselect_all_items.activated.connect(self.unselect_all_items)
+    def switch_to_tools(self):
+        self.switch_to_main()
+        self.ui.main_stacked_widget_top.setCurrentIndex(3)
 
     def load_style(self):
         """Refactored function to load icons and stylesheets."""
@@ -1446,11 +1224,184 @@ class AddUrls(QRunnable):
         self.header.resizeSection(2, 50)
         self.header.setSectionResizeMode(3, QHeaderView.ResizeMode.Fixed)
         self.ui.treeWidget.setColumnWidth(3, 150)
-        self.header.sortIndicatorChanged.connect(self.reindex) # This does not make any sense and I need to refactor it!
-        self.ui.treeWidget.itemClicked.connect(self.set_thumbnail)
+        #self.header.sortIndicatorChanged.connect(partial(reindex, ))  # don't know what this is, vibe coding ahh moment
+        #self.ui.treeWidget.itemClicked.connect(self.set_thumbnail)
 
         # Sort by the 'Length' column in ascending order
         self.ui.treeWidget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
+
+    '''def install_pornfetch(self):
+        if __build__ == "desktop":
+            self.logger.info(f"Starting Porn Fetch installation with App name: {self.app_name}")
+            self.install_thread = InstallThread(self.app_name)
+            self.install_thread.signals.install_finished.connect(self.install_pornfetch_result)
+            self.install_thread.signals.start_undefined_range.connect(self.start_undefined_range)
+            self.install_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
+            self.threadpool.start(self.install_thread)
+
+        else:
+            ui_popup(self.tr("You are running on Android! You can not install Porn Fetch", disambiguation=None))
+
+    '''
+    def install_pornfetch_result(self, result):
+        if result[0]:
+            ui_popup("Porn Fetch has been installed. The app will now close! Please start Porn Fetch from"
+                     " your context menu again.")
+
+            self.close()
+
+        else:
+            ui_popup(self.tr(f"Porn Fetch installation failed, because of: {result[1]}", disambiguation=None))
+
+    def anonymous_mode(self):
+        """
+        This mode will hide that you are using Porn Fetch by hiding video title names, hiding author names,
+        hiding the window title and removing all placeholders from lineedits. May not be the most efficient approach,
+         but it works.
+        """
+        self.setWindowTitle("Running in Anonymous mode...")
+        self.ui.download_lineedit_url.setPlaceholderText(" ")
+        self.ui.login_lineedit_password.setPlaceholderText(" ")
+        self.ui.login_lineedit_username.setPlaceholderText(" ")
+        self.ui.settings_label_pornhub_delay.setText("Delay (0 = Disabled) in seconds:")
+        self.ui.settings_label_settings_videos_model.setText("Actors video types:")
+        self.ui.settings_button_install_pornfetch.setText("Install Program")
+        self.ui.settings_groupbox_system_pornfetch.setWindowTitle("System")
+        self.ui.main_textbrowser_supported_websites.setText(
+            "Running in anonymous mode, please deactivate to display...")
+        self.ui.download_lineedit_playlist_url.setPlaceholderText("Enter playlist URL")
+        self.ui.download_radio_search_website_eporner.setText("4")
+        self.ui.download_radio_search_website_hqporner.setText("2")
+        self.ui.download_radio_search_website_pornhub.setText("1")
+        self.ui.download_radio_search_website_xvideos.setText("3")
+        self.ui.download_radio_search_website_xnxx.setText("5")
+        self.ui.progress_label_pornhub.setText("1")
+        self.ui.progress_label_hqporner.setText("2")
+        self.ui.progress_label_eporner.setText("3")
+        self.ui.progress_label_xnxx.setText("4")
+        self.ui.progress_label_xvideos.setText("5")
+        self._anonymous_mode = True  # Makes sense, trust
+        self.logger.info("Enabled anonymous mode!")
+
+    def button_groups(self):
+        """
+        The button groups are needed to tell the radio button which of them are in a group.
+        If I don't do this, then you could check all redio buttons at the same time lol"""
+        self.group_threading_mode = QButtonGroup()
+        self.group_threading_mode.addButton(self.ui.settings_radio_threading_mode_ffmpeg)
+        self.group_threading_mode.addButton(self.ui.settings_radio_threading_mode_default)
+        self.group_threading_mode.addButton(self.ui.settings_radio_threading_mode_high_performance)
+
+        self.group_quality = QButtonGroup()
+        self.group_quality.addButton(self.ui.settings_radio_quality_worst)
+        self.group_quality.addButton(self.ui.settings_radio_quality_half)
+        self.group_quality.addButton(self.ui.settings_radio_quality_best)
+
+        self.group_ui_language = QButtonGroup()
+        self.group_ui_language.addButton(self.ui.settings_radio_ui_language_english)
+        self.group_ui_language.addButton(self.ui.settings_radio_ui_language_german)
+        self.group_ui_language.addButton(self.ui.settings_radio_ui_language_french)
+        self.group_ui_language.addButton(self.ui.settings_radio_ui_language_system_default)
+        self.group_ui_language.addButton(self.ui.settings_radio_ui_language_chinese_simplified)
+
+        self.group_radio_hqporner = QButtonGroup()
+        self.group_radio_hqporner.addButton(self.ui.tools_radio_top_porn_week)
+        self.group_radio_hqporner.addButton(self.ui.tools_radio_top_porn_month)
+        self.group_radio_hqporner.addButton(self.ui.tools_radio_top_porn_all_time)
+
+        self.group_radio_model_videos = QButtonGroup()
+        self.group_radio_model_videos.addButton(self.ui.settings_radio_model_both)
+        self.group_radio_model_videos.addButton(self.ui.settings_radio_model_uploads)
+        self.group_radio_model_videos.addButton(self.ui.settings_radio_model_featured)
+
+    def button_connections(self):
+        """a function to link the buttons to their functions"""
+        # Menu Bar Switch Button Connections
+        self.ui.main_button_switch_home.clicked.connect(self.switch_to_download)
+        self.ui.main_button_switch_settings.clicked.connect(self.switch_to_settings)
+        self.ui.main_button_switch_credits.clicked.connect(self.switch_to_credits)
+        self.ui.main_button_switch_account.clicked.connect(self.switch_to_login)
+        self.ui.main_button_switch_supported_websites.clicked.connect(self.switch_to_supported_sites)
+        self.ui.main_button_view_progress_bars.clicked.connect(self.switch_to_progressbars)
+
+        # Video Download Button Connections
+        self.ui.main_button_tree_download.clicked.connect(self.download_tree_widget)
+        self.ui.download_button_download.clicked.connect(self.start_single_video)
+        self.ui.download_button_model.clicked.connect(self.start_model)
+        self.ui.download_button_playlist_get_videos.clicked.connect(self.start_playlist)
+
+        # Help Buttons Connections
+        self.ui.settings_button_semaphore_help.clicked.connect(button_semaphore_help)
+        self.ui.settings_button_threading_mode_help.clicked.connect(button_threading_mode_help)
+        self.ui.settings_button_directory_system_help.clicked.connect(button_directory_system_help)
+        self.ui.settings_button_workers_help.clicked.connect(maximal_workers_help)
+        self.ui.settings_button_timeout_help.clicked.connect(timeout_help)
+        self.ui.settings_button_pornhub_delay_help.clicked.connect(pornhub_delay_help)
+        self.ui.settings_button_result_limit_help.clicked.connect(result_limit_help)
+        self.ui.download_button_help_file.clicked.connect(open_file_help)
+        self.ui.settings_button_timeout_maximal_retries_help.clicked.connect(max_retries_help)
+        self.ui.settings_button_help_skip_existing_files.clicked.connect(skip_existing_files_help)
+        self.ui.settings_button_help_model_videos.clicked.connect(model_videos_help)
+        self.ui.button_help_write_metadata_tags.clicked.connect(metadata_help)
+
+        # Settings
+        self.ui.settings_button_apply.clicked.connect(self.save_user_settings)
+        self.ui.settings_button_reset.clicked.connect(reset_pornfetch)
+        #self.ui.settings_button_install_pornfetch.clicked.connect(self.install_pornfetch)
+        self.ui.settings_checkbox_system_activate_proxy.clicked.connect(self.set_proxies)
+
+        # Account
+        self.ui.login_button_login.clicked.connect(self.login)
+        self.ui.login_button_get_watched_videos.clicked.connect(self.get_watched_videos)
+        self.ui.login_button_get_liked_videos.clicked.connect(self.get_liked_videos)
+        self.ui.login_button_get_recommended_videos.clicked.connect(self.get_recommended_videos)
+
+        # Search
+        self.ui.button_search.clicked.connect(self.search)
+
+        # HQPorner
+        self.ui.main_button_switch_tools.clicked.connect(self.switch_to_tools)
+        self.ui.tools_button_hqporner_category_get_videos.clicked.connect(self.get_by_category_hqporner)
+        self.ui.tools_button_top_porn_get_videos.clicked.connect(self.get_top_porn_hqporner)
+        self.ui.tools_button_get_brazzers_videos.clicked.connect(self.get_brazzers_videos)
+        self.ui.tools_button_list_categories.clicked.connect(list_categories_hqporner)
+        self.ui.tools_button_get_random_videos.clicked.connect(self.get_random_video)
+
+        # EPorner
+        self.ui.tools_button_list_categories_eporner.clicked.connect(list_categories_eporner)
+        self.ui.tools_button_eporner_category_get_videos.clicked.connect(self.get_by_category_eporner)
+
+        # File Dialog
+        self.ui.settings_button_output_path_select.clicked.connect(self.open_output_path_dialog)
+        self.ui.download_button_open_file.clicked.connect(self.open_file_dialog)
+
+        # Other stuff IDK
+        self.ui.main_button_tree_stop.clicked.connect(switch_stop_state)
+        self.ui.settings_button_download_ffmpeg.clicked.connect(self.download_ffmpeg)
+        self.ui.main_button_tree_keyboard_shortcuts.clicked.connect(self.switch_to_keyboard_shortcuts)
+        self.ui.main_button_tree_automated_selection.clicked.connect(self.select_range_of_items)
+
+    def shortcuts(self):
+        quit_shortcut = QShortcut(QKeySequence("Ctrl+Q"), self)
+        quit_shortcut.activated.connect(self.close)
+
+        export_urls_shortcut = QShortcut(QKeySequence("Ctrl+E"), self)
+        export_urls_shortcut.activated.connect(export_urls)
+
+        download_tree_widget = QShortcut(QKeySequence("Ctrl+T"), self)
+        download_tree_widget.activated.connect(self.download_tree_widget)
+
+        enable_anonymous_mode = QShortcut(QKeySequence("Ctrl+A"), self)
+        enable_anonymous_mode.activated.connect(self.anonymous_mode)
+
+        save_settings = QShortcut(QKeySequence("Ctrl+S"), self)
+        save_settings.activated.connect(self.save_user_settings)
+
+        select_all_items = QShortcut(QKeySequence("Ctrl+X"), self)
+        select_all_items.activated.connect(self.select_all_items)
+
+        unselect_all_items = QShortcut(QKeySequence("Ctrl+Z"), self)
+        unselect_all_items.activated.connect(self.unselect_all_items)
 
     def settings_maps_initialization(self):
         # Maps for settings and corresponding UI elements
@@ -1506,11 +1457,15 @@ class AddUrls(QRunnable):
         self.directory_system = self.conf.get("Video", "directory_system") == "true"
         self.ui.settings_checkbox_videos_use_directory_system.setChecked(self.directory_system)
 
-        self.ui.settings_checkbox_ui_custom_font.setChecked(True if self.conf.get("UI", "custom_font") == "true" else False)
+        self.ui.settings_checkbox_ui_custom_font.setChecked(
+            True if self.conf.get("UI", "custom_font") == "true" else False)
 
         if self.conf["PostProcessing"]["write_metadata"] == "true":
             self.write_metadata = True
-            self.ui.checkbox_settings_post_processing_write_metadata_tags.setChecked(True) if self.conf.get("PostProcessing","write_metadata") == "true" else self.ui.checkbox_settings_post_processing_write_metadata_tags.setChecked(False)
+            self.ui.checkbox_settings_post_processing_write_metadata_tags.setChecked(True) if self.conf.get(
+                "PostProcessing",
+                "write_metadata") == "true" else self.ui.checkbox_settings_post_processing_write_metadata_tags.setChecked(
+                False)
 
         if self.conf["PostProcessing"]["convert"] == "true":
             self.format = self.conf["PostProcessing"]["format"]
@@ -1572,22 +1527,30 @@ class AddUrls(QRunnable):
         self.conf.set("Performance", "workers", str(self.ui.settings_spinbox_maximal_workers.value()))
         self.conf.set("Video", "delay", str(self.ui.settings_spinbox_pornhub_delay.value()))
         self.conf.set("Performance", "retries", str(self.ui.settings_spinbox_maximal_retries.value()))
-        self.conf.set("Setup", "update_checks", "true" if self.ui.settings_checkbox_system_update_checks.isChecked() else "false")
-        self.conf.set("Setup", "internet_checks", "true" if self.ui.settings_checkbox_internet_checks.isChecked() else "false")
-        self.conf.set("Setup", "anonymous_mode", "true" if self.ui.settings_checkbox_system_anonymous_mode.isChecked() else "false")
-        self.conf.set("PostProcessing", "write_metadata", "true" if self.ui.checkbox_settings_post_processing_write_metadata_tags.isChecked() else "false")
-        self.conf.set("Video", "skip_existing_files", "true" if self.ui.settings_checkbox_videos_skip_existing_files.isChecked() else "false")
-        self.conf.set("Video", "directory_system", "true" if self.ui.settings_checkbox_videos_use_directory_system.isChecked() else "false")
-        self.conf.set("UI", "custom_font", "true" if self.ui.settings_checkbox_ui_custom_font.isChecked() else "false")
+        self.conf.set("Setup", "update_checks",
+                      "true" if self.ui.settings_checkbox_system_update_checks.isChecked() else "false")
+        self.conf.set("Setup", "internet_checks",
+                      "true" if self.ui.settings_checkbox_internet_checks.isChecked() else "false")
+        self.conf.set("Setup", "anonymous_mode",
+                      "true" if self.ui.settings_checkbox_system_anonymous_mode.isChecked() else "false")
+        self.conf.set("PostProcessing", "write_metadata",
+                      "true" if self.ui.checkbox_settings_post_processing_write_metadata_tags.isChecked() else "false")
+        self.conf.set("Video", "skip_existing_files",
+                      "true" if self.ui.settings_checkbox_videos_skip_existing_files.isChecked() else "false")
+        self.conf.set("Video", "directory_system",
+                      "true" if self.ui.settings_checkbox_videos_use_directory_system.isChecked() else "false")
+        self.conf.set("UI", "custom_font",
+                      "true" if self.ui.settings_checkbox_ui_custom_font.isChecked() else "false")
 
         if self.ui.radio_settings_post_processing_do_not_convert.isChecked():
             self.conf.set("PostProcessing", "convert", "false")
 
         elif self.ui.radio_settings_post_processing_use_custom_format.isChecked():
             self.conf.set("PostProcessing", "convert", "true")
-            self.conf.set("PostProcessing", "format", str(self.ui.lineedit_settings_post_processing_use_custom_format.text()))
+            self.conf.set("PostProcessing", "format",
+                          str(self.ui.lineedit_settings_post_processing_use_custom_format.text()))
 
-        with open("config.ini", "w") as config_file: # type: TextIOWrapper
+        with open("config.ini", "w") as config_file:  # type: TextIOWrapper
             self.conf.write(config_file)
 
         ui_popup(self.tr("Saved User Settings, please restart Porn Fetch!", None))
@@ -1596,7 +1559,7 @@ class AddUrls(QRunnable):
     def set_proxies(self):
         message = self.tr("""
 !!! ONLY SOCKS5 IS SUPPORTED !!!
-        
+
 Warning:
 Your entire traffic will be routed through the proxy, except if your threading mode is set to 'ffmpeg'. There's no
 guarantee for your IP not being exposed. If you live in a country where downloading Porn is a crime, please consider
@@ -1624,7 +1587,6 @@ of the proxy and not my fault ;)
 If you still want to proceed, click O.K. Otherwise, close Porn Fetch now and restart it.""", disambiguation=None)
         ui_popup(message)
 
-
         proxy_input, ok = QInputDialog.getText(
             self,
             "Enter Proxies",
@@ -1643,7 +1605,8 @@ If you still want to proceed, click O.K. Otherwise, close Porn Fetch now and res
 
             # Testing if proxy works
             self.logger.info("[1/5] Requesting IP without Proxy")
-            ip_unmasked = httpx.Client().get("http://httpbin.org/ip").json()["origin"] # Using independent httpx session, because of the caching system from BaseCore
+            ip_unmasked = httpx.Client().get("http://httpbin.org/ip").json()[
+                "origin"]  # Using independent httpx session, because of the caching system from BaseCore
             self.logger.info(f"[1/5] Retrieved IP: {ip_unmasked}")
 
             self.logger.info(f"[2/5] Requesting IP with Proxy: {final_proxy}")
@@ -1737,8 +1700,8 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
 
         else:
             videos = None
-            ui_popup(self.tr("The model URL you entered seems to be invalid. Please check your input", disambiguation=None))
-
+            ui_popup(self.tr("The model URL you entered seems to be invalid. Please check your input",
+                             disambiguation=None))
 
         self.add_to_tree_widget_thread(videos)
 
@@ -1797,7 +1760,8 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
                 self.ui.download_radio_search_website_eporner.setChecked(True)
 
             else:
-                ui_popup(self.tr(f"Information: The Website {website} specified in the URL file isn't valid.", None))
+                ui_popup(
+                    self.tr(f"Information: The Website {website} specified in the URL file isn't valid.", None))
                 return
 
             self.ui.download_lineedit_search_query.setText(query)
@@ -1819,15 +1783,17 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
             videos = hq_client.search_videos(query)
 
         elif self.ui.download_radio_search_website_eporner.isChecked():
-            videos = ep_client.search_videos(query, sorting_gay="", sorting_order="", sorting_low_quality="", page=1,
-                                               per_page=self.search_limit, enable_html_scraping=True)
+            videos = ep_client.search_videos(query, sorting_gay="", sorting_order="", sorting_low_quality="",
+                                             page=1,
+                                             per_page=self.search_limit, enable_html_scraping=True)
 
         elif self.ui.download_radio_search_website_xnxx.isChecked():
             videos = xn_client.search(query).videos
 
         else:
             videos = None
-            ui_popup(self.tr("Couldn't determine which site you want to search on??? Please report this immediately!"))
+            ui_popup(
+                self.tr("Couldn't determine which site you want to search on??? Please report this immediately!"))
 
         self.add_to_tree_widget_thread(videos)
 
@@ -1840,7 +1806,8 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
         """
         is_reverse = self.ui.main_checkbox_tree_show_videos_reversed.isChecked()
         is_checked = self.ui.main_checkbox_tree_do_not_clear_videos.isChecked()
-        self.add_to_tree_widget_thread_ = AddToTreeWidget(iterator=iterator, is_reverse=is_reverse, is_checked=is_checked,
+        self.add_to_tree_widget_thread_ = AddToTreeWidget(iterator=iterator, is_reverse=is_reverse,
+                                                          is_checked=is_checked,
                                                           last_index=self.last_index)
         self.add_to_tree_widget_thread_.signals.text_data_to_tree_widget.connect(self.add_to_tree_widget_signal)
         self.add_to_tree_widget_thread_.signals.clear_tree_widget_signal.connect(self.clear_tree_widget)
@@ -1932,13 +1899,13 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
         self.threadpool.start(self.download_thread)
         self.logger.debug("Started Download Thread!")
 
-
     def download_completed(self, video_id):
         """If a video is downloaded, the semaphore is released"""
         self.logger.debug("Download Completed!")
         global total_downloaded_videos
         total_downloaded_videos += 1
-        self.ui.progress_lineedit_download_info.setText(f"Downloaded: {total_downloaded_videos} video(s) this session.")
+        self.ui.progress_lineedit_download_info.setText(
+            f"Downloaded: {total_downloaded_videos} video(s) this session.")
         self.ui.main_progressbar_total.setMaximum(100)
         self.ui.progressbar_hqporner.setValue(0)
         self.ui.progressbar_eporner.setValue(0)
@@ -1952,9 +1919,8 @@ This is an error in the BaseModule and it shouldn't happen, but if it does, plea
         downloaded_videos = int(self.conf.get("Sponsoring", "downloaded_videos"))
         downloaded_videos += 1
         self.conf.set("Sponsoring", "downloaded_videos", str(downloaded_videos))
-        with open("config.ini", "w") as config_file: # type:TextIOWrapper
+        with open("config.ini", "w") as config_file:  # type:TextIOWrapper
             self.conf.write(config_file)
-
 
     def show_error(self, error):
         err = self.tr(f"""
@@ -1962,22 +1928,6 @@ An error happened inside of Porn Fetch!
 
 {error}""")
         ui_popup(err)
-
-    def reindex(self):
-        ascending = self.ui.treeWidget.header().sortIndicatorOrder() == Qt.SortOrder.AscendingOrder
-        count = self.ui.treeWidget.topLevelItemCount()
-        for i in range(count):
-            if ascending:
-                # When sorting in ascending order, start indexes at 1 and increment
-                new_index = i + 1
-            else:
-                # When sorting in descending order, start indexes at the count and decrement
-                new_index = count - i
-
-            item = self.ui.treeWidget.topLevelItem(i)
-            current_text = item.text(0)
-            original_title = current_text.split(') ', 1)[1] if ') ' in current_text else current_text
-            item.setText(0, f"{new_index}) {original_title}")
 
     def clear_tree_widget(self):
         """
@@ -1988,6 +1938,7 @@ An error happened inside of Porn Fetch!
             self.ui.treeWidget.clear()
 
     """These functions are related to selecting video items within the tree widget"""
+
     def unselect_all_items(self):
         """Unselects all items from the tree widget"""
         self.logger.info("Unselected all items")
@@ -1999,9 +1950,7 @@ An error happened inside of Porn Fetch!
 
     def select_range_of_items(self):
         # Create an instance of the UI form widget
-        self.widget = QWidget()
-        self.range_ui = Ui_PornFetchRangeSelector()
-        self.range_ui.setupUi(self.widget)
+        self.switch_to_range_selector()
         root = self.ui.treeWidget.invisibleRootItem()
         item_count = root.childCount()
         self.range_ui.spinbox_range_end.setMaximum(item_count)
@@ -2009,8 +1958,6 @@ An error happened inside of Porn Fetch!
         self.range_ui.button_range_apply_time.clicked.connect(self.process_range_of_items_selection_time)
         self.range_ui.button_range_apply_author.clicked.connect(self.process_range_of_items_author)
 
-        # Show the new widget
-        self.widget.show()
 
     def select_all_items(self):
         """Selects all items from the tree widget"""
@@ -2020,12 +1967,6 @@ An error happened inside of Porn Fetch!
         for i in range(item_count):
             item = root.child(i)
             item.setCheckState(0, Qt.CheckState.Checked)
-
-        try:
-            self.widget.deleteLater()
-
-        except AttributeError:
-            pass # This is expected when using the Keyboard shortcuts
 
     def process_range_of_items_selection_index(self):
         start = self.range_ui.spinbox_range_start.value()
@@ -2039,8 +1980,6 @@ An error happened inside of Porn Fetch!
         for i in range(start, end + 1):  # Adjust the range to be inclusive of the end
             item = root.child(i)
             item.setCheckState(0, Qt.CheckState.Checked)
-
-        self.widget.deleteLater()
 
     def process_range_of_items_selection_time(self):
         start_time = int(self.range_ui.lineedit_range_start.text())
@@ -2058,9 +1997,6 @@ An error happened inside of Porn Fetch!
             if start_time <= duration <= end_time:
                 item.setCheckState(0, Qt.CheckState.Checked)
 
-        # Assuming this is meant to close the widget, but it might be better to handle this outside this function
-        self.widget.deleteLater()
-
     def process_range_of_items_author(self):
         name = str(self.range_ui.lineedit_range_author.text())
         root = self.ui.treeWidget.invisibleRootItem()
@@ -2071,7 +2007,6 @@ An error happened inside of Porn Fetch!
             if str(author).lower() == str(name).lower():
                 item.setCheckState(0, Qt.CheckState.Checked)
 
-        self.widget.deleteLater()
 
     def set_thumbnail(self, item):
         """Set the thumbnail for the selected video."""
@@ -2083,8 +2018,9 @@ An error happened inside of Porn Fetch!
             return
 
         if self._anonymous_mode:
-            self.ui.main_label_tree_show_thumbnail.setText(self.tr("Can't show thumbnail, due to your privacy settings ;)",
-                                                                   disambiguation=None))
+            self.ui.main_label_tree_show_thumbnail.setText(
+                self.tr("Can't show thumbnail, due to your privacy settings ;)",
+                        disambiguation=None))
             self.logger.debug("Anonymous mode is enabled, won't show thumbnail")
             return
 
@@ -2102,8 +2038,9 @@ An error happened inside of Porn Fetch!
                     pixmap.loadFromData(BaseCore().fetch(thumbnail, get_bytes=True))
 
                 else:
-                    self.logger.warning("HQPorner currently has an issue with internal network fetching, using independent httpx session instead."
-                                        "This will !! BYPASS ANY APPLIED PROXIES !!")
+                    self.logger.warning(
+                        "HQPorner currently has an issue with internal network fetching, using independent httpx session instead."
+                        "This will !! BYPASS ANY APPLIED PROXIES !!")
 
                     pixmap.loadFromData(httpx.Client().get(thumbnail).content)
 
@@ -2119,7 +2056,6 @@ An error happened inside of Porn Fetch!
             except Exception:
                 error = traceback.format_exc()
                 self.ui.main_label_tree_show_thumbnail.setText(f"Failed to load image: {error}")
-
 
     """
     The following functions are used to connect data between Threads and the Main UI
@@ -2211,8 +2147,8 @@ An error happened inside of Porn Fetch!
             self.logger.debug("Associating a new client object with a logged in session")
             client = Client(username, password)
             self.logger.debug("Login Successful!")
-            ui_popup(self.tr( "Login Successful!", None))
-            self.switch_login_button_state()
+            ui_popup(self.tr("Login Successful!", None))
+            switch_login_button_state(self)
 
         except errors.LoginFailed:
             self.logger.error("Login Failed, because of invalid credentials")
@@ -2239,15 +2175,6 @@ An error happened inside of Porn Fetch!
             else:
                 return True
 
-    def switch_login_button_state(self):
-        """If the user is logged in, I'll change the stylesheets of the buttons"""
-        file = ":/style/stylesheets/stylesheet_switch_buttons_login_state.qss"
-        stylesheet = load_stylesheet(file)
-
-        self.ui.login_button_get_liked_videos.setStyleSheet(stylesheet)
-        self.ui.login_button_get_watched_videos.setStyleSheet(stylesheet)
-        self.ui.login_button_get_recommended_videos.setStyleSheet(stylesheet)
-
     def get_watched_videos(self):
         """Returns the videos watched by the user"""
         global client
@@ -2273,7 +2200,6 @@ An error happened inside of Porn Fetch!
     The following functions are related to the search functionality
     """
 
-
     def get_top_porn_hqporner(self):
         if self.ui.tools_radio_top_porn_week.isChecked():
             sort = hq_Sort.WEEK
@@ -2297,7 +2223,7 @@ An error happened inside of Porn Fetch!
 
         if not category_name in all_categories:
             ui_popup(self.tr("Invalid Category. Press 'list categories' to see all "
-                                                  "possible ones.", None))
+                             "possible ones.", None))
 
         else:
             videos = hq_client.get_videos_by_category(category=category_name)
@@ -2310,31 +2236,16 @@ An error happened inside of Porn Fetch!
 
         if not category_name in self.all_categories_eporner:
             ui_popup(self.tr("Invalid Category. Press 'list categories' to see all "
-                                                  "possible ones.", None))
+                             "possible ones.", None))
 
         else:
             videos = ep_client.get_videos_by_category(category=category_name, enable_html_scraping=True)
             self.add_to_tree_widget_thread(iterator=videos)
 
-    def list_categories_eporner(self):
-        """Lists all video categories from EPorner"""
-        all_categories = ",".join([getattr(ep_Category, category) for category in dir(ep_Category) if
-                                   not callable(getattr(ep_Category, category)) and not category.startswith("__")])
-
-        self.all_categories_eporner = all_categories  # Need this list to verify the category later
-        ui_popup(all_categories)
-
     def get_brazzers_videos(self):
         """Get brazzers videos from HQPorner"""
         videos = hq_client.get_brazzers_videos()
         self.add_to_tree_widget_thread(videos)
-
-    @classmethod
-    def list_categories_hqporner(cls):
-        """Get all available categories. I want to also extend that for EPorner (and maybe even more sites)"""
-        categories_ = hq_client.get_all_categories()
-        categories = ",".join(categories_)
-        ui_popup(categories)
 
     def get_random_video(self):
         """Gets a random video from HQPorner"""
@@ -2342,11 +2253,10 @@ An error happened inside of Porn Fetch!
         some_list = [video]
         self.add_to_tree_widget_thread(some_list)
 
-
     """
     These function don't need to be maintained very often or better say I don't need them very often in code,
     so I moved them down here to get a better focus on the important things yk
-    
+
     """
 
     def show_credits(self):
@@ -2360,12 +2270,6 @@ An error happened inside of Porn Fetch!
             file.open(QFile.OpenModeFlag.ReadOnly | QFile.OpenModeFlag.Text)
             stream = QTextStream(file)
             self.ui.main_textbrowser_credits.setHtml(markdown.markdown(stream.readAll()))
-
-    def show_keyboard_shortcuts(self):
-        self.keyboard_widget = QWidget()
-        self.keyboard_widget_ = Ui_KeyboardShortcuts()
-        self.keyboard_widget_.setupUi(self.keyboard_widget)
-        self.keyboard_widget.show()
 
     def check_for_updates(self):
         """Checks for updates in a thread, so that the main UI isn't blocked, until update checks are done"""
@@ -2409,7 +2313,6 @@ Some websites couldn't be accessed. Here's a detailed report:
             if not ffmpeg_path is None:
                 ffmpeg_path = os.path.abspath(ffmpeg_path)
 
-
         if ffmpeg_path is None:
             # If ffmpeg binaries are not found in the current directory, display warning and disable features
             if self.conf.get("Performance", "ffmpeg_warning") == "true":
@@ -2442,6 +2345,7 @@ This warning won't be shown again.
             self.ffmpeg_path = ffmpeg_path
             self.logger.info(f"FFmpeg found at: {ffmpeg_path}")
 
+
     def download_ffmpeg(self):
         if sys.platform == "linux":
             if not os.path.isfile("ffmpeg"):
@@ -2455,83 +2359,9 @@ This warning won't be shown again.
             if not os.path.isfile("ffmpeg"):
                 self.downloader = FFMPEGDownload(url=url_macOS, extract_path=".", mode="macOS")
 
-
         self.downloader.signals.total_progress.connect(self.update_total_progressbar)
         self.downloader.signals.ffmpeg_download_finished.connect(ffmpeg_finished)
         self.threadpool.start(self.downloader)
-
-
-    """
-    These functions are used for switching the index of the stacked widget. This basically is the menu bar
-    """
-
-    def switch_to_home(self):
-        self.ui.main_stacked_widget_main.setCurrentIndex(0)
-        self.ui.main_stacked_widget_top.setCurrentIndex(0)
-        self.ui.main_stacked_widget_top.setMaximumHeight(220)
-
-    def switch_to_account(self):
-        self.ui.main_stacked_widget_top.setCurrentIndex(1)
-        self.ui.main_stacked_widget_main.setCurrentIndex(0)
-
-    def switch_to_tools(self):
-        self.ui.main_stacked_widget_main.setCurrentIndex(0)
-        self.ui.main_stacked_widget_top.setCurrentIndex(3)
-
-    def switch_to_settings(self):
-        self.ui.main_stacked_widget_main.setCurrentIndex(1)
-
-    def switch_to_credits(self):
-        self.ui.main_stacked_widget_main.setCurrentIndex(2)
-        self.show_credits()
-
-    def switch_to_supported_websites(self):
-        self.ui.main_stacked_widget_main.setCurrentIndex(3)
-
-    def switch_to_all_progress_bars(self):
-        self.ui.main_stacked_widget_top.setCurrentIndex(2)
-        self.ui.main_stacked_widget_main.setCurrentIndex(0)
-        self.ui.main_stacked_widget_top.setMaximumHeight(280)
-'''
-
-
-class PornFetch(QMainWindow):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setWindowTitle(f"Porn Fetch v{__version__} Copyright (C) Johannes Habel 2023-2025")
-        self.ui = Ui_MainWindow()
-        self.ui.setupUi(self)
-        self.UI_donation_nag = DonationNag(self.ui)
-
-        """
-                     ! INDEX LIST !
-        
-        0) Main application (downloading, login, tree widget etc.)
-        :: Index list for main application ::
-        - 1: Download
-        - 2: Login
-        - 3: Progress Bars
-        - 4: Tools
-        
-        1) Settings
-        2) Credits
-        3) License
-        4) Range Selector (for automatically selecting videos in the tree widget)
-        5) Keyboard Shortcuts
-        6) Install Dialog
-        7) Supported websites
-        8) Donation Nag        
-        This may look a little bit confusing, but once you understand it, it makes sense, trust me :)
-        """
-
-        self.UI_donation_nag.ui.button_donate_close.clicked.connect(self.switch_to_license)
-        self.ui.CentralStackedWidget.setCurrentIndex(8)
-
-
-
-    def switch_to_license(self):
-        self.ui.CentralStackedWidget.setCurrentIndex(1)
-
 
 
 def main():
@@ -2598,20 +2428,6 @@ if __name__ == "__main__":
     which is why I placed them here.
     """
 
-    def load_stylesheet(path):
-        """Load stylesheet from a given path with explicit open and close."""
-        file = QFile(path)
-        if not file.open(QFile.OpenModeFlag.ReadOnly | QFile.OpenModeFlag.Text):
-            logger.error(f"Failed to open stylesheet.qss: {file.errorString()}")
-            return ""
-        stylesheet = QTextStream(file).readAll()
-        file.close()
-        return stylesheet
-
-
-    def reset_pornfetch():
-        setup_config_file(force=True)
-        ui_popup(QCoreApplication.translate("main", "Done! Please restart.", None))
 
 
     def switch_stop_state_2():
