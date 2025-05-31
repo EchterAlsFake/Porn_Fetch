@@ -464,3 +464,15 @@ the thread is permanently locked
 
 ## Deprecations
 - Removed support for Spankbang because the site blocks all requests with a 403 status code
+
+
+
+# 3.6
+
+## Code improvements / Performance / Stability
+- Huge refactoring of the internal configuration file logic
+
+
+
+
+

@@ -14,6 +14,8 @@ from configparser import ConfigParser
 from phub import Client, errors, Video, consts as phub_consts
 from phub.modules import download as download
 from ffmpeg_progress_yield import FfmpegProgress
+from src.backend.config import shared_config
+conf = shared_config
 
 from base_api.base import BaseCore, setup_logger
 from base_api.modules import consts as bs_consts
@@ -83,15 +85,14 @@ as they are indeed needed for the main applications!
 """
 
 # TODO: Implement logging
-sections = ["Setup", "Performance", "PostProcessing", "Video", "UI", "Sponsoring", "Disclaimer", "Android"]
+sections = ["Setup", "Performance", "PostProcessing", "Video", "UI", "Sponsoring", "Android"]
 
-options_setup = ["license_accepted", "install", "update_checks", "internet_checks", "anonymous_mode"]
+options_setup = ["license_accepted", "install", "update_checks", "internet_checks", "anonymous_mode", "disclaimer_shown"]
 options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries", "ffmpeg_warning"]
 options_post_processing = ["convert", "format", "write_metadata"]
 options_video = ["quality", "output_path", "directory_system", "search_limit", "delay", "skip_existing_files", "model_videos"]
 options_ui = ["language", "custom_font"]
 options_sponsoring = ["downloaded_videos", "notice_shown"]
-options_disclaimer = ["shown"]
 options_android = ["warning_shown"]
 
 
@@ -105,11 +106,12 @@ xhamster_pattern = re.compile(r'(.*?)xhamster(.*?)')
 
 
 default_configuration = f"""[Setup]
-license_accepted = no
+license_accepted = false
 install = unknown
 update_checks = true
 internet_checks = true
 anonymous_mode = false
+disclaimer_shown = false
 
 [Performance]
 threading_mode = threaded
@@ -140,9 +142,6 @@ custom_font = true
 [Sponsoring]
 downloaded_videos = 0
 notice_shown = false
-
-[Disclaimer]
-shown = false
 
 [Android]
 warning_shown = false
@@ -254,40 +253,43 @@ def setup_config_file(force=False):
                 for option in options_setup:
                     if not config.has_option(section, option):
                         setup_config_file(force=True)
+                        print("ISSUE 1")
 
             if idx == 1:
                 for option in options_performance:
                     if not config.has_option(section, option):
                         setup_config_file(force=True)
+                        print("ISSUE 2")
             if idx == 2:
                 for option in options_post_processing:
                     if not config.has_option(section, option):
                         setup_config_file(force=True)
+                        print("ISSUE 3")
 
             if idx == 3:
                 for option in options_video:
                     if not config.has_option(section, option):
                         setup_config_file(force=True)
+                        print("ISSUE 4")
 
             if idx == 4:
                 for option in options_ui:
                     if not config.has_option(section, option):
                         setup_config_file(force=True)
+                        print("ISSUE 5")
 
             if idx == 5:
                 for option in options_sponsoring:
                     if not config.has_option(section, option):
                         setup_config_file(force=True)
+                        print("ISSUE 6")
 
             if idx == 6:
-                for option in options_disclaimer:
-                    if not config.has_option(section, option):
-                        setup_config_file(force=True)
-
-            if idx == 7:
                 for option in options_android:
                     if not config.has_option(section, option):
+                        print(f"ISSUE 7, {section} {option}")
                         setup_config_file(force=True)
+
 
 
 def load_video_attributes(video):

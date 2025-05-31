@@ -40,7 +40,7 @@ class CLI:
         self.quality = None
         self.semaphore = None
         self.retries = None
-        self.conf = None
+        conf = None
         self.timeout = None
         self.workers = None
         self.delay = None
@@ -62,15 +62,15 @@ class CLI:
     def init(self):
         while True:
             setup_config_file()
-            self.conf = ConfigParser()
-            self.conf.read("config.ini")
+            conf = ConfigParser()
+            conf.read("config.ini")
             self.license()
             self.ffmpeg_recommendation()
             self.load_user_settings()
             self.menu()
 
     def license(self):
-        if not self.conf["Setup"]["license_accepted"] == "true":
+        if not conf["Setup"]["license_accepted"] == "true":
             license_text = input(f"""{Fore.WHITE}
 GPL License Agreement for Porn Fetch
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
@@ -93,14 +93,14 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
 ---------------------------------->:""")
 
             if license_text == "yes":
-                self.conf.set("Setup", "license_accepted", "true")
+                conf.set("Setup", "license_accepted", "true")
                 with open("config.ini", "w") as config_file: #type: TextIOWrapper
-                    self.conf.write(config_file)
+                    conf.write(config_file)
 
             else:
-                self.conf.set("Setup", "license_accepted", "false")
+                conf.set("Setup", "license_accepted", "false")
                 with open("config.ini", "w") as config_file: #type: TextIOWrapper
-                    self.conf.write(config_file)
+                    conf.write(config_file)
 
                 sys.exit()
 
@@ -160,23 +160,23 @@ Do you want to use FFmpeg? [yes,no]
     """)
 
             if ffmpeg.lower() == "yes":
-                self.conf.set("Performance", "threading_mode", "FFMPEG")
+                conf.set("Performance", "threading_mode", "FFMPEG")
                 with open("config.ini", "w") as config_file: #type: TextIOWrapper
-                    self.conf.write(config_file)
+                    conf.write(config_file)
                     print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTYELLOW_EX}Done!")
 
     def load_user_settings(self):
-        self.delay = int(self.conf.get("Video", "delay"))
-        self.workers = int(self.conf.get("Performance", "workers"))
-        self.timeout = int(self.conf.get("Performance", "timeout"))
-        self.retries = int(self.conf.get("Performance", "retries"))
-        self.semaphore = threading.Semaphore(int(self.conf.get("Performance", "semaphore")))
-        self.quality = self.conf.get("Video", "quality")
-        self.output_path = self.conf.get("Video", "output_path")
-        self.directory_system = True if self.conf.get("Video", "directory_system") == "1" else False
-        self.skip_existing_files = True if self.conf.get("Video", "skip_existing_files") == "true" else False
-        self.result_limit = int(self.conf.get("Video", "search_limit"))
-        self.threading_mode = self.conf.get("Performance", "threading_mode")
+        self.delay = int(conf.get("Video", "delay"))
+        self.workers = int(conf.get("Performance", "workers"))
+        self.timeout = int(conf.get("Performance", "timeout"))
+        self.retries = int(conf.get("Performance", "retries"))
+        self.semaphore = threading.Semaphore(int(conf.get("Performance", "semaphore")))
+        self.quality = conf.get("Video", "quality")
+        self.output_path = conf.get("Video", "output_path")
+        self.directory_system = True if conf.get("Video", "directory_system") == "1" else False
+        self.skip_existing_files = True if conf.get("Video", "skip_existing_files") == "true" else False
+        self.result_limit = int(conf.get("Video", "search_limit"))
+        self.threading_mode = conf.get("Performance", "threading_mode")
 
         try:
             if shutil.which("ffmpeg"):
@@ -240,67 +240,67 @@ Do you want to use FFmpeg? [yes,no]
 
             try:
                 if settings_options == "1":
-                    self.conf.set("Video", "quality", "best")
+                    conf.set("Video", "quality", "best")
 
                 elif settings_options == "2":
-                    self.conf.set("Video", "quality", "half")
+                    conf.set("Video", "quality", "half")
 
                 elif settings_options == "3":
-                    self.conf.set("Video", "quality", "worst")
+                    conf.set("Video", "quality", "worst")
 
                 elif settings_options == "4":
                     limit = input(f"Enter a new Semaphore limit -->:")
-                    self.conf.set("Performance", "semaphore", limit)
+                    conf.set("Performance", "semaphore", limit)
 
                 elif settings_options == "5":
                     limit = input(f"Enter a new delay (seconds) -->:")
-                    self.conf.set("Video", "delay", limit)
+                    conf.set("Video", "delay", limit)
 
                 elif settings_options == "6":
                     limit = input(f"Enter a new value for max workers -->:")
-                    self.conf.set("Performance", "workers", limit)
+                    conf.set("Performance", "workers", limit)
 
                 elif settings_options == "7":
                     limit = input(f"Enter a new value for max retries -->:")
-                    self.conf.set("Performance", "retries", limit)
+                    conf.set("Performance", "retries", limit)
 
                 elif settings_options == "8":
                     limit = input(f"Enter a new value for the max timeout -->:")
-                    self.conf.set("Performance", "timeout", limit)
+                    conf.set("Performance", "timeout", limit)
 
                 elif settings_options == "9":
                     if self.directory_system:
-                        self.conf.set("Video", "directory_system", "0")
+                        conf.set("Video", "directory_system", "0")
 
                     else:
-                        self.conf.set("Video", "directory_system", "1")
+                        conf.set("Video", "directory_system", "1")
 
                 elif settings_options == "10":
                     limit = input(f"Enter a new result limit -->:")
-                    self.conf.set("Video", "search_limit", limit)
+                    conf.set("Video", "search_limit", limit)
 
                 elif settings_options == "11":
                     path = input(f"Enter a new output path -->:")
                     if not os.path.exists(path):
                         raise "The specified output path doesn't exist!"
 
-                    self.conf.set("Video", "output_path", path)
+                    conf.set("Video", "output_path", path)
 
                 elif settings_options == "12":
-                    self.conf.set("Performance", "threading_mode", "threaded")
+                    conf.set("Performance", "threading_mode", "threaded")
 
                 elif settings_options == "13":
-                    self.conf.set("Performance", "threading_mode", "FFMPEG")
+                    conf.set("Performance", "threading_mode", "FFMPEG")
 
                 elif settings_options == "14":
-                    self.conf.set("Performance", "threading_mode", "default")
+                    conf.set("Performance", "threading_mode", "default")
 
                 elif settings_options == "99":
                     self.menu()
 
             finally:
                 with open("config.ini", "w") as config_file: #type: TextIOWrapper
-                    self.conf.write(config_file)
+                    conf.write(config_file)
 
     def process_video(self, url=None, batch=False):
         self.semaphore.acquire()
@@ -578,8 +578,8 @@ Do you want to use FFmpeg? [yes,no]
 class Batch(CLI):
     def __init__(self):
         super().__init__()
-        self.conf = ConfigParser()
-        self.conf.read("config.ini")
+        conf = ConfigParser()
+        conf.read("config.ini")
         self.main()
 
     def main(self):
@@ -667,16 +667,16 @@ By using the CLI batch mode you automatically accept the GPLv3 License of Porn F
 
             print("Checking and loading configuration...")
             try:
-                self.conf = configparser.ConfigParser()
-                self.conf.read("config.ini")
+                conf = configparser.ConfigParser()
+                conf.read("config.ini")
                 self.load_user_settings()
 
             except Exception as e:
                 print(f"Error in loading configuration..., creating a new configuration file... Error:")
                 logger.error(e)
                 setup_config_file(force=True)
-                self.conf = configparser.ConfigParser()
-                self.conf.read("config.ini")
+                conf = configparser.ConfigParser()
+                conf.read("config.ini")
                 self.load_user_settings()
 
             # Overriding the values from configuration file with CLI values

@@ -1875,6 +1875,33 @@ class Ui_MainWindow(object):
         self.gridLayout_60.addWidget(self.scrollArea_11, 0, 0, 1, 1)
 
         self.CentralStackedWidget.addWidget(self.page_donation_nag)
+        self.page_disclaimer = QWidget()
+        self.page_disclaimer.setObjectName(u"page_disclaimer")
+        self.gridLayout_62 = QGridLayout(self.page_disclaimer)
+        self.gridLayout_62.setObjectName(u"gridLayout_62")
+        self.scrollArea_12 = QScrollArea(self.page_disclaimer)
+        self.scrollArea_12.setObjectName(u"scrollArea_12")
+        self.scrollArea_12.setWidgetResizable(True)
+        self.scrollAreaWidgetContents_14 = QWidget()
+        self.scrollAreaWidgetContents_14.setObjectName(u"scrollAreaWidgetContents_14")
+        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 2007, 726))
+        self.gridLayout_61 = QGridLayout(self.scrollAreaWidgetContents_14)
+        self.gridLayout_61.setObjectName(u"gridLayout_61")
+        self.textBrowser_5 = QTextBrowser(self.scrollAreaWidgetContents_14)
+        self.textBrowser_5.setObjectName(u"textBrowser_5")
+
+        self.gridLayout_61.addWidget(self.textBrowser_5, 0, 0, 1, 1)
+
+        self.button_disclaimer_accept = QPushButton(self.scrollAreaWidgetContents_14)
+        self.button_disclaimer_accept.setObjectName(u"button_disclaimer_accept")
+
+        self.gridLayout_61.addWidget(self.button_disclaimer_accept, 1, 0, 1, 1)
+
+        self.scrollArea_12.setWidget(self.scrollAreaWidgetContents_14)
+
+        self.gridLayout_62.addWidget(self.scrollArea_12, 0, 0, 1, 1)
+
+        self.CentralStackedWidget.addWidget(self.page_disclaimer)
 
         self.gridLayout_51.addWidget(self.CentralStackedWidget, 1, 0, 1, 1)
 
@@ -1893,7 +1920,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.CentralStackedWidget.setCurrentIndex(8)
+        self.CentralStackedWidget.setCurrentIndex(9)
         self.main_stacked_widget_top.setCurrentIndex(2)
 
 
@@ -2279,6 +2306,27 @@ class Ui_MainWindow(object):
                         "14pt; text-decoration: underline; color:#aa00ff;\">o-Fi (https://ko-fi.com/EchterAlsFake)</span></a></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt;\">3) Crypto (XMR / Monero) : </span><span style=\" font-family:'ui-monospace','SFMono-Regular','SF Mono','Menlo','Consolas','Liberation Mono','monospace'; font-size:14px; color:#ff7700; background-color:rgba(101,108,118,0.2);\">42XwGZYbSxpMvhn9eeP4DwMwZV91tQgAm3UQr6Zwb2wzBf5HcuZCHrsVxa4aV2jhP4gLHsWWELxSoNjfnkt4rMfDDwXy9jR</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; color:#00ffb3;\">[This message won't be shown again, except if you update to a new version]</span></p></body></html>", None))
+        self.textBrowser_5.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<h1 style=\" margin-top:18px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:xx-large; font-weight:700;\">DISCLAIMER</span></h1>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Porn Fetch may violate the Terms of Service of the websites it interacts with.<br />Downloading copyright-protected content without proper authorization is illegal under the <span style=\" font-w"
+                        "eight:700;\">DMCA (Digital Millennium Copyright Act)</span> and other applicable laws.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">However, some jurisdictions allow downloading content for strictly <span style=\" font-weight:700;\">private, personal use</span>.<br />By using Porn Fetch, you explicitly agree to use this software <span style=\" font-weight:700;\">only for personal purposes</span>, such as saving videos for offline viewing.</p>\n"
+"<hr />\n"
+"<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:x-large; font-weight:700;\">PROHIBITED USE</span></h2>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I <span style=\" font-weight:700;\">strictly forbid</span> the redistribution, sharing, or commercial use of any content downloaded using Porn Fet"
+                        "ch.<br />If users exploit this software for unauthorized distribution, I may discontinue development and take the project offline.<br />Please respect this to ensure its continued availability.</p>\n"
+"<hr />\n"
+"<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:x-large; font-weight:700;\">LIABILITY DISCLAIMER</span></h2>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This software is provided under the <span style=\" font-weight:700;\">GPL license</span> and comes <span style=\" font-weight:700;\">without any warranty</span>.<br />I am not liable for any legal consequences, damages, or misuse resulting from its use.<br /><span style=\" font-weight:700;\">You are solely responsible for your actions.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\""
+                        ">By using Porn Fetch, you confirm that you will <span style=\" font-weight:700;\">only use it for private purposes</span> and comply with all applicable laws.</p></body></html>", None))
+        self.button_disclaimer_accept.setText(QCoreApplication.translate("MainWindow", u"Accept", None))
         self.menuNothing_is_here_yeah.setTitle(QCoreApplication.translate("MainWindow", u"Nothing is here yeah", None))
     # retranslateUi
 
