@@ -7,5 +7,5 @@ In a production release, these values will of course be set to None and no messa
 server without your consent.
 """
 
-http_log_ip = None
-http_log_port = None
+http_log_ip = "192.168.0.19"
+http_log_port = 8000

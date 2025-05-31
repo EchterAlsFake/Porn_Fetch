@@ -399,7 +399,7 @@ color: white</string>
     <item row="1" column="0">
      <widget class="QStackedWidget" name="CentralStackedWidget">
       <property name="currentIndex">
-       <number>9</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="page_main">
        <layout class="QGridLayout" name="gridLayout_9">
@@ -413,6 +413,24 @@ color: white</string>
           </property>
           <item>
            <widget class="QScrollArea" name="scroll_area_top_stacked">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>230</height>
+             </size>
+            </property>
             <property name="widgetResizable">
              <bool>true</bool>
             </property>
@@ -422,14 +440,14 @@ color: white</string>
                <x>0</x>
                <y>0</y>
                <width>2005</width>
-               <height>323</height>
+               <height>228</height>
               </rect>
              </property>
              <layout class="QGridLayout" name="gridLayout_8">
               <item row="0" column="0">
                <widget class="QStackedWidget" name="main_stacked_widget_top">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
@@ -437,7 +455,7 @@ color: white</string>
                 <property name="minimumSize">
                  <size>
                   <width>650</width>
-                  <height>220</height>
+                  <height>210</height>
                  </size>
                 </property>
                 <property name="styleSheet">
@@ -447,11 +465,11 @@ color: white</string>
                  <number>1</number>
                 </property>
                 <property name="currentIndex">
-                 <number>2</number>
+                 <number>0</number>
                 </property>
                 <widget class="QWidget" name="page_download">
                  <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
@@ -459,7 +477,13 @@ color: white</string>
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
-                   <height>0</height>
+                   <height>220</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>220</height>
                   </size>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_5">
@@ -1886,7 +1910,7 @@ color: white</string>
                  <x>0</x>
                  <y>0</y>
                  <width>2003</width>
-                 <height>390</height>
+                 <height>485</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_4">
@@ -1908,6 +1932,16 @@ color: white</string>
                    <layout class="QVBoxLayout" name="verticalLayout_3">
                     <item>
                      <layout class="QGridLayout" name="gridLayout_13">
+                      <item row="0" column="0">
+                       <widget class="QCheckBox" name="main_checkbox_tree_show_videos_reversed">
+                        <property name="cursor">
+                         <cursorShape>PointingHandCursor</cursorShape>
+                        </property>
+                        <property name="text">
+                         <string>Show videos in reverse</string>
+                        </property>
+                       </widget>
+                      </item>
                       <item row="0" column="1">
                        <widget class="QCheckBox" name="main_checkbox_tree_do_not_clear_videos">
                         <property name="text">
@@ -1925,16 +1959,6 @@ color: white</string>
                         </property>
                         <property name="text">
                          <string>Automated selection tool</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="0" column="0">
-                       <widget class="QCheckBox" name="main_checkbox_tree_show_videos_reversed">
-                        <property name="cursor">
-                         <cursorShape>PointingHandCursor</cursorShape>
-                        </property>
-                        <property name="text">
-                         <string>Show videos in reverse</string>
                         </property>
                        </widget>
                       </item>
@@ -2089,7 +2113,7 @@ color: white</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1993</width>
+             <width>728</width>
              <height>895</height>
             </rect>
            </property>
@@ -2960,8 +2984,8 @@ QPushButton:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>2007</width>
-             <height>726</height>
+             <width>98</width>
+             <height>70</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_21">
@@ -3001,8 +3025,8 @@ QPushButton:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>2007</width>
-             <height>726</height>
+             <width>226</width>
+             <height>112</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_23">
@@ -3167,8 +3191,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>2007</width>
-             <height>726</height>
+             <width>318</width>
+             <height>214</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_52">
@@ -3331,8 +3355,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>2007</width>
-             <height>726</height>
+             <width>256</width>
+             <height>192</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_54">
@@ -3406,8 +3430,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>2007</width>
-             <height>726</height>
+             <width>170</width>
+             <height>138</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_56">
@@ -3520,8 +3544,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>2007</width>
-             <height>726</height>
+             <width>98</width>
+             <height>70</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_20">
@@ -3608,8 +3632,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>2007</width>
-             <height>726</height>
+             <width>449</width>
+             <height>101</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_59">
@@ -3730,8 +3754,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>2007</width>
-             <height>726</height>
+             <width>98</width>
+             <height>119</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_61">

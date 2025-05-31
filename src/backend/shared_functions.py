@@ -15,6 +15,9 @@ from phub import Client, errors, Video, consts as phub_consts
 from phub.modules import download as download
 from ffmpeg_progress_yield import FfmpegProgress
 from src.backend.config import shared_config
+from src.backend.config import *
+from src.backend.consts import *
+
 conf = shared_config
 
 from base_api.base import BaseCore, setup_logger
@@ -35,7 +38,7 @@ xv_client = xv_Client()
 mv_client = mv_Client()
 xh_client = xh_Client()
 
-logger = setup_logger(name="Porn Fetch - [shared_functions]", log_file="PornFetch.log", level=logging.DEBUG)
+logger = setup_logger(name="Porn Fetch - [shared_functions]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=http_log_ip, http_port=http_log_port)
 
 
 def refresh_clients():
@@ -147,31 +150,6 @@ notice_shown = false
 warning_shown = false
 """
 
-def send_error_log(message):
-    """
-    This function is made for the Android development of Porn Fetch and is used for debugging.
-    You can, of course, change or remove it, but I wouldn't recommend it.
-    """
-    return
-    url = "192.168.0.19:8000"
-    endpoint = "/error-log/"
-    data = json.dumps({"message": message})
-    headers = {"Content-type": "application/json"}
-
-    conn = http.client.HTTPConnection(url)
-
-    try:
-        conn.request("POST", endpoint, data, headers)
-        response = conn.getresponse()
-
-        if response.status == 200:
-            print("Error log sent successfully")
-        else:
-            print(f"Failed to send error log: Status {response.status}, Reason: {response.reason}")
-
-        conn.close()
-    except Exception as e:
-        print(f"Request failed: {e}")
 
 def check_video(url, is_url=True):
     if is_url:

@@ -1,5 +1,4 @@
 import sys
-sys.stdout.reconfigure(encoding='utf-8')
 import time
 import httpx
 import random
@@ -36,7 +35,6 @@ from PySide6.QtWidgets import QWidget, QApplication, QTreeWidgetItem, QButtonGro
 from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence
 
 
-
 """
 Copyright (C) 2023-2025 Johannes Habel
 
@@ -61,7 +59,7 @@ Discord: echteralsfake (faster response)
 
 __license__ = "GPL 3"
 __version__ = "3.6"
-__build__ = "desktop"  # android or desktop
+__build__ = "android"  # android or desktop
 __author__ = "Johannes Habel"
 __next_release__ = "3.7"
 total_segments = 0
@@ -2410,9 +2408,7 @@ def main():
             logger.debug(f"Failed to load {language_code} translation")
 
     app.installTranslator(translator)
-    send_error_log("Installed translation")
     app.setStyleSheet(load_stylesheet(":/style/stylesheets/stylesheet.qss"))
-    send_error_log("Set main stylesheet")
 
     if conf["UI"]["custom_font"] == "true":
         font_id = QFontDatabase.addApplicationFont(":/fonts/graphics/JetBrainsMono-Regular.ttf")
