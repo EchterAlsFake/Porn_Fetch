@@ -26,6 +26,11 @@
 ---
 </div>
 
+> [!NOTE]
+> I will completely rewrite Porn Fetch in QML using Qt's `Qt Design Studio`. This will make the UI much more smooth and fully working on Android. It will be a huge
+> learning curve for me and take some time, but it's absolutely worth it. Please remember, Porn Fetch is only a LEARNING project for me to learn GUI development.
+> So it can often be the case that I randomly try new stuff because "i feel like it" although it might not be necessary. 
+
 > [!WARNING]
 > Porn Fetch is NOT associated with the websites. Porn Fetch is AGAINST the Terms of Services of EVERY website! Usage is on YOUR risk.
 
