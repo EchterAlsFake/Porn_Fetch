@@ -8,6 +8,9 @@ on:
     branches:
       - master
 
+permissions:
+  contents: read
+
 jobs:
   build-pornfetch-gui-linux-x64:
     runs-on: ubuntu-latest
@@ -15,10 +18,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python 3.11 x64
+      - name: Set up Python 3.13 x64
         uses: actions/setup-python@v3
         with:
-          python-version: "3.11"
+          python-version: "3.13"
           architecture: x64
 
       - name: Install Python dependencies
