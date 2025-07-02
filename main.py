@@ -77,6 +77,7 @@ logger.setLevel(logging.DEBUG)
 conf = shared_config
 
 
+
 class VideoData:
     """
     This class stores the video objects and their loaded data across Porn Fetch.
