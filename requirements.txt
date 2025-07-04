@@ -6,6 +6,7 @@ git+https://github.com/EchterAlsFake/eporner_api
 git+https://github.com/EchterAlsFake/xnxx_api
 git+https://github.com/EchterAlsFake/xvideos_api
 git+https://github.com/EchterAlsFake/eaf_base_api
+git+https://github.com/EchterAlsFake/spankbang_api
 colorama
 PySide6
 requests
