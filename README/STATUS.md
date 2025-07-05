@@ -25,6 +25,8 @@
 - [] Optional processing delay for every video
 - [] Upgrade Python version from 3.11 -> 3.13
 - [] Fix tools section layout
+- [] Fix tabbing
+- [] Fix keyboard shortcuts
 
 # Other stuff
 - [] Automatic model download of new videos [#78](https://github.com/EchterAlsFake/Porn_Fetch/issues/78)
@@ -32,6 +34,11 @@
 - [] Allow for Video IDs as the filename [#76](https://github.com/EchterAlsFake/Porn_Fetch/issues/76)
 - [] Allow ignoring specific errors [#74](https://github.com/EchterAlsFake/Porn_Fetch/issues/74)
 - [] Rework the Batch processing features entirely (lol)
+- [] Re-add an error / feedback reporting system using my own privacy focussed server
+- [] Switch update checking to my own server instead of GitHub (more flexibility)
+- [] Rewrite License Agreement to be GPLv3 compliant
+- [] Add spankbang back into the project
+- [] Add a kill switch feature for Proxy users
 
 # Code optimizations
 - [] Allow ignoring specific exceptions (#74)
@@ -57,3 +64,9 @@
 - [] Specific better support for Termux
 - [] Auto installation for Termux on Android to also handle storage permissions etc...
 - [] Fix progress reporting
+
+
+# 3.7 - I don't know
+- [] Entire rewrite in QML
+- [] Dedicated Android layout in QML
+- 
