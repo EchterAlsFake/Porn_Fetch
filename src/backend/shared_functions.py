@@ -268,7 +268,7 @@ def load_video_attributes(video):
         thumbnail = video.thumbnail_url[0]
 
     elif isinstance(video, xv_Video):
-        author = video.author
+        author = video.author.name
         length = video.length
         tags = video.tags
         publish_date = video.publish_date

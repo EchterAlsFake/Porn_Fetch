@@ -75,7 +75,7 @@ jobs:
       - name: Install Python packages
         run: |
           export LD_LIBRARY_PATH=/usr/local/python-32/lib:$LD_LIBRARY_PATH
-          /usr/local/python-32/bin/python3.13 -m venv venv
+          /usr/local/python-32/bin/python3.11 -m venv venv
           source venv/bin/activate
           pip install --upgrade pip
           pip install pyinstaller

@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'form_main_window.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.9.0
+## Created by: Qt User Interface Compiler version 6.9.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -222,11 +222,11 @@ class Ui_MainWindow(object):
         sizePolicy2.setHeightForWidth(self.scroll_area_top_stacked.sizePolicy().hasHeightForWidth())
         self.scroll_area_top_stacked.setSizePolicy(sizePolicy2)
         self.scroll_area_top_stacked.setMinimumSize(QSize(0, 0))
-        self.scroll_area_top_stacked.setMaximumSize(QSize(16777215, 230))
+        self.scroll_area_top_stacked.setMaximumSize(QSize(16777215, 300))
         self.scroll_area_top_stacked.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 2005, 228))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 2005, 298))
         self.gridLayout_8 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
         self.main_stacked_widget_top = QStackedWidget(self.scrollAreaWidgetContents)
@@ -561,122 +561,22 @@ class Ui_MainWindow(object):
         self.progress_gridlayout_progressbar = QGridLayout()
         self.progress_gridlayout_progressbar.setObjectName(u"progress_gridlayout_progressbar")
         self.progress_gridlayout_progressbar.setHorizontalSpacing(6)
-        self.progressbar_xnxx = QProgressBar(self.page_progressbars)
-        self.progressbar_xnxx.setObjectName(u"progressbar_xnxx")
-        self.progressbar_xnxx.setMinimumSize(QSize(0, 30))
-        self.progressbar_xnxx.setStyleSheet(u"text-align: center; /* Centered text */")
-        self.progressbar_xnxx.setValue(0)
-
-        self.progress_gridlayout_progressbar.addWidget(self.progressbar_xnxx, 3, 1, 1, 1)
-
-        self.progress_label_pornhub = QLabel(self.page_progressbars)
-        self.progress_label_pornhub.setObjectName(u"progress_label_pornhub")
-        sizePolicy10.setHeightForWidth(self.progress_label_pornhub.sizePolicy().hasHeightForWidth())
-        self.progress_label_pornhub.setSizePolicy(sizePolicy10)
-        self.progress_label_pornhub.setMinimumSize(QSize(0, 30))
-
-        self.progress_gridlayout_progressbar.addWidget(self.progress_label_pornhub, 0, 0, 1, 1)
-
-        self.progress_label_xvideos = QLabel(self.page_progressbars)
-        self.progress_label_xvideos.setObjectName(u"progress_label_xvideos")
-        self.progress_label_xvideos.setMinimumSize(QSize(0, 30))
-
-        self.progress_gridlayout_progressbar.addWidget(self.progress_label_xvideos, 4, 0, 1, 1)
-
-        self.progress_label_eporner = QLabel(self.page_progressbars)
-        self.progress_label_eporner.setObjectName(u"progress_label_eporner")
-        self.progress_label_eporner.setMinimumSize(QSize(0, 30))
-
-        self.progress_gridlayout_progressbar.addWidget(self.progress_label_eporner, 2, 0, 1, 1)
-
+        self.progress_gridlayout_progressbar.setContentsMargins(-1, -1, -1, 0)
         self.progress_vertical_spacer_main = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.progress_gridlayout_progressbar.addItem(self.progress_vertical_spacer_main, 8, 1, 1, 1)
-
-        self.progressbar_eporner = QProgressBar(self.page_progressbars)
-        self.progressbar_eporner.setObjectName(u"progressbar_eporner")
-        self.progressbar_eporner.setMinimumSize(QSize(0, 30))
-        self.progressbar_eporner.setStyleSheet(u"text-align: center; /* Centered text */")
-        self.progressbar_eporner.setValue(0)
-
-        self.progress_gridlayout_progressbar.addWidget(self.progressbar_eporner, 2, 1, 1, 1)
-
-        self.progress_label_info = QLabel(self.page_progressbars)
-        self.progress_label_info.setObjectName(u"progress_label_info")
-        self.progress_label_info.setMinimumSize(QSize(0, 30))
-
-        self.progress_gridlayout_progressbar.addWidget(self.progress_label_info, 7, 0, 1, 1)
-
-        self.progressbar_hqporner = QProgressBar(self.page_progressbars)
-        self.progressbar_hqporner.setObjectName(u"progressbar_hqporner")
-        sizePolicy1.setHeightForWidth(self.progressbar_hqporner.sizePolicy().hasHeightForWidth())
-        self.progressbar_hqporner.setSizePolicy(sizePolicy1)
-        self.progressbar_hqporner.setMinimumSize(QSize(300, 30))
-        self.progressbar_hqporner.setStyleSheet(u"text-align: center; /* Centered text */")
-        self.progressbar_hqporner.setValue(0)
-
-        self.progress_gridlayout_progressbar.addWidget(self.progressbar_hqporner, 1, 1, 1, 1)
-
-        self.progressbar_pornhub = QProgressBar(self.page_progressbars)
-        self.progressbar_pornhub.setObjectName(u"progressbar_pornhub")
-        sizePolicy1.setHeightForWidth(self.progressbar_pornhub.sizePolicy().hasHeightForWidth())
-        self.progressbar_pornhub.setSizePolicy(sizePolicy1)
-        self.progressbar_pornhub.setMinimumSize(QSize(300, 30))
-        self.progressbar_pornhub.setStyleSheet(u"text-align: center; /* Centered text */")
-        self.progressbar_pornhub.setValue(0)
-
-        self.progress_gridlayout_progressbar.addWidget(self.progressbar_pornhub, 0, 1, 1, 1)
-
-        self.progress_label_hqporner = QLabel(self.page_progressbars)
-        self.progress_label_hqporner.setObjectName(u"progress_label_hqporner")
-        sizePolicy10.setHeightForWidth(self.progress_label_hqporner.sizePolicy().hasHeightForWidth())
-        self.progress_label_hqporner.setSizePolicy(sizePolicy10)
-        self.progress_label_hqporner.setMinimumSize(QSize(0, 30))
-
-        self.progress_gridlayout_progressbar.addWidget(self.progress_label_hqporner, 1, 0, 1, 1)
-
-        self.progress_label_missav = QLabel(self.page_progressbars)
-        self.progress_label_missav.setObjectName(u"progress_label_missav")
-
-        self.progress_gridlayout_progressbar.addWidget(self.progress_label_missav, 5, 0, 1, 1)
-
-        self.progressbar_xvideos = QProgressBar(self.page_progressbars)
-        self.progressbar_xvideos.setObjectName(u"progressbar_xvideos")
-        self.progressbar_xvideos.setMinimumSize(QSize(0, 30))
-        self.progressbar_xvideos.setStyleSheet(u"text-align: center; /* Centered text */")
-        self.progressbar_xvideos.setValue(0)
-
-        self.progress_gridlayout_progressbar.addWidget(self.progressbar_xvideos, 4, 1, 1, 1)
+        self.progress_gridlayout_progressbar.addItem(self.progress_vertical_spacer_main, 2, 1, 1, 1)
 
         self.progress_lineedit_download_info = QLineEdit(self.page_progressbars)
         self.progress_lineedit_download_info.setObjectName(u"progress_lineedit_download_info")
         self.progress_lineedit_download_info.setReadOnly(True)
 
-        self.progress_gridlayout_progressbar.addWidget(self.progress_lineedit_download_info, 7, 1, 1, 1)
+        self.progress_gridlayout_progressbar.addWidget(self.progress_lineedit_download_info, 1, 1, 1, 1)
 
-        self.progress_label_xnxx = QLabel(self.page_progressbars)
-        self.progress_label_xnxx.setObjectName(u"progress_label_xnxx")
-        self.progress_label_xnxx.setMinimumSize(QSize(0, 30))
+        self.progress_label_info = QLabel(self.page_progressbars)
+        self.progress_label_info.setObjectName(u"progress_label_info")
+        self.progress_label_info.setMinimumSize(QSize(0, 30))
 
-        self.progress_gridlayout_progressbar.addWidget(self.progress_label_xnxx, 3, 0, 1, 1)
-
-        self.progress_label_xhamster = QLabel(self.page_progressbars)
-        self.progress_label_xhamster.setObjectName(u"progress_label_xhamster")
-
-        self.progress_gridlayout_progressbar.addWidget(self.progress_label_xhamster, 6, 0, 1, 1)
-
-        self.progressbar_missav = QProgressBar(self.page_progressbars)
-        self.progressbar_missav.setObjectName(u"progressbar_missav")
-        self.progressbar_missav.setStyleSheet(u"")
-        self.progressbar_missav.setValue(0)
-
-        self.progress_gridlayout_progressbar.addWidget(self.progressbar_missav, 5, 1, 1, 1)
-
-        self.progressbar_xhamster = QProgressBar(self.page_progressbars)
-        self.progressbar_xhamster.setObjectName(u"progressbar_xhamster")
-        self.progressbar_xhamster.setValue(0)
-
-        self.progress_gridlayout_progressbar.addWidget(self.progressbar_xhamster, 6, 1, 1, 1)
+        self.progress_gridlayout_progressbar.addWidget(self.progress_label_info, 1, 0, 1, 1)
 
 
         self.gridLayout_6.addLayout(self.progress_gridlayout_progressbar, 0, 0, 1, 1)
@@ -902,7 +802,7 @@ class Ui_MainWindow(object):
         self.main_scrollarea_treewidget.setWidgetResizable(True)
         self.main_scrollarea_treewidget_content = QWidget()
         self.main_scrollarea_treewidget_content.setObjectName(u"main_scrollarea_treewidget_content")
-        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 2003, 485))
+        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 2003, 415))
         self.gridLayout_4 = QGridLayout(self.main_scrollarea_treewidget_content)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.gridLayout_4.setContentsMargins(0, 0, 0, 0)
@@ -1009,7 +909,7 @@ class Ui_MainWindow(object):
         self.settings_scrollarea.setWidgetResizable(True)
         self.settings_scrollarea_widget_contents = QWidget()
         self.settings_scrollarea_widget_contents.setObjectName(u"settings_scrollarea_widget_contents")
-        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 728, 895))
+        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 722, 890))
         self.gridLayout_19 = QGridLayout(self.settings_scrollarea_widget_contents)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.gridLayout_19.setContentsMargins(0, 0, 0, 0)
@@ -1831,7 +1731,7 @@ class Ui_MainWindow(object):
         self.scrollArea_11.setWidgetResizable(True)
         self.scrollAreaWidgetContents_13 = QWidget()
         self.scrollAreaWidgetContents_13.setObjectName(u"scrollAreaWidgetContents_13")
-        self.scrollAreaWidgetContents_13.setGeometry(QRect(0, 0, 449, 101))
+        self.scrollAreaWidgetContents_13.setGeometry(QRect(0, 0, 455, 101))
         self.gridLayout_59 = QGridLayout(self.scrollAreaWidgetContents_13)
         self.gridLayout_59.setObjectName(u"gridLayout_59")
         self.gridLayout_59.setHorizontalSpacing(0)
@@ -1929,7 +1829,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
 
         self.CentralStackedWidget.setCurrentIndex(0)
-        self.main_stacked_widget_top.setCurrentIndex(0)
+        self.main_stacked_widget_top.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -1978,15 +1878,8 @@ class Ui_MainWindow(object):
         self.login_button_get_recommended_videos.setText(QCoreApplication.translate("MainWindow", u"Get recommended videos", None))
         self.login_label_password.setText(QCoreApplication.translate("MainWindow", u"Password:", None))
         self.login_lineedit_password.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter your PornHub Password", None))
-        self.progress_label_pornhub.setText(QCoreApplication.translate("MainWindow", u"PornHub:", None))
-        self.progress_label_xvideos.setText(QCoreApplication.translate("MainWindow", u"XVideos:", None))
-        self.progress_label_eporner.setText(QCoreApplication.translate("MainWindow", u"Eporner:", None))
-        self.progress_label_info.setText(QCoreApplication.translate("MainWindow", u"Info:", None))
-        self.progress_label_hqporner.setText(QCoreApplication.translate("MainWindow", u"HQPorner:", None))
-        self.progress_label_missav.setText(QCoreApplication.translate("MainWindow", u"MissAV", None))
         self.progress_lineedit_download_info.setText("")
-        self.progress_label_xnxx.setText(QCoreApplication.translate("MainWindow", u"XNXX:", None))
-        self.progress_label_xhamster.setText(QCoreApplication.translate("MainWindow", u"XHamster", None))
+        self.progress_label_info.setText(QCoreApplication.translate("MainWindow", u"Info:", None))
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"HQPorner", None))
         self.tools_radio_top_porn_week.setText(QCoreApplication.translate("MainWindow", u"Week", None))
         self.tools_button_hqporner_category_get_videos.setText(QCoreApplication.translate("MainWindow", u"Get Videos", None))

@@ -428,7 +428,7 @@ color: white</string>
             <property name="maximumSize">
              <size>
               <width>16777215</width>
-              <height>230</height>
+              <height>300</height>
              </size>
             </property>
             <property name="widgetResizable">
@@ -440,7 +440,7 @@ color: white</string>
                <x>0</x>
                <y>0</y>
                <width>2005</width>
-               <height>228</height>
+               <height>298</height>
               </rect>
              </property>
              <layout class="QGridLayout" name="gridLayout_8">
@@ -465,7 +465,7 @@ color: white</string>
                  <number>1</number>
                 </property>
                 <property name="currentIndex">
-                 <number>0</number>
+                 <number>2</number>
                 </property>
                 <widget class="QWidget" name="page_download">
                  <property name="sizePolicy">
@@ -1203,71 +1203,13 @@ color: white</string>
                   </property>
                   <item row="0" column="0">
                    <layout class="QGridLayout" name="progress_gridlayout_progressbar">
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
                     <property name="horizontalSpacing">
                      <number>6</number>
                     </property>
-                    <item row="3" column="1">
-                     <widget class="QProgressBar" name="progressbar_xnxx">
-                      <property name="minimumSize">
-                       <size>
-                        <width>0</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="styleSheet">
-                       <string notr="true">text-align: center; /* Centered text */</string>
-                      </property>
-                      <property name="value">
-                       <number>0</number>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="0">
-                     <widget class="QLabel" name="progress_label_pornhub">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>0</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="text">
-                       <string>PornHub:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="0">
-                     <widget class="QLabel" name="progress_label_xvideos">
-                      <property name="minimumSize">
-                       <size>
-                        <width>0</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="text">
-                       <string>XVideos:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="0">
-                     <widget class="QLabel" name="progress_label_eporner">
-                      <property name="minimumSize">
-                       <size>
-                        <width>0</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="text">
-                       <string>Eporner:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="8" column="1">
+                    <item row="2" column="1">
                      <spacer name="progress_vertical_spacer_main">
                       <property name="orientation">
                        <enum>Qt::Orientation::Vertical</enum>
@@ -1280,122 +1222,7 @@ color: white</string>
                       </property>
                      </spacer>
                     </item>
-                    <item row="2" column="1">
-                     <widget class="QProgressBar" name="progressbar_eporner">
-                      <property name="minimumSize">
-                       <size>
-                        <width>0</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="styleSheet">
-                       <string notr="true">text-align: center; /* Centered text */</string>
-                      </property>
-                      <property name="value">
-                       <number>0</number>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="7" column="0">
-                     <widget class="QLabel" name="progress_label_info">
-                      <property name="minimumSize">
-                       <size>
-                        <width>0</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="text">
-                       <string>Info:</string>
-                      </property>
-                     </widget>
-                    </item>
                     <item row="1" column="1">
-                     <widget class="QProgressBar" name="progressbar_hqporner">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>300</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="styleSheet">
-                       <string notr="true">text-align: center; /* Centered text */</string>
-                      </property>
-                      <property name="value">
-                       <number>0</number>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="1">
-                     <widget class="QProgressBar" name="progressbar_pornhub">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>300</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="styleSheet">
-                       <string notr="true">text-align: center; /* Centered text */</string>
-                      </property>
-                      <property name="value">
-                       <number>0</number>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="0">
-                     <widget class="QLabel" name="progress_label_hqporner">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>0</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="text">
-                       <string>HQPorner:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="5" column="0">
-                     <widget class="QLabel" name="progress_label_missav">
-                      <property name="text">
-                       <string>MissAV</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="1">
-                     <widget class="QProgressBar" name="progressbar_xvideos">
-                      <property name="minimumSize">
-                       <size>
-                        <width>0</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="styleSheet">
-                       <string notr="true">text-align: center; /* Centered text */</string>
-                      </property>
-                      <property name="value">
-                       <number>0</number>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="7" column="1">
                      <widget class="QLineEdit" name="progress_lineedit_download_info">
                       <property name="text">
                        <string/>
@@ -1405,8 +1232,8 @@ color: white</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="3" column="0">
-                     <widget class="QLabel" name="progress_label_xnxx">
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="progress_label_info">
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -1414,31 +1241,7 @@ color: white</string>
                        </size>
                       </property>
                       <property name="text">
-                       <string>XNXX:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="6" column="0">
-                     <widget class="QLabel" name="progress_label_xhamster">
-                      <property name="text">
-                       <string>XHamster</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="5" column="1">
-                     <widget class="QProgressBar" name="progressbar_missav">
-                      <property name="styleSheet">
-                       <string notr="true"/>
-                      </property>
-                      <property name="value">
-                       <number>0</number>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="6" column="1">
-                     <widget class="QProgressBar" name="progressbar_xhamster">
-                      <property name="value">
-                       <number>0</number>
+                       <string>Info:</string>
                       </property>
                      </widget>
                     </item>
@@ -1910,7 +1713,7 @@ color: white</string>
                  <x>0</x>
                  <y>0</y>
                  <width>2003</width>
-                 <height>485</height>
+                 <height>415</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_4">
@@ -2113,8 +1916,8 @@ color: white</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>728</width>
-             <height>895</height>
+             <width>722</width>
+             <height>890</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_19">
@@ -3632,7 +3435,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>449</width>
+             <width>455</width>
              <height>101</height>
             </rect>
            </property>

@@ -1,0 +1,12 @@
+QProgressBar {
+    color: #E0E0E0; /* Text color adjusted for visibility */
+    border: 2px solid green; /* Purple border for consistency */
+    border-radius: 5px; /* Rounded corners */
+    text-align: center; /* Centered text */
+    background-color: #3C3C3C; /* Dark background for the progress bar */
+}
+
+QProgressBar::chunk {
+    background-color: yellow; /* Adjusted chunk color for consistency */
+    width: 20px; /* Chunk width */
+}
