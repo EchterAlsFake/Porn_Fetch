@@ -2,7 +2,6 @@ from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QMessageBox
 
 
-
 def ui_popup(text, title="Notice"):
     """A styled UI popup for small messages to the user."""
     message_box = QMessageBox()

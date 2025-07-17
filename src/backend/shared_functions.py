@@ -5,81 +5,56 @@ If you know what you do, you can change a few things here :)
 
 import os
 import re
-import json
 import logging
-import http.client
 
 from mutagen.mp4 import MP4, MP4Cover
-from configparser import ConfigParser
-from phub import Client, errors, Video, consts as phub_consts
-from phub.modules import download as download
+from phub import Client as ph_Client, errors, Video as ph_Video, consts as phub_consts
 from ffmpeg_progress_yield import FfmpegProgress
 from src.backend.config import shared_config
 from src.backend.config import *
 from src.backend.consts import *
 
-conf = shared_config
-
 from base_api.base import BaseCore, setup_logger
-from base_api.modules import consts as bs_consts
 from hqporner_api import Client as hq_Client, Video as hq_Video
 from xnxx_api import Client as xn_Client, Video as xn_Video
 from xvideos_api import Client as xv_Client, Video as xv_Video
 from eporner_api import Client as ep_Client, Video as ep_Video, Category as ep_Category # Used in the main file
-from missav_api import Client as mv_Client, Video as mv_Video
+from missav_api.missav_api import Video as mv_Video, Client as mv_Client
 from xhamster_api import Client as xh_Client, Video as xh_Video
+from spankbang_api import Client as sp_Client, Video as sp_Video
+from base_api.modules.config import config # This is the global configuration instance of base core config
+# which is also affecting all other APIs when the refresh_clients function is called
 
-# Initialize clients globally
-client = Client()
-hq_client = hq_Client()
-ep_client = ep_Client()
-xn_client = xn_Client()
-xv_client = xv_Client()
+# Initialize clients globally, so that we can override them later with a new configuration from BaseCore if needed
 mv_client = mv_Client()
+ep_client = ep_Client()
+ph_client = ph_Client()
+xv_client = xv_Client()
 xh_client = xh_Client()
-
-logger = setup_logger(name="Porn Fetch - [shared_functions]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=http_log_ip, http_port=http_log_port)
+sp_client = sp_Client()
+hq_client = hq_Client()
+xn_client = xn_Client()
+core = BaseCore() # We need that sometimes in Porn Fetch's main class e.g., thumbnail fetching
 
 
 def refresh_clients():
-    """
-    Reinitializes all API clients with updated BaseCore settings.
-    Call this after modifying consts.PROXY.
-    """
-    global hq_client, ep_client, xn_client, xv_client, client, xh_client, mv_client
+    global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, hq_client, xn_client, core
+    core = BaseCore(config=config)
+    xn_client = xn_Client(core=core)
+    ep_client = ep_Client(core = BaseCore(config=config))
+    xv_client = xv_Client(core = BaseCore(config=config))
+    xh_client = xh_Client(core = BaseCore(config=config))
+    sp_client = sp_Client(core = BaseCore(config=config))
+    hq_client = hq_Client(core = BaseCore(config=config))
+    xn_client = xn_Client(core = BaseCore(config=config))
+    ph_client = ph_Client(core = BaseCore(config=config))
 
-    # Refresh BaseCore first
-    BaseCore().initialize_session()
 
-    import hqporner_api
-    import xnxx_api
-    import eporner_api
-    import xvideos_api
-    import xhamster_api
-    import missav_api
+def enable_logging(level=logging.DEBUG, log_file="APIs.log", log_ip=http_log_ip, log_port=http_log_port):
+    global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, hq_client, xn_client
+    pass # Need to implement that later lol
 
-    hqporner_api.api.refresh_core(enable_logging=True, log_file="hqporner_api.log", level=logging.DEBUG)
-    xnxx_api.xnxx_api.refresh_core(enable_logging=True, log_file="xnxx_api.log", level=logging.DEBUG)
-    eporner_api.refresh_core(enable_logging=True, log_file="eporner_api.log", log_level=logging.DEBUG)
-    xvideos_api.xvideos_api.refresh_core(enable_logging=True, log_file="xvideos_api.log", level=logging.DEBUG)
-    missav_api.missav_api.refresh_core(enable_logging=True, log_file="missav_api.log", level=logging.DEBUG)
-    xhamster_api.xhamster_api.refresh_core(enable_logging=True, log_file="xhamster_api.log", level=logging.DEBUG)
-
-    # Reinitialize all clients so they get a fresh BaseCore instance
-    hq_client = hqporner_api.Client()
-    ep_client = eporner_api.Client()
-    xn_client = xnxx_api.Client()
-    xv_client = xvideos_api.Client()
-    xh_client = xhamster_api.Client()
-    mv_client = missav_api.Client()
-
-    hq_client.enable_logging(log_file="hqporner_api.log", level=logging.DEBUG)
-    ep_client.enable_logging(log_file="eporner_api.log", level=logging.DEBUG)
-    xv_client.enable_logging(log_file="xvideos_api.log", level=logging.DEBUG)
-
-    client = Client()
-    client.reset()
-    logger.info(f"Initialized new sessions with Proxy value: {bs_consts.PROXY} | {phub_consts.PROXY}")
+logger = setup_logger(name="Porn Fetch - [shared_functions]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=http_log_ip, http_port=http_log_port)
 
 
 """
@@ -171,7 +146,7 @@ def check_video(url, is_url=True):
         elif xhamster_pattern.search(str(url)) and not isinstance(url, xh_Video):
             return xh_client.get_video(url)
 
-        if isinstance(url, Video):
+        if isinstance(url, ph_Video):
             url.fetch("page@") # If url is a PornHub Video object it does have the `fetch` method
             return url
 
@@ -195,10 +170,9 @@ def check_video(url, is_url=True):
 
 
         elif isinstance(url, str) and not str(url).endswith(".html"):
-            video = Client().get(url)
+            video = ph_client.get(url) # PornHub client
             video.fetch("page@")
             return video
-
 
         else:
             return False
@@ -273,7 +247,7 @@ def setup_config_file(force=False):
 def load_video_attributes(video):
     title = video.title
 
-    if isinstance(video, Video):
+    if isinstance(video, ph_Video):
         try:
             author = video.author.name
 

@@ -54,6 +54,7 @@
   - [] Maybe auto updating Porn Fetch in the future? (Would be great lmao)
 
 # Android
+(This will be ignored for now, cuz we're switching to QML in the future, so these problems should automatically resolve lol)
 - [] Fix I/O error for Qt stylesheets and icons
 - [] Layout changes, so that the app fits the screen (probably with QScrollBar)
 - [] Fix path issues

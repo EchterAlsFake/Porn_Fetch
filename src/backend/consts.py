@@ -3,9 +3,13 @@ This stores some values that are shared between all files. One example is the ht
 note that I only need this for Android development, as this is the only proper way of logging and debugging
 on Android.
 
-In a production release, these values will of course be set to None and no messages will ever be sent to an external
-server without your consent.
+In a production release, these values will need consent of you, before logging is applied. Porn Fetch will never
+log to any server without your explicit consent.
+"""
+"""
+http_log_ip = "echteralsfake.duckdns.org"
+http_log_port = 443
 """
 
-http_log_ip = "192.168.0.19"
-http_log_port = 8000
+http_log_ip = None
+http_log_port = None
