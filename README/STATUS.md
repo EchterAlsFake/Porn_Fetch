@@ -4,7 +4,7 @@
 # Bug fixes
 - [] Fix check for updates changelog displaying
 - [] Entirely rework and fix the error reporting system
-- [] Fix thumbnails for HQPorner
+- [x] Fix thumbnails for HQPorner
 - [] Bring Porn Fetch back on Android
   - [] Make an Android compatible Layout
   - [] Fix threading

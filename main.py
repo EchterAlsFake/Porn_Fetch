@@ -8,6 +8,7 @@ import os.path
 import zipfile
 import argparse
 import markdown
+import datetime
 import traceback
 import src.frontend.UI.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
 
@@ -444,14 +445,52 @@ class AddToTreeWidget(QRunnable):
         self.consistent_data = VideoData().consistent_data
         self.output_path = self.consistent_data.get("output_path")
         self.search_limit = self.consistent_data.get("search_limit")
+        self.supress_errors = self.consistent_data.get("supress_errors")
+        self.activate_logging = self.consistent_data.get("activate_logging")
         self.logger = setup_logger(name="Porn Fetch - [AddToTreeWidget]", log_file="PornFetch.log", level=logging.DEBUG,
                                    http_port=http_log_port, http_ip=http_log_ip)
 
+    def handle_error_gracefully(self, error_message: str, needs_network_log: bool= False):
+        self.logger.error(error_message)
+
+        if not self.supress_errors:
+            self.signals.error_signal.emit(error_message)
+
+        if needs_network_log:
+            if self.activate_logging:
+                self.logger.info(f"Logging Error: {error_message} to network server...")
+                message = f"""
+                An error occurred in Porn Fetch - [AddToTreeWidget]
+                Time: {datetime.datetime.now()}
+                Version: {__version__}
+                System: {sys.platform}
+                Error message: {error_message}
+                """
+
+                payload = {"message": message}
+                try:
+                    response = httpx.post(
+                    url="https://echteralsfake.duckdns.org:443/report",
+                    json=payload,
+                    timeout=6)
+
+                    if response.status_code == 200:
+                        self.logger.info("Successfully reported the Error!")
+
+                except Exception as e:
+                    self.logger.error(f"Couldn't report the error. Maybe you don't have an IPv6 connection: {e}")
+
     def process_video(self, video, index):
-        self.logger.debug(f"Requesting video processing of: {video.url}")
+        if not isinstance(video, str):
+            self.logger.debug(f"Requesting video processing of: {video.url}")
+        else:
+            self.logger.debug(f"Requesting video processing of: {video}")
 
         try:
             video_id = random.randint(0, 99999999) # Creates a random ID for each video
+            if isinstance(video, str):
+                video = check_video(url=video, is_url=True)
+
             self.logger.debug(f"Created ID: {video_id} for: {video.url}")
             data = load_video_attributes(video)
             self.logger.debug("Loaded video attributes")
@@ -481,89 +520,87 @@ class AddToTreeWidget(QRunnable):
             return video_id
 
         except (errors.PremiumVideo, IndexError):
-            self.logger.error(f"Warning: The video {video.url} is a Premium-only video and will be skipped.")
-            self.signals.error_signal.emit(f"Premium-only video skipped: {video.url}")
+            self.handle_error_gracefully(error_message=f"Premium-only video skipped: {video.url}")
             return False
 
         except errors.RegionBlocked:
-            self.logger.error(f"Warning: The video {video.url} is region-blocked or private and will be skipped.")
-            self.signals.error_signal.emit(f"Region-blocked video skipped: {video.url}")
+            self.handle_error_gracefully(f"Region-blocked video skipped: {video.url}")
             return False
+
+        except errors.VideoDisabled:
+            self.handle_error_gracefully(f"Warning: The video {video.url} is disabled. It will be skipped")
+
+        except errors.RegexError:
+            message = f"""
+            A regex error occurred. This is always a 50/50 chance if it's my or PornHub's fault. If this happens again on
+            the same video, please consider reporting it. If you have logging enabled, this issue will automatically be reported.
+            
+            Current Index: {index}
+            Additional Info: URL: {video.url}
+            """
+            self.handle_error_gracefully(error_message=message, needs_network_log=True)
+            return False
+
+        except errors.VideoPendingReview:
+            self.handle_error_gracefully(f"Warning: The video {video.url} is pending review. It will be skipped")
+            return False
+
+        except InvalidResponse:
+            self.handle_error_gracefully(f"Warning: The video: {video.url} returned an empty response when trying"
+                                         f"to fetch its content. There is nothing I can do. It will be skipped")
+            return False
+
 
         except Exception:
             error = traceback.format_exc()
-            self.logger.exception(f"Unexpected error while processing video: {error}")
-            self.signals.error_signal.emit(f"Unexpected error occurred: {error}")
+            self.handle_error_gracefully(f"Unexpected error occurred: {error}", needs_network_log=True)
             return False
 
     def run(self):
+        if isinstance(self.iterator, str):
+            self.iterator = [self.iterator]
+
         if not self.is_checked:
             self.signals.clear_tree_widget_signal.emit()  # Clears the tree widget
 
         self.signals.start_undefined_range.emit()  # Starts the progressbar, but with a loading animation
         if self.is_checked:
-            index = self.last_index
-            start = index
-            self.search_limit += self.search_limit
+            start = self.last_index
+            self.search_limit += start
 
         else:
             start = 1
-            self.last_index = start
-
-        try:
             self.logger.debug(f"Result Limit: {str(self.search_limit)}")
 
-            if self.reverse:
-                self.logger.debug("Reversing Videos. This may take some time...")
 
-                # Use islice to limit the number of items fetched from the iterator
-                videos = list(islice(self.iterator, self.search_limit))  # Can take A LOT of time (like really)
-                videos.reverse()  # Reverse the list (to show videos in reverse order)
+        if self.reverse:
+            self.logger.info("Reversing Videos. This may take some time...")
 
-            else:
-                videos = islice(self.iterator, self.search_limit)
+            # Use islice to limit the number of items fetched from the iterator
+            videos = list(islice(self.iterator, self.search_limit))  # Can take A LOT of time (like really)
+            videos.reverse()  # Reverse the list (to show videos in reverse order)
 
-            success = False
+        else:
+            videos = islice(self.iterator, self.search_limit)
 
-            for i, video in enumerate(videos, start=start):
-                if self.stop_flag.is_set():
-                    return  # Stop processing if user pressed the stop button
+        for i, video in enumerate(videos, start=start):
+            if self.stop_flag.is_set():
+                return  # Stop processing if user pressed the stop button
 
-                try_attempt = True
-                while try_attempt:
-                    try:
-                        if i >= self.search_limit + 1:
-                            break  # Respect search limit
+            if i >= self.search_limit + 1:
+                break  # Respect search limit
 
-                        video_id = self.process_video(video, i)  # Passes video and index object / int
-                        if not success:
-                            self.signals.stop_undefined_range.emit()  # Stop the loading animation
+            video_id = self.process_video(video, i)  # Passes video and index object / int
 
-                        success = True
+            if video_id is False:
+                self.logger.warning(f"Skipping Video: {video}")
+                continue
 
-                        self.signals.progress_add_to_tree_widget.emit(self.search_limit, i)
-                        self.signals.text_data_to_tree_widget.emit(video_id)
-                        try_attempt = False  # Processing succeeded
-
-                    except errors.RegexError as e:
-                        self.logger.error(f"Regex error: {e}")
-                        self.signals.error_signal.emit(f"Regex error: {e}. Please report this issue.")
-                        continue
-
-                    except (ConnectionError, ConnectionAbortedError, ConnectionResetError) as e:
-                        self.logger.error(f"Connection error: {e}")
-                        self.signals.error_signal.emit(f"Connection error: {e}. Retrying in 20 seconds...")
-                        time.sleep(20)
-                        continue
-
-
-        except Exception:
-            error = traceback.format_exc()
-            self.logger.exception(f"Fatal error in run: {error}")
-            self.signals.error_signal.emit(f"Fatal error: {error}")
-
-        finally:
             self.signals.stop_undefined_range.emit()
+            self.signals.progress_add_to_tree_widget.emit(self.search_limit, i)
+            self.signals.text_data_to_tree_widget.emit(video_id)
+
+        self.logger.debug("Finished Iterating")
 
 
 class DownloadThread(QRunnable):
@@ -993,7 +1030,9 @@ class PornFetch(QMainWindow):
             "video_format": self.format,
             "convert_videos": self.convert_videos,
             "search_limit": self.search_limit,
-            "skip_existing_files": self.skip_existing_files
+            "skip_existing_files": self.skip_existing_files,
+            "supress_errors": self.supress_errors,
+            "activate_logging": self.activate_logging,
         })
         self.logger.debug("Startup: [5/5] OK")
         self.initialize_pornfetch()
@@ -1168,8 +1207,8 @@ class PornFetch(QMainWindow):
         self.header.resizeSection(2, 50)
         self.header.setSectionResizeMode(3, QHeaderView.ResizeMode.Fixed)
         self.ui.treeWidget.setColumnWidth(3, 150)
-        # self.header.sortIndicatorChanged.connect(partial(reindex, ))  # don't know what this is, vibe coding ahh moment
-        # self.ui.treeWidget.itemClicked.connect(self.set_thumbnail)
+        self.header.sortIndicatorChanged.connect(partial(reindex, ))  # don't know what this is, vibe coding ahh moment
+        self.ui.treeWidget.itemClicked.connect(self.set_thumbnail)
 
         # Sort by the 'Length' column in ascending order
         self.ui.treeWidget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
@@ -1220,11 +1259,6 @@ class PornFetch(QMainWindow):
         self.ui.download_radio_search_website_pornhub.setText("1")
         self.ui.download_radio_search_website_xvideos.setText("3")
         self.ui.download_radio_search_website_xnxx.setText("5")
-        self.ui.progress_label_pornhub.setText("1")
-        self.ui.progress_label_hqporner.setText("2")
-        self.ui.progress_label_eporner.setText("3")
-        self.ui.progress_label_xnxx.setText("4")
-        self.ui.progress_label_xvideos.setText("5")
         self._anonymous_mode = True  # Makes sense, trust
         self.logger.info("Enabled anonymous mode!")
 
@@ -1402,6 +1436,12 @@ class PornFetch(QMainWindow):
         self.directory_system = conf.get("Video", "directory_system") == "true"
         self.ui.settings_checkbox_videos_use_directory_system.setChecked(self.directory_system)
 
+        self.supress_errors = conf.get("Video", "supress_errors") == "true"
+        self.ui.checkbox_settings_video_supress_errors.setChecked(self.supress_errors)
+
+        self.activate_logging = conf.get("Setup", "activate_logging") == "true"
+        self.ui.settings_checkbox_system_activate_logging.setChecked(self.activate_logging)
+
         self.ui.settings_checkbox_ui_custom_font.setChecked(
             True if conf.get("UI", "custom_font") == "true" else False)
 
@@ -1515,34 +1555,8 @@ class PornFetch(QMainWindow):
         self.logger.debug("Saved User Settings, please restart Porn Fetch.")
 
     def set_proxies(self):
-        message = self.tr("""
-!!! ONLY SOCKS5 IS SUPPORTED !!!
-
-Warning:
-Your entire traffic will be routed through the proxy, except if your threading mode is set to 'ffmpeg'. There's no
-guarantee for your IP not being exposed. If you live in a country where downloading Porn is a crime, please consider
-using a VPN or Tor for a more safe approach. 
-
-After submitting the proxy, Porn Fetch will do a short test if your IP is leaked by making a request to 
-'http://httpbin.org/ip' with and without proxy to compare your IP address. 
-
-All traffic will be sent with encryption, however, SSL won't be verified, meaning someone could break your encryption
-and you won't get notified about it. Basically all SSL related errors will be completely ignored, but if your
-proxy is good, SSL should work. 
-
-Proxy implementation will be improved in the next release. All of it is currently in BETA. Please report any issues unless
-they are related to the proxy itself e.g., closed connections and such things. You might want to higher the timeout
-in Porn Fetch settings, because some proxies are just really slow
-
-Please set your threading mode to 'Default'. Most proxies can't handle what the threaded mode is capable of.
-Seriously this thing can go up to 115 MB/s. Proxies can't handle that xD
-If you want to see by yourself, use wireshark and monitor your network traffic.
-
-DO NOT REPORT ANY ERRORS WHEN USING A PUBLIC PROXY!
-They are just shit, and don't work well. If you come across connection errors with them it is by 99.9% the fault
-of the proxy and not my fault ;)
-
-If you still want to proceed, click O.K. Otherwise, close Porn Fetch now and restart it.""", disambiguation=None)
+        message = self.tr("""""", disambiguation=None)
+        # TODO
         ui_popup(message)
 
         proxy_input, ok = QInputDialog.getText(
@@ -1589,9 +1603,7 @@ If you still want to proceed, click O.K. Otherwise, close Porn Fetch now and res
         """
         url = self.ui.download_lineedit_url.text()
         self.logger.info(f"Starting a single shot download for -->: {url}")
-        video = check_video(url)
-        list_ = [video]
-        self.add_to_tree_widget_thread(iterator=list_)
+        self.add_to_tree_widget_thread(iterator=url)
 
     def start_model(self, url=None):
         """Starts the model downloads"""
@@ -1603,8 +1615,7 @@ If you still want to proceed, click O.K. Otherwise, close Porn Fetch now and res
 
         self.logger.info(f"Checking model: {url}")
         if pornhub_pattern.match(model):
-
-            model_object = client.get_user(model)
+            model_object = ph_client.get_user(model)
             videos = model_object.videos
             uploads = model_object.uploads
 
@@ -1959,15 +1970,14 @@ An error happened inside of Porn Fetch!
             # Load the thumbnail image dynamically
             try:
                 pixmap = QPixmap()
-                if not "hqporner" in thumbnail:
-                    pixmap.loadFromData(core.fetch(thumbnail, get_bytes=True))
+                if "hqporner" in thumbnail:
+                    core.config.headers["Referer"] = "https://hqporner.com"
+                    core.update_headers({"Referer": "https://hqporner.com/"})
 
-                else:
-                    self.logger.warning(
-                        "HQPorner currently has an issue with internal network fetching, using independent httpx session instead."
-                        "This will !! BYPASS ANY APPLIED PROXIES !!")
+                pixmap.loadFromData(core.fetch(thumbnail, get_bytes=True))
 
-                    pixmap.loadFromData(httpx.Client().get(thumbnail).content)
+                if "hqporner" in thumbnail:
+                    del core.config.headers['Referer']
 
                 self.logger.info("Fetched thumbnail!")
                 # Scale the pixmap to fit the fixed QLabel size while maintaining the aspect ratio

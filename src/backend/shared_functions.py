@@ -7,6 +7,7 @@ import os
 import re
 import logging
 
+from charset_normalizer.utils import is_arabic_isolated_form
 from mutagen.mp4 import MP4, MP4Cover
 from phub import Client as ph_Client, errors, Video as ph_Video, consts as phub_consts
 from ffmpeg_progress_yield import FfmpegProgress
@@ -17,6 +18,7 @@ from src.backend.consts import *
 from base_api.base import BaseCore, setup_logger
 from hqporner_api import Client as hq_Client, Video as hq_Video
 from xnxx_api import Client as xn_Client, Video as xn_Video
+from xnxx_api.modules.errors import InvalidResponse
 from xvideos_api import Client as xv_Client, Video as xv_Video
 from eporner_api import Client as ep_Client, Video as ep_Video, Category as ep_Category # Used in the main file
 from missav_api.missav_api import Video as mv_Video, Client as mv_Client
@@ -65,10 +67,10 @@ as they are indeed needed for the main applications!
 # TODO: Implement logging
 sections = ["Setup", "Performance", "PostProcessing", "Video", "UI", "Sponsoring", "Android"]
 
-options_setup = ["license_accepted", "install", "update_checks", "internet_checks", "anonymous_mode", "disclaimer_shown"]
+options_setup = ["license_accepted", "install", "update_checks", "internet_checks", "anonymous_mode", "disclaimer_shown", "activate_logging"]
 options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries", "ffmpeg_warning"]
 options_post_processing = ["convert", "format", "write_metadata"]
-options_video = ["quality", "output_path", "directory_system", "search_limit", "delay", "skip_existing_files", "model_videos"]
+options_video = ["quality", "output_path", "directory_system", "search_limit", "delay", "skip_existing_files", "model_videos", "supress_errors"]
 options_ui = ["language", "custom_font"]
 options_sponsoring = ["downloaded_videos", "notice_shown"]
 options_android = ["warning_shown"]
@@ -81,6 +83,7 @@ xvideos_pattern = re.compile(r'(.*?)xvideos.com(.*)')
 eporner_pattern = re.compile(r'(.*?)eporner.com(.*)')
 missav_pattern = re.compile(r'(.*?)missav(.*?)')
 xhamster_pattern = re.compile(r'(.*?)xhamster(.*?)')
+spankbang_pattern = re.compile(r'(.*?)spankbang(.*?)')
 
 
 default_configuration = f"""[Setup]
@@ -90,6 +93,7 @@ update_checks = true
 internet_checks = true
 anonymous_mode = false
 disclaimer_shown = false
+activate_logging = false
 
 [Performance]
 threading_mode = threaded
@@ -112,6 +116,7 @@ search_limit = 50
 delay = 0
 skip_existing_files = true
 model_videos = both
+supress_errors = false
 
 [UI]
 language = system
@@ -146,6 +151,9 @@ def check_video(url, is_url=True):
         elif xhamster_pattern.search(str(url)) and not isinstance(url, xh_Video):
             return xh_client.get_video(url)
 
+        elif spankbang_pattern.search(str(url)) and not isinstance(url, sp_Video):
+            return sp_client.get_video(url)
+
         if isinstance(url, ph_Video):
             url.fetch("page@") # If url is a PornHub Video object it does have the `fetch` method
             return url
@@ -168,6 +176,8 @@ def check_video(url, is_url=True):
         elif isinstance(url, mv_Video):
             return url
 
+        elif isinstance(url, sp_Video):
+            return url
 
         elif isinstance(url, str) and not str(url).endswith(".html"):
             video = ph_client.get(url) # PornHub client
@@ -309,6 +319,13 @@ def load_video_attributes(video):
         tags = "Not available"
         thumbnail = video.thumbnail
         publish_date = "Not available"
+
+    elif isinstance(video, sp_Video):
+        author = video.author
+        length = video.length
+        tags = ",".join(video.tags)
+        thumbnail = video.thumbnail
+        publish_date = video.publish_date
 
     else:
         raise "Instance Error! Please report this immediately on GitHub!"

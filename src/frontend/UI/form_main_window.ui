@@ -399,7 +399,7 @@ color: white</string>
     <item row="1" column="0">
      <widget class="QStackedWidget" name="CentralStackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page_main">
        <layout class="QGridLayout" name="gridLayout_9">
@@ -439,8 +439,8 @@ color: white</string>
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>2005</width>
-               <height>298</height>
+               <width>668</width>
+               <height>228</height>
               </rect>
              </property>
              <layout class="QGridLayout" name="gridLayout_8">
@@ -1712,8 +1712,8 @@ color: white</string>
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>2003</width>
-                 <height>415</height>
+                 <width>516</width>
+                 <height>368</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_4">
@@ -1915,9 +1915,9 @@ color: white</string>
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>0</y>
-             <width>722</width>
-             <height>890</height>
+             <y>-192</y>
+             <width>1993</width>
+             <height>952</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_19">
@@ -2080,44 +2080,17 @@ color: white</string>
                    <property name="bottomMargin">
                     <number>6</number>
                    </property>
-                   <item row="4" column="1">
+                   <item row="5" column="1">
                     <widget class="QPushButton" name="settings_button_help_tor">
                      <property name="text">
                       <string>Help</string>
                      </property>
                     </widget>
                    </item>
-                   <item row="2" column="0">
-                    <widget class="QLabel" name="settings_label_startup">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="text">
-                      <string>Startup:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="0" colspan="3">
-                    <widget class="QPushButton" name="settings_button_download_ffmpeg">
-                     <property name="text">
-                      <string>Download and Setup FFmpeg</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="4" column="2">
+                   <item row="5" column="2">
                     <widget class="QPushButton" name="settings_button_help_anonymous_mode">
                      <property name="text">
                       <string>Help</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="2">
-                    <widget class="QCheckBox" name="settings_checkbox_internet_checks">
-                     <property name="text">
-                      <string>Internet checks</string>
                      </property>
                     </widget>
                    </item>
@@ -2135,6 +2108,61 @@ color: white</string>
                      </property>
                     </widget>
                    </item>
+                   <item row="3" column="1">
+                    <widget class="QCheckBox" name="settings_checkbox_system_anonymous_mode">
+                     <property name="text">
+                      <string>Enable Anonymous mode</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="0">
+                    <widget class="QLabel" name="settings_label_startup">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="text">
+                      <string>Startup:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="6" column="0">
+                    <widget class="QCheckBox" name="checkbox_settings_video_supress_errors">
+                     <property name="text">
+                      <string>Supress errors silently</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="0" colspan="3">
+                    <widget class="QPushButton" name="settings_button_download_ffmpeg">
+                     <property name="text">
+                      <string>Download and Setup FFmpeg</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="2">
+                    <widget class="QCheckBox" name="settings_checkbox_internet_checks">
+                     <property name="text">
+                      <string>Internet checks</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="2">
+                    <widget class="QCheckBox" name="settings_checkbox_system_activate_proxy">
+                     <property name="text">
+                      <string>Activate Proxy</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="6" column="1">
+                    <widget class="QPushButton" name="button_help_checkbox_supress_errors">
+                     <property name="text">
+                      <string>Help</string>
+                     </property>
+                    </widget>
+                   </item>
                    <item row="3" column="0">
                     <widget class="QLabel" name="settings_label_system_privacy">
                      <property name="sizePolicy">
@@ -2148,17 +2176,17 @@ color: white</string>
                      </property>
                     </widget>
                    </item>
-                   <item row="3" column="1">
-                    <widget class="QCheckBox" name="settings_checkbox_system_anonymous_mode">
+                   <item row="7" column="0">
+                    <widget class="QCheckBox" name="settings_checkbox_system_activate_logging">
                      <property name="text">
-                      <string>Enable Anonymous mode</string>
+                      <string>Enable Network Logging</string>
                      </property>
                     </widget>
                    </item>
-                   <item row="3" column="2">
-                    <widget class="QCheckBox" name="settings_checkbox_system_activate_proxy">
+                   <item row="7" column="1">
+                    <widget class="QPushButton" name="button_help_activate_logging">
                      <property name="text">
-                      <string>Activate Proxy</string>
+                      <string>Help</string>
                      </property>
                     </widget>
                    </item>
@@ -2787,7 +2815,7 @@ QPushButton:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
+             <width>70</width>
              <height>70</height>
             </rect>
            </property>
@@ -3347,7 +3375,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
+             <width>70</width>
              <height>70</height>
             </rect>
            </property>
