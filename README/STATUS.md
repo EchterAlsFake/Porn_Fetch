@@ -23,7 +23,7 @@
 - [] Publish translation strings on Crowdin 
 - [] Allow for font size change
 - [] Optional processing delay for every video
-- [] Upgrade Python version from 3.11 -> 3.13
+- [x] Upgrade Python version from 3.11 -> 3.13
 - [] Fix tools section layout
 - [] Fix tabbing
 - [] Fix keyboard shortcuts
@@ -37,7 +37,7 @@
 - [] Re-add an error / feedback reporting system using my own privacy focussed server
 - [] Switch update checking to my own server instead of GitHub (more flexibility)
 - [] Rewrite License Agreement to be GPLv3 compliant
-- [] Add spankbang back into the project
+- [x] Add spankbang back into the project
 - [] Add a kill switch feature for Proxy users
 
 # Code optimizations

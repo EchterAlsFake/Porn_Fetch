@@ -11,7 +11,6 @@ from charset_normalizer.utils import is_arabic_isolated_form
 from mutagen.mp4 import MP4, MP4Cover
 from phub import Client as ph_Client, errors, Video as ph_Video, consts as phub_consts
 from ffmpeg_progress_yield import FfmpegProgress
-from src.backend.config import shared_config
 from src.backend.config import *
 from src.backend.consts import *
 

@@ -23,7 +23,7 @@ from src.backend.shared_functions import *
 from src.frontend.UI.ui_form_main_window import Ui_MainWindow
 from src.backend.one_time_functions import *
 from src.backend.consts import *
-
+from src.backend.config import __version__, __next_release__, __build__, __license__, __author__
 from src.backend.donation_nag import DonationNag
 from src.backend.license import License, Disclaimer
 from src.backend.config import shared_config
@@ -57,11 +57,9 @@ E-Mail: EchterAlsFake@proton.me
 Discord: echteralsfake (faster response)
 """
 
-__license__ = "GPL 3"
-__version__ = "3.6"
-__build__ = "android"  # android or desktop
-__author__ = "Johannes Habel"
-__next_release__ = "3.7"
+
+# For general information see /src/backend/config.py
+
 total_segments = 0
 downloaded_segments = 0
 stop_flag = Event()
@@ -284,6 +282,7 @@ class InternetCheck(QRunnable):
                     "Referer": f"{website}",
                     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36)"})
                 status = core.fetch(website, get_response=True)
+                del core.config.headers["Referer"]
 
                 if status.status_code == 200:
                     self.website_results.update({website: "OK"})
@@ -449,36 +448,6 @@ class AddToTreeWidget(QRunnable):
         self.activate_logging = self.consistent_data.get("activate_logging")
         self.logger = setup_logger(name="Porn Fetch - [AddToTreeWidget]", log_file="PornFetch.log", level=logging.DEBUG,
                                    http_port=http_log_port, http_ip=http_log_ip)
-
-    def handle_error_gracefully(self, error_message: str, needs_network_log: bool= False):
-        self.logger.error(error_message)
-
-        if not self.supress_errors:
-            self.signals.error_signal.emit(error_message)
-
-        if needs_network_log:
-            if self.activate_logging:
-                self.logger.info(f"Logging Error: {error_message} to network server...")
-                message = f"""
-                An error occurred in Porn Fetch - [AddToTreeWidget]
-                Time: {datetime.datetime.now()}
-                Version: {__version__}
-                System: {sys.platform}
-                Error message: {error_message}
-                """
-
-                payload = {"message": message}
-                try:
-                    response = httpx.post(
-                    url="https://echteralsfake.duckdns.org:443/report",
-                    json=payload,
-                    timeout=6)
-
-                    if response.status_code == 200:
-                        self.logger.info("Successfully reported the Error!")
-
-                except Exception as e:
-                    self.logger.error(f"Couldn't report the error. Maybe you don't have an IPv6 connection: {e}")
 
     def process_video(self, video, index):
         if not isinstance(video, str):
@@ -1081,7 +1050,7 @@ class PornFetch(QMainWindow):
     def switch_to_progressbars(self):
         self.switch_to_main()
         self.ui.main_stacked_widget_top.setCurrentIndex(2)
-        self.ui.main_stacked_widget_top.setMaximumHeight(280)
+        self.ui.main_stacked_widget_top.setMaximumHeight(30)
 
     def switch_to_tools(self):
         self.switch_to_main()

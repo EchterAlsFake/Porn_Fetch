@@ -1,3 +1,5 @@
+import httpx
+import datetime
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QMessageBox
 
@@ -36,3 +38,34 @@ def ui_popup(text, title="Notice"):
 
     message_box.setStandardButtons(QMessageBox.StandardButton.Ok)
     message_box.exec()
+
+
+def handle_error_gracefully(self, error_message: str, needs_network_log: bool= False):
+    self.logger.error(error_message)
+
+    if not self.supress_errors:
+        self.signals.error_signal.emit(error_message)
+
+    if needs_network_log:
+        if self.activate_logging:
+            self.logger.info(f"Logging Error: {error_message} to network server...")
+            message = f"""
+            An error occurred in Porn Fetch - [AddToTreeWidget]
+            Time: {datetime.datetime.now()}
+            Version: {__version__}
+            System: {sys.platform}
+            Error message: {error_message}
+            """
+
+            payload = {"message": message}
+            try:
+                response = httpx.post(
+                url="https://echteralsfake.duckdns.org:443/report",
+                json=payload,
+                timeout=6)
+
+                if response.status_code == 200:
+                    self.logger.info("Successfully reported the Error!")
+
+            except Exception as e:
+                self.logger.error(f"Couldn't report the error. Maybe you don't have an IPv6 connection: {e}")

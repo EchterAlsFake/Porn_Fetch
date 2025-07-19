@@ -208,6 +208,7 @@ class Ui_MainWindow(object):
         self.CentralStackedWidget.setObjectName(u"CentralStackedWidget")
         self.page_main = QWidget()
         self.page_main.setObjectName(u"page_main")
+        self.page_main.setMaximumSize(QSize(16777215, 16777215))
         self.gridLayout_9 = QGridLayout(self.page_main)
         self.gridLayout_9.setObjectName(u"gridLayout_9")
         self.main_verticallayout = QVBoxLayout()
@@ -221,12 +222,12 @@ class Ui_MainWindow(object):
         sizePolicy2.setVerticalStretch(0)
         sizePolicy2.setHeightForWidth(self.scroll_area_top_stacked.sizePolicy().hasHeightForWidth())
         self.scroll_area_top_stacked.setSizePolicy(sizePolicy2)
-        self.scroll_area_top_stacked.setMinimumSize(QSize(0, 0))
-        self.scroll_area_top_stacked.setMaximumSize(QSize(16777215, 300))
+        self.scroll_area_top_stacked.setMinimumSize(QSize(0, 10))
+        self.scroll_area_top_stacked.setMaximumSize(QSize(16777215, 110))
         self.scroll_area_top_stacked.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 668, 228))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1991, 156))
         self.gridLayout_8 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
         self.main_stacked_widget_top = QStackedWidget(self.scrollAreaWidgetContents)
@@ -236,7 +237,7 @@ class Ui_MainWindow(object):
         sizePolicy3.setVerticalStretch(0)
         sizePolicy3.setHeightForWidth(self.main_stacked_widget_top.sizePolicy().hasHeightForWidth())
         self.main_stacked_widget_top.setSizePolicy(sizePolicy3)
-        self.main_stacked_widget_top.setMinimumSize(QSize(650, 210))
+        self.main_stacked_widget_top.setMinimumSize(QSize(650, 100))
         self.main_stacked_widget_top.setStyleSheet(u"b")
         self.main_stacked_widget_top.setLineWidth(1)
         self.page_download = QWidget()
@@ -554,33 +555,13 @@ class Ui_MainWindow(object):
         self.main_stacked_widget_top.addWidget(self.page_login)
         self.page_progressbars = QWidget()
         self.page_progressbars.setObjectName(u"page_progressbars")
+        sizePolicy10.setHeightForWidth(self.page_progressbars.sizePolicy().hasHeightForWidth())
+        self.page_progressbars.setSizePolicy(sizePolicy10)
+        self.page_progressbars.setMinimumSize(QSize(20, 10))
         self.gridLayout_6 = QGridLayout(self.page_progressbars)
         self.gridLayout_6.setSpacing(0)
         self.gridLayout_6.setObjectName(u"gridLayout_6")
         self.gridLayout_6.setContentsMargins(0, 0, 0, 0)
-        self.progress_gridlayout_progressbar = QGridLayout()
-        self.progress_gridlayout_progressbar.setObjectName(u"progress_gridlayout_progressbar")
-        self.progress_gridlayout_progressbar.setHorizontalSpacing(6)
-        self.progress_gridlayout_progressbar.setContentsMargins(-1, -1, -1, 0)
-        self.progress_vertical_spacer_main = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.progress_gridlayout_progressbar.addItem(self.progress_vertical_spacer_main, 2, 1, 1, 1)
-
-        self.progress_lineedit_download_info = QLineEdit(self.page_progressbars)
-        self.progress_lineedit_download_info.setObjectName(u"progress_lineedit_download_info")
-        self.progress_lineedit_download_info.setReadOnly(True)
-
-        self.progress_gridlayout_progressbar.addWidget(self.progress_lineedit_download_info, 1, 1, 1, 1)
-
-        self.progress_label_info = QLabel(self.page_progressbars)
-        self.progress_label_info.setObjectName(u"progress_label_info")
-        self.progress_label_info.setMinimumSize(QSize(0, 30))
-
-        self.progress_gridlayout_progressbar.addWidget(self.progress_label_info, 1, 0, 1, 1)
-
-
-        self.gridLayout_6.addLayout(self.progress_gridlayout_progressbar, 0, 0, 1, 1)
-
         self.main_stacked_widget_top.addWidget(self.page_progressbars)
         self.page_tools = QWidget()
         self.page_tools.setObjectName(u"page_tools")
@@ -789,7 +770,31 @@ class Ui_MainWindow(object):
 
         self.main_stacked_widget_top.addWidget(self.page_tools)
 
-        self.gridLayout_8.addWidget(self.main_stacked_widget_top, 0, 0, 1, 1)
+        self.gridLayout_8.addWidget(self.main_stacked_widget_top, 1, 0, 1, 1)
+
+        self.progress_gridlayout_progressbar = QGridLayout()
+        self.progress_gridlayout_progressbar.setObjectName(u"progress_gridlayout_progressbar")
+        self.progress_gridlayout_progressbar.setHorizontalSpacing(6)
+        self.progress_gridlayout_progressbar.setContentsMargins(-1, -1, -1, 0)
+        self.progress_label_info = QLabel(self.scrollAreaWidgetContents)
+        self.progress_label_info.setObjectName(u"progress_label_info")
+        self.progress_label_info.setMinimumSize(QSize(0, 30))
+
+        self.progress_gridlayout_progressbar.addWidget(self.progress_label_info, 1, 0, 1, 1)
+
+        self.progress_lineedit_download_info = QLineEdit(self.scrollAreaWidgetContents)
+        self.progress_lineedit_download_info.setObjectName(u"progress_lineedit_download_info")
+        sizePolicy15 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        sizePolicy15.setHorizontalStretch(0)
+        sizePolicy15.setVerticalStretch(0)
+        sizePolicy15.setHeightForWidth(self.progress_lineedit_download_info.sizePolicy().hasHeightForWidth())
+        self.progress_lineedit_download_info.setSizePolicy(sizePolicy15)
+        self.progress_lineedit_download_info.setReadOnly(True)
+
+        self.progress_gridlayout_progressbar.addWidget(self.progress_lineedit_download_info, 1, 1, 1, 1)
+
+
+        self.gridLayout_8.addLayout(self.progress_gridlayout_progressbar, 0, 0, 1, 1)
 
         self.scroll_area_top_stacked.setWidget(self.scrollAreaWidgetContents)
 
@@ -802,7 +807,12 @@ class Ui_MainWindow(object):
         self.main_scrollarea_treewidget.setWidgetResizable(True)
         self.main_scrollarea_treewidget_content = QWidget()
         self.main_scrollarea_treewidget_content.setObjectName(u"main_scrollarea_treewidget_content")
-        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 516, 368))
+        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 2003, 605))
+        sizePolicy16 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
+        sizePolicy16.setHorizontalStretch(0)
+        sizePolicy16.setVerticalStretch(0)
+        sizePolicy16.setHeightForWidth(self.main_scrollarea_treewidget_content.sizePolicy().hasHeightForWidth())
+        self.main_scrollarea_treewidget_content.setSizePolicy(sizePolicy16)
         self.gridLayout_4 = QGridLayout(self.main_scrollarea_treewidget_content)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.gridLayout_4.setContentsMargins(0, 0, 0, 0)
@@ -877,11 +887,11 @@ class Ui_MainWindow(object):
         __qtreewidgetitem.setText(0, u"Title");
         self.treeWidget.setHeaderItem(__qtreewidgetitem)
         self.treeWidget.setObjectName(u"treeWidget")
-        sizePolicy15 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
-        sizePolicy15.setHorizontalStretch(0)
-        sizePolicy15.setVerticalStretch(0)
-        sizePolicy15.setHeightForWidth(self.treeWidget.sizePolicy().hasHeightForWidth())
-        self.treeWidget.setSizePolicy(sizePolicy15)
+        sizePolicy17 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
+        sizePolicy17.setHorizontalStretch(0)
+        sizePolicy17.setVerticalStretch(0)
+        sizePolicy17.setHeightForWidth(self.treeWidget.sizePolicy().hasHeightForWidth())
+        self.treeWidget.setSizePolicy(sizePolicy17)
         self.treeWidget.setMinimumSize(QSize(100, 200))
 
         self.gridLayout.addWidget(self.treeWidget, 0, 1, 1, 1)
@@ -909,7 +919,7 @@ class Ui_MainWindow(object):
         self.settings_scrollarea.setWidgetResizable(True)
         self.settings_scrollarea_widget_contents = QWidget()
         self.settings_scrollarea_widget_contents.setObjectName(u"settings_scrollarea_widget_contents")
-        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, -192, 1993, 952))
+        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 1993, 952))
         self.gridLayout_19 = QGridLayout(self.settings_scrollarea_widget_contents)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.gridLayout_19.setContentsMargins(0, 0, 0, 0)
@@ -1008,11 +1018,11 @@ class Ui_MainWindow(object):
 
         self.settings_label_startup = QLabel(self.settings_groupbox_system_pornfetch)
         self.settings_label_startup.setObjectName(u"settings_label_startup")
-        sizePolicy16 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
-        sizePolicy16.setHorizontalStretch(0)
-        sizePolicy16.setVerticalStretch(0)
-        sizePolicy16.setHeightForWidth(self.settings_label_startup.sizePolicy().hasHeightForWidth())
-        self.settings_label_startup.setSizePolicy(sizePolicy16)
+        sizePolicy18 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
+        sizePolicy18.setHorizontalStretch(0)
+        sizePolicy18.setVerticalStretch(0)
+        sizePolicy18.setHeightForWidth(self.settings_label_startup.sizePolicy().hasHeightForWidth())
+        self.settings_label_startup.setSizePolicy(sizePolicy18)
 
         self.settings_gridlayout_system_pornfetch.addWidget(self.settings_label_startup, 2, 0, 1, 1)
 
@@ -1043,8 +1053,8 @@ class Ui_MainWindow(object):
 
         self.settings_label_system_privacy = QLabel(self.settings_groupbox_system_pornfetch)
         self.settings_label_system_privacy.setObjectName(u"settings_label_system_privacy")
-        sizePolicy16.setHeightForWidth(self.settings_label_system_privacy.sizePolicy().hasHeightForWidth())
-        self.settings_label_system_privacy.setSizePolicy(sizePolicy16)
+        sizePolicy18.setHeightForWidth(self.settings_label_system_privacy.sizePolicy().hasHeightForWidth())
+        self.settings_label_system_privacy.setSizePolicy(sizePolicy18)
 
         self.settings_gridlayout_system_pornfetch.addWidget(self.settings_label_system_privacy, 3, 0, 1, 1)
 
@@ -1536,7 +1546,7 @@ class Ui_MainWindow(object):
         self.scrollArea_4.setWidgetResizable(True)
         self.scrollAreaWidgetContents_5 = QWidget()
         self.scrollAreaWidgetContents_5.setObjectName(u"scrollAreaWidgetContents_5")
-        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 318, 214))
+        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 2007, 726))
         self.gridLayout_52 = QGridLayout(self.scrollAreaWidgetContents_5)
         self.gridLayout_52.setSpacing(0)
         self.gridLayout_52.setObjectName(u"gridLayout_52")
@@ -1647,8 +1657,8 @@ class Ui_MainWindow(object):
         self.gridLayout_54.setContentsMargins(0, 0, 0, 0)
         self.text_browser_keyboard_shortcuts = QTextBrowser(self.scrollAreaWidgetContents_11)
         self.text_browser_keyboard_shortcuts.setObjectName(u"text_browser_keyboard_shortcuts")
-        sizePolicy15.setHeightForWidth(self.text_browser_keyboard_shortcuts.sizePolicy().hasHeightForWidth())
-        self.text_browser_keyboard_shortcuts.setSizePolicy(sizePolicy15)
+        sizePolicy17.setHeightForWidth(self.text_browser_keyboard_shortcuts.sizePolicy().hasHeightForWidth())
+        self.text_browser_keyboard_shortcuts.setSizePolicy(sizePolicy17)
         self.text_browser_keyboard_shortcuts.setMaximumSize(QSize(200000, 200000))
 
         self.gridLayout_54.addWidget(self.text_browser_keyboard_shortcuts, 0, 0, 1, 1)
@@ -1848,7 +1858,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.CentralStackedWidget.setCurrentIndex(1)
+        self.CentralStackedWidget.setCurrentIndex(4)
         self.main_stacked_widget_top.setCurrentIndex(2)
 
 
@@ -1898,8 +1908,6 @@ class Ui_MainWindow(object):
         self.login_button_get_recommended_videos.setText(QCoreApplication.translate("MainWindow", u"Get recommended videos", None))
         self.login_label_password.setText(QCoreApplication.translate("MainWindow", u"Password:", None))
         self.login_lineedit_password.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter your PornHub Password", None))
-        self.progress_lineedit_download_info.setText("")
-        self.progress_label_info.setText(QCoreApplication.translate("MainWindow", u"Info:", None))
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"HQPorner", None))
         self.tools_radio_top_porn_week.setText(QCoreApplication.translate("MainWindow", u"Week", None))
         self.tools_button_hqporner_category_get_videos.setText(QCoreApplication.translate("MainWindow", u"Get Videos", None))
@@ -1917,6 +1925,8 @@ class Ui_MainWindow(object):
         self.tools_button_eporner_category_get_videos.setText(QCoreApplication.translate("MainWindow", u"Get Videos", None))
         self.tools_button_list_categories_eporner.setText(QCoreApplication.translate("MainWindow", u"List of all categories", None))
         self.tools_label_videos_by_category_eporner.setText(QCoreApplication.translate("MainWindow", u"Get videos by category", None))
+        self.progress_label_info.setText(QCoreApplication.translate("MainWindow", u"Info:", None))
+        self.progress_lineedit_download_info.setText("")
         self.main_checkbox_tree_show_videos_reversed.setText(QCoreApplication.translate("MainWindow", u"Show videos in reverse", None))
         self.main_checkbox_tree_do_not_clear_videos.setText(QCoreApplication.translate("MainWindow", u"Do not clear videos", None))
         self.main_button_tree_automated_selection.setText(QCoreApplication.translate("MainWindow", u"Automated selection tool", None))
