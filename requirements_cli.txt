@@ -11,5 +11,4 @@ requests
 hue_shift
 markdown
 rich
-ffmpeg-progress-yield
 mutagen

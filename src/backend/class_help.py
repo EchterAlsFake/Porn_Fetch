@@ -62,12 +62,8 @@ The different threading modes are used for different scenarios.
 1) High Performance:  Uses a class of workers to download multiple video segments at a time. Can be really fast if you
 have a very strong internet connection. Maybe not great for low end systems.
 
-2) FFMPEG:  ffmpeg is a tool for converting media files. ffmpeg will download every video segment and merge it directly
-into the video file. This removes an extra step from the default method and is therefore a lot faster, but still not as 
-good as high performance.
-
-3) Default:  The default download mode will just download one video segment after the next one. If you get a lot of 
-timeouts this can really slow down the process, as we need to wait for PornHub to return the video segments.
+2) Default:  The default download mode will just download one video segment after the next one. If you get a lot of 
+timeouts this can really slow down the process, as we need to wait the Porn sites to return the video segments.
 With the High Performance method, we can just download other segments while waiting which makes it so fast.
 """, None)
     ui_popup(text)

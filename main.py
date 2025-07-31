@@ -64,9 +64,6 @@ total_segments = 0
 downloaded_segments = 0
 stop_flag = Event()
 
-url_linux = "https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-amd64-static.tar.xz"
-url_windows = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z"
-url_macOS = "https://evermeet.cx/ffmpeg/ffmpeg-7.1.zip"
 session_urls = []  # This list saves all URls used in the current session. Used for the URL export function
 total_downloaded_videos = 0  # All videos that actually successfully downloaded
 total_downloaded_videos_attempt = 0  # All videos the user tries to download
@@ -129,7 +126,6 @@ class Signals(QObject):
                                  object)  # Sends the selected video objects from the tree widget to the main class
     # to download them
     url_iterators = Signal(object, object, object)  # Sends the processed URLs from the file to Porn Fetch
-    ffmpeg_download_finished = Signal()  # Reports the successful download / install of FFmpeg
 
 
 class InstallThread(QRunnable):
@@ -331,107 +327,6 @@ class CheckUpdates(QRunnable):
             self.signals.error_signal.emit(error)
 
 
-class FFMPEGDownload(QRunnable):
-    """Downloads ffmpeg into the execution path of Porn Fetch"""
-
-    def __init__(self, url, extract_path, mode):
-        super().__init__()
-        self.url = url
-        self.extract_path = extract_path
-        self.mode = mode
-        self.logger = setup_logger(name="Porn Fetch - [FFMPEGDownload]", log_file="PornFetch.log", level=logging.DEBUG,
-                                   http_port=http_log_port, http_ip=http_log_ip)
-        self.signals = Signals()
-
-    def delete_dir(self):
-        deleted_any = False
-        cwd = os.getcwd()
-        self.logger.info(f"Trying to delete FFmpeg directory in: {cwd}")
-
-        for entry in os.listdir(cwd):
-            if "ffmpeg" in entry.lower():
-                full_path = os.path.join(cwd, entry)
-                if os.path.isdir(full_path):
-                    try:
-                        self.logger.info(f"Found possible path: {full_path}, tryint to delete")
-                        shutil.rmtree(full_path)
-                        self.logger.info(f"Deleted folder: {full_path}")
-                        deleted_any = True
-                    except Exception as e:
-                        self.logger.error(f"Error deleting folder {full_path}: {e}")
-
-        return deleted_any
-
-    def run(self):
-        # Download the file
-        self.logger.debug(f"Downloading: {self.url}")
-        self.logger.debug("FFMPEG: [1/4] Starting the download")
-        with httpx.stream("GET", self.url, follow_redirects=True) as r:
-            r.raise_for_status()
-            if self.url == url_windows or self.url == url_macOS:
-                total_length = int(r.headers.get('content-length'))
-
-            else:
-                total_length = 41964060
-
-            self.signals.total_progress.emit(0, total_length)  # Initialize progress bar
-            dl = 0
-            filename = self.url.split('/')[-1]
-            with open(filename, 'wb') as f:
-                for chunk in r.iter_bytes(chunk_size=8192):
-                    if chunk:  # filter out keep-alive new chunks
-                        f.write(chunk)
-                        dl += len(chunk)
-                        self.signals.total_progress.emit(dl, total_length)
-
-        self.logger.debug("FFMPEG: [2/4] Starting file extraction")
-        # Extract the file based on OS mode
-        if self.mode == "linux" and filename.endswith(".tar.xz"):
-            with tarfile.open(filename, "r:xz") as tar:
-                total_members = len(tar.getmembers())
-
-                for idx, member in enumerate(tar.getmembers()):
-                    if 'ffmpeg' in member.name and (member.name.endswith('ffmpeg')):
-                        tar.extract(member, self.extract_path, filter="data")
-                        extracted_path = os.path.join(self.extract_path, member.path)
-                        shutil.move(extracted_path, "./")
-
-                    self.signals.total_progress.emit(idx, total_members)
-
-                os.chmod("ffmpeg", 0o755)
-
-        elif self.mode == "windows" and filename.endswith(".zip"):
-            with zipfile.ZipFile(filename, 'r') as zip_ref:
-                total = len(zip_ref.namelist())
-
-                for idx, member in enumerate(zip_ref.namelist()):
-                    if 'ffmpeg.exe' in member:
-                        zip_ref.extract(member, self.extract_path)
-                        extracted_path = os.path.join(self.extract_path, member)
-                        shutil.move(extracted_path, ".")
-
-                    self.signals.total_progress.emit(idx, total)
-
-        elif self.mode == "macOS" and filename.endswith(".zip"):
-            with zipfile.ZipFile(filename, mode='r') as archive:
-                archive.extractall(path=self.extract_path)
-
-            os.chmod("ffmpeg", 0o755)  # Sets executable, read and write permissions
-
-        self.logger.debug("FFMPEG: [3/4] Finished Extraction")
-        # Finalize
-        self.signals.total_progress.emit(total_length, total_length)  # Ensure progress bar reaches 100%
-        os.remove(filename)  # Clean up downloaded archive
-
-        if self.delete_dir():
-            self.logger.debug("FFMPEG: [4/4] Cleaned Up")
-
-        else:
-            self.logger.error("The Regex for finding the FFmpeg version failed. Please report this on GitHub!, Thanks.")
-
-        self.signals.ffmpeg_download_finished.emit()
-
-
 class AddToTreeWidget(QRunnable):
     def __init__(self, iterator, is_reverse, is_checked, last_index):
         super(AddToTreeWidget, self).__init__()
@@ -577,7 +472,6 @@ class DownloadThread(QRunnable):
 
     def __init__(self, video, video_id):
         super().__init__()
-        self.ffmpeg = None
         self.video = video
         self.video_id = video_id
         self.consistent_data = VideoData().consistent_data
@@ -597,53 +491,38 @@ class DownloadThread(QRunnable):
         self.last_update_time = 0
 
 
-    def generic_callback(self, pos, total,  video_source, ffmpeg=False):
+    def generic_callback(self, pos, total,  video_source):
         """Generic callback function to emit progress signals with rate limiting."""
         current_time = time.time()
         if self.stop_flag.is_set():
             return
+        # Emit signal for individual progress
+        if video_source == "hqporner" or video_source == "eporner":
 
-        if ffmpeg:
-            self.update_ffmpeg_progress(pos, total)
-            self.signals.progress_video.emit(self.video_id, pos, total)
+            # Check if the current time is at least 0.5 seconds greater than the last update time
+            if current_time - self.last_update_time < 0.5:
+                # If not, do not update the progress and return immediately
+                return
 
-        else:
-            # Emit signal for individual progress
-            if video_source == "hqporner" or video_source == "eporner":
+            scaling_factor = 1024 * 1024
+            pos = int(pos / scaling_factor)
+            total = int(total / scaling_factor)
 
-                # Check if the current time is at least 0.5 seconds greater than the last update time
-                if current_time - self.last_update_time < 0.5:
-                    # If not, do not update the progress and return immediately
-                    return
-
-                scaling_factor = 1024 * 1024
-                pos = int(pos / scaling_factor)
-                total = int(total / scaling_factor)
-
-            self.signals.progress_video.emit(self.video_id, pos, total)
-            print(f"Emitted: {self.video_id}, {pos} {total}")
-            # Update total progress only if the video source uses segments
-            if video_source not in ['hqporner', 'eporner']:
-                self.update_total_progress(ffmpeg)
+        self.signals.progress_video.emit(self.video_id, pos, total)
+        print(f"Emitted: {self.video_id}, {pos} {total}")
+        # Update total progress only if the video source uses segments
+        if video_source not in ['hqporner', 'eporner']:
+            self.update_total_progress()
 
         # Update the last update time to the current time
         self.last_update_time = current_time
 
-    def update_ffmpeg_progress(self, pos, total):
-        """Update progress for ffmpeg downloads."""
-        print(f"\r\033[KProgress: [{pos} / 100]", end='', flush=True)  # I don't know why, but this fixes the progress.
-        video_title = self.video.title
-        self.video_progress[
-            video_title] = pos / total * 100  # video title as video id, to keep track which video has how much progress done
-        total_progress = sum(self.video_progress.values()) / len(self.video_progress)
-        self.signals.total_progress.emit(total_progress, 100)
 
-    def update_total_progress(self, ffmpeg):
+    def update_total_progress(self):
         """Update total download progress."""
-        if not ffmpeg:
-            global downloaded_segments
-            downloaded_segments += 1
-            self.signals.total_progress.emit(downloaded_segments, total_segments)
+        global downloaded_segments
+        downloaded_segments += 1
+        self.signals.total_progress.emit(downloaded_segments, total_segments)
 
     def run(self):
         """Run the download in a thread, optimizing for different video sources and modes."""
@@ -662,19 +541,16 @@ class DownloadThread(QRunnable):
 
             self.logger.debug(f"Downloading Video to: {self.output_path}")
 
-            if str(self.threading_mode).lower() == "ffmpeg" or self.threading_mode == core.FFMPEG:
-                self.ffmpeg = True
-
             # We need to specify the sources, so that it knows which individual progressbar to use
             if isinstance(self.video, hq_Video):
                 video_source = "hqporner"
                 self.video.download(quality=self.quality, path=self.output_path, no_title=True,
-                                    callback=lambda pos, total: self.generic_callback(pos, total, video_source, self.ffmpeg))
+                                    callback=lambda pos, total: self.generic_callback(pos, total, video_source))
 
             elif isinstance(self.video, ep_Video):
                 video_source = "eporner"
                 self.video.download(quality=self.quality, path=self.output_path, no_title=True,
-                                    callback=lambda pos, total: self.generic_callback(pos, total, video_source, self.ffmpeg))
+                                    callback=lambda pos, total: self.generic_callback(pos, total, video_source))
 
             else:  # Assuming 'Video' is the class for Pornhub
                 path = self.output_path
@@ -682,12 +558,11 @@ class DownloadThread(QRunnable):
                 self.logger.debug("Starting the Download!")
                 try:
                     self.video.download(downloader=str(self.threading_mode), path=path, quality=self.quality,
-                                    display=lambda pos, total: self.generic_callback(pos, total, video_source, self.ffmpeg))
+                                    display=lambda pos, total: self.generic_callback(pos, total, video_source))
 
                 except TypeError:
                     self.video.download(downloader=str(self.threading_mode), path=path, quality=self.quality,
-                                        callback=lambda pos, total: self.generic_callback(pos, total, video_source,
-                                                                                         self.ffmpeg))
+                                        callback=lambda pos, total: self.generic_callback(pos, total, video_source))
 
 
         finally:
@@ -706,51 +581,16 @@ class PostProcessVideoThread(QRunnable):
         self.consistent_data = VideoData().consistent_data
         self.data = VideoData().data_objects.get(video_id)
         self.write_tags_ = self.consistent_data.get("write_metadata")
-        self.ffmpeg_path = self.consistent_data.get("ffmpeg_path")
         self.video_format = self.consistent_data.get("video_format")
         self.path = self.data.get("output_path")
         self.logger = setup_logger(name="Porn Fetch - [PostProcessVideoThread]", log_file="PornFetch.log",
                                    level=logging.DEBUG, http_port=http_log_port, http_ip=http_log_ip)
 
     def run(self):
-        if self.ffmpeg_path is None:
-            self.logger.warning(
-                "FFmpeg couldn't be found during initialization. Video post processing will be skipped!")
-            return
 
         try:
-            os.rename(f"{self.path}", f"{self.path}_.tmp")
-            self.logger.debug(f"FFMPEG PATH: {self.ffmpeg_path}")
-
-            # Keeping a local variable space, because otherwise variables get messed up
-            temp_path = f"{self.path}_.tmp"
-            target_mp4_path = self.path
-            other_format_path_ = str(self.path).replace(".mp4",
-                                                        "")  # Videos are by default downloaded in .mp4, that's why I need to strip the mp4 out
-            other_format_path = f"{other_format_path_}.{self.video_format}"
-
-            if self.video_format == "mp4":
-                cmd = [self.ffmpeg_path, "-i", temp_path, "-c", "copy", target_mp4_path]
-                path_for_tags = target_mp4_path
-
-            else:
-                cmd = [self.ffmpeg_path, '-i', temp_path, other_format_path]
-                path_for_tags = other_format_path
-
-            ff = FfmpegProgress(cmd)
-            for progress in ff.run_command_with_progress():
-                self.signals.ffmpeg_converting_progress.emit(round(progress), 100)
-
-            os.remove(temp_path)
-
-            if self.video_format == "mp4":
-                if self.write_tags_:
-                    write_tags(path=path_for_tags, data=self.data)
-
-            else:
-                self.logger.warning(
-                    f"You've set your format to: {self.video_format}. Writing metadata tags is not supported in this case!")
-
+            ""
+            # TODO
         except Exception:
             error = traceback.format_exc()
             self.signals.error_signal.emit(error)
@@ -783,22 +623,14 @@ class QTreeWidgetDownloadThread(QRunnable):
                 video_objects.append(item.data(0, Qt.ItemDataRole.UserRole))
                 data_objects.append(item.data(1, Qt.ItemDataRole.UserRole))
 
-        if not self.threading_mode == "FFMPEG":
-            self.logger.debug("Retrieving total length of video segments to calculate total progress...")
-            total_segments += sum(
-                [len(list(video.get_segments(quality=self.quality))) for video in video_objects if
-                 hasattr(video, 'get_segments')])
-            self.logger.debug(f"Got {total_segments} segments...")
-            # This basically looks how many segments exist in all videos together, so that we can calculate the total
-            # progress
 
-        else:
-            logger.debug("Progress tracking: FFMPEG")
-            # FFMPEG has always 0-100 as progress callback, that is why I specify 100 for each video instead of the
-            # total segments
-
-            for _ in video_objects:
-                total_segments += 100  # Progress for FFmpeg can only be 100%, so we just add +100 for every video.
+        self.logger.debug("Retrieving total length of video segments to calculate total progress...")
+        total_segments += sum(
+            [len(list(video.get_segments(quality=self.quality))) for video in video_objects if
+             hasattr(video, 'get_segments')])
+        self.logger.debug(f"Got {total_segments} segments...")
+        # This basically looks how many segments exist in all videos together, so that we can calculate the total
+        # progress
 
         downloaded_segments = 0
         self.signals.stop_undefined_range.emit()
@@ -929,7 +761,6 @@ class PornFetch(QMainWindow):
         self.model_videos_type = None
         self.downloader = None
         self.directory_system = None
-        self.ffmpeg_path = None
         self.logger = setup_logger(name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG,
                                    http_ip=http_log_ip, http_port=http_log_port)
 
@@ -989,7 +820,6 @@ class PornFetch(QMainWindow):
 
         VideoData().consistent_data.update({
             "output_path": self.output_path,
-            "ffmpeg_path": self.ffmpeg_path,
             "threading_mode": self.threading_mode,
             "quality": self.quality,
             "timeout": self.timeout,
@@ -1154,7 +984,6 @@ class PornFetch(QMainWindow):
 
         self.ui.settings_button_timeout_maximal_retries_help.setStyleSheet(stylesheets["button_green"])
         self.ui.download_button_help_file.setStyleSheet(stylesheets["button_green"])
-        self.ui.settings_button_download_ffmpeg.setStyleSheet(stylesheets["button_purple"])
         self.ui.tools_button_list_categories_eporner.setStyleSheet(stylesheets["button_purple"])
         self.ui.button_help_write_metadata_tags.setStyleSheet(stylesheets["button_green"])
         self.ui.settings_button_help_model_videos.setStyleSheet(stylesheets["button_green"])
@@ -1236,7 +1065,6 @@ class PornFetch(QMainWindow):
         The button groups are needed to tell the radio button which of them are in a group.
         If I don't do this, then you could check all redio buttons at the same time lol"""
         self.group_threading_mode = QButtonGroup()
-        self.group_threading_mode.addButton(self.ui.settings_radio_threading_mode_ffmpeg)
         self.group_threading_mode.addButton(self.ui.settings_radio_threading_mode_default)
         self.group_threading_mode.addButton(self.ui.settings_radio_threading_mode_high_performance)
 
@@ -1325,7 +1153,6 @@ class PornFetch(QMainWindow):
 
         # Other stuff IDK
         self.ui.main_button_tree_stop.clicked.connect(switch_stop_state)
-        self.ui.settings_button_download_ffmpeg.clicked.connect(self.download_ffmpeg)
         self.ui.main_button_tree_keyboard_shortcuts.clicked.connect(self.switch_to_keyboard_shortcuts)
         self.ui.main_button_tree_automated_selection.clicked.connect(self.select_range_of_items)
 
@@ -1361,7 +1188,6 @@ class PornFetch(QMainWindow):
 
         self.map_threading_mode = {
             "threaded": self.ui.settings_radio_threading_mode_high_performance,
-            "FFMPEG": self.ui.settings_radio_threading_mode_ffmpeg,
             "default": self.ui.settings_radio_threading_mode_default
         }
 
@@ -1449,11 +1275,9 @@ class PornFetch(QMainWindow):
         self.ui.settings_spinbox_pornhub_delay.setValue(int(self.delay))
 
         # Apply stuff to eaf_base_api and refresh cores
-        self.check_ffmpeg()  # Checks and sets up FFmpeg
         config.timeout = self.timeout
         config.request_delay = self.delay
         config.max_retries = self.max_retries
-        config.ffmpeg_path = self.ffmpeg_path
         refresh_clients()
         enable_logging()
 
@@ -2198,65 +2022,6 @@ Some websites couldn't be accessed. Here's a detailed report:
 ------------------------------------------------------------
 {formatted_results}"""))
 
-    def check_ffmpeg(self):
-        # Check if ffmpeg is available in the system PATH
-        ffmpeg_path = shutil.which("ffmpeg")
-
-        if ffmpeg_path is None:
-            # If ffmpeg is not in PATH, check the current directory for ffmpeg binaries
-            ffmpeg_path = "ffmpeg.exe" if os.path.isfile("ffmpeg.exe") else "ffmpeg" if os.path.isfile(
-                "ffmpeg") else None
-
-            if not ffmpeg_path is None:
-                ffmpeg_path = os.path.abspath(ffmpeg_path)
-
-        if ffmpeg_path is None:
-            # If ffmpeg binaries are not found in the current directory, display warning and disable features
-            if conf.get("Performance", "ffmpeg_warning") == "true":
-                ffmpeg_warning_message = self.tr(
-                    """
-FFmpeg isn't installed on your system... Some features won't be available:
-
-- The FFmpeg threading mode
-- Converting videos into a valid .mp4 format
-- Writing tags / metadata into the videos
-
-These features aren't necessary for Porn Fetch, but can be useful for some people.
-
-To automatically install ffmpeg, just head over to the settings and press the magical button, or install ffmpeg in your
-local PATH (e.g, through your linux package manager, or through the Windows PATH)
-
-This warning won't be shown again.
-                    """, None)
-                ui_popup(ffmpeg_warning_message)
-                conf.set("Performance", "ffmpeg_warning", "false")
-                with open("config.ini", "w") as config_file:  # type: TextIOWrapper
-                    conf.write(config_file)
-
-            self.ui.settings_radio_threading_mode_ffmpeg.setDisabled(True)
-            self.ffmpeg_path = None
-
-        else:
-            self.ffmpeg_path = ffmpeg_path
-            self.logger.info(f"FFmpeg found at: {ffmpeg_path}")
-
-    def download_ffmpeg(self):
-        if sys.platform == "linux":
-            if not os.path.isfile("ffmpeg"):
-                self.downloader = FFMPEGDownload(url=url_linux, extract_path=".", mode="linux")
-
-        elif sys.platform == "win32":
-            if not os.path.isfile("ffmpeg.exe"):
-                self.downloader = FFMPEGDownload(url=url_windows, extract_path=".", mode="windows")
-
-        elif sys.platform == "darwin":
-            if not os.path.isfile("ffmpeg"):
-                self.downloader = FFMPEGDownload(url=url_macOS, extract_path=".", mode="macOS")
-
-        self.downloader.signals.total_progress.connect(self.update_total_progressbar)
-        self.downloader.signals.ffmpeg_download_finished.connect(ffmpeg_finished)
-        self.threadpool.start(self.downloader)
-
 
 def main():
     setup_config_file()
@@ -2342,10 +2107,6 @@ if __name__ == "__main__":
 
         else:
             ui_popup(QCoreApplication.translate("main", "No URLs in the current session...", None))
-
-
-    def ffmpeg_finished():
-        ui_popup(QCoreApplication.translate("main", "FFmpeg has been installed. Please restart Porn Fetch :)", None))
 
 
     parser = argparse.ArgumentParser()

@@ -399,7 +399,7 @@ color: white</string>
     <item row="1" column="0">
      <widget class="QStackedWidget" name="CentralStackedWidget">
       <property name="currentIndex">
-       <number>4</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page_main">
        <property name="maximumSize">
@@ -445,7 +445,7 @@ color: white</string>
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>1991</width>
+               <width>668</width>
                <height>156</height>
               </rect>
              </property>
@@ -1723,8 +1723,8 @@ color: white</string>
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>2003</width>
-                 <height>605</height>
+                 <width>516</width>
+                 <height>368</height>
                 </rect>
                </property>
                <property name="sizePolicy">
@@ -1932,9 +1932,9 @@ color: white</string>
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>0</y>
+             <y>-195</y>
              <width>1993</width>
-             <height>952</height>
+             <height>921</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_19">
@@ -2097,14 +2097,7 @@ color: white</string>
                    <property name="bottomMargin">
                     <number>6</number>
                    </property>
-                   <item row="5" column="1">
-                    <widget class="QPushButton" name="settings_button_help_tor">
-                     <property name="text">
-                      <string>Help</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="5" column="2">
+                   <item row="4" column="2">
                     <widget class="QPushButton" name="settings_button_help_anonymous_mode">
                      <property name="text">
                       <string>Help</string>
@@ -2112,27 +2105,76 @@ color: white</string>
                     </widget>
                    </item>
                    <item row="2" column="1">
-                    <widget class="QCheckBox" name="settings_checkbox_system_update_checks">
-                     <property name="text">
-                      <string>Update checks</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="0" colspan="3">
-                    <widget class="QPushButton" name="settings_button_install_pornfetch">
-                     <property name="text">
-                      <string>Install Porn Fetch</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="3" column="1">
                     <widget class="QCheckBox" name="settings_checkbox_system_anonymous_mode">
                      <property name="text">
                       <string>Enable Anonymous mode</string>
                      </property>
                     </widget>
                    </item>
-                   <item row="2" column="0">
+                   <item row="6" column="0">
+                    <widget class="QCheckBox" name="settings_checkbox_system_activate_logging">
+                     <property name="text">
+                      <string>Enable Network Logging</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="5" column="1">
+                    <widget class="QPushButton" name="button_help_checkbox_supress_errors">
+                     <property name="text">
+                      <string>Help</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="5" column="0">
+                    <widget class="QCheckBox" name="checkbox_settings_video_supress_errors">
+                     <property name="text">
+                      <string>Supress errors silently</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="2">
+                    <widget class="QCheckBox" name="settings_checkbox_internet_checks">
+                     <property name="text">
+                      <string>Internet checks</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="2">
+                    <widget class="QCheckBox" name="settings_checkbox_system_activate_proxy">
+                     <property name="text">
+                      <string>Activate Proxy</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="1">
+                    <widget class="QCheckBox" name="settings_checkbox_system_update_checks">
+                     <property name="text">
+                      <string>Update checks</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="6" column="1">
+                    <widget class="QPushButton" name="button_help_activate_logging">
+                     <property name="text">
+                      <string>Help</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="4" column="1">
+                    <widget class="QPushButton" name="settings_button_help_tor">
+                     <property name="text">
+                      <string>Help</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="0" colspan="3">
+                    <widget class="QPushButton" name="settings_button_install_pornfetch">
+                     <property name="text">
+                      <string>Install Porn Fetch</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="0">
                     <widget class="QLabel" name="settings_label_startup">
                      <property name="sizePolicy">
                       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -2145,42 +2187,7 @@ color: white</string>
                      </property>
                     </widget>
                    </item>
-                   <item row="6" column="0">
-                    <widget class="QCheckBox" name="checkbox_settings_video_supress_errors">
-                     <property name="text">
-                      <string>Supress errors silently</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="0" colspan="3">
-                    <widget class="QPushButton" name="settings_button_download_ffmpeg">
-                     <property name="text">
-                      <string>Download and Setup FFmpeg</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="2">
-                    <widget class="QCheckBox" name="settings_checkbox_internet_checks">
-                     <property name="text">
-                      <string>Internet checks</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="3" column="2">
-                    <widget class="QCheckBox" name="settings_checkbox_system_activate_proxy">
-                     <property name="text">
-                      <string>Activate Proxy</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="6" column="1">
-                    <widget class="QPushButton" name="button_help_checkbox_supress_errors">
-                     <property name="text">
-                      <string>Help</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="3" column="0">
+                   <item row="2" column="0">
                     <widget class="QLabel" name="settings_label_system_privacy">
                      <property name="sizePolicy">
                       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -2190,20 +2197,6 @@ color: white</string>
                      </property>
                      <property name="text">
                       <string>Privacy:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="7" column="0">
-                    <widget class="QCheckBox" name="settings_checkbox_system_activate_logging">
-                     <property name="text">
-                      <string>Enable Network Logging</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="7" column="1">
-                    <widget class="QPushButton" name="button_help_activate_logging">
-                     <property name="text">
-                      <string>Help</string>
                      </property>
                     </widget>
                    </item>
@@ -2718,16 +2711,6 @@ color: white</string>
                      </property>
                      <property name="text">
                       <string>High Performance</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QRadioButton" name="settings_radio_threading_mode_ffmpeg">
-                     <property name="cursor">
-                      <cursorShape>PointingHandCursor</cursorShape>
-                     </property>
-                     <property name="text">
-                      <string>FFMPEG</string>
                      </property>
                     </widget>
                    </item>
