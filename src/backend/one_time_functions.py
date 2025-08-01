@@ -9,11 +9,9 @@ import logging
 from src.frontend.UI import resources
 from src.backend.shared_gui import ui_popup
 from eporner_api import Category as ep_Category
-from PySide6.QtCore import QFile, QCoreApplication, QTextStream
 from src.backend.shared_functions import setup_config_file, setup_logger
-from src.backend.consts import *
+from PySide6.QtCore import QFile, QCoreApplication, QTextStream
 
-from PySide6.QtCore import Qt
 
 logger = setup_logger("Porn Fetch - [one_time_functions.py]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=None, http_port=None)
 logger.setLevel(logging.DEBUG)

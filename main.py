@@ -1,28 +1,21 @@
-import sys
 import time
-import httpx
 import random
 import shutil
-import tarfile
 import os.path
-import zipfile
 import argparse
 import markdown
-import datetime
 import traceback
 import src.frontend.UI.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
 
-from threading import Event
+from threading import Event, Lock
 from io import TextIOWrapper
 from itertools import islice, chain
-from functools import partial
 
 from src.backend.shared_gui import *
 from src.backend.class_help import *
 from src.backend.shared_functions import *
 from src.frontend.UI.ui_form_main_window import Ui_MainWindow
 from src.backend.one_time_functions import *
-from src.backend.consts import *
 from src.backend.config import __version__, __next_release__, __build__, __license__, __author__
 from src.backend.donation_nag import DonationNag
 from src.backend.license import License, Disclaimer
@@ -30,10 +23,22 @@ from src.backend.config import shared_config
 from hqporner_api.api import Sort as hq_Sort
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
-                            QTranslator, QCoreApplication, QSize)
+                            QTranslator, QCoreApplication, QSize, QEvent, QRectF)
 from PySide6.QtWidgets import QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, \
-    QInputDialog, QMainWindow, QLabel, QProgressBar
-from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence
+    QInputDialog, QMainWindow, QLabel, QProgressBar, QGraphicsPixmapItem, QDialog, QVBoxLayout, QGraphicsScene, QGraphicsView
+from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence, QPainter
+
+
+# Possible errors from APIs
+
+from xnxx_api.modules.errors import InvalidResponse
+from hqporner_api.modules.errors import (InvalidActress as InvalidActres_HQ, NoVideosFound,
+                                         NotAvailable as NotAvailable_HQ, WeirdError as WeirdError_HQ)
+from xvideos_api.modules.errors import (InvalidChannel as InvalidChannel_XV, InvalidPornstar as InvalidPornstar_XV,
+                                        VideoUnavailable as VideoUnavailable_XV)
+
+_download_lock = Lock()
+
 
 """
 Copyright (C) 2023-2025 Johannes Habel
@@ -100,15 +105,18 @@ class VideoData:
         for video_title in video_titles:
             del self.data_objects[video_title]  # Del is faster than pop :)
 
+video_data = VideoData()
 
 class Signals(QObject):
     """Signals for the Download class"""
     # Progress Signal
-    total_progress = Signal(int, int)  #
+    total_progress = Signal(int) # Sets the current value for the progressbar
+    total_progress_range = Signal(int) # Sets the maximum for the total progressbar
     progress_add_to_tree_widget = Signal(int, int)  # Tracks the number of videos
     # loaded and processed into the tree widget
 
     progress_video = Signal(int, int, int)
+    progress_video_range = Signal(int, int)
 
     # Animations
     start_undefined_range = Signal()  # Starts the loading animation progressbar
@@ -252,7 +260,7 @@ class InternetCheck(QRunnable):
         super(InternetCheck, self).__init__()
         self.websites = [
             "https://www.pornhub.com",
-            "https://hqporner.com",
+            "https://www.hqporner.com",
             "https://www.xvideos.com",
             "https://www.xnxx.com",
             "https://www.missav.ws",
@@ -288,7 +296,6 @@ class InternetCheck(QRunnable):
                         self.website_results.update(
                             {website: "Failed, website doesn't exist? Please report this error"})
 
-
             except Exception:
                     error = traceback.format_exc()
                     self.signals.error_signal.emit(error)
@@ -304,27 +311,11 @@ class CheckUpdates(QRunnable):
                                    http_port=http_log_port, http_ip=http_log_ip)
 
     def run(self):
-        url = f"https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/{__next_release__}"
+        pass # TODO
 
-        try:
-            request = core.fetch(url, get_response=True)
 
-            if request.status_code == 200:
-                self.logger.info("NEW UPDATE IS AVAILABLE!")
-                self.signals.result.emit(True)
 
-            else:
-                self.logger.info("Checked for updates, no update is available.")
-                self.signals.result.emit(False)
 
-        except AttributeError:
-            self.logger.info("Checked for updates, no update is available.")
-            self.signals.result.emit(False)  # Please just don't ask, thanks :)
-
-        except Exception:
-            error = traceback.format_exc()
-            self.logger.error(f"Could not check for updates. Please report the following error on GitHub: {error}")
-            self.signals.error_signal.emit(error)
 
 
 class AddToTreeWidget(QRunnable):
@@ -336,7 +327,7 @@ class AddToTreeWidget(QRunnable):
         self.stop_flag = stop_flag  # If the user pressed the stop process button
         self.is_checked = is_checked  # If the "do not clear videos" checkbox is checked
         self.last_index = last_index  # The last index (video) of the tree widget to maintain a correct order of numbers
-        self.consistent_data = VideoData().consistent_data
+        self.consistent_data = video_data.consistent_data
         self.output_path = self.consistent_data.get("output_path")
         self.search_limit = self.consistent_data.get("search_limit")
         self.supress_errors = self.consistent_data.get("supress_errors")
@@ -380,19 +371,19 @@ class AddToTreeWidget(QRunnable):
                     "video": video
                 })
 
-            VideoData().data_objects.update({video_id: data})
+            video_data.data_objects.update({video_id: data})
             return video_id
 
         except (errors.PremiumVideo, IndexError):
-            self.handle_error_gracefully(error_message=f"Premium-only video skipped: {video.url}")
+            handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Premium-only video skipped: {video.url}")
             return False
 
         except errors.RegionBlocked:
-            self.handle_error_gracefully(f"Region-blocked video skipped: {video.url}")
+            handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Region-blocked video skipped: {video.url}")
             return False
 
         except errors.VideoDisabled:
-            self.handle_error_gracefully(f"Warning: The video {video.url} is disabled. It will be skipped")
+            handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Warning: The video {video.url} is disabled. It will be skipped")
 
         except errors.RegexError:
             message = f"""
@@ -402,22 +393,36 @@ class AddToTreeWidget(QRunnable):
             Current Index: {index}
             Additional Info: URL: {video.url}
             """
-            self.handle_error_gracefully(error_message=message, needs_network_log=True)
+            handle_error_gracefully(self, data=video_data.consistent_data, error_message=message, needs_network_log=True)
             return False
 
         except errors.VideoPendingReview:
-            self.handle_error_gracefully(f"Warning: The video {video.url} is pending review. It will be skipped")
+            handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Warning: The video {video.url} is pending review. It will be skipped")
             return False
 
         except InvalidResponse:
-            self.handle_error_gracefully(f"Warning: The video: {video.url} returned an empty response when trying"
+            handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Warning: The video: {video.url} returned an empty response when trying"
                                          f"to fetch its content. There is nothing I can do. It will be skipped")
             return False
 
+        except NotAvailable_HQ:
+            handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {video.url} is not available, because the CDN network has an issue. "
+                                          f"This is not my fault, please do NOT report this error, thank you :)")
+            return False
+
+
+        except WeirdError_HQ:
+            handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"An error happend with: {video.url} this is a weird error i have no fix for yet,"
+                                          f" however this will be reported, to help me fixing it :) ", needs_network_log=True)
+            return False
+
+        except VideoUnavailable_XV:
+            handle_error_gracefully(self, data=video_data.consistent_data, error_message= f"The video {video.url} is not available. Do not report this error... Not my fault :)")
+            return False
 
         except Exception:
             error = traceback.format_exc()
-            self.handle_error_gracefully(f"Unexpected error occurred: {error}", needs_network_log=True)
+            handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Unexpected error occurred: {error}", needs_network_log=True)
             return False
 
     def run(self):
@@ -474,9 +479,9 @@ class DownloadThread(QRunnable):
         super().__init__()
         self.video = video
         self.video_id = video_id
-        self.consistent_data = VideoData().consistent_data
+        self.consistent_data = video_data.consistent_data
         self.quality = self.consistent_data.get("quality")
-        data_object: dict = VideoData().data_objects[self.video_id]
+        data_object: dict = video_data.data_objects[self.video_id]
         self.output_path = data_object.get("output_path")
         self.logger = setup_logger(name="Porn Fetch - [DownloadThread]", log_file="PornFetch.log", level=logging.DEBUG,
                                    http_ip=http_log_ip, http_port=http_log_port)
@@ -489,6 +494,7 @@ class DownloadThread(QRunnable):
         self.timeout = int(self.consistent_data.get("timeout"))
         self.video_progress = {}
         self.last_update_time = 0
+        self._range_emitted = False
 
 
     def generic_callback(self, pos, total,  video_source):
@@ -508,8 +514,12 @@ class DownloadThread(QRunnable):
             pos = int(pos / scaling_factor)
             total = int(total / scaling_factor)
 
-        self.signals.progress_video.emit(self.video_id, pos, total)
-        print(f"Emitted: {self.video_id}, {pos} {total}")
+        if not self._range_emitted:
+            # tell UI: "for video_id, this is the maximum"
+            self.signals.progress_video_range.emit(self.video_id, total)
+            self._range_emitted = True
+
+        self.signals.progress_video.emit(self.video_id, pos, total) # Although we don't use total, we need to accept it
         # Update total progress only if the video source uses segments
         if video_source not in ['hqporner', 'eporner']:
             self.update_total_progress()
@@ -521,8 +531,10 @@ class DownloadThread(QRunnable):
     def update_total_progress(self):
         """Update total download progress."""
         global downloaded_segments
-        downloaded_segments += 1
-        self.signals.total_progress.emit(downloaded_segments, total_segments)
+        with _download_lock:
+            downloaded_segments += 1
+            self.signals.total_progress.emit(downloaded_segments)
+            print(f"Emitted: {downloaded_segments}")
 
     def run(self):
         """Run the download in a thread, optimizing for different video sources and modes."""
@@ -540,6 +552,7 @@ class DownloadThread(QRunnable):
                     self.output_path = path
 
             self.logger.debug(f"Downloading Video to: {self.output_path}")
+            self.signals.total_progress_range.emit(total_segments)
 
             # We need to specify the sources, so that it knows which individual progressbar to use
             if isinstance(self.video, hq_Video):
@@ -557,43 +570,31 @@ class DownloadThread(QRunnable):
                 video_source = "general"
                 self.logger.debug("Starting the Download!")
                 try:
-                    self.video.download(downloader=str(self.threading_mode), path=path, quality=self.quality,
+                    self.video.download(downloader=str(self.threading_mode), path=path, quality=self.quality, remux=True,
                                     display=lambda pos, total: self.generic_callback(pos, total, video_source))
 
                 except TypeError:
-                    self.video.download(downloader=str(self.threading_mode), path=path, quality=self.quality,
+                    try:
+                        self.video.download(downloader=str(self.threading_mode), path=path, quality=self.quality, remux=True, no_title=True,
                                         callback=lambda pos, total: self.generic_callback(pos, total, video_source))
+
+                    except Exception:
+                        error = traceback.format_exc()
+                        error = f"An error occurred when trying to download video: {error}. This will be reported!"
+                        handle_error_gracefully(self, data=video_data.consistent_data, error_message=error, needs_network_log=True)
 
 
         finally:
+            if self.consistent_data.get("write_metadata"):
+                try:
+                    write_tags(path=self.output_path, data=video_data.data_objects.get(self.video_id))
+
+                except Exception:
+                    error = traceback.format_exc()
+                    error = f"An error occurred when trying to write metadata: {error}. This will be reported!"
+                    handle_error_gracefully(self, data=video_data.consistent_data, error_message=error, needs_network_log=True)
+
             self.signals.download_completed.emit(self.video_id)
-
-
-class PostProcessVideoThread(QRunnable):
-    """
-    This class will be executed (if enabled by the user) to convert the final video into different formats and apply
-    metadata to it.
-    """
-
-    def __init__(self, video_id):
-        super(PostProcessVideoThread, self).__init__()
-        self.signals = Signals()
-        self.consistent_data = VideoData().consistent_data
-        self.data = VideoData().data_objects.get(video_id)
-        self.write_tags_ = self.consistent_data.get("write_metadata")
-        self.video_format = self.consistent_data.get("video_format")
-        self.path = self.data.get("output_path")
-        self.logger = setup_logger(name="Porn Fetch - [PostProcessVideoThread]", log_file="PornFetch.log",
-                                   level=logging.DEBUG, http_port=http_log_port, http_ip=http_log_ip)
-
-    def run(self):
-
-        try:
-            ""
-            # TODO
-        except Exception:
-            error = traceback.format_exc()
-            self.signals.error_signal.emit(error)
 
 
 class QTreeWidgetDownloadThread(QRunnable):
@@ -603,7 +604,7 @@ class QTreeWidgetDownloadThread(QRunnable):
         super(QTreeWidgetDownloadThread, self).__init__()
         self.treeWidget = tree_widget
         self.signals = Signals()
-        self.consistent_data = VideoData().consistent_data
+        self.consistent_data = video_data.consistent_data
         self.threading_mode = self.consistent_data.get("threading_mode")
         self.quality = self.consistent_data.get("quality")
         self.semaphore = semaphore
@@ -625,6 +626,7 @@ class QTreeWidgetDownloadThread(QRunnable):
 
 
         self.logger.debug("Retrieving total length of video segments to calculate total progress...")
+        print(f"Starting with: {total_segments}")
         total_segments += sum(
             [len(list(video.get_segments(quality=self.quality))) for video in video_objects if
              hasattr(video, 'get_segments')])
@@ -711,8 +713,6 @@ class PornFetch(QMainWindow):
         self.url_thread = None
         self.download_thread = None
         self.video_loader_thread = None
-        self.video_converting_thread = None
-        self.post_processing_thread = None
         self.download_tree_thread = None
         self.add_to_tree_widget_thread_ = None
 
@@ -744,8 +744,6 @@ class PornFetch(QMainWindow):
         self.update_checks = None
         self._anonymous_mode = None
         self.write_metadata = None
-        self.convert_videos = None
-        self.format = None
         self.semaphore_limit = None
         self.search_limit = None
         self.output_path = None
@@ -818,8 +816,8 @@ class PornFetch(QMainWindow):
             self.logger.info("Enabling anonymous mode")
             self.anonymous_mode()
 
-
-        VideoData().consistent_data.update({
+        # IMPORTANT
+        video_data.consistent_data.update({
             "output_path": self.output_path,
             "threading_mode": self.threading_mode,
             "quality": self.quality,
@@ -827,8 +825,6 @@ class PornFetch(QMainWindow):
             "workers": self.workers,
             "directory_system": self.directory_system,
             "write_metadata": self.write_metadata,
-            "video_format": self.format,
-            "convert_videos": self.convert_videos,
             "search_limit": self.search_limit,
             "skip_existing_files": self.skip_existing_files,
             "supress_errors": self.supress_errors,
@@ -870,22 +866,36 @@ class PornFetch(QMainWindow):
         self.ui.CentralStackedWidget.setCurrentIndex(8)
 
     def switch_to_download(self):
-        self.switch_to_main()
+        self.ui.scroll_area_top_stacked.setMinimumHeight(110)
+        self.ui.scroll_area_top_stacked.setMaximumHeight(240)
+        self.ui.main_stacked_widget_top.setMaximumHeight(230)
+        self.ui.main_stacked_widget_top.setMinimumHeight(220)
         self.ui.main_stacked_widget_top.setCurrentIndex(0)
-        self.ui.main_stacked_widget_top.setMaximumHeight(220)
+        self.switch_to_main()
 
     def switch_to_login(self):
-        self.switch_to_main()
+        self.ui.scroll_area_top_stacked.setMinimumHeight(110)
+        self.ui.scroll_area_top_stacked.setMaximumHeight(160)
+        self.ui.main_stacked_widget_top.setMinimumHeight(160)
+        self.ui.main_stacked_widget_top.setMaximumHeight(160)
         self.ui.main_stacked_widget_top.setCurrentIndex(1)
+        self.switch_to_main()
 
     def switch_to_progressbars(self):
-        self.switch_to_main()
+        self.ui.scroll_area_top_stacked.setMinimumHeight(80)
+        self.ui.scroll_area_top_stacked.setMaximumHeight(200)
+        self.ui.main_stacked_widget_top.setMinimumHeight(200)
+        self.ui.main_stacked_widget_top.setMaximumHeight(200)
         self.ui.main_stacked_widget_top.setCurrentIndex(2)
-        self.ui.main_stacked_widget_top.setMaximumHeight(30)
+        self.switch_to_main()
 
     def switch_to_tools(self):
-        self.switch_to_main()
+        self.ui.scroll_area_top_stacked.setMinimumHeight(120)
+        self.ui.scroll_area_top_stacked.setMaximumHeight(250)
+        self.ui.main_stacked_widget_top.setMinimumHeight(250)
+        self.ui.main_stacked_widget_top.setMaximumHeight(250)
         self.ui.main_stacked_widget_top.setCurrentIndex(3)
+        self.switch_to_main()
 
     def switch_to_disclaimer(self):
         self.ui.CentralStackedWidget.setCurrentIndex(9)
@@ -893,6 +903,7 @@ class PornFetch(QMainWindow):
     def load_style(self):
         """Refactored function to load icons and stylesheets."""
         # Setting icons with a loop if applicable
+        self.setGeometry(0, 0, 1054, 829)
         icons = {
             self.ui.main_button_switch_home: "download.svg",
             self.ui.main_button_switch_settings: "settings.svg",
@@ -1008,8 +1019,23 @@ class PornFetch(QMainWindow):
         self.ui.treeWidget.setColumnWidth(3, 150)
         self.ui.treeWidget.itemClicked.connect(self.set_thumbnail)
 
-        # Sort by the 'Length' column in ascending order
         self.ui.treeWidget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
+        self.ui.progress_gridlayout_progressbar.setAlignment(Qt.AlignmentFlag.AlignTop)
+
+        # ChatGPT really cooked here
+        gv = self.ui.graphicsView # Geschlechtsverkehr Hihihi
+        gv.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+        gv.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        gv.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self._scene = QGraphicsScene(self)
+        gv.setScene(self._scene)
+        self._pixmap_item = QGraphicsPixmapItem()
+        self._scene.addItem(self._pixmap_item)
+        self._full_pixmap = QPixmap()
+        gv.installEventFilter(self)
+        gv.viewport().installEventFilter(self)
+
+        self.switch_to_download()
 
     '''def install_pornfetch(self):
         if __build__ == "desktop":
@@ -1247,16 +1273,6 @@ class PornFetch(QMainWindow):
                 "write_metadata") == "true" else self.ui.checkbox_settings_post_processing_write_metadata_tags.setChecked(
                 False)
 
-        if conf["PostProcessing"]["convert"] == "true":
-            self.format = conf["PostProcessing"]["format"]
-            self.convert_videos = True
-            self.ui.radio_settings_post_processing_use_custom_format.setChecked(True)
-            self.ui.lineedit_settings_post_processing_use_custom_format.setText(str(self.format))
-
-        else:
-            self.ui.radio_settings_post_processing_do_not_convert.setChecked(True)
-            self.convert_videos = False
-
         self.semaphore_limit = conf.get("Performance", "semaphore")
         self.search_limit = int(conf.get("Video", "search_limit"))
         self.output_path = conf.get("Video", "output_path")
@@ -1330,14 +1346,6 @@ class PornFetch(QMainWindow):
                  "true" if self.ui.settings_checkbox_videos_use_directory_system.isChecked() else "false")
         conf.set("UI", "custom_font",
                  "true" if self.ui.settings_checkbox_ui_custom_font.isChecked() else "false")
-
-        if self.ui.radio_settings_post_processing_do_not_convert.isChecked():
-            conf.set("PostProcessing", "convert", "false")
-
-        elif self.ui.radio_settings_post_processing_use_custom_format.isChecked():
-            conf.set("PostProcessing", "convert", "true")
-            conf.set("PostProcessing", "format",
-                     str(self.ui.lineedit_settings_post_processing_use_custom_format.text()))
 
         with open("config.ini", "w") as config_file:  # type: TextIOWrapper
             conf.write(config_file)
@@ -1420,7 +1428,16 @@ class PornFetch(QMainWindow):
                 videos = uploads
 
         elif hqporner_pattern.match(model):
-            videos = hq_client.get_videos_by_actress(name=model)
+            try:
+                videos = hq_client.get_videos_by_actress(name=model)
+
+            except InvalidActres_HQ:
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message="Invalid Actress URL!")
+                return
+
+            except NoVideosFound:
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message="No videos found. This is probably an error and will be reported.", needs_network_log=True)
+                return
 
         elif eporner_pattern.match(model):
             videos = ep_client.get_pornstar(url=model, enable_html_scraping=True).videos()
@@ -1428,8 +1445,11 @@ class PornFetch(QMainWindow):
         elif xnxx_pattern.match(model):
             videos = xn_client.get_user(url=model).videos
 
-        elif xvideos_pattern.match(model):
+        elif "xvideos" and "model" or "pornstar" in str(model):
             videos = xv_client.get_pornstar(url=model).videos
+
+        elif "xvideos" and "channel" in str(model):
+            videos = xv_client.get_channel(url=model).videos
 
         else:
             videos = None
@@ -1513,7 +1533,13 @@ class PornFetch(QMainWindow):
             videos = xv_client.search(query)
 
         elif self.ui.download_radio_search_website_hqporner.isChecked():
-            videos = hq_client.search_videos(query)
+            try:
+                videos = hq_client.search_videos(query)
+
+            except NoVideosFound:
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"No videos found for query: {query}")
+                return
+
 
         elif self.ui.download_radio_search_website_eporner.isChecked():
             videos = ep_client.search_videos(query, sorting_gay="", sorting_order="", sorting_low_quality="",
@@ -1524,9 +1550,10 @@ class PornFetch(QMainWindow):
             videos = xn_client.search(query).videos
 
         else:
-            videos = None
             ui_popup(
                 self.tr("Couldn't determine which site you want to search on??? Please report this immediately!"))
+            return
+
 
         self.add_to_tree_widget_thread(videos)
 
@@ -1563,7 +1590,7 @@ class PornFetch(QMainWindow):
         """
         self.logger.info(f"Applying video data for ID -->: {identifier}")
         self.last_index += 1
-        data = VideoData().data_objects.get(identifier)
+        data = video_data.data_objects.get(identifier)
         title = data.get("title")
         author = data.get("author")
         raw_length = data.get("length")  # Raw length from the data source.
@@ -1619,6 +1646,8 @@ class PornFetch(QMainWindow):
         self.create_video_progressbar(video_id=video_id, title=video.title)
         self.download_thread = DownloadThread(video=video, video_id=video_id)
         self.download_thread.signals.progress_video.connect(self.update_video_progressbar)
+        self.download_thread.signals.progress_video_range.connect(self.set_video_progress_range)
+        self.download_thread.signals.total_progress_range.connect(self.update_total_progressbar_range)
         self.download_thread.signals.total_progress.connect(self.update_total_progressbar)
         self.download_thread.signals.error_signal.connect(self.show_error)
         # ADAPTION
@@ -1634,10 +1663,7 @@ class PornFetch(QMainWindow):
         self.ui.progress_lineedit_download_info.setText(
             f"Downloaded: {total_downloaded_videos} video(s) this session.")
         self.ui.main_progressbar_total.setMaximum(100)
-        self.post_processing_thread = PostProcessVideoThread(video_id=video_id)
-        self.post_processing_thread.signals.error_signal.connect(self.show_error)
-        self.threadpool.start(self.post_processing_thread)
-        VideoData().clean_dict(video_id)
+        video_data.clean_dict(video_id)
         self.semaphore.release()
         widgets = self.progress_widgets.pop(video_id, None)
         if widgets:
@@ -1736,52 +1762,46 @@ An error happened inside of Porn Fetch!
                 item.setCheckState(0, Qt.CheckState.Checked)
 
     def set_thumbnail(self, item):
-        """Set the thumbnail for the selected video."""
-        self.ui.main_label_tree_show_thumbnail.setScaledContents(False)  # Ensure manual scaling
-        self.ui.main_label_tree_show_thumbnail.setFixedWidth(500)
-        self.ui.main_label_tree_show_thumbnail.setFixedHeight(281.25)
+        """Replace your QLabel code with this, feeding the graphicsView."""
+        gv = self.ui.graphicsView
 
-        if item is None:  # Handle no selection
+        # clear if nothing to show
+        if item is None or self._anonymous_mode:
+            self._pixmap_item.setPixmap(QPixmap())
             return
 
-        if self._anonymous_mode:
-            self.ui.main_label_tree_show_thumbnail.setText(
-                self.tr("Can't show thumbnail, due to your privacy settings ;)",
-                        disambiguation=None))
-            self.logger.debug("Anonymous mode is enabled, won't show thumbnail")
+        thumbnail = item.data(3, Qt.ItemDataRole.UserRole)
+        if not thumbnail:
+            self._pixmap_item.setPixmap(QPixmap())
             return
 
-        thumbnail = item.data(3, Qt.ItemDataRole.UserRole)  # Retrieve the thumbnail URL
+        try:
+            pixmap = QPixmap()
+            # your custom referer logic…
+            if "hqporner" in thumbnail:
+                core.config.headers["Referer"] = "https://hqporner.com"
+                core.update_headers({"Referer": "https://hqporner.com/"})
 
-        if not thumbnail or thumbnail is None:
-            self.ui.main_label_tree_show_thumbnail.setText(
-                self.tr("No thumbnail available", disambiguation=None)
-            )
-        else:
-            # Load the thumbnail image dynamically
-            try:
-                pixmap = QPixmap()
-                if "hqporner" in thumbnail:
-                    core.config.headers["Referer"] = "https://hqporner.com"
-                    core.update_headers({"Referer": "https://hqporner.com/"})
+            pixmap.loadFromData(core.fetch(thumbnail, get_bytes=True))
 
-                pixmap.loadFromData(core.fetch(thumbnail, get_bytes=True))
+            if "hqporner" in thumbnail:
+                del core.config.headers['Referer']
 
-                if "hqporner" in thumbnail:
-                    del core.config.headers['Referer']
+            self.logger.info("Fetched thumbnail!")
 
-                self.logger.info("Fetched thumbnail!")
-                # Scale the pixmap to fit the fixed QLabel size while maintaining the aspect ratio
-                scaled_pixmap = pixmap.scaled(
-                    self.ui.main_label_tree_show_thumbnail.width(),
-                    self.ui.main_label_tree_show_thumbnail.height(),
-                    Qt.AspectRatioMode.KeepAspectRatio,
-                    Qt.TransformationMode.SmoothTransformation
-                )
-                self.ui.main_label_tree_show_thumbnail.setPixmap(scaled_pixmap)
-            except Exception:
-                error = traceback.format_exc()
-                self.ui.main_label_tree_show_thumbnail.setText(f"Failed to load image: {error}")
+            # 1) stash the full-res copy
+            self._full_pixmap = pixmap
+
+            # 2) show it in the scene
+            self._pixmap_item.setPixmap(pixmap)
+            self._scene.setSceneRect(QRectF(pixmap.rect()))
+            # 3) initial fit/fill
+            gv.fitInView(self._scene.sceneRect(),
+                         Qt.AspectRatioMode.KeepAspectRatioByExpanding)
+
+        except Exception:
+            self.logger.error("Failed to load thumbnail", exc_info=True)
+            self._pixmap_item.setPixmap(QPixmap())
 
     """
     The following functions are used to connect data between Threads and the Main UI
@@ -1805,19 +1825,31 @@ An error happened inside of Porn Fetch!
 
         self.progress_widgets[video_id] = {'label': label, 'progressbar': progressbar}
 
-    def update_video_progressbar(self, video_id, value, maximum):
-        print(f"Received: {video_id}, {value}, {maximum}")
+    def set_video_progress_range(self, video_id, maximum):
+        """Called once per video to set up [0..maximum] on the bar."""
         widget_set = self.progress_widgets.get(video_id)
-        print(f"Found widget: {widget_set}")
-        if widget_set:
-            progressbar = widget_set['progressbar']
-            progressbar.setMaximum(maximum)
-            progressbar.setValue(value)
-            print("Applied maximum and value to progressbar")
+        if not widget_set:
+            return
+        bar = widget_set['progressbar']
+        bar.setRange(0, maximum)
+        # optional: reset to zero if you like
+        bar.setValue(0)
 
-    def update_total_progressbar(self, value, maximum):
-        """This updates the total progressbar"""
+    def update_video_progressbar(self, video_id, pos, maximum):
+        """Fired repeatedly—only updates the current value."""
+        widget_set = self.progress_widgets.get(video_id)
+        if not widget_set:
+            return
+        bar = widget_set['progressbar']
+        bar.setValue(pos)
+
+    def update_total_progressbar_range(self, maximum):
+        """Sets the maximum value for the total progressbar"""
+        self.ui.main_progressbar_total.setRange(0, maximum)
         self.ui.main_progressbar_total.setMaximum(maximum)
+
+    def update_total_progressbar(self, value):
+        """This updates the total progressbar"""
         self.ui.main_progressbar_total.setValue(value)
 
     def start_undefined_range(self):
@@ -1928,7 +1960,13 @@ An error happened inside of Porn Fetch!
         else:
             sort = None
 
-        videos = hq_client.get_top_porn(sort_by=sort)
+        try:
+            videos = hq_client.get_top_porn(sort_by=sort)
+
+        except NoVideosFound:
+            handle_error_gracefully(self, data=video_data.consistent_data, error_message="No videos found. This is likely an issue and will be reported", needs_network_log=True)
+            return
+
         self.add_to_tree_widget_thread(iterator=videos)
 
     def get_by_category_hqporner(self):
@@ -1959,13 +1997,25 @@ An error happened inside of Porn Fetch!
 
     def get_brazzers_videos(self):
         """Get brazzers videos from HQPorner"""
-        videos = hq_client.get_brazzers_videos()
+        try:
+            videos = hq_client.get_brazzers_videos()
+
+        except NoVideosFound:
+            handle_error_gracefully(self, data=video_data.consistent_data, error_message="No videos found. This is likely an issue and will be reported", needs_network_log=True)
+            return
+
         self.add_to_tree_widget_thread(videos)
 
     def get_random_video(self):
         """Gets a random video from HQPorner"""
-        video = hq_client.get_random_video()
-        some_list = [video]
+        try:
+            video = hq_client.get_random_video()
+            some_list = [video]
+
+        except NoVideosFound:
+            handle_error_gracefully(self, data=video_data.consistent_data, error_message="No videos found. This is likely an issue and will be reported", needs_network_log=True)
+            return
+
         self.add_to_tree_widget_thread(some_list)
 
     """
@@ -1992,6 +2042,68 @@ An error happened inside of Porn Fetch!
         self.update_thread.signals.result.connect(self.check_for_updates_result)
         self.update_thread.signals.error_signal.connect(self.show_error)
         self.threadpool.start(self.update_thread)
+
+    def eventFilter(self, source, event):
+        gv = self.ui.graphicsView
+
+        # ——————————————————————————————
+        # A) On the view resizing → re-fit & fill
+        if source is gv and event.type() == QEvent.Type.Resize:
+            rect = self._scene.sceneRect()
+            if not rect.isNull():
+                gv.fitInView(rect, Qt.AspectRatioMode.KeepAspectRatioByExpanding)
+            return False  # let the usual painting happen too
+
+        # ——————————————————————————————
+        # B) On double-click in the viewport → popup
+        if source is gv.viewport() and event.type() == QEvent.Type.MouseButtonDblClick:
+            if not self._full_pixmap.isNull():
+                self._show_full_thumbnail()
+                return True  # swallow the event
+            return False
+
+        return super().eventFilter(source, event)
+
+    def _show_full_thumbnail(self):
+        """Open a fixed 1280×720 preview, aspect-fill + center-crop."""
+        # Made by ChatGPT :)
+        if self._full_pixmap.isNull():
+            return
+
+        # 1) Scale up so it at least covers 1280×720, preserving aspect
+        scaled = self._full_pixmap.scaled(
+            1280, 720,
+            Qt.AspectRatioMode.KeepAspectRatioByExpanding,
+            Qt.TransformationMode.SmoothTransformation
+        )
+
+        # 2) Center-crop the scaled pixmap to exactly 1280×720
+        w, h = scaled.width(), scaled.height()
+        x = max(0, (w - 1280) // 2)
+        y = max(0, (h - 720) // 2)
+        final_pix = scaled.copy(x, y, 1280, 720)
+
+        # 3) Build a simple scene/view that will show that pixmap 1:1
+        dialog = QDialog(self)
+        dialog.setWindowTitle(self.tr("Full Thumbnail"))
+
+        scene = QGraphicsScene(dialog)
+        item = QGraphicsPixmapItem(final_pix)
+        scene.addItem(item)
+        scene.setSceneRect(item.boundingRect())
+
+        view = QGraphicsView(dialog)
+        view.setScene(scene)
+        view.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+        # no scrollbars — we’ve already cropped exactly
+        view.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        view.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+
+        # 4) Layout + force the dialog itself to 1280×720
+        layout = QVBoxLayout(dialog)
+        layout.addWidget(view)
+        dialog.setFixedSize(1280, 720)
+        dialog.exec()
 
     def check_for_updates_result(self, value):
         ""

@@ -1,7 +1,10 @@
+import sys
 import httpx
 import datetime
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QMessageBox
+
+from src.backend.config import __version__
 
 
 def ui_popup(text, title="Notice"):
@@ -40,14 +43,14 @@ def ui_popup(text, title="Notice"):
     message_box.exec()
 
 
-def handle_error_gracefully(self, error_message: str, needs_network_log: bool= False):
+def handle_error_gracefully(self, data: dict, error_message: str, needs_network_log: bool= False):
     self.logger.error(error_message)
 
-    if not self.supress_errors:
+    if not data.get("supress_errors") == "true":
         self.signals.error_signal.emit(error_message)
 
     if needs_network_log:
-        if self.activate_logging:
+        if data.get("activate_logging") == "true":
             self.logger.info(f"Logging Error: {error_message} to network server...")
             message = f"""
             An error occurred in Porn Fetch - [AddToTreeWidget]
