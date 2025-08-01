@@ -2,7 +2,6 @@ QWidget {
     color: #ECECEC;  /* Brightened for better contrast */
     background-color: #262626; /* Darkened for better contrast */
     border: none;
-    font-size: 16px;
 }
 
 QLineEdit {

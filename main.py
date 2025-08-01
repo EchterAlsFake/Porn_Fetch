@@ -1019,6 +1019,23 @@ class PornFetch(QMainWindow):
         self.ui.treeWidget.setColumnWidth(3, 150)
         self.ui.treeWidget.itemClicked.connect(self.set_thumbnail)
 
+        font = QFont()
+        if conf["UI"]["custom_font"] == "true":
+            font_id = QFontDatabase.addApplicationFont(":/fonts/graphics/JetBrainsMono-Regular.ttf")
+            if font_id == -1:
+                print("Failed to load font, please report")  # TODO
+            else:
+                # Get the family name of the loaded font
+                font.setFamily(QFontDatabase.applicationFontFamilies(font_id)[0])
+
+        else:
+            font.setFamily("Arial")
+
+        font.setPixelSize(int(conf["UI"]["font_size"]))
+        from PySide6.QtWidgets import QWidget
+        for w in self.findChildren(QWidget):
+            w.setFont(font)
+
         self.ui.treeWidget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
         self.ui.progress_gridlayout_progressbar.setAlignment(Qt.AlignmentFlag.AlignTop)
 
@@ -1242,6 +1259,7 @@ class PornFetch(QMainWindow):
         self.ui.settings_spinbox_semaphore.setValue(int(conf.get("Performance", "semaphore")))
         self.ui.settings_spinbox_treewidget_limit.setValue(int(conf.get("Video", "search_limit")))
         self.ui.settings_lineedit_output_path.setText(conf.get("Video", "output_path"))
+        self.ui.settings_spinbox_gui_font_size.setValue(int(conf.get("UI", "font_size")))
         self.internet_checks = conf.get("Setup", "internet_checks") == "true"
         self.ui.settings_checkbox_internet_checks.setChecked(self.internet_checks)
 
@@ -1346,6 +1364,7 @@ class PornFetch(QMainWindow):
                  "true" if self.ui.settings_checkbox_videos_use_directory_system.isChecked() else "false")
         conf.set("UI", "custom_font",
                  "true" if self.ui.settings_checkbox_ui_custom_font.isChecked() else "false")
+        conf.set("UI", "font_size", str(self.ui.settings_spinbox_gui_font_size.value()))
 
         with open("config.ini", "w") as config_file:  # type: TextIOWrapper
             conf.write(config_file)
@@ -2163,18 +2182,6 @@ def main():
 
     app.installTranslator(translator)
     app.setStyleSheet(load_stylesheet(":/style/stylesheets/stylesheet.qss"))
-
-    if conf["UI"]["custom_font"] == "true":
-        font_id = QFontDatabase.addApplicationFont(":/fonts/graphics/JetBrainsMono-Regular.ttf")
-        if font_id == -1:
-            print("Failed to load font, please report")  # TODO
-        else:
-
-            # Get the family name of the loaded font
-            font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
-            logger.info(f"Using custom font -->: {font_family}")
-            app.setFont(QFont(font_family))
-
     w = PornFetch()  # This actually starts Porn Fetch
     w.show()  # This shows the main widget
 

@@ -66,7 +66,7 @@ options_setup = ["license_accepted", "install", "update_checks", "internet_check
 options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries", "speed_limit"]
 options_post_processing = ["convert", "format", "write_metadata"]
 options_video = ["quality", "output_path", "directory_system", "search_limit", "delay", "skip_existing_files", "model_videos", "supress_errors"]
-options_ui = ["language", "custom_font"]
+options_ui = ["language", "custom_font", "font_size"]
 options_sponsoring = ["downloaded_videos", "notice_shown"]
 options_android = ["warning_shown"]
 
@@ -116,6 +116,7 @@ supress_errors = false
 [UI]
 language = system
 custom_font = true
+font_size = 14
 
 [Sponsoring]
 downloaded_videos = 0

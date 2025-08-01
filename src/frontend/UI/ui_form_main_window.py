@@ -876,7 +876,7 @@ class Ui_MainWindow(object):
         self.settings_scrollarea.setWidgetResizable(True)
         self.settings_scrollarea_widget_contents = QWidget()
         self.settings_scrollarea_widget_contents.setObjectName(u"settings_scrollarea_widget_contents")
-        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 722, 926))
+        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, -280, 1002, 932))
         self.gridLayout_19 = QGridLayout(self.settings_scrollarea_widget_contents)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.gridLayout_19.setContentsMargins(0, 0, 0, 0)
@@ -932,6 +932,16 @@ class Ui_MainWindow(object):
         self.settings_checkbox_ui_custom_font.setObjectName(u"settings_checkbox_ui_custom_font")
 
         self.settings_gridlayout_graphical_userinterface.addWidget(self.settings_checkbox_ui_custom_font, 1, 0, 1, 1)
+
+        self.settings_spinbox_gui_font_size = QSpinBox(self.settings_groupbox_ui)
+        self.settings_spinbox_gui_font_size.setObjectName(u"settings_spinbox_gui_font_size")
+
+        self.settings_gridlayout_graphical_userinterface.addWidget(self.settings_spinbox_gui_font_size, 1, 2, 1, 1)
+
+        self.settings_label_ui_font_size = QLabel(self.settings_groupbox_ui)
+        self.settings_label_ui_font_size.setObjectName(u"settings_label_ui_font_size")
+
+        self.settings_gridlayout_graphical_userinterface.addWidget(self.settings_label_ui_font_size, 1, 1, 1, 1)
 
 
         self.gridLayout_12.addLayout(self.settings_gridlayout_graphical_userinterface, 0, 0, 1, 1)
@@ -1843,7 +1853,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.CentralStackedWidget.setCurrentIndex(0)
+        self.CentralStackedWidget.setCurrentIndex(1)
         self.main_stacked_widget_top.setCurrentIndex(2)
 
 
@@ -1930,6 +1940,7 @@ class Ui_MainWindow(object):
         self.settings_radio_ui_language_chinese_simplified.setText(QCoreApplication.translate("MainWindow", u"Chinese (simplified)", None))
         self.settings_radio_ui_language_german.setText(QCoreApplication.translate("MainWindow", u"German", None))
         self.settings_checkbox_ui_custom_font.setText(QCoreApplication.translate("MainWindow", u"Enable custom font (Jetbrains Mono)", None))
+        self.settings_label_ui_font_size.setText(QCoreApplication.translate("MainWindow", u"Font Size:", None))
         self.settings_groupbox_system_pornfetch.setTitle(QCoreApplication.translate("MainWindow", u"System / Porn Fetch", None))
         self.settings_button_help_anonymous_mode.setText(QCoreApplication.translate("MainWindow", u"Help", None))
         self.settings_checkbox_system_anonymous_mode.setText(QCoreApplication.translate("MainWindow", u"Enable Anonymous mode", None))

@@ -2,6 +2,10 @@
 
 
 # Bug fixes
+- [x] Fix XNXX progress reporting
+- [x] Fixed total progress in general
+- [x] Fixed thumbnails entirely
+- [x] Fix tools section layout
 - [] Fix check for updates changelog displaying
 - [] Entirely rework and fix the error reporting system
 - [x] Fix thumbnails for HQPorner
@@ -13,12 +17,9 @@
 # Graphical User Interace
 - [x] Entirely reworked progressbar system
 - [x] Progressbars are now dynamically generated instead of hardcoded
-- [x] Fixed thumbnails entirely
 - [x] You can now double-click a thumbnail to view it separately
-- [x] Fixed total progress in general
-- [x] Fix XNXX progress reporting
 - [x] Upgrade Python version from 3.11 -> 3.13
-- [x] Fix tools section layout
+- [x] Allow for font size change
 - [] Allow for direct video downloading instead of manually selecting in the tree widget
 - [] Support Thumbnail when navigating with Arrow keys
 - [] Change Icons
@@ -28,7 +29,6 @@
 - [] Improve tree widget range selection and make it finally intuitive lol
 - [] Splash screen loading animation? (maybe idk yet)
 - [] Publish translation strings on Crowdin 
-- [] Allow for font size change
 - [] Optional processing delay for every video
 - [] Fix tabbing
 - [] Fix keyboard shortcuts

@@ -328,7 +328,7 @@ color: white</string>
     <item row="1" column="0">
      <widget class="QStackedWidget" name="CentralStackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page_main">
        <property name="maximumSize">
@@ -1848,9 +1848,9 @@ color: white</string>
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>0</y>
-             <width>722</width>
-             <height>926</height>
+             <y>-280</y>
+             <width>1002</width>
+             <height>932</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_19">
@@ -1970,6 +1970,16 @@ color: white</string>
                     <widget class="QCheckBox" name="settings_checkbox_ui_custom_font">
                      <property name="text">
                       <string>Enable custom font (Jetbrains Mono)</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="2">
+                    <widget class="QSpinBox" name="settings_spinbox_gui_font_size"/>
+                   </item>
+                   <item row="1" column="1">
+                    <widget class="QLabel" name="settings_label_ui_font_size">
+                     <property name="text">
+                      <string>Font Size:</string>
                      </property>
                     </widget>
                    </item>
