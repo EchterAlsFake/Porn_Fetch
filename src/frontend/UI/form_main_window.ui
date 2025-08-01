@@ -374,7 +374,7 @@ color: white</string>
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>1014</width>
+               <width>580</width>
                <height>220</height>
               </rect>
              </property>
@@ -1676,8 +1676,8 @@ color: white</string>
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>1014</width>
-               <height>415</height>
+               <width>412</width>
+               <height>207</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -1848,9 +1848,9 @@ color: white</string>
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>-280</y>
+             <y>0</y>
              <width>1002</width>
-             <height>932</height>
+             <height>960</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_19">
@@ -2168,36 +2168,30 @@ color: white</string>
                      <property name="bottomMargin">
                       <number>6</number>
                      </property>
-                     <item row="0" column="0">
-                      <widget class="QLabel" name="settings_label_quality">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="text">
-                        <string>Quality:</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="6" column="3" colspan="2">
-                      <widget class="QPushButton" name="settings_button_result_limit_help">
+                     <item row="0" column="3" colspan="2">
+                      <widget class="QRadioButton" name="settings_radio_quality_worst">
                        <property name="cursor">
                         <cursorShape>PointingHandCursor</cursorShape>
                        </property>
                        <property name="text">
-                        <string>Help</string>
+                        <string>Worst</string>
                        </property>
                       </widget>
                      </item>
-                     <item row="7" column="3" colspan="2">
-                      <widget class="QPushButton" name="settings_button_output_path_select">
+                     <item row="0" column="2">
+                      <widget class="QRadioButton" name="settings_radio_quality_half">
                        <property name="cursor">
                         <cursorShape>PointingHandCursor</cursorShape>
                        </property>
                        <property name="text">
-                        <string>Open</string>
+                        <string>Half</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="5" column="1">
+                      <widget class="QRadioButton" name="settings_radio_model_uploads">
+                       <property name="text">
+                        <string>User uploads</string>
                        </property>
                       </widget>
                      </item>
@@ -2214,58 +2208,6 @@ color: white</string>
                        </property>
                       </widget>
                      </item>
-                     <item row="5" column="0">
-                      <widget class="QLabel" name="settings_label_settings_videos_model">
-                       <property name="text">
-                        <string>Model videos (PornHub)</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="7" column="0">
-                      <widget class="QLabel" name="settings_label_output_path">
-                       <property name="text">
-                        <string>Output path:</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="9" column="0">
-                      <widget class="QCheckBox" name="settings_checkbox_videos_use_directory_system">
-                       <property name="text">
-                        <string>Use directory system</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="6" column="0">
-                      <widget class="QLabel" name="settings_label_searching_limit">
-                       <property name="text">
-                        <string>Result Limit:</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="8" column="1">
-                      <widget class="QPushButton" name="button_help_write_metadata_tags">
-                       <property name="text">
-                        <string>Help</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="5" column="1">
-                      <widget class="QRadioButton" name="settings_radio_model_uploads">
-                       <property name="text">
-                        <string>User uploads</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="3" colspan="2">
-                      <widget class="QRadioButton" name="settings_radio_quality_worst">
-                       <property name="cursor">
-                        <cursorShape>PointingHandCursor</cursorShape>
-                       </property>
-                       <property name="text">
-                        <string>Worst</string>
-                       </property>
-                      </widget>
-                     </item>
                      <item row="5" column="4">
                       <widget class="QPushButton" name="settings_button_help_model_videos">
                        <property name="text">
@@ -2273,34 +2215,30 @@ color: white</string>
                        </property>
                       </widget>
                      </item>
-                     <item row="10" column="0">
-                      <widget class="QCheckBox" name="settings_checkbox_videos_skip_existing_files">
-                       <property name="text">
-                        <string>Skip existing files</string>
-                       </property>
-                      </widget>
-                     </item>
                      <item row="10" column="1">
-                      <widget class="QPushButton" name="settings_button_help_skip_existing_files">
+                      <widget class="QPushButton" name="settings_button_directory_system_help">
+                       <property name="cursor">
+                        <cursorShape>PointingHandCursor</cursorShape>
+                       </property>
                        <property name="text">
                         <string>Help</string>
                        </property>
                       </widget>
                      </item>
-                     <item row="8" column="0">
-                      <widget class="QCheckBox" name="checkbox_settings_post_processing_write_metadata_tags">
-                       <property name="text">
-                        <string>Write metadata tags</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="2">
-                      <widget class="QRadioButton" name="settings_radio_quality_half">
+                     <item row="6" column="3" colspan="2">
+                      <widget class="QPushButton" name="settings_button_result_limit_help">
                        <property name="cursor">
                         <cursorShape>PointingHandCursor</cursorShape>
                        </property>
                        <property name="text">
-                        <string>Half</string>
+                        <string>Help</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="10" column="0">
+                      <widget class="QCheckBox" name="settings_checkbox_videos_use_directory_system">
+                       <property name="text">
+                        <string>Use directory system</string>
                        </property>
                       </widget>
                      </item>
@@ -2314,6 +2252,23 @@ color: white</string>
                        </property>
                       </widget>
                      </item>
+                     <item row="7" column="3" colspan="2">
+                      <widget class="QPushButton" name="settings_button_output_path_select">
+                       <property name="cursor">
+                        <cursorShape>PointingHandCursor</cursorShape>
+                       </property>
+                       <property name="text">
+                        <string>Open</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="9" column="1">
+                      <widget class="QPushButton" name="button_help_write_metadata_tags">
+                       <property name="text">
+                        <string>Help</string>
+                       </property>
+                      </widget>
+                     </item>
                      <item row="0" column="1">
                       <widget class="QRadioButton" name="settings_radio_quality_best">
                        <property name="cursor">
@@ -2324,10 +2279,65 @@ color: white</string>
                        </property>
                       </widget>
                      </item>
+                     <item row="6" column="0">
+                      <widget class="QLabel" name="settings_label_searching_limit">
+                       <property name="text">
+                        <string>Result Limit:</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="9" column="0">
+                      <widget class="QCheckBox" name="checkbox_settings_post_processing_write_metadata_tags">
+                       <property name="text">
+                        <string>Write metadata tags</string>
+                       </property>
+                      </widget>
+                     </item>
                      <item row="5" column="2">
                       <widget class="QRadioButton" name="settings_radio_model_featured">
                        <property name="text">
                         <string>Featured videos</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="7" column="0">
+                      <widget class="QLabel" name="settings_label_output_path">
+                       <property name="text">
+                        <string>Output path:</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="11" column="0">
+                      <widget class="QCheckBox" name="settings_checkbox_videos_skip_existing_files">
+                       <property name="text">
+                        <string>Skip existing files</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="settings_label_quality">
+                       <property name="sizePolicy">
+                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                         <horstretch>0</horstretch>
+                         <verstretch>0</verstretch>
+                        </sizepolicy>
+                       </property>
+                       <property name="text">
+                        <string>Quality:</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="11" column="1">
+                      <widget class="QPushButton" name="settings_button_help_skip_existing_files">
+                       <property name="text">
+                        <string>Help</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="5" column="0">
+                      <widget class="QLabel" name="settings_label_settings_videos_model">
+                       <property name="text">
+                        <string>Model videos (PornHub)</string>
                        </property>
                       </widget>
                      </item>
@@ -2338,13 +2348,10 @@ color: white</string>
                        </property>
                       </widget>
                      </item>
-                     <item row="9" column="1">
-                      <widget class="QPushButton" name="settings_button_directory_system_help">
-                       <property name="cursor">
-                        <cursorShape>PointingHandCursor</cursorShape>
-                       </property>
+                     <item row="8" column="0" colspan="2">
+                      <widget class="QCheckBox" name="settings_checkbox_use_video_id_as_filename">
                        <property name="text">
-                        <string>Help</string>
+                        <string>Use Video ID as filename</string>
                        </property>
                       </widget>
                      </item>

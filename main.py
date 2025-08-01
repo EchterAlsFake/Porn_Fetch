@@ -353,6 +353,9 @@ class AddToTreeWidget(QRunnable):
                 data.get("title"))  # Strip the title so that videos with special chars can be
                                     # saved on windows. it would raise an OSError otherwise
 
+            if self.consistent_data.get("video_id_as_filename"):
+                stripped_title = str(video_id)
+
             if self.consistent_data.get(
                     "directory_system"):  # If the directory system is enabled, this will create an additional folder
                 author_path = os.path.join(self.output_path, data.get("author"))
@@ -362,7 +365,9 @@ class AddToTreeWidget(QRunnable):
             else:
                 output_path = os.path.join(self.output_path, stripped_title + ".mp4")
 
+            stripped_title = core.strip_title(title=data.get("title"))
             # Emit the loaded signal with all the required information
+
             data.update(
                 {
                     "title": stripped_title,
@@ -829,6 +834,7 @@ class PornFetch(QMainWindow):
             "skip_existing_files": self.skip_existing_files,
             "supress_errors": self.supress_errors,
             "activate_logging": self.activate_logging,
+            "video_id_as_filename": self.use_video_id_as_filename,
         })
         self.logger.debug("Startup: [5/5] OK")
         self.initialize_pornfetch()
@@ -1269,6 +1275,9 @@ class PornFetch(QMainWindow):
         self._anonymous_mode = conf.get("Setup", "anonymous_mode") == "true"
         self.ui.settings_checkbox_system_anonymous_mode.setChecked(self._anonymous_mode)
 
+        self.use_video_id_as_filename = conf.get("Video", "video_id_as_filename") == "true"
+        self.ui.settings_checkbox_use_video_id_as_filename.setChecked(self.use_video_id_as_filename)
+
         self.skip_existing_files = conf.get("Video", "skip_existing_files") == "true"
         self.ui.settings_checkbox_videos_skip_existing_files.setChecked(self.skip_existing_files)
 
@@ -1365,6 +1374,7 @@ class PornFetch(QMainWindow):
         conf.set("UI", "custom_font",
                  "true" if self.ui.settings_checkbox_ui_custom_font.isChecked() else "false")
         conf.set("UI", "font_size", str(self.ui.settings_spinbox_gui_font_size.value()))
+        conf.set("Video", "video_id_as_filename", "true" if self.ui.settings_checkbox_use_video_id_as_filename.isChecked() else "false")
 
         with open("config.ini", "w") as config_file:  # type: TextIOWrapper
             conf.write(config_file)
@@ -2156,6 +2166,7 @@ def main():
     setup_config_file()
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
+    conf.read("config.ini")
     language = conf["UI"]["language"]
 
     if language == "system":

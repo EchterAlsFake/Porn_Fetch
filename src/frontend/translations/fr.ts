@@ -14,12 +14,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3568"/>
+        <location filename="../UI/form_main_window.ui" line="3575"/>
         <source>Total:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3597"/>
+        <location filename="../UI/form_main_window.ui" line="3604"/>
         <source>Converting:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -105,18 +105,18 @@
         <location filename="../UI/form_main_window.ui" line="2050"/>
         <location filename="../UI/form_main_window.ui" line="2085"/>
         <location filename="../UI/form_main_window.ui" line="2092"/>
-        <location filename="../UI/form_main_window.ui" line="2190"/>
-        <location filename="../UI/form_main_window.ui" line="2248"/>
-        <location filename="../UI/form_main_window.ui" line="2272"/>
-        <location filename="../UI/form_main_window.ui" line="2286"/>
-        <location filename="../UI/form_main_window.ui" line="2347"/>
-        <location filename="../UI/form_main_window.ui" line="2416"/>
-        <location filename="../UI/form_main_window.ui" line="2447"/>
-        <location filename="../UI/form_main_window.ui" line="2493"/>
-        <location filename="../UI/form_main_window.ui" line="2536"/>
-        <location filename="../UI/form_main_window.ui" line="2579"/>
-        <location filename="../UI/form_main_window.ui" line="2638"/>
-        <location filename="../UI/form_main_window.ui" line="2659"/>
+        <location filename="../UI/form_main_window.ui" line="2214"/>
+        <location filename="../UI/form_main_window.ui" line="2224"/>
+        <location filename="../UI/form_main_window.ui" line="2234"/>
+        <location filename="../UI/form_main_window.ui" line="2268"/>
+        <location filename="../UI/form_main_window.ui" line="2333"/>
+        <location filename="../UI/form_main_window.ui" line="2423"/>
+        <location filename="../UI/form_main_window.ui" line="2454"/>
+        <location filename="../UI/form_main_window.ui" line="2500"/>
+        <location filename="../UI/form_main_window.ui" line="2543"/>
+        <location filename="../UI/form_main_window.ui" line="2586"/>
+        <location filename="../UI/form_main_window.ui" line="2645"/>
+        <location filename="../UI/form_main_window.ui" line="2666"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
@@ -384,107 +384,107 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2265"/>
+        <location filename="../UI/form_main_window.ui" line="2177"/>
         <source>Worst</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2323"/>
+        <location filename="../UI/form_main_window.ui" line="2278"/>
         <source>Best</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2234"/>
+        <location filename="../UI/form_main_window.ui" line="2241"/>
         <source>Use directory system</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2227"/>
+        <location filename="../UI/form_main_window.ui" line="2306"/>
         <source>Output path:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2293"/>
+        <location filename="../UI/form_main_window.ui" line="2292"/>
         <source>Write metadata tags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2220"/>
+        <location filename="../UI/form_main_window.ui" line="2340"/>
         <source>Model videos (PornHub)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2200"/>
+        <location filename="../UI/form_main_window.ui" line="2261"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2241"/>
+        <location filename="../UI/form_main_window.ui" line="2285"/>
         <source>Result Limit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2180"/>
+        <location filename="../UI/form_main_window.ui" line="2326"/>
         <source>Quality:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2337"/>
+        <location filename="../UI/form_main_window.ui" line="2347"/>
         <source>Both</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2330"/>
+        <location filename="../UI/form_main_window.ui" line="2299"/>
         <source>Featured videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2213"/>
+        <location filename="../UI/form_main_window.ui" line="2207"/>
         <source>Enter &quot;./&quot; for current directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2303"/>
+        <location filename="../UI/form_main_window.ui" line="2187"/>
         <source>Half</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2255"/>
+        <location filename="../UI/form_main_window.ui" line="2194"/>
         <source>User uploads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2279"/>
+        <location filename="../UI/form_main_window.ui" line="2313"/>
         <source>Skip existing files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2361"/>
+        <location filename="../UI/form_main_window.ui" line="2368"/>
         <source>Performance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2427"/>
+        <location filename="../UI/form_main_window.ui" line="2434"/>
         <source>Simultaneous downloads:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2516"/>
+        <location filename="../UI/form_main_window.ui" line="2523"/>
         <source>Maximal workers:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2470"/>
+        <location filename="../UI/form_main_window.ui" line="2477"/>
         <source>Maximal timeout:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2559"/>
+        <location filename="../UI/form_main_window.ui" line="2566"/>
         <source>Maximal retries:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2396"/>
+        <location filename="../UI/form_main_window.ui" line="2403"/>
         <source>Network delay (per Request, in seconds):</source>
         <translation type="unfinished"></translation>
     </message>
@@ -494,48 +494,53 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2608"/>
+        <location filename="../UI/form_main_window.ui" line="2354"/>
+        <source>Use Video ID as filename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../UI/form_main_window.ui" line="2615"/>
         <source>Download Mode:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2618"/>
+        <location filename="../UI/form_main_window.ui" line="2625"/>
         <source>High Performance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2628"/>
+        <location filename="../UI/form_main_window.ui" line="2635"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2649"/>
+        <location filename="../UI/form_main_window.ui" line="2656"/>
         <source>Speed Limit (MB/s):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2691"/>
+        <location filename="../UI/form_main_window.ui" line="2698"/>
         <source>Apply  (needs restart)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2720"/>
+        <location filename="../UI/form_main_window.ui" line="2727"/>
         <source>Reset Porn Fetch to default settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2827"/>
-        <location filename="../UI/form_main_window.ui" line="3545"/>
+        <location filename="../UI/form_main_window.ui" line="2834"/>
+        <location filename="../UI/form_main_window.ui" line="3552"/>
         <source>Accept</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2853"/>
+        <location filename="../UI/form_main_window.ui" line="2860"/>
         <source>Deny and Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2867"/>
+        <location filename="../UI/form_main_window.ui" line="2874"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -596,7 +601,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="2976"/>
+        <location filename="../UI/form_main_window.ui" line="2983"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -619,52 +624,52 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3001"/>
-        <location filename="../UI/form_main_window.ui" line="3046"/>
-        <location filename="../UI/form_main_window.ui" line="3067"/>
+        <location filename="../UI/form_main_window.ui" line="3008"/>
+        <location filename="../UI/form_main_window.ui" line="3053"/>
+        <location filename="../UI/form_main_window.ui" line="3074"/>
         <source>Apply</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3008"/>
+        <location filename="../UI/form_main_window.ui" line="3015"/>
         <source>Apply by time:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3015"/>
-        <location filename="../UI/form_main_window.ui" line="3077"/>
+        <location filename="../UI/form_main_window.ui" line="3022"/>
+        <location filename="../UI/form_main_window.ui" line="3084"/>
         <source>0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3022"/>
+        <location filename="../UI/form_main_window.ui" line="3029"/>
         <source>Enter the author&apos;s name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3032"/>
+        <location filename="../UI/form_main_window.ui" line="3039"/>
         <source>Apply by Index:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3039"/>
-        <location filename="../UI/form_main_window.ui" line="3053"/>
+        <location filename="../UI/form_main_window.ui" line="3046"/>
+        <location filename="../UI/form_main_window.ui" line="3060"/>
         <source>End:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3060"/>
-        <location filename="../UI/form_main_window.ui" line="3084"/>
+        <location filename="../UI/form_main_window.ui" line="3067"/>
+        <location filename="../UI/form_main_window.ui" line="3091"/>
         <source>Start:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3091"/>
+        <location filename="../UI/form_main_window.ui" line="3098"/>
         <source>Apply by author:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3150"/>
+        <location filename="../UI/form_main_window.ui" line="3157"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -687,7 +692,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3215"/>
+        <location filename="../UI/form_main_window.ui" line="3222"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -718,27 +723,27 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3250"/>
+        <location filename="../UI/form_main_window.ui" line="3257"/>
         <source>Custom App Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3260"/>
+        <location filename="../UI/form_main_window.ui" line="3267"/>
         <source>Enter your custom App Name here. Leave it empty to keep &quot;Porn Fetch&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3271"/>
+        <location filename="../UI/form_main_window.ui" line="3278"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3278"/>
+        <location filename="../UI/form_main_window.ui" line="3285"/>
         <source>Portable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3327"/>
+        <location filename="../UI/form_main_window.ui" line="3334"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -783,32 +788,32 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3420"/>
+        <location filename="../UI/form_main_window.ui" line="3427"/>
         <source>Ko-Fi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3430"/>
+        <location filename="../UI/form_main_window.ui" line="3437"/>
         <source>Already Donated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3440"/>
+        <location filename="../UI/form_main_window.ui" line="3447"/>
         <source>PayPal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3450"/>
+        <location filename="../UI/form_main_window.ui" line="3457"/>
         <source>Copy XMR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3460"/>
+        <location filename="../UI/form_main_window.ui" line="3467"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3470"/>
+        <location filename="../UI/form_main_window.ui" line="3477"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -830,7 +835,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3522"/>
+        <location filename="../UI/form_main_window.ui" line="3529"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -851,7 +856,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3626"/>
+        <location filename="../UI/form_main_window.ui" line="3633"/>
         <source>Nothing is here yeah</source>
         <translation type="unfinished"></translation>
     </message>
@@ -859,37 +864,37 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>PornFetch</name>
     <message>
-        <location filename="../../../main.py" line="1077"/>
+        <location filename="../../../main.py" line="1079"/>
         <source>Porn Fetch installation failed, because of: {result[1]}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1370"/>
+        <location filename="../../../main.py" line="1375"/>
         <source>Saved User Settings, please restart Porn Fetch!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1374"/>
+        <location filename="../../../main.py" line="1379"/>
         <source></source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1474"/>
+        <location filename="../../../main.py" line="1479"/>
         <source>The model URL you entered seems to be invalid. Please check your input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1534"/>
+        <location filename="../../../main.py" line="1539"/>
         <source>Information: The Website {website} specified in the URL file isn&apos;t valid.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1571"/>
+        <location filename="../../../main.py" line="1576"/>
         <source>Couldn&apos;t determine which site you want to search on??? Please report this immediately!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1702"/>
+        <location filename="../../../main.py" line="1707"/>
         <source>
 An error happened inside of Porn Fetch! 
 
@@ -897,43 +902,43 @@ An error happened inside of Porn Fetch!
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1905"/>
+        <location filename="../../../main.py" line="1910"/>
         <source>Those credentials don&apos;t seem to be valid...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1918"/>
+        <location filename="../../../main.py" line="1923"/>
         <source>Login Successful!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1923"/>
+        <location filename="../../../main.py" line="1928"/>
         <source>Login Failed, please check your credentials and try again!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1927"/>
+        <location filename="../../../main.py" line="1932"/>
         <source>You are already logged in!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1939"/>
+        <location filename="../../../main.py" line="1944"/>
         <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1996"/>
-        <location filename="../../../main.py" line="2009"/>
+        <location filename="../../../main.py" line="2001"/>
+        <location filename="../../../main.py" line="2014"/>
         <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2105"/>
+        <location filename="../../../main.py" line="2110"/>
         <source>Full Thumbnail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2150"/>
+        <location filename="../../../main.py" line="2155"/>
         <source>
 ! Warning !
 Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
@@ -945,7 +950,7 @@ Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
 <context>
     <name>main</name>
     <message>
-        <location filename="../../../main.py" line="2224"/>
+        <location filename="../../../main.py" line="2229"/>
         <source>No URLs in the current session...</source>
         <translation type="unfinished"></translation>
     </message>

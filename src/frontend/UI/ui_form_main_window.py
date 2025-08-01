@@ -189,7 +189,7 @@ class Ui_MainWindow(object):
         self.scroll_area_top_stacked.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1014, 220))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 580, 220))
         self.gridLayout_8 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_8.setSpacing(0)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
@@ -775,7 +775,7 @@ class Ui_MainWindow(object):
         self.main_scrollarea_treewidget.setWidgetResizable(True)
         self.main_scrollarea_treewidget_content = QWidget()
         self.main_scrollarea_treewidget_content.setObjectName(u"main_scrollarea_treewidget_content")
-        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 1014, 415))
+        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 412, 207))
         sizePolicy17 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
         sizePolicy17.setHorizontalStretch(0)
         sizePolicy17.setVerticalStretch(0)
@@ -876,7 +876,7 @@ class Ui_MainWindow(object):
         self.settings_scrollarea.setWidgetResizable(True)
         self.settings_scrollarea_widget_contents = QWidget()
         self.settings_scrollarea_widget_contents.setObjectName(u"settings_scrollarea_widget_contents")
-        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, -280, 1002, 932))
+        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 1002, 960))
         self.gridLayout_19 = QGridLayout(self.settings_scrollarea_widget_contents)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.gridLayout_19.setContentsMargins(0, 0, 0, 0)
@@ -1047,24 +1047,22 @@ class Ui_MainWindow(object):
         self.settings_gridlayout_videos = QGridLayout()
         self.settings_gridlayout_videos.setObjectName(u"settings_gridlayout_videos")
         self.settings_gridlayout_videos.setContentsMargins(6, 3, 6, 6)
-        self.settings_label_quality = QLabel(self.settings_groupbox_videos)
-        self.settings_label_quality.setObjectName(u"settings_label_quality")
-        sizePolicy9.setHeightForWidth(self.settings_label_quality.sizePolicy().hasHeightForWidth())
-        self.settings_label_quality.setSizePolicy(sizePolicy9)
+        self.settings_radio_quality_worst = QRadioButton(self.settings_groupbox_videos)
+        self.settings_radio_quality_worst.setObjectName(u"settings_radio_quality_worst")
+        self.settings_radio_quality_worst.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.settings_gridlayout_videos.addWidget(self.settings_label_quality, 0, 0, 1, 1)
+        self.settings_gridlayout_videos.addWidget(self.settings_radio_quality_worst, 0, 3, 1, 2)
 
-        self.settings_button_result_limit_help = QPushButton(self.settings_groupbox_videos)
-        self.settings_button_result_limit_help.setObjectName(u"settings_button_result_limit_help")
-        self.settings_button_result_limit_help.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.settings_radio_quality_half = QRadioButton(self.settings_groupbox_videos)
+        self.settings_radio_quality_half.setObjectName(u"settings_radio_quality_half")
+        self.settings_radio_quality_half.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.settings_gridlayout_videos.addWidget(self.settings_button_result_limit_help, 6, 3, 1, 2)
+        self.settings_gridlayout_videos.addWidget(self.settings_radio_quality_half, 0, 2, 1, 1)
 
-        self.settings_button_output_path_select = QPushButton(self.settings_groupbox_videos)
-        self.settings_button_output_path_select.setObjectName(u"settings_button_output_path_select")
-        self.settings_button_output_path_select.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.settings_radio_model_uploads = QRadioButton(self.settings_groupbox_videos)
+        self.settings_radio_model_uploads.setObjectName(u"settings_radio_model_uploads")
 
-        self.settings_gridlayout_videos.addWidget(self.settings_button_output_path_select, 7, 3, 1, 2)
+        self.settings_gridlayout_videos.addWidget(self.settings_radio_model_uploads, 5, 1, 1, 1)
 
         self.settings_lineedit_output_path = QLineEdit(self.settings_groupbox_videos)
         self.settings_lineedit_output_path.setObjectName(u"settings_lineedit_output_path")
@@ -1073,67 +1071,27 @@ class Ui_MainWindow(object):
 
         self.settings_gridlayout_videos.addWidget(self.settings_lineedit_output_path, 7, 1, 1, 2)
 
-        self.settings_label_settings_videos_model = QLabel(self.settings_groupbox_videos)
-        self.settings_label_settings_videos_model.setObjectName(u"settings_label_settings_videos_model")
-
-        self.settings_gridlayout_videos.addWidget(self.settings_label_settings_videos_model, 5, 0, 1, 1)
-
-        self.settings_label_output_path = QLabel(self.settings_groupbox_videos)
-        self.settings_label_output_path.setObjectName(u"settings_label_output_path")
-
-        self.settings_gridlayout_videos.addWidget(self.settings_label_output_path, 7, 0, 1, 1)
-
-        self.settings_checkbox_videos_use_directory_system = QCheckBox(self.settings_groupbox_videos)
-        self.settings_checkbox_videos_use_directory_system.setObjectName(u"settings_checkbox_videos_use_directory_system")
-
-        self.settings_gridlayout_videos.addWidget(self.settings_checkbox_videos_use_directory_system, 9, 0, 1, 1)
-
-        self.settings_label_searching_limit = QLabel(self.settings_groupbox_videos)
-        self.settings_label_searching_limit.setObjectName(u"settings_label_searching_limit")
-
-        self.settings_gridlayout_videos.addWidget(self.settings_label_searching_limit, 6, 0, 1, 1)
-
-        self.button_help_write_metadata_tags = QPushButton(self.settings_groupbox_videos)
-        self.button_help_write_metadata_tags.setObjectName(u"button_help_write_metadata_tags")
-
-        self.settings_gridlayout_videos.addWidget(self.button_help_write_metadata_tags, 8, 1, 1, 1)
-
-        self.settings_radio_model_uploads = QRadioButton(self.settings_groupbox_videos)
-        self.settings_radio_model_uploads.setObjectName(u"settings_radio_model_uploads")
-
-        self.settings_gridlayout_videos.addWidget(self.settings_radio_model_uploads, 5, 1, 1, 1)
-
-        self.settings_radio_quality_worst = QRadioButton(self.settings_groupbox_videos)
-        self.settings_radio_quality_worst.setObjectName(u"settings_radio_quality_worst")
-        self.settings_radio_quality_worst.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.settings_gridlayout_videos.addWidget(self.settings_radio_quality_worst, 0, 3, 1, 2)
-
         self.settings_button_help_model_videos = QPushButton(self.settings_groupbox_videos)
         self.settings_button_help_model_videos.setObjectName(u"settings_button_help_model_videos")
 
         self.settings_gridlayout_videos.addWidget(self.settings_button_help_model_videos, 5, 4, 1, 1)
 
-        self.settings_checkbox_videos_skip_existing_files = QCheckBox(self.settings_groupbox_videos)
-        self.settings_checkbox_videos_skip_existing_files.setObjectName(u"settings_checkbox_videos_skip_existing_files")
+        self.settings_button_directory_system_help = QPushButton(self.settings_groupbox_videos)
+        self.settings_button_directory_system_help.setObjectName(u"settings_button_directory_system_help")
+        self.settings_button_directory_system_help.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.settings_gridlayout_videos.addWidget(self.settings_checkbox_videos_skip_existing_files, 10, 0, 1, 1)
+        self.settings_gridlayout_videos.addWidget(self.settings_button_directory_system_help, 10, 1, 1, 1)
 
-        self.settings_button_help_skip_existing_files = QPushButton(self.settings_groupbox_videos)
-        self.settings_button_help_skip_existing_files.setObjectName(u"settings_button_help_skip_existing_files")
+        self.settings_button_result_limit_help = QPushButton(self.settings_groupbox_videos)
+        self.settings_button_result_limit_help.setObjectName(u"settings_button_result_limit_help")
+        self.settings_button_result_limit_help.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.settings_gridlayout_videos.addWidget(self.settings_button_help_skip_existing_files, 10, 1, 1, 1)
+        self.settings_gridlayout_videos.addWidget(self.settings_button_result_limit_help, 6, 3, 1, 2)
 
-        self.checkbox_settings_post_processing_write_metadata_tags = QCheckBox(self.settings_groupbox_videos)
-        self.checkbox_settings_post_processing_write_metadata_tags.setObjectName(u"checkbox_settings_post_processing_write_metadata_tags")
+        self.settings_checkbox_videos_use_directory_system = QCheckBox(self.settings_groupbox_videos)
+        self.settings_checkbox_videos_use_directory_system.setObjectName(u"settings_checkbox_videos_use_directory_system")
 
-        self.settings_gridlayout_videos.addWidget(self.checkbox_settings_post_processing_write_metadata_tags, 8, 0, 1, 1)
-
-        self.settings_radio_quality_half = QRadioButton(self.settings_groupbox_videos)
-        self.settings_radio_quality_half.setObjectName(u"settings_radio_quality_half")
-        self.settings_radio_quality_half.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.settings_gridlayout_videos.addWidget(self.settings_radio_quality_half, 0, 2, 1, 1)
+        self.settings_gridlayout_videos.addWidget(self.settings_checkbox_videos_use_directory_system, 10, 0, 1, 1)
 
         self.settings_spinbox_treewidget_limit = QSpinBox(self.settings_groupbox_videos)
         self.settings_spinbox_treewidget_limit.setObjectName(u"settings_spinbox_treewidget_limit")
@@ -1142,27 +1100,74 @@ class Ui_MainWindow(object):
 
         self.settings_gridlayout_videos.addWidget(self.settings_spinbox_treewidget_limit, 6, 1, 1, 2)
 
+        self.settings_button_output_path_select = QPushButton(self.settings_groupbox_videos)
+        self.settings_button_output_path_select.setObjectName(u"settings_button_output_path_select")
+        self.settings_button_output_path_select.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.settings_gridlayout_videos.addWidget(self.settings_button_output_path_select, 7, 3, 1, 2)
+
+        self.button_help_write_metadata_tags = QPushButton(self.settings_groupbox_videos)
+        self.button_help_write_metadata_tags.setObjectName(u"button_help_write_metadata_tags")
+
+        self.settings_gridlayout_videos.addWidget(self.button_help_write_metadata_tags, 9, 1, 1, 1)
+
         self.settings_radio_quality_best = QRadioButton(self.settings_groupbox_videos)
         self.settings_radio_quality_best.setObjectName(u"settings_radio_quality_best")
         self.settings_radio_quality_best.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         self.settings_gridlayout_videos.addWidget(self.settings_radio_quality_best, 0, 1, 1, 1)
 
+        self.settings_label_searching_limit = QLabel(self.settings_groupbox_videos)
+        self.settings_label_searching_limit.setObjectName(u"settings_label_searching_limit")
+
+        self.settings_gridlayout_videos.addWidget(self.settings_label_searching_limit, 6, 0, 1, 1)
+
+        self.checkbox_settings_post_processing_write_metadata_tags = QCheckBox(self.settings_groupbox_videos)
+        self.checkbox_settings_post_processing_write_metadata_tags.setObjectName(u"checkbox_settings_post_processing_write_metadata_tags")
+
+        self.settings_gridlayout_videos.addWidget(self.checkbox_settings_post_processing_write_metadata_tags, 9, 0, 1, 1)
+
         self.settings_radio_model_featured = QRadioButton(self.settings_groupbox_videos)
         self.settings_radio_model_featured.setObjectName(u"settings_radio_model_featured")
 
         self.settings_gridlayout_videos.addWidget(self.settings_radio_model_featured, 5, 2, 1, 1)
+
+        self.settings_label_output_path = QLabel(self.settings_groupbox_videos)
+        self.settings_label_output_path.setObjectName(u"settings_label_output_path")
+
+        self.settings_gridlayout_videos.addWidget(self.settings_label_output_path, 7, 0, 1, 1)
+
+        self.settings_checkbox_videos_skip_existing_files = QCheckBox(self.settings_groupbox_videos)
+        self.settings_checkbox_videos_skip_existing_files.setObjectName(u"settings_checkbox_videos_skip_existing_files")
+
+        self.settings_gridlayout_videos.addWidget(self.settings_checkbox_videos_skip_existing_files, 11, 0, 1, 1)
+
+        self.settings_label_quality = QLabel(self.settings_groupbox_videos)
+        self.settings_label_quality.setObjectName(u"settings_label_quality")
+        sizePolicy9.setHeightForWidth(self.settings_label_quality.sizePolicy().hasHeightForWidth())
+        self.settings_label_quality.setSizePolicy(sizePolicy9)
+
+        self.settings_gridlayout_videos.addWidget(self.settings_label_quality, 0, 0, 1, 1)
+
+        self.settings_button_help_skip_existing_files = QPushButton(self.settings_groupbox_videos)
+        self.settings_button_help_skip_existing_files.setObjectName(u"settings_button_help_skip_existing_files")
+
+        self.settings_gridlayout_videos.addWidget(self.settings_button_help_skip_existing_files, 11, 1, 1, 1)
+
+        self.settings_label_settings_videos_model = QLabel(self.settings_groupbox_videos)
+        self.settings_label_settings_videos_model.setObjectName(u"settings_label_settings_videos_model")
+
+        self.settings_gridlayout_videos.addWidget(self.settings_label_settings_videos_model, 5, 0, 1, 1)
 
         self.settings_radio_model_both = QRadioButton(self.settings_groupbox_videos)
         self.settings_radio_model_both.setObjectName(u"settings_radio_model_both")
 
         self.settings_gridlayout_videos.addWidget(self.settings_radio_model_both, 5, 3, 1, 1)
 
-        self.settings_button_directory_system_help = QPushButton(self.settings_groupbox_videos)
-        self.settings_button_directory_system_help.setObjectName(u"settings_button_directory_system_help")
-        self.settings_button_directory_system_help.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.settings_checkbox_use_video_id_as_filename = QCheckBox(self.settings_groupbox_videos)
+        self.settings_checkbox_use_video_id_as_filename.setObjectName(u"settings_checkbox_use_video_id_as_filename")
 
-        self.settings_gridlayout_videos.addWidget(self.settings_button_directory_system_help, 9, 1, 1, 1)
+        self.settings_gridlayout_videos.addWidget(self.settings_checkbox_use_video_id_as_filename, 8, 0, 1, 2)
 
 
         self.gridLayout_14.addLayout(self.settings_gridlayout_videos, 6, 0, 1, 1)
@@ -1956,26 +1961,27 @@ class Ui_MainWindow(object):
         self.settings_label_startup.setText(QCoreApplication.translate("MainWindow", u"Startup:", None))
         self.settings_label_system_privacy.setText(QCoreApplication.translate("MainWindow", u"Privacy:", None))
         self.settings_groupbox_videos.setTitle(QCoreApplication.translate("MainWindow", u"Videos", None))
-        self.settings_label_quality.setText(QCoreApplication.translate("MainWindow", u"Quality:", None))
-        self.settings_button_result_limit_help.setText(QCoreApplication.translate("MainWindow", u"Help", None))
-        self.settings_button_output_path_select.setText(QCoreApplication.translate("MainWindow", u"Open", None))
-        self.settings_lineedit_output_path.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter \"./\" for current directory", None))
-        self.settings_label_settings_videos_model.setText(QCoreApplication.translate("MainWindow", u"Model videos (PornHub)", None))
-        self.settings_label_output_path.setText(QCoreApplication.translate("MainWindow", u"Output path:", None))
-        self.settings_checkbox_videos_use_directory_system.setText(QCoreApplication.translate("MainWindow", u"Use directory system", None))
-        self.settings_label_searching_limit.setText(QCoreApplication.translate("MainWindow", u"Result Limit:", None))
-        self.button_help_write_metadata_tags.setText(QCoreApplication.translate("MainWindow", u"Help", None))
-        self.settings_radio_model_uploads.setText(QCoreApplication.translate("MainWindow", u"User uploads", None))
         self.settings_radio_quality_worst.setText(QCoreApplication.translate("MainWindow", u"Worst", None))
-        self.settings_button_help_model_videos.setText(QCoreApplication.translate("MainWindow", u"Help", None))
-        self.settings_checkbox_videos_skip_existing_files.setText(QCoreApplication.translate("MainWindow", u"Skip existing files", None))
-        self.settings_button_help_skip_existing_files.setText(QCoreApplication.translate("MainWindow", u"Help", None))
-        self.checkbox_settings_post_processing_write_metadata_tags.setText(QCoreApplication.translate("MainWindow", u"Write metadata tags", None))
         self.settings_radio_quality_half.setText(QCoreApplication.translate("MainWindow", u"Half", None))
-        self.settings_radio_quality_best.setText(QCoreApplication.translate("MainWindow", u"Best", None))
-        self.settings_radio_model_featured.setText(QCoreApplication.translate("MainWindow", u"Featured videos", None))
-        self.settings_radio_model_both.setText(QCoreApplication.translate("MainWindow", u"Both", None))
+        self.settings_radio_model_uploads.setText(QCoreApplication.translate("MainWindow", u"User uploads", None))
+        self.settings_lineedit_output_path.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter \"./\" for current directory", None))
+        self.settings_button_help_model_videos.setText(QCoreApplication.translate("MainWindow", u"Help", None))
         self.settings_button_directory_system_help.setText(QCoreApplication.translate("MainWindow", u"Help", None))
+        self.settings_button_result_limit_help.setText(QCoreApplication.translate("MainWindow", u"Help", None))
+        self.settings_checkbox_videos_use_directory_system.setText(QCoreApplication.translate("MainWindow", u"Use directory system", None))
+        self.settings_button_output_path_select.setText(QCoreApplication.translate("MainWindow", u"Open", None))
+        self.button_help_write_metadata_tags.setText(QCoreApplication.translate("MainWindow", u"Help", None))
+        self.settings_radio_quality_best.setText(QCoreApplication.translate("MainWindow", u"Best", None))
+        self.settings_label_searching_limit.setText(QCoreApplication.translate("MainWindow", u"Result Limit:", None))
+        self.checkbox_settings_post_processing_write_metadata_tags.setText(QCoreApplication.translate("MainWindow", u"Write metadata tags", None))
+        self.settings_radio_model_featured.setText(QCoreApplication.translate("MainWindow", u"Featured videos", None))
+        self.settings_label_output_path.setText(QCoreApplication.translate("MainWindow", u"Output path:", None))
+        self.settings_checkbox_videos_skip_existing_files.setText(QCoreApplication.translate("MainWindow", u"Skip existing files", None))
+        self.settings_label_quality.setText(QCoreApplication.translate("MainWindow", u"Quality:", None))
+        self.settings_button_help_skip_existing_files.setText(QCoreApplication.translate("MainWindow", u"Help", None))
+        self.settings_label_settings_videos_model.setText(QCoreApplication.translate("MainWindow", u"Model videos (PornHub)", None))
+        self.settings_radio_model_both.setText(QCoreApplication.translate("MainWindow", u"Both", None))
+        self.settings_checkbox_use_video_id_as_filename.setText(QCoreApplication.translate("MainWindow", u"Use Video ID as filename", None))
         self.settings_groupbox_performance.setTitle(QCoreApplication.translate("MainWindow", u"Performance", None))
         self.settings_label_pornhub_delay.setText(QCoreApplication.translate("MainWindow", u"Network delay (per Request, in seconds):", None))
         self.settings_button_pornhub_delay_help.setText(QCoreApplication.translate("MainWindow", u"Help", None))

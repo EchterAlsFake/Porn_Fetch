@@ -65,7 +65,8 @@ sections = ["Setup", "Performance", "PostProcessing", "Video", "UI", "Sponsoring
 options_setup = ["license_accepted", "install", "update_checks", "internet_checks", "anonymous_mode", "disclaimer_shown", "activate_logging"]
 options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries", "speed_limit"]
 options_post_processing = ["convert", "format", "write_metadata"]
-options_video = ["quality", "output_path", "directory_system", "search_limit", "delay", "skip_existing_files", "model_videos", "supress_errors"]
+options_video = ["quality", "output_path", "directory_system", "search_limit", "delay", "skip_existing_files", "model_videos", "supress_errors",
+                 "video_id_as_filename"]
 options_ui = ["language", "custom_font", "font_size"]
 options_sponsoring = ["downloaded_videos", "notice_shown"]
 options_android = ["warning_shown"]
@@ -112,6 +113,7 @@ delay = 0
 skip_existing_files = true
 model_videos = both
 supress_errors = false
+video_id_as_filename = false
 
 [UI]
 language = system
