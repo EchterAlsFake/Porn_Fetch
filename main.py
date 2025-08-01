@@ -289,6 +289,9 @@ class InternetCheck(QRunnable):
                 status = core.fetch(website, get_response=True)
                 del core.config.headers["Referer"]
 
+                if status is None:
+                    continue # to lazy to make excpetions for this dog shit site called missav.ws
+
                 if status.status_code == 200:
                     self.website_results.update({website: "OK"})
 
@@ -312,7 +315,7 @@ class CheckUpdates(QRunnable):
                                    http_port=http_log_port, http_ip=http_log_ip)
 
     def run(self):
-        url = f"http://127.0.0.1:443/update"
+        url = f"https://echteralsfake.duckdns.org:443/update"
 
         try:
             response = core.fetch(url=url, get_response=True)
