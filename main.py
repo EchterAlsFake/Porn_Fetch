@@ -760,6 +760,7 @@ class PornFetch(QMainWindow):
         self.skip_existing_files = None
         self.model_videos_type = None
         self.downloader = None
+        self.speed_limit_mb = None
         self.directory_system = None
         self.logger = setup_logger(name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG,
                                    http_ip=http_log_ip, http_port=http_log_port)
@@ -1005,7 +1006,6 @@ class PornFetch(QMainWindow):
         self.header.resizeSection(2, 50)
         self.header.setSectionResizeMode(3, QHeaderView.ResizeMode.Fixed)
         self.ui.treeWidget.setColumnWidth(3, 150)
-        self.header.sortIndicatorChanged.connect(partial(reindex, ))  # don't know what this is, vibe coding ahh moment
         self.ui.treeWidget.itemClicked.connect(self.set_thumbnail)
 
         # Sort by the 'Length' column in ascending order
@@ -1269,24 +1269,21 @@ class PornFetch(QMainWindow):
         self.timeout = int(conf["Performance"]["timeout"])
         self.workers = int(conf["Performance"]["workers"])
         self.max_retries = int(conf["Performance"]["retries"])
+        self.speed_limit_mb = float(conf["Performance"]["speed_limit"])
         self.model_videos_type = conf["Video"]["model_videos"]
         self.ui.settings_spinbox_maximal_timeout.setValue(int(self.timeout))
         self.ui.settings_spinbox_maximal_workers.setValue(int(self.workers))
+        self.ui.settings_spinbox_maximal_retries.setValue(int(self.max_retries))
+        self.ui.settings_spinbox_speed_limit.setValue(self.speed_limit_mb)
         self.ui.settings_spinbox_pornhub_delay.setValue(int(self.delay))
 
         # Apply stuff to eaf_base_api and refresh cores
         config.timeout = self.timeout
         config.request_delay = self.delay
+        config.max_bandwidth_mb = self.speed_limit_mb
         config.max_retries = self.max_retries
         refresh_clients()
         enable_logging()
-
-
-
-
-
-
-
 
 
     def save_user_settings(self):
@@ -1312,6 +1309,7 @@ class PornFetch(QMainWindow):
 
         # Save other settings
         conf.set("Performance", "semaphore", str(self.ui.settings_spinbox_semaphore.value()))
+        conf.set("Performance", "speed_limit", str(self.ui.settings_spinbox_speed_limit.value()))
         conf.set("Video", "search_limit", str(self.ui.settings_spinbox_treewidget_limit.value()))
         conf.set("Video", "output_path", self.ui.settings_lineedit_output_path.text())
         conf.set("Performance", "timeout", str(self.ui.settings_spinbox_maximal_timeout.value()))

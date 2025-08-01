@@ -59,21 +59,3 @@ def list_categories_eporner(self):
 
     self.all_categories_eporner = all_categories  # Need this list to verify the category later
     ui_popup(all_categories)
-
-
-def reindex(self):
-    "Still don't know how this function works and why I needed it, but never touch a running system ahhhh moment"
-    ascending = self.ui.treeWidget.header().sortIndicatorOrder() == Qt.SortOrder.AscendingOrder
-    count = self.ui.treeWidget.topLevelItemCount()
-    for i in range(count):
-        if ascending:
-            # When sorting in ascending order, start indexes at 1 and increment
-            new_index = i + 1
-        else:
-            # When sorting in descending order, start indexes at the count and decrement
-            new_index = count - i
-
-        item = self.ui.treeWidget.topLevelItem(i)
-        current_text = item.text(0)
-        original_title = current_text.split(') ', 1)[1] if ') ' in current_text else current_text
-        item.setText(0, f"{new_index}) {original_title}")
