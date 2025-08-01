@@ -125,6 +125,7 @@ class Signals(QObject):
     # Operations / Reportings
     install_finished = Signal(object)  # Reports if the Porn Fetch installation was finished
     internet_check = Signal(object)  # Reports if the internet checks were successful
+    update_check = Signal(bool, dict)
     result = Signal(dict)  # Reports the result of the internet checks if something went wrong
     error_signal = Signal(object)  # A general error signal, which will show errors using a Pop-up
     clear_tree_widget_signal = Signal()  # A signal to clear the tree widget
@@ -311,11 +312,30 @@ class CheckUpdates(QRunnable):
                                    http_port=http_log_port, http_ip=http_log_ip)
 
     def run(self):
-        pass # TODO
+        url = f"http://127.0.0.1:443/update"
 
+        try:
+            response = core.fetch(url=url, get_response=True)
+            if response.status_code == 200:
+                json_stuff = response.json()
+                if float(json_stuff["version"]) > float(2.5):
+                    self.logger.info(f"A new update is available -->: {json_stuff["version"]}")
+                    self.signals.update_check.emit(True, json_stuff)
 
+                else:
+                    self.logger.info(f"Checked for updates... You are on the latest versioin :)")
+                    self.signals.update_check.emit(False, json_stuff)
 
+            elif response.status_code == 404:
+                self.logger.error("Temporary error reaching the server")
+                return
 
+            elif response.status_code == 500:
+                self.logger.error("Internal Server error, probably already fixing it :) ")
+                return
+
+        except (ConnectionError, ConnectionResetError, ConnectionRefusedError, TimeoutError):
+            handle_error_gracefully("I could NOT check for updates. The server is either not reachable, or you don't have an IPv6 connection.")
 
 
 class AddToTreeWidget(QRunnable):
@@ -982,6 +1002,7 @@ class PornFetch(QMainWindow):
         self.ui.login_button_login.setStyleSheet(stylesheets["button_blue"])
         self.ui.settings_button_apply.setStyleSheet(stylesheets["button_blue"])
         self.ui.tools_button_get_random_videos.setStyleSheet(stylesheets["button_purple"])
+        self.ui.button_update_acknowledged.setStyleSheet(stylesheets["button_green"])
         self.ui.tools_button_get_brazzers_videos.setStyleSheet(stylesheets["button_purple"])
         self.ui.tools_button_list_categories.setStyleSheet(stylesheets["button_purple"])
         self.ui.download_button_open_file.setStyleSheet(stylesheets["button_purple"])
@@ -2069,7 +2090,7 @@ An error happened inside of Porn Fetch!
     def check_for_updates(self):
         """Checks for updates in a thread, so that the main UI isn't blocked, until update checks are done"""
         self.update_thread = CheckUpdates()
-        self.update_thread.signals.result.connect(self.check_for_updates_result)
+        self.update_thread.signals.update_check.connect(self.check_for_updates_result)
         self.update_thread.signals.error_signal.connect(self.show_error)
         self.threadpool.start(self.update_thread)
 
@@ -2135,9 +2156,85 @@ An error happened inside of Porn Fetch!
         dialog.setFixedSize(1280, 720)
         dialog.exec()
 
-    def check_for_updates_result(self, value):
-        ""
+    def check_for_updates_result(self, success: bool, dictionary: dict):
+        if success:
+            self.logger.info("New Update found!")
+            version = dictionary["version"]
+            url = dictionary["url"]
+            anonymous_download_url = dictionary["anonymous_download"]
+            changelog = dictionary["changelog"]  # already HTML
+            important_info = dictionary["important_info"]
 
+            # Format the HTML content
+            html = f"""
+            <html>
+            <head>
+                <style>
+                    body {{
+                        font-family: "Segoe UI", sans-serif;
+                        font-size: 14px;
+                        color: #e0e0e0;
+                        background-color: #1e1e1e;
+                    }}
+                    h1 {{
+                        text-align: center;
+                        color: #4da6ff;
+                        font-size: 26px;
+                    }}
+                    .section {{
+                        margin: 15px 0;
+                    }}
+                    .label {{
+                        font-weight: bold;
+                        color: #5dade2;
+                    }}
+                    .info {{
+                        margin-left: 5px;
+                    }}
+                    .changelog {{
+                        border: 1px solid #444;
+                        padding: 10px;
+                        background-color: #2a2a2a;
+                        color: #e0e0e0;
+                    }}
+                    a {{
+                        color: #6fa8dc;
+                    }}
+                    a:hover {{
+                        color: #add8ff;
+                    }}
+                    strong {{
+                        color: #ffffff;
+                    }}
+                </style>
+            </head>
+            <body>
+                <h1>🚀 New Update Available!</h1>
+                <div class="section">
+                    <span class="label">Version:</span>
+                    <span class="info">{version}</span>
+                </div>
+                <div class="section">
+                    <span class="label">Download:</span>
+                    <span class="info"><a href="{url}">Authenticated Link</a> | <a href="{anonymous_download_url}">Anonymous Link</a></span>
+                </div>
+                <div class="section">
+                    <span class="label">Important Info:</span>
+                    <div class="info">{important_info}</div>
+                </div>
+                <div class="section">
+                    <span class="label">Changelog:</span>
+                    <div class="changelog">
+                        {changelog}
+                    </div>
+                </div>
+            </body>
+            </html>
+            """
+
+            self.ui.text_browser_update_available.setHtml(html)
+            self.ui.CentralStackedWidget.setCurrentIndex(6)
+            self.ui.button_update_acknowledged.clicked.connect(self.switch_to_download)
 
     def check_internet(self):
         """Checks if the porn sites are accessible"""

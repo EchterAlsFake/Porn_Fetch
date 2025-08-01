@@ -37,12 +37,12 @@
 - [x] Add spankbang back into the project
 - [x] Allow for Video IDs as the filename [#76](https://github.com/EchterAlsFake/Porn_Fetch/issues/76)
 - [x] Allow ignoring specific errors [#74](https://github.com/EchterAlsFake/Porn_Fetch/issues/74)
+- [x] Rewrite License Agreement to be GPLv3 compliant
 - [] Automatic model download of new videos [#78](https://github.com/EchterAlsFake/Porn_Fetch/issues/78)
 - [] Allow for more parameters when starting Porn Fetch [#77](https://github.com/EchterAlsFake/Porn_Fetch/issues/77)
 - [] Rework the Batch processing features entirely (lol)
 - [] Re-add an error / feedback reporting system using my own privacy focussed server
 - [] Switch update checking to my own server instead of GitHub (more flexibility)
-- [] Rewrite License Agreement to be GPLv3 compliant
 - [] Add a kill switch feature for Proxy users
 
 # Code optimizations
