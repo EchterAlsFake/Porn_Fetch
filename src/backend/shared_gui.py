@@ -46,7 +46,8 @@ def ui_popup(text, title="Notice"):
 def handle_error_gracefully(self, data: dict, error_message: str, needs_network_log: bool= False):
     self.logger.error(error_message)
 
-    if not data.get("supress_errors") == "true":
+    if not data.get("supress_errors") is True:
+        print(f"Suppress errors: {data.get('supress_errors')}")
         self.signals.error_signal.emit(error_message)
 
     if needs_network_log:

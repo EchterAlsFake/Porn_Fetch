@@ -417,7 +417,7 @@ class AddToTreeWidget(QRunnable):
 
 
         except WeirdError_HQ:
-            handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"An error happend with: {video.url} this is a weird error i have no fix for yet,"
+            handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"An error happened with: {video.url} this is a weird error i have no fix for yet,"
                                           f" however this will be reported, to help me fixing it :) ", needs_network_log=True)
             return False
 
@@ -1375,6 +1375,7 @@ class PornFetch(QMainWindow):
                  "true" if self.ui.settings_checkbox_ui_custom_font.isChecked() else "false")
         conf.set("UI", "font_size", str(self.ui.settings_spinbox_gui_font_size.value()))
         conf.set("Video", "video_id_as_filename", "true" if self.ui.settings_checkbox_use_video_id_as_filename.isChecked() else "false")
+        conf.set("Video", "supress_errors", "true" if self.ui.checkbox_settings_video_supress_errors.isChecked() else "false")
 
         with open("config.ini", "w") as config_file:  # type: TextIOWrapper
             conf.write(config_file)
