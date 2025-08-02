@@ -1,6 +1,25 @@
 # Guide for Localizing Porn Fetch into Your Language
-
 Thank you for your interest in translating Porn Fetch! Your contribution to localizing the application is highly valued.
+
+
+# The Easy Way
+The easy way of translating Porn Fetch directly from your browser from anywhere is by using
+crowdin. 
+
+Here's the Project URL ->: https://de.crowdin.com/project/pornfetch/
+
+You need to make a free account on crowdin (takes 1 minute).
+For reference, watch this very short and easy tutorial how to do it.
+
+Link: https://youtu.be/0N-kLGT1nJQ
+
+> [!IMPORTANT]
+> You DO NOT have to translate these big weird HTML like texts.
+
+
+# The Hard way
+The hard way is easier if you are tech savy and I would recommend it if you know what
+I am talking about ;) 
 
 ## Getting Started with Qt Linguist
 

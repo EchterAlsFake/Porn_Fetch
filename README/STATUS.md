@@ -1,6 +1,5 @@
 # v3.6
 
-
 # Bug fixes
 - [x] Fix XNXX progress reporting
 - [x] Fixed total progress in general
@@ -25,8 +24,8 @@
 - [x] Fix TypeError: Incoming markup is of an invalid type: None. Markup must be a string, a bytestring, or an open filehandle.
 - [x] Optional processing delay for every video
 - [x] Allow for direct video downloading instead of manually selecting in the tree widget
+- [x] Publish translation strings on Crowdin
 - [] Change Icons
-- [] Publish translation strings on Crowdin
 - [] Fix and improve the CLI
 - [] ~~Implement transition animations for the Stacked Widget~~
 - [] ~~Improve tree widget range selection and make it finally intuitive lol~~
@@ -52,7 +51,7 @@
 - [x] Finalize proxy support
 - [x] Entirely rework how settings are handled within Porn Fetch
 - [x] Improve download from file implementation
-- [] Generally improve how translations are handled
+- [x] Generally improve how translations are handled
 - [] Improving installation
   - [] Letting user know if Porn Fetch is already there
   - [] Better exception handling

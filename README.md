@@ -220,6 +220,10 @@ Currently available in:
 
 > If a language is marked with a `*` it means, you can contribute something, and it needs an update!
 
+If you are familiar with Crowdin, you can just use that for translating, here's the project link:
+<br> -> https://crowdin.com/project/pornfetch
+
+
 
 ## 👏 Credits
 - API: [PHUB](https://github.com/EchterAlsFake/PHUB)
