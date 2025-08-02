@@ -898,17 +898,32 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>PornFetch</name>
     <message>
-        <location filename="../../../main.py" line="1161"/>
+        <location filename="../../../main.py" line="1152"/>
         <source>Porn Fetch installation failed, because of: {result[1]}</source>
         <translation type="unfinished">Die Installation von Porn Fetch ist fehlgeschlafen{result[1]}</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1467"/>
+        <location filename="../../../main.py" line="1459"/>
         <source>Saved User Settings, please restart Porn Fetch!</source>
         <translation type="unfinished">Einstellungen wurden gespeichert. Bitte starte Porn Fetch neu!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1507"/>
+        <location filename="../../../main.py" line="1653"/>
+        <source>The model URL you entered seems to be invalid. Please check your input</source>
+        <translation type="unfinished">Die Model uRL, welche du eingegeben hast  scheint ungültig zu sein. Bitte überpfrüfe deine Eingaben</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1725"/>
+        <source>Couldn&apos;t determine which site you want to search on??? Please report this immediately!</source>
+        <translation type="unfinished">Ich konnte nicht herausfinden, auf welcher Seite du suchen willst??? Bitte melde das sofort!</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1147"/>
+        <source>Porn Fetch has been installed. The app will now close! Please start Porn Fetch from your context menu again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1499"/>
         <source>
 Please read this before setting proxies:
 
@@ -944,69 +959,68 @@ and one request without a proxy. If the IPs are different, then it worked, if no
 This is all for your safety!
 
 Warning:
-Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCURR WHEN YOU HAVE PROXIES ENABLED!!!
+Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YOU HAVE PROXIES ENABLED!!!
         </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1659"/>
-        <source>The model URL you entered seems to be invalid. Please check your input</source>
-        <translation type="unfinished">Die Model uRL, welche du eingegeben hast  scheint ungültig zu sein. Bitte überpfrüfe deine Eingaben</translation>
+        <location filename="../../../main.py" line="1532"/>
+        <source>You did choose to not disable SSL Verifications. Retuning to GUI without applying proxies now...</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1731"/>
-        <source>Couldn&apos;t determine which site you want to search on??? Please report this immediately!</source>
-        <translation type="unfinished">Ich konnte nicht herausfinden, auf welcher Seite du suchen willst??? Bitte melde das sofort!</translation>
+        <location filename="../../../main.py" line="1536"/>
+        <source>Your proxy seems to be invalid, please try again...</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1871"/>
-        <source>
-An error happened inside of Porn Fetch! 
-
-{error}</source>
-        <translation type="unfinished">
-Ein Fehler trat in Porn Fetch auf
-
-{error}</translation>
+        <location filename="../../../main.py" line="1543"/>
+        <source>Proxy IP: {ip_masked} Your IP: {ip} are the same! Please check the proxy you&apos;ve used!, aborting...</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2074"/>
+        <location filename="../../../main.py" line="1561"/>
+        <source>Can not enable Kill Switch if you haven&apos;t applied a proxy yet!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2061"/>
         <source>Those credentials don&apos;t seem to be valid...</source>
         <translation type="unfinished">Diese Zugangsdaten sehen ungültig aus...</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2087"/>
+        <location filename="../../../main.py" line="2073"/>
         <source>Login Successful!</source>
         <translation type="unfinished">Login erfolgreich!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2092"/>
+        <location filename="../../../main.py" line="2078"/>
         <source>Login Failed, please check your credentials and try again!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2096"/>
+        <location filename="../../../main.py" line="2082"/>
         <source>You are already logged in!</source>
         <translation type="unfinished">Du bist bereits angemeldet!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2108"/>
+        <location filename="../../../main.py" line="2094"/>
         <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
         <translation type="unfinished">Es gibt ein Problem mit dem Login. Bitte logge dich erst ein und versuche dann Videos von deinem Account zu laden.</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2165"/>
-        <location filename="../../../main.py" line="2178"/>
+        <location filename="../../../main.py" line="2151"/>
+        <location filename="../../../main.py" line="2164"/>
         <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
         <translation type="unfinished">Ungültige Kategorie. Drücke &quot;Kategorien auflisten&quot; um alle möglichen zu sehen.</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2274"/>
+        <location filename="../../../main.py" line="2260"/>
         <source>Full Thumbnail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2395"/>
+        <location filename="../../../main.py" line="2381"/>
         <source>
 ! Warning !
 Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
@@ -1022,7 +1036,7 @@ Einige Webseiten konnten nicht aufgerufen werden. Hier ist ein detailierter Beri
 <context>
     <name>main</name>
     <message>
-        <location filename="../../backend/class_help.py" line="11"/>
+        <location filename="../../backend/class_help.py" line="108"/>
         <source>
 The result limit defines how many videos will be returned when performing a search or doing other operations which
 involves loading multiple videos. This also affects models / channels and your liked videos. The result limit is
@@ -1034,41 +1048,7 @@ Vereinfacht ist es die Zahl, wie viele Videos maximal in das Tree Widget geladen
 </translation>
     </message>
     <message>
-        <location filename="../../backend/class_help.py" line="24"/>
-        <source>
-You can set a delay between requests from you to PornHub. If you are downloading a lot of videos or experiencing 
-&apos;client.call&apos; errors, you should enable a delay. By default the delay is turned off with the value 0
-
-A good starting point is between 0.5 - 1.5
-
-The longer the delay is, the longer it will take to download videos, load videos and generally do stuff.
-This does NOT affect other sites!
-</source>
-        <translation>
-Du kannst eine Verzögerung zwichen den Netzwerk Anfragen zwischen dir und der Website einstellen. Wenn du viele Videos herunterlädst und dabei Probleme bekommst,
-z.B. das dich eine Website temporör blockiert, oder Fehler aufweist. Standardmäßig ist die Verzögerung mit dem Wert 0 deaktiviert
-
-Eine Empfehlung wäre zwischen 0.5 - 1.5
-
-Je länger die Verzögerung ist, desto länger werden alle Netzwerkanfragen brauchen !
-</translation>
-    </message>
-    <message>
-        <location filename="../../backend/class_help.py" line="36"/>
-        <source>
-The maximal workers define the amount of maximal threads which can be started when using the threaded download mode.
-One thread handles downloading one segment, so (in theory) 20 threads can download 20 segments at the same time.
-This can of course be helpful when you have a very fast internet connection, but when you have a poor PC or running on
-Android, you should set this to a lower value.
-
-I recommend &apos;3&apos; for Android and 5 for low bandwidth connections &lt; 15000 bit/s
-</source>
-        <translation>Die maximalen &quot;Arbeiter&quot; definieren die Zahl der maximalen Threads, welche zum Herunterladen der Videosegmente benutzt werden.
-Ein Thread kann ein Segment herunterladen, 20 &quot;Arbeiter&quot; können also 20 Segmente gleichzeitig herunterladen (zumindest in der Theorie. Kommt natürlich auf deine Internetgeschwindigkeit an)
-</translation>
-    </message>
-    <message>
-        <location filename="../../backend/class_help.py" line="44"/>
+        <location filename="../../backend/class_help.py" line="60"/>
         <source>
 The timeout handles the timeout for retrieving segments when using the threaded download mode. If you have a poor 
 internet connection you can set this higher than 10. But this isn&apos;t required for most users!
@@ -1079,7 +1059,7 @@ oder instabiler Internetverbindung kann ein höhrerer Wert helfen!
 </translation>
     </message>
     <message>
-        <location filename="../../backend/class_help.py" line="55"/>
+        <location filename="../../backend/class_help.py" line="27"/>
         <source>
 The Semaphore is a tool to limit the number of simultaneous actions / downloads.
 
@@ -1096,7 +1076,7 @@ allerdings verbraucht Porn Fetch sehr viel CPU Leistung, daher ist ein Wert höh
 </translation>
     </message>
     <message>
-        <location filename="../../backend/class_help.py" line="69"/>
+        <location filename="../../backend/class_help.py" line="16"/>
         <source>
 The different threading modes are used for different scenarios. 
 
@@ -1110,7 +1090,50 @@ With the High Performance method, we can just download other segments while wait
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../backend/class_help.py" line="80"/>
+        <location filename="../../backend/class_help.py" line="40"/>
+        <source>
+You can set a delay between requests from you and a site. If you are downloading a lot of videos or experiencing 
+errors, you should enable a delay. By default the delay is turned off with the value 0
+
+A good starting point is between 0.5 - 1.5
+
+The longer the delay is, the longer it will take to download videos, load videos and generally do stuff. This does not
+really affect the high performance download mode.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../backend/class_help.py" line="52"/>
+        <source>
+The maximal workers define the amount of maximal threads which can be started when using the threaded download mode.
+One thread handles downloading one segment, so (in theory) 20 threads can download 20 segments at the same time.
+This can of course be helpful when you have a very fast internet connection, but when you have a poor PC or running on
+Android, you should set this to a lower value.
+
+I recommend &apos;3&apos; for Android and 5 for low bandwidth connections &lt; 15000 kbit/s
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../backend/class_help.py" line="87"/>
+        <source>
+The processing delay sets a delay before every video gets downloaded.
+Let&apos;s assume you set a delay of 30 (30 seconds), then it will take 30 seconds between each video downloads.
+This does not apply if you have a value of simultaneous downloads greater than 1.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../backend/class_help.py" line="117"/>
+        <source>
+Metadata tags are saved inside of the file itself. These are tags that video players can read from and provide you information.
+Some folder viewers also give you the ability to search files by specific metadata tags. Those tags can help organize and structure files.
+Porn Fetch will by default save those tags inside of your video files. 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../backend/class_help.py" line="128"/>
         <source>
 The directory system will save videos in an intelligent way. If you download 3 videos form one Pornstar and 5 videos 
 from another, Porn Fetch will automatically make folders for it and move the 3 videos into that one folder and the other
@@ -1123,30 +1146,49 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
 Das kann hilfreich sein, um Dinge zu organisieren, ist aber eine fortgeschrittene Funktion, die die Mehrheit der Nutzer wahrscheinlich nicht verwenden wird.</translation>
     </message>
     <message>
-        <location filename="../../backend/class_help.py" line="103"/>
+        <location filename="../../backend/class_help.py" line="209"/>
+        <source>
+I have created my own server that runs 24/7 in my home. Porn Fetch (ONLY if you enable it) logs specific types of errors,
+that I don&apos;t know of, or that I need your help to fix them, to my server using a simple JSON post request.
+
+You can see the Code of the server publicly here --&gt;: https://github.com/EchterAlsFake/Server
+Porn Fetch also does its update checking mechanism through that server.
+
+IMPORTANT:
+The server is IPv6 only. If your ISP has not given you a working IPv6 IP address, then you can&apos;t reach me.
+You can check for yourself on &apos;https://ipleak.net&apos;. It should be something like this: &apos;2a02:810a:186:b400::5c51&apos;
+
+My server does NOT save any of your personal information. No IP addresses, no PC information, no other identifiable information.
+The only things being stored is the literal Python exception that&apos;s being caught, the version you are running on, and your system.
+Like literally only if you use Windows, Linux or Mac. Nothing else.
+
+You can see that yourself, as mentioned before on the source code.
+You&apos;d help me a lot by enabling network logging :) 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../backend/class_help.py" line="229"/>
         <source>
 Create a .txt file and add URLs like this:
 
-url1
-url2
-url3
+video#&lt;url&gt;
 ...
 
 Split them with new lines. No comma, not multiple URLs in the same line!
 You can also add model URLs like this:
 
-model#MODEL_URL
-
+model#&lt;url&gt;
 An example for a file would be:
 
-https://de.pornhub.com/view_video.php?viewkey=ph5be76343323ff
-https://de.pornhub.com/view_video.php?viewkey=ph5946e5f19585a
+video#https://de.pornhub.com/view_video.php?viewkey=ph5be76343323ff
+video#https://de.pornhub.com/view_video.php?viewkey=ph5946e5f19585a
 model#https://de.pornhub.com/pornstar/nancy-a
 </source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../backend/class_help.py" line="111"/>
+        <location filename="../../backend/class_help.py" line="68"/>
         <source>
 The maximal retries defines how much attempts will be used for a network request. For example if an API calls
 a URL for a website there will be &lt;AMOUNT&gt; of attempts until an error is thrown.
@@ -1154,7 +1196,7 @@ a URL for a website there will be &lt;AMOUNT&gt; of attempts until an error is t
         <translation>Die maximalen Wiederholungen definieren, wie viele Versuche für eine Netzwerk-Anfrage unternommen werden. Wenn zum Beispiel eine API eine URL für eine Website aufruft, wird es &lt;ANZAHL&gt; Versuche geben, bis ein Fehler auftritt.</translation>
     </message>
     <message>
-        <location filename="../../backend/class_help.py" line="139"/>
+        <location filename="../../backend/class_help.py" line="99"/>
         <source>
 User uploads and featured videos are two different things. User uploads are the videos which were really uploaded
 by the model and the featured videos are videos the model is part or featured in.
@@ -1170,25 +1212,7 @@ Zum Beispiel hat das Model Nancy Ace ungefähr 10 selbst hochgeladene Videos, di
 Wenn du &quot;Nutzer-Uploads&quot; wählst, werden nur selbst hochgeladene Videos abgerufen, und andersherum :)</translation>
     </message>
     <message>
-        <location filename="../../backend/class_help.py" line="152"/>
-        <source>
-Metadata tags are saved inside of the file itself. These are tags that video players can read from and provide you information.
-Some folder viewers also give you the ability to search files by specific metadata tags. Those tags can help organize and structure files.
-Porn Fetch will by default save those tags inside of your video files. 
-
-Tag writing is not supported for formats that are not mp4 files. Porn Fetch allows you to convert video files into other
-formats, however, they use other standardization for metadata keys (a specifier), which is why I can&apos;t support other
-video &apos;containers&apos;. 
-</source>
-        <translation>
-Metadaten Tags werden im Video selbst gespeichert. Es sind Tags, welche von z.B. anderen Video-Playern ausgelesen werden können um dir Informationen über das Video zu geben.
-Einige Dateimanager können auch basierend auf Tags nach Dateien filtern. Es kann also z.B. zum sortieren von Dateien helfen.
-Porn Fetch wird standartmäßig diese Tags in die Videos schreiben. 
-
-Das Schreiben von Tags ist allerdings nur für mp4 Video-Container unterstützt, da die andere Container ein andere Standartisierung nutzen.</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="2470"/>
+        <location filename="../../../main.py" line="2456"/>
         <source>No URLs in the current session...</source>
         <translation>Keine URLs in der aktuellen Session...</translation>
     </message>

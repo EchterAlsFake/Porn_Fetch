@@ -50,9 +50,9 @@
 - [x] Improve failed segment retrying
 - [x] Allow ignoring specific exceptions (#74)
 - [x] Finalize proxy support
-- [] Entirely rework how settings are handled within Porn Fetch
+- [x] Entirely rework how settings are handled within Porn Fetch
+- [x] Improve download from file implementation
 - [] Generally improve how translations are handled
-- [] Improve download from file implementation
 - [] Improving installation
   - [] Letting user know if Porn Fetch is already there
   - [] Better exception handling

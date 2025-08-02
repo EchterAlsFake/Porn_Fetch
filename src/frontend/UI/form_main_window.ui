@@ -1848,7 +1848,7 @@ color: white</string>
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>-319</y>
+             <y>0</y>
              <width>1002</width>
              <height>965</height>
             </rect>
@@ -2492,7 +2492,7 @@ QPushButton:pressed {
                     </widget>
                    </item>
                    <item>
-                    <widget class="QPushButton" name="setting_button_help_performance_network_delay">
+                    <widget class="QPushButton" name="settings_button_help_performance_network_delay">
                      <property name="cursor">
                       <cursorShape>PointingHandCursor</cursorShape>
                      </property>
@@ -2803,7 +2803,7 @@ QPushButton:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>70</width>
+             <width>98</width>
              <height>70</height>
             </rect>
            </property>
@@ -3382,7 +3382,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>70</width>
+             <width>98</width>
              <height>70</height>
             </rect>
            </property>
@@ -3791,7 +3791,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
   <tabstop>settings_spinbox_performance_simultaneous_downloads</tabstop>
   <tabstop>settings_button_help_performance_simultaneous_downloads</tabstop>
   <tabstop>settings_spinbox_performance_network_delay</tabstop>
-  <tabstop>setting_button_help_performance_network_delay</tabstop>
+  <tabstop>settings_button_help_performance_network_delay</tabstop>
   <tabstop>settings_spinbox_performance_maximal_workers</tabstop>
   <tabstop>settings_button_help_performance_maximal_workers</tabstop>
   <tabstop>settings_spinbox_performance_maximal_timeout</tabstop>

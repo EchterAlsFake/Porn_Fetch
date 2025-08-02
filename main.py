@@ -16,7 +16,7 @@ from src.backend.shared_gui import *
 from src.backend.class_help import *
 from src.frontend.UI.ui_form_main_window import Ui_MainWindow
 from src.backend.one_time_functions import *
-from src.backend.config import __version__
+from src.backend.config import __version__, __build__
 from src.backend.donation_nag import DonationNag
 from src.backend.license import License, Disclaimer
 from src.backend.config import shared_config
@@ -128,7 +128,6 @@ class Signals(QObject):
     internet_check = Signal(object)  # Reports if the internet checks were successful
     update_check = Signal(bool, dict)
     result = Signal(dict)  # Reports the result of the internet checks if something went wrong
-    error_signal = Signal(object)  # A general error signal, which will show errors using a Pop-up
     clear_tree_widget_signal = Signal()  # A signal to clear the tree widget
     text_data_to_tree_widget = Signal(int)  # Sends the text data in the form of a dictionary to the main class
     download_completed = Signal(object)  # Reports a successfully downloaded video
@@ -304,7 +303,7 @@ class InternetCheck(QRunnable):
 
             except Exception:
                     error = traceback.format_exc()
-                    self.signals.error_signal.emit(error)
+                    print("Don't care lol")
 
         self.signals.internet_check.emit(self.website_results)
 
@@ -1127,24 +1126,14 @@ class PornFetch(QMainWindow):
         gv.viewport().installEventFilter(self)
         self.switch_to_download()
 
-    '''def install_pornfetch(self):
-        if __build__ == "desktop":
-            self.logger.info(f"Starting Porn Fetch installation with App name: {self.app_name}")
-            self.install_thread = InstallThread(self.app_name)
-            self.install_thread.signals.install_finished.connect(self.install_pornfetch_result)
-            self.install_thread.signals.start_undefined_range.connect(self.start_undefined_range)
-            self.install_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
-            self.threadpool.start(self.install_thread)
+    def install_pornfetch(self):
+        pass
 
-        else:
-            ui_popup(self.tr("You are running on Android! You can not install Porn Fetch", disambiguation=None))
-
-    '''
 
     def install_pornfetch_result(self, result):
         if result[0]:
-            ui_popup("Porn Fetch has been installed. The app will now close! Please start Porn Fetch from"
-                     " your context menu again.")
+            ui_popup(self.tr("Porn Fetch has been installed. The app will now close! Please start Porn Fetch from"
+                     " your context menu again.", disambiguation=None))
 
             self.close()
 
@@ -1223,23 +1212,29 @@ class PornFetch(QMainWindow):
         self.ui.download_button_playlist_get_videos.clicked.connect(self.start_playlist)
 
         # Help Buttons Connections
-        self.ui.settings_button_help_performance_simultaneous_downloads.clicked.connect(button_semaphore_help)
-        self.ui.settings_button_help_performance_download_mode.clicked.connect(button_threading_mode_help)
-        self.ui.settings_button_help_videos_use_directory_system.clicked.connect(button_directory_system_help)
-        self.ui.settings_button_help_performance_maximal_workers.clicked.connect(maximal_workers_help)
-        self.ui.settings_button_help_performance_maximal_timeout.clicked.connect(timeout_help)
-        self.ui.setting_button_help_performance_network_delay.clicked.connect(pornhub_delay_help)
-        self.ui.settings_button_help_videos_result_limit.clicked.connect(result_limit_help)
+        self.ui.settings_button_help_performance_simultaneous_downloads.clicked.connect(button_help_simultaneous_downloads)
+        self.ui.settings_button_help_performance_download_mode.clicked.connect(button_help_download_mode)
+        self.ui.settings_button_help_performance_maximal_workers.clicked.connect(button_help_maximal_workers)
+        self.ui.settings_button_help_performance_maximal_timeout.clicked.connect(button_help_timeout)
+        self.ui.settings_button_help_performance_network_delay.clicked.connect(button_help_network_delay)
+        self.ui.settings_button_help_performance_maximal_retries.clicked.connect(button_help_max_retries)
+        self.ui.settings_button_help_performance_processing_delay.clicked.connect(button_help_processing_delay)
+        self.ui.settings_button_help_performance_speed_limit.clicked.connect(button_help_speed_limit)
+        self.ui.settings_button_help_videos_use_directory_system.clicked.connect(button_help_directory_system)
+        self.ui.settings_button_help_videos_result_limit.clicked.connect(button_help_result_limit)
+        self.ui.settings_button_help_videos_skip_existing_files.clicked.connect(button_help_skip_existing_files)
+        self.ui.settings_button_help_videos_model_videos_type.clicked.connect(button_help_model_videos)
+        self.ui.settings_button_help_videos_write_metadata.clicked.connect(button_help_write_metadata)
+        self.ui.settings_button_help_videos_direct_download.clicked.connect(button_help_direct_download)
+        self.ui.settings_button_help_system_anonymous_mode.clicked.connect(button_help_anonymous_mode)
+        self.ui.settings_button_help_system_supress_errors.clicked.connect(button_help_supress_errors)
+        self.ui.settings_button_help_system_enable_network_logging.clicked.connect(button_help_network_logging)
+        self.ui.settings_button_help_system_proxy_kill_switch.clicked.connect(button_help_proxy_kill_switch)
         self.ui.download_button_help_file.clicked.connect(open_file_help)
-        self.ui.settings_button_help_performance_maximal_retries.clicked.connect(max_retries_help)
-        self.ui.settings_button_help_videos_skip_existing_files.clicked.connect(skip_existing_files_help)
-        self.ui.settings_button_help_videos_model_videos_type.clicked.connect(model_videos_help)
-        self.ui.settings_button_help_videos_write_metadata.clicked.connect(metadata_help)
-
         # Settings
         self.ui.settings_button_apply.clicked.connect(self.save_user_settings)
         self.ui.settings_button_reset.clicked.connect(reset_pornfetch)
-        # self.ui.settings_button_install_pornfetch.clicked.connect(self.install_pornfetch)
+        self.ui.settings_button_system_install_pornfetch.clicked.connect(self.install_pornfetch)
         self.ui.settings_checkbox_system_activate_proxy.clicked.connect(self.set_proxies)
 
         # Account
@@ -1489,7 +1484,7 @@ and one request without a proxy. If the IPs are different, then it worked, if no
 This is all for your safety!
 
 Warning:
-Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCURR WHEN YOU HAVE PROXIES ENABLED!!!
+Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YOU HAVE PROXIES ENABLED!!!
         """, disambiguation=None)
 
         ui_popup(message)
@@ -1523,18 +1518,18 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCURR WHEN Y
                         "origin"]
 
                 else:
-                    ui_popup("You did choose to not disable SSL Verifications. Retuning to GUI without applying proxies now...")
+                    ui_popup(self.tr("You did choose to not disable SSL Verifications. Retuning to GUI without applying proxies now...", disambiguation=None))
                     return None
 
             except InvalidProxy:
-                ui_popup("Your proxy seems to be invalid, please try again...")
+                ui_popup(self.tr("Your proxy seems to be invalid, please try again...", disambiguation=None))
                 return None
 
             self.logger.info(f"Masked IP is -->: {ip_masked}")
 
             if ip == ip_masked:
                 self.logger.error("ERROR: IP LEAK!")
-                ui_popup(f"Proxy IP: {ip_masked} Your IP: {ip} are the same! Please check the proxy you've used!, aborting...")
+                ui_popup(self.tr(f"Proxy IP: {ip_masked} Your IP: {ip} are the same! Please check the proxy you've used!, aborting...", disambiguation=None))
                 return None
 
 
@@ -1552,7 +1547,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCURR WHEN Y
 
         else:
             if self.proxy is None:
-                ui_popup("Can not enable Kill Switch if you haven't applied a proxy yet!")
+                ui_popup(self.tr("Can not enable Kill Switch if you haven't applied a proxy yet!", disambiguation=None))
                 self.ui.settings_checkbox_system_proxy_kill_switch.setChecked(False)
                 return None
 
@@ -1716,7 +1711,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCURR WHEN Y
 
         else:
             ui_popup(
-                self.tr("Couldn't determine which site you want to search on??? Please report this immediately!"))
+                self.tr("Couldn't determine which site you want to search on??? Please report this immediately!", disambiguation=None))
             return
 
 
@@ -1738,7 +1733,6 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCURR WHEN Y
         self.add_to_tree_widget_thread_.signals.clear_tree_widget_signal.connect(self.clear_tree_widget)
         self.add_to_tree_widget_thread_.signals.start_undefined_range.connect(self.start_undefined_range)
         self.add_to_tree_widget_thread_.signals.stop_undefined_range.connect(self.stop_undefined_range)
-        self.add_to_tree_widget_thread_.signals.error_signal.connect(self.show_error)
         self.add_to_tree_widget_thread_.signals.tree_widget_finished.connect(self.tree_widget_finished)
         self.add_to_tree_widget_thread_.signals.total_progress_range.connect(self.update_total_progressbar_range)
         self.add_to_tree_widget_thread_.signals.total_progress.connect(self.update_total_progressbar)
@@ -1812,7 +1806,6 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCURR WHEN Y
         self.download_tree_thread.signals.start_undefined_range.connect(self.start_undefined_range)
         self.download_tree_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
         self.download_tree_thread.signals.progress_send_video.connect(self.process_video_thread)
-        self.download_tree_thread.signals.error_signal.connect(self.show_error)
         self.threadpool.start(self.download_tree_thread)
 
     def process_video_thread(self, video, video_id):
@@ -1823,7 +1816,6 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCURR WHEN Y
         self.download_thread.signals.progress_video_range.connect(self.set_video_progress_range)
         self.download_thread.signals.total_progress_range.connect(self.update_total_progressbar_range)
         self.download_thread.signals.total_progress.connect(self.update_total_progressbar)
-        self.download_thread.signals.error_signal.connect(self.show_error)
         # ADAPTION
         self.download_thread.signals.download_completed.connect(self.download_completed)
         self.threadpool.start(self.download_thread)
@@ -1850,13 +1842,6 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCURR WHEN Y
         conf.set("Sponsoring", "downloaded_videos", str(downloaded_videos))
         with open("config.ini", "w") as config_file:  # type:TextIOWrapper
             conf.write(config_file)
-
-    def show_error(self, error):
-        err = self.tr(f"""
-An error happened inside of Porn Fetch! 
-
-{error}""")
-        ui_popup(err)
 
     def clear_tree_widget(self):
         """
@@ -2213,7 +2198,6 @@ An error happened inside of Porn Fetch!
         """Checks for updates in a thread, so that the main UI isn't blocked, until update checks are done"""
         self.update_thread = CheckUpdates()
         self.update_thread.signals.update_check.connect(self.check_for_updates_result)
-        self.update_thread.signals.error_signal.connect(self.show_error)
         self.threadpool.start(self.update_thread)
 
     def eventFilter(self, source, event):
@@ -2362,7 +2346,6 @@ An error happened inside of Porn Fetch!
         """Checks if the porn sites are accessible"""
         self.internet_check_thread = InternetCheck()
         self.internet_check_thread.signals.internet_check.connect(self.internet_check_result)
-        self.internet_check_thread.signals.error_signal.connect(self.show_error)
         self.threadpool.start(self.internet_check_thread)
 
     def internet_check_result(self, results: dict):
@@ -2451,7 +2434,7 @@ if __name__ == "__main__":
                 for url in session_urls:
                     url_export_file.write(f"{url}\n")
 
-            ui_popup(f"Success! Saved: {len(session_urls)} URLs")
+            ui_popup(QCoreApplication.translate("main", f"Success! Saved: {len(session_urls)} URLs", disambiguation=None))
 
         else:
             ui_popup(QCoreApplication.translate("main", "No URLs in the current session...", None))
