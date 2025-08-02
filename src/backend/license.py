@@ -1,7 +1,6 @@
 import sys
 
 from io import TextIOWrapper
-from configparser import ConfigParser
 from PySide6.QtWidgets import QWidget
 from src.backend.shared_gui import ui_popup
 from src.backend.config import shared_config
@@ -11,7 +10,6 @@ conf = shared_config
 class License(QWidget):
     def __init__(self, ui, this_one_function):
         super().__init__(parent=None)
-        conf = ConfigParser()
         conf.read("config.ini")
         self.ui = ui
         self.license_accepted_trigger = this_one_function
@@ -29,11 +27,9 @@ class License(QWidget):
         self.ui.button_deny.clicked.connect(self.license_denied)
 
     def license_accepted(self):
-        print("Before setting:", conf.get("Setup", "license_accepted", fallback="not set"))
         conf.set("Setup", "license_accepted", "true")
         with open("config.ini", "w") as config_file:
             conf.write(config_file)
-        print("After setting, reading back:", conf.get("Setup", "license_accepted"))
 
         self.ui.CentralStackedWidget.setCurrentIndex(0)
         self.license_accepted_trigger()
@@ -43,7 +39,6 @@ class License(QWidget):
         with open("config.ini", "w") as config_file: #type: TextIOWrapper
             conf.write(config_file)
 
-
         ui_popup("License was not accepted. Exiting...")
         sys.exit(0)
 
@@ -51,7 +46,6 @@ class License(QWidget):
 class Disclaimer(QWidget):
     def __init__(self, ui, this_one_function_lol):
         super().__init__(parent=None)
-        conf = ConfigParser()
         conf.read("config.ini")
         self.ui = ui
         self.disclaimer_accepted_trigger = this_one_function_lol
@@ -62,7 +56,6 @@ class Disclaimer(QWidget):
             return False
 
         else:
-            print("Disclaimer shown, returning true lmao")
             return True
 
     def button_connections(self):

@@ -6,9 +6,9 @@
 - [x] Fixed total progress in general
 - [x] Fixed thumbnails entirely
 - [x] Fix tools section layout
-- [] Fix check for updates changelog displaying
-- [] Entirely rework and fix the error reporting system
+- [x] Fix check for updates changelog displaying
 - [x] Fix thumbnails for HQPorner
+- [] Entirely rework and fix the error reporting system
 - [] Bring Porn Fetch back on Android
   - [] Make an Android compatible Layout
   - [] Fix threading
@@ -20,18 +20,17 @@
 - [x] You can now double-click a thumbnail to view it separately
 - [x] Upgrade Python version from 3.11 -> 3.13
 - [x] Allow for font size change
-- [] Allow for direct video downloading instead of manually selecting in the tree widget
-- [] Support Thumbnail when navigating with Arrow keys
+- [x] Support Thumbnail when navigating with Arrow keys
+- [x] Fix tabbing
+- [x] Fix TypeError: Incoming markup is of an invalid type: None. Markup must be a string, a bytestring, or an open filehandle.
+- [x] Optional processing delay for every video
+- [x] Allow for direct video downloading instead of manually selecting in the tree widget
 - [] Change Icons
-- [] Fix TypeError: Incoming markup is of an invalid type: None. Markup must be a string, a bytestring, or an open filehandle.
+- [] Publish translation strings on Crowdin
 - [] Fix and improve the CLI
 - [] ~~Implement transition animations for the Stacked Widget~~
-- [] Improve tree widget range selection and make it finally intuitive lol
-- [] Splash screen loading animation? (maybe idk yet)
-- [] Publish translation strings on Crowdin 
-- [] Optional processing delay for every video
-- [] Fix tabbing
-- [] Fix keyboard shortcuts
+- [] ~~Improve tree widget range selection and make it finally intuitive lol~~
+- [] ~~Splash screen loading animation? (maybe idk yet)~~
 
 # Other stuff
 - [x] Add spankbang back into the project
@@ -41,16 +40,16 @@
 - [x] Re-add an error / feedback reporting system using my own privacy focussed server
 - [x] Switch update checking to my own server instead of GitHub (more flexibility)
 - [x] Add a kill switch feature for Proxy users
+- [x] Rework the Batch processing features entirely (lol)
 - [] Automatic model download of new videos [#78](https://github.com/EchterAlsFake/Porn_Fetch/issues/78)
 - [] Allow for more parameters when starting Porn Fetch [#77](https://github.com/EchterAlsFake/Porn_Fetch/issues/77)
-- [] Rework the Batch processing features entirely (lol)
 
 # Code optimizations
 - [x] Fixed latency issues when updating progressbar
 - [x] Switch the whole application from QWidget-based to QMainWindow + stackedWidget (long story)
 - [x] Improve failed segment retrying
 - [x] Allow ignoring specific exceptions (#74)
-- [] Finalize proxy support
+- [x] Finalize proxy support
 - [] Entirely rework how settings are handled within Porn Fetch
 - [] Generally improve how translations are handled
 - [] Improve download from file implementation

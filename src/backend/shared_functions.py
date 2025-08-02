@@ -66,13 +66,12 @@ as they are indeed needed for the main applications!
 """
 
 # TODO: Implement logging
-sections = ["Setup", "Performance", "PostProcessing", "Video", "UI", "Sponsoring", "Android"]
+sections = ["Setup", "Performance", "Video", "UI", "Sponsoring", "Android"]
 
 options_setup = ["license_accepted", "install", "update_checks", "internet_checks", "anonymous_mode", "disclaimer_shown", "activate_logging"]
-options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries", "speed_limit"]
-options_post_processing = ["convert", "format", "write_metadata"]
-options_video = ["quality", "output_path", "directory_system", "search_limit", "delay", "skip_existing_files", "model_videos", "supress_errors",
-                 "video_id_as_filename"]
+options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries", "speed_limit", "processing_delay"]
+options_video = ["quality", "output_path", "directory_system", "result_limit", "delay", "skip_existing_files", "model_videos", "supress_errors",
+                 "video_id_as_filename", "direct_download", "write_metadata"]
 options_ui = ["language", "custom_font", "font_size"]
 options_sponsoring = ["downloaded_videos", "notice_shown"]
 options_android = ["warning_shown"]
@@ -104,22 +103,20 @@ workers = 20
 timeout = 10
 retries = 4
 speed_limit = 0
-
-[PostProcessing]
-convert = true
-format = mp4
-write_metadata = true
+processing_delay = 0
 
 [Video]
 quality = best
 output_path = ./
 directory_system = false
-search_limit = 50
+result_limit = 50
 delay = 0
 skip_existing_files = true
 model_videos = both
 supress_errors = false
 video_id_as_filename = false
+direct_download = false
+write_metadata = true
 
 [UI]
 language = system
@@ -226,31 +223,27 @@ def setup_config_file(force=False):
                     if not config.has_option(section, option):
                         setup_config_file(force=True)
                         print("ISSUE 2")
-            if idx == 2:
-                for option in options_post_processing:
-                    if not config.has_option(section, option):
-                        setup_config_file(force=True)
-                        print("ISSUE 3")
 
-            if idx == 3:
+            if idx == 2:
                 for option in options_video:
                     if not config.has_option(section, option):
+                        print(f"Config mismatch: {section} | {option}")
                         setup_config_file(force=True)
                         print("ISSUE 4")
 
-            if idx == 4:
+            if idx == 3:
                 for option in options_ui:
                     if not config.has_option(section, option):
                         setup_config_file(force=True)
                         print("ISSUE 5")
 
-            if idx == 5:
+            if idx == 4:
                 for option in options_sponsoring:
                     if not config.has_option(section, option):
                         setup_config_file(force=True)
                         print("ISSUE 6")
 
-            if idx == 6:
+            if idx == 5:
                 for option in options_android:
                     if not config.has_option(section, option):
                         print(f"ISSUE 7, {section} {option}")

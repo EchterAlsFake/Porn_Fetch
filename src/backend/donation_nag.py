@@ -1,6 +1,5 @@
 import webbrowser
 
-from configparser import ConfigParser
 from src.backend.shared_gui import ui_popup
 from PySide6.QtWidgets import QApplication, QWidget
 
@@ -14,7 +13,6 @@ class DonationNag(QWidget):
     """
     def __init__(self, ui, that_one_function):
         super().__init__()
-        conf = ConfigParser()
         conf.read("config.ini")
         self.ui = ui
         self.was_shown_lol = that_one_function
