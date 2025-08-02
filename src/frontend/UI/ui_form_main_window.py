@@ -876,7 +876,7 @@ class Ui_MainWindow(object):
         self.settings_scrollarea.setWidgetResizable(True)
         self.settings_scrollarea_widget_contents = QWidget()
         self.settings_scrollarea_widget_contents.setObjectName(u"settings_scrollarea_widget_contents")
-        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 722, 960))
+        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, -255, 1002, 960))
         self.gridLayout_19 = QGridLayout(self.settings_scrollarea_widget_contents)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.gridLayout_19.setContentsMargins(0, 0, 0, 0)
@@ -958,11 +958,6 @@ class Ui_MainWindow(object):
         self.settings_gridlayout_system_pornfetch = QGridLayout()
         self.settings_gridlayout_system_pornfetch.setObjectName(u"settings_gridlayout_system_pornfetch")
         self.settings_gridlayout_system_pornfetch.setContentsMargins(6, 3, 6, 6)
-        self.settings_button_help_anonymous_mode = QPushButton(self.settings_groupbox_system_pornfetch)
-        self.settings_button_help_anonymous_mode.setObjectName(u"settings_button_help_anonymous_mode")
-
-        self.settings_gridlayout_system_pornfetch.addWidget(self.settings_button_help_anonymous_mode, 4, 2, 1, 1)
-
         self.settings_checkbox_system_anonymous_mode = QCheckBox(self.settings_groupbox_system_pornfetch)
         self.settings_checkbox_system_anonymous_mode.setObjectName(u"settings_checkbox_system_anonymous_mode")
 
@@ -1003,11 +998,6 @@ class Ui_MainWindow(object):
 
         self.settings_gridlayout_system_pornfetch.addWidget(self.button_help_activate_logging, 6, 1, 1, 1)
 
-        self.settings_button_help_tor = QPushButton(self.settings_groupbox_system_pornfetch)
-        self.settings_button_help_tor.setObjectName(u"settings_button_help_tor")
-
-        self.settings_gridlayout_system_pornfetch.addWidget(self.settings_button_help_tor, 4, 1, 1, 1)
-
         self.settings_button_install_pornfetch = QPushButton(self.settings_groupbox_system_pornfetch)
         self.settings_button_install_pornfetch.setObjectName(u"settings_button_install_pornfetch")
 
@@ -1029,6 +1019,21 @@ class Ui_MainWindow(object):
         self.settings_label_system_privacy.setSizePolicy(sizePolicy19)
 
         self.settings_gridlayout_system_pornfetch.addWidget(self.settings_label_system_privacy, 2, 0, 1, 1)
+
+        self.settings_checkbox_proxy_kill_switch = QCheckBox(self.settings_groupbox_system_pornfetch)
+        self.settings_checkbox_proxy_kill_switch.setObjectName(u"settings_checkbox_proxy_kill_switch")
+
+        self.settings_gridlayout_system_pornfetch.addWidget(self.settings_checkbox_proxy_kill_switch, 3, 2, 1, 1)
+
+        self.settings_button_help_anonymous_mode = QPushButton(self.settings_groupbox_system_pornfetch)
+        self.settings_button_help_anonymous_mode.setObjectName(u"settings_button_help_anonymous_mode")
+
+        self.settings_gridlayout_system_pornfetch.addWidget(self.settings_button_help_anonymous_mode, 3, 0, 1, 1)
+
+        self.button_help_proxy_kill_switch = QPushButton(self.settings_groupbox_system_pornfetch)
+        self.button_help_proxy_kill_switch.setObjectName(u"button_help_proxy_kill_switch")
+
+        self.settings_gridlayout_system_pornfetch.addWidget(self.button_help_proxy_kill_switch, 3, 1, 1, 1)
 
 
         self.gridLayout_11.addLayout(self.settings_gridlayout_system_pornfetch, 2, 0, 1, 1)
@@ -1413,7 +1418,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 1016, 646))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 70, 70))
         self.gridLayout_21 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_21.setSpacing(0)
         self.gridLayout_21.setObjectName(u"gridLayout_21")
@@ -1616,7 +1621,7 @@ class Ui_MainWindow(object):
         self.scrollArea_9.setWidgetResizable(True)
         self.scrollAreaWidgetContents_11 = QWidget()
         self.scrollAreaWidgetContents_11.setObjectName(u"scrollAreaWidgetContents_11")
-        self.scrollAreaWidgetContents_11.setGeometry(QRect(0, 0, 1016, 646))
+        self.scrollAreaWidgetContents_11.setGeometry(QRect(0, 0, 256, 192))
         self.gridLayout_54 = QGridLayout(self.scrollAreaWidgetContents_11)
         self.gridLayout_54.setSpacing(0)
         self.gridLayout_54.setObjectName(u"gridLayout_54")
@@ -1722,7 +1727,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 98, 70))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 70, 70))
         self.gridLayout_20 = QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_20.setSpacing(0)
         self.gridLayout_20.setObjectName(u"gridLayout_20")
@@ -1808,7 +1813,7 @@ class Ui_MainWindow(object):
         self.scrollArea_12.setWidgetResizable(True)
         self.scrollAreaWidgetContents_14 = QWidget()
         self.scrollAreaWidgetContents_14.setObjectName(u"scrollAreaWidgetContents_14")
-        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 1016, 646))
+        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 98, 119))
         self.gridLayout_61 = QGridLayout(self.scrollAreaWidgetContents_14)
         self.gridLayout_61.setObjectName(u"gridLayout_61")
         self.textBrowser_5 = QTextBrowser(self.scrollAreaWidgetContents_14)
@@ -1878,7 +1883,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.CentralStackedWidget.setCurrentIndex(6)
+        self.CentralStackedWidget.setCurrentIndex(1)
         self.main_stacked_widget_top.setCurrentIndex(2)
 
 
@@ -1967,7 +1972,6 @@ class Ui_MainWindow(object):
         self.settings_checkbox_ui_custom_font.setText(QCoreApplication.translate("MainWindow", u"Enable custom font (Jetbrains Mono)", None))
         self.settings_label_ui_font_size.setText(QCoreApplication.translate("MainWindow", u"Font Size:", None))
         self.settings_groupbox_system_pornfetch.setTitle(QCoreApplication.translate("MainWindow", u"System / Porn Fetch", None))
-        self.settings_button_help_anonymous_mode.setText(QCoreApplication.translate("MainWindow", u"Help", None))
         self.settings_checkbox_system_anonymous_mode.setText(QCoreApplication.translate("MainWindow", u"Enable Anonymous mode", None))
         self.settings_checkbox_system_activate_logging.setText(QCoreApplication.translate("MainWindow", u"Enable Network Logging", None))
         self.button_help_checkbox_supress_errors.setText(QCoreApplication.translate("MainWindow", u"Help", None))
@@ -1976,10 +1980,12 @@ class Ui_MainWindow(object):
         self.settings_checkbox_system_activate_proxy.setText(QCoreApplication.translate("MainWindow", u"Activate Proxy", None))
         self.settings_checkbox_system_update_checks.setText(QCoreApplication.translate("MainWindow", u"Update checks", None))
         self.button_help_activate_logging.setText(QCoreApplication.translate("MainWindow", u"Help", None))
-        self.settings_button_help_tor.setText(QCoreApplication.translate("MainWindow", u"Help", None))
         self.settings_button_install_pornfetch.setText(QCoreApplication.translate("MainWindow", u"Install Porn Fetch", None))
         self.settings_label_startup.setText(QCoreApplication.translate("MainWindow", u"Startup:", None))
         self.settings_label_system_privacy.setText(QCoreApplication.translate("MainWindow", u"Privacy:", None))
+        self.settings_checkbox_proxy_kill_switch.setText(QCoreApplication.translate("MainWindow", u"Proxy Kill Switch", None))
+        self.settings_button_help_anonymous_mode.setText(QCoreApplication.translate("MainWindow", u"Help (anonymous mode)", None))
+        self.button_help_proxy_kill_switch.setText(QCoreApplication.translate("MainWindow", u"Help / Explanation (Proxy Kill Switch) ", None))
         self.settings_groupbox_videos.setTitle(QCoreApplication.translate("MainWindow", u"Videos", None))
         self.settings_radio_quality_worst.setText(QCoreApplication.translate("MainWindow", u"Worst", None))
         self.settings_radio_quality_half.setText(QCoreApplication.translate("MainWindow", u"Half", None))

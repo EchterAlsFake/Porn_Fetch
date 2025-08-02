@@ -40,20 +40,20 @@
 - [x] Rewrite License Agreement to be GPLv3 compliant
 - [x] Re-add an error / feedback reporting system using my own privacy focussed server
 - [x] Switch update checking to my own server instead of GitHub (more flexibility)
+- [x] Add a kill switch feature for Proxy users
 - [] Automatic model download of new videos [#78](https://github.com/EchterAlsFake/Porn_Fetch/issues/78)
 - [] Allow for more parameters when starting Porn Fetch [#77](https://github.com/EchterAlsFake/Porn_Fetch/issues/77)
 - [] Rework the Batch processing features entirely (lol)
-- [] Add a kill switch feature for Proxy users
 
 # Code optimizations
 - [x] Fixed latency issues when updating progressbar
 - [x] Switch the whole application from QWidget-based to QMainWindow + stackedWidget (long story)
 - [x] Improve failed segment retrying
-- [] Allow ignoring specific exceptions (#74)
+- [x] Allow ignoring specific exceptions (#74)
+- [] Finalize proxy support
 - [] Entirely rework how settings are handled within Porn Fetch
 - [] Generally improve how translations are handled
 - [] Improve download from file implementation
-- [] Finalize proxy support
 - [] Improving installation
   - [] Letting user know if Porn Fetch is already there
   - [] Better exception handling

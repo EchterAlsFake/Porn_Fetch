@@ -5,6 +5,7 @@ import os.path
 import argparse
 import markdown
 import traceback
+import src.backend.shared_functions as shared_functions
 import src.frontend.UI.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
 
 from threading import Event, Lock
@@ -13,10 +14,9 @@ from itertools import islice, chain
 
 from src.backend.shared_gui import *
 from src.backend.class_help import *
-from src.backend.shared_functions import *
 from src.frontend.UI.ui_form_main_window import Ui_MainWindow
 from src.backend.one_time_functions import *
-from src.backend.config import __version__, __next_release__, __build__, __license__, __author__
+from src.backend.config import __version__, __next_release__, __build__, __license__, __author__, shared_config
 from src.backend.donation_nag import DonationNag
 from src.backend.license import License, Disclaimer
 from src.backend.config import shared_config
@@ -24,13 +24,15 @@ from hqporner_api.api import Sort as hq_Sort
 
 from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
                             QTranslator, QCoreApplication, QSize, QEvent, QRectF)
-from PySide6.QtWidgets import QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, \
-    QInputDialog, QMainWindow, QLabel, QProgressBar, QGraphicsPixmapItem, QDialog, QVBoxLayout, QGraphicsScene, QGraphicsView
+from PySide6.QtWidgets import (QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, \
+    QInputDialog, QMainWindow, QLabel, QProgressBar, QGraphicsPixmapItem, QDialog, QVBoxLayout,
+                               QGraphicsScene, QGraphicsView, QPushButton, QHBoxLayout)
 from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence, QPainter
 
 
 # Possible errors from APIs
 
+from base_api.modules.errors import ProxySSLError, InvalidProxy
 from xnxx_api.modules.errors import InvalidResponse
 from hqporner_api.modules.errors import (InvalidActress as InvalidActres_HQ, NoVideosFound,
                                          NotAvailable as NotAvailable_HQ, WeirdError as WeirdError_HQ)
@@ -72,11 +74,11 @@ stop_flag = Event()
 session_urls = []  # This list saves all URls used in the current session. Used for the URL export function
 total_downloaded_videos = 0  # All videos that actually successfully downloaded
 total_downloaded_videos_attempt = 0  # All videos the user tries to download
-logger = setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=http_log_ip,
-                      http_port=http_log_port)
+logger = setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=shared_functions.http_log_ip,
+                      http_port=shared_functions.http_log_port)
 
 conf = shared_config
-core_conf = config
+core_conf = shared_functions.config
 
 
 class VideoData:
@@ -143,7 +145,7 @@ class InstallThread(QRunnable):
         self.app_name = app_name
         self.signals = Signals()
         self.logger = setup_logger(name="Porn Fetch - [InstallThread]", log_file="PornFetch.log", level=logging.DEBUG,
-                                   http_ip=http_log_ip, http_port=http_log_port)
+                                   http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
 
     def run(self):
         try:
@@ -181,7 +183,7 @@ If you believe, that this is a mistake, please report it on GitHub, so that I ca
                 self.logger.info(f"Downloading additional asset: icon")
 
                 if not os.path.exists(os.path.join(destination_path_final, "Logo.png")):
-                    img = core.fetch(
+                    img = shared_functions.core.fetch(
                         "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/refs/heads/master/src/frontend/graphics/android_app_icon.png",
                         get_bytes=True)
                     self.logger.debug("Got Porn Fetch logo, saving...")
@@ -273,7 +275,7 @@ class InternetCheck(QRunnable):
         self.website_results = {}
         self.signals = Signals()
         self.logger = setup_logger(name="Porn Fetch - [InternetCheck]", log_file="PornFetch.log", level=logging.DEBUG,
-                                   http_ip=http_log_ip, http_port=http_log_port)
+                                   http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
 
     def run(self):
         for idx, website in enumerate(self.websites, start=1):
@@ -281,16 +283,16 @@ class InternetCheck(QRunnable):
 
             try:
                 self.logger.info(f"Testing Internet [{idx}|{len(self.websites)}] : {website}")
-                core.config.headers.update({"Referer": website})
-                core.update_headers(headers={
+                shared_functions.core.config.headers.update({"Referer": website})
+                shared_functions.core.update_headers(headers={
                     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
                     "Referer": f"{website}",
                     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36)"})
-                status = core.fetch(website, get_response=True)
-                del core.config.headers["Referer"]
+                status = shared_functions.core.fetch(website, get_response=True)
+                del shared_functions.core.config.headers["Referer"]
 
                 if status is None:
-                    continue # to lazy to make excpetions for this dog shit site called missav.ws
+                    continue # to lazy to make exceptions for this dog shit site called missav.ws
 
                 if status.status_code == 200:
                     self.website_results.update({website: "OK"})
@@ -312,16 +314,16 @@ class CheckUpdates(QRunnable):
         super(CheckUpdates, self).__init__()
         self.signals = Signals()
         self.logger = setup_logger(name="Porn Fetch - [CheckUpdates]", log_file="PornFetch.log", level=logging.DEBUG,
-                                   http_port=http_log_port, http_ip=http_log_ip)
+                                   http_port=shared_functions.http_log_port, http_ip=shared_functions.http_log_ip)
 
     def run(self):
         url = f"https://echteralsfake.duckdns.org:443/update"
 
         try:
-            response = core.fetch(url=url, get_response=True)
+            response = shared_functions.core.fetch(url=url, get_response=True)
             if response.status_code == 200:
                 json_stuff = response.json()
-                if float(json_stuff["version"]) > float(2.5):
+                if float(json_stuff["version"]) > float(__version__):
                     self.logger.info(f"A new update is available -->: {json_stuff["version"]}")
                     self.signals.update_check.emit(True, json_stuff)
 
@@ -338,7 +340,7 @@ class CheckUpdates(QRunnable):
                 return
 
         except (ConnectionError, ConnectionResetError, ConnectionRefusedError, TimeoutError):
-            handle_error_gracefully("I could NOT check for updates. The server is either not reachable, or you don't have an IPv6 connection.")
+            handle_error_gracefully(self, data=video_data.consistent_data, error_message="I could NOT check for updates. The server is either not reachable, or you don't have an IPv6 connection.")
 
 
 class AddToTreeWidget(QRunnable):
@@ -356,23 +358,24 @@ class AddToTreeWidget(QRunnable):
         self.supress_errors = self.consistent_data.get("supress_errors")
         self.activate_logging = self.consistent_data.get("activate_logging")
         self.logger = setup_logger(name="Porn Fetch - [AddToTreeWidget]", log_file="PornFetch.log", level=logging.DEBUG,
-                                   http_port=http_log_port, http_ip=http_log_ip)
+                                   http_port=shared_functions.http_log_port, http_ip=shared_functions.http_log_ip)
 
     def process_video(self, video, index):
         if not isinstance(video, str):
             self.logger.debug(f"Requesting video processing of: {video.url}")
+
         else:
             self.logger.debug(f"Requesting video processing of: {video}")
 
         try:
             video_id = random.randint(0, 99999999) # Creates a random ID for each video
             if isinstance(video, str):
-                video = check_video(url=video, is_url=True)
+                video = shared_functions.check_video(url=video, is_url=True)
 
             self.logger.debug(f"Created ID: {video_id} for: {video.url}")
-            data = load_video_attributes(video)
+            data = shared_functions.load_video_attributes(video)
             self.logger.debug("Loaded video attributes")
-            stripped_title = core.strip_title(
+            stripped_title = shared_functions.core.strip_title(
                 data.get("title"))  # Strip the title so that videos with special chars can be
                                     # saved on windows. it would raise an OSError otherwise
 
@@ -388,7 +391,7 @@ class AddToTreeWidget(QRunnable):
             else:
                 output_path = os.path.join(self.output_path, stripped_title + ".mp4")
 
-            stripped_title = core.strip_title(title=data.get("title"))
+            stripped_title = shared_functions.core.strip_title(title=data.get("title"))
             # Emit the loaded signal with all the required information
 
             data.update(
@@ -402,18 +405,18 @@ class AddToTreeWidget(QRunnable):
             video_data.data_objects.update({video_id: data})
             return video_id
 
-        except (errors.PremiumVideo, IndexError):
+        except (shared_functions.errors.PremiumVideo, IndexError):
             handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Premium-only video skipped: {video.url}")
             return False
 
-        except errors.RegionBlocked:
+        except shared_functions.errors.RegionBlocked:
             handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Region-blocked video skipped: {video.url}")
             return False
 
-        except errors.VideoDisabled:
+        except shared_functions.errors.VideoDisabled:
             handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Warning: The video {video.url} is disabled. It will be skipped")
 
-        except errors.RegexError:
+        except shared_functions.errors.RegexError:
             message = f"""
             A regex error occurred. This is always a 50/50 chance if it's my or PornHub's fault. If this happens again on
             the same video, please consider reporting it. If you have logging enabled, this issue will automatically be reported.
@@ -424,7 +427,7 @@ class AddToTreeWidget(QRunnable):
             handle_error_gracefully(self, data=video_data.consistent_data, error_message=message, needs_network_log=True)
             return False
 
-        except errors.VideoPendingReview:
+        except shared_functions.errors.VideoPendingReview:
             handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Warning: The video {video.url} is pending review. It will be skipped")
             return False
 
@@ -512,7 +515,7 @@ class DownloadThread(QRunnable):
         data_object: dict = video_data.data_objects[self.video_id]
         self.output_path = data_object.get("output_path")
         self.logger = setup_logger(name="Porn Fetch - [DownloadThread]", log_file="PornFetch.log", level=logging.DEBUG,
-                                   http_ip=http_log_ip, http_port=http_log_port)
+                                   http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
 
         self.threading_mode = self.consistent_data.get("threading_mode")
         self.signals = Signals()
@@ -562,7 +565,6 @@ class DownloadThread(QRunnable):
         with _download_lock:
             downloaded_segments += 1
             self.signals.total_progress.emit(downloaded_segments)
-            print(f"Emitted: {downloaded_segments}")
 
     def run(self):
         """Run the download in a thread, optimizing for different video sources and modes."""
@@ -583,12 +585,12 @@ class DownloadThread(QRunnable):
             self.signals.total_progress_range.emit(total_segments)
 
             # We need to specify the sources, so that it knows which individual progressbar to use
-            if isinstance(self.video, hq_Video):
+            if isinstance(self.video, shared_functions.hq_Video):
                 video_source = "hqporner"
                 self.video.download(quality=self.quality, path=self.output_path, no_title=True,
                                     callback=lambda pos, total: self.generic_callback(pos, total, video_source))
 
-            elif isinstance(self.video, ep_Video):
+            elif isinstance(self.video, shared_functions.ep_Video):
                 video_source = "eporner"
                 self.video.download(quality=self.quality, path=self.output_path, no_title=True,
                                     callback=lambda pos, total: self.generic_callback(pos, total, video_source))
@@ -615,7 +617,7 @@ class DownloadThread(QRunnable):
         finally:
             if self.consistent_data.get("write_metadata"):
                 try:
-                    write_tags(path=self.output_path, data=video_data.data_objects.get(self.video_id))
+                    shared_functions.write_tags(path=self.output_path, data=video_data.data_objects.get(self.video_id))
 
                 except Exception:
                     error = traceback.format_exc()
@@ -637,7 +639,7 @@ class QTreeWidgetDownloadThread(QRunnable):
         self.quality = self.consistent_data.get("quality")
         self.semaphore = semaphore
         self.logger = setup_logger(name="Porn Fetch - [QTreeWidgetDownloadThread]", log_file="PornFetch.log",
-                                   level=logging.DEBUG, http_ip=http_log_ip, http_port=http_log_port)
+                                   level=logging.DEBUG, http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
 
     def run(self):
         self.signals.start_undefined_range.emit()
@@ -654,7 +656,6 @@ class QTreeWidgetDownloadThread(QRunnable):
 
 
         self.logger.debug("Retrieving total length of video segments to calculate total progress...")
-        print(f"Starting with: {total_segments}")
         total_segments += sum(
             [len(list(video.get_segments(quality=self.quality))) for video in video_objects if
              hasattr(video, 'get_segments')])
@@ -684,7 +685,7 @@ class AddUrls(QRunnable):
         self.file = file
         self.delay = delay
         self.logger = setup_logger(name="Porn Fetch - [AddUrls]", log_file="PornFetch.log", level=logging.DEBUG,
-                                   http_port=http_log_port, http_ip=http_log_ip)
+                                   http_port=shared_functions.http_log_port, http_ip=shared_functions.http_log_ip)
 
     def run(self):
         iterator = []
@@ -716,7 +717,7 @@ class AddUrls(QRunnable):
                 self.logger.debug(f"Found search query: {query}, site: {site}")
 
             else:
-                video = check_video(line)
+                video = shared_functions.check_video(line)
 
                 if video is not False:
                     self.logger.debug("Found Video object!")
@@ -726,6 +727,42 @@ class AddUrls(QRunnable):
 
         self.signals.url_iterators.emit(iterator, model_iterators, search_iterators)
 
+
+class SSLWarningDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("SSL Verification Warning")
+        self.setMinimumWidth(400)
+
+        layout = QVBoxLayout(self)
+
+        warning_text = (
+            "<b>Your proxy does not support proper SSL verification.</b><br><br>"
+            "The only way to bypass this is to <b>disable SSL certificate verification</b> completely.<br><br>"
+            "<b>⚠ This is a serious security risk.</b><br>"
+            "Disabling SSL verification may expose your connection to man-in-the-middle (MITM) attacks, "
+            "data interception, or spoofed websites.<br><br>"
+            "Do you want to proceed and disable SSL verification?"
+        )
+
+        label = QLabel(warning_text)
+        label.setWordWrap(True)
+        label.setTextFormat(Qt.RichText)
+        layout.addWidget(label)
+
+        # Button layout
+        button_layout = QHBoxLayout()
+        self.accept_btn = QPushButton("Accept (Disable SSL Verification)")
+        self.cancel_btn = QPushButton("Cancel")
+
+        button_layout.addStretch()
+        button_layout.addWidget(self.accept_btn)
+        button_layout.addWidget(self.cancel_btn)
+
+        layout.addLayout(button_layout)
+
+        self.accept_btn.clicked.connect(self.accept)
+        self.cancel_btn.clicked.connect(self.reject)
 
 class PornFetch(QMainWindow):
     def __init__(self, parent=None):
@@ -785,11 +822,13 @@ class PornFetch(QMainWindow):
         self.max_retries = None
         self.skip_existing_files = None
         self.model_videos_type = None
+        self.kill_switch = False
+        self.proxy = None
         self.downloader = None
         self.speed_limit_mb = None
         self.directory_system = None
         self.logger = setup_logger(name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG,
-                                   http_ip=http_log_ip, http_port=http_log_port)
+                                   http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
 
         self.last_index = 0  # Keeps track of the last index of videos added to the tree widget
         self.threadpool = QThreadPool()
@@ -1228,6 +1267,7 @@ class PornFetch(QMainWindow):
         self.ui.main_button_tree_stop.clicked.connect(switch_stop_state)
         self.ui.main_button_tree_keyboard_shortcuts.clicked.connect(self.switch_to_keyboard_shortcuts)
         self.ui.main_button_tree_automated_selection.clicked.connect(self.select_range_of_items)
+        self.ui.settings_checkbox_proxy_kill_switch.toggled.connect(self.toggle_killswitch)
 
     def shortcuts(self):
         quit_shortcut = QShortcut(QKeySequence("Ctrl+Q"), self)
@@ -1345,12 +1385,12 @@ class PornFetch(QMainWindow):
         self.ui.settings_spinbox_pornhub_delay.setValue(int(self.delay))
 
         # Apply stuff to eaf_base_api and refresh cores
-        config.timeout = self.timeout
-        config.request_delay = self.delay
-        config.max_bandwidth_mb = self.speed_limit_mb
-        config.max_retries = self.max_retries
-        refresh_clients()
-        enable_logging()
+        shared_functions.config.timeout = self.timeout
+        shared_functions.config.request_delay = self.delay
+        shared_functions.config.max_bandwidth_mb = self.speed_limit_mb
+        shared_functions.config.max_retries = self.max_retries
+        shared_functions.refresh_clients()
+        shared_functions.enable_logging()
 
 
     def save_user_settings(self):
@@ -1408,19 +1448,108 @@ class PornFetch(QMainWindow):
         self.logger.debug("Saved User Settings, please restart Porn Fetch.")
 
     def set_proxies(self):
-        message = self.tr("""""", disambiguation=None)
-        # TODO
+        message = self.tr("""
+Please read this before setting proxies:
+
+I am not a genius in programming and I can NOT guarantee for your safety. However, I did everything possible (in my abilities)
+to make sure this works perfectly. When you apply proxies you need to make sure that they are in the correct format. You'll
+see a few examples down below.
+
+Also, if you use PUBLIC proxies, then it's really a gamble if they work or if they don't. Usually they are really slow and 
+inconsistent, but maybe you are lucky.
+
+About SSL encryption:
+If your proxy does NOT support SSL / TLS or delivers incorrect self-signed certificates, then you can choose to ignore that
+by disabling SSL verification. However, this reduces your security a lot and people in your network will be able to intercept
+your network traffic. 
+
+This is not my fault, it's just how the internet works. So, get yourself a good proxy and then you are good to go :)
+
+Here are a few examples of valid proxies:
+
+1) http://89.3.64.185:1111
+2) socks5://45.115.114.57:9090
+
+Important:
+Even if your proxy supports https, you need to put it as 'http://'. This will NOT disable encryption.
+
+I do not know whether authenticated proxies e.g., with user + password authentication work.
+I can't test that, since I don't own such proxies.
+
+
+I will test your proxy before actually using it using requests to httpbin.org to get your IP address. One request with 
+and one request without a proxy. If the IPs are different, then it worked, if not you need to use another proxy.
+
+This is all for your safety!
+
+Warning:
+Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCURR WHEN YOU HAVE PROXIES ENABLED!!!
+        """, disambiguation=None)
+
         ui_popup(message)
 
         proxy_input, ok = QInputDialog.getText(
             self,
             "Enter Proxies",
-            "Enter (socks5 only) proxy in the format <ip:port>, e.g., 192.168.0.1:80")
+            "Enter proxy in the format <protocol><ip>:<port> -->:")
 
         if not ok:
             return None  # User canceled the input dialog
 
+        else:
+            self.logger.info(f"Using Proxy -->: {proxy_input}")
+            self.logger.info("Getting IP address without Proxy")
+            ip = shared_functions.core.fetch(url="https://httpbin.org/ip", get_response=True).json()["origin"]
+            self.logger.info("Applying Proxy to all session objects...")
+            shared_functions.config.proxy = proxy_input
+            shared_functions.refresh_clients()
+            self.logger.info(f"Unmasked IP is -->: {ip}")
+            try:
+                ip_masked = shared_functions.core.fetch(url="https://httpbin.org/ip", get_response=True).json()["origin"]
 
+            except ProxySSLError:
+                dialog = SSLWarningDialog()
+                if dialog.exec():
+                    self.logger.warning("Disabling SSL Verification")
+                    shared_functions.config.verify_ssl = False
+                    shared_functions.refresh_clients()
+                    ip_masked = shared_functions.core.fetch(url="https://httpbin.org/ip", get_response=True).json()[
+                        "origin"]
+
+                else:
+                    ui_popup("You did choose to not disable SSL Verifications. Retuning to GUI without applying proxies now...")
+                    return None
+
+            except InvalidProxy:
+                ui_popup("Your proxy seems to be invalid, please try again...")
+                return None
+
+            self.logger.info(f"Masked IP is -->: {ip_masked}")
+
+            if ip == ip_masked:
+                self.logger.error("ERROR: IP LEAK!")
+                ui_popup(f"Proxy IP: {ip_masked} Your IP: {ip} are the same! Please check the proxy you've used!, aborting...")
+                return None
+
+
+            else:
+                self.logger.info("Proxy worked!")
+                self.proxy = proxy_input
+
+
+    def toggle_killswitch(self):
+        if self.kill_switch:
+            self.logger.info(f"Disabling Kill Switch for -->: {self.proxy}")
+            shared_functions.refresh_clients(enable_kill_switch=False)
+
+        else:
+            if self.proxy is None:
+                ui_popup("Can not enable Kill Switch if you haven't applied a proxy yet!")
+                self.ui.settings_checkbox_proxy_kill_switch.setChecked(False)
+                return None
+
+            self.logger.info(f"Enabling Kill Switch for -->: {self.proxy}")
+            shared_functions.refresh_clients(enable_kill_switch=True)
 
 
     """
@@ -1467,8 +1596,8 @@ class PornFetch(QMainWindow):
             model = self.ui.download_lineedit_model_url.text()
 
         self.logger.info(f"Checking model: {url}")
-        if pornhub_pattern.match(model):
-            model_object = ph_client.get_user(model)
+        if shared_functions.pornhub_pattern.match(model):
+            model_object = shared_functions.ph_client.get_user(model)
             videos = model_object.videos
             uploads = model_object.uploads
 
@@ -1481,9 +1610,9 @@ class PornFetch(QMainWindow):
             elif self.model_videos_type == "uploads":
                 videos = uploads
 
-        elif hqporner_pattern.match(model):
+        elif shared_functions.hqporner_pattern.match(model):
             try:
-                videos = hq_client.get_videos_by_actress(name=model)
+                videos = shared_functions.hq_client.get_videos_by_actress(name=model)
 
             except InvalidActres_HQ:
                 handle_error_gracefully(self, data=video_data.consistent_data, error_message="Invalid Actress URL!")
@@ -1493,17 +1622,17 @@ class PornFetch(QMainWindow):
                 handle_error_gracefully(self, data=video_data.consistent_data, error_message="No videos found. This is probably an error and will be reported.", needs_network_log=True)
                 return
 
-        elif eporner_pattern.match(model):
-            videos = ep_client.get_pornstar(url=model, enable_html_scraping=True).videos()
+        elif shared_functions.eporner_pattern.match(model):
+            videos = shared_functions.ep_client.get_pornstar(url=model, enable_html_scraping=True).videos()
 
-        elif xnxx_pattern.match(model):
-            videos = xn_client.get_user(url=model).videos
+        elif shared_functions.xnxx_pattern.match(model):
+            videos = shared_functions.xn_client.get_user(url=model).videos
 
         elif "xvideos" and "model" or "pornstar" in str(model):
-            videos = xv_client.get_pornstar(url=model).videos
+            videos = shared_functions.xv_client.get_pornstar(url=model).videos
 
         elif "xvideos" and "channel" in str(model):
-            videos = xv_client.get_channel(url=model).videos
+            videos = shared_functions.xv_client.get_channel(url=model).videos
 
         else:
             videos = None
@@ -1584,11 +1713,11 @@ class PornFetch(QMainWindow):
             videos = client.search(query)
 
         elif self.ui.download_radio_search_website_xvideos.isChecked():
-            videos = xv_client.search(query)
+            videos = shared_functions.xv_client.search(query)
 
         elif self.ui.download_radio_search_website_hqporner.isChecked():
             try:
-                videos = hq_client.search_videos(query)
+                videos = shared_functions.hq_client.search_videos(query)
 
             except NoVideosFound:
                 handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"No videos found for query: {query}")
@@ -1596,12 +1725,12 @@ class PornFetch(QMainWindow):
 
 
         elif self.ui.download_radio_search_website_eporner.isChecked():
-            videos = ep_client.search_videos(query, sorting_gay="", sorting_order="", sorting_low_quality="",
+            videos = shared_functions.ep_client.search_videos(query, sorting_gay="", sorting_order="", sorting_low_quality="",
                                              page=1,
                                              per_page=self.search_limit, enable_html_scraping=True)
 
         elif self.ui.download_radio_search_website_xnxx.isChecked():
-            videos = xn_client.search(query).videos
+            videos = shared_functions.xn_client.search(query).videos
 
         else:
             ui_popup(
@@ -1653,7 +1782,7 @@ class PornFetch(QMainWindow):
         thumbnail = data.get("thumbnail")
 
         # Parse the raw length, passing video as a hint for the source.
-        parsed_length = parse_length(raw_length, video)
+        parsed_length = shared_functions.parse_length(raw_length, video)
 
         item = QTreeWidgetItem(self.ui.treeWidget)
 
@@ -1833,13 +1962,13 @@ An error happened inside of Porn Fetch!
             pixmap = QPixmap()
             # your custom referer logic…
             if "hqporner" in thumbnail:
-                core.config.headers["Referer"] = "https://hqporner.com"
-                core.update_headers({"Referer": "https://hqporner.com/"})
+                shared_functions.core.config.headers["Referer"] = "https://hqporner.com"
+                shared_functions.core.update_headers({"Referer": "https://hqporner.com/"})
 
-            pixmap.loadFromData(core.fetch(thumbnail, get_bytes=True))
+            pixmap.loadFromData(shared_functions.core.fetch(thumbnail, get_bytes=True))
 
             if "hqporner" in thumbnail:
-                del core.config.headers['Referer']
+                del shared_functions.core.config.headers['Referer']
 
             self.logger.info("Fetched thumbnail!")
 
@@ -1955,11 +2084,11 @@ An error happened inside of Porn Fetch!
             ui_popup(self.tr("Login Successful!", None))
             switch_login_button_state(self)
 
-        except errors.LoginFailed:
+        except shared_functions.errors.LoginFailed:
             self.logger.error("Login Failed, because of invalid credentials")
             ui_popup(self.tr("Login Failed, please check your credentials and try again!", None))
 
-        except errors.ClientAlreadyLogged:
+        except shared_functions.errors.ClientAlreadyLogged:
             self.logger.warning("Client already logged in?!! wait what??")
             ui_popup(self.tr("You are already logged in!", None))
 
@@ -2015,7 +2144,7 @@ An error happened inside of Porn Fetch!
             sort = None
 
         try:
-            videos = hq_client.get_top_porn(sort_by=sort)
+            videos = shared_functions.hq_client.get_top_porn(sort_by=sort)
 
         except NoVideosFound:
             handle_error_gracefully(self, data=video_data.consistent_data, error_message="No videos found. This is likely an issue and will be reported", needs_network_log=True)
@@ -2026,14 +2155,14 @@ An error happened inside of Porn Fetch!
     def get_by_category_hqporner(self):
         """Returns video by category from HQPorner. I want to add support for EPorner"""  # TODO
         category_name = self.ui.tools_lineedit_hqporner_category.text()
-        all_categories = hq_client.get_all_categories()
+        all_categories = shared_functions.hq_client.get_all_categories()
 
         if not category_name in all_categories:
             ui_popup(self.tr("Invalid Category. Press 'list categories' to see all "
                              "possible ones.", None))
 
         else:
-            videos = hq_client.get_videos_by_category(category=category_name)
+            videos = shared_functions.hq_client.get_videos_by_category(category=category_name)
             self.add_to_tree_widget_thread(videos)
 
     def get_by_category_eporner(self):
@@ -2046,13 +2175,13 @@ An error happened inside of Porn Fetch!
                              "possible ones.", None))
 
         else:
-            videos = ep_client.get_videos_by_category(category=category_name, enable_html_scraping=True)
+            videos = shared_functions.ep_client.get_videos_by_category(category=category_name, enable_html_scraping=True)
             self.add_to_tree_widget_thread(iterator=videos)
 
     def get_brazzers_videos(self):
         """Get brazzers videos from HQPorner"""
         try:
-            videos = hq_client.get_brazzers_videos()
+            videos = shared_functions.hq_client.get_brazzers_videos()
 
         except NoVideosFound:
             handle_error_gracefully(self, data=video_data.consistent_data, error_message="No videos found. This is likely an issue and will be reported", needs_network_log=True)
@@ -2063,7 +2192,7 @@ An error happened inside of Porn Fetch!
     def get_random_video(self):
         """Gets a random video from HQPorner"""
         try:
-            video = hq_client.get_random_video()
+            video = shared_functions.hq_client.get_random_video()
             some_list = [video]
 
         except NoVideosFound:

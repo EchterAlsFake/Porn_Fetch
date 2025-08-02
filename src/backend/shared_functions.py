@@ -34,17 +34,23 @@ xn_client = xn_Client()
 core = BaseCore() # We need that sometimes in Porn Fetch's main class e.g., thumbnail fetching
 
 
-def refresh_clients():
+def refresh_clients(enable_kill_switch=False):
     global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, hq_client, xn_client, core
-    core = BaseCore(config=config)
+    core = BaseCore(config=config, auto_init=False)
+    core.initialize_session()
+
+    if enable_kill_switch:
+        core.enable_kill_switch()
+
     xn_client = xn_Client(core=core)
-    ep_client = ep_Client(core = BaseCore(config=config))
-    xv_client = xv_Client(core = BaseCore(config=config))
-    xh_client = xh_Client(core = BaseCore(config=config))
-    sp_client = sp_Client(core = BaseCore(config=config))
-    hq_client = hq_Client(core = BaseCore(config=config))
-    xn_client = xn_Client(core = BaseCore(config=config))
-    ph_client = ph_Client(core = BaseCore(config=config))
+    ep_client = ep_Client(core=core)
+    xv_client = xv_Client(core=core)
+    xh_client = xh_Client(core=core)
+    sp_client = sp_Client(core=core)
+    hq_client = hq_Client(core=core)
+    xn_client = xn_Client(core=core)
+    ph_client = ph_Client(core=core)
+    mv_client = mv_Client(core=core)
 
 
 def enable_logging(level=logging.DEBUG, log_file="APIs.log", log_ip=http_log_ip, log_port=http_log_port):

@@ -328,7 +328,7 @@ color: white</string>
     <item row="1" column="0">
      <widget class="QStackedWidget" name="CentralStackedWidget">
       <property name="currentIndex">
-       <number>6</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page_main">
        <property name="maximumSize">
@@ -1848,8 +1848,8 @@ color: white</string>
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>0</y>
-             <width>722</width>
+             <y>-255</y>
+             <width>1002</width>
              <height>960</height>
             </rect>
            </property>
@@ -2023,13 +2023,6 @@ color: white</string>
                    <property name="bottomMargin">
                     <number>6</number>
                    </property>
-                   <item row="4" column="2">
-                    <widget class="QPushButton" name="settings_button_help_anonymous_mode">
-                     <property name="text">
-                      <string>Help</string>
-                     </property>
-                    </widget>
-                   </item>
                    <item row="2" column="1">
                     <widget class="QCheckBox" name="settings_checkbox_system_anonymous_mode">
                      <property name="text">
@@ -2086,13 +2079,6 @@ color: white</string>
                      </property>
                     </widget>
                    </item>
-                   <item row="4" column="1">
-                    <widget class="QPushButton" name="settings_button_help_tor">
-                     <property name="text">
-                      <string>Help</string>
-                     </property>
-                    </widget>
-                   </item>
                    <item row="0" column="0" colspan="3">
                     <widget class="QPushButton" name="settings_button_install_pornfetch">
                      <property name="text">
@@ -2123,6 +2109,27 @@ color: white</string>
                      </property>
                      <property name="text">
                       <string>Privacy:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="2">
+                    <widget class="QCheckBox" name="settings_checkbox_proxy_kill_switch">
+                     <property name="text">
+                      <string>Proxy Kill Switch</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="0">
+                    <widget class="QPushButton" name="settings_button_help_anonymous_mode">
+                     <property name="text">
+                      <string>Help (anonymous mode)</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="1">
+                    <widget class="QPushButton" name="button_help_proxy_kill_switch">
+                     <property name="text">
+                      <string>Help / Explanation (Proxy Kill Switch) </string>
                      </property>
                     </widget>
                    </item>
@@ -2748,8 +2755,8 @@ QPushButton:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1016</width>
-             <height>646</height>
+             <width>70</width>
+             <height>70</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_21">
@@ -3120,8 +3127,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1016</width>
-             <height>646</height>
+             <width>256</width>
+             <height>192</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_54">
@@ -3327,7 +3334,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
+             <width>70</width>
              <height>70</height>
             </rect>
            </property>
@@ -3537,8 +3544,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1016</width>
-             <height>646</height>
+             <width>98</width>
+             <height>119</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_61">
