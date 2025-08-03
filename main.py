@@ -5,6 +5,7 @@ import os.path
 import argparse
 import markdown
 import traceback
+import requests
 import src.backend.shared_functions as shared_functions
 import src.frontend.UI.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
 
@@ -160,16 +161,16 @@ class InstallThread(QRunnable):
 
                 if not os.path.exists(destination_path_tmp):
                     self.logger.warning("The needed installation path doesn't exist?!")
-                    '''ui_popup(QCoreApplication.translate(context="main", key="""The path ~/.local/share/ does not exist. This path is typically used for installing applications and their settings
+                    text = QCoreApplication.translate("main", """The path ~/.local/share/ does not exist. This path is typically used for installing applications and their settings
 in a users local account. Since you don't have that, you can't install it. Probably because your Linux does not follow
 the XDG Desktop Portal specifications. It's your own decision and I don't create the directory for you, or force you to
 do that. If you still wish to install Porn Fetch, look Online how to setup XDK-Desktop-Portal on your Linux distribution,
 head over to the setting and down there you will be able to try the installation again. Otherwise, you can just keep
 using the portable version, which will work just fine.
 
-If you believe, that this is a mistake, please report it on GitHub, so that I can fix it :)""", disambiguation=None))
-                    return
-'''
+If you believe, that this is a mistake, please report it on GitHub, so that I can fix it :)""", disambiguation=None)
+                    ui_popup(text)
+
                 os.makedirs(destination_path_final, exist_ok=True)
                 pornfetch_exe = os.path.join(destination_path_final, filename)
                 if os.path.exists(pornfetch_exe):
@@ -230,7 +231,7 @@ Categories=Utility;"""
                     "Don't care"
                     pass
 
-                shutil.move("config.ini", target_dir)  # Prevent overriding the old configuration file
+                shutil.move("config.ini", target_dir)
                 # Define paths for the shortcut creation
                 app_name = self.app_name
                 app_exe_path = os.path.join(target_dir, filename)  # Full path to the executable
@@ -251,6 +252,7 @@ Categories=Utility;"""
             self.logger.error(error)
             self.signals.install_finished.emit([False, error])
             self.signals.stop_undefined_range.emit()
+            return
 
         self.signals.stop_undefined_range.emit()
         self.signals.install_finished.emit([True, ""])
@@ -946,10 +948,10 @@ class PornFetch(QMainWindow):
         self.ui.CentralStackedWidget.setCurrentIndex(5)
 
     def switch_to_install_dialog(self):
-        self.ui.CentralStackedWidget.setCurrentIndex(6)
+        self.ui.CentralStackedWidget.setCurrentIndex(7)
 
     def switch_to_supported_sites(self):
-        self.ui.CentralStackedWidget.setCurrentIndex(7)
+        self.ui.CentralStackedWidget.setCurrentIndex(8)
 
     def switch_to_donation_nag(self):
         self.ui.CentralStackedWidget.setCurrentIndex(9)
@@ -1096,7 +1098,7 @@ class PornFetch(QMainWindow):
         if conf["UI"]["custom_font"] == "true":
             font_id = QFontDatabase.addApplicationFont(":/fonts/graphics/JetBrainsMono-Regular.ttf")
             if font_id == -1:
-                print("Failed to load font, please report")  # TODO
+                print("Failed to load font, please report")
             else:
                 # Get the family name of the loaded font
                 font.setFamily(QFontDatabase.applicationFontFamilies(font_id)[0])
@@ -1127,8 +1129,23 @@ class PornFetch(QMainWindow):
         self.switch_to_download()
 
     def install_pornfetch(self):
-        pass
+        app_name = self.ui.lineedit_custom_app_name.text()
+        if app_name == "" or app_name is None:
+            self.logger.info("You did not provide a custom App name. Using 'Porn Fetch' for the installation.")
+            app_name = "Porn Fetch"
 
+        self.install_thread = InstallThread(app_name=app_name)
+        self.install_thread.signals.start_undefined_range.connect(self.start_undefined_range)
+        self.install_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
+        self.install_thread.signals.install_finished.connect(self.install_pornfetch_result)
+        self.threadpool.start(self.install_thread)
+
+    def install_porn_fetch_portable(self):
+        conf["Setup"]["install"] = "portable"
+        with open("config.ini", "w") as config: # type: TextIOWrapper
+            conf.write(config)
+
+        self.switch_to_download()
 
     def install_pornfetch_result(self, result):
         if result[0]:
@@ -1236,6 +1253,8 @@ class PornFetch(QMainWindow):
         self.ui.settings_button_reset.clicked.connect(reset_pornfetch)
         self.ui.settings_button_system_install_pornfetch.clicked.connect(self.install_pornfetch)
         self.ui.settings_checkbox_system_activate_proxy.clicked.connect(self.set_proxies)
+        self.ui.button_install.clicked.connect(self.install_pornfetch)
+        self.ui.button_portable.clicked.connect(self.install_porn_fetch_portable)
 
         # Account
         self.ui.login_button_login.clicked.connect(self.login)
@@ -1578,6 +1597,11 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
             return
 
         self.ui.CentralStackedWidget.setCurrentIndex(0)
+
+        if conf["Setup"]["install"] == "unknown":
+            print("Switching to installation dialog")
+            self.switch_to_install_dialog()
+
 
     def start_single_video(self):
         """
@@ -2128,7 +2152,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         self.add_to_tree_widget_thread(iterator=videos)
 
     def get_by_category_hqporner(self):
-        """Returns video by category from HQPorner. I want to add support for EPorner"""  # TODO
+        """Returns video by category from HQPorner."""
         category_name = self.ui.tools_lineedit_hqporner_category.text()
         all_categories = shared_functions.hq_client.get_all_categories()
 
@@ -2427,7 +2451,6 @@ if __name__ == "__main__":
 
 
     def export_urls():
-        # TODO
         if not len(session_urls) == 0:
             file, type_ = QFileDialog().getOpenFileName()
             with open(file, "w") as url_export_file:

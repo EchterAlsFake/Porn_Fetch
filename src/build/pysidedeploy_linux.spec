@@ -8,7 +8,7 @@ title = Porn Fetch
 project_dir = .
 
 # source file path
-input_file = main.py
+input_file = /home/asuna/PycharmProjects/Porn_Fetch/main.py
 
 # directory where exec is stored
 exec_directory = .
@@ -22,12 +22,12 @@ icon = src/frontend/graphics/logo_transparent.png
 [python]
 
 # python path
-python_path =
+python_path = /home/asuna/PycharmProjects/venv/bin/python
 
 # python packages to install
 # ordered-set = increase compile time performance of nuitka packaging
 # zstandard = provides final executable size optimization
-packages = Nuitka==2.6.8
+packages = Nuitka==2.7.12
 
 # buildozer = for deploying Android application
 android_packages = buildozer==1.5.0,cython==0.29.33
@@ -42,7 +42,7 @@ qml_files =
 excluded_qml_plugins = 
 
 # qt modules used. comma separated
-modules = Widgets,Core,Gui,DBus
+modules = Core,DBus,Widgets,Gui
 
 # qt plugins used by the application
 plugins = xcbglintegrations,platforms/darwin,iconengines,accessiblebridge,styles,platformthemes,platforms,imageformats,generic,platforminputcontexts,egldeviceintegrations
@@ -66,7 +66,7 @@ plugins =
 macos.permissions = 
 
 # (str) specify any extra nuitka arguments
-extra_args = --noinclude-qt-translations --assume-yes-for-downloads --warn-unusual-code --show-memory --windows-console-mode=disable --company-name=None --product-name=PornFetch --file-version=3.5 --product-version=3.5 --copyright=JohannesHabel
+extra_args = --noinclude-qt-translations --assume-yes-for-downloads --disable-cache=all --clean-cache=all --remove-output --show-memory --company-name=None --product-name=PornFetch --file-version=3.6 --product-version=3.6 --copyright=JohannesHabel --enable-plugin=data-files --include-package-data=certifi
 
 [buildozer]
 

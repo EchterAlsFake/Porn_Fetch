@@ -48,7 +48,7 @@ def handle_error_gracefully(self, data: dict, error_message: str, needs_network_
 
     if not data.get("supress_errors") is True:
         print(f"Suppress errors: {data.get('supress_errors')}")
-        self.signals.error_signal.emit(error_message)
+        ui_popup(title="Error", text=error_message)
 
     if needs_network_log:
         if data.get("activate_logging") == "true":
