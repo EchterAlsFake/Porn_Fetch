@@ -1,6 +1,7 @@
 ## Updates the entire frontend
 
 pyside6-uic UI/form_main_window.ui -o UI/ui_form_main_window.py
+pyside6-uic UI/form_android.ui -o UI/ui_form_android.py
 
 # Resource file
 pyside6-rcc resources.qrc -o UI/resources.py

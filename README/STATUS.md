@@ -2,16 +2,17 @@
 
 # Bug fixes
 - [x] Fix XNXX progress reporting
+- [x] Fix xnxx not searching on the first page
 - [x] Fixed total progress in general
 - [x] Fixed thumbnails entirely
 - [x] Fix tools section layout
 - [x] Fix check for updates changelog displaying
 - [x] Fix thumbnails for HQPorner
 - [] Entirely rework and fix the error reporting system
-- [] Bring Porn Fetch back on Android
-  - [] Make an Android compatible Layout
-  - [] Fix threading
-  - [] Fix UI flickering and loading issues
+- [x] Bring Porn Fetch back on Android
+  - [x] Make an Android compatible Layout
+  - [x] Fix threading
+  - [x] Fix UI flickering and loading issues
 
 # Graphical User Interace
 - [x] Entirely reworked progressbar system

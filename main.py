@@ -1,34 +1,55 @@
-import time
-import random
-import shutil
-import os.path
-import argparse
-import markdown
-import traceback
-import requests
-import src.backend.shared_functions as shared_functions
-import src.frontend.UI.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
+try:
+    import time
+    import random
+    import shutil
+    import os.path
+    import argparse
+    import markdown
+    import traceback
+    import requests # Imported, although not used, because this triggers the certifi cacert.pem include workflow
+    import src.backend.shared_functions as shared_functions
+    import src.frontend.UI.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
 
-from threading import Event, Lock
-from io import TextIOWrapper
-from itertools import islice, chain
+    from threading import Event, Lock
+    from io import TextIOWrapper
+    from itertools import islice, chain
 
-from src.backend.shared_gui import *
-from src.backend.class_help import *
-from src.frontend.UI.ui_form_main_window import Ui_MainWindow
-from src.backend.one_time_functions import *
-from src.backend.config import __version__, __build__
-from src.backend.donation_nag import DonationNag
-from src.backend.license import License, Disclaimer
-from src.backend.config import shared_config
-from hqporner_api.api import Sort as hq_Sort
+    from src.backend.shared_gui import *
+    from src.backend.class_help import *
+    from src.frontend.UI.ui_form_main_window import Ui_MainWindow
+    from src.frontend.UI.ui_form_android import Ui_PornFetchAndroid
+    from src.backend.one_time_functions import *
+    from src.backend.config import __version__, __build__
+    from src.backend.donation_nag import DonationNag
+    from src.backend.license import License, Disclaimer
+    from src.backend.config import shared_config
+    from hqporner_api.api import Sort as hq_Sort
 
-from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
-                            QTranslator, QCoreApplication, QSize, QEvent, QRectF)
-from PySide6.QtWidgets import (QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, \
-    QInputDialog, QMainWindow, QLabel, QProgressBar, QGraphicsPixmapItem, QDialog, QVBoxLayout,
-                               QGraphicsScene, QGraphicsView, QPushButton, QHBoxLayout)
-from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence, QPainter
+    from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
+                                QTranslator, QCoreApplication, QSize, QEvent, QRectF)
+    from PySide6.QtWidgets import (QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, \
+        QInputDialog, QMainWindow, QLabel, QProgressBar, QGraphicsPixmapItem, QDialog, QVBoxLayout,
+                                   QGraphicsScene, QGraphicsView, QPushButton, QHBoxLayout)
+    from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence, QPainter
+
+except Exception as e:
+    from PySide6.QtWidgets import QWidget, QApplication, QLabel
+
+    class application(QWidget):
+        def __init__(self):
+            super().__init__()
+            self.label = QLabel(self)
+            self.label.setText(str(e))
+
+
+    app = QApplication()
+    w = application()
+    w.show()
+    app.exec()
+
+
+
+
 
 
 # Possible errors from APIs
@@ -134,7 +155,7 @@ class Signals(QObject):
     download_completed = Signal(object)  # Reports a successfully downloaded video
     progress_send_video = Signal(object,
                                  object)  # Sends the selected video objects from the tree widget to the main class
-    tree_widget_finished = Signal(object)
+    tree_widget_finished = Signal()
     # to download them
     url_iterators = Signal(object, object)  # Sends the processed URLs from the file to Porn Fetch
 
@@ -325,7 +346,7 @@ class CheckUpdates(QRunnable):
             if response.status_code == 200:
                 json_stuff = response.json()
                 if float(json_stuff["version"]) > float(__version__):
-                    self.logger.info(f"A new update is available -->: {json_stuff["version"]}")
+                    self.logger.info(f"A new update is available -->: {json_stuff['version']}")
                     self.signals.update_check.emit(True, json_stuff)
 
                 else:
@@ -495,6 +516,7 @@ class AddToTreeWidget(QRunnable):
         self.signals.total_progress_range.emit(self.result_limit)
         for i, video in enumerate(videos, start=start):
             if self.stop_flag.is_set():
+                self.signals.tree_widget_finished.emit()
                 return  # Stop processing if user pressed the stop button
 
             if i >= self.result_limit + 1:
@@ -511,7 +533,7 @@ class AddToTreeWidget(QRunnable):
             self.signals.text_data_to_tree_widget.emit(video_id)
 
         self.logger.debug("Finished Iterating")
-        self.signals.tree_widget_finished.emit(True)
+        self.signals.tree_widget_finished.emit()
 
 
 class DownloadThread(QRunnable):
@@ -791,7 +813,12 @@ class PornFetch(QMainWindow):
         self.direct_download = None
         self._full_pixmap = None
         self.setWindowTitle(f"Porn Fetch v{__version__} Copyright (C) Johannes Habel 2023-2025")
-        self.ui = Ui_MainWindow()
+        if __build__ == "desktop":
+            self.ui = Ui_MainWindow()
+
+        elif __build__ == "android":
+            self.ui = Ui_PornFetchAndroid()
+
         self.ui.setupUi(self)
 
         # Threads
@@ -1062,7 +1089,10 @@ class PornFetch(QMainWindow):
         self.ui.button_update_acknowledged.setStyleSheet(stylesheets["button_green"])
         self.ui.tools_button_get_brazzers_videos.setStyleSheet(stylesheets["button_purple"])
         self.ui.tools_button_list_categories.setStyleSheet(stylesheets["button_purple"])
-        self.ui.download_button_open_file.setStyleSheet(stylesheets["button_purple"])
+
+        if __build__ == "desktop":
+            self.ui.download_button_open_file.setStyleSheet(stylesheets["button_purple"])
+
         self.ui.main_button_switch_supported_websites.setStyleSheet(stylesheets["button_blue"])
         self.ui.tools_button_hqporner_category_get_videos.setStyleSheet(stylesheets["button_purple"])
         self.ui.tools_button_top_porn_get_videos.setStyleSheet(stylesheets["button_purple"])
@@ -1115,17 +1145,19 @@ class PornFetch(QMainWindow):
         self.ui.progress_gridlayout_progressbar.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # ChatGPT really cooked here
-        gv = self.ui.graphicsView # Geschlechtsverkehr Hihihi
-        gv.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
-        gv.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        gv.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self._scene = QGraphicsScene(self)
-        gv.setScene(self._scene)
-        self._pixmap_item = QGraphicsPixmapItem()
-        self._scene.addItem(self._pixmap_item)
-        self._full_pixmap = QPixmap()
-        gv.installEventFilter(self)
-        gv.viewport().installEventFilter(self)
+        if __build__ == "desktop":
+            gv = self.ui.graphicsView # Geschlechtsverkehr Hihihi
+            gv.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+            gv.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+            gv.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+            self._scene = QGraphicsScene(self)
+            gv.setScene(self._scene)
+            self._pixmap_item = QGraphicsPixmapItem()
+            self._scene.addItem(self._pixmap_item)
+            self._full_pixmap = QPixmap()
+            gv.installEventFilter(self)
+            gv.viewport().installEventFilter(self)
+
         self.switch_to_download()
 
     def install_pornfetch(self):
@@ -1247,7 +1279,8 @@ class PornFetch(QMainWindow):
         self.ui.settings_button_help_system_supress_errors.clicked.connect(button_help_supress_errors)
         self.ui.settings_button_help_system_enable_network_logging.clicked.connect(button_help_network_logging)
         self.ui.settings_button_help_system_proxy_kill_switch.clicked.connect(button_help_proxy_kill_switch)
-        self.ui.download_button_help_file.clicked.connect(open_file_help)
+        if __build__ == "desktop":
+            self.ui.download_button_help_file.clicked.connect(open_file_help)
         # Settings
         self.ui.settings_button_apply.clicked.connect(self.save_user_settings)
         self.ui.settings_button_reset.clicked.connect(reset_pornfetch)
@@ -1279,7 +1312,8 @@ class PornFetch(QMainWindow):
 
         # File Dialog
         self.ui.settings_button_videos_open_output_path.clicked.connect(self.open_output_path_dialog)
-        self.ui.download_button_open_file.clicked.connect(self.open_file_dialog)
+        if __build__ == "desktop":
+            self.ui.download_button_open_file.clicked.connect(self.open_file_dialog)
 
         # Other stuff IDK
         self.ui.main_button_tree_stop.clicked.connect(switch_stop_state)
@@ -1821,6 +1855,10 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
             self.select_all_items()
             self.download_tree_widget()
 
+        self.update_total_progressbar_range(1)
+        self.update_total_progressbar(1)
+
+
     def download_tree_widget(self):
         """
         Starts the thread for downloading the tree widget (All selected videos)
@@ -1946,6 +1984,9 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
 
     def set_thumbnail(self, item_current, item_previous=None): # Won's use the previous item
         """Replace your QLabel code with this, feeding the graphicsView."""
+        if __build__ == "android":
+            return
+
         item = item_current
         gv = self.ui.graphicsView
 
