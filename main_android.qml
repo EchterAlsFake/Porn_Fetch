@@ -1,12 +1,12 @@
 import QtQuick 2.15
+import QtQuick.Window 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Material 2.15
 import QtQuick.Layouts 1.15
 
 ApplicationWindow {
     visible: true
-    width: 360
-    height: 640
+    visibility: Window.FullScreen
     title: qsTr("Video Downloader")
     Material.theme: Material.Dark
     Material.accent: Material.Blue
@@ -15,12 +15,14 @@ ApplicationWindow {
         anchors.fill: parent
         anchors.margins: 16
         spacing: 12
+        clip: true
 
         Label {
-            text: qsTr("Enter Video URL ->:")
+            text: qsTr("Enter Video URL →")
             font.pointSize: 16
             color: "white"
         }
+
         TextField {
             id: urlInput
             placeholderText: qsTr("Paste video URL here")
@@ -33,24 +35,32 @@ ApplicationWindow {
             Layout.fillWidth: true
             Material.background: Material.Dense
 
-            RowLayout {
-                spacing: 20
-                RadioButton { id: bestQuality; text: qsTr("Best"); checked: true }
-                RadioButton { id: halfQuality; text: qsTr("Half") }
-                RadioButton { id: worstQuality; text: qsTr("Worst") }
+            Flow {
+                Layout.fillWidth: true
+                spacing: 12
+
+                RadioButton {
+                    id: bestQuality; text: qsTr("Best"); checked: true
+                }
+                RadioButton {
+                    id: halfQuality; text: qsTr("Half")
+                }
+                RadioButton {
+                    id: worstQuality; text: qsTr("Worst")
+                }
             }
         }
 
         Button {
             text: qsTr("Download")
-            Layout.alignment: Qt.AlignHCenter
+            Layout.fillWidth: true
             onClicked: {
                 var quality = bestQuality.checked ? "best"
-                              : halfQuality.checked ? "half"
-                              : "worst"
-                progressBar.value = 0
-                downloadLabel.text = ""
-                backend.downloadVideo(urlInput.text, quality)
+                    : halfQuality.checked ? "half"
+                        : "worst";
+                progressBar.value = 0;
+                downloadLabel.text = "";
+                backend.downloadVideo(urlInput.text, quality);
             }
         }
 
@@ -59,21 +69,40 @@ ApplicationWindow {
             text: ""
             font.pointSize: 14
             color: "lightgray"
+            // make sure it never forces the layout wider than the screen
+            Layout.fillWidth: true
+            wrapMode: Text.Wrap
+            elide: Text.ElideRight
         }
 
-        ProgressBar {
-            id: progressBar
+        StackLayout {
             Layout.fillWidth: true
-            from: 0
-            to: 100
-            value: 0
+            height: 28
+
+            ProgressBar {
+                id: progressBar
+                anchors.fill: parent
+                from: 0;
+                to: 100; value: 0
+                height: parent.height
+            }
+
+            Label {
+                text: qsTr("%1%").arg(Math.round(progressBar.value))
+                anchors.centerIn: parent
+                font.bold: true
+                color: "white"
+            }
         }
 
         Connections {
             target: backend
+
             function onTitleChanged(title) {
+                // now this long text will wrap or elide, not push everything wider
                 downloadLabel.text = qsTr("Downloading: %1").arg(title)
             }
+
             function onProgressChanged(current, total) {
                 var percent = total > 0 ? (current / total) * 100 : 0
                 progressBar.value = percent

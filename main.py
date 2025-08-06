@@ -301,35 +301,35 @@ class InternetCheck(QRunnable):
 
     def run(self):
         for idx, website in enumerate(self.websites, start=1):
-            self.logger.debug(f"[{idx}|{len(self.websites)}] Testing: {website}")
-
             try:
-                self.logger.info(f"Testing Internet [{idx}|{len(self.websites)}] : {website}")
-                shared_functions.core.config.headers.update({"Referer": website})
-                shared_functions.core.update_headers(headers={
-                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
-                    "Referer": f"{website}",
-                    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36)"})
-                status = shared_functions.core.fetch(website, get_response=True)
-                del shared_functions.core.config.headers["Referer"]
+                ref = shared_functions.origin(website)
 
-                if status is None:
-                    continue # to lazy to make exceptions for this dog shit site called missav.ws
+                # DUMMY FIX: rebuild session with per-site headers
+                shared_functions.core_internet_checks.initialize_session(headers={
+                    "Referer": ref,
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                                  "AppleWebKit/537.36 (KHTML, like Gecko) "
+                                  "Chrome/139.0.0.0 Safari/537.36",
+                    "Accept-Language": "en-US,en;q=0.9",
+                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                })
 
-                if status.status_code == 200:
-                    self.website_results.update({website: "OK"})
+                # Try HEAD first (lighter); some sites disallow HEAD -> fallback to GET
+                resp = shared_functions.core_internet_checks.session.head(website, timeout=10)
+                if resp.status_code in (405, 501):  # method not allowed / not implemented
+                    resp = shared_functions.core_internet_checks.session.get(website, timeout=10)
 
-                elif status.status_code == 404:
-                    if not website == "https://www.missav.ws":  # Could get taken down, so yeah ;)
-                        self.website_results.update(
-                            {website: "Failed, website doesn't exist? Please report this error"})
+                if resp.status_code == 200:
+                    self.logger.debug(f"Internet Check: {website} : OK")
+                    self.website_results[website] = "OK"
+                elif resp.status_code == 404 and website != "https://www.missav.ws":
+                    self.website_results[website] = "Failed, website doesn't exist? Please report this error"
 
             except Exception:
-                    error = traceback.format_exc()
-                    print("Don't care lol")
+                # swallow per your current behavior
+                pass
 
         self.signals.internet_check.emit(self.website_results)
-
 
 class CheckUpdates(QRunnable):
     def __init__(self):

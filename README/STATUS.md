@@ -1,14 +1,17 @@
 # v3.6
 
 # Bug fixes
-- [x] Fix XNXX progress reporting
-- [x] Fix xnxx not searching on the first page
+- [x] Fixed XNXX progress reporting
+- [x] Fixed xnxx not searching on the first page
+- [x] Fixed missav 403 errors
+- [x] Fixed spankbang 403 errors
+- [x] Fixed missav.ws too long path for mutagen metadata editing
+- [x] Fixed thumbnails for HQPorner
 - [x] Fixed total progress in general
 - [x] Fixed thumbnails entirely
-- [x] Fix tools section layout
-- [x] Fix check for updates changelog displaying
-- [x] Fix thumbnails for HQPorner
-- [] Entirely rework and fix the error reporting system
+- [x] Fixed tools section layout
+- [x] Fixed check for updates changelog displaying
+- [] Entirely reworked and fixed the error reporting system
 - [x] Bring Porn Fetch back on Android
   - [x] Make an Android compatible Layout
   - [x] Fix threading

@@ -7,11 +7,12 @@ import os
 import re
 import logging
 
-from mutagen.mp4 import MP4, MP4Cover
-from phub import Client as ph_Client, errors, Video as ph_Video, consts as phub_consts
 from src.backend.config import *
-
+from urllib.parse import urlsplit
+from mutagen.mp4 import MP4, MP4Cover
 from base_api.base import BaseCore, setup_logger
+from base_api.modules.config import RuntimeConfig
+from phub import Client as ph_Client, errors, Video as ph_Video, consts as phub_consts
 from hqporner_api import Client as hq_Client, Video as hq_Video
 from xnxx_api import Client as xn_Client, Video as xn_Video
 from xvideos_api import Client as xv_Client, Video as xv_Video
@@ -21,7 +22,6 @@ from xhamster_api import Client as xh_Client, Video as xh_Video
 from spankbang_api import Client as sp_Client, Video as sp_Video
 from base_api.modules.config import config # This is the global configuration instance of base core config
 # which is also affecting all other APIs when the refresh_clients function is called
-
 # Initialize clients globally, so that we can override them later with a new configuration from BaseCore if needed
 mv_client = mv_Client()
 ep_client = ep_Client()
@@ -32,26 +32,47 @@ sp_client = sp_Client()
 hq_client = hq_Client()
 xn_client = xn_Client()
 core = BaseCore() # We need that sometimes in Porn Fetch's main class e.g., thumbnail fetching
-
+core_internet_checks = BaseCore(config=RuntimeConfig(), auto_init=True)
 
 def refresh_clients(enable_kill_switch=False):
     global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, hq_client, xn_client, core
-    core = BaseCore(config=config, auto_init=False)
-    core.initialize_session()
+
+    # One BaseCore per site, with its own RuntimeConfig (isolated headers/cookies)
+    core_common = BaseCore(config=RuntimeConfig(), auto_init=True)   # if you want a “generic” core
+    core_hq    = BaseCore(config=RuntimeConfig(), auto_init=True)
+    core_mv    = BaseCore(config=RuntimeConfig(), auto_init=True)
+    core_ep    = BaseCore(config=RuntimeConfig(), auto_init=True)
+    core_ph    = BaseCore(config=RuntimeConfig(), auto_init=True)
+    core_xv    = BaseCore(config=RuntimeConfig(), auto_init=True)
+    core_xh    = BaseCore(config=RuntimeConfig(), auto_init=True)
+    core_xn    = BaseCore(config=RuntimeConfig(), auto_init=True)
+    core_sp    = BaseCore(config=RuntimeConfig(), auto_init=True)
 
     if enable_kill_switch:
-        core.enable_kill_switch()
+        core_common.enable_kill_switch()
+        core_hq.enable_kill_switch()
+        core_mv.enable_kill_switch()
+        core_ep.enable_kill_switch()
+        core_ph.enable_kill_switch()
+        core_xv.enable_kill_switch()
+        core_xh.enable_kill_switch()
+        core_xn.enable_kill_switch()
 
-    xn_client = xn_Client(core=core)
-    ep_client = ep_Client(core=core)
-    xv_client = xv_Client(core=core)
-    xh_client = xh_Client(core=core)
-    sp_client = sp_Client(core=core)
-    hq_client = hq_Client(core=core)
-    xn_client = xn_Client(core=core)
-    ph_client = ph_Client(core=core)
-    mv_client = mv_Client(core=core)
+    # Instantiate clients with their site-specific cores
+    mv_client = mv_Client(core=core_mv)
+    ep_client = ep_Client(core=core_ep)
+    ph_client = ph_Client(core=core_ph, use_webmaster_api=True)
+    xv_client = xv_Client(core=core_xv)
+    xh_client = xh_Client(core=core_xh)
+    sp_client = sp_Client(core=core_sp)
+    hq_client = hq_Client(core=core_hq)
+    xn_client = xn_Client(core=core_xn)
 
+    core = core_common
+
+def origin(url: str) -> str:
+    p = urlsplit(url)
+    return f"{p.scheme}://{p.netloc}/"
 
 def enable_logging(level=logging.DEBUG, log_file="APIs.log", log_ip=http_log_ip, log_port=http_log_port):
     global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, hq_client, xn_client
@@ -135,6 +156,7 @@ warning_shown = false
 def check_video(url, is_url=True):
     if is_url:
         if hqporner_pattern.search(str(url)) and not isinstance(url, hq_Video):
+            print("Returning HQPorner Video! ")
             return hq_client.get_video(url)
 
         elif eporner_pattern.search(str(url)) and not isinstance(url, ep_Video):
@@ -289,6 +311,7 @@ def load_video_attributes(video):
         thumbnail = video.thumbnail
 
     elif isinstance(video, hq_Video):
+        print("In loading stuff")
         try:
             author = video.pornstars[0]
         except Exception:
