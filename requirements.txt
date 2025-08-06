@@ -15,4 +15,3 @@ hue_shift
 Markdown
 av
 mutagen
-cython
