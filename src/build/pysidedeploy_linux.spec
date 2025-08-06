@@ -8,7 +8,7 @@ title = Porn Fetch
 project_dir = .
 
 # source file path
-input_file = /home/asuna/PycharmProjects/Porn_Fetch/main.py
+input_file =
 
 # directory where exec is stored
 exec_directory = .
@@ -22,7 +22,7 @@ icon = src/frontend/graphics/logo_transparent.png
 [python]
 
 # python path
-python_path = /home/asuna/PycharmProjects/venv/bin/python
+python_path =
 
 # python packages to install
 # ordered-set = increase compile time performance of nuitka packaging
