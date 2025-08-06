@@ -71,7 +71,7 @@ Set-Location -Path $projectDir
 py -m venv ..\venv\
 ..\venv\Scripts\activate.ps1
 pip install -r requirements.txt
-pip install pywin32
+pip install pywin32 av
 $env:NUITKA_ASSUME_YES_FOR_DOWNLOADS = "1"
 Write-Host "NUITKA_ASSUME_YES_FOR_DOWNLOADS is set to $env:NUITKA_ASSUME_YES_FOR_DOWNLOADS"
 

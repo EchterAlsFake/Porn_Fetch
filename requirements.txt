@@ -1,12 +1,12 @@
-git+https://github.com/EchterAlsFake/PHUB
-git+https://github.com/EchterAlsFake/missav_api
-git+https://github.com/EchterAlsFake/xhamster_api
-git+https://github.com/EchterAlsFake/hqporner_api
-git+https://github.com/EchterAlsFake/eporner_api
-git+https://github.com/EchterAlsFake/xnxx_api
-git+https://github.com/EchterAlsFake/xvideos_api
-git+https://github.com/EchterAlsFake/eaf_base_api
-git+https://github.com/EchterAlsFake/spankbang_api
+PHUB
+missav_api
+xhamster_api
+hqporner_api
+eporner_api
+xnxx_api
+xvideos_api
+eaf_base_api
+spankbang_api
 colorama
 PySide6
 requests
@@ -15,3 +15,4 @@ hue_shift
 Markdown
 av
 mutagen
+cython

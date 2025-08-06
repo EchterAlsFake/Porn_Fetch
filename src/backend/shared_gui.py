@@ -3,7 +3,6 @@ import httpx
 import datetime
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QMessageBox
-
 from src.backend.config import __version__
 
 
@@ -12,7 +11,7 @@ def ui_popup(text, title="Notice"):
     message_box = QMessageBox()
     message_box.setWindowTitle(title)
     message_box.setText(text)
-    message_box.setFont(QFont("Segoe UI", 10))
+    message_box.setFont(QFont("Segoe UI", 12))
 
     # Apply custom style sheet
     message_box.setStyleSheet("""
@@ -47,7 +46,6 @@ def handle_error_gracefully(self, data: dict, error_message: str, needs_network_
     self.logger.error(error_message)
 
     if not data.get("supress_errors") is True:
-        print(f"Suppress errors: {data.get('supress_errors')}")
         ui_popup(title="Error", text=error_message)
 
     if needs_network_log:
@@ -66,7 +64,7 @@ def handle_error_gracefully(self, data: dict, error_message: str, needs_network_
                 response = httpx.post(
                 url="https://echteralsfake.duckdns.org:443/report",
                 json=payload,
-                timeout=6)
+                timeout=20)
 
                 if response.status_code == 200:
                     self.logger.info("Successfully reported the Error!")

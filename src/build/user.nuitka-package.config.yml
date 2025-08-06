@@ -1,0 +1,15 @@
+# only-pyav-modules.yml
+- module-name: "av"
+  # implicit-imports: only the modules that av.open() and AudioResampler actually hit
+  implicit-imports:
+    - module: "av.container.input"      # for av.open() reading
+    - module: "av.container.output"     # if you ever open() in write mode
+    - module: "av.packet"               # packets for demuxing/remuxing
+    - module: "av.stream"               # generic stream base
+    - module: "av.audio.stream"         # audio-specific streams
+    - module: "av.audio.resampler"      # the AudioResampler class
+  data-files:
+    # pull in just the shared-objects for those modules
+    patterns:
+      - "container/*.so"
+      - "audio/*.so"

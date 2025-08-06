@@ -9,7 +9,8 @@ try:
     import requests # Imported, although not used, because this triggers the certifi cacert.pem include workflow
     import src.backend.shared_functions as shared_functions
     import src.frontend.UI.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
-
+    from av import open as av_open # Don't ask
+    from av.audio.resampler import AudioResampler # Don't ask
     from threading import Event, Lock
     from io import TextIOWrapper
     from itertools import islice, chain
@@ -33,13 +34,15 @@ try:
     from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence, QPainter
 
 except Exception as e:
+    import traceback
+    error = traceback.format_exc()
     from PySide6.QtWidgets import QWidget, QApplication, QLabel
 
     class application(QWidget):
         def __init__(self):
             super().__init__()
             self.label = QLabel(self)
-            self.label.setText(str(e))
+            self.label.setText(str(error))
 
 
     app = QApplication()
