@@ -56,7 +56,6 @@ except Exception as e:
 
 
 # Possible errors from APIs
-
 from base_api.modules.errors import ProxySSLError, InvalidProxy
 from xnxx_api.modules.errors import InvalidResponse
 from hqporner_api.modules.errors import (InvalidActress as InvalidActress_HQ, NoVideosFound,
@@ -400,6 +399,7 @@ class AddToTreeWidget(QRunnable):
 
                 self.logger.debug(f"Created ID: {video_id} for: {video.url}")
                 data = shared_functions.load_video_attributes(video)
+                session_urls.append(video.url)
                 self.logger.debug("Loaded video attributes")
                 stripped_title = shared_functions.core.strip_title(
                     data.get("title"))  # Strip the title so that videos with special chars can be

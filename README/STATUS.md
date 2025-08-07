@@ -9,6 +9,7 @@
 - [x] Fixed thumbnails for HQPorner
 - [x] Fixed total progress in general
 - [x] Fixed thumbnails entirely
+- [x] Fixed URL session export feature
 - [x] Fixed tools section layout
 - [x] Fixed check for updates changelog displaying
 - [] Entirely reworked and fixed the error reporting system
@@ -69,10 +70,10 @@
 - [] Make an Android Intent event, so that Android immediately recognizes downloaded fies (long story)
 
 # CLI
-- [] Entire rework of the CLI
+- [x] Entire rework of the CLI
 - [] Specific better support for Termux
 - [] Auto installation for Termux on Android to also handle storage permissions etc...
-- [] Fix progress reporting
+- [x] Fix progress reporting
 
 
 # 3.7 - I don't know

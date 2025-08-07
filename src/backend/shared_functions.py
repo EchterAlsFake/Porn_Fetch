@@ -32,21 +32,21 @@ sp_client = sp_Client()
 hq_client = hq_Client()
 xn_client = xn_Client()
 core = BaseCore() # We need that sometimes in Porn Fetch's main class e.g., thumbnail fetching
-core_internet_checks = BaseCore(config=RuntimeConfig(), auto_init=True)
+core_internet_checks = BaseCore(config=config, auto_init=True)
 
 def refresh_clients(enable_kill_switch=False):
     global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, hq_client, xn_client, core
 
     # One BaseCore per site, with its own RuntimeConfig (isolated headers/cookies)
-    core_common = BaseCore(config=RuntimeConfig(), auto_init=True)   # if you want a “generic” core
-    core_hq    = BaseCore(config=RuntimeConfig(), auto_init=True)
-    core_mv    = BaseCore(config=RuntimeConfig(), auto_init=True)
-    core_ep    = BaseCore(config=RuntimeConfig(), auto_init=True)
-    core_ph    = BaseCore(config=RuntimeConfig(), auto_init=True)
-    core_xv    = BaseCore(config=RuntimeConfig(), auto_init=True)
-    core_xh    = BaseCore(config=RuntimeConfig(), auto_init=True)
-    core_xn    = BaseCore(config=RuntimeConfig(), auto_init=True)
-    core_sp    = BaseCore(config=RuntimeConfig(), auto_init=True)
+    core_common = BaseCore(config=config, auto_init=True)   # if you want a “generic” core
+    core_hq    = BaseCore(config=config, auto_init=True)
+    core_mv    = BaseCore(config=config, auto_init=True)
+    core_ep    = BaseCore(config=config, auto_init=True)
+    core_ph    = BaseCore(config=config, auto_init=True)
+    core_xv    = BaseCore(config=config, auto_init=True)
+    core_xh    = BaseCore(config=config, auto_init=True)
+    core_xn    = BaseCore(config=config, auto_init=True)
+    core_sp    = BaseCore(config=config, auto_init=True)
 
     if enable_kill_switch:
         core_common.enable_kill_switch()

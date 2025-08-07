@@ -1,33 +1,39 @@
-import configparser
+import queue
+import logging
 import os.path
-import shutil
-import threading
 import argparse
-import phub.consts
+import threading
 import traceback
 import itertools
 
-import queue
+from colorama import *
 from io import TextIOWrapper
-from src.backend.shared_functions import *
+from rich import print as rprint
+from hue_shift import return_color
+from rich.markdown import Markdown
 from base_api.modules.progress_bars import *
 from base_api.base import BaseCore, setup_logger
-from rich import print as rprint
-from rich.markdown import Markdown
+from base_api.modules.config import RuntimeConfig
+from src.backend.CLI_model_feature_addon import *
+import src.backend.shared_functions as shared_functions
+from base_api.modules.errors import (InvalidProxy, ProxySSLError)
 from rich.progress import Progress, BarColumn, TextColumn, SpinnerColumn, TimeElapsedColumn, TimeRemainingColumn
-from colorama import *
-from hue_shift import return_color
 
 
-logger = setup_logger(name="Porn Fetch - [CLI]", log_file=None, level=logging.INFO)
+proxy_one_time_config_stuff_please_dont_ask_thank_you_very_mushhh = RuntimeConfig()
+STATE_FILE = "model_database.json"
+
+logger = setup_logger(name="Porn Fetch - [CLI]", log_file="PornFetch_CLI_LOG.log", level=logging.ERROR)
+logger_model_feature = setup_logger(name="Porn Fetch - [ModelBatchDownload]", log_file="PornFetch___ModelDownload___.log", level=logging.INFO)
 init(autoreset=True)
-
+conf = shared_functions.shared_config
+logging.disable(level=logging.DEBUG)
 
 
 class CLI:
     def __init__(self):
         self.downloaded_segments = 0
-        self.total_segments = 0 # Used for total progress tracking
+        self.total_segments = 0
         self.to_be_downloaded = 0
         self.finished_downloading = 0
         self.progress_queue = queue.Queue()
@@ -40,33 +46,33 @@ class CLI:
         self.quality = None
         self.semaphore = None
         self.retries = None
-        conf = None
         self.timeout = None
         self.workers = None
         self.delay = None
         self.language = None
         self.ffmpeg_features = True
         self.ffmpeg_path = None
+        shared_functions.refresh_clients()
+
+        # Setup the progress display (tasks added later)
         self.progress = Progress(
-            TextColumn("[progress.description]{task.description}", style="bold cyan"),  # Display task description here
+            TextColumn("[progress.description]{task.description}", style="bold cyan"),
             TextColumn("[progress.percentage]{task.percentage:>3.0f}%", style="bold cyan"),
             BarColumn(bar_width=20, finished_style="bold green"),
             TextColumn("[bold green]{task.completed}[/] / {task.total}", style="bold yellow"),
             TimeElapsedColumn(),
             TimeRemainingColumn(),
-            SpinnerColumn(spinner_name="dots")
+            SpinnerColumn(spinner_name="dots"),
         )
-        self.task_total_progres = self.progress.add_task("[progress.description]{task.description}", total=self.total_segments)
-        # Please just don't ask, thank you :)
+        self.task_total_progress = None
 
     def init(self):
         while True:
-            setup_config_file()
-            conf = ConfigParser()
+            shared_functions.setup_config_file()
             conf.read("config.ini")
             self.license()
-            self.ffmpeg_recommendation()
             self.load_user_settings()
+            conf.read("config.ini")
             self.menu()
 
     def license(self):
@@ -112,6 +118,10 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
 {return_color()}4) Search for videos
 {return_color()}5) Search a file for URLs and Model URLs
 {return_color()}6) Settings
+{return_color()}7) Model update / database feature (experimental)
+ 
+{return_color()}1337) Enable Proxy (experimental)
+{return_color()}1338) Enable Proxy Kill Switch (very experimental)
 
 {Fore.LIGHTWHITE_EX}98) Credits
 {Fore.LIGHTRED_EX}99) Exit
@@ -119,7 +129,7 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
 
         if options == "1":
             url = input(f"{return_color()}Please the enter video URL -->: {return_color()}")
-            video = [check_video(url)]
+            video = [shared_functions.check_video(url)]
             self.iterate_generator(auto=True, generator=video)
 
         elif options == "2":
@@ -137,33 +147,165 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
         elif options == "6":
             self.save_user_settings()
 
+        elif options == "7":
+            self.experimental_model_download()
+
+        elif options == "1337":
+            self.set_proxy()
+
+        elif options == "1338":
+            shared_functions.refresh_clients(enable_kill_switch=True)
+            print("Refreshed Clients with Kill Switch enabled!")
+
         elif options == "98":
             self.credits()
+            self.menu()
 
         elif options == "99":
             sys.exit(0)
 
-    def ffmpeg_recommendation(self):
-        if os.path.exists("/data/data/com.termux/files/home"):
-            ffmpeg = input(f"""
-Hey,
+    def experimental_model_download(self, path: str = STATE_FILE):
+        """
+        Interactive menu for managing the automatic model downloader.
+        `fetch_generator_fn` must accept a model_url and return an iterable of Video objects.
+        """
+        while True:
+            choice = input("""
+    What do you want to do?
 
-It seems like you are using Termux... I highly recommend you to use FFmpeg as your threading mode, because downloading
-HLS segments is very slow on Android devices, because the processor and the system in general can't handle so many
-threads at the same time.
+    1) Show help
+    2) Add new Models
+    3) Fetch pending URLs for all models
+    4) Delete Models
+    5) Show statistics
+    6) Exit
 
-You can install FFmpeg with: 'apt-get install ffmpeg'
+    99) Start Downloading / Updating Models
 
-If you accept, Porn Fetch will close and automatically set ffmpeg as your downloader.
+    Enter choice: """)
+            if choice == '1':
+                show_help()
 
-Do you want to use FFmpeg? [yes,no]        
-    """)
+            elif choice == '2':
+                urls = input("Enter model URLs to add (comma-separated): ").split(',')
+                for url in [u.strip() for u in urls if u.strip()]:
+                    add_model_url(url, path=path)
 
-            if ffmpeg.lower() == "yes":
-                conf.set("Performance", "threading_mode", "FFMPEG")
-                with open("config.ini", "w") as config_file: #type: TextIOWrapper
-                    conf.write(config_file)
-                    print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTYELLOW_EX}Done!")
+            elif choice == '3':
+                # requires a function fetch_generator_fn(url)
+                update_pending_for_all_models(self.process_model, path=path)
+
+            elif choice == '4':
+                urls = input("Enter model URLs to delete (comma-separated): ").split(',')
+                for url in [u.strip() for u in urls if u.strip()]:
+                    remove_model_url(url, path=path)
+
+            elif choice == '5':
+                show_stats(path)
+
+            elif choice == '6':
+                self.menu()
+
+            elif choice == "99":
+                models = get_all_saved_models(STATE_FILE)
+                idx = 0
+                for model in models:
+                    model_url, data = model
+
+                    idx += 1
+                    print(f"Processing: [{idx}|{len(models)}] -->: {model_url}")
+                    pending_videos = data.get("pending")
+
+                    if len(pending_videos) >= 1:
+                        print(f"Model has pending videos! Downloading: {len(pending_videos)}")
+                        for idx, url in enumerate(pending_videos):
+                            print(f"[{idx}|{len(pending_videos)}] Downloading -->: {url}")
+                            videos = [shared_functions.check_video(url)]
+                            try:
+                                self.iterate_generator(generator=videos, batch=True, auto=True, remove_total_bar=True)
+                                record_download(model_url=model_url, video_url=url, path=STATE_FILE)
+
+                            except Exception:
+                                error = traceback.format_exc()
+                                logger_model_feature.error(f"""
+Model: {model_url}
+Video URL: {url}
+Error: {error}
+Index: {idx}""")
+
+                        logger_model_feature.info(f"""
+Model: {model_url}
+STATUS: Finished!
+""")
+
+                    else:
+                        print(f"Model has no pending videos, continuing with the next one!")
+                        continue
+
+            else:
+                print("Invalid choice, please enter 1-6.")
+
+
+    def set_proxy(self):
+        proxy = input(f"""
+{Fore.LIGHTWHITE_EX}Please enter your proxy in the format like this:
+<protocol><ip>:<port>
+You can find free socks proxies here: https://spys.one/en/socks-proxy-list/
+Or http[s] proxies here: https://proxyscrape.com/free-proxy-list
+Example:
+
+1) {Fore.LIGHTMAGENTA_EX}socks5://13.37.4.20:1337 {Fore.LIGHTGREEN_EX}(Socks5 is recommended)
+2) {Fore.LIGHTCYAN_EX}https://54.224.25.185:69
+{Fore.LIGHTMAGENTA_EX}
+Disclaimer:
+The Proxy feature was well tested, however there's no guarantee for it to perfectly function and never leaking your IP.
+Also, free proxies are very unreliable in general. Consider using a paid / your own proxy. 
+
+{Fore.LIGHTYELLOW_EX}Your Proxy -->:{Fore.LIGHTWHITE_EX}""")
+        print(f"Testing your Proxy: {proxy}")
+
+        import httpx
+        ip_unmasked = httpx.Client().get("https://httpbin.org/ip").json()["origin"]
+        try:
+            proxy_one_time_config_stuff_please_dont_ask_thank_you_very_mushhh.proxy = proxy
+            proxy_core = BaseCore(proxy_one_time_config_stuff_please_dont_ask_thank_you_very_mushhh)
+            ip_masked = BaseCore(config=proxy_one_time_config_stuff_please_dont_ask_thank_you_very_mushhh).fetch("https://httpbin.org/ip", get_response=True).json()["origin"]
+
+        except InvalidProxy:
+            print("Your Proxy in invalid. Try again!")
+            self.set_proxy()
+
+        except ProxySSLError:
+            ssl_verification = input(f"""
+        {Fore.LIGHTYELLOW_EX}WARNING
+
+{Fore.LIGHTRED_EX}Your Proxy does NOT support proper TLS / SSL verfification. It may use a self-signed certificate or 
+no certificate at all. You can disable SSL verification to get around this, however, this makes you vulnerable to
+man in the middle attacks. Everyone in your network will be able to inject malicious downloads on the fly, intercept 
+your connection, and read all your traffic.
+
+Do you accept the risk? 
+-------[Yes|No]--->:
+""")
+
+            if ssl_verification.lower() == "yes":
+                print("Disabling SSL verficiation...")
+                shared_functions.config.verify_ssl = False
+                ip_masked = httpx.Client(proxy=proxy, verify=False).get("https://httpbin.org/ip").json()["origin"]
+
+            else:
+                print("Alright, going back to main menu....")
+                self.menu()
+
+        if ip_unmasked == ip_masked:
+            print(f"{Fore.LIGHTRED_EX}Your Proxy IP is equal to your normal IP! Your Proxy is not working, check your input!{Fore.LIGHTWHITE_EX}")
+            self.set_proxy()
+
+        else:
+            print(f"{return_color()}SUCCESS! {Fore.LIGHTWHITE_EX}Your Proxy IP is: {Fore.LIGHTYELLOW_EX}{ip_masked}. {Fore.LIGHTWHITE_EX}Using your Proxy for this session :)")
+            shared_functions.config.proxy = proxy
+            shared_functions.refresh_clients()
+            print("Refreshed Clients!")
 
     def load_user_settings(self):
         self.delay = int(conf.get("Video", "delay"))
@@ -175,29 +317,8 @@ Do you want to use FFmpeg? [yes,no]
         self.output_path = conf.get("Video", "output_path")
         self.directory_system = True if conf.get("Video", "directory_system") == "1" else False
         self.skip_existing_files = True if conf.get("Video", "skip_existing_files") == "true" else False
-        self.result_limit = int(conf.get("Video", "search_limit"))
+        self.result_limit = int(conf.get("Video", "result_limit"))
         self.threading_mode = conf.get("Performance", "threading_mode")
-
-        try:
-            if shutil.which("ffmpeg"):
-                self.ffmpeg_path = shutil.which("ffmpeg")
-
-            else:
-                if os.path.isfile("ffmpeg"):
-                    self.ffmpeg_path = "ffmpeg"
-
-                elif os.path.isfile("ffmpeg.exe"):
-                    self.ffmpeg_path = "ffmpeg.exe"
-
-                else:
-                    logger.warning("FFMPEG wasn't found... Have you extracted it from the .zip file?")
-                    logger.warning("FFMPEG Features won't be available!")
-                    self.ffmpeg_features = False
-        finally:
-            if not self.ffmpeg_path == "":
-                phub.consts.FFMPEG_EXECUTABLE = self.ffmpeg_path
-                bs_consts.FFMPEG_PATH = self.ffmpeg_path
-                self.ffmpeg_features = True
 
     def save_user_settings(self):
         while True:
@@ -277,7 +398,7 @@ Do you want to use FFmpeg? [yes,no]
 
                 elif settings_options == "10":
                     limit = input(f"Enter a new result limit -->:")
-                    conf.set("Video", "search_limit", limit)
+                    conf.set("Video", "result_limit", limit)
 
                 elif settings_options == "11":
                     path = input(f"Enter a new output path -->:")
@@ -302,49 +423,45 @@ Do you want to use FFmpeg? [yes,no]
                 with open("config.ini", "w") as config_file: #type: TextIOWrapper
                     conf.write(config_file)
 
-    def process_video(self, url=None, batch=False):
+    def process_video(self, url=None, video=None, batch=False, remove_total_bar=False):
         self.semaphore.acquire()
+        if video is None:
+            url = url or input("Enter Video URL: ")
+            video = shared_functions.check_video(url=url)
 
-        if url is None:
-            url = input(f"{return_color()}Please enter the Video URL -->:")
+        attrs = shared_functions.load_video_attributes(video)
+        author = attrs.get('author', '')
+        title = attrs.get('title', 'video')
 
-        video = check_video(url=url)
-        data = load_video_attributes(video)
-        author = data.get("author")
-        title = data.get("title")
-
-        output_path = self.output_path
-
+        # Determine output path
+        out_dir = self.output_path or os.getcwd()
         if self.directory_system:
-            path_author = os.path.join(output_path, author)
-            if not os.path.exists(path_author):
-                os.makedirs(path_author, exist_ok=True) # doesn't make sense ik
-
-            output_path = os.path.join(str(path_author), title + ".mp4")
-
+            author_dir = os.path.join(out_dir, author)
+            os.makedirs(author_dir, exist_ok=True)
+            out_file = os.path.join(author_dir, f"{title}.mp4")
         else:
-            output_path = os.path.join(output_path, title + ".mp4")
+            out_file = os.path.join(out_dir, f"{title}.mp4")
 
-        if os.path.exists(output_path):
-            logger.debug(f"{return_color()}File: {output_path} already exists, skipping...")
-            print(f"{return_color()}File: {output_path} already exists, skipping...")
+        if os.path.exists(out_file):
+            logger.debug(f"File exists, skipping: {out_file}")
+            print(f"Skipping existing file: {out_file}")
             self.semaphore.release()
             return
 
-        # Create the progress task
-        task = self.progress.add_task(description=f"[bold cyan]Downloading: {video.title}[/bold cyan]", total=100)
+        # Create per-video task
+        task_id = self.progress.add_task(
+            description=f"Downloading: {title}",
+            total=0,
+        )
 
-        # Start the download thread
-        self.progress.start()
-        self.download_thread = threading.Thread(target=self.download, args=(video, output_path, task))
-        self.download_thread.start()
-
-        self.progress_thread = threading.Thread(target=self._update_progress)
-        self.progress_thread.start()
-
-
+        dl_thread = threading.Thread(
+            target=self.download,
+            args=(video, out_file, task_id, remove_total_bar),
+            daemon=True,
+        )
+        dl_thread.start()
         if batch:
-            self.download_thread.join()
+            dl_thread.join()
 
     def process_video_with_error_handling(self, video, batch, ignore_errors):
         try:
@@ -356,55 +473,57 @@ Do you want to use FFmpeg? [yes,no]
             else:
                 raise f"{Fore.LIGHTRED_EX}[~]{Fore.RED}Error: {e}, please report the full traceback --: {traceback.print_exc()}"
 
-    def iterate_generator(self, generator, auto=False, ignore_errors=False, batch=False):
+    def iterate_generator(self, generator, auto=False, ignore_errors=False, batch=False, remove_total_bar=False):
         videos = []
-
         for idx, video in enumerate(generator):
             print(f"{idx}) - {video.title}")
             videos.append(video)
-
-            if idx >= self.result_limit:
+            if idx + 1 >= self.result_limit:
                 break
 
         print(f"Videos loaded: {len(videos)}")
 
         if not auto:
-            vids = input(f"""
-    {return_color()}Please enter the numbers of videos you want to download with a comma separated.
-    for example: 1,5,94,3{Fore.WHITE}
-
-    Enter 'all' to download all videos
-
-    {return_color()}------------------------>:{Fore.WHITE}""")
+            selection = input(
+                "\nPlease enter the numbers of videos to download (comma-separated) or 'all' to download all:\n"
+            )
         else:
-            vids = "all"
+            selection = "all"
 
-        if vids == "all" or auto:
-            print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTYELLOW_EX}Calculating the total progress... This may take some time!")
+        to_download = videos if selection.strip().lower() == "all" else [videos[i] for i in map(int, selection.split(","))]
 
-            self.total_segments = sum(
-                [len(list(video.get_segments(quality=self.quality))) for video in videos if
-                 hasattr(video, 'get_segments')])
-            logger.debug(f"Got segments: {self.total_segments}")
+        # Compute total segments
+        self.total_segments = sum(
+            len(list(v.get_segments(quality=self.quality)))
+            for v in to_download
+            if hasattr(v, 'get_segments')
+        )
+        self.to_be_downloaded = len(to_download)
 
-            self.to_be_downloaded = len(videos)
+        # Create total progress task
+        self.task_total_progress = self.progress.add_task(
+            description="Total Progress",
+            total=self.total_segments,
+        )
 
-            for video in videos:
-                self.process_video_with_error_handling(video, batch, ignore_errors)
-        else:
-            selected_videos = vids.split(",")
-            videos_ = []
-            for number in selected_videos:
-                videos_.append(videos[int(number)])
+        # Start display and updater thread
+        self.progress.start()
+        self.progress_thread = threading.Thread(target=self._update_progress, daemon=True)
+        self.progress_thread.start()
 
-            self.total_segments = sum(
-                [len(list(video.get_segments(quality=self.quality))) for video in videos_ if
-                 hasattr(video, 'get_segments')])
+        # Process each video
+        for video in to_download:
+            try:
+                self.process_video(video=video, batch=batch, remove_total_bar=remove_total_bar)
+            except Exception as e:
+                if ignore_errors:
+                    print(f"{Fore.LIGHTRED_EX}[~]{Fore.RED} Ignoring Error: {e}")
+                else:
+                    raise
 
-            self.to_be_downloaded = len(selected_videos)
-            for number in selected_videos:
-                video = videos[int(number)]
-                self.process_video_with_error_handling(video, batch, ignore_errors)
+        # Wait for all downloads, then remove total bar
+        self.progress_thread.join()
+        self.progress.stop()
 
 
     def process_model(self, url=None, do_return=False, auto=False, ignore_errors=False, batch=False):
@@ -414,20 +533,20 @@ Do you want to use FFmpeg? [yes,no]
         else:
             model = url
 
-        if eporner_pattern.search(model):
-            model = ep_Client().get_pornstar(model, enable_html_scraping=True).videos(pages=10)
+        if shared_functions.eporner_pattern.search(model):
+            model = shared_functions.ep_client.get_pornstar(model, enable_html_scraping=True).videos(pages=10)
 
-        elif xnxx_pattern.match(model):
-            model = xn_Client().get_user(model).videos
+        elif shared_functions.xnxx_pattern.match(model):
+            model = shared_functions.xn_client.get_user(model).videos
 
-        elif pornhub_pattern.match(model):
-            model = itertools.chain(Client().get_user(model).videos, Client().get_user(model).uploads)
+        elif shared_functions.pornhub_pattern.match(model):
+            model = itertools.chain(shared_functions.ph_client.get_user(model).videos, shared_functions.ph_client.get_user(model).uploads)
 
-        elif hqporner_pattern.match(model):
-            model = hq_Client().get_videos_by_actress(model)
+        elif shared_functions.hqporner_pattern.match(model):
+            model = shared_functions.hq_client.get_videos_by_actress(model)
 
-        elif xvideos_pattern.match(model):
-            model = xv_Client().get_pornstar(model).videos
+        elif shared_functions.xvideos_pattern.match(model):
+            model = shared_functions.xv_client.get_pornstar(model).videos
 
         if do_return:
             return model
@@ -437,7 +556,7 @@ Do you want to use FFmpeg? [yes,no]
     def process_playlist(self, url=None, auto=False, ignore_errors=False, batch=False):
         if url is None:
             url = input(f"{return_color()}Enter the (PornHub) playlist URL -->:")
-        playlist = Client().get_playlist(url)
+        playlist = shared_functions.ph_client.get_playlist(url)
         print(f"{return_color()}Processing: {playlist.title}")
         self.iterate_generator(playlist.sample(), auto=auto, ignore_errors=ignore_errors, batch=batch)
 
@@ -454,19 +573,19 @@ Do you want to use FFmpeg? [yes,no]
         query = input(f"{return_color()}Please enter the search query -->:")
 
         if website == "1":
-            self.iterate_generator(Client().search(query))
+            self.iterate_generator(shared_functions.ph_client.search(query))
 
         elif website == "2":
-            self.iterate_generator(hq_Client().search_videos(query=query))
+            self.iterate_generator(shared_functions.hq_client.search_videos(query=query))
 
         elif website == "3":
-            self.iterate_generator(xv_Client().search(query))
+            self.iterate_generator(shared_functions.xv_client.search(query))
 
         elif website == "4":
-            self.iterate_generator(xn_Client().search(query).videos)
+            self.iterate_generator(shared_functions.xn_client.search(query).videos)
 
         elif website == "5":
-            self.iterate_generator(ep_Client().search_videos(query, per_page=self.result_limit,
+            self.iterate_generator(shared_functions.ep_client.search_videos(query, per_page=self.result_limit,
                                                              sorting_order="", sorting_gay="", sorting_low_quality="",
                                                              enable_html_scraping=True, page=1))
 
@@ -490,7 +609,7 @@ Do you want to use FFmpeg? [yes,no]
 
         logger.debug(f"{return_color()}Processing Models / Videos...")
         for video in videos:
-            objects.append(check_video(video))
+            objects.append(shared_functions.check_video(video))
 
         for video in models:
             objects.append(video)
@@ -498,75 +617,80 @@ Do you want to use FFmpeg? [yes,no]
         logger.debug(f"{return_color()}Done!")
         self.iterate_generator(objects)
 
-    def download(self, video, output_path, task):
+    def download(self, video, output_path, task_id, remove_total_bar=False):
         try:
+            # Detect whether this is a byte-based download
+            is_byte_download = (
+                isinstance(video, shared_functions.hq_Video)
+                or isinstance(video, shared_functions.ep_Video)
+            )
+
             def callback_wrapper(pos, total):
-                self.progress_queue.put((task, pos, total))
-                self.downloaded_segments += 1
+                if is_byte_download:
+                    # pick MiB or GiB depending on size
+                    mib = pos / (1024 ** 2)
+                    tib = total / (1024 ** 2)
+                    pos_unit = round(mib, 1)
+                    tot_unit = round(tib, 1)
+                    self.progress.update(task_id, total=tot_unit, completed=pos_unit)
+                else:
+                    # segment‐based download: advance both per‐video and total
+                    self.progress.update(task_id, total=total, completed=pos)
+                    self.progress.update(self.task_total_progress, advance=1)
 
-            if isinstance(video, Video):
-                video.download(path=output_path, quality=self.quality, downloader=self.threading_mode,
-                               display=callback_wrapper)
-
-            elif isinstance(video, ep_Video) or isinstance(video, hq_Video):
-                video.download(path=output_path, quality=self.quality, no_title=True,
-                               callback=Callback.text_progress_bar)
-
+            # Kick off the right download call
+            if isinstance(video, shared_functions.ph_Video):
+                video.download(path=output_path,
+                    quality=self.quality,
+                    downloader=self.threading_mode,
+                    display=callback_wrapper,
+                    remux=True)
+            elif is_byte_download:
+                # HQPorner / Eporner
+                video.download(
+                    path=output_path,
+                    quality=self.quality,
+                    callback=callback_wrapper,
+                    no_title=True,
+                )
             else:
-                video.download(downloader=self.threading_mode, path=output_path, no_title=True, quality=self.quality,
-                               callback=callback_wrapper)
+                # other types (e.g. ep_Video/hq_Video fall through here if needed)
+                video.download(
+                    path=output_path,
+                    quality=self.quality,
+                    downloader=self.threading_mode,
+                    callback=callback_wrapper,
+                    remux=True,
+                    no_title=True,
+                )
 
         finally:
-            logger.debug(f"{return_color()}Finished downloading for: {video.title}")
+            logger.debug(f"Finished download: {video.title}")
+            if conf["Video"]["write_metadata"] == "true":
+                shared_functions.write_tags(
+                    path=output_path,
+                    data=shared_functions.load_video_attributes(video),
+                )
 
-            # Handle FFMPEG processing
-            if self.ffmpeg_features:
-                os.rename(f"{output_path}", f"{output_path}_.tmp")
-                cmd = [self.ffmpeg_path, "-i", f"{output_path}_.tmp", "-c", "copy", output_path, '-hide_banner',
-                       '-loglevel', 'error']
-                ff = FfmpegProgress(cmd)
-                for progress in ff.run_command_with_progress():
-                    logger.debug(f"Converting progress: {progress}")
-
-                os.remove(f"{output_path}_.tmp")
-                write_tags(path=output_path, data=load_video_attributes(video))
-            else:
-                logger.debug("FFMPEG features disabled, writing tags and converting the video won't be available!")
-
-            # Mark task as completed
-            self.progress.update(task, completed=self.progress.tasks[task].total)
-            self.progress_queue.put(None)  # This signals _update_progress to stop when all tasks are done
+            # Release semaphore and log
             self.finished_downloading += 1
             self.semaphore.release()
-            print(f"{Fore.LIGHTGREEN_EX}[+] {Fore.LIGHTYELLOW_EX}Video download finished!, you can continue navigating through the menu :)")
+            print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTYELLOW_EX} Download finished: {video.title}")
 
+            # Clean up the per-video bar; leave total bar intact for segments
+            try:
+                self.progress.remove_task(task_id)
+                if remove_total_bar and not is_byte_download:
+                    self.progress.remove_task(self.task_total_progress)
+            except ValueError:
+                pass
 
     def _update_progress(self):
-        while True:
-            try:
-                task_data = self.progress_queue.get()
-                if task_data is None:
-                    break  # Stop when all tasks are done
+        # Continuously refresh while there are tasks
+        while self.progress.tasks:
+            self.progress.refresh()
+            threading.Event().wait(0.1)
 
-                task, pos, total = task_data
-
-                # Ensure we only update when progress changes
-                progress_diff = pos - self.progress.tasks[task].completed
-                if progress_diff > 0:
-                    self.progress.update(task, advance=progress_diff, total=total)
-
-                total_progress_diff = self.downloaded_segments - self.progress.tasks[self.task_total_progres].completed
-                if total_progress_diff > 0:
-                    self.progress.update(self.task_total_progres, advance=total_progress_diff,
-                                         total=self.total_segments,
-                                         description=f"Total progress | Downloaded: {self.finished_downloading}/{self.to_be_downloaded} videos")
-
-                self.progress.refresh()
-
-            except TypeError:
-                break
-
-        self.progress.stop()  # Ensure the progress disappears when done
 
     @staticmethod
     def credits():
@@ -575,10 +699,10 @@ Do you want to use FFmpeg? [yes,no]
         rprint(md)
 
 
+
 class Batch(CLI):
     def __init__(self):
         super().__init__()
-        conf = ConfigParser()
         conf.read("config.ini")
         self.main()
 
@@ -646,12 +770,27 @@ By using the CLI batch mode you automatically accept the GPLv3 License of Porn F
             parser.add_argument("--auto_process", help="Whether to automatically download all videos from playlists,"
                                                        "files, models or ask you to select each videos individually",
                                 action="store_true")
+            parser.add_argument("--add-model-to-database", help="A model URL that should be added to the database")
+            parser.add_argument("--remove-model-from-database", help="A model URL that should be removed from the database")
+            parser.add_argument("--update-models", help="Runs the model update function")
 
             args = parser.parse_args()
 
             if args.info:
                 print(description)
                 exit(0)
+
+            '''if args.add_model_to_database:
+                model_url = args.add_model_to_database
+                CLI().add_model_url(model_url)
+
+            if args.remove_models_from_database:
+                model_url = args.remove_models_from_database
+                CLI().remove_model_url(model_url)
+
+            if args.update_models:
+                ""
+'''
 
             if args.batch is False:
                 CLI().init()
@@ -667,15 +806,13 @@ By using the CLI batch mode you automatically accept the GPLv3 License of Porn F
 
             print("Checking and loading configuration...")
             try:
-                conf = configparser.ConfigParser()
                 conf.read("config.ini")
                 self.load_user_settings()
 
             except Exception as e:
                 print(f"Error in loading configuration..., creating a new configuration file... Error:")
                 logger.error(e)
-                setup_config_file(force=True)
-                conf = configparser.ConfigParser()
+                shared_functions.setup_config_file(force=True)
                 conf.read("config.ini")
                 self.load_user_settings()
 
