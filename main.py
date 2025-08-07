@@ -61,6 +61,8 @@ from xnxx_api.modules.errors import InvalidResponse
 from hqporner_api.modules.errors import (InvalidActress as InvalidActress_HQ, NoVideosFound,
                                          NotAvailable as NotAvailable_HQ, WeirdError as WeirdError_HQ)
 from xvideos_api.modules.errors import (VideoUnavailable as VideoUnavailable_XV)
+from eporner_api.modules.errors import NotAvailable as NotAvailable_EP, VideoDisabled as VideoDisabled_EP
+from phub.errors import VideoError as VideoError_PH
 
 _download_lock = Lock()
 
@@ -142,6 +144,8 @@ class Signals(QObject):
 
     progress_video = Signal(int, int, int)
     progress_video_range = Signal(int, int)
+
+    error_signal = Signal(object)
 
     # Animations
     start_undefined_range = Signal()  # Starts the loading animation progressbar
@@ -482,6 +486,18 @@ class AddToTreeWidget(QRunnable):
                 handle_error_gracefully(self, data=video_data.consistent_data, error_message= f"The video {video.url} is not available. Do not report this error... Not my fault :)")
                 return False
 
+            except NotAvailable_EP:
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {video.url} is not available on HQPorner. This is not my fault, skipping...")
+                return False
+
+            except VideoDisabled_EP:
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {video.url} has been disabled by EPorner itself. It will be skippled...")
+                return False
+
+            except VideoError_PH:
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {video.url} has an error. However, in this case it's PornHub's fault. It will be skipped!")
+                return False
+
             except Exception:
                 error = traceback.format_exc()
                 handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Unexpected error occurred: {error}", needs_network_log=True)
@@ -624,13 +640,24 @@ class DownloadThread(QRunnable):
             # We need to specify the sources, so that it knows which individual progressbar to use
             if isinstance(self.video, shared_functions.hq_Video):
                 video_source = "hqporner"
-                self.video.download(quality=self.quality, path=self.output_path, no_title=True,
+                try:
+                    self.video.download(quality=self.quality, path=self.output_path, no_title=True,
                                     callback=lambda pos, total: self.generic_callback(pos, total, video_source))
+
+                except Exception:
+                    error = traceback.format_exc()
+                    handle_error_gracefully(data=self.consistent_data, self=self, error_message=f"An error happened while downloading a video from HQPorner: {error}", needs_network_log=True)
 
             elif isinstance(self.video, shared_functions.ep_Video):
                 video_source = "eporner"
-                self.video.download(quality=self.quality, path=self.output_path, no_title=True,
+                try:
+                    self.video.download(quality=self.quality, path=self.output_path, no_title=True,
                                     callback=lambda pos, total: self.generic_callback(pos, total, video_source))
+
+                except Exception:
+                    error = traceback.format_exc()
+                    handle_error_gracefully(data=self.consistent_data, self=self, error_message=f"An error happened while downloading a video from EPorner: {error}", needs_network_log=True)
+
 
             else:  # Assuming 'Video' is the class for Pornhub
                 path = self.output_path
@@ -1791,6 +1818,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
                                                           is_checked=is_checked,
                                                           last_index=self.last_index)
         self.add_to_tree_widget_thread_.signals.text_data_to_tree_widget.connect(self.add_to_tree_widget_signal)
+        self.add_to_tree_widget_thread_.signals.error_signal.connect(self.show_error)
         self.add_to_tree_widget_thread_.signals.clear_tree_widget_signal.connect(self.clear_tree_widget)
         self.add_to_tree_widget_thread_.signals.start_undefined_range.connect(self.start_undefined_range)
         self.add_to_tree_widget_thread_.signals.stop_undefined_range.connect(self.stop_undefined_range)
@@ -1861,6 +1889,8 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         self.update_total_progressbar_range(1)
         self.update_total_progressbar(1)
 
+    def show_error(self, message):
+        ui_popup(text=message, title="Error")
 
     def download_tree_widget(self):
         """
