@@ -1,3 +1,8 @@
+> [!IMPORTANT]
+> I hate Windows so much. This stupid trash system can't even automatically resolve IPv6 only servers. Do we live in 1990? AND THEY WANT 150€ PER LICENSE FUCK YOU MICROSOFT!!!!!!
+> Why can't everyone use Linux then I wouldn't need to make A CUSTOM DNS IMPLEMENTATION TO SUPPORT MY IPV6 ONLY SERVER OMG BROOOOOOOOOOOOOOOOOOOOOOOOOOOO I AM NEARLY GOING CRASHOUT HOLY SHIT
+>
+> Please make my life easier and use Arch Linux, so that I can drop support for Windows 💀🗣️🗣️🗣️🗣️🗣️🗣️🗣️🗣️🗣️🗣️
 <div align = center>
 <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
 <br>
