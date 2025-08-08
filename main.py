@@ -1,3 +1,22 @@
+import sys
+from pathlib import Path
+from PySide6.QtWidgets import QMessageBox
+
+app_path = Path(sys.argv[0]).resolve()
+if str(app_path).startswith("/Volumes/"):
+    QMessageBox.information(None,
+                            "Move PornFetch!",
+                            """
+Please move Porn Fetch into your applications folder. You can do that by opening 'Finder' and dragging the Porn Fetch
+executable you just clicked on, into the 'Applications' folder that you'll see in Finder. After that, you can open 'Launchpad'
+and type 'Porn Fetch'. You'll find it there and can run it easily from Launchpad and also add it to your application bar at
+the bottom.
+
+This is an intended behaviour from macOS and all applications follow this scheme. 
+Thank you for your patience :)
+""")
+
+
 try:
     import time
     import uuid
@@ -1677,6 +1696,9 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         self.ui.CentralStackedWidget.setCurrentIndex(0)
         global FORCE_PORTABLE_RUN
         if not FORCE_PORTABLE_RUN:
+            if sys.platform == "darwin":
+                return
+
             if conf["Setup"]["install"] == "unknown":
                 self.switch_to_install_dialog()
 
