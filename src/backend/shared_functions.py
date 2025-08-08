@@ -89,7 +89,7 @@ as they are indeed needed for the main applications!
 # TODO: Implement logging
 sections = ["Setup", "Performance", "Video", "UI", "Sponsoring", "Android"]
 
-options_setup = ["license_accepted", "install", "update_checks", "internet_checks", "anonymous_mode", "disclaimer_shown", "activate_logging"]
+options_setup = ["license_accepted", "install", "update_checks", "internet_checks", "anonymous_mode", "disclaimer_shown", "activate_logging", "first_run_cli"]
 options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries", "speed_limit", "processing_delay"]
 options_video = ["quality", "output_path", "directory_system", "result_limit", "delay", "skip_existing_files", "model_videos", "supress_errors",
                  "video_id_as_filename", "direct_download", "write_metadata"]
@@ -116,6 +116,7 @@ internet_checks = true
 anonymous_mode = false
 disclaimer_shown = false
 activate_logging = false
+first_run_cli = true
 
 [Performance]
 threading_mode = threaded

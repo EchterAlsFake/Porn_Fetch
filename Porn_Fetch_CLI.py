@@ -1,3 +1,4 @@
+import time
 import queue
 import logging
 import os.path
@@ -6,6 +7,7 @@ import threading
 import traceback
 import itertools
 
+from Cython.Compiler.TypeInference import object_expr
 from colorama import *
 from io import TextIOWrapper
 from rich import print as rprint
@@ -18,6 +20,14 @@ from src.backend.CLI_model_feature_addon import *
 import src.backend.shared_functions as shared_functions
 from base_api.modules.errors import (InvalidProxy, ProxySSLError)
 from rich.progress import Progress, BarColumn, TextColumn, SpinnerColumn, TimeElapsedColumn, TimeRemainingColumn
+
+try:
+    import av
+    remux = True
+
+except (ModuleNotFoundError, ImportError):
+    print(f"""Couldn't import pyav. Videos will not be remuxed, this is NOT an error if you are running on macOS / Termux""")
+    remux = False
 
 
 proxy_one_time_config_stuff_please_dont_ask_thank_you_very_mushhh = RuntimeConfig()
@@ -32,6 +42,7 @@ logging.disable(level=logging.DEBUG)
 
 class CLI:
     def __init__(self):
+        self._progress_stop = threading.Event()
         self.downloaded_segments = 0
         self.total_segments = 0
         self.to_be_downloaded = 0
@@ -40,6 +51,7 @@ class CLI:
         self.skip_existing_files = None
         self.threading_mode = None
         self.result_limit = None
+        self.speed_limit = None
         self.directory_system = None
         self.output_path = None
         self.progress_thread = None
@@ -67,12 +79,16 @@ class CLI:
         self.task_total_progress = None
 
     def init(self):
+        shared_functions.setup_config_file()
+        conf.read("config.ini")
+        self.license()
+        self.load_user_settings()
+        conf.read("config.ini")
+
+        if conf.get("Setup", "first_run_cli") == "true":
+            self.first_run_cli()
+
         while True:
-            shared_functions.setup_config_file()
-            conf.read("config.ini")
-            self.license()
-            self.load_user_settings()
-            conf.read("config.ini")
             self.menu()
 
     def license(self):
@@ -116,7 +132,7 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
 {return_color()}2) Get videos from a model
 {return_color()}3) Get videos from a PornHub playlist
 {return_color()}4) Search for videos
-{return_color()}5) Search a file for URLs and Model URLs
+{return_color()}5) Search a file for Video URLs (only Videos)
 {return_color()}6) Settings
 {return_color()}7) Model update / database feature (experimental)
  
@@ -171,18 +187,18 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
         """
         while True:
             choice = input("""
-    What do you want to do?
+What do you want to do?
 
-    1) Show help
-    2) Add new Models
-    3) Fetch pending URLs for all models
-    4) Delete Models
-    5) Show statistics
-    6) Exit
+1) Show help
+2) Add new Models
+3) Fetch pending URLs for all models
+4) Delete Models
+5) Show statistics
+6) Exit
 
-    99) Start Downloading / Updating Models
+99) Start Downloading / Updating Models
 
-    Enter choice: """)
+Enter choice: """)
             if choice == '1':
                 show_help()
 
@@ -207,44 +223,46 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
                 self.menu()
 
             elif choice == "99":
-                models = get_all_saved_models(STATE_FILE)
-                idx = 0
-                for model in models:
-                    model_url, data = model
-
-                    idx += 1
-                    print(f"Processing: [{idx}|{len(models)}] -->: {model_url}")
-                    pending_videos = data.get("pending")
-
-                    if len(pending_videos) >= 1:
-                        print(f"Model has pending videos! Downloading: {len(pending_videos)}")
-                        for idx, url in enumerate(pending_videos):
-                            print(f"[{idx}|{len(pending_videos)}] Downloading -->: {url}")
-                            videos = [shared_functions.check_video(url)]
-                            try:
-                                self.iterate_generator(generator=videos, batch=True, auto=True, remove_total_bar=True)
-                                record_download(model_url=model_url, video_url=url, path=STATE_FILE)
-
-                            except Exception:
-                                error = traceback.format_exc()
-                                logger_model_feature.error(f"""
-Model: {model_url}
-Video URL: {url}
-Error: {error}
-Index: {idx}""")
-
-                        logger_model_feature.info(f"""
-Model: {model_url}
-STATUS: Finished!
-""")
-
-                    else:
-                        print(f"Model has no pending videos, continuing with the next one!")
-                        continue
+                self.update_models()
 
             else:
                 print("Invalid choice, please enter 1-6.")
 
+    def update_models(self):
+        models = get_all_saved_models(STATE_FILE)
+        idx = 0
+        for model in models:
+            model_url, data = model
+
+            idx += 1
+            print(f"Processing: [{idx}|{len(models)}] -->: {model_url}")
+            pending_videos = data.get("pending")
+
+            if len(pending_videos) >= 1:
+                print(f"Model has pending videos! Downloading: {len(pending_videos)}")
+                for idx, url in enumerate(pending_videos):
+                    print(f"[{idx}|{len(pending_videos)}] Downloading -->: {url}")
+                    videos = [shared_functions.check_video(url)]
+                    try:
+                        self.iterate_generator(generator=videos, batch=True, auto=True, remove_total_bar=True)
+                        record_download(model_url=model_url, video_url=url, path=STATE_FILE)
+
+                    except Exception:
+                        error = traceback.format_exc()
+                        logger_model_feature.error(f"""
+        Model: {model_url}
+        Video URL: {url}
+        Error: {error}
+        Index: {idx}""")
+
+                logger_model_feature.info(f"""
+        Model: {model_url}
+        STATUS: Finished!
+        """)
+
+            else:
+                print(f"Model has no pending videos, continuing with the next one!")
+                continue
 
     def set_proxy(self):
         proxy = input(f"""
@@ -307,11 +325,46 @@ Do you accept the risk?
             shared_functions.refresh_clients()
             print("Refreshed Clients!")
 
+    def first_run_cli(self):
+        input(f"""
+Hello, thank you for using Porn Fetch. Please read through this real quick, to get a better understanding how everything 
+works.
+
+Notice: The CLI is for advanced users and has a different / uncompleted feature set compared to the GUI!
+
+# Regarding Video Progress:
+Progressbar for EPorner and HQPorner videos is in MB, for all others it's in segments. 
+
+# Video post processing:
+Videos are post-processed using pyav by default. Pyav ships the binaries for ffmpeg, and I use that to remux videos. 
+Videos that use HLS streaming are wrapped in an MPEG-TS container. Some video players fail to play that and I can't
+tag metadata to these videos. That's why we remux them. Pyav is NOT available on Termux (See down below).
+
+# Termux
+If you want to use the CLI on Termux, you definitely can. However, to actually save videos, you need to setup termux storage.
+You can do so by typing: 'termux-setup-storage' in your terminal. This will request storage permissions and you should
+see a folder called 'storage' in your home directory. From there you should be able to access your internal phone storage
+and save videos to that path.
+
+Pyav does not work on Termux, because you'd need to cross-compile ffmpeg for aarch64 / armv7. I don't do that, and trust
+me you also don't want to do that XD. Porn Fetch's code is automatically made in a way that it handles this automatically.
+So please don't be upset if the videos aren't true mp4. Most Android media players should play those files just fine. 
+
+Thank you very much for using Porn Fetch. Have a great time.
+Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
+
+(Press enter when you've finished reading)
+""")
+        with open("config.ini", "w") as config:
+            shared_functions.shared_config.set("Setup", "first_run_cli", "false")
+            shared_functions.shared_config.write(config)
+
     def load_user_settings(self):
         self.delay = int(conf.get("Video", "delay"))
         self.workers = int(conf.get("Performance", "workers"))
         self.timeout = int(conf.get("Performance", "timeout"))
         self.retries = int(conf.get("Performance", "retries"))
+        self.speed_limit = float(conf.get("Performance", "speed_limit"))
         self.semaphore = threading.Semaphore(int(conf.get("Performance", "semaphore")))
         self.quality = conf.get("Video", "quality")
         self.output_path = conf.get("Video", "output_path")
@@ -319,6 +372,13 @@ Do you accept the risk?
         self.skip_existing_files = True if conf.get("Video", "skip_existing_files") == "true" else False
         self.result_limit = int(conf.get("Video", "result_limit"))
         self.threading_mode = conf.get("Performance", "threading_mode")
+        shared_functions.config.request_delay = self.delay # Lmao in all versions past 3.6 these things were never actually applied to the backend LOOOOL
+        shared_functions.config.timeout = self.timeout
+        shared_functions.config.max_retries = self.retries
+        shared_functions.config.max_bandwidth_mb = self.speed_limit
+        shared_functions.refresh_clients()
+        logger.info("Refreshed Clients with user settings being applied!")
+
 
     def save_user_settings(self):
         while True:
@@ -329,7 +389,6 @@ Do you accept the risk?
             }
             threading_mode_color = {  # Highlight the current threading mode in yellow
                 "threaded": Fore.LIGHTYELLOW_EX if self.threading_mode == "threaded" else Fore.LIGHTWHITE_EX,
-                "ffmpeg": Fore.LIGHTYELLOW_EX if self.threading_mode == "ffmpeg" else Fore.LIGHTWHITE_EX,
                 "default": Fore.LIGHTYELLOW_EX if self.threading_mode == "default" else Fore.LIGHTWHITE_EX
             }
 
@@ -346,6 +405,7 @@ Do you accept the risk?
 6) Change Workers {Fore.LIGHTYELLOW_EX}(current: {self.workers}){Fore.LIGHTWHITE_EX}
 7) Change Retries {Fore.LIGHTYELLOW_EX}(current: {self.retries}){Fore.LIGHTWHITE_EX}
 8) Change Timeout {Fore.LIGHTYELLOW_EX}(current: {self.timeout}){Fore.LIGHTWHITE_EX}
+20) Set a Speed Limit {Fore.LIGHTYELLOW_EX}(Current: {self.speed_limit}){Fore.LIGHTWHITE_EX}
 -------- {Fore.LIGHTYELLOW_EX}Directory System {Fore.LIGHTWHITE_EX}---
 9) Enable / Disable directory system {Fore.LIGHTYELLOW_EX}(current: {"Enabled" if self.directory_system else "Disabled"}){Fore.LIGHTWHITE_EX}
 {Fore.LIGHTWHITE_EX}-------- {Fore.LIGHTGREEN_EX}Result Limit {Fore.LIGHTWHITE_EX}-------
@@ -354,8 +414,7 @@ Do you accept the risk?
 11) Change output path {Fore.LIGHTYELLOW_EX}(current: {self.output_path}){Fore.LIGHTWHITE_EX}
 {Fore.LIGHTWHITE_EX}---------{Fore.LIGHTMAGENTA_EX}Threading Mode {Fore.LIGHTWHITE_EX}---------
 12) {threading_mode_color["threaded"]}Change to threaded (Not recommended on Android!){Fore.LIGHTWHITE_EX}
-13) {threading_mode_color["ffmpeg"]}Change to FFmpeg (Recommended on Android){Fore.LIGHTWHITE_EX}
-14) {threading_mode_color["default"]}Change to default (really slow){Fore.LIGHTWHITE_EX}
+13) {threading_mode_color["default"]}Change to default (really slow){Fore.LIGHTWHITE_EX}
 {Fore.LIGHTRED_EX}99) Exit
 {Fore.WHITE}------------->:""")
 
@@ -411,10 +470,11 @@ Do you accept the risk?
                     conf.set("Performance", "threading_mode", "threaded")
 
                 elif settings_options == "13":
-                    conf.set("Performance", "threading_mode", "FFMPEG")
-
-                elif settings_options == "14":
                     conf.set("Performance", "threading_mode", "default")
+
+                elif settings_options == "20":
+                    speed_limit = input(f"Please enter the limit in MB/s (example: 2.5) -->:")
+                    conf.set("Performance", "speed_limit", speed_limit)
 
                 elif settings_options == "99":
                     self.menu()
@@ -451,7 +511,7 @@ Do you accept the risk?
         # Create per-video task
         task_id = self.progress.add_task(
             description=f"Downloading: {title}",
-            total=0,
+            total=None,
         )
 
         dl_thread = threading.Thread(
@@ -481,37 +541,24 @@ Do you accept the risk?
             if idx + 1 >= self.result_limit:
                 break
 
-        print(f"Videos loaded: {len(videos)}")
-
-        if not auto:
-            selection = input(
-                "\nPlease enter the numbers of videos to download (comma-separated) or 'all' to download all:\n"
-            )
-        else:
-            selection = "all"
-
-        to_download = videos if selection.strip().lower() == "all" else [videos[i] for i in map(int, selection.split(","))]
-
-        # Compute total segments
-        self.total_segments = sum(
-            len(list(v.get_segments(quality=self.quality)))
-            for v in to_download
-            if hasattr(v, 'get_segments')
+        selection = "all" if auto else input(
+            "\nPlease enter the numbers of videos to download (comma-separated) or 'all' to download all:\n"
         )
+        to_download = videos if selection.strip().lower() == "all" else [videos[i] for i in
+                                                                         map(int, selection.split(","))]
+
+        # (your existing segment counting + optional total bar creation here)
+
+        # reset per-run counters and start refresh thread
+        self.finished_downloading = 0
         self.to_be_downloaded = len(to_download)
+        self._progress_stop.clear()
 
-        # Create total progress task
-        self.task_total_progress = self.progress.add_task(
-            description="Total Progress",
-            total=self.total_segments,
-        )
-
-        # Start display and updater thread
         self.progress.start()
         self.progress_thread = threading.Thread(target=self._update_progress, daemon=True)
         self.progress_thread.start()
 
-        # Process each video
+        # kick off downloads
         for video in to_download:
             try:
                 self.process_video(video=video, batch=batch, remove_total_bar=remove_total_bar)
@@ -521,8 +568,21 @@ Do you accept the risk?
                 else:
                     raise
 
-        # Wait for all downloads, then remove total bar
+        # wait until all downloads finished (set in download() finally)
+        while self.finished_downloading < self.to_be_downloaded:
+            time.sleep(0.1)
+
+        # stop refresher cleanly and close progress
+        self._progress_stop.set()
         self.progress_thread.join()
+
+        # optional tidy-up of total bar if you want the line gone:
+        if self.task_total_progress is not None:
+            try:
+                self.progress.remove_task(self.task_total_progress)
+            except ValueError:
+                pass
+
         self.progress.stop()
 
 
@@ -546,7 +606,12 @@ Do you accept the risk?
             model = shared_functions.hq_client.get_videos_by_actress(model)
 
         elif shared_functions.xvideos_pattern.match(model):
-            model = shared_functions.xv_client.get_pornstar(model).videos
+            if "/model" in model or "/pornstar" in model:
+                model = shared_functions.xv_client.get_pornstar(model).videos
+
+            else:
+                logger.info("Model URL does not contain expected /model or /pornstar. Assuming it's a channel instead...")
+                model = shared_functions.xv_client.get_channel(model).videos
 
         if do_return:
             return model
@@ -585,14 +650,12 @@ Do you accept the risk?
             self.iterate_generator(shared_functions.xn_client.search(query).videos)
 
         elif website == "5":
-            self.iterate_generator(shared_functions.ep_client.search_videos(query, per_page=self.result_limit,
+            self.iterate_generator(shared_functions.ep_client.search_videos(query, per_page=50,
                                                              sorting_order="", sorting_gay="", sorting_low_quality="",
-                                                             enable_html_scraping=True, page=1))
+                                                             enable_html_scraping=True, page=20))
 
     def process_file(self):
         videos = []
-        models = []
-        objects = []
         file = input(f"{return_color()}Please enter the file path -->:")
 
         with open(file, "r") as file:
@@ -600,22 +663,19 @@ Do you accept the risk?
             content = content.splitlines()
 
         for line in content:
-            if line.startswith("model#"):
+            if line.startswith("video#"):
                 line = line.split("#")[1]
-                models.append(self.process_model(url=line, do_return=True))
+                try:
+                    videos.append(shared_functions.check_video(is_url=True, url=line))
 
-            else:
-                videos.append(line)
-
-        logger.debug(f"{return_color()}Processing Models / Videos...")
-        for video in videos:
-            objects.append(shared_functions.check_video(video))
-
-        for video in models:
-            objects.append(video)
+                except:
+                    error = traceback.format_exc()
+                    logger.error(f"Error in processing video: {line}, {error}")
+                    print(f"Error in processing video: {line}, {error}")
+                    continue
 
         logger.debug(f"{return_color()}Done!")
-        self.iterate_generator(objects)
+        self.iterate_generator(videos)
 
     def download(self, video, output_path, task_id, remove_total_bar=False):
         try:
@@ -627,16 +687,21 @@ Do you accept the risk?
 
             def callback_wrapper(pos, total):
                 if is_byte_download:
-                    # pick MiB or GiB depending on size
-                    mib = pos / (1024 ** 2)
-                    tib = total / (1024 ** 2)
-                    pos_unit = round(mib, 1)
-                    tot_unit = round(tib, 1)
-                    self.progress.update(task_id, total=tot_unit, completed=pos_unit)
+                    tot_mb = (total / (1024 ** 2)) if total and total > 0 else None
+                    comp_mb = (pos / (1024 ** 2))
+                    if tot_mb is not None:
+                        # avoid accidental 'finished' due to float/rounding
+                        if comp_mb >= tot_mb:
+                            comp_mb = tot_mb - 1e-6
+
+                        self.progress.update(task_id, total=round(tot_mb), completed=round(comp_mb))
+                    else:
+                        # keep task indeterminate until we know total size
+                        self.progress.update(task_id)
                 else:
-                    # segment‐based download: advance both per‐video and total
                     self.progress.update(task_id, total=total, completed=pos)
-                    self.progress.update(self.task_total_progress, advance=1)
+                    if self.task_total_progress is not None:
+                        self.progress.update(self.task_total_progress, advance=1)
 
             # Kick off the right download call
             if isinstance(video, shared_functions.ph_Video):
@@ -644,7 +709,7 @@ Do you accept the risk?
                     quality=self.quality,
                     downloader=self.threading_mode,
                     display=callback_wrapper,
-                    remux=True)
+                    remux=remux)
             elif is_byte_download:
                 # HQPorner / Eporner
                 video.download(
@@ -660,19 +725,23 @@ Do you accept the risk?
                     quality=self.quality,
                     downloader=self.threading_mode,
                     callback=callback_wrapper,
-                    remux=True,
+                    remux=remux,
                     no_title=True,
                 )
 
         finally:
             logger.debug(f"Finished download: {video.title}")
             if conf["Video"]["write_metadata"] == "true":
-                shared_functions.write_tags(
-                    path=output_path,
-                    data=shared_functions.load_video_attributes(video),
-                )
+                if remux:
+                    shared_functions.write_tags(
+                        path=output_path,
+                        data=shared_functions.load_video_attributes(video))
+
 
             # Release semaphore and log
+            t = next((t for t in self.progress.tasks if t.id == task_id), None)
+            if t and t.total is not None:
+                self.progress.update(task_id, completed=t.total)
             self.finished_downloading += 1
             self.semaphore.release()
             print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTYELLOW_EX} Download finished: {video.title}")
@@ -686,10 +755,10 @@ Do you accept the risk?
                 pass
 
     def _update_progress(self):
-        # Continuously refresh while there are tasks
-        while self.progress.tasks:
+        # Exit once every task is finished (no live tasks left).
+        while not self._progress_stop.is_set():
             self.progress.refresh()
-            threading.Event().wait(0.1)
+            time.sleep(0.1)
 
 
     @staticmethod
@@ -772,7 +841,8 @@ By using the CLI batch mode you automatically accept the GPLv3 License of Porn F
                                 action="store_true")
             parser.add_argument("--add-model-to-database", help="A model URL that should be added to the database")
             parser.add_argument("--remove-model-from-database", help="A model URL that should be removed from the database")
-            parser.add_argument("--update-models", help="Runs the model update function")
+            parser.add_argument("--update-models", help="Runs the model update function", action="store_true")
+            parser.add_argument("--update-pending-urls", help="Updates the videos that need to be fetched from a model", action="store_true")
 
             args = parser.parse_args()
 
@@ -780,17 +850,25 @@ By using the CLI batch mode you automatically accept the GPLv3 License of Porn F
                 print(description)
                 exit(0)
 
-            '''if args.add_model_to_database:
+            if args.add_model_to_database:
                 model_url = args.add_model_to_database
-                CLI().add_model_url(model_url)
+                add_model_url(model_url, path=STATE_FILE)
+                exit(0)
 
-            if args.remove_models_from_database:
-                model_url = args.remove_models_from_database
-                CLI().remove_model_url(model_url)
+            if args.remove_model_from_database:
+                model_url = args.remove_model_from_database
+                remove_model_url(model_url, path=STATE_FILE)
+                exit(0)
+
+            if args.update_pending_urls:
+                update_pending_for_all_models(self.process_model, STATE_FILE)
+                exit(0)
 
             if args.update_models:
-                ""
-'''
+                cli = CLI()
+                cli.load_user_settings()
+                cli.update_models()
+                exit(0)
 
             if args.batch is False:
                 CLI().init()
@@ -838,8 +916,6 @@ By using the CLI batch mode you automatically accept the GPLv3 License of Porn F
                     print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTMAGENTA_EX}! Using auto processing !")
 
                 self.process_playlist(url=playlist, auto=auto_process, ignore_errors=ignore, batch=True)
-
-
 
 
 if __name__ == '__main__':

@@ -19,6 +19,7 @@
   - [x] Fix UI flickering and loading issues
 
 # Graphical User Interace
+- [x] Total progress calculation now has progress instead of a loading animation
 - [x] Entirely reworked progressbar system
 - [x] Progressbars are now dynamically generated instead of hardcoded
 - [x] You can now double-click a thumbnail to view it separately
@@ -31,7 +32,7 @@
 - [x] Allow for direct video downloading instead of manually selecting in the tree widget
 - [x] Publish translation strings on Crowdin
 - [] Change Icons
-- [] Fix and improve the CLI
+- [x] Fix and improve the CLI
 - [] ~~Implement transition animations for the Stacked Widget~~
 - [] ~~Improve tree widget range selection and make it finally intuitive lol~~
 - [] ~~Splash screen loading animation? (maybe idk yet)~~

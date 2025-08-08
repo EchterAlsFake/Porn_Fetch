@@ -720,9 +720,17 @@ class QTreeWidgetDownloadThread(QRunnable):
 
 
         self.logger.debug("Retrieving total length of video segments to calculate total progress...")
-        total_segments += sum(
-            [len(list(video.get_segments(quality=self.quality))) for video in video_objects if
-             hasattr(video, 'get_segments')])
+
+        video_objects_with_hls = []
+        for video in video_objects:
+            if hasattr(video, "get_segments"):
+                video_objects_with_hls.append(video)
+
+        self.signals.total_progress_range.emit(len(video_objects_with_hls))
+        for idx, video in enumerate(video_objects_with_hls):
+            total_segments += len(video.get_segments(quality=self.quality))
+            self.signals.total_progress.emit(idx)
+
         self.logger.debug(f"Got {total_segments} segments...")
         # This basically looks how many segments exist in all videos together, so that we can calculate the total
         # progress
@@ -1898,6 +1906,8 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         """
         tree_widget = self.ui.treeWidget
         self.download_tree_thread = QTreeWidgetDownloadThread(tree_widget=tree_widget, semaphore=self.semaphore)
+        self.download_tree_thread.signals.total_progress_range.connect(self.update_total_progressbar_range)
+        self.download_tree_thread.signals.total_progress.connect(self.update_total_progressbar)
         self.download_tree_thread.signals.start_undefined_range.connect(self.start_undefined_range)
         self.download_tree_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
         self.download_tree_thread.signals.progress_send_video.connect(self.process_video_thread)

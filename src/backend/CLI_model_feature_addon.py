@@ -163,6 +163,8 @@ Options:
 5) Show statistics (downloaded vs pending).
 6) Exit
 
+99) Start downloading all videos that are marked as pending in the database (use option 3 before doing this :) 
+
 State file (`download_state.json`) stores for each model:
   - downloaded: list of URLs already downloaded
   - pending: list of URLs to download next
