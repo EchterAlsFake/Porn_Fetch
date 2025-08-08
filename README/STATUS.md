@@ -2,6 +2,7 @@
 
 # Bug fixes
 - [x] Fixed XNXX progress reporting
+- [x] Fixed JSON Decode error for EPorner
 - [x] Fixed xnxx not searching on the first page
 - [x] Fixed missav 403 errors
 - [x] Fixed spankbang 403 errors
@@ -31,7 +32,6 @@
 - [x] Optional processing delay for every video
 - [x] Allow for direct video downloading instead of manually selecting in the tree widget
 - [x] Publish translation strings on Crowdin
-- [] Change Icons
 - [x] Fix and improve the CLI
 - [] ~~Implement transition animations for the Stacked Widget~~
 - [] ~~Improve tree widget range selection and make it finally intuitive lol~~
@@ -46,8 +46,8 @@
 - [x] Switch update checking to my own server instead of GitHub (more flexibility)
 - [x] Add a kill switch feature for Proxy users
 - [x] Rework the Batch processing features entirely (lol)
-- [] Automatic model download of new videos [#78](https://github.com/EchterAlsFake/Porn_Fetch/issues/78)
-- [] Allow for more parameters when starting Porn Fetch [#77](https://github.com/EchterAlsFake/Porn_Fetch/issues/77)
+- [x] Automatic model download of new videos [#78](https://github.com/EchterAlsFake/Porn_Fetch/issues/78)
+- [x] Allow for more parameters when starting Porn Fetch [#77](https://github.com/EchterAlsFake/Porn_Fetch/issues/77)
 
 # Code optimizations
 - [x] Fixed latency issues when updating progressbar
@@ -72,7 +72,7 @@
 
 # CLI
 - [x] Entire rework of the CLI
-- [] Specific better support for Termux
+- [x] Specific better support for Termux
 - [] Auto installation for Termux on Android to also handle storage permissions etc...
 - [x] Fix progress reporting
 

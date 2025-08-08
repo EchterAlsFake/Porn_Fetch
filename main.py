@@ -51,11 +51,6 @@ except Exception as e:
     w.show()
     app.exec()
 
-
-
-
-
-
 # Possible errors from APIs
 from base_api.modules.errors import ProxySSLError, InvalidProxy
 from xnxx_api.modules.errors import InvalidResponse
@@ -66,6 +61,7 @@ from eporner_api.modules.errors import NotAvailable as NotAvailable_EP, VideoDis
 from phub.errors import VideoError as VideoError_PH
 
 _download_lock = Lock()
+FORCE_PORTABLE_RUN = False
 
 
 """
@@ -507,13 +503,13 @@ class AddToTreeWidget(QRunnable):
         return None
 
     def run(self):
+        self.signals.start_undefined_range.emit()  # Starts the progressbar, but with a loading animation
         if isinstance(self.iterator, str):
             self.iterator = [self.iterator]
 
         if not self.is_checked:
             self.signals.clear_tree_widget_signal.emit()  # Clears the tree widget
 
-        self.signals.start_undefined_range.emit()  # Starts the progressbar, but with a loading animation
         if self.is_checked:
             start = self.last_index
             self.result_limit += start
@@ -548,7 +544,6 @@ class AddToTreeWidget(QRunnable):
                 self.logger.warning(f"Skipping Video: {video}")
                 continue
 
-            self.signals.stop_undefined_range.emit()
             self.signals.total_progress.emit(i)
             self.signals.text_data_to_tree_widget.emit(video_id)
 
@@ -1670,10 +1665,10 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
             return
 
         self.ui.CentralStackedWidget.setCurrentIndex(0)
-
-        if conf["Setup"]["install"] == "unknown":
-            print("Switching to installation dialog")
-            self.switch_to_install_dialog()
+        global FORCE_PORTABLE_RUN
+        if not FORCE_PORTABLE_RUN:
+            if conf["Setup"]["install"] == "unknown":
+                self.switch_to_install_dialog()
 
 
     def start_single_video(self):
@@ -2112,6 +2107,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         bar.setValue(pos)
 
     def update_total_progressbar_range(self, maximum):
+        print(f"Applied: {maximum}")
         """Sets the maximum value for the total progressbar"""
         self.ui.main_progressbar_total.setRange(0, maximum)
         self.ui.main_progressbar_total.setMaximum(maximum)
@@ -2550,8 +2546,14 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", "--version", help="Shows the version information", action="store_true")
+    parser.add_argument("-p", "--portable", help="Forces a portable run of Porn Fetch (skips install dialog)", action="store_true")
     args = parser.parse_args()
 
     if args.version:
         print(__version__)
+
+
+    if args.portable:
+        FORCE_PORTABLE_RUN = True
+
     main()
