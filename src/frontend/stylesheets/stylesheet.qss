@@ -227,3 +227,67 @@ QScrollBar::add-line, QScrollBar::sub-line {
 QScrollBar::up-arrow, QScrollBar::down-arrow {
     background: #5D1049;
 }
+
+
+/* Apply to a QTextBrowser with objectName "reader" */
+QTextBrowser {
+  background: #0b1220;            /* near-black with a hint of blue */
+  color: #e5e7eb;                 /* gray-200 */
+  border: 1px solid #1f2937;      /* slate-800 */
+  border-radius: 12px;
+  padding: 12px;
+  selection-background-color: rgba(96, 165, 250, 0.28); /* soft blue */
+  selection-color: #0b1220;
+  font-family: Inter, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+QTextBrowser img, QTextBrowser table {
+  margin: 6px;
+}
+
+/* Vertical scrollbar */
+QTextBrowser QScrollBar:vertical {
+  width: 10px;
+  margin: 8px 4px 8px 0;
+  background: transparent;
+  border: none;
+}
+QTextBrowser QScrollBar::handle:vertical {
+  min-height: 24px;
+  background: #374151;            /* gray-700 */
+  border-radius: 8px;
+}
+QTextBrowser QScrollBar::handle:vertical:hover {
+  background: #4b5563;            /* gray-600 */
+}
+QTextBrowser QScrollBar::add-line:vertical,
+QTextBrowser QScrollBar::sub-line:vertical { height: 0; }
+QTextBrowser QScrollBar::add-page:vertical,
+QTextBrowser QScrollBar::sub-page:vertical { background: transparent; }
+
+/* Horizontal scrollbar */
+QTextBrowser QScrollBar:horizontal {
+  height: 10px;
+  margin: 0 8px 4px 8px;
+  background: transparent;
+  border: none;
+}
+QTextBrowser QScrollBar::handle:horizontal {
+  min-width: 24px;
+  background: #374151;
+  border-radius: 8px;
+}
+QTextBrowser QScrollBar::handle:horizontal:hover {
+  background: #4b5563;
+}
+QTextBrowser QScrollBar::add-line:horizontal,
+QTextBrowser QScrollBar::sub-line:horizontal { width: 0; }
+QTextBrowser QScrollBar::add-page:horizontal,
+QTextBrowser QScrollBar::sub-page:horizontal { background: transparent; }
+
+QTextBrowser:focus {
+  border: 1px solid #60a5fa;      /* blue-400 */
+}
+

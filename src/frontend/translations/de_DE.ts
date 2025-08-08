@@ -894,32 +894,17 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>PornFetch</name>
     <message>
-        <location filename="../../../main.py" line="1224"/>
+        <location filename="../../../main.py" line="1350"/>
         <source>Porn Fetch installation failed, because of: {result[1]}</source>
         <translation type="unfinished">Die Installation von Porn Fetch ist fehlgeschlafen{result[1]}</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1535"/>
+        <location filename="../../../main.py" line="1661"/>
         <source>Saved User Settings, please restart Porn Fetch!</source>
         <translation type="unfinished">Einstellungen wurden gespeichert. Bitte starte Porn Fetch neu!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1734"/>
-        <source>The model URL you entered seems to be invalid. Please check your input</source>
-        <translation type="unfinished">Die Model uRL, welche du eingegeben hast  scheint ungültig zu sein. Bitte überpfrüfe deine Eingaben</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1806"/>
-        <source>Couldn&apos;t determine which site you want to search on??? Please report this immediately!</source>
-        <translation type="unfinished">Ich konnte nicht herausfinden, auf welcher Seite du suchen willst??? Bitte melde das sofort!</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1219"/>
-        <source>Porn Fetch has been installed. The app will now close! Please start Porn Fetch from your context menu again.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="1575"/>
+        <location filename="../../../main.py" line="1702"/>
         <source>
 Please read this before setting proxies:
 
@@ -930,7 +915,8 @@ see a few examples down below.
 Also, if you use PUBLIC proxies, then it&apos;s really a gamble if they work or if they don&apos;t. Usually they are really slow and 
 inconsistent, but maybe you are lucky.
 
-About SSL encryption:
+About SSL encryption:   
+
 If your proxy does NOT support SSL / TLS or delivers incorrect self-signed certificates, then you can choose to ignore that
 by disabling SSL verification. However, this reduces your security a lot and people in your network will be able to intercept
 your network traffic. 
@@ -960,63 +946,78 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1608"/>
+        <location filename="../../../main.py" line="1864"/>
+        <source>The model URL you entered seems to be invalid. Please check your input</source>
+        <translation type="unfinished">Die Model uRL, welche du eingegeben hast  scheint ungültig zu sein. Bitte überpfrüfe deine Eingaben</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1936"/>
+        <source>Couldn&apos;t determine which site you want to search on??? Please report this immediately!</source>
+        <translation type="unfinished">Ich konnte nicht herausfinden, auf welcher Seite du suchen willst??? Bitte melde das sofort!</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1345"/>
+        <source>Porn Fetch has been installed. The app will now close! Please start Porn Fetch from your context menu again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="1735"/>
         <source>You did choose to not disable SSL Verifications. Retuning to GUI without applying proxies now...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1612"/>
+        <location filename="../../../main.py" line="1739"/>
         <source>Your proxy seems to be invalid, please try again...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1619"/>
+        <location filename="../../../main.py" line="1746"/>
         <source>Proxy IP: {ip_masked} Your IP: {ip} are the same! Please check the proxy you&apos;ve used!, aborting...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1637"/>
+        <location filename="../../../main.py" line="1764"/>
         <source>Can not enable Kill Switch if you haven&apos;t applied a proxy yet!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2155"/>
+        <location filename="../../../main.py" line="2289"/>
         <source>Those credentials don&apos;t seem to be valid...</source>
         <translation type="unfinished">Diese Zugangsdaten sehen ungültig aus...</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2162"/>
+        <location filename="../../../main.py" line="2296"/>
         <source>Login Successful!</source>
         <translation type="unfinished">Login erfolgreich!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2167"/>
+        <location filename="../../../main.py" line="2301"/>
         <source>Login Failed, please check your credentials and try again!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2171"/>
+        <location filename="../../../main.py" line="2305"/>
         <source>You are already logged in!</source>
         <translation type="unfinished">Du bist bereits angemeldet!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2183"/>
+        <location filename="../../../main.py" line="2317"/>
         <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
         <translation type="unfinished">Es gibt ein Problem mit dem Login. Bitte logge dich erst ein und versuche dann Videos von deinem Account zu laden.</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2240"/>
-        <location filename="../../../main.py" line="2259"/>
+        <location filename="../../../main.py" line="2374"/>
+        <location filename="../../../main.py" line="2393"/>
         <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
         <translation type="unfinished">Ungültige Kategorie. Drücke &quot;Kategorien auflisten&quot; um alle möglichen zu sehen.</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2362"/>
+        <location filename="../../../main.py" line="2496"/>
         <source>Full Thumbnail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2482"/>
+        <location filename="../../../main.py" line="2616"/>
         <source>
 ! Warning !
 Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
@@ -1208,7 +1209,7 @@ Zum Beispiel hat das Model Nancy Ace ungefähr 10 selbst hochgeladene Videos, di
 Wenn du &quot;Nutzer-Uploads&quot; wählst, werden nur selbst hochgeladene Videos abgerufen, und andersherum :)</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2556"/>
+        <location filename="../../../main.py" line="2690"/>
         <source>No URLs in the current session...</source>
         <translation>Keine URLs in der aktuellen Session...</translation>
     </message>
