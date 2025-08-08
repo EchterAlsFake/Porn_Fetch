@@ -8,6 +8,7 @@
     - module: "av.stream"               # generic stream base
     - module: "av.audio.stream"         # audio-specific streams
     - module: "av.audio.resampler"      # the AudioResampler class
+    - module: "uuid"
   data-files:
     # pull in just the shared-objects for those modules
     patterns:

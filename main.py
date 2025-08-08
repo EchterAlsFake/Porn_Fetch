@@ -1,5 +1,6 @@
 try:
     import time
+    import uuid
     import random
     import shutil
     import os.path
