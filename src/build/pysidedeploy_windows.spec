@@ -8,7 +8,7 @@ title = Porn Fetch
 project_dir = .
 
 # source file path
-input_file = main.py
+input_file = C:\Users\habel\PycharmProjects\Porn_Fetch\main.py
 
 # directory where exec is stored
 exec_directory = .
@@ -22,7 +22,7 @@ icon = src/frontend/graphics/logo_transparent.ico
 [python]
 
 # python path
-python_path =
+python_path = C:\Users\habel\PycharmProjects\Porn_Fetch\.venv\Scripts\python.exe
 
 # python packages to install
 # ordered-set = increase compile time performance of nuitka packaging
@@ -42,7 +42,7 @@ qml_files =
 excluded_qml_plugins = 
 
 # qt modules used. comma separated
-modules = Core,Gui,Widgets
+modules = QuickControls2,Widgets,Core,Qml,Gui
 
 # qt plugins used by the application
 plugins = egldeviceintegrations,iconengines,platforms/darwin,xcbglintegrations,imageformats,platforms,platformthemes,styles,platforminputcontexts,accessiblebridge,generic
@@ -63,7 +63,7 @@ plugins =
 # usage description for permissions requested by the app as found in the info.plist file
 # of the app bundle
 # eg = extra_args = --show-modules --follow-stdlib
-macos.permissions =
+macos.permissions = 
 
 # (str) specify any extra nuitka arguments
 extra_args = --noinclude-qt-translations --assume-yes-for-downloads --disable-cache=all --clean-cache=all --remove-output --show-memory --company-name=None --product-name=PornFetch --file-version=3.6 --product-version=3.6 --copyright=JohannesHabel --enable-plugin=data-files --include-package-data=certifi --user-package-configuration-file=src/build/user.nuitka-package.config.yml

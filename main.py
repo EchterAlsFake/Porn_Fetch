@@ -262,6 +262,7 @@ class Signals(QObject):
 
     progress_video = Signal(int, int, int)
     progress_video_range = Signal(int, int)
+    progress_video_converting = Signal(int, int)
 
     error_signal = Signal(object)
 
@@ -704,13 +705,16 @@ class DownloadThread(QRunnable):
         self.last_update_time = 0
         self._range_emitted = False
 
-    def generic_callback(self, pos, total,  video_source):
+    def callback_remux(self, pos, total):
+        self.signals.progress_video_converting.emit(pos, total)
+
+    def generic_callback(self, pos, total,  video_source="general"):
         """Generic callback function to emit progress signals with rate limiting."""
         current_time = time.time()
         if self.stop_flag.is_set():
             return
         # Emit signal for individual progress
-        if video_source == "hqporner" or video_source == "eporner":
+        if video_source == "raw":
 
             # Check if the current time is at least 0.5 seconds greater than the last update time
             if current_time - self.last_update_time < 0.5:
@@ -728,7 +732,7 @@ class DownloadThread(QRunnable):
 
         self.signals.progress_video.emit(self.video_id, pos, total) # Although we don't use total, we need to accept it
         # Update total progress only if the video source uses segments
-        if video_source not in ['hqporner', 'eporner']:
+        if video_source == "general":
             self.update_total_progress()
 
         # Update the last update time to the current time
@@ -763,45 +767,30 @@ class DownloadThread(QRunnable):
             self.signals.total_progress_range.emit(total_segments)
 
             # We need to specify the sources, so that it knows which individual progressbar to use
-            if isinstance(self.video, shared_functions.hq_Video):
-                video_source = "hqporner"
+            if isinstance(self.video, shared_functions.hq_Video) or isinstance(self.video, shared_functions.ep_Video):
+                video_source = "raw"
                 try:
                     self.video.download(quality=self.quality, path=self.output_path, no_title=True,
                                     callback=lambda pos, total: self.generic_callback(pos, total, video_source))
 
                 except Exception:
                     error = traceback.format_exc()
-                    handle_error_gracefully(data=self.consistent_data, self=self, error_message=f"An error happened while downloading a video from HQPorner: {error}", needs_network_log=True)
+                    handle_error_gracefully(data=self.consistent_data, self=self, error_message=f"An error happened while downloading a video from HQPorner / EPorner: {error}", needs_network_log=True)
 
-            elif isinstance(self.video, shared_functions.ep_Video):
-                video_source = "eporner"
-                try:
-                    self.video.download(quality=self.quality, path=self.output_path, no_title=True,
-                                    callback=lambda pos, total: self.generic_callback(pos, total, video_source))
-
-                except Exception:
-                    error = traceback.format_exc()
-                    handle_error_gracefully(data=self.consistent_data, self=self, error_message=f"An error happened while downloading a video from EPorner: {error}", needs_network_log=True)
-
-
-            else:  # Assuming 'Video' is the class for Pornhub
-                path = self.output_path
+            elif isinstance(self.video, shared_functions.ph_Video):  # Assuming 'Video' is the class for Pornhub
                 video_source = "general"
                 self.logger.debug("Starting the Download!")
-                try:
-                    self.video.download(downloader=str(self.threading_mode), path=path, quality=self.quality, remux=True,
-                                    display=lambda pos, total: self.generic_callback(pos, total, video_source))
+                self.video.download(downloader=str(self.threading_mode), path=self.output_path, quality=self.quality, remux=True, display_remux=self.callback_remux,
+                                    display=lambda pos, total: self.generic_callback(pos, total))
 
-                except TypeError:
-                    try:
-                        self.video.download(downloader=str(self.threading_mode), path=path, quality=self.quality, remux=True, no_title=True,
-                                        callback=lambda pos, total: self.generic_callback(pos, total, video_source))
+            else:
+                self.video.download(downloader=str(self.threading_mode), path=self.output_path, callback_remux=self.callback_remux, no_title=True,
+                                    quality=self.quality, remux=True, callback=lambda pos, total: self.generic_callback(pos, total))
 
-                    except Exception:
-                        error = traceback.format_exc()
-                        error = f"An error occurred when trying to download video: {error}. This will be reported!"
-                        handle_error_gracefully(self, data=video_data.consistent_data, error_message=error, needs_network_log=True)
-
+        except Exception:
+            error = traceback.format_exc()
+            error = f"An error occurred when trying to download video: {error}. This will be reported!"
+            handle_error_gracefully(self, data=video_data.consistent_data, error_message=error, needs_network_log=True)
 
         finally:
             if self.consistent_data.get("write_metadata"):
@@ -966,6 +955,7 @@ class SSLWarningDialog(QDialog):
 class PornFetch(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.last_update_time = time.time()
         self.last_thumbnail_change = time.time()
         self.stylesheets = None
         self._pixmap_item = None
@@ -2077,6 +2067,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         """Checks which of the three types of threading the user selected and handles them."""
         self.create_video_progressbar(video_id=video_id, title=video.title)
         self.download_thread = DownloadThread(video=video, video_id=video_id)
+        self.download_thread.signals.progress_video_converting.connect(self.progress_video_remuxing)
         self.download_thread.signals.progress_video.connect(self.update_video_progressbar)
         self.download_thread.signals.progress_video_range.connect(self.set_video_progress_range)
         self.download_thread.signals.total_progress_range.connect(self.update_total_progressbar_range)
@@ -2094,6 +2085,9 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         self.ui.progress_lineedit_download_info.setText(
             f"Downloaded: {total_downloaded_videos} video(s) this session.")
         self.ui.main_progressbar_total.setMaximum(100)
+        self.ui.main_progressbar_total.setValue(0)
+        self.ui.main_progressbar_converting.setMaximum(100)
+        self.ui.main_progressbar_converting.setValue(0)
         video_data.clean_dict(video_id)
         self.semaphore.release()
         widgets = self.progress_widgets.pop(video_id, None)
@@ -2268,6 +2262,15 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         bar.setRange(0, maximum)
         # optional: reset to zero if you like
         bar.setValue(0)
+
+    def progress_video_remuxing(self, pos, total):
+        """Updates the progress when the video gets remuxed"""
+        if time.time() - self.last_thumbnail_change < 0.3:
+            return
+
+        self.ui.main_progressbar_converting.setMaximum(total)
+        self.ui.main_progressbar_converting.setValue(pos)
+        self.last_update_time = time.time()
 
     def update_video_progressbar(self, video_id, pos, maximum):
         """Fired repeatedly—only updates the current value."""
