@@ -845,6 +845,7 @@ class SSLWarningDialog(QDialog):
 class PornFetch(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.last_thumbnail_change = time.time()
         self.stylesheets = None
         self._pixmap_item = None
         self._scene = None
@@ -854,7 +855,6 @@ class PornFetch(QMainWindow):
         self.supress_errors = None
         self.direct_download = None
         self._full_pixmap = None
-        self.setWindowTitle(f"Porn Fetch v{__version__} Copyright (C) Johannes Habel 2023-2025")
         if __build__ == "desktop":
             self.ui = Ui_MainWindow()
 
@@ -1165,6 +1165,7 @@ class PornFetch(QMainWindow):
         self.ui.treeWidget.setColumnWidth(3, 150)
         self.ui.treeWidget.itemClicked.connect(self.set_thumbnail)
         self.ui.treeWidget.currentItemChanged.connect(self.set_thumbnail)
+        self.setWindowTitle(f"Porn Fetch v{__version__} Copyright (C) Johannes Habel 2023-2025")
 
         font = QFont()
         if conf["UI"]["custom_font"] == "true":
@@ -2032,6 +2033,10 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
 
     def set_thumbnail(self, item_current, item_previous=None): # Won's use the previous item
         """Replace your QLabel code with this, feeding the graphicsView."""
+        if time.time() - self.last_thumbnail_change < 0.5: # Bypasses a bug
+            return
+
+        self.last_thumbnail_change = time.time()
         if __build__ == "android":
             return
 
