@@ -62,7 +62,7 @@ if __name__ == "__main__":
     ctx = engine.rootContext()
     ctx.setContextProperty("backend", downloader)
 
-    engine.load(QUrl.fromLocalFile("main.qml"))
+    engine.load(QUrl.fromLocalFile("main_android.qml"))
     if not engine.rootObjects():
         sys.exit(-1)
     sys.exit(app.exec())

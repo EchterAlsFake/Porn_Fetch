@@ -65,6 +65,16 @@ ApplicationWindow {
         }
 
         Label {
+            id: downloadLocation
+            text: "Videos are downloaded to: /storage/emulated/0/Download/"
+            font.pointSize: 14
+            color: "lightgray"
+            Layout.fillWidth: true
+            wrapMode: text.Wrap
+            elide: Text.ElideRight
+        }
+
+        Label {
             id: downloadLabel
             text: ""
             font.pointSize: 14

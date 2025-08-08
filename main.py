@@ -202,6 +202,10 @@ If you believe, that this is a mistake, please report it on GitHub, so that I ca
 
                 shutil.move("PornFetch_Linux_GUI_x64.bin", dst=destination_path_final)
                 self.logger.info(f"Moved the PornFetch binary to: {destination_path_final}")
+                shared_functions.shared_config.set("Setup", "installation", "installed")
+                with open("config.ini", "w") as configuration:
+                    shared_config.write(configuration)
+
                 shutil.move("config.ini", dst=destination_path_final)
                 self.logger.info("Moved configuration file")
                 self.logger.info(f"Downloading additional asset: icon")
@@ -249,6 +253,10 @@ Categories=Utility;"""
                 self.logger.info(f"Moved current Porn Fetch executable to: {target_dir}")
 
                 try:
+                    shared_functions.shared_config.set("Setup", "installation", "installed")
+                    with open("config.ini", "w") as configuration:
+                        shared_config.write(configuration)
+
                     os.remove(os.path.join(target_dir, "config.ini"))
 
                 except Exception:
@@ -1337,11 +1345,11 @@ class PornFetch(QMainWindow):
         self.ui.tools_button_hqporner_category_get_videos.clicked.connect(self.get_by_category_hqporner)
         self.ui.tools_button_top_porn_get_videos.clicked.connect(self.get_top_porn_hqporner)
         self.ui.tools_button_get_brazzers_videos.clicked.connect(self.get_brazzers_videos)
-        self.ui.tools_button_list_categories.clicked.connect(list_categories_hqporner)
+        self.ui.tools_button_list_categories.clicked.connect(self.list_categories_hqporner)
         self.ui.tools_button_get_random_videos.clicked.connect(self.get_random_video)
 
         # EPorner
-        self.ui.tools_button_list_categories_eporner.clicked.connect(list_categories_eporner)
+        self.ui.tools_button_list_categories_eporner.clicked.connect(self.list_categories_eporner)
         self.ui.tools_button_eporner_category_get_videos.clicked.connect(self.get_by_category_eporner)
 
         # File Dialog
@@ -1546,7 +1554,8 @@ see a few examples down below.
 Also, if you use PUBLIC proxies, then it's really a gamble if they work or if they don't. Usually they are really slow and 
 inconsistent, but maybe you are lucky.
 
-About SSL encryption:
+About SSL encryption:   
+
 If your proxy does NOT support SSL / TLS or delivers incorrect self-signed certificates, then you can choose to ignore that
 by disabling SSL verification. However, this reduces your security a lot and people in your network will be able to intercept
 your network traffic. 
@@ -2035,6 +2044,10 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
             return
 
         thumbnail = item.data(3, Qt.ItemDataRole.UserRole)
+        if not "http" in thumbnail:
+            self.logger.warning("Thumbnail not available for. This is not an error.")
+            return
+
         if not thumbnail:
             self._pixmap_item.setPixmap(QPixmap())
             return
@@ -2043,12 +2056,11 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
             pixmap = QPixmap()
             # your custom referer logic…
             if "hqporner" in thumbnail:
-                shared_functions.core.config.headers["Referer"] = "https://hqporner.com"
-                shared_functions.core.update_headers({"Referer": "https://hqporner.com/"})
+                shared_functions.core.session.headers["Referer"] = "https://hqporner.com"
 
             pixmap.loadFromData(shared_functions.core.fetch(thumbnail, get_bytes=True))
             if "hqporner" in thumbnail:
-                del shared_functions.core.config.headers['Referer']
+                del shared_functions.core.session.headers['Referer']
 
             self.logger.info("Fetched thumbnail!")
 
@@ -2154,12 +2166,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
 
         try:
             self.logger.debug("Associating a new client object with a logged in session")
-            shared_functions.ph_client.credentials = {
-                "email": username,
-                "password": password,
-            }
-            shared_functions.ph_client.login(force=True)
-
+            shared_functions.ph_client = shared_functions.ph_Client(email=username, password=password, core=shared_functions.core_ph)
             self.logger.debug("Login Successful!")
             ui_popup(self.tr("Login Successful!", None))
             switch_login_button_state(self)
@@ -2245,6 +2252,12 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
             videos = shared_functions.hq_client.get_videos_by_category(category=category_name)
             self.add_to_tree_widget_thread(videos)
 
+    def list_categories_hqporner(self):
+        """Get all available categories. I want to also extend that for EPorner (and maybe even more sites)"""
+        categories_ = shared_functions.hq_client.get_all_categories()
+        categories = ",".join(categories_)
+        ui_popup(categories)
+
     def get_by_category_eporner(self):
         """Returns video by category from EPorner"""
         category_name = self.ui.tools_lineedit_videos_by_category_eporner.text()
@@ -2257,6 +2270,14 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         else:
             videos = shared_functions.ep_client.get_videos_by_category(category=category_name, enable_html_scraping=True)
             self.add_to_tree_widget_thread(iterator=videos)
+
+    def list_categories_eporner(self):
+        """Lists all video categories from EPorner"""
+        all_categories = ",".join([getattr(ep_Category, category) for category in dir(ep_Category) if
+                                   not callable(getattr(ep_Category, category)) and not category.startswith("__")])
+
+        self.all_categories_eporner = all_categories  # Need this list to verify the category later
+        ui_popup(all_categories)
 
     def get_brazzers_videos(self):
         """Get brazzers videos from HQPorner"""

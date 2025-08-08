@@ -343,7 +343,7 @@ color: white</string>
     <item row="1" column="0">
      <widget class="QStackedWidget" name="CentralStackedWidget">
       <property name="currentIndex">
-       <number>10</number>
+       <number>8</number>
       </property>
       <widget class="QWidget" name="page_main">
        <property name="maximumSize">
@@ -1864,7 +1864,7 @@ color: white</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1002</width>
+             <width>739</width>
              <height>965</height>
             </rect>
            </property>
@@ -3397,8 +3397,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>70</height>
+             <width>1034</width>
+             <height>698</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_20">
@@ -3437,6 +3437,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;- XVideos.com (supports total progress)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;- Missav.ws (and all of it's subsites, supports total progress)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;- Xhamster.com (supports total progress)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;- Spankbang.com (supports total progress)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:16pt; color:#ee00ff;&quot;&gt;Model / Channel Downloads&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;- PornHub.com&lt;/span&gt;&lt;/p&gt;

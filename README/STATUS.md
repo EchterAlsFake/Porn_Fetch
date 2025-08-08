@@ -14,7 +14,7 @@
 - [x] Fixed URL session export feature
 - [x] Fixed tools section layout
 - [x] Fixed check for updates changelog displaying
-- [] Entirely reworked and fixed the error reporting system
+- [x] Entirely reworked and fixed the error reporting system
 - [x] Bring Porn Fetch back on Android
   - [x] Make an Android compatible Layout
   - [x] Fix threading
@@ -59,10 +59,7 @@
 - [x] Entirely rework how settings are handled within Porn Fetch
 - [x] Improve download from file implementation
 - [x] Generally improve how translations are handled
-- [] Improving installation
-  - [] Letting user know if Porn Fetch is already there
-  - [] Better exception handling
-  - [] Maybe auto updating Porn Fetch in the future? (Would be great lmao)
+- [x] Improving installation
 
 # Android
 (This will be ignored for now, cuz we're switching to QML in the future, so these problems should automatically resolve lol)

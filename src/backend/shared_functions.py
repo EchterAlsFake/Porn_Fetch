@@ -7,6 +7,8 @@ import os
 import re
 import logging
 
+from hqporner_api.modules.errors import WeirdError
+
 from src.backend.config import *
 from urllib.parse import urlsplit
 from mutagen.mp4 import MP4, MP4Cover
@@ -32,10 +34,11 @@ sp_client = sp_Client()
 hq_client = hq_Client()
 xn_client = xn_Client()
 core = BaseCore() # We need that sometimes in Porn Fetch's main class e.g., thumbnail fetching
+core_ph = None
 core_internet_checks = BaseCore(config=config, auto_init=True)
 
 def refresh_clients(enable_kill_switch=False):
-    global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, hq_client, xn_client, core
+    global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, hq_client, xn_client, core, core_ph
 
     # One BaseCore per site, with its own RuntimeConfig (isolated headers/cookies)
     core_common = BaseCore(config=config, auto_init=True)   # if you want a “generic” core
@@ -324,7 +327,7 @@ def load_video_attributes(video):
         try:
             thumbnail = video.get_thumbnails()[0]
 
-        except TypeError:
+        except (TypeError, WeirdError):
             thumbnail = "Not available" # Expected, it's an error on HQPorners end.
 
     elif isinstance(video, mv_Video):

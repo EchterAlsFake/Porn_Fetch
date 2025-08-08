@@ -41,19 +41,3 @@ def switch_login_button_state(self):
     self.ui.login_button_get_liked_videos.setStyleSheet(stylesheet)
     self.ui.login_button_get_watched_videos.setStyleSheet(stylesheet)
     self.ui.login_button_get_recommended_videos.setStyleSheet(stylesheet)
-
-
-def list_categories_hqporner(hq_client):
-    """Get all available categories. I want to also extend that for EPorner (and maybe even more sites)"""
-    categories_ = hq_client.get_all_categories()
-    categories = ",".join(categories_)
-    ui_popup(categories)
-
-
-def list_categories_eporner(self):
-    """Lists all video categories from EPorner"""
-    all_categories = ",".join([getattr(ep_Category, category) for category in dir(ep_Category) if
-                               not callable(getattr(ep_Category, category)) and not category.startswith("__")])
-
-    self.all_categories_eporner = all_categories  # Need this list to verify the category later
-    ui_popup(all_categories)
