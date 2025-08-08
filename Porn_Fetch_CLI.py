@@ -523,10 +523,10 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
         if batch:
             dl_thread.join()
 
-    def process_video_with_error_handling(self, video, batch, ignore_errors):
+    def process_video_with_error_handling(self, video, batch, ignore_errors, remove_total_bar):
         try:
             print(f"Processing video: {video.title}")
-            self.process_video(video, batch=batch)
+            self.process_video(video, batch=batch, remove_total_bar=remove_total_bar)
         except Exception as e:
             if ignore_errors:
                 print(f"{Fore.LIGHTRED_EX}[~]{Fore.RED}Ignoring Error: {e}")
@@ -561,7 +561,8 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
         # kick off downloads
         for video in to_download:
             try:
-                self.process_video(video=video, batch=batch, remove_total_bar=remove_total_bar)
+                self.process_video_with_error_handling(video=video, batch=batch, remove_total_bar=remove_total_bar,
+                                                       ignore_errors=ignore_errors)
             except Exception as e:
                 if ignore_errors:
                     print(f"{Fore.LIGHTRED_EX}[~]{Fore.RED} Ignoring Error: {e}")

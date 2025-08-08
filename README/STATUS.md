@@ -8,6 +8,7 @@
 - [x] Fixed spankbang 403 errors
 - [x] Fixed missav.ws too long path for mutagen metadata editing
 - [x] Fixed thumbnails for HQPorner
+- [x] Fixed error handling in CLI #74
 - [x] Fixed total progress in general
 - [x] Fixed thumbnails entirely
 - [x] Fixed URL session export feature
