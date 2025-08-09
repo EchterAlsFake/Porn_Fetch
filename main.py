@@ -324,7 +324,7 @@ If you believe, that this is a mistake, please report it on GitHub, so that I ca
 
                 shutil.move("PornFetch_Linux_GUI_x64.bin", dst=destination_path_final)
                 self.logger.info(f"Moved the PornFetch binary to: {destination_path_final}")
-                shared_functions.shared_config.set("Setup", "installation", "installed")
+                shared_functions.shared_config.set("Setup", "install", "installed")
                 with open("config.ini", "w") as configuration:
                     shared_config.write(configuration)
 
@@ -375,10 +375,11 @@ Categories=Utility;"""
                 self.logger.info(f"Moved current Porn Fetch executable to: {target_dir}")
 
                 try:
-                    shared_functions.shared_config.set("Setup", "installation", "installed")
+                    shared_functions.shared_config.set("Setup", "install", "installed")
                     with open("config.ini", "w") as configuration:
                         shared_config.write(configuration)
 
+                    print("Written new values to config")
                     os.remove(os.path.join(target_dir, "config.ini"))
 
                 except Exception:
@@ -386,6 +387,7 @@ Categories=Utility;"""
                     pass
 
                 shutil.move("config.ini", target_dir)
+                print(f"Moved config.ini to {target_dir}")
                 # Define paths for the shortcut creation
                 app_name = self.app_name
                 app_exe_path = os.path.join(target_dir, filename)  # Full path to the executable

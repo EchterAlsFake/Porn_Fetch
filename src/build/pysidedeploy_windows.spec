@@ -8,7 +8,7 @@ title = Porn Fetch
 project_dir = .
 
 # source file path
-input_file = main.py
+input_file = C:\Users\habel\PycharmProjects\Porn_Fetch\main.py
 
 # directory where exec is stored
 exec_directory = .
@@ -22,7 +22,7 @@ icon = src/frontend/graphics/logo_transparent.ico
 [python]
 
 # python path
-python_path =
+python_path = C:\Users\habel\PycharmProjects\Porn_Fetch\.venv\Scripts\python.exe
 
 # python packages to install
 # ordered-set = increase compile time performance of nuitka packaging
@@ -42,7 +42,7 @@ qml_files =
 excluded_qml_plugins = 
 
 # qt modules used. comma separated
-modules = QuickControls2,Widgets,Core,Qml,Gui
+modules = Qml,QuickControls2,Gui,Core,Widgets
 
 # qt plugins used by the application
 plugins = egldeviceintegrations,iconengines,platforms/darwin,xcbglintegrations,imageformats,platforms,platformthemes,styles,platforminputcontexts,accessiblebridge,generic
