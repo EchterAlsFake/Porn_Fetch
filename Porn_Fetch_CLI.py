@@ -7,7 +7,6 @@ import threading
 import traceback
 import itertools
 
-from Cython.Compiler.TypeInference import object_expr
 from colorama import *
 from io import TextIOWrapper
 from rich import print as rprint
