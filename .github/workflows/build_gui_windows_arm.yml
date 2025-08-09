@@ -1,0 +1,62 @@
+name: Build GUI (Windows ARM64)
+
+on:
+  pull_request:
+    branches: [ master ]
+  push:
+    branches: [ master ]
+
+permissions:
+  contents: read
+
+jobs:
+  build-pornfetch-gui-windows-arm64:
+    runs-on: windows-11-arm
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.13 ARM64
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          architecture: arm64
+
+      - name: Install Python dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          pip install virtualenv
+          virtualenv venv
+          .\venv\Scripts\activate
+          pip install -r requirements.txt
+          pip install PySide6 nuitka zstandard pywin32
+          .\src\frontend\update.ps1
+
+      - name: Build application for Windows ARM64
+        shell: pwsh
+        run: |
+          mkdir deploy
+          Get-ChildItem -Path . -Exclude deploy,venv | Move-Item -Destination deploy
+          cd deploy
+          ..\venv\Scripts\activate
+          echo "yes" | pyside6-deploy -c src/build/pysidedeploy_windows.spec -f -v
+
+      - name: Generate SHA256 Checksum
+        shell: pwsh
+        run: |
+          certUtil -hashfile "deploy\Porn Fetch.exe" SHA256 | findstr /v "hashfile CertUtil" > "deploy\PornFetch_Windows_GUI_ARM64.sha256"
+
+      - name: Publish SHA256 to GitHub Actions Summary
+        shell: bash
+        run: |
+          echo "### SHA256 Checksum for PornFetch_Windows_GUI_ARM64.exe" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          cat "deploy/PornFetch_Windows_GUI_ARM64.sha256" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Archive Windows ARM64 build
+        uses: actions/upload-artifact@v4
+        with:
+          name: pyside6-application-windows-arm64
+          path: "deploy\\Porn Fetch.exe"
