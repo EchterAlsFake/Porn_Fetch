@@ -13,5 +13,4 @@ requests
 httpx
 hue_shift
 Markdown
-av
 mutagen

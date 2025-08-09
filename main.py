@@ -1,3 +1,11 @@
+try:
+    from av import open as av_open  # Don't ask
+    from av.audio.resampler import AudioResampler  # Don't ask
+    FORCE_DISABLE_AV = False
+
+except Exception:
+    FORCE_DISABLE_AV = True
+
 import sys
 from pathlib import Path
 from PySide6.QtWidgets import QApplication, QWidget, QTextBrowser, QVBoxLayout, QPushButton
@@ -131,8 +139,6 @@ try:
     import requests # Imported, although not used, because this triggers the certifi cacert.pem include workflow
     import src.backend.shared_functions as shared_functions
     import src.frontend.UI.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
-    from av import open as av_open # Don't ask
-    from av.audio.resampler import AudioResampler # Don't ask
     from threading import Event, Lock
     from io import TextIOWrapper
     from itertools import islice, chain
@@ -767,6 +773,13 @@ class DownloadThread(QRunnable):
                 time.sleep(int(self.consistent_data.get("processing_delay")))
             self.logger.debug(f"Downloading Video to: {self.output_path}")
             self.signals.total_progress_range.emit(total_segments)
+            global FORCE_DISABLE_AV
+            if not FORCE_DISABLE_AV:
+                remux = True
+
+            else:
+                remux = False
+
 
             # We need to specify the sources, so that it knows which individual progressbar to use
             if isinstance(self.video, shared_functions.hq_Video) or isinstance(self.video, shared_functions.ep_Video):
@@ -782,12 +795,12 @@ class DownloadThread(QRunnable):
             elif isinstance(self.video, shared_functions.ph_Video):  # Assuming 'Video' is the class for Pornhub
                 video_source = "general"
                 self.logger.debug("Starting the Download!")
-                self.video.download(downloader=str(self.threading_mode), path=self.output_path, quality=self.quality, remux=True, display_remux=self.callback_remux,
+                self.video.download(downloader=str(self.threading_mode), path=self.output_path, quality=self.quality, remux=remux, display_remux=self.callback_remux,
                                     display=lambda pos, total: self.generic_callback(pos, total))
 
             else:
                 self.video.download(downloader=str(self.threading_mode), path=self.output_path, callback_remux=self.callback_remux, no_title=True,
-                                    quality=self.quality, remux=True, callback=lambda pos, total: self.generic_callback(pos, total))
+                                    quality=self.quality, remux=remux, callback=lambda pos, total: self.generic_callback(pos, total))
 
         except Exception:
             error = traceback.format_exc()
@@ -797,7 +810,8 @@ class DownloadThread(QRunnable):
         finally:
             if self.consistent_data.get("write_metadata"):
                 try:
-                    shared_functions.write_tags(path=self.output_path, data=video_data.data_objects.get(self.video_id))
+                    if not FORCE_DISABLE_AV:
+                        shared_functions.write_tags(path=self.output_path, data=video_data.data_objects.get(self.video_id))
 
                 except Exception:
                     error = traceback.format_exc()

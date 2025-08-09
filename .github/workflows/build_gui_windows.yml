@@ -31,7 +31,7 @@ jobs:
           virtualenv venv
           .\venv\Scripts\activate
           pip install -r requirements.txt
-          pip install PySide6 nuitka zstandard pywin32
+          pip install PySide6 nuitka zstandard pywin32 av
           .\src\frontend\update.ps1
 
       - name: Build application for Windows x64

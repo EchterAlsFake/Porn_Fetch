@@ -28,7 +28,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pyinstaller
-          pip install -r requirements_cli.txt
+          pip install -r requirements_cli.txt av
 
       - name: Build Porn Fetch (CLI - Windows - X64) (PyInstaller)
         run: |
@@ -68,7 +68,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pyinstaller
+          pip install pyinstaller av
           pip install -r requirements_cli.txt
 
       - name: Build Porn Fetch (CLI - Windows - X32) (PyInstaller)
