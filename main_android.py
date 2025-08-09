@@ -1,12 +1,29 @@
-import sys
-import threading
-from PySide6.QtCore import QObject, Slot, Signal, QUrl
-from PySide6.QtGui import QGuiApplication
-from PySide6.QtQml import QQmlApplicationEngine, QQmlContext
-from PySide6.QtQuickControls2 import QQuickStyle
+try:
+    import sys
+    import threading
+    from PySide6.QtCore import QObject, Slot, Signal, QUrl
+    from PySide6.QtGui import QGuiApplication
+    from PySide6.QtQml import QQmlApplicationEngine, QQmlContext
+    from PySide6.QtQuickControls2 import QQuickStyle
 
 # Import the pre-existing check_video function
-from src.backend.shared_functions import check_video
+    from src.backend.shared_functions import check_video
+except Exception as e:
+    import traceback
+    import sys
+    error = traceback.format_exc()
+    from PySide6.QtWidgets import QWidget, QApplication, QLabel
+    class Fortnite(QWidget):
+        def __init__(self):
+            super().__init__()
+            self.msg_box = QLabel(self)
+            self.msg_box.setText(error)
+    
+    app = QApplication(sys.argv)
+    w = Fortnite()
+    w.show()
+    app.exec()
+
 
 class VideoDownloader(QObject):
     titleChanged = Signal(str)
@@ -29,7 +46,7 @@ class VideoDownloader(QObject):
                     downloader="default",
                     callback=self._on_progress,
                     remux=False,
-                    path="/home/asuna/"
+                    path="/storage/emulated/0/Download/"
                     )
 
                 except TypeError:
@@ -62,7 +79,7 @@ if __name__ == "__main__":
     ctx = engine.rootContext()
     ctx.setContextProperty("backend", downloader)
 
-    engine.load(QUrl.fromLocalFile("main_android.qml"))
+    engine.load(QUrl.fromLocalFile("main.qml"))
     if not engine.rootObjects():
         sys.exit(-1)
     sys.exit(app.exec())

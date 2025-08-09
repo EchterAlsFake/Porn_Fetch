@@ -1812,6 +1812,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
 
         if not FORCE_PORTABLE_RUN:
             if sys.platform == "darwin":
+                self.ui.CentralStackedWidget.setCurrentIndex(0)
                 return
 
             if conf["Setup"]["install"] == "unknown":

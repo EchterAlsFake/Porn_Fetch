@@ -1452,7 +1452,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 1034, 698))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 98, 70))
         self.gridLayout_21 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_21.setSpacing(0)
         self.gridLayout_21.setObjectName(u"gridLayout_21")
@@ -1847,7 +1847,7 @@ class Ui_MainWindow(object):
         self.scrollArea_12.setWidgetResizable(True)
         self.scrollAreaWidgetContents_14 = QWidget()
         self.scrollAreaWidgetContents_14.setObjectName(u"scrollAreaWidgetContents_14")
-        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 1034, 698))
+        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 98, 119))
         self.gridLayout_61 = QGridLayout(self.scrollAreaWidgetContents_14)
         self.gridLayout_61.setObjectName(u"gridLayout_61")
         self.textBrowser_5 = QTextBrowser(self.scrollAreaWidgetContents_14)
@@ -2500,28 +2500,29 @@ class Ui_MainWindow(object):
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:x-large; font-weight:700;\">Data Collection &amp; Privacy Information</span></h2>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This application now uses my own server for update checking and error reporting, instead of relying on GitHub. This gives me greater control over the process and the"
-                        " data transmitted. However, my server is <span style=\" font-weight:700;\">IPv6-only</span>. This means that only about 50% of internet users will be able to connect. </p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">This application now uses my own server for update checking and error reporting, instead of relying on GitHub. This gives me greater"
+                        " control over the process and the data transmitted. However, my server is </span><span style=\" font-size:12pt; font-weight:700;\">IPv6-only</span><span style=\" font-size:12pt;\">. This means that only about 50% of internet users will be able to connect. </span></p>\n"
 "<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">About the Server</span></h3>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The server is a small, older Acer Swift 3 laptop running 24/7 in my room. The full source code for the server is publicly available here:<br /><a href=\"https://github.com/EchterAlsFake/Server\"><span style=\" text-decoration: underline; color:#f700ff;\">https://github.com/EchterAlsFake/Server</span></a> </p>\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">Data Collected via Error Rep"
-                        "orts</span></h3>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">The server is a small, older Acer Swift 3 laptop running 24/7 in my room. The full source code for the server is publicly available here:<br /></span><a href=\"https://github.com/EchterAlsFake/Server\"><span style=\" font-size:12pt; text-decoration: underline; color:#f700ff;\">https://github.com/EchterAlsFake/Server</span></a><span style=\" font-size:12pt;\"> </span></p>\n"
+"<h3 style=\""
+                        " margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt; font-weight:700;\">Data Collected via Error Reports</span></h3>\n"
 "<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\">\n"
-"<li style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The version of Porn Fetch you are using</li>\n"
-"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Your operating system (e.g., Windows, Linux, or macOS)</li>\n"
-"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The current date and time</li>\n"
-"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The error details (full Python traceback)</li></ul>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Important:</span> The Python traceback m"
-                        "ay, in some cases, include incidental personal information \u2014 for example, your system username if it appears in a file path. No other personal data is intentionally collected. </p>\n"
+"<li style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">The version of Porn Fetch you are using</span></li>\n"
+"<li style=\" font-size:12pt;\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Your operating system (e.g., Windows, Linux, or macOS)</li>\n"
+"<li style=\" font-size:12pt;\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The current date and time</li>\n"
+"<li style=\" font-size:12pt;\" style=\" margin-top:0px; margin-bottom:12px; margin-left:0px;"
+                        " margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The error details (full Python traceback)</li></ul>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:700;\">Important:</span><span style=\" font-size:12pt;\"> The Python traceback may, in some cases, include incidental personal information \u2014 for example, your system username if it appears in a file path. No other personal data is intentionally collected. </span></p>\n"
 "<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">Data Storage &amp; Security</span></h3>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Error reports are stored in plain text on my server. The server\u2019s storage device is encrypted with LUKS and secured with a strong password (40+ characters). <span style=\" color:#ff0000;\">Y</span><span style=\" font-size:10pt; color:#ff0000;\">our </span><span style=\" font-size:10pt; font-weight:700; color:#ff0000;\">IP address is never logged, stored, or displayed</span><span style=\" font-size:10pt; color:#ff0000;\">. </span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12p"
-                        "x; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">Optional Participation</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Whether you enable error reporting or not will have no impact on the application's functionality. It simply helps me identify and fix issues faster. You can also manually check for updates on GitHub, although most users do not do this. </p>\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">IPv6 Connectivity Check</span></h3>\n"
-"<p style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To see if you have IPv6 connectivity, visit:<br /><a href=\"https://echteralsfake.duckdns.org/ping\"><span style=\" text-decoration: underline; color:#1a"
-                        "ff00;\">https://echteralsfake.duckdns.org/ping</span></a><br />If you see a white page with <span style=\" font-weight:700;\">Success</span>, you have IPv6. If not, you do not. </p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">You can also verify your IP addresses by visiting: <a href=\"https://ipleak.net\"><span style=\" text-decoration: underline; color:#ffff00;\">https://ipleak.net</span></a><br />Example formats:<br />IPv4: <span style=\" font-family:'monospace';\">135.215.32.64</span><br />IPv6: <span style=\" font-family:'monospace';\">2a02:810a:186:b400::5c51</span> </p></body></html>", None))
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">Error reports are stored in plain text on my server. The server\u2019s storage device is encr"
+                        "ypted with LUKS and secured with a strong password (40+ characters). </span><span style=\" font-size:12pt; color:#ff0000;\">Your </span><span style=\" font-size:12pt; font-weight:700; color:#ff0000;\">IP address is never logged, stored, or displayed</span><span style=\" font-size:12pt; color:#ff0000;\">. </span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">Optional Participation</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">Whether you enable error reporting or not will have no impact on the application's functionality. It simply helps me identify and fix issues faster. You can also manually check for updates on GitHub, although most users do not do this. </span></p>\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px"
+                        "; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt; font-weight:700;\">IPv6 Connectivity Check</span></h3>\n"
+"<p style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">To see if you have IPv6 connectivity, visit:</span><span style=\" font-size:14pt;\"><br /></span><a href=\"https://echteralsfake.duckdns.org/ping\"><span style=\" font-size:14pt; text-decoration: underline; color:#1aff00;\">https://echteralsfake.duckdns.org/ping</span></a><br /><span style=\" font-size:12pt;\">If you see a white page with </span><span style=\" font-size:12pt; font-weight:700;\">Success</span><span style=\" font-size:12pt;\">, you have IPv6. If not, you do not. </span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">You can also verify your IP addresses by visiting: </span><a href=\"https://ipleak.n"
+                        "et\"><span style=\" font-size:12pt; text-decoration: underline; color:#ffff00;\">https://ipleak.net</span></a><span style=\" font-size:12pt;\"><br />Example formats:<br />IPv4: </span><span style=\" font-family:'monospace'; font-size:12pt;\">135.215.32.64</span><span style=\" font-size:12pt;\"><br />IPv6: </span><span style=\" font-family:'monospace'; font-size:12pt;\">2a02:810a:186:b400::5c51</span><span style=\" font-size:12pt;\"> </span></p></body></html>", None))
         self.button_server_enable_logging.setText(QCoreApplication.translate("MainWindow", u"I have IPv6 :) (and want to enable it)", None))
         self.button_server_disable_logging.setText(QCoreApplication.translate("MainWindow", u"I don't have IPv6 / I don't want to enable this feature", None))
         self.main_label_progressbar_total.setText(QCoreApplication.translate("MainWindow", u"Total:", None))
