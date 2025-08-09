@@ -1452,7 +1452,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 98, 70))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 1034, 698))
         self.gridLayout_21 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_21.setSpacing(0)
         self.gridLayout_21.setObjectName(u"gridLayout_21")
@@ -1693,36 +1693,6 @@ class Ui_MainWindow(object):
         self.gridLayout_28.addLayout(self.gridLayout_27, 0, 0, 1, 1)
 
         self.CentralStackedWidget.addWidget(self.page_update_available)
-        self.page_privacy_information = QWidget()
-        self.page_privacy_information.setObjectName(u"page_privacy_information")
-        self.gridLayout_30 = QGridLayout(self.page_privacy_information)
-        self.gridLayout_30.setSpacing(0)
-        self.gridLayout_30.setObjectName(u"gridLayout_30")
-        self.gridLayout_30.setContentsMargins(0, 0, 0, 0)
-        self.gridLayout_29 = QGridLayout()
-        self.gridLayout_29.setSpacing(0)
-        self.gridLayout_29.setObjectName(u"gridLayout_29")
-        self.textBrowser_2 = QTextBrowser(self.page_privacy_information)
-        self.textBrowser_2.setObjectName(u"textBrowser_2")
-        self.textBrowser_2.setLineWidth(1)
-        self.textBrowser_2.setOpenExternalLinks(True)
-
-        self.gridLayout_29.addWidget(self.textBrowser_2, 0, 0, 1, 2)
-
-        self.button_server_enable_logging = QPushButton(self.page_privacy_information)
-        self.button_server_enable_logging.setObjectName(u"button_server_enable_logging")
-
-        self.gridLayout_29.addWidget(self.button_server_enable_logging, 1, 0, 1, 1)
-
-        self.button_server_disable_logging = QPushButton(self.page_privacy_information)
-        self.button_server_disable_logging.setObjectName(u"button_server_disable_logging")
-
-        self.gridLayout_29.addWidget(self.button_server_disable_logging, 1, 1, 1, 1)
-
-
-        self.gridLayout_30.addLayout(self.gridLayout_29, 0, 0, 1, 1)
-
-        self.CentralStackedWidget.addWidget(self.page_privacy_information)
         self.page_install_dialog = QWidget()
         self.page_install_dialog.setObjectName(u"page_install_dialog")
         self.gridLayout_57 = QGridLayout(self.page_install_dialog)
@@ -1877,7 +1847,7 @@ class Ui_MainWindow(object):
         self.scrollArea_12.setWidgetResizable(True)
         self.scrollAreaWidgetContents_14 = QWidget()
         self.scrollAreaWidgetContents_14.setObjectName(u"scrollAreaWidgetContents_14")
-        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 98, 119))
+        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 1034, 698))
         self.gridLayout_61 = QGridLayout(self.scrollAreaWidgetContents_14)
         self.gridLayout_61.setObjectName(u"gridLayout_61")
         self.textBrowser_5 = QTextBrowser(self.scrollAreaWidgetContents_14)
@@ -1895,6 +1865,36 @@ class Ui_MainWindow(object):
         self.gridLayout_62.addWidget(self.scrollArea_12, 0, 0, 1, 1)
 
         self.CentralStackedWidget.addWidget(self.page_disclaimer)
+        self.page_privacy_information = QWidget()
+        self.page_privacy_information.setObjectName(u"page_privacy_information")
+        self.gridLayout_30 = QGridLayout(self.page_privacy_information)
+        self.gridLayout_30.setSpacing(0)
+        self.gridLayout_30.setObjectName(u"gridLayout_30")
+        self.gridLayout_30.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_29 = QGridLayout()
+        self.gridLayout_29.setSpacing(0)
+        self.gridLayout_29.setObjectName(u"gridLayout_29")
+        self.textBrowser_2 = QTextBrowser(self.page_privacy_information)
+        self.textBrowser_2.setObjectName(u"textBrowser_2")
+        self.textBrowser_2.setLineWidth(1)
+        self.textBrowser_2.setOpenExternalLinks(True)
+
+        self.gridLayout_29.addWidget(self.textBrowser_2, 0, 0, 1, 2)
+
+        self.button_server_enable_logging = QPushButton(self.page_privacy_information)
+        self.button_server_enable_logging.setObjectName(u"button_server_enable_logging")
+
+        self.gridLayout_29.addWidget(self.button_server_enable_logging, 1, 0, 1, 1)
+
+        self.button_server_disable_logging = QPushButton(self.page_privacy_information)
+        self.button_server_disable_logging.setObjectName(u"button_server_disable_logging")
+
+        self.gridLayout_29.addWidget(self.button_server_disable_logging, 1, 1, 1, 1)
+
+
+        self.gridLayout_30.addLayout(self.gridLayout_29, 0, 0, 1, 1)
+
+        self.CentralStackedWidget.addWidget(self.page_privacy_information)
 
         self.gridLayout_26.addWidget(self.CentralStackedWidget, 1, 0, 1, 1)
 
@@ -2079,7 +2079,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.CentralStackedWidget.setCurrentIndex(7)
+        self.CentralStackedWidget.setCurrentIndex(11)
         self.main_stacked_widget_top.setCurrentIndex(0)
 
 
@@ -2354,38 +2354,6 @@ class Ui_MainWindow(object):
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt;\">   </span></p></body></html>", None))
         self.button_update_acknowledged.setText(QCoreApplication.translate("MainWindow", u"OK", None))
-        self.textBrowser_2.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:x-large; font-weight:700;\">Data Collection &amp; Privacy Information</span></h2>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This application now uses my own server for update checking and error reporting, instead of relying on GitHub. This gives me greater control over the process and the"
-                        " data transmitted. However, my server is <span style=\" font-weight:700;\">IPv6-only</span>. This means that only about 50% of internet users will be able to connect. </p>\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">About the Server</span></h3>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The server is a small, older Acer Swift 3 laptop running 24/7 in my room. The full source code for the server is publicly available here:<br /><a href=\"https://github.com/EchterAlsFake/Server\"><span style=\" text-decoration: underline; color:#f700ff;\">https://github.com/EchterAlsFake/Server</span></a> </p>\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">Data Collected via Error Rep"
-                        "orts</span></h3>\n"
-"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\">\n"
-"<li style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The version of Porn Fetch you are using</li>\n"
-"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Your operating system (e.g., Windows, Linux, or macOS)</li>\n"
-"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The current date and time</li>\n"
-"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The error details (full Python traceback)</li></ul>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Important:</span> The Python traceback m"
-                        "ay, in some cases, include incidental personal information \u2014 for example, your system username if it appears in a file path. No other personal data is intentionally collected. </p>\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">Data Storage &amp; Security</span></h3>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Error reports are stored in plain text on my server. The server\u2019s storage device is encrypted with LUKS and secured with a strong password (40+ characters). <span style=\" color:#ff0000;\">Y</span><span style=\" font-size:10pt; color:#ff0000;\">our </span><span style=\" font-size:10pt; font-weight:700; color:#ff0000;\">IP address is never logged, stored, or displayed</span><span style=\" font-size:10pt; color:#ff0000;\">. </span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12p"
-                        "x; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">Optional Participation</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Whether you enable error reporting or not will have no impact on the application's functionality. It simply helps me identify and fix issues faster. You can also manually check for updates on GitHub, although most users do not do this. </p>\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">IPv6 Connectivity Check</span></h3>\n"
-"<p style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To see if you have IPv6 connectivity, visit:<br /><a href=\"https://echteralsfake.duckdns.org/ping\"><span style=\" text-decoration: underline; color:#1a"
-                        "ff00;\">https://echteralsfake.duckdns.org/ping</span></a><br />If you see a white page with <span style=\" font-weight:700;\">SUCCESS</span>, you have IPv6. If not, you do not. </p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">You can also verify your IP addresses by visiting: <a href=\"https://ipleak.net\"><span style=\" text-decoration: underline; color:#ffff00;\">https://ipleak.net</span></a><br />Example formats:<br />IPv4: <span style=\" font-family:'monospace';\">135.215.32.64</span><br />IPv6: <span style=\" font-family:'monospace';\">2a02:810a:186:b400::5c51</span> </p></body></html>", None))
-        self.button_server_enable_logging.setText(QCoreApplication.translate("MainWindow", u"I have IPv6 :) (and want to enable it)", None))
-        self.button_server_disable_logging.setText(QCoreApplication.translate("MainWindow", u"I don't have IPv6 / I don't want to enable this feature", None))
         self.textBrowser_3.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -2524,6 +2492,38 @@ class Ui_MainWindow(object):
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This software is provided <span style=\" font-weight:700;\">without any warranty</span> as described in the GPLv3. I am <span style=\" font-weight:700;\">not liable</span> for any damages, legal consequences, "
                         "or misuse resulting from your use of this software.<br />You are solely responsible for ensuring your actions are lawful and ethical. </p></body></html>", None))
         self.button_disclaimer_accept.setText(QCoreApplication.translate("MainWindow", u"Accept", None))
+        self.textBrowser_2.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:x-large; font-weight:700;\">Data Collection &amp; Privacy Information</span></h2>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This application now uses my own server for update checking and error reporting, instead of relying on GitHub. This gives me greater control over the process and the"
+                        " data transmitted. However, my server is <span style=\" font-weight:700;\">IPv6-only</span>. This means that only about 50% of internet users will be able to connect. </p>\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">About the Server</span></h3>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The server is a small, older Acer Swift 3 laptop running 24/7 in my room. The full source code for the server is publicly available here:<br /><a href=\"https://github.com/EchterAlsFake/Server\"><span style=\" text-decoration: underline; color:#f700ff;\">https://github.com/EchterAlsFake/Server</span></a> </p>\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">Data Collected via Error Rep"
+                        "orts</span></h3>\n"
+"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\">\n"
+"<li style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The version of Porn Fetch you are using</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Your operating system (e.g., Windows, Linux, or macOS)</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The current date and time</li>\n"
+"<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The error details (full Python traceback)</li></ul>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Important:</span> The Python traceback m"
+                        "ay, in some cases, include incidental personal information \u2014 for example, your system username if it appears in a file path. No other personal data is intentionally collected. </p>\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">Data Storage &amp; Security</span></h3>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Error reports are stored in plain text on my server. The server\u2019s storage device is encrypted with LUKS and secured with a strong password (40+ characters). <span style=\" color:#ff0000;\">Y</span><span style=\" font-size:10pt; color:#ff0000;\">our </span><span style=\" font-size:10pt; font-weight:700; color:#ff0000;\">IP address is never logged, stored, or displayed</span><span style=\" font-size:10pt; color:#ff0000;\">. </span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12p"
+                        "x; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">Optional Participation</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Whether you enable error reporting or not will have no impact on the application's functionality. It simply helps me identify and fix issues faster. You can also manually check for updates on GitHub, although most users do not do this. </p>\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">IPv6 Connectivity Check</span></h3>\n"
+"<p style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">To see if you have IPv6 connectivity, visit:<br /><a href=\"https://echteralsfake.duckdns.org/ping\"><span style=\" text-decoration: underline; color:#1a"
+                        "ff00;\">https://echteralsfake.duckdns.org/ping</span></a><br />If you see a white page with <span style=\" font-weight:700;\">Success</span>, you have IPv6. If not, you do not. </p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">You can also verify your IP addresses by visiting: <a href=\"https://ipleak.net\"><span style=\" text-decoration: underline; color:#ffff00;\">https://ipleak.net</span></a><br />Example formats:<br />IPv4: <span style=\" font-family:'monospace';\">135.215.32.64</span><br />IPv6: <span style=\" font-family:'monospace';\">2a02:810a:186:b400::5c51</span> </p></body></html>", None))
+        self.button_server_enable_logging.setText(QCoreApplication.translate("MainWindow", u"I have IPv6 :) (and want to enable it)", None))
+        self.button_server_disable_logging.setText(QCoreApplication.translate("MainWindow", u"I don't have IPv6 / I don't want to enable this feature", None))
         self.main_label_progressbar_total.setText(QCoreApplication.translate("MainWindow", u"Total:", None))
         self.main_label_progressbar_converting.setText(QCoreApplication.translate("MainWindow", u"Converting:", None))
     # retranslateUi

@@ -11,7 +11,7 @@
     <message>
         <location filename="../UI/form_main_window.ui" line="331"/>
         <source>Supported websites</source>
-        <translation type="unfinished"></translation>
+        <translation>Unterstützte Webseiten</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2944"/>
@@ -76,36 +76,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3302"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:x-large; font-weight:700;&quot;&gt;Data Collection &amp;amp; Privacy Information&lt;/span&gt;&lt;/h2&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This application now uses my own server for update checking and error reporting, instead of relying on GitHub. This gives me greater control over the process and the data transmitted. However, my server is &lt;span style=&quot; font-weight:700;&quot;&gt;IPv6-only&lt;/span&gt;. This means that only about 50% of internet users will be able to connect. &lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;About the Server&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The server is a small, older Acer Swift 3 laptop running 24/7 in my room. The full source code for the server is publicly available here:&lt;br /&gt;&lt;a href=&quot;https://github.com/EchterAlsFake/Server&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#f700ff;&quot;&gt;https://github.com/EchterAlsFake/Server&lt;/span&gt;&lt;/a&gt; &lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;Data Collected via Error Reports&lt;/span&gt;&lt;/h3&gt;
-&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
-&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The version of Porn Fetch you are using&lt;/li&gt;
-&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Your operating system (e.g., Windows, Linux, or macOS)&lt;/li&gt;
-&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The current date and time&lt;/li&gt;
-&lt;li style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The error details (full Python traceback)&lt;/li&gt;&lt;/ul&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Important:&lt;/span&gt; The Python traceback may, in some cases, include incidental personal information — for example, your system username if it appears in a file path. No other personal data is intentionally collected. &lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;Data Storage &amp;amp; Security&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Error reports are stored in plain text on my server. The server’s storage device is encrypted with LUKS and secured with a strong password (40+ characters). &lt;span style=&quot; color:#ff0000;&quot;&gt;Y&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#ff0000;&quot;&gt;our &lt;/span&gt;&lt;span style=&quot; font-size:10pt; font-weight:700; color:#ff0000;&quot;&gt;IP address is never logged, stored, or displayed&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#ff0000;&quot;&gt;. &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;Optional Participation&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Whether you enable error reporting or not will have no impact on the application&apos;s functionality. It simply helps me identify and fix issues faster. You can also manually check for updates on GitHub, although most users do not do this. &lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;IPv6 Connectivity Check&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;To see if you have IPv6 connectivity, visit:&lt;br /&gt;&lt;a href=&quot;https://echteralsfake.duckdns.org/ping&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#1aff00;&quot;&gt;https://echteralsfake.duckdns.org/ping&lt;/span&gt;&lt;/a&gt;&lt;br /&gt;If you see a white page with &lt;span style=&quot; font-weight:700;&quot;&gt;SUCCESS&lt;/span&gt;, you have IPv6. If not, you do not. &lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You can also verify your IP addresses by visiting: &lt;a href=&quot;https://ipleak.net&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#ffff00;&quot;&gt;https://ipleak.net&lt;/span&gt;&lt;/a&gt;&lt;br /&gt;Example formats:&lt;br /&gt;IPv4: &lt;span style=&quot; font-family:&apos;monospace&apos;;&quot;&gt;135.215.32.64&lt;/span&gt;&lt;br /&gt;IPv6: &lt;span style=&quot; font-family:&apos;monospace&apos;;&quot;&gt;2a02:810a:186:b400::5c51&lt;/span&gt; &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../UI/form_main_window.ui" line="3500"/>
+        <location filename="../UI/form_main_window.ui" line="3423"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -151,7 +122,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3696"/>
+        <location filename="../UI/form_main_window.ui" line="3619"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -177,73 +148,73 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <message>
         <location filename="../UI/form_main_window.ui" line="3745"/>
         <source>Total:</source>
-        <translation type="unfinished"></translation>
+        <translation>Insgesamt:</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="3774"/>
         <source>Converting:</source>
-        <translation type="unfinished"></translation>
+        <translation>Konvertieren:</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="767"/>
         <source>Download</source>
-        <translation type="unfinished"></translation>
+        <translation>Herunterladen</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="887"/>
         <source>PornHub</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="666"/>
         <source>Search for Videos. Select Website below</source>
-        <translation type="unfinished"></translation>
+        <translation>Suche nach Videos, wähle Webseite unten aus</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="704"/>
         <source>Playlist URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>Playlist URL:</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="685"/>
         <source>Search Website</source>
-        <translation type="unfinished"></translation>
+        <translation>Suche Website</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="606"/>
         <source>File:</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei:</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="723"/>
         <source>Model URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>Model URL:</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="587"/>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="502"/>
         <location filename="../UI/form_main_window.ui" line="1265"/>
         <source>HQPorner</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="909"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="792"/>
         <source>URLs in the file must be separated with new lines!</source>
-        <translation type="unfinished"></translation>
+        <translation>URLs in der Datei müssen mit neuen Zeilen separiert werden!</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="811"/>
         <source>XVideos</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="527"/>
@@ -253,12 +224,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <location filename="../UI/form_main_window.ui" line="1552"/>
         <location filename="../UI/form_main_window.ui" line="1624"/>
         <source>Get Videos</source>
-        <translation type="unfinished"></translation>
+        <translation>Videos abrufen</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="565"/>
         <source>Enter a PornHub Playlist URL</source>
-        <translation type="unfinished"></translation>
+        <translation>Gib eine PornHub Playlist ein</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="625"/>
@@ -279,451 +250,458 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <location filename="../UI/form_main_window.ui" line="2749"/>
         <location filename="../UI/form_main_window.ui" line="2792"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Hilfe</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="742"/>
         <source>XNXX</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="849"/>
         <source>Enter video URL</source>
-        <translation type="unfinished"></translation>
+        <translation>Gib eine Video URL ein</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="546"/>
         <source>Enter Model / Channel / Actress URL</source>
-        <translation type="unfinished"></translation>
+        <translation>Gib eine Model / Kanal / Darsteller URL ein</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="830"/>
         <source>Search Query:</source>
-        <translation type="unfinished"></translation>
+        <translation>Suchbegriff:</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="934"/>
         <source>Open File</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffne Datei</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="868"/>
         <location filename="../UI/form_main_window.ui" line="1564"/>
         <source>EPorner</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="988"/>
         <source>Get Liked videos</source>
-        <translation type="unfinished"></translation>
+        <translation>Erhalte Gelikte Videos</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1124"/>
         <source>Get watched videos</source>
-        <translation type="unfinished"></translation>
+        <translation>Erhalte aufgerufene Videos</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1045"/>
         <source>E-Mail:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1064"/>
         <source>Login</source>
-        <translation type="unfinished"></translation>
+        <translation>Anmelden</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1105"/>
         <source>Enter your PornHub E-Mail address (not your username, pornhub changed it) </source>
-        <translation type="unfinished"></translation>
+        <translation>Gib deine PornHub E-Mail Addresse (nicht deinen Namen) ein </translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1007"/>
         <source>Get recommended videos</source>
-        <translation type="unfinished"></translation>
+        <translation>Erhalte empfohlene Videos</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1026"/>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Passwort:</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1086"/>
         <source>Enter your PornHub Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Gib dein PornHub Passwort ein</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1207"/>
         <source>Info:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1303"/>
         <source>Week</source>
-        <translation type="unfinished"></translation>
+        <translation>Woche</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1347"/>
         <location filename="../UI/form_main_window.ui" line="1665"/>
         <source>Get videos by category</source>
-        <translation type="unfinished"></translation>
+        <translation>Videos nach einer Kategorie erhalten</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1366"/>
         <source>Get Top Porn:</source>
-        <translation type="unfinished"></translation>
+        <translation>Erhalte &quot;Top&quot; Porn:</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1388"/>
         <source>Month</source>
-        <translation type="unfinished"></translation>
+        <translation>Monat</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1407"/>
         <source>Get random video</source>
-        <translation type="unfinished"></translation>
+        <translation>Zufälliges Video</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1429"/>
         <source>All Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesamtzeit</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1451"/>
         <location filename="../UI/form_main_window.ui" line="1646"/>
         <source>List of all categories</source>
-        <translation type="unfinished"></translation>
+        <translation>Liste aller Kategorien</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1473"/>
         <source>Get Video</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrufen</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1530"/>
         <source>Get Brazzers videos</source>
-        <translation type="unfinished"></translation>
+        <translation>Erhalte Brazzers Videos</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1729"/>
         <source>Show videos in reverse</source>
-        <translation type="unfinished"></translation>
+        <translation>Videos in in umgedrehter
+Reihenfolge anzeigen</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1736"/>
         <source>Do not clear videos</source>
-        <translation type="unfinished"></translation>
+        <translation>Videos nicht aus der
+Liste löschen</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1749"/>
         <source>Automated selection tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisierte Auwahl</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1756"/>
         <source>Keyboard shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastenkombinationen</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1775"/>
         <source>Does not stop downloading videos</source>
-        <translation type="unfinished"></translation>
+        <translation>(Stoppt keine Downloads)</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1778"/>
         <source>Stop loading videos</source>
-        <translation type="unfinished"></translation>
+        <translation>Breche Laden von Videos ab</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1810"/>
         <source>Download Selected Videos</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausgewählte Videos herunterladen</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1835"/>
         <source>Author</source>
-        <translation type="unfinished"></translation>
+        <translation>Autor</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1840"/>
         <source>Duration (minutes)</source>
-        <translation type="unfinished"></translation>
+        <translation>Länge (Minuten)</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2169"/>
         <source>Directly Download videos (bypass tree widget)</source>
-        <translation type="unfinished"></translation>
+        <translation>Videos direkt herunterladen
+(umgeht das Tree Widget)</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2190"/>
         <source>Graphical User Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Graphisches Nutzer Interface</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2228"/>
         <source>System default</source>
-        <translation type="unfinished"></translation>
+        <translation>Standart</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2241"/>
         <source>Graphical User Interface Language:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprache des Graphischen Nutzer Interfaces:</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2251"/>
         <source>English</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2261"/>
         <source>French</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2271"/>
         <source>Chinese (simplified)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2281"/>
         <source>German</source>
-        <translation type="unfinished"></translation>
+        <translation>Deutsch</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2288"/>
         <source>Enable custom font (Jetbrains Mono)</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigene Font (Jetbrains Mono) aktivieren</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2310"/>
         <source>System / Porn Fetch</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2414"/>
         <source>Startup:</source>
-        <translation type="unfinished"></translation>
+        <translation>Start (von Porn Fetch):</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2366"/>
         <source>Supress errors silently</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehlermeldungen ignorieren</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2373"/>
         <source>Internet checks</source>
-        <translation type="unfinished"></translation>
+        <translation>Internet Checks</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2387"/>
         <source>Update checks</source>
-        <translation type="unfinished"></translation>
+        <translation>Suche nach Updates (beim Start)</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2401"/>
         <source>Install Porn Fetch</source>
-        <translation type="unfinished"></translation>
+        <translation>Porn Fetch Installieren</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2427"/>
         <source>Privacy:</source>
-        <translation type="unfinished"></translation>
+        <translation>Privatsphäre:</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2345"/>
         <source>Enable Anonymous mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Anonymen Modus Aktivieren</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2380"/>
         <source>Activate Proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>Proxy Aktivieren</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2352"/>
         <source>Enable Network Logging</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktiviere das Melden
+von Fehlern über eigenen
+Server (Netzwerklogging)</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1947"/>
         <source>Videos</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1985"/>
         <source>Worst</source>
-        <translation type="unfinished"></translation>
+        <translation>Schlechteste</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2069"/>
         <source>Best</source>
-        <translation type="unfinished"></translation>
+        <translation>Beste</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2152"/>
         <source>Use directory system</source>
-        <translation type="unfinished"></translation>
+        <translation>Nutzen eines Ordner Systems</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2097"/>
         <source>Output path:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausgabepfad:</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2083"/>
         <source>Write metadata tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Metadaten Schreiben</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2131"/>
         <source>Model videos (PornHub)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2052"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffnen</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2076"/>
         <source>Result Limit:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ergebnis Limit:</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2117"/>
         <source>Quality:</source>
-        <translation type="unfinished"></translation>
+        <translation>Qualität (Videos):</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2138"/>
         <source>Both</source>
-        <translation type="unfinished"></translation>
+        <translation>Beide</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2090"/>
         <source>Featured videos</source>
-        <translation type="unfinished"></translation>
+        <translation>Teil von Videos</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2015"/>
         <source>Enter &quot;./&quot; for current directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Gib &quot;./&quot; für aktuelles Verzeichnis ein</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1995"/>
         <source>Half</source>
-        <translation type="unfinished"></translation>
+        <translation>Hälfte</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2002"/>
         <source>User uploads</source>
-        <translation type="unfinished"></translation>
+        <translation>Videos, die der Nutzer
+selbst hochgeladen hat</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2104"/>
         <source>Skip existing files</source>
-        <translation type="unfinished"></translation>
+        <translation>Existierende Dateien überspringen</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2460"/>
         <source>Performance</source>
-        <translation type="unfinished"></translation>
+        <translation>Leistung</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2686"/>
         <source>Simultaneous downloads:</source>
-        <translation type="unfinished"></translation>
+        <translation>Gleichzeitige Downloads::</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2772"/>
         <source>Maximal workers:</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximale Arbeiter:</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2618"/>
         <source>Maximal timeout:</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximaler Wartezeit auf
+Netzwerkanfragen:</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2729"/>
         <source>Maximal retries:</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximale Versuche:</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2495"/>
         <source>Network delay (per Request, in seconds):</source>
-        <translation type="unfinished"></translation>
+        <translation>Netzwerkverzögerung (pro Anfrage, in Sekunden):</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2298"/>
         <source>Font Size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Schriftgröße:</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2434"/>
         <source>Proxy Kill Switch</source>
-        <translation type="unfinished"></translation>
+        <translation>Proxy Kill Switch</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2441"/>
         <source>Help (anonymous mode)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hilfe (anonymer Modus)</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2448"/>
         <source>Help / Explanation (Proxy Kill Switch) </source>
-        <translation type="unfinished"></translation>
+        <translation>Hile / Erklärung (Proxy Kill Switch) </translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2145"/>
         <source>Use Video ID as filename</source>
-        <translation type="unfinished"></translation>
+        <translation>Video IDs als Dateinamen nutzen</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2544"/>
         <source>Download Mode:</source>
-        <translation type="unfinished"></translation>
+        <translation>Download Modus:</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2554"/>
         <source>High Performance</source>
-        <translation type="unfinished"></translation>
+        <translation>Starke Leistung</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2564"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2585"/>
         <source>Speed Limit (MB/s):</source>
-        <translation type="unfinished"></translation>
+        <translation>Geschwindigkeitslimit (MB/s):</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1905"/>
         <source>Apply  (needs restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>Anwenden (benötigt Neustart)</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="1934"/>
         <source>Reset Porn Fetch to default settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Porn Fetch auf Werkseinstellungen zurücksetzen</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2652"/>
         <source>Processing Delay (each Video, in seconds):</source>
-        <translation type="unfinished"></translation>
+        <translation>Verarbeitungsverzögerung (je Video, in Sekunden):</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2904"/>
-        <location filename="../UI/form_main_window.ui" line="3722"/>
+        <location filename="../UI/form_main_window.ui" line="3645"/>
         <source>Accept</source>
-        <translation type="unfinished"></translation>
+        <translation>Akzeptieren</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2930"/>
         <source>Deny and Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Ablehnen und Beenden</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="3054"/>
@@ -753,45 +731,45 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <location filename="../UI/form_main_window.ui" line="3124"/>
         <location filename="../UI/form_main_window.ui" line="3145"/>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation>Anwenden</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="3086"/>
         <source>Apply by time:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nach Zeit anwenden:</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="3093"/>
         <location filename="../UI/form_main_window.ui" line="3155"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation>0</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="3100"/>
         <source>Enter the author&apos;s name</source>
-        <translation type="unfinished"></translation>
+        <translation>Gib den Namen des Autors ein</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="3110"/>
         <source>Apply by Index:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nach Index anwenden:</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="3117"/>
         <location filename="../UI/form_main_window.ui" line="3131"/>
         <source>End:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ende:</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="3138"/>
         <location filename="../UI/form_main_window.ui" line="3162"/>
         <source>Start:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="3169"/>
         <source>Apply by author:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nach Autor anwenden:</translation>
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="3228"/>
@@ -819,20 +797,49 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <message>
         <location filename="../UI/form_main_window.ui" line="3266"/>
         <source>OK</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../UI/form_main_window.ui" line="3683"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:x-large; font-weight:700;&quot;&gt;Data Collection &amp;amp; Privacy Information&lt;/span&gt;&lt;/h2&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This application now uses my own server for update checking and error reporting, instead of relying on GitHub. This gives me greater control over the process and the data transmitted. However, my server is &lt;span style=&quot; font-weight:700;&quot;&gt;IPv6-only&lt;/span&gt;. This means that only about 50% of internet users will be able to connect. &lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;About the Server&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The server is a small, older Acer Swift 3 laptop running 24/7 in my room. The full source code for the server is publicly available here:&lt;br /&gt;&lt;a href=&quot;https://github.com/EchterAlsFake/Server&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#f700ff;&quot;&gt;https://github.com/EchterAlsFake/Server&lt;/span&gt;&lt;/a&gt; &lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;Data Collected via Error Reports&lt;/span&gt;&lt;/h3&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The version of Porn Fetch you are using&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Your operating system (e.g., Windows, Linux, or macOS)&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The current date and time&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The error details (full Python traceback)&lt;/li&gt;&lt;/ul&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Important:&lt;/span&gt; The Python traceback may, in some cases, include incidental personal information — for example, your system username if it appears in a file path. No other personal data is intentionally collected. &lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;Data Storage &amp;amp; Security&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Error reports are stored in plain text on my server. The server’s storage device is encrypted with LUKS and secured with a strong password (40+ characters). &lt;span style=&quot; color:#ff0000;&quot;&gt;Y&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#ff0000;&quot;&gt;our &lt;/span&gt;&lt;span style=&quot; font-size:10pt; font-weight:700; color:#ff0000;&quot;&gt;IP address is never logged, stored, or displayed&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#ff0000;&quot;&gt;. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;Optional Participation&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Whether you enable error reporting or not will have no impact on the application&apos;s functionality. It simply helps me identify and fix issues faster. You can also manually check for updates on GitHub, although most users do not do this. &lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;IPv6 Connectivity Check&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;To see if you have IPv6 connectivity, visit:&lt;br /&gt;&lt;a href=&quot;https://echteralsfake.duckdns.org/ping&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#1aff00;&quot;&gt;https://echteralsfake.duckdns.org/ping&lt;/span&gt;&lt;/a&gt;&lt;br /&gt;If you see a white page with &lt;span style=&quot; font-weight:700;&quot;&gt;Success&lt;/span&gt;, you have IPv6. If not, you do not. &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You can also verify your IP addresses by visiting: &lt;a href=&quot;https://ipleak.net&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#ffff00;&quot;&gt;https://ipleak.net&lt;/span&gt;&lt;/a&gt;&lt;br /&gt;Example formats:&lt;br /&gt;IPv4: &lt;span style=&quot; font-family:&apos;monospace&apos;;&quot;&gt;135.215.32.64&lt;/span&gt;&lt;br /&gt;IPv6: &lt;span style=&quot; font-family:&apos;monospace&apos;;&quot;&gt;2a02:810a:186:b400::5c51&lt;/span&gt; &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3336"/>
+        <location filename="../UI/form_main_window.ui" line="3717"/>
         <source>I have IPv6 :) (and want to enable it)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ich habe IPv6 UND möchte es aktivieren</translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3343"/>
+        <location filename="../UI/form_main_window.ui" line="3724"/>
         <source>I don&apos;t have IPv6 / I don&apos;t want to enable this feature</source>
-        <translation type="unfinished"></translation>
+        <translation>Ich hab kein IPv6 / Ich möchte es nicht aktivieren</translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3388"/>
+        <location filename="../UI/form_main_window.ui" line="3311"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -863,52 +870,52 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3423"/>
+        <location filename="../UI/form_main_window.ui" line="3346"/>
         <source>Custom App Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigener App Name:</translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3433"/>
+        <location filename="../UI/form_main_window.ui" line="3356"/>
         <source>Enter your custom App Name here. Leave it empty to keep &quot;Porn Fetch&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Gib deinen eigenen App Namen ein. Lasse es frei um &quot;Porn Fetch&quot; zu behalten</translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3444"/>
+        <location filename="../UI/form_main_window.ui" line="3367"/>
         <source>Install</source>
-        <translation type="unfinished"></translation>
+        <translation>Installieren</translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3451"/>
+        <location filename="../UI/form_main_window.ui" line="3374"/>
         <source>Portable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Portabel</translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3594"/>
+        <location filename="../UI/form_main_window.ui" line="3517"/>
         <source>Ko-Fi</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3604"/>
+        <location filename="../UI/form_main_window.ui" line="3527"/>
         <source>Already Donated</source>
-        <translation type="unfinished"></translation>
+        <translation>Bereits gespendet</translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3614"/>
+        <location filename="../UI/form_main_window.ui" line="3537"/>
         <source>PayPal</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3624"/>
+        <location filename="../UI/form_main_window.ui" line="3547"/>
         <source>Copy XMR</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiere XMR</translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3634"/>
+        <location filename="../UI/form_main_window.ui" line="3557"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Beenden</translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3644"/>
+        <location filename="../UI/form_main_window.ui" line="3567"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -933,17 +940,17 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>PornFetch</name>
     <message>
-        <location filename="../../../main.py" line="1373"/>
+        <location filename="../../../main.py" line="1371"/>
         <source>Porn Fetch installation failed, because of: {result[1]}</source>
-        <translation type="unfinished">Die Installation von Porn Fetch ist fehlgeschlafen{result[1]}</translation>
+        <translation>Die Installation von Porn Fetch ist fehlgeschlafen{result[1]}</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1685"/>
+        <location filename="../../../main.py" line="1683"/>
         <source>Saved User Settings, please restart Porn Fetch!</source>
-        <translation type="unfinished">Einstellungen wurden gespeichert. Bitte starte Porn Fetch neu!</translation>
+        <translation>Einstellungen wurden gespeichert. Bitte starte Porn Fetch neu!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1726"/>
+        <location filename="../../../main.py" line="1724"/>
         <source>
 Please read this before setting proxies:
 
@@ -982,87 +989,87 @@ This is all for your safety!
 Warning:
 Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YOU HAVE PROXIES ENABLED!!!
         </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1888"/>
+        <location filename="../../../main.py" line="1898"/>
         <source>The model URL you entered seems to be invalid. Please check your input</source>
-        <translation type="unfinished">Die Model uRL, welche du eingegeben hast  scheint ungültig zu sein. Bitte überpfrüfe deine Eingaben</translation>
+        <translation>Die Model uRL, welche du eingegeben hast  scheint ungültig zu sein. Bitte überpfrüfe deine Eingaben</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1960"/>
+        <location filename="../../../main.py" line="1970"/>
         <source>Couldn&apos;t determine which site you want to search on??? Please report this immediately!</source>
-        <translation type="unfinished">Ich konnte nicht herausfinden, auf welcher Seite du suchen willst??? Bitte melde das sofort!</translation>
+        <translation>Ich konnte nicht herausfinden, auf welcher Seite du suchen willst??? Bitte melde das sofort!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1368"/>
+        <location filename="../../../main.py" line="1366"/>
         <source>Porn Fetch has been installed. The app will now close! Please start Porn Fetch from your context menu again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Porn Fetch wurde installiert. Die App wird sich nun schließen! Bitte starte Porn Fetch erneut.</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1759"/>
+        <location filename="../../../main.py" line="1757"/>
         <source>You did choose to not disable SSL Verifications. Retuning to GUI without applying proxies now...</source>
-        <translation type="unfinished"></translation>
+        <translation>Du hast dem Deaktivieren der SSL Verifikation nicht zugestimmt. Die GUI wird ohne Proxies weiterlaufen...</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1763"/>
+        <location filename="../../../main.py" line="1761"/>
         <source>Your proxy seems to be invalid, please try again...</source>
-        <translation type="unfinished"></translation>
+        <translation>Dein Proxy scheint ungültig zu sein, bitte versuche es erneut ...</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1770"/>
+        <location filename="../../../main.py" line="1768"/>
         <source>Proxy IP: {ip_masked} Your IP: {ip} are the same! Please check the proxy you&apos;ve used!, aborting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Proxy IP: {ip_masked} Deine IP: {ip} sind gleich! Bitte überprüfe deinen Proxy, breche ab ...</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1788"/>
+        <location filename="../../../main.py" line="1786"/>
         <source>Can not enable Kill Switch if you haven&apos;t applied a proxy yet!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ich kann den Kill Switch nicht aktivieren, wenn du noch keinen Proxy gesetzt hast!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2313"/>
+        <location filename="../../../main.py" line="2322"/>
         <source>Those credentials don&apos;t seem to be valid...</source>
-        <translation type="unfinished">Diese Zugangsdaten sehen ungültig aus...</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="2320"/>
-        <source>Login Successful!</source>
-        <translation type="unfinished">Login erfolgreich!</translation>
-    </message>
-    <message>
-        <location filename="../../../main.py" line="2325"/>
-        <source>Login Failed, please check your credentials and try again!</source>
-        <translation type="unfinished"></translation>
+        <translation>Diese Zugangsdaten sehen ungültig aus...</translation>
     </message>
     <message>
         <location filename="../../../main.py" line="2329"/>
+        <source>Login Successful!</source>
+        <translation>Anmeldung erfolgreich!</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2334"/>
+        <source>Login Failed, please check your credentials and try again!</source>
+        <translation>Anmeldung Fehlgeschlagen, bitte überprüfe deine Zugangsdaten und versuche es erneut!</translation>
+    </message>
+    <message>
+        <location filename="../../../main.py" line="2338"/>
         <source>You are already logged in!</source>
-        <translation type="unfinished">Du bist bereits angemeldet!</translation>
+        <translation>Du bist bereits angemeldet!</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2341"/>
+        <location filename="../../../main.py" line="2350"/>
         <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
-        <translation type="unfinished">Es gibt ein Problem mit dem Login. Bitte logge dich erst ein und versuche dann Videos von deinem Account zu laden.</translation>
+        <translation>Es gibt ein Problem mit dem Login. Bitte logge dich erst ein und versuche dann Videos von deinem Account zu laden.</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2398"/>
-        <location filename="../../../main.py" line="2417"/>
+        <location filename="../../../main.py" line="2407"/>
+        <location filename="../../../main.py" line="2426"/>
         <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
-        <translation type="unfinished">Ungültige Kategorie. Drücke &quot;Kategorien auflisten&quot; um alle möglichen zu sehen.</translation>
+        <translation>Ungültige Kategorie. Drücke &quot;Kategorien auflisten&quot; um alle möglichen zu sehen.</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2520"/>
+        <location filename="../../../main.py" line="2533"/>
         <source>Full Thumbnail</source>
-        <translation type="unfinished"></translation>
+        <translation>Volles Thumbnail</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2640"/>
+        <location filename="../../../main.py" line="2653"/>
         <source>
 ! Warning !
 Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
 ------------------------------------------------------------
 {formatted_results}</source>
-        <translation type="unfinished">
+        <translation>
 ! Warnung!
 Einige Webseiten konnten nicht aufgerufen werden. Hier ist ein detailierter Bericht:
 ------------------------------------------------------------
@@ -1108,8 +1115,7 @@ Die Semaphore limitiert, wie viele gleichzeitige Downloads stattfinden.
 
 Als Beispiel, wenn die Semaphore bei &quot;1&quot; liegt, dann wird ein Video maximal zur selben Zeit heruntergeladen.
 Wenn die Semaphore bei 4 liegt, dann kannst du 4 Videos gleichzeitig herunterladen. Bei sehr starken Internetverbindungen macht das Sinn, 
-allerdings verbraucht Porn Fetch sehr viel CPU Leistung, daher ist ein Wert höher als 3 eigentlich quatsch
-</translation>
+allerdings verbraucht Porn Fetch sehr viel CPU Leistung, daher ist ein Wert höher als 3 eigentlich quatsch</translation>
     </message>
     <message>
         <location filename="../../backend/class_help.py" line="16"/>
@@ -1123,7 +1129,7 @@ have a very strong internet connection. Maybe not great for low end systems.
 timeouts this can really slow down the process, as we need to wait the Porn sites to return the video segments.
 With the High Performance method, we can just download other segments while waiting which makes it so fast.
 </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../backend/class_help.py" line="40"/>
@@ -1248,7 +1254,7 @@ Zum Beispiel hat das Model Nancy Ace ungefähr 10 selbst hochgeladene Videos, di
 Wenn du &quot;Nutzer-Uploads&quot; wählst, werden nur selbst hochgeladene Videos abgerufen, und andersherum :)</translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2714"/>
+        <location filename="../../../main.py" line="2727"/>
         <source>No URLs in the current session...</source>
         <translation>Keine URLs in der aktuellen Session...</translation>
     </message>

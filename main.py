@@ -1113,26 +1113,20 @@ class PornFetch(QMainWindow):
         })
         self.logger.debug("Startup: [5/5] OK")
         self.initialize_pornfetch()
-        if conf["Setup"]["activate_logging"] == "not_set":
-            self.switch_to_logging()
-            self.ui.button_server_enable_logging.setStyleSheet(self.stylesheets["button_green"])
-            self.ui.button_server_disable_logging.setStyleSheet(self.stylesheets["button_reset"])
-            self.ui.button_server_enable_logging.clicked.connect(self.enable_logging)
-            self.ui.button_server_disable_logging.clicked.connect(self.disable_logging)
 
     def disable_logging(self):
         conf["Setup"]["activate_logging"] = "false"
         with open("config.ini", "w") as configuration:
             conf.write(configuration)
 
-        self.switch_to_download()
+        self.initialize_pornfetch()
 
     def enable_logging(self):
         conf["Setup"]["activate_logging"] = "true"
         with open("config.ini", "w") as configuration:
             conf.write(configuration)
 
-        self.switch_to_download()
+        self.initialize_pornfetch()
 
     """
     The following functions just switch the Stacked Widget to the different widgets
@@ -1202,7 +1196,7 @@ class PornFetch(QMainWindow):
         self.ui.CentralStackedWidget.setCurrentIndex(10)
 
     def switch_to_logging(self):
-        self.ui.CentralStackedWidget.setCurrentIndex(7)
+        self.ui.CentralStackedWidget.setCurrentIndex(11)
 
     def load_style(self):
         icons = {
@@ -1471,7 +1465,7 @@ class PornFetch(QMainWindow):
         # Settings
         self.ui.settings_button_apply.clicked.connect(self.save_user_settings)
         self.ui.settings_button_reset.clicked.connect(reset_pornfetch)
-        self.ui.settings_button_system_install_pornfetch.clicked.connect(self.install_pornfetch)
+        self.ui.settings_button_system_install_pornfetch.clicked.connect(self.switch_to_install_dialog)
         self.ui.settings_checkbox_system_activate_proxy.clicked.connect(self.set_proxies)
         self.ui.button_install.clicked.connect(self.install_pornfetch)
         self.ui.button_portable.clicked.connect(self.install_porn_fetch_portable)
@@ -1807,6 +1801,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         if the License was shown and accepted, if the disclaimer text was shown, if the user downloaded the amount
         of videos to show the sponsoring dialog and after all that switch to the main widget.
         """
+        global FORCE_PORTABLE_RUN
         if not self.license.check_license():
             self.switch_to_license()
             return
@@ -1819,15 +1814,26 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
             self.switch_to_donation_nag()
             return
 
-        self.ui.CentralStackedWidget.setCurrentIndex(0)
-        global FORCE_PORTABLE_RUN
+        if conf["Setup"]["activate_logging"] == "not_set":
+            self.handle_network_logging()
+            return
+
         if not FORCE_PORTABLE_RUN:
             if sys.platform == "darwin":
                 return
 
             if conf["Setup"]["install"] == "unknown":
                 self.switch_to_install_dialog()
+                return
 
+        self.ui.CentralStackedWidget.setCurrentIndex(0)
+
+    def handle_network_logging(self):
+        self.switch_to_logging()
+        self.ui.button_server_enable_logging.setStyleSheet(self.stylesheets["button_green"])
+        self.ui.button_server_disable_logging.setStyleSheet(self.stylesheets["button_reset"])
+        self.ui.button_server_enable_logging.clicked.connect(self.enable_logging)
+        self.ui.button_server_disable_logging.clicked.connect(self.disable_logging)
 
     def start_single_video(self):
         """
