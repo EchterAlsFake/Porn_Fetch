@@ -49,7 +49,7 @@ def handle_error_gracefully(self, data: dict, error_message: str, needs_network_
         self.signals.error_signal.emit(error_message)
 
     if needs_network_log:
-        if data.get("activate_logging") == "true":
+        if data.get("activate_logging"):
             self.logger.info(f"Logging Error: {error_message} to network server...")
             message = f"""
             An error occurred in Porn Fetch - [AddToTreeWidget]
@@ -71,3 +71,5 @@ def handle_error_gracefully(self, data: dict, error_message: str, needs_network_
 
             except Exception as e:
                 self.logger.error(f"Couldn't report the error. Maybe you don't have an IPv6 connection: {e}")
+        else:
+            self.logger.info("Logging is disabled. Error will NOT be reported!")

@@ -76,7 +76,36 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3423"/>
+        <location filename="../UI/form_main_window.ui" line="3302"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:x-large; font-weight:700;&quot;&gt;Data Collection &amp;amp; Privacy Information&lt;/span&gt;&lt;/h2&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This application now uses my own server for update checking and error reporting, instead of relying on GitHub. This gives me greater control over the process and the data transmitted. However, my server is &lt;span style=&quot; font-weight:700;&quot;&gt;IPv6-only&lt;/span&gt;. This means that only about 50% of internet users will be able to connect. &lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;About the Server&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The server is a small, older Acer Swift 3 laptop running 24/7 in my room. The full source code for the server is publicly available here:&lt;br /&gt;&lt;a href=&quot;https://github.com/EchterAlsFake/Server&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#f700ff;&quot;&gt;https://github.com/EchterAlsFake/Server&lt;/span&gt;&lt;/a&gt; &lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;Data Collected via Error Reports&lt;/span&gt;&lt;/h3&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The version of Porn Fetch you are using&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Your operating system (e.g., Windows, Linux, or macOS)&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The current date and time&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The error details (full Python traceback)&lt;/li&gt;&lt;/ul&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Important:&lt;/span&gt; The Python traceback may, in some cases, include incidental personal information — for example, your system username if it appears in a file path. No other personal data is intentionally collected. &lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;Data Storage &amp;amp; Security&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Error reports are stored in plain text on my server. The server’s storage device is encrypted with LUKS and secured with a strong password (40+ characters). &lt;span style=&quot; color:#ff0000;&quot;&gt;Y&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#ff0000;&quot;&gt;our &lt;/span&gt;&lt;span style=&quot; font-size:10pt; font-weight:700; color:#ff0000;&quot;&gt;IP address is never logged, stored, or displayed&lt;/span&gt;&lt;span style=&quot; font-size:10pt; color:#ff0000;&quot;&gt;. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;Optional Participation&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Whether you enable error reporting or not will have no impact on the application&apos;s functionality. It simply helps me identify and fix issues faster. You can also manually check for updates on GitHub, although most users do not do this. &lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;IPv6 Connectivity Check&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;To see if you have IPv6 connectivity, visit:&lt;br /&gt;&lt;a href=&quot;https://echteralsfake.duckdns.org/ping&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#1aff00;&quot;&gt;https://echteralsfake.duckdns.org/ping&lt;/span&gt;&lt;/a&gt;&lt;br /&gt;If you see a white page with &lt;span style=&quot; font-weight:700;&quot;&gt;SUCCESS&lt;/span&gt;, you have IPv6. If not, you do not. &lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You can also verify your IP addresses by visiting: &lt;a href=&quot;https://ipleak.net&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#ffff00;&quot;&gt;https://ipleak.net&lt;/span&gt;&lt;/a&gt;&lt;br /&gt;Example formats:&lt;br /&gt;IPv4: &lt;span style=&quot; font-family:&apos;monospace&apos;;&quot;&gt;135.215.32.64&lt;/span&gt;&lt;br /&gt;IPv6: &lt;span style=&quot; font-family:&apos;monospace&apos;;&quot;&gt;2a02:810a:186:b400::5c51&lt;/span&gt; &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../UI/form_main_window.ui" line="3500"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -122,7 +151,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3619"/>
+        <location filename="../UI/form_main_window.ui" line="3696"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -146,12 +175,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3668"/>
+        <location filename="../UI/form_main_window.ui" line="3745"/>
         <source>Total:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3697"/>
+        <location filename="../UI/form_main_window.ui" line="3774"/>
         <source>Converting:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -687,7 +716,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </message>
     <message>
         <location filename="../UI/form_main_window.ui" line="2904"/>
-        <location filename="../UI/form_main_window.ui" line="3645"/>
+        <location filename="../UI/form_main_window.ui" line="3722"/>
         <source>Accept</source>
         <translation type="unfinished"></translation>
     </message>
@@ -793,7 +822,17 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3311"/>
+        <location filename="../UI/form_main_window.ui" line="3336"/>
+        <source>I have IPv6 :) (and want to enable it)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../UI/form_main_window.ui" line="3343"/>
+        <source>I don&apos;t have IPv6 / I don&apos;t want to enable this feature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../UI/form_main_window.ui" line="3388"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -824,52 +863,52 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3346"/>
+        <location filename="../UI/form_main_window.ui" line="3423"/>
         <source>Custom App Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3356"/>
+        <location filename="../UI/form_main_window.ui" line="3433"/>
         <source>Enter your custom App Name here. Leave it empty to keep &quot;Porn Fetch&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3367"/>
+        <location filename="../UI/form_main_window.ui" line="3444"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3374"/>
+        <location filename="../UI/form_main_window.ui" line="3451"/>
         <source>Portable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3517"/>
+        <location filename="../UI/form_main_window.ui" line="3594"/>
         <source>Ko-Fi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3527"/>
+        <location filename="../UI/form_main_window.ui" line="3604"/>
         <source>Already Donated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3537"/>
+        <location filename="../UI/form_main_window.ui" line="3614"/>
         <source>PayPal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3547"/>
+        <location filename="../UI/form_main_window.ui" line="3624"/>
         <source>Copy XMR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3557"/>
+        <location filename="../UI/form_main_window.ui" line="3634"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../UI/form_main_window.ui" line="3567"/>
+        <location filename="../UI/form_main_window.ui" line="3644"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -894,17 +933,17 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>PornFetch</name>
     <message>
-        <location filename="../../../main.py" line="1350"/>
+        <location filename="../../../main.py" line="1373"/>
         <source>Porn Fetch installation failed, because of: {result[1]}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1661"/>
+        <location filename="../../../main.py" line="1685"/>
         <source>Saved User Settings, please restart Porn Fetch!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1702"/>
+        <location filename="../../../main.py" line="1726"/>
         <source>
 Please read this before setting proxies:
 
@@ -946,78 +985,78 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1864"/>
+        <location filename="../../../main.py" line="1888"/>
         <source>The model URL you entered seems to be invalid. Please check your input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1936"/>
+        <location filename="../../../main.py" line="1960"/>
         <source>Couldn&apos;t determine which site you want to search on??? Please report this immediately!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1345"/>
+        <location filename="../../../main.py" line="1368"/>
         <source>Porn Fetch has been installed. The app will now close! Please start Porn Fetch from your context menu again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1735"/>
+        <location filename="../../../main.py" line="1759"/>
         <source>You did choose to not disable SSL Verifications. Retuning to GUI without applying proxies now...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1739"/>
+        <location filename="../../../main.py" line="1763"/>
         <source>Your proxy seems to be invalid, please try again...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1746"/>
+        <location filename="../../../main.py" line="1770"/>
         <source>Proxy IP: {ip_masked} Your IP: {ip} are the same! Please check the proxy you&apos;ve used!, aborting...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="1764"/>
+        <location filename="../../../main.py" line="1788"/>
         <source>Can not enable Kill Switch if you haven&apos;t applied a proxy yet!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2289"/>
+        <location filename="../../../main.py" line="2313"/>
         <source>Those credentials don&apos;t seem to be valid...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2296"/>
+        <location filename="../../../main.py" line="2320"/>
         <source>Login Successful!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2301"/>
+        <location filename="../../../main.py" line="2325"/>
         <source>Login Failed, please check your credentials and try again!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2305"/>
+        <location filename="../../../main.py" line="2329"/>
         <source>You are already logged in!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2317"/>
+        <location filename="../../../main.py" line="2341"/>
         <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2374"/>
-        <location filename="../../../main.py" line="2393"/>
+        <location filename="../../../main.py" line="2398"/>
+        <location filename="../../../main.py" line="2417"/>
         <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2496"/>
+        <location filename="../../../main.py" line="2520"/>
         <source>Full Thumbnail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../main.py" line="2616"/>
+        <location filename="../../../main.py" line="2640"/>
         <source>
 ! Warning !
 Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
@@ -1029,7 +1068,7 @@ Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
 <context>
     <name>main</name>
     <message>
-        <location filename="../../../main.py" line="2690"/>
+        <location filename="../../../main.py" line="2714"/>
         <source>No URLs in the current session...</source>
         <translation type="unfinished"></translation>
     </message>

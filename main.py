@@ -1113,6 +1113,26 @@ class PornFetch(QMainWindow):
         })
         self.logger.debug("Startup: [5/5] OK")
         self.initialize_pornfetch()
+        if conf["Setup"]["activate_logging"] == "not_set":
+            self.switch_to_logging()
+            self.ui.button_server_enable_logging.setStyleSheet(self.stylesheets["button_green"])
+            self.ui.button_server_disable_logging.setStyleSheet(self.stylesheets["button_reset"])
+            self.ui.button_server_enable_logging.clicked.connect(self.enable_logging)
+            self.ui.button_server_disable_logging.clicked.connect(self.disable_logging)
+
+    def disable_logging(self):
+        conf["Setup"]["activate_logging"] = "false"
+        with open("config.ini", "w") as configuration:
+            conf.write(configuration)
+
+        self.switch_to_download()
+
+    def enable_logging(self):
+        conf["Setup"]["activate_logging"] = "true"
+        with open("config.ini", "w") as configuration:
+            conf.write(configuration)
+
+        self.switch_to_download()
 
     """
     The following functions just switch the Stacked Widget to the different widgets
@@ -1180,6 +1200,9 @@ class PornFetch(QMainWindow):
 
     def switch_to_disclaimer(self):
         self.ui.CentralStackedWidget.setCurrentIndex(10)
+
+    def switch_to_logging(self):
+        self.ui.CentralStackedWidget.setCurrentIndex(7)
 
     def load_style(self):
         icons = {
@@ -1571,7 +1594,7 @@ class PornFetch(QMainWindow):
         self.ui.settings_checkbox_system_supress_errors.setChecked(self.supress_errors)
 
         self.activate_logging = conf.get("Setup", "activate_logging") == "true"
-        self.ui.settings_checkbox_system_activate_proxy.setChecked(self.activate_logging)
+        self.ui.settings_checkbox_system_enable_network_logging.setChecked(self.activate_logging)
 
         self.ui.settings_checkbox_ui_custom_font.setChecked(True if conf.get("UI", "custom_font") == "true" else False)
 
@@ -1658,6 +1681,7 @@ class PornFetch(QMainWindow):
         conf.set("Video", "supress_errors", "true" if self.ui.settings_checkbox_system_supress_errors.isChecked() else "false")
         conf.set("Performance", "processing_delay", str(self.ui.settings_spinbox_performance_processing_delay.value()))
         conf.set("Video", "direct_download", "true" if self.ui.settings_checkbox_videos_direct_download.isChecked() else "false")
+        conf.set("Setup", "activate_logging", "true" if self.ui.settings_checkbox_system_enable_network_logging.isChecked() else "false")
 
         with open("config.ini", "w") as config_file:  # type: TextIOWrapper
             conf.write(config_file)
@@ -2248,7 +2272,6 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         bar.setValue(pos)
 
     def update_total_progressbar_range(self, maximum):
-        print(f"Applied: {maximum}")
         """Sets the maximum value for the total progressbar"""
         self.ui.main_progressbar_total.setRange(0, maximum)
         self.ui.main_progressbar_total.setMaximum(maximum)
@@ -2451,6 +2474,10 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
 
     def check_for_updates(self):
         """Checks for updates in a thread, so that the main UI isn't blocked, until update checks are done"""
+        if self.activate_logging is False:
+            self.logger.info("You have disabled IPv6 connection to my server. Won't check for updates...")
+            return
+
         self.update_thread = CheckUpdates()
         self.update_thread.signals.update_check.connect(self.check_for_updates_result)
         self.threadpool.start(self.update_thread)

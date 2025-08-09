@@ -118,7 +118,7 @@ update_checks = true
 internet_checks = true
 anonymous_mode = false
 disclaimer_shown = false
-activate_logging = false
+activate_logging = not_set
 first_run_cli = true
 
 [Performance]
