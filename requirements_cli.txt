@@ -12,3 +12,4 @@ hue_shift
 markdown
 rich
 mutagen
+spankbang_api

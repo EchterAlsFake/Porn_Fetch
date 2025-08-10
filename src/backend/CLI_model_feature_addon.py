@@ -152,8 +152,7 @@ def show_help():
     """
     help_text = """
 Automatic Model Downloader:
-
-This feature tracks videos per model without immediate download.
+This feature tracks videos per model with download capabilities.
 
 Options:
 1) Show this help text.
@@ -168,8 +167,7 @@ Options:
 State file (`download_state.json`) stores for each model:
   - downloaded: list of URLs already downloaded
   - pending: list of URLs to download next
-
-After gathering pending URLs, you can separately process `state["models"][model_url]["pending"]` with your existing download code.
+  
 """
     print(help_text)
 
