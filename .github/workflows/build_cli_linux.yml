@@ -99,20 +99,20 @@ jobs:
           pyinstaller -F Porn_Fetch_CLI.py
           cd dist && mv Porn_Fetch_CLI PornFetch_Linux_CLI_x32 && chmod +x PornFetch_Linux_CLI_x32
 
-          - name: Generate SHA256 Checksum
-            run: sha256sum dist/PornFetch_Linux_CLI_x32 > dist/PornFetch_Linux_CLI_x32.sha256
+      - name: Generate SHA256 Checksum
+        run: sha256sum dist/PornFetch_Linux_CLI_x32 > dist/PornFetch_Linux_CLI_x32.sha256
 
-          - name: Publish SHA256 to GitHub Actions Summary
-            run: |
-              {
-                echo "### SHA256 Checksum for PornFetch_Linux_CLI_x32";
-                echo '```';
-                cat dist/PornFetch_Linux_CLI_x32.sha256;
-                echo '```';
-              } >> "$GITHUB_STEP_SUMMARY"
+      - name: Publish SHA256 to GitHub Actions Summary
+        run: |
+          {
+            echo "### SHA256 Checksum for PornFetch_Linux_CLI_x32";
+            echo '```';
+            cat dist/PornFetch_Linux_CLI_x32.sha256;
+            echo '```';
+          } >> "$GITHUB_STEP_SUMMARY"
 
-          - name: Archive Porn Fetch CLI (Linux_32) build
-            uses: actions/upload-artifact@v4
-            with:
-              name: PornFetch_Linux_CLI_x32
-              path: dist/PornFetch_Linux_CLI_x32
+      - name: Archive Porn Fetch CLI (Linux_32) build
+        uses: actions/upload-artifact@v4
+        with:
+          name: PornFetch_Linux_CLI_x32
+          path: dist/PornFetch_Linux_CLI_x32
