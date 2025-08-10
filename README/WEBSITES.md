@@ -13,12 +13,13 @@
 ### Here's a list of all features and if the website (API) supports it
 
 
-| Website  | Downloading | Searching | Account Login | Total Progress | Model |
-|:---------|:-----------:|:---------:|:-------------:|:--------------:|:-----:|
-| PornHub  |     Yes     |    Yes    |      Yes      |      Yes       |  Yes  |
-| HQporner |     Yes     |    Yes    |      No       |       No       |  Yes  |
-| Eporner  |     Yes     |    Yes    |      No       |       No       |  Yes  |
-| xnxx     |     Yes     |    Yes    |      No       |      Yes       |  Yes  |
-| xvideos  |     Yes     |    Yes    |      No       |      Yes       |  Yes  |
-| missav   |     Yes     |    No     |      No       |      Yes       |  No   | 
-| Xhamster |     Yes     |    No     |      No       |      Yes       |  No   | 
+| Website    | Downloading | Searching | Account Login | Total Progress | Model |
+|:-----------|:-----------:|:---------:|:-------------:|:--------------:|:-----:|
+| PornHub    |     Yes     |    Yes    |      Yes      |      Yes       |  Yes  |
+| HQporner   |     Yes     |    Yes    |      No       |       No       |  Yes  |
+| Eporner    |     Yes     |    Yes    |      No       |       No       |  Yes  |
+| xnxx       |     Yes     |    Yes    |      No       |      Yes       |  Yes  |
+| xvideos    |     Yes     |    Yes    |      No       |      Yes       |  Yes  |
+| missav     |     Yes     |    No     |      No       |      Yes       |  No   | 
+| Xhamster   |     Yes     |    No     |      No       |      Yes       |  No   | 
+| Spankbang  |     Yes     |    No     |      No       |      Yes       |  No   |
