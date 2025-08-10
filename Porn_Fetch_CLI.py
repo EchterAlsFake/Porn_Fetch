@@ -505,7 +505,7 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
             logger.debug(f"File exists, skipping: {out_file}")
             print(f"Skipping existing file: {out_file}")
             self.semaphore.release()
-            return
+            self.menu()
 
         # Create per-video task
         task_id = self.progress.add_task(
