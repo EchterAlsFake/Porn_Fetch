@@ -8,7 +8,7 @@ except Exception:
 
 import sys
 from pathlib import Path
-from PySide6.QtWidgets import QApplication, QWidget, QTextBrowser, QVBoxLayout, QPushButton
+from PySide6.QtWidgets import QApplication, QWidget, QTextBrowser
 
 app_path = Path(sys.argv[0]).resolve()
 if str(app_path).startswith("/Volume"):
@@ -144,9 +144,9 @@ try:
     from itertools import islice, chain
 
     from src.backend.shared_gui import *
-    from src.backend.class_help import *
+    from src.frontend.translations.strings import *
     from src.frontend.UI.ui_form_main_window import Ui_MainWindow
-    from src.frontend.UI.ui_form_android import Ui_PornFetchAndroid
+    #from src.frontend.UI.ui_form_android import Ui_PornFetchAndroid
     from src.backend.one_time_functions import *
     from src.backend.config import __version__, __build__
     from src.backend.donation_nag import DonationNag
@@ -986,8 +986,8 @@ class PornFetch(QMainWindow):
             self.ui = Ui_MainWindow()
 
         elif __build__ == "android":
-            self.ui = Ui_PornFetchAndroid()
-
+            #self.ui = Ui_PornFetchAndroid()
+            pass
         self.ui.setupUi(self)
 
         # Threads
@@ -1042,6 +1042,7 @@ class PornFetch(QMainWindow):
         self.skip_existing_files = None
         self.model_videos_type = None
         self.kill_switch = False
+        self.website_to_search_on = 0
         self.proxy = None
         self.downloader = None
         self.speed_limit_mb = None
@@ -1309,6 +1310,7 @@ class PornFetch(QMainWindow):
         self.ui.treeWidget.setColumnWidth(3, 150)
         self.ui.treeWidget.itemClicked.connect(self.set_thumbnail)
         self.ui.treeWidget.currentItemChanged.connect(self.set_thumbnail)
+        self.ui.download_website_combobox.activated.connect(self.website_index_changed)
         self.setWindowTitle(f"Porn Fetch v{__version__} Copyright (C) Johannes Habel 2023-2025")
 
         font = QFont()
@@ -1393,11 +1395,6 @@ class PornFetch(QMainWindow):
         self.ui.main_textbrowser_supported_websites.setText(
             "Running in anonymous mode, please deactivate to display...")
         self.ui.download_lineedit_playlist_url.setPlaceholderText("Enter playlist URL")
-        self.ui.download_radio_search_website_eporner.setText("4")
-        self.ui.download_radio_search_website_hqporner.setText("2")
-        self.ui.download_radio_search_website_pornhub.setText("1")
-        self.ui.download_radio_search_website_xvideos.setText("3")
-        self.ui.download_radio_search_website_xnxx.setText("5")
         self._anonymous_mode = True  # Makes sense, trust
         self.logger.info("Enabled anonymous mode!")
 
@@ -1456,6 +1453,7 @@ class PornFetch(QMainWindow):
         self.ui.settings_button_help_performance_maximal_retries.clicked.connect(button_help_max_retries)
         self.ui.settings_button_help_performance_processing_delay.clicked.connect(button_help_processing_delay)
         self.ui.settings_button_help_performance_speed_limit.clicked.connect(button_help_speed_limit)
+        self.ui.settings_button_help_videos_quality_advanced.clicked.connect(button_help_quality_advanced)
         self.ui.settings_button_help_videos_use_directory_system.clicked.connect(button_help_directory_system)
         self.ui.settings_button_help_videos_result_limit.clicked.connect(button_help_result_limit)
         self.ui.settings_button_help_videos_skip_existing_files.clicked.connect(button_help_skip_existing_files)
@@ -1561,7 +1559,14 @@ class PornFetch(QMainWindow):
         """Loads the user settings from the configuration file and applies them."""
         conf.read("config.ini")
         # Apply settings
-        self.map_quality.get(conf.get("Video", "quality")).setChecked(True)
+        quality = conf.get("Video", "quality")
+        try:
+            quality = int(quality)
+            self.ui.settings_spinbox_videos_quality_custom.setValue(quality)
+
+        except ValueError:
+            self.map_quality.get(conf.get("Video", "quality")).setChecked(True)
+
         self.map_threading_mode.get(conf.get("Performance", "threading_mode")).setChecked(True)
         self.map_gui_language.get(conf.get("UI", "language")).setChecked(True)
         self.map_model_videos.get(conf.get("Video", "model_videos")).setChecked(True)
@@ -1606,7 +1611,7 @@ class PornFetch(QMainWindow):
         self.output_path = conf.get("Video", "output_path")
 
         self.gui_language = conf.get("UI", "language")
-        self.quality = conf["Video"]["quality"]
+        self.quality = quality
         self.threading_mode = conf["Performance"]["threading_mode"]
         self.semaphore = QSemaphore(int(self.semaphore_limit))
         self.delay = int(conf["Video"]["delay"])
@@ -1945,38 +1950,50 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         if direct_download:
             self.download_tree_widget()
 
+    def website_index_changed(self, idx: int):
+        """Called when the user changes the currently selected website in the combo box"""
+        self.website_to_search_on = idx
+        self.logger.debug(f"Changed website searching to: {idx}")
+
     def search(self):
         """Does a simple search for videos without filters on selected website"""
         query = self.ui.download_lineedit_search_query.text()
         self.logger.debug(f"Searching with query: {query}")
-        if self.ui.download_radio_search_website_pornhub.isChecked():
-            videos = shared_functions.ph_client.search(query)
-
-        elif self.ui.download_radio_search_website_xvideos.isChecked():
-            videos = shared_functions.xv_client.search(query)
-
-        elif self.ui.download_radio_search_website_hqporner.isChecked():
+        if self.website_to_search_on == 0:
             try:
                 videos = shared_functions.hq_client.search_videos(query)
 
             except NoVideosFound:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"No videos found for query: {query}")
+                handle_error_gracefully(self, data=video_data.consistent_data,
+                                        error_message=f"No videos found for query: {query}")
                 return
 
+        elif self.website_to_search_on == 1:
+            videos = shared_functions.ph_client.search(query)
 
-        elif self.ui.download_radio_search_website_eporner.isChecked():
-            videos = shared_functions.ep_client.search_videos(query, sorting_gay="", sorting_order="", sorting_low_quality="",
-                                                              page=1,
-                                                              per_page=self.result_limit, enable_html_scraping=True)
+        elif self.website_to_search_on == 2:
+            videos = shared_functions.ep_client.search_videos(query, sorting_gay="", sorting_order="",
+                                                              sorting_low_quality="")
+        elif self.website_to_search_on == 3:
+            videos = shared_functions.xv_client.search(query)
 
-        elif self.ui.download_radio_search_website_xnxx.isChecked():
+        elif self.website_to_search_on == 4:
+            videos = shared_functions.xh_client.search_videos(query=query)
+
+        elif self.website_to_search_on == 5:
             videos = shared_functions.xn_client.search(query).videos
+
+        elif self.website_to_search_on == 6:
+            videos = shared_functions.sp_client
+            # TODO
+
+        elif self.website_to_search_on == 7:
+            videos = shared_functions.mv_client.search(query=query, video_count=500)
 
         else:
             ui_popup(
                 self.tr("Couldn't determine which site you want to search on??? Please report this immediately!", disambiguation=None))
             return
-
 
         self.add_to_tree_widget_thread(videos)
 

@@ -2,6 +2,19 @@ from PySide6.QtCore import QCoreApplication
 from src.backend.shared_gui import ui_popup
 
 
+def button_help_quality_advanced():
+    text = QCoreApplication.translate("main", """
+By default, Porn Fetch will select the best available video quality. You can also decide between half and worst above.
+However, if you want more precise quality control, you can enter a custom integer here. For example:
+
+2160,1440,1080,720,480,360,240,144
+
+If the video does not support your chosen quality, it will pick the next best if available and if not the next worst.
+Set the value to 0 to disable advanced quality control.
+""")
+    ui_popup(text)
+
+
 def button_help_download_mode():
     text = QCoreApplication.translate("main", """
 The different threading modes are used for different scenarios. 
