@@ -132,6 +132,7 @@ try:
     import uuid
     import random
     import shutil
+    import sqlite3
     import os.path
     import argparse
     import markdown
@@ -1690,6 +1691,7 @@ class PornFetch(QMainWindow):
         conf.set("Performance", "processing_delay", str(self.ui.settings_spinbox_performance_processing_delay.value()))
         conf.set("Video", "direct_download", "true" if self.ui.settings_checkbox_videos_direct_download.isChecked() else "false")
         conf.set("Setup", "activate_logging", "true" if self.ui.settings_checkbox_system_enable_network_logging.isChecked() else "false")
+        conf.set("Video", "track_videos", "true" if self.ui.settings_checkbox_videos_track_downloaded_videos.isChecked() else "false")
 
         with open("config.ini", "w") as config_file:  # type: TextIOWrapper
             conf.write(config_file)
@@ -2125,8 +2127,6 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         self.ui.main_progressbar_total.setValue(0)
         self.ui.main_progressbar_converting.setMaximum(100)
         self.ui.main_progressbar_converting.setValue(0)
-        video_data.clean_dict(video_id)
-        self.semaphore.release()
         widgets = self.progress_widgets.pop(video_id, None)
         if widgets:
             for widget in widgets.values():
@@ -2138,6 +2138,18 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         conf.set("Sponsoring", "downloaded_videos", str(downloaded_videos))
         with open("config.ini", "w") as config_file:  # type:TextIOWrapper
             conf.write(config_file)
+
+        if self.track_videos:
+            self.logger.info(f"Tracking video: {video_id}")
+            shared_functions.init_db()
+            data = video_data.data_objects.get(video_id)
+            print(data)
+            print(f"{data.get("url")}")
+            print(video_data.data_objects)
+            shared_functions.save_video_metadata(video_id, data)
+
+        video_data.clean_dict(video_id)
+        self.semaphore.release()
 
     def clear_tree_widget(self):
         """

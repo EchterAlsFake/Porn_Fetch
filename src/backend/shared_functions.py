@@ -5,6 +5,8 @@ If you know what you do, you can change a few things here :)
 
 import os
 import re
+import json
+import sqlite3
 import logging
 
 from hqporner_api.modules.errors import WeirdError
@@ -95,7 +97,7 @@ sections = ["Setup", "Performance", "Video", "UI", "Sponsoring", "Android"]
 options_setup = ["license_accepted", "install", "update_checks", "internet_checks", "anonymous_mode", "disclaimer_shown", "activate_logging", "first_run_cli"]
 options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries", "speed_limit", "processing_delay"]
 options_video = ["quality", "output_path", "directory_system", "result_limit", "delay", "skip_existing_files", "model_videos", "supress_errors",
-                 "video_id_as_filename", "direct_download", "write_metadata"]
+                 "video_id_as_filename", "direct_download", "write_metadata", "track_videos"]
 options_ui = ["language", "custom_font", "font_size"]
 options_sponsoring = ["downloaded_videos", "notice_shown"]
 options_android = ["warning_shown"]
@@ -131,6 +133,7 @@ speed_limit = 0
 processing_delay = 0
 
 [Video]
+track_videos = false
 quality = best
 output_path = ./
 directory_system = false
@@ -361,11 +364,50 @@ def load_video_attributes(video):
         "tags": tags,
         "publish_date": publish_date,
         "thumbnail": thumbnail,
+        "url": video.url
     }
     logger.debug(f"Loaded video data: {data}")
 
     return data
 
+def save_video_metadata(video_id, data):
+    conn = sqlite3.connect("downloads.db")
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT OR REPLACE INTO videos (video_id, url, title, author, length, tags, publish_date, thumbnail)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    """, (
+        video_id,
+        data.get("url"),
+        data.get("title"),
+        data.get("author"),
+        data.get("length"),
+        json.dumps(data.get("tags")),  # store tags list as JSON
+        data.get("publish_date"),
+        data.get("thumbnail")
+    ))
+    conn.commit()
+    conn.close()
+
+def init_db():
+    conn = sqlite3.connect("downloads.db")
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS videos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            video_id TEXT UNIQUE,
+            url TEXT,
+            title TEXT,
+            author TEXT,
+            length INTEGER,
+            tags TEXT,
+            publish_date TEXT,
+            thumbnail TEXT,
+            downloaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    conn.commit()
+    conn.close()
 
 def write_tags(path, data: dict): # Using core from Porn Fetch to keep proxy support
     comment = "Downloaded with Porn Fetch (GPLv3)"
