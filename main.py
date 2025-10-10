@@ -1577,7 +1577,7 @@ class PornFetch(QMainWindow):
         self.internet_checks = conf.get("Setup", "internet_checks") == "true"
         self.ui.settings_checkbox_system_internet_checks.setChecked(self.internet_checks)
 
-        self.track_videos = conf.get("Videos", "track_videos") == "true"
+        self.track_videos = conf.get("Video", "track_videos") == "true"
         self.ui.settings_checkbox_videos_track_downloaded_videos.setChecked(self.track_videos)
 
         self.update_checks = conf.get("Setup", "update_checks") == "true"
@@ -1988,7 +1988,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
 
         elif self.website_to_search_on == 6:
             videos = shared_functions.sp_client
-            # TODO
+            videos = shared_functions.sp_client.search(query=query, pages=0)
 
         elif self.website_to_search_on == 7:
             videos = shared_functions.mv_client.search(query=query, video_count=500)

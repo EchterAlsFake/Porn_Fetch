@@ -349,7 +349,7 @@ def load_video_attributes(video):
         length = video.length
         tags = ",".join(video.tags)
         thumbnail = video.thumbnail
-        publish_date = video.publish_date
+        publish_date = "Not available"
 
     else:
         raise "Instance Error! Please report this immediately on GitHub!"
