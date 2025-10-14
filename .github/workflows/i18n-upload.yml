@@ -1,7 +1,7 @@
 name: i18n - upload sources
 on:
   push:
-    branches: [ main ]
+    branches: [master]
     paths:
       - 'UI/**'
       - 'translations/strings.py'
