@@ -3,9 +3,9 @@ on:
   push:
     branches: [master]
     paths:
-      - 'UI/**'
-      - 'translations/strings.py'
-      - 'translations/html/*.html'
+      - 'src/frontend/UI/**'
+      - 'src/frontend/translations/strings.py'
+      - 'src/frontend/translations/html/*.html'
       - 'main.py'
       - '.github/workflows/i18n-upload.yml'
 
