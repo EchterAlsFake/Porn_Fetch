@@ -1,0 +1,42 @@
+name: i18n - upload sources
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'UI/**'
+      - 'translations/strings.py'
+      - 'translations/html/*.html'
+      - 'main.py'
+      - '.github/workflows/i18n-upload.yml'
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install PySide6
+
+      # refresh translations/en.ts from sources
+      - run: scripts/build_translations.sh
+
+      # optionally commit updated en.ts (keeps repo in sync)
+      - name: Commit updated en.ts
+        run: |
+          git config user.name  "github-actions"
+          git config user.email "github-actions@github.com"
+          git add translations/en.ts
+          git diff --cached --quiet || git commit -m "i18n: update en.ts"
+          git push || true
+
+      # upload sources (en.ts + English HTML) to Crowdin
+      - uses: crowdin/github-action@v2
+        with:
+          upload_sources: true
+          upload_translations: false
+          config: crowdin.yml
+        env:
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}

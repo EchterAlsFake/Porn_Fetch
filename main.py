@@ -2143,9 +2143,6 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
             self.logger.info(f"Tracking video: {video_id}")
             shared_functions.init_db()
             data = video_data.data_objects.get(video_id)
-            print(data)
-            print(f"{data.get("url")}")
-            print(video_data.data_objects)
             shared_functions.save_video_metadata(video_id, data)
 
         video_data.clean_dict(video_id)
