@@ -20,7 +20,7 @@ jobs:
       - run: pip install PySide6
 
       # refresh translations/en.ts from sources
-      - run: src/frontend/translations/scripts/build_translations.sh
+      - run: bash src/frontend/translations/scripts/build_translations.sh
 
       # optionally commit updated en.ts (keeps repo in sync)
       - name: Commit updated en.ts
