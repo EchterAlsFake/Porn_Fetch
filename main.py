@@ -145,7 +145,6 @@ try:
     from itertools import islice, chain
 
     from src.backend.shared_gui import *
-    from src.frontend.translations.strings import *
     from src.frontend.UI.ui_form_main_window import Ui_MainWindow
     #from src.frontend.UI.ui_form_android import Ui_PornFetchAndroid
     from src.backend.one_time_functions import *
@@ -1086,7 +1085,6 @@ class PornFetch(QMainWindow):
         self.button_groups()  # Groups the buttons, so that the Radio buttons are split from themselves (hard to explain)
         self.shortcuts()  # Activates the keyboard shortcuts
         self.logger.debug("Startup: [3/5] Initialized the User Interface")
-        self.settings_maps_initialization()
         self.load_user_settings()  # Loads the user settings and applies selected values to the UI
         self.logger.debug("Startup: [4/5] Loaded the user settings")
         self.progress_widgets = {}  # video_id -> {'label': QLabel, 'progressbar': QProgressBar}
@@ -1392,7 +1390,6 @@ class PornFetch(QMainWindow):
         self.ui.settings_label_performance_network_delay.setText("Delay (0 = Disabled) in seconds:")
         self.ui.settings_label_videos_model_vdeos_type.setText("Actors video types:")
         self.ui.settings_button_system_install_pornfetch.setText("Install Program")
-        self.ui.settings_groupbox_system_pornfetch.setWindowTitle("System")
         self.ui.main_textbrowser_supported_websites.setText(
             "Running in anonymous mode, please deactivate to display...")
         self.ui.download_lineedit_playlist_url.setPlaceholderText("Enter playlist URL")
@@ -1403,31 +1400,10 @@ class PornFetch(QMainWindow):
         """
         The button groups are needed to tell the radio button which of them are in a group.
         If I don't do this, then you could check all redio buttons at the same time lol"""
-        self.group_threading_mode = QButtonGroup()
-        self.group_threading_mode.addButton(self.ui.settings_radio_performance_download_mode_performance)
-        self.group_threading_mode.addButton(self.ui.settings_radio_performance_download_mode_default)
-
-        self.group_quality = QButtonGroup()
-        self.group_quality.addButton(self.ui.settings_radio_videos_quality_worst)
-        self.group_quality.addButton(self.ui.settings_radio_videos_quality_half)
-        self.group_quality.addButton(self.ui.settings_radio_videos_quality_best)
-
-        self.group_ui_language = QButtonGroup()
-        self.group_ui_language.addButton(self.ui.settings_radio_ui_language_english)
-        self.group_ui_language.addButton(self.ui.settings_radio_ui_language_german)
-        self.group_ui_language.addButton(self.ui.settings_radio_ui_language_french)
-        self.group_ui_language.addButton(self.ui.settings_radio_ui_language_system_default)
-        self.group_ui_language.addButton(self.ui.settings_radio_ui_language_chinese_simplified)
-
         self.group_radio_hqporner = QButtonGroup()
         self.group_radio_hqporner.addButton(self.ui.tools_radio_top_porn_week)
         self.group_radio_hqporner.addButton(self.ui.tools_radio_top_porn_month)
         self.group_radio_hqporner.addButton(self.ui.tools_radio_top_porn_all_time)
-
-        self.group_radio_model_videos = QButtonGroup()
-        self.group_radio_model_videos.addButton(self.ui.settings_radio_videos_model_type_both)
-        self.group_radio_model_videos.addButton(self.ui.settings_radio_videos_model_type_user_uploads)
-        self.group_radio_model_videos.addButton(self.ui.settings_radio_videos_model_type_featured)
 
     def button_connections(self):
         """a function to link the buttons to their functions"""
@@ -1445,28 +1421,6 @@ class PornFetch(QMainWindow):
         self.ui.download_button_model.clicked.connect(self.start_model)
         self.ui.download_button_playlist_get_videos.clicked.connect(self.start_playlist)
 
-        # Help Buttons Connections
-        self.ui.settings_button_help_performance_simultaneous_downloads.clicked.connect(button_help_simultaneous_downloads)
-        self.ui.settings_button_help_performance_download_mode.clicked.connect(button_help_download_mode)
-        self.ui.settings_button_help_performance_maximal_workers.clicked.connect(button_help_maximal_workers)
-        self.ui.settings_button_help_performance_maximal_timeout.clicked.connect(button_help_timeout)
-        self.ui.settings_button_help_performance_network_delay.clicked.connect(button_help_network_delay)
-        self.ui.settings_button_help_performance_maximal_retries.clicked.connect(button_help_max_retries)
-        self.ui.settings_button_help_performance_processing_delay.clicked.connect(button_help_processing_delay)
-        self.ui.settings_button_help_performance_speed_limit.clicked.connect(button_help_speed_limit)
-        self.ui.settings_button_help_videos_quality_advanced.clicked.connect(button_help_quality_advanced)
-        self.ui.settings_button_help_videos_use_directory_system.clicked.connect(button_help_directory_system)
-        self.ui.settings_button_help_videos_result_limit.clicked.connect(button_help_result_limit)
-        self.ui.settings_button_help_videos_skip_existing_files.clicked.connect(button_help_skip_existing_files)
-        self.ui.settings_button_help_videos_model_videos_type.clicked.connect(button_help_model_videos)
-        self.ui.settings_button_help_videos_write_metadata.clicked.connect(button_help_write_metadata)
-        self.ui.settings_button_help_videos_direct_download.clicked.connect(button_help_direct_download)
-        self.ui.settings_button_help_system_anonymous_mode.clicked.connect(button_help_anonymous_mode)
-        self.ui.settings_button_help_system_supress_errors.clicked.connect(button_help_supress_errors)
-        self.ui.settings_button_help_system_enable_network_logging.clicked.connect(button_help_network_logging)
-        self.ui.settings_button_help_system_proxy_kill_switch.clicked.connect(button_help_proxy_kill_switch)
-        if __build__ == "desktop":
-            self.ui.download_button_help_file.clicked.connect(open_file_help)
         # Settings
         self.ui.settings_button_apply.clicked.connect(self.save_user_settings)
         self.ui.settings_button_reset.clicked.connect(reset_pornfetch)
@@ -1529,48 +1483,10 @@ class PornFetch(QMainWindow):
         unselect_all_items = QShortcut(QKeySequence("Ctrl+Z"), self)
         unselect_all_items.activated.connect(self.unselect_all_items)
 
-    def settings_maps_initialization(self):
-        # Maps for settings and corresponding UI elements
-        self.map_quality = {
-            "best": self.ui.settings_radio_videos_quality_best,
-            "half": self.ui.settings_radio_videos_quality_half,
-            "worst": self.ui.settings_radio_videos_quality_worst
-        }
-
-        self.map_threading_mode = {
-            "threaded": self.ui.settings_radio_performance_download_mode_performance,
-            "default": self.ui.settings_radio_performance_download_mode_default
-        }
-
-        self.map_gui_language = {
-            "en": self.ui.settings_radio_ui_language_english,
-            "de_DE": self.ui.settings_radio_ui_language_german,
-            "fr": self.ui.settings_radio_ui_language_french,
-            "zh_CN": self.ui.settings_radio_ui_language_chinese_simplified,
-            "system": self.ui.settings_radio_ui_language_system_default
-        }
-
-        self.map_model_videos = {
-            "both": self.ui.settings_radio_videos_model_type_both,
-            "uploads": self.ui.settings_radio_videos_model_type_user_uploads,
-            "featured": self.ui.settings_radio_videos_model_type_featured
-        }
-
     def load_user_settings(self):
         """Loads the user settings from the configuration file and applies them."""
         conf.read("config.ini")
         # Apply settings
-        quality = conf.get("Video", "quality")
-        try:
-            quality = int(quality)
-            self.ui.settings_spinbox_videos_quality_custom.setValue(quality)
-
-        except ValueError:
-            self.map_quality.get(conf.get("Video", "quality")).setChecked(True)
-
-        self.map_threading_mode.get(conf.get("Performance", "threading_mode")).setChecked(True)
-        self.map_gui_language.get(conf.get("UI", "language")).setChecked(True)
-        self.map_model_videos.get(conf.get("Video", "model_videos")).setChecked(True)
         self.ui.settings_spinbox_performance_simultaneous_downloads.setValue(int(conf.get("Performance", "semaphore")))
         self.ui.settings_spinbox_videos_result_limit.setValue(int(conf.get("Video", "result_limit")))
         self.ui.settings_lineedit_videos_output_path.setText(conf.get("Video", "output_path"))
@@ -1615,7 +1531,6 @@ class PornFetch(QMainWindow):
         self.output_path = conf.get("Video", "output_path")
 
         self.gui_language = conf.get("UI", "language")
-        self.quality = quality
         self.threading_mode = conf["Performance"]["threading_mode"]
         self.semaphore = QSemaphore(int(self.semaphore_limit))
         self.delay = int(conf["Video"]["delay"])
@@ -1645,23 +1560,6 @@ class PornFetch(QMainWindow):
         """Saves the user settings to the configuration file based on the UI state."""
         # Save quality setting
         conf.read("config.ini")
-        for quality, radio_button in self.map_quality.items():
-            if radio_button.isChecked():
-                conf.set("Video", "quality", quality)
-
-        # Save threading mode
-        for mode, radio_button in self.map_threading_mode.items():
-            if radio_button.isChecked():
-                conf.set("Performance", "threading_mode", mode)
-
-        for language, radio_button in self.map_gui_language.items():
-            if radio_button.isChecked():
-                conf.set("UI", "language", language)
-
-        for model_video_type, radio_button in self.map_model_videos.items():
-            if radio_button.isChecked():
-                conf.set("Video", "model_videos", model_video_type)
-
         # Save other settings
         conf.set("Performance", "semaphore", str(self.ui.settings_spinbox_performance_simultaneous_downloads.value()))
         conf.set("Performance", "speed_limit", str(self.ui.settings_doublespinbox_performance_speed_limit.value()))

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1016</width>
+    <width>1429</width>
     <height>829</height>
    </rect>
   </property>
@@ -18,27 +18,28 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="toolTip">
+   <string>Create a .txt file and add URLs like this:
+
+video#&lt;url&gt;
+...
+
+Split them with new lines. No comma, not multiple URLs in the same line!
+You can also add model URLs like this:
+
+model#&lt;url&gt;
+An example for a file would be:
+
+video#https://de.pornhub.com/view_video.php?viewkey=ph5be76343323ff
+video#https://de.pornhub.com/view_video.php?viewkey=ph5946e5f19585a
+model#https://de.pornhub.com/pornstar/nancy-a</string>
+  </property>
   <property name="styleSheet">
    <string notr="true">background-color: #262626;
 color: white</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_26">
-    <property name="leftMargin">
-     <number>0</number>
-    </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
-     <number>0</number>
-    </property>
-    <property name="spacing">
-     <number>0</number>
-    </property>
+   <layout class="QGridLayout" name="gridLayout_12">
     <item row="0" column="0">
      <layout class="QHBoxLayout" name="main_horizontallayout_menu_buttons">
       <property name="spacing">
@@ -340,66 +341,10 @@ color: white</string>
       </item>
      </layout>
     </item>
-    <item row="2" column="0">
-     <layout class="QFormLayout" name="formlayout_progressbar">
-      <property name="horizontalSpacing">
-       <number>0</number>
-      </property>
-      <property name="verticalSpacing">
-       <number>0</number>
-      </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="main_label_progressbar_total">
-        <property name="text">
-         <string>Total:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QProgressBar" name="main_progressbar_total">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>300</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">text-align: center; /* Centered text */</string>
-        </property>
-        <property name="value">
-         <number>0</number>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="main_label_progressbar_converting">
-        <property name="text">
-         <string>Converting:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QProgressBar" name="main_progressbar_converting">
-        <property name="styleSheet">
-         <string notr="true">text-align: center; /* Centered text */</string>
-        </property>
-        <property name="value">
-         <number>0</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
     <item row="1" column="0">
      <widget class="QStackedWidget" name="CentralStackedWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page_main">
        <property name="maximumSize">
@@ -445,7 +390,7 @@ color: white</string>
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>610</width>
+               <width>644</width>
                <height>220</height>
               </rect>
              </property>
@@ -492,7 +437,7 @@ color: white</string>
                  <number>1</number>
                 </property>
                 <property name="currentIndex">
-                 <number>0</number>
+                 <number>1</number>
                 </property>
                 <widget class="QWidget" name="page_download">
                  <property name="sizePolicy">
@@ -540,7 +485,86 @@ color: white</string>
                     <property name="spacing">
                      <number>6</number>
                     </property>
-                    <item row="4" column="5">
+                    <item row="7" column="1" colspan="2">
+                     <widget class="QLineEdit" name="download_lineedit_search_query">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>300</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="placeholderText">
+                       <string>Search for Videos. Select Website below</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="0">
+                     <widget class="QLabel" name="download_label_model_url">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>100</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Model URL:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="1" colspan="3">
+                     <widget class="QLineEdit" name="download_lineedit_playlist_url">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="placeholderText">
+                       <string>Enter a PornHub Playlist URL</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="1" colspan="3">
+                     <widget class="QLineEdit" name="download_lineedit_model_url">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>300</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="placeholderText">
+                       <string>Enter Model / Channel / Actress URL</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="4">
                      <widget class="QPushButton" name="download_button_playlist_get_videos">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -556,44 +580,6 @@ color: white</string>
                       </property>
                       <property name="text">
                        <string>Get Videos</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="7" column="0">
-                     <widget class="QLabel" name="download_label_search">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>0</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="text">
-                       <string>Search Query:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="1" colspan="4">
-                     <widget class="QLineEdit" name="download_lineedit_url">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>300</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="placeholderText">
-                       <string>Enter video URL</string>
                       </property>
                      </widget>
                     </item>
@@ -616,8 +602,8 @@ color: white</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="5" column="5">
-                     <widget class="QPushButton" name="download_button_model">
+                    <item row="6" column="4">
+                     <widget class="QPushButton" name="download_button_open_file">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                         <horstretch>0</horstretch>
@@ -633,16 +619,19 @@ color: white</string>
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
                       </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
                       <property name="styleSheet">
                        <string notr="true"/>
                       </property>
                       <property name="text">
-                       <string>Get Videos</string>
+                       <string>Open File</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="4" column="0">
-                     <widget class="QLabel" name="download_label_playlist_url">
+                    <item row="7" column="0">
+                     <widget class="QLabel" name="download_label_search">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
                         <horstretch>0</horstretch>
@@ -656,58 +645,11 @@ color: white</string>
                        </size>
                       </property>
                       <property name="text">
-                       <string>Playlist URL:</string>
+                       <string>Search Query:</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="7" column="1" colspan="3">
-                     <widget class="QLineEdit" name="download_lineedit_search_query">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>300</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="text">
-                       <string/>
-                      </property>
-                      <property name="placeholderText">
-                       <string>Search for Videos. Select Website below</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="5">
-                     <widget class="QPushButton" name="download_button_download">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>60</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="styleSheet">
-                       <string notr="true"/>
-                      </property>
-                      <property name="text">
-                       <string>Download</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="7" column="4">
+                    <item row="7" column="3">
                      <widget class="QComboBox" name="download_website_combobox">
                       <item>
                        <property name="text">
@@ -751,8 +693,27 @@ color: white</string>
                       </item>
                      </widget>
                     </item>
-                    <item row="6" column="5">
-                     <widget class="QPushButton" name="download_button_open_file">
+                    <item row="4" column="0">
+                     <widget class="QLabel" name="download_label_playlist_url">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string>Playlist URL:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="4">
+                     <widget class="QPushButton" name="download_button_model">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                         <horstretch>0</horstretch>
@@ -772,50 +733,12 @@ color: white</string>
                        <string notr="true"/>
                       </property>
                       <property name="text">
-                       <string>Open File</string>
+                       <string>Get Videos</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="5" column="0">
-                     <widget class="QLabel" name="download_label_model_url">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>100</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="text">
-                       <string>Model URL:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="6" column="4">
-                     <widget class="QPushButton" name="download_button_help_file">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>0</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="text">
-                       <string>Help</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="5" column="1" colspan="4">
-                     <widget class="QLineEdit" name="download_lineedit_model_url">
+                    <item row="2" column="1" colspan="3">
+                     <widget class="QLineEdit" name="download_lineedit_url">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
                         <horstretch>0</horstretch>
@@ -829,49 +752,11 @@ color: white</string>
                        </size>
                       </property>
                       <property name="placeholderText">
-                       <string>Enter Model / Channel / Actress URL</string>
+                       <string>Enter video URL</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="4" column="1" colspan="4">
-                     <widget class="QLineEdit" name="download_lineedit_playlist_url">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>0</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="placeholderText">
-                       <string>Enter a PornHub Playlist URL</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="6" column="0">
-                     <widget class="QLabel" name="download_label_file">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>100</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="text">
-                       <string>File:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="7" column="5">
+                    <item row="7" column="4">
                      <widget class="QPushButton" name="button_search">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -893,28 +778,63 @@ color: white</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="6" column="1" colspan="3">
-                     <widget class="QLineEdit" name="download_lineedit_file">
+                    <item row="2" column="4">
+                     <widget class="QPushButton" name="download_button_download">
                       <property name="sizePolicy">
-                       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+                       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
                       </property>
                       <property name="minimumSize">
                        <size>
-                        <width>300</width>
+                        <width>60</width>
                         <height>30</height>
                        </size>
                       </property>
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true"/>
+                      </property>
                       <property name="text">
-                       <string/>
+                       <string>Download</string>
                       </property>
-                      <property name="readOnly">
-                       <bool>true</bool>
+                     </widget>
+                    </item>
+                    <item row="6" column="0" colspan="4">
+                     <widget class="QLabel" name="download_label_file">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
                       </property>
-                      <property name="placeholderText">
-                       <string>URLs in the file must be separated with new lines!</string>
+                      <property name="minimumSize">
+                       <size>
+                        <width>100</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="toolTip">
+                       <string>Create a .txt file and add URLs like this:
+
+video#&lt;url&gt;
+...
+
+Split them with new lines. No comma, not multiple URLs in the same line!
+You can also add model URLs like this:
+
+model#&lt;url&gt;
+An example for a file would be:
+
+video#https://de.pornhub.com/view_video.php?viewkey=ph5be76343323ff
+video#https://de.pornhub.com/view_video.php?viewkey=ph5946e5f19585a
+model#https://de.pornhub.com/pornstar/nancy-a</string>
+                      </property>
+                      <property name="text">
+                       <string>Open a file (See tooltip for details how this works)</string>
                       </property>
                      </widget>
                     </item>
@@ -1674,8 +1594,8 @@ color: white</string>
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>458</width>
-               <height>209</height>
+               <width>644</width>
+               <height>331</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -1837,7 +1757,7 @@ color: white</string>
       </widget>
       <widget class="QWidget" name="page_settings">
        <layout class="QGridLayout" name="gridLayout_7">
-        <item row="0" column="0">
+        <item row="0" column="1">
          <widget class="QScrollArea" name="settings_scrollarea">
           <property name="widgetResizable">
            <bool>true</bool>
@@ -1847,8 +1767,8 @@ color: white</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>982</width>
-             <height>1027</height>
+             <width>1391</width>
+             <height>665</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_19">
@@ -1864,38 +1784,752 @@ color: white</string>
             <property name="bottomMargin">
              <number>0</number>
             </property>
-            <item row="4" column="0" colspan="2">
-             <spacer name="settings_vertical_spacer_main">
-              <property name="orientation">
-               <enum>Qt::Orientation::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="2" column="0" rowspan="2" colspan="2">
-             <layout class="QHBoxLayout" name="settings_horizontallayout_apply">
+            <item row="1" column="0">
+             <layout class="QVBoxLayout" name="verticalLayout_4">
               <item>
-               <widget class="QPushButton" name="settings_button_apply">
-                <property name="cursor">
-                 <cursorShape>PointingHandCursor</cursorShape>
+               <layout class="QHBoxLayout" name="horizontalLayout">
+                <item>
+                 <widget class="QPushButton" name="pushButton">
+                  <property name="text">
+                   <string>Video</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton_2">
+                  <property name="text">
+                   <string>Performance</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton_3">
+                  <property name="text">
+                   <string>System</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton_4">
+                  <property name="text">
+                   <string>UI</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QStackedWidget" name="settings_stacked_widget_main">
+                <property name="currentIndex">
+                 <number>1</number>
                 </property>
-                <property name="text">
-                 <string>Apply  (needs restart)</string>
-                </property>
+                <widget class="QWidget" name="page_performance">
+                 <layout class="QGridLayout" name="gridLayout_26">
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="spacing">
+                   <number>0</number>
+                  </property>
+                  <item row="0" column="0">
+                   <layout class="QGridLayout" name="settings_gridlayout_performance">
+                    <item row="2" column="1">
+                     <widget class="QSpinBox" name="settings_spinbox_performance_network_delay">
+                      <property name="minimum">
+                       <number>0</number>
+                      </property>
+                      <property name="maximum">
+                       <number>5000</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="settings_label_performance_network_delay">
+                      <property name="toolTip">
+                       <string>You can set a delay between requests from you and a site. If you are downloading a lot of videos or experiencing 
+errors, you should enable a delay. By default the delay is turned off with the value 0
+
+A good starting point is between 0.5 - 1.5
+
+The longer the delay is, the longer it will take to download videos, load videos and generally do stuff. This does not
+really affect the high performance download mode.</string>
+                      </property>
+                      <property name="text">
+                       <string>Network delay (requests/sec)</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QComboBox" name="settings_performance_combobox_download_mode">
+                      <property name="toolTip">
+                       <string>1) High Performance:  Uses a class of workers to download multiple video segments at a time. Can be really fast if you
+have a very strong internet connection. Maybe not great for low end systems.
+
+2) FFMPEG:
+FFmpeg is a specialized tool for video encoding and decoding. It is also able to fetch videos based on their m3u8 URL, which contains the segments. FFmpeg is slower compared to high performance and not well tested. Please only use if you have to.
+
+3) Default:  The default download mode will just download one video segment after the next one. If you get a lot of 
+timeouts this can really slow down the process, as we need to wait the Porn sites to return the video segments.
+With the High Performance method, we can just download other segments while waiting which makes it so fast.</string>
+                      </property>
+                      <item>
+                       <property name="text">
+                        <string>High Performance</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>FFMPEG</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>Default</string>
+                       </property>
+                      </item>
+                     </widget>
+                    </item>
+                    <item row="4" column="0">
+                     <widget class="QLabel" name="settings_label_performance_maximal_timeout">
+                      <property name="toolTip">
+                       <string>The timeout handles the timeout for retrieving segments when using the threaded download mode. If you have a poor 
+internet connection you can set this higher than 10. But this isn't required for most users!</string>
+                      </property>
+                      <property name="text">
+                       <string>Maximal timeout:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="1">
+                     <widget class="QSpinBox" name="settings_spinbox_performance_maximal_retries">
+                      <property name="minimum">
+                       <number>5</number>
+                      </property>
+                      <property name="maximum">
+                       <number>5000</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="0">
+                     <widget class="QLabel" name="settings_label_performance_maximal_retries">
+                      <property name="toolTip">
+                       <string>The maximal retries defines how much attempts will be used for a network request. For example if an API calls
+a URL for a website there will be &lt;AMOUNT&gt; of attempts until an error is thrown.</string>
+                      </property>
+                      <property name="text">
+                       <string>Maximal retries:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="settings_label_performance_simultaneous_download">
+                      <property name="toolTip">
+                       <string>The Semaphore is a tool to limit the number of simultaneous actions / downloads. For example: If the semaphore is set to 1, only 1 video will be downloaded at the same time.\nIf the semaphore is set to 4, 4 videos will be downloaded at the same time. Changing this is only useful, if you have a really good internet connection and a good system.</string>
+                      </property>
+                      <property name="text">
+                       <string>Simultaneous downloads:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="QSpinBox" name="settings_spinbox_performance_maximal_workers">
+                      <property name="minimum">
+                       <number>1</number>
+                      </property>
+                      <property name="maximum">
+                       <number>5000</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="settings_label_performance_download_mode">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="text">
+                       <string>Download Mode:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="1">
+                     <widget class="QSpinBox" name="settings_spinbox_performance_maximal_timeout">
+                      <property name="minimum">
+                       <number>5</number>
+                      </property>
+                      <property name="maximum">
+                       <number>5000</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QSpinBox" name="settings_spinbox_performance_simultaneous_downloads">
+                      <property name="minimum">
+                       <number>1</number>
+                      </property>
+                      <property name="maximum">
+                       <number>5000</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="6" column="0">
+                     <widget class="QLabel" name="settings_label_performance_speed_limit">
+                      <property name="toolTip">
+                       <string>The speed limit sets the maximum allowed network speed in megabyte per seconds. However, this doesn't work perfectly.
+The speed limit also only works for the default download mode, because it wouldn't make sense downloading multiple
+segments at the same time with a speed limit being in place.
+
+If you need something more 'exact / precise', use applications like NetLimiter 4 or something similar.</string>
+                      </property>
+                      <property name="text">
+                       <string>Speed Limit (MB/s):</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QLabel" name="settings_label_performance_maximal_workers">
+                      <property name="toolTip">
+                       <string> The maximal workers define the amount of maximal threads which can be started when using the threaded download mode.
+One thread handles downloading one segment, so (in theory) 20 threads can download 20 segments at the same time.
+This can of course be helpful when you have a very fast internet connection, but when you have a poor PC or running on
+Android, you should set this to a lower value.</string>
+                      </property>
+                      <property name="text">
+                       <string>Maximal workers:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="6" column="1">
+                     <widget class="QDoubleSpinBox" name="settings_doublespinbox_performance_speed_limit"/>
+                    </item>
+                    <item row="7" column="0">
+                     <widget class="QLabel" name="settings_label_performance_processing_delay">
+                      <property name="toolTip">
+                       <string>The processing delay sets a delay before every video gets downloaded.
+Let's assume you set a delay of 30 (30 seconds), then it will take 30 seconds between each video downloads.
+This does not apply if you have a value of simultaneous downloads greater than 1.</string>
+                      </property>
+                      <property name="text">
+                       <string>Processing Delay (videos/sec)</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="7" column="1">
+                     <widget class="QSpinBox" name="settings_spinbox_performance_processing_delay">
+                      <property name="minimum">
+                       <number>1</number>
+                      </property>
+                      <property name="maximum">
+                       <number>500</number>
+                      </property>
+                      <property name="value">
+                       <number>1</number>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="page_video">
+                 <layout class="QGridLayout" name="gridLayout_14">
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="spacing">
+                   <number>0</number>
+                  </property>
+                  <item row="0" column="0">
+                   <layout class="QGridLayout" name="settings_gridlayout_video">
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="settings_label_videos_quality">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="toolTip">
+                       <string>By default, Porn Fetch will select the best available video quality. You can also decide between half and worst above.
+If you instead use the custom integer values (1080p, 720p etc.) then Porn Fetch will try to use these, if available,
+but if they are not available the next best quality will be chosen. Please note that this is experimental and has not
+been that tested very well. (Be honest, why would you not choose the best quality lol)</string>
+                      </property>
+                      <property name="text">
+                       <string>Quality:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="0">
+                     <widget class="QCheckBox" name="settings_checkbox_videos_use_video_id_as_filename">
+                      <property name="text">
+                       <string>Use Video ID as filename</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1" colspan="2">
+                     <widget class="QComboBox" name="settings_video_combobox_model_videos">
+                      <item>
+                       <property name="text">
+                        <string>Both (recommended)</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>Uploaded</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>Featured</string>
+                       </property>
+                      </item>
+                     </widget>
+                    </item>
+                    <item row="0" column="1" colspan="2">
+                     <widget class="QComboBox" name="settings_video_combobox_quality">
+                      <item>
+                       <property name="text">
+                        <string>BEST (auto)</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>HALF (auto)</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>WORST (auto)</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>2160p</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>1440p</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>1080p</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>720p</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>540p</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>360p</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>240p</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>144p</string>
+                       </property>
+                      </item>
+                     </widget>
+                    </item>
+                    <item row="4" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_videos_write_metadata">
+                      <property name="toolTip">
+                       <string>Metadata tags are saved inside of the file itself. These are tags that video players can read from and provide you information.
+Some folder viewers also give you the ability to search files by specific metadata tags. Those tags can help organize and structure files.
+Porn Fetch will by default save those tags inside of your video files. </string>
+                      </property>
+                      <property name="text">
+                       <string>Write metadata tags</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="settings_label_videos_result_limit">
+                      <property name="toolTip">
+                       <string>The result limit defines how many videos will be returned when performing a search or doing other operations which
+involves loading multiple videos. This also affects models / channels and your liked videos. The result limit is
+basically the number of videos which can be loaded into the tree widget (this thing where videos are displayed).</string>
+                      </property>
+                      <property name="text">
+                       <string>Result Limit:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1" colspan="2">
+                     <widget class="QSpinBox" name="settings_spinbox_videos_result_limit">
+                      <property name="minimum">
+                       <number>1</number>
+                      </property>
+                      <property name="maximum">
+                       <number>5000</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QLabel" name="settings_label_videos_output_path">
+                      <property name="text">
+                       <string>Output path:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="QLineEdit" name="settings_lineedit_videos_output_path">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="placeholderText">
+                       <string>Enter &quot;./&quot; for current directory</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="2">
+                     <widget class="QCheckBox" name="settings_checkbox_videos_skip_existing_files">
+                      <property name="toolTip">
+                       <string>If you fetch a video and the exact same filename already exists, usually Porn Fetch would just skip this file.
+If you set this option to No, then Porn Fetch instead download the video and append a random number to it.
+
+For example you have downloaded a video called:
+
+Spain_didnt_win_against_Germany.mp4
+
+and you download a video with the same title, then it would append a random number to it:
+
+Spain_didnt_win_against_Germany_118251.mp4</string>
+                      </property>
+                      <property name="text">
+                       <string>Skip existing files</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="settings_label_videos_model_vdeos_type">
+                      <property name="toolTip">
+                       <string>User uploads and featured videos are two different things. User uploads are the videos which were really uploaded
+by the model and the featured videos are videos the model is part or featured in.
+
+For example the model Nancy Ace has like 10 self uploaded which she made by herself, but she is part in like thousands
+of videos from other studios.
+
+If you choose &quot;User Uploads&quot;, only self uploaded videos will be fetched, and the other way around :)</string>
+                      </property>
+                      <property name="text">
+                       <string>Model videos (PH)</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="2">
+                     <widget class="QPushButton" name="settings_button_videos_open_output_path">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="text">
+                       <string>Open</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="0">
+                     <widget class="QCheckBox" name="settings_checkbox_videos_track_downloaded_videos">
+                      <property name="toolTip">
+                       <string>Videos will be tracked in a SQL database which will save the URL and the metadata. </string>
+                      </property>
+                      <property name="text">
+                       <string>Track downloaded videos</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_videos_use_directory_system">
+                      <property name="toolTip">
+                       <string>The directory system will save videos in an intelligent way. If you download 3 videos form one Pornstar and 5 videos 
+from another, Porn Fetch will automatically make folders for it and move the 3 videos into that one folder and the other
+5 into the other. (This will still apply with your selected output path)
+
+This can be helpful for organizing stuff, but is a more advanced feature, so the majority of users won't use it probably</string>
+                      </property>
+                      <property name="text">
+                       <string>Use directory system</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="2">
+                     <widget class="QCheckBox" name="settings_checkbox_videos_direct_download">
+                      <property name="toolTip">
+                       <string>When you download a single video, usually you need to mark the video in the tree widget and then hit Download to
+actually download it.
+
+By activating this function we bypass the tree widget. The video will be loaded into it, but immediately self-downloaded.
+So you only need to press 'Download' once and not twice. 
+
+This makes it easier, but gives you less control.</string>
+                      </property>
+                      <property name="text">
+                       <string>Directly Download videos (bypass tree widget)</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="page_system">
+                 <layout class="QGridLayout" name="gridLayout_33">
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="spacing">
+                   <number>0</number>
+                  </property>
+                  <item row="0" column="0">
+                   <layout class="QGridLayout" name="settings_gridlayout_system">
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
+                    <item row="2" column="0">
+                     <widget class="QCheckBox" name="settings_checkbox_system_enable_anonymous_mode">
+                      <property name="toolTip">
+                       <string>The anonymous mode renames all of Porn Fetch's elements to look NOT like a Porn downloader.
+This makes it useful for downloading Porn content if you are in public, or multiple people use your PC / Phone.
+
+This also disables thumbnail preview. All titles will be replaced with: [redacted] as well as all authors.</string>
+                      </property>
+                      <property name="text">
+                       <string>Enable Anonymous mode</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_system_proxy_kill_switch">
+                      <property name="toolTip">
+                       <string>The proxy kill switch is an additional security layer if you use proxies. It will check your IP each time before making
+a request and if it's leaked it will immediately exit everything.
+
+My priority on developing this is low. Please do not report errors. Thank you &lt;3</string>
+                      </property>
+                      <property name="text">
+                       <string>Proxy Kill Switch</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0" colspan="2">
+                     <widget class="QPushButton" name="settings_button_system_install_pornfetch">
+                      <property name="text">
+                       <string>Install Porn Fetch</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QCheckBox" name="settings_checkbox_system_update_checks">
+                      <property name="text">
+                       <string>Update checks</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_system_internet_checks">
+                      <property name="text">
+                       <string>Internet checks</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QCheckBox" name="settings_checkbox_system_supress_errors">
+                      <property name="toolTip">
+                       <string>If you enable this function, all errors will be suppressed. This does not mean that they will be completely ignored, but
+you won't get a big notification for it. 
+
+If you have activated Network Logging, they will still be reported. If an error happens while iterating through videos,
+the current video will be skipped and Porn Fetch will continue with the next one.  </string>
+                      </property>
+                      <property name="text">
+                       <string>Supress errors silently</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_system_activate_proxy">
+                      <property name="text">
+                       <string>Activate Proxy</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="0" colspan="2">
+                     <widget class="QCheckBox" name="settings_checkbox_system_enable_network_logging">
+                      <property name="toolTip">
+                       <string>I have created my own server that runs 24/7 in my home. Porn Fetch (ONLY if you enable it) logs specific types of errors,
+that I don't know of, or that I need your help to fix them, to my server using a simple JSON post request.
+
+You can see the Code of the server publicly here --&gt;: https://github.com/EchterAlsFake/Server
+Porn Fetch also does its update checking mechanism through that server.
+
+IMPORTANT:
+The server is IPv6 only. If your ISP has not given you a working IPv6 IP address, then you can't reach me.
+You can check for yourself on 'https://ipleak.net'. It should be something like this: '2a02:810a:186:b400::5c51'
+
+My server does NOT save any of your personal information. No IP addresses, no PC information, no other identifiable information.
+The only things being stored is the literal Python exception that's being caught, the version you are running on, and your system.
+Like literally only if you use Windows, Linux or Mac. Nothing else.
+
+You can see that yourself, as mentioned before on the source code.
+You'd help me a lot by enabling network logging :) </string>
+                      </property>
+                      <property name="text">
+                       <string>Enable Network Logging</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="page_ui">
+                 <layout class="QGridLayout" name="gridLayout_34">
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="spacing">
+                   <number>0</number>
+                  </property>
+                  <item row="0" column="0">
+                   <layout class="QGridLayout" name="settings_gridlayout_ui">
+                    <item row="0" column="1">
+                     <widget class="QComboBox" name="settings_ui_combobox_language">
+                      <item>
+                       <property name="text">
+                        <string>System</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>English</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>German</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>Chinese simplified (outdated)</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>French (outdated)</string>
+                       </property>
+                      </item>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="settings_label_ui_language">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="text">
+                       <string>Graphical User Interface Language:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="settings_label_ui_font_size">
+                      <property name="text">
+                       <string>Font Size:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QSpinBox" name="settings_spinbox_ui_font_size"/>
+                    </item>
+                    <item row="2" column="0" colspan="2">
+                     <widget class="QCheckBox" name="settings_checkbox_ui_custom_font">
+                      <property name="text">
+                       <string>Enable custom font (Jetbrains Mono)</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </widget>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="settings_button_reset">
-                <property name="cursor">
-                 <cursorShape>PointingHandCursor</cursorShape>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QPushButton {
+               <layout class="QHBoxLayout" name="settings_horizontallayout_apply">
+                <item>
+                 <widget class="QPushButton" name="settings_button_apply">
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="text">
+                   <string>Apply  (needs restart)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="settings_button_reset">
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
     background-color: rgb(85, 0, 0)/* Green */
     font: bold 14px;
     min-width: 5em;
@@ -1912,915 +2546,26 @@ QPushButton:pressed {
     background-color: rgb(108, 0, 52) /* Dark green */
 }
 </string>
-                </property>
-                <property name="text">
-                 <string>Reset Porn Fetch to default settings</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="0" column="0" colspan="2">
-             <layout class="QGridLayout" name="settings_scrollarea_gridlayout">
-              <item row="2" column="0">
-               <layout class="QHBoxLayout" name="settings_horizontallayout_videos_post_processing">
-                <item>
-                 <widget class="QGroupBox" name="settings_groupbox_videos">
-                  <property name="title">
-                   <string>Videos</string>
                   </property>
-                  <layout class="QGridLayout" name="gridLayout_14">
-                   <property name="leftMargin">
-                    <number>6</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>3</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>6</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>6</number>
-                   </property>
-                   <property name="horizontalSpacing">
-                    <number>6</number>
-                   </property>
-                   <item row="6" column="0">
-                    <layout class="QGridLayout" name="settings_gridlayout_videos">
-                     <property name="leftMargin">
-                      <number>6</number>
-                     </property>
-                     <property name="topMargin">
-                      <number>3</number>
-                     </property>
-                     <property name="rightMargin">
-                      <number>6</number>
-                     </property>
-                     <property name="bottomMargin">
-                      <number>6</number>
-                     </property>
-                     <item row="5" column="4">
-                      <widget class="QPushButton" name="settings_button_help_videos_model_videos_type">
-                       <property name="text">
-                        <string>Help</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="7" column="3" colspan="2">
-                      <widget class="QPushButton" name="settings_button_videos_open_output_path">
-                       <property name="cursor">
-                        <cursorShape>PointingHandCursor</cursorShape>
-                       </property>
-                       <property name="text">
-                        <string>Open</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="6" column="0">
-                      <widget class="QLabel" name="settings_label_videos_result_limit">
-                       <property name="text">
-                        <string>Result Limit:</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="11" column="0">
-                      <widget class="QCheckBox" name="settings_checkbox_videos_skip_existing_files">
-                       <property name="text">
-                        <string>Skip existing files</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="1">
-                      <widget class="QSpinBox" name="settings_spinbox_videos_quality_custom">
-                       <property name="minimum">
-                        <number>0</number>
-                       </property>
-                       <property name="maximum">
-                        <number>2160</number>
-                       </property>
-                       <property name="value">
-                        <number>0</number>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="2">
-                      <widget class="QPushButton" name="settings_button_help_videos_quality_advanced">
-                       <property name="text">
-                        <string>Help</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="11" column="1">
-                      <widget class="QPushButton" name="settings_button_help_videos_skip_existing_files">
-                       <property name="text">
-                        <string>Help</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="6" column="3" colspan="2">
-                      <widget class="QPushButton" name="settings_button_help_videos_result_limit">
-                       <property name="cursor">
-                        <cursorShape>PointingHandCursor</cursorShape>
-                       </property>
-                       <property name="text">
-                        <string>Help</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="9" column="1">
-                      <widget class="QPushButton" name="settings_button_help_videos_write_metadata">
-                       <property name="text">
-                        <string>Help</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="11" column="3">
-                      <widget class="QPushButton" name="settings_button_help_videos_direct_download">
-                       <property name="text">
-                        <string>Help</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="1">
-                      <widget class="QRadioButton" name="settings_radio_videos_quality_best">
-                       <property name="cursor">
-                        <cursorShape>PointingHandCursor</cursorShape>
-                       </property>
-                       <property name="text">
-                        <string>Best</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="5" column="3">
-                      <widget class="QRadioButton" name="settings_radio_videos_model_type_both">
-                       <property name="text">
-                        <string>Both</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="5" column="0">
-                      <widget class="QLabel" name="settings_label_videos_model_vdeos_type">
-                       <property name="text">
-                        <string>Model videos (PornHub)</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="5" column="1">
-                      <widget class="QRadioButton" name="settings_radio_videos_model_type_user_uploads">
-                       <property name="text">
-                        <string>User uploads</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="5" column="2">
-                      <widget class="QRadioButton" name="settings_radio_videos_model_type_featured">
-                       <property name="text">
-                        <string>Featured videos</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="9" column="0">
-                      <widget class="QCheckBox" name="settings_checkbox_videos_write_metadata">
-                       <property name="text">
-                        <string>Write metadata tags</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="7" column="0">
-                      <widget class="QLabel" name="settings_label_videos_output_path">
-                       <property name="text">
-                        <string>Output path:</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="0">
-                      <widget class="QLabel" name="settings_label_videos_quality_advanced">
-                       <property name="text">
-                        <string>Quality (advanced):</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="9" column="2">
-                      <widget class="QCheckBox" name="settings_checkbox_videos_use_directory_system">
-                       <property name="text">
-                        <string>Use directory system</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="3" colspan="2">
-                      <widget class="QRadioButton" name="settings_radio_videos_quality_worst">
-                       <property name="cursor">
-                        <cursorShape>PointingHandCursor</cursorShape>
-                       </property>
-                       <property name="text">
-                        <string>Worst</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="7" column="1" colspan="2">
-                      <widget class="QLineEdit" name="settings_lineedit_videos_output_path">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="placeholderText">
-                        <string>Enter &quot;./&quot; for current directory</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="6" column="1" colspan="2">
-                      <widget class="QSpinBox" name="settings_spinbox_videos_result_limit">
-                       <property name="minimum">
-                        <number>1</number>
-                       </property>
-                       <property name="maximum">
-                        <number>5000</number>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="2">
-                      <widget class="QRadioButton" name="settings_radio_videos_quality_half">
-                       <property name="cursor">
-                        <cursorShape>PointingHandCursor</cursorShape>
-                       </property>
-                       <property name="text">
-                        <string>Half</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="9" column="3">
-                      <widget class="QPushButton" name="settings_button_help_videos_use_directory_system">
-                       <property name="cursor">
-                        <cursorShape>PointingHandCursor</cursorShape>
-                       </property>
-                       <property name="text">
-                        <string>Help</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="0">
-                      <widget class="QLabel" name="settings_label_videos_quality">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="text">
-                        <string>Quality:</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="8" column="0" colspan="2">
-                      <widget class="QCheckBox" name="settings_checkbox_videos_use_video_id_as_filename">
-                       <property name="text">
-                        <string>Use Video ID as filename</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="11" column="2">
-                      <widget class="QCheckBox" name="settings_checkbox_videos_direct_download">
-                       <property name="text">
-                        <string>Directly Download videos (bypass tree widget)</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="12" column="0">
-                      <widget class="QCheckBox" name="settings_checkbox_videos_track_downloaded_videos">
-                       <property name="text">
-                        <string>Track downloaded videos</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="12" column="1">
-                      <widget class="QPushButton" name="settings_button_help_videos_track_downloaded_videos">
-                       <property name="text">
-                        <string>Help</string>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </item>
-                  </layout>
+                  <property name="text">
+                   <string>Reset Porn Fetch to default settings</string>
+                  </property>
                  </widget>
                 </item>
                </layout>
               </item>
-              <item row="4" column="0">
-               <widget class="QGroupBox" name="settings_groupbox_ui">
-                <property name="title">
-                 <string>Graphical User Interface</string>
+              <item>
+               <spacer name="settings_vertical_spacer_main">
+                <property name="orientation">
+                 <enum>Qt::Orientation::Vertical</enum>
                 </property>
-                <layout class="QGridLayout" name="gridLayout_12">
-                 <property name="leftMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="topMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="rightMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="bottomMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="spacing">
-                  <number>6</number>
-                 </property>
-                 <item row="0" column="0">
-                  <layout class="QGridLayout" name="settings_gridlayout_graphical_userinterface">
-                   <property name="leftMargin">
-                    <number>6</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>3</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>6</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>6</number>
-                   </property>
-                   <item row="0" column="1">
-                    <widget class="QRadioButton" name="settings_radio_ui_language_system_default">
-                     <property name="cursor">
-                      <cursorShape>PointingHandCursor</cursorShape>
-                     </property>
-                     <property name="text">
-                      <string>System default</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="0">
-                    <widget class="QLabel" name="settings_label_ui_language">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="text">
-                      <string>Graphical User Interface Language:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="2">
-                    <widget class="QRadioButton" name="settings_radio_ui_language_english">
-                     <property name="cursor">
-                      <cursorShape>PointingHandCursor</cursorShape>
-                     </property>
-                     <property name="text">
-                      <string>English</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="5">
-                    <widget class="QRadioButton" name="settings_radio_ui_language_french">
-                     <property name="enabled">
-                      <bool>true</bool>
-                     </property>
-                     <property name="text">
-                      <string>French</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="4">
-                    <widget class="QRadioButton" name="settings_radio_ui_language_chinese_simplified">
-                     <property name="cursor">
-                      <cursorShape>PointingHandCursor</cursorShape>
-                     </property>
-                     <property name="text">
-                      <string>Chinese (simplified)</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="3">
-                    <widget class="QRadioButton" name="settings_radio_ui_language_german">
-                     <property name="cursor">
-                      <cursorShape>PointingHandCursor</cursorShape>
-                     </property>
-                     <property name="text">
-                      <string>German</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="0">
-                    <widget class="QCheckBox" name="settings_checkbox_ui_custom_font">
-                     <property name="text">
-                      <string>Enable custom font (Jetbrains Mono)</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="2">
-                    <widget class="QSpinBox" name="settings_spinbox_ui_font_size"/>
-                   </item>
-                   <item row="1" column="1">
-                    <widget class="QLabel" name="settings_label_ui_font_size">
-                     <property name="text">
-                      <string>Font Size:</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-              <item row="3" column="0">
-               <widget class="QGroupBox" name="settings_groupbox_system_pornfetch">
-                <property name="title">
-                 <string>System / Porn Fetch</string>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>108</width>
+                  <height>98</height>
+                 </size>
                 </property>
-                <layout class="QGridLayout" name="gridLayout_11">
-                 <property name="leftMargin">
-                  <number>6</number>
-                 </property>
-                 <property name="topMargin">
-                  <number>6</number>
-                 </property>
-                 <property name="rightMargin">
-                  <number>6</number>
-                 </property>
-                 <property name="bottomMargin">
-                  <number>6</number>
-                 </property>
-                 <property name="spacing">
-                  <number>6</number>
-                 </property>
-                 <item row="2" column="0">
-                  <layout class="QGridLayout" name="settings_gridlayout_system_pornfetch">
-                   <property name="leftMargin">
-                    <number>6</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>3</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>6</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>6</number>
-                   </property>
-                   <item row="2" column="1">
-                    <widget class="QCheckBox" name="settings_checkbox_system_enable_anonymous_mode">
-                     <property name="text">
-                      <string>Enable Anonymous mode</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="6" column="0">
-                    <widget class="QCheckBox" name="settings_checkbox_system_enable_network_logging">
-                     <property name="text">
-                      <string>Enable Network Logging</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="5" column="1">
-                    <widget class="QPushButton" name="settings_button_help_system_supress_errors">
-                     <property name="text">
-                      <string>Help</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="5" column="0">
-                    <widget class="QCheckBox" name="settings_checkbox_system_supress_errors">
-                     <property name="text">
-                      <string>Supress errors silently</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="2">
-                    <widget class="QCheckBox" name="settings_checkbox_system_internet_checks">
-                     <property name="text">
-                      <string>Internet checks</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="2">
-                    <widget class="QCheckBox" name="settings_checkbox_system_activate_proxy">
-                     <property name="text">
-                      <string>Activate Proxy</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="1">
-                    <widget class="QCheckBox" name="settings_checkbox_system_update_checks">
-                     <property name="text">
-                      <string>Update checks</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="6" column="1">
-                    <widget class="QPushButton" name="settings_button_help_system_enable_network_logging">
-                     <property name="text">
-                      <string>Help</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="0" colspan="3">
-                    <widget class="QPushButton" name="settings_button_system_install_pornfetch">
-                     <property name="text">
-                      <string>Install Porn Fetch</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="0">
-                    <widget class="QLabel" name="settings_label_system_startup">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="text">
-                      <string>Startup:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="0">
-                    <widget class="QLabel" name="settings_label_system_privacy">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="text">
-                      <string>Privacy:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="3" column="2">
-                    <widget class="QCheckBox" name="settings_checkbox_system_proxy_kill_switch">
-                     <property name="text">
-                      <string>Proxy Kill Switch</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="3" column="0">
-                    <widget class="QPushButton" name="settings_button_help_system_anonymous_mode">
-                     <property name="text">
-                      <string>Help (anonymous mode)</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="3" column="1">
-                    <widget class="QPushButton" name="settings_button_help_system_proxy_kill_switch">
-                     <property name="text">
-                      <string>Help / Explanation (Proxy Kill Switch) </string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QGroupBox" name="settings_groupbox_performance">
-                <property name="title">
-                 <string>Performance</string>
-                </property>
-                <layout class="QGridLayout" name="gridLayout_10">
-                 <property name="leftMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="topMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="rightMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="bottomMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="spacing">
-                  <number>6</number>
-                 </property>
-                 <item row="3" column="0">
-                  <layout class="QHBoxLayout" name="settings_horizontallayout_pornhub_delay">
-                   <property name="leftMargin">
-                    <number>6</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>3</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>6</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>6</number>
-                   </property>
-                   <item>
-                    <widget class="QLabel" name="settings_label_performance_network_delay">
-                     <property name="text">
-                      <string>Network delay (per Request, in seconds):</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QSpinBox" name="settings_spinbox_performance_network_delay">
-                     <property name="minimum">
-                      <number>0</number>
-                     </property>
-                     <property name="maximum">
-                      <number>5000</number>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QPushButton" name="settings_button_help_performance_network_delay">
-                     <property name="cursor">
-                      <cursorShape>PointingHandCursor</cursorShape>
-                     </property>
-                     <property name="text">
-                      <string>Help</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                 <item row="1" column="0">
-                  <layout class="QHBoxLayout" name="settings_horizontallayout_threading_mode">
-                   <property name="leftMargin">
-                    <number>6</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>3</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>6</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>6</number>
-                   </property>
-                   <item>
-                    <widget class="QLabel" name="settings_label_performance_download_mode">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="text">
-                      <string>Download Mode:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QRadioButton" name="settings_radio_performance_download_mode_performance">
-                     <property name="cursor">
-                      <cursorShape>PointingHandCursor</cursorShape>
-                     </property>
-                     <property name="text">
-                      <string>High Performance</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QRadioButton" name="settings_radio_performance_download_mode_default">
-                     <property name="cursor">
-                      <cursorShape>PointingHandCursor</cursorShape>
-                     </property>
-                     <property name="text">
-                      <string>Default</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QPushButton" name="settings_button_help_performance_download_mode">
-                     <property name="cursor">
-                      <cursorShape>PointingHandCursor</cursorShape>
-                     </property>
-                     <property name="text">
-                      <string>Help</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                 <item row="7" column="0">
-                  <layout class="QHBoxLayout" name="horizontalLayout">
-                   <item>
-                    <widget class="QLabel" name="settings_label_performance_speed_limit">
-                     <property name="text">
-                      <string>Speed Limit (MB/s):</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QDoubleSpinBox" name="settings_doublespinbox_performance_speed_limit"/>
-                   </item>
-                   <item>
-                    <widget class="QPushButton" name="settings_button_help_performance_speed_limit">
-                     <property name="text">
-                      <string>Help</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                 <item row="5" column="0">
-                  <layout class="QHBoxLayout" name="settings_horizontallayout_maximal_timeout">
-                   <property name="leftMargin">
-                    <number>6</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>3</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>6</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>6</number>
-                   </property>
-                   <item>
-                    <widget class="QLabel" name="settings_label_performance_maximal_timeout">
-                     <property name="text">
-                      <string>Maximal timeout:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QSpinBox" name="settings_spinbox_performance_maximal_timeout">
-                     <property name="minimum">
-                      <number>5</number>
-                     </property>
-                     <property name="maximum">
-                      <number>5000</number>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QPushButton" name="settings_button_help_performance_maximal_timeout">
-                     <property name="cursor">
-                      <cursorShape>PointingHandCursor</cursorShape>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true"/>
-                     </property>
-                     <property name="text">
-                      <string>Help</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                 <item row="8" column="0">
-                  <layout class="QHBoxLayout" name="horizontalLayout_2">
-                   <item>
-                    <widget class="QLabel" name="settings_label_performance_processing_delay">
-                     <property name="text">
-                      <string>Processing Delay (each Video, in seconds):</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QSpinBox" name="settings_spinbox_performance_processing_delay">
-                     <property name="minimum">
-                      <number>0</number>
-                     </property>
-                     <property name="maximum">
-                      <number>500</number>
-                     </property>
-                     <property name="value">
-                      <number>0</number>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QPushButton" name="settings_button_help_performance_processing_delay">
-                     <property name="cursor">
-                      <cursorShape>PointingHandCursor</cursorShape>
-                     </property>
-                     <property name="text">
-                      <string>Help</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                 <item row="2" column="0">
-                  <layout class="QHBoxLayout" name="settings_horizontallayout_simultaneous_downloads">
-                   <item>
-                    <widget class="QLabel" name="settings_label_performance_simultaneous_download">
-                     <property name="text">
-                      <string>Simultaneous downloads:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QSpinBox" name="settings_spinbox_performance_simultaneous_downloads">
-                     <property name="minimum">
-                      <number>1</number>
-                     </property>
-                     <property name="maximum">
-                      <number>5000</number>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QPushButton" name="settings_button_help_performance_simultaneous_downloads">
-                     <property name="cursor">
-                      <cursorShape>PointingHandCursor</cursorShape>
-                     </property>
-                     <property name="text">
-                      <string>Help</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                 <item row="6" column="0">
-                  <layout class="QHBoxLayout" name="settings_horizontallayout_maximal_retries">
-                   <property name="leftMargin">
-                    <number>6</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>3</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>6</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>6</number>
-                   </property>
-                   <item>
-                    <widget class="QLabel" name="settings_label_performance_maximal_retries">
-                     <property name="text">
-                      <string>Maximal retries:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QSpinBox" name="settings_spinbox_performance_maximal_retries">
-                     <property name="minimum">
-                      <number>5</number>
-                     </property>
-                     <property name="maximum">
-                      <number>5000</number>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QPushButton" name="settings_button_help_performance_maximal_retries">
-                     <property name="cursor">
-                      <cursorShape>PointingHandCursor</cursorShape>
-                     </property>
-                     <property name="text">
-                      <string>Help</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                 <item row="4" column="0">
-                  <layout class="QHBoxLayout" name="settings_horizontallayout_maximal_workers">
-                   <property name="leftMargin">
-                    <number>6</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>3</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>6</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>6</number>
-                   </property>
-                   <item>
-                    <widget class="QLabel" name="settings_label_performance_maximal_workers">
-                     <property name="text">
-                      <string>Maximal workers:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QSpinBox" name="settings_spinbox_performance_maximal_workers">
-                     <property name="minimum">
-                      <number>1</number>
-                     </property>
-                     <property name="maximum">
-                      <number>5000</number>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QPushButton" name="settings_button_help_performance_maximal_workers">
-                     <property name="cursor">
-                      <cursorShape>PointingHandCursor</cursorShape>
-                     </property>
-                     <property name="text">
-                      <string>Help</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                </layout>
-               </widget>
+               </spacer>
               </item>
              </layout>
             </item>
@@ -2842,8 +2587,8 @@ QPushButton:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>996</width>
-             <height>695</height>
+             <width>646</width>
+             <height>562</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_21">
@@ -2883,8 +2628,8 @@ QPushButton:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>996</width>
-             <height>695</height>
+             <width>646</width>
+             <height>562</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_23">
@@ -3050,8 +2795,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>996</width>
-             <height>695</height>
+             <width>646</width>
+             <height>562</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_52">
@@ -3203,8 +2948,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>256</width>
-             <height>192</height>
+             <width>646</width>
+             <height>562</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_54">
@@ -3296,8 +3041,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>996</width>
-             <height>695</height>
+             <width>646</width>
+             <height>562</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_56">
@@ -3391,8 +3136,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>996</width>
-             <height>695</height>
+             <width>646</width>
+             <height>562</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_20">
@@ -3446,8 +3191,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>996</width>
-             <height>695</height>
+             <width>646</width>
+             <height>562</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_59">
@@ -3558,8 +3303,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>996</width>
-             <height>695</height>
+             <width>646</width>
+             <height>562</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_61">
@@ -3652,6 +3397,62 @@ li.checked::marker { content: &quot;\2612&quot;; }
       </widget>
      </widget>
     </item>
+    <item row="2" column="0">
+     <layout class="QFormLayout" name="formlayout_progressbar">
+      <property name="horizontalSpacing">
+       <number>0</number>
+      </property>
+      <property name="verticalSpacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="main_label_progressbar_total">
+        <property name="text">
+         <string>Total:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QProgressBar" name="main_progressbar_total">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>300</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">text-align: center; /* Centered text */</string>
+        </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="main_label_progressbar_converting">
+        <property name="text">
+         <string>Converting:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QProgressBar" name="main_progressbar_converting">
+        <property name="styleSheet">
+         <string notr="true">text-align: center; /* Centered text */</string>
+        </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -3671,7 +3472,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
   <tabstop>download_button_playlist_get_videos</tabstop>
   <tabstop>download_lineedit_model_url</tabstop>
   <tabstop>download_button_model</tabstop>
-  <tabstop>download_lineedit_file</tabstop>
   <tabstop>download_button_open_file</tabstop>
   <tabstop>download_lineedit_search_query</tabstop>
   <tabstop>button_search</tabstop>
@@ -3721,65 +3521,15 @@ li.checked::marker { content: &quot;\2612&quot;; }
   <tabstop>spinbox_range_start</tabstop>
   <tabstop>spinbox_range_end</tabstop>
   <tabstop>button_range_apply_index</tabstop>
-  <tabstop>settings_radio_performance_download_mode_performance</tabstop>
-  <tabstop>settings_radio_performance_download_mode_default</tabstop>
-  <tabstop>settings_button_help_performance_download_mode</tabstop>
-  <tabstop>settings_spinbox_performance_simultaneous_downloads</tabstop>
-  <tabstop>settings_button_help_performance_simultaneous_downloads</tabstop>
-  <tabstop>settings_spinbox_performance_network_delay</tabstop>
-  <tabstop>settings_button_help_performance_network_delay</tabstop>
-  <tabstop>settings_spinbox_performance_maximal_workers</tabstop>
-  <tabstop>settings_button_help_performance_maximal_workers</tabstop>
-  <tabstop>settings_spinbox_performance_maximal_timeout</tabstop>
-  <tabstop>settings_spinbox_performance_maximal_retries</tabstop>
-  <tabstop>settings_button_help_performance_maximal_retries</tabstop>
-  <tabstop>settings_button_help_performance_maximal_timeout</tabstop>
-  <tabstop>settings_doublespinbox_performance_speed_limit</tabstop>
-  <tabstop>settings_button_help_performance_speed_limit</tabstop>
-  <tabstop>settings_radio_videos_quality_best</tabstop>
-  <tabstop>settings_radio_videos_quality_half</tabstop>
-  <tabstop>settings_radio_videos_quality_worst</tabstop>
-  <tabstop>settings_radio_videos_model_type_user_uploads</tabstop>
-  <tabstop>settings_radio_videos_model_type_featured</tabstop>
-  <tabstop>settings_radio_videos_model_type_both</tabstop>
-  <tabstop>settings_button_help_videos_model_videos_type</tabstop>
-  <tabstop>settings_spinbox_videos_result_limit</tabstop>
-  <tabstop>settings_button_help_videos_result_limit</tabstop>
-  <tabstop>settings_lineedit_videos_output_path</tabstop>
-  <tabstop>settings_button_videos_open_output_path</tabstop>
-  <tabstop>settings_checkbox_videos_use_video_id_as_filename</tabstop>
-  <tabstop>settings_checkbox_videos_write_metadata</tabstop>
-  <tabstop>settings_button_help_videos_write_metadata</tabstop>
-  <tabstop>settings_checkbox_videos_skip_existing_files</tabstop>
-  <tabstop>settings_button_help_videos_skip_existing_files</tabstop>
-  <tabstop>settings_button_system_install_pornfetch</tabstop>
   <tabstop>scrollArea</tabstop>
   <tabstop>settings_button_reset</tabstop>
-  <tabstop>settings_button_help_system_anonymous_mode</tabstop>
   <tabstop>main_textbrowser_credits</tabstop>
-  <tabstop>settings_checkbox_system_enable_anonymous_mode</tabstop>
-  <tabstop>settings_checkbox_ui_custom_font</tabstop>
-  <tabstop>settings_spinbox_ui_font_size</tabstop>
   <tabstop>textBrowser</tabstop>
-  <tabstop>settings_checkbox_system_enable_network_logging</tabstop>
   <tabstop>textbrowser_range</tabstop>
-  <tabstop>settings_checkbox_system_update_checks</tabstop>
-  <tabstop>settings_checkbox_system_internet_checks</tabstop>
-  <tabstop>settings_button_help_system_supress_errors</tabstop>
-  <tabstop>settings_button_help_system_proxy_kill_switch</tabstop>
-  <tabstop>settings_checkbox_system_proxy_kill_switch</tabstop>
-  <tabstop>settings_checkbox_system_supress_errors</tabstop>
-  <tabstop>settings_button_help_system_enable_network_logging</tabstop>
-  <tabstop>settings_checkbox_system_activate_proxy</tabstop>
-  <tabstop>settings_radio_ui_language_german</tabstop>
   <tabstop>text_browser_keyboard_shortcuts</tabstop>
   <tabstop>text_browser_update_available</tabstop>
   <tabstop>button_update_acknowledged</tabstop>
-  <tabstop>settings_radio_ui_language_chinese_simplified</tabstop>
   <tabstop>textBrowser_3</tabstop>
-  <tabstop>settings_radio_ui_language_english</tabstop>
-  <tabstop>settings_radio_ui_language_system_default</tabstop>
-  <tabstop>settings_radio_ui_language_french</tabstop>
   <tabstop>settings_button_apply</tabstop>
   <tabstop>main_textbrowser_supported_websites</tabstop>
   <tabstop>scrollArea_11</tabstop>

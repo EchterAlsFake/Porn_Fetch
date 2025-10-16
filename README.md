@@ -26,6 +26,9 @@
 ---
 </div>
 
+[![Stop Scanning Me](https://stopscanningme.eu/img/organise/SSM_mailing-banner1.png)](https://stopscanningme.eu/)
+<br>EUROPA NICHT DEN LEYEN ÜBERLASSEN | DON'T LEAVE EUROPE TO THE LEYEN
+
 > [!WARNING]
 > Porn Fetch is NOT associated with the websites. Porn Fetch is AGAINST the Terms of Services of EVERY website! Usage is on YOUR risk.
 

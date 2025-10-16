@@ -36,6 +36,7 @@ level frontend AND backend development toolkit for free.**
 - <a href="https://iconscout.com/icons/checkmark" class="text-underline font-size-sm" target="_blank">Checkmark</a> by <a href="https://iconscout.com/contributors/benjamin-j-sperry" class="text-underline font-size-sm">Benjamin J sperry</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
 - <a href="https://iconscout.com/icons/done" class="text-underline font-size-sm" target="_blank">Done</a> by <a href="https://iconscout.com/contributors/google-inc" class="text-underline font-size-sm">Google Inc.</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
 - <a href="https://iconscout.com/icons/progressbar" class="text-underline font-size-sm" target="_blank">Progressbar</a> by <a href="https://iconscout.com/contributors/vaadin-icons" class="text-underline font-size-sm">Vaadin Icons</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
+- <a href="https://iconscout.com/icons/exclamation-mark" class="text-underline font-size-sm" target="_blank">Information Sign</a> by <a href="https://iconscout.com/contributors/unicons" class="text-underline font-size-sm">Unicons Font</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
 
 Porn Fetch uses the Open-Source [Jetbrans Mono Regular](https://www.jetbrains.com/de-de/lp/mono/) font as the default font for the whole application.
 This font is licensed under SIL Open Font License, Version 1.1
