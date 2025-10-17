@@ -390,7 +390,7 @@ color: white</string>
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>644</width>
+               <width>1389</width>
                <height>220</height>
               </rect>
              </property>
@@ -437,7 +437,7 @@ color: white</string>
                  <number>1</number>
                 </property>
                 <property name="currentIndex">
-                 <number>1</number>
+                 <number>3</number>
                 </property>
                 <widget class="QWidget" name="page_download">
                  <property name="sizePolicy">
@@ -1185,10 +1185,10 @@ model#https://de.pornhub.com/pornstar/nancy-a</string>
                        </property>
                        <item row="0" column="0">
                         <layout class="QGridLayout" name="gridLayout_3">
-                         <item row="0" column="1">
-                          <widget class="QRadioButton" name="tools_radio_top_porn_week">
+                         <item row="3" column="0">
+                          <widget class="QPushButton" name="tools_button_get_random_videos">
                            <property name="sizePolicy">
-                            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                              <horstretch>0</horstretch>
                              <verstretch>0</verstretch>
                             </sizepolicy>
@@ -1203,10 +1203,7 @@ model#https://de.pornhub.com/pornstar/nancy-a</string>
                             <cursorShape>PointingHandCursor</cursorShape>
                            </property>
                            <property name="text">
-                            <string>Week</string>
-                           </property>
-                           <property name="checked">
-                            <bool>true</bool>
+                            <string>Get random Video</string>
                            </property>
                           </widget>
                          </item>
@@ -1251,132 +1248,6 @@ model#https://de.pornhub.com/pornstar/nancy-a</string>
                            </property>
                           </widget>
                          </item>
-                         <item row="0" column="0">
-                          <widget class="QLabel" name="tools_label_get_top_porn">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                             <horstretch>0</horstretch>
-                             <verstretch>0</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>0</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="text">
-                            <string>Get Top Porn:</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="0" column="2">
-                          <widget class="QRadioButton" name="tools_radio_top_porn_month">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                             <horstretch>0</horstretch>
-                             <verstretch>0</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>0</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="cursor">
-                            <cursorShape>PointingHandCursor</cursorShape>
-                           </property>
-                           <property name="text">
-                            <string>Month</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="2" column="0">
-                          <widget class="QLabel" name="tools_label_get_random_video">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                             <horstretch>0</horstretch>
-                             <verstretch>0</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>0</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="text">
-                            <string>Get random video</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="0" column="3">
-                          <widget class="QRadioButton" name="tools_radio_top_porn_all_time">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                             <horstretch>0</horstretch>
-                             <verstretch>0</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>0</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="cursor">
-                            <cursorShape>PointingHandCursor</cursorShape>
-                           </property>
-                           <property name="text">
-                            <string>All Time</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="1" column="3">
-                          <widget class="QPushButton" name="tools_button_list_categories">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                             <horstretch>0</horstretch>
-                             <verstretch>0</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>0</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="cursor">
-                            <cursorShape>PointingHandCursor</cursorShape>
-                           </property>
-                           <property name="text">
-                            <string>List of all categories</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="2" column="1">
-                          <widget class="QPushButton" name="tools_button_get_random_videos">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                             <horstretch>0</horstretch>
-                             <verstretch>0</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>0</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="cursor">
-                            <cursorShape>PointingHandCursor</cursorShape>
-                           </property>
-                           <property name="text">
-                            <string>Get Video</string>
-                           </property>
-                          </widget>
-                         </item>
                          <item row="1" column="1">
                           <widget class="QLineEdit" name="tools_lineedit_hqporner_category">
                            <property name="sizePolicy">
@@ -1393,30 +1264,8 @@ model#https://de.pornhub.com/pornstar/nancy-a</string>
                            </property>
                           </widget>
                          </item>
-                         <item row="0" column="4">
-                          <widget class="QPushButton" name="tools_button_top_porn_get_videos">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                             <horstretch>0</horstretch>
-                             <verstretch>0</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>0</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="cursor">
-                            <cursorShape>PointingHandCursor</cursorShape>
-                           </property>
-                           <property name="text">
-                            <string>Get Videos</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="3" column="0">
-                          <widget class="QLabel" name="tools_label_get_brazzers_videos">
+                         <item row="0" column="0">
+                          <widget class="QLabel" name="tools_label_get_top_porn">
                            <property name="sizePolicy">
                             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                              <horstretch>0</horstretch>
@@ -1430,7 +1279,7 @@ model#https://de.pornhub.com/pornstar/nancy-a</string>
                             </size>
                            </property>
                            <property name="text">
-                            <string>Get Brazzers videos</string>
+                            <string>Get Top Porn:</string>
                            </property>
                           </widget>
                          </item>
@@ -1452,7 +1301,70 @@ model#https://de.pornhub.com/pornstar/nancy-a</string>
                             <cursorShape>PointingHandCursor</cursorShape>
                            </property>
                            <property name="text">
+                            <string>Get Brazzers videos</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="0" column="1">
+                          <widget class="QComboBox" name="tools_combobox_hqporner_top_porn">
+                           <item>
+                            <property name="text">
+                             <string>Week</string>
+                            </property>
+                           </item>
+                           <item>
+                            <property name="text">
+                             <string>Month</string>
+                            </property>
+                           </item>
+                           <item>
+                            <property name="text">
+                             <string>All time</string>
+                            </property>
+                           </item>
+                          </widget>
+                         </item>
+                         <item row="0" column="2">
+                          <widget class="QPushButton" name="tools_button_top_porn_get_videos">
+                           <property name="sizePolicy">
+                            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                            </sizepolicy>
+                           </property>
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>0</height>
+                            </size>
+                           </property>
+                           <property name="cursor">
+                            <cursorShape>PointingHandCursor</cursorShape>
+                           </property>
+                           <property name="text">
                             <string>Get Videos</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="3" column="2">
+                          <widget class="QPushButton" name="tools_button_list_categories">
+                           <property name="sizePolicy">
+                            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                            </sizepolicy>
+                           </property>
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>0</height>
+                            </size>
+                           </property>
+                           <property name="cursor">
+                            <cursorShape>PointingHandCursor</cursorShape>
+                           </property>
+                           <property name="text">
+                            <string>List of all categories</string>
                            </property>
                           </widget>
                          </item>
@@ -1594,8 +1506,8 @@ model#https://de.pornhub.com/pornstar/nancy-a</string>
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>644</width>
-               <height>331</height>
+               <width>1389</width>
+               <height>434</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -1789,28 +1701,28 @@ model#https://de.pornhub.com/pornstar/nancy-a</string>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout">
                 <item>
-                 <widget class="QPushButton" name="pushButton">
+                 <widget class="QPushButton" name="settings_button_switch_video">
                   <property name="text">
                    <string>Video</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="pushButton_2">
+                 <widget class="QPushButton" name="settings_button_switch_performance">
                   <property name="text">
                    <string>Performance</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="pushButton_3">
+                 <widget class="QPushButton" name="settings_button_switch_system">
                   <property name="text">
                    <string>System</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="pushButton_4">
+                 <widget class="QPushButton" name="settings_button_switch_ui">
                   <property name="text">
                    <string>UI</string>
                   </property>
@@ -1821,227 +1733,8 @@ model#https://de.pornhub.com/pornstar/nancy-a</string>
               <item>
                <widget class="QStackedWidget" name="settings_stacked_widget_main">
                 <property name="currentIndex">
-                 <number>1</number>
+                 <number>2</number>
                 </property>
-                <widget class="QWidget" name="page_performance">
-                 <layout class="QGridLayout" name="gridLayout_26">
-                  <property name="leftMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="topMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="rightMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="bottomMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="spacing">
-                   <number>0</number>
-                  </property>
-                  <item row="0" column="0">
-                   <layout class="QGridLayout" name="settings_gridlayout_performance">
-                    <item row="2" column="1">
-                     <widget class="QSpinBox" name="settings_spinbox_performance_network_delay">
-                      <property name="minimum">
-                       <number>0</number>
-                      </property>
-                      <property name="maximum">
-                       <number>5000</number>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="0">
-                     <widget class="QLabel" name="settings_label_performance_network_delay">
-                      <property name="toolTip">
-                       <string>You can set a delay between requests from you and a site. If you are downloading a lot of videos or experiencing 
-errors, you should enable a delay. By default the delay is turned off with the value 0
-
-A good starting point is between 0.5 - 1.5
-
-The longer the delay is, the longer it will take to download videos, load videos and generally do stuff. This does not
-really affect the high performance download mode.</string>
-                      </property>
-                      <property name="text">
-                       <string>Network delay (requests/sec)</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="1">
-                     <widget class="QComboBox" name="settings_performance_combobox_download_mode">
-                      <property name="toolTip">
-                       <string>1) High Performance:  Uses a class of workers to download multiple video segments at a time. Can be really fast if you
-have a very strong internet connection. Maybe not great for low end systems.
-
-2) FFMPEG:
-FFmpeg is a specialized tool for video encoding and decoding. It is also able to fetch videos based on their m3u8 URL, which contains the segments. FFmpeg is slower compared to high performance and not well tested. Please only use if you have to.
-
-3) Default:  The default download mode will just download one video segment after the next one. If you get a lot of 
-timeouts this can really slow down the process, as we need to wait the Porn sites to return the video segments.
-With the High Performance method, we can just download other segments while waiting which makes it so fast.</string>
-                      </property>
-                      <item>
-                       <property name="text">
-                        <string>High Performance</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>FFMPEG</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>Default</string>
-                       </property>
-                      </item>
-                     </widget>
-                    </item>
-                    <item row="4" column="0">
-                     <widget class="QLabel" name="settings_label_performance_maximal_timeout">
-                      <property name="toolTip">
-                       <string>The timeout handles the timeout for retrieving segments when using the threaded download mode. If you have a poor 
-internet connection you can set this higher than 10. But this isn't required for most users!</string>
-                      </property>
-                      <property name="text">
-                       <string>Maximal timeout:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="5" column="1">
-                     <widget class="QSpinBox" name="settings_spinbox_performance_maximal_retries">
-                      <property name="minimum">
-                       <number>5</number>
-                      </property>
-                      <property name="maximum">
-                       <number>5000</number>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="5" column="0">
-                     <widget class="QLabel" name="settings_label_performance_maximal_retries">
-                      <property name="toolTip">
-                       <string>The maximal retries defines how much attempts will be used for a network request. For example if an API calls
-a URL for a website there will be &lt;AMOUNT&gt; of attempts until an error is thrown.</string>
-                      </property>
-                      <property name="text">
-                       <string>Maximal retries:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="0">
-                     <widget class="QLabel" name="settings_label_performance_simultaneous_download">
-                      <property name="toolTip">
-                       <string>The Semaphore is a tool to limit the number of simultaneous actions / downloads. For example: If the semaphore is set to 1, only 1 video will be downloaded at the same time.\nIf the semaphore is set to 4, 4 videos will be downloaded at the same time. Changing this is only useful, if you have a really good internet connection and a good system.</string>
-                      </property>
-                      <property name="text">
-                       <string>Simultaneous downloads:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="1">
-                     <widget class="QSpinBox" name="settings_spinbox_performance_maximal_workers">
-                      <property name="minimum">
-                       <number>1</number>
-                      </property>
-                      <property name="maximum">
-                       <number>5000</number>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="0">
-                     <widget class="QLabel" name="settings_label_performance_download_mode">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="text">
-                       <string>Download Mode:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="1">
-                     <widget class="QSpinBox" name="settings_spinbox_performance_maximal_timeout">
-                      <property name="minimum">
-                       <number>5</number>
-                      </property>
-                      <property name="maximum">
-                       <number>5000</number>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="1">
-                     <widget class="QSpinBox" name="settings_spinbox_performance_simultaneous_downloads">
-                      <property name="minimum">
-                       <number>1</number>
-                      </property>
-                      <property name="maximum">
-                       <number>5000</number>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="6" column="0">
-                     <widget class="QLabel" name="settings_label_performance_speed_limit">
-                      <property name="toolTip">
-                       <string>The speed limit sets the maximum allowed network speed in megabyte per seconds. However, this doesn't work perfectly.
-The speed limit also only works for the default download mode, because it wouldn't make sense downloading multiple
-segments at the same time with a speed limit being in place.
-
-If you need something more 'exact / precise', use applications like NetLimiter 4 or something similar.</string>
-                      </property>
-                      <property name="text">
-                       <string>Speed Limit (MB/s):</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="0">
-                     <widget class="QLabel" name="settings_label_performance_maximal_workers">
-                      <property name="toolTip">
-                       <string> The maximal workers define the amount of maximal threads which can be started when using the threaded download mode.
-One thread handles downloading one segment, so (in theory) 20 threads can download 20 segments at the same time.
-This can of course be helpful when you have a very fast internet connection, but when you have a poor PC or running on
-Android, you should set this to a lower value.</string>
-                      </property>
-                      <property name="text">
-                       <string>Maximal workers:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="6" column="1">
-                     <widget class="QDoubleSpinBox" name="settings_doublespinbox_performance_speed_limit"/>
-                    </item>
-                    <item row="7" column="0">
-                     <widget class="QLabel" name="settings_label_performance_processing_delay">
-                      <property name="toolTip">
-                       <string>The processing delay sets a delay before every video gets downloaded.
-Let's assume you set a delay of 30 (30 seconds), then it will take 30 seconds between each video downloads.
-This does not apply if you have a value of simultaneous downloads greater than 1.</string>
-                      </property>
-                      <property name="text">
-                       <string>Processing Delay (videos/sec)</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="7" column="1">
-                     <widget class="QSpinBox" name="settings_spinbox_performance_processing_delay">
-                      <property name="minimum">
-                       <number>1</number>
-                      </property>
-                      <property name="maximum">
-                       <number>500</number>
-                      </property>
-                      <property name="value">
-                       <number>1</number>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </item>
-                 </layout>
-                </widget>
                 <widget class="QWidget" name="page_video">
                  <layout class="QGridLayout" name="gridLayout_14">
                   <property name="leftMargin">
@@ -2301,6 +1994,225 @@ This makes it easier, but gives you less control.</string>
                       </property>
                       <property name="text">
                        <string>Directly Download videos (bypass tree widget)</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="page_performance">
+                 <layout class="QGridLayout" name="gridLayout_26">
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="spacing">
+                   <number>0</number>
+                  </property>
+                  <item row="0" column="0">
+                   <layout class="QGridLayout" name="settings_gridlayout_performance">
+                    <item row="2" column="1">
+                     <widget class="QSpinBox" name="settings_spinbox_performance_network_delay">
+                      <property name="minimum">
+                       <number>0</number>
+                      </property>
+                      <property name="maximum">
+                       <number>5000</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="settings_label_performance_network_delay">
+                      <property name="toolTip">
+                       <string>You can set a delay between requests from you and a site. If you are downloading a lot of videos or experiencing 
+errors, you should enable a delay. By default the delay is turned off with the value 0
+
+A good starting point is between 0.5 - 1.5
+
+The longer the delay is, the longer it will take to download videos, load videos and generally do stuff. This does not
+really affect the high performance download mode.</string>
+                      </property>
+                      <property name="text">
+                       <string>Network delay (requests/sec)</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QComboBox" name="settings_performance_combobox_download_mode">
+                      <property name="toolTip">
+                       <string>1) High Performance:  Uses a class of workers to download multiple video segments at a time. Can be really fast if you
+have a very strong internet connection. Maybe not great for low end systems.
+
+2) FFMPEG:
+FFmpeg is a specialized tool for video encoding and decoding. It is also able to fetch videos based on their m3u8 URL, which contains the segments. FFmpeg is slower compared to high performance and not well tested. Please only use if you have to.
+
+3) Default:  The default download mode will just download one video segment after the next one. If you get a lot of 
+timeouts this can really slow down the process, as we need to wait the Porn sites to return the video segments.
+With the High Performance method, we can just download other segments while waiting which makes it so fast.</string>
+                      </property>
+                      <item>
+                       <property name="text">
+                        <string>High Performance</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>FFMPEG</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>Default</string>
+                       </property>
+                      </item>
+                     </widget>
+                    </item>
+                    <item row="4" column="0">
+                     <widget class="QLabel" name="settings_label_performance_maximal_timeout">
+                      <property name="toolTip">
+                       <string>The timeout handles the timeout for retrieving segments when using the threaded download mode. If you have a poor 
+internet connection you can set this higher than 10. But this isn't required for most users!</string>
+                      </property>
+                      <property name="text">
+                       <string>Maximal timeout:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="1">
+                     <widget class="QSpinBox" name="settings_spinbox_performance_maximal_retries">
+                      <property name="minimum">
+                       <number>5</number>
+                      </property>
+                      <property name="maximum">
+                       <number>5000</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="0">
+                     <widget class="QLabel" name="settings_label_performance_maximal_retries">
+                      <property name="toolTip">
+                       <string>The maximal retries defines how much attempts will be used for a network request. For example if an API calls
+a URL for a website there will be &lt;AMOUNT&gt; of attempts until an error is thrown.</string>
+                      </property>
+                      <property name="text">
+                       <string>Maximal retries:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="settings_label_performance_simultaneous_download">
+                      <property name="toolTip">
+                       <string>The Semaphore is a tool to limit the number of simultaneous actions / downloads. For example: If the semaphore is set to 1, only 1 video will be downloaded at the same time.\nIf the semaphore is set to 4, 4 videos will be downloaded at the same time. Changing this is only useful, if you have a really good internet connection and a good system.</string>
+                      </property>
+                      <property name="text">
+                       <string>Simultaneous downloads:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="QSpinBox" name="settings_spinbox_performance_maximal_workers">
+                      <property name="minimum">
+                       <number>1</number>
+                      </property>
+                      <property name="maximum">
+                       <number>5000</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="settings_label_performance_download_mode">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="text">
+                       <string>Download Mode:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="1">
+                     <widget class="QSpinBox" name="settings_spinbox_performance_maximal_timeout">
+                      <property name="minimum">
+                       <number>5</number>
+                      </property>
+                      <property name="maximum">
+                       <number>5000</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QSpinBox" name="settings_spinbox_performance_simultaneous_downloads">
+                      <property name="minimum">
+                       <number>1</number>
+                      </property>
+                      <property name="maximum">
+                       <number>5000</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="6" column="0">
+                     <widget class="QLabel" name="settings_label_performance_speed_limit">
+                      <property name="toolTip">
+                       <string>The speed limit sets the maximum allowed network speed in megabyte per seconds. However, this doesn't work perfectly.
+The speed limit also only works for the default download mode, because it wouldn't make sense downloading multiple
+segments at the same time with a speed limit being in place.
+
+If you need something more 'exact / precise', use applications like NetLimiter 4 or something similar.</string>
+                      </property>
+                      <property name="text">
+                       <string>Speed Limit (MB/s):</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QLabel" name="settings_label_performance_maximal_workers">
+                      <property name="toolTip">
+                       <string> The maximal workers define the amount of maximal threads which can be started when using the threaded download mode.
+One thread handles downloading one segment, so (in theory) 20 threads can download 20 segments at the same time.
+This can of course be helpful when you have a very fast internet connection, but when you have a poor PC or running on
+Android, you should set this to a lower value.</string>
+                      </property>
+                      <property name="text">
+                       <string>Maximal workers:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="6" column="1">
+                     <widget class="QDoubleSpinBox" name="settings_doublespinbox_performance_speed_limit"/>
+                    </item>
+                    <item row="7" column="0">
+                     <widget class="QLabel" name="settings_label_performance_processing_delay">
+                      <property name="toolTip">
+                       <string>The processing delay sets a delay before every video gets downloaded.
+Let's assume you set a delay of 30 (30 seconds), then it will take 30 seconds between each video downloads.
+This does not apply if you have a value of simultaneous downloads greater than 1.</string>
+                      </property>
+                      <property name="text">
+                       <string>Processing Delay (videos/sec)</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="7" column="1">
+                     <widget class="QSpinBox" name="settings_spinbox_performance_processing_delay">
+                      <property name="minimum">
+                       <number>1</number>
+                      </property>
+                      <property name="maximum">
+                       <number>500</number>
+                      </property>
+                      <property name="value">
+                       <number>1</number>
                       </property>
                      </widget>
                     </item>
@@ -2587,8 +2499,8 @@ QPushButton:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>646</width>
-             <height>562</height>
+             <width>70</width>
+             <height>70</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_21">
@@ -2628,8 +2540,8 @@ QPushButton:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>646</width>
-             <height>562</height>
+             <width>218</width>
+             <height>110</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_23">
@@ -2795,8 +2707,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>646</width>
-             <height>562</height>
+             <width>1391</width>
+             <height>665</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_52">
@@ -2948,8 +2860,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>646</width>
-             <height>562</height>
+             <width>256</width>
+             <height>192</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_54">
@@ -3041,8 +2953,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>646</width>
-             <height>562</height>
+             <width>170</width>
+             <height>140</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_56">
@@ -3136,8 +3048,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>646</width>
-             <height>562</height>
+             <width>70</width>
+             <height>70</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_20">
@@ -3191,8 +3103,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>646</width>
-             <height>562</height>
+             <width>1391</width>
+             <height>665</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_59">
@@ -3303,8 +3215,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>646</width>
-             <height>562</height>
+             <width>98</width>
+             <height>120</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_61">
@@ -3490,14 +3402,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
   <tabstop>login_button_get_liked_videos</tabstop>
   <tabstop>login_button_get_watched_videos</tabstop>
   <tabstop>progress_lineedit_download_info</tabstop>
-  <tabstop>tools_radio_top_porn_week</tabstop>
-  <tabstop>tools_radio_top_porn_month</tabstop>
-  <tabstop>tools_radio_top_porn_all_time</tabstop>
-  <tabstop>tools_button_top_porn_get_videos</tabstop>
   <tabstop>tools_lineedit_hqporner_category</tabstop>
   <tabstop>tools_button_hqporner_category_get_videos</tabstop>
-  <tabstop>tools_button_list_categories</tabstop>
-  <tabstop>tools_button_get_random_videos</tabstop>
   <tabstop>tools_button_get_brazzers_videos</tabstop>
   <tabstop>main_scrollarea_treewidget</tabstop>
   <tabstop>tools_lineedit_videos_by_category_eporner</tabstop>

@@ -19,9 +19,9 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDoubleSpinBo
     QFormLayout, QGraphicsView, QGridLayout, QGroupBox,
     QHBoxLayout, QHeaderView, QLabel, QLayout,
     QLineEdit, QMainWindow, QProgressBar, QPushButton,
-    QRadioButton, QScrollArea, QSizePolicy, QSpacerItem,
-    QSpinBox, QStackedWidget, QStatusBar, QTextBrowser,
-    QTreeWidget, QTreeWidgetItem, QVBoxLayout, QWidget)
+    QScrollArea, QSizePolicy, QSpacerItem, QSpinBox,
+    QStackedWidget, QStatusBar, QTextBrowser, QTreeWidget,
+    QTreeWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -187,7 +187,7 @@ class Ui_MainWindow(object):
         self.scroll_area_top_stacked.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 644, 220))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1389, 220))
         self.gridLayout_8 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_8.setSpacing(0)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
@@ -517,26 +517,22 @@ class Ui_MainWindow(object):
         self.gridLayout_15.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_3 = QGridLayout()
         self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.tools_radio_top_porn_week = QRadioButton(self.groupBox)
-        self.tools_radio_top_porn_week.setObjectName(u"tools_radio_top_porn_week")
-        sizePolicy11 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-        sizePolicy11.setHorizontalStretch(0)
-        sizePolicy11.setVerticalStretch(0)
-        sizePolicy11.setHeightForWidth(self.tools_radio_top_porn_week.sizePolicy().hasHeightForWidth())
-        self.tools_radio_top_porn_week.setSizePolicy(sizePolicy11)
-        self.tools_radio_top_porn_week.setMinimumSize(QSize(0, 0))
-        self.tools_radio_top_porn_week.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.tools_radio_top_porn_week.setChecked(True)
+        self.tools_button_get_random_videos = QPushButton(self.groupBox)
+        self.tools_button_get_random_videos.setObjectName(u"tools_button_get_random_videos")
+        sizePolicy3.setHeightForWidth(self.tools_button_get_random_videos.sizePolicy().hasHeightForWidth())
+        self.tools_button_get_random_videos.setSizePolicy(sizePolicy3)
+        self.tools_button_get_random_videos.setMinimumSize(QSize(0, 0))
+        self.tools_button_get_random_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.gridLayout_3.addWidget(self.tools_radio_top_porn_week, 0, 1, 1, 1)
+        self.gridLayout_3.addWidget(self.tools_button_get_random_videos, 3, 0, 1, 1)
 
         self.tools_button_hqporner_category_get_videos = QPushButton(self.groupBox)
         self.tools_button_hqporner_category_get_videos.setObjectName(u"tools_button_hqporner_category_get_videos")
-        sizePolicy12 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-        sizePolicy12.setHorizontalStretch(0)
-        sizePolicy12.setVerticalStretch(2)
-        sizePolicy12.setHeightForWidth(self.tools_button_hqporner_category_get_videos.sizePolicy().hasHeightForWidth())
-        self.tools_button_hqporner_category_get_videos.setSizePolicy(sizePolicy12)
+        sizePolicy11 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        sizePolicy11.setHorizontalStretch(0)
+        sizePolicy11.setVerticalStretch(2)
+        sizePolicy11.setHeightForWidth(self.tools_button_hqporner_category_get_videos.sizePolicy().hasHeightForWidth())
+        self.tools_button_hqporner_category_get_videos.setSizePolicy(sizePolicy11)
         self.tools_button_hqporner_category_get_videos.setMinimumSize(QSize(0, 0))
         self.tools_button_hqporner_category_get_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
@@ -550,6 +546,17 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addWidget(self.tools_label_videos_by_category, 1, 0, 1, 1)
 
+        self.tools_lineedit_hqporner_category = QLineEdit(self.groupBox)
+        self.tools_lineedit_hqporner_category.setObjectName(u"tools_lineedit_hqporner_category")
+        sizePolicy12 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        sizePolicy12.setHorizontalStretch(0)
+        sizePolicy12.setVerticalStretch(4)
+        sizePolicy12.setHeightForWidth(self.tools_lineedit_hqporner_category.sizePolicy().hasHeightForWidth())
+        self.tools_lineedit_hqporner_category.setSizePolicy(sizePolicy12)
+        self.tools_lineedit_hqporner_category.setMinimumSize(QSize(100, 0))
+
+        self.gridLayout_3.addWidget(self.tools_lineedit_hqporner_category, 1, 1, 1, 1)
+
         self.tools_label_get_top_porn = QLabel(self.groupBox)
         self.tools_label_get_top_porn.setObjectName(u"tools_label_get_top_porn")
         sizePolicy8.setHeightForWidth(self.tools_label_get_top_porn.sizePolicy().hasHeightForWidth())
@@ -557,78 +564,6 @@ class Ui_MainWindow(object):
         self.tools_label_get_top_porn.setMinimumSize(QSize(0, 0))
 
         self.gridLayout_3.addWidget(self.tools_label_get_top_porn, 0, 0, 1, 1)
-
-        self.tools_radio_top_porn_month = QRadioButton(self.groupBox)
-        self.tools_radio_top_porn_month.setObjectName(u"tools_radio_top_porn_month")
-        sizePolicy11.setHeightForWidth(self.tools_radio_top_porn_month.sizePolicy().hasHeightForWidth())
-        self.tools_radio_top_porn_month.setSizePolicy(sizePolicy11)
-        self.tools_radio_top_porn_month.setMinimumSize(QSize(0, 0))
-        self.tools_radio_top_porn_month.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_3.addWidget(self.tools_radio_top_porn_month, 0, 2, 1, 1)
-
-        self.tools_label_get_random_video = QLabel(self.groupBox)
-        self.tools_label_get_random_video.setObjectName(u"tools_label_get_random_video")
-        sizePolicy8.setHeightForWidth(self.tools_label_get_random_video.sizePolicy().hasHeightForWidth())
-        self.tools_label_get_random_video.setSizePolicy(sizePolicy8)
-        self.tools_label_get_random_video.setMinimumSize(QSize(0, 0))
-
-        self.gridLayout_3.addWidget(self.tools_label_get_random_video, 2, 0, 1, 1)
-
-        self.tools_radio_top_porn_all_time = QRadioButton(self.groupBox)
-        self.tools_radio_top_porn_all_time.setObjectName(u"tools_radio_top_porn_all_time")
-        sizePolicy11.setHeightForWidth(self.tools_radio_top_porn_all_time.sizePolicy().hasHeightForWidth())
-        self.tools_radio_top_porn_all_time.setSizePolicy(sizePolicy11)
-        self.tools_radio_top_porn_all_time.setMinimumSize(QSize(0, 0))
-        self.tools_radio_top_porn_all_time.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_3.addWidget(self.tools_radio_top_porn_all_time, 0, 3, 1, 1)
-
-        self.tools_button_list_categories = QPushButton(self.groupBox)
-        self.tools_button_list_categories.setObjectName(u"tools_button_list_categories")
-        sizePolicy11.setHeightForWidth(self.tools_button_list_categories.sizePolicy().hasHeightForWidth())
-        self.tools_button_list_categories.setSizePolicy(sizePolicy11)
-        self.tools_button_list_categories.setMinimumSize(QSize(0, 0))
-        self.tools_button_list_categories.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_3.addWidget(self.tools_button_list_categories, 1, 3, 1, 1)
-
-        self.tools_button_get_random_videos = QPushButton(self.groupBox)
-        self.tools_button_get_random_videos.setObjectName(u"tools_button_get_random_videos")
-        sizePolicy3.setHeightForWidth(self.tools_button_get_random_videos.sizePolicy().hasHeightForWidth())
-        self.tools_button_get_random_videos.setSizePolicy(sizePolicy3)
-        self.tools_button_get_random_videos.setMinimumSize(QSize(0, 0))
-        self.tools_button_get_random_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_3.addWidget(self.tools_button_get_random_videos, 2, 1, 1, 1)
-
-        self.tools_lineedit_hqporner_category = QLineEdit(self.groupBox)
-        self.tools_lineedit_hqporner_category.setObjectName(u"tools_lineedit_hqporner_category")
-        sizePolicy13 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        sizePolicy13.setHorizontalStretch(0)
-        sizePolicy13.setVerticalStretch(4)
-        sizePolicy13.setHeightForWidth(self.tools_lineedit_hqporner_category.sizePolicy().hasHeightForWidth())
-        self.tools_lineedit_hqporner_category.setSizePolicy(sizePolicy13)
-        self.tools_lineedit_hqporner_category.setMinimumSize(QSize(100, 0))
-
-        self.gridLayout_3.addWidget(self.tools_lineedit_hqporner_category, 1, 1, 1, 1)
-
-        self.tools_button_top_porn_get_videos = QPushButton(self.groupBox)
-        self.tools_button_top_porn_get_videos.setObjectName(u"tools_button_top_porn_get_videos")
-        sizePolicy11.setHeightForWidth(self.tools_button_top_porn_get_videos.sizePolicy().hasHeightForWidth())
-        self.tools_button_top_porn_get_videos.setSizePolicy(sizePolicy11)
-        self.tools_button_top_porn_get_videos.setMinimumSize(QSize(0, 0))
-        self.tools_button_top_porn_get_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_3.addWidget(self.tools_button_top_porn_get_videos, 0, 4, 1, 1)
-
-        self.tools_label_get_brazzers_videos = QLabel(self.groupBox)
-        self.tools_label_get_brazzers_videos.setObjectName(u"tools_label_get_brazzers_videos")
-        sizePolicy8.setHeightForWidth(self.tools_label_get_brazzers_videos.sizePolicy().hasHeightForWidth())
-        self.tools_label_get_brazzers_videos.setSizePolicy(sizePolicy8)
-        self.tools_label_get_brazzers_videos.setMinimumSize(QSize(0, 0))
-
-        self.gridLayout_3.addWidget(self.tools_label_get_brazzers_videos, 3, 0, 1, 1)
 
         self.tools_button_get_brazzers_videos = QPushButton(self.groupBox)
         self.tools_button_get_brazzers_videos.setObjectName(u"tools_button_get_brazzers_videos")
@@ -638,6 +573,35 @@ class Ui_MainWindow(object):
         self.tools_button_get_brazzers_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         self.gridLayout_3.addWidget(self.tools_button_get_brazzers_videos, 3, 1, 1, 1)
+
+        self.tools_combobox_hqporner_top_porn = QComboBox(self.groupBox)
+        self.tools_combobox_hqporner_top_porn.addItem("")
+        self.tools_combobox_hqporner_top_porn.addItem("")
+        self.tools_combobox_hqporner_top_porn.addItem("")
+        self.tools_combobox_hqporner_top_porn.setObjectName(u"tools_combobox_hqporner_top_porn")
+
+        self.gridLayout_3.addWidget(self.tools_combobox_hqporner_top_porn, 0, 1, 1, 1)
+
+        self.tools_button_top_porn_get_videos = QPushButton(self.groupBox)
+        self.tools_button_top_porn_get_videos.setObjectName(u"tools_button_top_porn_get_videos")
+        sizePolicy13 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        sizePolicy13.setHorizontalStretch(0)
+        sizePolicy13.setVerticalStretch(0)
+        sizePolicy13.setHeightForWidth(self.tools_button_top_porn_get_videos.sizePolicy().hasHeightForWidth())
+        self.tools_button_top_porn_get_videos.setSizePolicy(sizePolicy13)
+        self.tools_button_top_porn_get_videos.setMinimumSize(QSize(0, 0))
+        self.tools_button_top_porn_get_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout_3.addWidget(self.tools_button_top_porn_get_videos, 0, 2, 1, 1)
+
+        self.tools_button_list_categories = QPushButton(self.groupBox)
+        self.tools_button_list_categories.setObjectName(u"tools_button_list_categories")
+        sizePolicy13.setHeightForWidth(self.tools_button_list_categories.sizePolicy().hasHeightForWidth())
+        self.tools_button_list_categories.setSizePolicy(sizePolicy13)
+        self.tools_button_list_categories.setMinimumSize(QSize(0, 0))
+        self.tools_button_list_categories.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout_3.addWidget(self.tools_button_list_categories, 3, 2, 1, 1)
 
 
         self.gridLayout_15.addLayout(self.gridLayout_3, 0, 0, 1, 1)
@@ -680,8 +644,8 @@ class Ui_MainWindow(object):
 
         self.tools_button_list_categories_eporner = QPushButton(self.groupBox_2)
         self.tools_button_list_categories_eporner.setObjectName(u"tools_button_list_categories_eporner")
-        sizePolicy11.setHeightForWidth(self.tools_button_list_categories_eporner.sizePolicy().hasHeightForWidth())
-        self.tools_button_list_categories_eporner.setSizePolicy(sizePolicy11)
+        sizePolicy13.setHeightForWidth(self.tools_button_list_categories_eporner.sizePolicy().hasHeightForWidth())
+        self.tools_button_list_categories_eporner.setSizePolicy(sizePolicy13)
         self.tools_button_list_categories_eporner.setMinimumSize(QSize(0, 0))
         self.tools_button_list_categories_eporner.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
@@ -717,7 +681,7 @@ class Ui_MainWindow(object):
         self.main_scrollarea_treewidget.setWidgetResizable(True)
         self.main_scrollarea_treewidget_content = QWidget()
         self.main_scrollarea_treewidget_content.setObjectName(u"main_scrollarea_treewidget_content")
-        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 644, 331))
+        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 1389, 434))
         sizePolicy16 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
         sizePolicy16.setHorizontalStretch(0)
         sizePolicy16.setVerticalStretch(0)
@@ -826,31 +790,139 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.pushButton = QPushButton(self.settings_scrollarea_widget_contents)
-        self.pushButton.setObjectName(u"pushButton")
+        self.settings_button_switch_video = QPushButton(self.settings_scrollarea_widget_contents)
+        self.settings_button_switch_video.setObjectName(u"settings_button_switch_video")
 
-        self.horizontalLayout.addWidget(self.pushButton)
+        self.horizontalLayout.addWidget(self.settings_button_switch_video)
 
-        self.pushButton_2 = QPushButton(self.settings_scrollarea_widget_contents)
-        self.pushButton_2.setObjectName(u"pushButton_2")
+        self.settings_button_switch_performance = QPushButton(self.settings_scrollarea_widget_contents)
+        self.settings_button_switch_performance.setObjectName(u"settings_button_switch_performance")
 
-        self.horizontalLayout.addWidget(self.pushButton_2)
+        self.horizontalLayout.addWidget(self.settings_button_switch_performance)
 
-        self.pushButton_3 = QPushButton(self.settings_scrollarea_widget_contents)
-        self.pushButton_3.setObjectName(u"pushButton_3")
+        self.settings_button_switch_system = QPushButton(self.settings_scrollarea_widget_contents)
+        self.settings_button_switch_system.setObjectName(u"settings_button_switch_system")
 
-        self.horizontalLayout.addWidget(self.pushButton_3)
+        self.horizontalLayout.addWidget(self.settings_button_switch_system)
 
-        self.pushButton_4 = QPushButton(self.settings_scrollarea_widget_contents)
-        self.pushButton_4.setObjectName(u"pushButton_4")
+        self.settings_button_switch_ui = QPushButton(self.settings_scrollarea_widget_contents)
+        self.settings_button_switch_ui.setObjectName(u"settings_button_switch_ui")
 
-        self.horizontalLayout.addWidget(self.pushButton_4)
+        self.horizontalLayout.addWidget(self.settings_button_switch_ui)
 
 
         self.verticalLayout_4.addLayout(self.horizontalLayout)
 
         self.settings_stacked_widget_main = QStackedWidget(self.settings_scrollarea_widget_contents)
         self.settings_stacked_widget_main.setObjectName(u"settings_stacked_widget_main")
+        self.page_video = QWidget()
+        self.page_video.setObjectName(u"page_video")
+        self.gridLayout_14 = QGridLayout(self.page_video)
+        self.gridLayout_14.setSpacing(0)
+        self.gridLayout_14.setObjectName(u"gridLayout_14")
+        self.gridLayout_14.setContentsMargins(0, 0, 0, 0)
+        self.settings_gridlayout_video = QGridLayout()
+        self.settings_gridlayout_video.setObjectName(u"settings_gridlayout_video")
+        self.settings_label_videos_quality = QLabel(self.page_video)
+        self.settings_label_videos_quality.setObjectName(u"settings_label_videos_quality")
+        sizePolicy8.setHeightForWidth(self.settings_label_videos_quality.sizePolicy().hasHeightForWidth())
+        self.settings_label_videos_quality.setSizePolicy(sizePolicy8)
+
+        self.settings_gridlayout_video.addWidget(self.settings_label_videos_quality, 0, 0, 1, 1)
+
+        self.settings_checkbox_videos_use_video_id_as_filename = QCheckBox(self.page_video)
+        self.settings_checkbox_videos_use_video_id_as_filename.setObjectName(u"settings_checkbox_videos_use_video_id_as_filename")
+
+        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_use_video_id_as_filename, 4, 0, 1, 1)
+
+        self.settings_video_combobox_model_videos = QComboBox(self.page_video)
+        self.settings_video_combobox_model_videos.addItem("")
+        self.settings_video_combobox_model_videos.addItem("")
+        self.settings_video_combobox_model_videos.addItem("")
+        self.settings_video_combobox_model_videos.setObjectName(u"settings_video_combobox_model_videos")
+
+        self.settings_gridlayout_video.addWidget(self.settings_video_combobox_model_videos, 1, 1, 1, 2)
+
+        self.settings_video_combobox_quality = QComboBox(self.page_video)
+        self.settings_video_combobox_quality.addItem("")
+        self.settings_video_combobox_quality.addItem("")
+        self.settings_video_combobox_quality.addItem("")
+        self.settings_video_combobox_quality.addItem("")
+        self.settings_video_combobox_quality.addItem("")
+        self.settings_video_combobox_quality.addItem("")
+        self.settings_video_combobox_quality.addItem("")
+        self.settings_video_combobox_quality.addItem("")
+        self.settings_video_combobox_quality.addItem("")
+        self.settings_video_combobox_quality.addItem("")
+        self.settings_video_combobox_quality.addItem("")
+        self.settings_video_combobox_quality.setObjectName(u"settings_video_combobox_quality")
+
+        self.settings_gridlayout_video.addWidget(self.settings_video_combobox_quality, 0, 1, 1, 2)
+
+        self.settings_checkbox_videos_write_metadata = QCheckBox(self.page_video)
+        self.settings_checkbox_videos_write_metadata.setObjectName(u"settings_checkbox_videos_write_metadata")
+
+        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_write_metadata, 4, 1, 1, 1)
+
+        self.settings_label_videos_result_limit = QLabel(self.page_video)
+        self.settings_label_videos_result_limit.setObjectName(u"settings_label_videos_result_limit")
+
+        self.settings_gridlayout_video.addWidget(self.settings_label_videos_result_limit, 2, 0, 1, 1)
+
+        self.settings_spinbox_videos_result_limit = QSpinBox(self.page_video)
+        self.settings_spinbox_videos_result_limit.setObjectName(u"settings_spinbox_videos_result_limit")
+        self.settings_spinbox_videos_result_limit.setMinimum(1)
+        self.settings_spinbox_videos_result_limit.setMaximum(5000)
+
+        self.settings_gridlayout_video.addWidget(self.settings_spinbox_videos_result_limit, 2, 1, 1, 2)
+
+        self.settings_label_videos_output_path = QLabel(self.page_video)
+        self.settings_label_videos_output_path.setObjectName(u"settings_label_videos_output_path")
+
+        self.settings_gridlayout_video.addWidget(self.settings_label_videos_output_path, 3, 0, 1, 1)
+
+        self.settings_lineedit_videos_output_path = QLineEdit(self.page_video)
+        self.settings_lineedit_videos_output_path.setObjectName(u"settings_lineedit_videos_output_path")
+        sizePolicy13.setHeightForWidth(self.settings_lineedit_videos_output_path.sizePolicy().hasHeightForWidth())
+        self.settings_lineedit_videos_output_path.setSizePolicy(sizePolicy13)
+
+        self.settings_gridlayout_video.addWidget(self.settings_lineedit_videos_output_path, 3, 1, 1, 1)
+
+        self.settings_checkbox_videos_skip_existing_files = QCheckBox(self.page_video)
+        self.settings_checkbox_videos_skip_existing_files.setObjectName(u"settings_checkbox_videos_skip_existing_files")
+
+        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_skip_existing_files, 4, 2, 1, 1)
+
+        self.settings_label_videos_model_vdeos_type = QLabel(self.page_video)
+        self.settings_label_videos_model_vdeos_type.setObjectName(u"settings_label_videos_model_vdeos_type")
+
+        self.settings_gridlayout_video.addWidget(self.settings_label_videos_model_vdeos_type, 1, 0, 1, 1)
+
+        self.settings_button_videos_open_output_path = QPushButton(self.page_video)
+        self.settings_button_videos_open_output_path.setObjectName(u"settings_button_videos_open_output_path")
+        self.settings_button_videos_open_output_path.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.settings_gridlayout_video.addWidget(self.settings_button_videos_open_output_path, 3, 2, 1, 1)
+
+        self.settings_checkbox_videos_track_downloaded_videos = QCheckBox(self.page_video)
+        self.settings_checkbox_videos_track_downloaded_videos.setObjectName(u"settings_checkbox_videos_track_downloaded_videos")
+
+        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_track_downloaded_videos, 5, 0, 1, 1)
+
+        self.settings_checkbox_videos_use_directory_system = QCheckBox(self.page_video)
+        self.settings_checkbox_videos_use_directory_system.setObjectName(u"settings_checkbox_videos_use_directory_system")
+
+        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_use_directory_system, 5, 1, 1, 1)
+
+        self.settings_checkbox_videos_direct_download = QCheckBox(self.page_video)
+        self.settings_checkbox_videos_direct_download.setObjectName(u"settings_checkbox_videos_direct_download")
+
+        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_direct_download, 5, 2, 1, 1)
+
+
+        self.gridLayout_14.addLayout(self.settings_gridlayout_video, 0, 0, 1, 1)
+
+        self.settings_stacked_widget_main.addWidget(self.page_video)
         self.page_performance = QWidget()
         self.page_performance.setObjectName(u"page_performance")
         self.gridLayout_26 = QGridLayout(self.page_performance)
@@ -961,114 +1033,6 @@ class Ui_MainWindow(object):
         self.gridLayout_26.addLayout(self.settings_gridlayout_performance, 0, 0, 1, 1)
 
         self.settings_stacked_widget_main.addWidget(self.page_performance)
-        self.page_video = QWidget()
-        self.page_video.setObjectName(u"page_video")
-        self.gridLayout_14 = QGridLayout(self.page_video)
-        self.gridLayout_14.setSpacing(0)
-        self.gridLayout_14.setObjectName(u"gridLayout_14")
-        self.gridLayout_14.setContentsMargins(0, 0, 0, 0)
-        self.settings_gridlayout_video = QGridLayout()
-        self.settings_gridlayout_video.setObjectName(u"settings_gridlayout_video")
-        self.settings_label_videos_quality = QLabel(self.page_video)
-        self.settings_label_videos_quality.setObjectName(u"settings_label_videos_quality")
-        sizePolicy8.setHeightForWidth(self.settings_label_videos_quality.sizePolicy().hasHeightForWidth())
-        self.settings_label_videos_quality.setSizePolicy(sizePolicy8)
-
-        self.settings_gridlayout_video.addWidget(self.settings_label_videos_quality, 0, 0, 1, 1)
-
-        self.settings_checkbox_videos_use_video_id_as_filename = QCheckBox(self.page_video)
-        self.settings_checkbox_videos_use_video_id_as_filename.setObjectName(u"settings_checkbox_videos_use_video_id_as_filename")
-
-        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_use_video_id_as_filename, 4, 0, 1, 1)
-
-        self.settings_video_combobox_model_videos = QComboBox(self.page_video)
-        self.settings_video_combobox_model_videos.addItem("")
-        self.settings_video_combobox_model_videos.addItem("")
-        self.settings_video_combobox_model_videos.addItem("")
-        self.settings_video_combobox_model_videos.setObjectName(u"settings_video_combobox_model_videos")
-
-        self.settings_gridlayout_video.addWidget(self.settings_video_combobox_model_videos, 1, 1, 1, 2)
-
-        self.settings_video_combobox_quality = QComboBox(self.page_video)
-        self.settings_video_combobox_quality.addItem("")
-        self.settings_video_combobox_quality.addItem("")
-        self.settings_video_combobox_quality.addItem("")
-        self.settings_video_combobox_quality.addItem("")
-        self.settings_video_combobox_quality.addItem("")
-        self.settings_video_combobox_quality.addItem("")
-        self.settings_video_combobox_quality.addItem("")
-        self.settings_video_combobox_quality.addItem("")
-        self.settings_video_combobox_quality.addItem("")
-        self.settings_video_combobox_quality.addItem("")
-        self.settings_video_combobox_quality.addItem("")
-        self.settings_video_combobox_quality.setObjectName(u"settings_video_combobox_quality")
-
-        self.settings_gridlayout_video.addWidget(self.settings_video_combobox_quality, 0, 1, 1, 2)
-
-        self.settings_checkbox_videos_write_metadata = QCheckBox(self.page_video)
-        self.settings_checkbox_videos_write_metadata.setObjectName(u"settings_checkbox_videos_write_metadata")
-
-        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_write_metadata, 4, 1, 1, 1)
-
-        self.settings_label_videos_result_limit = QLabel(self.page_video)
-        self.settings_label_videos_result_limit.setObjectName(u"settings_label_videos_result_limit")
-
-        self.settings_gridlayout_video.addWidget(self.settings_label_videos_result_limit, 2, 0, 1, 1)
-
-        self.settings_spinbox_videos_result_limit = QSpinBox(self.page_video)
-        self.settings_spinbox_videos_result_limit.setObjectName(u"settings_spinbox_videos_result_limit")
-        self.settings_spinbox_videos_result_limit.setMinimum(1)
-        self.settings_spinbox_videos_result_limit.setMaximum(5000)
-
-        self.settings_gridlayout_video.addWidget(self.settings_spinbox_videos_result_limit, 2, 1, 1, 2)
-
-        self.settings_label_videos_output_path = QLabel(self.page_video)
-        self.settings_label_videos_output_path.setObjectName(u"settings_label_videos_output_path")
-
-        self.settings_gridlayout_video.addWidget(self.settings_label_videos_output_path, 3, 0, 1, 1)
-
-        self.settings_lineedit_videos_output_path = QLineEdit(self.page_video)
-        self.settings_lineedit_videos_output_path.setObjectName(u"settings_lineedit_videos_output_path")
-        sizePolicy11.setHeightForWidth(self.settings_lineedit_videos_output_path.sizePolicy().hasHeightForWidth())
-        self.settings_lineedit_videos_output_path.setSizePolicy(sizePolicy11)
-
-        self.settings_gridlayout_video.addWidget(self.settings_lineedit_videos_output_path, 3, 1, 1, 1)
-
-        self.settings_checkbox_videos_skip_existing_files = QCheckBox(self.page_video)
-        self.settings_checkbox_videos_skip_existing_files.setObjectName(u"settings_checkbox_videos_skip_existing_files")
-
-        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_skip_existing_files, 4, 2, 1, 1)
-
-        self.settings_label_videos_model_vdeos_type = QLabel(self.page_video)
-        self.settings_label_videos_model_vdeos_type.setObjectName(u"settings_label_videos_model_vdeos_type")
-
-        self.settings_gridlayout_video.addWidget(self.settings_label_videos_model_vdeos_type, 1, 0, 1, 1)
-
-        self.settings_button_videos_open_output_path = QPushButton(self.page_video)
-        self.settings_button_videos_open_output_path.setObjectName(u"settings_button_videos_open_output_path")
-        self.settings_button_videos_open_output_path.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.settings_gridlayout_video.addWidget(self.settings_button_videos_open_output_path, 3, 2, 1, 1)
-
-        self.settings_checkbox_videos_track_downloaded_videos = QCheckBox(self.page_video)
-        self.settings_checkbox_videos_track_downloaded_videos.setObjectName(u"settings_checkbox_videos_track_downloaded_videos")
-
-        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_track_downloaded_videos, 5, 0, 1, 1)
-
-        self.settings_checkbox_videos_use_directory_system = QCheckBox(self.page_video)
-        self.settings_checkbox_videos_use_directory_system.setObjectName(u"settings_checkbox_videos_use_directory_system")
-
-        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_use_directory_system, 5, 1, 1, 1)
-
-        self.settings_checkbox_videos_direct_download = QCheckBox(self.page_video)
-        self.settings_checkbox_videos_direct_download.setObjectName(u"settings_checkbox_videos_direct_download")
-
-        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_direct_download, 5, 2, 1, 1)
-
-
-        self.gridLayout_14.addLayout(self.settings_gridlayout_video, 0, 0, 1, 1)
-
-        self.settings_stacked_widget_main.addWidget(self.page_video)
         self.page_system = QWidget()
         self.page_system.setObjectName(u"page_system")
         self.gridLayout_33 = QGridLayout(self.page_system)
@@ -1224,7 +1188,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 646, 562))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 70, 70))
         self.gridLayout_21 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_21.setSpacing(0)
         self.gridLayout_21.setObjectName(u"gridLayout_21")
@@ -1248,7 +1212,7 @@ class Ui_MainWindow(object):
         self.scrollArea_3.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 646, 562))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 218, 110))
         self.gridLayout_23 = QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_23.setSpacing(0)
         self.gridLayout_23.setObjectName(u"gridLayout_23")
@@ -1323,7 +1287,7 @@ class Ui_MainWindow(object):
         self.scrollArea_4.setWidgetResizable(True)
         self.scrollAreaWidgetContents_5 = QWidget()
         self.scrollAreaWidgetContents_5.setObjectName(u"scrollAreaWidgetContents_5")
-        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 646, 562))
+        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 335, 216))
         self.gridLayout_52 = QGridLayout(self.scrollAreaWidgetContents_5)
         self.gridLayout_52.setSpacing(0)
         self.gridLayout_52.setObjectName(u"gridLayout_52")
@@ -1427,7 +1391,7 @@ class Ui_MainWindow(object):
         self.scrollArea_9.setWidgetResizable(True)
         self.scrollAreaWidgetContents_11 = QWidget()
         self.scrollAreaWidgetContents_11.setObjectName(u"scrollAreaWidgetContents_11")
-        self.scrollAreaWidgetContents_11.setGeometry(QRect(0, 0, 646, 562))
+        self.scrollAreaWidgetContents_11.setGeometry(QRect(0, 0, 256, 192))
         self.gridLayout_54 = QGridLayout(self.scrollAreaWidgetContents_11)
         self.gridLayout_54.setSpacing(0)
         self.gridLayout_54.setObjectName(u"gridLayout_54")
@@ -1474,7 +1438,7 @@ class Ui_MainWindow(object):
         self.scrollArea_10.setWidgetResizable(True)
         self.scrollAreaWidgetContents_12 = QWidget()
         self.scrollAreaWidgetContents_12.setObjectName(u"scrollAreaWidgetContents_12")
-        self.scrollAreaWidgetContents_12.setGeometry(QRect(0, 0, 646, 562))
+        self.scrollAreaWidgetContents_12.setGeometry(QRect(0, 0, 170, 140))
         self.gridLayout_56 = QGridLayout(self.scrollAreaWidgetContents_12)
         self.gridLayout_56.setSpacing(0)
         self.gridLayout_56.setObjectName(u"gridLayout_56")
@@ -1533,7 +1497,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 646, 562))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 70, 70))
         self.gridLayout_20 = QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_20.setSpacing(0)
         self.gridLayout_20.setObjectName(u"gridLayout_20")
@@ -1558,7 +1522,7 @@ class Ui_MainWindow(object):
         self.scrollArea_11.setWidgetResizable(True)
         self.scrollAreaWidgetContents_13 = QWidget()
         self.scrollAreaWidgetContents_13.setObjectName(u"scrollAreaWidgetContents_13")
-        self.scrollAreaWidgetContents_13.setGeometry(QRect(0, 0, 646, 562))
+        self.scrollAreaWidgetContents_13.setGeometry(QRect(0, 0, 1391, 665))
         self.gridLayout_59 = QGridLayout(self.scrollAreaWidgetContents_13)
         self.gridLayout_59.setObjectName(u"gridLayout_59")
         self.gridLayout_59.setHorizontalSpacing(0)
@@ -1619,7 +1583,7 @@ class Ui_MainWindow(object):
         self.scrollArea_12.setWidgetResizable(True)
         self.scrollAreaWidgetContents_14 = QWidget()
         self.scrollAreaWidgetContents_14.setObjectName(u"scrollAreaWidgetContents_14")
-        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 646, 562))
+        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 98, 120))
         self.gridLayout_61 = QGridLayout(self.scrollAreaWidgetContents_14)
         self.gridLayout_61.setObjectName(u"gridLayout_61")
         self.textBrowser_5 = QTextBrowser(self.scrollAreaWidgetContents_14)
@@ -1739,15 +1703,9 @@ class Ui_MainWindow(object):
         QWidget.setTabOrder(self.login_lineedit_password, self.login_button_get_liked_videos)
         QWidget.setTabOrder(self.login_button_get_liked_videos, self.login_button_get_watched_videos)
         QWidget.setTabOrder(self.login_button_get_watched_videos, self.progress_lineedit_download_info)
-        QWidget.setTabOrder(self.progress_lineedit_download_info, self.tools_radio_top_porn_week)
-        QWidget.setTabOrder(self.tools_radio_top_porn_week, self.tools_radio_top_porn_month)
-        QWidget.setTabOrder(self.tools_radio_top_porn_month, self.tools_radio_top_porn_all_time)
-        QWidget.setTabOrder(self.tools_radio_top_porn_all_time, self.tools_button_top_porn_get_videos)
-        QWidget.setTabOrder(self.tools_button_top_porn_get_videos, self.tools_lineedit_hqporner_category)
+        QWidget.setTabOrder(self.progress_lineedit_download_info, self.tools_lineedit_hqporner_category)
         QWidget.setTabOrder(self.tools_lineedit_hqporner_category, self.tools_button_hqporner_category_get_videos)
-        QWidget.setTabOrder(self.tools_button_hqporner_category_get_videos, self.tools_button_list_categories)
-        QWidget.setTabOrder(self.tools_button_list_categories, self.tools_button_get_random_videos)
-        QWidget.setTabOrder(self.tools_button_get_random_videos, self.tools_button_get_brazzers_videos)
+        QWidget.setTabOrder(self.tools_button_hqporner_category_get_videos, self.tools_button_get_brazzers_videos)
         QWidget.setTabOrder(self.tools_button_get_brazzers_videos, self.main_scrollarea_treewidget)
         QWidget.setTabOrder(self.main_scrollarea_treewidget, self.tools_lineedit_videos_by_category_eporner)
         QWidget.setTabOrder(self.tools_lineedit_videos_by_category_eporner, self.treeWidget)
@@ -1794,9 +1752,9 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.CentralStackedWidget.setCurrentIndex(1)
-        self.main_stacked_widget_top.setCurrentIndex(1)
-        self.settings_stacked_widget_main.setCurrentIndex(1)
+        self.CentralStackedWidget.setCurrentIndex(0)
+        self.main_stacked_widget_top.setCurrentIndex(3)
+        self.settings_stacked_widget_main.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -1881,18 +1839,17 @@ class Ui_MainWindow(object):
         self.progress_label_info.setText(QCoreApplication.translate("MainWindow", u"Info:", None))
         self.progress_lineedit_download_info.setText("")
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"HQPorner", None))
-        self.tools_radio_top_porn_week.setText(QCoreApplication.translate("MainWindow", u"Week", None))
+        self.tools_button_get_random_videos.setText(QCoreApplication.translate("MainWindow", u"Get random Video", None))
         self.tools_button_hqporner_category_get_videos.setText(QCoreApplication.translate("MainWindow", u"Get Videos", None))
         self.tools_label_videos_by_category.setText(QCoreApplication.translate("MainWindow", u"Get videos by category", None))
         self.tools_label_get_top_porn.setText(QCoreApplication.translate("MainWindow", u"Get Top Porn:", None))
-        self.tools_radio_top_porn_month.setText(QCoreApplication.translate("MainWindow", u"Month", None))
-        self.tools_label_get_random_video.setText(QCoreApplication.translate("MainWindow", u"Get random video", None))
-        self.tools_radio_top_porn_all_time.setText(QCoreApplication.translate("MainWindow", u"All Time", None))
-        self.tools_button_list_categories.setText(QCoreApplication.translate("MainWindow", u"List of all categories", None))
-        self.tools_button_get_random_videos.setText(QCoreApplication.translate("MainWindow", u"Get Video", None))
+        self.tools_button_get_brazzers_videos.setText(QCoreApplication.translate("MainWindow", u"Get Brazzers videos", None))
+        self.tools_combobox_hqporner_top_porn.setItemText(0, QCoreApplication.translate("MainWindow", u"Week", None))
+        self.tools_combobox_hqporner_top_porn.setItemText(1, QCoreApplication.translate("MainWindow", u"Month", None))
+        self.tools_combobox_hqporner_top_porn.setItemText(2, QCoreApplication.translate("MainWindow", u"All time", None))
+
         self.tools_button_top_porn_get_videos.setText(QCoreApplication.translate("MainWindow", u"Get Videos", None))
-        self.tools_label_get_brazzers_videos.setText(QCoreApplication.translate("MainWindow", u"Get Brazzers videos", None))
-        self.tools_button_get_brazzers_videos.setText(QCoreApplication.translate("MainWindow", u"Get Videos", None))
+        self.tools_button_list_categories.setText(QCoreApplication.translate("MainWindow", u"List of all categories", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("MainWindow", u"EPorner", None))
         self.tools_button_eporner_category_get_videos.setText(QCoreApplication.translate("MainWindow", u"Get Videos", None))
         self.tools_button_list_categories_eporner.setText(QCoreApplication.translate("MainWindow", u"List of all categories", None))
@@ -1909,71 +1866,10 @@ class Ui_MainWindow(object):
         ___qtreewidgetitem = self.treeWidget.headerItem()
         ___qtreewidgetitem.setText(2, QCoreApplication.translate("MainWindow", u"Duration (minutes)", None));
         ___qtreewidgetitem.setText(1, QCoreApplication.translate("MainWindow", u"Author", None));
-        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Video", None))
-        self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Performance", None))
-        self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"System", None))
-        self.pushButton_4.setText(QCoreApplication.translate("MainWindow", u"UI", None))
-#if QT_CONFIG(tooltip)
-        self.settings_label_performance_network_delay.setToolTip(QCoreApplication.translate("MainWindow", u"You can set a delay between requests from you and a site. If you are downloading a lot of videos or experiencing \n"
-"errors, you should enable a delay. By default the delay is turned off with the value 0\n"
-"\n"
-"A good starting point is between 0.5 - 1.5\n"
-"\n"
-"The longer the delay is, the longer it will take to download videos, load videos and generally do stuff. This does not\n"
-"really affect the high performance download mode.", None))
-#endif // QT_CONFIG(tooltip)
-        self.settings_label_performance_network_delay.setText(QCoreApplication.translate("MainWindow", u"Network delay (requests/sec)", None))
-        self.settings_performance_combobox_download_mode.setItemText(0, QCoreApplication.translate("MainWindow", u"High Performance", None))
-        self.settings_performance_combobox_download_mode.setItemText(1, QCoreApplication.translate("MainWindow", u"FFMPEG", None))
-        self.settings_performance_combobox_download_mode.setItemText(2, QCoreApplication.translate("MainWindow", u"Default", None))
-
-#if QT_CONFIG(tooltip)
-        self.settings_performance_combobox_download_mode.setToolTip(QCoreApplication.translate("MainWindow", u"1) High Performance:  Uses a class of workers to download multiple video segments at a time. Can be really fast if you\n"
-"have a very strong internet connection. Maybe not great for low end systems.\n"
-"\n"
-"2) FFMPEG:\n"
-"FFmpeg is a specialized tool for video encoding and decoding. It is also able to fetch videos based on their m3u8 URL, which contains the segments. FFmpeg is slower compared to high performance and not well tested. Please only use if you have to.\n"
-"\n"
-"3) Default:  The default download mode will just download one video segment after the next one. If you get a lot of \n"
-"timeouts this can really slow down the process, as we need to wait the Porn sites to return the video segments.\n"
-"With the High Performance method, we can just download other segments while waiting which makes it so fast.", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(tooltip)
-        self.settings_label_performance_maximal_timeout.setToolTip(QCoreApplication.translate("MainWindow", u"The timeout handles the timeout for retrieving segments when using the threaded download mode. If you have a poor \n"
-"internet connection you can set this higher than 10. But this isn't required for most users!", None))
-#endif // QT_CONFIG(tooltip)
-        self.settings_label_performance_maximal_timeout.setText(QCoreApplication.translate("MainWindow", u"Maximal timeout:", None))
-#if QT_CONFIG(tooltip)
-        self.settings_label_performance_maximal_retries.setToolTip(QCoreApplication.translate("MainWindow", u"The maximal retries defines how much attempts will be used for a network request. For example if an API calls\n"
-"a URL for a website there will be <AMOUNT> of attempts until an error is thrown.", None))
-#endif // QT_CONFIG(tooltip)
-        self.settings_label_performance_maximal_retries.setText(QCoreApplication.translate("MainWindow", u"Maximal retries:", None))
-#if QT_CONFIG(tooltip)
-        self.settings_label_performance_simultaneous_download.setToolTip(QCoreApplication.translate("MainWindow", u"The Semaphore is a tool to limit the number of simultaneous actions / downloads. For example: If the semaphore is set to 1, only 1 video will be downloaded at the same time.\\nIf the semaphore is set to 4, 4 videos will be downloaded at the same time. Changing this is only useful, if you have a really good internet connection and a good system.", None))
-#endif // QT_CONFIG(tooltip)
-        self.settings_label_performance_simultaneous_download.setText(QCoreApplication.translate("MainWindow", u"Simultaneous downloads:", None))
-        self.settings_label_performance_download_mode.setText(QCoreApplication.translate("MainWindow", u"Download Mode:", None))
-#if QT_CONFIG(tooltip)
-        self.settings_label_performance_speed_limit.setToolTip(QCoreApplication.translate("MainWindow", u"The speed limit sets the maximum allowed network speed in megabyte per seconds. However, this doesn't work perfectly.\n"
-"The speed limit also only works for the default download mode, because it wouldn't make sense downloading multiple\n"
-"segments at the same time with a speed limit being in place.\n"
-"\n"
-"If you need something more 'exact / precise', use applications like NetLimiter 4 or something similar.", None))
-#endif // QT_CONFIG(tooltip)
-        self.settings_label_performance_speed_limit.setText(QCoreApplication.translate("MainWindow", u"Speed Limit (MB/s):", None))
-#if QT_CONFIG(tooltip)
-        self.settings_label_performance_maximal_workers.setToolTip(QCoreApplication.translate("MainWindow", u" The maximal workers define the amount of maximal threads which can be started when using the threaded download mode.\n"
-"One thread handles downloading one segment, so (in theory) 20 threads can download 20 segments at the same time.\n"
-"This can of course be helpful when you have a very fast internet connection, but when you have a poor PC or running on\n"
-"Android, you should set this to a lower value.", None))
-#endif // QT_CONFIG(tooltip)
-        self.settings_label_performance_maximal_workers.setText(QCoreApplication.translate("MainWindow", u"Maximal workers:", None))
-#if QT_CONFIG(tooltip)
-        self.settings_label_performance_processing_delay.setToolTip(QCoreApplication.translate("MainWindow", u"The processing delay sets a delay before every video gets downloaded.\n"
-"Let's assume you set a delay of 30 (30 seconds), then it will take 30 seconds between each video downloads.\n"
-"This does not apply if you have a value of simultaneous downloads greater than 1.", None))
-#endif // QT_CONFIG(tooltip)
-        self.settings_label_performance_processing_delay.setText(QCoreApplication.translate("MainWindow", u"Processing Delay (videos/sec)", None))
+        self.settings_button_switch_video.setText(QCoreApplication.translate("MainWindow", u"Video", None))
+        self.settings_button_switch_performance.setText(QCoreApplication.translate("MainWindow", u"Performance", None))
+        self.settings_button_switch_system.setText(QCoreApplication.translate("MainWindow", u"System", None))
+        self.settings_button_switch_ui.setText(QCoreApplication.translate("MainWindow", u"UI", None))
 #if QT_CONFIG(tooltip)
         self.settings_label_videos_quality.setToolTip(QCoreApplication.translate("MainWindow", u"By default, Porn Fetch will select the best available video quality. You can also decide between half and worst above.\n"
 "If you instead use the custom integer values (1080p, 720p etc.) then Porn Fetch will try to use these, if available,\n"
@@ -2058,6 +1954,67 @@ class Ui_MainWindow(object):
 "This makes it easier, but gives you less control.", None))
 #endif // QT_CONFIG(tooltip)
         self.settings_checkbox_videos_direct_download.setText(QCoreApplication.translate("MainWindow", u"Directly Download videos (bypass tree widget)", None))
+#if QT_CONFIG(tooltip)
+        self.settings_label_performance_network_delay.setToolTip(QCoreApplication.translate("MainWindow", u"You can set a delay between requests from you and a site. If you are downloading a lot of videos or experiencing \n"
+"errors, you should enable a delay. By default the delay is turned off with the value 0\n"
+"\n"
+"A good starting point is between 0.5 - 1.5\n"
+"\n"
+"The longer the delay is, the longer it will take to download videos, load videos and generally do stuff. This does not\n"
+"really affect the high performance download mode.", None))
+#endif // QT_CONFIG(tooltip)
+        self.settings_label_performance_network_delay.setText(QCoreApplication.translate("MainWindow", u"Network delay (requests/sec)", None))
+        self.settings_performance_combobox_download_mode.setItemText(0, QCoreApplication.translate("MainWindow", u"High Performance", None))
+        self.settings_performance_combobox_download_mode.setItemText(1, QCoreApplication.translate("MainWindow", u"FFMPEG", None))
+        self.settings_performance_combobox_download_mode.setItemText(2, QCoreApplication.translate("MainWindow", u"Default", None))
+
+#if QT_CONFIG(tooltip)
+        self.settings_performance_combobox_download_mode.setToolTip(QCoreApplication.translate("MainWindow", u"1) High Performance:  Uses a class of workers to download multiple video segments at a time. Can be really fast if you\n"
+"have a very strong internet connection. Maybe not great for low end systems.\n"
+"\n"
+"2) FFMPEG:\n"
+"FFmpeg is a specialized tool for video encoding and decoding. It is also able to fetch videos based on their m3u8 URL, which contains the segments. FFmpeg is slower compared to high performance and not well tested. Please only use if you have to.\n"
+"\n"
+"3) Default:  The default download mode will just download one video segment after the next one. If you get a lot of \n"
+"timeouts this can really slow down the process, as we need to wait the Porn sites to return the video segments.\n"
+"With the High Performance method, we can just download other segments while waiting which makes it so fast.", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.settings_label_performance_maximal_timeout.setToolTip(QCoreApplication.translate("MainWindow", u"The timeout handles the timeout for retrieving segments when using the threaded download mode. If you have a poor \n"
+"internet connection you can set this higher than 10. But this isn't required for most users!", None))
+#endif // QT_CONFIG(tooltip)
+        self.settings_label_performance_maximal_timeout.setText(QCoreApplication.translate("MainWindow", u"Maximal timeout:", None))
+#if QT_CONFIG(tooltip)
+        self.settings_label_performance_maximal_retries.setToolTip(QCoreApplication.translate("MainWindow", u"The maximal retries defines how much attempts will be used for a network request. For example if an API calls\n"
+"a URL for a website there will be <AMOUNT> of attempts until an error is thrown.", None))
+#endif // QT_CONFIG(tooltip)
+        self.settings_label_performance_maximal_retries.setText(QCoreApplication.translate("MainWindow", u"Maximal retries:", None))
+#if QT_CONFIG(tooltip)
+        self.settings_label_performance_simultaneous_download.setToolTip(QCoreApplication.translate("MainWindow", u"The Semaphore is a tool to limit the number of simultaneous actions / downloads. For example: If the semaphore is set to 1, only 1 video will be downloaded at the same time.\\nIf the semaphore is set to 4, 4 videos will be downloaded at the same time. Changing this is only useful, if you have a really good internet connection and a good system.", None))
+#endif // QT_CONFIG(tooltip)
+        self.settings_label_performance_simultaneous_download.setText(QCoreApplication.translate("MainWindow", u"Simultaneous downloads:", None))
+        self.settings_label_performance_download_mode.setText(QCoreApplication.translate("MainWindow", u"Download Mode:", None))
+#if QT_CONFIG(tooltip)
+        self.settings_label_performance_speed_limit.setToolTip(QCoreApplication.translate("MainWindow", u"The speed limit sets the maximum allowed network speed in megabyte per seconds. However, this doesn't work perfectly.\n"
+"The speed limit also only works for the default download mode, because it wouldn't make sense downloading multiple\n"
+"segments at the same time with a speed limit being in place.\n"
+"\n"
+"If you need something more 'exact / precise', use applications like NetLimiter 4 or something similar.", None))
+#endif // QT_CONFIG(tooltip)
+        self.settings_label_performance_speed_limit.setText(QCoreApplication.translate("MainWindow", u"Speed Limit (MB/s):", None))
+#if QT_CONFIG(tooltip)
+        self.settings_label_performance_maximal_workers.setToolTip(QCoreApplication.translate("MainWindow", u" The maximal workers define the amount of maximal threads which can be started when using the threaded download mode.\n"
+"One thread handles downloading one segment, so (in theory) 20 threads can download 20 segments at the same time.\n"
+"This can of course be helpful when you have a very fast internet connection, but when you have a poor PC or running on\n"
+"Android, you should set this to a lower value.", None))
+#endif // QT_CONFIG(tooltip)
+        self.settings_label_performance_maximal_workers.setText(QCoreApplication.translate("MainWindow", u"Maximal workers:", None))
+#if QT_CONFIG(tooltip)
+        self.settings_label_performance_processing_delay.setToolTip(QCoreApplication.translate("MainWindow", u"The processing delay sets a delay before every video gets downloaded.\n"
+"Let's assume you set a delay of 30 (30 seconds), then it will take 30 seconds between each video downloads.\n"
+"This does not apply if you have a value of simultaneous downloads greater than 1.", None))
+#endif // QT_CONFIG(tooltip)
+        self.settings_label_performance_processing_delay.setText(QCoreApplication.translate("MainWindow", u"Processing Delay (videos/sec)", None))
 #if QT_CONFIG(tooltip)
         self.settings_checkbox_system_enable_anonymous_mode.setToolTip(QCoreApplication.translate("MainWindow", u"The anonymous mode renames all of Porn Fetch's elements to look NOT like a Porn downloader.\n"
 "This makes it useful for downloading Porn content if you are in public, or multiple people use your PC / Phone.\n"

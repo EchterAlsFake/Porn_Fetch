@@ -1052,7 +1052,7 @@ class PornFetch(QMainWindow):
 
         self.last_index = 0  # Keeps track of the last index of videos added to the tree widget
         self.threadpool = QThreadPool()
-
+        self.maps()
         self.load_style()
         self.donation_nag = DonationNag(self.ui, self.initialize_pornfetch)
         self.license = License(self.ui, self.initialize_pornfetch)
@@ -1082,7 +1082,6 @@ class PornFetch(QMainWindow):
 
         self.default_max_height = self.ui.main_stacked_widget_top.maximumHeight()
         self.button_connections()  # Connects the buttons to their functions
-        self.button_groups()  # Groups the buttons, so that the Radio buttons are split from themselves (hard to explain)
         self.shortcuts()  # Activates the keyboard shortcuts
         self.logger.debug("Startup: [3/5] Initialized the User Interface")
         self.load_user_settings()  # Loads the user settings and applies selected values to the UI
@@ -1396,15 +1395,6 @@ class PornFetch(QMainWindow):
         self._anonymous_mode = True  # Makes sense, trust
         self.logger.info("Enabled anonymous mode!")
 
-    def button_groups(self):
-        """
-        The button groups are needed to tell the radio button which of them are in a group.
-        If I don't do this, then you could check all redio buttons at the same time lol"""
-        self.group_radio_hqporner = QButtonGroup()
-        self.group_radio_hqporner.addButton(self.ui.tools_radio_top_porn_week)
-        self.group_radio_hqporner.addButton(self.ui.tools_radio_top_porn_month)
-        self.group_radio_hqporner.addButton(self.ui.tools_radio_top_porn_all_time)
-
     def button_connections(self):
         """a function to link the buttons to their functions"""
         # Menu Bar Switch Button Connections
@@ -1422,6 +1412,11 @@ class PornFetch(QMainWindow):
         self.ui.download_button_playlist_get_videos.clicked.connect(self.start_playlist)
 
         # Settings
+        self.ui.settings_button_switch_video.clicked.connect((lambda _=False, i=0: self.ui.settings_stacked_widget_main.setCurrentIndex(i)))
+        self.ui.settings_button_switch_performance.clicked.connect(lambda _=False, i=1: self.ui.settings_stacked_widget_main.setCurrentIndex(i))
+        self.ui.settings_button_switch_system.clicked.connect(lambda _=False, i=2: self.ui.settings_stacked_widget_main.setCurrentIndex(i))
+        self.ui.settings_button_switch_ui.clicked.connect(lambda _=False, i=3: self.ui.settings_stacked_widget_main.setCurrentIndex(i))
+
         self.ui.settings_button_apply.clicked.connect(self.save_user_settings)
         self.ui.settings_button_reset.clicked.connect(reset_pornfetch)
         self.ui.settings_button_system_install_pornfetch.clicked.connect(self.switch_to_install_dialog)
@@ -1826,12 +1821,10 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         """This opens and processes urls in the file"""
         dialog = QFileDialog()
         file, types = dialog.getOpenFileName()
-        self.logger.info(f"Iterating over: {file}")
-        self.ui.download_lineedit_file.setText(file)
-        self.start_file_processing()
+        self.logger.info(f"Processing: {file}")
+        self.start_file_processing(file)
 
-    def start_file_processing(self):
-        file = self.ui.download_lineedit_file.text()
+    def start_file_processing(self, file: str):
         self.url_thread = AddUrls(file)
         self.url_thread.signals.total_progress.connect(self.update_total_progressbar)
         self.url_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
@@ -2009,7 +2002,6 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         self.download_thread.signals.progress_video_range.connect(self.set_video_progress_range)
         self.download_thread.signals.total_progress_range.connect(self.update_total_progressbar_range)
         self.download_thread.signals.total_progress.connect(self.update_total_progressbar)
-        # ADAPTION
         self.download_thread.signals.download_completed.connect(self.download_completed)
         self.threadpool.start(self.download_thread)
         self.logger.debug("Started Download Thread!")
@@ -2322,21 +2314,16 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
     The following functions are related to the search functionality
     """
 
+    def maps(self):
+        self.mappings_hqporner_tools = {
+            0: hq_Sort.WEEK,
+            1: hq_Sort.MONTH,
+            2: hq_Sort.ALL_TIME
+        }
+
     def get_top_porn_hqporner(self):
-        if self.ui.tools_radio_top_porn_week.isChecked():
-            sort = hq_Sort.WEEK
-
-        elif self.ui.tools_radio_top_porn_month.isChecked():
-            sort = hq_Sort.MONTH
-
-        elif self.ui.tools_radio_top_porn_all_time:
-            sort = hq_Sort.ALL_TIME
-
-        else:
-            sort = None
-
         try:
-            videos = shared_functions.hq_client.get_top_porn(sort_by=sort)
+            videos = shared_functions.hq_client.get_top_porn(sort_by=self.mappings_hqporner_tools[self.ui.tools_combobox_hqporner_top_porn.currentIndex()])
 
         except NoVideosFound:
             handle_error_gracefully(self, data=video_data.consistent_data, error_message="No videos found. This is likely an issue and will be reported", needs_network_log=True)
