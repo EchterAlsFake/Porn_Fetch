@@ -24,6 +24,7 @@ from eporner_api import Client as ep_Client, Video as ep_Video, Category as ep_C
 from missav_api.missav_api import Video as mv_Video, Client as mv_Client
 from xhamster_api import Client as xh_Client, Video as xh_Video
 from spankbang_api import Client as sp_Client, Video as sp_Video
+from youporn_api.youporn_api import Client as yp_Client, Video as yp_Video
 from base_api.modules.config import config # This is the global configuration instance of base core config
 # which is also affecting all other APIs when the refresh_clients function is called
 # Initialize clients globally, so that we can override them later with a new configuration from BaseCore if needed
@@ -35,12 +36,13 @@ xh_client = xh_Client()
 sp_client = sp_Client()
 hq_client = hq_Client()
 xn_client = xn_Client()
+yp_client = yp_Client()
 core = BaseCore() # We need that sometimes in Porn Fetch's main class e.g., thumbnail fetching
 core_ph = None
 core_internet_checks = BaseCore(config=config, auto_init=True)
 
 def refresh_clients(enable_kill_switch=False):
-    global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, hq_client, xn_client, core, core_ph
+    global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, hq_client, xn_client, core, core_ph, yp_client
 
     # One BaseCore per site, with its own RuntimeConfig (isolated headers/cookies)
     core_common = BaseCore(config=config, auto_init=True)   # if you want a “generic” core
@@ -52,6 +54,7 @@ def refresh_clients(enable_kill_switch=False):
     core_xh    = BaseCore(config=config, auto_init=True)
     core_xn    = BaseCore(config=config, auto_init=True)
     core_sp    = BaseCore(config=config, auto_init=True)
+    core_yp    = BaseCore(config=config, auto_init=True)
 
     if enable_kill_switch:
         core_common.enable_kill_switch()
@@ -62,6 +65,7 @@ def refresh_clients(enable_kill_switch=False):
         core_xv.enable_kill_switch()
         core_xh.enable_kill_switch()
         core_xn.enable_kill_switch()
+        core_yp.enable_kill_switch()
 
     # Instantiate clients with their site-specific cores
     mv_client = mv_Client(core=core_mv)
@@ -72,6 +76,7 @@ def refresh_clients(enable_kill_switch=False):
     sp_client = sp_Client(core=core_sp)
     hq_client = hq_Client(core=core_hq)
     xn_client = xn_Client(core=core_xn)
+    yp_client = yp_Client(core=core_yp)
 
     core = core_common
 
@@ -111,6 +116,7 @@ eporner_pattern = re.compile(r'(.*?)eporner.com(.*)')
 missav_pattern = re.compile(r'(.*?)missav(.*?)')
 xhamster_pattern = re.compile(r'(.*?)xhamster(.*?)')
 spankbang_pattern = re.compile(r'(.*?)spankbang(.*?)')
+youporn_pattern = re.compile(r'(.*?)youporn(.*?)')
 
 
 default_configuration = f"""[Setup]
@@ -184,6 +190,9 @@ def check_video(url, is_url=True):
         elif spankbang_pattern.search(str(url)) and not isinstance(url, sp_Video):
             return sp_client.get_video(url)
 
+        elif youporn_pattern.search(str(url)) and not isinstance(url, yp_Video):
+            return yp_client.get_video(url)
+
         if isinstance(url, ph_Video):
             url.fetch("page@") # If url is a PornHub Video object it does have the `fetch` method
             return url
@@ -207,6 +216,9 @@ def check_video(url, is_url=True):
             return url
 
         elif isinstance(url, sp_Video):
+            return url
+
+        elif isinstance(url, yp_Video):
             return url
 
         elif isinstance(url, str) and not str(url).endswith(".html"):
@@ -337,6 +349,13 @@ def load_video_attributes(video):
         author = "Not available"
         length = "Not available"
         tags = "Not available"
+        thumbnail = video.thumbnail
+        publish_date = video.publish_date
+
+    elif isinstance(video, yp_Video):
+        author = video.author.name
+        length = video.length
+        tags = ",".join(video.categories)
         thumbnail = video.thumbnail
         publish_date = video.publish_date
 

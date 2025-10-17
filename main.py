@@ -185,6 +185,7 @@ from hqporner_api.modules.errors import (InvalidActress as InvalidActress_HQ, No
                                          NotAvailable as NotAvailable_HQ, WeirdError as WeirdError_HQ)
 from xvideos_api.modules.errors import (VideoUnavailable as VideoUnavailable_XV)
 from eporner_api.modules.errors import NotAvailable as NotAvailable_EP, VideoDisabled as VideoDisabled_EP
+from youporn_api.modules.errors import VideoUnavailable as VideoUnavailable_YP, RegionBlocked as RegionBlocked_YP
 from phub.errors import VideoError as VideoError_PH
 
 _download_lock = Lock()
@@ -431,7 +432,8 @@ class InternetCheck(QRunnable):
             "https://www.xnxx.com",
             "https://www.missav.ws",
             "https://www.xhamster.com",
-            "https://www.spankbang.com"
+            "https://www.spankbang.com",
+            "https://www.youporn.com"
             # Append new URLs here
         ]
 
@@ -632,6 +634,12 @@ class AddToTreeWidget(QRunnable):
             except VideoError_PH:
                 handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {video.url} has an error. However, in this case it's PornHub's fault. It will be skipped!")
                 return False
+
+            except RegionBlocked_YP:
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {video.url} is region locked. It will be skipped...")
+
+            except VideoUnavailable_YP:
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {video.url} is unavailable on YouPorn. It will be skipped...")
 
             except Exception:
                 error = traceback.format_exc()
@@ -1796,6 +1804,12 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         elif shared_functions.xnxx_pattern.match(model):
             videos = shared_functions.xn_client.get_user(url=model).videos
 
+        elif shared_functions.youporn_pattern.match(model) and "channel" in model:
+            videos = shared_functions.yp_client.get_channel(url=model).videos()
+
+        elif shared_functions.youporn_pattern.match(model):
+            videos = shared_functions.yp_client.get_pornstar(url=model).videos()
+
         elif "xvideos" and "model" or "pornstar" in str(model):
             videos = shared_functions.xv_client.get_pornstar(url=model).videos
 
@@ -1812,8 +1826,17 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
     def start_playlist(self):
         url = self.ui.download_lineedit_playlist_url.text()
         self.logger.info(f"Requesting playlist videos for -->: {url}")
-        playlist = shared_functions.ph_client.get_playlist(url)
-        videos = playlist.sample()
+
+        if shared_functions.pornhub_pattern.match(url):
+            playlist = shared_functions.ph_client.get_playlist(url)
+            videos = playlist.sample()
+
+        elif shared_functions.youporn_pattern.match(url):
+            videos = shared_functions.yp_client.get_collection(url).videos()
+
+        else:
+            return # Invalid playlist provided
+
         self.logger.debug("Got playlist videos!")
         self.add_to_tree_widget_thread(iterator=videos)
 
