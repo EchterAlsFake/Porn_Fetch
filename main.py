@@ -147,6 +147,7 @@ try:
     from src.backend.shared_gui import *
     from src.frontend.UI.ui_form_main_window import Ui_MainWindow
     #from src.frontend.UI.ui_form_android import Ui_PornFetchAndroid
+    from src.frontend.UI.theme import apply_theme, mark, pretty_combo
     from src.backend.one_time_functions import *
     from src.backend.config import __version__, __build__
     from src.backend.donation_nag import DonationNag
@@ -158,7 +159,8 @@ try:
                                 QTranslator, QCoreApplication, QSize, QEvent, QRectF)
     from PySide6.QtWidgets import (QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, \
         QInputDialog, QMainWindow, QLabel, QProgressBar, QGraphicsPixmapItem, QDialog, QVBoxLayout,
-                                   QGraphicsScene, QGraphicsView, QPushButton, QHBoxLayout)
+                                   QGraphicsScene, QGraphicsView, QPushButton, QHBoxLayout, QLineEdit, QComboBox,
+                                   QSpinBox, QDoubleSpinBox, QTextEdit, QPlainTextEdit, QToolButton, QAbstractButton)
     from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence, QPainter
 
 except Exception as e:
@@ -258,6 +260,44 @@ class VideoData:
             del self.data_objects[video_title]  # Del is faster than pop :)
 
 video_data = VideoData()
+
+KEYBOARD_REASONS = {
+    Qt.TabFocusReason, Qt.BacktabFocusReason, Qt.ShortcutFocusReason
+}
+
+class FocusOutlineFilter(QObject):
+    def eventFilter(self, obj: QObject, ev: QEvent) -> bool:
+        et = ev.type()
+        if et == QEvent.FocusIn:
+            # keyboard-driven focus?
+            try:
+                reason = ev.reason()  # QFocusEvent
+            except Exception:
+                reason = Qt.OtherFocusReason
+            obj.setProperty("kbd", "1" if reason in KEYBOARD_REASONS else "0")
+            _repolish(obj)
+        elif et == QEvent.FocusOut:
+            obj.setProperty("kbd", "0")
+            _repolish(obj)
+        # we rely on native :hover, so no Enter/Leave handling needed
+        return False
+
+def _repolish(w: QObject):
+    if isinstance(w, QWidget):
+        w.setStyleSheet(w.styleSheet())   # re-evaluate inline (even if empty)
+        w.style().unpolish(w)
+        w.style().polish(w)
+        w.update()
+
+def install_focus_outline(root: QWidget):
+    """Attach to all interactive widgets now (call again after dynamic UI changes)."""
+    filt = FocusOutlineFilter(root)
+    root._focus_outline_filter = filt  # keep a reference
+    classes = [QLineEdit, QComboBox, QTextEdit, QPlainTextEdit,
+               QSpinBox, QDoubleSpinBox, QAbstractButton]
+    for cls in classes:
+        for w in root.findChildren(cls):
+            w.installEventFilter(filt)
 
 class Signals(QObject):
     """Signals for the Download class"""
@@ -509,11 +549,10 @@ class CheckUpdates(QRunnable):
 
 
 class AddToTreeWidget(QRunnable):
-    def __init__(self, iterator, is_reverse, is_checked, last_index):
+    def __init__(self, iterator, is_checked, last_index):
         super(AddToTreeWidget, self).__init__()
         self.signals = Signals()  # Processing signals for progress and information
         self.iterator = iterator  # The video iterator (Search or model object yk)
-        self.reverse = is_reverse  # If the user wants to display the videos in reverse
         self.stop_flag = stop_flag  # If the user pressed the stop process button
         self.is_checked = is_checked  # If the "do not clear videos" checkbox is checked
         self.last_index = last_index  # The last index (video) of the tree widget to maintain a correct order of numbers
@@ -664,17 +703,7 @@ class AddToTreeWidget(QRunnable):
             start = 1
             self.logger.debug(f"Result Limit: {str(self.result_limit)}")
 
-
-        if self.reverse:
-            self.logger.info("Reversing Videos. This may take some time...")
-
-            # Use islice to limit the number of items fetched from the iterator
-            videos = list(islice(self.iterator, self.result_limit))  # Can take A LOT of time (like really)
-            videos.reverse()  # Reverse the list (to show videos in reverse order)
-
-        else:
-            videos = islice(self.iterator, self.result_limit)
-
+        videos = islice(self.iterator, self.result_limit)
         self.signals.total_progress_range.emit(self.result_limit)
         for i, video in enumerate(videos, start=start):
             if self.stop_flag.is_set():
@@ -1212,8 +1241,9 @@ class PornFetch(QMainWindow):
         self.ui.CentralStackedWidget.setCurrentIndex(11)
 
     def load_style(self):
+        self.ui.settings_radio_ui_lsd.setText("LSD (☢️)")
+        self.ui.settings_radio_ui_light.setText("Light (💀)")
         icons = {
-            # Menu Bar Icons
             self.ui.main_button_switch_home: "download.svg",
             self.ui.main_button_switch_settings: "settings.svg",
             self.ui.main_button_switch_credits: "information.svg",
@@ -1221,130 +1251,121 @@ class PornFetch(QMainWindow):
             self.ui.main_button_switch_tools: "tools.svg",
             self.ui.main_button_view_progress_bars: "progressbars.svg",
         }
-        """Refactored function to load icons and stylesheets."""
-        # Setting icons with a loop if applicable
-        self.setGeometry(0, 0, 1054, 829)
-        for button, icon_name in icons.items():
-            if icon_name == "settings.svg" or icon_name == "tools.svg":
-                button.setIconSize(QSize(24, 24))
-
-            button.setIcon(QIcon(f":/images/graphics/{icon_name}"))
-
         self.setWindowIcon(QIcon(":/images/graphics/logo_transparent.ico"))
-        # Stylesheets
-        stylesheet_paths = {
-            "stylesheet_menu_button_download": ":/style/stylesheets/menu_button_download.qss",
-            "stylesheet_menu_button_account": ":/style/stylesheets/menu_button_account.qss",
-            "stylesheet_menu_button_tools": ":/style/stylesheets/menu_button_tools.qss",
-            "stylesheet_menu_button_credits": ":/style/stylesheets/menu_button_credits.qss",
-            "stylesheet_menu_button_progress": ":/style/stylesheets/menu_button_progress.qss",
-            "progressbar_pornhub": ":/style/stylesheets/progressbar_pornhub.qss",
-            "progressbar_hqporner": ":/style/stylesheets/progressbar_hqporner.qss",
-            "progressbar_eporner": ":/style/stylesheets/progressbar_eporner.qss",
-            "progressbar_total": ":/style/stylesheets/progressbar_total.qss",
-            "progressbar_xnxx": ":/style/stylesheets/progressbar_xnxx.qss",
-            "progressbar_missav": ":/style/stylesheets/progressbar_missav.qss",
-            "progressbar_xhamster": ":/style/stylesheets/progressbar_xhamster.qss",
-            "progressbar_xvideos": ":/style/stylesheets/progressbar_xvideos.qss",
-            "progressbar_spankbang": ":/style/stylesheets/progressbar_spankbang.qss",
-            "progressbar_converting": ":/style/stylesheets/progressbar_converting.qss",
-            "button_blue": ":/style/stylesheets/stylesheet_button_blue.qss",
-            "button_orange": ":/style/stylesheets/stylesheet_button_orange.qss",
-            "button_purple": ":/style/stylesheets/stylesheet_button_purple.qss",
-            "button_green": ":/style/stylesheets/stylesheet_button_green.qss",
-            "buttons_login": ":/style/stylesheets/stylesheet_buttons_login.qss",
-            "button_reset": ":/style/stylesheets/stylesheet_button_reset.qss"
-        }
 
-        self.stylesheets = {key: load_stylesheet(path) for key, path in stylesheet_paths.items()}
-        stylesheets = self.stylesheets # Please don't ask
-        # Applying stylesheets to specific buttons
-        # Simplify this part based on actual UI structure and naming
+        for btn, name in icons.items():
+            btn.setIcon(QIcon(f":/images/graphics/{name}"))
+            btn.setIconSize(QSize(24, 24))  # consistent size for all
 
-        from PySide6.QtWidgets import QWidget
-        for child in self.findChildren(QWidget):
-            if isinstance(child, QPushButton) and "button_help" in child.objectName():
-                child.setStyleSheet(stylesheets["button_green"])
-                child.setIcon(QIcon(f":/images/graphics/faq.svg"))
+        # --- top nav becomes segmented & exclusive ---
+        nav = [
+            self.ui.main_button_switch_home,
+            self.ui.main_button_switch_account,
+            self.ui.main_button_switch_tools,
+            self.ui.main_button_switch_settings,
+            self.ui.main_button_switch_credits,
+            self.ui.main_button_view_progress_bars,
+        ]
+        group_menu_bar = QButtonGroup(self)
+        group_menu_bar.setExclusive(True)
+        for b in nav:
+            b.setCheckable(True)
+            group_menu_bar.addButton(b)
+            mark(b, seg=True)  # <- gives the segmented style
+        self.ui.main_button_switch_home.setChecked(True)
 
-        # Applying top buttons
-        self.ui.login_button_login.setStyleSheet(stylesheets["button_green"])
-        self.ui.main_progressbar_total.setStyleSheet(stylesheets["progressbar_total"])
-        self.ui.main_progressbar_converting.setStyleSheet(stylesheets["progressbar_converting"])
-        self.ui.download_button_model.setStyleSheet(stylesheets["button_purple"])
-        self.ui.button_search.setStyleSheet(stylesheets["button_purple"])
-        self.ui.download_button_download.setStyleSheet(stylesheets["button_purple"])
-        self.ui.main_button_tree_download.setStyleSheet(stylesheets["button_orange"])
-        self.ui.settings_button_videos_open_output_path.setStyleSheet(stylesheets["button_blue"])
-        self.ui.login_button_login.setStyleSheet(stylesheets["button_blue"])
-        self.ui.settings_button_apply.setStyleSheet(stylesheets["button_blue"])
-        self.ui.tools_button_get_random_videos.setStyleSheet(stylesheets["button_purple"])
-        self.ui.button_update_acknowledged.setStyleSheet(stylesheets["button_green"])
-        self.ui.tools_button_get_brazzers_videos.setStyleSheet(stylesheets["button_purple"])
-        self.ui.tools_button_list_categories.setStyleSheet(stylesheets["button_purple"])
+        settings_nav = [
+            self.ui.settings_button_switch_video,
+            self.ui.settings_button_switch_performance,
+            self.ui.settings_button_switch_system,
+            self.ui.settings_button_switch_ui
+        ]
+        group_settings_bar = QButtonGroup(self)
+        group_settings_bar.setExclusive(True)
+        for b in settings_nav:
+            b.setCheckable(True)
+            group_settings_bar.addButton(b)
+            mark(b, seg=True)
+        self.ui.settings_button_switch_video.setChecked(True)
+
+        # --- intent & size instead of dozens of QSS files ---
+        mark(self.ui.download_button_download, intent="primary", size="lg")
+        mark(self.ui.main_button_tree_download, intent="primary")
+        mark(self.ui.login_button_login, intent="primary")
+        mark(self.ui.settings_button_apply, intent="primary")
+
+        mark(self.ui.main_button_tree_stop, intent="danger")
+        mark(self.ui.settings_button_reset, intent="danger")
+
+        mark(self.ui.main_progressbar_total, role="total")
+        mark(self.ui.main_progressbar_converting, role="convert")
+
+        # most of these are secondary or flat so they don’t compete visually
+        for b in [
+            self.ui.main_button_switch_supported_websites,
+            self.ui.main_button_tree_keyboard_shortcuts,
+            self.ui.button_update_acknowledged,
+        ]:
+            mark(b, flat=True)
+
+        # things that start/queue work but aren’t “the” CTA: make them secondary
+        for b in [
+            self.ui.download_button_playlist_get_videos,
+            self.ui.download_button_model,
+            self.ui.button_search,
+            self.ui.tools_button_get_random_videos,
+            self.ui.tools_button_get_brazzers_videos,
+            self.ui.tools_button_list_categories,
+            self.ui.tools_button_list_categories_eporner,
+            self.ui.tools_button_eporner_category_get_videos,
+            self.ui.tools_button_hqporner_category_get_videos,
+            self.ui.settings_button_system_install_pornfetch,
+        ]:
+            mark(b)  # no intent ⇒ secondary
+
+        for cb in self.findChildren(QComboBox):
+            pretty_combo(cb)
 
         if __build__ == "desktop":
-            self.ui.download_button_open_file.setStyleSheet(stylesheets["button_purple"])
+            mark(self.ui.download_button_open_file)  # secondary
 
-        self.ui.main_button_switch_supported_websites.setStyleSheet(stylesheets["button_blue"])
-        self.ui.tools_button_hqporner_category_get_videos.setStyleSheet(stylesheets["button_purple"])
-        self.ui.tools_button_top_porn_get_videos.setStyleSheet(stylesheets["button_purple"])
-        self.ui.login_button_get_watched_videos.setStyleSheet(stylesheets["buttons_login"])
-        self.ui.login_button_get_liked_videos.setStyleSheet(stylesheets["buttons_login"])
-        self.ui.login_button_get_recommended_videos.setStyleSheet(stylesheets["buttons_login"])
-        self.ui.settings_button_reset.setStyleSheet(stylesheets["button_reset"])
-        self.ui.download_button_playlist_get_videos.setStyleSheet(stylesheets["button_purple"])
-        self.ui.main_button_tree_stop.setStyleSheet(stylesheets["button_reset"])
-        self.ui.tools_button_eporner_category_get_videos.setStyleSheet(stylesheets["button_purple"])
+        # --- progress bars: mark roles instead of separate QSS files ---
+        mark(self.ui.main_progressbar_total, role="total")
+        mark(self.ui.main_progressbar_converting, role="convert")
 
-        self.ui.tools_button_list_categories_eporner.setStyleSheet(stylesheets["button_purple"])
-        self.ui.settings_button_system_install_pornfetch.setStyleSheet(stylesheets["button_green"])
-        self.ui.main_button_tree_automated_selection.setStyleSheet(stylesheets["button_purple"])
-        self.ui.main_button_tree_keyboard_shortcuts.setStyleSheet(stylesheets["button_blue"])
-
-        self.ui.main_button_switch_home.setStyleSheet(stylesheets["stylesheet_menu_button_download"])
-        self.ui.main_button_switch_account.setStyleSheet(stylesheets["stylesheet_menu_button_account"])
-        self.ui.main_button_switch_tools.setStyleSheet(stylesheets["stylesheet_menu_button_tools"])
-        self.ui.main_button_switch_credits.setStyleSheet(stylesheets["stylesheet_menu_button_credits"])
-        self.ui.main_button_view_progress_bars.setStyleSheet(stylesheets["stylesheet_menu_button_progress"])
-
-        self.header = self.ui.treeWidget.header()
-        self.header.resizeSection(0, 300)
-        self.header.resizeSection(1, 150)
-        self.header.resizeSection(2, 50)
-        self.header.setSectionResizeMode(3, QHeaderView.ResizeMode.Fixed)
+        # --- tree header sizing / behavior ---
+        hdr = self.ui.treeWidget.header()
+        hdr.setStretchLastSection(False)
+        hdr.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)  # Title
+        hdr.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)  # Author
+        hdr.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)  # Length
+        hdr.setSectionResizeMode(3, QHeaderView.ResizeMode.Fixed)  # Actions/Status
         self.ui.treeWidget.setColumnWidth(3, 150)
-        self.ui.treeWidget.itemClicked.connect(self.set_thumbnail)
-        self.ui.treeWidget.currentItemChanged.connect(self.set_thumbnail)
-        self.ui.download_website_combobox.activated.connect(self.website_index_changed)
-        self.setWindowTitle(f"Porn Fetch v{__version__} Copyright (C) Johannes Habel 2023-2025")
+        self.ui.treeWidget.setAlternatingRowColors(True)
 
-        font = QFont()
+        # --- font (app-wide) ---
         if conf["UI"]["custom_font"] == "true":
-            font_id = QFontDatabase.addApplicationFont(":/fonts/graphics/JetBrainsMono-Regular.ttf")
-            if font_id == -1:
-                print("Failed to load font, please report")
+            fid = QFontDatabase.addApplicationFont(":/fonts/graphics/JetBrainsMono-Regular.ttf")
+            if fid != -1:
+                fam = QFontDatabase.applicationFontFamilies(fid)[0]
+                font = QFont(fam)
             else:
-                # Get the family name of the loaded font
-                font.setFamily(QFontDatabase.applicationFontFamilies(font_id)[0])
-
+                font = QFontDatabase.systemFont(QFontDatabase.SystemFont.GeneralFont)
         else:
-            font.setFamily("Arial")
+            font = QFontDatabase.systemFont(QFontDatabase.SystemFont.GeneralFont)
 
-        font.setPixelSize(int(conf["UI"]["font_size"]))
-        from PySide6.QtWidgets import QWidget
-        for w in self.findChildren(QWidget):
-            w.setFont(font)
+        font.setPointSizeF(int(conf["UI"]["font_size"]))
+        self.window().setFont(font)  # don’t loop all children
 
+        # --- misc you already had ---
         self.ui.treeWidget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
-        self.ui.progress_gridlayout_progressbar.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.ui.progress_gridlayout_progressbar.setAlignment(Qt.AlignTop)
 
-        # ChatGPT really cooked here
         if __build__ == "desktop":
-            gv = self.ui.graphicsView # Geschlechtsverkehr Hihihi
-            gv.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
-            gv.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-            gv.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+            gv = self.ui.graphicsView
+            gv.setRenderHint(QPainter.SmoothPixmapTransform)
+            gv.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+            gv.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
             self._scene = QGraphicsScene(self)
             gv.setScene(self._scene)
             self._pixmap_item = QGraphicsPixmapItem()
@@ -1353,6 +1374,7 @@ class PornFetch(QMainWindow):
             gv.installEventFilter(self)
             gv.viewport().installEventFilter(self)
 
+        install_focus_outline(self)
         self.switch_to_download()
 
     def install_pornfetch(self):
@@ -1512,9 +1534,6 @@ class PornFetch(QMainWindow):
         self.skip_existing_files = conf.get("Video", "skip_existing_files") == "true"
         self.ui.settings_checkbox_videos_skip_existing_files.setChecked(self.skip_existing_files)
 
-        self.direct_download = conf.get("Video", "direct_download") == "true"
-        self.ui.settings_checkbox_videos_direct_download.setChecked(self.direct_download)
-
         self.directory_system = conf.get("Video", "directory_system") == "true"
         self.ui.settings_checkbox_videos_use_directory_system.setChecked(self.directory_system)
 
@@ -1523,8 +1542,6 @@ class PornFetch(QMainWindow):
 
         self.activate_logging = conf.get("Setup", "activate_logging") == "true"
         self.ui.settings_checkbox_system_enable_network_logging.setChecked(self.activate_logging)
-
-        self.ui.settings_checkbox_ui_custom_font.setChecked(True if conf.get("UI", "custom_font") == "true" else False)
 
         self.write_metadata = conf.get("Video", "write_metadata") == "true"
         self.ui.settings_checkbox_videos_write_metadata.setChecked(self.write_metadata)
@@ -1584,13 +1601,10 @@ class PornFetch(QMainWindow):
                  "true" if self.ui.settings_checkbox_videos_skip_existing_files.isChecked() else "false")
         conf.set("Video", "directory_system",
                  "true" if self.ui.settings_checkbox_videos_use_directory_system.isChecked() else "false")
-        conf.set("UI", "custom_font",
-                 "true" if self.ui.settings_checkbox_ui_custom_font.isChecked() else "false")
         conf.set("UI", "font_size", str(self.ui.settings_spinbox_ui_font_size.value()))
         conf.set("Video", "video_id_as_filename", "true" if self.ui.settings_checkbox_videos_use_video_id_as_filename.isChecked() else "false")
         conf.set("Video", "supress_errors", "true" if self.ui.settings_checkbox_system_supress_errors.isChecked() else "false")
         conf.set("Performance", "processing_delay", str(self.ui.settings_spinbox_performance_processing_delay.value()))
-        conf.set("Video", "direct_download", "true" if self.ui.settings_checkbox_videos_direct_download.isChecked() else "false")
         conf.set("Setup", "activate_logging", "true" if self.ui.settings_checkbox_system_enable_network_logging.isChecked() else "false")
         conf.set("Video", "track_videos", "true" if self.ui.settings_checkbox_videos_track_downloaded_videos.isChecked() else "false")
 
@@ -1923,9 +1937,8 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         title, author, duration, etc. to it, so that it can be processed and used later.
         This makes it possible to only use one network request and use the videos across entire Porn Fetch
         """
-        is_reverse = self.ui.main_checkbox_tree_show_videos_reversed.isChecked()
         is_checked = self.ui.main_checkbox_tree_do_not_clear_videos.isChecked()
-        self.add_to_tree_widget_thread_ = AddToTreeWidget(iterator=iterator, is_reverse=is_reverse,
+        self.add_to_tree_widget_thread_ = AddToTreeWidget(iterator=iterator,
                                                           is_checked=is_checked,
                                                           last_index=self.last_index)
         self.add_to_tree_widget_thread_.signals.text_data_to_tree_widget.connect(self.add_to_tree_widget_signal)
@@ -2613,6 +2626,7 @@ Some websites couldn't be accessed. Here's a detailed report:
 def main():
     setup_config_file()
     app = QApplication(sys.argv)
+    apply_theme(app)
     app.setStyle("Fusion")
     conf.read("config.ini")
     language = conf["UI"]["language"]
@@ -2640,7 +2654,6 @@ def main():
             logger.debug(f"Failed to load {language_code} translation")
 
     app.installTranslator(translator)
-    app.setStyleSheet(load_stylesheet(":/style/stylesheets/stylesheet.qss"))
     w = PornFetch()  # This actually starts Porn Fetch
     w.show()  # This shows the main widget
 
