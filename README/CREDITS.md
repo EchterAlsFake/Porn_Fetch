@@ -10,6 +10,9 @@ Although I now have ownership, without him, this project wouldn't be possible in
 first place. If you need someone who will do web-scraping on a high level, feel free to reach out to
 him. He's the best that I know!
 
+> [!NOTE]
+> Some assets that are listed here aren't used in the current release / development version.
+> Those are marked with a [*] at the end. 
 
 # Development
 - Language: [Python](https://www.python.org/)
@@ -22,29 +25,26 @@ level frontend AND backend development toolkit for free.**
 
 
 # Graphics
-- <a href="https://iconscout.com/icons/list" class="text-underline font-size-sm" target="_blank">List</a> by <a href="https://iconscout.com/contributors/iyikon" class="text-underline font-size-sm" target="_blank">Iyikon ...</a>
+- <a href="https://iconscout.com/icons/list" class="text-underline font-size-sm" target="_blank">List</a> by <a href="https://iconscout.com/contributors/iyikon" class="text-underline font-size-sm" target="_blank">Iyikon ...</a> [*]
+- <a href="https://iconscout.com/icons/unread" class="text-underline font-size-sm" target="_blank">unread</a> by <a href="https://iconscout.com/contributors/bharat-icons" class="text-underline font-size-sm">Bharat Design</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a> [*]
+- <a href="https://iconscout.com/icons/top-arrow" class="text-underline font-size-sm" target="_blank">Top Arrow</a> by <a href="https://iconscout.com/contributors/creative-studio" class="text-underline font-size-sm" target="_blank">Mian Saab</a> [*]
+- <a href="https://iconscout.com/icons/down-arrow" class="text-underline font-size-sm" target="_blank">Down Arrow</a> by <a href="https://iconscout.com/contributors/adamicons" class="text-underline font-size-sm">Adam Dicons</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a> [*]
+- <a href="https://iconscout.com/icons/tick" class="text-underline font-size-sm" target="_blank">Tick</a> by <a href="https://iconscout.com/contributors/kolo-design" class="text-underline font-size-sm" target="_blank">Kalash</a> [*]
 - <a href="https://iconscout.com/icons/information" class="text-underline font-size-sm" target="_blank">Information</a> by <a href="https://iconscout.com/contributors/petai-jantrapoon" class="text-underline font-size-sm">Petai Jantrapoon</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
-- <a href="https://iconscout.com/icons/unread" class="text-underline font-size-sm" target="_blank">unread</a> by <a href="https://iconscout.com/contributors/bharat-icons" class="text-underline font-size-sm">Bharat Design</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
-- <a href="https://iconscout.com/icons/top-arrow" class="text-underline font-size-sm" target="_blank">Top Arrow</a> by <a href="https://iconscout.com/contributors/creative-studio" class="text-underline font-size-sm" target="_blank">Mian Saab</a>
-- <a href="https://iconscout.com/icons/down-arrow" class="text-underline font-size-sm" target="_blank">Down Arrow</a> by <a href="https://iconscout.com/contributors/adamicons" class="text-underline font-size-sm">Adam Dicons</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
-- <a href="https://iconscout.com/icons/tick" class="text-underline font-size-sm" target="_blank">Tick</a> by <a href="https://iconscout.com/contributors/kolo-design" class="text-underline font-size-sm" target="_blank">Kalash</a>
 - <a href="https://iconscout.com/icons/account" class="text-underline font-size-sm" target="_blank">account</a> by <a href="https://iconscout.com/contributors/anggaraputra" class="text-underline font-size-sm">Anggara Putra</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
 - <a href="https://iconscout.com/icons/tools" class="text-underline font-size-sm" target="_blank">Tools</a> by <a href="https://iconscout.com/contributors/adms-icon" class="text-underline font-size-sm" target="_blank">ADMS Icons</a>
 - <a href="https://iconscout.com/icons/faq" class="text-underline font-size-sm" target="_blank">Faq</a> by <a href="https://iconscout.com/contributors/petai-jantrapoon" class="text-underline font-size-sm">Petai Jantrapoon</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
-- Download Icon by [Tutukof](https://iconscout.com/contributors/fersusart)
-- Free [Settings Icon](https://iconscout.com/free-icon/settings-2856913) in Gradient Style By [Haca Studio](https://iconscout.com/contributors/boosticon)
 - <a href="https://iconscout.com/icons/checkmark" class="text-underline font-size-sm" target="_blank">Checkmark</a> by <a href="https://iconscout.com/contributors/benjamin-j-sperry" class="text-underline font-size-sm">Benjamin J sperry</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
 - <a href="https://iconscout.com/icons/done" class="text-underline font-size-sm" target="_blank">Done</a> by <a href="https://iconscout.com/contributors/google-inc" class="text-underline font-size-sm">Google Inc.</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
 - <a href="https://iconscout.com/icons/progressbar" class="text-underline font-size-sm" target="_blank">Progressbar</a> by <a href="https://iconscout.com/contributors/vaadin-icons" class="text-underline font-size-sm">Vaadin Icons</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
 - <a href="https://iconscout.com/icons/exclamation-mark" class="text-underline font-size-sm" target="_blank">Information Sign</a> by <a href="https://iconscout.com/contributors/unicons" class="text-underline font-size-sm">Unicons Font</a> on <a href="https://iconscout.com" class="text-underline font-size-sm">IconScout</a>
+- Download Icon by [Tutukof](https://iconscout.com/contributors/fersusart)
+- Free [Settings Icon](https://iconscout.com/free-icon/settings-2856913) in Gradient Style By [Haca Studio](https://iconscout.com/contributors/boosticon)
 
-Porn Fetch uses the Open-Source [Jetbrans Mono Regular](https://www.jetbrains.com/de-de/lp/mono/) font as the default font for the whole application.
+### Other Attributions
+- Porn Fetch used the Open-Source [Jetbrans Mono Regular](https://www.jetbrains.com/de-de/lp/mono/) font as the default font for the whole application in version 3.5.
 This font is licensed under SIL Open Font License, Version 1.1
-
-Logo was generated by DALL-E (ChatGPT)
-<br>Some assets aren't used anymore because I have decided to use new icons,
-but because I used them in the past and to keep the credit for the creators I won't remove them from here.
-Same goes for the used libraries in Porn Fetch.
+- The Logo of Porn Fetch was generated by ChatGPT
 
 ## Contributors
 - [Egsagon](https://github.com/Egsagon) PHUB API & French Translations
@@ -83,12 +83,16 @@ Same goes for the used libraries in Porn Fetch.
 - [pywin32](https://github.com/mhammond/pywin32) (PSF-2.0)
 - [pyav](https://github.com/PyAV-Org/PyAV) (BSD-3-Clause)
 
+(This list may not be perfectly accurate)
+
+
 <br>ANDROID:
 - [Buildozer](https://github.com/kivy/buildozer) (MIT)
 - [Cython](https://github.com/cython/cython) (Apache 2.0)
 
 # Applications
 - [FFMPEG](https://ffmpeg.org/) (GPL)
+- Porn Fetch doesn't use FFmpeg anymore by itself, but you can integrate it at system level (advanced)
 
 ** All other libraries are built in to Python.
 
@@ -97,6 +101,5 @@ For the fairness to these authors, I will still list them here, although they do
 
 # macOS Build
 Big shoutout to this project: https://github.com/notAperson535/OneClick-macOS-Simple-KVM
-
 This makes Porn Fetch on macOS possible thanks to virtualization
 

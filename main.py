@@ -1,199 +1,3 @@
-try:
-    from av import open as av_open  # Don't ask
-    from av.audio.resampler import AudioResampler  # Don't ask
-    FORCE_DISABLE_AV = False
-
-except Exception:
-    FORCE_DISABLE_AV = True
-
-import sys
-from pathlib import Path
-from PySide6.QtWidgets import QApplication, QWidget, QTextBrowser
-
-app_path = Path(sys.argv[0]).resolve()
-if str(app_path).startswith("/Volume"):
-    class Notification(QWidget):
-        def __init__(self):
-            super().__init__()
-            self.setGeometry(0, 0, 600, 600)
-            self.setStyleSheet("""
-QWidget: {
-color: #ECECEC;  /* Brightened for better contrast */
-background-color: #262626; /* Darkened for better contrast */
-border: none}
-""")
-            self.layout = QVBoxLayout()
-            self.close_button = QPushButton("Close")
-            self.close_button.setMinimumHeight(30)
-            self.msg_box = QTextBrowser(self)
-            self.msg_box.setText("""
-Please move Porn Fetch into your applications folder. You can do that by opening 'Finder' and dragging the Porn Fetch
-executable you just clicked on, into the 'Applications' folder that you'll see in Finder. After that, you can open 'Launchpad'
-and type 'Porn Fetch'. You'll find it there and can run it easily from Launchpad and also add it to your application bar at
-the bottom.
-
-This is an intended behaviour from macOS and all applications follow this scheme. 
-Thank you for your patience :)
-""")
-            self.msg_box.setObjectName("reader")
-            self.msg_box.setStyleSheet("""
-/* Apply to a QTextBrowser with objectName "reader" */
-#reader {
-  background: #0b1220;            /* near-black with a hint of blue */
-  color: #e5e7eb;                 /* gray-200 */
-  border: 1px solid #1f2937;      /* slate-800 */
-  border-radius: 12px;
-  padding: 12px;
-  selection-background-color: rgba(96, 165, 250, 0.28); /* soft blue */
-  selection-color: #0b1220;
-  font-family: Inter, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.35;
-}
-
-#reader img, #reader table {
-  margin: 6px;
-}
-
-/* Vertical scrollbar */
-#reader QScrollBar:vertical {
-  width: 10px;
-  margin: 8px 4px 8px 0;
-  background: transparent;
-  border: none;
-}
-#reader QScrollBar::handle:vertical {
-  min-height: 24px;
-  background: #374151;            /* gray-700 */
-  border-radius: 8px;
-}
-#reader QScrollBar::handle:vertical:hover {
-  background: #4b5563;            /* gray-600 */
-}
-#reader QScrollBar::add-line:vertical,
-#reader QScrollBar::sub-line:vertical { height: 0; }
-#reader QScrollBar::add-page:vertical,
-#reader QScrollBar::sub-page:vertical { background: transparent; }
-
-/* Horizontal scrollbar */
-#reader QScrollBar:horizontal {
-  height: 10px;
-  margin: 0 8px 4px 8px;
-  background: transparent;
-  border: none;
-}
-#reader QScrollBar::handle:horizontal {
-  min-width: 24px;
-  background: #374151;
-  border-radius: 8px;
-}
-#reader QScrollBar::handle:horizontal:hover {
-  background: #4b5563;
-}
-#reader QScrollBar::add-line:horizontal,
-#reader QScrollBar::sub-line:horizontal { width: 0; }
-#reader QScrollBar::add-page:horizontal,
-#reader QScrollBar::sub-page:horizontal { background: transparent; }
-
-#reader:focus {
-  border: 1px solid #60a5fa;      /* blue-400 */
-}
-""")
-            self.layout.addWidget(self.msg_box)
-            self.layout.addWidget(self.close_button)
-            self.setLayout(self.layout)
-            self.close_button.setStyleSheet("""
-QPushButton {
-    background-color: #7B1FA2; /* Purple */
-    color: white;
-    border-radius: 8px;
-}
-
-QPushButton:hover {
-    background-color: #9575CD; /* Lighter violet */
-}
-
-QPushButton:pressed {
-    background-color: #6A1B9A; /* Dark purple */
-}
-
-""")
-            self.close_button.clicked.connect(self.close)
-            self.layout.setContentsMargins(0, 0, 0, 0)
-            self.setContentsMargins(0, 0, 0, 0)
-
-    app = QApplication(sys.argv)
-    w = Notification()
-    w.show()
-    sys.exit(app.exec())
-
-try:
-    import time
-    import uuid
-    import random
-    import shutil
-    import sqlite3
-    import os.path
-    import argparse
-    import markdown
-    import traceback
-    import requests # Imported, although not used, because this triggers the certifi cacert.pem include workflow
-    import src.backend.shared_functions as shared_functions
-    import src.frontend.UI.resources  # Your IDE may tell you that this is an unused import statement, but that is WRONG!
-    from threading import Event, Lock
-    from io import TextIOWrapper
-    from itertools import islice, chain
-
-    from src.backend.shared_gui import *
-    from src.frontend.UI.ui_form_main_window import Ui_MainWindow
-    #from src.frontend.UI.ui_form_android import Ui_PornFetchAndroid
-    from src.frontend.UI.theme import apply_theme, mark, pretty_combo
-    from src.backend.one_time_functions import *
-    from src.backend.config import __version__, __build__
-    from src.backend.donation_nag import DonationNag
-    from src.backend.license import License, Disclaimer
-    from src.backend.config import shared_config
-    from hqporner_api.api import Sort as hq_Sort
-
-    from PySide6.QtCore import (QFile, QTextStream, Signal, QRunnable, QThreadPool, QObject, QSemaphore, Qt, QLocale,
-                                QTranslator, QCoreApplication, QSize, QEvent, QRectF)
-    from PySide6.QtWidgets import (QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, \
-        QInputDialog, QMainWindow, QLabel, QProgressBar, QGraphicsPixmapItem, QDialog, QVBoxLayout,
-                                   QGraphicsScene, QGraphicsView, QPushButton, QHBoxLayout, QLineEdit, QComboBox,
-                                   QSpinBox, QDoubleSpinBox, QTextEdit, QPlainTextEdit, QToolButton, QAbstractButton)
-    from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence, QPainter
-
-except Exception as e:
-    import traceback
-    error = traceback.format_exc()
-    from PySide6.QtWidgets import QWidget, QApplication, QLabel
-
-    class application(QWidget):
-        def __init__(self):
-            super().__init__()
-            self.label = QLabel(self)
-            self.label.setText(str(error))
-
-
-    app = QApplication()
-    w = application()
-    w.show()
-    app.exec()
-
-# Possible errors from APIs
-from base_api.modules.errors import ProxySSLError, InvalidProxy
-from xnxx_api.modules.errors import InvalidResponse
-from hqporner_api.modules.errors import (InvalidActress as InvalidActress_HQ, NoVideosFound,
-                                         NotAvailable as NotAvailable_HQ, WeirdError as WeirdError_HQ)
-from xvideos_api.modules.errors import (VideoUnavailable as VideoUnavailable_XV)
-from eporner_api.modules.errors import NotAvailable as NotAvailable_EP, VideoDisabled as VideoDisabled_EP
-from youporn_api.modules.errors import VideoUnavailable as VideoUnavailable_YP, RegionBlocked as RegionBlocked_YP
-from phub.errors import VideoError as VideoError_PH
-
-_download_lock = Lock()
-FORCE_PORTABLE_RUN = False
-
-
 """
 Copyright (C) 2023-2025 Johannes Habel
 
@@ -216,120 +20,70 @@ E-Mail: EchterAlsFake@proton.me
 Discord: echteralsfake (faster response)
 """
 
+try:
+    from av import open as av_open  # Don't ask
+    from av.audio.resampler import AudioResampler  # Don't ask
+    FORCE_DISABLE_AV = False
 
-# For general information see /src/backend/config.py
+except Exception:
+    FORCE_DISABLE_AV = True
 
+import time
+import random
+import shutil
+import os.path
+import argparse
+import markdown
+import traceback
+import src.backend.shared_functions as shared_functions
+
+from io import TextIOWrapper
+from threading import Event, Lock
+from itertools import islice, chain
+from src.backend.shared_gui import *
+from src.frontend.UI.ssl_warning import *
+from src.frontend.UI.ui_form_main_window import Ui_MainWindow
+#from src.frontend.UI.ui_form_android import Ui_PornFetchAndroid
+from src.frontend.UI.theme import apply_theme, mark, pretty_combo, install_focus_outline
+from src.backend.one_time_functions import *
+from src.backend.config import __version__, __build__
+from src.frontend.UI.donation_nag import DonationNag
+from src.frontend.UI.license import License, Disclaimer
+from src.backend.config import shared_config
+from hqporner_api.api import Sort as hq_Sort
+
+from PySide6.QtCore import (QFile, QTextStream, QRunnable, QThreadPool, QSemaphore, Qt, QLocale,
+                            QTranslator, QCoreApplication, QSize, QEvent, QRectF)
+from PySide6.QtWidgets import (QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, \
+                               QInputDialog, QMainWindow, QLabel, QProgressBar, QGraphicsPixmapItem, QDialog, QVBoxLayout,
+                               QGraphicsScene, QGraphicsView, QComboBox)
+from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence, QPainter
+
+
+
+# Possible errors from APIs
+from base_api.modules.errors import ProxySSLError, InvalidProxy
+from xnxx_api.modules.errors import InvalidResponse
+from hqporner_api.modules.errors import (InvalidActress as InvalidActress_HQ, NoVideosFound,
+                                         NotAvailable as NotAvailable_HQ, WeirdError as WeirdError_HQ)
+from xvideos_api.modules.errors import (VideoUnavailable as VideoUnavailable_XV)
+from eporner_api.modules.errors import NotAvailable as NotAvailable_EP, VideoDisabled as VideoDisabled_EP
+from youporn_api.modules.errors import VideoUnavailable as VideoUnavailable_YP, RegionBlocked as RegionBlocked_YP
+from phub.errors import VideoError as VideoError_PH
+
+FORCE_PORTABLE_RUN = False
 total_segments = 0
 downloaded_segments = 0
-stop_flag = Event()
-
-session_urls = []  # This list saves all URls used in the current session. Used for the URL export function
 total_downloaded_videos = 0  # All videos that actually successfully downloaded
 total_downloaded_videos_attempt = 0  # All videos the user tries to download
-logger = setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=shared_functions.http_log_ip,
-                      http_port=shared_functions.http_log_port)
-
+session_urls = []  # This list saves all URls used in the current session. Used for the URL export function
 conf = shared_config
 core_conf = shared_functions.config
-
-
-class VideoData:
-    """
-    This class stores the video objects and their loaded data across Porn Fetch.
-    It allows for re-fetching data if needed, update data if needed and handles caching thanks to
-    a dictionary.
-
-    (Okay, I am overhyping it a bit, but yeah, let's put that away xD)
-    """
-
-    data_objects = {}
-    consistent_data = {}  # This dictionary stores other important data which will be re-used for the entire
-    # run of Porn Fetch
-
-    """
-    If a video object isn't used anymore e.g., the video finished downloading or the tree widget was loaded with other
-    videos, than those videos will be cleaned up in the dictionary, to be as memory and performance efficient as
-    possible.
-    """
-
-    def clean_dict(self, video_titles):
-        if not isinstance(video_titles, list):  # In case we only have one video title to delete
-            video_titles = [video_titles]
-
-        for video_title in video_titles:
-            del self.data_objects[video_title]  # Del is faster than pop :)
-
+stop_flag = Event()
+_download_lock = Lock()
 video_data = VideoData()
-
-KEYBOARD_REASONS = {
-    Qt.TabFocusReason, Qt.BacktabFocusReason, Qt.ShortcutFocusReason
-}
-
-class FocusOutlineFilter(QObject):
-    def eventFilter(self, obj: QObject, ev: QEvent) -> bool:
-        et = ev.type()
-        if et == QEvent.FocusIn:
-            # keyboard-driven focus?
-            try:
-                reason = ev.reason()  # QFocusEvent
-            except Exception:
-                reason = Qt.OtherFocusReason
-            obj.setProperty("kbd", "1" if reason in KEYBOARD_REASONS else "0")
-            _repolish(obj)
-        elif et == QEvent.FocusOut:
-            obj.setProperty("kbd", "0")
-            _repolish(obj)
-        # we rely on native :hover, so no Enter/Leave handling needed
-        return False
-
-def _repolish(w: QObject):
-    if isinstance(w, QWidget):
-        w.setStyleSheet(w.styleSheet())   # re-evaluate inline (even if empty)
-        w.style().unpolish(w)
-        w.style().polish(w)
-        w.update()
-
-def install_focus_outline(root: QWidget):
-    """Attach to all interactive widgets now (call again after dynamic UI changes)."""
-    filt = FocusOutlineFilter(root)
-    root._focus_outline_filter = filt  # keep a reference
-    classes = [QLineEdit, QComboBox, QTextEdit, QPlainTextEdit,
-               QSpinBox, QDoubleSpinBox, QAbstractButton]
-    for cls in classes:
-        for w in root.findChildren(cls):
-            w.installEventFilter(filt)
-
-class Signals(QObject):
-    """Signals for the Download class"""
-    # Progress Signal
-    total_progress = Signal(int) # Sets the current value for the progressbar
-    total_progress_range = Signal(int) # Sets the maximum for the total progressbar
-    progress_add_to_tree_widget = Signal(int, int)  # Tracks the number of videos
-    # loaded and processed into the tree widget
-
-    progress_video = Signal(int, int, int)
-    progress_video_range = Signal(int, int)
-    progress_video_converting = Signal(int, int)
-
-    error_signal = Signal(object)
-
-    # Animations
-    start_undefined_range = Signal()  # Starts the loading animation progressbar
-    stop_undefined_range = Signal()  # Stops the loading animation progressbar
-
-    # Operations / Reportings
-    install_finished = Signal(object)  # Reports if the Porn Fetch installation was finished
-    internet_check = Signal(object)  # Reports if the internet checks were successful
-    update_check = Signal(bool, dict)
-    result = Signal(dict)  # Reports the result of the internet checks if something went wrong
-    clear_tree_widget_signal = Signal()  # A signal to clear the tree widget
-    text_data_to_tree_widget = Signal(int)  # Sends the text data in the form of a dictionary to the main class
-    download_completed = Signal(object)  # Reports a successfully downloaded video
-    progress_send_video = Signal(object,
-                                 object)  # Sends the selected video objects from the tree widget to the main class
-    tree_widget_finished = Signal()
-    # to download them
-    url_iterators = Signal(object, object)  # Sends the processed URLs from the file to Porn Fetch
+logger = setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=shared_functions.http_log_ip,
+                      http_port=shared_functions.http_log_port)
 
 
 class InstallThread(QRunnable):
@@ -513,6 +267,7 @@ class InternetCheck(QRunnable):
                 pass
 
         self.signals.internet_check.emit(self.website_results)
+
 
 class CheckUpdates(QRunnable):
     def __init__(self):
@@ -728,7 +483,6 @@ class AddToTreeWidget(QRunnable):
 
 class DownloadThread(QRunnable):
     """Refactored threading class to download videos with improved performance and logic."""
-
     def __init__(self, video, video_id):
         super().__init__()
         self.video = video
@@ -969,41 +723,6 @@ class AddUrls(QRunnable):
 
         self.signals.url_iterators.emit(iterator, model_iterators)
 
-class SSLWarningDialog(QDialog):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setWindowTitle("SSL Verification Warning")
-        self.setMinimumWidth(400)
-
-        layout = QVBoxLayout(self)
-
-        warning_text = (
-            "<b>Your proxy does not support proper SSL verification.</b><br><br>"
-            "The only way to bypass this is to <b>disable SSL certificate verification</b> completely.<br><br>"
-            "<b>⚠ This is a serious security risk.</b><br>"
-            "Disabling SSL verification may expose your connection to man-in-the-middle (MITM) attacks, "
-            "data interception, or spoofed websites.<br><br>"
-            "Do you want to proceed and disable SSL verification?"
-        )
-
-        label = QLabel(warning_text)
-        label.setWordWrap(True)
-        label.setTextFormat(Qt.TextFormat.RichText)
-        layout.addWidget(label)
-
-        # Button layout
-        button_layout = QHBoxLayout()
-        self.accept_btn = QPushButton("Accept (Disable SSL Verification)")
-        self.cancel_btn = QPushButton("Cancel")
-
-        button_layout.addStretch()
-        button_layout.addWidget(self.accept_btn)
-        button_layout.addWidget(self.cancel_btn)
-
-        layout.addLayout(button_layout)
-
-        self.accept_btn.clicked.connect(self.accept)
-        self.cancel_btn.clicked.connect(self.reject)
 
 class PornFetch(QMainWindow):
     def __init__(self, parent=None):
@@ -2302,7 +2021,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
             shared_functions.ph_client = shared_functions.ph_Client(email=username, password=password, core=shared_functions.core_ph)
             self.logger.debug("Login Successful!")
             ui_popup(self.tr("Login Successful!", None))
-            switch_login_button_state(self)
+            # TODO
 
         except shared_functions.errors.LoginFailed:
             self.logger.error("Login Failed, because of invalid credentials")
@@ -2640,14 +2359,14 @@ def main():
         language_code = language
     # Try loading the specific regional translation
 
-    path = f":/translations/translations/{language_code}.qm"
+    path = f":/translations/translations/qm/{language_code}.qm"
     translator = QTranslator(app)
     if translator.load(path):
         logger.debug(f"Startup: [1/5] {language_code} translation loaded")
     else:
         # Try loading a more general translation if specific one fails
         general_language_code = language_code.split('_')[0]
-        path = f":/translations/translations/{general_language_code}.qm"
+        path = f":/translations/translations/qm/{general_language_code}.qm"
         if translator.load(path):
             logger.debug(f"{general_language_code} translation loaded as fallback")
         else:

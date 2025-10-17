@@ -1,8 +1,8 @@
 # 3.7
 - [x] Fixed Searching User Interface
 - [x] Added searching support for missav
-- [] Fix Translations once and forever
 - [] YouPorn support
+- [] Fix Translations once and forever
 - [] Support XHamster Shorts
 - [] Support Xhamster Searching
 - [] Support Xhamster Playlists

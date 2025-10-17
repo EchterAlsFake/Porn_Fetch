@@ -6,10 +6,13 @@ to use ChatGPT to build a working app, and that's all that counts.
 :)
 """
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QObject, QEvent
 from PySide6.QtGui import QPalette, QColor
-from PySide6.QtWidgets import QApplication, QComboBox, QListView, QFrame
+from PySide6.QtWidgets import (QApplication, QComboBox, QListView, QFrame, QWidget, QLineEdit, QTextEdit, QPlainTextEdit,
+                               QSpinBox, QDoubleSpinBox, QAbstractButton)
 
+
+"""This is the main stylesheet"""
 QSS = """
 /* --- Base --- */
 QWidget { color:#EAEAEA; background:#1f1f21; font-size:13px; }
@@ -166,7 +169,44 @@ def pretty_combo(combo: QComboBox):
     view.setFrameShape(QFrame.NoFrame)  # we draw the border in QSS
     combo.setView(view)
 
-
 def outline(widget, mode="accent"):
     widget.setProperty("highlight", mode)
     widget.style().unpolish(widget); widget.style().polish(widget)
+
+
+class FocusOutlineFilter(QObject):
+    def eventFilter(self, obj: QObject, ev: QEvent) -> bool:
+        et = ev.type()
+        keyboard_reasons = {Qt.FocusReason.TabFocusReason, Qt.FocusReason.BacktabFocusReason,
+                            Qt.FocusReason.ShortcutFocusReason}
+        if et == QEvent.Type.FocusIn:
+            # keyboard-driven focus? (chatgpt why do you put a question mark there? LMAO)
+            try:
+                reason = ev.reason()  # QFocusEvent
+
+            except Exception:
+                reason = Qt.OtherFocusReason
+            obj.setProperty("kbd", "1" if reason in keyboard_reasons else "0")
+            _repolish(obj)
+        elif et == QEvent.Type.FocusOut:
+            obj.setProperty("kbd", "0")
+            _repolish(obj)
+        # we rely on native :hover, so no Enter/Leave handling needed
+        return False
+
+def _repolish(w: QObject):
+    if isinstance(w, QWidget):
+        w.setStyleSheet(w.styleSheet())   # re-evaluate inline (even if empty)
+        w.style().unpolish(w)
+        w.style().polish(w)
+        w.update()
+
+def install_focus_outline(root: QWidget):
+    """Attach to all interactive widgets now (call again after dynamic UI changes)."""
+    filter = FocusOutlineFilter(root)
+    root._focus_outline_filter = filter  # keep a reference
+    classes = [QLineEdit, QComboBox, QTextEdit, QPlainTextEdit,
+               QSpinBox, QDoubleSpinBox, QAbstractButton]
+    for cls in classes:
+        for w in root.findChildren(cls):
+            w.installEventFilter(filter)

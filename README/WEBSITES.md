@@ -6,6 +6,8 @@
 - xvideos.com (3.0)
 - xhamster.com (3.5)
 - missav.ws (3.5) supports all other top level domains too
+- spankbang.com (3.6)
+- youporn.com (3.7) (DEV)
 
 
 > Porn Fetch was built for PornHub in the first place, but I decided to support as many websites as possible

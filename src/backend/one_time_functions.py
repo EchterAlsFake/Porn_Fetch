@@ -18,26 +18,5 @@ logger.setLevel(logging.DEBUG)
 
 
 
-def load_stylesheet(path):
-    """Load stylesheet from a given path with explicit open and close."""
-    file = QFile(path)
-    if not file.open(QFile.OpenModeFlag.ReadOnly | QFile.OpenModeFlag.Text):
-        logger.error(f"Failed to open stylesheet.qss: {file.errorString()}")
-        return ""
-    stylesheet = QTextStream(file).readAll()
-    file.close()
-    return stylesheet
 
 
-def reset_pornfetch():
-    setup_config_file(force=True)
-    ui_popup(QCoreApplication.translate("main", "Done! Please restart.", None))
-
-def switch_login_button_state(self):
-    """If the user is logged in, I'll change the stylesheets of the buttons"""
-    file = ":/style/stylesheets/stylesheet_switch_buttons_login_state.qss"
-    stylesheet = load_stylesheet(file)
-
-    self.ui.login_button_get_liked_videos.setStyleSheet(stylesheet)
-    self.ui.login_button_get_watched_videos.setStyleSheet(stylesheet)
-    self.ui.login_button_get_recommended_videos.setStyleSheet(stylesheet)

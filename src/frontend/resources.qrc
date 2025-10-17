@@ -4,7 +4,6 @@
         <file>graphics/information.svg</file>
         <file>graphics/settings.svg</file>
         <file>graphics/logo_transparent.ico</file>
-        <file>graphics/top-arrow.ico</file>
         <file>graphics/account.svg</file>
         <file>graphics/unread.svg</file>
         <file>graphics/tools.svg</file>
@@ -12,16 +11,12 @@
         <file>graphics/progressbars.svg</file>
         <file>graphics/tooltip.svg</file>
     </qresource>
-    <qresource prefix="/fonts">
-        <file>graphics/JetBrainsMono-Regular.ttf</file>
-    </qresource>
-
     <qresource prefix="/credits">
         <file>../../README/CREDITS.md</file>
     </qresource>
     <qresource prefix="/translations">
-        <file>translations/de_DE.qm</file>
-        <file>translations/zh_CN.qm</file>
-        <file>translations/fr.qm</file>
+        <file>translations/qm/de_DE.qm</file>
+        <file>translations/qm/zh_CN.qm</file>
+        <file>translations/qm/fr.qm</file>
     </qresource>
 </RCC>

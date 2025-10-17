@@ -1,10 +1,9 @@
 import webbrowser
-
 from src.backend.shared_gui import ui_popup
-from PySide6.QtWidgets import QApplication, QWidget
-
 from src.backend.config import shared_config
+from PySide6.QtWidgets import QApplication, QWidget
 conf = shared_config
+
 
 class DonationNag(QWidget):
     """
