@@ -14,3 +14,4 @@ httpx
 hue_shift
 Markdown
 mutagen
+youporn_api

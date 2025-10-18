@@ -47,6 +47,7 @@ from src.frontend.UI.theme import *
 from src.backend.one_time_functions import *
 from src.backend.config import __version__, __build__
 from src.frontend.UI.donation_nag import DonationNag
+from src.backend.batch_feature import Batch
 from src.frontend.UI.license import License, Disclaimer
 from src.backend.config import shared_config
 from hqporner_api.api import Sort as hq_Sort
@@ -678,98 +679,6 @@ class PornFetch(QMainWindow):
             pass
 
         self.ui.setupUi(self)
-        import re
-        def _strip_font_rules(qss: str) -> str:
-            if not qss:
-                return qss
-            # remove 'font:' shorthand and individual font-* props
-            qss = re.sub(r'(?is)\bfont\s*:[^;{}]*;?', '', qss)
-            qss = re.sub(r'(?is)\bfont-(?:size|family|weight|style|kerning|stretch|variant)\s*:[^;{}]*;?', '', qss)
-            # tidy stray semicolons
-            qss = re.sub(r';\s*;', ';', qss)
-            qss = qss.replace('{ ;', '{').replace('{;', '{')
-            return qss
-
-        def install_qss_font_stripper(QWidget):
-            orig = QWidget.setStyleSheet
-
-            def wrapper(self, qss):
-                cleaned = _strip_font_rules(qss or "")
-                return orig(self, cleaned)
-
-            QWidget.setStyleSheet = wrapper
-
-        def clean_fonts(family="Inter", point_size=30, scrub_qtext_content=True):
-            """Call AFTER setupUi(self)."""
-            # Resolve bindings
-            from PySide6.QtWidgets import QApplication, QWidget, QTextEdit, QTextBrowser, QPlainTextEdit, QListWidget, \
-                QTreeWidget, QTableWidget, QToolTip
-            from PySide6.QtGui import QFont, QTextCursor, QTextCharFormat
-            from PySide6.QtCore import Qt
-            # If you're on PySide2/PyQt5/6, the names are the same; import from your binding.
-
-            app = QApplication.instance()
-            if app is None:
-                raise RuntimeError("QApplication must exist")
-
-            # 0) Strip font rules from ALL future widget style sheets
-            install_qss_font_stripper(QWidget)
-
-            # 1) Clear app stylesheet if it mentions fonts
-            if "font" in (app.styleSheet() or "").lower():
-                app.setStyleSheet("")
-
-            # 2) Remove explicit fonts everywhere (including MainWindow)
-            for w in list(app.allWidgets()):
-                # drop any inline QSS font rules by rewriting the existing style (keep non-font styling)
-                ss = w.styleSheet()
-                if ss:
-                    cleaned = _strip_font_rules(ss)
-                    if cleaned != ss:
-                        w.setStyleSheet(cleaned)
-
-                # clear WA_SetFont (bold/size/family overrides)
-                if w.testAttribute(Qt.WA_SetFont):
-                    w.setFont(QFont())  # empty = inherit, no mask
-                    w.setAttribute(Qt.WA_SetFont, False)
-
-                # text widgets: reset default/document font and (optionally) strip per-run formatting
-                if isinstance(w, (QTextEdit, QTextBrowser)):
-                    w.document().setDefaultFont(QFont())
-                    if scrub_qtext_content:
-                        cursor = w.textCursor()
-                        cursor.beginEditBlock()
-                        cursor.select(QTextCursor.Document)
-                        cursor.setCharFormat(QTextCharFormat())
-                        cursor.endEditBlock()
-                elif isinstance(w, QPlainTextEdit):
-                    w.setFont(QFont())
-
-                # clear item-widget fonts
-                if isinstance(w, QListWidget):
-                    for i in range(w.count()):
-                        it = w.item(i);
-                        it and it.setFont(QFont())
-                elif isinstance(w, QTreeWidget):
-                    def walk(it):
-                        for c in range(it.columnCount()):
-                            it.setFont(c, QFont())
-                        for k in range(it.childCount()):
-                            walk(it.child(k))
-
-                    for i in range(w.topLevelItemCount()):
-                        walk(w.topLevelItem(i))
-                elif isinstance(w, QTableWidget):
-                    for r in range(w.rowCount()):
-                        for c in range(w.columnCount()):
-                            it = w.item(r, c);
-                            it and it.setFont(QFont())
-
-            # 3) Apply a single clean app-wide font
-            app.setFont(QFont(family, point_size))
-            QToolTip.setFont(QFont(family, point_size))
-
-        clean_fonts()
         self.logger = setup_logger(name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG,
                                    http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
 
@@ -874,6 +783,9 @@ class PornFetch(QMainWindow):
     def switch_to_donation_nag(self):
         self.ui.CentralStackedWidget.setCurrentIndex(9)
 
+    def switch_to_batch(self):
+        self.ui.CentralStackedWidget.setCurrentIndex(12)
+
     def switch_to_download(self):
         self.ui.main_stacked_widget_top.setCurrentIndex(0)
         self.switch_to_main()
@@ -897,6 +809,7 @@ class PornFetch(QMainWindow):
         self.ui.CentralStackedWidget.setCurrentIndex(11)
 
     def load_style(self):
+        self.ui.CentralStackedWidget.insertWidget(12, Batch())
         icons = {
             self.ui.main_button_switch_home: "download.svg",
             self.ui.main_button_switch_settings: "settings.svg",
@@ -918,6 +831,7 @@ class PornFetch(QMainWindow):
             self.ui.main_button_switch_tools,
             self.ui.main_button_switch_settings,
             self.ui.main_button_switch_credits,
+            self.ui.main_button_switch_batch,
             self.ui.main_button_view_progress_bars,
         ]
         group_menu_bar = QButtonGroup(self)
@@ -1089,6 +1003,7 @@ class PornFetch(QMainWindow):
         self.ui.main_button_switch_account.clicked.connect(self.switch_to_login)
         self.ui.main_button_switch_supported_websites.clicked.connect(self.switch_to_supported_sites)
         self.ui.main_button_view_progress_bars.clicked.connect(self.switch_to_progressbars)
+        self.ui.main_button_switch_batch.clicked.connect(self.switch_to_batch)
 
         # Video Download Button Connections
         self.ui.main_button_tree_download.clicked.connect(self.download_tree_widget)

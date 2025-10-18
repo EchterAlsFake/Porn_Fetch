@@ -2,6 +2,7 @@
 
 pyside6-uic UI/form_main_window.ui -o UI/ui_form_main_window.py
 pyside6-uic UI/form_android.ui -o UI/ui_form_android.py
+pyside6-uic UI/form_batch.ui -o UI/ui_form_batch.py
 
 # Translations
 pyside6-lupdate ../../main.py UI/form_main_window.ui UI/ui_form_main_window.py -ts translations/ts/en.ts -no-obsolete
