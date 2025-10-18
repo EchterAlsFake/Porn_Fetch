@@ -370,8 +370,8 @@ def load_video_attributes(video):
 
     return data
 
-def save_video_metadata(video_id, data):
-    conn = sqlite3.connect("downloads.db")
+def save_video_metadata(video_id, data, database_path: str):
+    conn = sqlite3.connect(database_path)
     cursor = conn.cursor()
     cursor.execute("""
         INSERT OR REPLACE INTO videos (video_id, url, title, author, length, tags, publish_date, thumbnail)
@@ -389,8 +389,8 @@ def save_video_metadata(video_id, data):
     conn.commit()
     conn.close()
 
-def init_db():
-    conn = sqlite3.connect("downloads.db")
+def init_db(database_path: str):
+    conn = sqlite3.connect(database_path)
     cursor = conn.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS videos (

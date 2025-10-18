@@ -573,6 +573,7 @@ class DownloadThread(QRunnable):
             if isinstance(self.video, shared_functions.hq_Video) or isinstance(self.video, shared_functions.ep_Video):
                 video_source = "raw"
                 try:
+                    self.logger.debug("Starting the Download!")
                     self.video.download(quality=self.quality, path=self.output_path, no_title=True,
                                     callback=lambda pos, total: self.generic_callback(pos, total, video_source))
 
@@ -681,6 +682,7 @@ class PornFetch(QMainWindow):
                                    http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
 
         self.last_index = 0  # Keeps track of the last index of videos added to the tree widget
+        self.website_to_search_on = 0
         self.threadpool = QThreadPool()
         self.maps()
         self.load_style()
@@ -922,6 +924,18 @@ class PornFetch(QMainWindow):
             gv.installEventFilter(self)
             gv.viewport().installEventFilter(self)
 
+        self.header = self.ui.treeWidget.header()
+        self.header.resizeSection(0, 300)
+        self.header.resizeSection(1, 150)
+        self.header.resizeSection(2, 50)
+        self.header.setSectionResizeMode(3, QHeaderView.ResizeMode.Fixed)
+        self.ui.treeWidget.setColumnWidth(3, 150)
+        self.ui.treeWidget.itemClicked.connect(self.set_thumbnail)
+        self.ui.treeWidget.currentItemChanged.connect(self.set_thumbnail)
+        self.setWindowTitle(f"Porn Fetch v{__version__} Copyright (C) Johannes Habel 2023-2025")
+        self.ui.treeWidget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
+        self.ui.progress_gridlayout_progressbar.setAlignment(Qt.AlignmentFlag.AlignTop)
+
         install_focus_outline(self)
         self.switch_to_download()
 
@@ -1010,6 +1024,7 @@ class PornFetch(QMainWindow):
 
         # Search
         self.ui.button_search.clicked.connect(self.search)
+        self.ui.download_website_combobox.currentIndexChanged.connect(self.website_index_changed)
 
         # HQPorner
         self.ui.main_button_switch_tools.clicked.connect(self.switch_to_tools)
@@ -1086,7 +1101,7 @@ class PornFetch(QMainWindow):
             4: "french"
         }
         self.mappings_download_mode = {
-            0: "performance",
+            0: "threaded",
             1: "ffmpeg",
             2: "default"
         }
@@ -1145,7 +1160,7 @@ class PornFetch(QMainWindow):
 
         # Performance Options
         _download_mode = int(conf.get("Performance", "download_mode"))
-        video_data.consistent_data.update({"download_mode": _download_mode})
+        video_data.consistent_data.update({"download_mode": self.mappings_download_mode.get(_download_mode)})
         self.ui.settings_performance_combobox_download_mode.setCurrentIndex(_download_mode)
 
         simultaneous_downloads = int(conf.get("Performance", "semaphore"))
@@ -1186,6 +1201,7 @@ class PornFetch(QMainWindow):
         self.ui.settings_checkbox_system_internet_checks.setChecked(internet_checks)
 
         anonymous_mode = b(conf.get("Misc", "anonymous_mode"))
+        self._anonymous_mode = anonymous_mode
         video_data.consistent_data.update({"anonymous_mode": anonymous_mode})
         self.ui.settings_checkbox_system_enable_anonymous_mode.setChecked(anonymous_mode)
 
@@ -1232,7 +1248,7 @@ class PornFetch(QMainWindow):
         conf.set("Video", "video_id_as_filename", b(video_id_as_filename))
         conf.set("Video", "write_metadata", b(write_metadata))
         conf.set("Video", "skip_existing_files", b(skip_existing_files))
-        conf.set("Video", "track_downloaded_videos", b(track_downloaded_videos))
+        conf.set("Video", "track_videos", b(track_downloaded_videos))
         conf.set("Video", "database_path", database_path)
         conf.set("Video", "directory_system", b(directory_system))
 
@@ -1544,7 +1560,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
 
         elif self.website_to_search_on == 2:
             videos = shared_functions.ep_client.search_videos(query, sorting_gay="", sorting_order="",
-                                                              sorting_low_quality="")
+                                                              sorting_low_quality="", page=20, per_page=200)
         elif self.website_to_search_on == 3:
             videos = shared_functions.xv_client.search(query)
 
@@ -1552,10 +1568,9 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
             videos = shared_functions.xh_client.search_videos(query=query)
 
         elif self.website_to_search_on == 5:
-            videos = shared_functions.xn_client.search(query).videos
+            videos = shared_functions.xn_client.search(query).videos()
 
         elif self.website_to_search_on == 6:
-            videos = shared_functions.sp_client
             videos = shared_functions.sp_client.search(query=query, pages=0)
 
         elif self.website_to_search_on == 7:
@@ -1643,7 +1658,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         item.setData(3, Qt.ItemDataRole.UserRole, str(thumbnail))
 
     def tree_widget_finished(self):
-        if self.direct_download:
+        if self.ui.main_checkbox_direct_download.isChecked():
             self.logger.info("Automatically downloading all videos in the tree widget!")
             self.select_all_items()
             self.download_tree_widget()
@@ -1703,11 +1718,11 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         with open("config.ini", "w") as config_file:  # type:TextIOWrapper
             conf.write(config_file)
 
-        if self.track_videos:
+        if video_data.consistent_data.get("track_videos"):
             self.logger.info(f"Tracking video: {video_id}")
-            shared_functions.init_db()
+            shared_functions.init_db(video_data.consistent_data.get("database_path"))
             data = video_data.data_objects.get(video_id)
-            shared_functions.save_video_metadata(video_id, data)
+            shared_functions.save_video_metadata(video_id, data, video_data.consistent_data.get("database_path"))
 
         video_data.clean_dict(video_id)
         self.semaphore.release()

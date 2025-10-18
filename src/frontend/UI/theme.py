@@ -140,6 +140,104 @@ QSpinBox:focus, QDoubleSpinBox:focus, QAbstractButton:focus {
 /* Don’t show hover/focus ring for disabled */
 *:disabled { border-color: #2c2d31; }
 
+/* Standout QCheckBox with transparent unchecked background + SVG checkmark */
+QCheckBox {
+  spacing: 8px;            /* gap between box and label */
+  font-weight: 600;
+}
+
+/* Indicator (the box) */
+QCheckBox::indicator {
+  width: 22px;
+  height: 22px;
+  border: 2px solid #2563eb;    /* vibrant, clearly visible even when unchecked */
+  border-radius: 6px;
+  background: transparent;      /* no fill as requested */
+  margin-top: 1px;              /* aligns with text baseline a bit better */
+}
+
+/* Explicitly no image when unchecked */
+QCheckBox::indicator:unchecked {
+  image: none;
+}
+
+/* Hover / pressed cues without adding fill */
+QCheckBox::indicator:hover {
+  border-color: #1d4ed8;        /* slightly darker blue */
+}
+QCheckBox::indicator:pressed {
+  border-color: #1e40af;
+}
+
+/* (Some styles honor :focus on indicator; harmless if ignored) */
+QCheckBox::indicator:focus {
+  border-color: #1d4ed8;
+}
+
+/* Checked — keep border visible and draw your SVG */
+QCheckBox::indicator:checked {
+  background: transparent;      /* still no fill */
+  border-color: #16a34a;        /* green border to differentiate state */
+  image: url(:/images/graphics/done.svg);
+}
+
+/* Indeterminate (optional) — still transparent, distinct border */
+QCheckBox::indicator:indeterminate {
+  background: transparent;
+  border-color: #f59e0b;        /* amber border */
+  image: none;
+}
+
+/* Disabled */
+QCheckBox:disabled { color: #9ca3af; }
+QCheckBox::indicator:disabled {
+  border-color: #cbd5e1;
+  background: transparent;
+  image: none;
+}
+
+/* --- Tree item checkbox indicator --- */
+QTreeView::indicator, QTreeWidget::indicator {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #2563eb;   /* vibrant so it's clearly visible */
+  border-radius: 5px;
+  background: transparent;      /* no fill for unchecked */
+}
+
+/* No icon when unchecked */
+QTreeView::indicator:unchecked, QTreeWidget::indicator:unchecked {
+  image: none;
+}
+
+/* Hover / focus cues */
+QTreeView::indicator:hover, QTreeWidget::indicator:hover {
+  border-color: #1d4ed8;
+}
+QTreeView::indicator:focus, QTreeWidget::indicator:focus {
+  border-color: #1d4ed8;
+}
+
+/* Checked — draw your SVG, keep border visible */
+QTreeView::indicator:checked, QTreeWidget::indicator:checked {
+  image: url(:/images/graphics/done.svg);
+  background: transparent;
+  border-color: #16a34a;        /* green border to differentiate state */
+}
+
+/* Indeterminate (optional) */
+QTreeView::indicator:indeterminate, QTreeWidget::indicator:indeterminate {
+  image: none;                   /* or point to an indeterminate icon */
+  background: transparent;
+  border-color: #f59e0b;         /* amber */
+}
+
+/* Disabled */
+QTreeView::indicator:disabled, QTreeWidget::indicator:disabled {
+  border-color: #cbd5e1;
+  image: none;
+}
+
 """
 
 LIGHT_QSS = """

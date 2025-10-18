@@ -7,6 +7,6 @@
 - [] Support Xhamster Searching
 - [] Support Xhamster Playlists
 - [] Update networking stuff a little bit
-- [] Improve UI icons and general look (more consistent)
+- [x] Improve UI icons and general look (more consistent)
 - [] Improve logging to server
 
