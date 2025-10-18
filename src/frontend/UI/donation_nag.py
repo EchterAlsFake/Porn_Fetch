@@ -17,8 +17,8 @@ class DonationNag(QWidget):
         self.was_shown_lol = that_one_function
 
     def check_donation_nag(self):
-        if int(conf.get("Sponsoring", "downloaded_videos")) >= 25 and not conf.get("Sponsoring", "notice_shown") == "true":
-            conf.set("Sponsoring", "notice_shown", "true")
+        if int(conf.get("Misc", "downloaded_videos")) >= 25 and not conf.get("Misc", "notice_shown") == "true":
+            conf.set("Misc", "notice_shown", "true")
             with open("config.ini", "w") as configfile:
                 conf.write(configfile)
 

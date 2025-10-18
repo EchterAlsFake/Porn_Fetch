@@ -15,7 +15,7 @@ class License(QWidget):
         self.license_accepted_trigger = this_one_function
 
     def check_license(self):
-        if not conf.get("Setup", "license_accepted") == "true":
+        if not conf.get("Misc", "license_accepted") == "true":
             self.button_connections()
             return False
 
@@ -27,7 +27,7 @@ class License(QWidget):
         self.ui.button_deny.clicked.connect(self.license_denied)
 
     def license_accepted(self):
-        conf.set("Setup", "license_accepted", "true")
+        conf.set("Misc", "license_accepted", "true")
         with open("config.ini", "w") as config_file:
             conf.write(config_file)
 
@@ -35,7 +35,7 @@ class License(QWidget):
         self.license_accepted_trigger()
 
     def license_denied(self):
-        conf.set("Setup", "license_accepted", "false")
+        conf.set("Misc", "license_accepted", "false")
         with open("config.ini", "w") as config_file: #type: TextIOWrapper
             conf.write(config_file)
 
@@ -51,7 +51,7 @@ class Disclaimer(QWidget):
         self.disclaimer_accepted_trigger = this_one_function_lol
 
     def check_disclaimer(self):
-        if not conf.get("Setup", "disclaimer_shown") == "true":
+        if not conf.get("Misc", "disclaimer_shown") == "true":
             self.button_connections()
             return False
 
@@ -62,7 +62,7 @@ class Disclaimer(QWidget):
         self.ui.button_disclaimer_accept.clicked.connect(self.disclaimer_accepted)
 
     def disclaimer_accepted(self):
-        conf.set("Setup", "disclaimer_shown", "true")
+        conf.set("Misc", "disclaimer_shown", "true")
         with open("config.ini", "w") as config_file:
             conf.write(config_file)
 

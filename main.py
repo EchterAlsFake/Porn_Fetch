@@ -29,7 +29,6 @@ except Exception:
     FORCE_DISABLE_AV = True
 
 import time
-import random
 import shutil
 import os.path
 import argparse
@@ -44,7 +43,7 @@ from src.backend.shared_gui import *
 from src.frontend.UI.ssl_warning import *
 from src.frontend.UI.ui_form_main_window import Ui_MainWindow
 #from src.frontend.UI.ui_form_android import Ui_PornFetchAndroid
-from src.frontend.UI.theme import apply_theme, mark, pretty_combo, install_focus_outline
+from src.frontend.UI.theme import *
 from src.backend.one_time_functions import *
 from src.backend.config import __version__, __build__
 from src.frontend.UI.donation_nag import DonationNag
@@ -57,9 +56,7 @@ from PySide6.QtCore import (QFile, QTextStream, QRunnable, QThreadPool, QSemapho
 from PySide6.QtWidgets import (QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, \
                                QInputDialog, QMainWindow, QLabel, QProgressBar, QGraphicsPixmapItem, QDialog, QVBoxLayout,
                                QGraphicsScene, QGraphicsView, QComboBox)
-from PySide6.QtGui import QIcon, QFont, QFontDatabase, QPixmap, QShortcut, QKeySequence, QPainter
-
-
+from PySide6.QtGui import QIcon, QFontDatabase, QPixmap, QShortcut, QKeySequence, QPainter
 
 # Possible errors from APIs
 from base_api.modules.errors import ProxySSLError, InvalidProxy
@@ -125,7 +122,7 @@ If you believe, that this is a mistake, please report it on GitHub, so that I ca
 
                 shutil.move("PornFetch_Linux_GUI_x64.bin", dst=destination_path_final)
                 self.logger.info(f"Moved the PornFetch binary to: {destination_path_final}")
-                shared_functions.shared_config.set("Setup", "install", "installed")
+                shared_functions.shared_config.set("Misc", "install", "installed")
                 with open("config.ini", "w") as configuration:
                     shared_config.write(configuration)
 
@@ -176,7 +173,7 @@ Categories=Utility;"""
                 self.logger.info(f"Moved current Porn Fetch executable to: {target_dir}")
 
                 try:
-                    shared_functions.shared_config.set("Setup", "install", "installed")
+                    shared_functions.shared_config.set("Misc", "install", "installed")
                     with open("config.ini", "w") as configuration:
                         shared_config.write(configuration)
 
@@ -494,7 +491,7 @@ class DownloadThread(QRunnable):
         self.logger = setup_logger(name="Porn Fetch - [DownloadThread]", log_file="PornFetch.log", level=logging.DEBUG,
                                    http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
 
-        self.threading_mode = self.consistent_data.get("threading_mode")
+        self.download_mode = self.consistent_data.get("download_mode")
         self.signals = Signals()
         self.stop_flag = stop_flag
         self.skip_existing_files = self.consistent_data.get("skip_existing_files")
@@ -586,11 +583,11 @@ class DownloadThread(QRunnable):
             elif isinstance(self.video, shared_functions.ph_Video):  # Assuming 'Video' is the class for Pornhub
                 video_source = "general"
                 self.logger.debug("Starting the Download!")
-                self.video.download(downloader=str(self.threading_mode), path=self.output_path, quality=self.quality, remux=remux, display_remux=self.callback_remux,
+                self.video.download(downloader=str(self.download_mode), path=self.output_path, quality=self.quality, remux=remux, display_remux=self.callback_remux,
                                     display=lambda pos, total: self.generic_callback(pos, total))
 
             else:
-                self.video.download(downloader=str(self.threading_mode), path=self.output_path, callback_remux=self.callback_remux, no_title=True,
+                self.video.download(downloader=str(self.download_mode), path=self.output_path, callback_remux=self.callback_remux, no_title=True,
                                     quality=self.quality, remux=remux, callback=lambda pos, total: self.generic_callback(pos, total))
 
         except Exception:
@@ -620,7 +617,7 @@ class QTreeWidgetDownloadThread(QRunnable):
         self.treeWidget = tree_widget
         self.signals = Signals()
         self.consistent_data = video_data.consistent_data
-        self.threading_mode = self.consistent_data.get("threading_mode")
+        self.download_mode = self.consistent_data.get("download_mode")
         self.quality = self.consistent_data.get("quality")
         self.semaphore = semaphore
         self.logger = setup_logger(name="Porn Fetch - [QTreeWidgetDownloadThread]", log_file="PornFetch.log",
@@ -666,143 +663,20 @@ class QTreeWidgetDownloadThread(QRunnable):
                 idx])  # Now emits the video to the main class for further processing
 
 
-class AddUrls(QRunnable):
-    """
-    This class is used to add the URLs from the 'open file' function, because the UI doesn't respond until
-    all URLs / Models / Search terms have been processed. This is why I made this threading class
-    """
-
-    def __init__(self, file):
-        super(AddUrls, self).__init__()
-        self.signals = Signals()
-        self.file = file
-        self.logger = setup_logger(name="Porn Fetch - [AddUrls (Batch Processing)]", log_file="PornFetch.log", level=logging.DEBUG,
-                                   http_port=shared_functions.http_log_port, http_ip=shared_functions.http_log_ip)
-
-    def run(self):
-        iterator = []
-        model_iterators = []
-
-        self.signals.start_undefined_range.emit()
-        self.logger.info(f"Trying to read URL (Batch) file: {self.file}")
-        with open(self.file, "r") as url_file:
-            content = url_file.read().splitlines()
-
-        self.logger.info(f"Found: {len(content)} lines of iterables")
-        for idx, line in enumerate(content):
-            if len(line) == 0:
-                continue
-
-            self.signals.stop_undefined_range.emit()
-            total = len(content)
-            self.signals.total_progress_range.emit(total)
-            """
-            Template:
-            
-            model#<url>
-            video#<url>
-            """
-
-            if line.startswith("model#"):
-                model_url = line.split("#")[1]
-                model_iterators.append(model_url)
-                self.logger.debug(f"Found Model URL ->: {model_url}")
-
-            elif line.startswith("video#"):
-                video_url = line.split("#")[1]
-                video = shared_functions.check_video(video_url)
-
-                if video is not False:
-                    self.logger.debug("Found Video object!")
-                    iterator.append(video)
-
-            else:
-                self.logger.warning(f"Line: {idx} - {line} contains invalid formatting!, skipping...")
-
-            self.signals.total_progress.emit(idx)
-
-        self.signals.url_iterators.emit(iterator, model_iterators)
-
-
 class PornFetch(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.last_update_time = time.time()
         self.last_thumbnail_change = time.time()
-        self.stylesheets = None
-        self._pixmap_item = None
-        self._scene = None
-        self.use_video_id_as_filename = None
-        self.processing_delay = None
-        self.activate_logging = None
-        self.supress_errors = None
-        self.direct_download = None
-        self._full_pixmap = None
+
         if __build__ == "desktop":
             self.ui = Ui_MainWindow()
 
         elif __build__ == "android":
             #self.ui = Ui_PornFetchAndroid()
             pass
+
         self.ui.setupUi(self)
-
-        # Threads
-        self.install_thread = None
-        self.internet_check_thread = None
-        self.update_thread = None
-        self.url_thread = None
-        self.download_thread = None
-        self.video_loader_thread = None
-        self.download_tree_thread = None
-        self.add_to_tree_widget_thread_ = None
-
-        # Button groups
-        self.group_threading_mode = None
-        self.group_quality = None
-        self.group_radio_tree_data_mode = None
-        self.group_ui_language = None
-        self.group_directory_system = None
-        self.group_radio_hqporner = None
-        self.group_radio_model_videos = None
-        self.group_radio_skip_existing_files = None
-
-        # UI Stuff
-        self.header = None
-        self.widget = None
-        self.range_ui = None
-        self.keyboard_widget = None
-        self.keyboard_widget_ = None
-        self.all_categories_eporner = None
-
-        # Settings mappings
-        self.map_quality = None
-        self.map_model_videos = None
-        self.map_gui_language = None
-        self.map_threading_mode = None
-
-        self.internet_checks = None
-        self.update_checks = None
-        self._anonymous_mode = None
-        self.write_metadata = None
-        self.semaphore_limit = None
-        self.result_limit = None
-        self.output_path = None
-        self.gui_language = None
-        self.quality = None
-        self.threading_mode = None
-        self.semaphore = None
-        self.delay = None
-        self.timeout = None
-        self.workers = None
-        self.max_retries = None
-        self.skip_existing_files = None
-        self.model_videos_type = None
-        self.kill_switch = False
-        self.website_to_search_on = 0
-        self.proxy = None
-        self.downloader = None
-        self.speed_limit_mb = None
-        self.directory_system = None
         self.logger = setup_logger(name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG,
                                    http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
 
@@ -810,9 +684,9 @@ class PornFetch(QMainWindow):
         self.threadpool = QThreadPool()
         self.maps()
         self.load_style()
-        self.donation_nag = DonationNag(self.ui, self.initialize_pornfetch)
         self.license = License(self.ui, self.initialize_pornfetch)
         self.disclaimer = Disclaimer(self.ui, self.initialize_pornfetch)
+        self.donation_nag = DonationNag(self.ui, self.initialize_pornfetch)
 
         """
                              ! INDEX LIST !
@@ -844,46 +718,31 @@ class PornFetch(QMainWindow):
         self.logger.debug("Startup: [4/5] Loaded the user settings")
         self.progress_widgets = {}  # video_id -> {'label': QLabel, 'progressbar': QProgressBar}
 
-        if self.internet_checks:
+        if video_data.consistent_data.get("internet_checks"):
             self.logger.info("Running internet checks")
             self.check_internet()
 
-        if self.update_checks:
+        if video_data.consistent_data.get("update_checks"):
             self.logger.info("Running update checks")
             self.check_for_updates()
 
-        if self._anonymous_mode:
+        if video_data.consistent_data.get("anonymous_mode"):
             self.logger.info("Enabling anonymous mode")
             self.anonymous_mode()
 
-        # IMPORTANT
-        video_data.consistent_data.update({
-            "output_path": self.output_path,
-            "threading_mode": self.threading_mode,
-            "quality": self.quality,
-            "timeout": self.timeout,
-            "workers": self.workers,
-            "directory_system": self.directory_system,
-            "write_metadata": self.write_metadata,
-            "result_limit": self.result_limit,
-            "skip_existing_files": self.skip_existing_files,
-            "supress_errors": self.supress_errors,
-            "activate_logging": self.activate_logging,
-            "video_id_as_filename": self.use_video_id_as_filename,
-            "processing_delay": self.processing_delay,
-        })
+        self.semaphore = QSemaphore(video_data.consistent_data["semaphore"])
         self.logger.debug("Startup: [5/5] OK")
         self.initialize_pornfetch()
 
     def disable_logging(self):
-        conf["Setup"]["activate_logging"] = "false"
+        conf["Misc"]["network_logging"] = "false"
         with open("config.ini", "w") as configuration:
             conf.write(configuration)
 
         self.initialize_pornfetch()
 
     def enable_logging(self):
-        conf["Setup"]["activate_logging"] = "true"
+        conf["Misc"]["network_logging"] = "true"
         with open("config.ini", "w") as configuration:
             conf.write(configuration)
 
@@ -922,34 +781,18 @@ class PornFetch(QMainWindow):
         self.ui.CentralStackedWidget.setCurrentIndex(9)
 
     def switch_to_download(self):
-        self.ui.scroll_area_top_stacked.setMinimumHeight(110)
-        self.ui.scroll_area_top_stacked.setMaximumHeight(240)
-        self.ui.main_stacked_widget_top.setMaximumHeight(230)
-        self.ui.main_stacked_widget_top.setMinimumHeight(220)
         self.ui.main_stacked_widget_top.setCurrentIndex(0)
         self.switch_to_main()
 
     def switch_to_login(self):
-        self.ui.scroll_area_top_stacked.setMinimumHeight(110)
-        self.ui.scroll_area_top_stacked.setMaximumHeight(160)
-        self.ui.main_stacked_widget_top.setMinimumHeight(160)
-        self.ui.main_stacked_widget_top.setMaximumHeight(160)
         self.ui.main_stacked_widget_top.setCurrentIndex(1)
         self.switch_to_main()
 
     def switch_to_progressbars(self):
-        self.ui.scroll_area_top_stacked.setMinimumHeight(80)
-        self.ui.scroll_area_top_stacked.setMaximumHeight(200)
-        self.ui.main_stacked_widget_top.setMinimumHeight(200)
-        self.ui.main_stacked_widget_top.setMaximumHeight(200)
         self.ui.main_stacked_widget_top.setCurrentIndex(2)
         self.switch_to_main()
 
     def switch_to_tools(self):
-        self.ui.scroll_area_top_stacked.setMinimumHeight(120)
-        self.ui.scroll_area_top_stacked.setMaximumHeight(250)
-        self.ui.main_stacked_widget_top.setMinimumHeight(250)
-        self.ui.main_stacked_widget_top.setMaximumHeight(250)
         self.ui.main_stacked_widget_top.setCurrentIndex(3)
         self.switch_to_main()
 
@@ -960,8 +803,6 @@ class PornFetch(QMainWindow):
         self.ui.CentralStackedWidget.setCurrentIndex(11)
 
     def load_style(self):
-        self.ui.settings_radio_ui_lsd.setText("LSD (☢️)")
-        self.ui.settings_radio_ui_light.setText("Light (💀)")
         icons = {
             self.ui.main_button_switch_home: "download.svg",
             self.ui.main_button_switch_settings: "settings.svg",
@@ -1045,9 +886,6 @@ class PornFetch(QMainWindow):
         for cb in self.findChildren(QComboBox):
             pretty_combo(cb)
 
-        if __build__ == "desktop":
-            mark(self.ui.download_button_open_file)  # secondary
-
         # --- progress bars: mark roles instead of separate QSS files ---
         mark(self.ui.main_progressbar_total, role="total")
         mark(self.ui.main_progressbar_converting, role="convert")
@@ -1063,16 +901,7 @@ class PornFetch(QMainWindow):
         self.ui.treeWidget.setAlternatingRowColors(True)
 
         # --- font (app-wide) ---
-        if conf["UI"]["custom_font"] == "true":
-            fid = QFontDatabase.addApplicationFont(":/fonts/graphics/JetBrainsMono-Regular.ttf")
-            if fid != -1:
-                fam = QFontDatabase.applicationFontFamilies(fid)[0]
-                font = QFont(fam)
-            else:
-                font = QFontDatabase.systemFont(QFontDatabase.SystemFont.GeneralFont)
-        else:
-            font = QFontDatabase.systemFont(QFontDatabase.SystemFont.GeneralFont)
-
+        font = QFontDatabase.systemFont(QFontDatabase.SystemFont.GeneralFont)
         font.setPointSizeF(int(conf["UI"]["font_size"]))
         self.window().setFont(font)  # don’t loop all children
 
@@ -1109,7 +938,7 @@ class PornFetch(QMainWindow):
         self.threadpool.start(self.install_thread)
 
     def install_porn_fetch_portable(self):
-        conf["Setup"]["install"] = "portable"
+        conf["Misc"]["install_type"] = "portable"
         with open("config.ini", "w") as config: # type: TextIOWrapper
             conf.write(config)
 
@@ -1196,8 +1025,6 @@ class PornFetch(QMainWindow):
 
         # File Dialog
         self.ui.settings_button_videos_open_output_path.clicked.connect(self.open_output_path_dialog)
-        if __build__ == "desktop":
-            self.ui.download_button_open_file.clicked.connect(self.open_file_dialog)
 
         # Other stuff IDK
         self.ui.main_button_tree_stop.clicked.connect(switch_stop_state)
@@ -1227,108 +1054,229 @@ class PornFetch(QMainWindow):
         unselect_all_items = QShortcut(QKeySequence("Ctrl+Z"), self)
         unselect_all_items.activated.connect(self.unselect_all_items)
 
+    def maps(self):
+        self.mappings_hqporner_tools = {
+            0: hq_Sort.WEEK,
+            1: hq_Sort.MONTH,
+            2: hq_Sort.ALL_TIME
+        }
+        self.mappings_quality = {
+            0: "best",
+            1: "half",
+            2: "worst",
+            4: 2160,
+            5: 1440,
+            6: 1080,
+            7: 720,
+            8: 540,
+            9: 360,
+            10: 240,
+            11: 144
+        }
+        self.mappings_ui_theme = {
+            0: "dark",
+            1: "light",
+            2: "lsd",
+        }
+        self.mappings_ui_language = {
+            0: "system",
+            1: "english",
+            2: "german",
+            3: "chinese",
+            4: "french"
+        }
+        self.mappings_download_mode = {
+            0: "performance",
+            1: "ffmpeg",
+            2: "default"
+        }
+
     def load_user_settings(self):
         """Loads the user settings from the configuration file and applies them."""
         conf.read("config.ini")
-        # Apply settings
-        self.ui.settings_spinbox_performance_simultaneous_downloads.setValue(int(conf.get("Performance", "semaphore")))
-        self.ui.settings_spinbox_videos_result_limit.setValue(int(conf.get("Video", "result_limit")))
-        self.ui.settings_lineedit_videos_output_path.setText(conf.get("Video", "output_path"))
-        self.ui.settings_spinbox_ui_font_size.setValue(int(conf.get("UI", "font_size")))
-        self.internet_checks = conf.get("Setup", "internet_checks") == "true"
-        self.ui.settings_checkbox_system_internet_checks.setChecked(self.internet_checks)
 
-        self.track_videos = conf.get("Video", "track_videos") == "true"
-        self.ui.settings_checkbox_videos_track_downloaded_videos.setChecked(self.track_videos)
+        def b(value: str):
+            if value == "true":
+                return True
 
-        self.update_checks = conf.get("Setup", "update_checks") == "true"
-        self.ui.settings_checkbox_system_update_checks.setChecked(self.update_checks)
+            elif value == "false":
+                return False
 
-        self._anonymous_mode = conf.get("Setup", "anonymous_mode") == "true"
-        self.ui.settings_checkbox_system_enable_anonymous_mode.setChecked(self._anonymous_mode)
+        # Video settings
+        _quality = int(conf.get("Video", "quality"))
+        video_data.consistent_data.update({"quality": self.mappings_quality.get(_quality)})
+        self.ui.settings_video_combobox_quality.setCurrentIndex(_quality)
 
-        self.use_video_id_as_filename = conf.get("Video", "video_id_as_filename") == "true"
-        self.ui.settings_checkbox_videos_use_video_id_as_filename.setChecked(self.use_video_id_as_filename)
+        _model_videos = int(conf.get("Video", "model_videos"))
+        video_data.consistent_data.update({"model_videos": _model_videos})
+        self.ui.settings_video_combobox_model_videos.setCurrentIndex(_model_videos)
 
-        self.skip_existing_files = conf.get("Video", "skip_existing_files") == "true"
-        self.ui.settings_checkbox_videos_skip_existing_files.setChecked(self.skip_existing_files)
+        result_limit = int(conf.get("Video", "result_limit"))
+        video_data.consistent_data.update({"result_limit": result_limit})
+        self.ui.settings_spinbox_videos_result_limit.setValue(result_limit)
 
-        self.directory_system = conf.get("Video", "directory_system") == "true"
-        self.ui.settings_checkbox_videos_use_directory_system.setChecked(self.directory_system)
+        output_path = str(conf.get("Video", "output_path"))
+        video_data.consistent_data.update({"output_path": output_path})
+        self.ui.settings_lineedit_videos_output_path.setText(output_path)
 
-        self.supress_errors = conf.get("Video", "supress_errors") == "true"
-        self.ui.settings_checkbox_system_supress_errors.setChecked(self.supress_errors)
+        video_id_as_filename = b(conf.get("Video", "video_id_as_filename"))
+        video_data.consistent_data.update({"video_id_as_filename": video_id_as_filename})
+        self.ui.settings_checkbox_videos_use_video_id_as_filename.setChecked(video_id_as_filename)
 
-        self.activate_logging = conf.get("Setup", "activate_logging") == "true"
-        self.ui.settings_checkbox_system_enable_network_logging.setChecked(self.activate_logging)
+        write_metadata = b(conf.get("Video", "write_metadata"))
+        video_data.consistent_data.update({"write_metadata": write_metadata})
+        self.ui.settings_checkbox_videos_write_metadata.setChecked(write_metadata)
 
-        self.write_metadata = conf.get("Video", "write_metadata") == "true"
-        self.ui.settings_checkbox_videos_write_metadata.setChecked(self.write_metadata)
+        skip_existing_files = b(conf.get("Video", "skip_existing_files"))
+        video_data.consistent_data.update({"skip_existing_files": skip_existing_files})
+        self.ui.settings_checkbox_videos_skip_existing_files.setChecked(skip_existing_files)
 
-        self.semaphore_limit = conf.get("Performance", "semaphore")
-        self.result_limit = int(conf.get("Video", "result_limit"))
-        self.output_path = conf.get("Video", "output_path")
+        track_videos = b(conf.get("Video", "track_videos"))
+        video_data.consistent_data.update({"track_videos": track_videos})
+        self.ui.settings_checkbox_videos_track_downloaded_videos.setChecked(track_videos)
 
-        self.gui_language = conf.get("UI", "language")
-        self.threading_mode = conf["Performance"]["threading_mode"]
-        self.semaphore = QSemaphore(int(self.semaphore_limit))
-        self.delay = int(conf["Video"]["delay"])
-        self.timeout = int(conf["Performance"]["timeout"])
-        self.workers = int(conf["Performance"]["workers"])
-        self.max_retries = int(conf["Performance"]["retries"])
-        self.speed_limit_mb = float(conf["Performance"]["speed_limit"])
-        self.model_videos_type = conf["Video"]["model_videos"]
-        self.processing_delay = conf["Performance"]["processing_delay"]
-        self.ui.settings_spinbox_performance_processing_delay.setValue(int(self.processing_delay))
-        self.ui.settings_spinbox_performance_maximal_timeout.setValue(int(self.timeout))
-        self.ui.settings_spinbox_performance_maximal_workers.setValue(int(self.workers))
-        self.ui.settings_spinbox_performance_maximal_retries.setValue(int(self.max_retries))
-        self.ui.settings_doublespinbox_performance_speed_limit.setValue(self.speed_limit_mb)
-        self.ui.settings_spinbox_performance_network_delay.setValue(int(self.delay))
+        database_path = str(conf.get("Video", "database_path"))
+        video_data.consistent_data.update({"database_path": database_path})
+        self.ui.settings_lineedit_videos_database_path.setText(database_path)
 
-        # Apply stuff to eaf_base_api and refresh cores
-        shared_functions.config.timeout = self.timeout
-        shared_functions.config.request_delay = self.delay
-        shared_functions.config.max_bandwidth_mb = self.speed_limit_mb
-        shared_functions.config.max_retries = self.max_retries
+        directory_system = b(conf.get("Video", "directory_system"))
+        video_data.consistent_data.update({"directory_system": directory_system})
+        self.ui.settings_checkbox_videos_use_directory_system.setChecked(directory_system)
+
+        # Performance Options
+        _download_mode = int(conf.get("Performance", "download_mode"))
+        video_data.consistent_data.update({"download_mode": _download_mode})
+        self.ui.settings_performance_combobox_download_mode.setCurrentIndex(_download_mode)
+
+        simultaneous_downloads = int(conf.get("Performance", "semaphore"))
+        video_data.consistent_data.update({"semaphore": simultaneous_downloads})
+        self.ui.settings_spinbox_performance_simultaneous_downloads.setValue(simultaneous_downloads)
+
+        network_delay = int(conf.get("Performance", "network_delay"))
+        video_data.consistent_data.update({"network_delay": network_delay})
+        self.ui.settings_spinbox_performance_network_delay.setValue(network_delay)
+
+        workers = int(conf.get("Performance", "workers"))
+        video_data.consistent_data.update({"workers": workers})
+        self.ui.settings_spinbox_performance_maximal_workers.setValue(workers)
+
+        timeout = int(conf.get("Performance", "timeout"))
+        video_data.consistent_data.update({"timeout": timeout})
+        self.ui.settings_spinbox_performance_maximal_timeout.setValue(timeout)
+
+        retries = int(conf.get("Performance", "retries"))
+        video_data.consistent_data.update({"retries": retries})
+        self.ui.settings_spinbox_performance_maximal_retries.setValue(retries)
+
+        speed_limit = float(conf.get("Performance", "speed_limit"))
+        video_data.consistent_data.update({"speed_limit": speed_limit})
+        self.ui.settings_doublespinbox_performance_speed_limit.setValue(speed_limit)
+
+        processing_delay = int(conf.get("Performance", "processing_delay"))
+        video_data.consistent_data.update({"processing_delay": processing_delay})
+        self.ui.settings_spinbox_performance_processing_delay.setValue(processing_delay)
+
+        # System
+        update_checks = b(conf.get("Misc", "update_checks"))
+        video_data.consistent_data.update({"update_checks": update_checks})
+        self.ui.settings_checkbox_system_update_checks.setChecked(update_checks)
+
+        internet_checks = b(conf.get("Misc", "internet_checks"))
+        video_data.consistent_data.update({"internet_checks": internet_checks})
+        self.ui.settings_checkbox_system_internet_checks.setChecked(internet_checks)
+
+        anonymous_mode = b(conf.get("Misc", "anonymous_mode"))
+        video_data.consistent_data.update({"anonymous_mode": anonymous_mode})
+        self.ui.settings_checkbox_system_enable_anonymous_mode.setChecked(anonymous_mode)
+
+        # (Proxies are handled when clicked, not here, and not saved to a configuration file)
+        supress_errors = b(conf.get("Misc", "supress_errors"))
+        video_data.consistent_data.update({"supress_errors": supress_errors})
+        self.ui.settings_checkbox_system_supress_errors.setChecked(supress_errors)
+
+        network_logging = b(conf.get("Misc", "network_logging"))
+        video_data.consistent_data.update({"network_logging": network_logging})
+        self.ui.settings_checkbox_system_enable_network_logging.setChecked(network_logging)
+
+        core_conf.timeout = timeout
+        core_conf.max_retries = retries
+        core_conf.max_bandwidth_mb = speed_limit
+        core_conf.raise_bot_protection = False
+        core_conf.request_delay = network_delay
         shared_functions.refresh_clients()
         shared_functions.enable_logging()
 
-
     def save_user_settings(self):
         """Saves the user settings to the configuration file based on the UI state."""
-        # Save quality setting
         conf.read("config.ini")
-        # Save other settings
-        conf.set("Performance", "semaphore", str(self.ui.settings_spinbox_performance_simultaneous_downloads.value()))
-        conf.set("Performance", "speed_limit", str(self.ui.settings_doublespinbox_performance_speed_limit.value()))
-        conf.set("Video", "result_limit", str(self.ui.settings_spinbox_videos_result_limit.value()))
-        conf.set("Video", "output_path", self.ui.settings_lineedit_videos_output_path.text())
-        conf.set("Performance", "timeout", str(self.ui.settings_spinbox_performance_maximal_timeout.value()))
-        conf.set("Performance", "workers", str(self.ui.settings_spinbox_performance_maximal_workers.value()))
-        conf.set("Video", "delay", str(self.ui.settings_spinbox_performance_network_delay.value()))
-        conf.set("Performance", "retries", str(self.ui.settings_spinbox_performance_maximal_retries.value()))
-        conf.set("Setup", "update_checks",
-                 "true" if self.ui.settings_checkbox_system_update_checks.isChecked() else "false")
-        conf.set("Setup", "internet_checks",
-                 "true" if self.ui.settings_checkbox_system_internet_checks.isChecked() else "false")
-        conf.set("Setup", "anonymous_mode",
-                 "true" if self.ui.settings_checkbox_system_enable_anonymous_mode.isChecked() else "false")
-        conf.set("Video", "write_metadata",
-                 "true" if self.ui.settings_checkbox_videos_write_metadata.isChecked() else "false")
-        conf.set("Video", "skip_existing_files",
-                 "true" if self.ui.settings_checkbox_videos_skip_existing_files.isChecked() else "false")
-        conf.set("Video", "directory_system",
-                 "true" if self.ui.settings_checkbox_videos_use_directory_system.isChecked() else "false")
-        conf.set("UI", "font_size", str(self.ui.settings_spinbox_ui_font_size.value()))
-        conf.set("Video", "video_id_as_filename", "true" if self.ui.settings_checkbox_videos_use_video_id_as_filename.isChecked() else "false")
-        conf.set("Video", "supress_errors", "true" if self.ui.settings_checkbox_system_supress_errors.isChecked() else "false")
-        conf.set("Performance", "processing_delay", str(self.ui.settings_spinbox_performance_processing_delay.value()))
-        conf.set("Setup", "activate_logging", "true" if self.ui.settings_checkbox_system_enable_network_logging.isChecked() else "false")
-        conf.set("Video", "track_videos", "true" if self.ui.settings_checkbox_videos_track_downloaded_videos.isChecked() else "false")
 
-        with open("config.ini", "w") as config_file:  # type: TextIOWrapper
-            conf.write(config_file)
+        # Helper for lower-case boolean strings
+        def b(v: bool) -> str:
+            return "true" if v else "false"
+
+        # Video
+        _quality_idx = self.ui.settings_video_combobox_quality.currentIndex()
+        _model_videos = self.ui.settings_video_combobox_model_videos.currentIndex()
+        result_limit = int(self.ui.settings_spinbox_videos_result_limit.value())
+        output_path = str(self.ui.settings_lineedit_videos_output_path.text())
+        video_id_as_filename = self.ui.settings_checkbox_videos_track_downloaded_videos.isChecked()
+        write_metadata = self.ui.settings_checkbox_videos_write_metadata.isChecked()
+        skip_existing_files = self.ui.settings_checkbox_videos_skip_existing_files.isChecked()
+        track_downloaded_videos = self.ui.settings_checkbox_videos_track_downloaded_videos.isChecked()
+        database_path = str(self.ui.settings_lineedit_videos_database_path.text())
+        directory_system = self.ui.settings_checkbox_videos_use_directory_system.isChecked()
+        conf.set("Video", "quality", str(_quality_idx))
+        conf.set("Video", "model_videos", str(_model_videos))
+        conf.set("Video", "result_limit", str(result_limit))
+        conf.set("Video", "output_path", output_path)
+        conf.set("Video", "video_id_as_filename", b(video_id_as_filename))
+        conf.set("Video", "write_metadata", b(write_metadata))
+        conf.set("Video", "skip_existing_files", b(skip_existing_files))
+        conf.set("Video", "track_downloaded_videos", b(track_downloaded_videos))
+        conf.set("Video", "database_path", database_path)
+        conf.set("Video", "directory_system", b(directory_system))
+
+        # --- Performance ---
+        _download_mode_idx = self.ui.settings_performance_combobox_download_mode.currentIndex()
+        simultaneous_downloads = int(self.ui.settings_spinbox_performance_simultaneous_downloads.value())
+        network_delay = int(self.ui.settings_spinbox_performance_network_delay.value())
+        maximal_workers = int(self.ui.settings_spinbox_performance_maximal_workers.value())
+        maximal_timeout = int(self.ui.settings_spinbox_performance_maximal_timeout.value())
+        maximal_retries = int(self.ui.settings_spinbox_performance_maximal_retries.value())
+        speed_limit = float(self.ui.settings_doublespinbox_performance_speed_limit.value())
+        processing_delay = int(self.ui.settings_spinbox_performance_processing_delay.value())
+        conf.set("Performance", "download_mode", str(_download_mode_idx))
+        conf.set("Performance", "semaphore", str(simultaneous_downloads))
+        conf.set("Performance", "network_delay", str(network_delay))
+        conf.set("Performance", "workers", str(maximal_workers))
+        conf.set("Performance", "maximal_timeout", str(maximal_timeout))
+        conf.set("Performance", "maximal_retries", str(maximal_retries))
+        conf.set("Performance", "speed_limit", str(speed_limit))
+        conf.set("Performance", "processing_delay", str(processing_delay))
+
+        # --- System ---
+        update_checks = self.ui.settings_checkbox_system_update_checks.isChecked()
+        internet_checks = self.ui.settings_checkbox_system_internet_checks.isChecked()
+        anonymous_mode = self.ui.settings_checkbox_system_enable_anonymous_mode.isChecked()
+        supress_errors = self.ui.settings_checkbox_system_supress_errors.isChecked()
+        network_logging = self.ui.settings_checkbox_system_enable_network_logging.isChecked()
+        conf.set("Misc", "update_checks", b(update_checks))
+        conf.set("Misc", "internet_checks", b(internet_checks))
+        conf.set("Misc", "anonymous_mode", b(anonymous_mode))
+        conf.set("Misc", "supress_errors", b(supress_errors))
+        conf.set("Misc", "network_logging", b(network_logging))
+
+        # UI
+        _gui_language_idx = self.ui.settings_ui_combobox_language.currentIndex()
+        _theme_idx = self.ui.settings_combobox_ui_theme.currentIndex()
+        font_size = self.ui.settings_spinbox_ui_font_size.value()
+        conf.set("UI", "language", str(_gui_language_idx))
+        conf.set("UI", "theme", str(_theme_idx))
+        conf.set("UI", "font_size", str(font_size))
+
+        # Persist to disk
+        with open("config.ini", "w", encoding="utf-8") as f:
+            conf.write(f)
 
         ui_popup(self.tr("Saved User Settings, please restart Porn Fetch!", None))
         self.logger.debug("Saved User Settings, please restart Porn Fetch.")
@@ -1464,7 +1412,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
             self.switch_to_donation_nag()
             return
 
-        if conf["Setup"]["activate_logging"] == "not_set":
+        if conf["Misc"]["network_logging"] == "not_set":
             self.handle_network_logging()
             return
 
@@ -1473,7 +1421,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
                 self.ui.CentralStackedWidget.setCurrentIndex(0)
                 return
 
-            if conf["Setup"]["install"] == "unknown":
+            if conf["Misc"]["install_type"] == "unknown":
                 self.switch_to_install_dialog()
                 return
 
@@ -1481,8 +1429,8 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
 
     def handle_network_logging(self):
         self.switch_to_logging()
-        self.ui.button_server_enable_logging.setStyleSheet(self.stylesheets["button_green"])
-        self.ui.button_server_disable_logging.setStyleSheet(self.stylesheets["button_reset"])
+        mark(self.ui.button_server_enable_logging, intent="primary")
+        mark(self.ui.button_server_disable_logging, intent="secondary")
         self.ui.button_server_enable_logging.clicked.connect(self.enable_logging)
         self.ui.button_server_disable_logging.clicked.connect(self.disable_logging)
 
@@ -1572,35 +1520,6 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
 
         self.logger.debug("Got playlist videos!")
         self.add_to_tree_widget_thread(iterator=videos)
-
-    def open_file_dialog(self):
-        """This opens and processes urls in the file"""
-        dialog = QFileDialog()
-        file, types = dialog.getOpenFileName()
-        self.logger.info(f"Processing: {file}")
-        self.start_file_processing(file)
-
-    def start_file_processing(self, file: str):
-        self.url_thread = AddUrls(file)
-        self.url_thread.signals.total_progress.connect(self.update_total_progressbar)
-        self.url_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
-        self.url_thread.signals.start_undefined_range.connect(self.start_undefined_range)
-        self.url_thread.signals.url_iterators.connect(self.receive_url_result)
-        self.threadpool.start(self.url_thread)
-
-    def receive_url_result(self, iterator, model_iterator):
-        self.logger.debug(f"Received Video Iterator ({len(iterator)} videos)")
-        self.logger.debug(f"Received Model Iterator ({len(model_iterator)} urls)")
-        direct_download = self.direct_download
-        self.direct_download = False # Makes sense, trust me
-        self.logger.debug("Processing Videos...")
-        self.add_to_tree_widget_thread(iterator)
-        self.logger.debug("Processing Models...")
-        for url in model_iterator:
-            self.start_model(url)
-
-        if direct_download:
-            self.download_tree_widget()
 
     def website_index_changed(self, idx: int):
         """Called when the user changes the currently selected website in the combo box"""
@@ -1778,9 +1697,9 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
                 self.ui.progress_gridlayout_progressbar.removeWidget(widget)
                 widget.deleteLater()
 
-        downloaded_videos = int(conf.get("Sponsoring", "downloaded_videos"))
+        downloaded_videos = int(conf.get("Misc", "downloaded_videos"))
         downloaded_videos += 1
-        conf.set("Sponsoring", "downloaded_videos", str(downloaded_videos))
+        conf.set("Misc", "downloaded_videos", str(downloaded_videos))
         with open("config.ini", "w") as config_file:  # type:TextIOWrapper
             conf.write(config_file)
 
@@ -1927,14 +1846,10 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
     """
 
     def create_video_progressbar(self, video_id, title):
-        progressbar_themes = [
-            "progressbar_eporner", "progressbar_pornhub", "progressbar_missav", "progressbar_hqporner", "progressbar_xhamster",
-            "progressbar_xnxx", "progressbar_xvideos", "progressbar_eporner"
-        ]
         truncated_title = (title[:30] + '...') if len(title) > 30 else title
         label = QLabel(truncated_title)
         progressbar = QProgressBar()
-        progressbar.setStyleSheet(self.stylesheets[random.choice(progressbar_themes)])
+        progressbar.setStyleSheet(generate_random_progressbar_qss())
         progressbar.setMaximum(100)
         progressbar.setValue(0)
 
@@ -2069,12 +1984,6 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
     The following functions are related to the search functionality
     """
 
-    def maps(self):
-        self.mappings_hqporner_tools = {
-            0: hq_Sort.WEEK,
-            1: hq_Sort.MONTH,
-            2: hq_Sort.ALL_TIME
-        }
 
     def get_top_porn_hqporner(self):
         try:
@@ -2169,10 +2078,6 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
 
     def check_for_updates(self):
         """Checks for updates in a thread, so that the main UI isn't blocked, until update checks are done"""
-        if self.activate_logging is False:
-            self.logger.info("You have disabled IPv6 connection to my server. Won't check for updates...")
-            return
-
         self.update_thread = CheckUpdates()
         self.update_thread.signals.update_check.connect(self.check_for_updates_result)
         self.threadpool.start(self.update_thread)
@@ -2345,10 +2250,18 @@ Some websites couldn't be accessed. Here's a detailed report:
 def main():
     setup_config_file()
     app = QApplication(sys.argv)
-    apply_theme(app)
     app.setStyle("Fusion")
     conf.read("config.ini")
     language = conf["UI"]["language"]
+
+    if conf["UI"]["theme"] == "0":
+        apply_theme(app)
+
+    elif conf["UI"]["theme"] == "1":
+        apply_theme_light(app)
+
+    elif conf["UI"]["theme"] == "2":
+        apply_theme_lsd(app)
 
     if language == "system":
         # Get the system's locale
@@ -2390,8 +2303,6 @@ if __name__ == "__main__":
     These just exist for some reason, but I don't want to scroll through endless lines of code,
     which is why I placed them here.
     """
-
-
     def switch_stop_state_2():
         global stop_flag
         stop_flag = Event()

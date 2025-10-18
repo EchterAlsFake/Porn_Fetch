@@ -97,16 +97,15 @@ as they are indeed needed for the main applications!
 """
 
 # TODO: Implement logging
-sections = ["Setup", "Performance", "Video", "UI", "Sponsoring", "Android"]
+sections = [ "Misc", "Performance", "Video", "UI"]
 
-options_setup = ["license_accepted", "install", "update_checks", "internet_checks", "anonymous_mode", "disclaimer_shown", "activate_logging", "first_run_cli"]
-options_performance = ["semaphore", "threading_mode", "workers", "timeout", "retries", "speed_limit", "processing_delay"]
-options_video = ["quality", "output_path", "directory_system", "result_limit", "delay", "skip_existing_files", "model_videos", "supress_errors",
-                 "video_id_as_filename", "direct_download", "write_metadata", "track_videos"]
-options_ui = ["language", "custom_font", "font_size"]
-options_sponsoring = ["downloaded_videos", "notice_shown"]
-options_android = ["warning_shown"]
-
+options_misc = ["license_accepted", "install_type", "update_checks", "internet_checks", "anonymous_mode", "disclaimer_shown",
+                "network_logging", "first_run_cli", "downloaded_videos", "notice_shown", "android_warning_shown", "supress_errors"]
+options_performance = ["download_mode", "semaphore", "workers", "timeout", "retries", "speed_limit", "processing_delay",
+                       "network_delay"]
+options_video = ["quality", "model_videos", "result_limit", "output_path", "video_id_as_filename", "write_metadata",
+                 "skip_existing_files", "track_videos", "database_path", "directory_system"]
+options_ui = ["language", "font_size", "theme"]
 
 pornhub_pattern = re.compile(r'(.*?)pornhub(.*)') # can also be .org
 hqporner_pattern = re.compile(r'(.*?)hqporner.com(.*)')
@@ -118,58 +117,52 @@ xhamster_pattern = re.compile(r'(.*?)xhamster(.*?)')
 spankbang_pattern = re.compile(r'(.*?)spankbang(.*?)')
 youporn_pattern = re.compile(r'(.*?)youporn(.*?)')
 
-
-default_configuration = f"""[Setup]
+default_configuration = f"""
+[Misc]
 license_accepted = false
-install = unknown
+install_type = unknown
 update_checks = true
 internet_checks = true
 anonymous_mode = false
 disclaimer_shown = false
-activate_logging = not_set
+network_logging = false
 first_run_cli = true
+downloaded_videos = 0
+notice_shown = false
+android_warning_shown = false
+supress_errors = false
 
 [Performance]
-threading_mode = threaded
+download_mode = 0
 semaphore = 2
 workers = 20
 timeout = 10
 retries = 4
 speed_limit = 0
 processing_delay = 0
+network_delay = 0
 
 [Video]
-track_videos = false
-quality = best
-output_path = ./
-directory_system = false
+quality = 0
+model_videos = 0
 result_limit = 50
-delay = 0
-skip_existing_files = true
-model_videos = both
-supress_errors = false
+output_path = ./
 video_id_as_filename = false
-direct_download = false
 write_metadata = true
+skip_existing_files = true
+track_videos = false
+database_path = ./downloads.db
+directory_system = false
 
 [UI]
-language = system
-custom_font = true
+language = 0
 font_size = 14
-
-[Sponsoring]
-downloaded_videos = 0
-notice_shown = false
-
-[Android]
-warning_shown = false
+theme = 0
 """
-
 
 def check_video(url, is_url=True):
     if is_url:
         if hqporner_pattern.search(str(url)) and not isinstance(url, hq_Video):
-            print("Returning HQPorner Video! ")
             return hq_client.get_video(url)
 
         elif eporner_pattern.search(str(url)) and not isinstance(url, ep_Video):
@@ -254,40 +247,28 @@ def setup_config_file(force=False):
 
         for idx, section in enumerate(sections):
             if idx == 0:
-                for option in options_setup:
+                for option in options_misc:
                     if not config.has_option(section, option):
+                        print(f"Configuration mismatch: {section} -> {option}")
                         setup_config_file(force=True)
-                        print("ISSUE 1")
 
             if idx == 1:
                 for option in options_performance:
                     if not config.has_option(section, option):
+                        print(f"Configuration mismatch: {section} -> {option}")
                         setup_config_file(force=True)
-                        print("ISSUE 2")
 
             if idx == 2:
                 for option in options_video:
                     if not config.has_option(section, option):
-                        print(f"Config mismatch: {section} | {option}")
+                        print(f"Configuration mismatch: {section} -> {option}")
                         setup_config_file(force=True)
-                        print("ISSUE 4")
+
 
             if idx == 3:
                 for option in options_ui:
                     if not config.has_option(section, option):
-                        setup_config_file(force=True)
-                        print("ISSUE 5")
-
-            if idx == 4:
-                for option in options_sponsoring:
-                    if not config.has_option(section, option):
-                        setup_config_file(force=True)
-                        print("ISSUE 6")
-
-            if idx == 5:
-                for option in options_android:
-                    if not config.has_option(section, option):
-                        print(f"ISSUE 7, {section} {option}")
+                        print(f"Configuration mismatch: {section} -> {option}")
                         setup_config_file(force=True)
 
 
