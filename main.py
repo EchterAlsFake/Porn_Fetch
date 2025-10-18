@@ -678,6 +678,98 @@ class PornFetch(QMainWindow):
             pass
 
         self.ui.setupUi(self)
+        import re
+        def _strip_font_rules(qss: str) -> str:
+            if not qss:
+                return qss
+            # remove 'font:' shorthand and individual font-* props
+            qss = re.sub(r'(?is)\bfont\s*:[^;{}]*;?', '', qss)
+            qss = re.sub(r'(?is)\bfont-(?:size|family|weight|style|kerning|stretch|variant)\s*:[^;{}]*;?', '', qss)
+            # tidy stray semicolons
+            qss = re.sub(r';\s*;', ';', qss)
+            qss = qss.replace('{ ;', '{').replace('{;', '{')
+            return qss
+
+        def install_qss_font_stripper(QWidget):
+            orig = QWidget.setStyleSheet
+
+            def wrapper(self, qss):
+                cleaned = _strip_font_rules(qss or "")
+                return orig(self, cleaned)
+
+            QWidget.setStyleSheet = wrapper
+
+        def clean_fonts(family="Inter", point_size=30, scrub_qtext_content=True):
+            """Call AFTER setupUi(self)."""
+            # Resolve bindings
+            from PySide6.QtWidgets import QApplication, QWidget, QTextEdit, QTextBrowser, QPlainTextEdit, QListWidget, \
+                QTreeWidget, QTableWidget, QToolTip
+            from PySide6.QtGui import QFont, QTextCursor, QTextCharFormat
+            from PySide6.QtCore import Qt
+            # If you're on PySide2/PyQt5/6, the names are the same; import from your binding.
+
+            app = QApplication.instance()
+            if app is None:
+                raise RuntimeError("QApplication must exist")
+
+            # 0) Strip font rules from ALL future widget style sheets
+            install_qss_font_stripper(QWidget)
+
+            # 1) Clear app stylesheet if it mentions fonts
+            if "font" in (app.styleSheet() or "").lower():
+                app.setStyleSheet("")
+
+            # 2) Remove explicit fonts everywhere (including MainWindow)
+            for w in list(app.allWidgets()):
+                # drop any inline QSS font rules by rewriting the existing style (keep non-font styling)
+                ss = w.styleSheet()
+                if ss:
+                    cleaned = _strip_font_rules(ss)
+                    if cleaned != ss:
+                        w.setStyleSheet(cleaned)
+
+                # clear WA_SetFont (bold/size/family overrides)
+                if w.testAttribute(Qt.WA_SetFont):
+                    w.setFont(QFont())  # empty = inherit, no mask
+                    w.setAttribute(Qt.WA_SetFont, False)
+
+                # text widgets: reset default/document font and (optionally) strip per-run formatting
+                if isinstance(w, (QTextEdit, QTextBrowser)):
+                    w.document().setDefaultFont(QFont())
+                    if scrub_qtext_content:
+                        cursor = w.textCursor()
+                        cursor.beginEditBlock()
+                        cursor.select(QTextCursor.Document)
+                        cursor.setCharFormat(QTextCharFormat())
+                        cursor.endEditBlock()
+                elif isinstance(w, QPlainTextEdit):
+                    w.setFont(QFont())
+
+                # clear item-widget fonts
+                if isinstance(w, QListWidget):
+                    for i in range(w.count()):
+                        it = w.item(i);
+                        it and it.setFont(QFont())
+                elif isinstance(w, QTreeWidget):
+                    def walk(it):
+                        for c in range(it.columnCount()):
+                            it.setFont(c, QFont())
+                        for k in range(it.childCount()):
+                            walk(it.child(k))
+
+                    for i in range(w.topLevelItemCount()):
+                        walk(w.topLevelItem(i))
+                elif isinstance(w, QTableWidget):
+                    for r in range(w.rowCount()):
+                        for c in range(w.columnCount()):
+                            it = w.item(r, c);
+                            it and it.setFont(QFont())
+
+            # 3) Apply a single clean app-wide font
+            app.setFont(QFont(family, point_size))
+            QToolTip.setFont(QFont(family, point_size))
+
+        clean_fonts()
         self.logger = setup_logger(name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG,
                                    http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
 
@@ -904,7 +996,8 @@ class PornFetch(QMainWindow):
 
         # --- font (app-wide) ---
         font = QFontDatabase.systemFont(QFontDatabase.SystemFont.GeneralFont)
-        font.setPointSizeF(int(conf["UI"]["font_size"]))
+        font.setPointSize(int(conf["UI"]["font_size"]))
+        print(font.pointSize())
         self.window().setFont(font)  # don’t loop all children
 
         # --- misc you already had ---
@@ -1213,6 +1306,16 @@ class PornFetch(QMainWindow):
         network_logging = b(conf.get("Misc", "network_logging"))
         video_data.consistent_data.update({"network_logging": network_logging})
         self.ui.settings_checkbox_system_enable_network_logging.setChecked(network_logging)
+
+        # UI
+        ui_language_idx = int(conf.get("UI", "language"))
+        self.ui.settings_ui_combobox_language.setCurrentIndex(ui_language_idx)
+
+        font_size = int(conf.get("UI", "font_size"))
+        self.ui.settings_spinbox_ui_font_size.setValue(font_size)
+
+        ui_theme_idx = int(conf.get("UI", "theme"))
+        self.ui.settings_combobox_ui_theme.setCurrentIndex(ui_theme_idx)
 
         core_conf.timeout = timeout
         core_conf.max_retries = retries
@@ -2265,6 +2368,7 @@ Some websites couldn't be accessed. Here's a detailed report:
 def main():
     setup_config_file()
     app = QApplication(sys.argv)
+    install_font_watchdog("watchdog.log")
     app.setStyle("Fusion")
     conf.read("config.ini")
     language = conf["UI"]["language"]
@@ -2303,7 +2407,7 @@ def main():
     app.installTranslator(translator)
     w = PornFetch()  # This actually starts Porn Fetch
     w.show()  # This shows the main widget
-
+    scan_and_report("report.csv")
     """
     The following exceptions are just general exceptions to handle some basic errors. They are not so relevant for
     most cases.

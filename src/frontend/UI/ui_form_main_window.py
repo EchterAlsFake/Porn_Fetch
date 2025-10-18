@@ -28,9 +28,6 @@ class Ui_MainWindow(object):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(947, 725)
-        font = QFont()
-        font.setPointSize(14)
-        MainWindow.setFont(font)
         MainWindow.setStyleSheet(u"background-color: #262626;\n"
 "color: white")
         self.centralwidget = QWidget(MainWindow)
@@ -82,8 +79,8 @@ class Ui_MainWindow(object):
         self.main_button_switch_tools.setSizePolicy(sizePolicy)
         self.main_button_switch_tools.setMinimumSize(QSize(50, 35))
         self.main_button_switch_tools.setMaximumSize(QSize(16777215, 35))
-        font1 = QFont()
-        self.main_button_switch_tools.setFont(font1)
+        font = QFont()
+        self.main_button_switch_tools.setFont(font)
         self.main_button_switch_tools.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.main_button_switch_tools.setStyleSheet(u"QPushButton {\n"
 "    border-radius: 8px;\n"
@@ -223,9 +220,9 @@ class Ui_MainWindow(object):
         self.download_website_combobox.setSizePolicy(sizePolicy3)
         self.download_website_combobox.setMinimumSize(QSize(0, 35))
         self.download_website_combobox.setMaximumSize(QSize(16777215, 35))
-        font2 = QFont()
-        font2.setBold(True)
-        self.download_website_combobox.setFont(font2)
+        font1 = QFont()
+        font1.setBold(True)
+        self.download_website_combobox.setFont(font1)
         self.download_website_combobox.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         self.gridlayout_downloading.addWidget(self.download_website_combobox, 6, 2, 1, 1)
@@ -238,7 +235,7 @@ class Ui_MainWindow(object):
         sizePolicy4.setHeightForWidth(self.download_lineedit_url.sizePolicy().hasHeightForWidth())
         self.download_lineedit_url.setSizePolicy(sizePolicy4)
         self.download_lineedit_url.setMinimumSize(QSize(300, 30))
-        self.download_lineedit_url.setFont(font2)
+        self.download_lineedit_url.setFont(font1)
 
         self.gridlayout_downloading.addWidget(self.download_lineedit_url, 2, 1, 1, 3)
 
@@ -250,7 +247,7 @@ class Ui_MainWindow(object):
         sizePolicy5.setHeightForWidth(self.download_label_model_url.sizePolicy().hasHeightForWidth())
         self.download_label_model_url.setSizePolicy(sizePolicy5)
         self.download_label_model_url.setMinimumSize(QSize(100, 30))
-        self.download_label_model_url.setFont(font2)
+        self.download_label_model_url.setFont(font1)
 
         self.gridlayout_downloading.addWidget(self.download_label_model_url, 5, 0, 1, 1)
 
@@ -262,7 +259,7 @@ class Ui_MainWindow(object):
         sizePolicy6.setHeightForWidth(self.download_lineedit_search_query.sizePolicy().hasHeightForWidth())
         self.download_lineedit_search_query.setSizePolicy(sizePolicy6)
         self.download_lineedit_search_query.setMinimumSize(QSize(100, 35))
-        self.download_lineedit_search_query.setFont(font2)
+        self.download_lineedit_search_query.setFont(font1)
 
         self.gridlayout_downloading.addWidget(self.download_lineedit_search_query, 6, 1, 1, 1)
 
@@ -271,7 +268,7 @@ class Ui_MainWindow(object):
         sizePolicy5.setHeightForWidth(self.download_button_model.sizePolicy().hasHeightForWidth())
         self.download_button_model.setSizePolicy(sizePolicy5)
         self.download_button_model.setMinimumSize(QSize(60, 30))
-        self.download_button_model.setFont(font2)
+        self.download_button_model.setFont(font1)
         self.download_button_model.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.download_button_model.setStyleSheet(u"")
 
@@ -285,7 +282,7 @@ class Ui_MainWindow(object):
         sizePolicy7.setHeightForWidth(self.download_label_search.sizePolicy().hasHeightForWidth())
         self.download_label_search.setSizePolicy(sizePolicy7)
         self.download_label_search.setMinimumSize(QSize(0, 30))
-        self.download_label_search.setFont(font2)
+        self.download_label_search.setFont(font1)
 
         self.gridlayout_downloading.addWidget(self.download_label_search, 6, 0, 1, 1)
 
@@ -297,7 +294,7 @@ class Ui_MainWindow(object):
         sizePolicy8.setHeightForWidth(self.button_search.sizePolicy().hasHeightForWidth())
         self.button_search.setSizePolicy(sizePolicy8)
         self.button_search.setMinimumSize(QSize(0, 35))
-        self.button_search.setFont(font2)
+        self.button_search.setFont(font1)
         self.button_search.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         self.gridlayout_downloading.addWidget(self.button_search, 6, 4, 1, 1)
@@ -307,7 +304,7 @@ class Ui_MainWindow(object):
         sizePolicy6.setHeightForWidth(self.download_lineedit_model_url.sizePolicy().hasHeightForWidth())
         self.download_lineedit_model_url.setSizePolicy(sizePolicy6)
         self.download_lineedit_model_url.setMinimumSize(QSize(300, 35))
-        self.download_lineedit_model_url.setFont(font2)
+        self.download_lineedit_model_url.setFont(font1)
 
         self.gridlayout_downloading.addWidget(self.download_lineedit_model_url, 5, 1, 1, 3)
 
@@ -316,7 +313,7 @@ class Ui_MainWindow(object):
         sizePolicy7.setHeightForWidth(self.download_label_playlist_url.sizePolicy().hasHeightForWidth())
         self.download_label_playlist_url.setSizePolicy(sizePolicy7)
         self.download_label_playlist_url.setMinimumSize(QSize(0, 30))
-        self.download_label_playlist_url.setFont(font2)
+        self.download_label_playlist_url.setFont(font1)
 
         self.gridlayout_downloading.addWidget(self.download_label_playlist_url, 4, 0, 1, 1)
 
@@ -325,10 +322,10 @@ class Ui_MainWindow(object):
         sizePolicy5.setHeightForWidth(self.download_button_download.sizePolicy().hasHeightForWidth())
         self.download_button_download.setSizePolicy(sizePolicy5)
         self.download_button_download.setMinimumSize(QSize(60, 30))
-        font3 = QFont()
-        font3.setBold(True)
-        font3.setUnderline(False)
-        self.download_button_download.setFont(font3)
+        font2 = QFont()
+        font2.setBold(True)
+        font2.setUnderline(False)
+        self.download_button_download.setFont(font2)
         self.download_button_download.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.download_button_download.setStyleSheet(u"")
 
@@ -339,7 +336,7 @@ class Ui_MainWindow(object):
         sizePolicy5.setHeightForWidth(self.download_button_playlist_get_videos.sizePolicy().hasHeightForWidth())
         self.download_button_playlist_get_videos.setSizePolicy(sizePolicy5)
         self.download_button_playlist_get_videos.setMinimumSize(QSize(0, 30))
-        self.download_button_playlist_get_videos.setFont(font2)
+        self.download_button_playlist_get_videos.setFont(font1)
         self.download_button_playlist_get_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         self.gridlayout_downloading.addWidget(self.download_button_playlist_get_videos, 4, 4, 1, 1)
@@ -352,7 +349,7 @@ class Ui_MainWindow(object):
         sizePolicy9.setHeightForWidth(self.download_lineedit_playlist_url.sizePolicy().hasHeightForWidth())
         self.download_lineedit_playlist_url.setSizePolicy(sizePolicy9)
         self.download_lineedit_playlist_url.setMinimumSize(QSize(0, 30))
-        self.download_lineedit_playlist_url.setFont(font2)
+        self.download_lineedit_playlist_url.setFont(font1)
 
         self.gridlayout_downloading.addWidget(self.download_lineedit_playlist_url, 4, 1, 1, 3)
 
@@ -361,7 +358,7 @@ class Ui_MainWindow(object):
         sizePolicy5.setHeightForWidth(self.download_label_url.sizePolicy().hasHeightForWidth())
         self.download_label_url.setSizePolicy(sizePolicy5)
         self.download_label_url.setMinimumSize(QSize(0, 30))
-        self.download_label_url.setFont(font2)
+        self.download_label_url.setFont(font1)
 
         self.gridlayout_downloading.addWidget(self.download_label_url, 2, 0, 1, 1)
 
@@ -385,7 +382,7 @@ class Ui_MainWindow(object):
         sizePolicy4.setHeightForWidth(self.login_lineedit_username.sizePolicy().hasHeightForWidth())
         self.login_lineedit_username.setSizePolicy(sizePolicy4)
         self.login_lineedit_username.setMinimumSize(QSize(150, 35))
-        self.login_lineedit_username.setFont(font2)
+        self.login_lineedit_username.setFont(font1)
 
         self.login_gridlayout_login_box.addWidget(self.login_lineedit_username, 0, 1, 1, 3)
 
@@ -394,7 +391,7 @@ class Ui_MainWindow(object):
         sizePolicy4.setHeightForWidth(self.login_lineedit_password.sizePolicy().hasHeightForWidth())
         self.login_lineedit_password.setSizePolicy(sizePolicy4)
         self.login_lineedit_password.setMinimumSize(QSize(0, 35))
-        self.login_lineedit_password.setFont(font2)
+        self.login_lineedit_password.setFont(font1)
         self.login_lineedit_password.setCursor(QCursor(Qt.CursorShape.IBeamCursor))
         self.login_lineedit_password.setEchoMode(QLineEdit.EchoMode.Password)
 
@@ -408,14 +405,14 @@ class Ui_MainWindow(object):
         sizePolicy10.setHeightForWidth(self.login_label_password.sizePolicy().hasHeightForWidth())
         self.login_label_password.setSizePolicy(sizePolicy10)
         self.login_label_password.setMinimumSize(QSize(0, 30))
-        self.login_label_password.setFont(font2)
+        self.login_label_password.setFont(font1)
 
         self.login_gridlayout_login_box.addWidget(self.login_label_password, 1, 0, 1, 1)
 
         self.login_button_login = QPushButton(self.page_login)
         self.login_button_login.setObjectName(u"login_button_login")
         self.login_button_login.setMinimumSize(QSize(0, 30))
-        self.login_button_login.setFont(font2)
+        self.login_button_login.setFont(font1)
         self.login_button_login.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.login_button_login.setStyleSheet(u"")
 
@@ -430,7 +427,7 @@ class Ui_MainWindow(object):
         sizePolicy10.setHeightForWidth(self.login_label_username.sizePolicy().hasHeightForWidth())
         self.login_label_username.setSizePolicy(sizePolicy10)
         self.login_label_username.setMinimumSize(QSize(0, 30))
-        self.login_label_username.setFont(font2)
+        self.login_label_username.setFont(font1)
 
         self.login_gridlayout_login_box.addWidget(self.login_label_username, 0, 0, 1, 1)
 
@@ -517,7 +514,7 @@ class Ui_MainWindow(object):
         self.scrollArea_5.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 434, 176))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 911, 176))
         self.gridLayout_8 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_8.setSpacing(0)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
@@ -694,7 +691,7 @@ class Ui_MainWindow(object):
         self.main_scrollarea_treewidget.setWidgetResizable(True)
         self.main_scrollarea_treewidget_content = QWidget()
         self.main_scrollarea_treewidget_content.setObjectName(u"main_scrollarea_treewidget_content")
-        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 542, 207))
+        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 925, 430))
         sizePolicy15 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
         sizePolicy15.setHorizontalStretch(0)
         sizePolicy15.setVerticalStretch(0)
@@ -734,14 +731,14 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.main_button_tree_stop.sizePolicy().hasHeightForWidth())
         self.main_button_tree_stop.setSizePolicy(sizePolicy)
         self.main_button_tree_stop.setMinimumSize(QSize(0, 30))
-        self.main_button_tree_stop.setFont(font2)
+        self.main_button_tree_stop.setFont(font1)
         self.main_button_tree_stop.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         self.gridLayout_13.addWidget(self.main_button_tree_stop, 2, 0, 1, 2)
 
         self.main_checkbox_direct_download = QCheckBox(self.main_scrollarea_treewidget_content)
         self.main_checkbox_direct_download.setObjectName(u"main_checkbox_direct_download")
-        self.main_checkbox_direct_download.setFont(font2)
+        self.main_checkbox_direct_download.setFont(font1)
         self.main_checkbox_direct_download.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         self.gridLayout_13.addWidget(self.main_checkbox_direct_download, 0, 0, 1, 1)
@@ -762,7 +759,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.main_button_tree_download.sizePolicy().hasHeightForWidth())
         self.main_button_tree_download.setSizePolicy(sizePolicy)
         self.main_button_tree_download.setMinimumSize(QSize(0, 30))
-        self.main_button_tree_download.setFont(font2)
+        self.main_button_tree_download.setFont(font1)
         self.main_button_tree_download.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.main_button_tree_download.setStyleSheet(u"")
 
@@ -1251,7 +1248,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 98, 70))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 927, 582))
         self.gridLayout_21 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_21.setSpacing(0)
         self.gridLayout_21.setObjectName(u"gridLayout_21")
@@ -1277,7 +1274,7 @@ class Ui_MainWindow(object):
         self.scrollArea_3.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 226, 112))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 927, 582))
         self.gridLayout_23 = QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_23.setSpacing(0)
         self.gridLayout_23.setObjectName(u"gridLayout_23")
@@ -1328,11 +1325,11 @@ class Ui_MainWindow(object):
 
         self.textBrowser = QTextBrowser(self.scrollAreaWidgetContents_4)
         self.textBrowser.setObjectName(u"textBrowser")
-        font4 = QFont()
-        font4.setFamilies([u"JetBrainsMono Nerd Font Propo"])
-        font4.setPointSize(11)
-        font4.setKerning(True)
-        self.textBrowser.setFont(font4)
+        font3 = QFont()
+        font3.setFamilies([u"JetBrainsMono Nerd Font Propo"])
+        font3.setPointSize(11)
+        font3.setKerning(True)
+        self.textBrowser.setFont(font3)
         self.textBrowser.setTextInteractionFlags(Qt.TextInteractionFlag.LinksAccessibleByKeyboard|Qt.TextInteractionFlag.LinksAccessibleByMouse|Qt.TextInteractionFlag.TextBrowserInteraction|Qt.TextInteractionFlag.TextSelectableByKeyboard|Qt.TextInteractionFlag.TextSelectableByMouse)
         self.textBrowser.setOpenExternalLinks(True)
 
@@ -1460,7 +1457,7 @@ class Ui_MainWindow(object):
         self.scrollArea_9.setWidgetResizable(True)
         self.scrollAreaWidgetContents_11 = QWidget()
         self.scrollAreaWidgetContents_11.setObjectName(u"scrollAreaWidgetContents_11")
-        self.scrollAreaWidgetContents_11.setGeometry(QRect(0, 0, 256, 192))
+        self.scrollAreaWidgetContents_11.setGeometry(QRect(0, 0, 927, 582))
         self.gridLayout_54 = QGridLayout(self.scrollAreaWidgetContents_11)
         self.gridLayout_54.setSpacing(0)
         self.gridLayout_54.setObjectName(u"gridLayout_54")
@@ -1511,7 +1508,7 @@ class Ui_MainWindow(object):
         self.scrollArea_10.setWidgetResizable(True)
         self.scrollAreaWidgetContents_12 = QWidget()
         self.scrollAreaWidgetContents_12.setObjectName(u"scrollAreaWidgetContents_12")
-        self.scrollAreaWidgetContents_12.setGeometry(QRect(0, 0, 170, 138))
+        self.scrollAreaWidgetContents_12.setGeometry(QRect(0, 0, 927, 582))
         self.gridLayout_56 = QGridLayout(self.scrollAreaWidgetContents_12)
         self.gridLayout_56.setSpacing(0)
         self.gridLayout_56.setObjectName(u"gridLayout_56")
@@ -1599,7 +1596,7 @@ class Ui_MainWindow(object):
         self.scrollArea_11.setWidgetResizable(True)
         self.scrollAreaWidgetContents_13 = QWidget()
         self.scrollAreaWidgetContents_13.setObjectName(u"scrollAreaWidgetContents_13")
-        self.scrollAreaWidgetContents_13.setGeometry(QRect(0, 0, 455, 101))
+        self.scrollAreaWidgetContents_13.setGeometry(QRect(0, 0, 927, 582))
         self.gridLayout_59 = QGridLayout(self.scrollAreaWidgetContents_13)
         self.gridLayout_59.setObjectName(u"gridLayout_59")
         self.gridLayout_59.setHorizontalSpacing(0)
@@ -1662,7 +1659,7 @@ class Ui_MainWindow(object):
         self.scrollArea_12.setWidgetResizable(True)
         self.scrollAreaWidgetContents_14 = QWidget()
         self.scrollAreaWidgetContents_14.setObjectName(u"scrollAreaWidgetContents_14")
-        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 98, 119))
+        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 927, 582))
         self.gridLayout_61 = QGridLayout(self.scrollAreaWidgetContents_14)
         self.gridLayout_61.setObjectName(u"gridLayout_61")
         self.textbrowser_disclaimer = QTextBrowser(self.scrollAreaWidgetContents_14)
@@ -1823,7 +1820,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.CentralStackedWidget.setCurrentIndex(1)
+        self.CentralStackedWidget.setCurrentIndex(0)
         self.main_stacked_widget_top.setCurrentIndex(3)
         self.settings_stacked_widget_main.setCurrentIndex(1)
 
