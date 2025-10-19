@@ -22,6 +22,6 @@
 | Eporner    |     Yes     |    Yes    |      No       |       No       |  Yes  |
 | xnxx       |     Yes     |    Yes    |      No       |      Yes       |  Yes  |
 | xvideos    |     Yes     |    Yes    |      No       |      Yes       |  Yes  |
-| missav     |     Yes     |    No     |      No       |      Yes       |  No   | 
-| Xhamster   |     Yes     |    No     |      No       |      Yes       |  No   | 
-| Spankbang  |     Yes     |    No     |      No       |      Yes       |  No   |
+| missav     |     Yes     |    Yes    |      No       |      Yes       |  No   | 
+| Xhamster   |     Yes     |    Yes    |      No       |      Yes       |  Yes  | 
+| Spankbang  |     Yes     |    Yes    |      No       |      Yes       |  Yes  |

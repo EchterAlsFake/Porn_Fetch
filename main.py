@@ -683,6 +683,7 @@ class PornFetch(QMainWindow):
 
         self.last_index = 0  # Keeps track of the last index of videos added to the tree widget
         self.website_to_search_on = 0
+        self.kill_switch = False
         self.threadpool = QThreadPool()
         self.maps()
         self.load_style()
@@ -1479,19 +1480,19 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         else:
             model = self.ui.download_lineedit_model_url.text()
 
-        self.logger.info(f"Checking model: {url}")
+        self.logger.info(f"Checking model: {model}")
         if shared_functions.pornhub_pattern.match(model):
             model_object = shared_functions.ph_client.get_user(model)
             videos = model_object.videos
             uploads = model_object.uploads
-
-            if self.model_videos_type == "both":
+            model_type = self.ui.settings_video_combobox_model_videos.currentIndex()
+            if model_type == 0:
                 videos = chain(uploads, videos)
 
-            elif self.model_videos_type == "featured":
+            elif model_type == 1:
                 videos = videos
 
-            elif self.model_videos_type == "uploads":
+            elif model_type == 2:
                 videos = uploads
 
         elif shared_functions.hqporner_pattern.match(model):
@@ -1518,11 +1519,32 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         elif shared_functions.youporn_pattern.match(model):
             videos = shared_functions.yp_client.get_pornstar(url=model).videos()
 
-        elif "xvideos" and "model" or "pornstar" in str(model):
-            videos = shared_functions.xv_client.get_pornstar(url=model).videos
+        elif "xvideos" in str(model) and ("model" or "pornstar") in str(model):
+            videos = shared_functions.xv_client.get_pornstar(url=model).videos()
 
-        elif "xvideos" and "channel" in str(model):
-            videos = shared_functions.xv_client.get_channel(url=model).videos
+        elif "xvideos" in str(model) and "channel" in str(model):
+            videos = shared_functions.xv_client.get_channel(url=model).videos()
+
+        elif "xvideos" in str(model):
+            videos = shared_functions.xv_client.get_channel(url=model).videos()
+
+        elif "spankbang" in str(model) and "pornstar" in str(model):
+            videos = shared_functions.sp_client.get_pornstar(url=model).videos()
+
+        elif "spankbang" in str(model) and "creator" in str(model):
+            videos = shared_functions.sp_client.get_creator(url=model).videos()
+
+        elif "spankbang" in str(model) and "channel" in str(model):
+            videos = shared_functions.sp_client.get_channel(url=model).videos()
+
+        elif "xhamster" in str(model) and "pornstars" in str(model):
+            videos = shared_functions.xh_client.get_pornstar(url=model).videos()
+
+        elif "xhamster" in str(model) and "creators" in str(model):
+            videos = shared_functions.xh_client.get_creator(url=model).videos()
+
+        elif "xhamster" in str(model) and "channels" in str(model):
+            videos = shared_functions.xh_client.get_channel(url=model).videos()
 
         else:
             videos = None
