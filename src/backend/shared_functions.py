@@ -186,6 +186,9 @@ def check_video(url, is_url=True):
         elif youporn_pattern.search(str(url)) and not isinstance(url, yp_Video):
             return yp_client.get_video(url)
 
+        elif "xhamster" in url and "moments" in url and not isinstance(url, xh_Video):
+            return xh_client.get_short(url)
+
         if isinstance(url, ph_Video):
             url.fetch("page@") # If url is a PornHub Video object it does have the `fetch` method
             return url
