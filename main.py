@@ -28,12 +28,10 @@ try:
 except Exception:
     FORCE_DISABLE_AV = True
 
-import time
 import shutil
 import os.path
 import argparse
 import markdown
-import traceback
 import src.backend.shared_functions as shared_functions
 
 from io import TextIOWrapper
@@ -42,7 +40,7 @@ from itertools import islice, chain
 from src.backend.shared_gui import *
 from src.frontend.UI.ssl_warning import *
 from src.frontend.UI.ui_form_main_window import Ui_MainWindow
-#from src.frontend.UI.ui_form_android import Ui_PornFetchAndroid
+from src.frontend.UI.ui_form_android import Ui_PornFetchAndroid
 from src.frontend.UI.theme import *
 from src.backend.one_time_functions import *
 from src.backend.config import __version__, __build__
@@ -671,12 +669,11 @@ class PornFetch(QMainWindow):
         self.last_update_time = time.time()
         self.last_thumbnail_change = time.time()
 
-        if __build__ == "desktop":
-            self.ui = Ui_MainWindow()
+        if __build__ == "android":
+            self.ui = Ui_PornFetchAndroid()
 
-        elif __build__ == "android":
-            #self.ui = Ui_PornFetchAndroid()
-            pass
+        elif __build__ == "desktop":
+            self.ui = Ui_MainWindow()
 
         self.ui.setupUi(self)
         self.logger = setup_logger(name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG,
