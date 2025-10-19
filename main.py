@@ -28,10 +28,12 @@ try:
 except Exception:
     FORCE_DISABLE_AV = True
 
+import time
 import shutil
 import os.path
 import argparse
 import markdown
+import traceback
 import src.backend.shared_functions as shared_functions
 
 from io import TextIOWrapper
@@ -766,7 +768,7 @@ class PornFetch(QMainWindow):
         self.ui.CentralStackedWidget.setCurrentIndex(3)
 
     def switch_to_range_selector(self):
-        self.ui.CentralStackedWidget.setCurrentIndex(4)
+        self.ui.main_stacked_widget_top.setCurrentIndex(4)
 
     def switch_to_keyboard_shortcuts(self):
         self.ui.CentralStackedWidget.setCurrentIndex(5)
@@ -905,21 +907,15 @@ class PornFetch(QMainWindow):
         self.ui.treeWidget.setColumnWidth(3, 150)
         self.ui.treeWidget.setAlternatingRowColors(True)
 
-        # --- font (app-wide) ---
-        font = QFontDatabase.systemFont(QFontDatabase.SystemFont.GeneralFont)
-        font.setPointSize(int(conf["UI"]["font_size"]))
-        print(font.pointSize())
-        self.window().setFont(font)  # don’t loop all children
-
         # --- misc you already had ---
         self.ui.treeWidget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
-        self.ui.progress_gridlayout_progressbar.setAlignment(Qt.AlignTop)
+        self.ui.progress_gridlayout_progressbar.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         if __build__ == "desktop":
             gv = self.ui.graphicsView
-            gv.setRenderHint(QPainter.SmoothPixmapTransform)
-            gv.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-            gv.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+            gv.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+            gv.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+            gv.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
             self._scene = QGraphicsScene(self)
             gv.setScene(self._scene)
             self._pixmap_item = QGraphicsPixmapItem()
@@ -1671,6 +1667,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         item.setText(2, display_duration)  # What the user sees.
         item.setData(2, Qt.ItemDataRole.UserRole, formatted_duration)  # Hidden sort key.
         item.setData(3, Qt.ItemDataRole.UserRole, str(thumbnail))
+        item.setData(4, Qt.ItemDataRole.UserRole, str(author))
 
     def tree_widget_finished(self):
         if self.ui.main_checkbox_direct_download.isChecked():
@@ -1766,10 +1763,12 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         self.switch_to_range_selector()
         root = self.ui.treeWidget.invisibleRootItem()
         item_count = root.childCount()
-        self.range_ui.spinbox_range_end.setMaximum(item_count)
-        self.range_ui.button_range_apply_index.clicked.connect(self.process_range_of_items_selection_index)
-        self.range_ui.button_range_apply_time.clicked.connect(self.process_range_of_items_selection_time)
-        self.range_ui.button_range_apply_author.clicked.connect(self.process_range_of_items_author)
+        self.ui.spinbox_range_end.setMaximum(item_count)
+        self.ui.button_range_apply_index.clicked.connect(self.process_range_of_items_selection_index)
+        self.ui.button_range_apply_time.clicked.connect(self.process_range_of_items_selection_time)
+        self.ui.button_range_apply_author.clicked.connect(self.process_range_of_items_author)
+        self.ui.button_range_select_all.clicked.connect(self.select_all_items)
+        self.ui.button_range_unselect_all.clicked.connect(self.unselect_all_items)
 
     def select_all_items(self):
         """Selects all items from the tree widget"""
@@ -1781,8 +1780,8 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
             item.setCheckState(0, Qt.CheckState.Checked)
 
     def process_range_of_items_selection_index(self):
-        start = self.range_ui.spinbox_range_start.value()
-        end = self.range_ui.spinbox_range_end.value()
+        start = self.ui.spinbox_range_start.value()
+        end = self.ui.spinbox_range_end.value()
         root = self.ui.treeWidget.invisibleRootItem()
 
         # Adjust start and end indices to match tree widget indexing
@@ -1794,8 +1793,8 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
             item.setCheckState(0, Qt.CheckState.Checked)
 
     def process_range_of_items_selection_time(self):
-        start_time = int(self.range_ui.lineedit_range_start.text())
-        end_time = int(self.range_ui.lineedit_range_end.text())
+        start_time = int(self.ui.lineedit_range_start.text())
+        end_time = int(self.ui.lineedit_range_end.text())
         root = self.ui.treeWidget.invisibleRootItem()
 
         # Loop through all items in the QTreeWidget
@@ -1810,12 +1809,12 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
                 item.setCheckState(0, Qt.CheckState.Checked)
 
     def process_range_of_items_author(self):
-        name = str(self.range_ui.lineedit_range_author.text())
+        name = str(self.ui.lineedit_range_author.text())
         root = self.ui.treeWidget.invisibleRootItem()
 
         for i in range(root.childCount()):
             item = root.child(i)
-            author = str(item.data(1, Qt.ItemDataRole.UserRole))
+            author = str(item.data(4, Qt.ItemDataRole.UserRole))
             if str(author).lower() == str(name).lower():
                 item.setCheckState(0, Qt.CheckState.Checked)
 
@@ -2280,7 +2279,6 @@ Some websites couldn't be accessed. Here's a detailed report:
 def main():
     setup_config_file()
     app = QApplication(sys.argv)
-    install_font_watchdog("watchdog.log")
     app.setStyle("Fusion")
     conf.read("config.ini")
     language = conf["UI"]["language"]
@@ -2293,6 +2291,11 @@ def main():
 
     elif conf["UI"]["theme"] == "2":
         apply_theme_lsd(app)
+
+    font_size = conf["UI"]["font_size"]
+    sys_font = QFontDatabase.systemFont(QFontDatabase.SystemFont.GeneralFont)
+    sys_font.setPointSize(int(font_size))
+    app.setFont(sys_font)
 
     if language == "system":
         # Get the system's locale
@@ -2319,7 +2322,6 @@ def main():
     app.installTranslator(translator)
     w = PornFetch()  # This actually starts Porn Fetch
     w.show()  # This shows the main widget
-    scan_and_report("report.csv")
     """
     The following exceptions are just general exceptions to handle some basic errors. They are not so relevant for
     most cases.

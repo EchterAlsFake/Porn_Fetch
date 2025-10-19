@@ -9,10 +9,9 @@ import random
 import colorsys
 
 from PySide6.QtCore import Qt, QObject, QEvent
-from PySide6.QtGui import QPalette, QColor, QFont, QTextCursor, QTextCharFormat
-from PySide6.QtWidgets import (QApplication, QComboBox, QListView, QFrame, QWidget, QLineEdit, QTextEdit, QPlainTextEdit,
-                               QSpinBox, QDoubleSpinBox, QAbstractButton, QMainWindow, QTextBrowser, QPlainTextEdit,
-                               QTreeWidget, QListWidget, QTableWidget, QToolTip)
+from PySide6.QtGui import QPalette, QColor
+from PySide6.QtWidgets import (QApplication, QComboBox, QListView, QFrame, QWidget, QLineEdit, QTextEdit, QSpinBox,
+                               QDoubleSpinBox, QAbstractButton, QPlainTextEdit)
 
 """This is the main stylesheet"""
 QSS = """
@@ -328,30 +327,30 @@ QSpinBox:focus, QDoubleSpinBox:focus, QAbstractButton:focus {
 def apply_theme(app: QApplication):
     app.setStyle("Fusion")
     pal = QPalette()
-    pal.setColor(QPalette.Window, QColor("#1f1f21"))
-    pal.setColor(QPalette.Base, QColor("#262628"))
-    pal.setColor(QPalette.AlternateBase, QColor("#232427"))
-    pal.setColor(QPalette.Text, QColor("#EAEAEA"))
-    pal.setColor(QPalette.Button, QColor("#2a2b2e"))
-    pal.setColor(QPalette.ButtonText, QColor("#EAEAEA"))
-    pal.setColor(QPalette.Highlight, QColor("#3b82f6"))
-    pal.setColor(QPalette.HighlightedText, Qt.white)
-    pal.setColor(QPalette.PlaceholderText, QColor("#8b8f97"))
+    pal.setColor(QPalette.ColorRole.Window, QColor("#1f1f21"))
+    pal.setColor(QPalette.ColorRole.Base, QColor("#262628"))
+    pal.setColor(QPalette.ColorRole.AlternateBase, QColor("#232427"))
+    pal.setColor(QPalette.ColorRole.Text, QColor("#EAEAEA"))
+    pal.setColor(QPalette.ColorRole.Button, QColor("#2a2b2e"))
+    pal.setColor(QPalette.ColorRole.ButtonText, QColor("#EAEAEA"))
+    pal.setColor(QPalette.ColorRole.Highlight, QColor("#3b82f6"))
+    pal.setColor(QPalette.ColorRole.HighlightedText, Qt.GlobalColor.white)
+    pal.setColor(QPalette.ColorRole.PlaceholderText, QColor("#8b8f97"))
     app.setPalette(pal)
     app.setStyleSheet(QSS)
 
 def apply_theme_light(app: QApplication):
     app.setStyle("Fusion")
     pal = QPalette()
-    pal.setColor(QPalette.Window, QColor("#F8FAFC"))
-    pal.setColor(QPalette.Base, QColor("#FFFFFF"))
-    pal.setColor(QPalette.AlternateBase, QColor("#F3F4F6"))
-    pal.setColor(QPalette.Text, QColor("#111827"))
-    pal.setColor(QPalette.Button, QColor("#FFFFFF"))
-    pal.setColor(QPalette.ButtonText, QColor("#111827"))
-    pal.setColor(QPalette.Highlight, QColor("#2563EB"))
-    pal.setColor(QPalette.HighlightedText, Qt.white)
-    pal.setColor(QPalette.PlaceholderText, QColor("#9CA3AF"))
+    pal.setColor(QPalette.ColorRole.Window, QColor("#F8FAFC"))
+    pal.setColor(QPalette.ColorRole.Base, QColor("#FFFFFF"))
+    pal.setColor(QPalette.ColorRole.AlternateBase, QColor("#F3F4F6"))
+    pal.setColor(QPalette.ColorRole.Text, QColor("#111827"))
+    pal.setColor(QPalette.ColorRole.Button, QColor("#FFFFFF"))
+    pal.setColor(QPalette.ColorRole.ButtonText, QColor("#111827"))
+    pal.setColor(QPalette.ColorRole.Highlight, QColor("#2563EB"))
+    pal.setColor(QPalette.ColorRole.HighlightedText, Qt.GlobalColor.white)
+    pal.setColor(QPalette.ColorRole.PlaceholderText, QColor("#9CA3AF"))
     app.setPalette(pal)
     app.setStyleSheet(LIGHT_QSS)
 
@@ -359,7 +358,7 @@ def _hsl(h, s, l):
     return QColor.fromHsl(h % 360, int(max(0, min(1, s)) * 255), int(max(0, min(1, l)) * 255))
 
 def _hex(q: QColor) -> str:
-    return q.name(QColor.HexRgb)
+    return q.name(QColor.NameFormat.HexRgb)
 
 def _lg(c1, c2, x2=1, y2=1):
     return f"qlineargradient(x1:0, y1:0, x2:{x2}, y2:{y2}, stop:0 {c1}, stop:1 {c2})"
@@ -498,15 +497,15 @@ def apply_theme_lsd(app: QApplication, seed=None):
     app.setStyle("Fusion")
     qss, r = build_lsd_qss(seed=seed)
     pal = QPalette()
-    pal.setColor(QPalette.Window, QColor(r["window"]))
-    pal.setColor(QPalette.Base,   QColor(r["base"]))
-    pal.setColor(QPalette.AlternateBase, QColor(r["alt"]))
-    pal.setColor(QPalette.Text, QColor(r["text"]))
-    pal.setColor(QPalette.Button, QColor("#ffffff"))
-    pal.setColor(QPalette.ButtonText, QColor(r["text"]))
-    pal.setColor(QPalette.Highlight, QColor(r["highlight"]))
-    pal.setColor(QPalette.HighlightedText, Qt.white)
-    pal.setColor(QPalette.PlaceholderText, QColor("#6b7280"))
+    pal.setColor(QPalette.ColorRole.Window, QColor(r["window"]))
+    pal.setColor(QPalette.ColorRole.Base,   QColor(r["base"]))
+    pal.setColor(QPalette.ColorRole.AlternateBase, QColor(r["alt"]))
+    pal.setColor(QPalette.ColorRole.Text, QColor(r["text"]))
+    pal.setColor(QPalette.ColorRole.Button, QColor("#ffffff"))
+    pal.setColor(QPalette.ColorRole.ButtonText, QColor(r["text"]))
+    pal.setColor(QPalette.ColorRole.Highlight, QColor(r["highlight"]))
+    pal.setColor(QPalette.ColorRole.HighlightedText, Qt.GlobalColor.white)
+    pal.setColor(QPalette.ColorRole.PlaceholderText, QColor("#6b7280"))
     app.setPalette(pal)
     app.setStyleSheet(qss)
 
@@ -521,7 +520,7 @@ def mark(w, *, intent=None, size=None, flat=False, seg=False, role=None):
 def pretty_combo(combo: QComboBox):
     view = QListView()
     view.setSpacing(6)  # space between outlined items
-    view.setFrameShape(QFrame.NoFrame)  # we draw the border in QSS
+    view.setFrameShape(QFrame.Shape.NoFrame)  # we draw the border in QSS
     combo.setView(view)
 
 def outline(widget, mode="accent"):
@@ -540,7 +539,7 @@ class FocusOutlineFilter(QObject):
                 reason = ev.reason()  # QFocusEvent
 
             except Exception:
-                reason = Qt.OtherFocusReason
+                reason = Qt.FocusReason.OtherFocusReason
             obj.setProperty("kbd", "1" if reason in keyboard_reasons else "0")
             _repolish(obj)
         elif et == QEvent.Type.FocusOut:
@@ -770,217 +769,3 @@ def generate_random_progressbar_qss(seed=None):
     """
 
     return header + chunk + overlay_text
-
-
-import io, os, sys, csv, time, traceback
-
-def _binds():
-    try:
-        from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QTextEdit, QTextBrowser, QPlainTextEdit, QListWidget, QTreeWidget, QTableWidget, QToolTip
-        from PySide6.QtGui import QFont, QTextCursor, QTextCharFormat
-        from PySide6.QtCore import Qt, QObject, QEvent
-        return dict(api="PySide6", QApplication=QApplication, QWidget=QWidget, QMainWindow=QMainWindow,
-                    QTextEdit=QTextEdit, QTextBrowser=QTextBrowser, QPlainTextEdit=QPlainTextEdit,
-                    QListWidget=QListWidget, QTreeWidget=QTreeWidget, QTableWidget=QTableWidget, QToolTip=QToolTip,
-                    QFont=QFont, QTextCursor=QTextCursor, QTextCharFormat=QTextCharFormat,
-                    Qt=Qt, QObject=QObject, QEvent=QEvent)
-    except Exception:
-        try:
-            from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QTextEdit, QTextBrowser, QPlainTextEdit, QListWidget, QTreeWidget, QTableWidget, QToolTip
-            from PyQt6.QtGui import QFont, QTextCursor, QTextCharFormat
-            from PyQt6.QtCore import Qt, QObject, QEvent
-            return dict(api="PyQt6", QApplication=QApplication, QWidget=QWidget, QMainWindow=QMainWindow,
-                        QTextEdit=QTextEdit, QTextBrowser=QTextBrowser, QPlainTextEdit=QPlainTextEdit,
-                        QListWidget=QListWidget, QTreeWidget=QTreeWidget, QTableWidget=QTableWidget, QToolTip=QToolTip,
-                        QFont=QFont, QTextCursor=QTextCursor, QTextCharFormat=QTextCharFormat,
-                        Qt=Qt, QObject=QObject, QEvent=QEvent)
-        except Exception:
-            try:
-                from PySide2.QtWidgets import QApplication, QWidget, QMainWindow, QTextEdit, QTextBrowser, QPlainTextEdit, QListWidget, QTreeWidget, QTableWidget, QToolTip
-                from PySide2.QtGui import QFont, QTextCursor, QTextCharFormat
-                from PySide2.QtCore import Qt, QObject, QEvent
-                return dict(api="PySide2", QApplication=QApplication, QWidget=QWidget, QMainWindow=QMainWindow,
-                            QTextEdit=QTextEdit, QTextBrowser=QTextBrowser, QPlainTextEdit=QPlainTextEdit,
-                            QListWidget=QListWidget, QTreeWidget=QTreeWidget, QTableWidget=QTableWidget, QToolTip=QToolTip,
-                            QFont=QFont, QTextCursor=QTextCursor, QTextCharFormat=QTextCharFormat,
-                            Qt=Qt, QObject=QObject, QEvent=QEvent)
-            except Exception:
-                from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QTextEdit, QTextBrowser, QPlainTextEdit, QListWidget, QTreeWidget, QTableWidget, QToolTip
-                from PyQt5.QtGui import QFont, QTextCursor, QTextCharFormat
-                from PyQt5.QtCore import Qt, QObject, QEvent
-                return dict(api="PyQt5", QApplication=QApplication, QWidget=QWidget, QMainWindow=QMainWindow,
-                            QTextEdit=QTextEdit, QTextBrowser=QTextBrowser, QPlainTextEdit=QPlainTextEdit,
-                            QListWidget=QListWidget, QTreeWidget=QTreeWidget, QTableWidget=QTableWidget, QToolTip=QToolTip,
-                            QFont=QFont, QTextCursor=QTextCursor, QTextCharFormat=QTextCharFormat,
-                            Qt=Qt, QObject=QObject, QEvent=QEvent)
-
-B = _binds()
-A, W = B["QApplication"], B["QWidget"]
-
-def _ts():
-    return time.strftime("%Y-%m-%d %H:%M:%S")
-
-def _short(s, n=160):
-    s = s.replace("\n", " ").strip()
-    return s if len(s) <= n else s[:n] + " …"
-
-class _FontEventSniffer(B["QObject"]):
-    def __init__(self, log_fp):
-        super().__init__()
-        self.log_fp = log_fp
-
-    def eventFilter(self, obj, event):
-        if event.type() == B["QEvent"].FontChange:
-            try:
-                with open(self.log_fp, "a", encoding="utf-8") as f:
-                    f.write(f"[{_ts()}] FontChange: {obj.__class__.__name__} objectName='{obj.objectName()}' "
-                            f"font='{obj.font().toString() if hasattr(obj.font(), 'toString') else obj.font().family()}'\n")
-            except Exception:
-                pass
-        return False
-
-def install_font_watchdog(log_path="font_watchdog.log"):
-    """
-    - Logs calls to QApplication.setFont (incl. class-specific), QWidget.setStyleSheet if it mentions 'font',
-      and QToolTip.setFont, with stack traces.
-    - Installs an event filter to record QEvent::FontChange on all widgets.
-    Call this once, after QApplication is created (before you build the UI is fine, earlier is better).
-    """
-    app = A.instance()
-    if app is None:
-        raise RuntimeError("Call install_font_watchdog() after QApplication is created.")
-
-    # Wrap QApplication.setFont (handles class-specific overrides too)
-    orig_setFont = app.setFont
-    def setFont_wrapper(*args, **kwargs):
-        # args could be (font,) or (font, className)
-        cls = None
-        if len(args) >= 2 and isinstance(args[1], str):
-            cls = args[1]
-        stack = "".join(traceback.format_stack(limit=20))
-        with open(log_path, "a", encoding="utf-8") as f:
-            f.write(f"[{_ts()}] QApplication.setFont called"
-                    f"{' for class='+cls if cls else ''}\n{stack}\n")
-        return orig_setFont(*args, **kwargs)
-    app.setFont = setFont_wrapper  # monkeypatch
-
-    # Wrap QWidget.setStyleSheet and record any 'font' usage
-    orig_w_setStyleSheet = W.setStyleSheet
-    def widget_setStyleSheet_wrapper(self, qss):
-        try:
-            s = (qss or "")
-            if "font" in s.lower():
-                stack = "".join(traceback.format_stack(limit=20))
-                with open(log_path, "a", encoding="utf-8") as f:
-                    f.write(f"[{_ts()}] {self.__class__.__name__}({self.objectName()!r}).setStyleSheet with font:\n"
-                            f"QSS: {_short(s)}\n{stack}\n")
-        except Exception:
-            pass
-        return orig_w_setStyleSheet(self, qss)
-    W.setStyleSheet = widget_setStyleSheet_wrapper  # monkeypatch
-
-    # Wrap QToolTip.setFont (tooltips often forgotten)
-    orig_tt_setFont = B["QToolTip"].setFont
-    def tooltip_setFont_wrapper(font):
-        stack = "".join(traceback.format_stack(limit=20))
-        with open(log_path, "a", encoding="utf-8") as f:
-            f.write(f"[{_ts()}] QToolTip.setFont called\n{stack}\n")
-        return orig_tt_setFont(font)
-    B["QToolTip"].setFont = tooltip_setFont_wrapper
-
-    # Install a global event filter to log FontChange events
-    sniffer = _FontEventSniffer(log_path)
-    app.installEventFilter(sniffer)
-
-    # Note for caller: keep a reference to `sniffer` if needed. We stash it on the app.
-    setattr(app, "_font_sniffer", sniffer)
-
-def scan_and_report(report_csv="font_report.csv", include_item_widgets=True):
-    """
-    Scans all widgets for:
-      - inline stylesheets (and whether they mention font)
-      - explicit WA_SetFont (widget-level font override)
-      - whether widget.font() differs from QApplication.font()
-      - simple text widgets + item widgets for per-item fonts
-    Writes a CSV and prints a small summary.
-    """
-    app = A.instance()
-    if app is None:
-        raise RuntimeError("Call after QApplication is created.")
-
-    rows = []
-    app_font = app.font()
-
-    def font_sig(f):
-        try:
-            # family|point|pixel|bold|italic
-            return f"{f.family()}|pt={f.pointSize()}|px={f.pixelSize()}|b={int(f.bold())}|i={int(f.italic())}"
-        except Exception:
-            return repr(f)
-
-    # Helper: check item widgets
-    def scan_items(widget):
-        hits = []
-        if isinstance(widget, B["QListWidget"]):
-            for i in range(widget.count()):
-                it = widget.item(i)
-                if it and it.font().family():  # any font set (Qt uses default when unset)
-                    hits.append(("QListWidgetItem", i, font_sig(it.font())))
-        elif isinstance(widget, B["QTreeWidget"]):
-            def walk(item):
-                for c in range(item.columnCount()):
-                    f = item.font(c)
-                    if f.family():
-                        hits.append(("QTreeWidgetItem", item.text(c), font_sig(f)))
-                for k in range(item.childCount()):
-                    walk(item.child(k))
-            for i in range(widget.topLevelItemCount()):
-                walk(widget.topLevelItem(i))
-        elif isinstance(widget, B["QTableWidget"]):
-            for r in range(widget.rowCount()):
-                for c in range(widget.columnCount()):
-                    it = widget.item(r, c)
-                    if it and it.font().family():
-                        hits.append(("QTableWidgetItem", (r, c), font_sig(it.font())))
-        return hits
-
-    for w in list(app.allWidgets()):
-        try:
-            ss = w.styleSheet() or ""
-            has_ss = bool(ss)
-            has_ss_font = ("font" in ss.lower()) if has_ss else False
-            wa_setfont = w.testAttribute(B["Qt"].WidgetAttribute.WA_SetFont)
-            wf = w.font()
-            differs = font_sig(wf) != font_sig(app_font)
-            item_hits = scan_items(w) if include_item_widgets else []
-            rows.append({
-                "class": w.__class__.__name__,
-                "objectName": w.objectName(),
-                "has_stylesheet": has_ss,
-                "stylesheet_mentions_font": has_ss_font,
-                "wa_setfont": wa_setfont,
-                "widget_font": font_sig(wf),
-                "app_font": font_sig(app_font),
-                "differs_from_app": differs,
-                "items_with_fonts": len(item_hits),
-                "items_detail_sample": item_hits[:3],
-            })
-        except Exception:
-            pass
-
-    with open(report_csv, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=list(rows[0].keys()) if rows else [
-            "class","objectName","has_stylesheet","stylesheet_mentions_font",
-            "wa_setfont","widget_font","app_font","differs_from_app",
-            "items_with_fonts","items_detail_sample"
-        ])
-        writer.writeheader()
-        writer.writerows(rows)
-
-    total = len(rows)
-    ss_font = sum(1 for r in rows if r["stylesheet_mentions_font"])
-    wa = sum(1 for r in rows if r["wa_setfont"])
-    diff = sum(1 for r in rows if r["differs_from_app"])
-    print(f"[FontForensics] scanned {total} widgets "
-          f"| with QSS font: {ss_font} | WA_SetFont: {wa} | font!=app: {diff}")
-    print(f"[FontForensics] report -> {os.path.abspath(report_csv)}")

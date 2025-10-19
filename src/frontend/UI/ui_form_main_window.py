@@ -31,55 +31,18 @@ class Ui_MainWindow(object):
         MainWindow.setStyleSheet(u"")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.gridLayout_10 = QGridLayout(self.centralwidget)
-        self.gridLayout_10.setObjectName(u"gridLayout_10")
-        self.formlayout_progressbar = QFormLayout()
-        self.formlayout_progressbar.setObjectName(u"formlayout_progressbar")
-        self.formlayout_progressbar.setHorizontalSpacing(0)
-        self.formlayout_progressbar.setVerticalSpacing(0)
-        self.main_label_progressbar_total = QLabel(self.centralwidget)
-        self.main_label_progressbar_total.setObjectName(u"main_label_progressbar_total")
-
-        self.formlayout_progressbar.setWidget(0, QFormLayout.ItemRole.LabelRole, self.main_label_progressbar_total)
-
-        self.main_progressbar_total = QProgressBar(self.centralwidget)
-        self.main_progressbar_total.setObjectName(u"main_progressbar_total")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.main_progressbar_total.sizePolicy().hasHeightForWidth())
-        self.main_progressbar_total.setSizePolicy(sizePolicy)
-        self.main_progressbar_total.setMinimumSize(QSize(300, 0))
-        self.main_progressbar_total.setStyleSheet(u"text-align: center; /* Centered text */")
-        self.main_progressbar_total.setValue(0)
-
-        self.formlayout_progressbar.setWidget(0, QFormLayout.ItemRole.FieldRole, self.main_progressbar_total)
-
-        self.main_label_progressbar_converting = QLabel(self.centralwidget)
-        self.main_label_progressbar_converting.setObjectName(u"main_label_progressbar_converting")
-
-        self.formlayout_progressbar.setWidget(1, QFormLayout.ItemRole.LabelRole, self.main_label_progressbar_converting)
-
-        self.main_progressbar_converting = QProgressBar(self.centralwidget)
-        self.main_progressbar_converting.setObjectName(u"main_progressbar_converting")
-        self.main_progressbar_converting.setStyleSheet(u"text-align: center; /* Centered text */")
-        self.main_progressbar_converting.setValue(0)
-
-        self.formlayout_progressbar.setWidget(1, QFormLayout.ItemRole.FieldRole, self.main_progressbar_converting)
-
-
-        self.gridLayout_10.addLayout(self.formlayout_progressbar, 2, 0, 1, 1)
-
+        self.gridLayout_11 = QGridLayout(self.centralwidget)
+        self.gridLayout_11.setObjectName(u"gridLayout_11")
         self.main_horizontallayout_menu_buttons = QHBoxLayout()
         self.main_horizontallayout_menu_buttons.setSpacing(5)
         self.main_horizontallayout_menu_buttons.setObjectName(u"main_horizontallayout_menu_buttons")
         self.main_button_switch_home = QPushButton(self.centralwidget)
         self.main_button_switch_home.setObjectName(u"main_button_switch_home")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Maximum)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.main_button_switch_home.sizePolicy().hasHeightForWidth())
-        self.main_button_switch_home.setSizePolicy(sizePolicy1)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.main_button_switch_home.sizePolicy().hasHeightForWidth())
+        self.main_button_switch_home.setSizePolicy(sizePolicy)
         self.main_button_switch_home.setMinimumSize(QSize(50, 35))
         self.main_button_switch_home.setMaximumSize(QSize(16777215, 35))
         self.main_button_switch_home.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -94,8 +57,8 @@ class Ui_MainWindow(object):
 
         self.main_button_switch_account = QPushButton(self.centralwidget)
         self.main_button_switch_account.setObjectName(u"main_button_switch_account")
-        sizePolicy1.setHeightForWidth(self.main_button_switch_account.sizePolicy().hasHeightForWidth())
-        self.main_button_switch_account.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.main_button_switch_account.sizePolicy().hasHeightForWidth())
+        self.main_button_switch_account.setSizePolicy(sizePolicy)
         self.main_button_switch_account.setMinimumSize(QSize(50, 35))
         self.main_button_switch_account.setMaximumSize(QSize(16777215, 35))
         self.main_button_switch_account.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -111,8 +74,8 @@ class Ui_MainWindow(object):
 
         self.main_button_switch_tools = QPushButton(self.centralwidget)
         self.main_button_switch_tools.setObjectName(u"main_button_switch_tools")
-        sizePolicy1.setHeightForWidth(self.main_button_switch_tools.sizePolicy().hasHeightForWidth())
-        self.main_button_switch_tools.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.main_button_switch_tools.sizePolicy().hasHeightForWidth())
+        self.main_button_switch_tools.setSizePolicy(sizePolicy)
         self.main_button_switch_tools.setMinimumSize(QSize(50, 35))
         self.main_button_switch_tools.setMaximumSize(QSize(16777215, 35))
         font = QFont()
@@ -130,8 +93,8 @@ class Ui_MainWindow(object):
 
         self.main_button_switch_settings = QPushButton(self.centralwidget)
         self.main_button_switch_settings.setObjectName(u"main_button_switch_settings")
-        sizePolicy1.setHeightForWidth(self.main_button_switch_settings.sizePolicy().hasHeightForWidth())
-        self.main_button_switch_settings.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.main_button_switch_settings.sizePolicy().hasHeightForWidth())
+        self.main_button_switch_settings.setSizePolicy(sizePolicy)
         self.main_button_switch_settings.setMinimumSize(QSize(50, 35))
         self.main_button_switch_settings.setMaximumSize(QSize(16777215, 35))
         self.main_button_switch_settings.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -147,8 +110,8 @@ class Ui_MainWindow(object):
 
         self.main_button_switch_credits = QPushButton(self.centralwidget)
         self.main_button_switch_credits.setObjectName(u"main_button_switch_credits")
-        sizePolicy1.setHeightForWidth(self.main_button_switch_credits.sizePolicy().hasHeightForWidth())
-        self.main_button_switch_credits.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.main_button_switch_credits.sizePolicy().hasHeightForWidth())
+        self.main_button_switch_credits.setSizePolicy(sizePolicy)
         self.main_button_switch_credits.setMinimumSize(QSize(50, 35))
         self.main_button_switch_credits.setMaximumSize(QSize(16777215, 35))
         self.main_button_switch_credits.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -164,8 +127,8 @@ class Ui_MainWindow(object):
 
         self.main_button_view_progress_bars = QPushButton(self.centralwidget)
         self.main_button_view_progress_bars.setObjectName(u"main_button_view_progress_bars")
-        sizePolicy1.setHeightForWidth(self.main_button_view_progress_bars.sizePolicy().hasHeightForWidth())
-        self.main_button_view_progress_bars.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.main_button_view_progress_bars.sizePolicy().hasHeightForWidth())
+        self.main_button_view_progress_bars.setSizePolicy(sizePolicy)
         self.main_button_view_progress_bars.setMinimumSize(QSize(50, 35))
         self.main_button_view_progress_bars.setMaximumSize(QSize(16777215, 35))
         self.main_button_view_progress_bars.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -185,8 +148,8 @@ class Ui_MainWindow(object):
 
         self.main_button_switch_supported_websites = QPushButton(self.centralwidget)
         self.main_button_switch_supported_websites.setObjectName(u"main_button_switch_supported_websites")
-        sizePolicy1.setHeightForWidth(self.main_button_switch_supported_websites.sizePolicy().hasHeightForWidth())
-        self.main_button_switch_supported_websites.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.main_button_switch_supported_websites.sizePolicy().hasHeightForWidth())
+        self.main_button_switch_supported_websites.setSizePolicy(sizePolicy)
         self.main_button_switch_supported_websites.setMinimumSize(QSize(50, 35))
         self.main_button_switch_supported_websites.setMaximumSize(QSize(16777215, 35))
         self.main_button_switch_supported_websites.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -200,7 +163,7 @@ class Ui_MainWindow(object):
         self.main_horizontallayout_menu_buttons.addWidget(self.main_button_switch_supported_websites)
 
 
-        self.gridLayout_10.addLayout(self.main_horizontallayout_menu_buttons, 0, 0, 1, 1)
+        self.gridLayout_11.addLayout(self.main_horizontallayout_menu_buttons, 0, 0, 1, 1)
 
         self.CentralStackedWidget = QStackedWidget(self.centralwidget)
         self.CentralStackedWidget.setObjectName(u"CentralStackedWidget")
@@ -217,22 +180,22 @@ class Ui_MainWindow(object):
         self.main_verticallayout.setContentsMargins(-1, 0, -1, -1)
         self.main_stacked_widget_top = QStackedWidget(self.page_main)
         self.main_stacked_widget_top.setObjectName(u"main_stacked_widget_top")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.main_stacked_widget_top.sizePolicy().hasHeightForWidth())
-        self.main_stacked_widget_top.setSizePolicy(sizePolicy2)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.main_stacked_widget_top.sizePolicy().hasHeightForWidth())
+        self.main_stacked_widget_top.setSizePolicy(sizePolicy1)
         self.main_stacked_widget_top.setMinimumSize(QSize(0, 80))
         self.main_stacked_widget_top.setMaximumSize(QSize(16777215, 150))
         self.main_stacked_widget_top.setStyleSheet(u"")
         self.main_stacked_widget_top.setLineWidth(1)
         self.page_download = QWidget()
         self.page_download.setObjectName(u"page_download")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.page_download.sizePolicy().hasHeightForWidth())
-        self.page_download.setSizePolicy(sizePolicy3)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.page_download.sizePolicy().hasHeightForWidth())
+        self.page_download.setSizePolicy(sizePolicy2)
         self.page_download.setMinimumSize(QSize(0, 150))
         self.page_download.setMaximumSize(QSize(16777215, 150))
         self.gridLayout_5 = QGridLayout(self.page_download)
@@ -254,11 +217,11 @@ class Ui_MainWindow(object):
         self.download_website_combobox.addItem("")
         self.download_website_combobox.addItem("")
         self.download_website_combobox.setObjectName(u"download_website_combobox")
-        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
-        sizePolicy4.setHorizontalStretch(0)
-        sizePolicy4.setVerticalStretch(0)
-        sizePolicy4.setHeightForWidth(self.download_website_combobox.sizePolicy().hasHeightForWidth())
-        self.download_website_combobox.setSizePolicy(sizePolicy4)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.download_website_combobox.sizePolicy().hasHeightForWidth())
+        self.download_website_combobox.setSizePolicy(sizePolicy3)
         self.download_website_combobox.setMinimumSize(QSize(0, 35))
         self.download_website_combobox.setMaximumSize(QSize(16777215, 35))
         font1 = QFont()
@@ -270,8 +233,11 @@ class Ui_MainWindow(object):
 
         self.download_lineedit_url = QLineEdit(self.page_download)
         self.download_lineedit_url.setObjectName(u"download_lineedit_url")
-        sizePolicy.setHeightForWidth(self.download_lineedit_url.sizePolicy().hasHeightForWidth())
-        self.download_lineedit_url.setSizePolicy(sizePolicy)
+        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Fixed)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.download_lineedit_url.sizePolicy().hasHeightForWidth())
+        self.download_lineedit_url.setSizePolicy(sizePolicy4)
         self.download_lineedit_url.setMinimumSize(QSize(300, 30))
         self.download_lineedit_url.setFont(font1)
 
@@ -417,8 +383,8 @@ class Ui_MainWindow(object):
         self.login_gridlayout_login_box.setContentsMargins(-1, 0, -1, -1)
         self.login_lineedit_username = QLineEdit(self.page_login)
         self.login_lineedit_username.setObjectName(u"login_lineedit_username")
-        sizePolicy.setHeightForWidth(self.login_lineedit_username.sizePolicy().hasHeightForWidth())
-        self.login_lineedit_username.setSizePolicy(sizePolicy)
+        sizePolicy4.setHeightForWidth(self.login_lineedit_username.sizePolicy().hasHeightForWidth())
+        self.login_lineedit_username.setSizePolicy(sizePolicy4)
         self.login_lineedit_username.setMinimumSize(QSize(150, 35))
         self.login_lineedit_username.setFont(font1)
 
@@ -426,8 +392,8 @@ class Ui_MainWindow(object):
 
         self.login_lineedit_password = QLineEdit(self.page_login)
         self.login_lineedit_password.setObjectName(u"login_lineedit_password")
-        sizePolicy.setHeightForWidth(self.login_lineedit_password.sizePolicy().hasHeightForWidth())
-        self.login_lineedit_password.setSizePolicy(sizePolicy)
+        sizePolicy4.setHeightForWidth(self.login_lineedit_password.sizePolicy().hasHeightForWidth())
+        self.login_lineedit_password.setSizePolicy(sizePolicy4)
         self.login_lineedit_password.setMinimumSize(QSize(0, 35))
         self.login_lineedit_password.setFont(font1)
         self.login_lineedit_password.setCursor(QCursor(Qt.CursorShape.IBeamCursor))
@@ -552,7 +518,7 @@ class Ui_MainWindow(object):
         self.scrollArea_5.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 1128, 182))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 596, 176))
         self.gridLayout_8 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_8.setSpacing(0)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
@@ -721,6 +687,104 @@ class Ui_MainWindow(object):
         self.gridLayout_17.addWidget(self.scrollArea_5, 0, 0, 1, 1)
 
         self.main_stacked_widget_top.addWidget(self.page_tools)
+        self.page_range = QWidget()
+        self.page_range.setObjectName(u"page_range")
+        self.gridLayout_10 = QGridLayout(self.page_range)
+        self.gridLayout_10.setSpacing(0)
+        self.gridLayout_10.setObjectName(u"gridLayout_10")
+        self.gridLayout_10.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_25 = QGridLayout()
+        self.gridLayout_25.setSpacing(0)
+        self.gridLayout_25.setObjectName(u"gridLayout_25")
+        self.button_range_apply_index = QPushButton(self.page_range)
+        self.button_range_apply_index.setObjectName(u"button_range_apply_index")
+
+        self.gridLayout_25.addWidget(self.button_range_apply_index, 8, 4, 1, 1)
+
+        self.lineedit_range_start = QLineEdit(self.page_range)
+        self.lineedit_range_start.setObjectName(u"lineedit_range_start")
+
+        self.gridLayout_25.addWidget(self.lineedit_range_start, 4, 1, 1, 1)
+
+        self.button_range_apply_author = QPushButton(self.page_range)
+        self.button_range_apply_author.setObjectName(u"button_range_apply_author")
+
+        self.gridLayout_25.addWidget(self.button_range_apply_author, 0, 2, 1, 3)
+
+        self.spinbox_range_start = QSpinBox(self.page_range)
+        self.spinbox_range_start.setObjectName(u"spinbox_range_start")
+
+        self.gridLayout_25.addWidget(self.spinbox_range_start, 8, 1, 1, 1)
+
+        self.lineedit_range_author = QLineEdit(self.page_range)
+        self.lineedit_range_author.setObjectName(u"lineedit_range_author")
+
+        self.gridLayout_25.addWidget(self.lineedit_range_author, 0, 1, 1, 1)
+
+        self.spinbox_range_end = QSpinBox(self.page_range)
+        self.spinbox_range_end.setObjectName(u"spinbox_range_end")
+
+        self.gridLayout_25.addWidget(self.spinbox_range_end, 8, 3, 1, 1)
+
+        self.label_range_start = QLabel(self.page_range)
+        self.label_range_start.setObjectName(u"label_range_start")
+
+        self.gridLayout_25.addWidget(self.label_range_start, 8, 0, 1, 1)
+
+        self.button_range_apply_time = QPushButton(self.page_range)
+        self.button_range_apply_time.setObjectName(u"button_range_apply_time")
+
+        self.gridLayout_25.addWidget(self.button_range_apply_time, 4, 4, 1, 1)
+
+        self.lineedit_range_end = QLineEdit(self.page_range)
+        self.lineedit_range_end.setObjectName(u"lineedit_range_end")
+
+        self.gridLayout_25.addWidget(self.lineedit_range_end, 4, 3, 1, 1)
+
+        self.label_range_by_author = QLabel(self.page_range)
+        self.label_range_by_author.setObjectName(u"label_range_by_author")
+
+        self.gridLayout_25.addWidget(self.label_range_by_author, 0, 0, 1, 1)
+
+        self.label_range_end = QLabel(self.page_range)
+        self.label_range_end.setObjectName(u"label_range_end")
+
+        self.gridLayout_25.addWidget(self.label_range_end, 8, 2, 1, 1)
+
+        self.label_apply_by_time = QLabel(self.page_range)
+        self.label_apply_by_time.setObjectName(u"label_apply_by_time")
+
+        self.gridLayout_25.addWidget(self.label_apply_by_time, 3, 0, 1, 4)
+
+        self.label_range_time_start = QLabel(self.page_range)
+        self.label_range_time_start.setObjectName(u"label_range_time_start")
+
+        self.gridLayout_25.addWidget(self.label_range_time_start, 4, 0, 1, 1)
+
+        self.label_range_time_end = QLabel(self.page_range)
+        self.label_range_time_end.setObjectName(u"label_range_time_end")
+
+        self.gridLayout_25.addWidget(self.label_range_time_end, 4, 2, 1, 1)
+
+        self.button_range_select_all = QPushButton(self.page_range)
+        self.button_range_select_all.setObjectName(u"button_range_select_all")
+
+        self.gridLayout_25.addWidget(self.button_range_select_all, 9, 0, 1, 2)
+
+        self.button_range_unselect_all = QPushButton(self.page_range)
+        self.button_range_unselect_all.setObjectName(u"button_range_unselect_all")
+
+        self.gridLayout_25.addWidget(self.button_range_unselect_all, 9, 3, 1, 2)
+
+        self.label_apply_by_index = QLabel(self.page_range)
+        self.label_apply_by_index.setObjectName(u"label_apply_by_index")
+
+        self.gridLayout_25.addWidget(self.label_apply_by_index, 5, 0, 1, 4)
+
+
+        self.gridLayout_10.addLayout(self.gridLayout_25, 0, 0, 1, 1)
+
+        self.main_stacked_widget_top.addWidget(self.page_range)
 
         self.main_verticallayout.addWidget(self.main_stacked_widget_top)
 
@@ -729,7 +793,7 @@ class Ui_MainWindow(object):
         self.main_scrollarea_treewidget.setWidgetResizable(True)
         self.main_scrollarea_treewidget_content = QWidget()
         self.main_scrollarea_treewidget_content.setObjectName(u"main_scrollarea_treewidget_content")
-        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 1142, 427))
+        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 1142, 430))
         sizePolicy15 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
         sizePolicy15.setHorizontalStretch(0)
         sizePolicy15.setVerticalStretch(0)
@@ -766,8 +830,8 @@ class Ui_MainWindow(object):
 
         self.main_button_tree_stop = QPushButton(self.main_scrollarea_treewidget_content)
         self.main_button_tree_stop.setObjectName(u"main_button_tree_stop")
-        sizePolicy1.setHeightForWidth(self.main_button_tree_stop.sizePolicy().hasHeightForWidth())
-        self.main_button_tree_stop.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.main_button_tree_stop.sizePolicy().hasHeightForWidth())
+        self.main_button_tree_stop.setSizePolicy(sizePolicy)
         self.main_button_tree_stop.setMinimumSize(QSize(0, 30))
         self.main_button_tree_stop.setFont(font1)
         self.main_button_tree_stop.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -794,8 +858,8 @@ class Ui_MainWindow(object):
 
         self.main_button_tree_download = QPushButton(self.main_scrollarea_treewidget_content)
         self.main_button_tree_download.setObjectName(u"main_button_tree_download")
-        sizePolicy1.setHeightForWidth(self.main_button_tree_download.sizePolicy().hasHeightForWidth())
-        self.main_button_tree_download.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.main_button_tree_download.sizePolicy().hasHeightForWidth())
+        self.main_button_tree_download.setSizePolicy(sizePolicy)
         self.main_button_tree_download.setMinimumSize(QSize(0, 30))
         self.main_button_tree_download.setFont(font1)
         self.main_button_tree_download.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -839,7 +903,7 @@ class Ui_MainWindow(object):
         self.settings_scrollarea.setWidgetResizable(True)
         self.settings_scrollarea_widget_contents = QWidget()
         self.settings_scrollarea_widget_contents.setObjectName(u"settings_scrollarea_widget_contents")
-        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 1144, 579))
+        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 612, 481))
         self.gridLayout_19 = QGridLayout(self.settings_scrollarea_widget_contents)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.gridLayout_19.setContentsMargins(0, 0, 0, 0)
@@ -1286,7 +1350,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 84, 70))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 612, 481))
         self.gridLayout_21 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_21.setSpacing(0)
         self.gridLayout_21.setObjectName(u"gridLayout_21")
@@ -1312,7 +1376,7 @@ class Ui_MainWindow(object):
         self.scrollArea_3.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 218, 110))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 612, 481))
         self.gridLayout_23 = QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_23.setSpacing(0)
         self.gridLayout_23.setObjectName(u"gridLayout_23")
@@ -1384,105 +1448,6 @@ class Ui_MainWindow(object):
         self.gridLayout_53.setSpacing(0)
         self.gridLayout_53.setObjectName(u"gridLayout_53")
         self.gridLayout_53.setContentsMargins(0, 0, 0, 0)
-        self.scrollArea_4 = QScrollArea(self.page_range_selector)
-        self.scrollArea_4.setObjectName(u"scrollArea_4")
-        self.scrollArea_4.setWidgetResizable(True)
-        self.scrollAreaWidgetContents_5 = QWidget()
-        self.scrollAreaWidgetContents_5.setObjectName(u"scrollAreaWidgetContents_5")
-        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 335, 217))
-        self.gridLayout_52 = QGridLayout(self.scrollAreaWidgetContents_5)
-        self.gridLayout_52.setSpacing(0)
-        self.gridLayout_52.setObjectName(u"gridLayout_52")
-        self.gridLayout_52.setContentsMargins(0, 0, 0, 0)
-        self.gridLayout_25 = QGridLayout()
-        self.gridLayout_25.setObjectName(u"gridLayout_25")
-        self.textbrowser_range = QTextBrowser(self.scrollAreaWidgetContents_5)
-        self.textbrowser_range.setObjectName(u"textbrowser_range")
-
-        self.gridLayout_25.addWidget(self.textbrowser_range, 0, 0, 1, 5)
-
-        self.button_range_apply_time = QPushButton(self.scrollAreaWidgetContents_5)
-        self.button_range_apply_time.setObjectName(u"button_range_apply_time")
-
-        self.gridLayout_25.addWidget(self.button_range_apply_time, 5, 4, 1, 1)
-
-        self.label_apply_by_time = QLabel(self.scrollAreaWidgetContents_5)
-        self.label_apply_by_time.setObjectName(u"label_apply_by_time")
-
-        self.gridLayout_25.addWidget(self.label_apply_by_time, 4, 0, 1, 4)
-
-        self.lineedit_range_start = QLineEdit(self.scrollAreaWidgetContents_5)
-        self.lineedit_range_start.setObjectName(u"lineedit_range_start")
-
-        self.gridLayout_25.addWidget(self.lineedit_range_start, 5, 1, 1, 1)
-
-        self.lineedit_range_author = QLineEdit(self.scrollAreaWidgetContents_5)
-        self.lineedit_range_author.setObjectName(u"lineedit_range_author")
-
-        self.gridLayout_25.addWidget(self.lineedit_range_author, 1, 1, 1, 1)
-
-        self.spinbox_range_end = QSpinBox(self.scrollAreaWidgetContents_5)
-        self.spinbox_range_end.setObjectName(u"spinbox_range_end")
-
-        self.gridLayout_25.addWidget(self.spinbox_range_end, 9, 3, 1, 1)
-
-        self.label_apply_by_index = QLabel(self.scrollAreaWidgetContents_5)
-        self.label_apply_by_index.setObjectName(u"label_apply_by_index")
-
-        self.gridLayout_25.addWidget(self.label_apply_by_index, 6, 0, 1, 4)
-
-        self.label_range_end = QLabel(self.scrollAreaWidgetContents_5)
-        self.label_range_end.setObjectName(u"label_range_end")
-
-        self.gridLayout_25.addWidget(self.label_range_end, 9, 2, 1, 1)
-
-        self.button_range_apply_index = QPushButton(self.scrollAreaWidgetContents_5)
-        self.button_range_apply_index.setObjectName(u"button_range_apply_index")
-
-        self.gridLayout_25.addWidget(self.button_range_apply_index, 9, 4, 1, 1)
-
-        self.label_range_time_end = QLabel(self.scrollAreaWidgetContents_5)
-        self.label_range_time_end.setObjectName(u"label_range_time_end")
-
-        self.gridLayout_25.addWidget(self.label_range_time_end, 5, 2, 1, 1)
-
-        self.label_range_start = QLabel(self.scrollAreaWidgetContents_5)
-        self.label_range_start.setObjectName(u"label_range_start")
-
-        self.gridLayout_25.addWidget(self.label_range_start, 9, 0, 1, 1)
-
-        self.button_range_apply_author = QPushButton(self.scrollAreaWidgetContents_5)
-        self.button_range_apply_author.setObjectName(u"button_range_apply_author")
-
-        self.gridLayout_25.addWidget(self.button_range_apply_author, 1, 2, 1, 3)
-
-        self.spinbox_range_start = QSpinBox(self.scrollAreaWidgetContents_5)
-        self.spinbox_range_start.setObjectName(u"spinbox_range_start")
-
-        self.gridLayout_25.addWidget(self.spinbox_range_start, 9, 1, 1, 1)
-
-        self.lineedit_range_end = QLineEdit(self.scrollAreaWidgetContents_5)
-        self.lineedit_range_end.setObjectName(u"lineedit_range_end")
-
-        self.gridLayout_25.addWidget(self.lineedit_range_end, 5, 3, 1, 1)
-
-        self.label_range_time_start = QLabel(self.scrollAreaWidgetContents_5)
-        self.label_range_time_start.setObjectName(u"label_range_time_start")
-
-        self.gridLayout_25.addWidget(self.label_range_time_start, 5, 0, 1, 1)
-
-        self.label_range_by_author = QLabel(self.scrollAreaWidgetContents_5)
-        self.label_range_by_author.setObjectName(u"label_range_by_author")
-
-        self.gridLayout_25.addWidget(self.label_range_by_author, 1, 0, 1, 1)
-
-
-        self.gridLayout_52.addLayout(self.gridLayout_25, 0, 0, 1, 1)
-
-        self.scrollArea_4.setWidget(self.scrollAreaWidgetContents_5)
-
-        self.gridLayout_53.addWidget(self.scrollArea_4, 0, 0, 1, 1)
-
         self.CentralStackedWidget.addWidget(self.page_range_selector)
         self.page_keyboard_shortcuts = QWidget()
         self.page_keyboard_shortcuts.setObjectName(u"page_keyboard_shortcuts")
@@ -1546,7 +1511,7 @@ class Ui_MainWindow(object):
         self.scrollArea_10.setWidgetResizable(True)
         self.scrollAreaWidgetContents_12 = QWidget()
         self.scrollAreaWidgetContents_12.setObjectName(u"scrollAreaWidgetContents_12")
-        self.scrollAreaWidgetContents_12.setGeometry(QRect(0, 0, 1144, 579))
+        self.scrollAreaWidgetContents_12.setGeometry(QRect(0, 0, 170, 138))
         self.gridLayout_56 = QGridLayout(self.scrollAreaWidgetContents_12)
         self.gridLayout_56.setSpacing(0)
         self.gridLayout_56.setObjectName(u"gridLayout_56")
@@ -1607,7 +1572,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 1144, 579))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 84, 70))
         self.gridLayout_20 = QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_20.setSpacing(0)
         self.gridLayout_20.setObjectName(u"gridLayout_20")
@@ -1634,7 +1599,7 @@ class Ui_MainWindow(object):
         self.scrollArea_11.setWidgetResizable(True)
         self.scrollAreaWidgetContents_13 = QWidget()
         self.scrollAreaWidgetContents_13.setObjectName(u"scrollAreaWidgetContents_13")
-        self.scrollAreaWidgetContents_13.setGeometry(QRect(0, 0, 1144, 579))
+        self.scrollAreaWidgetContents_13.setGeometry(QRect(0, 0, 455, 101))
         self.gridLayout_59 = QGridLayout(self.scrollAreaWidgetContents_13)
         self.gridLayout_59.setObjectName(u"gridLayout_59")
         self.gridLayout_59.setHorizontalSpacing(0)
@@ -1697,7 +1662,7 @@ class Ui_MainWindow(object):
         self.scrollArea_12.setWidgetResizable(True)
         self.scrollAreaWidgetContents_14 = QWidget()
         self.scrollAreaWidgetContents_14.setObjectName(u"scrollAreaWidgetContents_14")
-        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 1144, 579))
+        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 1144, 582))
         self.gridLayout_61 = QGridLayout(self.scrollAreaWidgetContents_14)
         self.gridLayout_61.setObjectName(u"gridLayout_61")
         self.textbrowser_disclaimer = QTextBrowser(self.scrollAreaWidgetContents_14)
@@ -1753,7 +1718,41 @@ class Ui_MainWindow(object):
         self.gridLayout_31.setContentsMargins(0, 0, 0, 0)
         self.CentralStackedWidget.addWidget(self.page_batch)
 
-        self.gridLayout_10.addWidget(self.CentralStackedWidget, 1, 0, 1, 1)
+        self.gridLayout_11.addWidget(self.CentralStackedWidget, 1, 0, 1, 1)
+
+        self.formlayout_progressbar = QFormLayout()
+        self.formlayout_progressbar.setObjectName(u"formlayout_progressbar")
+        self.formlayout_progressbar.setHorizontalSpacing(0)
+        self.formlayout_progressbar.setVerticalSpacing(0)
+        self.main_label_progressbar_total = QLabel(self.centralwidget)
+        self.main_label_progressbar_total.setObjectName(u"main_label_progressbar_total")
+
+        self.formlayout_progressbar.setWidget(0, QFormLayout.ItemRole.LabelRole, self.main_label_progressbar_total)
+
+        self.main_progressbar_total = QProgressBar(self.centralwidget)
+        self.main_progressbar_total.setObjectName(u"main_progressbar_total")
+        sizePolicy4.setHeightForWidth(self.main_progressbar_total.sizePolicy().hasHeightForWidth())
+        self.main_progressbar_total.setSizePolicy(sizePolicy4)
+        self.main_progressbar_total.setMinimumSize(QSize(300, 0))
+        self.main_progressbar_total.setStyleSheet(u"text-align: center; /* Centered text */")
+        self.main_progressbar_total.setValue(0)
+
+        self.formlayout_progressbar.setWidget(0, QFormLayout.ItemRole.FieldRole, self.main_progressbar_total)
+
+        self.main_label_progressbar_converting = QLabel(self.centralwidget)
+        self.main_label_progressbar_converting.setObjectName(u"main_label_progressbar_converting")
+
+        self.formlayout_progressbar.setWidget(1, QFormLayout.ItemRole.LabelRole, self.main_label_progressbar_converting)
+
+        self.main_progressbar_converting = QProgressBar(self.centralwidget)
+        self.main_progressbar_converting.setObjectName(u"main_progressbar_converting")
+        self.main_progressbar_converting.setStyleSheet(u"text-align: center; /* Centered text */")
+        self.main_progressbar_converting.setValue(0)
+
+        self.formlayout_progressbar.setWidget(1, QFormLayout.ItemRole.FieldRole, self.main_progressbar_converting)
+
+
+        self.gridLayout_11.addLayout(self.formlayout_progressbar, 2, 0, 1, 1)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QStatusBar(MainWindow)
@@ -1798,8 +1797,7 @@ class Ui_MainWindow(object):
         QWidget.setTabOrder(self.scrollArea_9, self.button_accept)
         QWidget.setTabOrder(self.button_accept, self.button_deny)
         QWidget.setTabOrder(self.button_deny, self.scrollArea_3)
-        QWidget.setTabOrder(self.scrollArea_3, self.scrollArea_4)
-        QWidget.setTabOrder(self.scrollArea_4, self.lineedit_range_author)
+        QWidget.setTabOrder(self.scrollArea_3, self.lineedit_range_author)
         QWidget.setTabOrder(self.lineedit_range_author, self.button_range_apply_author)
         QWidget.setTabOrder(self.button_range_apply_author, self.lineedit_range_start)
         QWidget.setTabOrder(self.lineedit_range_start, self.lineedit_range_end)
@@ -1811,8 +1809,7 @@ class Ui_MainWindow(object):
         QWidget.setTabOrder(self.scrollArea, self.settings_button_reset)
         QWidget.setTabOrder(self.settings_button_reset, self.main_textbrowser_credits)
         QWidget.setTabOrder(self.main_textbrowser_credits, self.textBrowser)
-        QWidget.setTabOrder(self.textBrowser, self.textbrowser_range)
-        QWidget.setTabOrder(self.textbrowser_range, self.text_browser_keyboard_shortcuts)
+        QWidget.setTabOrder(self.textBrowser, self.text_browser_keyboard_shortcuts)
         QWidget.setTabOrder(self.text_browser_keyboard_shortcuts, self.text_browser_update_available)
         QWidget.setTabOrder(self.text_browser_update_available, self.button_update_acknowledged)
         QWidget.setTabOrder(self.button_update_acknowledged, self.textbrowser_install_dialog)
@@ -1831,8 +1828,8 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.CentralStackedWidget.setCurrentIndex(12)
-        self.main_stacked_widget_top.setCurrentIndex(3)
+        self.CentralStackedWidget.setCurrentIndex(0)
+        self.main_stacked_widget_top.setCurrentIndex(4)
         self.settings_stacked_widget_main.setCurrentIndex(0)
 
 
@@ -1844,8 +1841,6 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(tooltip)
         MainWindow.setToolTip("")
 #endif // QT_CONFIG(tooltip)
-        self.main_label_progressbar_total.setText(QCoreApplication.translate("MainWindow", u"Total:", None))
-        self.main_label_progressbar_converting.setText(QCoreApplication.translate("MainWindow", u"Converting:", None))
         self.main_button_switch_home.setText("")
         self.main_button_switch_account.setText("")
         self.main_button_switch_tools.setText("")
@@ -1902,6 +1897,21 @@ class Ui_MainWindow(object):
         self.tools_button_eporner_category_get_videos.setText(QCoreApplication.translate("MainWindow", u"Get Videos", None))
         self.tools_button_list_categories_eporner.setText(QCoreApplication.translate("MainWindow", u"List of all categories", None))
         self.tools_label_videos_by_category_eporner.setText(QCoreApplication.translate("MainWindow", u"Get videos by category", None))
+        self.button_range_apply_index.setText(QCoreApplication.translate("MainWindow", u"Apply", None))
+        self.lineedit_range_start.setText(QCoreApplication.translate("MainWindow", u"0", None))
+        self.button_range_apply_author.setText(QCoreApplication.translate("MainWindow", u"Apply", None))
+        self.lineedit_range_author.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter the author's name", None))
+        self.label_range_start.setText(QCoreApplication.translate("MainWindow", u"Start:", None))
+        self.button_range_apply_time.setText(QCoreApplication.translate("MainWindow", u"Apply", None))
+        self.lineedit_range_end.setText(QCoreApplication.translate("MainWindow", u"0", None))
+        self.label_range_by_author.setText(QCoreApplication.translate("MainWindow", u"Apply by author:", None))
+        self.label_range_end.setText(QCoreApplication.translate("MainWindow", u"End:", None))
+        self.label_apply_by_time.setText(QCoreApplication.translate("MainWindow", u"Apply by time:", None))
+        self.label_range_time_start.setText(QCoreApplication.translate("MainWindow", u"Start:", None))
+        self.label_range_time_end.setText(QCoreApplication.translate("MainWindow", u"End:", None))
+        self.button_range_select_all.setText(QCoreApplication.translate("MainWindow", u"Select all videos", None))
+        self.button_range_unselect_all.setText(QCoreApplication.translate("MainWindow", u"Unselect all videos", None))
+        self.label_apply_by_index.setText(QCoreApplication.translate("MainWindow", u"Apply by Index:", None))
         self.main_checkbox_tree_do_not_clear_videos.setText(QCoreApplication.translate("MainWindow", u"Do not clear videos", None))
         self.main_button_tree_automated_selection.setText(QCoreApplication.translate("MainWindow", u"Automated selection tool", None))
         self.main_button_tree_keyboard_shortcuts.setText(QCoreApplication.translate("MainWindow", u"Keyboard shortcuts", None))
@@ -2186,63 +2196,27 @@ class Ui_MainWindow(object):
                         " text-decoration: underline; color:#007af4;\">https://scripts.sil.org/OFL</span></a>.</p>\n"
 "<hr />\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Thank you for using <span style=\" font-weight:700;\">Porn Fetch</span> responsibly!</p></body></html>", None))
-        self.textbrowser_range.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:9pt;\">Select the range of videos to be automatically selected.</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI'; font-size:9pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-rig"
-                        "ht:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:9pt;\">For example, if you set the start to 5 and the end to 20, then all videos between 5-20 will be checked for downloading :)</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI'; font-size:9pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:9pt;\">Or select by a range in time:</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI'; font-size:9pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; fon"
-                        "t-size:9pt;\">For example if you want to download all videos in between 10 and 20 minutes do:</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI'; font-size:9pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:9pt;\">Start: 10</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:9pt;\">End: 20</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI'; font-size:9pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:"
-                        "0px;\"><span style=\" font-family:'Segoe UI'; font-size:9pt;\">And click Apply.</span></p></body></html>", None))
-        self.button_range_apply_time.setText(QCoreApplication.translate("MainWindow", u"Apply", None))
-        self.label_apply_by_time.setText(QCoreApplication.translate("MainWindow", u"Apply by time:", None))
-        self.lineedit_range_start.setText(QCoreApplication.translate("MainWindow", u"0", None))
-        self.lineedit_range_author.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter the author's name", None))
-        self.label_apply_by_index.setText(QCoreApplication.translate("MainWindow", u"Apply by Index:", None))
-        self.label_range_end.setText(QCoreApplication.translate("MainWindow", u"End:", None))
-        self.button_range_apply_index.setText(QCoreApplication.translate("MainWindow", u"Apply", None))
-        self.label_range_time_end.setText(QCoreApplication.translate("MainWindow", u"End:", None))
-        self.label_range_start.setText(QCoreApplication.translate("MainWindow", u"Start:", None))
-        self.button_range_apply_author.setText(QCoreApplication.translate("MainWindow", u"Apply", None))
-        self.lineedit_range_end.setText(QCoreApplication.translate("MainWindow", u"0", None))
-        self.label_range_time_start.setText(QCoreApplication.translate("MainWindow", u"Start:", None))
-        self.label_range_by_author.setText(QCoreApplication.translate("MainWindow", u"Apply by author:", None))
         self.text_browser_keyboard_shortcuts.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt; font-weight:700;\">Keyboard Shortcuts</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:14pt; font-weight:700;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-l"
-                        "eft:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + Q     Closes the application</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + E      Exports all current video URLs from the tree widget into a .txt file </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + T      Downloads all videos in the tree widget (same as clicking the button)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + A     Quickly enables the anonymous mode (temporarily)</span></p>\n"
-"<p style=\" margin-top:0px; margin"
-                        "-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + S     Saves Porn Fetch settings</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:16pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + X     Selects all items in the tree widget as checked</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + Z     Unchecks all items in the tree widget</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-ind"
-                        "ent:0; text-indent:0px; font-family:'Sans Serif'; font-size:16pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">   </span></p></body></html>", None))
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt; font-weight:700;\">Keyboard Shortcuts</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:14pt; font-weight:700;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+                        "indent:0px;\"><span style=\" font-size:16pt;\">CTRL + Q     Closes the application</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt;\">CTRL + E      Exports all current video URLs from the tree widget into a .txt file </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt;\">CTRL + T      Downloads all videos in the tree widget (same as clicking the button)</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt;\">CTRL + A     Quickly enables the anonymous mode (temporarily)</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt;\">CTRL + S     Saves Porn Fetch settin"
+                        "gs</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt;\">CTRL + X     Selects all items in the tree widget as checked</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt;\">CTRL + Z     Unchecks all items in the tree widget</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt;\">   </span></p></body></html>", None))
         self.button_update_acknowledged.setText(QCoreApplication.translate("MainWindow", u"OK", None))
         self.textbrowser_install_dialog.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -2250,7 +2224,7 @@ class Ui_MainWindow(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:24pt; font-weight:700;\">Installation Mode</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:16pt; text-decoration: underline; color:#0000ff;\">1) Inst</span><span style=\" font-family:'Segoe UI'; font-size:14pt; text-"
                         "decoration: underline; color:#0000ff;\">all</span></p>\n"
@@ -2261,22 +2235,21 @@ class Ui_MainWindow(object):
                         "ent:0; text-indent:0px; font-family:'Segoe UI'; font-size:12pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">Windows: C:\\Users\\&lt;user&gt;\\AppData\\Local\\pornfetch\\</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">Linux: ~/.local/share/pornfetch</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI'; font-size:9pt;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI';\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:16pt; text-decoration: underline; color:#00ff00;\">2) Portable</span></p>\n"
-"<p style=\" marg"
-                        "in-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">This means, that Porn Fetch will not be installed and in order to use and start Porn Fetch you always need to double click on the file you have downloaded. This has some benefits as the uninstallation is easier and you have more control over it, but for the average user I do not recommend this.</span></p>\n"
+"<p style=\" margin-top:0px; mar"
+                        "gin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">This means, that Porn Fetch will not be installed and in order to use and start Porn Fetch you always need to double click on the file you have downloaded. This has some benefits as the uninstallation is easier and you have more control over it, but for the average user I do not recommend this.</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI'; font-size:12pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:16pt; font-weight:700; color:#a100ff;\">Custom App name</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-ind"
-                        "ent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt; color:#ffffff;\">Down below you can enter  a custom name for Porn Fetch. You can then search with this name for Porn Fetch and Porn Fetch will not be found anymore when someone enters &quot;Porn Fetch&quot; on your PC. This can be useful if multiple persons use your PC and you don't want them to know you are using this application. It can also help if you are in public and people stare at your PC. Porn Fetch has also an option to fully hide, that it's a PornHub downloader.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><spa"
+                        "n style=\" font-family:'Segoe UI'; font-size:12pt; color:#ffffff;\">Down below you can enter  a custom name for Porn Fetch. You can then search with this name for Porn Fetch and Porn Fetch will not be found anymore when someone enters &quot;Porn Fetch&quot; on your PC. This can be useful if multiple persons use your PC and you don't want them to know you are using this application. It can also help if you are in public and people stare at your PC. Porn Fetch has also an option to fully hide, that it's a PornHub downloader.</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI'; font-size:12pt; color:#ffffff;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt; color:#ffffff;\">If you leave it empty, Porn Fetch will remain as &quot;"
-                        "Porn Fetch&quot; in your short menu.</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; color:#ffffff;\">If you leave it empty, Porn Fetch will remain as &quot;Porn Fetch&quot; in your short menu.</spa"
+                        "n></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:14pt; text-decoration: underline; color:#aa0000;\">NOTE:</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">Installation was implemented in this release and might still be experimental. If you run into any issues, please report it on my GitHub. Thank you :</span><span style=\" font-family:'Segoe UI'; font-size:9pt;\">) </span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-inden"
-                        "t:0; text-indent:0px; font-family:'Segoe UI'; font-size:9pt;\"><br /></p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">Installation was implemented in this release and might still be experimental. If you run into any issues, please report it on my GitHub. Thank you :</span><span style=\" font-family:'Segoe UI';\">) </span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI';\"><br /></p></body></html>", None))
         self.label_custom_app_name.setText(QCoreApplication.translate("MainWindow", u"Custom App Name:", None))
         self.lineedit_custom_app_name.setText("")
         self.lineedit_custom_app_name.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter your custom App Name here. Leave it empty to keep \"Porn Fetch\"", None))
@@ -2288,50 +2261,49 @@ class Ui_MainWindow(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt; color:#0019ff;\">Supported Websites:</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-rig"
-                        "ht:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt; color:#00ff08;\">Downloading:</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">- PornHub.com (supports total progress)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">- HQPorner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">- Eporner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">- XNXX.com (supports total progress)</span"
-                        "></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">- XVideos.com (supports total progress)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">- Missav.ws (and all of it's subsites, supports total progress)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">- Xhamster.com (supports total progress)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">- Spankbang.com (supports total progress)</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:"
-                        "0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt; color:#ee00ff;\">Model / Channel Downloads</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">- PornHub.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">- HQPorner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">- EPorner.com</span></p>\n"
-"<p styl"
-                        "e=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">- XNXX.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">- XVideos.com</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:12pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt; color:#ff8800;\">Searching:</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">- PornHub.com"
-                        "</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">- HQPorner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">- Xvideos.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">- Eporner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">- XNXX.com</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-"
-                        "size:12pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt; color:#ff0000;\">I am constantly working to support more websites.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt; color:#ff0000;\">If you want a specific site to be supported, just ask:<br /><br />Discord: echteralsfake</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt; color:#ff0000;\">GitHub: https://github.com/EchterAlsFake/Porn_Fetch/issues</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif';"
-                        " font-size:12pt; color:#ff0000;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:12pt;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif"
-                        "'; font-size:9pt;\"><br /></p></body></html>", None))
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt; color:#0019ff;\">Supported Websites:</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
+                        "size:16pt; color:#00ff08;\">Downloading:</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- PornHub.com (supports total progress)</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- HQPorner.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- Eporner.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- XNXX.com (supports total progress)</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- XVideos.com (supports total pro"
+                        "gress)</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- Missav.ws (and all of it's subsites, supports total progress)</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- Xhamster.com (supports total progress)</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- Spankbang.com (supports total progress)</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt; color:#ee00ff;\">Model / Channel Dow"
+                        "nloads</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- PornHub.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- HQPorner.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- EPorner.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- XNXX.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- XVideos.com</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; m"
+                        "argin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt; color:#ff8800;\">Searching:</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- PornHub.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- HQPorner.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- Xvideos.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- Eporner.com</span></p>\n"
+"<p style=\""
+                        " margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- XNXX.com</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; color:#ff0000;\">I am constantly working to support more websites.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; color:#ff0000;\">If you want a specific site to be supported, just ask:<br /><br />Discord: echteralsfake</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; color:#ff0000;\">Git"
+                        "Hub: https://github.com/EchterAlsFake/Porn_Fetch/issues</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt; color:#ff0000;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:"
+                        "0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
         self.button_donate_kofi.setText(QCoreApplication.translate("MainWindow", u"Ko-Fi", None))
         self.button_donate_already_donated.setText(QCoreApplication.translate("MainWindow", u"Already Donated", None))
         self.button_donate_paypal.setText(QCoreApplication.translate("MainWindow", u"PayPal", None))
@@ -2343,48 +2315,46 @@ class Ui_MainWindow(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#ffc800;\">y</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#cc00ff;\">o</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#ffffff;\"> </span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#37ff00;\">w</span><span style=\" font-family:'Sans Serif'; font-size:36pt"
-                        "; color:#ff00bb;\">a</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#ff0000;\">s</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#0000ff;\">s</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#00fff7;\">u</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#ff55ff;\">p</span></p>\n"
-"<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#ffffff;\">If you have a moment to read this, I'd appreciate it a lot...</span><span style=\" font-family:'Sans Serif'; font-size:9pt; color:#ffffff;\"><br /></span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; color:#ffffff;\">I have started developing Porn Fetch ~2 years ago as a fun project for lear"
-                        "ning graphical user interfaces. Over the years Porn Fetch became more professional, as my programming skills increased and more people started using it. That I reach even 1000 downloads on this was something I'd never thought was possible and now we are over 20.000 xD</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; color:#ffffff;\">Although I absolutely love what I am doing here, and unless I receive a Cease and Desist letter, will never stop it, I haven't earned much from this project except for the few people that donated me something (Thank you so much btw).</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; color:#ffffff;\">If you have a few cents left on your pocket, I'd absolutely appreciate it. I know it might not seem much but it's a thank you and "
-                        "it keeps me motivated. Also since I still go to school small amounts of money are much more in relation to me than it is for someone who already has a job.</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; color:#ffffff;\">But even if you don't donate, please don't feel bad. I don't expect it from you. I just kindly ask, but it's absolutely okay if you don't want to.</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt; color:#0000ff;\">Donation options</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://paypal.me/EchterAlsFake\"><span style=\" font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#27bf73;\">1) PayPal (ht"
-                        "tps://paypal.me/EchterAlsFake)</span></a></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://paypal.me/EchterAlsFake\"><span style=\" font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#aa00ff;\">2) K</span></a><a href=\"https://ko-fi.com/EchterAlsFake\"><span style=\" font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#aa00ff;\">o-Fi (https://ko-fi.com/EchterAlsFake)</span></a></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt;\">3) Crypto (XMR / Monero) : </span><span style=\" font-family:'ui-monospace','SFMono-Regular','SF Mono','Menlo','Consolas','Liberation Mono','monospace'; font-size:9pt; color:#ff7700; background-color:rgba(101,108,118,0.2);\">42XwGZYbSxpMvhn9eeP4DwMwZV91tQgAm3UQr6Zwb2wzBf5HcuZCHrsVxa4aV2jhP4gLHsWWELxSoNjf"
-                        "nkt4rMfDDwXy9jR</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt; color:#00ffb3;\">[This message won't be shown again, except if you update to a new version]</span></p></body></html>", None))
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:36pt; color:#ffc800;\">y</span><span style=\" font-size:36pt; color:#cc00ff;\">o</span><span style=\" font-size:36pt; color:#ffffff;\"> </span><span style=\" font-size:36pt; color:#37ff00;\">w</span><span style=\" font-size:36pt; color:#ff00bb;\">a</span><span style=\" font-size:36pt; color:#ff0000;\">s</span><span style=\" font-size:36pt; color:#0000ff;\""
+                        ">s</span><span style=\" font-size:36pt; color:#00fff7;\">u</span><span style=\" font-size:36pt; color:#ff55ff;\">p</span></p>\n"
+"<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt; text-decoration: underline; color:#ffffff;\">If you have a moment to read this, I'd appreciate it a lot...</span><span style=\" color:#ffffff;\"><br /></span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:11pt; color:#ffffff;\">I have started developing Porn Fetch ~2 years ago as a fun project for learning graphical user interfaces. Over the years Porn Fetch became more professional, as my programming skills increased and more people started using it. That I reach even 1000 downloads on this was something I'd never thought was possible and now we are over 20.000 xD</span></p>\n"
+"<p style=\" margin-top:12px"
+                        "; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:11pt; color:#ffffff;\">Although I absolutely love what I am doing here, and unless I receive a Cease and Desist letter, will never stop it, I haven't earned much from this project except for the few people that donated me something (Thank you so much btw).</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:11pt; color:#ffffff;\">If you have a few cents left on your pocket, I'd absolutely appreciate it. I know it might not seem much but it's a thank you and it keeps me motivated. Also since I still go to school small amounts of money are much more in relation to me than it is for someone who already has a job.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:11pt; color:"
+                        "#ffffff;\">But even if you don't donate, please don't feel bad. I don't expect it from you. I just kindly ask, but it's absolutely okay if you don't want to.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt; color:#0000ff;\">Donation options</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://paypal.me/EchterAlsFake\"><span style=\" font-size:14pt; text-decoration: underline; color:#27bf73;\">1) PayPal (https://paypal.me/EchterAlsFake)</span></a></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://paypal.me/EchterAlsFake\"><span style=\" font-size:14pt; text-decoration: underline; color:#aa00ff;\">2) K</span></a><a href=\"https://ko-fi.com/EchterAlsFake\"><span style=\" font-size:14pt; text-decor"
+                        "ation: underline; color:#aa00ff;\">o-Fi (https://ko-fi.com/EchterAlsFake)</span></a></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt;\">3) Crypto (XMR / Monero) : </span><span style=\" font-family:'ui-monospace','SFMono-Regular','SF Mono','Menlo','Consolas','Liberation Mono','monospace'; color:#ff7700; background-color:rgba(101,108,118,0.2);\">42XwGZYbSxpMvhn9eeP4DwMwZV91tQgAm3UQr6Zwb2wzBf5HcuZCHrsVxa4aV2jhP4gLHsWWELxSoNjfnkt4rMfDDwXy9jR</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; color:#00ffb3;\">[This message won't be shown again, except if you update to a new version]</span></p></body></html>", None))
         self.textbrowser_disclaimer.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">DISCLAIMER</span></h3>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">Porn Fetch</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> is free software licens"
-                        "ed under the GNU General Public License v3.0. You are free to use, modify, and redistribute this software under the terms of that license.</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Please be aware that </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">Porn Fetch may interact with websites in ways that violate their Terms of Service.</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> Additionally, downloading copyright-protected content without proper authorization may be illegal in many jurisdictions, including under the DMCA (Digital Millennium Copyright Act).</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">While some countries or regions may allow downloading content"
-                        " for strictly </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">personal, non-commercial use</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\">, I </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">strongly discourage</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> using Porn Fetch to download, share, or redistribute content without appropriate rights or permissions. Always ensure you comply with your local laws and the terms of any website you access.</span></p>\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">IMPORTANT NOTE</span></h3>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">I </span><span style=\" font-family:'Sans Serif'"
-                        "; font-size:9pt; font-weight:700;\">strongly recommend</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> that you do </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">not</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> use this software for:</span></p>\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">DISCLAIMER</span></h3>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Porn Fetch</span> is free software licensed under the GNU General Public License v3.0. You are free to use, modify, and redistribute this software under the terms o"
+                        "f that license.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Please be aware that <span style=\" font-weight:700;\">Porn Fetch may interact with websites in ways that violate their Terms of Service.</span> Additionally, downloading copyright-protected content without proper authorization may be illegal in many jurisdictions, including under the DMCA (Digital Millennium Copyright Act).</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">While some countries or regions may allow downloading content for strictly <span style=\" font-weight:700;\">personal, non-commercial use</span>, I <span style=\" font-weight:700;\">strongly discourage</span> using Porn Fetch to download, share, or redistribute content without appropriate rights or permissions. Always ensure you comply with your local laws and the terms of any website you access.</p>\n"
+"<h3 style=\""
+                        " margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">IMPORTANT NOTE</span></h3>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I <span style=\" font-weight:700;\">strongly recommend</span> that you do <span style=\" font-weight:700;\">not</span> use this software for:</p>\n"
 "<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\">\n"
-"<li style=\" font-family:'Sans Serif'; font-size:9pt;\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Unauthorized redistribution of content</li>\n"
-"<li style=\" font-family:'Sans Serif'; font-size:9pt;\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Commercial use of downloaded materials</li>\n"
-"<li style=\" font-family:'Sans Serif'; font-size:9pt;\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-bl"
-                        "ock-indent:0; text-indent:0px;\">Any activity that could result in legal liability for yourself or others</li></ul>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Although the GPL license grants you broad rights, </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">continued misuse</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> may jeopardize the development and availability of this project. Please respect the intent behind this tool and use it responsibly.</span></p>\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">LIABILITY DISCLAIMER</span></h3>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><spa"
-                        "n style=\" font-family:'Sans Serif'; font-size:9pt;\">This software is provided </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">without any warranty</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> as described in the GPLv3. I am </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">not liable</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> for any damages, legal consequences, or misuse resulting from your use of this software.<br />You are solely responsible for ensuring your actions are lawful and ethical. </span></p></body></html>", None))
+"<li style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Unauthorized redistribution of content</li>\n"
+"<li style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Commercial use of downloaded materials</li>\n"
+"<li style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent"
+                        ":0; text-indent:0px;\">Any activity that could result in legal liability for yourself or others</li></ul>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Although the GPL license grants you broad rights, <span style=\" font-weight:700;\">continued misuse</span> may jeopardize the development and availability of this project. Please respect the intent behind this tool and use it responsibly.</p>\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">LIABILITY DISCLAIMER</span></h3>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This software is provided <span style=\" font-weight:700;\">without any warranty</span> as described in the GPLv3. I am <span style=\" font-weight:700;\">not liable</span> for any damages, legal consequences, "
+                        "or misuse resulting from your use of this software.<br />You are solely responsible for ensuring your actions are lawful and ethical. </p></body></html>", None))
         self.button_disclaimer_accept.setText(QCoreApplication.translate("MainWindow", u"Accept", None))
         self.textbrowser_data_collection.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -2392,33 +2362,34 @@ class Ui_MainWindow(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">Data Collection &amp; Privacy Information</span></h2>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">This application now uses my own server for update checking and error reporting, ins"
-                        "tead of relying on GitHub. This gives me greater control over the process and the data transmitted. However, my server is </span><span style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:700;\">IPv6-only</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\">. This means that only about 50% of internet users will be able to connect. </span></p>\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">About the Server</span></h3>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">The server is a small, older Acer Swift 3 laptop running 24/7 in my room. The full source code for the server is publicly available here:<br /></span><a href=\"https://github.com/EchterAlsFake/Server\"><span style=\" font-family:'Sans Seri"
-                        "f'; font-size:12pt; text-decoration: underline; color:#f700ff;\">https://github.com/EchterAlsFake/Server</span></a><span style=\" font-family:'Sans Serif'; font-size:12pt;\"> </span></p>\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt; font-weight:700;\">Data Collected via Error Reports</span></h3>\n"
+"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:x-large; font-weight:700;\">Data Collection &amp; Privacy Information</span></h2>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">This application now uses my own server for update checking and error reporting, instead of relying on GitHub. This gives me greater"
+                        " control over the process and the data transmitted. However, my server is </span><span style=\" font-size:12pt; font-weight:700;\">IPv6-only</span><span style=\" font-size:12pt;\">. This means that only about 50% of internet users will be able to connect. </span></p>\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">About the Server</span></h3>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">The server is a small, older Acer Swift 3 laptop running 24/7 in my room. The full source code for the server is publicly available here:<br /></span><a href=\"https://github.com/EchterAlsFake/Server\"><span style=\" font-size:12pt; text-decoration: underline; color:#f700ff;\">https://github.com/EchterAlsFake/Server</span></a><span style=\" font-size:12pt;\"> </span></p>\n"
+"<h3 style=\""
+                        " margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt; font-weight:700;\">Data Collected via Error Reports</span></h3>\n"
 "<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\">\n"
-"<li style=\" font-family:'Sans Serif'; font-size:9pt;\" style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">The version of Porn Fetch you are using</span></li>\n"
-"<li style=\" font-family:'Sans Serif'; font-size:12pt;\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Your operating system (e.g., Wind"
-                        "ows, Linux, or macOS)</li>\n"
-"<li style=\" font-family:'Sans Serif'; font-size:12pt;\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The current date and time</li>\n"
-"<li style=\" font-family:'Sans Serif'; font-size:12pt;\" style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The error details (full Python traceback)</li></ul>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:700;\">Important:</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\"> The Python traceback may, in some cases, include incidental personal information \u2014 for example, your system username if it appears in a file path. No other personal data is intentionally collected. </span></p>\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-"
-                        "left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">Data Storage &amp; Security</span></h3>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">Error reports are stored in plain text on my server. The server\u2019s storage device is encrypted with LUKS and secured with a strong password (40+ characters). </span><span style=\" font-family:'Sans Serif'; font-size:12pt; color:#ff0000;\">Your </span><span style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:700; color:#ff0000;\">IP address is never logged, stored, or displayed</span><span style=\" font-family:'Sans Serif'; font-size:12pt; color:#ff0000;\">. </span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; "
-                        "font-size:9pt; font-weight:700;\">Optional Participation</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">Whether you enable error reporting or not will have no impact on the application's functionality. It simply helps me identify and fix issues faster. You can also manually check for updates on GitHub, although most users do not do this. </span></p>\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt; font-weight:700;\">IPv6 Connectivity Check</span></h3>\n"
-"<p style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">To see if you have IPv6 connectivity, visit:</span><span style=\" font-family:'Sans Serif'; font-"
-                        "size:14pt;\"><br /></span><a href=\"https://echteralsfake.duckdns.org/ping\"><span style=\" font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#1aff00;\">https://echteralsfake.duckdns.org/ping</span></a><span style=\" font-family:'Sans Serif'; font-size:9pt;\"><br /></span><span style=\" font-family:'Sans Serif'; font-size:12pt;\">If you see a white page with </span><span style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:700;\">Success</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\">, you have IPv6. If not, you do not. </span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">You can also verify your IP addresses by visiting: </span><a href=\"https://ipleak.net\"><span style=\" font-family:'Sans Serif'; font-size:12pt; text-decoration: underline; color:#ffff00;\">https://ipleak.net</span></a><span style=\" font-family:"
-                        "'Sans Serif'; font-size:12pt;\"><br />Example formats:<br />IPv4: </span><span style=\" font-family:'monospace'; font-size:12pt;\">135.215.32.64</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\"><br />IPv6: </span><span style=\" font-family:'monospace'; font-size:12pt;\">2a02:810a:186:b400::5c51</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\"> </span></p></body></html>", None))
+"<li style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">The version of Porn Fetch you are using</span></li>\n"
+"<li style=\" font-size:12pt;\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Your operating system (e.g., Windows, Linux, or macOS)</li>\n"
+"<li style=\" font-size:12pt;\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The current date and time</li>\n"
+"<li style=\" font-size:12pt;\" style=\" margin-top:0px; margin-bottom:12px; margin-left:0px;"
+                        " margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The error details (full Python traceback)</li></ul>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:700;\">Important:</span><span style=\" font-size:12pt;\"> The Python traceback may, in some cases, include incidental personal information \u2014 for example, your system username if it appears in a file path. No other personal data is intentionally collected. </span></p>\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">Data Storage &amp; Security</span></h3>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">Error reports are stored in plain text on my server. The server\u2019s storage device is encr"
+                        "ypted with LUKS and secured with a strong password (40+ characters). </span><span style=\" font-size:12pt; color:#ff0000;\">Your </span><span style=\" font-size:12pt; font-weight:700; color:#ff0000;\">IP address is never logged, stored, or displayed</span><span style=\" font-size:12pt; color:#ff0000;\">. </span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Optional Participation</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">Whether you enable error reporting or not will have no impact on the application's functionality. It simply helps me identify and fix issues faster. You can also manually check for updates on GitHub, although most users do not do this. </span></p>\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-inden"
+                        "t:0; text-indent:0px;\"><span style=\" font-size:14pt; font-weight:700;\">IPv6 Connectivity Check</span></h3>\n"
+"<p style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">To see if you have IPv6 connectivity, visit:</span><span style=\" font-size:14pt;\"><br /></span><a href=\"https://echteralsfake.duckdns.org/ping\"><span style=\" font-size:14pt; text-decoration: underline; color:#1aff00;\">https://echteralsfake.duckdns.org/ping</span></a><br /><span style=\" font-size:12pt;\">If you see a white page with </span><span style=\" font-size:12pt; font-weight:700;\">Success</span><span style=\" font-size:12pt;\">, you have IPv6. If not, you do not. </span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">You can also verify your IP addresses by visiting: </span><a href=\"https://ipleak.net\"><span style="
+                        "\" font-size:12pt; text-decoration: underline; color:#ffff00;\">https://ipleak.net</span></a><span style=\" font-size:12pt;\"><br />Example formats:<br />IPv4: </span><span style=\" font-family:'monospace'; font-size:12pt;\">135.215.32.64</span><span style=\" font-size:12pt;\"><br />IPv6: </span><span style=\" font-family:'monospace'; font-size:12pt;\">2a02:810a:186:b400::5c51</span><span style=\" font-size:12pt;\"> </span></p></body></html>", None))
         self.button_server_enable_logging.setText(QCoreApplication.translate("MainWindow", u"I have IPv6 :) (and want to enable it)", None))
         self.button_server_disable_logging.setText(QCoreApplication.translate("MainWindow", u"I don't have IPv6 / I don't want to enable this feature", None))
+        self.main_label_progressbar_total.setText(QCoreApplication.translate("MainWindow", u"Total:", None))
+        self.main_label_progressbar_converting.setText(QCoreApplication.translate("MainWindow", u"Converting:", None))
     # retranslateUi
 
