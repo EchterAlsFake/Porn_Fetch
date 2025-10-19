@@ -1561,6 +1561,9 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
             playlist = shared_functions.ph_client.get_playlist(url)
             videos = playlist.sample()
 
+        elif "xvideos" in url:
+            videos = shared_functions.xv_client.get_playlist(url=url, pages=400)
+
         elif shared_functions.youporn_pattern.match(url):
             videos = shared_functions.yp_client.get_collection(url).videos()
 
