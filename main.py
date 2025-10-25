@@ -31,9 +31,11 @@ except Exception:
 import time
 import shutil
 import os.path
+import logging
 import argparse
 import markdown
 import traceback
+import src.frontend.UI.resources
 import src.backend.shared_functions as shared_functions
 
 from io import TextIOWrapper
@@ -44,7 +46,6 @@ from src.frontend.UI.ssl_warning import *
 from src.frontend.UI.ui_form_main_window import Ui_MainWindow
 from src.frontend.UI.ui_form_android import Ui_PornFetchAndroid
 from src.frontend.UI.theme import *
-from src.backend.one_time_functions import *
 from src.backend.config import __version__, __build__
 from src.frontend.UI.donation_nag import DonationNag
 from src.backend.batch_feature import Batch
@@ -68,6 +69,8 @@ from xvideos_api.modules.errors import (VideoUnavailable as VideoUnavailable_XV)
 from eporner_api.modules.errors import NotAvailable as NotAvailable_EP, VideoDisabled as VideoDisabled_EP
 from youporn_api.modules.errors import VideoUnavailable as VideoUnavailable_YP, RegionBlocked as RegionBlocked_YP
 from phub.errors import VideoError as VideoError_PH
+from eporner_api.modules.locals import Category as ep_Category
+
 
 FORCE_PORTABLE_RUN = False
 total_segments = 0
@@ -80,7 +83,7 @@ core_conf = shared_functions.config
 stop_flag = Event()
 _download_lock = Lock()
 video_data = VideoData()
-logger = setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=shared_functions.http_log_ip,
+logger = shared_functions.setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=shared_functions.http_log_ip,
                       http_port=shared_functions.http_log_port)
 
 
@@ -89,7 +92,7 @@ class InstallThread(QRunnable):
         super(InstallThread, self).__init__()
         self.app_name = app_name
         self.signals = Signals()
-        self.logger = setup_logger(name="Porn Fetch - [InstallThread]", log_file="PornFetch.log", level=logging.DEBUG,
+        self.logger = shared_functions.setup_logger(name="Porn Fetch - [InstallThread]", log_file="PornFetch.log", level=logging.DEBUG,
                                    http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
 
     def run(self):
@@ -231,7 +234,7 @@ class InternetCheck(QRunnable):
 
         self.website_results = {}
         self.signals = Signals()
-        self.logger = setup_logger(name="Porn Fetch - [InternetCheck]", log_file="PornFetch.log", level=logging.DEBUG,
+        self.logger = shared_functions.setup_logger(name="Porn Fetch - [InternetCheck]", log_file="PornFetch.log", level=logging.DEBUG,
                                    http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
 
     def run(self):
@@ -271,7 +274,7 @@ class CheckUpdates(QRunnable):
     def __init__(self):
         super(CheckUpdates, self).__init__()
         self.signals = Signals()
-        self.logger = setup_logger(name="Porn Fetch - [CheckUpdates]", log_file="PornFetch.log", level=logging.DEBUG,
+        self.logger = shared_functions.setup_logger(name="Porn Fetch - [CheckUpdates]", log_file="PornFetch.log", level=logging.DEBUG,
                                    http_port=shared_functions.http_log_port, http_ip=shared_functions.http_log_ip)
 
     def run(self):
@@ -314,7 +317,7 @@ class AddToTreeWidget(QRunnable):
         self.result_limit = self.consistent_data.get("result_limit")
         self.supress_errors = self.consistent_data.get("supress_errors")
         self.activate_logging = self.consistent_data.get("activate_logging")
-        self.logger = setup_logger(name="Porn Fetch - [AddToTreeWidget]", log_file="PornFetch.log", level=logging.DEBUG,
+        self.logger = shared_functions.setup_logger(name="Porn Fetch - [AddToTreeWidget]", log_file="PornFetch.log", level=logging.DEBUG,
                                    http_port=shared_functions.http_log_port, http_ip=shared_functions.http_log_ip)
 
     def process_video(self, video, index):
@@ -350,7 +353,6 @@ class AddToTreeWidget(QRunnable):
                 else:
                     output_path = os.path.join(self.output_path, stripped_title + ".mp4")
 
-                stripped_title = shared_functions.core.strip_title(title=data.get("title"))
                 # Emit the loaded signal with all the required information
 
                 data.update(
@@ -489,7 +491,7 @@ class DownloadThread(QRunnable):
         self.quality = self.consistent_data.get("quality")
         data_object: dict = video_data.data_objects[self.video_id]
         self.output_path = data_object.get("output_path")
-        self.logger = setup_logger(name="Porn Fetch - [DownloadThread]", log_file="PornFetch.log", level=logging.DEBUG,
+        self.logger = shared_functions.setup_logger(name="Porn Fetch - [DownloadThread]", log_file="PornFetch.log", level=logging.DEBUG,
                                    http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
 
         self.download_mode = self.consistent_data.get("download_mode")
@@ -585,8 +587,10 @@ class DownloadThread(QRunnable):
             elif isinstance(self.video, shared_functions.ph_Video):  # Assuming 'Video' is the class for Pornhub
                 video_source = "general"
                 self.logger.debug("Starting the Download!")
-                self.video.download(downloader=str(self.download_mode), path=self.output_path, quality=self.quality, remux=remux, display_remux=self.callback_remux,
-                                    display=lambda pos, total: self.generic_callback(pos, total))
+                self.video.download(downloader=str(self.download_mode), path=self.output_path,
+                                    quality=self.quality, remux=remux, display_remux=self.callback_remux,
+                                    display=lambda pos, total: self.generic_callback(pos, total),
+                                    )
 
             else:
                 self.video.download(downloader=str(self.download_mode), path=self.output_path, callback_remux=self.callback_remux, no_title=True,
@@ -622,7 +626,7 @@ class QTreeWidgetDownloadThread(QRunnable):
         self.download_mode = self.consistent_data.get("download_mode")
         self.quality = self.consistent_data.get("quality")
         self.semaphore = semaphore
-        self.logger = setup_logger(name="Porn Fetch - [QTreeWidgetDownloadThread]", log_file="PornFetch.log",
+        self.logger = shared_functions.setup_logger(name="Porn Fetch - [QTreeWidgetDownloadThread]", log_file="PornFetch.log",
                                    level=logging.DEBUG, http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
 
     def run(self):
@@ -678,7 +682,7 @@ class PornFetch(QMainWindow):
             self.ui = Ui_MainWindow()
 
         self.ui.setupUi(self)
-        self.logger = setup_logger(name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG,
+        self.logger = shared_functions.setup_logger(name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG,
                                    http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
 
         self.last_index = 0  # Keeps track of the last index of videos added to the tree widget
@@ -831,7 +835,7 @@ class PornFetch(QMainWindow):
             self.ui.main_button_switch_tools,
             self.ui.main_button_switch_settings,
             self.ui.main_button_switch_credits,
-            self.ui.main_button_switch_batch,
+            #self.ui.main_button_switch_batch, (Not implemented yet)
             self.ui.main_button_view_progress_bars,
         ]
         group_menu_bar = QButtonGroup(self)
@@ -997,7 +1001,7 @@ class PornFetch(QMainWindow):
         self.ui.main_button_switch_account.clicked.connect(self.switch_to_login)
         self.ui.main_button_switch_supported_websites.clicked.connect(self.switch_to_supported_sites)
         self.ui.main_button_view_progress_bars.clicked.connect(self.switch_to_progressbars)
-        self.ui.main_button_switch_batch.clicked.connect(self.switch_to_batch)
+        #self.ui.main_button_switch_batch.clicked.connect(self.switch_to_batch) (Not implemented yet)
 
         # Video Download Button Connections
         self.ui.main_button_tree_download.clicked.connect(self.download_tree_widget)
@@ -1173,9 +1177,17 @@ class PornFetch(QMainWindow):
         video_data.consistent_data.update({"network_delay": network_delay})
         self.ui.settings_spinbox_performance_network_delay.setValue(network_delay)
 
-        workers = int(conf.get("Performance", "workers"))
-        video_data.consistent_data.update({"workers": workers})
-        self.ui.settings_spinbox_performance_maximal_workers.setValue(workers)
+        videos_concurrency = int(conf.get("Performance", "videos_concurrency"))
+        video_data.consistent_data.update({"videos_concurrency": videos_concurrency})
+        self.ui.settings_spinbox_performance_videos_concurrency.setValue(videos_concurrency)
+
+        pages_concurrency = int(conf.get("Performance", "pages_concurrency"))
+        video_data.consistent_data.update({"pages_concurrency": pages_concurrency})
+        self.ui.settings_spinbox_performance_pages_concurrency.setValue(pages_concurrency)
+
+        download_workers = int(conf.get("Performance", "download_workers"))
+        video_data.consistent_data.update({"download_workers": download_workers})
+        self.ui.settings_spinbox_performance_download_workers.setValue(download_workers)
 
         timeout = int(conf.get("Performance", "timeout"))
         video_data.consistent_data.update({"timeout": timeout})
@@ -1231,6 +1243,9 @@ class PornFetch(QMainWindow):
         core_conf.max_bandwidth_mb = speed_limit
         core_conf.raise_bot_protection = False
         core_conf.request_delay = network_delay
+        core_conf.videos_concurrency = videos_concurrency
+        core_conf.pages_concurrency = pages_concurrency
+        core_conf.max_workers_download = download_workers
         shared_functions.refresh_clients()
         shared_functions.enable_logging()
 
@@ -1247,7 +1262,7 @@ class PornFetch(QMainWindow):
         _model_videos = self.ui.settings_video_combobox_model_videos.currentIndex()
         result_limit = int(self.ui.settings_spinbox_videos_result_limit.value())
         output_path = str(self.ui.settings_lineedit_videos_output_path.text())
-        video_id_as_filename = self.ui.settings_checkbox_videos_track_downloaded_videos.isChecked()
+        video_id_as_filename = self.ui.settings_checkbox_videos_use_video_id_as_filename.isChecked()
         write_metadata = self.ui.settings_checkbox_videos_write_metadata.isChecked()
         skip_existing_files = self.ui.settings_checkbox_videos_skip_existing_files.isChecked()
         track_downloaded_videos = self.ui.settings_checkbox_videos_track_downloaded_videos.isChecked()
@@ -1268,7 +1283,9 @@ class PornFetch(QMainWindow):
         _download_mode_idx = self.ui.settings_performance_combobox_download_mode.currentIndex()
         simultaneous_downloads = int(self.ui.settings_spinbox_performance_simultaneous_downloads.value())
         network_delay = int(self.ui.settings_spinbox_performance_network_delay.value())
-        maximal_workers = int(self.ui.settings_spinbox_performance_maximal_workers.value())
+        videos_concurrency = int(self.ui.settings_spinbox_performance_videos_concurrency.value())
+        pages_concurrency = int(self.ui.settings_spinbox_performance_pages_concurrency.value())
+        download_workers = int(self.ui.settings_spinbox_performance_download_workers.value())
         maximal_timeout = int(self.ui.settings_spinbox_performance_maximal_timeout.value())
         maximal_retries = int(self.ui.settings_spinbox_performance_maximal_retries.value())
         speed_limit = float(self.ui.settings_doublespinbox_performance_speed_limit.value())
@@ -1276,7 +1293,9 @@ class PornFetch(QMainWindow):
         conf.set("Performance", "download_mode", str(_download_mode_idx))
         conf.set("Performance", "semaphore", str(simultaneous_downloads))
         conf.set("Performance", "network_delay", str(network_delay))
-        conf.set("Performance", "workers", str(maximal_workers))
+        conf.set("Performance", "videos_concurrency", str(videos_concurrency))
+        conf.set("Performance", "pages_concurrency", str(pages_concurrency))
+        conf.set("Performance", "download_workers", str(download_workers))
         conf.set("Performance", "maximal_timeout", str(maximal_timeout))
         conf.set("Performance", "maximal_retries", str(maximal_retries))
         conf.set("Performance", "speed_limit", str(speed_limit))

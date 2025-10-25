@@ -10,18 +10,24 @@
 - youporn.com (3.7) (DEV)
 
 
+
 > Porn Fetch was built for PornHub in the first place, but I decided to support as many websites as possible
 
 ### Here's a list of all features and if the website (API) supports it
 
-
-| Website    | Downloading | Searching | Account Login | Total Progress | Model |
-|:-----------|:-----------:|:---------:|:-------------:|:--------------:|:-----:|
-| PornHub    |     Yes     |    Yes    |      Yes      |      Yes       |  Yes  |
-| HQporner   |     Yes     |    Yes    |      No       |       No       |  Yes  |
-| Eporner    |     Yes     |    Yes    |      No       |       No       |  Yes  |
-| xnxx       |     Yes     |    Yes    |      No       |      Yes       |  Yes  |
-| xvideos    |     Yes     |    Yes    |      No       |      Yes       |  Yes  |
-| missav     |     Yes     |    Yes    |      No       |      Yes       |  No   | 
-| Xhamster   |     Yes     |    Yes    |      No       |      Yes       |  Yes  | 
-| Spankbang  |     Yes     |    Yes    |      No       |      Yes       |  Yes  |
+| Category            | Websites                                                                                           |
+|:--------------------|:---------------------------------------------------------------------------------------------------|
+| Videos              | PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang, YouPorn                   |
+| Searching           | PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang                            |
+| Models              | PornHub, HQporner, xnxx                                                                            |
+| Pornstars           | PornHub, Eporner, xvideos, Xhamster, Spankbang                                                     |
+| Channels            | PornHub, Xhamster, Spankbang                                                                       |
+| Creator / Users     | Xhamster (Creator), Spankbang (Creator), xnxx (Users)                                              |
+| Playlists           | PornHub, xvideos                                                                                   |
+| Downloading         | xvideos                                                                                            |
+| Shorts              | Xhamster                                                                                           |
+| Account Login       | PornHub                                                                                            |
+| Videos by Category  | HQporner, Eporner                                                                                  |
+| Random              | HQporner                                                                                           |
+| Brazzers only       | HQporner                                                                                           |
+| Top Porn            | HQporner                                                                                           |

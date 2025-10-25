@@ -141,11 +141,6 @@ class Ui_MainWindow(object):
 
         self.main_horizontallayout_menu_buttons.addWidget(self.main_button_view_progress_bars)
 
-        self.main_button_switch_batch = QPushButton(self.centralwidget)
-        self.main_button_switch_batch.setObjectName(u"main_button_switch_batch")
-
-        self.main_horizontallayout_menu_buttons.addWidget(self.main_button_switch_batch)
-
         self.main_button_switch_supported_websites = QPushButton(self.centralwidget)
         self.main_button_switch_supported_websites.setObjectName(u"main_button_switch_supported_websites")
         sizePolicy.setHeightForWidth(self.main_button_switch_supported_websites.sizePolicy().hasHeightForWidth())
@@ -518,7 +513,7 @@ class Ui_MainWindow(object):
         self.scrollArea_5.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 596, 176))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 503, 188))
         self.gridLayout_8 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_8.setSpacing(0)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
@@ -793,7 +788,7 @@ class Ui_MainWindow(object):
         self.main_scrollarea_treewidget.setWidgetResizable(True)
         self.main_scrollarea_treewidget_content = QWidget()
         self.main_scrollarea_treewidget_content.setObjectName(u"main_scrollarea_treewidget_content")
-        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 1142, 430))
+        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 1142, 424))
         sizePolicy15 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
         sizePolicy15.setHorizontalStretch(0)
         sizePolicy15.setVerticalStretch(0)
@@ -903,7 +898,7 @@ class Ui_MainWindow(object):
         self.settings_scrollarea.setWidgetResizable(True)
         self.settings_scrollarea_widget_contents = QWidget()
         self.settings_scrollarea_widget_contents.setObjectName(u"settings_scrollarea_widget_contents")
-        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 612, 481))
+        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 1144, 576))
         self.gridLayout_19 = QGridLayout(self.settings_scrollarea_widget_contents)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.gridLayout_19.setContentsMargins(0, 0, 0, 0)
@@ -1070,46 +1065,35 @@ class Ui_MainWindow(object):
         self.gridLayout_26.setContentsMargins(0, 0, 0, 0)
         self.settings_gridlayout_performance = QGridLayout()
         self.settings_gridlayout_performance.setObjectName(u"settings_gridlayout_performance")
-        self.settings_label_performance_maximal_workers = QLabel(self.page_performance)
-        self.settings_label_performance_maximal_workers.setObjectName(u"settings_label_performance_maximal_workers")
+        self.settings_spinbox_performance_processing_delay = QSpinBox(self.page_performance)
+        self.settings_spinbox_performance_processing_delay.setObjectName(u"settings_spinbox_performance_processing_delay")
+        self.settings_spinbox_performance_processing_delay.setMinimum(1)
+        self.settings_spinbox_performance_processing_delay.setMaximum(500)
+        self.settings_spinbox_performance_processing_delay.setValue(1)
 
-        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_maximal_workers, 0, 2, 1, 1)
+        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_processing_delay, 5, 3, 1, 1)
 
-        self.settings_label_performance_speed_limit = QLabel(self.page_performance)
-        self.settings_label_performance_speed_limit.setObjectName(u"settings_label_performance_speed_limit")
+        self.settings_label_performance_videos_concurrency = QLabel(self.page_performance)
+        self.settings_label_performance_videos_concurrency.setObjectName(u"settings_label_performance_videos_concurrency")
 
-        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_speed_limit, 6, 0, 1, 1)
+        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_videos_concurrency, 7, 2, 1, 1)
 
-        self.settings_label_performance_download_mode = QLabel(self.page_performance)
-        self.settings_label_performance_download_mode.setObjectName(u"settings_label_performance_download_mode")
-        sizePolicy10.setHeightForWidth(self.settings_label_performance_download_mode.sizePolicy().hasHeightForWidth())
-        self.settings_label_performance_download_mode.setSizePolicy(sizePolicy10)
+        self.settings_label_performance_simultaneous_download = QLabel(self.page_performance)
+        self.settings_label_performance_simultaneous_download.setObjectName(u"settings_label_performance_simultaneous_download")
 
-        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_download_mode, 0, 0, 1, 1)
+        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_simultaneous_download, 2, 0, 1, 1)
+
+        self.settings_label_performance_processing_delay = QLabel(self.page_performance)
+        self.settings_label_performance_processing_delay.setObjectName(u"settings_label_performance_processing_delay")
+
+        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_processing_delay, 5, 2, 1, 1)
 
         self.settings_spinbox_performance_maximal_timeout = QSpinBox(self.page_performance)
         self.settings_spinbox_performance_maximal_timeout.setObjectName(u"settings_spinbox_performance_maximal_timeout")
         self.settings_spinbox_performance_maximal_timeout.setMinimum(5)
         self.settings_spinbox_performance_maximal_timeout.setMaximum(5000)
 
-        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_maximal_timeout, 4, 1, 1, 1)
-
-        self.settings_label_performance_maximal_timeout = QLabel(self.page_performance)
-        self.settings_label_performance_maximal_timeout.setObjectName(u"settings_label_performance_maximal_timeout")
-
-        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_maximal_timeout, 4, 0, 1, 1)
-
-        self.settings_doublespinbox_performance_speed_limit = QDoubleSpinBox(self.page_performance)
-        self.settings_doublespinbox_performance_speed_limit.setObjectName(u"settings_doublespinbox_performance_speed_limit")
-
-        self.settings_gridlayout_performance.addWidget(self.settings_doublespinbox_performance_speed_limit, 6, 1, 1, 1)
-
-        self.settings_spinbox_performance_simultaneous_downloads = QSpinBox(self.page_performance)
-        self.settings_spinbox_performance_simultaneous_downloads.setObjectName(u"settings_spinbox_performance_simultaneous_downloads")
-        self.settings_spinbox_performance_simultaneous_downloads.setMinimum(1)
-        self.settings_spinbox_performance_simultaneous_downloads.setMaximum(5000)
-
-        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_simultaneous_downloads, 1, 1, 1, 1)
+        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_maximal_timeout, 5, 1, 1, 1)
 
         self.settings_performance_combobox_download_mode = QComboBox(self.page_performance)
         self.settings_performance_combobox_download_mode.addItem("")
@@ -1120,54 +1104,86 @@ class Ui_MainWindow(object):
 
         self.settings_gridlayout_performance.addWidget(self.settings_performance_combobox_download_mode, 0, 1, 1, 1)
 
-        self.settings_label_performance_simultaneous_download = QLabel(self.page_performance)
-        self.settings_label_performance_simultaneous_download.setObjectName(u"settings_label_performance_simultaneous_download")
+        self.settings_label_performance_speed_limit = QLabel(self.page_performance)
+        self.settings_label_performance_speed_limit.setObjectName(u"settings_label_performance_speed_limit")
 
-        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_simultaneous_download, 1, 0, 1, 1)
+        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_speed_limit, 7, 0, 1, 1)
 
-        self.settings_spinbox_performance_maximal_workers = QSpinBox(self.page_performance)
-        self.settings_spinbox_performance_maximal_workers.setObjectName(u"settings_spinbox_performance_maximal_workers")
-        self.settings_spinbox_performance_maximal_workers.setMinimum(1)
-        self.settings_spinbox_performance_maximal_workers.setMaximum(5000)
+        self.settings_label_performance_download_mode = QLabel(self.page_performance)
+        self.settings_label_performance_download_mode.setObjectName(u"settings_label_performance_download_mode")
+        sizePolicy10.setHeightForWidth(self.settings_label_performance_download_mode.sizePolicy().hasHeightForWidth())
+        self.settings_label_performance_download_mode.setSizePolicy(sizePolicy10)
 
-        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_maximal_workers, 0, 3, 1, 1)
+        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_download_mode, 0, 0, 1, 1)
 
-        self.settings_label_performance_network_delay = QLabel(self.page_performance)
-        self.settings_label_performance_network_delay.setObjectName(u"settings_label_performance_network_delay")
+        self.settings_spinbox_performance_simultaneous_downloads = QSpinBox(self.page_performance)
+        self.settings_spinbox_performance_simultaneous_downloads.setObjectName(u"settings_spinbox_performance_simultaneous_downloads")
+        self.settings_spinbox_performance_simultaneous_downloads.setMinimum(1)
+        self.settings_spinbox_performance_simultaneous_downloads.setMaximum(5000)
 
-        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_network_delay, 1, 2, 1, 1)
+        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_simultaneous_downloads, 2, 1, 1, 1)
 
-        self.settings_spinbox_performance_network_delay = QSpinBox(self.page_performance)
-        self.settings_spinbox_performance_network_delay.setObjectName(u"settings_spinbox_performance_network_delay")
-        self.settings_spinbox_performance_network_delay.setMinimum(0)
-        self.settings_spinbox_performance_network_delay.setMaximum(5000)
+        self.settings_spinbox_performance_pages_concurrency = QSpinBox(self.page_performance)
+        self.settings_spinbox_performance_pages_concurrency.setObjectName(u"settings_spinbox_performance_pages_concurrency")
+        self.settings_spinbox_performance_pages_concurrency.setMinimum(1)
 
-        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_network_delay, 1, 3, 1, 1)
-
-        self.settings_label_performance_maximal_retries = QLabel(self.page_performance)
-        self.settings_label_performance_maximal_retries.setObjectName(u"settings_label_performance_maximal_retries")
-
-        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_maximal_retries, 4, 2, 1, 1)
+        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_pages_concurrency, 8, 1, 1, 1)
 
         self.settings_spinbox_performance_maximal_retries = QSpinBox(self.page_performance)
         self.settings_spinbox_performance_maximal_retries.setObjectName(u"settings_spinbox_performance_maximal_retries")
         self.settings_spinbox_performance_maximal_retries.setMinimum(5)
         self.settings_spinbox_performance_maximal_retries.setMaximum(5000)
 
-        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_maximal_retries, 4, 3, 1, 1)
+        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_maximal_retries, 2, 3, 1, 1)
 
-        self.settings_label_performance_processing_delay = QLabel(self.page_performance)
-        self.settings_label_performance_processing_delay.setObjectName(u"settings_label_performance_processing_delay")
+        self.settings_label_performance_maximal_retries = QLabel(self.page_performance)
+        self.settings_label_performance_maximal_retries.setObjectName(u"settings_label_performance_maximal_retries")
 
-        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_processing_delay, 6, 2, 1, 1)
+        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_maximal_retries, 2, 2, 1, 1)
 
-        self.settings_spinbox_performance_processing_delay = QSpinBox(self.page_performance)
-        self.settings_spinbox_performance_processing_delay.setObjectName(u"settings_spinbox_performance_processing_delay")
-        self.settings_spinbox_performance_processing_delay.setMinimum(1)
-        self.settings_spinbox_performance_processing_delay.setMaximum(500)
-        self.settings_spinbox_performance_processing_delay.setValue(1)
+        self.settings_spinbox_performance_network_delay = QSpinBox(self.page_performance)
+        self.settings_spinbox_performance_network_delay.setObjectName(u"settings_spinbox_performance_network_delay")
+        self.settings_spinbox_performance_network_delay.setMinimum(0)
+        self.settings_spinbox_performance_network_delay.setMaximum(5000)
 
-        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_processing_delay, 6, 3, 1, 1)
+        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_network_delay, 0, 3, 1, 1)
+
+        self.settings_spinbox_performance_videos_concurrency = QSpinBox(self.page_performance)
+        self.settings_spinbox_performance_videos_concurrency.setObjectName(u"settings_spinbox_performance_videos_concurrency")
+        self.settings_spinbox_performance_videos_concurrency.setMinimum(1)
+
+        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_videos_concurrency, 7, 3, 1, 1)
+
+        self.settings_label_performance_maximal_timeout = QLabel(self.page_performance)
+        self.settings_label_performance_maximal_timeout.setObjectName(u"settings_label_performance_maximal_timeout")
+
+        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_maximal_timeout, 5, 0, 1, 1)
+
+        self.settings_doublespinbox_performance_speed_limit = QDoubleSpinBox(self.page_performance)
+        self.settings_doublespinbox_performance_speed_limit.setObjectName(u"settings_doublespinbox_performance_speed_limit")
+
+        self.settings_gridlayout_performance.addWidget(self.settings_doublespinbox_performance_speed_limit, 7, 1, 1, 1)
+
+        self.settings_label_performance_pages_concurrency = QLabel(self.page_performance)
+        self.settings_label_performance_pages_concurrency.setObjectName(u"settings_label_performance_pages_concurrency")
+
+        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_pages_concurrency, 8, 0, 1, 1)
+
+        self.settings_label_performance_network_delay = QLabel(self.page_performance)
+        self.settings_label_performance_network_delay.setObjectName(u"settings_label_performance_network_delay")
+
+        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_network_delay, 0, 2, 1, 1)
+
+        self.label_settings_performance_download_workers = QLabel(self.page_performance)
+        self.label_settings_performance_download_workers.setObjectName(u"label_settings_performance_download_workers")
+
+        self.settings_gridlayout_performance.addWidget(self.label_settings_performance_download_workers, 8, 2, 1, 1)
+
+        self.settings_spinbox_performance_download_workers = QSpinBox(self.page_performance)
+        self.settings_spinbox_performance_download_workers.setObjectName(u"settings_spinbox_performance_download_workers")
+        self.settings_spinbox_performance_download_workers.setMinimum(1)
+
+        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_download_workers, 8, 3, 1, 1)
 
 
         self.gridLayout_26.addLayout(self.settings_gridlayout_performance, 0, 0, 1, 1)
@@ -1350,7 +1366,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 612, 481))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 84, 70))
         self.gridLayout_21 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_21.setSpacing(0)
         self.gridLayout_21.setObjectName(u"gridLayout_21")
@@ -1376,7 +1392,7 @@ class Ui_MainWindow(object):
         self.scrollArea_3.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 612, 481))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 230, 110))
         self.gridLayout_23 = QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_23.setSpacing(0)
         self.gridLayout_23.setObjectName(u"gridLayout_23")
@@ -1511,7 +1527,7 @@ class Ui_MainWindow(object):
         self.scrollArea_10.setWidgetResizable(True)
         self.scrollAreaWidgetContents_12 = QWidget()
         self.scrollAreaWidgetContents_12.setObjectName(u"scrollAreaWidgetContents_12")
-        self.scrollAreaWidgetContents_12.setGeometry(QRect(0, 0, 170, 138))
+        self.scrollAreaWidgetContents_12.setGeometry(QRect(0, 0, 194, 142))
         self.gridLayout_56 = QGridLayout(self.scrollAreaWidgetContents_12)
         self.gridLayout_56.setSpacing(0)
         self.gridLayout_56.setObjectName(u"gridLayout_56")
@@ -1572,7 +1588,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 84, 70))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 1144, 576))
         self.gridLayout_20 = QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_20.setSpacing(0)
         self.gridLayout_20.setObjectName(u"gridLayout_20")
@@ -1599,7 +1615,7 @@ class Ui_MainWindow(object):
         self.scrollArea_11.setWidgetResizable(True)
         self.scrollAreaWidgetContents_13 = QWidget()
         self.scrollAreaWidgetContents_13.setObjectName(u"scrollAreaWidgetContents_13")
-        self.scrollAreaWidgetContents_13.setGeometry(QRect(0, 0, 455, 101))
+        self.scrollAreaWidgetContents_13.setGeometry(QRect(0, 0, 488, 103))
         self.gridLayout_59 = QGridLayout(self.scrollAreaWidgetContents_13)
         self.gridLayout_59.setObjectName(u"gridLayout_59")
         self.gridLayout_59.setHorizontalSpacing(0)
@@ -1662,7 +1678,7 @@ class Ui_MainWindow(object):
         self.scrollArea_12.setWidgetResizable(True)
         self.scrollAreaWidgetContents_14 = QWidget()
         self.scrollAreaWidgetContents_14.setObjectName(u"scrollAreaWidgetContents_14")
-        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 1144, 582))
+        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 98, 121))
         self.gridLayout_61 = QGridLayout(self.scrollAreaWidgetContents_14)
         self.gridLayout_61.setObjectName(u"gridLayout_61")
         self.textbrowser_disclaimer = QTextBrowser(self.scrollAreaWidgetContents_14)
@@ -1828,9 +1844,9 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.CentralStackedWidget.setCurrentIndex(0)
-        self.main_stacked_widget_top.setCurrentIndex(4)
-        self.settings_stacked_widget_main.setCurrentIndex(0)
+        self.CentralStackedWidget.setCurrentIndex(1)
+        self.main_stacked_widget_top.setCurrentIndex(0)
+        self.settings_stacked_widget_main.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -1841,13 +1857,36 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(tooltip)
         MainWindow.setToolTip("")
 #endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        MainWindow.setAccessibleName(QCoreApplication.translate("MainWindow", u"Button Tools section", None))
+#endif // QT_CONFIG(accessibility)
+#if QT_CONFIG(accessibility)
+        self.main_button_switch_home.setAccessibleName(QCoreApplication.translate("MainWindow", u"Button home page", None))
+#endif // QT_CONFIG(accessibility)
         self.main_button_switch_home.setText("")
+#if QT_CONFIG(accessibility)
+        self.main_button_switch_account.setAccessibleName(QCoreApplication.translate("MainWindow", u"Button Login (PornHub)", None))
+#endif // QT_CONFIG(accessibility)
         self.main_button_switch_account.setText("")
+#if QT_CONFIG(accessibility)
+        self.main_button_switch_tools.setAccessibleName(QCoreApplication.translate("MainWindow", u"Button Tools section", None))
+#endif // QT_CONFIG(accessibility)
         self.main_button_switch_tools.setText("")
+#if QT_CONFIG(accessibility)
+        self.main_button_switch_settings.setAccessibleName(QCoreApplication.translate("MainWindow", u"Button view progressbars", None))
+#endif // QT_CONFIG(accessibility)
         self.main_button_switch_settings.setText("")
+#if QT_CONFIG(accessibility)
+        self.main_button_switch_credits.setAccessibleName(QCoreApplication.translate("MainWindow", u"Button Credits / Information", None))
+#endif // QT_CONFIG(accessibility)
         self.main_button_switch_credits.setText("")
+#if QT_CONFIG(accessibility)
+        self.main_button_view_progress_bars.setAccessibleName(QCoreApplication.translate("MainWindow", u"Button view progressbars", None))
+#endif // QT_CONFIG(accessibility)
         self.main_button_view_progress_bars.setText("")
-        self.main_button_switch_batch.setText(QCoreApplication.translate("MainWindow", u"Batch", None))
+#if QT_CONFIG(accessibility)
+        self.main_button_switch_supported_websites.setAccessibleName(QCoreApplication.translate("MainWindow", u"button: Supported websites", None))
+#endif // QT_CONFIG(accessibility)
         self.main_button_switch_supported_websites.setText(QCoreApplication.translate("MainWindow", u"Supported websites", None))
         self.download_website_combobox.setItemText(0, QCoreApplication.translate("MainWindow", u"HQPorner", None))
         self.download_website_combobox.setItemText(1, QCoreApplication.translate("MainWindow", u"PornHub", None))
@@ -1858,19 +1897,22 @@ class Ui_MainWindow(object):
         self.download_website_combobox.setItemText(6, QCoreApplication.translate("MainWindow", u"Spankbang", None))
         self.download_website_combobox.setItemText(7, QCoreApplication.translate("MainWindow", u"Missav", None))
 
-        self.download_lineedit_url.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter video URL", None))
+        self.download_lineedit_url.setText("")
+        self.download_lineedit_url.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter a Video URL or an XHamster Short", None))
         self.download_label_model_url.setText(QCoreApplication.translate("MainWindow", u"Model URL:", None))
         self.download_lineedit_search_query.setText("")
-        self.download_lineedit_search_query.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Search for Videos. Select Website below", None))
+        self.download_lineedit_search_query.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Search for videos on a website", None))
         self.download_button_model.setText(QCoreApplication.translate("MainWindow", u"Get Videos", None))
         self.download_label_search.setText(QCoreApplication.translate("MainWindow", u"Search Query:", None))
         self.button_search.setText(QCoreApplication.translate("MainWindow", u"Search", None))
-        self.download_lineedit_model_url.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter Model / Channel / Actress URL", None))
+        self.download_lineedit_model_url.setText("")
+        self.download_lineedit_model_url.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter a Model / Channel / Actress / Creator URL ", None))
         self.download_label_playlist_url.setText(QCoreApplication.translate("MainWindow", u"Playlist URL:", None))
         self.download_button_download.setText(QCoreApplication.translate("MainWindow", u"Download", None))
         self.download_button_playlist_get_videos.setText(QCoreApplication.translate("MainWindow", u"Get Videos", None))
-        self.download_lineedit_playlist_url.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter a PornHub Playlist URL", None))
-        self.download_label_url.setText(QCoreApplication.translate("MainWindow", u"URL:", None))
+        self.download_lineedit_playlist_url.setText("")
+        self.download_lineedit_playlist_url.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter a PornHub / XVideos Playlist URL", None))
+        self.download_label_url.setText(QCoreApplication.translate("MainWindow", u"Video URL:", None))
         self.login_lineedit_username.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter your PornHub E-Mail address", None))
         self.login_lineedit_password.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter your PornHub Password (Your account data will never be saved nor shared) ", None))
         self.login_label_password.setText(QCoreApplication.translate("MainWindow", u"Password:", None))
@@ -1924,9 +1966,24 @@ class Ui_MainWindow(object):
         ___qtreewidgetitem = self.treeWidget.headerItem()
         ___qtreewidgetitem.setText(2, QCoreApplication.translate("MainWindow", u"Duration (minutes)", None));
         ___qtreewidgetitem.setText(1, QCoreApplication.translate("MainWindow", u"Author", None));
+#if QT_CONFIG(accessibility)
+        self.settings_button_switch_video.setAccessibleName(QCoreApplication.translate("MainWindow", u"Video page (settings)", None))
+#endif // QT_CONFIG(accessibility)
         self.settings_button_switch_video.setText(QCoreApplication.translate("MainWindow", u"Video", None))
+#if QT_CONFIG(accessibility)
+        self.settings_button_switch_performance.setAccessibleName(QCoreApplication.translate("MainWindow", u"Performance page (Settings)", None))
+#endif // QT_CONFIG(accessibility)
         self.settings_button_switch_performance.setText(QCoreApplication.translate("MainWindow", u"Performance", None))
+#if QT_CONFIG(accessibility)
+        self.settings_button_switch_system.setAccessibleName(QCoreApplication.translate("MainWindow", u"System page (settings)", None))
+#endif // QT_CONFIG(accessibility)
+#if QT_CONFIG(accessibility)
+        self.settings_button_switch_system.setAccessibleDescription("")
+#endif // QT_CONFIG(accessibility)
         self.settings_button_switch_system.setText(QCoreApplication.translate("MainWindow", u"System", None))
+#if QT_CONFIG(accessibility)
+        self.settings_button_switch_ui.setAccessibleName(QCoreApplication.translate("MainWindow", u"button: Supported websites", None))
+#endif // QT_CONFIG(accessibility)
         self.settings_button_switch_ui.setText(QCoreApplication.translate("MainWindow", u"UI", None))
 #if QT_CONFIG(tooltip)
         self.settings_label_videos_quality.setToolTip(QCoreApplication.translate("MainWindow", u"By default, Porn Fetch will select the best available video quality. You can also decide between half and worst above.\n"
@@ -2003,27 +2060,26 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(tooltip)
         self.settings_checkbox_videos_use_directory_system.setText(QCoreApplication.translate("MainWindow", u"Use directory system", None))
         self.settings_lineedit_videos_database_path.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter the path of the database file here", None))
+#if QT_CONFIG(accessibility)
+        self.settings_label_performance_videos_concurrency.setAccessibleName(QCoreApplication.translate("MainWindow", u"Videos Concurrency", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_label_performance_videos_concurrency.setText(QCoreApplication.translate("MainWindow", u"Videos Concurrency:", None))
 #if QT_CONFIG(tooltip)
-        self.settings_label_performance_maximal_workers.setToolTip(QCoreApplication.translate("MainWindow", u" The maximal workers define the amount of maximal threads which can be started when using the threaded download mode.\n"
-"One thread handles downloading one segment, so (in theory) 20 threads can download 20 segments at the same time.\n"
-"This can of course be helpful when you have a very fast internet connection, but when you have a poor PC or running on\n"
-"Android, you should set this to a lower value.", None))
+        self.settings_label_performance_simultaneous_download.setToolTip(QCoreApplication.translate("MainWindow", u"The Semaphore is a tool to limit the number of simultaneous actions / downloads. For example: If the semaphore is set to 1, only 1 video will be downloaded at the same time.\\nIf the semaphore is set to 4, 4 videos will be downloaded at the same time. Changing this is only useful, if you have a really good internet connection and a good system.", None))
 #endif // QT_CONFIG(tooltip)
-        self.settings_label_performance_maximal_workers.setText(QCoreApplication.translate("MainWindow", u"Maximum workers:", None))
+#if QT_CONFIG(accessibility)
+        self.settings_label_performance_simultaneous_download.setAccessibleName(QCoreApplication.translate("MainWindow", u"Simultaneous downloads", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_label_performance_simultaneous_download.setText(QCoreApplication.translate("MainWindow", u"Simultaneous downloads:", None))
 #if QT_CONFIG(tooltip)
-        self.settings_label_performance_speed_limit.setToolTip(QCoreApplication.translate("MainWindow", u"The speed limit sets the maximum allowed network speed in megabyte per seconds. However, this doesn't work perfectly.\n"
-"The speed limit also only works for the default download mode, because it wouldn't make sense downloading multiple\n"
-"segments at the same time with a speed limit being in place.\n"
-"\n"
-"If you need something more 'exact / precise', use applications like NetLimiter 4 or something similar.", None))
+        self.settings_label_performance_processing_delay.setToolTip(QCoreApplication.translate("MainWindow", u"The processing delay sets a delay before every video gets downloaded.\n"
+"Let's assume you set a delay of 30 (30 seconds), then it will take 30 seconds between each video downloads.\n"
+"This does not apply if you have a value of simultaneous downloads greater than 1.", None))
 #endif // QT_CONFIG(tooltip)
-        self.settings_label_performance_speed_limit.setText(QCoreApplication.translate("MainWindow", u"Speed Limit (MB/s):", None))
-        self.settings_label_performance_download_mode.setText(QCoreApplication.translate("MainWindow", u"Download Mode:", None))
-#if QT_CONFIG(tooltip)
-        self.settings_label_performance_maximal_timeout.setToolTip(QCoreApplication.translate("MainWindow", u"The timeout handles the timeout for retrieving segments when using the threaded download mode. If you have a poor \n"
-"internet connection you can set this higher than 10. But this isn't required for most users!", None))
-#endif // QT_CONFIG(tooltip)
-        self.settings_label_performance_maximal_timeout.setText(QCoreApplication.translate("MainWindow", u"Maximum timeout:", None))
+#if QT_CONFIG(accessibility)
+        self.settings_label_performance_processing_delay.setAccessibleName(QCoreApplication.translate("MainWindow", u"Videos Concurrency", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_label_performance_processing_delay.setText(QCoreApplication.translate("MainWindow", u"Processing Delay (videos/sec):", None))
         self.settings_performance_combobox_download_mode.setItemText(0, QCoreApplication.translate("MainWindow", u"High Performance", None))
         self.settings_performance_combobox_download_mode.setItemText(1, QCoreApplication.translate("MainWindow", u"FFMPEG", None))
         self.settings_performance_combobox_download_mode.setItemText(2, QCoreApplication.translate("MainWindow", u"Default", None))
@@ -2040,9 +2096,46 @@ class Ui_MainWindow(object):
 "With the High Performance method, we can just download other segments while waiting which makes it so fast.", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
-        self.settings_label_performance_simultaneous_download.setToolTip(QCoreApplication.translate("MainWindow", u"The Semaphore is a tool to limit the number of simultaneous actions / downloads. For example: If the semaphore is set to 1, only 1 video will be downloaded at the same time.\\nIf the semaphore is set to 4, 4 videos will be downloaded at the same time. Changing this is only useful, if you have a really good internet connection and a good system.", None))
+        self.settings_label_performance_speed_limit.setToolTip(QCoreApplication.translate("MainWindow", u"The speed limit sets the maximum allowed network speed in megabyte per seconds. However, this doesn't work perfectly.\n"
+"The speed limit also only works for the default download mode, because it wouldn't make sense downloading multiple\n"
+"segments at the same time with a speed limit being in place.\n"
+"\n"
+"If you need something more 'exact / precise', use applications like NetLimiter 4 or something similar.", None))
 #endif // QT_CONFIG(tooltip)
-        self.settings_label_performance_simultaneous_download.setText(QCoreApplication.translate("MainWindow", u"Simultaneous downloads:", None))
+#if QT_CONFIG(accessibility)
+        self.settings_label_performance_speed_limit.setAccessibleName(QCoreApplication.translate("MainWindow", u"Speed Limit (MB/s)", None))
+#endif // QT_CONFIG(accessibility)
+#if QT_CONFIG(accessibility)
+        self.settings_label_performance_speed_limit.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"Pages concurrency", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_label_performance_speed_limit.setText(QCoreApplication.translate("MainWindow", u"Speed Limit (MB/s):", None))
+#if QT_CONFIG(accessibility)
+        self.settings_label_performance_download_mode.setAccessibleName(QCoreApplication.translate("MainWindow", u"Download Mode", None))
+#endif // QT_CONFIG(accessibility)
+#if QT_CONFIG(accessibility)
+        self.settings_label_performance_download_mode.setAccessibleDescription("")
+#endif // QT_CONFIG(accessibility)
+        self.settings_label_performance_download_mode.setText(QCoreApplication.translate("MainWindow", u"Download Mode:", None))
+#if QT_CONFIG(tooltip)
+        self.settings_label_performance_maximal_retries.setToolTip(QCoreApplication.translate("MainWindow", u"The maximal retries defines how much attempts will be used for a network request. For example if an API calls\n"
+"a URL for a website there will be <AMOUNT> of attempts until an error is thrown.", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.settings_label_performance_maximal_retries.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"Maximum retries", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_label_performance_maximal_retries.setText(QCoreApplication.translate("MainWindow", u"Maximum retries:", None))
+#if QT_CONFIG(tooltip)
+        self.settings_label_performance_maximal_timeout.setToolTip(QCoreApplication.translate("MainWindow", u"The timeout handles the timeout for retrieving segments when using the threaded download mode. If you have a poor \n"
+"internet connection you can set this higher than 10. But this isn't required for most users!", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.settings_label_performance_maximal_timeout.setAccessibleName(QCoreApplication.translate("MainWindow", u"Maximum timeout", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_label_performance_maximal_timeout.setText(QCoreApplication.translate("MainWindow", u"Maximum timeout:", None))
+#if QT_CONFIG(accessibility)
+        self.settings_label_performance_pages_concurrency.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"Pages concurrency", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_label_performance_pages_concurrency.setText(QCoreApplication.translate("MainWindow", u"Pages concurrency:", None))
 #if QT_CONFIG(tooltip)
         self.settings_label_performance_network_delay.setToolTip(QCoreApplication.translate("MainWindow", u"You can set a delay between requests from you and a site. If you are downloading a lot of videos or experiencing \n"
 "errors, you should enable a delay. By default the delay is turned off with the value 0\n"
@@ -2052,18 +2145,14 @@ class Ui_MainWindow(object):
 "The longer the delay is, the longer it will take to download videos, load videos and generally do stuff. This does not\n"
 "really affect the high performance download mode.", None))
 #endif // QT_CONFIG(tooltip)
-        self.settings_label_performance_network_delay.setText(QCoreApplication.translate("MainWindow", u"Network delay (requests/sec)", None))
-#if QT_CONFIG(tooltip)
-        self.settings_label_performance_maximal_retries.setToolTip(QCoreApplication.translate("MainWindow", u"The maximal retries defines how much attempts will be used for a network request. For example if an API calls\n"
-"a URL for a website there will be <AMOUNT> of attempts until an error is thrown.", None))
-#endif // QT_CONFIG(tooltip)
-        self.settings_label_performance_maximal_retries.setText(QCoreApplication.translate("MainWindow", u"Maximum retries:", None))
-#if QT_CONFIG(tooltip)
-        self.settings_label_performance_processing_delay.setToolTip(QCoreApplication.translate("MainWindow", u"The processing delay sets a delay before every video gets downloaded.\n"
-"Let's assume you set a delay of 30 (30 seconds), then it will take 30 seconds between each video downloads.\n"
-"This does not apply if you have a value of simultaneous downloads greater than 1.", None))
-#endif // QT_CONFIG(tooltip)
-        self.settings_label_performance_processing_delay.setText(QCoreApplication.translate("MainWindow", u"Processing Delay (videos/sec)", None))
+#if QT_CONFIG(accessibility)
+        self.settings_label_performance_network_delay.setAccessibleName(QCoreApplication.translate("MainWindow", u"Network delay (requests/sec)", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_label_performance_network_delay.setText(QCoreApplication.translate("MainWindow", u"Network delay (requests/sec):", None))
+#if QT_CONFIG(accessibility)
+        self.label_settings_performance_download_workers.setAccessibleName(QCoreApplication.translate("MainWindow", u"Download workers:", None))
+#endif // QT_CONFIG(accessibility)
+        self.label_settings_performance_download_workers.setText(QCoreApplication.translate("MainWindow", u"Download workers:", None))
 #if QT_CONFIG(tooltip)
         self.settings_checkbox_system_enable_anonymous_mode.setToolTip(QCoreApplication.translate("MainWindow", u"The anonymous mode renames all of Porn Fetch's elements to look NOT like a Porn downloader.\n"
 "This makes it useful for downloading Porn content if you are in public, or multiple people use your PC / Phone.\n"
@@ -2202,21 +2291,22 @@ class Ui_MainWindow(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt; font-weight:700;\">Keyboard Shortcuts</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:14pt; font-weight:700;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
-                        "indent:0px;\"><span style=\" font-size:16pt;\">CTRL + Q     Closes the application</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt;\">CTRL + E      Exports all current video URLs from the tree widget into a .txt file </span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt;\">CTRL + T      Downloads all videos in the tree widget (same as clicking the button)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt;\">CTRL + A     Quickly enables the anonymous mode (temporarily)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt;\">CTRL + S     Saves Porn Fetch settin"
-                        "gs</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt;\">CTRL + X     Selects all items in the tree widget as checked</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt;\">CTRL + Z     Unchecks all items in the tree widget</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt;\">   </span></p></body></html>", None))
+"</style></head><body style=\" font-family:'Adwaita Sans'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt; font-weight:700;\">Keyboard Shortcuts</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:14pt; font-weight:700;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margi"
+                        "n-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + Q     Closes the application</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + E      Exports all current video URLs from the tree widget into a .txt file </span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + T      Downloads all videos in the tree widget (same as clicking the button)</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + A     Quickly enables the anonymous mode (temporarily)</span></p>\n"
+"<p style=\" margin-top:0px; mar"
+                        "gin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + S     Saves Porn Fetch settings</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:16pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + X     Selects all items in the tree widget as checked</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + Z     Unchecks all items in the tree widget</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-"
+                        "indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:16pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">   </span></p></body></html>", None))
         self.button_update_acknowledged.setText(QCoreApplication.translate("MainWindow", u"OK", None))
         self.textbrowser_install_dialog.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -2224,32 +2314,33 @@ class Ui_MainWindow(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:'Adwaita Sans'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:24pt; font-weight:700;\">Installation Mode</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:16pt; text-decoration: underline; color:#0000ff;\">1) Inst</span><span style=\" font-family:'Segoe UI'; font-size:14pt; text-"
-                        "decoration: underline; color:#0000ff;\">all</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:16pt; text-decoration: underline; color:#0000ff;\">1) Inst</span><span style=\" font-family:'Segoe UI'; font-size:14pt; te"
+                        "xt-decoration: underline; color:#0000ff;\">all</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">This will install Porn Fetch into your system, meaning that you can run it directly from your Start Menu. e.g, press Windows key, type Porn Fetch and directly start it and on Linux it will be the same.</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI'; font-size:12pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">Porn Fetch will be installed into the following path(s):</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-ind"
-                        "ent:0; text-indent:0px; font-family:'Segoe UI'; font-size:12pt;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-"
+                        "indent:0; text-indent:0px; font-family:'Segoe UI'; font-size:12pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">Windows: C:\\Users\\&lt;user&gt;\\AppData\\Local\\pornfetch\\</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">Linux: ~/.local/share/pornfetch</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI';\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI'; font-size:9pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:16pt; text-decoration: underline; color:#00ff00;\">2) Portable</span></p>\n"
-"<p style=\" margin-top:0px; mar"
-                        "gin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">This means, that Porn Fetch will not be installed and in order to use and start Porn Fetch you always need to double click on the file you have downloaded. This has some benefits as the uninstallation is easier and you have more control over it, but for the average user I do not recommend this.</span></p>\n"
+"<p style=\" m"
+                        "argin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">This means, that Porn Fetch will not be installed and in order to use and start Porn Fetch you always need to double click on the file you have downloaded. This has some benefits as the uninstallation is easier and you have more control over it, but for the average user I do not recommend this.</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI'; font-size:12pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:16pt; font-weight:700; color:#a100ff;\">Custom App name</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><spa"
-                        "n style=\" font-family:'Segoe UI'; font-size:12pt; color:#ffffff;\">Down below you can enter  a custom name for Porn Fetch. You can then search with this name for Porn Fetch and Porn Fetch will not be found anymore when someone enters &quot;Porn Fetch&quot; on your PC. This can be useful if multiple persons use your PC and you don't want them to know you are using this application. It can also help if you are in public and people stare at your PC. Porn Fetch has also an option to fully hide, that it's a PornHub downloader.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
+                        "indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt; color:#ffffff;\">Down below you can enter  a custom name for Porn Fetch. You can then search with this name for Porn Fetch and Porn Fetch will not be found anymore when someone enters &quot;Porn Fetch&quot; on your PC. This can be useful if multiple persons use your PC and you don't want them to know you are using this application. It can also help if you are in public and people stare at your PC. Porn Fetch has also an option to fully hide, that it's a PornHub downloader.</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI'; font-size:12pt; color:#ffffff;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; color:#ffffff;\">If you leave it empty, Porn Fetch will remain as &quot;Porn Fetch&quot; in your short menu.</spa"
-                        "n></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt; color:#ffffff;\">If you leave it empty, Porn Fetch will remain as &qu"
+                        "ot;Porn Fetch&quot; in your short menu.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:14pt; text-decoration: underline; color:#aa0000;\">NOTE:</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">Installation was implemented in this release and might still be experimental. If you run into any issues, please report it on my GitHub. Thank you :</span><span style=\" font-family:'Segoe UI';\">) </span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI';\"><br /></p></body></html>", None))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">Installation was implemented in this release and might still be experimental. If you run into any issues, please report it on my GitHub. Thank you :</span><span style=\" font-family:'Segoe UI'; font-size:9pt;\">) </span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-in"
+                        "dent:0; text-indent:0px; font-family:'Segoe UI'; font-size:9pt;\"><br /></p></body></html>", None))
         self.label_custom_app_name.setText(QCoreApplication.translate("MainWindow", u"Custom App Name:", None))
         self.lineedit_custom_app_name.setText("")
         self.lineedit_custom_app_name.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter your custom App Name here. Leave it empty to keep \"Porn Fetch\"", None))
@@ -2261,49 +2352,88 @@ class Ui_MainWindow(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt; color:#0019ff;\">Supported Websites:</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-                        "size:16pt; color:#00ff08;\">Downloading:</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- PornHub.com (supports total progress)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- HQPorner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- Eporner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- XNXX.com (supports total progress)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- XVideos.com (supports total pro"
-                        "gress)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- Missav.ws (and all of it's subsites, supports total progress)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- Xhamster.com (supports total progress)</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- Spankbang.com (supports total progress)</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt; color:#ee00ff;\">Model / Channel Dow"
-                        "nloads</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- PornHub.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- HQPorner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- EPorner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- XNXX.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- XVideos.com</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; m"
-                        "argin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt; color:#ff8800;\">Searching:</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- PornHub.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- HQPorner.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- Xvideos.com</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- Eporner.com</span></p>\n"
-"<p style=\""
-                        " margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">- XNXX.com</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; color:#ff0000;\">I am constantly working to support more websites.</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; color:#ff0000;\">If you want a specific site to be supported, just ask:<br /><br />Discord: echteralsfake</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; color:#ff0000;\">Git"
-                        "Hub: https://github.com/EchterAlsFake/Porn_Fetch/issues</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt; color:#ff0000;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:"
-                        "0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
+"</style></head><body style=\" font-family:'Adwaita Sans'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<table border=\"0\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;\" cellspacing=\"2\" cellpadding=\"0\"><thead>\n"
+"<tr>\n"
+"<td>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Category</span></p></td>\n"
+"<td>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span"
+                        " style=\" font-weight:700;\">Websites</span></p></td></tr></thead>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Videos</p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang, YouPorn</p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Searching</p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang</p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Models</p></td>\n"
+"<td>\n"
+"<p style=\" margin"
+                        "-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">PornHub, HQporner, xnxx</p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Pornstars</p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">PornHub, Eporner, xvideos, Xhamster, Spankbang</p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Channels</p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">PornHub, Xhamster, Spankbang</p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Creator / Users</p></td>\n"
+"<td>\n"
+"<p style"
+                        "=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Xhamster (Creator), Spankbang (Creator), xnxx (Users)</p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Playlists</p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">PornHub, xvideos</p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Downloading</p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">xvideos</p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Shorts</p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0p"
+                        "x; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Xhamster</p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Account Login</p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">PornHub</p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Videos by Category</p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">HQporner, Eporner</p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Random</p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-righ"
+                        "t:0px; -qt-block-indent:0; text-indent:0px;\">HQporner</p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Brazzers only</p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">HQporner</p></td></tr>\n"
+"<tr>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Top Porn</p></td>\n"
+"<td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">HQporner</p></td></tr></table></body></html>", None))
         self.button_donate_kofi.setText(QCoreApplication.translate("MainWindow", u"Ko-Fi", None))
         self.button_donate_already_donated.setText(QCoreApplication.translate("MainWindow", u"Already Donated", None))
         self.button_donate_paypal.setText(QCoreApplication.translate("MainWindow", u"PayPal", None))
@@ -2315,46 +2445,48 @@ class Ui_MainWindow(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:36pt; color:#ffc800;\">y</span><span style=\" font-size:36pt; color:#cc00ff;\">o</span><span style=\" font-size:36pt; color:#ffffff;\"> </span><span style=\" font-size:36pt; color:#37ff00;\">w</span><span style=\" font-size:36pt; color:#ff00bb;\">a</span><span style=\" font-size:36pt; color:#ff0000;\">s</span><span style=\" font-size:36pt; color:#0000ff;\""
-                        ">s</span><span style=\" font-size:36pt; color:#00fff7;\">u</span><span style=\" font-size:36pt; color:#ff55ff;\">p</span></p>\n"
-"<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt; text-decoration: underline; color:#ffffff;\">If you have a moment to read this, I'd appreciate it a lot...</span><span style=\" color:#ffffff;\"><br /></span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:11pt; color:#ffffff;\">I have started developing Porn Fetch ~2 years ago as a fun project for learning graphical user interfaces. Over the years Porn Fetch became more professional, as my programming skills increased and more people started using it. That I reach even 1000 downloads on this was something I'd never thought was possible and now we are over 20.000 xD</span></p>\n"
-"<p style=\" margin-top:12px"
-                        "; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:11pt; color:#ffffff;\">Although I absolutely love what I am doing here, and unless I receive a Cease and Desist letter, will never stop it, I haven't earned much from this project except for the few people that donated me something (Thank you so much btw).</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:11pt; color:#ffffff;\">If you have a few cents left on your pocket, I'd absolutely appreciate it. I know it might not seem much but it's a thank you and it keeps me motivated. Also since I still go to school small amounts of money are much more in relation to me than it is for someone who already has a job.</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:11pt; color:"
-                        "#ffffff;\">But even if you don't donate, please don't feel bad. I don't expect it from you. I just kindly ask, but it's absolutely okay if you don't want to.</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt; color:#0000ff;\">Donation options</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://paypal.me/EchterAlsFake\"><span style=\" font-size:14pt; text-decoration: underline; color:#27bf73;\">1) PayPal (https://paypal.me/EchterAlsFake)</span></a></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://paypal.me/EchterAlsFake\"><span style=\" font-size:14pt; text-decoration: underline; color:#aa00ff;\">2) K</span></a><a href=\"https://ko-fi.com/EchterAlsFake\"><span style=\" font-size:14pt; text-decor"
-                        "ation: underline; color:#aa00ff;\">o-Fi (https://ko-fi.com/EchterAlsFake)</span></a></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt;\">3) Crypto (XMR / Monero) : </span><span style=\" font-family:'ui-monospace','SFMono-Regular','SF Mono','Menlo','Consolas','Liberation Mono','monospace'; color:#ff7700; background-color:rgba(101,108,118,0.2);\">42XwGZYbSxpMvhn9eeP4DwMwZV91tQgAm3UQr6Zwb2wzBf5HcuZCHrsVxa4aV2jhP4gLHsWWELxSoNjfnkt4rMfDDwXy9jR</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; color:#00ffb3;\">[This message won't be shown again, except if you update to a new version]</span></p></body></html>", None))
+"</style></head><body style=\" font-family:'Adwaita Sans'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#ffc800;\">y</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#cc00ff;\">o</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#ffffff;\"> </span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#37ff00;\">w</span><span style=\" font-family:'Sans Serif'; font-size:3"
+                        "6pt; color:#ff00bb;\">a</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#ff0000;\">s</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#0000ff;\">s</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#00fff7;\">u</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#ff55ff;\">p</span></p>\n"
+"<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#ffffff;\">If you have a moment to read this, I'd appreciate it a lot...</span><span style=\" font-family:'Sans Serif'; font-size:9pt; color:#ffffff;\"><br /></span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; color:#ffffff;\">I have started developing Porn Fetch ~2 years ago as a fun project for l"
+                        "earning graphical user interfaces. Over the years Porn Fetch became more professional, as my programming skills increased and more people started using it. That I reach even 1000 downloads on this was something I'd never thought was possible and now we are over 20.000 xD</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; color:#ffffff;\">Although I absolutely love what I am doing here, and unless I receive a Cease and Desist letter, will never stop it, I haven't earned much from this project except for the few people that donated me something (Thank you so much btw).</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; color:#ffffff;\">If you have a few cents left on your pocket, I'd absolutely appreciate it. I know it might not seem much but it's a thank you a"
+                        "nd it keeps me motivated. Also since I still go to school small amounts of money are much more in relation to me than it is for someone who already has a job.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; color:#ffffff;\">But even if you don't donate, please don't feel bad. I don't expect it from you. I just kindly ask, but it's absolutely okay if you don't want to.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt; color:#0000ff;\">Donation options</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://paypal.me/EchterAlsFake\"><span style=\" font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#27bf73;\">1) PayPal "
+                        "(https://paypal.me/EchterAlsFake)</span></a></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://paypal.me/EchterAlsFake\"><span style=\" font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#aa00ff;\">2) K</span></a><a href=\"https://ko-fi.com/EchterAlsFake\"><span style=\" font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#aa00ff;\">o-Fi (https://ko-fi.com/EchterAlsFake)</span></a></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt;\">3) Crypto (XMR / Monero) : </span><span style=\" font-family:'ui-monospace','SFMono-Regular','SF Mono','Menlo','Consolas','Liberation Mono','monospace'; font-size:9pt; color:#ff7700; background-color:rgba(101,108,118,0.2);\">42XwGZYbSxpMvhn9eeP4DwMwZV91tQgAm3UQr6Zwb2wzBf5HcuZCHrsVxa4aV2jhP4gLHsWWELxSo"
+                        "Njfnkt4rMfDDwXy9jR</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt; color:#00ffb3;\">[This message won't be shown again, except if you update to a new version]</span></p></body></html>", None))
         self.textbrowser_disclaimer.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">DISCLAIMER</span></h3>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Porn Fetch</span> is free software licensed under the GNU General Public License v3.0. You are free to use, modify, and redistribute this software under the terms o"
-                        "f that license.</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Please be aware that <span style=\" font-weight:700;\">Porn Fetch may interact with websites in ways that violate their Terms of Service.</span> Additionally, downloading copyright-protected content without proper authorization may be illegal in many jurisdictions, including under the DMCA (Digital Millennium Copyright Act).</p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">While some countries or regions may allow downloading content for strictly <span style=\" font-weight:700;\">personal, non-commercial use</span>, I <span style=\" font-weight:700;\">strongly discourage</span> using Porn Fetch to download, share, or redistribute content without appropriate rights or permissions. Always ensure you comply with your local laws and the terms of any website you access.</p>\n"
-"<h3 style=\""
-                        " margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">IMPORTANT NOTE</span></h3>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I <span style=\" font-weight:700;\">strongly recommend</span> that you do <span style=\" font-weight:700;\">not</span> use this software for:</p>\n"
+"</style></head><body style=\" font-family:'Adwaita Sans'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">DISCLAIMER</span></h3>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">Porn Fetch</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> is free software lic"
+                        "ensed under the GNU General Public License v3.0. You are free to use, modify, and redistribute this software under the terms of that license.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Please be aware that </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">Porn Fetch may interact with websites in ways that violate their Terms of Service.</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> Additionally, downloading copyright-protected content without proper authorization may be illegal in many jurisdictions, including under the DMCA (Digital Millennium Copyright Act).</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">While some countries or regions may allow downloading cont"
+                        "ent for strictly </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">personal, non-commercial use</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\">, I </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">strongly discourage</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> using Porn Fetch to download, share, or redistribute content without appropriate rights or permissions. Always ensure you comply with your local laws and the terms of any website you access.</span></p>\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">IMPORTANT NOTE</span></h3>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">I </span><span style=\" font-family:'Sans Ser"
+                        "if'; font-size:9pt; font-weight:700;\">strongly recommend</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> that you do </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">not</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> use this software for:</span></p>\n"
 "<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\">\n"
-"<li style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Unauthorized redistribution of content</li>\n"
-"<li style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Commercial use of downloaded materials</li>\n"
-"<li style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent"
-                        ":0; text-indent:0px;\">Any activity that could result in legal liability for yourself or others</li></ul>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Although the GPL license grants you broad rights, <span style=\" font-weight:700;\">continued misuse</span> may jeopardize the development and availability of this project. Please respect the intent behind this tool and use it responsibly.</p>\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">LIABILITY DISCLAIMER</span></h3>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">This software is provided <span style=\" font-weight:700;\">without any warranty</span> as described in the GPLv3. I am <span style=\" font-weight:700;\">not liable</span> for any damages, legal consequences, "
-                        "or misuse resulting from your use of this software.<br />You are solely responsible for ensuring your actions are lawful and ethical. </p></body></html>", None))
+"<li style=\" font-family:'Sans Serif'; font-size:9pt;\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Unauthorized redistribution of content</li>\n"
+"<li style=\" font-family:'Sans Serif'; font-size:9pt;\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Commercial use of downloaded materials</li>\n"
+"<li style=\" font-family:'Sans Serif'; font-size:9pt;\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt"
+                        "-block-indent:0; text-indent:0px;\">Any activity that could result in legal liability for yourself or others</li></ul>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Although the GPL license grants you broad rights, </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">continued misuse</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> may jeopardize the development and availability of this project. Please respect the intent behind this tool and use it responsibly.</span></p>\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">LIABILITY DISCLAIMER</span></h3>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><"
+                        "span style=\" font-family:'Sans Serif'; font-size:9pt;\">This software is provided </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">without any warranty</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> as described in the GPLv3. I am </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">not liable</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> for any damages, legal consequences, or misuse resulting from your use of this software.<br />You are solely responsible for ensuring your actions are lawful and ethical. </span></p></body></html>", None))
         self.button_disclaimer_accept.setText(QCoreApplication.translate("MainWindow", u"Accept", None))
         self.textbrowser_data_collection.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -2362,31 +2494,32 @@ class Ui_MainWindow(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:x-large; font-weight:700;\">Data Collection &amp; Privacy Information</span></h2>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">This application now uses my own server for update checking and error reporting, instead of relying on GitHub. This gives me greater"
-                        " control over the process and the data transmitted. However, my server is </span><span style=\" font-size:12pt; font-weight:700;\">IPv6-only</span><span style=\" font-size:12pt;\">. This means that only about 50% of internet users will be able to connect. </span></p>\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">About the Server</span></h3>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">The server is a small, older Acer Swift 3 laptop running 24/7 in my room. The full source code for the server is publicly available here:<br /></span><a href=\"https://github.com/EchterAlsFake/Server\"><span style=\" font-size:12pt; text-decoration: underline; color:#f700ff;\">https://github.com/EchterAlsFake/Server</span></a><span style=\" font-size:12pt;\"> </span></p>\n"
-"<h3 style=\""
-                        " margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt; font-weight:700;\">Data Collected via Error Reports</span></h3>\n"
+"</style></head><body style=\" font-family:'Adwaita Sans'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">Data Collection &amp; Privacy Information</span></h2>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">This application now uses my own server for update checking and error reporting, "
+                        "instead of relying on GitHub. This gives me greater control over the process and the data transmitted. However, my server is </span><span style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:700;\">IPv6-only</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\">. This means that only about 50% of internet users will be able to connect. </span></p>\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">About the Server</span></h3>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">The server is a small, older Acer Swift 3 laptop running 24/7 in my room. The full source code for the server is publicly available here:<br /></span><a href=\"https://github.com/EchterAlsFake/Server\"><span style=\" font-family:'Sans S"
+                        "erif'; font-size:12pt; text-decoration: underline; color:#f700ff;\">https://github.com/EchterAlsFake/Server</span></a><span style=\" font-family:'Sans Serif'; font-size:12pt;\"> </span></p>\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt; font-weight:700;\">Data Collected via Error Reports</span></h3>\n"
 "<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\">\n"
-"<li style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">The version of Porn Fetch you are using</span></li>\n"
-"<li style=\" font-size:12pt;\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Your operating system (e.g., Windows, Linux, or macOS)</li>\n"
-"<li style=\" font-size:12pt;\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The current date and time</li>\n"
-"<li style=\" font-size:12pt;\" style=\" margin-top:0px; margin-bottom:12px; margin-left:0px;"
-                        " margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The error details (full Python traceback)</li></ul>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:700;\">Important:</span><span style=\" font-size:12pt;\"> The Python traceback may, in some cases, include incidental personal information \u2014 for example, your system username if it appears in a file path. No other personal data is intentionally collected. </span></p>\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:large; font-weight:700;\">Data Storage &amp; Security</span></h3>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">Error reports are stored in plain text on my server. The server\u2019s storage device is encr"
-                        "ypted with LUKS and secured with a strong password (40+ characters). </span><span style=\" font-size:12pt; color:#ff0000;\">Your </span><span style=\" font-size:12pt; font-weight:700; color:#ff0000;\">IP address is never logged, stored, or displayed</span><span style=\" font-size:12pt; color:#ff0000;\">. </span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Optional Participation</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">Whether you enable error reporting or not will have no impact on the application's functionality. It simply helps me identify and fix issues faster. You can also manually check for updates on GitHub, although most users do not do this. </span></p>\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-inden"
-                        "t:0; text-indent:0px;\"><span style=\" font-size:14pt; font-weight:700;\">IPv6 Connectivity Check</span></h3>\n"
-"<p style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">To see if you have IPv6 connectivity, visit:</span><span style=\" font-size:14pt;\"><br /></span><a href=\"https://echteralsfake.duckdns.org/ping\"><span style=\" font-size:14pt; text-decoration: underline; color:#1aff00;\">https://echteralsfake.duckdns.org/ping</span></a><br /><span style=\" font-size:12pt;\">If you see a white page with </span><span style=\" font-size:12pt; font-weight:700;\">Success</span><span style=\" font-size:12pt;\">, you have IPv6. If not, you do not. </span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">You can also verify your IP addresses by visiting: </span><a href=\"https://ipleak.net\"><span style="
-                        "\" font-size:12pt; text-decoration: underline; color:#ffff00;\">https://ipleak.net</span></a><span style=\" font-size:12pt;\"><br />Example formats:<br />IPv4: </span><span style=\" font-family:'monospace'; font-size:12pt;\">135.215.32.64</span><span style=\" font-size:12pt;\"><br />IPv6: </span><span style=\" font-family:'monospace'; font-size:12pt;\">2a02:810a:186:b400::5c51</span><span style=\" font-size:12pt;\"> </span></p></body></html>", None))
+"<li style=\" font-family:'Sans Serif'; font-size:9pt;\" style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">The version of Porn Fetch you are using</span></li>\n"
+"<li style=\" font-family:'Sans Serif'; font-size:12pt;\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Your operating system (e.g., W"
+                        "indows, Linux, or macOS)</li>\n"
+"<li style=\" font-family:'Sans Serif'; font-size:12pt;\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The current date and time</li>\n"
+"<li style=\" font-family:'Sans Serif'; font-size:12pt;\" style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The error details (full Python traceback)</li></ul>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:700;\">Important:</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\"> The Python traceback may, in some cases, include incidental personal information \u2014 for example, your system username if it appears in a file path. No other personal data is intentionally collected. </span></p>\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; marg"
+                        "in-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">Data Storage &amp; Security</span></h3>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">Error reports are stored in plain text on my server. The server\u2019s storage device is encrypted with LUKS and secured with a strong password (40+ characters). </span><span style=\" font-family:'Sans Serif'; font-size:12pt; color:#ff0000;\">Your </span><span style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:700; color:#ff0000;\">IP address is never logged, stored, or displayed</span><span style=\" font-family:'Sans Serif'; font-size:12pt; color:#ff0000;\">. </span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif"
+                        "'; font-size:9pt; font-weight:700;\">Optional Participation</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">Whether you enable error reporting or not will have no impact on the application's functionality. It simply helps me identify and fix issues faster. You can also manually check for updates on GitHub, although most users do not do this. </span></p>\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt; font-weight:700;\">IPv6 Connectivity Check</span></h3>\n"
+"<p style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">To see if you have IPv6 connectivity, visit:</span><span style=\" font-family:'Sans Serif'; fo"
+                        "nt-size:14pt;\"><br /></span><a href=\"https://echteralsfake.duckdns.org/ping\"><span style=\" font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#1aff00;\">https://echteralsfake.duckdns.org/ping</span></a><span style=\" font-family:'Sans Serif'; font-size:9pt;\"><br /></span><span style=\" font-family:'Sans Serif'; font-size:12pt;\">If you see a white page with </span><span style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:700;\">Success</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\">, you have IPv6. If not, you do not. </span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">You can also verify your IP addresses by visiting: </span><a href=\"https://ipleak.net\"><span style=\" font-family:'Sans Serif'; font-size:12pt; text-decoration: underline; color:#ffff00;\">https://ipleak.net</span></a><span style=\" font-fami"
+                        "ly:'Sans Serif'; font-size:12pt;\"><br />Example formats:<br />IPv4: </span><span style=\" font-family:'monospace'; font-size:12pt;\">135.215.32.64</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\"><br />IPv6: </span><span style=\" font-family:'monospace'; font-size:12pt;\">2a02:810a:186:b400::5c51</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\"> </span></p></body></html>", None))
         self.button_server_enable_logging.setText(QCoreApplication.translate("MainWindow", u"I have IPv6 :) (and want to enable it)", None))
         self.button_server_disable_logging.setText(QCoreApplication.translate("MainWindow", u"I don't have IPv6 / I don't want to enable this feature", None))
         self.main_label_progressbar_total.setText(QCoreApplication.translate("MainWindow", u"Total:", None))

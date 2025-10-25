@@ -9,4 +9,5 @@
 - [] Update networking stuff a little bit
 - [x] Improve UI icons and general look (more consistent)
 - [] Improve logging to server
+- [] Improving help buttons 
 

@@ -39,22 +39,22 @@ xn_client = xn_Client()
 yp_client = yp_Client()
 core = BaseCore() # We need that sometimes in Porn Fetch's main class e.g., thumbnail fetching
 core_ph = None
-core_internet_checks = BaseCore(config=config, auto_init=True)
+core_internet_checks = BaseCore(config=config)
 
 def refresh_clients(enable_kill_switch=False):
     global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, hq_client, xn_client, core, core_ph, yp_client
 
     # One BaseCore per site, with its own RuntimeConfig (isolated headers/cookies)
-    core_common = BaseCore(config=config, auto_init=True)   # if you want a “generic” core
-    core_hq    = BaseCore(config=config, auto_init=True)
-    core_mv    = BaseCore(config=config, auto_init=True)
-    core_ep    = BaseCore(config=config, auto_init=True)
-    core_ph    = BaseCore(config=config, auto_init=True)
-    core_xv    = BaseCore(config=config, auto_init=True)
-    core_xh    = BaseCore(config=config, auto_init=True)
-    core_xn    = BaseCore(config=config, auto_init=True)
-    core_sp    = BaseCore(config=config, auto_init=True)
-    core_yp    = BaseCore(config=config, auto_init=True)
+    core_common = BaseCore(config=config)   # if you want a “generic” core
+    core_hq    = BaseCore(config=config)
+    core_mv    = BaseCore(config=config)
+    core_ep    = BaseCore(config=config)
+    core_ph    = BaseCore(config=config)
+    core_xv    = BaseCore(config=config)
+    core_xh    = BaseCore(config=config)
+    core_xn    = BaseCore(config=config)
+    core_sp    = BaseCore(config=config)
+    core_yp    = BaseCore(config=config)
 
     if enable_kill_switch:
         core_common.enable_kill_switch()
@@ -101,8 +101,8 @@ sections = [ "Misc", "Performance", "Video", "UI"]
 
 options_misc = ["license_accepted", "install_type", "update_checks", "internet_checks", "anonymous_mode", "disclaimer_shown",
                 "network_logging", "first_run_cli", "downloaded_videos", "notice_shown", "android_warning_shown", "supress_errors"]
-options_performance = ["download_mode", "semaphore", "workers", "timeout", "retries", "speed_limit", "processing_delay",
-                       "network_delay"]
+options_performance = ["download_mode", "semaphore", "videos_concurrency", "pages_concurrency", "download_workers",
+                       "timeout", "retries", "speed_limit", "processing_delay", "network_delay"]
 options_video = ["quality", "model_videos", "result_limit", "output_path", "video_id_as_filename", "write_metadata",
                  "skip_existing_files", "track_videos", "database_path", "directory_system"]
 options_ui = ["language", "font_size", "theme"]
@@ -135,8 +135,10 @@ supress_errors = false
 [Performance]
 download_mode = 0
 semaphore = 2
-workers = 20
-timeout = 10
+videos_concurrency = 10
+pages_concurrency = 2
+download_workers = 20
+timeout = 5
 retries = 4
 speed_limit = 0
 processing_delay = 0
@@ -156,7 +158,7 @@ directory_system = false
 
 [UI]
 language = 0
-font_size = 14
+font_size = 10
 theme = 0
 """
 
@@ -421,7 +423,6 @@ def write_tags(path, data: dict): # Using core from Porn Fetch to keep proxy sup
     date = data.get("publish_date")
     thumbnail = data.get("thumbnail")
     logging.debug("Tags [1/3]")
-
     audio = MP4(path)
     audio.tags["\xa9nam"] = str(title)
     audio.tags["\xa9ART"] = str(artist)
