@@ -349,7 +349,7 @@
     <item row="1" column="0">
      <widget class="QStackedWidget" name="CentralStackedWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>6</number>
       </property>
       <widget class="QWidget" name="page_main">
        <property name="maximumSize">
@@ -409,7 +409,7 @@
              <number>1</number>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>3</number>
             </property>
             <widget class="QWidget" name="page_download">
              <property name="sizePolicy">
@@ -485,6 +485,9 @@
                   <property name="cursor">
                    <cursorShape>PointingHandCursor</cursorShape>
                   </property>
+                  <property name="accessibleName">
+                   <string>combobox, select search website here</string>
+                  </property>
                   <item>
                    <property name="text">
                     <string>HQPorner</string>
@@ -546,6 +549,9 @@
                     <bold>true</bold>
                    </font>
                   </property>
+                  <property name="accessibleName">
+                   <string>lineedit video url</string>
+                  </property>
                   <property name="text">
                    <string/>
                   </property>
@@ -573,6 +579,9 @@
                     <bold>true</bold>
                    </font>
                   </property>
+                  <property name="accessibleName">
+                   <string>label model url</string>
+                  </property>
                   <property name="text">
                    <string>Model URL:</string>
                   </property>
@@ -596,6 +605,9 @@
                    <font>
                     <bold>true</bold>
                    </font>
+                  </property>
+                  <property name="accessibleName">
+                   <string>lineedit search query</string>
                   </property>
                   <property name="text">
                    <string/>
@@ -627,6 +639,9 @@
                   <property name="cursor">
                    <cursorShape>PointingHandCursor</cursorShape>
                   </property>
+                  <property name="accessibleName">
+                   <string>button start fetching videos from model, channel, actress or creator</string>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true"/>
                   </property>
@@ -653,6 +668,9 @@
                    <font>
                     <bold>true</bold>
                    </font>
+                  </property>
+                  <property name="accessibleName">
+                   <string>label search query</string>
                   </property>
                   <property name="text">
                    <string>Search Query:</string>
@@ -681,6 +699,9 @@
                   <property name="cursor">
                    <cursorShape>PointingHandCursor</cursorShape>
                   </property>
+                  <property name="accessibleName">
+                   <string>button start video search</string>
+                  </property>
                   <property name="text">
                    <string>Search</string>
                   </property>
@@ -704,6 +725,9 @@
                    <font>
                     <bold>true</bold>
                    </font>
+                  </property>
+                  <property name="accessibleName">
+                   <string>lineedit model / channel, actress, creator URL</string>
                   </property>
                   <property name="text">
                    <string/>
@@ -732,6 +756,9 @@
                     <bold>true</bold>
                    </font>
                   </property>
+                  <property name="accessibleName">
+                   <string>label playlist url</string>
+                  </property>
                   <property name="text">
                    <string>Playlist URL:</string>
                   </property>
@@ -759,6 +786,9 @@
                   </property>
                   <property name="cursor">
                    <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="accessibleName">
+                   <string>button start downloading a video</string>
                   </property>
                   <property name="styleSheet">
                    <string notr="true"/>
@@ -790,6 +820,9 @@
                   <property name="cursor">
                    <cursorShape>PointingHandCursor</cursorShape>
                   </property>
+                  <property name="accessibleName">
+                   <string>button start fetching videos of a playlist</string>
+                  </property>
                   <property name="text">
                    <string>Get Videos</string>
                   </property>
@@ -813,6 +846,9 @@
                    <font>
                     <bold>true</bold>
                    </font>
+                  </property>
+                  <property name="accessibleName">
+                   <string>lineedit playlist URL (PornHub, Xvideos)</string>
                   </property>
                   <property name="text">
                    <string/>
@@ -840,6 +876,9 @@
                    <font>
                     <bold>true</bold>
                    </font>
+                  </property>
+                  <property name="accessibleName">
+                   <string>label video url</string>
                   </property>
                   <property name="text">
                    <string>Video URL:</string>
@@ -881,29 +920,75 @@
                 <property name="spacing">
                  <number>6</number>
                 </property>
-                <item row="0" column="1" colspan="3">
-                 <widget class="QLineEdit" name="login_lineedit_username">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>150</width>
-                    <height>35</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="placeholderText">
-                   <string>Enter your PornHub E-Mail address</string>
-                  </property>
-                 </widget>
+                <item row="3" column="0" colspan="4">
+                 <layout class="QHBoxLayout" name="horizontalLayout_2">
+                  <item>
+                   <widget class="QPushButton" name="login_button_get_watched_videos">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="cursor">
+                     <cursorShape>PointingHandCursor</cursorShape>
+                    </property>
+                    <property name="accessibleName">
+                     <string>button get watched videos (requires login) </string>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true"/>
+                    </property>
+                    <property name="text">
+                     <string>Get watched videos</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="login_button_get_recommended_videos">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="cursor">
+                     <cursorShape>PointingHandCursor</cursorShape>
+                    </property>
+                    <property name="accessibleName">
+                     <string>button get recommended videos (requires login)</string>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true"/>
+                    </property>
+                    <property name="text">
+                     <string>Get recommended videos</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="login_button_get_liked_videos">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="cursor">
+                     <cursorShape>PointingHandCursor</cursorShape>
+                    </property>
+                    <property name="accessibleName">
+                     <string>button get liked videos (requires login)</string>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true"/>
+                    </property>
+                    <property name="text">
+                     <string>Get Liked videos</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                 <item row="1" column="1" colspan="3">
                  <widget class="QLineEdit" name="login_lineedit_password">
@@ -927,11 +1012,68 @@
                   <property name="cursor">
                    <cursorShape>IBeamCursor</cursorShape>
                   </property>
+                  <property name="accessibleName">
+                   <string>lineedit password </string>
+                  </property>
                   <property name="echoMode">
                    <enum>QLineEdit::EchoMode::Password</enum>
                   </property>
                   <property name="placeholderText">
                    <string>Enter your PornHub Password (Your account data will never be saved nor shared) </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1" colspan="3">
+                 <widget class="QLineEdit" name="login_lineedit_username">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>150</width>
+                    <height>35</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="accessibleName">
+                   <string>lineedit email</string>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Enter your PornHub E-Mail address</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0" colspan="4">
+                 <widget class="QPushButton" name="login_button_login">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="accessibleName">
+                   <string>button start login (enter credentials above)</string>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="text">
+                   <string>Login</string>
                   </property>
                  </widget>
                 </item>
@@ -954,47 +1096,13 @@
                     <bold>true</bold>
                    </font>
                   </property>
+                  <property name="accessibleName">
+                   <string>label password</string>
+                  </property>
                   <property name="text">
                    <string>Password:</string>
                   </property>
                  </widget>
-                </item>
-                <item row="2" column="0" colspan="4">
-                 <widget class="QPushButton" name="login_button_login">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true"/>
-                  </property>
-                  <property name="text">
-                   <string>Login</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="0">
-                 <spacer name="login_spacer_main">
-                  <property name="orientation">
-                   <enum>Qt::Orientation::Vertical</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>20</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                 </spacer>
                 </item>
                 <item row="0" column="0">
                  <widget class="QLabel" name="login_label_username">
@@ -1015,71 +1123,13 @@
                     <bold>true</bold>
                    </font>
                   </property>
+                  <property name="accessibleName">
+                   <string>label username</string>
+                  </property>
                   <property name="text">
                    <string>E-Mail:</string>
                   </property>
                  </widget>
-                </item>
-                <item row="3" column="0" colspan="4">
-                 <layout class="QHBoxLayout" name="horizontalLayout_2">
-                  <item>
-                   <widget class="QPushButton" name="login_button_get_watched_videos">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>30</height>
-                     </size>
-                    </property>
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true"/>
-                    </property>
-                    <property name="text">
-                     <string>Get watched videos</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="login_button_get_recommended_videos">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>30</height>
-                     </size>
-                    </property>
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true"/>
-                    </property>
-                    <property name="text">
-                     <string>Get recommended videos</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="login_button_get_liked_videos">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>30</height>
-                     </size>
-                    </property>
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true"/>
-                    </property>
-                    <property name="text">
-                     <string>Get Liked videos</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
                 </item>
                </layout>
               </item>
@@ -1146,6 +1196,9 @@
                     <height>30</height>
                    </size>
                   </property>
+                  <property name="accessibleName">
+                   <string>label information (this shows how many videos have been downloaded)</string>
+                  </property>
                   <property name="text">
                    <string>Info:</string>
                   </property>
@@ -1158,6 +1211,9 @@
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
+                  </property>
+                  <property name="accessibleName">
+                   <string>information (the actual value) </string>
                   </property>
                   <property name="text">
                    <string/>
@@ -1209,8 +1265,8 @@
                  <property name="geometry">
                   <rect>
                    <x>0</x>
-                   <y>0</y>
-                   <width>503</width>
+                   <y>-40</y>
+                   <width>1128</width>
                    <height>188</height>
                   </rect>
                  </property>
@@ -1272,6 +1328,9 @@
                            <property name="cursor">
                             <cursorShape>PointingHandCursor</cursorShape>
                            </property>
+                           <property name="accessibleName">
+                            <string>tools button hqporner get random video</string>
+                           </property>
                            <property name="text">
                             <string>Get random Video</string>
                            </property>
@@ -1294,6 +1353,12 @@
                            <property name="cursor">
                             <cursorShape>PointingHandCursor</cursorShape>
                            </property>
+                           <property name="acceptDrops">
+                            <bool>false</bool>
+                           </property>
+                           <property name="accessibleName">
+                            <string>tools button hqporner get videos by category</string>
+                           </property>
                            <property name="text">
                             <string>Get Videos</string>
                            </property>
@@ -1312,6 +1377,9 @@
                              <width>0</width>
                              <height>0</height>
                             </size>
+                           </property>
+                           <property name="accessibleName">
+                            <string>label tools hqporner get videos by category</string>
                            </property>
                            <property name="text">
                             <string>Get videos by category</string>
@@ -1332,6 +1400,9 @@
                              <height>0</height>
                             </size>
                            </property>
+                           <property name="accessibleName">
+                            <string>tools lineedit hqporner category (enter the category here)</string>
+                           </property>
                           </widget>
                          </item>
                          <item row="0" column="0">
@@ -1347,6 +1418,9 @@
                              <width>0</width>
                              <height>0</height>
                             </size>
+                           </property>
+                           <property name="accessibleName">
+                            <string>label tools hqporn get top porn</string>
                            </property>
                            <property name="text">
                             <string>Get Top Porn:</string>
@@ -1370,6 +1444,9 @@
                            <property name="cursor">
                             <cursorShape>PointingHandCursor</cursorShape>
                            </property>
+                           <property name="accessibleName">
+                            <string>tools buttonn get brazzers videos</string>
+                           </property>
                            <property name="text">
                             <string>Get Brazzers videos</string>
                            </property>
@@ -1379,6 +1456,9 @@
                           <widget class="QComboBox" name="tools_combobox_hqporner_top_porn">
                            <property name="cursor">
                             <cursorShape>PointingHandCursor</cursorShape>
+                           </property>
+                           <property name="accessibleName">
+                            <string>tools combobox hqporner top porn selection</string>
                            </property>
                            <item>
                             <property name="text">
@@ -1414,6 +1494,9 @@
                            <property name="cursor">
                             <cursorShape>PointingHandCursor</cursorShape>
                            </property>
+                           <property name="accessibleName">
+                            <string>tools button hqporner get videos by top porn</string>
+                           </property>
                            <property name="text">
                             <string>Get Videos</string>
                            </property>
@@ -1435,6 +1518,9 @@
                            </property>
                            <property name="cursor">
                             <cursorShape>PointingHandCursor</cursorShape>
+                           </property>
+                           <property name="accessibleName">
+                            <string>tools button hqporner list all categories</string>
                            </property>
                            <property name="text">
                             <string>List of all categories</string>
@@ -1489,6 +1575,9 @@
                              <height>0</height>
                             </size>
                            </property>
+                           <property name="accessibleName">
+                            <string>lineedit tools eporner enter category here</string>
+                           </property>
                           </widget>
                          </item>
                          <item row="4" column="4">
@@ -1507,6 +1596,9 @@
                            </property>
                            <property name="cursor">
                             <cursorShape>PointingHandCursor</cursorShape>
+                           </property>
+                           <property name="accessibleName">
+                            <string>button tools eporner get videos by category</string>
                            </property>
                            <property name="text">
                             <string>Get Videos</string>
@@ -1530,6 +1622,9 @@
                            <property name="cursor">
                             <cursorShape>PointingHandCursor</cursorShape>
                            </property>
+                           <property name="accessibleName">
+                            <string>button tools eporner list all categories</string>
+                           </property>
                            <property name="text">
                             <string>List of all categories</string>
                            </property>
@@ -1548,6 +1643,9 @@
                              <width>100</width>
                              <height>0</height>
                             </size>
+                           </property>
+                           <property name="accessibleName">
+                            <string>label tools eporner get videos by category</string>
                            </property>
                            <property name="text">
                             <string>Get videos by category</string>
@@ -1591,6 +1689,9 @@
                 </property>
                 <item row="8" column="4">
                  <widget class="QPushButton" name="button_range_apply_index">
+                  <property name="accessibleName">
+                   <string>button apply automated selection by index</string>
+                  </property>
                   <property name="text">
                    <string>Apply</string>
                   </property>
@@ -1598,6 +1699,9 @@
                 </item>
                 <item row="4" column="1">
                  <widget class="QLineEdit" name="lineedit_range_start">
+                  <property name="accessibleName">
+                   <string>spinbox apply by time range start</string>
+                  </property>
                   <property name="text">
                    <string>0</string>
                   </property>
@@ -1605,26 +1709,43 @@
                 </item>
                 <item row="0" column="2" colspan="3">
                  <widget class="QPushButton" name="button_range_apply_author">
+                  <property name="accessibleName">
+                   <string>button apply automated video selection by author</string>
+                  </property>
                   <property name="text">
                    <string>Apply</string>
                   </property>
                  </widget>
                 </item>
                 <item row="8" column="1">
-                 <widget class="QSpinBox" name="spinbox_range_start"/>
+                 <widget class="QSpinBox" name="spinbox_range_start">
+                  <property name="accessibleName">
+                   <string>spinbox apply by index start</string>
+                  </property>
+                 </widget>
                 </item>
                 <item row="0" column="1">
                  <widget class="QLineEdit" name="lineedit_range_author">
+                  <property name="accessibleName">
+                   <string>lineedit author name </string>
+                  </property>
                   <property name="placeholderText">
                    <string>Enter the author's name</string>
                   </property>
                  </widget>
                 </item>
                 <item row="8" column="3">
-                 <widget class="QSpinBox" name="spinbox_range_end"/>
+                 <widget class="QSpinBox" name="spinbox_range_end">
+                  <property name="accessibleName">
+                   <string>spinbox apply by index end</string>
+                  </property>
+                 </widget>
                 </item>
                 <item row="8" column="0">
                  <widget class="QLabel" name="label_range_start">
+                  <property name="accessibleName">
+                   <string>label index range start</string>
+                  </property>
                   <property name="text">
                    <string>Start:</string>
                   </property>
@@ -1632,6 +1753,9 @@
                 </item>
                 <item row="4" column="4">
                  <widget class="QPushButton" name="button_range_apply_time">
+                  <property name="accessibleName">
+                   <string>button apply automated selection by time</string>
+                  </property>
                   <property name="text">
                    <string>Apply</string>
                   </property>
@@ -1639,6 +1763,9 @@
                 </item>
                 <item row="4" column="3">
                  <widget class="QLineEdit" name="lineedit_range_end">
+                  <property name="accessibleName">
+                   <string>spinbox apply by time range end</string>
+                  </property>
                   <property name="text">
                    <string>0</string>
                   </property>
@@ -1646,6 +1773,9 @@
                 </item>
                 <item row="0" column="0">
                  <widget class="QLabel" name="label_range_by_author">
+                  <property name="accessibleName">
+                   <string>label apply by author</string>
+                  </property>
                   <property name="text">
                    <string>Apply by author:</string>
                   </property>
@@ -1653,6 +1783,9 @@
                 </item>
                 <item row="8" column="2">
                  <widget class="QLabel" name="label_range_end">
+                  <property name="accessibleName">
+                   <string>label index range end</string>
+                  </property>
                   <property name="text">
                    <string>End:</string>
                   </property>
@@ -1660,6 +1793,9 @@
                 </item>
                 <item row="3" column="0" colspan="4">
                  <widget class="QLabel" name="label_apply_by_time">
+                  <property name="accessibleName">
+                   <string>label apply by time</string>
+                  </property>
                   <property name="text">
                    <string>Apply by time:</string>
                   </property>
@@ -1667,6 +1803,9 @@
                 </item>
                 <item row="4" column="0">
                  <widget class="QLabel" name="label_range_time_start">
+                  <property name="accessibleName">
+                   <string>label apply by time start</string>
+                  </property>
                   <property name="text">
                    <string>Start:</string>
                   </property>
@@ -1674,6 +1813,9 @@
                 </item>
                 <item row="4" column="2">
                  <widget class="QLabel" name="label_range_time_end">
+                  <property name="accessibleName">
+                   <string>label apply by time end</string>
+                  </property>
                   <property name="text">
                    <string>End:</string>
                   </property>
@@ -1681,6 +1823,9 @@
                 </item>
                 <item row="9" column="0" colspan="2">
                  <widget class="QPushButton" name="button_range_select_all">
+                  <property name="accessibleName">
+                   <string>button automated selection select all videos</string>
+                  </property>
                   <property name="text">
                    <string>Select all videos</string>
                   </property>
@@ -1688,6 +1833,9 @@
                 </item>
                 <item row="9" column="3" colspan="2">
                  <widget class="QPushButton" name="button_range_unselect_all">
+                  <property name="accessibleName">
+                   <string>button automated selection unselect all videos</string>
+                  </property>
                   <property name="text">
                    <string>Unselect all videos</string>
                   </property>
@@ -1695,6 +1843,9 @@
                 </item>
                 <item row="5" column="0" colspan="4">
                  <widget class="QLabel" name="label_apply_by_index">
+                  <property name="accessibleName">
+                   <string>label apply by index</string>
+                  </property>
                   <property name="text">
                    <string>Apply by Index:</string>
                   </property>
@@ -1750,6 +1901,9 @@
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
                       </property>
+                      <property name="accessibleName">
+                       <string>checkbox do not clear videos</string>
+                      </property>
                       <property name="text">
                        <string>Do not clear videos</string>
                       </property>
@@ -1766,6 +1920,9 @@
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
                       </property>
+                      <property name="accessibleName">
+                       <string>button automated selection tool</string>
+                      </property>
                       <property name="text">
                        <string>Automated selection tool</string>
                       </property>
@@ -1775,6 +1932,9 @@
                      <widget class="QPushButton" name="main_button_tree_keyboard_shortcuts">
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="accessibleName">
+                       <string>button keyboard shortcuts</string>
                       </property>
                       <property name="text">
                        <string>Keyboard shortcuts</string>
@@ -1806,6 +1966,9 @@
                       <property name="toolTip">
                        <string>Does not stop downloading videos</string>
                       </property>
+                      <property name="accessibleName">
+                       <string>button stop loading videos</string>
+                      </property>
                       <property name="text">
                        <string>Stop loading videos</string>
                       </property>
@@ -1821,6 +1984,9 @@
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
                       </property>
+                      <property name="accessibleName">
+                       <string>checkbox directly download videos</string>
+                      </property>
                       <property name="text">
                        <string>Download videos directly (skip tree widget) </string>
                       </property>
@@ -1829,7 +1995,11 @@
                    </layout>
                   </item>
                   <item>
-                   <widget class="QGraphicsView" name="graphicsView"/>
+                   <widget class="QGraphicsView" name="graphicsView">
+                    <property name="accessibleName">
+                     <string>thumbnail display</string>
+                    </property>
+                   </widget>
                   </item>
                  </layout>
                 </item>
@@ -2018,7 +2188,7 @@
                  </sizepolicy>
                 </property>
                 <property name="currentIndex">
-                 <number>1</number>
+                 <number>0</number>
                 </property>
                 <widget class="QWidget" name="page_video">
                  <property name="sizePolicy">
@@ -2059,6 +2229,9 @@ If you instead use the custom integer values (1080p, 720p etc.) then Porn Fetch 
 but if they are not available the next best quality will be chosen. Please note that this is experimental and has not
 been that tested very well. (Be honest, why would you not choose the best quality lol)</string>
                       </property>
+                      <property name="accessibleName">
+                       <string>label video quality</string>
+                      </property>
                       <property name="text">
                        <string>Quality:</string>
                       </property>
@@ -2066,6 +2239,9 @@ been that tested very well. (Be honest, why would you not choose the best qualit
                     </item>
                     <item row="4" column="0">
                      <widget class="QCheckBox" name="settings_checkbox_videos_use_video_id_as_filename">
+                      <property name="accessibleName">
+                       <string>checkbox use video id as filename</string>
+                      </property>
                       <property name="text">
                        <string>Use Video ID as filename</string>
                       </property>
@@ -2075,6 +2251,12 @@ been that tested very well. (Be honest, why would you not choose the best qualit
                      <widget class="QComboBox" name="settings_video_combobox_model_videos">
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="accessibleName">
+                       <string>combobox model videos type</string>
+                      </property>
+                      <property name="accessibleDescription">
+                       <string>This decides whether you want to fetch model uploads or featured videos or both of them</string>
                       </property>
                       <item>
                        <property name="text">
@@ -2097,6 +2279,12 @@ been that tested very well. (Be honest, why would you not choose the best qualit
                      <widget class="QComboBox" name="settings_video_combobox_quality">
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="accessibleName">
+                       <string>combobox settings quality</string>
+                      </property>
+                      <property name="accessibleDescription">
+                       <string>Porn Fetch will by default download the best video quality</string>
                       </property>
                       <item>
                        <property name="text">
@@ -2165,6 +2353,9 @@ been that tested very well. (Be honest, why would you not choose the best qualit
 Some folder viewers also give you the ability to search files by specific metadata tags. Those tags can help organize and structure files.
 Porn Fetch will by default save those tags inside of your video files. </string>
                       </property>
+                      <property name="accessibleName">
+                       <string>checkbox write metadata tags</string>
+                      </property>
                       <property name="text">
                        <string>Write metadata tags</string>
                       </property>
@@ -2177,6 +2368,9 @@ Porn Fetch will by default save those tags inside of your video files. </string>
 involves loading multiple videos. This also affects models / channels and your liked videos. The result limit is
 basically the number of videos which can be loaded into the tree widget (this thing where videos are displayed).</string>
                       </property>
+                      <property name="accessibleName">
+                       <string>label result limit</string>
+                      </property>
                       <property name="text">
                        <string>Result Limit:</string>
                       </property>
@@ -2184,6 +2378,12 @@ basically the number of videos which can be loaded into the tree widget (this th
                     </item>
                     <item row="2" column="1" colspan="2">
                      <widget class="QSpinBox" name="settings_spinbox_videos_result_limit">
+                      <property name="accessibleName">
+                       <string>spinbox resutl limit</string>
+                      </property>
+                      <property name="accessibleDescription">
+                       <string>The result limit limits how many videos will be fetched</string>
+                      </property>
                       <property name="minimum">
                        <number>1</number>
                       </property>
@@ -2194,6 +2394,9 @@ basically the number of videos which can be loaded into the tree widget (this th
                     </item>
                     <item row="3" column="0">
                      <widget class="QLabel" name="settings_label_videos_output_path">
+                      <property name="accessibleName">
+                       <string>label output path</string>
+                      </property>
                       <property name="text">
                        <string>Output path:</string>
                       </property>
@@ -2206,6 +2409,9 @@ basically the number of videos which can be loaded into the tree widget (this th
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
+                      </property>
+                      <property name="accessibleName">
+                       <string>lineedit video output path</string>
                       </property>
                       <property name="placeholderText">
                        <string>Enter &quot;./&quot; for current directory</string>
@@ -2229,6 +2435,9 @@ and you download a video with the same title, then it would append a random numb
 
 Spain_didnt_win_against_Germany_118251.mp4</string>
                       </property>
+                      <property name="accessibleName">
+                       <string>checkbox skip existing files</string>
+                      </property>
                       <property name="text">
                        <string>Skip existing files</string>
                       </property>
@@ -2245,6 +2454,9 @@ of videos from other studios.
 
 If you choose &quot;User Uploads&quot;, only self uploaded videos will be fetched, and the other way around :)</string>
                       </property>
+                      <property name="accessibleName">
+                       <string>label model videos type (pornhub)</string>
+                      </property>
                       <property name="text">
                        <string>Model videos (PH)</string>
                       </property>
@@ -2255,6 +2467,9 @@ If you choose &quot;User Uploads&quot;, only self uploaded videos will be fetche
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
                       </property>
+                      <property name="accessibleName">
+                       <string>settings open output path</string>
+                      </property>
                       <property name="text">
                        <string>Open</string>
                       </property>
@@ -2264,6 +2479,9 @@ If you choose &quot;User Uploads&quot;, only self uploaded videos will be fetche
                      <widget class="QCheckBox" name="settings_checkbox_videos_track_downloaded_videos">
                       <property name="toolTip">
                        <string>Videos will be tracked in a SQL database which will save the URL and the metadata. </string>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox track downloaded videos</string>
                       </property>
                       <property name="text">
                        <string>Track downloaded videos</string>
@@ -2282,6 +2500,12 @@ from another, Porn Fetch will automatically make folders for it and move the 3 v
 
 This can be helpful for organizing stuff, but is a more advanced feature, so the majority of users won't use it probably</string>
                       </property>
+                      <property name="accessibleName">
+                       <string>checkbox use directory system</string>
+                      </property>
+                      <property name="accessibleDescription">
+                       <string>The directory system will automatically create folders for each author of videos</string>
+                      </property>
                       <property name="text">
                        <string>Use directory system</string>
                       </property>
@@ -2289,6 +2513,12 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
                     </item>
                     <item row="5" column="1">
                      <widget class="QLineEdit" name="settings_lineedit_videos_database_path">
+                      <property name="accessibleName">
+                       <string>lineedit output path of the database</string>
+                      </property>
+                      <property name="accessibleDescription">
+                       <string>the database tracks all downloaded videos in Porn Fetch, optional</string>
+                      </property>
                       <property name="placeholderText">
                        <string>Enter the path of the database file here</string>
                       </property>
@@ -2468,6 +2698,12 @@ If you need something more 'exact / precise', use applications like NetLimiter 4
                     </item>
                     <item row="8" column="1">
                      <widget class="QSpinBox" name="settings_spinbox_performance_pages_concurrency">
+                      <property name="accessibleName">
+                       <string>spinbox pages concurrency</string>
+                      </property>
+                      <property name="accessibleDescription">
+                       <string>This decides how many pages will be scraped at the same time. Lower values between 1-3 are recommended</string>
+                      </property>
                       <property name="minimum">
                        <number>1</number>
                       </property>
@@ -2529,7 +2765,11 @@ internet connection you can set this higher than 10. But this isn't required for
                      </widget>
                     </item>
                     <item row="7" column="1">
-                     <widget class="QDoubleSpinBox" name="settings_doublespinbox_performance_speed_limit"/>
+                     <widget class="QDoubleSpinBox" name="settings_doublespinbox_performance_speed_limit">
+                      <property name="accessibleName">
+                       <string>spinbox speed limit</string>
+                      </property>
+                     </widget>
                     </item>
                     <item row="8" column="0">
                      <widget class="QLabel" name="settings_label_performance_pages_concurrency">
@@ -2620,6 +2860,9 @@ This makes it useful for downloading Porn content if you are in public, or multi
 
 This also disables thumbnail preview. All titles will be replaced with: [redacted] as well as all authors.</string>
                       </property>
+                      <property name="accessibleName">
+                       <string>checkbox enable anonymous mode</string>
+                      </property>
                       <property name="text">
                        <string>Enable Anonymous mode</string>
                       </property>
@@ -2636,6 +2879,9 @@ a request and if it's leaked it will immediately exit everything.
 
 My priority on developing this is low. Please do not report errors. Thank you &lt;3</string>
                       </property>
+                      <property name="accessibleName">
+                       <string>checkbox enable proxy kill switch</string>
+                      </property>
                       <property name="text">
                        <string>Proxy Kill Switch</string>
                       </property>
@@ -2643,6 +2889,9 @@ My priority on developing this is low. Please do not report errors. Thank you &l
                     </item>
                     <item row="0" column="0" colspan="2">
                      <widget class="QPushButton" name="settings_button_system_install_pornfetch">
+                      <property name="accessibleName">
+                       <string>button install porn fetch (This is optional) </string>
+                      </property>
                       <property name="text">
                        <string>Install Porn Fetch</string>
                       </property>
@@ -2653,6 +2902,9 @@ My priority on developing this is low. Please do not report errors. Thank you &l
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
                       </property>
+                      <property name="accessibleName">
+                       <string>checkbox enable update checks</string>
+                      </property>
                       <property name="text">
                        <string>Update checks</string>
                       </property>
@@ -2662,6 +2914,9 @@ My priority on developing this is low. Please do not report errors. Thank you &l
                      <widget class="QCheckBox" name="settings_checkbox_system_internet_checks">
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox enable internet checks</string>
                       </property>
                       <property name="text">
                        <string>Internet checks</string>
@@ -2680,6 +2935,9 @@ you won't get a big notification for it.
 If you have activated Network Logging, they will still be reported. If an error happens while iterating through videos,
 the current video will be skipped and Porn Fetch will continue with the next one.  </string>
                       </property>
+                      <property name="accessibleName">
+                       <string>checkbox supress errors silently</string>
+                      </property>
                       <property name="text">
                        <string>Supress errors silently</string>
                       </property>
@@ -2689,6 +2947,9 @@ the current video will be skipped and Porn Fetch will continue with the next one
                      <widget class="QCheckBox" name="settings_checkbox_system_activate_proxy">
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox activate a proxy</string>
                       </property>
                       <property name="text">
                        <string>Activate Proxy</string>
@@ -2717,6 +2978,9 @@ Like literally only if you use Windows, Linux or Mac. Nothing else.
 
 You can see that yourself, as mentioned before on the source code.
 You'd help me a lot by enabling network logging :) </string>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox enable network logging</string>
                       </property>
                       <property name="text">
                        <string>Enable Network Logging</string>
@@ -2754,6 +3018,9 @@ You'd help me a lot by enabling network logging :) </string>
                    <layout class="QGridLayout" name="settings_gridlayout_ui">
                     <item row="2" column="0">
                      <widget class="QLabel" name="settings_label_ui_theme">
+                      <property name="accessibleName">
+                       <string>label porn fetch theme </string>
+                      </property>
                       <property name="text">
                        <string>Theme:</string>
                       </property>
@@ -2767,6 +3034,9 @@ You'd help me a lot by enabling network logging :) </string>
                         <verstretch>0</verstretch>
                        </sizepolicy>
                       </property>
+                      <property name="accessibleName">
+                       <string>label graphical user interface language</string>
+                      </property>
                       <property name="text">
                        <string>Graphical User Interface Language:</string>
                       </property>
@@ -2774,6 +3044,9 @@ You'd help me a lot by enabling network logging :) </string>
                     </item>
                     <item row="1" column="0">
                      <widget class="QLabel" name="settings_label_ui_font_size">
+                      <property name="accessibleName">
+                       <string>label font size</string>
+                      </property>
                       <property name="text">
                        <string>Font Size:</string>
                       </property>
@@ -2781,6 +3054,9 @@ You'd help me a lot by enabling network logging :) </string>
                     </item>
                     <item row="2" column="1">
                      <widget class="QComboBox" name="settings_combobox_ui_theme">
+                      <property name="accessibleName">
+                       <string>combobox porn fetch theme</string>
+                      </property>
                       <item>
                        <property name="text">
                         <string>Dark</string>
@@ -2799,12 +3075,19 @@ You'd help me a lot by enabling network logging :) </string>
                      </widget>
                     </item>
                     <item row="1" column="1">
-                     <widget class="QSpinBox" name="settings_spinbox_ui_font_size"/>
+                     <widget class="QSpinBox" name="settings_spinbox_ui_font_size">
+                      <property name="accessibleName">
+                       <string>spinbox font size</string>
+                      </property>
+                     </widget>
                     </item>
                     <item row="0" column="1">
                      <widget class="QComboBox" name="settings_ui_combobox_language">
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="accessibleName">
+                       <string>combobox porn fetch language</string>
                       </property>
                       <item>
                        <property name="text">
@@ -2846,6 +3129,9 @@ You'd help me a lot by enabling network logging :) </string>
                   <property name="cursor">
                    <cursorShape>PointingHandCursor</cursorShape>
                   </property>
+                  <property name="accessibleName">
+                   <string>button apply the settings</string>
+                  </property>
                   <property name="text">
                    <string>Apply  (needs restart)</string>
                   </property>
@@ -2855,6 +3141,9 @@ You'd help me a lot by enabling network logging :) </string>
                  <widget class="QPushButton" name="settings_button_reset">
                   <property name="cursor">
                    <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="accessibleName">
+                   <string>button reset porn fetch to default settings</string>
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
@@ -2930,8 +3219,8 @@ QPushButton:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>84</width>
-             <height>70</height>
+             <width>1144</width>
+             <height>576</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_21">
@@ -2951,7 +3240,11 @@ QPushButton:pressed {
              <number>0</number>
             </property>
             <item row="0" column="0">
-             <widget class="QTextBrowser" name="main_textbrowser_credits"/>
+             <widget class="QTextBrowser" name="main_textbrowser_credits">
+              <property name="accessibleName">
+               <string>Textbrowser for credits / information</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -2986,8 +3279,8 @@ QPushButton:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>230</width>
-             <height>110</height>
+             <width>1144</width>
+             <height>576</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_23">
@@ -3008,6 +3301,9 @@ QPushButton:pressed {
             </property>
             <item row="1" column="0">
              <widget class="QPushButton" name="button_accept">
+              <property name="accessibleName">
+               <string>button accept license</string>
+              </property>
               <property name="styleSheet">
                <string notr="true">QPushButton {
     background-color: #28a745; /* Green */
@@ -3034,6 +3330,9 @@ QPushButton:pressed {
             </item>
             <item row="1" column="1">
              <widget class="QPushButton" name="button_deny">
+              <property name="accessibleName">
+               <string>button deny license</string>
+              </property>
               <property name="styleSheet">
                <string notr="true">QPushButton {
     background-color: #dc3545; /* Red */
@@ -3066,6 +3365,9 @@ QPushButton:pressed {
                 <pointsize>11</pointsize>
                 <kerning>true</kerning>
                </font>
+              </property>
+              <property name="accessibleName">
+               <string>textbrowser license</string>
               </property>
               <property name="html">
                <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -3187,8 +3489,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>256</width>
-             <height>192</height>
+             <width>1144</width>
+             <height>576</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_54">
@@ -3220,6 +3522,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
                 <width>200000</width>
                 <height>200000</height>
                </size>
+              </property>
+              <property name="accessibleName">
+               <string>textbrowser keyboard shortcuts</string>
               </property>
               <property name="html">
                <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -3270,10 +3575,17 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout_27">
           <item row="0" column="0">
-           <widget class="QTextBrowser" name="text_browser_update_available"/>
+           <widget class="QTextBrowser" name="text_browser_update_available">
+            <property name="accessibleName">
+             <string>textbrowser update changelog notification</string>
+            </property>
+           </widget>
           </item>
           <item row="1" column="0">
            <widget class="QPushButton" name="button_update_acknowledged">
+            <property name="accessibleName">
+             <string>button acknowledge that a new version is out</string>
+            </property>
             <property name="text">
              <string>OK</string>
             </property>
@@ -3310,8 +3622,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>194</width>
-             <height>142</height>
+             <width>1144</width>
+             <height>576</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_56">
@@ -3334,6 +3646,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <layout class="QVBoxLayout" name="verticalLayout">
               <item>
                <widget class="QTextBrowser" name="textbrowser_install_dialog">
+                <property name="accessibleName">
+                 <string>textbrowser install dialog</string>
+                </property>
                 <property name="html">
                  <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -3369,6 +3684,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
                <layout class="QHBoxLayout" name="horizontallayout_app_name">
                 <item>
                  <widget class="QLabel" name="label_custom_app_name">
+                  <property name="accessibleName">
+                   <string>label custom app name</string>
+                  </property>
                   <property name="text">
                    <string>Custom App Name:</string>
                   </property>
@@ -3376,6 +3694,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
                 </item>
                 <item>
                  <widget class="QLineEdit" name="lineedit_custom_app_name">
+                  <property name="accessibleName">
+                   <string>lineedit custom app name (enter the custom name here) </string>
+                  </property>
                   <property name="text">
                    <string/>
                   </property>
@@ -3390,6 +3711,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
                <layout class="QHBoxLayout" name="horizontallayout_buttons">
                 <item>
                  <widget class="QPushButton" name="button_install">
+                  <property name="accessibleName">
+                   <string>buttom instal porn fetch</string>
+                  </property>
                   <property name="text">
                    <string>Install</string>
                   </property>
@@ -3397,6 +3721,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
                 </item>
                 <item>
                  <widget class="QPushButton" name="button_portable">
+                  <property name="accessibleName">
+                   <string>button portable mode</string>
+                  </property>
                   <property name="text">
                    <string>Portable</string>
                   </property>
@@ -3461,6 +3788,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
             </property>
             <item row="0" column="0">
              <widget class="QTextBrowser" name="main_textbrowser_supported_websites">
+              <property name="accessibleName">
+               <string>textbrowser supported websites</string>
+              </property>
               <property name="html">
                <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -3584,8 +3914,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>488</width>
-             <height>103</height>
+             <width>1144</width>
+             <height>576</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_59">
@@ -3611,6 +3941,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
                 <property name="cursor">
                  <cursorShape>PointingHandCursor</cursorShape>
                 </property>
+                <property name="accessibleName">
+                 <string>button donate ko-fi</string>
+                </property>
                 <property name="text">
                  <string>Ko-Fi</string>
                 </property>
@@ -3620,6 +3953,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
                <widget class="QPushButton" name="button_donate_already_donated">
                 <property name="cursor">
                  <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+                <property name="accessibleName">
+                 <string>button already donated</string>
                 </property>
                 <property name="text">
                  <string>Already Donated</string>
@@ -3631,6 +3967,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
                 <property name="cursor">
                  <cursorShape>PointingHandCursor</cursorShape>
                 </property>
+                <property name="accessibleName">
+                 <string>button donate paypal</string>
+                </property>
                 <property name="text">
                  <string>PayPal</string>
                 </property>
@@ -3640,6 +3979,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
                <widget class="QPushButton" name="button_donate_copy_xmr">
                 <property name="cursor">
                  <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+                <property name="accessibleName">
+                 <string>button copy XMR address for donations</string>
                 </property>
                 <property name="text">
                  <string>Copy XMR</string>
@@ -3651,6 +3993,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
                 <property name="cursor">
                  <cursorShape>PointingHandCursor</cursorShape>
                 </property>
+                <property name="accessibleName">
+                 <string>button close donation message</string>
+                </property>
                 <property name="text">
                  <string>Close</string>
                 </property>
@@ -3658,6 +4003,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
               </item>
               <item row="0" column="0" colspan="5">
                <widget class="QTextBrowser" name="textbrowser_donation_nag">
+                <property name="accessibleName">
+                 <string>textbrowser for donation message</string>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">border-radius: 15px;</string>
                 </property>
@@ -3721,13 +4069,19 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>121</height>
+             <width>1144</width>
+             <height>576</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_61">
             <item row="0" column="0">
              <widget class="QTextBrowser" name="textbrowser_disclaimer">
+              <property name="accessibleName">
+               <string>textbrowser disclaimer message</string>
+              </property>
+              <property name="accessibleDescription">
+               <string/>
+              </property>
               <property name="html">
                <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -3754,6 +4108,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
             </item>
             <item row="1" column="0">
              <widget class="QPushButton" name="button_disclaimer_accept">
+              <property name="accessibleName">
+               <string>button accept disclaimer message</string>
+              </property>
               <property name="text">
                <string>Accept</string>
               </property>
@@ -3789,6 +4146,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </property>
           <item row="0" column="0" colspan="2">
            <widget class="QTextBrowser" name="textbrowser_data_collection">
+            <property name="accessibleName">
+             <string>textbrowser data collection</string>
+            </property>
+            <property name="accessibleDescription">
+             <string>This contains information of how Porn Fetch processes collected errors, where they go to and how they are transmitted. </string>
+            </property>
             <property name="lineWidth">
              <number>1</number>
             </property>
@@ -3826,6 +4189,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </item>
           <item row="1" column="0">
            <widget class="QPushButton" name="button_server_enable_logging">
+            <property name="accessibleName">
+             <string>button enable IPv6 logging</string>
+            </property>
             <property name="text">
              <string>I have IPv6 :) (and want to enable it)</string>
             </property>
@@ -3833,6 +4199,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </item>
           <item row="1" column="1">
            <widget class="QPushButton" name="button_server_disable_logging">
+            <property name="accessibleName">
+             <string>button disable IPv6 logging completely</string>
+            </property>
             <property name="text">
              <string>I don't have IPv6 / I don't want to enable this feature</string>
             </property>
