@@ -362,6 +362,15 @@ def load_video_attributes(video):
     else:
         raise "Instance Error! Please report this immediately on GitHub!"
 
+    try:
+        logger.info(f"Fetching Thumbnail for: {title}")
+        if "hqporner" in thumbnail:
+            core.session.headers["Referer"] = "https://www.hqporner.com/"
+        data_bytes = core.fetch(thumbnail, get_bytes=True)  # <- returns bytes
+    finally:
+        # remove header if present (no KeyError)
+        core.session.headers.pop("Referer", None)
+
     data = {
         "title": title,
         "author": author,
@@ -369,7 +378,8 @@ def load_video_attributes(video):
         "tags": tags,
         "publish_date": publish_date,
         "thumbnail": thumbnail,
-        "url": video.url
+        "url": video.url,
+        "thumbnail_data": data_bytes
     }
     logger.debug(f"Loaded video data: {data}")
 

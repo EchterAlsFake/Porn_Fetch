@@ -28,6 +28,7 @@ try:
 except Exception:
     FORCE_DISABLE_AV = True
 
+import ast
 import time
 import shutil
 import os.path
@@ -54,7 +55,7 @@ from src.backend.config import shared_config
 from hqporner_api.api import Sort as hq_Sort
 
 from PySide6.QtCore import (QFile, QTextStream, QRunnable, QThreadPool, QSemaphore, Qt, QLocale,
-                            QTranslator, QCoreApplication, QSize, QEvent, QRectF)
+                            QTranslator, QCoreApplication, QSize, QEvent, QRectF, QByteArray)
 from PySide6.QtWidgets import (QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, \
                                QInputDialog, QMainWindow, QLabel, QProgressBar, QGraphicsPixmapItem, QDialog, QVBoxLayout,
                                QGraphicsScene, QGraphicsView, QComboBox)
@@ -354,7 +355,6 @@ class AddToTreeWidget(QRunnable):
                     output_path = os.path.join(self.output_path, stripped_title + ".mp4")
 
                 # Emit the loaded signal with all the required information
-
                 data.update(
                     {
                         "title": stripped_title,
@@ -498,8 +498,6 @@ class DownloadThread(QRunnable):
         self.signals = Signals()
         self.stop_flag = stop_flag
         self.skip_existing_files = self.consistent_data.get("skip_existing_files")
-        self.workers = int(self.consistent_data.get("workers"))
-        self.timeout = int(self.consistent_data.get("timeout"))
         self.video_progress = {}
         self.last_update_time = 0
         self._range_emitted = False
@@ -1565,6 +1563,12 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         elif "xhamster" in str(model) and "channels" in str(model):
             videos = shared_functions.xh_client.get_channel(url=model).videos()
 
+        elif "youporn" in str(model) and "pornstar" in str(model):
+            videos = shared_functions.yp_client.get_pornstar(url=model).videos()
+
+        elif "youporn" in str(model) and "channel" in str(model):
+            videos = shared_functions.yp_client.get_channel(url=model).videos()
+
         else:
             videos = None
             ui_popup(self.tr("The model URL you entered seems to be invalid. Please check your input",
@@ -1602,13 +1606,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         query = self.ui.download_lineedit_search_query.text()
         self.logger.debug(f"Searching with query: {query}")
         if self.website_to_search_on == 0:
-            try:
-                videos = shared_functions.hq_client.search_videos(query)
-
-            except NoVideosFound:
-                handle_error_gracefully(self, data=video_data.consistent_data,
-                                        error_message=f"No videos found for query: {query}")
-                return
+            videos = shared_functions.hq_client.search_videos(query, pages=500)
 
         elif self.website_to_search_on == 1:
             videos = shared_functions.ph_client.search(query)
@@ -1617,16 +1615,16 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
             videos = shared_functions.ep_client.search_videos(query, sorting_gay="", sorting_order="",
                                                               sorting_low_quality="", page=20, per_page=200)
         elif self.website_to_search_on == 3:
-            videos = shared_functions.xv_client.search(query)
+            videos = shared_functions.xv_client.search(query, pages=500)
 
         elif self.website_to_search_on == 4:
-            videos = shared_functions.xh_client.search_videos(query=query)
+            videos = shared_functions.xh_client.search_videos(query=query, pages=500)
 
         elif self.website_to_search_on == 5:
-            videos = shared_functions.xn_client.search(query).videos()
+            videos = shared_functions.xn_client.search(query).videos(pages=500)
 
         elif self.website_to_search_on == 6:
-            videos = shared_functions.sp_client.search(query=query, pages=0)
+            videos = shared_functions.sp_client.search(query=query, pages=500)
 
         elif self.website_to_search_on == 7:
             videos = shared_functions.mv_client.search(query=query, video_count=500)
@@ -1680,6 +1678,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         index = data.get("index")
         video = data.get("video")  # e.g. a URL or identifier that may contain "xnxx", "eporner", etc.
         thumbnail = data.get("thumbnail")
+        thumbnail_data = data.get("thumbnail_data")
 
         # Parse the raw length, passing video as a hint for the source.
         parsed_length = shared_functions.parse_length(raw_length, video)
@@ -1712,6 +1711,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         item.setData(2, Qt.ItemDataRole.UserRole, formatted_duration)  # Hidden sort key.
         item.setData(3, Qt.ItemDataRole.UserRole, str(thumbnail))
         item.setData(4, Qt.ItemDataRole.UserRole, str(author))
+        item.setData(5, Qt.ItemDataRole.UserRole, thumbnail_data) # Thumbnail in bytes form
 
     def tree_widget_finished(self):
         if self.ui.main_checkbox_direct_download.isChecked():
@@ -1862,57 +1862,51 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
             if str(author).lower() == str(name).lower():
                 item.setCheckState(0, Qt.CheckState.Checked)
 
-    def set_thumbnail(self, item_current, item_previous=None): # Won's use the previous item
+    def set_thumbnail(self, item_current: QTreeWidgetItem, item_previous=None): # Won's use the previous item
         """Replace your QLabel code with this, feeding the graphicsView."""
-        if time.time() - self.last_thumbnail_change < 0.5: # Bypasses a bug
-            return
-
-        self.last_thumbnail_change = time.time()
         if __build__ == "android":
             return
 
+        if time.time() - self.last_thumbnail_change < 0.1: # Bypasses a bug where the function would be called 2 times always
+            return
+
+        data = item_current.data(5, Qt.ItemDataRole.UserRole)
+        self.last_thumbnail_change = time.time()
         item = item_current
-        gv = self.ui.graphicsView
 
         # clear if nothing to show
         if item is None or self._anonymous_mode:
             self._pixmap_item.setPixmap(QPixmap())
             return
 
-        thumbnail = item.data(3, Qt.ItemDataRole.UserRole)
-        if not "http" in thumbnail:
-            self.logger.warning("Thumbnail not available for. This is not an error.")
-            return
+        pixmap = QPixmap()
 
-        if not thumbnail:
+        if not data:
             self._pixmap_item.setPixmap(QPixmap())
             return
 
-        try:
-            pixmap = QPixmap()
-            # your custom referer logic…
-            if "hqporner" in thumbnail:
-                shared_functions.core.session.headers["Referer"] = "https://hqporner.com"
+        if isinstance(data, (bytes, bytearray, memoryview)):
+            ok = pixmap.loadFromData(bytes(data))
+        elif isinstance(data, QByteArray):
+            ok = pixmap.loadFromData(data)
+        elif isinstance(data, QPixmap):
+            pixmap = data
+            ok = True
+        else:
+            self.logger.warning("Unexpected thumbnail_data type: %r", type(data))
+            ok = False
 
-            pixmap.loadFromData(shared_functions.core.fetch(thumbnail, get_bytes=True))
-            if "hqporner" in thumbnail:
-                del shared_functions.core.session.headers['Referer']
-
-            self.logger.info("Fetched thumbnail!")
-
-            # 1) stash the full-res copy
-            self._full_pixmap = pixmap
-
-            # 2) show it in the scene
-            self._pixmap_item.setPixmap(pixmap)
-            self._scene.setSceneRect(QRectF(pixmap.rect()))
-            # 3) initial fit/fill
-            gv.fitInView(self._scene.sceneRect(),
-                         Qt.AspectRatioMode.KeepAspectRatioByExpanding)
-
-        except Exception:
-            self.logger.error("Failed to load thumbnail", exc_info=True)
+        if not ok:
+            self.logger.warning("Failed to load pixmap from thumbnail data")
             self._pixmap_item.setPixmap(QPixmap())
+            return
+
+        self._full_pixmap = pixmap
+        self._pixmap_item.setPixmap(pixmap)
+        self._scene.setSceneRect(QRectF(pixmap.rect()))
+        self.ui.graphicsView.fitInView(self._scene.sceneRect(),
+                                       Qt.AspectRatioMode.KeepAspectRatioByExpanding)
+
 
     """
     The following functions are used to connect data between Threads and the Main UI
