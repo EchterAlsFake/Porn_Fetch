@@ -330,41 +330,42 @@ class AddToTreeWidget(QRunnable):
 
         for attempt in range(0, 5):
             try:
-                video_id = random.randint(0, 99999999) # Creates a random ID for each video
+                video_identifier = random.randint(0, 99999999) # Creates a random ID for each video
                 if isinstance(video, str):
                     video = shared_functions.check_video(url=video, is_url=True)
 
-                self.logger.debug(f"Created ID: {video_id} for: {video.url}")
+                self.logger.debug(f"Created ID: {video_identifier} for: {video.url}")
                 data = shared_functions.load_video_attributes(video)
-                session_urls.append(video.url)
                 self.logger.debug("Loaded video attributes")
-                stripped_title = shared_functions.core.strip_title(
-                    data.get("title"))  # Strip the title so that videos with special chars can be
-                                        # saved on windows. it would raise an OSError otherwise
+                session_urls.append(video.url)
+                title = data.get("title")
+                video_id = data.get("video_id")
+                stripped_title_1 = shared_functions.core.strip_title(title) # Clears special characters
+                stripped_title_2 = shared_functions.core.strip_title(title)
 
                 if self.consistent_data.get("video_id_as_filename"):
-                    stripped_title = str(video_id)
+                    stripped_title_1 = video_id # Only PornHub / EPorner / MissAV
 
                 if self.consistent_data.get(
                         "directory_system"):  # If the directory system is enabled, this will create an additional folder
                     author_path = os.path.join(self.output_path, data.get("author"))
                     os.makedirs(author_path, exist_ok=True)
-                    output_path = os.path.join(str(author_path), stripped_title + ".mp4")
+                    output_path = os.path.join(str(author_path), stripped_title_1 + ".mp4")
 
                 else:
-                    output_path = os.path.join(self.output_path, stripped_title + ".mp4")
+                    output_path = os.path.join(self.output_path, stripped_title_1 + ".mp4")
 
                 # Emit the loaded signal with all the required information
                 data.update(
                     {
-                        "title": stripped_title,
+                        "title": stripped_title_2,
                         "output_path": output_path,
                         "index": index,
                         "video": video
                     })
 
-                video_data.data_objects.update({video_id: data})
-                return video_id
+                video_data.data_objects.update({video_identifier: data})
+                return video_identifier
 
             except (shared_functions.errors.PremiumVideo, IndexError):
                 handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Premium-only video skipped: {video.url}")

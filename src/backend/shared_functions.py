@@ -293,6 +293,7 @@ def load_video_attributes(video):
         publish_date = video.date
         video.refresh()  # Throws an error otherwise. I have no idea why.
         thumbnail = video.image.url
+        video_id = video.id
 
     elif isinstance(video, xn_Video):
         author = video.author
@@ -300,6 +301,7 @@ def load_video_attributes(video):
         tags = video.tags
         publish_date = video.publish_date
         thumbnail = video.thumbnail_url[0]
+        video_id = video.title
 
     elif isinstance(video, xv_Video):
         author = video.author.name
@@ -307,6 +309,7 @@ def load_video_attributes(video):
         tags = video.tags
         publish_date = video.publish_date
         thumbnail = video.thumbnail_url
+        video_id = video.title
 
     elif isinstance(video, ep_Video):
         author = video.author
@@ -314,6 +317,7 @@ def load_video_attributes(video):
         tags = ",".join([tag for tag in video.tags])
         publish_date = video.publish_date
         thumbnail = video.thumbnail
+        video_id = video.video_id
 
     elif isinstance(video, hq_Video):
         print("In loading stuff")
@@ -325,6 +329,7 @@ def load_video_attributes(video):
         length = video.length
         tags = ",".join([category for category in video.tags])
         publish_date = video.publish_date
+        video_id = video.title
         try:
             thumbnail = video.get_thumbnails()[0]
 
@@ -337,6 +342,7 @@ def load_video_attributes(video):
         tags = "Not available"
         thumbnail = video.thumbnail
         publish_date = video.publish_date
+        video_id = video.video_code
 
     elif isinstance(video, yp_Video):
         author = video.author.name
@@ -344,6 +350,7 @@ def load_video_attributes(video):
         tags = ",".join(video.categories)
         thumbnail = video.thumbnail
         publish_date = video.publish_date
+        video_id = video.title
 
     elif isinstance(video, xh_Video):
         author = ",".join(video.pornstars)
@@ -351,6 +358,7 @@ def load_video_attributes(video):
         tags = "Not available"
         thumbnail = video.thumbnail
         publish_date = "Not available"
+        video_id = video.title
 
     elif isinstance(video, sp_Video):
         author = video.author
@@ -358,6 +366,7 @@ def load_video_attributes(video):
         tags = ",".join(video.tags)
         thumbnail = video.thumbnail
         publish_date = "Not available"
+        video_id = video.title
 
     else:
         raise "Instance Error! Please report this immediately on GitHub!"
@@ -379,7 +388,8 @@ def load_video_attributes(video):
         "publish_date": publish_date,
         "thumbnail": thumbnail,
         "url": video.url,
-        "thumbnail_data": data_bytes
+        "thumbnail_data": data_bytes,
+        "video_id": video_id
     }
     logger.debug(f"Successfully loaded video data for: {title}")
 
