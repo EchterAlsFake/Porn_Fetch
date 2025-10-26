@@ -19,3 +19,4 @@ h2
 brotli
 fake-useragent
 lxml
+truststore
