@@ -13,3 +13,9 @@ markdown
 rich
 mutagen
 spankbang_api
+youporn_api
+h2
+brotli
+fake-useragent
+lxml
+truststore
