@@ -35,6 +35,7 @@ import logging
 import argparse
 import markdown
 import traceback
+import truststore
 import src.frontend.UI.resources
 import src.backend.shared_functions as shared_functions
 
@@ -71,6 +72,8 @@ from youporn_api.modules.errors import VideoUnavailable as VideoUnavailable_YP, 
 from phub.errors import VideoError as VideoError_PH
 from eporner_api.modules.locals import Category as ep_Category
 
+
+truststore.inject_into_ssl() # Uses System CAs instead of ceritfi's cacert.pem
 
 FORCE_PORTABLE_RUN = False
 total_segments = 0
@@ -2341,13 +2344,24 @@ def main():
     app.setFont(sys_font)
     app.setWindowIcon(QIcon(":/images/graphics/logo_transparent.png"))
 
-    if language == "system":
+    if str(language) == "0":
         # Get the system's locale
         locale = QLocale.system()
         language_code = locale.name()
 
     else:
-        language_code = language
+        if str(language) == "1":
+            language_code = "en"
+
+        elif str(language) == "2":
+            language_code = "de_DE"
+
+        elif str(language) == "3":
+            language_code = "zh_CN"
+
+        elif str(language) == "4":
+            language_code = "fr"
+
     # Try loading the specific regional translation
 
     path = f":/translations/translations/qm/{language_code}.qm"
@@ -2393,7 +2407,7 @@ if __name__ == "__main__":
 
     def export_urls():
         if not len(session_urls) == 0:
-            file, type_ = QFileDialog().getOpenFileName()
+            file, type_ = QFileDialog().getSaveFileName()
             with open(file, "w") as url_export_file:
                 for url in session_urls:
                     url_export_file.write(f"{url}\n")
