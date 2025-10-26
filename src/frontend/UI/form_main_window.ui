@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1164</width>
-    <height>725</height>
+    <width>978</width>
+    <height>655</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,13 @@
    <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_11">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_12">
     <item row="0" column="0">
      <layout class="QHBoxLayout" name="main_horizontallayout_menu_buttons">
       <property name="spacing">
@@ -349,7 +355,7 @@
     <item row="1" column="0">
      <widget class="QStackedWidget" name="CentralStackedWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="page_main">
        <property name="maximumSize">
@@ -393,7 +399,7 @@
             <property name="minimumSize">
              <size>
               <width>0</width>
-              <height>80</height>
+              <height>150</height>
              </size>
             </property>
             <property name="maximumSize">
@@ -409,7 +415,7 @@
              <number>1</number>
             </property>
             <property name="currentIndex">
-             <number>3</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="page_download">
              <property name="sizePolicy">
@@ -427,7 +433,7 @@
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>150</height>
+               <height>180</height>
               </size>
              </property>
              <layout class="QGridLayout" name="gridLayout_5">
@@ -479,7 +485,7 @@
                   </property>
                   <property name="font">
                    <font>
-                    <bold>true</bold>
+                    <bold>false</bold>
                    </font>
                   </property>
                   <property name="cursor">
@@ -526,6 +532,11 @@
                   <item>
                    <property name="text">
                     <string>Missav</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>YouPorn</string>
                    </property>
                   </item>
                  </widget>
@@ -576,7 +587,7 @@
                   </property>
                   <property name="font">
                    <font>
-                    <bold>true</bold>
+                    <bold>false</bold>
                    </font>
                   </property>
                   <property name="accessibleName">
@@ -633,7 +644,7 @@
                   </property>
                   <property name="font">
                    <font>
-                    <bold>true</bold>
+                    <bold>false</bold>
                    </font>
                   </property>
                   <property name="cursor">
@@ -666,7 +677,7 @@
                   </property>
                   <property name="font">
                    <font>
-                    <bold>true</bold>
+                    <bold>false</bold>
                    </font>
                   </property>
                   <property name="accessibleName">
@@ -693,7 +704,7 @@
                   </property>
                   <property name="font">
                    <font>
-                    <bold>true</bold>
+                    <bold>false</bold>
                    </font>
                   </property>
                   <property name="cursor">
@@ -753,7 +764,7 @@
                   </property>
                   <property name="font">
                    <font>
-                    <bold>true</bold>
+                    <bold>false</bold>
                    </font>
                   </property>
                   <property name="accessibleName">
@@ -780,7 +791,7 @@
                   </property>
                   <property name="font">
                    <font>
-                    <bold>true</bold>
+                    <bold>false</bold>
                     <underline>false</underline>
                    </font>
                   </property>
@@ -814,7 +825,7 @@
                   </property>
                   <property name="font">
                    <font>
-                    <bold>true</bold>
+                    <bold>false</bold>
                    </font>
                   </property>
                   <property name="cursor">
@@ -874,7 +885,7 @@
                   </property>
                   <property name="font">
                    <font>
-                    <bold>true</bold>
+                    <bold>false</bold>
                    </font>
                   </property>
                   <property name="accessibleName">
@@ -1168,62 +1179,96 @@
                <number>0</number>
               </property>
               <item row="1" column="0">
-               <spacer name="verticalSpacer_2">
-                <property name="orientation">
-                 <enum>Qt::Orientation::Vertical</enum>
+               <widget class="QScrollArea" name="scrollarea_progressbars">
+                <property name="widgetResizable">
+                 <bool>true</bool>
                 </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>248</width>
-                  <height>88</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item row="0" column="0">
-               <layout class="QGridLayout" name="progress_gridlayout_progressbar">
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
-                <property name="horizontalSpacing">
-                 <number>6</number>
-                </property>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="progress_label_info">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>30</height>
-                   </size>
+                <widget class="QWidget" name="scrollAreaWidgetContents_5">
+                 <property name="geometry">
+                  <rect>
+                   <x>0</x>
+                   <y>0</y>
+                   <width>956</width>
+                   <height>148</height>
+                  </rect>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_11">
+                  <property name="leftMargin">
+                   <number>0</number>
                   </property>
-                  <property name="accessibleName">
-                   <string>label information (this shows how many videos have been downloaded)</string>
+                  <property name="topMargin">
+                   <number>0</number>
                   </property>
-                  <property name="text">
-                   <string>Info:</string>
+                  <property name="rightMargin">
+                   <number>0</number>
                   </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QLineEdit" name="progress_lineedit_download_info">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
+                  <property name="bottomMargin">
+                   <number>0</number>
                   </property>
-                  <property name="accessibleName">
-                   <string>information (the actual value) </string>
+                  <property name="spacing">
+                   <number>0</number>
                   </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="readOnly">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
+                  <item row="0" column="0">
+                   <layout class="QGridLayout" name="progress_gridlayout_progressbar">
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="horizontalSpacing">
+                     <number>6</number>
+                    </property>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="progress_label_info">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>30</height>
+                       </size>
+                      </property>
+                      <property name="accessibleName">
+                       <string>label information (this shows how many videos have been downloaded)</string>
+                      </property>
+                      <property name="text">
+                       <string>Info:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QLineEdit" name="progress_lineedit_download_info">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="accessibleName">
+                       <string>information (the actual value) </string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="1" column="0">
+                   <spacer name="verticalSpacer_2">
+                    <property name="orientation">
+                     <enum>Qt::Orientation::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>308</width>
+                      <height>18</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </widget>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -1265,8 +1310,8 @@
                  <property name="geometry">
                   <rect>
                    <x>0</x>
-                   <y>-40</y>
-                   <width>1128</width>
+                   <y>0</y>
+                   <width>503</width>
                    <height>188</height>
                   </rect>
                  </property>
@@ -1867,8 +1912,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>1142</width>
-               <height>424</height>
+               <width>956</width>
+               <height>378</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -1898,6 +1943,12 @@
                    <layout class="QGridLayout" name="gridLayout_13">
                     <item row="0" column="1">
                      <widget class="QCheckBox" name="main_checkbox_tree_do_not_clear_videos">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
                       </property>
@@ -1930,6 +1981,12 @@
                     </item>
                     <item row="1" column="1">
                      <widget class="QPushButton" name="main_button_tree_keyboard_shortcuts">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
                       </property>
@@ -1944,7 +2001,7 @@
                     <item row="2" column="0" colspan="2">
                      <widget class="QPushButton" name="main_button_tree_stop">
                       <property name="sizePolicy">
-                       <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
@@ -1957,7 +2014,7 @@
                       </property>
                       <property name="font">
                        <font>
-                        <bold>true</bold>
+                        <bold>false</bold>
                        </font>
                       </property>
                       <property name="cursor">
@@ -1976,9 +2033,15 @@
                     </item>
                     <item row="0" column="0">
                      <widget class="QCheckBox" name="main_checkbox_direct_download">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
                       <property name="font">
                        <font>
-                        <bold>true</bold>
+                        <bold>false</bold>
                        </font>
                       </property>
                       <property name="cursor">
@@ -1988,7 +2051,8 @@
                        <string>checkbox directly download videos</string>
                       </property>
                       <property name="text">
-                       <string>Download videos directly (skip tree widget) </string>
+                       <string>Download videos 
+directly </string>
                       </property>
                      </widget>
                     </item>
@@ -1996,6 +2060,12 @@
                   </item>
                   <item>
                    <widget class="QGraphicsView" name="graphicsView">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
                     <property name="accessibleName">
                      <string>thumbnail display</string>
                     </property>
@@ -2019,7 +2089,7 @@
                   </property>
                   <property name="font">
                    <font>
-                    <bold>true</bold>
+                    <bold>false</bold>
                    </font>
                   </property>
                   <property name="cursor">
@@ -2043,7 +2113,7 @@
                   </property>
                   <property name="minimumSize">
                    <size>
-                    <width>100</width>
+                    <width>300</width>
                     <height>10</height>
                    </size>
                   </property>
@@ -2075,6 +2145,12 @@
        </layout>
       </widget>
       <widget class="QWidget" name="page_settings">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <layout class="QGridLayout" name="gridLayout_7">
         <property name="leftMargin">
          <number>0</number>
@@ -2093,6 +2169,12 @@
         </property>
         <item row="0" column="1">
          <widget class="QScrollArea" name="settings_scrollarea">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="widgetResizable">
            <bool>true</bool>
           </property>
@@ -2101,8 +2183,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1144</width>
-             <height>576</height>
+             <width>958</width>
+             <height>530</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_19">
@@ -2182,13 +2264,13 @@
               <item>
                <widget class="QStackedWidget" name="settings_stacked_widget_main">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
                 <property name="currentIndex">
-                 <number>1</number>
+                 <number>0</number>
                 </property>
                 <widget class="QWidget" name="page_video">
                  <property name="sizePolicy">
@@ -3228,8 +3310,8 @@ QPushButton:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1144</width>
-             <height>576</height>
+             <width>84</width>
+             <height>70</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_21">
@@ -3288,8 +3370,8 @@ QPushButton:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1144</width>
-             <height>576</height>
+             <width>230</width>
+             <height>110</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_23">
@@ -3498,8 +3580,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1144</width>
-             <height>576</height>
+             <width>256</width>
+             <height>192</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_54">
@@ -3631,8 +3713,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1144</width>
-             <height>576</height>
+             <width>194</width>
+             <height>142</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_56">
@@ -3775,8 +3857,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1144</width>
-             <height>576</height>
+             <width>84</width>
+             <height>70</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_20">
@@ -3923,8 +4005,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1144</width>
-             <height>576</height>
+             <width>488</width>
+             <height>103</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_59">
@@ -4078,8 +4160,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1144</width>
-             <height>576</height>
+             <width>98</width>
+             <height>121</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_61">
@@ -4299,7 +4381,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <tabstops>
   <tabstop>main_button_switch_home</tabstop>

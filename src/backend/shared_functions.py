@@ -9,13 +9,12 @@ import json
 import sqlite3
 import logging
 
-from hqporner_api.modules.errors import WeirdError
-
 from src.backend.config import *
 from urllib.parse import urlsplit
-from mutagen.mp4 import MP4, MP4Cover
+from mutagen.mp4 import MP4, MP4Cover, MP4Tags
 from base_api.base import BaseCore, setup_logger
 from base_api.modules.config import RuntimeConfig
+from hqporner_api.modules.errors import WeirdError
 from phub import Client as ph_Client, errors, Video as ph_Video, consts as phub_consts
 from hqporner_api import Client as hq_Client, Video as hq_Video
 from xnxx_api import Client as xn_Client, Video as xn_Video
@@ -346,7 +345,7 @@ def load_video_attributes(video):
 
     elif isinstance(video, yp_Video):
         author = video.author.name
-        length = video.length
+        length = round(int(video.length) // 60)
         tags = ",".join(video.categories)
         thumbnail = video.thumbnail
         publish_date = video.publish_date
@@ -362,7 +361,7 @@ def load_video_attributes(video):
 
     elif isinstance(video, sp_Video):
         author = video.author
-        length = video.length
+        length = round(int(video.length) // 60)
         tags = ",".join(video.tags)
         thumbnail = video.thumbnail
         publish_date = "Not available"
@@ -434,32 +433,52 @@ def init_db(database_path: str):
     conn.commit()
     conn.close()
 
-def write_tags(path, data: dict): # Using core from Porn Fetch to keep proxy support
-    comment = "Downloaded with Porn Fetch (GPLv3)"
-    genre = "Porn"
+def write_tags(path, data: dict):
+    comment   = "Downloaded with Porn Fetch (GPLv3)"
+    genre     = "Porn"
+    title     = data.get("title")
+    artist    = data.get("author")
+    date      = data.get("publish_date")  # e.g. "2025-10-26" or "2025"
+    thumbnail = data.get("thumbnail_data")
 
-    title = data.get("title")
-    artist = data.get("author")
-    date = data.get("publish_date")
-    thumbnail = data.get("thumbnail")
     logging.debug("Tags [1/3]")
+
     audio = MP4(path)
-    audio.tags["\xa9nam"] = str(title)
-    audio.tags["\xa9ART"] = str(artist)
-    audio.tags["\xa9cmt"] = str(comment)
-    audio.tags["\xa9gen"] = str(genre)
-    audio.tags["\xa9day"] = str(date)
+
+    # Ensure an 'ilst' tag container exists
+    if audio.tags is None:
+        try:
+            audio.add_tags()          # preferred; creates empty MP4Tags
+        except Exception:
+            pass
+    if audio.tags is None:
+        audio.tags = MP4Tags()        # fallback for older/env-specific builds
+
+    # Write basic text tags (skip Nones)
+    if title  is not None:  audio.tags["\xa9nam"] = str(title)
+    if artist is not None:  audio.tags["\xa9ART"] = str(artist)
+    if comment is not None: audio.tags["\xa9cmt"] = str(comment)
+    if genre  is not None:  audio.tags["\xa9gen"] = str(genre)
+    if date   is not None:  audio.tags["\xa9day"] = str(date)
 
     logging.debug("Tags: [2/3] - Writing Thumbnail")
 
-    try:
-        content = BaseCore().fetch(url=thumbnail, get_bytes=True)
-        cover = MP4Cover(content, imageformat=MP4Cover.FORMAT_JPEG)
-        audio.tags["covr"] = [cover] # Yes, it needs to be in a list
+    # Optional: embed cover art if it's JPEG/PNG
+    if thumbnail:
+        try:
+            # Heuristically choose cover format
+            if thumbnail.startswith(b"\x89PNG\r\n\x1a\n"):
+                fmt = MP4Cover.FORMAT_PNG
+            else:
+                # JPEG has many possible headers; default to JPEG if not PNG
+                fmt = MP4Cover.FORMAT_JPEG
 
-    except Exception as e:
-        logger.error("Could not download / write thumbnail into the metadata tags of the video. Please report the"
-                     f"following error on GitHub: {e} - Image URL: {thumbnail}")
+            cover = MP4Cover(thumbnail, imageformat=fmt)
+            audio.tags["covr"] = [cover]  # must be a list
+        except Exception as e:
+            logging.error(
+                "Could not embed thumbnail: %s - Image URL: %s", e, thumbnail
+            )
 
     audio.save()
     logging.debug("Tags: [3/3] ✔")

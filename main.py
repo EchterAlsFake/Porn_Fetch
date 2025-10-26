@@ -685,7 +685,6 @@ class PornFetch(QMainWindow):
                                    http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
 
         self.last_index = 0  # Keeps track of the last index of videos added to the tree widget
-        self.website_to_search_on = 0
         self.kill_switch = False
         self.threadpool = QThreadPool()
         self.maps()
@@ -812,7 +811,7 @@ class PornFetch(QMainWindow):
         self.ui.CentralStackedWidget.setCurrentIndex(11)
 
     def load_style(self):
-        self.ui.CentralStackedWidget.insertWidget(12, Batch())
+        #self.ui.CentralStackedWidget.insertWidget(12, Batch())
         icons = {
             self.ui.main_button_switch_home: "download.svg",
             self.ui.main_button_switch_settings: "settings.svg",
@@ -939,6 +938,7 @@ class PornFetch(QMainWindow):
         self.setWindowTitle(f"Porn Fetch v{__version__} Copyright (C) Johannes Habel 2023-2025")
         self.ui.treeWidget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
         self.ui.progress_gridlayout_progressbar.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.ui.settings_stacked_widget_main.setCurrentIndex(0)
 
         install_focus_outline(self)
         self.switch_to_download()
@@ -1029,7 +1029,6 @@ class PornFetch(QMainWindow):
 
         # Search
         self.ui.button_search.clicked.connect(self.search)
-        self.ui.download_website_combobox.currentIndexChanged.connect(self.website_index_changed)
 
         # HQPorner
         self.ui.main_button_switch_tools.clicked.connect(self.switch_to_tools)
@@ -1488,6 +1487,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         """
         url = self.ui.download_lineedit_url.text()
         self.logger.info(f"Starting a single shot download for -->: {url}")
+        self.ui.download_lineedit_url.clear()
         self.add_to_tree_widget_thread(iterator=url)
 
     def start_model(self, url=None):
@@ -1498,6 +1498,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         else:
             model = self.ui.download_lineedit_model_url.text()
 
+        self.ui.download_lineedit_model_url.clear()
         self.logger.info(f"Checking model: {model}")
         if shared_functions.pornhub_pattern.match(model):
             model_object = shared_functions.ph_client.get_user(model)
@@ -1580,7 +1581,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
     def start_playlist(self):
         url = self.ui.download_lineedit_playlist_url.text()
         self.logger.info(f"Requesting playlist videos for -->: {url}")
-
+        self.ui.download_lineedit_playlist_url.clear()
         if shared_functions.pornhub_pattern.match(url):
             playlist = shared_functions.ph_client.get_playlist(url)
             videos = playlist.sample()
@@ -1597,38 +1598,36 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         self.logger.debug("Got playlist videos!")
         self.add_to_tree_widget_thread(iterator=videos)
 
-    def website_index_changed(self, idx: int):
-        """Called when the user changes the currently selected website in the combo box"""
-        self.website_to_search_on = idx
-        self.logger.debug(f"Changed website searching to: {idx}")
-
     def search(self):
         """Does a simple search for videos without filters on selected website"""
         query = self.ui.download_lineedit_search_query.text()
         self.logger.debug(f"Searching with query: {query}")
-        if self.website_to_search_on == 0:
+        if self.ui.download_website_combobox.currentIndex() == 0:
             videos = shared_functions.hq_client.search_videos(query, pages=500)
 
-        elif self.website_to_search_on == 1:
+        elif self.ui.download_website_combobox.currentIndex() == 1:
             videos = shared_functions.ph_client.search(query)
 
-        elif self.website_to_search_on == 2:
+        elif self.ui.download_website_combobox.currentIndex() == 2:
             videos = shared_functions.ep_client.search_videos(query, sorting_gay="", sorting_order="",
                                                               sorting_low_quality="", page=20, per_page=200)
-        elif self.website_to_search_on == 3:
+        elif self.ui.download_website_combobox.currentIndex() == 3:
             videos = shared_functions.xv_client.search(query, pages=500)
 
-        elif self.website_to_search_on == 4:
+        elif self.ui.download_website_combobox.currentIndex() == 4:
             videos = shared_functions.xh_client.search_videos(query=query, pages=500)
 
-        elif self.website_to_search_on == 5:
+        elif self.ui.download_website_combobox.currentIndex() == 5:
             videos = shared_functions.xn_client.search(query).videos(pages=500)
 
-        elif self.website_to_search_on == 6:
+        elif self.ui.download_website_combobox.currentIndex() == 6:
             videos = shared_functions.sp_client.search(query=query, pages=500)
 
-        elif self.website_to_search_on == 7:
+        elif self.ui.download_website_combobox.currentIndex() == 7:
             videos = shared_functions.mv_client.search(query=query, video_count=500)
+
+        elif self.ui.download_website_combobox.currentIndex() == 8:
+            videos = shared_functions.yp_client.search_videos(query=query, pages=500)
 
         else:
             ui_popup(
@@ -1870,6 +1869,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
 
     def set_thumbnail(self, item_current: QTreeWidgetItem, item_previous=None): # Won's use the previous item
         """Replace your QLabel code with this, feeding the graphicsView."""
+
         if __build__ == "android":
             return
 
@@ -2340,6 +2340,7 @@ def main():
     sys_font = QFontDatabase.systemFont(QFontDatabase.SystemFont.GeneralFont)
     sys_font.setPointSize(int(font_size))
     app.setFont(sys_font)
+    app.setWindowIcon(QIcon(":/images/graphics/logo_transparent.png"))
 
     if language == "system":
         # Get the system's locale
