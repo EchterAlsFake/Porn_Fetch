@@ -28,7 +28,6 @@ try:
 except Exception:
     FORCE_DISABLE_AV = True
 
-import ast
 import time
 import shutil
 import os.path
@@ -1083,14 +1082,14 @@ class PornFetch(QMainWindow):
             0: "best",
             1: "half",
             2: "worst",
-            4: 2160,
-            5: 1440,
-            6: 1080,
-            7: 720,
-            8: 540,
-            9: 360,
-            10: 240,
-            11: 144
+            3: 2160,
+            4: 1440,
+            5: 1080,
+            6: 720,
+            7: 540,
+            8: 360,
+            9: 240,
+            10: 144
         }
         self.mappings_ui_theme = {
             0: "dark",

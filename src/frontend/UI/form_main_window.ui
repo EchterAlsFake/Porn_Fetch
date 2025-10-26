@@ -1944,7 +1944,7 @@
                     <item row="0" column="1">
                      <widget class="QCheckBox" name="main_checkbox_tree_do_not_clear_videos">
                       <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
@@ -1963,7 +1963,7 @@
                     <item row="1" column="0">
                      <widget class="QPushButton" name="main_button_tree_automated_selection">
                       <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
@@ -1982,7 +1982,7 @@
                     <item row="1" column="1">
                      <widget class="QPushButton" name="main_button_tree_keyboard_shortcuts">
                       <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
@@ -2001,7 +2001,7 @@
                     <item row="2" column="0" colspan="2">
                      <widget class="QPushButton" name="main_button_tree_stop">
                       <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
@@ -2034,7 +2034,7 @@
                     <item row="0" column="0">
                      <widget class="QCheckBox" name="main_checkbox_direct_download">
                       <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>

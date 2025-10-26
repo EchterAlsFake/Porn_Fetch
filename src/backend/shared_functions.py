@@ -137,7 +137,7 @@ semaphore = 2
 videos_concurrency = 10
 pages_concurrency = 2
 download_workers = 20
-timeout = 5
+timeout = 10
 retries = 4
 speed_limit = 0
 processing_delay = 0
@@ -319,7 +319,6 @@ def load_video_attributes(video):
         video_id = video.video_id
 
     elif isinstance(video, hq_Video):
-        print("In loading stuff")
         try:
             author = video.pornstars[0]
         except Exception:
