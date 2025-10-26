@@ -292,7 +292,7 @@ class CheckUpdates(QRunnable):
                     self.signals.update_check.emit(True, json_stuff)
 
                 else:
-                    self.logger.info(f"Checked for updates... You are on the latest versioin :)")
+                    self.logger.info(f"Checked for updates... You are on the latest version :)")
                     self.signals.update_check.emit(False, json_stuff)
 
             elif response.status_code == 404:

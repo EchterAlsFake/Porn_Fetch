@@ -6,6 +6,7 @@ import argparse
 import threading
 import traceback
 import itertools
+import truststore
 
 from colorama import *
 from io import TextIOWrapper
@@ -29,6 +30,7 @@ except (ModuleNotFoundError, ImportError):
     remux = False
 
 
+truststore.inject_into_ssl()
 proxy_one_time_config_stuff_please_dont_ask_thank_you_very_mushhh = RuntimeConfig()
 STATE_FILE = "model_database.json"
 
