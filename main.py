@@ -129,7 +129,7 @@ If you believe, that this is a mistake, please report it on GitHub, so that I ca
 
                 shutil.move("PornFetch_Linux_GUI_x64.bin", dst=destination_path_final)
                 self.logger.info(f"Moved the PornFetch binary to: {destination_path_final}")
-                shared_functions.shared_config.set("Misc", "install", "installed")
+                shared_functions.shared_config.set("Misc", "install_type", "installed")
                 with open("config.ini", "w") as configuration:
                     shared_config.write(configuration)
 
@@ -180,7 +180,7 @@ Categories=Utility;"""
                 self.logger.info(f"Moved current Porn Fetch executable to: {target_dir}")
 
                 try:
-                    shared_functions.shared_config.set("Misc", "install", "installed")
+                    shared_functions.shared_config.set("Misc", "install_type", "installed")
                     with open("config.ini", "w") as configuration:
                         shared_config.write(configuration)
 

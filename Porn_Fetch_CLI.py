@@ -48,7 +48,9 @@ class CLI:
         self.finished_downloading = 0
         self.progress_queue = queue.Queue()
         self.skip_existing_files = None
-        self.threading_mode = None
+        self.download_mode = None
+        self.pages_concurrency = None
+        self.videos_concurrency = None
         self.result_limit = None
         self.speed_limit = None
         self.directory_system = None
@@ -64,6 +66,26 @@ class CLI:
         self.ffmpeg_features = True
         self.ffmpeg_path = None
         shared_functions.refresh_clients()
+
+        self.mappings_quality = {
+            0: "best",
+            1: "half",
+            2: "worst",
+            3: 2160,
+            4: 1440,
+            5: 1080,
+            6: 720,
+            7: 540,
+            8: 360,
+            9: 240,
+            10: 144
+        }
+
+        self.mappings_download_mode = {
+            0: "threaded",
+            1: "ffmpeg",
+            2: "default"
+        }
 
         # Setup the progress display (tasks added later)
         self.progress = Progress(
@@ -84,14 +106,14 @@ class CLI:
         self.load_user_settings()
         conf.read("config.ini")
 
-        if conf.get("Setup", "first_run_cli") == "true":
+        if conf.get("Misc", "first_run_cli") == "true":
             self.first_run_cli()
 
         while True:
             self.menu()
 
     def license(self):
-        if not conf["Setup"]["license_accepted"] == "true":
+        if not conf["Misc"]["license_accepted"] == "true":
             license_text = input(f"""{Fore.WHITE}
 GPL License Agreement for Porn Fetch
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
@@ -114,12 +136,12 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
 ---------------------------------->:""")
 
             if license_text == "yes":
-                conf.set("Setup", "license_accepted", "true")
+                conf.set("Misc", "license_accepted", "true")
                 with open("config.ini", "w") as config_file: #type: TextIOWrapper
                     conf.write(config_file)
 
             else:
-                conf.set("Setup", "license_accepted", "false")
+                conf.set("Misc", "license_accepted", "false")
                 with open("config.ini", "w") as config_file: #type: TextIOWrapper
                     conf.write(config_file)
 
@@ -355,24 +377,29 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
 (Press enter when you've finished reading)
 """)
         with open("config.ini", "w") as config:
-            shared_functions.shared_config.set("Setup", "first_run_cli", "false")
+            shared_functions.shared_config.set("Misc", "first_run_cli", "false")
             shared_functions.shared_config.write(config)
 
     def load_user_settings(self):
-        self.delay = int(conf.get("Video", "delay"))
-        self.workers = int(conf.get("Performance", "workers"))
+        self.quality = self.mappings_quality.get(int(conf.get("Video", "quality")))
+        self.delay = int(conf.get("Performance", "network_delay"))
+        self.workers = int(conf.get("Performance", "download_workers"))
         self.timeout = int(conf.get("Performance", "timeout"))
         self.retries = int(conf.get("Performance", "retries"))
+        self.pages_concurrency = int(conf.get("Performance", "pages_concurrency"))
+        self.videos_concurrency = int(conf.get("Performance", "videos_concurrency"))
         self.speed_limit = float(conf.get("Performance", "speed_limit"))
         self.semaphore = threading.Semaphore(int(conf.get("Performance", "semaphore")))
-        self.quality = conf.get("Video", "quality")
         self.output_path = conf.get("Video", "output_path")
         self.directory_system = True if conf.get("Video", "directory_system") == "1" else False
         self.skip_existing_files = True if conf.get("Video", "skip_existing_files") == "true" else False
         self.result_limit = int(conf.get("Video", "result_limit"))
-        self.threading_mode = conf.get("Performance", "threading_mode")
+        self.download_mode = self.mappings_download_mode.get(int(conf.get("Performance", "download_mode")))
         shared_functions.config.request_delay = self.delay # Lmao in all versions past 3.6 these things were never actually applied to the backend LOOOOL
         shared_functions.config.timeout = self.timeout
+        shared_functions.config.max_workers_download = self.workers
+        shared_functions.config.videos_concurrency = self.videos_concurrency
+        shared_functions.config.pages_concurrency = self.pages_concurrency
         shared_functions.config.max_retries = self.retries
         shared_functions.config.max_bandwidth_mb = self.speed_limit
         shared_functions.refresh_clients()
@@ -401,31 +428,33 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
 {Fore.LIGHTWHITE_EX}-------- {Fore.LIGHTCYAN_EX}Performance {Fore.LIGHTWHITE_EX}--------
 4) Change Semaphore {Fore.LIGHTYELLOW_EX}(current: {self.semaphore._value}){Fore.LIGHTWHITE_EX}
 5) Change Delay {Fore.LIGHTYELLOW_EX}(current: {self.delay}){Fore.LIGHTWHITE_EX}
-6) Change Workers {Fore.LIGHTYELLOW_EX}(current: {self.workers}){Fore.LIGHTWHITE_EX}
-7) Change Retries {Fore.LIGHTYELLOW_EX}(current: {self.retries}){Fore.LIGHTWHITE_EX}
-8) Change Timeout {Fore.LIGHTYELLOW_EX}(current: {self.timeout}){Fore.LIGHTWHITE_EX}
-20) Set a Speed Limit {Fore.LIGHTYELLOW_EX}(Current: {self.speed_limit}){Fore.LIGHTWHITE_EX}
+6) Change Download Workers {Fore.LIGHTYELLOW_EX}(current: {self.workers}){Fore.LIGHTWHITE_EX}
+7) Change Pages Workers (current: {self.pages_concurrency}{Fore.LIGHTWHITE_EX})
+8) Change Videos Workers (current: {self.videos_concurrency}{Fore.LIGHTWHITE_EX})
+9) Change Retries {Fore.LIGHTYELLOW_EX}(current: {self.retries}){Fore.LIGHTWHITE_EX}
+10) Change Timeout {Fore.LIGHTYELLOW_EX}(current: {self.timeout}){Fore.LIGHTWHITE_EX}
+11) Set a Speed Limit {Fore.LIGHTYELLOW_EX}(Current: {self.speed_limit}){Fore.LIGHTWHITE_EX}
 -------- {Fore.LIGHTYELLOW_EX}Directory System {Fore.LIGHTWHITE_EX}---
-9) Enable / Disable directory system {Fore.LIGHTYELLOW_EX}(current: {"Enabled" if self.directory_system else "Disabled"}){Fore.LIGHTWHITE_EX}
+12) Enable / Disable directory system {Fore.LIGHTYELLOW_EX}(current: {"Enabled" if self.directory_system else "Disabled"}){Fore.LIGHTWHITE_EX}
 {Fore.LIGHTWHITE_EX}-------- {Fore.LIGHTGREEN_EX}Result Limit {Fore.LIGHTWHITE_EX}-------
-10) Change result limit {Fore.LIGHTYELLOW_EX}(current: {self.result_limit}){Fore.LIGHTWHITE_EX}
+13) Change result limit {Fore.LIGHTYELLOW_EX}(current: {self.result_limit}){Fore.LIGHTWHITE_EX}
 {Fore.LIGHTWHITE_EX}-------- {Fore.LIGHTBLUE_EX}Output Path {Fore.LIGHTWHITE_EX}--------
-11) Change output path {Fore.LIGHTYELLOW_EX}(current: {self.output_path}){Fore.LIGHTWHITE_EX}
+14) Change output path {Fore.LIGHTYELLOW_EX}(current: {self.output_path}){Fore.LIGHTWHITE_EX}
 {Fore.LIGHTWHITE_EX}---------{Fore.LIGHTMAGENTA_EX}Threading Mode {Fore.LIGHTWHITE_EX}---------
-12) {threading_mode_color["threaded"]}Change to threaded (Not recommended on Android!){Fore.LIGHTWHITE_EX}
-13) {threading_mode_color["default"]}Change to default (really slow){Fore.LIGHTWHITE_EX}
+15) {threading_mode_color["threaded"]}Change to threaded (Not recommended on Android!){Fore.LIGHTWHITE_EX}
+16) {threading_mode_color["default"]}Change to default (really slow){Fore.LIGHTWHITE_EX}
 {Fore.LIGHTRED_EX}99) Exit
 {Fore.WHITE}------------->:""")
 
             try:
                 if settings_options == "1":
-                    conf.set("Video", "quality", "best")
+                    conf.set("Video", "quality", "0")
 
                 elif settings_options == "2":
-                    conf.set("Video", "quality", "half")
+                    conf.set("Video", "quality", "1")
 
                 elif settings_options == "3":
-                    conf.set("Video", "quality", "worst")
+                    conf.set("Video", "quality", "2")
 
                 elif settings_options == "4":
                     limit = input(f"Enter a new Semaphore limit -->:")
@@ -437,43 +466,52 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
 
                 elif settings_options == "6":
                     limit = input(f"Enter a new value for max workers -->:")
-                    conf.set("Performance", "workers", limit)
+                    conf.set("Performance", "download_workers", limit)
 
                 elif settings_options == "7":
+                    workers = int(f"Enter a new value for max page workers -->:")
+                    conf.set("Performance", "pages_concurrency", workers)
+
+                elif settings_options == "8":
+                    workers = int(f"Enter a new value for max video workers -->:")
+                    conf.set("Performance", "video_concurrency", workers)
+
+                elif settings_options == "9":
                     limit = input(f"Enter a new value for max retries -->:")
                     conf.set("Performance", "retries", limit)
 
-                elif settings_options == "8":
+                elif settings_options == "10":
                     limit = input(f"Enter a new value for the max timeout -->:")
                     conf.set("Performance", "timeout", limit)
 
-                elif settings_options == "9":
+                elif settings_options == "11":
+                    speed_limit = input(f"Please enter the limit in MB/s (example: 2.5) -->:")
+                    conf.set("Performance", "speed_limit", speed_limit)
+
+
+                elif settings_options == "12":
                     if self.directory_system:
                         conf.set("Video", "directory_system", "0")
 
                     else:
                         conf.set("Video", "directory_system", "1")
 
-                elif settings_options == "10":
+                elif settings_options == "13":
                     limit = input(f"Enter a new result limit -->:")
                     conf.set("Video", "result_limit", limit)
 
-                elif settings_options == "11":
+                elif settings_options == "14":
                     path = input(f"Enter a new output path -->:")
                     if not os.path.exists(path):
                         raise "The specified output path doesn't exist!"
 
                     conf.set("Video", "output_path", path)
 
-                elif settings_options == "12":
+                elif settings_options == "15":
                     conf.set("Performance", "threading_mode", "threaded")
 
-                elif settings_options == "13":
+                elif settings_options == "16":
                     conf.set("Performance", "threading_mode", "default")
-
-                elif settings_options == "20":
-                    speed_limit = input(f"Please enter the limit in MB/s (example: 2.5) -->:")
-                    conf.set("Performance", "speed_limit", speed_limit)
 
                 elif settings_options == "99":
                     self.menu()
@@ -707,7 +745,7 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
             if isinstance(video, shared_functions.ph_Video):
                 video.download(path=output_path,
                     quality=self.quality,
-                    downloader=self.threading_mode,
+                    downloader=self.download_mode,
                     display=callback_wrapper,
                     remux=remux)
             elif is_byte_download:
@@ -723,7 +761,7 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
                 video.download(
                     path=output_path,
                     quality=self.quality,
-                    downloader=self.threading_mode,
+                    downloader=self.download_mode,
                     callback=callback_wrapper,
                     remux=remux,
                     no_title=True,
