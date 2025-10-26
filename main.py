@@ -1780,7 +1780,12 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
             data = video_data.data_objects.get(video_id)
             shared_functions.save_video_metadata(video_id, data, video_data.consistent_data.get("database_path"))
 
-        video_data.clean_dict(video_id)
+        try:
+            video_data.clean_dict(video_id)
+
+        except KeyError:
+            pass # Doesn't matter
+
         self.semaphore.release()
 
     def clear_tree_widget(self):

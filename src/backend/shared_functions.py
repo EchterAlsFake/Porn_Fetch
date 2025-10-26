@@ -381,7 +381,7 @@ def load_video_attributes(video):
         "url": video.url,
         "thumbnail_data": data_bytes
     }
-    logger.debug(f"Loaded video data: {data}")
+    logger.debug(f"Successfully loaded video data for: {title}")
 
     return data
 
