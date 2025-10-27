@@ -568,6 +568,7 @@ And even more that I forgot here...
 - Fixed range selector widget
 - Fixed 429 and 403 errors (mostly)
 - Fixed PornHub pagination
+- Fixed URL export function
 
 ### User Interface
 - Completely new design (finally good)
@@ -585,6 +586,9 @@ And even more that I forgot here...
 - SSL certificate will now be taken from the OS instead of certifi
 - AND SO MUCH MORE!
 
+### Deprecations
+- Android support (it's just not good enough)
+- File processing (I don't see the benefit) 
 
 ### Final words
 This release comes with a lot of features, new supported websites,
