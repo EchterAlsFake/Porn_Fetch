@@ -7,7 +7,7 @@
 - xhamster.com (3.5)
 - missav.ws (3.5) supports all other top level domains too
 - spankbang.com (3.6)
-- youporn.com (3.7) (DEV)
+- youporn.com (3.7)
 
 
 
@@ -15,19 +15,18 @@
 
 ### Here's a list of all features and if the website (API) supports it
 
-| Category            | Websites                                                                                           |
-|:--------------------|:---------------------------------------------------------------------------------------------------|
-| Videos              | PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang, YouPorn                   |
-| Searching           | PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang                            |
-| Models              | PornHub, HQporner, xnxx                                                                            |
-| Pornstars           | PornHub, Eporner, xvideos, Xhamster, Spankbang                                                     |
-| Channels            | PornHub, Xhamster, Spankbang                                                                       |
-| Creator / Users     | Xhamster (Creator), Spankbang (Creator), xnxx (Users)                                              |
-| Playlists           | PornHub, xvideos                                                                                   |
-| Downloading         | xvideos                                                                                            |
-| Shorts              | Xhamster                                                                                           |
-| Account Login       | PornHub                                                                                            |
-| Videos by Category  | HQporner, Eporner                                                                                  |
-| Random              | HQporner                                                                                           |
-| Brazzers only       | HQporner                                                                                           |
-| Top Porn            | HQporner                                                                                           |
+| Category            | Websites                                                                        |
+|:--------------------|:--------------------------------------------------------------------------------|
+| Videos              | PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang, YouPorn |
+| Searching           | PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang, YouPorn |
+| Models              | PornHub, HQporner, xnxx                                                         |
+| Pornstars           | PornHub, Eporner, xvideos, Xhamster, Spankbang, YouPorn                         |
+| Channels            | PornHub, Xhamster, Spankbang, YouPorn                                           |
+| Creator / Users     | Xhamster (Creator), Spankbang (Creator), xnxx (Users)                           |
+| Playlists           | PornHub, xvideos, YouPorn                                                       | |
+| Shorts              | Xhamster                                                                        |
+| Account Login       | PornHub                                                                         |
+| Videos by Category  | HQporner, Eporner                                                               |
+| Random              | HQporner                                                                        |
+| Brazzers only       | HQporner                                                                        |
+| Top Porn            | HQporner                                                                        |

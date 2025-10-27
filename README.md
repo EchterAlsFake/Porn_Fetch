@@ -16,7 +16,7 @@
 
 ---
 
-**[<kbd><strong>&nbsp;<br>&nbsp;Download (v3.6)&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.6)** 
+**[<kbd><strong>&nbsp;<br>&nbsp;Download (v3.7)&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.7)** 
 **[<kbd><strong>&nbsp;<br>&nbsp;Screenshots&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/SCREENSHOTS.md)** 
 **[<kbd><strong>&nbsp;<br>&nbsp;Supported Websites&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/WEBSITES.md)** 
 **[<kbd><strong>&nbsp;<br>&nbsp;FAQ&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/FAQ.md)** 
@@ -27,7 +27,6 @@
 </div>
 
 [![Stop Scanning Me](https://stopscanningme.eu/img/organise/SSM_mailing-banner1.png)](https://stopscanningme.eu/)
-<br>EUROPA NICHT DEN LEYEN ÜBERLASSEN | DON'T LEAVE EUROPE TO THE LEYEN
 
 > [!WARNING]
 > Porn Fetch is NOT associated with the websites. Porn Fetch is AGAINST the Terms of Services of EVERY website! Usage is on YOUR risk.
@@ -64,10 +63,10 @@
 - Cross-platform compatibility
 - Multiple supported websites
 - Multiple user interface languages
-- Native Android application
+- Native Android application (Only v3.6) 
 - modern looking user interface
 - Supports over 115 MB/s download speed thanks to well optimized HLS downloading
-- Proxy support (Experimental)
+- Proxy support
 - Model Batch download with database updating
 - Native macOS support
 - A lot of available settings
@@ -86,15 +85,16 @@
 > [!NOTE]
 > **Supported platforms & architectures (based on current release files)**
 
-| Platform                  | App              | Architectures                                      |
-|---------------------------|------------------|----------------------------------------------------|
-| **Windows**               | GUI              | x64, ARM                                           |
-| **Windows**               | CLI              | x64, x86 (x32)                                     |
-| **Linux (X11 / Wayland)** | GUI              | x64                                                |
-| **Linux (X11 / Wayland)** | CLI              | x64, x86 (x32)*                                    |
-| **macOS**                 | GUI              | x86_64 (Intel)†                                    |
-| **Android**               | GUI (APK)        | arm64-v8a (aarch64), armeabi-v7a (armv7-a), x86_64 |
-| **Android**               | CLI (via Termux) | All                                                |
+| Platform                  | App              | Architectures                                        |
+|---------------------------|------------------|------------------------------------------------------|
+| **Windows**               | GUI              | x64, ARM                                             |
+| **Windows**               | CLI              | x64, x86 (x32)                                       |
+| **Linux (X11 / Wayland)** | GUI              | x64                                                  |
+| **Linux (X11 / Wayland)** | CLI              | x64, x86 (x32)*                                      |
+| **macOS**                 | GUI              | x86_64 (Intel)†                                      |
+| **Android**               | CLI (via Termux) | All  |
+
+The GUI of Android currently doesn't work. I will try to get it working in v3.8
 
 † Intel build; runs on Apple Silicon (M1/M2/M3) via Rosetta 2.
 
@@ -111,29 +111,13 @@
 - [missav.ws](https://github.com/EchterAlsFake/missav_api)
 - [xhamster.com](https://github.com/EchterAlsFake/xhamster_api)
 - [spankbang.com](https://spankbang.com)
+- [youporn.com](https://youporn.com)
 
 > [!IMPORTANT] 
 > Not all websites support every feature. 
 > Some might only support downloading, while others support searching
 
 ### You can find more information [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/WEBSITES.md)
-
-## Batch processing
-Porn Fetch allows you to use batch / automatic processing of videos, models and search queries
-
-Here's a short documentation on how to use it:
-
-> [!NOTE]
-> This feature is currently being reworked. New changes will apply in version 3.6
-
-Here's a quick example on how to use it. It should explain anything by itself:
-
-```text
-Inside the File:
-
-vidoe#<video_url> # The url of some video you want to download. Just in raw format, like when you would download it.
-model#<model_url> # First enter "model#" after the # follows the model URL
-```
 
 ## 🔨 Building from Source
 Easy-to-use build scripts are available for various platforms.
@@ -146,7 +130,7 @@ Hardware requirements:
 - ~2–3 GB of RAM
 - A processor that can do some math
 
-> Compilation takes around 5–20 minutes depending on your system and hardware.
+> Compilation takes around 30-60 minutes depending on your system and hardware.
 
 ### Linux (Ubuntu, Arch-based, Debian-based, OpenSUSE)
 > [!NOTE]
