@@ -30,7 +30,7 @@ except Exception:
 
 import sys
 from pathlib import Path
-from PySide6.QtWidgets import QApplication, QWidget, QTextBrowser
+from PySide6.QtWidgets import QApplication, QWidget, QTextBrowser, QVBoxLayout, QPushButton
 
 app_path = Path(sys.argv[0]).resolve()
 if str(app_path).startswith("/Volume"):
