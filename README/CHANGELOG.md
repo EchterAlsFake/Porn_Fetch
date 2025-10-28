@@ -601,6 +601,16 @@ to be refactored.
 
 
 
+# 3.8
+### New Features
+- Added Video support for beeg.com
+
+
+
+
+
+### Code Optimizations
+- Refactored `check_video` function to be faster and less redundant
 
 
 

@@ -8,6 +8,7 @@ import re
 import json
 import sqlite3
 import logging
+import traceback
 
 from src.backend.config import *
 from urllib.parse import urlsplit
@@ -24,6 +25,7 @@ from missav_api.missav_api import Video as mv_Video, Client as mv_Client
 from xhamster_api import Client as xh_Client, Video as xh_Video
 from spankbang_api import Client as sp_Client, Video as sp_Video
 from youporn_api.youporn_api import Client as yp_Client, Video as yp_Video
+from beeg_api.beeg_api import Client as bg_Client, Video as bg_Video
 from base_api.modules.config import config # This is the global configuration instance of base core config
 # which is also affecting all other APIs when the refresh_clients function is called
 # Initialize clients globally, so that we can override them later with a new configuration from BaseCore if needed
@@ -36,12 +38,13 @@ sp_client = sp_Client()
 hq_client = hq_Client()
 xn_client = xn_Client()
 yp_client = yp_Client()
+bg_client = bg_Client()
 core = BaseCore() # We need that sometimes in Porn Fetch's main class e.g., thumbnail fetching
 core_ph = None
 core_internet_checks = BaseCore(config=config)
 
 def refresh_clients(enable_kill_switch=False):
-    global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, hq_client, xn_client, core, core_ph, yp_client
+    global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, hq_client, xn_client, core, core_ph, yp_client, bg_client
 
     # One BaseCore per site, with its own RuntimeConfig (isolated headers/cookies)
     core_common = BaseCore(config=config)   # if you want a “generic” core
@@ -54,6 +57,7 @@ def refresh_clients(enable_kill_switch=False):
     core_xn    = BaseCore(config=config)
     core_sp    = BaseCore(config=config)
     core_yp    = BaseCore(config=config)
+    core_bg    = BaseCore(config=config)
 
     if enable_kill_switch:
         core_common.enable_kill_switch()
@@ -65,6 +69,7 @@ def refresh_clients(enable_kill_switch=False):
         core_xh.enable_kill_switch()
         core_xn.enable_kill_switch()
         core_yp.enable_kill_switch()
+        core_bg.enable_kill_switch()
 
     # Instantiate clients with their site-specific cores
     mv_client = mv_Client(core=core_mv)
@@ -76,6 +81,7 @@ def refresh_clients(enable_kill_switch=False):
     hq_client = hq_Client(core=core_hq)
     xn_client = xn_Client(core=core_xn)
     yp_client = yp_Client(core=core_yp)
+    bg_client = bg_Client(core=core_bg)
 
     core = core_common
 
@@ -106,15 +112,6 @@ options_video = ["quality", "model_videos", "result_limit", "output_path", "vide
                  "skip_existing_files", "track_videos", "database_path", "directory_system"]
 options_ui = ["language", "font_size", "theme"]
 
-pornhub_pattern = re.compile(r'(.*?)pornhub(.*)') # can also be .org
-hqporner_pattern = re.compile(r'(.*?)hqporner.com(.*)')
-xnxx_pattern = re.compile(r'(.*?)xnxx.com(.*)')
-xvideos_pattern = re.compile(r'(.*?)xvideos.com(.*)')
-eporner_pattern = re.compile(r'(.*?)eporner.com(.*)')
-missav_pattern = re.compile(r'(.*?)missav(.*?)')
-xhamster_pattern = re.compile(r'(.*?)xhamster(.*?)')
-spankbang_pattern = re.compile(r'(.*?)spankbang(.*?)')
-youporn_pattern = re.compile(r'(.*?)youporn(.*?)')
 
 default_configuration = f"""
 [Misc]
@@ -162,74 +159,48 @@ theme = 0
 """
 
 def check_video(url, is_url=True):
-    if is_url:
-        if hqporner_pattern.search(str(url)) and not isinstance(url, hq_Video):
-            return hq_client.get_video(url)
+    objects = [hq_Video, ep_Video, xn_Video, xv_Video, mv_Video, xh_Video, sp_Video, yp_Video, bg_Video]
 
-        elif eporner_pattern.search(str(url)) and not isinstance(url, ep_Video):
-            return ep_client.get_video(url, enable_html_scraping=True)
-
-        elif xnxx_pattern.search(str(url)) and not isinstance(url, xn_Video):
-            return xn_client.get_video(url)
-
-        elif xvideos_pattern.search(str(url)) and not isinstance(url, xv_Video):
-            return xv_client.get_video(url)
-
-        elif missav_pattern.search(str(url)) and not isinstance(url, mv_Video):
-            return mv_client.get_video(url)
-
-        elif xhamster_pattern.search(str(url)) and not isinstance(url, xh_Video):
-            return xh_client.get_video(url)
-
-        elif spankbang_pattern.search(str(url)) and not isinstance(url, sp_Video):
-            return sp_client.get_video(url)
-
-        elif youporn_pattern.search(str(url)) and not isinstance(url, yp_Video):
-            return yp_client.get_video(url)
-
-        elif "xhamster" in str(url) and "moments" in str(url) and not isinstance(url, xh_Video):
-            return xh_client.get_short(url)
-
-        if isinstance(url, ph_Video):
-            url.fetch("page@") # If url is a PornHub Video object it does have the `fetch` method
-            return url
-
-        elif isinstance(url, hq_Video):
-            return url
-
-        elif isinstance(url, ep_Video):
-            return url
-
-        elif isinstance(url, xn_Video):
-            return url
-
-        elif isinstance(url, xv_Video):
-            return url
-
-        elif isinstance(url, xh_Video):
-            return url
-
-        elif isinstance(url, mv_Video):
-            return url
-
-        elif isinstance(url, sp_Video):
-            return url
-
-        elif isinstance(url, yp_Video):
-            return url
-
-        elif isinstance(url, str) and not str(url).endswith(".html"):
-            video = ph_client.get(url) # PornHub client
-            video.fetch("page@")
-            return video
-
-        else:
-            return False
+    if isinstance(url, tuple(objects)):
+        return url
 
     else:
-        pass
+        if isinstance(url, str) and len(url) > 0 and url.startswith("http"):
+            if "pornhub" in url:
+                return ph_client.get(url)
 
-        # TODO
+            if "hqporner" in url:
+                return hq_client.get_video(url)
+
+            elif "eporner" in url:
+                return ep_client.get_video(url, enable_html_scraping=True)
+
+            elif "xnxx" in url:
+                return xn_client.get_video(url)
+
+            elif "xvideos" in url:
+                return xv_client.get_video(url)
+
+            elif "missav" in url:
+                return mv_client.get_video(url)
+
+            elif "xhamster" in str(url) and "moments" in str(url) and not isinstance(url, xh_Video):
+                return xh_client.get_short(url)
+
+            elif "xhamster" in url:
+                return xh_client.get_video(url)
+
+            elif "spankbang" in url:
+                return sp_client.get_video(url)
+
+            elif "youporn" in url:
+                return yp_client.get_video(url)
+
+            elif "beeg.com" in str(url):
+                return bg_client.get_video(url)
+
+            else:
+                return False
 
 
 def setup_config_file(force=False):
@@ -366,14 +337,31 @@ def load_video_attributes(video):
         publish_date = "Not available"
         video_id = video.title
 
+    elif isinstance(video, bg_Video):
+        author = "Not available"
+        length = round(int(video.duration // 60))
+        tags = "Not available"
+        thumbnail = "Not available"
+        publish_date = "Not available"
+        video_id = video.video_id
+
     else:
         raise "Instance Error! Please report this immediately on GitHub!"
 
+    data_bytes = None
+
     try:
         logger.info(f"Fetching Thumbnail for: {title}")
-        if "hqporner" in thumbnail:
-            core.session.headers["Referer"] = "https://www.hqporner.com/"
-        data_bytes = core.fetch(thumbnail, get_bytes=True)  # <- returns bytes
+        if not thumbnail == "Not available":
+            if "hqporner" in thumbnail:
+                core.session.headers["Referer"] = "https://www.hqporner.com/"
+            data_bytes = core.fetch(thumbnail, get_bytes=True)  # <- returns bytes
+
+    except:
+        error = traceback.format_exc()
+        logger.error(f"An error occurred when fetching Thumbnail for: {title}: {error}")
+        data_bytes = None
+
     finally:
         # remove header if present (no KeyError)
         core.session.headers.pop("Referer", None)
