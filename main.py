@@ -949,6 +949,9 @@ class PornFetch(QMainWindow):
             btn.setIcon(QIcon(f":/images/graphics/{name}"))
             btn.setIconSize(QSize(24, 24))  # consistent size for all
 
+        pixmap_tooltip = QPixmap(":/images/graphics/tooltip.svg")
+        mark_help_buttons(ui=self.ui, pixmap=pixmap_tooltip)
+
         # --- top nav becomes segmented & exclusive ---
         nav = [
             self.ui.main_button_switch_home,
@@ -1067,7 +1070,7 @@ class PornFetch(QMainWindow):
         self.switch_to_download()
 
     def install_pornfetch(self):
-        app_name = self.ui.lineedit_custom_app_name.text()
+        app_name = self.ui.lineedit_custom_app_name.text() or self.ui.settings_lineedit_system_custom_app_name.text()
         if app_name == "" or app_name is None:
             self.logger.info("You did not provide a custom App name. Using 'Porn Fetch' for the installation.")
             app_name = "Porn Fetch"

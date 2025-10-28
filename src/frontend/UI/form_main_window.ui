@@ -355,7 +355,7 @@
     <item row="1" column="0">
      <widget class="QStackedWidget" name="CentralStackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page_main">
        <property name="maximumSize">
@@ -1188,8 +1188,8 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>956</width>
-                   <height>148</height>
+                   <width>308</width>
+                   <height>32</height>
                   </rect>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_11">
@@ -1311,8 +1311,8 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>503</width>
-                   <height>188</height>
+                   <width>466</width>
+                   <height>182</height>
                   </rect>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_8">
@@ -1912,8 +1912,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>956</width>
-               <height>378</height>
+               <width>658</width>
+               <height>349</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -2184,7 +2184,7 @@ directly </string>
              <x>0</x>
              <y>0</y>
              <width>958</width>
-             <height>530</height>
+             <height>532</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_19">
@@ -2270,7 +2270,7 @@ directly </string>
                  </sizepolicy>
                 </property>
                 <property name="currentIndex">
-                 <number>0</number>
+                 <number>2</number>
                 </property>
                 <widget class="QWidget" name="page_video">
                  <property name="sizePolicy">
@@ -2297,7 +2297,52 @@ directly </string>
                   </property>
                   <item row="0" column="0">
                    <layout class="QGridLayout" name="settings_gridlayout_video">
-                    <item row="0" column="0">
+                    <item row="2" column="1">
+                     <widget class="QLabel" name="settings_label_videos_result_limit">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="accessibleName">
+                       <string>label result limit</string>
+                      </property>
+                      <property name="text">
+                       <string>Result Limit:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="5">
+                     <widget class="QCheckBox" name="settings_checkbox_videos_use_directory_system">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox use directory system</string>
+                      </property>
+                      <property name="accessibleDescription">
+                       <string>The directory system will automatically create folders for each author of videos</string>
+                      </property>
+                      <property name="text">
+                       <string>Use directory system</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_videos_track_downloaded_videos">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox track downloaded videos</string>
+                      </property>
+                      <property name="text">
+                       <string>Track downloaded videos</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
                      <widget class="QLabel" name="settings_label_videos_quality">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -2306,10 +2351,7 @@ directly </string>
                        </sizepolicy>
                       </property>
                       <property name="toolTip">
-                       <string>By default, Porn Fetch will select the best available video quality. You can also decide between half and worst above.
-If you instead use the custom integer values (1080p, 720p etc.) then Porn Fetch will try to use these, if available,
-but if they are not available the next best quality will be chosen. Please note that this is experimental and has not
-been that tested very well. (Be honest, why would you not choose the best quality lol)</string>
+                       <string/>
                       </property>
                       <property name="accessibleName">
                        <string>label video quality</string>
@@ -2319,17 +2361,72 @@ been that tested very well. (Be honest, why would you not choose the best qualit
                       </property>
                      </widget>
                     </item>
-                    <item row="4" column="0">
-                     <widget class="QCheckBox" name="settings_checkbox_videos_use_video_id_as_filename">
-                      <property name="accessibleName">
-                       <string>checkbox use video id as filename</string>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="label_tooltip_model_videos">
+                      <property name="toolTip">
+                       <string/>
                       </property>
                       <property name="text">
-                       <string>Use Video ID as filename</string>
+                       <string/>
                       </property>
                      </widget>
                     </item>
-                    <item row="1" column="1" colspan="2">
+                    <item row="4" column="5">
+                     <widget class="QCheckBox" name="settings_checkbox_videos_skip_existing_files">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox skip existing files</string>
+                      </property>
+                      <property name="text">
+                       <string>Skip existing files</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="QLabel" name="settings_label_videos_output_path">
+                      <property name="accessibleName">
+                       <string>label output path</string>
+                      </property>
+                      <property name="text">
+                       <string>Output path:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="3">
+                     <widget class="QCheckBox" name="settings_checkbox_videos_write_metadata">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox write metadata tags</string>
+                      </property>
+                      <property name="text">
+                       <string>Write metadata tags</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_tooltip_quality">
+                      <property name="toolTip">
+                       <string>By default, Porn Fetch will select the best available video quality. You can also decide between half and worst above.
+If you instead use the custom integer values (1080p, 720p etc.) then Porn Fetch will try to use these, if available,
+but if they are not available the next best quality will be chosen. Please note that this is experimental and has not
+been that tested very well. (Be honest, why would you not choose the best quality lol)</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2" colspan="4">
                      <widget class="QComboBox" name="settings_video_combobox_model_videos">
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
@@ -2357,7 +2454,42 @@ been that tested very well. (Be honest, why would you not choose the best qualit
                       </item>
                      </widget>
                     </item>
-                    <item row="0" column="1" colspan="2">
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_tooltip_result_limit">
+                      <property name="toolTip">
+                       <string>The result limit defines how many videos will be returned when performing a search or doing other operations which
+involves loading multiple videos. This also affects models / channels and your liked videos. The result limit is
+basically the number of videos which can be loaded into the tree widget (this thing where videos are displayed).</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="0">
+                     <widget class="QLabel" name="label_tooltip_track_videos">
+                      <property name="toolTip">
+                       <string>Videos will be tracked in a SQL database which will save the URL and the metadata. </string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="5">
+                     <widget class="QPushButton" name="settings_button_videos_open_output_path">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="accessibleName">
+                       <string>settings open output path</string>
+                      </property>
+                      <property name="text">
+                       <string>Open</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2" colspan="4">
                      <widget class="QComboBox" name="settings_video_combobox_quality">
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
@@ -2425,40 +2557,20 @@ been that tested very well. (Be honest, why would you not choose the best qualit
                       </item>
                      </widget>
                     </item>
-                    <item row="4" column="1">
-                     <widget class="QCheckBox" name="settings_checkbox_videos_write_metadata">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="toolTip">
-                       <string>Metadata tags are saved inside of the file itself. These are tags that video players can read from and provide you information.
-Some folder viewers also give you the ability to search files by specific metadata tags. Those tags can help organize and structure files.
-Porn Fetch will by default save those tags inside of your video files. </string>
-                      </property>
+                    <item row="5" column="3">
+                     <widget class="QLineEdit" name="settings_lineedit_videos_database_path">
                       <property name="accessibleName">
-                       <string>checkbox write metadata tags</string>
+                       <string>lineedit output path of the database</string>
                       </property>
-                      <property name="text">
-                       <string>Write metadata tags</string>
+                      <property name="accessibleDescription">
+                       <string>the database tracks all downloaded videos in Porn Fetch, optional</string>
+                      </property>
+                      <property name="placeholderText">
+                       <string>Enter the path of the database file here</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="2" column="0">
-                     <widget class="QLabel" name="settings_label_videos_result_limit">
-                      <property name="toolTip">
-                       <string>The result limit defines how many videos will be returned when performing a search or doing other operations which
-involves loading multiple videos. This also affects models / channels and your liked videos. The result limit is
-basically the number of videos which can be loaded into the tree widget (this thing where videos are displayed).</string>
-                      </property>
-                      <property name="accessibleName">
-                       <string>label result limit</string>
-                      </property>
-                      <property name="text">
-                       <string>Result Limit:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="1" colspan="2">
+                    <item row="2" column="2" colspan="4">
                      <widget class="QSpinBox" name="settings_spinbox_videos_result_limit">
                       <property name="accessibleName">
                        <string>spinbox resutl limit</string>
@@ -2474,58 +2586,29 @@ basically the number of videos which can be loaded into the tree widget (this th
                       </property>
                      </widget>
                     </item>
-                    <item row="3" column="0">
-                     <widget class="QLabel" name="settings_label_videos_output_path">
+                    <item row="4" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_videos_use_video_id_as_filename">
                       <property name="accessibleName">
-                       <string>label output path</string>
+                       <string>checkbox use video id as filename</string>
                       </property>
                       <property name="text">
-                       <string>Output path:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="1">
-                     <widget class="QLineEdit" name="settings_lineedit_videos_output_path">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="accessibleName">
-                       <string>lineedit video output path</string>
-                      </property>
-                      <property name="placeholderText">
-                       <string>Enter &quot;./&quot; for current directory</string>
+                       <string>Use Video ID as filename</string>
                       </property>
                      </widget>
                     </item>
                     <item row="4" column="2">
-                     <widget class="QCheckBox" name="settings_checkbox_videos_skip_existing_files">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
+                     <widget class="QLabel" name="label_tooltip_write_metadata">
                       <property name="toolTip">
-                       <string>If you fetch a video and the exact same filename already exists, usually Porn Fetch would just skip this file.
-If you set this option to No, then Porn Fetch instead download the video and append a random number to it.
-
-For example you have downloaded a video called:
-
-Spain_didnt_win_against_Germany.mp4
-
-and you download a video with the same title, then it would append a random number to it:
-
-Spain_didnt_win_against_Germany_118251.mp4</string>
-                      </property>
-                      <property name="accessibleName">
-                       <string>checkbox skip existing files</string>
+                       <string>Metadata tags are saved inside of the file itself. These are tags that video players can read from and provide you information.
+Some folder viewers also give you the ability to search files by specific metadata tags. Those tags can help organize and structure files.
+Porn Fetch will by default save those tags inside of your video files. </string>
                       </property>
                       <property name="text">
-                       <string>Skip existing files</string>
+                       <string/>
                       </property>
                      </widget>
                     </item>
-                    <item row="1" column="0">
+                    <item row="1" column="1">
                      <widget class="QLabel" name="settings_label_videos_model_vdeos_type">
                       <property name="toolTip">
                        <string>User uploads and featured videos are two different things. User uploads are the videos which were really uploaded
@@ -2544,37 +2627,24 @@ If you choose &quot;User Uploads&quot;, only self uploaded videos will be fetche
                       </property>
                      </widget>
                     </item>
-                    <item row="3" column="2">
-                     <widget class="QPushButton" name="settings_button_videos_open_output_path">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
+                    <item row="3" column="2" colspan="2">
+                     <widget class="QLineEdit" name="settings_lineedit_videos_output_path">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
                       </property>
                       <property name="accessibleName">
-                       <string>settings open output path</string>
+                       <string>lineedit video output path</string>
                       </property>
-                      <property name="text">
-                       <string>Open</string>
+                      <property name="placeholderText">
+                       <string>Enter &quot;./&quot; for current directory</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="5" column="0">
-                     <widget class="QCheckBox" name="settings_checkbox_videos_track_downloaded_videos">
-                      <property name="toolTip">
-                       <string>Videos will be tracked in a SQL database which will save the URL and the metadata. </string>
-                      </property>
-                      <property name="accessibleName">
-                       <string>checkbox track downloaded videos</string>
-                      </property>
-                      <property name="text">
-                       <string>Track downloaded videos</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="5" column="2">
-                     <widget class="QCheckBox" name="settings_checkbox_videos_use_directory_system">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
+                    <item row="5" column="4">
+                     <widget class="QLabel" name="label_tooltip_use_directory_system">
                       <property name="toolTip">
                        <string>The directory system will save videos in an intelligent way. If you download 3 videos form one Pornstar and 5 videos 
 from another, Porn Fetch will automatically make folders for it and move the 3 videos into that one folder and the other
@@ -2582,27 +2652,27 @@ from another, Porn Fetch will automatically make folders for it and move the 3 v
 
 This can be helpful for organizing stuff, but is a more advanced feature, so the majority of users won't use it probably</string>
                       </property>
-                      <property name="accessibleName">
-                       <string>checkbox use directory system</string>
-                      </property>
-                      <property name="accessibleDescription">
-                       <string>The directory system will automatically create folders for each author of videos</string>
-                      </property>
                       <property name="text">
-                       <string>Use directory system</string>
+                       <string/>
                       </property>
                      </widget>
                     </item>
-                    <item row="5" column="1">
-                     <widget class="QLineEdit" name="settings_lineedit_videos_database_path">
-                      <property name="accessibleName">
-                       <string>lineedit output path of the database</string>
+                    <item row="4" column="4">
+                     <widget class="QLabel" name="label_tooltip_skip_existing_files">
+                      <property name="toolTip">
+                       <string>If you fetch a video and the exact same filename already exists, usually Porn Fetch would just skip this file.
+If you set this option to No, then Porn Fetch instead download the video and append a random number to it.
+
+For example you have downloaded a video called:
+
+Spain_didnt_win_against_Germany.mp4
+
+and you download a video with the same title, then it would append a random number to it:
+
+Spain_didnt_win_against_Germany_118251.mp4</string>
                       </property>
-                      <property name="accessibleDescription">
-                       <string>the database tracks all downloaded videos in Porn Fetch, optional</string>
-                      </property>
-                      <property name="placeholderText">
-                       <string>Enter the path of the database file here</string>
+                      <property name="text">
+                       <string/>
                       </property>
                      </widget>
                     </item>
@@ -2635,111 +2705,10 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
                   </property>
                   <item row="0" column="0">
                    <layout class="QGridLayout" name="settings_gridlayout_performance">
-                    <item row="5" column="3">
-                     <widget class="QSpinBox" name="settings_spinbox_performance_processing_delay">
-                      <property name="minimum">
-                       <number>1</number>
-                      </property>
-                      <property name="maximum">
-                       <number>500</number>
-                      </property>
-                      <property name="value">
-                       <number>1</number>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="7" column="2">
-                     <widget class="QLabel" name="settings_label_performance_videos_concurrency">
-                      <property name="toolTip">
-                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The videos concurrency defines how many videos are fetched at the same time when searching or fetching models etc.&lt;/p&gt;&lt;p&gt;For example, let's say you search for something. Then the first page of the results will be scraped for video URLs. This takes&lt;/p&gt;&lt;p&gt;usually around 1 second. If you set this value to 20, then from all those URLs Porn Fetch will attempt to load 20 videos at&lt;/p&gt;&lt;p&gt;the same time. This can improve speed A LOT, but can also get you blocked from the site. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                      </property>
-                      <property name="accessibleName">
-                       <string>Videos Concurrency</string>
-                      </property>
-                      <property name="text">
-                       <string>Videos Concurrency:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="0">
-                     <widget class="QLabel" name="settings_label_performance_simultaneous_download">
-                      <property name="toolTip">
-                       <string>The Semaphore is a tool to limit the number of simultaneous actions / downloads. For example: If the semaphore is set to 1, only 1 video will be downloaded at the same time.\nIf the semaphore is set to 4, 4 videos will be downloaded at the same time. Changing this is only useful, if you have a really good internet connection and a good system.</string>
-                      </property>
-                      <property name="accessibleName">
-                       <string>Simultaneous downloads</string>
-                      </property>
-                      <property name="text">
-                       <string>Simultaneous downloads:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="5" column="2">
-                     <widget class="QLabel" name="settings_label_performance_processing_delay">
-                      <property name="toolTip">
-                       <string>The processing delay sets a delay before every video gets downloaded.
-Let's assume you set a delay of 30 (30 seconds), then it will take 30 seconds between each video downloads.
-This does not apply if you have a value of simultaneous downloads greater than 1.</string>
-                      </property>
-                      <property name="accessibleName">
-                       <string>Videos Concurrency</string>
-                      </property>
-                      <property name="text">
-                       <string>Processing Delay (videos/sec):</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="5" column="1">
-                     <widget class="QSpinBox" name="settings_spinbox_performance_maximal_timeout">
-                      <property name="minimum">
-                       <number>5</number>
-                      </property>
-                      <property name="maximum">
-                       <number>5000</number>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="1">
-                     <widget class="QComboBox" name="settings_performance_combobox_download_mode">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="toolTip">
-                       <string>1) High Performance:  Uses a class of workers to download multiple video segments at a time. Can be really fast if you
-have a very strong internet connection. Maybe not great for low end systems.
-
-2) FFMPEG:
-FFmpeg is a specialized tool for video encoding and decoding. It is also able to fetch videos based on their m3u8 URL, which contains the segments. FFmpeg is slower compared to high performance and not well tested. Please only use if you have to.
-
-3) Default:  The default download mode will just download one video segment after the next one. If you get a lot of 
-timeouts this can really slow down the process, as we need to wait the Porn sites to return the video segments.
-With the High Performance method, we can just download other segments while waiting which makes it so fast.</string>
-                      </property>
-                      <item>
-                       <property name="text">
-                        <string>High Performance</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>FFMPEG</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>Default</string>
-                       </property>
-                      </item>
-                     </widget>
-                    </item>
-                    <item row="7" column="0">
+                    <item row="7" column="1">
                      <widget class="QLabel" name="settings_label_performance_speed_limit">
                       <property name="toolTip">
-                       <string>The speed limit sets the maximum allowed network speed in megabyte per seconds. However, this doesn't work perfectly.
-The speed limit also only works for the default download mode, because it wouldn't make sense downloading multiple
-segments at the same time with a speed limit being in place.
-
-If you need something more 'exact / precise', use applications like NetLimiter 4 or something similar.</string>
+                       <string/>
                       </property>
                       <property name="accessibleName">
                        <string>Speed Limit (MB/s)</string>
@@ -2752,7 +2721,7 @@ If you need something more 'exact / precise', use applications like NetLimiter 4
                       </property>
                      </widget>
                     </item>
-                    <item row="0" column="0">
+                    <item row="0" column="1">
                      <widget class="QLabel" name="settings_label_performance_download_mode">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -2771,7 +2740,54 @@ If you need something more 'exact / precise', use applications like NetLimiter 4
                       </property>
                      </widget>
                     </item>
-                    <item row="2" column="1">
+                    <item row="5" column="0">
+                     <widget class="QLabel" name="label_tooltip_maximum_timeout">
+                      <property name="toolTip">
+                       <string>The timeout handles the timeout for retrieving segments when using the threaded download mode. If you have a poor 
+internet connection you can set this higher than 10. But this isn't required for most users!</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="8" column="0">
+                     <widget class="QLabel" name="label_tooltip_pages_concurrency">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The pages concurrency defines how many pages will be scraped at the same time,&lt;/p&gt;&lt;p&gt;when searching for videos or fetching models. Lower values are generally recommended,&lt;/p&gt;&lt;p&gt;to avoid getting blocked. Keep it between 1-3.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="4">
+                     <widget class="QLabel" name="settings_label_performance_processing_delay">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="accessibleName">
+                       <string>Videos Concurrency</string>
+                      </property>
+                      <property name="text">
+                       <string>Processing Delay (videos/sec):</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="8" column="1">
+                     <widget class="QLabel" name="settings_label_performance_pages_concurrency">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="accessibleDescription">
+                       <string>Pages concurrency</string>
+                      </property>
+                      <property name="text">
+                       <string>Pages concurrency:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="2">
                      <widget class="QSpinBox" name="settings_spinbox_performance_simultaneous_downloads">
                       <property name="minimum">
                        <number>1</number>
@@ -2781,7 +2797,109 @@ If you need something more 'exact / precise', use applications like NetLimiter 4
                       </property>
                      </widget>
                     </item>
-                    <item row="8" column="1">
+                    <item row="0" column="5">
+                     <widget class="QSpinBox" name="settings_spinbox_performance_network_delay">
+                      <property name="minimum">
+                       <number>0</number>
+                      </property>
+                      <property name="maximum">
+                       <number>5000</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_tooltip_simultaneous_downloads">
+                      <property name="toolTip">
+                       <string>The Semaphore is a tool to limit the number of simultaneous actions / downloads. For example: If the semaphore is set to 1, only 1 video will be downloaded at the same time.\nIf the semaphore is set to 4, 4 videos will be downloaded at the same time. Changing this is only useful, if you have a really good internet connection and a good system.</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="5">
+                     <widget class="QSpinBox" name="settings_spinbox_performance_maximal_retries">
+                      <property name="minimum">
+                       <number>5</number>
+                      </property>
+                      <property name="maximum">
+                       <number>5000</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="7" column="0">
+                     <widget class="QLabel" name="label_tooltip_speed_limit">
+                      <property name="toolTip">
+                       <string>The speed limit sets the maximum allowed network speed in megabyte per seconds. However, this doesn't work perfectly.
+The speed limit also only works for the default download mode, because it wouldn't make sense downloading multiple
+segments at the same time with a speed limit being in place.
+
+If you need something more 'exact / precise', use applications like NetLimiter 4 or something similar.</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="4">
+                     <widget class="QLabel" name="settings_label_performance_maximal_retries">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="accessibleDescription">
+                       <string>Maximum retries</string>
+                      </property>
+                      <property name="text">
+                       <string>Maximum retries:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="7" column="2">
+                     <widget class="QDoubleSpinBox" name="settings_doublespinbox_performance_speed_limit">
+                      <property name="accessibleName">
+                       <string>spinbox speed limit</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="8" column="5">
+                     <widget class="QSpinBox" name="settings_spinbox_performance_download_workers">
+                      <property name="minimum">
+                       <number>1</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="7" column="5">
+                     <widget class="QSpinBox" name="settings_spinbox_performance_videos_concurrency">
+                      <property name="minimum">
+                       <number>1</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_tooltip_download_mode">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="toolTip">
+                       <string>1) High Performance:  Uses a class of workers to download multiple video segments at a time. Can be really fast if you
+have a very strong internet connection. Maybe not great for low end systems.
+
+2) FFMPEG:
+FFmpeg is a specialized tool for video encoding and decoding. It is also able to fetch videos based on their m3u8 URL, which contains the segments. FFmpeg is slower compared to high performance and not well tested. Please only use if you have to.
+
+3) Default:  The default download mode will just download one video segment after the next one. If you get a lot of 
+timeouts this can really slow down the process, as we need to wait the Porn sites to return the video segments.
+With the High Performance method, we can just download other segments while waiting which makes it so fast.</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="8" column="2">
                      <widget class="QSpinBox" name="settings_spinbox_performance_pages_concurrency">
                       <property name="accessibleName">
                        <string>spinbox pages concurrency</string>
@@ -2794,52 +2912,36 @@ If you need something more 'exact / precise', use applications like NetLimiter 4
                       </property>
                      </widget>
                     </item>
-                    <item row="2" column="3">
-                     <widget class="QSpinBox" name="settings_spinbox_performance_maximal_retries">
+                    <item row="5" column="5">
+                     <widget class="QSpinBox" name="settings_spinbox_performance_processing_delay">
                       <property name="minimum">
-                       <number>5</number>
+                       <number>1</number>
                       </property>
                       <property name="maximum">
-                       <number>5000</number>
+                       <number>500</number>
                       </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="2">
-                     <widget class="QLabel" name="settings_label_performance_maximal_retries">
-                      <property name="toolTip">
-                       <string>The maximal retries defines how much attempts will be used for a network request. For example if an API calls
-a URL for a website there will be &lt;AMOUNT&gt; of attempts until an error is thrown.</string>
-                      </property>
-                      <property name="accessibleDescription">
-                       <string>Maximum retries</string>
-                      </property>
-                      <property name="text">
-                       <string>Maximum retries:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="3">
-                     <widget class="QSpinBox" name="settings_spinbox_performance_network_delay">
-                      <property name="minimum">
-                       <number>0</number>
-                      </property>
-                      <property name="maximum">
-                       <number>5000</number>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="7" column="3">
-                     <widget class="QSpinBox" name="settings_spinbox_performance_videos_concurrency">
-                      <property name="minimum">
+                      <property name="value">
                        <number>1</number>
                       </property>
                      </widget>
                     </item>
-                    <item row="5" column="0">
+                    <item row="2" column="1">
+                     <widget class="QLabel" name="settings_label_performance_simultaneous_download">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="accessibleName">
+                       <string>Simultaneous downloads</string>
+                      </property>
+                      <property name="text">
+                       <string>Simultaneous downloads:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="1">
                      <widget class="QLabel" name="settings_label_performance_maximal_timeout">
                       <property name="toolTip">
-                       <string>The timeout handles the timeout for retrieving segments when using the threaded download mode. If you have a poor 
-internet connection you can set this higher than 10. But this isn't required for most users!</string>
+                       <string/>
                       </property>
                       <property name="accessibleName">
                        <string>Maximum timeout</string>
@@ -2849,36 +2951,58 @@ internet connection you can set this higher than 10. But this isn't required for
                       </property>
                      </widget>
                     </item>
-                    <item row="7" column="1">
-                     <widget class="QDoubleSpinBox" name="settings_doublespinbox_performance_speed_limit">
+                    <item row="7" column="4">
+                     <widget class="QLabel" name="settings_label_performance_videos_concurrency">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
                       <property name="accessibleName">
-                       <string>spinbox speed limit</string>
+                       <string>Videos Concurrency</string>
+                      </property>
+                      <property name="text">
+                       <string>Videos Concurrency:</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="8" column="0">
-                     <widget class="QLabel" name="settings_label_performance_pages_concurrency">
-                      <property name="toolTip">
-                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The pages concurrency defines how many pages will be scraped at the same time,&lt;/p&gt;&lt;p&gt;when searching for videos or fetching models. Lower values are generally recommended,&lt;/p&gt;&lt;p&gt;to avoid getting blocked. Keep it between 1-3.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    <item row="5" column="2">
+                     <widget class="QSpinBox" name="settings_spinbox_performance_maximal_timeout">
+                      <property name="minimum">
+                       <number>5</number>
                       </property>
-                      <property name="accessibleDescription">
-                       <string>Pages concurrency</string>
-                      </property>
-                      <property name="text">
-                       <string>Pages concurrency:</string>
+                      <property name="maximum">
+                       <number>5000</number>
                       </property>
                      </widget>
                     </item>
                     <item row="0" column="2">
+                     <widget class="QComboBox" name="settings_performance_combobox_download_mode">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <item>
+                       <property name="text">
+                        <string>High Performance</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>FFMPEG</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>Default</string>
+                       </property>
+                      </item>
+                     </widget>
+                    </item>
+                    <item row="0" column="4">
                      <widget class="QLabel" name="settings_label_performance_network_delay">
                       <property name="toolTip">
-                       <string>You can set a delay between requests from you and a site. If you are downloading a lot of videos or experiencing 
-errors, you should enable a delay. By default the delay is turned off with the value 0
-
-A good starting point is between 0.5 - 1.5
-
-The longer the delay is, the longer it will take to download videos, load videos and generally do stuff. This does not
-really affect the high performance download mode.</string>
+                       <string/>
                       </property>
                       <property name="accessibleName">
                        <string>Network delay (requests/sec)</string>
@@ -2888,10 +3012,10 @@ really affect the high performance download mode.</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="8" column="2">
+                    <item row="8" column="4">
                      <widget class="QLabel" name="label_settings_performance_download_workers">
                       <property name="toolTip">
-                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The download worker setting defines, how many workers / threads will be used at the same time&lt;/p&gt;&lt;p&gt;to fetch video segments at the same time. Usually you don't need to go over 20, unless you have a higher&lt;/p&gt;&lt;p&gt;internet connection than 1gbit/s. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                       <string/>
                       </property>
                       <property name="accessibleName">
                        <string>Download workers:</string>
@@ -2901,10 +3025,68 @@ really affect the high performance download mode.</string>
                       </property>
                      </widget>
                     </item>
+                    <item row="0" column="3">
+                     <widget class="QLabel" name="label_tooltip_network_delay">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="toolTip">
+                       <string>You can set a delay between requests from you and a site. If you are downloading a lot of videos or experiencing 
+errors, you should enable a delay. By default the delay is turned off with the value 0
+
+A good starting point is between 0.5 - 1.5
+
+The longer the delay is, the longer it will take to download videos, load videos and generally do stuff. This does not
+really affect the high performance download mode.</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="3">
+                     <widget class="QLabel" name="label_tooltip_processing_delay">
+                      <property name="toolTip">
+                       <string>The processing delay sets a delay before every video gets downloaded.
+Let's assume you set a delay of 30 (30 seconds), then it will take 30 seconds between each video downloads.
+This does not apply if you have a value of simultaneous downloads greater than 1.</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="7" column="3">
+                     <widget class="QLabel" name="label_tooltip_videos_concurrency">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The videos concurrency defines how many videos are fetched at the same time when searching or fetching models etc.&lt;/p&gt;&lt;p&gt;For example, let's say you search for something. Then the first page of the results will be scraped for video URLs. This takes&lt;/p&gt;&lt;p&gt;usually around 1 second. If you set this value to 20, then from all those URLs Porn Fetch will attempt to load 20 videos at&lt;/p&gt;&lt;p&gt;the same time. This can improve speed A LOT, but can also get you blocked from the site. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
                     <item row="8" column="3">
-                     <widget class="QSpinBox" name="settings_spinbox_performance_download_workers">
-                      <property name="minimum">
-                       <number>1</number>
+                     <widget class="QLabel" name="label_tooltip_download_workers">
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The download worker setting defines, how many workers / threads will be used at the same time&lt;/p&gt;&lt;p&gt;to fetch video segments at the same time. Usually you don't need to go over 20, unless you have a higher&lt;/p&gt;&lt;p&gt;internet connection than 1gbit/s. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="3">
+                     <widget class="QLabel" name="label_tooltip_maximum_retries">
+                      <property name="toolTip">
+                       <string>The maximal retries defines how much attempts will be used for a network request. For example if an API calls
+a URL for a website there will be &lt;AMOUNT&gt; of attempts until an error is thrown.</string>
+                      </property>
+                      <property name="text">
+                       <string/>
                       </property>
                      </widget>
                     </item>
@@ -2940,16 +3122,125 @@ really affect the high performance download mode.</string>
                     <property name="spacing">
                      <number>0</number>
                     </property>
-                    <item row="2" column="0">
-                     <widget class="QCheckBox" name="settings_checkbox_system_enable_anonymous_mode">
+                    <item row="2" column="2">
+                     <widget class="QCheckBox" name="settings_checkbox_system_activate_proxy">
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
                       </property>
+                      <property name="accessibleName">
+                       <string>checkbox activate a proxy</string>
+                      </property>
+                      <property name="text">
+                       <string>Activate Proxy</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2">
+                     <widget class="QCheckBox" name="settings_checkbox_system_internet_checks">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox enable internet checks</string>
+                      </property>
+                      <property name="text">
+                       <string>Internet checks</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="1" colspan="2">
+                     <widget class="QCheckBox" name="settings_checkbox_system_enable_network_logging">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox enable network logging</string>
+                      </property>
+                      <property name="text">
+                       <string>Enable Network Logging</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="0">
+                     <widget class="QLabel" name="label_tooltip_network_logging">
+                      <property name="toolTip">
+                       <string>I have created my own server that runs 24/7 in my home. Porn Fetch (ONLY if you enable it) logs specific types of errors,
+that I don't know of, or that I need your help to fix them, to my server using a simple JSON post request.
+
+You can see the Code of the server publicly here --&gt;: https://github.com/EchterAlsFake/Server
+Porn Fetch also does its update checking mechanism through that server.
+
+IMPORTANT:
+The server is IPv6 only. If your ISP has not given you a working IPv6 IP address, then you can't reach me.
+You can check for yourself on 'https://ipleak.net'. It should be something like this: '2a02:810a:186:b400::5c51'
+
+My server does NOT save any of your personal information. No IP addresses, no PC information, no other identifiable information.
+The only things being stored is the literal Python exception that's being caught, the version you are running on, and your system.
+Like literally only if you use Windows, Linux or Mac. Nothing else.
+
+You can see that yourself, as mentioned before on the source code.
+You'd help me a lot by enabling network logging :) </string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_system_supress_errors">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox supress errors silently</string>
+                      </property>
+                      <property name="text">
+                       <string>Supress errors silently</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="label_tooltip_update_checks">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="toolTip">
+                       <string>Porn Fetch will check for updates each time it starts, using my own server. This will require a working IPv6 connection. No personal data nor any other data is sent during this process.</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_tooltip_anonymous_mode">
                       <property name="toolTip">
                        <string>The anonymous mode renames all of Porn Fetch's elements to look NOT like a Porn downloader.
 This makes it useful for downloading Porn content if you are in public, or multiple people use your PC / Phone.
 
 This also disables thumbnail preview. All titles will be replaced with: [redacted] as well as all authors.</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_system_enable_anonymous_mode">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
                       </property>
                       <property name="accessibleName">
                        <string>checkbox enable anonymous mode</string>
@@ -2959,7 +3250,34 @@ This also disables thumbnail preview. All titles will be replaced with: [redacte
                       </property>
                      </widget>
                     </item>
-                    <item row="3" column="1">
+                    <item row="1" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_system_update_checks">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox enable update checks</string>
+                      </property>
+                      <property name="text">
+                       <string>Update checks</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QLabel" name="label_tooltip_supress_errors">
+                      <property name="toolTip">
+                       <string>If you enable this function, all errors will be suppressed. This does not mean that they will be completely ignored, but
+you won't get a big notification for it. 
+
+If you have activated Network Logging, they will still be reported. If an error happens while iterating through videos,
+the current video will be skipped and Porn Fetch will continue with the next one.  </string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="2">
                      <widget class="QCheckBox" name="settings_checkbox_system_proxy_kill_switch">
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
@@ -2988,93 +3306,16 @@ My priority on developing this is low. Please do not report errors. Thank you &l
                       </property>
                      </widget>
                     </item>
-                    <item row="1" column="0">
-                     <widget class="QCheckBox" name="settings_checkbox_system_update_checks">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
+                    <item row="0" column="2">
+                     <widget class="QLineEdit" name="settings_lineedit_system_custom_app_name">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
                       </property>
-                      <property name="accessibleName">
-                       <string>checkbox enable update checks</string>
-                      </property>
-                      <property name="text">
-                       <string>Update checks</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="1">
-                     <widget class="QCheckBox" name="settings_checkbox_system_internet_checks">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="accessibleName">
-                       <string>checkbox enable internet checks</string>
-                      </property>
-                      <property name="text">
-                       <string>Internet checks</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="0">
-                     <widget class="QCheckBox" name="settings_checkbox_system_supress_errors">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="toolTip">
-                       <string>If you enable this function, all errors will be suppressed. This does not mean that they will be completely ignored, but
-you won't get a big notification for it. 
-
-If you have activated Network Logging, they will still be reported. If an error happens while iterating through videos,
-the current video will be skipped and Porn Fetch will continue with the next one.  </string>
-                      </property>
-                      <property name="accessibleName">
-                       <string>checkbox supress errors silently</string>
-                      </property>
-                      <property name="text">
-                       <string>Supress errors silently</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="1">
-                     <widget class="QCheckBox" name="settings_checkbox_system_activate_proxy">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="accessibleName">
-                       <string>checkbox activate a proxy</string>
-                      </property>
-                      <property name="text">
-                       <string>Activate Proxy</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="0" colspan="2">
-                     <widget class="QCheckBox" name="settings_checkbox_system_enable_network_logging">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="toolTip">
-                       <string>I have created my own server that runs 24/7 in my home. Porn Fetch (ONLY if you enable it) logs specific types of errors,
-that I don't know of, or that I need your help to fix them, to my server using a simple JSON post request.
-
-You can see the Code of the server publicly here --&gt;: https://github.com/EchterAlsFake/Server
-Porn Fetch also does its update checking mechanism through that server.
-
-IMPORTANT:
-The server is IPv6 only. If your ISP has not given you a working IPv6 IP address, then you can't reach me.
-You can check for yourself on 'https://ipleak.net'. It should be something like this: '2a02:810a:186:b400::5c51'
-
-My server does NOT save any of your personal information. No IP addresses, no PC information, no other identifiable information.
-The only things being stored is the literal Python exception that's being caught, the version you are running on, and your system.
-Like literally only if you use Windows, Linux or Mac. Nothing else.
-
-You can see that yourself, as mentioned before on the source code.
-You'd help me a lot by enabling network logging :) </string>
-                      </property>
-                      <property name="accessibleName">
-                       <string>checkbox enable network logging</string>
-                      </property>
-                      <property name="text">
-                       <string>Enable Network Logging</string>
+                      <property name="placeholderText">
+                       <string>Write a custom app name here</string>
                       </property>
                      </widget>
                     </item>
@@ -3370,7 +3611,7 @@ QPushButton:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>230</width>
+             <width>218</width>
              <height>110</height>
             </rect>
            </property>
@@ -3624,7 +3865,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Adwaita Sans'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:14pt; font-weight:700;&quot;&gt;Keyboard Shortcuts&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:14pt; font-weight:700;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:16pt;&quot;&gt;CTRL + Q     Closes the application&lt;/span&gt;&lt;/p&gt;
@@ -3713,8 +3954,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>194</width>
-             <height>142</height>
+             <width>170</width>
+             <height>140</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_56">
@@ -3747,7 +3988,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Adwaita Sans'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-size:24pt; font-weight:700;&quot;&gt;Installation Mode&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-size:16pt; text-decoration: underline; color:#0000ff;&quot;&gt;1) Inst&lt;/span&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-size:14pt; text-decoration: underline; color:#0000ff;&quot;&gt;all&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-size:12pt;&quot;&gt;This will install Porn Fetch into your system, meaning that you can run it directly from your Start Menu. e.g, press Windows key, type Porn Fetch and directly start it and on Linux it will be the same.&lt;/span&gt;&lt;/p&gt;
@@ -3889,83 +4130,83 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Adwaita Sans'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;table border=&quot;0&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;&quot; cellspacing=&quot;2&quot; cellpadding=&quot;0&quot;&gt;&lt;thead&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Category&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans'; font-weight:700;&quot;&gt;Category&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Websites&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans'; font-weight:700;&quot;&gt;Websites&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Videos&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;Videos&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang, YouPorn&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang, YouPorn&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Searching&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;Searching&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Models&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;Models&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;PornHub, HQporner, xnxx&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;PornHub, HQporner, xnxx&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Pornstars&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;Pornstars&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;PornHub, Eporner, xvideos, Xhamster, Spankbang&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;PornHub, Eporner, xvideos, Xhamster, Spankbang&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Channels&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;Channels&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;PornHub, Xhamster, Spankbang&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;PornHub, Xhamster, Spankbang&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Creator / Users&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;Creator / Users&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Xhamster (Creator), Spankbang (Creator), xnxx (Users)&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;Xhamster (Creator), Spankbang (Creator), xnxx (Users)&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Playlists&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;Playlists&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;PornHub, xvideos&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;PornHub, xvideos&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Downloading&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;Downloading&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;xvideos&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;xvideos&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Shorts&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;Shorts&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Xhamster&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;Xhamster&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Account Login&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;Account Login&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;PornHub&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;PornHub&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Videos by Category&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;Videos by Category&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;HQporner, Eporner&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;HQporner, Eporner&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Random&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;Random&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;HQporner&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;HQporner&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Brazzers only&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;Brazzers only&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;HQporner&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;HQporner&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Top Porn&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;Top Porn&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;HQporner&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Adwaita Sans';&quot;&gt;HQporner&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="openExternalLinks">
                <bool>true</bool>
@@ -4005,8 +4246,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>488</width>
-             <height>103</height>
+             <width>475</width>
+             <height>102</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_59">
@@ -4107,7 +4348,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Adwaita Sans'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:36pt; color:#ffc800;&quot;&gt;y&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:36pt; color:#cc00ff;&quot;&gt;o&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:36pt; color:#ffffff;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:36pt; color:#37ff00;&quot;&gt;w&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:36pt; color:#ff00bb;&quot;&gt;a&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:36pt; color:#ff0000;&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:36pt; color:#0000ff;&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:36pt; color:#00fff7;&quot;&gt;u&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:36pt; color:#ff55ff;&quot;&gt;p&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#ffffff;&quot;&gt;If you have a moment to read this, I'd appreciate it a lot...&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt; color:#ffffff;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; color:#ffffff;&quot;&gt;I have started developing Porn Fetch ~2 years ago as a fun project for learning graphical user interfaces. Over the years Porn Fetch became more professional, as my programming skills increased and more people started using it. That I reach even 1000 downloads on this was something I'd never thought was possible and now we are over 20.000 xD&lt;/span&gt;&lt;/p&gt;
@@ -4161,7 +4402,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <x>0</x>
              <y>0</y>
              <width>98</width>
-             <height>121</height>
+             <height>120</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_61">
@@ -4180,7 +4421,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Adwaita Sans'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:700;&quot;&gt;DISCLAIMER&lt;/span&gt;&lt;/h3&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:700;&quot;&gt;Porn Fetch&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt; is free software licensed under the GNU General Public License v3.0. You are free to use, modify, and redistribute this software under the terms of that license.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;Please be aware that &lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:700;&quot;&gt;Porn Fetch may interact with websites in ways that violate their Terms of Service.&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt; Additionally, downloading copyright-protected content without proper authorization may be illegal in many jurisdictions, including under the DMCA (Digital Millennium Copyright Act).&lt;/span&gt;&lt;/p&gt;
@@ -4253,7 +4494,7 @@ p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Adwaita Sans'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:700;&quot;&gt;Data Collection &amp;amp; Privacy Information&lt;/span&gt;&lt;/h2&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:12pt;&quot;&gt;This application now uses my own server for update checking and error reporting, instead of relying on GitHub. This gives me greater control over the process and the data transmitted. However, my server is &lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:12pt; font-weight:700;&quot;&gt;IPv6-only&lt;/span&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:12pt;&quot;&gt;. This means that only about 50% of internet users will be able to connect. &lt;/span&gt;&lt;/p&gt;
 &lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:700;&quot;&gt;About the Server&lt;/span&gt;&lt;/h3&gt;

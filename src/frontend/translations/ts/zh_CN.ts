@@ -14,7 +14,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3464"/>
+        <location filename="../../UI/form_main_window.ui" line="3705"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -76,122 +76,47 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4098"/>
+        <location filename="../../UI/form_main_window.ui" line="4339"/>
         <source>textbrowser for donation message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4104"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ffc800;&quot;&gt;y&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#cc00ff;&quot;&gt;o&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ffffff;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#37ff00;&quot;&gt;w&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ff00bb;&quot;&gt;a&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ff0000;&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#0000ff;&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#00fff7;&quot;&gt;u&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ff55ff;&quot;&gt;p&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#ffffff;&quot;&gt;If you have a moment to read this, I&apos;d appreciate it a lot...&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; color:#ffffff;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; color:#ffffff;&quot;&gt;I have started developing Porn Fetch ~2 years ago as a fun project for learning graphical user interfaces. Over the years Porn Fetch became more professional, as my programming skills increased and more people started using it. That I reach even 1000 downloads on this was something I&apos;d never thought was possible and now we are over 20.000 xD&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; color:#ffffff;&quot;&gt;Although I absolutely love what I am doing here, and unless I receive a Cease and Desist letter, will never stop it, I haven&apos;t earned much from this project except for the few people that donated me something (Thank you so much btw).&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; color:#ffffff;&quot;&gt;If you have a few cents left on your pocket, I&apos;d absolutely appreciate it. I know it might not seem much but it&apos;s a thank you and it keeps me motivated. Also since I still go to school small amounts of money are much more in relation to me than it is for someone who already has a job.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; color:#ffffff;&quot;&gt;But even if you don&apos;t donate, please don&apos;t feel bad. I don&apos;t expect it from you. I just kindly ask, but it&apos;s absolutely okay if you don&apos;t want to.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; color:#0000ff;&quot;&gt;Donation options&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://paypal.me/EchterAlsFake&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#27bf73;&quot;&gt;1) PayPal (https://paypal.me/EchterAlsFake)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://paypal.me/EchterAlsFake&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#aa00ff;&quot;&gt;2) K&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://ko-fi.com/EchterAlsFake&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#aa00ff;&quot;&gt;o-Fi (https://ko-fi.com/EchterAlsFake)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt;&quot;&gt;3) Crypto (XMR / Monero) : &lt;/span&gt;&lt;span style=&quot; font-family:&apos;ui-monospace&apos;,&apos;SFMono-Regular&apos;,&apos;SF Mono&apos;,&apos;Menlo&apos;,&apos;Consolas&apos;,&apos;Liberation Mono&apos;,&apos;monospace&apos;; font-size:9pt; color:#ff7700; background-color:rgba(101,108,118,0.2);&quot;&gt;42XwGZYbSxpMvhn9eeP4DwMwZV91tQgAm3UQr6Zwb2wzBf5HcuZCHrsVxa4aV2jhP4gLHsWWELxSoNjfnkt4rMfDDwXy9jR&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; color:#00ffb3;&quot;&gt;[This message won&apos;t be shown again, except if you update to a new version]&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="4171"/>
+        <location filename="../../UI/form_main_window.ui" line="4412"/>
         <source>textbrowser disclaimer message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4177"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;DISCLAIMER&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Porn Fetch&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; is free software licensed under the GNU General Public License v3.0. You are free to use, modify, and redistribute this software under the terms of that license.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;Please be aware that &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Porn Fetch may interact with websites in ways that violate their Terms of Service.&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; Additionally, downloading copyright-protected content without proper authorization may be illegal in many jurisdictions, including under the DMCA (Digital Millennium Copyright Act).&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;While some countries or regions may allow downloading content for strictly &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;personal, non-commercial use&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;, I &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;strongly discourage&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; using Porn Fetch to download, share, or redistribute content without appropriate rights or permissions. Always ensure you comply with your local laws and the terms of any website you access.&lt;/span&gt;&lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;IMPORTANT NOTE&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;I &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;strongly recommend&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; that you do &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;not&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; use this software for:&lt;/span&gt;&lt;/p&gt;
-&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Unauthorized redistribution of content&lt;/li&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Commercial use of downloaded materials&lt;/li&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Any activity that could result in legal liability for yourself or others&lt;/li&gt;&lt;/ul&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;Although the GPL license grants you broad rights, &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;continued misuse&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; may jeopardize the development and availability of this project. Please respect the intent behind this tool and use it responsibly.&lt;/span&gt;&lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;LIABILITY DISCLAIMER&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;This software is provided &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;without any warranty&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; as described in the GPLv3. I am &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;not liable&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; for any damages, legal consequences, or misuse resulting from your use of this software.&lt;br /&gt;You are solely responsible for ensuring your actions are lawful and ethical. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="4203"/>
+        <location filename="../../UI/form_main_window.ui" line="4444"/>
         <source>button accept disclaimer message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4241"/>
+        <location filename="../../UI/form_main_window.ui" line="4482"/>
         <source>textbrowser data collection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4244"/>
+        <location filename="../../UI/form_main_window.ui" line="4485"/>
         <source>This contains information of how Porn Fetch processes collected errors, where they go to and how they are transmitted. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4250"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Data Collection &amp;amp; Privacy Information&lt;/span&gt;&lt;/h2&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;This application now uses my own server for update checking and error reporting, instead of relying on GitHub. This gives me greater control over the process and the data transmitted. However, my server is &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700;&quot;&gt;IPv6-only&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;. This means that only about 50% of internet users will be able to connect. &lt;/span&gt;&lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;About the Server&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;The server is a small, older Acer Swift 3 laptop running 24/7 in my room. The full source code for the server is publicly available here:&lt;br /&gt;&lt;/span&gt;&lt;a href=&quot;https://github.com/EchterAlsFake/Server&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; text-decoration: underline; color:#f700ff;&quot;&gt;https://github.com/EchterAlsFake/Server&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; font-weight:700;&quot;&gt;Data Collected via Error Reports&lt;/span&gt;&lt;/h3&gt;
-&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;The version of Porn Fetch you are using&lt;/span&gt;&lt;/li&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Your operating system (e.g., Windows, Linux, or macOS)&lt;/li&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The current date and time&lt;/li&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot; style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The error details (full Python traceback)&lt;/li&gt;&lt;/ul&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700;&quot;&gt;Important:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt; The Python traceback may, in some cases, include incidental personal information — for example, your system username if it appears in a file path. No other personal data is intentionally collected. &lt;/span&gt;&lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Data Storage &amp;amp; Security&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;Error reports are stored in plain text on my server. The server’s storage device is encrypted with LUKS and secured with a strong password (40+ characters). &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; color:#ff0000;&quot;&gt;Your &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700; color:#ff0000;&quot;&gt;IP address is never logged, stored, or displayed&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; color:#ff0000;&quot;&gt;. &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Optional Participation&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;Whether you enable error reporting or not will have no impact on the application&apos;s functionality. It simply helps me identify and fix issues faster. You can also manually check for updates on GitHub, although most users do not do this. &lt;/span&gt;&lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; font-weight:700;&quot;&gt;IPv6 Connectivity Check&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;To see if you have IPv6 connectivity, visit:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;a href=&quot;https://echteralsfake.duckdns.org/ping&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#1aff00;&quot;&gt;https://echteralsfake.duckdns.org/ping&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;If you see a white page with &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700;&quot;&gt;Success&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;, you have IPv6. If not, you do not. &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;You can also verify your IP addresses by visiting: &lt;/span&gt;&lt;a href=&quot;https://ipleak.net&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; text-decoration: underline; color:#ffff00;&quot;&gt;https://ipleak.net&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;Example formats:&lt;br /&gt;IPv4: &lt;/span&gt;&lt;span style=&quot; font-family:&apos;monospace&apos;; font-size:12pt;&quot;&gt;135.215.32.64&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;IPv6: &lt;/span&gt;&lt;span style=&quot; font-family:&apos;monospace&apos;; font-size:12pt;&quot;&gt;2a02:810a:186:b400::5c51&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="4284"/>
+        <location filename="../../UI/form_main_window.ui" line="4525"/>
         <source>button enable IPv6 logging</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4294"/>
+        <location filename="../../UI/form_main_window.ui" line="4535"/>
         <source>button disable IPv6 logging completely</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4337"/>
+        <location filename="../../UI/form_main_window.ui" line="4578"/>
         <source>Total:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4366"/>
+        <location filename="../../UI/form_main_window.ui" line="4607"/>
         <source>Converting:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -374,188 +299,188 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2569"/>
+        <location filename="../../UI/form_main_window.ui" line="2341"/>
         <source>Track downloaded videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2855"/>
+        <location filename="../../UI/form_main_window.ui" line="2860"/>
         <source>spinbox speed limit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2868"/>
+        <location filename="../../UI/form_main_window.ui" line="2786"/>
         <source>Pages concurrency:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2887"/>
+        <location filename="../../UI/form_main_window.ui" line="3011"/>
         <source>Network delay (requests/sec):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2897"/>
-        <location filename="../../UI/form_main_window.ui" line="2900"/>
+        <location filename="../../UI/form_main_window.ui" line="3021"/>
+        <location filename="../../UI/form_main_window.ui" line="3024"/>
         <source>Download workers:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2955"/>
+        <location filename="../../UI/form_main_window.ui" line="3246"/>
         <source>checkbox enable anonymous mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2974"/>
+        <location filename="../../UI/form_main_window.ui" line="3292"/>
         <source>checkbox enable proxy kill switch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2984"/>
+        <location filename="../../UI/form_main_window.ui" line="3302"/>
         <source>button install porn fetch (This is optional) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2997"/>
+        <location filename="../../UI/form_main_window.ui" line="3259"/>
         <source>checkbox enable update checks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3010"/>
+        <location filename="../../UI/form_main_window.ui" line="3144"/>
         <source>checkbox enable internet checks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3030"/>
+        <location filename="../../UI/form_main_window.ui" line="3201"/>
         <source>checkbox supress errors silently</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3043"/>
+        <location filename="../../UI/form_main_window.ui" line="3131"/>
         <source>checkbox activate a proxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3074"/>
+        <location filename="../../UI/form_main_window.ui" line="3160"/>
         <source>checkbox enable network logging</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3113"/>
+        <location filename="../../UI/form_main_window.ui" line="3354"/>
         <source>label porn fetch theme </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3129"/>
+        <location filename="../../UI/form_main_window.ui" line="3370"/>
         <source>label graphical user interface language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3132"/>
+        <location filename="../../UI/form_main_window.ui" line="3373"/>
         <source>Graphical User Interface Language:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3139"/>
+        <location filename="../../UI/form_main_window.ui" line="3380"/>
         <source>label font size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3149"/>
+        <location filename="../../UI/form_main_window.ui" line="3390"/>
         <source>combobox porn fetch theme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3171"/>
+        <location filename="../../UI/form_main_window.ui" line="3412"/>
         <source>spinbox font size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3181"/>
+        <location filename="../../UI/form_main_window.ui" line="3422"/>
         <source>combobox porn fetch language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3190"/>
+        <location filename="../../UI/form_main_window.ui" line="3431"/>
         <source>English</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3195"/>
+        <location filename="../../UI/form_main_window.ui" line="3436"/>
         <source>German</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3033"/>
+        <location filename="../../UI/form_main_window.ui" line="3204"/>
         <source>Supress errors silently</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3013"/>
+        <location filename="../../UI/form_main_window.ui" line="3147"/>
         <source>Internet checks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3000"/>
+        <location filename="../../UI/form_main_window.ui" line="3262"/>
         <source>Update checks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2987"/>
+        <location filename="../../UI/form_main_window.ui" line="3305"/>
         <source>Install Porn Fetch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2958"/>
+        <location filename="../../UI/form_main_window.ui" line="3249"/>
         <source>Enable Anonymous mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3046"/>
+        <location filename="../../UI/form_main_window.ui" line="3134"/>
         <source>Activate Proxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3077"/>
+        <location filename="../../UI/form_main_window.ui" line="3163"/>
         <source>Enable Network Logging</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2592"/>
+        <location filename="../../UI/form_main_window.ui" line="2328"/>
         <source>Use directory system</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2483"/>
+        <location filename="../../UI/form_main_window.ui" line="2396"/>
         <source>Output path:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2442"/>
+        <location filename="../../UI/form_main_window.ui" line="2412"/>
         <source>Write metadata tags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2556"/>
+        <location filename="../../UI/form_main_window.ui" line="2488"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2457"/>
+        <location filename="../../UI/form_main_window.ui" line="2309"/>
         <source>Result Limit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2318"/>
+        <location filename="../../UI/form_main_window.ui" line="2360"/>
         <source>Quality:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2499"/>
+        <location filename="../../UI/form_main_window.ui" line="2642"/>
         <source>Enter &quot;./&quot; for current directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2524"/>
+        <location filename="../../UI/form_main_window.ui" line="2386"/>
         <source>Skip existing files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -565,27 +490,27 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2673"/>
+        <location filename="../../UI/form_main_window.ui" line="2937"/>
         <source>Simultaneous downloads:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3142"/>
+        <location filename="../../UI/form_main_window.ui" line="3383"/>
         <source>Font Size:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2977"/>
+        <location filename="../../UI/form_main_window.ui" line="3295"/>
         <source>Proxy Kill Switch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2328"/>
+        <location filename="../../UI/form_main_window.ui" line="2595"/>
         <source>Use Video ID as filename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2770"/>
+        <location filename="../../UI/form_main_window.ui" line="2739"/>
         <source>Download Mode:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -596,7 +521,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </message>
     <message>
         <location filename="../../UI/form_main_window.ui" line="2245"/>
-        <location filename="../../UI/form_main_window.ui" line="3185"/>
+        <location filename="../../UI/form_main_window.ui" line="3426"/>
         <source>System</source>
         <translation type="unfinished"></translation>
     </message>
@@ -606,12 +531,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2605"/>
+        <location filename="../../UI/form_main_window.ui" line="2569"/>
         <source>Enter the path of the database file here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2875"/>
+        <location filename="../../UI/form_main_window.ui" line="3037"/>
         <source>You can set a delay between requests from you and a site. If you are downloading a lot of videos or experiencing 
 errors, you should enable a delay. By default the delay is turned off with the value 0
 
@@ -622,12 +547,12 @@ really affect the high performance download mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2884"/>
+        <location filename="../../UI/form_main_window.ui" line="3008"/>
         <source>Network delay (requests/sec)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2708"/>
+        <location filename="../../UI/form_main_window.ui" line="2887"/>
         <source>1) High Performance:  Uses a class of workers to download multiple video segments at a time. Can be really fast if you
 have a very strong internet connection. Maybe not great for low end systems.
 
@@ -640,39 +565,39 @@ With the High Performance method, we can just download other segments while wait
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2720"/>
+        <location filename="../../UI/form_main_window.ui" line="2987"/>
         <source>High Performance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2725"/>
+        <location filename="../../UI/form_main_window.ui" line="2992"/>
         <source>FFMPEG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2730"/>
+        <location filename="../../UI/form_main_window.ui" line="2997"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2841"/>
+        <location filename="../../UI/form_main_window.ui" line="2746"/>
         <source>The timeout handles the timeout for retrieving segments when using the threaded download mode. If you have a poor 
 internet connection you can set this higher than 10. But this isn&apos;t required for most users!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2810"/>
+        <location filename="../../UI/form_main_window.ui" line="3085"/>
         <source>The maximal retries defines how much attempts will be used for a network request. For example if an API calls
 a URL for a website there will be &lt;AMOUNT&gt; of attempts until an error is thrown.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2667"/>
+        <location filename="../../UI/form_main_window.ui" line="2813"/>
         <source>The Semaphore is a tool to limit the number of simultaneous actions / downloads. For example: If the semaphore is set to 1, only 1 video will be downloaded at the same time.\nIf the semaphore is set to 4, 4 videos will be downloaded at the same time. Changing this is only useful, if you have a really good internet connection and a good system.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2738"/>
+        <location filename="../../UI/form_main_window.ui" line="2833"/>
         <source>The speed limit sets the maximum allowed network speed in megabyte per seconds. However, this doesn&apos;t work perfectly.
 The speed limit also only works for the default download mode, because it wouldn&apos;t make sense downloading multiple
 segments at the same time with a speed limit being in place.
@@ -681,19 +606,19 @@ If you need something more &apos;exact / precise&apos;, use applications like Ne
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2751"/>
+        <location filename="../../UI/form_main_window.ui" line="2720"/>
         <source>Speed Limit (MB/s):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2680"/>
+        <location filename="../../UI/form_main_window.ui" line="3053"/>
         <source>The processing delay sets a delay before every video gets downloaded.
 Let&apos;s assume you set a delay of 30 (30 seconds), then it will take 30 seconds between each video downloads.
 This does not apply if you have a value of simultaneous downloads greater than 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2309"/>
+        <location filename="../../UI/form_main_window.ui" line="2419"/>
         <source>By default, Porn Fetch will select the best available video quality. You can also decide between half and worst above.
 If you instead use the custom integer values (1080p, 720p etc.) then Porn Fetch will try to use these, if available,
 but if they are not available the next best quality will be chosen. Please note that this is experimental and has not
@@ -1109,151 +1034,151 @@ been that tested very well. (Be honest, why would you not choose the best qualit
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2315"/>
+        <location filename="../../UI/form_main_window.ui" line="2357"/>
         <source>label video quality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2325"/>
+        <location filename="../../UI/form_main_window.ui" line="2592"/>
         <source>checkbox use video id as filename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2338"/>
+        <location filename="../../UI/form_main_window.ui" line="2435"/>
         <source>combobox model videos type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2341"/>
+        <location filename="../../UI/form_main_window.ui" line="2438"/>
         <source>This decides whether you want to fetch model uploads or featured videos or both of them</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2345"/>
+        <location filename="../../UI/form_main_window.ui" line="2442"/>
         <source>Both (recommended)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2350"/>
+        <location filename="../../UI/form_main_window.ui" line="2447"/>
         <source>Uploaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2355"/>
+        <location filename="../../UI/form_main_window.ui" line="2452"/>
         <source>Featured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2366"/>
+        <location filename="../../UI/form_main_window.ui" line="2498"/>
         <source>combobox settings quality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2369"/>
+        <location filename="../../UI/form_main_window.ui" line="2501"/>
         <source>Porn Fetch will by default download the best video quality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2373"/>
+        <location filename="../../UI/form_main_window.ui" line="2505"/>
         <source>BEST (auto)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2378"/>
+        <location filename="../../UI/form_main_window.ui" line="2510"/>
         <source>HALF (auto)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2383"/>
+        <location filename="../../UI/form_main_window.ui" line="2515"/>
         <source>WORST (auto)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2388"/>
+        <location filename="../../UI/form_main_window.ui" line="2520"/>
         <source>2160p</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2393"/>
+        <location filename="../../UI/form_main_window.ui" line="2525"/>
         <source>1440p</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2398"/>
+        <location filename="../../UI/form_main_window.ui" line="2530"/>
         <source>1080p</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2403"/>
+        <location filename="../../UI/form_main_window.ui" line="2535"/>
         <source>720p</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2408"/>
+        <location filename="../../UI/form_main_window.ui" line="2540"/>
         <source>540p</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2413"/>
+        <location filename="../../UI/form_main_window.ui" line="2545"/>
         <source>360p</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2418"/>
+        <location filename="../../UI/form_main_window.ui" line="2550"/>
         <source>240p</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2423"/>
+        <location filename="../../UI/form_main_window.ui" line="2555"/>
         <source>144p</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2434"/>
+        <location filename="../../UI/form_main_window.ui" line="2602"/>
         <source>Metadata tags are saved inside of the file itself. These are tags that video players can read from and provide you information.
 Some folder viewers also give you the ability to search files by specific metadata tags. Those tags can help organize and structure files.
 Porn Fetch will by default save those tags inside of your video files. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2439"/>
+        <location filename="../../UI/form_main_window.ui" line="2409"/>
         <source>checkbox write metadata tags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2449"/>
+        <location filename="../../UI/form_main_window.ui" line="2460"/>
         <source>The result limit defines how many videos will be returned when performing a search or doing other operations which
 involves loading multiple videos. This also affects models / channels and your liked videos. The result limit is
 basically the number of videos which can be loaded into the tree widget (this thing where videos are displayed).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2454"/>
+        <location filename="../../UI/form_main_window.ui" line="2306"/>
         <source>label result limit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2464"/>
+        <location filename="../../UI/form_main_window.ui" line="2576"/>
         <source>spinbox resutl limit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2467"/>
+        <location filename="../../UI/form_main_window.ui" line="2579"/>
         <source>The result limit limits how many videos will be fetched</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2480"/>
+        <location filename="../../UI/form_main_window.ui" line="2393"/>
         <source>label output path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2496"/>
+        <location filename="../../UI/form_main_window.ui" line="2639"/>
         <source>lineedit video output path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2509"/>
+        <location filename="../../UI/form_main_window.ui" line="2663"/>
         <source>If you fetch a video and the exact same filename already exists, usually Porn Fetch would just skip this file.
 If you set this option to No, then Porn Fetch instead download the video and append a random number to it.
 
@@ -1267,12 +1192,12 @@ Spain_didnt_win_against_Germany_118251.mp4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2521"/>
+        <location filename="../../UI/form_main_window.ui" line="2383"/>
         <source>checkbox skip existing files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2531"/>
+        <location filename="../../UI/form_main_window.ui" line="2614"/>
         <source>User uploads and featured videos are two different things. User uploads are the videos which were really uploaded
 by the model and the featured videos are videos the model is part or featured in.
 
@@ -1283,32 +1208,32 @@ If you choose &quot;User Uploads&quot;, only self uploaded videos will be fetche
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2540"/>
+        <location filename="../../UI/form_main_window.ui" line="2623"/>
         <source>label model videos type (pornhub)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2543"/>
+        <location filename="../../UI/form_main_window.ui" line="2626"/>
         <source>Model videos (PH)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2553"/>
+        <location filename="../../UI/form_main_window.ui" line="2485"/>
         <source>settings open output path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2563"/>
+        <location filename="../../UI/form_main_window.ui" line="2472"/>
         <source>Videos will be tracked in a SQL database which will save the URL and the metadata. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2566"/>
+        <location filename="../../UI/form_main_window.ui" line="2338"/>
         <source>checkbox track downloaded videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2579"/>
+        <location filename="../../UI/form_main_window.ui" line="2649"/>
         <source>The directory system will save videos in an intelligent way. If you download 3 videos form one Pornstar and 5 videos 
 from another, Porn Fetch will automatically make folders for it and move the 3 videos into that one folder and the other
 5 into the other. (This will still apply with your selected output path)
@@ -1317,99 +1242,99 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2586"/>
+        <location filename="../../UI/form_main_window.ui" line="2322"/>
         <source>checkbox use directory system</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2589"/>
+        <location filename="../../UI/form_main_window.ui" line="2325"/>
         <source>The directory system will automatically create folders for each author of videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2599"/>
+        <location filename="../../UI/form_main_window.ui" line="2563"/>
         <source>lineedit output path of the database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2602"/>
+        <location filename="../../UI/form_main_window.ui" line="2566"/>
         <source>the database tracks all downloaded videos in Porn Fetch, optional</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2654"/>
+        <location filename="../../UI/form_main_window.ui" line="3065"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The videos concurrency defines how many videos are fetched at the same time when searching or fetching models etc.&lt;/p&gt;&lt;p&gt;For example, let&apos;s say you search for something. Then the first page of the results will be scraped for video URLs. This takes&lt;/p&gt;&lt;p&gt;usually around 1 second. If you set this value to 20, then from all those URLs Porn Fetch will attempt to load 20 videos at&lt;/p&gt;&lt;p&gt;the same time. This can improve speed A LOT, but can also get you blocked from the site. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2657"/>
-        <location filename="../../UI/form_main_window.ui" line="2685"/>
+        <location filename="../../UI/form_main_window.ui" line="2770"/>
+        <location filename="../../UI/form_main_window.ui" line="2960"/>
         <source>Videos Concurrency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2660"/>
+        <location filename="../../UI/form_main_window.ui" line="2963"/>
         <source>Videos Concurrency:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2670"/>
+        <location filename="../../UI/form_main_window.ui" line="2934"/>
         <source>Simultaneous downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2688"/>
+        <location filename="../../UI/form_main_window.ui" line="2773"/>
         <source>Processing Delay (videos/sec):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2745"/>
+        <location filename="../../UI/form_main_window.ui" line="2714"/>
         <source>Speed Limit (MB/s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2748"/>
-        <location filename="../../UI/form_main_window.ui" line="2865"/>
+        <location filename="../../UI/form_main_window.ui" line="2717"/>
+        <location filename="../../UI/form_main_window.ui" line="2783"/>
         <source>Pages concurrency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2764"/>
+        <location filename="../../UI/form_main_window.ui" line="2733"/>
         <source>Download Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2787"/>
+        <location filename="../../UI/form_main_window.ui" line="2905"/>
         <source>spinbox pages concurrency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2790"/>
+        <location filename="../../UI/form_main_window.ui" line="2908"/>
         <source>This decides how many pages will be scraped at the same time. Lower values between 1-3 are recommended</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2814"/>
+        <location filename="../../UI/form_main_window.ui" line="2850"/>
         <source>Maximum retries</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2845"/>
+        <location filename="../../UI/form_main_window.ui" line="2947"/>
         <source>Maximum timeout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2848"/>
+        <location filename="../../UI/form_main_window.ui" line="2950"/>
         <source>Maximum timeout:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2817"/>
+        <location filename="../../UI/form_main_window.ui" line="2853"/>
         <source>Maximum retries:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2949"/>
+        <location filename="../../UI/form_main_window.ui" line="3227"/>
         <source>The anonymous mode renames all of Porn Fetch&apos;s elements to look NOT like a Porn downloader.
 This makes it useful for downloading Porn content if you are in public, or multiple people use your PC / Phone.
 
@@ -1417,7 +1342,7 @@ This also disables thumbnail preview. All titles will be replaced with: [redacte
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2968"/>
+        <location filename="../../UI/form_main_window.ui" line="3286"/>
         <source>The proxy kill switch is an additional security layer if you use proxies. It will check your IP each time before making
 a request and if it&apos;s leaked it will immediately exit everything.
 
@@ -1425,7 +1350,7 @@ My priority on developing this is low. Please do not report errors. Thank you &l
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3023"/>
+        <location filename="../../UI/form_main_window.ui" line="3269"/>
         <source>If you enable this function, all errors will be suppressed. This does not mean that they will be completely ignored, but
 you won&apos;t get a big notification for it. 
 
@@ -1434,7 +1359,7 @@ the current video will be skipped and Porn Fetch will continue with the next one
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3056"/>
+        <location filename="../../UI/form_main_window.ui" line="3170"/>
         <source>I have created my own server that runs 24/7 in my home. Porn Fetch (ONLY if you enable it) logs specific types of errors,
 that I don&apos;t know of, or that I need your help to fix them, to my server using a simple JSON post request.
 
@@ -1454,53 +1379,53 @@ You&apos;d help me a lot by enabling network logging :) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3158"/>
+        <location filename="../../UI/form_main_window.ui" line="3399"/>
         <source>Light (why would you pick light theme)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3163"/>
+        <location filename="../../UI/form_main_window.ui" line="3404"/>
         <source>LSD (don&apos;t activate while you are high) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3200"/>
+        <location filename="../../UI/form_main_window.ui" line="3441"/>
         <source>Chinese simplified (outdated)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3205"/>
+        <location filename="../../UI/form_main_window.ui" line="3446"/>
         <source>French (outdated)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3153"/>
+        <location filename="../../UI/form_main_window.ui" line="3394"/>
         <source>Dark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3116"/>
+        <location filename="../../UI/form_main_window.ui" line="3357"/>
         <source>Theme:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3227"/>
+        <location filename="../../UI/form_main_window.ui" line="3468"/>
         <source>Apply  (needs restart)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3259"/>
+        <location filename="../../UI/form_main_window.ui" line="3500"/>
         <source>Reset Porn Fetch to default settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3418"/>
-        <location filename="../../UI/form_main_window.ui" line="4206"/>
+        <location filename="../../UI/form_main_window.ui" line="3659"/>
+        <location filename="../../UI/form_main_window.ui" line="4447"/>
         <source>Accept</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3447"/>
+        <location filename="../../UI/form_main_window.ui" line="3688"/>
         <source>Deny and Exit</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1550,85 +1475,14 @@ You&apos;d help me a lot by enabling network logging :) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3681"/>
-        <source>OK</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="4287"/>
-        <source>I have IPv6 :) (and want to enable it)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="4297"/>
-        <source>I don&apos;t have IPv6 / I don&apos;t want to enable this feature</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="3782"/>
-        <source>Custom App Name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="2054"/>
-        <source>Download videos 
-directly </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="2862"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The pages concurrency defines how many pages will be scraped at the same time,&lt;/p&gt;&lt;p&gt;when searching for videos or fetching models. Lower values are generally recommended,&lt;/p&gt;&lt;p&gt;to avoid getting blocked. Keep it between 1-3.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="2894"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The download worker setting defines, how many workers / threads will be used at the same time&lt;/p&gt;&lt;p&gt;to fetch video segments at the same time. Usually you don&apos;t need to go over 20, unless you have a higher&lt;/p&gt;&lt;p&gt;internet connection than 1gbit/s. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="3224"/>
-        <source>button apply the settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="3237"/>
-        <source>button reset porn fetch to default settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="3336"/>
-        <source>Textbrowser for credits / information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="3396"/>
-        <source>button accept license</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="3425"/>
-        <source>button deny license</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="3461"/>
-        <source>textbrowser license</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="3618"/>
-        <source>textbrowser keyboard shortcuts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="3621"/>
+        <location filename="../../UI/form_main_window.ui" line="3862"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; font-weight:700;&quot;&gt;Keyboard Shortcuts&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;; font-size:14pt; font-weight:700;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + Q     Closes the application&lt;/span&gt;&lt;/p&gt;
@@ -1644,29 +1498,19 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3671"/>
-        <source>textbrowser update changelog notification</source>
+        <location filename="../../UI/form_main_window.ui" line="3922"/>
+        <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3678"/>
-        <source>button acknowledge that a new version is out</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="3741"/>
-        <source>textbrowser install dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="3744"/>
+        <location filename="../../UI/form_main_window.ui" line="3985"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:24pt; font-weight:700;&quot;&gt;Installation Mode&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:16pt; text-decoration: underline; color:#0000ff;&quot;&gt;1) Inst&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:14pt; text-decoration: underline; color:#0000ff;&quot;&gt;all&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;This will install Porn Fetch into your system, meaning that you can run it directly from your Start Menu. e.g, press Windows key, type Porn Fetch and directly start it and on Linux it will be the same.&lt;/span&gt;&lt;/p&gt;
@@ -1690,179 +1534,345 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3779"/>
-        <source>label custom app name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="3789"/>
-        <source>lineedit custom app name (enter the custom name here) </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="3795"/>
-        <source>Enter your custom App Name here. Leave it empty to keep &quot;Porn Fetch&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="3806"/>
-        <source>buttom instal porn fetch</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="3809"/>
-        <source>Install</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="3816"/>
-        <source>button portable mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="3819"/>
-        <source>Portable</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="3883"/>
-        <source>textbrowser supported websites</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="3886"/>
+        <location filename="../../UI/form_main_window.ui" line="4127"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;table border=&quot;0&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;&quot; cellspacing=&quot;2&quot; cellpadding=&quot;0&quot;&gt;&lt;thead&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Category&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-weight:700;&quot;&gt;Category&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Websites&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-weight:700;&quot;&gt;Websites&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Videos&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Videos&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang, YouPorn&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang, YouPorn&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Searching&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Searching&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Models&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Models&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;PornHub, HQporner, xnxx&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;PornHub, HQporner, xnxx&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Pornstars&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Pornstars&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;PornHub, Eporner, xvideos, Xhamster, Spankbang&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;PornHub, Eporner, xvideos, Xhamster, Spankbang&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Channels&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Channels&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;PornHub, Xhamster, Spankbang&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;PornHub, Xhamster, Spankbang&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Creator / Users&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Creator / Users&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Xhamster (Creator), Spankbang (Creator), xnxx (Users)&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Xhamster (Creator), Spankbang (Creator), xnxx (Users)&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Playlists&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Playlists&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;PornHub, xvideos&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;PornHub, xvideos&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Downloading&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Downloading&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;xvideos&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;xvideos&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Shorts&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Shorts&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Xhamster&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Xhamster&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Account Login&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Account Login&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;PornHub&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;PornHub&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Videos by Category&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Videos by Category&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;HQporner, Eporner&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;HQporner, Eporner&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Random&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Random&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;HQporner&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;HQporner&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Brazzers only&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Brazzers only&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;HQporner&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;HQporner&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Top Porn&lt;/p&gt;&lt;/td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Top Porn&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
 &lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;HQporner&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</source>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;HQporner&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="4345"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ffc800;&quot;&gt;y&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#cc00ff;&quot;&gt;o&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ffffff;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#37ff00;&quot;&gt;w&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ff00bb;&quot;&gt;a&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ff0000;&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#0000ff;&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#00fff7;&quot;&gt;u&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ff55ff;&quot;&gt;p&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#ffffff;&quot;&gt;If you have a moment to read this, I&apos;d appreciate it a lot...&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; color:#ffffff;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; color:#ffffff;&quot;&gt;I have started developing Porn Fetch ~2 years ago as a fun project for learning graphical user interfaces. Over the years Porn Fetch became more professional, as my programming skills increased and more people started using it. That I reach even 1000 downloads on this was something I&apos;d never thought was possible and now we are over 20.000 xD&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; color:#ffffff;&quot;&gt;Although I absolutely love what I am doing here, and unless I receive a Cease and Desist letter, will never stop it, I haven&apos;t earned much from this project except for the few people that donated me something (Thank you so much btw).&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; color:#ffffff;&quot;&gt;If you have a few cents left on your pocket, I&apos;d absolutely appreciate it. I know it might not seem much but it&apos;s a thank you and it keeps me motivated. Also since I still go to school small amounts of money are much more in relation to me than it is for someone who already has a job.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; color:#ffffff;&quot;&gt;But even if you don&apos;t donate, please don&apos;t feel bad. I don&apos;t expect it from you. I just kindly ask, but it&apos;s absolutely okay if you don&apos;t want to.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; color:#0000ff;&quot;&gt;Donation options&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://paypal.me/EchterAlsFake&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#27bf73;&quot;&gt;1) PayPal (https://paypal.me/EchterAlsFake)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://paypal.me/EchterAlsFake&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#aa00ff;&quot;&gt;2) K&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://ko-fi.com/EchterAlsFake&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#aa00ff;&quot;&gt;o-Fi (https://ko-fi.com/EchterAlsFake)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt;&quot;&gt;3) Crypto (XMR / Monero) : &lt;/span&gt;&lt;span style=&quot; font-family:&apos;ui-monospace&apos;,&apos;SFMono-Regular&apos;,&apos;SF Mono&apos;,&apos;Menlo&apos;,&apos;Consolas&apos;,&apos;Liberation Mono&apos;,&apos;monospace&apos;; font-size:9pt; color:#ff7700; background-color:rgba(101,108,118,0.2);&quot;&gt;42XwGZYbSxpMvhn9eeP4DwMwZV91tQgAm3UQr6Zwb2wzBf5HcuZCHrsVxa4aV2jhP4gLHsWWELxSoNjfnkt4rMfDDwXy9jR&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; color:#00ffb3;&quot;&gt;[This message won&apos;t be shown again, except if you update to a new version]&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="4418"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;DISCLAIMER&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Porn Fetch&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; is free software licensed under the GNU General Public License v3.0. You are free to use, modify, and redistribute this software under the terms of that license.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;Please be aware that &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Porn Fetch may interact with websites in ways that violate their Terms of Service.&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; Additionally, downloading copyright-protected content without proper authorization may be illegal in many jurisdictions, including under the DMCA (Digital Millennium Copyright Act).&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;While some countries or regions may allow downloading content for strictly &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;personal, non-commercial use&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;, I &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;strongly discourage&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; using Porn Fetch to download, share, or redistribute content without appropriate rights or permissions. Always ensure you comply with your local laws and the terms of any website you access.&lt;/span&gt;&lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;IMPORTANT NOTE&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;I &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;strongly recommend&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; that you do &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;not&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; use this software for:&lt;/span&gt;&lt;/p&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Unauthorized redistribution of content&lt;/li&gt;
+&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Commercial use of downloaded materials&lt;/li&gt;
+&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Any activity that could result in legal liability for yourself or others&lt;/li&gt;&lt;/ul&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;Although the GPL license grants you broad rights, &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;continued misuse&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; may jeopardize the development and availability of this project. Please respect the intent behind this tool and use it responsibly.&lt;/span&gt;&lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;LIABILITY DISCLAIMER&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;This software is provided &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;without any warranty&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; as described in the GPLv3. I am &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;not liable&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; for any damages, legal consequences, or misuse resulting from your use of this software.&lt;br /&gt;You are solely responsible for ensuring your actions are lawful and ethical. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="4491"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Data Collection &amp;amp; Privacy Information&lt;/span&gt;&lt;/h2&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;This application now uses my own server for update checking and error reporting, instead of relying on GitHub. This gives me greater control over the process and the data transmitted. However, my server is &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700;&quot;&gt;IPv6-only&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;. This means that only about 50% of internet users will be able to connect. &lt;/span&gt;&lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;About the Server&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;The server is a small, older Acer Swift 3 laptop running 24/7 in my room. The full source code for the server is publicly available here:&lt;br /&gt;&lt;/span&gt;&lt;a href=&quot;https://github.com/EchterAlsFake/Server&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; text-decoration: underline; color:#f700ff;&quot;&gt;https://github.com/EchterAlsFake/Server&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; font-weight:700;&quot;&gt;Data Collected via Error Reports&lt;/span&gt;&lt;/h3&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;The version of Porn Fetch you are using&lt;/span&gt;&lt;/li&gt;
+&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Your operating system (e.g., Windows, Linux, or macOS)&lt;/li&gt;
+&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The current date and time&lt;/li&gt;
+&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot; style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The error details (full Python traceback)&lt;/li&gt;&lt;/ul&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700;&quot;&gt;Important:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt; The Python traceback may, in some cases, include incidental personal information — for example, your system username if it appears in a file path. No other personal data is intentionally collected. &lt;/span&gt;&lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Data Storage &amp;amp; Security&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;Error reports are stored in plain text on my server. The server’s storage device is encrypted with LUKS and secured with a strong password (40+ characters). &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; color:#ff0000;&quot;&gt;Your &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700; color:#ff0000;&quot;&gt;IP address is never logged, stored, or displayed&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; color:#ff0000;&quot;&gt;. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Optional Participation&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;Whether you enable error reporting or not will have no impact on the application&apos;s functionality. It simply helps me identify and fix issues faster. You can also manually check for updates on GitHub, although most users do not do this. &lt;/span&gt;&lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; font-weight:700;&quot;&gt;IPv6 Connectivity Check&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;To see if you have IPv6 connectivity, visit:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;a href=&quot;https://echteralsfake.duckdns.org/ping&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#1aff00;&quot;&gt;https://echteralsfake.duckdns.org/ping&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;If you see a white page with &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700;&quot;&gt;Success&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;, you have IPv6. If not, you do not. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;You can also verify your IP addresses by visiting: &lt;/span&gt;&lt;a href=&quot;https://ipleak.net&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; text-decoration: underline; color:#ffff00;&quot;&gt;https://ipleak.net&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;Example formats:&lt;br /&gt;IPv4: &lt;/span&gt;&lt;span style=&quot; font-family:&apos;monospace&apos;; font-size:12pt;&quot;&gt;135.215.32.64&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;IPv6: &lt;/span&gt;&lt;span style=&quot; font-family:&apos;monospace&apos;; font-size:12pt;&quot;&gt;2a02:810a:186:b400::5c51&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="4528"/>
+        <source>I have IPv6 :) (and want to enable it)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="4538"/>
+        <source>I don&apos;t have IPv6 / I don&apos;t want to enable this feature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="4023"/>
+        <source>Custom App Name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="2054"/>
+        <source>Download videos 
+directly </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="2757"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The pages concurrency defines how many pages will be scraped at the same time,&lt;/p&gt;&lt;p&gt;when searching for videos or fetching models. Lower values are generally recommended,&lt;/p&gt;&lt;p&gt;to avoid getting blocked. Keep it between 1-3.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="3075"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The download worker setting defines, how many workers / threads will be used at the same time&lt;/p&gt;&lt;p&gt;to fetch video segments at the same time. Usually you don&apos;t need to go over 20, unless you have a higher&lt;/p&gt;&lt;p&gt;internet connection than 1gbit/s. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="3217"/>
+        <source>Porn Fetch will check for updates each time it starts, using my own server. This will require a working IPv6 connection. No personal data nor any other data is sent during this process.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="3318"/>
+        <source>Write a custom app name here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="3465"/>
+        <source>button apply the settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="3478"/>
+        <source>button reset porn fetch to default settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="3577"/>
+        <source>Textbrowser for credits / information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="3637"/>
+        <source>button accept license</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="3666"/>
+        <source>button deny license</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="3702"/>
+        <source>textbrowser license</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="3859"/>
+        <source>textbrowser keyboard shortcuts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="3912"/>
+        <source>textbrowser update changelog notification</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="3919"/>
+        <source>button acknowledge that a new version is out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="3982"/>
+        <source>textbrowser install dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="4020"/>
+        <source>label custom app name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="4030"/>
+        <source>lineedit custom app name (enter the custom name here) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../UI/form_main_window.ui" line="4036"/>
+        <source>Enter your custom App Name here. Leave it empty to keep &quot;Porn Fetch&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="4047"/>
+        <source>buttom instal porn fetch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="4050"/>
+        <source>Install</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="4057"/>
+        <source>button portable mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="4060"/>
+        <source>Portable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="4124"/>
+        <source>textbrowser supported websites</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="4277"/>
         <source>button donate ko-fi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4039"/>
+        <location filename="../../UI/form_main_window.ui" line="4280"/>
         <source>Ko-Fi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4049"/>
+        <location filename="../../UI/form_main_window.ui" line="4290"/>
         <source>button already donated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4052"/>
+        <location filename="../../UI/form_main_window.ui" line="4293"/>
         <source>Already Donated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4062"/>
+        <location filename="../../UI/form_main_window.ui" line="4303"/>
         <source>button donate paypal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4065"/>
+        <location filename="../../UI/form_main_window.ui" line="4306"/>
         <source>PayPal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4075"/>
+        <location filename="../../UI/form_main_window.ui" line="4316"/>
         <source>button copy XMR address for donations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4078"/>
+        <location filename="../../UI/form_main_window.ui" line="4319"/>
         <source>Copy XMR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4088"/>
+        <location filename="../../UI/form_main_window.ui" line="4329"/>
         <source>button close donation message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4091"/>
+        <location filename="../../UI/form_main_window.ui" line="4332"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1870,17 +1880,17 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>PornFetch</name>
     <message>
-        <location filename="../../../../main.py" line="972"/>
+        <location filename="../../../../main.py" line="1099"/>
         <source>Porn Fetch installation failed, because of: {result[1]}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1327"/>
+        <location filename="../../../../main.py" line="1452"/>
         <source>Saved User Settings, please restart Porn Fetch!</source>
         <translation type="unfinished">已保存用户设置，请重新启动 Porn Fetch！</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1331"/>
+        <location filename="../../../../main.py" line="1456"/>
         <source>
 Please read this before setting proxies:
 
@@ -1922,78 +1932,78 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1577"/>
+        <location filename="../../../../main.py" line="1702"/>
         <source>The model URL you entered seems to be invalid. Please check your input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1635"/>
+        <location filename="../../../../main.py" line="1760"/>
         <source>Couldn&apos;t determine which site you want to search on??? Please report this immediately!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="966"/>
+        <location filename="../../../../main.py" line="1093"/>
         <source>Porn Fetch has been installed. The app will now close! Please start Porn Fetch from your context menu again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1401"/>
+        <location filename="../../../../main.py" line="1526"/>
         <source>You did choose to not disable SSL Verifications. Retuning to GUI without applying proxies now...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1405"/>
+        <location filename="../../../../main.py" line="1530"/>
         <source>Your proxy seems to be invalid, please try again...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1412"/>
+        <location filename="../../../../main.py" line="1537"/>
         <source>Proxy IP: {ip_masked} Your IP: {ip} are the same! Please check the proxy you&apos;ve used!, aborting...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1430"/>
+        <location filename="../../../../main.py" line="1555"/>
         <source>Can not enable Kill Switch if you haven&apos;t applied a proxy yet!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2005"/>
+        <location filename="../../../../main.py" line="2130"/>
         <source>Those credentials don&apos;t seem to be valid...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2012"/>
+        <location filename="../../../../main.py" line="2137"/>
         <source>Login Successful!</source>
         <translation type="unfinished">登陆成功！</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2017"/>
+        <location filename="../../../../main.py" line="2142"/>
         <source>Login Failed, please check your credentials and try again!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2021"/>
+        <location filename="../../../../main.py" line="2146"/>
         <source>You are already logged in!</source>
         <translation type="unfinished">您已经登录！</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2031"/>
+        <location filename="../../../../main.py" line="2156"/>
         <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
         <translation type="unfinished">登录有问题。请确保您先登录，然后尝试根据您的帐户获取视频。</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2078"/>
-        <location filename="../../../../main.py" line="2097"/>
+        <location filename="../../../../main.py" line="2203"/>
+        <location filename="../../../../main.py" line="2222"/>
         <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
         <translation type="unfinished">类别无效。按“列出类别”查看所有可能的类别。</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2201"/>
+        <location filename="../../../../main.py" line="2326"/>
         <source>Full Thumbnail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2317"/>
+        <location filename="../../../../main.py" line="2442"/>
         <source>
 ! Warning !
 Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
@@ -2005,7 +2015,7 @@ Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
 <context>
     <name>main</name>
     <message>
-        <location filename="../../../../main.py" line="2406"/>
+        <location filename="../../../../main.py" line="2542"/>
         <source>No URLs in the current session...</source>
         <translation type="unfinished"></translation>
     </message>

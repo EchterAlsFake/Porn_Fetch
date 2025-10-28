@@ -1,11 +1,12 @@
 import sys
 import httpx
 import datetime
-from PySide6.QtGui import QFont
-from PySide6.QtWidgets import QMessageBox
+
+from PySide6.QtGui import QFont, QPixmap
+from src.backend.config import __version__
+from PySide6.QtWidgets import QMessageBox, QMainWindow
 from src.backend.shared_functions import setup_config_file
 from PySide6.QtCore import Signal, QObject, QCoreApplication
-from src.backend.config import __version__
 
 
 def ui_popup(text, title="Notice"):
@@ -139,3 +140,20 @@ class Signals(QObject):
     tree_widget_finished = Signal()
     # to download them
     url_iterators = Signal(object, object)  # Sends the processed URLs from the file to Porn Fetch
+
+
+def mark_help_buttons(ui: QMainWindow, pixmap: QPixmap):
+    """Applies a little notification icon to buttons with a tooltip"""
+    labels = ["label_tooltip_quality", "label_tooltip_model_videos", "label_tooltip_result_limit",
+              "label_tooltip_track_videos", "label_tooltip_write_metadata", "label_tooltip_skip_existing_files",
+              "label_tooltip_use_directory_system", "label_tooltip_download_mode", "label_tooltip_simultaneous_downloads",
+              "label_tooltip_maximum_timeout", "label_tooltip_speed_limit", "label_tooltip_pages_concurrency",
+              "label_tooltip_network_delay", "label_tooltip_maximum_retries", "label_tooltip_processing_delay",
+              "label_tooltip_videos_concurrency", "label_tooltip_download_workers", "label_tooltip_update_checks",
+              "label_tooltip_anonymous_mode", "label_tooltip_supress_errors", "label_tooltip_network_logging"
+
+    ]
+
+    for label in labels:
+        ui.__getattribute__(label).setPixmap(pixmap)
+

@@ -479,7 +479,7 @@ class Ui_MainWindow(object):
         self.scrollarea_progressbars.setWidgetResizable(True)
         self.scrollAreaWidgetContents_5 = QWidget()
         self.scrollAreaWidgetContents_5.setObjectName(u"scrollAreaWidgetContents_5")
-        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 956, 148))
+        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 308, 32))
         self.gridLayout_11 = QGridLayout(self.scrollAreaWidgetContents_5)
         self.gridLayout_11.setSpacing(0)
         self.gridLayout_11.setObjectName(u"gridLayout_11")
@@ -528,7 +528,7 @@ class Ui_MainWindow(object):
         self.scrollArea_5.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 503, 188))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 466, 182))
         self.gridLayout_8 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_8.setSpacing(0)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
@@ -804,7 +804,7 @@ class Ui_MainWindow(object):
         self.main_scrollarea_treewidget.setWidgetResizable(True)
         self.main_scrollarea_treewidget_content = QWidget()
         self.main_scrollarea_treewidget_content.setObjectName(u"main_scrollarea_treewidget_content")
-        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 956, 378))
+        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 658, 349))
         sizePolicy15 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
         sizePolicy15.setHorizontalStretch(0)
         sizePolicy15.setVerticalStretch(0)
@@ -929,7 +929,7 @@ class Ui_MainWindow(object):
         self.settings_scrollarea.setWidgetResizable(True)
         self.settings_scrollarea_widget_contents = QWidget()
         self.settings_scrollarea_widget_contents.setObjectName(u"settings_scrollarea_widget_contents")
-        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 958, 530))
+        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 958, 532))
         self.gridLayout_19 = QGridLayout(self.settings_scrollarea_widget_contents)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.gridLayout_19.setContentsMargins(0, 0, 0, 0)
@@ -981,17 +981,55 @@ class Ui_MainWindow(object):
         self.gridLayout_14.setContentsMargins(0, 0, 0, 0)
         self.settings_gridlayout_video = QGridLayout()
         self.settings_gridlayout_video.setObjectName(u"settings_gridlayout_video")
+        self.settings_label_videos_result_limit = QLabel(self.page_video)
+        self.settings_label_videos_result_limit.setObjectName(u"settings_label_videos_result_limit")
+
+        self.settings_gridlayout_video.addWidget(self.settings_label_videos_result_limit, 2, 1, 1, 1)
+
+        self.settings_checkbox_videos_use_directory_system = QCheckBox(self.page_video)
+        self.settings_checkbox_videos_use_directory_system.setObjectName(u"settings_checkbox_videos_use_directory_system")
+        self.settings_checkbox_videos_use_directory_system.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_use_directory_system, 5, 5, 1, 1)
+
+        self.settings_checkbox_videos_track_downloaded_videos = QCheckBox(self.page_video)
+        self.settings_checkbox_videos_track_downloaded_videos.setObjectName(u"settings_checkbox_videos_track_downloaded_videos")
+
+        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_track_downloaded_videos, 5, 1, 1, 1)
+
         self.settings_label_videos_quality = QLabel(self.page_video)
         self.settings_label_videos_quality.setObjectName(u"settings_label_videos_quality")
         sizePolicy10.setHeightForWidth(self.settings_label_videos_quality.sizePolicy().hasHeightForWidth())
         self.settings_label_videos_quality.setSizePolicy(sizePolicy10)
 
-        self.settings_gridlayout_video.addWidget(self.settings_label_videos_quality, 0, 0, 1, 1)
+        self.settings_gridlayout_video.addWidget(self.settings_label_videos_quality, 0, 1, 1, 1)
 
-        self.settings_checkbox_videos_use_video_id_as_filename = QCheckBox(self.page_video)
-        self.settings_checkbox_videos_use_video_id_as_filename.setObjectName(u"settings_checkbox_videos_use_video_id_as_filename")
+        self.label_tooltip_model_videos = QLabel(self.page_video)
+        self.label_tooltip_model_videos.setObjectName(u"label_tooltip_model_videos")
 
-        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_use_video_id_as_filename, 4, 0, 1, 1)
+        self.settings_gridlayout_video.addWidget(self.label_tooltip_model_videos, 1, 0, 1, 1)
+
+        self.settings_checkbox_videos_skip_existing_files = QCheckBox(self.page_video)
+        self.settings_checkbox_videos_skip_existing_files.setObjectName(u"settings_checkbox_videos_skip_existing_files")
+        self.settings_checkbox_videos_skip_existing_files.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_skip_existing_files, 4, 5, 1, 1)
+
+        self.settings_label_videos_output_path = QLabel(self.page_video)
+        self.settings_label_videos_output_path.setObjectName(u"settings_label_videos_output_path")
+
+        self.settings_gridlayout_video.addWidget(self.settings_label_videos_output_path, 3, 1, 1, 1)
+
+        self.settings_checkbox_videos_write_metadata = QCheckBox(self.page_video)
+        self.settings_checkbox_videos_write_metadata.setObjectName(u"settings_checkbox_videos_write_metadata")
+        self.settings_checkbox_videos_write_metadata.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_write_metadata, 4, 3, 1, 1)
+
+        self.label_tooltip_quality = QLabel(self.page_video)
+        self.label_tooltip_quality.setObjectName(u"label_tooltip_quality")
+
+        self.settings_gridlayout_video.addWidget(self.label_tooltip_quality, 0, 0, 1, 1)
 
         self.settings_video_combobox_model_videos = QComboBox(self.page_video)
         self.settings_video_combobox_model_videos.addItem("")
@@ -1000,7 +1038,23 @@ class Ui_MainWindow(object):
         self.settings_video_combobox_model_videos.setObjectName(u"settings_video_combobox_model_videos")
         self.settings_video_combobox_model_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.settings_gridlayout_video.addWidget(self.settings_video_combobox_model_videos, 1, 1, 1, 2)
+        self.settings_gridlayout_video.addWidget(self.settings_video_combobox_model_videos, 1, 2, 1, 4)
+
+        self.label_tooltip_result_limit = QLabel(self.page_video)
+        self.label_tooltip_result_limit.setObjectName(u"label_tooltip_result_limit")
+
+        self.settings_gridlayout_video.addWidget(self.label_tooltip_result_limit, 2, 0, 1, 1)
+
+        self.label_tooltip_track_videos = QLabel(self.page_video)
+        self.label_tooltip_track_videos.setObjectName(u"label_tooltip_track_videos")
+
+        self.settings_gridlayout_video.addWidget(self.label_tooltip_track_videos, 5, 0, 1, 1)
+
+        self.settings_button_videos_open_output_path = QPushButton(self.page_video)
+        self.settings_button_videos_open_output_path.setObjectName(u"settings_button_videos_open_output_path")
+        self.settings_button_videos_open_output_path.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.settings_gridlayout_video.addWidget(self.settings_button_videos_open_output_path, 3, 5, 1, 1)
 
         self.settings_video_combobox_quality = QComboBox(self.page_video)
         self.settings_video_combobox_quality.addItem("")
@@ -1017,70 +1071,51 @@ class Ui_MainWindow(object):
         self.settings_video_combobox_quality.setObjectName(u"settings_video_combobox_quality")
         self.settings_video_combobox_quality.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.settings_gridlayout_video.addWidget(self.settings_video_combobox_quality, 0, 1, 1, 2)
+        self.settings_gridlayout_video.addWidget(self.settings_video_combobox_quality, 0, 2, 1, 4)
 
-        self.settings_checkbox_videos_write_metadata = QCheckBox(self.page_video)
-        self.settings_checkbox_videos_write_metadata.setObjectName(u"settings_checkbox_videos_write_metadata")
-        self.settings_checkbox_videos_write_metadata.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.settings_lineedit_videos_database_path = QLineEdit(self.page_video)
+        self.settings_lineedit_videos_database_path.setObjectName(u"settings_lineedit_videos_database_path")
 
-        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_write_metadata, 4, 1, 1, 1)
-
-        self.settings_label_videos_result_limit = QLabel(self.page_video)
-        self.settings_label_videos_result_limit.setObjectName(u"settings_label_videos_result_limit")
-
-        self.settings_gridlayout_video.addWidget(self.settings_label_videos_result_limit, 2, 0, 1, 1)
+        self.settings_gridlayout_video.addWidget(self.settings_lineedit_videos_database_path, 5, 3, 1, 1)
 
         self.settings_spinbox_videos_result_limit = QSpinBox(self.page_video)
         self.settings_spinbox_videos_result_limit.setObjectName(u"settings_spinbox_videos_result_limit")
         self.settings_spinbox_videos_result_limit.setMinimum(1)
         self.settings_spinbox_videos_result_limit.setMaximum(5000)
 
-        self.settings_gridlayout_video.addWidget(self.settings_spinbox_videos_result_limit, 2, 1, 1, 2)
+        self.settings_gridlayout_video.addWidget(self.settings_spinbox_videos_result_limit, 2, 2, 1, 4)
 
-        self.settings_label_videos_output_path = QLabel(self.page_video)
-        self.settings_label_videos_output_path.setObjectName(u"settings_label_videos_output_path")
+        self.settings_checkbox_videos_use_video_id_as_filename = QCheckBox(self.page_video)
+        self.settings_checkbox_videos_use_video_id_as_filename.setObjectName(u"settings_checkbox_videos_use_video_id_as_filename")
 
-        self.settings_gridlayout_video.addWidget(self.settings_label_videos_output_path, 3, 0, 1, 1)
+        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_use_video_id_as_filename, 4, 1, 1, 1)
+
+        self.label_tooltip_write_metadata = QLabel(self.page_video)
+        self.label_tooltip_write_metadata.setObjectName(u"label_tooltip_write_metadata")
+
+        self.settings_gridlayout_video.addWidget(self.label_tooltip_write_metadata, 4, 2, 1, 1)
+
+        self.settings_label_videos_model_vdeos_type = QLabel(self.page_video)
+        self.settings_label_videos_model_vdeos_type.setObjectName(u"settings_label_videos_model_vdeos_type")
+
+        self.settings_gridlayout_video.addWidget(self.settings_label_videos_model_vdeos_type, 1, 1, 1, 1)
 
         self.settings_lineedit_videos_output_path = QLineEdit(self.page_video)
         self.settings_lineedit_videos_output_path.setObjectName(u"settings_lineedit_videos_output_path")
         sizePolicy5.setHeightForWidth(self.settings_lineedit_videos_output_path.sizePolicy().hasHeightForWidth())
         self.settings_lineedit_videos_output_path.setSizePolicy(sizePolicy5)
 
-        self.settings_gridlayout_video.addWidget(self.settings_lineedit_videos_output_path, 3, 1, 1, 1)
+        self.settings_gridlayout_video.addWidget(self.settings_lineedit_videos_output_path, 3, 2, 1, 2)
 
-        self.settings_checkbox_videos_skip_existing_files = QCheckBox(self.page_video)
-        self.settings_checkbox_videos_skip_existing_files.setObjectName(u"settings_checkbox_videos_skip_existing_files")
-        self.settings_checkbox_videos_skip_existing_files.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.label_tooltip_use_directory_system = QLabel(self.page_video)
+        self.label_tooltip_use_directory_system.setObjectName(u"label_tooltip_use_directory_system")
 
-        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_skip_existing_files, 4, 2, 1, 1)
+        self.settings_gridlayout_video.addWidget(self.label_tooltip_use_directory_system, 5, 4, 1, 1)
 
-        self.settings_label_videos_model_vdeos_type = QLabel(self.page_video)
-        self.settings_label_videos_model_vdeos_type.setObjectName(u"settings_label_videos_model_vdeos_type")
+        self.label_tooltip_skip_existing_files = QLabel(self.page_video)
+        self.label_tooltip_skip_existing_files.setObjectName(u"label_tooltip_skip_existing_files")
 
-        self.settings_gridlayout_video.addWidget(self.settings_label_videos_model_vdeos_type, 1, 0, 1, 1)
-
-        self.settings_button_videos_open_output_path = QPushButton(self.page_video)
-        self.settings_button_videos_open_output_path.setObjectName(u"settings_button_videos_open_output_path")
-        self.settings_button_videos_open_output_path.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.settings_gridlayout_video.addWidget(self.settings_button_videos_open_output_path, 3, 2, 1, 1)
-
-        self.settings_checkbox_videos_track_downloaded_videos = QCheckBox(self.page_video)
-        self.settings_checkbox_videos_track_downloaded_videos.setObjectName(u"settings_checkbox_videos_track_downloaded_videos")
-
-        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_track_downloaded_videos, 5, 0, 1, 1)
-
-        self.settings_checkbox_videos_use_directory_system = QCheckBox(self.page_video)
-        self.settings_checkbox_videos_use_directory_system.setObjectName(u"settings_checkbox_videos_use_directory_system")
-        self.settings_checkbox_videos_use_directory_system.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_use_directory_system, 5, 2, 1, 1)
-
-        self.settings_lineedit_videos_database_path = QLineEdit(self.page_video)
-        self.settings_lineedit_videos_database_path.setObjectName(u"settings_lineedit_videos_database_path")
-
-        self.settings_gridlayout_video.addWidget(self.settings_lineedit_videos_database_path, 5, 1, 1, 1)
+        self.settings_gridlayout_video.addWidget(self.label_tooltip_skip_existing_files, 4, 4, 1, 1)
 
 
         self.gridLayout_14.addLayout(self.settings_gridlayout_video, 0, 0, 1, 1)
@@ -1096,35 +1131,136 @@ class Ui_MainWindow(object):
         self.gridLayout_26.setContentsMargins(0, 0, 0, 0)
         self.settings_gridlayout_performance = QGridLayout()
         self.settings_gridlayout_performance.setObjectName(u"settings_gridlayout_performance")
+        self.settings_label_performance_speed_limit = QLabel(self.page_performance)
+        self.settings_label_performance_speed_limit.setObjectName(u"settings_label_performance_speed_limit")
+
+        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_speed_limit, 7, 1, 1, 1)
+
+        self.settings_label_performance_download_mode = QLabel(self.page_performance)
+        self.settings_label_performance_download_mode.setObjectName(u"settings_label_performance_download_mode")
+        sizePolicy10.setHeightForWidth(self.settings_label_performance_download_mode.sizePolicy().hasHeightForWidth())
+        self.settings_label_performance_download_mode.setSizePolicy(sizePolicy10)
+
+        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_download_mode, 0, 1, 1, 1)
+
+        self.label_tooltip_maximum_timeout = QLabel(self.page_performance)
+        self.label_tooltip_maximum_timeout.setObjectName(u"label_tooltip_maximum_timeout")
+
+        self.settings_gridlayout_performance.addWidget(self.label_tooltip_maximum_timeout, 5, 0, 1, 1)
+
+        self.label_tooltip_pages_concurrency = QLabel(self.page_performance)
+        self.label_tooltip_pages_concurrency.setObjectName(u"label_tooltip_pages_concurrency")
+
+        self.settings_gridlayout_performance.addWidget(self.label_tooltip_pages_concurrency, 8, 0, 1, 1)
+
+        self.settings_label_performance_processing_delay = QLabel(self.page_performance)
+        self.settings_label_performance_processing_delay.setObjectName(u"settings_label_performance_processing_delay")
+
+        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_processing_delay, 5, 4, 1, 1)
+
+        self.settings_label_performance_pages_concurrency = QLabel(self.page_performance)
+        self.settings_label_performance_pages_concurrency.setObjectName(u"settings_label_performance_pages_concurrency")
+
+        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_pages_concurrency, 8, 1, 1, 1)
+
+        self.settings_spinbox_performance_simultaneous_downloads = QSpinBox(self.page_performance)
+        self.settings_spinbox_performance_simultaneous_downloads.setObjectName(u"settings_spinbox_performance_simultaneous_downloads")
+        self.settings_spinbox_performance_simultaneous_downloads.setMinimum(1)
+        self.settings_spinbox_performance_simultaneous_downloads.setMaximum(5000)
+
+        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_simultaneous_downloads, 2, 2, 1, 1)
+
+        self.settings_spinbox_performance_network_delay = QSpinBox(self.page_performance)
+        self.settings_spinbox_performance_network_delay.setObjectName(u"settings_spinbox_performance_network_delay")
+        self.settings_spinbox_performance_network_delay.setMinimum(0)
+        self.settings_spinbox_performance_network_delay.setMaximum(5000)
+
+        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_network_delay, 0, 5, 1, 1)
+
+        self.label_tooltip_simultaneous_downloads = QLabel(self.page_performance)
+        self.label_tooltip_simultaneous_downloads.setObjectName(u"label_tooltip_simultaneous_downloads")
+
+        self.settings_gridlayout_performance.addWidget(self.label_tooltip_simultaneous_downloads, 2, 0, 1, 1)
+
+        self.settings_spinbox_performance_maximal_retries = QSpinBox(self.page_performance)
+        self.settings_spinbox_performance_maximal_retries.setObjectName(u"settings_spinbox_performance_maximal_retries")
+        self.settings_spinbox_performance_maximal_retries.setMinimum(5)
+        self.settings_spinbox_performance_maximal_retries.setMaximum(5000)
+
+        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_maximal_retries, 2, 5, 1, 1)
+
+        self.label_tooltip_speed_limit = QLabel(self.page_performance)
+        self.label_tooltip_speed_limit.setObjectName(u"label_tooltip_speed_limit")
+
+        self.settings_gridlayout_performance.addWidget(self.label_tooltip_speed_limit, 7, 0, 1, 1)
+
+        self.settings_label_performance_maximal_retries = QLabel(self.page_performance)
+        self.settings_label_performance_maximal_retries.setObjectName(u"settings_label_performance_maximal_retries")
+
+        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_maximal_retries, 2, 4, 1, 1)
+
+        self.settings_doublespinbox_performance_speed_limit = QDoubleSpinBox(self.page_performance)
+        self.settings_doublespinbox_performance_speed_limit.setObjectName(u"settings_doublespinbox_performance_speed_limit")
+
+        self.settings_gridlayout_performance.addWidget(self.settings_doublespinbox_performance_speed_limit, 7, 2, 1, 1)
+
+        self.settings_spinbox_performance_download_workers = QSpinBox(self.page_performance)
+        self.settings_spinbox_performance_download_workers.setObjectName(u"settings_spinbox_performance_download_workers")
+        self.settings_spinbox_performance_download_workers.setMinimum(1)
+
+        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_download_workers, 8, 5, 1, 1)
+
+        self.settings_spinbox_performance_videos_concurrency = QSpinBox(self.page_performance)
+        self.settings_spinbox_performance_videos_concurrency.setObjectName(u"settings_spinbox_performance_videos_concurrency")
+        self.settings_spinbox_performance_videos_concurrency.setMinimum(1)
+
+        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_videos_concurrency, 7, 5, 1, 1)
+
+        self.label_tooltip_download_mode = QLabel(self.page_performance)
+        self.label_tooltip_download_mode.setObjectName(u"label_tooltip_download_mode")
+        sizePolicy19 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Preferred)
+        sizePolicy19.setHorizontalStretch(0)
+        sizePolicy19.setVerticalStretch(0)
+        sizePolicy19.setHeightForWidth(self.label_tooltip_download_mode.sizePolicy().hasHeightForWidth())
+        self.label_tooltip_download_mode.setSizePolicy(sizePolicy19)
+
+        self.settings_gridlayout_performance.addWidget(self.label_tooltip_download_mode, 0, 0, 1, 1)
+
+        self.settings_spinbox_performance_pages_concurrency = QSpinBox(self.page_performance)
+        self.settings_spinbox_performance_pages_concurrency.setObjectName(u"settings_spinbox_performance_pages_concurrency")
+        self.settings_spinbox_performance_pages_concurrency.setMinimum(1)
+
+        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_pages_concurrency, 8, 2, 1, 1)
+
         self.settings_spinbox_performance_processing_delay = QSpinBox(self.page_performance)
         self.settings_spinbox_performance_processing_delay.setObjectName(u"settings_spinbox_performance_processing_delay")
         self.settings_spinbox_performance_processing_delay.setMinimum(1)
         self.settings_spinbox_performance_processing_delay.setMaximum(500)
         self.settings_spinbox_performance_processing_delay.setValue(1)
 
-        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_processing_delay, 5, 3, 1, 1)
-
-        self.settings_label_performance_videos_concurrency = QLabel(self.page_performance)
-        self.settings_label_performance_videos_concurrency.setObjectName(u"settings_label_performance_videos_concurrency")
-
-        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_videos_concurrency, 7, 2, 1, 1)
+        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_processing_delay, 5, 5, 1, 1)
 
         self.settings_label_performance_simultaneous_download = QLabel(self.page_performance)
         self.settings_label_performance_simultaneous_download.setObjectName(u"settings_label_performance_simultaneous_download")
 
-        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_simultaneous_download, 2, 0, 1, 1)
+        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_simultaneous_download, 2, 1, 1, 1)
 
-        self.settings_label_performance_processing_delay = QLabel(self.page_performance)
-        self.settings_label_performance_processing_delay.setObjectName(u"settings_label_performance_processing_delay")
+        self.settings_label_performance_maximal_timeout = QLabel(self.page_performance)
+        self.settings_label_performance_maximal_timeout.setObjectName(u"settings_label_performance_maximal_timeout")
 
-        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_processing_delay, 5, 2, 1, 1)
+        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_maximal_timeout, 5, 1, 1, 1)
+
+        self.settings_label_performance_videos_concurrency = QLabel(self.page_performance)
+        self.settings_label_performance_videos_concurrency.setObjectName(u"settings_label_performance_videos_concurrency")
+
+        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_videos_concurrency, 7, 4, 1, 1)
 
         self.settings_spinbox_performance_maximal_timeout = QSpinBox(self.page_performance)
         self.settings_spinbox_performance_maximal_timeout.setObjectName(u"settings_spinbox_performance_maximal_timeout")
         self.settings_spinbox_performance_maximal_timeout.setMinimum(5)
         self.settings_spinbox_performance_maximal_timeout.setMaximum(5000)
 
-        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_maximal_timeout, 5, 1, 1, 1)
+        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_maximal_timeout, 5, 2, 1, 1)
 
         self.settings_performance_combobox_download_mode = QComboBox(self.page_performance)
         self.settings_performance_combobox_download_mode.addItem("")
@@ -1133,88 +1269,44 @@ class Ui_MainWindow(object):
         self.settings_performance_combobox_download_mode.setObjectName(u"settings_performance_combobox_download_mode")
         self.settings_performance_combobox_download_mode.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.settings_gridlayout_performance.addWidget(self.settings_performance_combobox_download_mode, 0, 1, 1, 1)
-
-        self.settings_label_performance_speed_limit = QLabel(self.page_performance)
-        self.settings_label_performance_speed_limit.setObjectName(u"settings_label_performance_speed_limit")
-
-        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_speed_limit, 7, 0, 1, 1)
-
-        self.settings_label_performance_download_mode = QLabel(self.page_performance)
-        self.settings_label_performance_download_mode.setObjectName(u"settings_label_performance_download_mode")
-        sizePolicy10.setHeightForWidth(self.settings_label_performance_download_mode.sizePolicy().hasHeightForWidth())
-        self.settings_label_performance_download_mode.setSizePolicy(sizePolicy10)
-
-        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_download_mode, 0, 0, 1, 1)
-
-        self.settings_spinbox_performance_simultaneous_downloads = QSpinBox(self.page_performance)
-        self.settings_spinbox_performance_simultaneous_downloads.setObjectName(u"settings_spinbox_performance_simultaneous_downloads")
-        self.settings_spinbox_performance_simultaneous_downloads.setMinimum(1)
-        self.settings_spinbox_performance_simultaneous_downloads.setMaximum(5000)
-
-        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_simultaneous_downloads, 2, 1, 1, 1)
-
-        self.settings_spinbox_performance_pages_concurrency = QSpinBox(self.page_performance)
-        self.settings_spinbox_performance_pages_concurrency.setObjectName(u"settings_spinbox_performance_pages_concurrency")
-        self.settings_spinbox_performance_pages_concurrency.setMinimum(1)
-
-        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_pages_concurrency, 8, 1, 1, 1)
-
-        self.settings_spinbox_performance_maximal_retries = QSpinBox(self.page_performance)
-        self.settings_spinbox_performance_maximal_retries.setObjectName(u"settings_spinbox_performance_maximal_retries")
-        self.settings_spinbox_performance_maximal_retries.setMinimum(5)
-        self.settings_spinbox_performance_maximal_retries.setMaximum(5000)
-
-        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_maximal_retries, 2, 3, 1, 1)
-
-        self.settings_label_performance_maximal_retries = QLabel(self.page_performance)
-        self.settings_label_performance_maximal_retries.setObjectName(u"settings_label_performance_maximal_retries")
-
-        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_maximal_retries, 2, 2, 1, 1)
-
-        self.settings_spinbox_performance_network_delay = QSpinBox(self.page_performance)
-        self.settings_spinbox_performance_network_delay.setObjectName(u"settings_spinbox_performance_network_delay")
-        self.settings_spinbox_performance_network_delay.setMinimum(0)
-        self.settings_spinbox_performance_network_delay.setMaximum(5000)
-
-        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_network_delay, 0, 3, 1, 1)
-
-        self.settings_spinbox_performance_videos_concurrency = QSpinBox(self.page_performance)
-        self.settings_spinbox_performance_videos_concurrency.setObjectName(u"settings_spinbox_performance_videos_concurrency")
-        self.settings_spinbox_performance_videos_concurrency.setMinimum(1)
-
-        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_videos_concurrency, 7, 3, 1, 1)
-
-        self.settings_label_performance_maximal_timeout = QLabel(self.page_performance)
-        self.settings_label_performance_maximal_timeout.setObjectName(u"settings_label_performance_maximal_timeout")
-
-        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_maximal_timeout, 5, 0, 1, 1)
-
-        self.settings_doublespinbox_performance_speed_limit = QDoubleSpinBox(self.page_performance)
-        self.settings_doublespinbox_performance_speed_limit.setObjectName(u"settings_doublespinbox_performance_speed_limit")
-
-        self.settings_gridlayout_performance.addWidget(self.settings_doublespinbox_performance_speed_limit, 7, 1, 1, 1)
-
-        self.settings_label_performance_pages_concurrency = QLabel(self.page_performance)
-        self.settings_label_performance_pages_concurrency.setObjectName(u"settings_label_performance_pages_concurrency")
-
-        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_pages_concurrency, 8, 0, 1, 1)
+        self.settings_gridlayout_performance.addWidget(self.settings_performance_combobox_download_mode, 0, 2, 1, 1)
 
         self.settings_label_performance_network_delay = QLabel(self.page_performance)
         self.settings_label_performance_network_delay.setObjectName(u"settings_label_performance_network_delay")
 
-        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_network_delay, 0, 2, 1, 1)
+        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_network_delay, 0, 4, 1, 1)
 
         self.label_settings_performance_download_workers = QLabel(self.page_performance)
         self.label_settings_performance_download_workers.setObjectName(u"label_settings_performance_download_workers")
 
-        self.settings_gridlayout_performance.addWidget(self.label_settings_performance_download_workers, 8, 2, 1, 1)
+        self.settings_gridlayout_performance.addWidget(self.label_settings_performance_download_workers, 8, 4, 1, 1)
 
-        self.settings_spinbox_performance_download_workers = QSpinBox(self.page_performance)
-        self.settings_spinbox_performance_download_workers.setObjectName(u"settings_spinbox_performance_download_workers")
-        self.settings_spinbox_performance_download_workers.setMinimum(1)
+        self.label_tooltip_network_delay = QLabel(self.page_performance)
+        self.label_tooltip_network_delay.setObjectName(u"label_tooltip_network_delay")
+        sizePolicy19.setHeightForWidth(self.label_tooltip_network_delay.sizePolicy().hasHeightForWidth())
+        self.label_tooltip_network_delay.setSizePolicy(sizePolicy19)
 
-        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_download_workers, 8, 3, 1, 1)
+        self.settings_gridlayout_performance.addWidget(self.label_tooltip_network_delay, 0, 3, 1, 1)
+
+        self.label_tooltip_processing_delay = QLabel(self.page_performance)
+        self.label_tooltip_processing_delay.setObjectName(u"label_tooltip_processing_delay")
+
+        self.settings_gridlayout_performance.addWidget(self.label_tooltip_processing_delay, 5, 3, 1, 1)
+
+        self.label_tooltip_videos_concurrency = QLabel(self.page_performance)
+        self.label_tooltip_videos_concurrency.setObjectName(u"label_tooltip_videos_concurrency")
+
+        self.settings_gridlayout_performance.addWidget(self.label_tooltip_videos_concurrency, 7, 3, 1, 1)
+
+        self.label_tooltip_download_workers = QLabel(self.page_performance)
+        self.label_tooltip_download_workers.setObjectName(u"label_tooltip_download_workers")
+
+        self.settings_gridlayout_performance.addWidget(self.label_tooltip_download_workers, 8, 3, 1, 1)
+
+        self.label_tooltip_maximum_retries = QLabel(self.page_performance)
+        self.label_tooltip_maximum_retries.setObjectName(u"label_tooltip_maximum_retries")
+
+        self.settings_gridlayout_performance.addWidget(self.label_tooltip_maximum_retries, 2, 3, 1, 1)
 
 
         self.gridLayout_26.addLayout(self.settings_gridlayout_performance, 0, 0, 1, 1)
@@ -1231,52 +1323,81 @@ class Ui_MainWindow(object):
         self.settings_gridlayout_system = QGridLayout()
         self.settings_gridlayout_system.setSpacing(0)
         self.settings_gridlayout_system.setObjectName(u"settings_gridlayout_system")
+        self.settings_checkbox_system_activate_proxy = QCheckBox(self.page_system)
+        self.settings_checkbox_system_activate_proxy.setObjectName(u"settings_checkbox_system_activate_proxy")
+        self.settings_checkbox_system_activate_proxy.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_activate_proxy, 2, 2, 1, 1)
+
+        self.settings_checkbox_system_internet_checks = QCheckBox(self.page_system)
+        self.settings_checkbox_system_internet_checks.setObjectName(u"settings_checkbox_system_internet_checks")
+        self.settings_checkbox_system_internet_checks.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_internet_checks, 1, 2, 1, 1)
+
+        self.settings_checkbox_system_enable_network_logging = QCheckBox(self.page_system)
+        self.settings_checkbox_system_enable_network_logging.setObjectName(u"settings_checkbox_system_enable_network_logging")
+        self.settings_checkbox_system_enable_network_logging.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_enable_network_logging, 4, 1, 1, 2)
+
+        self.label_tooltip_network_logging = QLabel(self.page_system)
+        self.label_tooltip_network_logging.setObjectName(u"label_tooltip_network_logging")
+
+        self.settings_gridlayout_system.addWidget(self.label_tooltip_network_logging, 4, 0, 1, 1)
+
+        self.settings_checkbox_system_supress_errors = QCheckBox(self.page_system)
+        self.settings_checkbox_system_supress_errors.setObjectName(u"settings_checkbox_system_supress_errors")
+        self.settings_checkbox_system_supress_errors.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_supress_errors, 3, 1, 1, 1)
+
+        self.label_tooltip_update_checks = QLabel(self.page_system)
+        self.label_tooltip_update_checks.setObjectName(u"label_tooltip_update_checks")
+        sizePolicy19.setHeightForWidth(self.label_tooltip_update_checks.sizePolicy().hasHeightForWidth())
+        self.label_tooltip_update_checks.setSizePolicy(sizePolicy19)
+
+        self.settings_gridlayout_system.addWidget(self.label_tooltip_update_checks, 1, 0, 1, 1)
+
+        self.label_tooltip_anonymous_mode = QLabel(self.page_system)
+        self.label_tooltip_anonymous_mode.setObjectName(u"label_tooltip_anonymous_mode")
+
+        self.settings_gridlayout_system.addWidget(self.label_tooltip_anonymous_mode, 2, 0, 1, 1)
+
         self.settings_checkbox_system_enable_anonymous_mode = QCheckBox(self.page_system)
         self.settings_checkbox_system_enable_anonymous_mode.setObjectName(u"settings_checkbox_system_enable_anonymous_mode")
         self.settings_checkbox_system_enable_anonymous_mode.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_enable_anonymous_mode, 2, 0, 1, 1)
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_enable_anonymous_mode, 2, 1, 1, 1)
+
+        self.settings_checkbox_system_update_checks = QCheckBox(self.page_system)
+        self.settings_checkbox_system_update_checks.setObjectName(u"settings_checkbox_system_update_checks")
+        self.settings_checkbox_system_update_checks.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_update_checks, 1, 1, 1, 1)
+
+        self.label_tooltip_supress_errors = QLabel(self.page_system)
+        self.label_tooltip_supress_errors.setObjectName(u"label_tooltip_supress_errors")
+
+        self.settings_gridlayout_system.addWidget(self.label_tooltip_supress_errors, 3, 0, 1, 1)
 
         self.settings_checkbox_system_proxy_kill_switch = QCheckBox(self.page_system)
         self.settings_checkbox_system_proxy_kill_switch.setObjectName(u"settings_checkbox_system_proxy_kill_switch")
         self.settings_checkbox_system_proxy_kill_switch.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_proxy_kill_switch, 3, 1, 1, 1)
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_proxy_kill_switch, 3, 2, 1, 1)
 
         self.settings_button_system_install_pornfetch = QPushButton(self.page_system)
         self.settings_button_system_install_pornfetch.setObjectName(u"settings_button_system_install_pornfetch")
 
         self.settings_gridlayout_system.addWidget(self.settings_button_system_install_pornfetch, 0, 0, 1, 2)
 
-        self.settings_checkbox_system_update_checks = QCheckBox(self.page_system)
-        self.settings_checkbox_system_update_checks.setObjectName(u"settings_checkbox_system_update_checks")
-        self.settings_checkbox_system_update_checks.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.settings_lineedit_system_custom_app_name = QLineEdit(self.page_system)
+        self.settings_lineedit_system_custom_app_name.setObjectName(u"settings_lineedit_system_custom_app_name")
+        sizePolicy7.setHeightForWidth(self.settings_lineedit_system_custom_app_name.sizePolicy().hasHeightForWidth())
+        self.settings_lineedit_system_custom_app_name.setSizePolicy(sizePolicy7)
 
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_update_checks, 1, 0, 1, 1)
-
-        self.settings_checkbox_system_internet_checks = QCheckBox(self.page_system)
-        self.settings_checkbox_system_internet_checks.setObjectName(u"settings_checkbox_system_internet_checks")
-        self.settings_checkbox_system_internet_checks.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_internet_checks, 1, 1, 1, 1)
-
-        self.settings_checkbox_system_supress_errors = QCheckBox(self.page_system)
-        self.settings_checkbox_system_supress_errors.setObjectName(u"settings_checkbox_system_supress_errors")
-        self.settings_checkbox_system_supress_errors.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_supress_errors, 3, 0, 1, 1)
-
-        self.settings_checkbox_system_activate_proxy = QCheckBox(self.page_system)
-        self.settings_checkbox_system_activate_proxy.setObjectName(u"settings_checkbox_system_activate_proxy")
-        self.settings_checkbox_system_activate_proxy.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_activate_proxy, 2, 1, 1, 1)
-
-        self.settings_checkbox_system_enable_network_logging = QCheckBox(self.page_system)
-        self.settings_checkbox_system_enable_network_logging.setObjectName(u"settings_checkbox_system_enable_network_logging")
-        self.settings_checkbox_system_enable_network_logging.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_enable_network_logging, 4, 0, 1, 2)
+        self.settings_gridlayout_system.addWidget(self.settings_lineedit_system_custom_app_name, 0, 2, 1, 1)
 
 
         self.gridLayout_33.addLayout(self.settings_gridlayout_system, 0, 0, 1, 1)
@@ -1423,7 +1544,7 @@ class Ui_MainWindow(object):
         self.scrollArea_3.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 230, 110))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 218, 110))
         self.gridLayout_23 = QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_23.setSpacing(0)
         self.gridLayout_23.setObjectName(u"gridLayout_23")
@@ -1558,7 +1679,7 @@ class Ui_MainWindow(object):
         self.scrollArea_10.setWidgetResizable(True)
         self.scrollAreaWidgetContents_12 = QWidget()
         self.scrollAreaWidgetContents_12.setObjectName(u"scrollAreaWidgetContents_12")
-        self.scrollAreaWidgetContents_12.setGeometry(QRect(0, 0, 194, 142))
+        self.scrollAreaWidgetContents_12.setGeometry(QRect(0, 0, 170, 140))
         self.gridLayout_56 = QGridLayout(self.scrollAreaWidgetContents_12)
         self.gridLayout_56.setSpacing(0)
         self.gridLayout_56.setObjectName(u"gridLayout_56")
@@ -1646,7 +1767,7 @@ class Ui_MainWindow(object):
         self.scrollArea_11.setWidgetResizable(True)
         self.scrollAreaWidgetContents_13 = QWidget()
         self.scrollAreaWidgetContents_13.setObjectName(u"scrollAreaWidgetContents_13")
-        self.scrollAreaWidgetContents_13.setGeometry(QRect(0, 0, 488, 103))
+        self.scrollAreaWidgetContents_13.setGeometry(QRect(0, 0, 475, 102))
         self.gridLayout_59 = QGridLayout(self.scrollAreaWidgetContents_13)
         self.gridLayout_59.setObjectName(u"gridLayout_59")
         self.gridLayout_59.setHorizontalSpacing(0)
@@ -1709,7 +1830,7 @@ class Ui_MainWindow(object):
         self.scrollArea_12.setWidgetResizable(True)
         self.scrollAreaWidgetContents_14 = QWidget()
         self.scrollAreaWidgetContents_14.setObjectName(u"scrollAreaWidgetContents_14")
-        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 98, 121))
+        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 98, 120))
         self.gridLayout_61 = QGridLayout(self.scrollAreaWidgetContents_14)
         self.gridLayout_61.setObjectName(u"gridLayout_61")
         self.textbrowser_disclaimer = QTextBrowser(self.scrollAreaWidgetContents_14)
@@ -1872,9 +1993,9 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.CentralStackedWidget.setCurrentIndex(0)
+        self.CentralStackedWidget.setCurrentIndex(1)
         self.main_stacked_widget_top.setCurrentIndex(0)
-        self.settings_stacked_widget_main.setCurrentIndex(0)
+        self.settings_stacked_widget_main.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -2193,19 +2314,65 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(accessibility)
         self.settings_button_switch_ui.setText(QCoreApplication.translate("MainWindow", u"UI", None))
 #if QT_CONFIG(tooltip)
-        self.settings_label_videos_quality.setToolTip(QCoreApplication.translate("MainWindow", u"By default, Porn Fetch will select the best available video quality. You can also decide between half and worst above.\n"
-"If you instead use the custom integer values (1080p, 720p etc.) then Porn Fetch will try to use these, if available,\n"
-"but if they are not available the next best quality will be chosen. Please note that this is experimental and has not\n"
-"been that tested very well. (Be honest, why would you not choose the best quality lol)", None))
+        self.settings_label_videos_result_limit.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.settings_label_videos_result_limit.setAccessibleName(QCoreApplication.translate("MainWindow", u"label result limit", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_label_videos_result_limit.setText(QCoreApplication.translate("MainWindow", u"Result Limit:", None))
+#if QT_CONFIG(tooltip)
+        self.settings_checkbox_videos_use_directory_system.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.settings_checkbox_videos_use_directory_system.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox use directory system", None))
+#endif // QT_CONFIG(accessibility)
+#if QT_CONFIG(accessibility)
+        self.settings_checkbox_videos_use_directory_system.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"The directory system will automatically create folders for each author of videos", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_checkbox_videos_use_directory_system.setText(QCoreApplication.translate("MainWindow", u"Use directory system", None))
+#if QT_CONFIG(tooltip)
+        self.settings_checkbox_videos_track_downloaded_videos.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.settings_checkbox_videos_track_downloaded_videos.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox track downloaded videos", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_checkbox_videos_track_downloaded_videos.setText(QCoreApplication.translate("MainWindow", u"Track downloaded videos", None))
+#if QT_CONFIG(tooltip)
+        self.settings_label_videos_quality.setToolTip("")
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(accessibility)
         self.settings_label_videos_quality.setAccessibleName(QCoreApplication.translate("MainWindow", u"label video quality", None))
 #endif // QT_CONFIG(accessibility)
         self.settings_label_videos_quality.setText(QCoreApplication.translate("MainWindow", u"Quality:", None))
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_model_videos.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_model_videos.setText("")
+#if QT_CONFIG(tooltip)
+        self.settings_checkbox_videos_skip_existing_files.setToolTip("")
+#endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_use_video_id_as_filename.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox use video id as filename", None))
+        self.settings_checkbox_videos_skip_existing_files.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox skip existing files", None))
 #endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_use_video_id_as_filename.setText(QCoreApplication.translate("MainWindow", u"Use Video ID as filename", None))
+        self.settings_checkbox_videos_skip_existing_files.setText(QCoreApplication.translate("MainWindow", u"Skip existing files", None))
+#if QT_CONFIG(accessibility)
+        self.settings_label_videos_output_path.setAccessibleName(QCoreApplication.translate("MainWindow", u"label output path", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_label_videos_output_path.setText(QCoreApplication.translate("MainWindow", u"Output path:", None))
+#if QT_CONFIG(tooltip)
+        self.settings_checkbox_videos_write_metadata.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.settings_checkbox_videos_write_metadata.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox write metadata tags", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_checkbox_videos_write_metadata.setText(QCoreApplication.translate("MainWindow", u"Write metadata tags", None))
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_quality.setToolTip(QCoreApplication.translate("MainWindow", u"By default, Porn Fetch will select the best available video quality. You can also decide between half and worst above.\n"
+"If you instead use the custom integer values (1080p, 720p etc.) then Porn Fetch will try to use these, if available,\n"
+"but if they are not available the next best quality will be chosen. Please note that this is experimental and has not\n"
+"been that tested very well. (Be honest, why would you not choose the best quality lol)", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_quality.setText("")
         self.settings_video_combobox_model_videos.setItemText(0, QCoreApplication.translate("MainWindow", u"Both (recommended)", None))
         self.settings_video_combobox_model_videos.setItemText(1, QCoreApplication.translate("MainWindow", u"Uploaded", None))
         self.settings_video_combobox_model_videos.setItemText(2, QCoreApplication.translate("MainWindow", u"Featured", None))
@@ -2216,6 +2383,20 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(accessibility)
         self.settings_video_combobox_model_videos.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"This decides whether you want to fetch model uploads or featured videos or both of them", None))
 #endif // QT_CONFIG(accessibility)
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_result_limit.setToolTip(QCoreApplication.translate("MainWindow", u"The result limit defines how many videos will be returned when performing a search or doing other operations which\n"
+"involves loading multiple videos. This also affects models / channels and your liked videos. The result limit is\n"
+"basically the number of videos which can be loaded into the tree widget (this thing where videos are displayed).", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_result_limit.setText("")
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_track_videos.setToolTip(QCoreApplication.translate("MainWindow", u"Videos will be tracked in a SQL database which will save the URL and the metadata. ", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_track_videos.setText("")
+#if QT_CONFIG(accessibility)
+        self.settings_button_videos_open_output_path.setAccessibleName(QCoreApplication.translate("MainWindow", u"settings open output path", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_button_videos_open_output_path.setText(QCoreApplication.translate("MainWindow", u"Open", None))
         self.settings_video_combobox_quality.setItemText(0, QCoreApplication.translate("MainWindow", u"BEST (auto)", None))
         self.settings_video_combobox_quality.setItemText(1, QCoreApplication.translate("MainWindow", u"HALF (auto)", None))
         self.settings_video_combobox_quality.setItemText(2, QCoreApplication.translate("MainWindow", u"WORST (auto)", None))
@@ -2234,24 +2415,13 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(accessibility)
         self.settings_video_combobox_quality.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"Porn Fetch will by default download the best video quality", None))
 #endif // QT_CONFIG(accessibility)
-#if QT_CONFIG(tooltip)
-        self.settings_checkbox_videos_write_metadata.setToolTip(QCoreApplication.translate("MainWindow", u"Metadata tags are saved inside of the file itself. These are tags that video players can read from and provide you information.\n"
-"Some folder viewers also give you the ability to search files by specific metadata tags. Those tags can help organize and structure files.\n"
-"Porn Fetch will by default save those tags inside of your video files. ", None))
-#endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_write_metadata.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox write metadata tags", None))
+        self.settings_lineedit_videos_database_path.setAccessibleName(QCoreApplication.translate("MainWindow", u"lineedit output path of the database", None))
 #endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_write_metadata.setText(QCoreApplication.translate("MainWindow", u"Write metadata tags", None))
-#if QT_CONFIG(tooltip)
-        self.settings_label_videos_result_limit.setToolTip(QCoreApplication.translate("MainWindow", u"The result limit defines how many videos will be returned when performing a search or doing other operations which\n"
-"involves loading multiple videos. This also affects models / channels and your liked videos. The result limit is\n"
-"basically the number of videos which can be loaded into the tree widget (this thing where videos are displayed).", None))
-#endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(accessibility)
-        self.settings_label_videos_result_limit.setAccessibleName(QCoreApplication.translate("MainWindow", u"label result limit", None))
+        self.settings_lineedit_videos_database_path.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"the database tracks all downloaded videos in Porn Fetch, optional", None))
 #endif // QT_CONFIG(accessibility)
-        self.settings_label_videos_result_limit.setText(QCoreApplication.translate("MainWindow", u"Result Limit:", None))
+        self.settings_lineedit_videos_database_path.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter the path of the database file here", None))
 #if QT_CONFIG(accessibility)
         self.settings_spinbox_videos_result_limit.setAccessibleName(QCoreApplication.translate("MainWindow", u"spinbox resutl limit", None))
 #endif // QT_CONFIG(accessibility)
@@ -2259,29 +2429,15 @@ class Ui_MainWindow(object):
         self.settings_spinbox_videos_result_limit.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"The result limit limits how many videos will be fetched", None))
 #endif // QT_CONFIG(accessibility)
 #if QT_CONFIG(accessibility)
-        self.settings_label_videos_output_path.setAccessibleName(QCoreApplication.translate("MainWindow", u"label output path", None))
+        self.settings_checkbox_videos_use_video_id_as_filename.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox use video id as filename", None))
 #endif // QT_CONFIG(accessibility)
-        self.settings_label_videos_output_path.setText(QCoreApplication.translate("MainWindow", u"Output path:", None))
-#if QT_CONFIG(accessibility)
-        self.settings_lineedit_videos_output_path.setAccessibleName(QCoreApplication.translate("MainWindow", u"lineedit video output path", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_lineedit_videos_output_path.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter \"./\" for current directory", None))
+        self.settings_checkbox_videos_use_video_id_as_filename.setText(QCoreApplication.translate("MainWindow", u"Use Video ID as filename", None))
 #if QT_CONFIG(tooltip)
-        self.settings_checkbox_videos_skip_existing_files.setToolTip(QCoreApplication.translate("MainWindow", u"If you fetch a video and the exact same filename already exists, usually Porn Fetch would just skip this file.\n"
-"If you set this option to No, then Porn Fetch instead download the video and append a random number to it.\n"
-"\n"
-"For example you have downloaded a video called:\n"
-"\n"
-"Spain_didnt_win_against_Germany.mp4\n"
-"\n"
-"and you download a video with the same title, then it would append a random number to it:\n"
-"\n"
-"Spain_didnt_win_against_Germany_118251.mp4", None))
+        self.label_tooltip_write_metadata.setToolTip(QCoreApplication.translate("MainWindow", u"Metadata tags are saved inside of the file itself. These are tags that video players can read from and provide you information.\n"
+"Some folder viewers also give you the ability to search files by specific metadata tags. Those tags can help organize and structure files.\n"
+"Porn Fetch will by default save those tags inside of your video files. ", None))
 #endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_skip_existing_files.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox skip existing files", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_skip_existing_files.setText(QCoreApplication.translate("MainWindow", u"Skip existing files", None))
+        self.label_tooltip_write_metadata.setText("")
 #if QT_CONFIG(tooltip)
         self.settings_label_videos_model_vdeos_type.setToolTip(QCoreApplication.translate("MainWindow", u"User uploads and featured videos are two different things. User uploads are the videos which were really uploaded\n"
 "by the model and the featured videos are videos the model is part or featured in.\n"
@@ -2296,81 +2452,32 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(accessibility)
         self.settings_label_videos_model_vdeos_type.setText(QCoreApplication.translate("MainWindow", u"Model videos (PH)", None))
 #if QT_CONFIG(accessibility)
-        self.settings_button_videos_open_output_path.setAccessibleName(QCoreApplication.translate("MainWindow", u"settings open output path", None))
+        self.settings_lineedit_videos_output_path.setAccessibleName(QCoreApplication.translate("MainWindow", u"lineedit video output path", None))
 #endif // QT_CONFIG(accessibility)
-        self.settings_button_videos_open_output_path.setText(QCoreApplication.translate("MainWindow", u"Open", None))
+        self.settings_lineedit_videos_output_path.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter \"./\" for current directory", None))
 #if QT_CONFIG(tooltip)
-        self.settings_checkbox_videos_track_downloaded_videos.setToolTip(QCoreApplication.translate("MainWindow", u"Videos will be tracked in a SQL database which will save the URL and the metadata. ", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_track_downloaded_videos.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox track downloaded videos", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_track_downloaded_videos.setText(QCoreApplication.translate("MainWindow", u"Track downloaded videos", None))
-#if QT_CONFIG(tooltip)
-        self.settings_checkbox_videos_use_directory_system.setToolTip(QCoreApplication.translate("MainWindow", u"The directory system will save videos in an intelligent way. If you download 3 videos form one Pornstar and 5 videos \n"
+        self.label_tooltip_use_directory_system.setToolTip(QCoreApplication.translate("MainWindow", u"The directory system will save videos in an intelligent way. If you download 3 videos form one Pornstar and 5 videos \n"
 "from another, Porn Fetch will automatically make folders for it and move the 3 videos into that one folder and the other\n"
 "5 into the other. (This will still apply with your selected output path)\n"
 "\n"
 "This can be helpful for organizing stuff, but is a more advanced feature, so the majority of users won't use it probably", None))
 #endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_use_directory_system.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox use directory system", None))
-#endif // QT_CONFIG(accessibility)
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_use_directory_system.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"The directory system will automatically create folders for each author of videos", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_use_directory_system.setText(QCoreApplication.translate("MainWindow", u"Use directory system", None))
-#if QT_CONFIG(accessibility)
-        self.settings_lineedit_videos_database_path.setAccessibleName(QCoreApplication.translate("MainWindow", u"lineedit output path of the database", None))
-#endif // QT_CONFIG(accessibility)
-#if QT_CONFIG(accessibility)
-        self.settings_lineedit_videos_database_path.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"the database tracks all downloaded videos in Porn Fetch, optional", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_lineedit_videos_database_path.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter the path of the database file here", None))
+        self.label_tooltip_use_directory_system.setText("")
 #if QT_CONFIG(tooltip)
-        self.settings_label_performance_videos_concurrency.setToolTip(QCoreApplication.translate("MainWindow", u"<html><head/><body><p>The videos concurrency defines how many videos are fetched at the same time when searching or fetching models etc.</p><p>For example, let's say you search for something. Then the first page of the results will be scraped for video URLs. This takes</p><p>usually around 1 second. If you set this value to 20, then from all those URLs Porn Fetch will attempt to load 20 videos at</p><p>the same time. This can improve speed A LOT, but can also get you blocked from the site. </p></body></html>", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(accessibility)
-        self.settings_label_performance_videos_concurrency.setAccessibleName(QCoreApplication.translate("MainWindow", u"Videos Concurrency", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_label_performance_videos_concurrency.setText(QCoreApplication.translate("MainWindow", u"Videos Concurrency:", None))
-#if QT_CONFIG(tooltip)
-        self.settings_label_performance_simultaneous_download.setToolTip(QCoreApplication.translate("MainWindow", u"The Semaphore is a tool to limit the number of simultaneous actions / downloads. For example: If the semaphore is set to 1, only 1 video will be downloaded at the same time.\\nIf the semaphore is set to 4, 4 videos will be downloaded at the same time. Changing this is only useful, if you have a really good internet connection and a good system.", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(accessibility)
-        self.settings_label_performance_simultaneous_download.setAccessibleName(QCoreApplication.translate("MainWindow", u"Simultaneous downloads", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_label_performance_simultaneous_download.setText(QCoreApplication.translate("MainWindow", u"Simultaneous downloads:", None))
-#if QT_CONFIG(tooltip)
-        self.settings_label_performance_processing_delay.setToolTip(QCoreApplication.translate("MainWindow", u"The processing delay sets a delay before every video gets downloaded.\n"
-"Let's assume you set a delay of 30 (30 seconds), then it will take 30 seconds between each video downloads.\n"
-"This does not apply if you have a value of simultaneous downloads greater than 1.", None))
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(accessibility)
-        self.settings_label_performance_processing_delay.setAccessibleName(QCoreApplication.translate("MainWindow", u"Videos Concurrency", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_label_performance_processing_delay.setText(QCoreApplication.translate("MainWindow", u"Processing Delay (videos/sec):", None))
-        self.settings_performance_combobox_download_mode.setItemText(0, QCoreApplication.translate("MainWindow", u"High Performance", None))
-        self.settings_performance_combobox_download_mode.setItemText(1, QCoreApplication.translate("MainWindow", u"FFMPEG", None))
-        self.settings_performance_combobox_download_mode.setItemText(2, QCoreApplication.translate("MainWindow", u"Default", None))
-
-#if QT_CONFIG(tooltip)
-        self.settings_performance_combobox_download_mode.setToolTip(QCoreApplication.translate("MainWindow", u"1) High Performance:  Uses a class of workers to download multiple video segments at a time. Can be really fast if you\n"
-"have a very strong internet connection. Maybe not great for low end systems.\n"
+        self.label_tooltip_skip_existing_files.setToolTip(QCoreApplication.translate("MainWindow", u"If you fetch a video and the exact same filename already exists, usually Porn Fetch would just skip this file.\n"
+"If you set this option to No, then Porn Fetch instead download the video and append a random number to it.\n"
 "\n"
-"2) FFMPEG:\n"
-"FFmpeg is a specialized tool for video encoding and decoding. It is also able to fetch videos based on their m3u8 URL, which contains the segments. FFmpeg is slower compared to high performance and not well tested. Please only use if you have to.\n"
+"For example you have downloaded a video called:\n"
 "\n"
-"3) Default:  The default download mode will just download one video segment after the next one. If you get a lot of \n"
-"timeouts this can really slow down the process, as we need to wait the Porn sites to return the video segments.\n"
-"With the High Performance method, we can just download other segments while waiting which makes it so fast.", None))
+"Spain_didnt_win_against_Germany.mp4\n"
+"\n"
+"and you download a video with the same title, then it would append a random number to it:\n"
+"\n"
+"Spain_didnt_win_against_Germany_118251.mp4", None))
 #endif // QT_CONFIG(tooltip)
+        self.label_tooltip_skip_existing_files.setText("")
 #if QT_CONFIG(tooltip)
-        self.settings_label_performance_speed_limit.setToolTip(QCoreApplication.translate("MainWindow", u"The speed limit sets the maximum allowed network speed in megabyte per seconds. However, this doesn't work perfectly.\n"
-"The speed limit also only works for the default download mode, because it wouldn't make sense downloading multiple\n"
-"segments at the same time with a speed limit being in place.\n"
-"\n"
-"If you need something more 'exact / precise', use applications like NetLimiter 4 or something similar.", None))
+        self.settings_label_performance_speed_limit.setToolTip("")
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(accessibility)
         self.settings_label_performance_speed_limit.setAccessibleName(QCoreApplication.translate("MainWindow", u"Speed Limit (MB/s)", None))
@@ -2386,6 +2493,63 @@ class Ui_MainWindow(object):
         self.settings_label_performance_download_mode.setAccessibleDescription("")
 #endif // QT_CONFIG(accessibility)
         self.settings_label_performance_download_mode.setText(QCoreApplication.translate("MainWindow", u"Download Mode:", None))
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_maximum_timeout.setToolTip(QCoreApplication.translate("MainWindow", u"The timeout handles the timeout for retrieving segments when using the threaded download mode. If you have a poor \n"
+"internet connection you can set this higher than 10. But this isn't required for most users!", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_maximum_timeout.setText("")
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_pages_concurrency.setToolTip(QCoreApplication.translate("MainWindow", u"<html><head/><body><p>The pages concurrency defines how many pages will be scraped at the same time,</p><p>when searching for videos or fetching models. Lower values are generally recommended,</p><p>to avoid getting blocked. Keep it between 1-3.</p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_pages_concurrency.setText("")
+#if QT_CONFIG(tooltip)
+        self.settings_label_performance_processing_delay.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.settings_label_performance_processing_delay.setAccessibleName(QCoreApplication.translate("MainWindow", u"Videos Concurrency", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_label_performance_processing_delay.setText(QCoreApplication.translate("MainWindow", u"Processing Delay (videos/sec):", None))
+#if QT_CONFIG(tooltip)
+        self.settings_label_performance_pages_concurrency.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.settings_label_performance_pages_concurrency.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"Pages concurrency", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_label_performance_pages_concurrency.setText(QCoreApplication.translate("MainWindow", u"Pages concurrency:", None))
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_simultaneous_downloads.setToolTip(QCoreApplication.translate("MainWindow", u"The Semaphore is a tool to limit the number of simultaneous actions / downloads. For example: If the semaphore is set to 1, only 1 video will be downloaded at the same time.\\nIf the semaphore is set to 4, 4 videos will be downloaded at the same time. Changing this is only useful, if you have a really good internet connection and a good system.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_simultaneous_downloads.setText("")
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_speed_limit.setToolTip(QCoreApplication.translate("MainWindow", u"The speed limit sets the maximum allowed network speed in megabyte per seconds. However, this doesn't work perfectly.\n"
+"The speed limit also only works for the default download mode, because it wouldn't make sense downloading multiple\n"
+"segments at the same time with a speed limit being in place.\n"
+"\n"
+"If you need something more 'exact / precise', use applications like NetLimiter 4 or something similar.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_speed_limit.setText("")
+#if QT_CONFIG(tooltip)
+        self.settings_label_performance_maximal_retries.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.settings_label_performance_maximal_retries.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"Maximum retries", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_label_performance_maximal_retries.setText(QCoreApplication.translate("MainWindow", u"Maximum retries:", None))
+#if QT_CONFIG(accessibility)
+        self.settings_doublespinbox_performance_speed_limit.setAccessibleName(QCoreApplication.translate("MainWindow", u"spinbox speed limit", None))
+#endif // QT_CONFIG(accessibility)
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_download_mode.setToolTip(QCoreApplication.translate("MainWindow", u"1) High Performance:  Uses a class of workers to download multiple video segments at a time. Can be really fast if you\n"
+"have a very strong internet connection. Maybe not great for low end systems.\n"
+"\n"
+"2) FFMPEG:\n"
+"FFmpeg is a specialized tool for video encoding and decoding. It is also able to fetch videos based on their m3u8 URL, which contains the segments. FFmpeg is slower compared to high performance and not well tested. Please only use if you have to.\n"
+"\n"
+"3) Default:  The default download mode will just download one video segment after the next one. If you get a lot of \n"
+"timeouts this can really slow down the process, as we need to wait the Porn sites to return the video segments.\n"
+"With the High Performance method, we can just download other segments while waiting which makes it so fast.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_download_mode.setText("")
 #if QT_CONFIG(accessibility)
         self.settings_spinbox_performance_pages_concurrency.setAccessibleName(QCoreApplication.translate("MainWindow", u"spinbox pages concurrency", None))
 #endif // QT_CONFIG(accessibility)
@@ -2393,33 +2557,49 @@ class Ui_MainWindow(object):
         self.settings_spinbox_performance_pages_concurrency.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"This decides how many pages will be scraped at the same time. Lower values between 1-3 are recommended", None))
 #endif // QT_CONFIG(accessibility)
 #if QT_CONFIG(tooltip)
-        self.settings_label_performance_maximal_retries.setToolTip(QCoreApplication.translate("MainWindow", u"The maximal retries defines how much attempts will be used for a network request. For example if an API calls\n"
-"a URL for a website there will be <AMOUNT> of attempts until an error is thrown.", None))
+        self.settings_label_performance_simultaneous_download.setToolTip("")
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(accessibility)
-        self.settings_label_performance_maximal_retries.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"Maximum retries", None))
+        self.settings_label_performance_simultaneous_download.setAccessibleName(QCoreApplication.translate("MainWindow", u"Simultaneous downloads", None))
 #endif // QT_CONFIG(accessibility)
-        self.settings_label_performance_maximal_retries.setText(QCoreApplication.translate("MainWindow", u"Maximum retries:", None))
+        self.settings_label_performance_simultaneous_download.setText(QCoreApplication.translate("MainWindow", u"Simultaneous downloads:", None))
 #if QT_CONFIG(tooltip)
-        self.settings_label_performance_maximal_timeout.setToolTip(QCoreApplication.translate("MainWindow", u"The timeout handles the timeout for retrieving segments when using the threaded download mode. If you have a poor \n"
-"internet connection you can set this higher than 10. But this isn't required for most users!", None))
+        self.settings_label_performance_maximal_timeout.setToolTip("")
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(accessibility)
         self.settings_label_performance_maximal_timeout.setAccessibleName(QCoreApplication.translate("MainWindow", u"Maximum timeout", None))
 #endif // QT_CONFIG(accessibility)
         self.settings_label_performance_maximal_timeout.setText(QCoreApplication.translate("MainWindow", u"Maximum timeout:", None))
-#if QT_CONFIG(accessibility)
-        self.settings_doublespinbox_performance_speed_limit.setAccessibleName(QCoreApplication.translate("MainWindow", u"spinbox speed limit", None))
-#endif // QT_CONFIG(accessibility)
 #if QT_CONFIG(tooltip)
-        self.settings_label_performance_pages_concurrency.setToolTip(QCoreApplication.translate("MainWindow", u"<html><head/><body><p>The pages concurrency defines how many pages will be scraped at the same time,</p><p>when searching for videos or fetching models. Lower values are generally recommended,</p><p>to avoid getting blocked. Keep it between 1-3.</p></body></html>", None))
+        self.settings_label_performance_videos_concurrency.setToolTip("")
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(accessibility)
-        self.settings_label_performance_pages_concurrency.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"Pages concurrency", None))
+        self.settings_label_performance_videos_concurrency.setAccessibleName(QCoreApplication.translate("MainWindow", u"Videos Concurrency", None))
 #endif // QT_CONFIG(accessibility)
-        self.settings_label_performance_pages_concurrency.setText(QCoreApplication.translate("MainWindow", u"Pages concurrency:", None))
+        self.settings_label_performance_videos_concurrency.setText(QCoreApplication.translate("MainWindow", u"Videos Concurrency:", None))
+        self.settings_performance_combobox_download_mode.setItemText(0, QCoreApplication.translate("MainWindow", u"High Performance", None))
+        self.settings_performance_combobox_download_mode.setItemText(1, QCoreApplication.translate("MainWindow", u"FFMPEG", None))
+        self.settings_performance_combobox_download_mode.setItemText(2, QCoreApplication.translate("MainWindow", u"Default", None))
+
 #if QT_CONFIG(tooltip)
-        self.settings_label_performance_network_delay.setToolTip(QCoreApplication.translate("MainWindow", u"You can set a delay between requests from you and a site. If you are downloading a lot of videos or experiencing \n"
+        self.settings_performance_combobox_download_mode.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        self.settings_label_performance_network_delay.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.settings_label_performance_network_delay.setAccessibleName(QCoreApplication.translate("MainWindow", u"Network delay (requests/sec)", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_label_performance_network_delay.setText(QCoreApplication.translate("MainWindow", u"Network delay (requests/sec):", None))
+#if QT_CONFIG(tooltip)
+        self.label_settings_performance_download_workers.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.label_settings_performance_download_workers.setAccessibleName(QCoreApplication.translate("MainWindow", u"Download workers:", None))
+#endif // QT_CONFIG(accessibility)
+        self.label_settings_performance_download_workers.setText(QCoreApplication.translate("MainWindow", u"Download workers:", None))
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_network_delay.setToolTip(QCoreApplication.translate("MainWindow", u"You can set a delay between requests from you and a site. If you are downloading a lot of videos or experiencing \n"
 "errors, you should enable a delay. By default the delay is turned off with the value 0\n"
 "\n"
 "A good starting point is between 0.5 - 1.5\n"
@@ -2427,66 +2607,43 @@ class Ui_MainWindow(object):
 "The longer the delay is, the longer it will take to download videos, load videos and generally do stuff. This does not\n"
 "really affect the high performance download mode.", None))
 #endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(accessibility)
-        self.settings_label_performance_network_delay.setAccessibleName(QCoreApplication.translate("MainWindow", u"Network delay (requests/sec)", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_label_performance_network_delay.setText(QCoreApplication.translate("MainWindow", u"Network delay (requests/sec):", None))
+        self.label_tooltip_network_delay.setText("")
 #if QT_CONFIG(tooltip)
-        self.label_settings_performance_download_workers.setToolTip(QCoreApplication.translate("MainWindow", u"<html><head/><body><p>The download worker setting defines, how many workers / threads will be used at the same time</p><p>to fetch video segments at the same time. Usually you don't need to go over 20, unless you have a higher</p><p>internet connection than 1gbit/s. </p></body></html>", None))
+        self.label_tooltip_processing_delay.setToolTip(QCoreApplication.translate("MainWindow", u"The processing delay sets a delay before every video gets downloaded.\n"
+"Let's assume you set a delay of 30 (30 seconds), then it will take 30 seconds between each video downloads.\n"
+"This does not apply if you have a value of simultaneous downloads greater than 1.", None))
 #endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(accessibility)
-        self.label_settings_performance_download_workers.setAccessibleName(QCoreApplication.translate("MainWindow", u"Download workers:", None))
-#endif // QT_CONFIG(accessibility)
-        self.label_settings_performance_download_workers.setText(QCoreApplication.translate("MainWindow", u"Download workers:", None))
+        self.label_tooltip_processing_delay.setText("")
 #if QT_CONFIG(tooltip)
-        self.settings_checkbox_system_enable_anonymous_mode.setToolTip(QCoreApplication.translate("MainWindow", u"The anonymous mode renames all of Porn Fetch's elements to look NOT like a Porn downloader.\n"
-"This makes it useful for downloading Porn content if you are in public, or multiple people use your PC / Phone.\n"
-"\n"
-"This also disables thumbnail preview. All titles will be replaced with: [redacted] as well as all authors.", None))
+        self.label_tooltip_videos_concurrency.setToolTip(QCoreApplication.translate("MainWindow", u"<html><head/><body><p>The videos concurrency defines how many videos are fetched at the same time when searching or fetching models etc.</p><p>For example, let's say you search for something. Then the first page of the results will be scraped for video URLs. This takes</p><p>usually around 1 second. If you set this value to 20, then from all those URLs Porn Fetch will attempt to load 20 videos at</p><p>the same time. This can improve speed A LOT, but can also get you blocked from the site. </p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_system_enable_anonymous_mode.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable anonymous mode", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_system_enable_anonymous_mode.setText(QCoreApplication.translate("MainWindow", u"Enable Anonymous mode", None))
+        self.label_tooltip_videos_concurrency.setText("")
 #if QT_CONFIG(tooltip)
-        self.settings_checkbox_system_proxy_kill_switch.setToolTip(QCoreApplication.translate("MainWindow", u"The proxy kill switch is an additional security layer if you use proxies. It will check your IP each time before making\n"
-"a request and if it's leaked it will immediately exit everything.\n"
-"\n"
-"My priority on developing this is low. Please do not report errors. Thank you <3", None))
+        self.label_tooltip_download_workers.setToolTip(QCoreApplication.translate("MainWindow", u"<html><head/><body><p>The download worker setting defines, how many workers / threads will be used at the same time</p><p>to fetch video segments at the same time. Usually you don't need to go over 20, unless you have a higher</p><p>internet connection than 1gbit/s. </p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
+        self.label_tooltip_download_workers.setText("")
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_maximum_retries.setToolTip(QCoreApplication.translate("MainWindow", u"The maximal retries defines how much attempts will be used for a network request. For example if an API calls\n"
+"a URL for a website there will be <AMOUNT> of attempts until an error is thrown.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_maximum_retries.setText("")
 #if QT_CONFIG(accessibility)
-        self.settings_checkbox_system_proxy_kill_switch.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable proxy kill switch", None))
+        self.settings_checkbox_system_activate_proxy.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox activate a proxy", None))
 #endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_system_proxy_kill_switch.setText(QCoreApplication.translate("MainWindow", u"Proxy Kill Switch", None))
-#if QT_CONFIG(accessibility)
-        self.settings_button_system_install_pornfetch.setAccessibleName(QCoreApplication.translate("MainWindow", u"button install porn fetch (This is optional) ", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_button_system_install_pornfetch.setText(QCoreApplication.translate("MainWindow", u"Install Porn Fetch", None))
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_system_update_checks.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable update checks", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_system_update_checks.setText(QCoreApplication.translate("MainWindow", u"Update checks", None))
+        self.settings_checkbox_system_activate_proxy.setText(QCoreApplication.translate("MainWindow", u"Activate Proxy", None))
 #if QT_CONFIG(accessibility)
         self.settings_checkbox_system_internet_checks.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable internet checks", None))
 #endif // QT_CONFIG(accessibility)
         self.settings_checkbox_system_internet_checks.setText(QCoreApplication.translate("MainWindow", u"Internet checks", None))
 #if QT_CONFIG(tooltip)
-        self.settings_checkbox_system_supress_errors.setToolTip(QCoreApplication.translate("MainWindow", u"If you enable this function, all errors will be suppressed. This does not mean that they will be completely ignored, but\n"
-"you won't get a big notification for it. \n"
-"\n"
-"If you have activated Network Logging, they will still be reported. If an error happens while iterating through videos,\n"
-"the current video will be skipped and Porn Fetch will continue with the next one.  ", None))
+        self.settings_checkbox_system_enable_network_logging.setToolTip("")
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(accessibility)
-        self.settings_checkbox_system_supress_errors.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox supress errors silently", None))
+        self.settings_checkbox_system_enable_network_logging.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable network logging", None))
 #endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_system_supress_errors.setText(QCoreApplication.translate("MainWindow", u"Supress errors silently", None))
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_system_activate_proxy.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox activate a proxy", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_system_activate_proxy.setText(QCoreApplication.translate("MainWindow", u"Activate Proxy", None))
+        self.settings_checkbox_system_enable_network_logging.setText(QCoreApplication.translate("MainWindow", u"Enable Network Logging", None))
 #if QT_CONFIG(tooltip)
-        self.settings_checkbox_system_enable_network_logging.setToolTip(QCoreApplication.translate("MainWindow", u"I have created my own server that runs 24/7 in my home. Porn Fetch (ONLY if you enable it) logs specific types of errors,\n"
+        self.label_tooltip_network_logging.setToolTip(QCoreApplication.translate("MainWindow", u"I have created my own server that runs 24/7 in my home. Porn Fetch (ONLY if you enable it) logs specific types of errors,\n"
 "that I don't know of, or that I need your help to fix them, to my server using a simple JSON post request.\n"
 "\n"
 "You can see the Code of the server publicly here -->: https://github.com/EchterAlsFake/Server\n"
@@ -2504,10 +2661,59 @@ class Ui_MainWindow(object):
                         " that yourself, as mentioned before on the source code.\n"
 "You'd help me a lot by enabling network logging :) ", None))
 #endif // QT_CONFIG(tooltip)
+        self.label_tooltip_network_logging.setText("")
+#if QT_CONFIG(tooltip)
+        self.settings_checkbox_system_supress_errors.setToolTip("")
+#endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(accessibility)
-        self.settings_checkbox_system_enable_network_logging.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable network logging", None))
+        self.settings_checkbox_system_supress_errors.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox supress errors silently", None))
 #endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_system_enable_network_logging.setText(QCoreApplication.translate("MainWindow", u"Enable Network Logging", None))
+        self.settings_checkbox_system_supress_errors.setText(QCoreApplication.translate("MainWindow", u"Supress errors silently", None))
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_update_checks.setToolTip(QCoreApplication.translate("MainWindow", u"Porn Fetch will check for updates each time it starts, using my own server. This will require a working IPv6 connection. No personal data nor any other data is sent during this process.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_update_checks.setText("")
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_anonymous_mode.setToolTip(QCoreApplication.translate("MainWindow", u"The anonymous mode renames all of Porn Fetch's elements to look NOT like a Porn downloader.\n"
+"This makes it useful for downloading Porn content if you are in public, or multiple people use your PC / Phone.\n"
+"\n"
+"This also disables thumbnail preview. All titles will be replaced with: [redacted] as well as all authors.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_anonymous_mode.setText("")
+#if QT_CONFIG(tooltip)
+        self.settings_checkbox_system_enable_anonymous_mode.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.settings_checkbox_system_enable_anonymous_mode.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable anonymous mode", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_checkbox_system_enable_anonymous_mode.setText(QCoreApplication.translate("MainWindow", u"Enable Anonymous mode", None))
+#if QT_CONFIG(accessibility)
+        self.settings_checkbox_system_update_checks.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable update checks", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_checkbox_system_update_checks.setText(QCoreApplication.translate("MainWindow", u"Update checks", None))
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_supress_errors.setToolTip(QCoreApplication.translate("MainWindow", u"If you enable this function, all errors will be suppressed. This does not mean that they will be completely ignored, but\n"
+"you won't get a big notification for it. \n"
+"\n"
+"If you have activated Network Logging, they will still be reported. If an error happens while iterating through videos,\n"
+"the current video will be skipped and Porn Fetch will continue with the next one.  ", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_supress_errors.setText("")
+#if QT_CONFIG(tooltip)
+        self.settings_checkbox_system_proxy_kill_switch.setToolTip(QCoreApplication.translate("MainWindow", u"The proxy kill switch is an additional security layer if you use proxies. It will check your IP each time before making\n"
+"a request and if it's leaked it will immediately exit everything.\n"
+"\n"
+"My priority on developing this is low. Please do not report errors. Thank you <3", None))
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.settings_checkbox_system_proxy_kill_switch.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable proxy kill switch", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_checkbox_system_proxy_kill_switch.setText(QCoreApplication.translate("MainWindow", u"Proxy Kill Switch", None))
+#if QT_CONFIG(accessibility)
+        self.settings_button_system_install_pornfetch.setAccessibleName(QCoreApplication.translate("MainWindow", u"button install porn fetch (This is optional) ", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_button_system_install_pornfetch.setText(QCoreApplication.translate("MainWindow", u"Install Porn Fetch", None))
+        self.settings_lineedit_system_custom_app_name.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Write a custom app name here", None))
 #if QT_CONFIG(accessibility)
         self.settings_label_ui_theme.setAccessibleName(QCoreApplication.translate("MainWindow", u"label porn fetch theme ", None))
 #endif // QT_CONFIG(accessibility)
@@ -2639,21 +2845,21 @@ class Ui_MainWindow(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Adwaita Sans'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt; font-weight:700;\">Keyboard Shortcuts</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:14pt; font-weight:700;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margi"
-                        "n-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + Q     Closes the application</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-l"
+                        "eft:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + Q     Closes the application</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + E      Exports all current video URLs from the tree widget into a .txt file </span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + T      Downloads all videos in the tree widget (same as clicking the button)</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + A     Quickly enables the anonymous mode (temporarily)</span></p>\n"
-"<p style=\" margin-top:0px; mar"
-                        "gin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + S     Saves Porn Fetch settings</span></p>\n"
+"<p style=\" margin-top:0px; margin"
+                        "-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + S     Saves Porn Fetch settings</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:16pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + X     Selects all items in the tree widget as checked</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">CTRL + Z     Unchecks all items in the tree widget</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-"
-                        "indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:16pt;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-ind"
+                        "ent:0; text-indent:0px; font-family:'Sans Serif'; font-size:16pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">   </span></p></body></html>", None))
 #if QT_CONFIG(accessibility)
         self.text_browser_update_available.setAccessibleName(QCoreApplication.translate("MainWindow", u"textbrowser update changelog notification", None))
@@ -2671,33 +2877,33 @@ class Ui_MainWindow(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Adwaita Sans'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:24pt; font-weight:700;\">Installation Mode</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:16pt; text-decoration: underline; color:#0000ff;\">1) Inst</span><span style=\" font-family:'Segoe UI'; font-size:14pt; te"
-                        "xt-decoration: underline; color:#0000ff;\">all</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:16pt; text-decoration: underline; color:#0000ff;\">1) Inst</span><span style=\" font-family:'Segoe UI'; font-size:14pt; text-"
+                        "decoration: underline; color:#0000ff;\">all</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">This will install Porn Fetch into your system, meaning that you can run it directly from your Start Menu. e.g, press Windows key, type Porn Fetch and directly start it and on Linux it will be the same.</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI'; font-size:12pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">Porn Fetch will be installed into the following path(s):</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-"
-                        "indent:0; text-indent:0px; font-family:'Segoe UI'; font-size:12pt;\"><br /></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-ind"
+                        "ent:0; text-indent:0px; font-family:'Segoe UI'; font-size:12pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">Windows: C:\\Users\\&lt;user&gt;\\AppData\\Local\\pornfetch\\</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">Linux: ~/.local/share/pornfetch</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI'; font-size:9pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:16pt; text-decoration: underline; color:#00ff00;\">2) Portable</span></p>\n"
-"<p style=\" m"
-                        "argin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">This means, that Porn Fetch will not be installed and in order to use and start Porn Fetch you always need to double click on the file you have downloaded. This has some benefits as the uninstallation is easier and you have more control over it, but for the average user I do not recommend this.</span></p>\n"
+"<p style=\" marg"
+                        "in-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">This means, that Porn Fetch will not be installed and in order to use and start Porn Fetch you always need to double click on the file you have downloaded. This has some benefits as the uninstallation is easier and you have more control over it, but for the average user I do not recommend this.</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI'; font-size:12pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:16pt; font-weight:700; color:#a100ff;\">Custom App name</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
-                        "indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt; color:#ffffff;\">Down below you can enter  a custom name for Porn Fetch. You can then search with this name for Porn Fetch and Porn Fetch will not be found anymore when someone enters &quot;Porn Fetch&quot; on your PC. This can be useful if multiple persons use your PC and you don't want them to know you are using this application. It can also help if you are in public and people stare at your PC. Porn Fetch has also an option to fully hide, that it's a PornHub downloader.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-ind"
+                        "ent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt; color:#ffffff;\">Down below you can enter  a custom name for Porn Fetch. You can then search with this name for Porn Fetch and Porn Fetch will not be found anymore when someone enters &quot;Porn Fetch&quot; on your PC. This can be useful if multiple persons use your PC and you don't want them to know you are using this application. It can also help if you are in public and people stare at your PC. Porn Fetch has also an option to fully hide, that it's a PornHub downloader.</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Segoe UI'; font-size:12pt; color:#ffffff;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt; color:#ffffff;\">If you leave it empty, Porn Fetch will remain as &qu"
-                        "ot;Porn Fetch&quot; in your short menu.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt; color:#ffffff;\">If you leave it empty, Porn Fetch will remain as &quot;"
+                        "Porn Fetch&quot; in your short menu.</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:14pt; text-decoration: underline; color:#aa0000;\">NOTE:</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Segoe UI'; font-size:12pt;\">Installation was implemented in this release and might still be experimental. If you run into any issues, please report it on my GitHub. Thank you :</span><span style=\" font-family:'Segoe UI'; font-size:9pt;\">) </span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-in"
-                        "dent:0; text-indent:0px; font-family:'Segoe UI'; font-size:9pt;\"><br /></p></body></html>", None))
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-inden"
+                        "t:0; text-indent:0px; font-family:'Segoe UI'; font-size:9pt;\"><br /></p></body></html>", None))
 #if QT_CONFIG(accessibility)
         self.label_custom_app_name.setAccessibleName(QCoreApplication.translate("MainWindow", u"label custom app name", None))
 #endif // QT_CONFIG(accessibility)
@@ -2724,88 +2930,90 @@ class Ui_MainWindow(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Adwaita Sans'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
 "<table border=\"0\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;\" cellspacing=\"2\" cellpadding=\"0\"><thead>\n"
 "<tr>\n"
 "<td>\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Category</span></p></td>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-weight:700;\">Category</span></p></td>\n"
 "<td>\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span"
-                        " style=\" font-weight:700;\">Websites</span></p></td></tr></thead>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;"
+                        " text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-weight:700;\">Websites</span></p></td></tr></thead>\n"
 "<tr>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Videos</p></td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">Videos</span></p></td>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang, YouPorn</p></td></tr>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang, YouPorn</span></p></td></tr>\n"
 "<tr>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Searching</p></td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">Searching</span></p></td>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang</p></td></tr>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">PornHub, HQporner, Ep"
+                        "orner, xnxx, xvideos, missav, Xhamster, Spankbang</span></p></td></tr>\n"
 "<tr>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Models</p></td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">Models</span></p></td>\n"
 "<td>\n"
-"<p style=\" margin"
-                        "-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">PornHub, HQporner, xnxx</p></td></tr>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">PornHub, HQporner, xnxx</span></p></td></tr>\n"
 "<tr>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Pornstars</p></td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">Pornstars</span></p></td>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">PornHub, Eporner, xvideos, Xhamster, Spankbang</p></td></tr>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">PornHub, Eporner, xvideos, Xhamster, Spankbang</span></p></td></tr>\n"
 "<tr>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Channels</p></td>\n"
+"<p style=\" margin-top:0px; margin-b"
+                        "ottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">Channels</span></p></td>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">PornHub, Xhamster, Spankbang</p></td></tr>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">PornHub, Xhamster, Spankbang</span></p></td></tr>\n"
 "<tr>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Creator / Users</p></td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">Creator / Users</span></p></td>\n"
 "<td>\n"
-"<p style"
-                        "=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Xhamster (Creator), Spankbang (Creator), xnxx (Users)</p></td></tr>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">Xhamster (Creator), Spankbang (Creator), xnxx (Users)</span></p></td></tr>\n"
 "<tr>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Playlists</p></td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-fami"
+                        "ly:'Adwaita Sans';\">Playlists</span></p></td>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">PornHub, xvideos</p></td></tr>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">PornHub, xvideos</span></p></td></tr>\n"
 "<tr>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Downloading</p></td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">Downloading</span></p></td>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">xvideos</p></td></tr>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">xvideos</span></p></td></tr>\n"
 "<tr>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Shorts</p></td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">Shorts</span></p></td>\n"
 "<td>\n"
-"<p style=\" margin-top:0p"
-                        "x; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Xhamster</p></td></tr>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent"
+                        ":0px;\"><span style=\" font-family:'Adwaita Sans';\">Xhamster</span></p></td></tr>\n"
 "<tr>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Account Login</p></td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">Account Login</span></p></td>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">PornHub</p></td></tr>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">PornHub</span></p></td></tr>\n"
 "<tr>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Videos by Category</p></td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">Videos by Category</span></p></td>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">HQporner, Eporner</p></td></tr>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">HQporner, Eporner</span></p></td></tr>\n"
 "<tr>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Random</p></td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin"
+                        "-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">Random</span></p></td>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-righ"
-                        "t:0px; -qt-block-indent:0; text-indent:0px;\">HQporner</p></td></tr>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">HQporner</span></p></td></tr>\n"
 "<tr>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Brazzers only</p></td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">Brazzers only</span></p></td>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">HQporner</p></td></tr>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">HQporner</span></p></td></tr>\n"
 "<tr>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Top Porn</p></td>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">Top Porn</span></p></td>\n"
 "<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">HQporner</p></td></tr></table></body></html>", None))
+"<p style=\" margin-top:0px;"
+                        " margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans';\">HQporner</span></p></td></tr></table></body></html>", None))
 #if QT_CONFIG(accessibility)
         self.button_donate_kofi.setAccessibleName(QCoreApplication.translate("MainWindow", u"button donate ko-fi", None))
 #endif // QT_CONFIG(accessibility)
@@ -2835,22 +3043,22 @@ class Ui_MainWindow(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Adwaita Sans'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#ffc800;\">y</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#cc00ff;\">o</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#ffffff;\"> </span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#37ff00;\">w</span><span style=\" font-family:'Sans Serif'; font-size:3"
-                        "6pt; color:#ff00bb;\">a</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#ff0000;\">s</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#0000ff;\">s</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#00fff7;\">u</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#ff55ff;\">p</span></p>\n"
+"</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#ffc800;\">y</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#cc00ff;\">o</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#ffffff;\"> </span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#37ff00;\">w</span><span style=\" font-family:'Sans Serif'; font-size:36pt"
+                        "; color:#ff00bb;\">a</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#ff0000;\">s</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#0000ff;\">s</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#00fff7;\">u</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#ff55ff;\">p</span></p>\n"
 "<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#ffffff;\">If you have a moment to read this, I'd appreciate it a lot...</span><span style=\" font-family:'Sans Serif'; font-size:9pt; color:#ffffff;\"><br /></span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; color:#ffffff;\">I have started developing Porn Fetch ~2 years ago as a fun project for l"
-                        "earning graphical user interfaces. Over the years Porn Fetch became more professional, as my programming skills increased and more people started using it. That I reach even 1000 downloads on this was something I'd never thought was possible and now we are over 20.000 xD</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; color:#ffffff;\">I have started developing Porn Fetch ~2 years ago as a fun project for lear"
+                        "ning graphical user interfaces. Over the years Porn Fetch became more professional, as my programming skills increased and more people started using it. That I reach even 1000 downloads on this was something I'd never thought was possible and now we are over 20.000 xD</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; color:#ffffff;\">Although I absolutely love what I am doing here, and unless I receive a Cease and Desist letter, will never stop it, I haven't earned much from this project except for the few people that donated me something (Thank you so much btw).</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; color:#ffffff;\">If you have a few cents left on your pocket, I'd absolutely appreciate it. I know it might not seem much but it's a thank you a"
-                        "nd it keeps me motivated. Also since I still go to school small amounts of money are much more in relation to me than it is for someone who already has a job.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; color:#ffffff;\">If you have a few cents left on your pocket, I'd absolutely appreciate it. I know it might not seem much but it's a thank you and "
+                        "it keeps me motivated. Also since I still go to school small amounts of money are much more in relation to me than it is for someone who already has a job.</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; color:#ffffff;\">But even if you don't donate, please don't feel bad. I don't expect it from you. I just kindly ask, but it's absolutely okay if you don't want to.</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt; color:#0000ff;\">Donation options</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://paypal.me/EchterAlsFake\"><span style=\" font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#27bf73;\">1) PayPal "
-                        "(https://paypal.me/EchterAlsFake)</span></a></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://paypal.me/EchterAlsFake\"><span style=\" font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#27bf73;\">1) PayPal (ht"
+                        "tps://paypal.me/EchterAlsFake)</span></a></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://paypal.me/EchterAlsFake\"><span style=\" font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#aa00ff;\">2) K</span></a><a href=\"https://ko-fi.com/EchterAlsFake\"><span style=\" font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#aa00ff;\">o-Fi (https://ko-fi.com/EchterAlsFake)</span></a></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt;\">3) Crypto (XMR / Monero) : </span><span style=\" font-family:'ui-monospace','SFMono-Regular','SF Mono','Menlo','Consolas','Liberation Mono','monospace'; font-size:9pt; color:#ff7700; background-color:rgba(101,108,118,0.2);\">42XwGZYbSxpMvhn9eeP4DwMwZV91tQgAm3UQr6Zwb2wzBf5HcuZCHrsVxa4aV2jhP4gLHsWWELxSo"
-                        "Njfnkt4rMfDDwXy9jR</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt;\">3) Crypto (XMR / Monero) : </span><span style=\" font-family:'ui-monospace','SFMono-Regular','SF Mono','Menlo','Consolas','Liberation Mono','monospace'; font-size:9pt; color:#ff7700; background-color:rgba(101,108,118,0.2);\">42XwGZYbSxpMvhn9eeP4DwMwZV91tQgAm3UQr6Zwb2wzBf5HcuZCHrsVxa4aV2jhP4gLHsWWELxSoNjf"
+                        "nkt4rMfDDwXy9jR</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt; color:#00ffb3;\">[This message won't be shown again, except if you update to a new version]</span></p></body></html>", None))
 #if QT_CONFIG(accessibility)
         self.textbrowser_disclaimer.setAccessibleName(QCoreApplication.translate("MainWindow", u"textbrowser disclaimer message", None))
@@ -2864,25 +3072,25 @@ class Ui_MainWindow(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Adwaita Sans'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
 "<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">DISCLAIMER</span></h3>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">Porn Fetch</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> is free software lic"
-                        "ensed under the GNU General Public License v3.0. You are free to use, modify, and redistribute this software under the terms of that license.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">Porn Fetch</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> is free software licens"
+                        "ed under the GNU General Public License v3.0. You are free to use, modify, and redistribute this software under the terms of that license.</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Please be aware that </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">Porn Fetch may interact with websites in ways that violate their Terms of Service.</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> Additionally, downloading copyright-protected content without proper authorization may be illegal in many jurisdictions, including under the DMCA (Digital Millennium Copyright Act).</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">While some countries or regions may allow downloading cont"
-                        "ent for strictly </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">personal, non-commercial use</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\">, I </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">strongly discourage</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> using Porn Fetch to download, share, or redistribute content without appropriate rights or permissions. Always ensure you comply with your local laws and the terms of any website you access.</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">While some countries or regions may allow downloading content"
+                        " for strictly </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">personal, non-commercial use</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\">, I </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">strongly discourage</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> using Porn Fetch to download, share, or redistribute content without appropriate rights or permissions. Always ensure you comply with your local laws and the terms of any website you access.</span></p>\n"
 "<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">IMPORTANT NOTE</span></h3>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">I </span><span style=\" font-family:'Sans Ser"
-                        "if'; font-size:9pt; font-weight:700;\">strongly recommend</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> that you do </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">not</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> use this software for:</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">I </span><span style=\" font-family:'Sans Serif'"
+                        "; font-size:9pt; font-weight:700;\">strongly recommend</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> that you do </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">not</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> use this software for:</span></p>\n"
 "<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\">\n"
 "<li style=\" font-family:'Sans Serif'; font-size:9pt;\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Unauthorized redistribution of content</li>\n"
 "<li style=\" font-family:'Sans Serif'; font-size:9pt;\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Commercial use of downloaded materials</li>\n"
-"<li style=\" font-family:'Sans Serif'; font-size:9pt;\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt"
-                        "-block-indent:0; text-indent:0px;\">Any activity that could result in legal liability for yourself or others</li></ul>\n"
+"<li style=\" font-family:'Sans Serif'; font-size:9pt;\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-bl"
+                        "ock-indent:0; text-indent:0px;\">Any activity that could result in legal liability for yourself or others</li></ul>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt;\">Although the GPL license grants you broad rights, </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">continued misuse</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> may jeopardize the development and availability of this project. Please respect the intent behind this tool and use it responsibly.</span></p>\n"
 "<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">LIABILITY DISCLAIMER</span></h3>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><"
-                        "span style=\" font-family:'Sans Serif'; font-size:9pt;\">This software is provided </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">without any warranty</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> as described in the GPLv3. I am </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">not liable</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> for any damages, legal consequences, or misuse resulting from your use of this software.<br />You are solely responsible for ensuring your actions are lawful and ethical. </span></p></body></html>", None))
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><spa"
+                        "n style=\" font-family:'Sans Serif'; font-size:9pt;\">This software is provided </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">without any warranty</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> as described in the GPLv3. I am </span><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">not liable</span><span style=\" font-family:'Sans Serif'; font-size:9pt;\"> for any damages, legal consequences, or misuse resulting from your use of this software.<br />You are solely responsible for ensuring your actions are lawful and ethical. </span></p></body></html>", None))
 #if QT_CONFIG(accessibility)
         self.button_disclaimer_accept.setAccessibleName(QCoreApplication.translate("MainWindow", u"button accept disclaimer message", None))
 #endif // QT_CONFIG(accessibility)
@@ -2899,32 +3107,32 @@ class Ui_MainWindow(object):
 "hr { height: 1px; border-width: 0; }\n"
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Adwaita Sans'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:'Cantarell'; font-size:11pt; font-weight:400; font-style:normal;\">\n"
 "<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">Data Collection &amp; Privacy Information</span></h2>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">This application now uses my own server for update checking and error reporting, "
-                        "instead of relying on GitHub. This gives me greater control over the process and the data transmitted. However, my server is </span><span style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:700;\">IPv6-only</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\">. This means that only about 50% of internet users will be able to connect. </span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">This application now uses my own server for update checking and error reporting, ins"
+                        "tead of relying on GitHub. This gives me greater control over the process and the data transmitted. However, my server is </span><span style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:700;\">IPv6-only</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\">. This means that only about 50% of internet users will be able to connect. </span></p>\n"
 "<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">About the Server</span></h3>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">The server is a small, older Acer Swift 3 laptop running 24/7 in my room. The full source code for the server is publicly available here:<br /></span><a href=\"https://github.com/EchterAlsFake/Server\"><span style=\" font-family:'Sans S"
-                        "erif'; font-size:12pt; text-decoration: underline; color:#f700ff;\">https://github.com/EchterAlsFake/Server</span></a><span style=\" font-family:'Sans Serif'; font-size:12pt;\"> </span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">The server is a small, older Acer Swift 3 laptop running 24/7 in my room. The full source code for the server is publicly available here:<br /></span><a href=\"https://github.com/EchterAlsFake/Server\"><span style=\" font-family:'Sans Seri"
+                        "f'; font-size:12pt; text-decoration: underline; color:#f700ff;\">https://github.com/EchterAlsFake/Server</span></a><span style=\" font-family:'Sans Serif'; font-size:12pt;\"> </span></p>\n"
 "<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt; font-weight:700;\">Data Collected via Error Reports</span></h3>\n"
 "<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\">\n"
 "<li style=\" font-family:'Sans Serif'; font-size:9pt;\" style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">The version of Porn Fetch you are using</span></li>\n"
-"<li style=\" font-family:'Sans Serif'; font-size:12pt;\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Your operating system (e.g., W"
-                        "indows, Linux, or macOS)</li>\n"
+"<li style=\" font-family:'Sans Serif'; font-size:12pt;\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Your operating system (e.g., Wind"
+                        "ows, Linux, or macOS)</li>\n"
 "<li style=\" font-family:'Sans Serif'; font-size:12pt;\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The current date and time</li>\n"
 "<li style=\" font-family:'Sans Serif'; font-size:12pt;\" style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The error details (full Python traceback)</li></ul>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:700;\">Important:</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\"> The Python traceback may, in some cases, include incidental personal information \u2014 for example, your system username if it appears in a file path. No other personal data is intentionally collected. </span></p>\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; marg"
-                        "in-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">Data Storage &amp; Security</span></h3>\n"
+"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-"
+                        "left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">Data Storage &amp; Security</span></h3>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">Error reports are stored in plain text on my server. The server\u2019s storage device is encrypted with LUKS and secured with a strong password (40+ characters). </span><span style=\" font-family:'Sans Serif'; font-size:12pt; color:#ff0000;\">Your </span><span style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:700; color:#ff0000;\">IP address is never logged, stored, or displayed</span><span style=\" font-family:'Sans Serif'; font-size:12pt; color:#ff0000;\">. </span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif"
-                        "'; font-size:9pt; font-weight:700;\">Optional Participation</span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; "
+                        "font-size:9pt; font-weight:700;\">Optional Participation</span></p>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">Whether you enable error reporting or not will have no impact on the application's functionality. It simply helps me identify and fix issues faster. You can also manually check for updates on GitHub, although most users do not do this. </span></p>\n"
 "<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt; font-weight:700;\">IPv6 Connectivity Check</span></h3>\n"
-"<p style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">To see if you have IPv6 connectivity, visit:</span><span style=\" font-family:'Sans Serif'; fo"
-                        "nt-size:14pt;\"><br /></span><a href=\"https://echteralsfake.duckdns.org/ping\"><span style=\" font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#1aff00;\">https://echteralsfake.duckdns.org/ping</span></a><span style=\" font-family:'Sans Serif'; font-size:9pt;\"><br /></span><span style=\" font-family:'Sans Serif'; font-size:12pt;\">If you see a white page with </span><span style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:700;\">Success</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\">, you have IPv6. If not, you do not. </span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">You can also verify your IP addresses by visiting: </span><a href=\"https://ipleak.net\"><span style=\" font-family:'Sans Serif'; font-size:12pt; text-decoration: underline; color:#ffff00;\">https://ipleak.net</span></a><span style=\" font-fami"
-                        "ly:'Sans Serif'; font-size:12pt;\"><br />Example formats:<br />IPv4: </span><span style=\" font-family:'monospace'; font-size:12pt;\">135.215.32.64</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\"><br />IPv6: </span><span style=\" font-family:'monospace'; font-size:12pt;\">2a02:810a:186:b400::5c51</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\"> </span></p></body></html>", None))
+"<p style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">To see if you have IPv6 connectivity, visit:</span><span style=\" font-family:'Sans Serif'; font-"
+                        "size:14pt;\"><br /></span><a href=\"https://echteralsfake.duckdns.org/ping\"><span style=\" font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#1aff00;\">https://echteralsfake.duckdns.org/ping</span></a><span style=\" font-family:'Sans Serif'; font-size:9pt;\"><br /></span><span style=\" font-family:'Sans Serif'; font-size:12pt;\">If you see a white page with </span><span style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:700;\">Success</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\">, you have IPv6. If not, you do not. </span></p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">You can also verify your IP addresses by visiting: </span><a href=\"https://ipleak.net\"><span style=\" font-family:'Sans Serif'; font-size:12pt; text-decoration: underline; color:#ffff00;\">https://ipleak.net</span></a><span style=\" font-family:"
+                        "'Sans Serif'; font-size:12pt;\"><br />Example formats:<br />IPv4: </span><span style=\" font-family:'monospace'; font-size:12pt;\">135.215.32.64</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\"><br />IPv6: </span><span style=\" font-family:'monospace'; font-size:12pt;\">2a02:810a:186:b400::5c51</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\"> </span></p></body></html>", None))
 #if QT_CONFIG(accessibility)
         self.button_server_enable_logging.setAccessibleName(QCoreApplication.translate("MainWindow", u"button enable IPv6 logging", None))
 #endif // QT_CONFIG(accessibility)

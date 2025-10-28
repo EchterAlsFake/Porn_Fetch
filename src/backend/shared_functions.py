@@ -158,7 +158,7 @@ font_size = 10
 theme = 0
 """
 
-def check_video(url, is_url=True):
+def check_video(url):
     objects = [hq_Video, ep_Video, xn_Video, xv_Video, mv_Video, xh_Video, sp_Video, yp_Video, bg_Video]
 
     if isinstance(url, tuple(objects)):

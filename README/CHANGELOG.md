@@ -606,12 +606,14 @@ to be refactored.
 - Added Video support for beeg.com
 
 
+### User Interface
+- Added clear tooltips for most settings option to help understand
+- You can also set a custom app name when installing Porn Fetch from the settings
 
 
 
 ### Code Optimizations
 - Refactored `check_video` function to be faster and less redundant
-
 
 
 
