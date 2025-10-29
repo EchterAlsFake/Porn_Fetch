@@ -19,4 +19,5 @@ h2
 brotli
 fake-useragent
 lxml
+porntrex_api
 truststore

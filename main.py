@@ -353,6 +353,8 @@ class InternetCheck(QRunnable):
             "https://www.xhamster.com",
             "https://www.spankbang.com",
             "https://www.youporn.com"
+            "https://www.beeg.com"
+            "https://www.porntrex.com"
             # Append new URLs here
         ]
 
@@ -405,7 +407,7 @@ class CheckUpdates(QRunnable):
         url = f"https://echteralsfake.duckdns.org:443/update"
 
         try:
-            response = shared_functions.core.fetch(url=url, get_response=True)
+            response = shared_functions.core_update_checks.fetch(url=url, get_response=True)
             if response.status_code == 200:
                 json_stuff = response.json()
                 if float(json_stuff["version"]) > float(__version__):
@@ -455,7 +457,7 @@ class AddToTreeWidget(QRunnable):
             try:
                 video_identifier = random.randint(0, 99999999) # Creates a random ID for each video
                 if isinstance(video, str):
-                    video = shared_functions.check_video(url=video, is_url=True)
+                    video = shared_functions.check_video(url=video)
 
                 self.logger.debug(f"Created ID: {video_identifier} for: {video.url}")
                 data = shared_functions.load_video_attributes(video)
@@ -695,7 +697,9 @@ class DownloadThread(QRunnable):
 
 
             # We need to specify the sources, so that it knows which individual progressbar to use
-            if isinstance(self.video, shared_functions.hq_Video) or isinstance(self.video, shared_functions.ep_Video):
+            instances_legacy = [shared_functions.hq_Video, shared_functions.ep_Video, shared_functions.pt_Video]
+
+            if isinstance(self.video, tuple(instances_legacy)):
                 video_source = "raw"
                 try:
                     self.logger.debug("Starting the Download!")

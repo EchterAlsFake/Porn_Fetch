@@ -20,3 +20,4 @@ brotli
 fake-useragent
 lxml
 truststore
+porntrex_api

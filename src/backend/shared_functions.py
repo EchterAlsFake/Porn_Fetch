@@ -25,6 +25,7 @@ from missav_api.missav_api import Video as mv_Video, Client as mv_Client
 from xhamster_api import Client as xh_Client, Video as xh_Video
 from spankbang_api import Client as sp_Client, Video as sp_Video
 from youporn_api.youporn_api import Client as yp_Client, Video as yp_Video
+from porntrex_api.porntrex_api import Client as pt_Client, Video as pt_Video
 from beeg_api.beeg_api import Client as bg_Client, Video as bg_Video
 from base_api.modules.config import config # This is the global configuration instance of base core config
 # which is also affecting all other APIs when the refresh_clients function is called
@@ -39,12 +40,20 @@ hq_client = hq_Client()
 xn_client = xn_Client()
 yp_client = yp_Client()
 bg_client = bg_Client()
+pt_client = pt_Client()
 core = BaseCore() # We need that sometimes in Porn Fetch's main class e.g., thumbnail fetching
+core_update_checks = BaseCore()
 core_ph = None
 core_internet_checks = BaseCore(config=config)
 
+core_update_checks.config.max_retries = 1
+core_update_checks.config.use_http2 = False
+core_update_checks.config.timeout = 10
+
+
 def refresh_clients(enable_kill_switch=False):
-    global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, hq_client, xn_client, core, core_ph, yp_client, bg_client
+    global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, \
+        hq_client, xn_client, core, core_ph, yp_client, bg_client, pt_client
 
     # One BaseCore per site, with its own RuntimeConfig (isolated headers/cookies)
     core_common = BaseCore(config=config)   # if you want a “generic” core
@@ -58,6 +67,7 @@ def refresh_clients(enable_kill_switch=False):
     core_sp    = BaseCore(config=config)
     core_yp    = BaseCore(config=config)
     core_bg    = BaseCore(config=config)
+    core_pt    = BaseCore(config=config)
 
     if enable_kill_switch:
         core_common.enable_kill_switch()
@@ -70,6 +80,7 @@ def refresh_clients(enable_kill_switch=False):
         core_xn.enable_kill_switch()
         core_yp.enable_kill_switch()
         core_bg.enable_kill_switch()
+        core_pt.enable_kill_switch()
 
     # Instantiate clients with their site-specific cores
     mv_client = mv_Client(core=core_mv)
@@ -82,6 +93,7 @@ def refresh_clients(enable_kill_switch=False):
     xn_client = xn_Client(core=core_xn)
     yp_client = yp_Client(core=core_yp)
     bg_client = bg_Client(core=core_bg)
+    pt_client = pt_Client(core=core_pt)
 
     core = core_common
 
@@ -159,7 +171,7 @@ theme = 0
 """
 
 def check_video(url):
-    objects = [hq_Video, ep_Video, xn_Video, xv_Video, mv_Video, xh_Video, sp_Video, yp_Video, bg_Video]
+    objects = [hq_Video, ep_Video, xn_Video, xv_Video, mv_Video, xh_Video, sp_Video, yp_Video, bg_Video, pt_Video]
 
     if isinstance(url, tuple(objects)):
         return url
@@ -198,6 +210,9 @@ def check_video(url):
 
             elif "beeg.com" in str(url):
                 return bg_client.get_video(url)
+
+            elif "porntrex" in str(url):
+                return pt_client.get_video(url)
 
             else:
                 return False
@@ -345,6 +360,14 @@ def load_video_attributes(video):
         publish_date = "Not available"
         video_id = video.video_id
 
+    elif isinstance(video, pt_Video):
+        author = video.author
+        length = video.duration
+        tags = video.tags
+        thumbnail = "Not available"
+        publish_date = video.publish_date
+        video_id = video.video_id
+
     else:
         raise "Instance Error! Please report this immediately on GitHub!"
 
@@ -364,7 +387,11 @@ def load_video_attributes(video):
 
     finally:
         # remove header if present (no KeyError)
-        core.session.headers.pop("Referer", None)
+        try:
+            core.session.headers.pop("Referer", None)
+
+        except AttributeError:
+            pass
 
     data = {
         "title": title,
