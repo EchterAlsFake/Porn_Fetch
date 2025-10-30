@@ -1630,7 +1630,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
 
         self.ui.download_lineedit_model_url.clear()
         self.logger.info(f"Checking model: {model}")
-        if shared_functions.pornhub_pattern.match(model):
+        if "pornhub" in str(model) and ("model" or "user") in str(model):
             model_object = shared_functions.ph_client.get_user(model)
             videos = model_object.videos
             uploads = model_object.uploads
@@ -1644,7 +1644,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
             elif model_type == 2:
                 videos = uploads
 
-        elif shared_functions.hqporner_pattern.match(model):
+        elif "hqporner" in str(model):
             try:
                 videos = shared_functions.hq_client.get_videos_by_actress(name=model)
 
@@ -1656,16 +1656,16 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
                 handle_error_gracefully(self, data=video_data.consistent_data, error_message="No videos found. This is probably an error and will be reported.", needs_network_log=True)
                 return
 
-        elif shared_functions.eporner_pattern.match(model):
+        elif "eporner" in str(model):
             videos = shared_functions.ep_client.get_pornstar(url=model, enable_html_scraping=True).videos()
 
-        elif shared_functions.xnxx_pattern.match(model):
+        elif "xnxx" in str(model):
             videos = shared_functions.xn_client.get_user(url=model).videos
 
-        elif shared_functions.youporn_pattern.match(model) and "channel" in model:
+        elif "youporn" in str(model) and "channel" in model:
             videos = shared_functions.yp_client.get_channel(url=model).videos()
 
-        elif shared_functions.youporn_pattern.match(model):
+        elif "youporn" in str(model):
             videos = shared_functions.yp_client.get_pornstar(url=model).videos()
 
         elif "xvideos" in str(model) and ("model" or "pornstar") in str(model):
@@ -1700,6 +1700,12 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
 
         elif "youporn" in str(model) and "channel" in str(model):
             videos = shared_functions.yp_client.get_channel(url=model).videos()
+
+        elif "porntrex" in str(model) and "channel" in str(model):
+            videos = shared_functions.pt_client.get_channel(url=model).videos()
+
+        elif "porntrex" in str(model) and "model" in str(model):
+            videos = shared_functions.pt_client.get_model(url=model).videos()
 
         else:
             videos = None
@@ -1758,6 +1764,9 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
 
         elif self.ui.download_website_combobox.currentIndex() == 8:
             videos = shared_functions.yp_client.search_videos(query=query, pages=500)
+
+        elif self.ui.download_website_combobox.currentIndex() == 9:
+            videos = shared_functions.pt_client.search(query=query, pages=500)
 
         else:
             ui_popup(

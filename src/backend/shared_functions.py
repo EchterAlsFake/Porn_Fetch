@@ -364,7 +364,7 @@ def load_video_attributes(video):
         author = video.author
         length = video.duration
         tags = video.tags
-        thumbnail = "Not available"
+        thumbnail = video.thumbnail
         publish_date = video.publish_date
         video_id = video.video_id
 
@@ -531,6 +531,7 @@ def parse_length(length, video_source=None):
 
         # Work with a stripped string.
         s = str(length).strip()
+        s_lower = s.lower()
 
         # -------------------------------
         # Case 1: "mm:ss" format (e.g. "16:19")
@@ -580,8 +581,27 @@ def parse_length(length, video_source=None):
                 pass
 
         # -------------------------------
-        # Case 4: Contains "min" (e.g. "9 Min").
-        if "min" in s.lower():
+        # NEW Case 4a: "<value>min <value>sec/seconds" (e.g. "247min 02sec")
+        # Supports: min|mins|minute|minutes and sec|secs|second|seconds (any case), spaces optional.
+        m = re.search(
+            r'(?i)\b(\d+(?:\.\d+)?)\s*(?:min|mins|minute|minutes)\s*(\d+(?:\.\d+)?)\s*(?:sec|secs|second|seconds)\b',
+            s
+        )
+        if m:
+            minutes = float(m.group(1))
+            seconds = float(m.group(2))
+            total = minutes + seconds / 60.0
+            result = round(total)
+            if result == 0 and total > 0:
+                result = 1
+            return result
+
+        # -------------------------------
+        # Case 4: Contains "min" (e.g. "9 Min")
+        if "min" in s_lower:
+            # Extract only the first contiguous number near 'min' to avoid picking up trailing seconds.
+            # This keeps existing behavior for strings like "17 min".
+            # If seconds are present, the regex case above will have returned already.
             num_str = ''.join(ch for ch in s if ch.isdigit() or ch == '.')
             if num_str:
                 try:
@@ -595,7 +615,12 @@ def parse_length(length, video_source=None):
 
         # -------------------------------
         # Case 5: Mixed time units such as "59m 40s" or "1h 2m 3s"
-        time_units = {'s': 1 / 60, 'm': 1, 'h': 60}
+        # (Extended to accept long-form units too.)
+        time_units = {
+            's': 1 / 60, 'sec': 1 / 60, 'secs': 1 / 60, 'second': 1 / 60, 'seconds': 1 / 60,
+            'm': 1, 'min': 1, 'mins': 1, 'minute': 1, 'minutes': 1,
+            'h': 60, 'hr': 60, 'hrs': 60, 'hour': 60, 'hours': 60
+        }
         total_minutes = 0.0
         for part in s.split():
             # Extract numeric (or decimal) part and letter part.
@@ -614,7 +639,8 @@ def parse_length(length, video_source=None):
 
         # -------------------------------
         # Case 6: Formats like "24 seconds"
-        if s.endswith("seconds"):
+        if s_lower.endswith("second") or s_lower.endswith("seconds") or s_lower.endswith("sec") or s_lower.endswith(
+                "secs"):
             num_str = ''.join(ch for ch in s if ch.isdigit() or ch == '.')
             if num_str:
                 try:
@@ -628,13 +654,20 @@ def parse_length(length, video_source=None):
 
         # -------------------------------
         # Case 7: Formats ending with "min" (e.g. "17 min")
-        if s.endswith("min"):
-            num_part = s[:-3].strip()
-            if num_part.isdigit():
-                return int(num_part)
+        if s_lower.endswith("min") or s_lower.endswith("mins") or s_lower.endswith("minute") or s_lower.endswith(
+                "minutes"):
+            # Pull the leading number(s)
+            m_only = re.search(r'(\d+(?:\.\d+)?)', s)
+            if m_only:
+                val = float(m_only.group(1))
+                result = round(val)
+                if result == 0 and val > 0:
+                    result = 1
+                return result
 
         # If nothing matches, return None.
         return None
 
     except Exception:
         return 0
+

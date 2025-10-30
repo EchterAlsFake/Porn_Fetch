@@ -214,6 +214,7 @@ class Ui_MainWindow(object):
         self.download_website_combobox.addItem("")
         self.download_website_combobox.addItem("")
         self.download_website_combobox.addItem("")
+        self.download_website_combobox.addItem("")
         self.download_website_combobox.setObjectName(u"download_website_combobox")
         sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy3.setHorizontalStretch(0)
@@ -804,7 +805,7 @@ class Ui_MainWindow(object):
         self.main_scrollarea_treewidget.setWidgetResizable(True)
         self.main_scrollarea_treewidget_content = QWidget()
         self.main_scrollarea_treewidget_content.setObjectName(u"main_scrollarea_treewidget_content")
-        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 658, 349))
+        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 956, 380))
         sizePolicy15 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
         sizePolicy15.setHorizontalStretch(0)
         sizePolicy15.setVerticalStretch(0)
@@ -1993,7 +1994,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.CentralStackedWidget.setCurrentIndex(1)
+        self.CentralStackedWidget.setCurrentIndex(0)
         self.main_stacked_widget_top.setCurrentIndex(0)
         self.settings_stacked_widget_main.setCurrentIndex(2)
 
@@ -2046,6 +2047,7 @@ class Ui_MainWindow(object):
         self.download_website_combobox.setItemText(6, QCoreApplication.translate("MainWindow", u"Spankbang", None))
         self.download_website_combobox.setItemText(7, QCoreApplication.translate("MainWindow", u"Missav", None))
         self.download_website_combobox.setItemText(8, QCoreApplication.translate("MainWindow", u"YouPorn", None))
+        self.download_website_combobox.setItemText(9, QCoreApplication.translate("MainWindow", u"Porntrex", None))
 
 #if QT_CONFIG(accessibility)
         self.download_website_combobox.setAccessibleName(QCoreApplication.translate("MainWindow", u"combobox, select search website here", None))

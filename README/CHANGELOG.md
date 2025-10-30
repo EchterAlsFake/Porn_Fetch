@@ -604,7 +604,9 @@ to be refactored.
 # 3.8
 ### New Features
 - Added Video support for beeg.com
-
+- Added Video support for porntrex.com
+- Added Model / Channel support for porntrex.com
+- Added Searching support for porntrex.com
 
 ### User Interface
 - Added clear tooltips for most settings option to help understand

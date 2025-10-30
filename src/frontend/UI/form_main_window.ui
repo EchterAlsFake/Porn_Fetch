@@ -355,7 +355,7 @@
     <item row="1" column="0">
      <widget class="QStackedWidget" name="CentralStackedWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="page_main">
        <property name="maximumSize">
@@ -537,6 +537,11 @@
                   <item>
                    <property name="text">
                     <string>YouPorn</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Porntrex</string>
                    </property>
                   </item>
                  </widget>
@@ -1912,8 +1917,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>658</width>
-               <height>349</height>
+               <width>956</width>
+               <height>380</height>
               </rect>
              </property>
              <property name="sizePolicy">
