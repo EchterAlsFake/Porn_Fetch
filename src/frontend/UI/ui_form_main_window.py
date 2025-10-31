@@ -930,7 +930,7 @@ class Ui_MainWindow(object):
         self.settings_scrollarea.setWidgetResizable(True)
         self.settings_scrollarea_widget_contents = QWidget()
         self.settings_scrollarea_widget_contents.setObjectName(u"settings_scrollarea_widget_contents")
-        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 958, 532))
+        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 637, 262))
         self.gridLayout_19 = QGridLayout(self.settings_scrollarea_widget_contents)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.gridLayout_19.setContentsMargins(0, 0, 0, 0)
@@ -1519,15 +1519,25 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 84, 70))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 958, 532))
         self.gridLayout_21 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_21.setSpacing(0)
         self.gridLayout_21.setObjectName(u"gridLayout_21")
         self.gridLayout_21.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_5 = QVBoxLayout()
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.button_credits_send_feedback = QPushButton(self.scrollAreaWidgetContents_3)
+        self.button_credits_send_feedback.setObjectName(u"button_credits_send_feedback")
+
+        self.verticalLayout_5.addWidget(self.button_credits_send_feedback)
+
         self.main_textbrowser_credits = QTextBrowser(self.scrollAreaWidgetContents_3)
         self.main_textbrowser_credits.setObjectName(u"main_textbrowser_credits")
 
-        self.gridLayout_21.addWidget(self.main_textbrowser_credits, 0, 0, 1, 1)
+        self.verticalLayout_5.addWidget(self.main_textbrowser_credits)
+
+
+        self.gridLayout_21.addLayout(self.verticalLayout_5, 0, 1, 1, 1)
 
         self.scrollArea_2.setWidget(self.scrollAreaWidgetContents_3)
 
@@ -1973,8 +1983,7 @@ class Ui_MainWindow(object):
         QWidget.setTabOrder(self.spinbox_range_end, self.button_range_apply_index)
         QWidget.setTabOrder(self.button_range_apply_index, self.scrollArea)
         QWidget.setTabOrder(self.scrollArea, self.settings_button_reset)
-        QWidget.setTabOrder(self.settings_button_reset, self.main_textbrowser_credits)
-        QWidget.setTabOrder(self.main_textbrowser_credits, self.textBrowser)
+        QWidget.setTabOrder(self.settings_button_reset, self.textBrowser)
         QWidget.setTabOrder(self.textBrowser, self.text_browser_keyboard_shortcuts)
         QWidget.setTabOrder(self.text_browser_keyboard_shortcuts, self.text_browser_update_available)
         QWidget.setTabOrder(self.text_browser_update_available, self.button_update_acknowledged)
@@ -1994,7 +2003,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.CentralStackedWidget.setCurrentIndex(0)
+        self.CentralStackedWidget.setCurrentIndex(2)
         self.main_stacked_widget_top.setCurrentIndex(0)
         self.settings_stacked_widget_main.setCurrentIndex(2)
 
@@ -2755,6 +2764,7 @@ class Ui_MainWindow(object):
         self.settings_button_reset.setAccessibleName(QCoreApplication.translate("MainWindow", u"button reset porn fetch to default settings", None))
 #endif // QT_CONFIG(accessibility)
         self.settings_button_reset.setText(QCoreApplication.translate("MainWindow", u"Reset Porn Fetch to default settings", None))
+        self.button_credits_send_feedback.setText(QCoreApplication.translate("MainWindow", u"Send Feedback (Anonymously)", None))
 #if QT_CONFIG(accessibility)
         self.main_textbrowser_credits.setAccessibleName(QCoreApplication.translate("MainWindow", u"Textbrowser for credits / information", None))
 #endif // QT_CONFIG(accessibility)

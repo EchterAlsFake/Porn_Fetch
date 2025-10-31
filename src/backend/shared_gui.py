@@ -1,10 +1,12 @@
 import sys
+import traceback
+
 import httpx
 import datetime
 
 from PySide6.QtGui import QFont, QPixmap
 from src.backend.config import __version__
-from PySide6.QtWidgets import QMessageBox, QMainWindow
+from PySide6.QtWidgets import QMainWindow, QMessageBox
 from src.backend.shared_functions import setup_config_file
 from PySide6.QtCore import Signal, QObject, QCoreApplication
 
@@ -44,8 +46,31 @@ def ui_popup(text, title="Notice"):
     message_box.setStandardButtons(QMessageBox.StandardButton.Ok)
     message_box.exec()
 
+def send_to_server(message: dict):
+    try:
+        response = httpx.post(
+            url="https://echteralsfake.duckdns.org:443/report",
+            json=message,
+            timeout=20)
 
-def handle_error_gracefully(self, data: dict, error_message: str, needs_network_log: bool= False):
+        if response.status_code == 200:
+            ui_popup(f"The error / feedback was successfully reported! Thanks :)")
+
+        elif response.status_code == 500:
+            ui_popup("An internal server error occurred. I am probably already fixing this.")
+
+    except Exception:
+        error = traceback.format_exc()
+        ui_popup(f"Couldn't report to server due to error -->: {error}")
+
+
+
+
+def handle_error_gracefully(self, data: dict, error_message: str | dict, needs_network_log: bool= False, is_feedback=False):
+    if is_feedback:
+        send_to_server(message=error_message)
+        return
+
     self.logger.error(error_message)
     if not data.get("supress_errors") is True:
         self.signals.error_signal.emit(error_message)
@@ -54,25 +79,15 @@ def handle_error_gracefully(self, data: dict, error_message: str, needs_network_
         if data.get("activate_logging"):
             self.logger.info(f"Logging Error: {error_message} to network server...")
             message = f"""
-            An error occurred in Porn Fetch - [AddToTreeWidget]
+            An error occurred in Porn Fetch!
             Time: {datetime.datetime.now()}
             Version: {__version__}
             System: {sys.platform}
             Error message: {error_message}
             """
-
             payload = {"message": message}
-            try:
-                response = httpx.post(
-                url="https://echteralsfake.duckdns.org:443/report",
-                json=payload,
-                timeout=20)
+            send_to_server(message=payload)
 
-                if response.status_code == 200:
-                    self.logger.info("Successfully reported the Error!")
-
-            except Exception as e:
-                self.logger.error(f"Couldn't report the error. Maybe you don't have an IPv6 connection: {e}")
         else:
             self.logger.info("Logging is disabled. Error will NOT be reported!")
 

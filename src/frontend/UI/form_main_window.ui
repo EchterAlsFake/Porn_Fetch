@@ -355,7 +355,7 @@
     <item row="1" column="0">
      <widget class="QStackedWidget" name="CentralStackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="page_main">
        <property name="maximumSize">
@@ -2188,8 +2188,8 @@ directly </string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>958</width>
-             <height>532</height>
+             <width>637</width>
+             <height>262</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_19">
@@ -3556,8 +3556,8 @@ QPushButton:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>84</width>
-             <height>70</height>
+             <width>958</width>
+             <height>532</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_21">
@@ -3576,12 +3576,23 @@ QPushButton:pressed {
             <property name="spacing">
              <number>0</number>
             </property>
-            <item row="0" column="0">
-             <widget class="QTextBrowser" name="main_textbrowser_credits">
-              <property name="accessibleName">
-               <string>Textbrowser for credits / information</string>
-              </property>
-             </widget>
+            <item row="0" column="1">
+             <layout class="QVBoxLayout" name="verticalLayout_5">
+              <item>
+               <widget class="QPushButton" name="button_credits_send_feedback">
+                <property name="text">
+                 <string>Send Feedback (Anonymously)</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QTextBrowser" name="main_textbrowser_credits">
+                <property name="accessibleName">
+                 <string>Textbrowser for credits / information</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </widget>
@@ -4679,7 +4690,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
   <tabstop>button_range_apply_index</tabstop>
   <tabstop>scrollArea</tabstop>
   <tabstop>settings_button_reset</tabstop>
-  <tabstop>main_textbrowser_credits</tabstop>
   <tabstop>textBrowser</tabstop>
   <tabstop>text_browser_keyboard_shortcuts</tabstop>
   <tabstop>text_browser_update_available</tabstop>

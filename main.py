@@ -170,6 +170,7 @@ from src.frontend.UI.ui_form_android import Ui_PornFetchAndroid
 from src.frontend.UI.theme import *
 from src.backend.config import __version__, __build__
 from src.frontend.UI.donation_nag import DonationNag
+from src.frontend.UI.feedback_dialog import FeedbackDialog
 from src.backend.batch_feature import Batch
 from src.frontend.UI.license import License, Disclaimer
 from src.backend.config import shared_config
@@ -800,6 +801,8 @@ class PornFetch(QMainWindow):
         super().__init__(parent)
         self.last_update_time = time.time()
         self.last_thumbnail_change = time.time()
+        self.signals = Signals()
+        self.signals.error_signal.connect(ui_popup)
 
         if __build__ == "android":
             self.ui = Ui_PornFetchAndroid()
@@ -1180,6 +1183,7 @@ class PornFetch(QMainWindow):
         self.ui.main_button_tree_keyboard_shortcuts.clicked.connect(self.switch_to_keyboard_shortcuts)
         self.ui.main_button_tree_automated_selection.clicked.connect(self.select_range_of_items)
         self.ui.settings_checkbox_system_proxy_kill_switch.toggled.connect(self.toggle_killswitch)
+        self.ui.button_credits_send_feedback.clicked.connect(self.send_feedback)
 
     def shortcuts(self):
         quit_shortcut = QShortcut(QKeySequence("Ctrl+Q"), self)
@@ -1456,6 +1460,23 @@ class PornFetch(QMainWindow):
         ui_popup(self.tr("Saved User Settings, please restart Porn Fetch!", None))
         self.logger.debug("Saved User Settings, please restart Porn Fetch.")
 
+    def send_feedback(self):
+        dlg = FeedbackDialog(parent=self)
+        if dlg.exec() != QDialog.Accepted:
+            # User cancelled or closed the dialog: do nothing.
+            return None
+
+        feedback_message = dlg.feedback_text()
+        message = f"""
+        [Feedback]
+        Time: {datetime.datetime.now()}
+        Version: {__version__}
+        System: {sys.platform}
+        Feedback: {feedback_message}
+        """
+        payload = {"message": message}
+        handle_error_gracefully(self=self, data=video_data.consistent_data, error_message=payload, is_feedback=True)
+
     def set_proxies(self):
         message = self.tr("""
 Please read this before setting proxies:
@@ -1718,18 +1739,23 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         url = self.ui.download_lineedit_playlist_url.text()
         self.logger.info(f"Requesting playlist videos for -->: {url}")
         self.ui.download_lineedit_playlist_url.clear()
-        if shared_functions.pornhub_pattern.match(url):
+        if "pornhub" in str(url) and "playlist" in str(url):
             playlist = shared_functions.ph_client.get_playlist(url)
             videos = playlist.sample()
 
         elif "xvideos" in url:
             videos = shared_functions.xv_client.get_playlist(url=url, pages=400)
 
-        elif shared_functions.youporn_pattern.match(url):
+        elif "youporn" in str(url) and "collection" in str(url):
             videos = shared_functions.yp_client.get_collection(url).videos()
 
         else:
-            return # Invalid playlist provided
+            handle_error_gracefully(data=video_data.consistent_data, needs_network_log=False, error_message="""
+Hey, the URL you've entered seems to be invalid. If you want Playlist support for a specific website,
+please open an Issue on GitHub and ask for it. I'll do my best to implement it.
+""", self=self)
+            return
+
 
         self.logger.debug("Got playlist videos!")
         self.add_to_tree_widget_thread(iterator=videos)
