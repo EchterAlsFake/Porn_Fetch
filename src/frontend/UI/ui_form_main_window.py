@@ -805,7 +805,7 @@ class Ui_MainWindow(object):
         self.main_scrollarea_treewidget.setWidgetResizable(True)
         self.main_scrollarea_treewidget_content = QWidget()
         self.main_scrollarea_treewidget_content.setObjectName(u"main_scrollarea_treewidget_content")
-        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 956, 380))
+        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 942, 384))
         sizePolicy15 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
         sizePolicy15.setHorizontalStretch(0)
         sizePolicy15.setVerticalStretch(0)
@@ -816,69 +816,6 @@ class Ui_MainWindow(object):
         self.gridLayout_4.setContentsMargins(0, 0, 0, 0)
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.verticalLayout_3 = QVBoxLayout()
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.gridLayout_13 = QGridLayout()
-        self.gridLayout_13.setObjectName(u"gridLayout_13")
-        self.main_checkbox_tree_do_not_clear_videos = QCheckBox(self.main_scrollarea_treewidget_content)
-        self.main_checkbox_tree_do_not_clear_videos.setObjectName(u"main_checkbox_tree_do_not_clear_videos")
-        sizePolicy3.setHeightForWidth(self.main_checkbox_tree_do_not_clear_videos.sizePolicy().hasHeightForWidth())
-        self.main_checkbox_tree_do_not_clear_videos.setSizePolicy(sizePolicy3)
-        self.main_checkbox_tree_do_not_clear_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_13.addWidget(self.main_checkbox_tree_do_not_clear_videos, 0, 1, 1, 1)
-
-        self.main_button_tree_automated_selection = QPushButton(self.main_scrollarea_treewidget_content)
-        self.main_button_tree_automated_selection.setObjectName(u"main_button_tree_automated_selection")
-        sizePolicy3.setHeightForWidth(self.main_button_tree_automated_selection.sizePolicy().hasHeightForWidth())
-        self.main_button_tree_automated_selection.setSizePolicy(sizePolicy3)
-        self.main_button_tree_automated_selection.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_13.addWidget(self.main_button_tree_automated_selection, 1, 0, 1, 1)
-
-        self.main_button_tree_keyboard_shortcuts = QPushButton(self.main_scrollarea_treewidget_content)
-        self.main_button_tree_keyboard_shortcuts.setObjectName(u"main_button_tree_keyboard_shortcuts")
-        sizePolicy3.setHeightForWidth(self.main_button_tree_keyboard_shortcuts.sizePolicy().hasHeightForWidth())
-        self.main_button_tree_keyboard_shortcuts.setSizePolicy(sizePolicy3)
-        self.main_button_tree_keyboard_shortcuts.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_13.addWidget(self.main_button_tree_keyboard_shortcuts, 1, 1, 1, 1)
-
-        self.main_button_tree_stop = QPushButton(self.main_scrollarea_treewidget_content)
-        self.main_button_tree_stop.setObjectName(u"main_button_tree_stop")
-        sizePolicy3.setHeightForWidth(self.main_button_tree_stop.sizePolicy().hasHeightForWidth())
-        self.main_button_tree_stop.setSizePolicy(sizePolicy3)
-        self.main_button_tree_stop.setMinimumSize(QSize(0, 30))
-        self.main_button_tree_stop.setFont(font1)
-        self.main_button_tree_stop.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_13.addWidget(self.main_button_tree_stop, 2, 0, 1, 2)
-
-        self.main_checkbox_direct_download = QCheckBox(self.main_scrollarea_treewidget_content)
-        self.main_checkbox_direct_download.setObjectName(u"main_checkbox_direct_download")
-        sizePolicy3.setHeightForWidth(self.main_checkbox_direct_download.sizePolicy().hasHeightForWidth())
-        self.main_checkbox_direct_download.setSizePolicy(sizePolicy3)
-        self.main_checkbox_direct_download.setFont(font1)
-        self.main_checkbox_direct_download.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_13.addWidget(self.main_checkbox_direct_download, 0, 0, 1, 1)
-
-
-        self.verticalLayout_3.addLayout(self.gridLayout_13)
-
-        self.graphicsView = QGraphicsView(self.main_scrollarea_treewidget_content)
-        self.graphicsView.setObjectName(u"graphicsView")
-        sizePolicy16 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.MinimumExpanding)
-        sizePolicy16.setHorizontalStretch(0)
-        sizePolicy16.setVerticalStretch(0)
-        sizePolicy16.setHeightForWidth(self.graphicsView.sizePolicy().hasHeightForWidth())
-        self.graphicsView.setSizePolicy(sizePolicy16)
-
-        self.verticalLayout_3.addWidget(self.graphicsView)
-
-
-        self.gridLayout.addLayout(self.verticalLayout_3, 0, 2, 1, 1)
-
         self.main_button_tree_download = QPushButton(self.main_scrollarea_treewidget_content)
         self.main_button_tree_download.setObjectName(u"main_button_tree_download")
         sizePolicy1.setHeightForWidth(self.main_button_tree_download.sizePolicy().hasHeightForWidth())
@@ -890,16 +827,118 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.main_button_tree_download, 1, 0, 1, 3)
 
+        self.verticalLayout_3 = QVBoxLayout()
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.gridLayout_13 = QGridLayout()
+        self.gridLayout_13.setObjectName(u"gridLayout_13")
+        self.main_button_tree_keyboard_shortcuts = QPushButton(self.main_scrollarea_treewidget_content)
+        self.main_button_tree_keyboard_shortcuts.setObjectName(u"main_button_tree_keyboard_shortcuts")
+        sizePolicy3.setHeightForWidth(self.main_button_tree_keyboard_shortcuts.sizePolicy().hasHeightForWidth())
+        self.main_button_tree_keyboard_shortcuts.setSizePolicy(sizePolicy3)
+        self.main_button_tree_keyboard_shortcuts.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout_13.addWidget(self.main_button_tree_keyboard_shortcuts, 3, 2, 1, 1)
+
+        self.main_checkbox_direct_download = QCheckBox(self.main_scrollarea_treewidget_content)
+        self.main_checkbox_direct_download.setObjectName(u"main_checkbox_direct_download")
+        sizePolicy3.setHeightForWidth(self.main_checkbox_direct_download.sizePolicy().hasHeightForWidth())
+        self.main_checkbox_direct_download.setSizePolicy(sizePolicy3)
+        self.main_checkbox_direct_download.setFont(font1)
+        self.main_checkbox_direct_download.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout_13.addWidget(self.main_checkbox_direct_download, 0, 0, 1, 2)
+
+        self.main_button_tree_stop = QPushButton(self.main_scrollarea_treewidget_content)
+        self.main_button_tree_stop.setObjectName(u"main_button_tree_stop")
+        sizePolicy3.setHeightForWidth(self.main_button_tree_stop.sizePolicy().hasHeightForWidth())
+        self.main_button_tree_stop.setSizePolicy(sizePolicy3)
+        self.main_button_tree_stop.setMinimumSize(QSize(0, 30))
+        self.main_button_tree_stop.setFont(font1)
+        self.main_button_tree_stop.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout_13.addWidget(self.main_button_tree_stop, 4, 0, 1, 3)
+
+        self.main_checkbox_tree_do_not_clear_videos = QCheckBox(self.main_scrollarea_treewidget_content)
+        self.main_checkbox_tree_do_not_clear_videos.setObjectName(u"main_checkbox_tree_do_not_clear_videos")
+        sizePolicy3.setHeightForWidth(self.main_checkbox_tree_do_not_clear_videos.sizePolicy().hasHeightForWidth())
+        self.main_checkbox_tree_do_not_clear_videos.setSizePolicy(sizePolicy3)
+        self.main_checkbox_tree_do_not_clear_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout_13.addWidget(self.main_checkbox_tree_do_not_clear_videos, 0, 2, 1, 1)
+
+        self.main_button_tree_automated_selection = QPushButton(self.main_scrollarea_treewidget_content)
+        self.main_button_tree_automated_selection.setObjectName(u"main_button_tree_automated_selection")
+        sizePolicy3.setHeightForWidth(self.main_button_tree_automated_selection.sizePolicy().hasHeightForWidth())
+        self.main_button_tree_automated_selection.setSizePolicy(sizePolicy3)
+        self.main_button_tree_automated_selection.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout_13.addWidget(self.main_button_tree_automated_selection, 3, 1, 1, 1)
+
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.label_tooltip_index_videos = QLabel(self.main_scrollarea_treewidget_content)
+        self.label_tooltip_index_videos.setObjectName(u"label_tooltip_index_videos")
+        sizePolicy16 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Preferred)
+        sizePolicy16.setHorizontalStretch(0)
+        sizePolicy16.setVerticalStretch(0)
+        sizePolicy16.setHeightForWidth(self.label_tooltip_index_videos.sizePolicy().hasHeightForWidth())
+        self.label_tooltip_index_videos.setSizePolicy(sizePolicy16)
+
+        self.horizontalLayout_3.addWidget(self.label_tooltip_index_videos)
+
+        self.label_index_start = QLabel(self.main_scrollarea_treewidget_content)
+        self.label_index_start.setObjectName(u"label_index_start")
+        sizePolicy16.setHeightForWidth(self.label_index_start.sizePolicy().hasHeightForWidth())
+        self.label_index_start.setSizePolicy(sizePolicy16)
+
+        self.horizontalLayout_3.addWidget(self.label_index_start)
+
+        self.spinbox_index_fetching_start = QSpinBox(self.main_scrollarea_treewidget_content)
+        self.spinbox_index_fetching_start.setObjectName(u"spinbox_index_fetching_start")
+
+        self.horizontalLayout_3.addWidget(self.spinbox_index_fetching_start)
+
+        self.label_index_end = QLabel(self.main_scrollarea_treewidget_content)
+        self.label_index_end.setObjectName(u"label_index_end")
+        sizePolicy16.setHeightForWidth(self.label_index_end.sizePolicy().hasHeightForWidth())
+        self.label_index_end.setSizePolicy(sizePolicy16)
+
+        self.horizontalLayout_3.addWidget(self.label_index_end)
+
+        self.spinbox_index_fetching_end = QSpinBox(self.main_scrollarea_treewidget_content)
+        self.spinbox_index_fetching_end.setObjectName(u"spinbox_index_fetching_end")
+
+        self.horizontalLayout_3.addWidget(self.spinbox_index_fetching_end)
+
+
+        self.gridLayout_13.addLayout(self.horizontalLayout_3, 1, 1, 1, 2)
+
+
+        self.verticalLayout_3.addLayout(self.gridLayout_13)
+
+        self.graphicsView = QGraphicsView(self.main_scrollarea_treewidget_content)
+        self.graphicsView.setObjectName(u"graphicsView")
+        sizePolicy17 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.MinimumExpanding)
+        sizePolicy17.setHorizontalStretch(0)
+        sizePolicy17.setVerticalStretch(0)
+        sizePolicy17.setHeightForWidth(self.graphicsView.sizePolicy().hasHeightForWidth())
+        self.graphicsView.setSizePolicy(sizePolicy17)
+
+        self.verticalLayout_3.addWidget(self.graphicsView)
+
+
+        self.gridLayout.addLayout(self.verticalLayout_3, 0, 2, 1, 1)
+
         self.treeWidget = QTreeWidget(self.main_scrollarea_treewidget_content)
         __qtreewidgetitem = QTreeWidgetItem()
         __qtreewidgetitem.setText(0, u"Title");
         self.treeWidget.setHeaderItem(__qtreewidgetitem)
         self.treeWidget.setObjectName(u"treeWidget")
-        sizePolicy17 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
-        sizePolicy17.setHorizontalStretch(0)
-        sizePolicy17.setVerticalStretch(0)
-        sizePolicy17.setHeightForWidth(self.treeWidget.sizePolicy().hasHeightForWidth())
-        self.treeWidget.setSizePolicy(sizePolicy17)
+        sizePolicy18 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
+        sizePolicy18.setHorizontalStretch(0)
+        sizePolicy18.setVerticalStretch(0)
+        sizePolicy18.setHeightForWidth(self.treeWidget.sizePolicy().hasHeightForWidth())
+        self.treeWidget.setSizePolicy(sizePolicy18)
         self.treeWidget.setMinimumSize(QSize(300, 10))
 
         self.gridLayout.addWidget(self.treeWidget, 0, 1, 1, 1)
@@ -971,11 +1010,11 @@ class Ui_MainWindow(object):
         self.settings_stacked_widget_main.setSizePolicy(sizePolicy3)
         self.page_video = QWidget()
         self.page_video.setObjectName(u"page_video")
-        sizePolicy18 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
-        sizePolicy18.setHorizontalStretch(0)
-        sizePolicy18.setVerticalStretch(0)
-        sizePolicy18.setHeightForWidth(self.page_video.sizePolicy().hasHeightForWidth())
-        self.page_video.setSizePolicy(sizePolicy18)
+        sizePolicy19 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
+        sizePolicy19.setHorizontalStretch(0)
+        sizePolicy19.setVerticalStretch(0)
+        sizePolicy19.setHeightForWidth(self.page_video.sizePolicy().hasHeightForWidth())
+        self.page_video.setSizePolicy(sizePolicy19)
         self.gridLayout_14 = QGridLayout(self.page_video)
         self.gridLayout_14.setSpacing(0)
         self.gridLayout_14.setObjectName(u"gridLayout_14")
@@ -1124,8 +1163,8 @@ class Ui_MainWindow(object):
         self.settings_stacked_widget_main.addWidget(self.page_video)
         self.page_performance = QWidget()
         self.page_performance.setObjectName(u"page_performance")
-        sizePolicy18.setHeightForWidth(self.page_performance.sizePolicy().hasHeightForWidth())
-        self.page_performance.setSizePolicy(sizePolicy18)
+        sizePolicy19.setHeightForWidth(self.page_performance.sizePolicy().hasHeightForWidth())
+        self.page_performance.setSizePolicy(sizePolicy19)
         self.gridLayout_26 = QGridLayout(self.page_performance)
         self.gridLayout_26.setSpacing(0)
         self.gridLayout_26.setObjectName(u"gridLayout_26")
@@ -1219,11 +1258,8 @@ class Ui_MainWindow(object):
 
         self.label_tooltip_download_mode = QLabel(self.page_performance)
         self.label_tooltip_download_mode.setObjectName(u"label_tooltip_download_mode")
-        sizePolicy19 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Preferred)
-        sizePolicy19.setHorizontalStretch(0)
-        sizePolicy19.setVerticalStretch(0)
-        sizePolicy19.setHeightForWidth(self.label_tooltip_download_mode.sizePolicy().hasHeightForWidth())
-        self.label_tooltip_download_mode.setSizePolicy(sizePolicy19)
+        sizePolicy16.setHeightForWidth(self.label_tooltip_download_mode.sizePolicy().hasHeightForWidth())
+        self.label_tooltip_download_mode.setSizePolicy(sizePolicy16)
 
         self.settings_gridlayout_performance.addWidget(self.label_tooltip_download_mode, 0, 0, 1, 1)
 
@@ -1284,8 +1320,8 @@ class Ui_MainWindow(object):
 
         self.label_tooltip_network_delay = QLabel(self.page_performance)
         self.label_tooltip_network_delay.setObjectName(u"label_tooltip_network_delay")
-        sizePolicy19.setHeightForWidth(self.label_tooltip_network_delay.sizePolicy().hasHeightForWidth())
-        self.label_tooltip_network_delay.setSizePolicy(sizePolicy19)
+        sizePolicy16.setHeightForWidth(self.label_tooltip_network_delay.sizePolicy().hasHeightForWidth())
+        self.label_tooltip_network_delay.setSizePolicy(sizePolicy16)
 
         self.settings_gridlayout_performance.addWidget(self.label_tooltip_network_delay, 0, 3, 1, 1)
 
@@ -1315,8 +1351,8 @@ class Ui_MainWindow(object):
         self.settings_stacked_widget_main.addWidget(self.page_performance)
         self.page_system = QWidget()
         self.page_system.setObjectName(u"page_system")
-        sizePolicy18.setHeightForWidth(self.page_system.sizePolicy().hasHeightForWidth())
-        self.page_system.setSizePolicy(sizePolicy18)
+        sizePolicy19.setHeightForWidth(self.page_system.sizePolicy().hasHeightForWidth())
+        self.page_system.setSizePolicy(sizePolicy19)
         self.gridLayout_33 = QGridLayout(self.page_system)
         self.gridLayout_33.setSpacing(0)
         self.gridLayout_33.setObjectName(u"gridLayout_33")
@@ -1355,8 +1391,8 @@ class Ui_MainWindow(object):
 
         self.label_tooltip_update_checks = QLabel(self.page_system)
         self.label_tooltip_update_checks.setObjectName(u"label_tooltip_update_checks")
-        sizePolicy19.setHeightForWidth(self.label_tooltip_update_checks.sizePolicy().hasHeightForWidth())
-        self.label_tooltip_update_checks.setSizePolicy(sizePolicy19)
+        sizePolicy16.setHeightForWidth(self.label_tooltip_update_checks.sizePolicy().hasHeightForWidth())
+        self.label_tooltip_update_checks.setSizePolicy(sizePolicy16)
 
         self.settings_gridlayout_system.addWidget(self.label_tooltip_update_checks, 1, 0, 1, 1)
 
@@ -1406,8 +1442,8 @@ class Ui_MainWindow(object):
         self.settings_stacked_widget_main.addWidget(self.page_system)
         self.page_ui = QWidget()
         self.page_ui.setObjectName(u"page_ui")
-        sizePolicy18.setHeightForWidth(self.page_ui.sizePolicy().hasHeightForWidth())
-        self.page_ui.setSizePolicy(sizePolicy18)
+        sizePolicy19.setHeightForWidth(self.page_ui.sizePolicy().hasHeightForWidth())
+        self.page_ui.setSizePolicy(sizePolicy19)
         self.gridLayout_34 = QGridLayout(self.page_ui)
         self.gridLayout_34.setSpacing(0)
         self.gridLayout_34.setObjectName(u"gridLayout_34")
@@ -1646,8 +1682,8 @@ class Ui_MainWindow(object):
         self.gridLayout_54.setContentsMargins(0, 0, 0, 0)
         self.text_browser_keyboard_shortcuts = QTextBrowser(self.scrollAreaWidgetContents_11)
         self.text_browser_keyboard_shortcuts.setObjectName(u"text_browser_keyboard_shortcuts")
-        sizePolicy17.setHeightForWidth(self.text_browser_keyboard_shortcuts.sizePolicy().hasHeightForWidth())
-        self.text_browser_keyboard_shortcuts.setSizePolicy(sizePolicy17)
+        sizePolicy18.setHeightForWidth(self.text_browser_keyboard_shortcuts.sizePolicy().hasHeightForWidth())
+        self.text_browser_keyboard_shortcuts.setSizePolicy(sizePolicy18)
         self.text_browser_keyboard_shortcuts.setMaximumSize(QSize(200000, 200000))
 
         self.gridLayout_54.addWidget(self.text_browser_keyboard_shortcuts, 0, 0, 1, 1)
@@ -1690,7 +1726,7 @@ class Ui_MainWindow(object):
         self.scrollArea_10.setWidgetResizable(True)
         self.scrollAreaWidgetContents_12 = QWidget()
         self.scrollAreaWidgetContents_12.setObjectName(u"scrollAreaWidgetContents_12")
-        self.scrollAreaWidgetContents_12.setGeometry(QRect(0, 0, 170, 140))
+        self.scrollAreaWidgetContents_12.setGeometry(QRect(0, 0, 648, 501))
         self.gridLayout_56 = QGridLayout(self.scrollAreaWidgetContents_12)
         self.gridLayout_56.setSpacing(0)
         self.gridLayout_56.setObjectName(u"gridLayout_56")
@@ -1778,7 +1814,7 @@ class Ui_MainWindow(object):
         self.scrollArea_11.setWidgetResizable(True)
         self.scrollAreaWidgetContents_13 = QWidget()
         self.scrollAreaWidgetContents_13.setObjectName(u"scrollAreaWidgetContents_13")
-        self.scrollAreaWidgetContents_13.setGeometry(QRect(0, 0, 475, 102))
+        self.scrollAreaWidgetContents_13.setGeometry(QRect(0, 0, 648, 501))
         self.gridLayout_59 = QGridLayout(self.scrollAreaWidgetContents_13)
         self.gridLayout_59.setObjectName(u"gridLayout_59")
         self.gridLayout_59.setHorizontalSpacing(0)
@@ -1841,7 +1877,7 @@ class Ui_MainWindow(object):
         self.scrollArea_12.setWidgetResizable(True)
         self.scrollAreaWidgetContents_14 = QWidget()
         self.scrollAreaWidgetContents_14.setObjectName(u"scrollAreaWidgetContents_14")
-        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 98, 120))
+        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 648, 501))
         self.gridLayout_61 = QGridLayout(self.scrollAreaWidgetContents_14)
         self.gridLayout_61.setObjectName(u"gridLayout_61")
         self.textbrowser_disclaimer = QTextBrowser(self.scrollAreaWidgetContents_14)
@@ -2003,7 +2039,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.CentralStackedWidget.setCurrentIndex(2)
+        self.CentralStackedWidget.setCurrentIndex(0)
         self.main_stacked_widget_top.setCurrentIndex(0)
         self.settings_stacked_widget_main.setCurrentIndex(2)
 
@@ -2274,18 +2310,16 @@ class Ui_MainWindow(object):
         self.label_apply_by_index.setAccessibleName(QCoreApplication.translate("MainWindow", u"label apply by index", None))
 #endif // QT_CONFIG(accessibility)
         self.label_apply_by_index.setText(QCoreApplication.translate("MainWindow", u"Apply by Index:", None))
-#if QT_CONFIG(accessibility)
-        self.main_checkbox_tree_do_not_clear_videos.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox do not clear videos", None))
-#endif // QT_CONFIG(accessibility)
-        self.main_checkbox_tree_do_not_clear_videos.setText(QCoreApplication.translate("MainWindow", u"Do not clear videos", None))
-#if QT_CONFIG(accessibility)
-        self.main_button_tree_automated_selection.setAccessibleName(QCoreApplication.translate("MainWindow", u"button automated selection tool", None))
-#endif // QT_CONFIG(accessibility)
-        self.main_button_tree_automated_selection.setText(QCoreApplication.translate("MainWindow", u"Automated selection tool", None))
+        self.main_button_tree_download.setText(QCoreApplication.translate("MainWindow", u"Download Selected Videos", None))
 #if QT_CONFIG(accessibility)
         self.main_button_tree_keyboard_shortcuts.setAccessibleName(QCoreApplication.translate("MainWindow", u"button keyboard shortcuts", None))
 #endif // QT_CONFIG(accessibility)
         self.main_button_tree_keyboard_shortcuts.setText(QCoreApplication.translate("MainWindow", u"Keyboard shortcuts", None))
+#if QT_CONFIG(accessibility)
+        self.main_checkbox_direct_download.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox directly download videos", None))
+#endif // QT_CONFIG(accessibility)
+        self.main_checkbox_direct_download.setText(QCoreApplication.translate("MainWindow", u"Download videos \n"
+"directly ", None))
 #if QT_CONFIG(tooltip)
         self.main_button_tree_stop.setToolTip(QCoreApplication.translate("MainWindow", u"Does not stop downloading videos", None))
 #endif // QT_CONFIG(tooltip)
@@ -2294,14 +2328,28 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(accessibility)
         self.main_button_tree_stop.setText(QCoreApplication.translate("MainWindow", u"Stop loading videos", None))
 #if QT_CONFIG(accessibility)
-        self.main_checkbox_direct_download.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox directly download videos", None))
+        self.main_checkbox_tree_do_not_clear_videos.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox do not clear videos", None))
 #endif // QT_CONFIG(accessibility)
-        self.main_checkbox_direct_download.setText(QCoreApplication.translate("MainWindow", u"Download videos \n"
-"directly ", None))
+        self.main_checkbox_tree_do_not_clear_videos.setText(QCoreApplication.translate("MainWindow", u"Do not clear videos", None))
+#if QT_CONFIG(accessibility)
+        self.main_button_tree_automated_selection.setAccessibleName(QCoreApplication.translate("MainWindow", u"button automated selection tool", None))
+#endif // QT_CONFIG(accessibility)
+        self.main_button_tree_automated_selection.setText(QCoreApplication.translate("MainWindow", u"Automated selection tool", None))
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_index_videos.setToolTip(QCoreApplication.translate("MainWindow", u"This feature allows you to only fetch a specific range of videos when\n"
+"searching, loading models / channels or fetching a playlist.\n"
+"\n"
+"For example if you use 20 for the start and 30 for the end value, the first\n"
+"20 videos will be completely ignored and not loaded into the tree widget.\n"
+"This can save a lot of time in certain scenarios.\n"
+"", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_index_videos.setText("")
+        self.label_index_start.setText(QCoreApplication.translate("MainWindow", u"Start:", None))
+        self.label_index_end.setText(QCoreApplication.translate("MainWindow", u"End:", None))
 #if QT_CONFIG(accessibility)
         self.graphicsView.setAccessibleName(QCoreApplication.translate("MainWindow", u"thumbnail display", None))
 #endif // QT_CONFIG(accessibility)
-        self.main_button_tree_download.setText(QCoreApplication.translate("MainWindow", u"Download Selected Videos", None))
         ___qtreewidgetitem = self.treeWidget.headerItem()
         ___qtreewidgetitem.setText(2, QCoreApplication.translate("MainWindow", u"Duration (minutes)", None));
         ___qtreewidgetitem.setText(1, QCoreApplication.translate("MainWindow", u"Author", None));
