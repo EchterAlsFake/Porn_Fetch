@@ -355,7 +355,7 @@
     <item row="1" column="0">
      <widget class="QStackedWidget" name="CentralStackedWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="page_main">
        <property name="maximumSize">
@@ -1917,8 +1917,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>956</width>
-               <height>380</height>
+               <width>942</width>
+               <height>384</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -1942,49 +1942,41 @@
               </property>
               <item row="0" column="0">
                <layout class="QGridLayout" name="gridLayout">
+                <item row="1" column="0" colspan="3">
+                 <widget class="QPushButton" name="main_button_tree_download">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <bold>false</bold>
+                   </font>
+                  </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="text">
+                   <string>Download Selected Videos</string>
+                  </property>
+                 </widget>
+                </item>
                 <item row="0" column="2">
                  <layout class="QVBoxLayout" name="verticalLayout_3">
                   <item>
                    <layout class="QGridLayout" name="gridLayout_13">
-                    <item row="0" column="1">
-                     <widget class="QCheckBox" name="main_checkbox_tree_do_not_clear_videos">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="accessibleName">
-                       <string>checkbox do not clear videos</string>
-                      </property>
-                      <property name="text">
-                       <string>Do not clear videos</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="0">
-                     <widget class="QPushButton" name="main_button_tree_automated_selection">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="accessibleName">
-                       <string>button automated selection tool</string>
-                      </property>
-                      <property name="text">
-                       <string>Automated selection tool</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="1">
+                    <item row="3" column="2">
                      <widget class="QPushButton" name="main_button_tree_keyboard_shortcuts">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -2003,7 +1995,32 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="2" column="0" colspan="2">
+                    <item row="0" column="0" colspan="2">
+                     <widget class="QCheckBox" name="main_checkbox_direct_download">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <bold>false</bold>
+                       </font>
+                      </property>
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox directly download videos</string>
+                      </property>
+                      <property name="text">
+                       <string>Download videos 
+directly </string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="0" colspan="3">
                      <widget class="QPushButton" name="main_button_tree_stop">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -2036,30 +2053,101 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="0" column="0">
-                     <widget class="QCheckBox" name="main_checkbox_direct_download">
+                    <item row="0" column="2">
+                     <widget class="QCheckBox" name="main_checkbox_tree_do_not_clear_videos">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
                       </property>
-                      <property name="font">
-                       <font>
-                        <bold>false</bold>
-                       </font>
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox do not clear videos</string>
+                      </property>
+                      <property name="text">
+                       <string>Do not clear videos</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="QPushButton" name="main_button_tree_automated_selection">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
                       </property>
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
                       </property>
                       <property name="accessibleName">
-                       <string>checkbox directly download videos</string>
+                       <string>button automated selection tool</string>
                       </property>
                       <property name="text">
-                       <string>Download videos 
-directly </string>
+                       <string>Automated selection tool</string>
                       </property>
                      </widget>
+                    </item>
+                    <item row="1" column="1" colspan="2">
+                     <layout class="QHBoxLayout" name="horizontalLayout_3">
+                      <item>
+                       <widget class="QLabel" name="label_tooltip_index_videos">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="toolTip">
+                         <string>This feature allows you to only fetch a specific range of videos when
+searching, loading models / channels or fetching a playlist.
+
+For example if you use 20 for the start and 30 for the end value, the first
+20 videos will be completely ignored and not loaded into the tree widget.
+This can save a lot of time in certain scenarios.
+</string>
+                        </property>
+                        <property name="text">
+                         <string/>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="label_index_start">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="text">
+                         <string>Start:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QSpinBox" name="spinbox_index_fetching_start"/>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="label_index_end">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="text">
+                         <string>End:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QSpinBox" name="spinbox_index_fetching_end"/>
+                      </item>
+                     </layout>
                     </item>
                    </layout>
                   </item>
@@ -2077,36 +2165,6 @@ directly </string>
                    </widget>
                   </item>
                  </layout>
-                </item>
-                <item row="1" column="0" colspan="3">
-                 <widget class="QPushButton" name="main_button_tree_download">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <bold>false</bold>
-                   </font>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true"/>
-                  </property>
-                  <property name="text">
-                   <string>Download Selected Videos</string>
-                  </property>
-                 </widget>
                 </item>
                 <item row="0" column="1">
                  <widget class="QTreeWidget" name="treeWidget">
@@ -3970,8 +4028,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>170</width>
-             <height>140</height>
+             <width>648</width>
+             <height>501</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_56">
@@ -4262,8 +4320,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>475</width>
-             <height>102</height>
+             <width>648</width>
+             <height>501</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_59">
@@ -4417,8 +4475,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>120</height>
+             <width>648</width>
+             <height>501</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_61">
