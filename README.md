@@ -85,14 +85,15 @@
 > [!NOTE]
 > **Supported platforms & architectures (based on current release files)**
 
-| Platform                  | App              | Architectures                                        |
-|---------------------------|------------------|------------------------------------------------------|
-| **Windows**               | GUI              | x64, ARM                                             |
-| **Windows**               | CLI              | x64, x86 (x32)                                       |
-| **Linux (X11 / Wayland)** | GUI              | x64                                                  |
-| **Linux (X11 / Wayland)** | CLI              | x64, x86 (x32)*                                      |
-| **macOS**                 | GUI              | x86_64 (Intel)†                                      |
-| **Android**               | CLI (via Termux) | All  |
+| Platform                      | App              | Architectures                                   |
+|-------------------------------|------------------|-------------------------------------------------|
+| **Windows**                   | GUI              | x64, ARM                                        |
+| **Windows**                   | CLI              | x64, x86 (x32)                                  |
+| **Linux (X11 / Wayland)**     | GUI              | x64                                             |
+| **Linux (X11 / Wayland)**     | CLI              | x64, x86 (x32)*                                 |
+| **macOS**                     | GUI              | x86_64 (Intel)†                                 |
+| **Android**                   | CLI (via Termux) | All                                             |
+| **iOS** **(IN DEVELOPMENT!)** | CLI              | iOS 15.8+, rootless<br>Jailbroken with palera1n |
 
 The GUI of Android currently doesn't work. I will try to get it working in v3.8
 
