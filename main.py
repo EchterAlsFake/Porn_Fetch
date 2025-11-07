@@ -571,6 +571,8 @@ class AddToTreeWidget(QRunnable):
 
     def run(self):
         self.signals.start_undefined_range.emit()  # Starts the progressbar, but with a loading animation
+        is_first = True # see down below for an explanation
+
         if isinstance(self.iterator, str):
             self.iterator = [self.iterator]
 
@@ -586,7 +588,7 @@ class AddToTreeWidget(QRunnable):
             self.logger.debug(f"Result Limit: {str(self.result_limit)}")
 
         videos = islice(self.iterator, self.result_limit)
-        self.signals.total_progress_range.emit(self.result_limit)
+
         for i, video in enumerate(videos, start=start):
             if self.stop_flag.is_set():
                 self.signals.tree_widget_finished.emit()
@@ -601,6 +603,10 @@ class AddToTreeWidget(QRunnable):
                 self.logger.warning(f"Skipping Video: {video}")
                 continue
 
+            if is_first:
+                self.signals.total_progress_range.emit(self.result_limit)
+                is_first = False # Otherwise the total would be sent every time which creates overhead
+                
             self.signals.total_progress.emit(i)
             self.signals.text_data_to_tree_widget.emit(video_id)
 
