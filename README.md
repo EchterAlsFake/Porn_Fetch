@@ -1,3 +1,6 @@
+Guys, I have my last 3 exams this year next week and after that I lock the fuck in and we gonna make this a serious project. Since I am 18 now I can finally do the shit I always wanted with my own website, 24/7 server, marketing AND AND AND. 
+Holy Shit I am HYPED af but I need to survive the next 3 days, wish me luck 💀
+
 <div align = center>
 <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
 <br>
