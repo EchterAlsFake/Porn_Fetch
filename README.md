@@ -205,6 +205,7 @@ Currently available in:
 - English
 - Chinese (3.0) `[*]` Thanks to: [Joshua-auhsoj](https://github.com/Joshua-auhsoj)
 - French (3.0) `[*]` Thanks to: [Egsagon](https://github.com/Egsagon)
+- Italian (3.8) Thanks to: [FatalPuppet](https://github.com/FatalPuppet)
 
 <br>To contribute a translation, follow [this guide](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/TRANSLATING.md).
 

@@ -613,6 +613,7 @@ to be refactored.
 - 
 
 ### User Interface
+- Added Italian translations (Thanks: @FatalPuppet)
 - Added clear tooltips for most settings option to help understand
 - You can also set a custom app name when installing Porn Fetch from the settings
 - Infinite loading animation works better now
