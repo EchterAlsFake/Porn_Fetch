@@ -1,5 +1,5 @@
-Guys, I have my last 3 exams this year next week and after that I lock the fuck in and we gonna make this a serious project. Since I am 18 now I can finally do the shit I always wanted with my own website, 24/7 server, marketing AND AND AND. 
-Holy Shit I am HYPED af but I need to survive the next 3 days, wish me luck 💀
+> [!IMPORTANT]
+> Porn Fetch will receive paid only features with a license system. Please join the [DISCUSSION](https://github.com/EchterAlsFake/Porn_Fetch/discussions/101), I'd like to know your ideas / feedback!
 
 <div align = center>
 <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
@@ -11,8 +11,6 @@ Holy Shit I am HYPED af but I need to survive the next 3 days, wish me luck 💀
 <a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_cli_linux.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_cli_linux.yml/badge.svg" alt="Build GUI CLI Linux Status"/></a>
 <a href="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL"><img src="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL/badge.svg" alt="CodeQL Analysis"/></a>
 <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/EchterAlsFake/Porn_Fetch/total?style=social&logo=github&logoColor=purple">
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D21C103Z)
 
 <br>
 
