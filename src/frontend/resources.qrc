@@ -18,5 +18,6 @@
         <file>translations/qm/de_DE.qm</file>
         <file>translations/qm/zh_CN.qm</file>
         <file>translations/qm/fr.qm</file>
+        <file>translations/qm/it.qm</file>
     </qresource>
 </RCC>

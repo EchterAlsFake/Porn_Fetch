@@ -58,6 +58,7 @@ This font is licensed under SIL Open Font License, Version 1.1
 - [efraxs](https://github.com/efraxs) Enhancement [#76](https://github.com/EchterAlsFake/Porn_Feetch/76) (Video IDs as filename)
 - [journeym](https://github.com/journeym) Enhancement [#74](https://github.com/EchterAlsFake/Porn_Feetch/74) (Suppressing Errors)
 - [Joly0](https://github.com/Joly0) Enhancement [#78](https://github.com/EchterAlsFake/Porn_Feetch/78) (Model batch downloading)
+- [FatalPuppet](https://github.com/FatalPuppet) Italian Translations [#100](https://github.com/EchterAlsFake/Porn_Fetch/issues/100)
 
 # Libraries
 - [PHUB](https://github.com/EchterAlsFake/PHUB) (GPLv3)

@@ -14,7 +14,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3779"/>
+        <location filename="../../UI/form_main_window.ui" line="3784"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -76,47 +76,122 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4413"/>
+        <location filename="../../UI/form_main_window.ui" line="4418"/>
         <source>textbrowser for donation message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4486"/>
+        <location filename="../../UI/form_main_window.ui" line="4424"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ffc800;&quot;&gt;y&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#cc00ff;&quot;&gt;o&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ffffff;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#37ff00;&quot;&gt;w&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ff00bb;&quot;&gt;a&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ff0000;&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#0000ff;&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#00fff7;&quot;&gt;u&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ff55ff;&quot;&gt;p&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#ffffff;&quot;&gt;If you have a moment to read this, I&apos;d appreciate it a lot...&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; color:#ffffff;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:11pt; color:#ffffff;&quot;&gt;I have started developing Porn Fetch ~2 years ago as a fun project for learning graphical user interfaces. Over the years Porn Fetch became more professional, as my programming skills increased and more people started using it. That I reach even 1000 downloads on this was something I&apos;d never thought was possible and now we are over 20.000 xD&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:11pt; color:#ffffff;&quot;&gt;Although I absolutely love what I am doing here, and unless I receive a Cease and Desist letter, will never stop it, I haven&apos;t earned much from this project except for the few people that donated me something (Thank you so much btw).&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:11pt; color:#ffffff;&quot;&gt;If you have a few cents left on your pocket, I&apos;d absolutely appreciate it. I know it might not seem much but it&apos;s a thank you and it keeps me motivated. Also since I still go to school small amounts of money are much more in relation to me than it is for someone who already has a job.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:11pt; color:#ffffff;&quot;&gt;But even if you don&apos;t donate, please don&apos;t feel bad. I don&apos;t expect it from you. I just kindly ask, but it&apos;s absolutely okay if you don&apos;t want to.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; color:#0000ff;&quot;&gt;Donation options&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://paypal.me/EchterAlsFake&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#27bf73;&quot;&gt;1) PayPal (https://paypal.me/EchterAlsFake)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://paypal.me/EchterAlsFake&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#aa00ff;&quot;&gt;2) K&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://ko-fi.com/EchterAlsFake&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#aa00ff;&quot;&gt;o-Fi (https://ko-fi.com/EchterAlsFake)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt;&quot;&gt;3) Crypto (XMR / Monero) : &lt;/span&gt;&lt;span style=&quot; font-family:&apos;ui-monospace&apos;,&apos;SFMono-Regular&apos;,&apos;SF Mono&apos;,&apos;Menlo&apos;,&apos;Consolas&apos;,&apos;Liberation Mono&apos;,&apos;monospace&apos;; font-size:9pt; color:#ff7700; background-color:rgba(101,108,118,0.2);&quot;&gt;42XwGZYbSxpMvhn9eeP4DwMwZV91tQgAm3UQr6Zwb2wzBf5HcuZCHrsVxa4aV2jhP4gLHsWWELxSoNjfnkt4rMfDDwXy9jR&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; color:#00ffb3;&quot;&gt;[This message won&apos;t be shown again, except if you update to a new version]&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="4491"/>
         <source>textbrowser disclaimer message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4518"/>
+        <location filename="../../UI/form_main_window.ui" line="4497"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;DISCLAIMER&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Porn Fetch&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; is free software licensed under the GNU General Public License v3.0. You are free to use, modify, and redistribute this software under the terms of that license.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;Please be aware that &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Porn Fetch may interact with websites in ways that violate their Terms of Service.&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; Additionally, downloading copyright-protected content without proper authorization may be illegal in many jurisdictions, including under the DMCA (Digital Millennium Copyright Act).&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;While some countries or regions may allow downloading content for strictly &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;personal, non-commercial use&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;, I &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;strongly discourage&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; using Porn Fetch to download, share, or redistribute content without appropriate rights or permissions. Always ensure you comply with your local laws and the terms of any website you access.&lt;/span&gt;&lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;IMPORTANT NOTE&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;I &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;strongly recommend&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; that you do &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;not&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; use this software for:&lt;/span&gt;&lt;/p&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Unauthorized redistribution of content&lt;/li&gt;
+&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Commercial use of downloaded materials&lt;/li&gt;
+&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Any activity that could result in legal liability for yourself or others&lt;/li&gt;&lt;/ul&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;Although the GPL license grants you broad rights, &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;continued misuse&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; may jeopardize the development and availability of this project. Please respect the intent behind this tool and use it responsibly.&lt;/span&gt;&lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;LIABILITY DISCLAIMER&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;This software is provided &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;without any warranty&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; as described in the GPLv3. I am &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;not liable&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; for any damages, legal consequences, or misuse resulting from your use of this software.&lt;br /&gt;You are solely responsible for ensuring your actions are lawful and ethical. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="4523"/>
         <source>button accept disclaimer message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4556"/>
+        <location filename="../../UI/form_main_window.ui" line="4561"/>
         <source>textbrowser data collection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4559"/>
+        <location filename="../../UI/form_main_window.ui" line="4564"/>
         <source>This contains information of how Porn Fetch processes collected errors, where they go to and how they are transmitted. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4599"/>
+        <location filename="../../UI/form_main_window.ui" line="4570"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Data Collection &amp;amp; Privacy Information&lt;/span&gt;&lt;/h2&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;This application now uses my own server for update checking and error reporting, instead of relying on GitHub. This gives me greater control over the process and the data transmitted. However, my server is &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700;&quot;&gt;IPv6-only&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;. This means that only about 50% of internet users will be able to connect. &lt;/span&gt;&lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;About the Server&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;The server is a small, older Acer Swift 3 laptop running 24/7 in my room. The full source code for the server is publicly available here:&lt;br /&gt;&lt;/span&gt;&lt;a href=&quot;https://github.com/EchterAlsFake/Server&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; text-decoration: underline; color:#f700ff;&quot;&gt;https://github.com/EchterAlsFake/Server&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; font-weight:700;&quot;&gt;Data Collected via Error Reports&lt;/span&gt;&lt;/h3&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;The version of Porn Fetch you are using&lt;/span&gt;&lt;/li&gt;
+&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Your operating system (e.g., Windows, Linux, or macOS)&lt;/li&gt;
+&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The current date and time&lt;/li&gt;
+&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot; style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The error details (full Python traceback)&lt;/li&gt;&lt;/ul&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700;&quot;&gt;Important:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt; The Python traceback may, in some cases, include incidental personal information — for example, your system username if it appears in a file path. No other personal data is intentionally collected. &lt;/span&gt;&lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Data Storage &amp;amp; Security&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;Error reports are stored in plain text on my server. The server’s storage device is encrypted with LUKS and secured with a strong password (40+ characters). &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; color:#ff0000;&quot;&gt;Your &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700; color:#ff0000;&quot;&gt;IP address is never logged, stored, or displayed&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; color:#ff0000;&quot;&gt;. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Optional Participation&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;Whether you enable error reporting or not will have no impact on the application&apos;s functionality. It simply helps me identify and fix issues faster. You can also manually check for updates on GitHub, although most users do not do this. &lt;/span&gt;&lt;/p&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; font-weight:700;&quot;&gt;IPv6 Connectivity Check&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;To see if you have IPv6 connectivity, visit:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;a href=&quot;https://echteralsfake.duckdns.org/ping&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#1aff00;&quot;&gt;https://echteralsfake.duckdns.org/ping&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;If you see a white page with &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700;&quot;&gt;Success&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;, you have IPv6. If not, you do not. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;You can also verify your IP addresses by visiting: &lt;/span&gt;&lt;a href=&quot;https://ipleak.net&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; text-decoration: underline; color:#ffff00;&quot;&gt;https://ipleak.net&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;Example formats:&lt;br /&gt;IPv4: &lt;/span&gt;&lt;span style=&quot; font-family:&apos;monospace&apos;; font-size:12pt;&quot;&gt;135.215.32.64&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;IPv6: &lt;/span&gt;&lt;span style=&quot; font-family:&apos;monospace&apos;; font-size:12pt;&quot;&gt;2a02:810a:186:b400::5c51&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="4604"/>
         <source>button enable IPv6 logging</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4609"/>
+        <location filename="../../UI/form_main_window.ui" line="4614"/>
         <source>button disable IPv6 logging completely</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4652"/>
+        <location filename="../../UI/form_main_window.ui" line="4657"/>
         <source>Total:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4681"/>
+        <location filename="../../UI/form_main_window.ui" line="4686"/>
         <source>Converting:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1425,23 +1500,23 @@ You&apos;d help me a lot by enabling network logging :) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3531"/>
+        <location filename="../../UI/form_main_window.ui" line="3536"/>
         <source>Apply  (needs restart)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3563"/>
+        <location filename="../../UI/form_main_window.ui" line="3568"/>
         <source>Reset Porn Fetch to default settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3733"/>
-        <location filename="../../UI/form_main_window.ui" line="4521"/>
+        <location filename="../../UI/form_main_window.ui" line="3738"/>
+        <location filename="../../UI/form_main_window.ui" line="4526"/>
         <source>Accept</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3762"/>
+        <location filename="../../UI/form_main_window.ui" line="3767"/>
         <source>Deny and Exit</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1493,238 +1568,22 @@ You&apos;d help me a lot by enabling network logging :) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3936"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; font-weight:700;&quot;&gt;Keyboard Shortcuts&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;; font-size:14pt; font-weight:700;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + Q     Closes the application&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + E      Exports all current video URLs from the tree widget into a .txt file &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + T      Downloads all videos in the tree widget (same as clicking the button)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + A     Quickly enables the anonymous mode (temporarily)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + S     Saves Porn Fetch settings&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + X     Selects all items in the tree widget as checked&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + Z     Unchecks all items in the tree widget&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;   &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="3996"/>
+        <location filename="../../UI/form_main_window.ui" line="4001"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4059"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:24pt; font-weight:700;&quot;&gt;Installation Mode&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:16pt; text-decoration: underline; color:#0000ff;&quot;&gt;1) Inst&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:14pt; text-decoration: underline; color:#0000ff;&quot;&gt;all&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;This will install Porn Fetch into your system, meaning that you can run it directly from your Start Menu. e.g, press Windows key, type Porn Fetch and directly start it and on Linux it will be the same.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;Porn Fetch will be installed into the following path(s):&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;Windows: C:\Users\&amp;lt;user&amp;gt;\AppData\Local\pornfetch\&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;Linux: ~/.local/share/pornfetch&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:16pt; text-decoration: underline; color:#00ff00;&quot;&gt;2) Portable&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;This means, that Porn Fetch will not be installed and in order to use and start Porn Fetch you always need to double click on the file you have downloaded. This has some benefits as the uninstallation is easier and you have more control over it, but for the average user I do not recommend this.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:16pt; font-weight:700; color:#a100ff;&quot;&gt;Custom App name&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt; color:#ffffff;&quot;&gt;Down below you can enter  a custom name for Porn Fetch. You can then search with this name for Porn Fetch and Porn Fetch will not be found anymore when someone enters &amp;quot;Porn Fetch&amp;quot; on your PC. This can be useful if multiple persons use your PC and you don&apos;t want them to know you are using this application. It can also help if you are in public and people stare at your PC. Porn Fetch has also an option to fully hide, that it&apos;s a PornHub downloader.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:12pt; color:#ffffff;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; color:#ffffff;&quot;&gt;If you leave it empty, Porn Fetch will remain as &amp;quot;Porn Fetch&amp;quot; in your short menu.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:14pt; text-decoration: underline; color:#aa0000;&quot;&gt;NOTE:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;Installation was implemented in this release and might still be experimental. If you run into any issues, please report it on my GitHub. Thank you :&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:9pt;&quot;&gt;) &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="4201"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;table border=&quot;0&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;&quot; cellspacing=&quot;2&quot; cellpadding=&quot;0&quot;&gt;&lt;thead&gt;
-&lt;tr&gt;
-&lt;td&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-weight:700;&quot;&gt;Category&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-weight:700;&quot;&gt;Websites&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;
-&lt;tr&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Videos&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang, YouPorn&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Searching&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Models&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;PornHub, HQporner, xnxx&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Pornstars&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;PornHub, Eporner, xvideos, Xhamster, Spankbang&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Channels&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;PornHub, Xhamster, Spankbang&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Creator / Users&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Xhamster (Creator), Spankbang (Creator), xnxx (Users)&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Playlists&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;PornHub, xvideos&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Downloading&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;xvideos&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Shorts&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Xhamster&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Account Login&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;PornHub&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Videos by Category&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;HQporner, Eporner&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Random&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;HQporner&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Brazzers only&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;HQporner&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;Top Porn&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
-&lt;td&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;;&quot;&gt;HQporner&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="4419"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ffc800;&quot;&gt;y&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#cc00ff;&quot;&gt;o&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ffffff;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#37ff00;&quot;&gt;w&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ff00bb;&quot;&gt;a&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ff0000;&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#0000ff;&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#00fff7;&quot;&gt;u&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:36pt; color:#ff55ff;&quot;&gt;p&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#ffffff;&quot;&gt;If you have a moment to read this, I&apos;d appreciate it a lot...&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; color:#ffffff;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; color:#ffffff;&quot;&gt;I have started developing Porn Fetch ~2 years ago as a fun project for learning graphical user interfaces. Over the years Porn Fetch became more professional, as my programming skills increased and more people started using it. That I reach even 1000 downloads on this was something I&apos;d never thought was possible and now we are over 20.000 xD&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; color:#ffffff;&quot;&gt;Although I absolutely love what I am doing here, and unless I receive a Cease and Desist letter, will never stop it, I haven&apos;t earned much from this project except for the few people that donated me something (Thank you so much btw).&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; color:#ffffff;&quot;&gt;If you have a few cents left on your pocket, I&apos;d absolutely appreciate it. I know it might not seem much but it&apos;s a thank you and it keeps me motivated. Also since I still go to school small amounts of money are much more in relation to me than it is for someone who already has a job.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; color:#ffffff;&quot;&gt;But even if you don&apos;t donate, please don&apos;t feel bad. I don&apos;t expect it from you. I just kindly ask, but it&apos;s absolutely okay if you don&apos;t want to.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; color:#0000ff;&quot;&gt;Donation options&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://paypal.me/EchterAlsFake&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#27bf73;&quot;&gt;1) PayPal (https://paypal.me/EchterAlsFake)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://paypal.me/EchterAlsFake&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#aa00ff;&quot;&gt;2) K&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://ko-fi.com/EchterAlsFake&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#aa00ff;&quot;&gt;o-Fi (https://ko-fi.com/EchterAlsFake)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt;&quot;&gt;3) Crypto (XMR / Monero) : &lt;/span&gt;&lt;span style=&quot; font-family:&apos;ui-monospace&apos;,&apos;SFMono-Regular&apos;,&apos;SF Mono&apos;,&apos;Menlo&apos;,&apos;Consolas&apos;,&apos;Liberation Mono&apos;,&apos;monospace&apos;; font-size:9pt; color:#ff7700; background-color:rgba(101,108,118,0.2);&quot;&gt;42XwGZYbSxpMvhn9eeP4DwMwZV91tQgAm3UQr6Zwb2wzBf5HcuZCHrsVxa4aV2jhP4gLHsWWELxSoNjfnkt4rMfDDwXy9jR&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; color:#00ffb3;&quot;&gt;[This message won&apos;t be shown again, except if you update to a new version]&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="4492"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;DISCLAIMER&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Porn Fetch&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; is free software licensed under the GNU General Public License v3.0. You are free to use, modify, and redistribute this software under the terms of that license.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;Please be aware that &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Porn Fetch may interact with websites in ways that violate their Terms of Service.&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; Additionally, downloading copyright-protected content without proper authorization may be illegal in many jurisdictions, including under the DMCA (Digital Millennium Copyright Act).&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;While some countries or regions may allow downloading content for strictly &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;personal, non-commercial use&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;, I &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;strongly discourage&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; using Porn Fetch to download, share, or redistribute content without appropriate rights or permissions. Always ensure you comply with your local laws and the terms of any website you access.&lt;/span&gt;&lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;IMPORTANT NOTE&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;I &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;strongly recommend&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; that you do &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;not&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; use this software for:&lt;/span&gt;&lt;/p&gt;
-&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Unauthorized redistribution of content&lt;/li&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Commercial use of downloaded materials&lt;/li&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Any activity that could result in legal liability for yourself or others&lt;/li&gt;&lt;/ul&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;Although the GPL license grants you broad rights, &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;continued misuse&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; may jeopardize the development and availability of this project. Please respect the intent behind this tool and use it responsibly.&lt;/span&gt;&lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;LIABILITY DISCLAIMER&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;This software is provided &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;without any warranty&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; as described in the GPLv3. I am &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;not liable&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt; for any damages, legal consequences, or misuse resulting from your use of this software.&lt;br /&gt;You are solely responsible for ensuring your actions are lawful and ethical. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="4565"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-hr { height: 1px; border-width: 0; }
-li.unchecked::marker { content: &quot;\2610&quot;; }
-li.checked::marker { content: &quot;\2612&quot;; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;h2 style=&quot; margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Data Collection &amp;amp; Privacy Information&lt;/span&gt;&lt;/h2&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;This application now uses my own server for update checking and error reporting, instead of relying on GitHub. This gives me greater control over the process and the data transmitted. However, my server is &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700;&quot;&gt;IPv6-only&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;. This means that only about 50% of internet users will be able to connect. &lt;/span&gt;&lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;About the Server&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;The server is a small, older Acer Swift 3 laptop running 24/7 in my room. The full source code for the server is publicly available here:&lt;br /&gt;&lt;/span&gt;&lt;a href=&quot;https://github.com/EchterAlsFake/Server&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; text-decoration: underline; color:#f700ff;&quot;&gt;https://github.com/EchterAlsFake/Server&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; font-weight:700;&quot;&gt;Data Collected via Error Reports&lt;/span&gt;&lt;/h3&gt;
-&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot; style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;The version of Porn Fetch you are using&lt;/span&gt;&lt;/li&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Your operating system (e.g., Windows, Linux, or macOS)&lt;/li&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The current date and time&lt;/li&gt;
-&lt;li style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot; style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The error details (full Python traceback)&lt;/li&gt;&lt;/ul&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700;&quot;&gt;Important:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt; The Python traceback may, in some cases, include incidental personal information — for example, your system username if it appears in a file path. No other personal data is intentionally collected. &lt;/span&gt;&lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Data Storage &amp;amp; Security&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;Error reports are stored in plain text on my server. The server’s storage device is encrypted with LUKS and secured with a strong password (40+ characters). &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; color:#ff0000;&quot;&gt;Your &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700; color:#ff0000;&quot;&gt;IP address is never logged, stored, or displayed&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; color:#ff0000;&quot;&gt;. &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:700;&quot;&gt;Optional Participation&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;Whether you enable error reporting or not will have no impact on the application&apos;s functionality. It simply helps me identify and fix issues faster. You can also manually check for updates on GitHub, although most users do not do this. &lt;/span&gt;&lt;/p&gt;
-&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; font-weight:700;&quot;&gt;IPv6 Connectivity Check&lt;/span&gt;&lt;/h3&gt;
-&lt;p style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;To see if you have IPv6 connectivity, visit:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;a href=&quot;https://echteralsfake.duckdns.org/ping&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; text-decoration: underline; color:#1aff00;&quot;&gt;https://echteralsfake.duckdns.org/ping&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;If you see a white page with &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; font-weight:700;&quot;&gt;Success&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;, you have IPv6. If not, you do not. &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;You can also verify your IP addresses by visiting: &lt;/span&gt;&lt;a href=&quot;https://ipleak.net&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; text-decoration: underline; color:#ffff00;&quot;&gt;https://ipleak.net&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;Example formats:&lt;br /&gt;IPv4: &lt;/span&gt;&lt;span style=&quot; font-family:&apos;monospace&apos;; font-size:12pt;&quot;&gt;135.215.32.64&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;IPv6: &lt;/span&gt;&lt;span style=&quot; font-family:&apos;monospace&apos;; font-size:12pt;&quot;&gt;2a02:810a:186:b400::5c51&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/form_main_window.ui" line="4602"/>
+        <location filename="../../UI/form_main_window.ui" line="4607"/>
         <source>I have IPv6 :) (and want to enable it)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4612"/>
+        <location filename="../../UI/form_main_window.ui" line="4617"/>
         <source>I don&apos;t have IPv6 / I don&apos;t want to enable this feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4097"/>
+        <location filename="../../UI/form_main_window.ui" line="4102"/>
         <source>Custom App Name:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1755,147 +1614,293 @@ directly </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3528"/>
+        <location filename="../../UI/form_main_window.ui" line="3514"/>
+        <source>Italian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="3533"/>
         <source>button apply the settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3541"/>
+        <location filename="../../UI/form_main_window.ui" line="3546"/>
         <source>button reset porn fetch to default settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3642"/>
+        <location filename="../../UI/form_main_window.ui" line="3647"/>
         <source>Send Feedback (Anonymously)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3649"/>
+        <location filename="../../UI/form_main_window.ui" line="3654"/>
         <source>Textbrowser for credits / information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3711"/>
+        <location filename="../../UI/form_main_window.ui" line="3716"/>
         <source>button accept license</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3740"/>
+        <location filename="../../UI/form_main_window.ui" line="3745"/>
         <source>button deny license</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3776"/>
+        <location filename="../../UI/form_main_window.ui" line="3781"/>
         <source>textbrowser license</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3933"/>
+        <location filename="../../UI/form_main_window.ui" line="3938"/>
         <source>textbrowser keyboard shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3986"/>
+        <location filename="../../UI/form_main_window.ui" line="3941"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:14pt; font-weight:700;&quot;&gt;Keyboard Shortcuts&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;; font-size:14pt; font-weight:700;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + Q     Closes the application&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + E      Exports all current video URLs from the tree widget into a .txt file &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + T      Downloads all videos in the tree widget (same as clicking the button)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + A     Quickly enables the anonymous mode (temporarily)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + S     Saves Porn Fetch settings&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + X     Selects all items in the tree widget as checked&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;CTRL + Z     Unchecks all items in the tree widget&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:16pt;&quot;&gt;   &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="3991"/>
         <source>textbrowser update changelog notification</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3993"/>
+        <location filename="../../UI/form_main_window.ui" line="3998"/>
         <source>button acknowledge that a new version is out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4056"/>
+        <location filename="../../UI/form_main_window.ui" line="4061"/>
         <source>textbrowser install dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4094"/>
+        <location filename="../../UI/form_main_window.ui" line="4064"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:24pt; font-weight:700;&quot;&gt;Installation Mode&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:16pt; text-decoration: underline; color:#0000ff;&quot;&gt;1) Inst&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:14pt; text-decoration: underline; color:#0000ff;&quot;&gt;all&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;This will install Porn Fetch into your system, meaning that you can run it directly from your Start Menu. e.g, press Windows key, type Porn Fetch and directly start it and on Linux it will be the same.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;Porn Fetch will be installed into the following path(s):&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;Windows: C:\Users\&amp;lt;user&amp;gt;\AppData\Local\pornfetch\&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;Linux: ~/.local/share/pornfetch&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:16pt; text-decoration: underline; color:#00ff00;&quot;&gt;2) Portable&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;This means, that Porn Fetch will not be installed and in order to use and start Porn Fetch you always need to double click on the file you have downloaded. This has some benefits as the uninstallation is easier and you have more control over it, but for the average user I do not recommend this.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:16pt; font-weight:700; color:#a100ff;&quot;&gt;Custom App name&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt; color:#ffffff;&quot;&gt;Down below you can enter  a custom name for Porn Fetch. You can then search with this name for Porn Fetch and Porn Fetch will not be found anymore when someone enters &amp;quot;Porn Fetch&amp;quot; on your PC. This can be useful if multiple persons use your PC and you don&apos;t want them to know you are using this application. It can also help if you are in public and people stare at your PC. Porn Fetch has also an option to fully hide, that it&apos;s a PornHub downloader.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:12pt; color:#ffffff;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:12pt; color:#ffffff;&quot;&gt;If you leave it empty, Porn Fetch will remain as &amp;quot;Porn Fetch&amp;quot; in your short menu.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:14pt; text-decoration: underline; color:#aa0000;&quot;&gt;NOTE:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:12pt;&quot;&gt;Installation was implemented in this release and might still be experimental. If you run into any issues, please report it on my GitHub. Thank you :&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Segoe UI&apos;; font-size:9pt;&quot;&gt;) &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Segoe UI&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="4099"/>
         <source>label custom app name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4104"/>
+        <location filename="../../UI/form_main_window.ui" line="4109"/>
         <source>lineedit custom app name (enter the custom name here) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4110"/>
+        <location filename="../../UI/form_main_window.ui" line="4115"/>
         <source>Enter your custom App Name here. Leave it empty to keep &quot;Porn Fetch&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4121"/>
+        <location filename="../../UI/form_main_window.ui" line="4126"/>
         <source>buttom instal porn fetch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4124"/>
+        <location filename="../../UI/form_main_window.ui" line="4129"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4131"/>
+        <location filename="../../UI/form_main_window.ui" line="4136"/>
         <source>button portable mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4134"/>
+        <location filename="../../UI/form_main_window.ui" line="4139"/>
         <source>Portable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4198"/>
+        <location filename="../../UI/form_main_window.ui" line="4203"/>
         <source>textbrowser supported websites</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4351"/>
+        <location filename="../../UI/form_main_window.ui" line="4206"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;table border=&quot;0&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;&quot; cellspacing=&quot;2&quot; cellpadding=&quot;0&quot;&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt; font-weight:700;&quot;&gt;Category&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt; font-weight:700;&quot;&gt;Websites&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;Videos&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang, YouPorn&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;Searching&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;Models&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;PornHub, HQporner, xnxx&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;Pornstars&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;PornHub, Eporner, xvideos, Xhamster, Spankbang&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;Channels&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;PornHub, Xhamster, Spankbang&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;Creator / Users&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;Xhamster (Creator), Spankbang (Creator), xnxx (Users)&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;Playlists&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;PornHub, xvideos&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;Downloading&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;xvideos&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;Shorts&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;Xhamster&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;Account Login&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;PornHub&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;Videos by Category&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;HQporner, Eporner&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;Random&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;HQporner&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;Brazzers only&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;HQporner&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;Top Porn&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Adwaita Sans&apos;; font-size:11pt;&quot;&gt;HQporner&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="4356"/>
         <source>button donate ko-fi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4354"/>
+        <location filename="../../UI/form_main_window.ui" line="4359"/>
         <source>Ko-Fi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4364"/>
+        <location filename="../../UI/form_main_window.ui" line="4369"/>
         <source>button already donated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4367"/>
+        <location filename="../../UI/form_main_window.ui" line="4372"/>
         <source>Already Donated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4377"/>
+        <location filename="../../UI/form_main_window.ui" line="4382"/>
         <source>button donate paypal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4380"/>
+        <location filename="../../UI/form_main_window.ui" line="4385"/>
         <source>PayPal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4390"/>
+        <location filename="../../UI/form_main_window.ui" line="4395"/>
         <source>button copy XMR address for donations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4393"/>
+        <location filename="../../UI/form_main_window.ui" line="4398"/>
         <source>Copy XMR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4403"/>
+        <location filename="../../UI/form_main_window.ui" line="4408"/>
         <source>button close donation message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="4406"/>
+        <location filename="../../UI/form_main_window.ui" line="4411"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1903,17 +1908,17 @@ directly </source>
 <context>
     <name>PornFetch</name>
     <message>
-        <location filename="../../../../main.py" line="1106"/>
+        <location filename="../../../../main.py" line="1112"/>
         <source>Porn Fetch installation failed, because of: {result[1]}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1460"/>
+        <location filename="../../../../main.py" line="1466"/>
         <source>Saved User Settings, please restart Porn Fetch!</source>
         <translation type="unfinished">已保存用户设置，请重新启动 Porn Fetch！</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1481"/>
+        <location filename="../../../../main.py" line="1487"/>
         <source>
 Please read this before setting proxies:
 
@@ -1955,78 +1960,78 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1733"/>
+        <location filename="../../../../main.py" line="1739"/>
         <source>The model URL you entered seems to be invalid. Please check your input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1799"/>
+        <location filename="../../../../main.py" line="1805"/>
         <source>Couldn&apos;t determine which site you want to search on??? Please report this immediately!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1100"/>
+        <location filename="../../../../main.py" line="1106"/>
         <source>Porn Fetch has been installed. The app will now close! Please start Porn Fetch from your context menu again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1551"/>
+        <location filename="../../../../main.py" line="1557"/>
         <source>You did choose to not disable SSL Verifications. Retuning to GUI without applying proxies now...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1555"/>
+        <location filename="../../../../main.py" line="1561"/>
         <source>Your proxy seems to be invalid, please try again...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1562"/>
+        <location filename="../../../../main.py" line="1568"/>
         <source>Proxy IP: {ip_masked} Your IP: {ip} are the same! Please check the proxy you&apos;ve used!, aborting...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1580"/>
+        <location filename="../../../../main.py" line="1586"/>
         <source>Can not enable Kill Switch if you haven&apos;t applied a proxy yet!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2169"/>
+        <location filename="../../../../main.py" line="2175"/>
         <source>Those credentials don&apos;t seem to be valid...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2176"/>
+        <location filename="../../../../main.py" line="2182"/>
         <source>Login Successful!</source>
         <translation type="unfinished">登陆成功！</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2181"/>
+        <location filename="../../../../main.py" line="2187"/>
         <source>Login Failed, please check your credentials and try again!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2185"/>
+        <location filename="../../../../main.py" line="2191"/>
         <source>You are already logged in!</source>
         <translation type="unfinished">您已经登录！</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2195"/>
+        <location filename="../../../../main.py" line="2201"/>
         <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
         <translation type="unfinished">登录有问题。请确保您先登录，然后尝试根据您的帐户获取视频。</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2242"/>
-        <location filename="../../../../main.py" line="2261"/>
+        <location filename="../../../../main.py" line="2248"/>
+        <location filename="../../../../main.py" line="2267"/>
         <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
         <translation type="unfinished">类别无效。按“列出类别”查看所有可能的类别。</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2365"/>
+        <location filename="../../../../main.py" line="2371"/>
         <source>Full Thumbnail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2481"/>
+        <location filename="../../../../main.py" line="2487"/>
         <source>
 ! Warning !
 Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
@@ -2038,7 +2043,7 @@ Some websites couldn&apos;t be accessed. Here&apos;s a detailed report:
 <context>
     <name>main</name>
     <message>
-        <location filename="../../../../main.py" line="2581"/>
+        <location filename="../../../../main.py" line="2590"/>
         <source>No URLs in the current session...</source>
         <translation type="unfinished"></translation>
     </message>

@@ -608,6 +608,10 @@ to be refactored.
 - Added Model / Channel support for porntrex.com
 - Added Searching support for porntrex.com
 
+### Bug Fixes
+- Fixed 403 missav error
+- 
+
 ### User Interface
 - Added clear tooltips for most settings option to help understand
 - You can also set a custom app name when installing Porn Fetch from the settings

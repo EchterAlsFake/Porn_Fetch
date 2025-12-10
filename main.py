@@ -2531,6 +2531,9 @@ def main():
         elif str(language) == "4":
             language_code = "fr"
 
+        elif str(language) == "5":
+            language_code = "it"
+
     # Try loading the specific regional translation
 
     path = f":/translations/translations/qm/{language_code}.qm"
