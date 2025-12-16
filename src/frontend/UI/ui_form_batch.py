@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'form_batch.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.10.0
+## Created by: Qt User Interface Compiler version 6.10.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
