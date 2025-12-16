@@ -621,6 +621,9 @@ to be refactored.
 
 ### Code Optimizations
 - Refactored `check_video` function to be faster and less redundant
+- Switched (mostly) from configparser to QSettings for faster and native settings handling
+- When installing Porn Fetch on Linux, the logo will not be downloaded and is embedded in the app
+- Improved installation by using standartized paths, instead of hardcoded ones
 
 
 

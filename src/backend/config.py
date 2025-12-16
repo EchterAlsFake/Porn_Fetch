@@ -15,6 +15,7 @@ __version__ = "3.7"
 __build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 __next_release__ = "3.8"
+__type__ = "source"
 
 """
 This stores some values that are shared between all files. One example is the http log IP and port. Please

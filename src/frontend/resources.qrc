@@ -10,6 +10,7 @@
         <file>graphics/done.svg</file>
         <file>graphics/progressbars.svg</file>
         <file>graphics/tooltip.svg</file>
+        <file>graphics/logo.png</file>
     </qresource>
     <qresource prefix="/credits">
         <file>../../README/CREDITS.md</file>

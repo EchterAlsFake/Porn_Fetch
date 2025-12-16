@@ -20,6 +20,13 @@ E-Mail: EchterAlsFake@proton.me
 Discord: echteralsfake (faster response)
 """
 
+# macOS Setup...
+import sys
+
+if sys.platform == "darwin":
+    from src.backend.macos_setup import macos_setup
+    macos_setup()
+
 try:
     from av import open as av_open  # Don't ask
     from av.audio.resampler import AudioResampler  # Don't ask
@@ -28,126 +35,6 @@ try:
 except Exception:
     FORCE_DISABLE_AV = True
 
-import sys
-from pathlib import Path
-from PySide6.QtWidgets import QApplication, QWidget, QTextBrowser, QVBoxLayout, QPushButton
-
-app_path = Path(sys.argv[0]).resolve()
-if str(app_path).startswith("/Volume"):
-    class Notification(QWidget):
-        def __init__(self):
-            super().__init__()
-            self.setGeometry(0, 0, 600, 600)
-            self.setStyleSheet("""
-QWidget: {
-color: #ECECEC;  /* Brightened for better contrast */
-background-color: #262626; /* Darkened for better contrast */
-border: none}
-""")
-            self.layout = QVBoxLayout()
-            self.close_button = QPushButton("Close")
-            self.close_button.setMinimumHeight(30)
-            self.msg_box = QTextBrowser(self)
-            self.msg_box.setText("""
-Please move Porn Fetch into your applications folder. You can do that by opening 'Finder' and dragging the Porn Fetch
-executable you just clicked on, into the 'Applications' folder that you'll see in Finder. After that, you can open 'Launchpad'
-and type 'Porn Fetch'. You'll find it there and can run it easily from Launchpad and also add it to your application bar at
-the bottom.
-
-This is an intended behaviour from macOS and all applications follow this scheme. 
-Thank you for your patience :)
-""")
-            self.msg_box.setObjectName("reader")
-            self.msg_box.setStyleSheet("""
-/* Apply to a QTextBrowser with objectName "reader" */
-#reader {
-  background: #0b1220;            /* near-black with a hint of blue */
-  color: #e5e7eb;                 /* gray-200 */
-  border: 1px solid #1f2937;      /* slate-800 */
-  border-radius: 12px;
-  padding: 12px;
-  selection-background-color: rgba(96, 165, 250, 0.28); /* soft blue */
-  selection-color: #0b1220;
-  font-family: Inter, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.35;
-}
-
-#reader img, #reader table {
-  margin: 6px;
-}
-
-/* Vertical scrollbar */
-#reader QScrollBar:vertical {
-  width: 10px;
-  margin: 8px 4px 8px 0;
-  background: transparent;
-  border: none;
-}
-#reader QScrollBar::handle:vertical {
-  min-height: 24px;
-  background: #374151;            /* gray-700 */
-  border-radius: 8px;
-}
-#reader QScrollBar::handle:vertical:hover {
-  background: #4b5563;            /* gray-600 */
-}
-#reader QScrollBar::add-line:vertical,
-#reader QScrollBar::sub-line:vertical { height: 0; }
-#reader QScrollBar::add-page:vertical,
-#reader QScrollBar::sub-page:vertical { background: transparent; }
-
-/* Horizontal scrollbar */
-#reader QScrollBar:horizontal {
-  height: 10px;
-  margin: 0 8px 4px 8px;
-  background: transparent;
-  border: none;
-}
-#reader QScrollBar::handle:horizontal {
-  min-width: 24px;
-  background: #374151;
-  border-radius: 8px;
-}
-#reader QScrollBar::handle:horizontal:hover {
-  background: #4b5563;
-}
-#reader QScrollBar::add-line:horizontal,
-#reader QScrollBar::sub-line:horizontal { width: 0; }
-#reader QScrollBar::add-page:horizontal,
-#reader QScrollBar::sub-page:horizontal { background: transparent; }
-
-#reader:focus {
-  border: 1px solid #60a5fa;      /* blue-400 */
-}
-""")
-            self.layout.addWidget(self.msg_box)
-            self.layout.addWidget(self.close_button)
-            self.setLayout(self.layout)
-            self.close_button.setStyleSheet("""
-QPushButton {
-    background-color: #7B1FA2; /* Purple */
-    color: white;
-    border-radius: 8px;
-}
-
-QPushButton:hover {
-    background-color: #9575CD; /* Lighter violet */
-}
-
-QPushButton:pressed {
-    background-color: #6A1B9A; /* Dark purple */
-}
-
-""")
-            self.close_button.clicked.connect(self.close)
-            self.layout.setContentsMargins(0, 0, 0, 0)
-            self.setContentsMargins(0, 0, 0, 0)
-
-    app = QApplication(sys.argv)
-    w = Notification()
-    w.show()
-    sys.exit(app.exec())
 
 import time
 import shutil
@@ -176,9 +63,11 @@ from src.backend.check_license import LicenseManager
 from src.frontend.UI.license import License, Disclaimer
 from src.backend.config import shared_config
 from hqporner_api.api import Sort as hq_Sort
+from pathlib import Path
 
 from PySide6.QtCore import (QFile, QTextStream, QRunnable, QThreadPool, QSemaphore, Qt, QLocale,
-                            QTranslator, QCoreApplication, QSize, QEvent, QRectF, QByteArray, QStandardPaths)
+                            QTranslator, QCoreApplication, QSize, QEvent, QRectF, QByteArray, QStandardPaths,
+                            QDir, QIODevice, QFileDevice, QSettings, QSaveFile)
 from PySide6.QtWidgets import (QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, \
                                QInputDialog, QMainWindow, QLabel, QProgressBar, QGraphicsPixmapItem, QDialog, QVBoxLayout,
                                QGraphicsScene, QGraphicsView, QComboBox)
@@ -209,15 +98,89 @@ core_conf = shared_functions.config
 stop_flag = Event()
 _download_lock = Lock()
 video_data = VideoData()
+settings: QSettings = None
 logger = shared_functions.setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=shared_functions.http_log_ip,
                       http_port=shared_functions.http_log_port)
 
 
-PUBLIC_KEY_B64 = 'fO+O91Q/HkC8s9s8Cium4Q2J/v7RqrFsEs8t4bhuuD0='  # embed public key only
+PUBLIC_KEY_B64 = 'zGUmG8Z5InvoYIwnIokQi+SysjEodvfP8kLoCur3KjM=' # This is the public key lol
+
+
+def _mkpath(path: str) -> None:
+    if not path:
+        raise RuntimeError("Got empty path from QStandardPaths.")
+    if not QDir().mkpath(path):
+        raise RuntimeError(f"Failed to create directory: {path}")
+
+
+def _move_or_copy(src: str, dst: str) -> None:
+    # Prefer atomic-ish rename, but fall back to copy+remove (cross-device, etc.)
+    if QFile.exists(dst):
+        QFile.remove(dst)
+
+    if QFile.rename(src, dst):
+        return
+
+    if not QFile.copy(src, dst):
+        raise RuntimeError(f"Could not move/copy '{src}' -> '{dst}'")
+
+    # Only remove original after successful copy
+    QFile.remove(src)
+
+
+def _write_text_atomic(path: str, text: str) -> None:
+    f = QSaveFile(path)
+    if not f.open(QIODevice.OpenModeFlag.WriteOnly | QIODevice.OpenModeFlag.Text):
+        raise RuntimeError(f"Could not open for writing: {path}")
+    f.write(text.encode("utf-8"))
+    if not f.commit():
+        raise RuntimeError(f"Could not commit: {path}")
+
+
+def _chmod_755(path: str) -> None:
+    perms = (
+        QFileDevice.Permission.ReadOwner | QFileDevice.Permission.WriteOwner | QFileDevice.Permission.ExeOwner |
+        QFileDevice.Permission.ReadGroup | QFileDevice.Permission.ExeGroup |
+        QFileDevice.Permission.ReadOther | QFileDevice.Permission.ExeOther
+    )
+    QFile.setPermissions(path, perms)
+
 
 def _default_license_path() -> Path:
     cfg = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation)
     return Path(cfg) / "porn_fetch.license"
+
+
+def make_settings(portable: bool, portable_dir: str | None = None) -> QSettings:
+    """
+    One clean place to decide where settings go.
+    - Portable: INI next to the portable app folder
+    - Installed: native backend (registry/plist/ini in standard locations) OR INI in AppConfigLocation
+    """
+    if portable:
+        if not portable_dir:
+            portable_dir = os.getcwd()
+        ini_path = os.path.join(portable_dir, "config.ini")
+        return QSettings(ini_path, QSettings.Format.IniFormat)
+
+    # Installed:
+    return QSettings()  # uses org/app + platform standard location/backend
+
+
+def get_settings(*, portable: bool, portable_dir: str | None = None) -> QSettings:
+    """
+    Portable  -> ./config.ini (next to app / CWD or portable_dir)
+    Installed -> config.ini in AppConfigLocation (per-user standard location)
+    """
+    QSettings.setDefaultFormat(QSettings.Format.IniFormat)
+
+    if portable:
+        base = portable_dir or os.getcwd()
+        return QSettings(os.path.join(base, "config.ini"), QSettings.Format.IniFormat)
+
+    cfg_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation)
+    QDir().mkpath(cfg_dir)
+    return QSettings(os.path.join(cfg_dir, "config.ini"), QSettings.Format.IniFormat)
 
 
 class LicenseWidget(QWidget):
@@ -254,122 +217,33 @@ class LicenseWidget(QWidget):
 
 
 class InstallThread(QRunnable):
-    def __init__(self, app_name):
-        super(InstallThread, self).__init__()
+    def __init__(self, app_name: str, app_id: str = "pornfetch", org_name: str = "EchterAlsFake"):
+        super().__init__()
+        global settings
+        settings = get_settings(portable=False) # At the first run, I assume the user goes for a portable install-type, however if the installation is called we need to switch that behaviour
+
         self.app_name = app_name
+        self.app_id = app_id  # used for desktop file name, etc.
+        self.org_name = org_name
         self.signals = Signals()
-        self.logger = shared_functions.setup_logger(name="Porn Fetch - [InstallThread]", log_file="PornFetch.log", level=logging.DEBUG,
-                                   http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
+
+        # keep your logger setup if you want; using basic logging here
+        self.logger = logging.getLogger("InstallThread")
 
     def run(self):
         try:
             self.signals.start_undefined_range.emit()
 
-            if sys.platform == "linux":
-                self.logger.info("Running installation for Platform: Linux")
-                filename = "PornFetch_Linux_GUI_x64.bin"
-                destination_path_tmp = os.path.expanduser("~/.local/share/")
-                destination_path_final = os.path.expanduser("~/.local/share/pornfetch/")
-                destination_install = os.path.expanduser("~/.local/share/applications/")
-                shortcut_path = os.path.join(destination_install, "pornfetch.desktop")
+            # These matter for QSettings() “installed” mode:
+            QCoreApplication.setOrganizationName(self.org_name)
+            QCoreApplication.setApplicationName(self.app_name)
 
-                if not os.path.exists(destination_path_tmp):
-                    self.logger.warning("The needed installation path doesn't exist?!")
-                    text = QCoreApplication.translate("main", """The path ~/.local/share/ does not exist. This path is typically used for installing applications and their settings
-in a users local account. Since you don't have that, you can't install it. Probably because your Linux does not follow
-the XDG Desktop Portal specifications. It's your own decision and I don't create the directory for you, or force you to
-do that. If you still wish to install Porn Fetch, look Online how to setup XDK-Desktop-Portal on your Linux distribution,
-head over to the setting and down there you will be able to try the installation again. Otherwise, you can just keep
-using the portable version, which will work just fine.
-
-If you believe, that this is a mistake, please report it on GitHub, so that I can fix it :)""", disambiguation=None)
-                    ui_popup(text)
-
-                os.makedirs(destination_path_final, exist_ok=True)
-                pornfetch_exe = os.path.join(destination_path_final, filename)
-                if os.path.exists(pornfetch_exe):
-                    os.remove(pornfetch_exe)
-
-                shutil.move("PornFetch_Linux_GUI_x64.bin", dst=destination_path_final)
-                self.logger.info(f"Moved the PornFetch binary to: {destination_path_final}")
-                shared_functions.shared_config.set("Misc", "install_type", "installed")
-                with open("config.ini", "w") as configuration:
-                    shared_config.write(configuration)
-
-                shutil.move("config.ini", dst=destination_path_final)
-                self.logger.info("Moved configuration file")
-                self.logger.info(f"Downloading additional asset: icon")
-
-                if not os.path.exists(os.path.join(destination_path_final, "Logo.png")):
-                    img = shared_functions.core.fetch(
-                        "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/refs/heads/master/src/frontend/graphics/android_app_icon.png",
-                        get_bytes=True)
-                    self.logger.debug("Got Porn Fetch logo, saving...")
-                    with open("Logo.png", "wb") as logo:
-                        logo.write(img)
-                        shutil.move("Logo.png", dst=destination_path_final)
-
-                entry_content = f"""[Desktop Entry]
-Name={self.app_name}
-Exec={destination_path_final}PornFetch_Linux_GUI_x64.bin %F
-Icon={destination_path_final}Logo.png
-Type=Application
-Terminal=false
-Categories=Utility;"""
-                if os.path.exists(shortcut_path):
-                    os.remove(shortcut_path)
-
-                with open("pornfetch.desktop", "w") as entry_file:
-                    entry_file.write(entry_content)
-
-                shutil.move("pornfetch.desktop", shortcut_path)
-                self.logger.info("Successfully installed Porn Fetch!")
-                os.chmod(mode=0o755,
-                         path=destination_path_final + "PornFetch_Linux_GUI_x64.bin")  # Setting executable permission
-
+            if sys.platform.startswith("linux"):
+                self._install_linux_user()
             elif sys.platform == "win32":
-                import win32com.client  # Only available on Windows
-
-                filename = "PornFetch_Windows_GUI_x64.exe"
-                target_dir = os.path.join(os.getenv("LOCALAPPDATA"), "pornfetch")
-                os.makedirs(target_dir, exist_ok=True)
-                self.logger.info(f"Created path at: {target_dir}")
-                if os.path.exists(os.path.join(target_dir, filename)):
-                    self.logger.info("Removed old Porn Fetch executable")
-                    os.remove(os.path.join(target_dir, filename))
-
-                # Move the executable to the target directory
-                shutil.move(filename, target_dir)
-                self.logger.info(f"Moved current Porn Fetch executable to: {target_dir}")
-
-                try:
-                    shared_functions.shared_config.set("Misc", "install_type", "installed")
-                    with open("config.ini", "w") as configuration:
-                        shared_config.write(configuration)
-
-                    print("Written new values to config")
-                    os.remove(os.path.join(target_dir, "config.ini"))
-
-                except Exception:
-                    "Don't care"
-                    pass
-
-                shutil.move("config.ini", target_dir)
-                print(f"Moved config.ini to {target_dir}")
-                # Define paths for the shortcut creation
-                app_name = self.app_name
-                app_exe_path = os.path.join(target_dir, filename)  # Full path to the executable
-                start_menu_path = os.path.join(os.getenv("APPDATA"), "Microsoft", "Windows", "Start Menu", "Programs")
-                shortcut_path = os.path.join(start_menu_path, f"{app_name}.lnk")
-
-                # Create the shortcut
-                shell = win32com.client.Dispatch("WScript.Shell")
-                shortcut = shell.CreateShortcut(shortcut_path)
-                shortcut.TargetPath = app_exe_path  # Path to the executable
-                shortcut.WorkingDirectory = target_dir  # Set working directory to the target directory
-                shortcut.IconLocation = app_exe_path
-                shortcut.Save()
-                self.logger.info(f"Created shortcut in -->: {shortcut_path}")
+                self._install_windows_user()
+            else:
+                raise RuntimeError(f"Unsupported platform: {sys.platform}")
 
         except Exception:
             error = traceback.format_exc()
@@ -380,7 +254,95 @@ Categories=Utility;"""
 
         self.signals.stop_undefined_range.emit()
         self.signals.install_finished.emit([True, ""])
-        # Porn Fetch installation is finished
+
+    # ----------------------------
+    # Linux (user-local install)
+    # ----------------------------
+    def _install_linux_user(self):
+        filename = "PornFetch_Linux_GUI_x64.bin"
+
+        # Install “payload” (binary + assets) into local app data:
+        install_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
+        _mkpath(install_dir)
+
+
+        apps_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.ApplicationsLocation)
+        if not apps_dir:
+            # Rare, but some environments can return empty; keep a safe fallback.
+            apps_dir = os.path.expanduser("~/.local/share/applications")
+        _mkpath(apps_dir)
+
+        src_exe = QCoreApplication.applicationFilePath()
+        dst_exe = os.path.join(install_dir, filename)
+        _move_or_copy(src_exe, dst_exe)
+        _chmod_755(dst_exe)
+
+        icon_dst = os.path.join(install_dir, "logo.png")
+        if not QFile.exists(icon_dst):
+            QFile.copy(":/images/graphics/logo.png", icon_dst)
+
+        # Write desktop file atomically
+        desktop_path = os.path.join(apps_dir, f"{self.app_id}.desktop")
+        entry = f"""[Desktop Entry]
+Version={__version__}
+Type=Application
+Name={self.app_name}
+Exec="{dst_exe}" %F
+Icon={icon_dst}
+Path={install_dir}
+Terminal=false
+Categories=Utility;
+StartupNotify=true
+"""
+        _write_text_atomic(desktop_path, entry)
+
+        # Store “installed” flag using Qt settings
+        settings = make_settings(portable=False)
+        settings.setValue("Misc/install_type", "installed")
+        settings.sync()
+
+        self.logger.info(f"Installed to {install_dir}, desktop entry {desktop_path}")
+
+    # ----------------------------
+    # Windows (user-local install)
+    # ----------------------------
+    def _install_windows_user(self):
+        import win32com.client  # pywin32
+
+        filename = "PornFetch_Windows_GUI_x64.exe"
+
+        install_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
+        _mkpath(install_dir)
+
+        src_exe = os.path.abspath(filename)
+        if not os.path.exists(src_exe):
+            raise RuntimeError(f"Missing installer payload: {src_exe}")
+
+        dst_exe = os.path.join(install_dir, filename)
+        _move_or_copy(src_exe, dst_exe)
+
+        # Settings flag
+        settings = make_settings(portable=False)
+        settings.setValue("Misc/install_type", "installed")
+        settings.sync()
+
+        # Start Menu Programs folder via Qt
+        start_menu_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.ApplicationsLocation)
+        if not start_menu_dir:
+            # Fallback (usually not needed)
+            start_menu_dir = os.path.join(os.getenv("APPDATA"), "Microsoft", "Windows", "Start Menu", "Programs")
+        _mkpath(start_menu_dir)
+
+        shortcut_path = os.path.join(start_menu_dir, f"{self.app_name}.lnk")
+
+        shell = win32com.client.Dispatch("WScript.Shell")
+        shortcut = shell.CreateShortcut(shortcut_path)
+        shortcut.TargetPath = dst_exe
+        shortcut.WorkingDirectory = install_dir
+        shortcut.IconLocation = dst_exe
+        shortcut.Save()
+
+        self.logger.info(f"Installed to {install_dir}, shortcut {shortcut_path}")
 
 
 class InternetCheck(QRunnable):
@@ -851,6 +813,9 @@ class PornFetch(QMainWindow):
         self.signals = Signals()
         self.signals.error_signal.connect(ui_popup)
 
+        global settings
+        settings = get_settings(portable=True, portable_dir=os.getcwd())
+
         if __build__ == "android":
             self.ui = Ui_PornFetchAndroid()
 
@@ -1295,131 +1260,121 @@ class PornFetch(QMainWindow):
         }
 
     def load_user_settings(self):
-        """Loads the user settings from the configuration file and applies them."""
-        conf.read("config.ini")
-
-        def b(value: str):
-            if value == "true":
-                return True
-
-            elif value == "false":
-                return False
-
-        # Video settings
-        _quality = int(conf.get("Video", "quality"))
+        # --- Video ---
+        _quality = settings.value("Video/quality", 0, int)
         video_data.consistent_data.update({"quality": self.mappings_quality.get(_quality)})
         self.ui.settings_video_combobox_quality.setCurrentIndex(_quality)
 
-        _model_videos = int(conf.get("Video", "model_videos"))
+        _model_videos = settings.value("Video/model_videos", 0, int)
         video_data.consistent_data.update({"model_videos": _model_videos})
         self.ui.settings_video_combobox_model_videos.setCurrentIndex(_model_videos)
 
-        result_limit = int(conf.get("Video", "result_limit"))
+        result_limit = settings.value("Video/result_limit", 50, int)
         video_data.consistent_data.update({"result_limit": result_limit})
         self.ui.settings_spinbox_videos_result_limit.setValue(result_limit)
 
-        output_path = str(conf.get("Video", "output_path"))
+        output_path = settings.value("Video/output_path", "./", str)
         video_data.consistent_data.update({"output_path": output_path})
         self.ui.settings_lineedit_videos_output_path.setText(output_path)
 
-        video_id_as_filename = b(conf.get("Video", "video_id_as_filename"))
+        video_id_as_filename = settings.value("Video/video_id_as_filename", False, bool)
         video_data.consistent_data.update({"video_id_as_filename": video_id_as_filename})
         self.ui.settings_checkbox_videos_use_video_id_as_filename.setChecked(video_id_as_filename)
 
-        write_metadata = b(conf.get("Video", "write_metadata"))
+        write_metadata = settings.value("Video/write_metadata", True, bool)
         video_data.consistent_data.update({"write_metadata": write_metadata})
         self.ui.settings_checkbox_videos_write_metadata.setChecked(write_metadata)
 
-        skip_existing_files = b(conf.get("Video", "skip_existing_files"))
+        skip_existing_files = settings.value("Video/skip_existing_files", True, bool)
         video_data.consistent_data.update({"skip_existing_files": skip_existing_files})
         self.ui.settings_checkbox_videos_skip_existing_files.setChecked(skip_existing_files)
 
-        track_videos = b(conf.get("Video", "track_videos"))
+        track_videos = settings.value("Video/track_videos", False, bool)
         video_data.consistent_data.update({"track_videos": track_videos})
         self.ui.settings_checkbox_videos_track_downloaded_videos.setChecked(track_videos)
 
-        database_path = str(conf.get("Video", "database_path"))
+        database_path = settings.value("Video/database_path", "./downloads.db", str)
         video_data.consistent_data.update({"database_path": database_path})
         self.ui.settings_lineedit_videos_database_path.setText(database_path)
 
-        directory_system = b(conf.get("Video", "directory_system"))
+        directory_system = settings.value("Video/directory_system", False, bool)
         video_data.consistent_data.update({"directory_system": directory_system})
         self.ui.settings_checkbox_videos_use_directory_system.setChecked(directory_system)
 
-        # Performance Options
-        _download_mode = int(conf.get("Performance", "download_mode"))
+        # --- Performance ---
+        _download_mode = settings.value("Performance/download_mode", 0, int)
         video_data.consistent_data.update({"download_mode": self.mappings_download_mode.get(_download_mode)})
         self.ui.settings_performance_combobox_download_mode.setCurrentIndex(_download_mode)
 
-        simultaneous_downloads = int(conf.get("Performance", "semaphore"))
+        simultaneous_downloads = settings.value("Performance/semaphore", 2, int)
         video_data.consistent_data.update({"semaphore": simultaneous_downloads})
         self.ui.settings_spinbox_performance_simultaneous_downloads.setValue(simultaneous_downloads)
 
-        network_delay = int(conf.get("Performance", "network_delay"))
+        network_delay = settings.value("Performance/network_delay", 0, int)
         video_data.consistent_data.update({"network_delay": network_delay})
         self.ui.settings_spinbox_performance_network_delay.setValue(network_delay)
 
-        videos_concurrency = int(conf.get("Performance", "videos_concurrency"))
+        videos_concurrency = settings.value("Performance/videos_concurrency", 10, int)
         video_data.consistent_data.update({"videos_concurrency": videos_concurrency})
         self.ui.settings_spinbox_performance_videos_concurrency.setValue(videos_concurrency)
 
-        pages_concurrency = int(conf.get("Performance", "pages_concurrency"))
+        pages_concurrency = settings.value("Performance/pages_concurrency", 2, int)
         video_data.consistent_data.update({"pages_concurrency": pages_concurrency})
         self.ui.settings_spinbox_performance_pages_concurrency.setValue(pages_concurrency)
 
-        download_workers = int(conf.get("Performance", "download_workers"))
+        download_workers = settings.value("Performance/download_workers", 20, int)
         video_data.consistent_data.update({"download_workers": download_workers})
         self.ui.settings_spinbox_performance_download_workers.setValue(download_workers)
 
-        timeout = int(conf.get("Performance", "timeout"))
+        timeout = settings.value("Performance/timeout", 10, int)
         video_data.consistent_data.update({"timeout": timeout})
         self.ui.settings_spinbox_performance_maximal_timeout.setValue(timeout)
 
-        retries = int(conf.get("Performance", "retries"))
+        retries = settings.value("Performance/retries", 4, int)
         video_data.consistent_data.update({"retries": retries})
         self.ui.settings_spinbox_performance_maximal_retries.setValue(retries)
 
-        speed_limit = float(conf.get("Performance", "speed_limit"))
+        speed_limit = settings.value("Performance/speed_limit", 0.0, float)
         video_data.consistent_data.update({"speed_limit": speed_limit})
         self.ui.settings_doublespinbox_performance_speed_limit.setValue(speed_limit)
 
-        processing_delay = int(conf.get("Performance", "processing_delay"))
+        processing_delay = settings.value("Performance/processing_delay", 0, int)
         video_data.consistent_data.update({"processing_delay": processing_delay})
         self.ui.settings_spinbox_performance_processing_delay.setValue(processing_delay)
 
-        # System
-        update_checks = b(conf.get("Misc", "update_checks"))
+        # --- System/Misc ---
+        update_checks = settings.value("Misc/update_checks", True, bool)
         video_data.consistent_data.update({"update_checks": update_checks})
         self.ui.settings_checkbox_system_update_checks.setChecked(update_checks)
 
-        internet_checks = b(conf.get("Misc", "internet_checks"))
+        internet_checks = settings.value("Misc/internet_checks", True, bool)
         video_data.consistent_data.update({"internet_checks": internet_checks})
         self.ui.settings_checkbox_system_internet_checks.setChecked(internet_checks)
 
-        anonymous_mode = b(conf.get("Misc", "anonymous_mode"))
+        anonymous_mode = settings.value("Misc/anonymous_mode", False, bool)
         self._anonymous_mode = anonymous_mode
         video_data.consistent_data.update({"anonymous_mode": anonymous_mode})
         self.ui.settings_checkbox_system_enable_anonymous_mode.setChecked(anonymous_mode)
 
-        # (Proxies are handled when clicked, not here, and not saved to a configuration file)
-        supress_errors = b(conf.get("Misc", "supress_errors"))
+        supress_errors = settings.value("Misc/supress_errors", False, bool)
         video_data.consistent_data.update({"supress_errors": supress_errors})
         self.ui.settings_checkbox_system_supress_errors.setChecked(supress_errors)
 
-        network_logging = b(conf.get("Misc", "network_logging"))
+        network_logging = settings.value("Misc/network_logging", False, bool)
         video_data.consistent_data.update({"network_logging": network_logging})
         self.ui.settings_checkbox_system_enable_network_logging.setChecked(network_logging)
 
-        # UI
-        ui_language_idx = int(conf.get("UI", "language"))
+        # --- UI ---
+        ui_language_idx = settings.value("UI/language", 0, int)
         self.ui.settings_ui_combobox_language.setCurrentIndex(ui_language_idx)
 
-        font_size = int(conf.get("UI", "font_size"))
+        font_size = settings.value("UI/font_size", 10, int)
         self.ui.settings_spinbox_ui_font_size.setValue(font_size)
 
-        ui_theme_idx = int(conf.get("UI", "theme"))
+        ui_theme_idx = settings.value("UI/theme", 0, int)
         self.ui.settings_combobox_ui_theme.setCurrentIndex(ui_theme_idx)
 
+        # Apply to your core_conf
         core_conf.timeout = timeout
         core_conf.max_retries = retries
         core_conf.max_bandwidth_mb = speed_limit
@@ -1428,84 +1383,57 @@ class PornFetch(QMainWindow):
         core_conf.videos_concurrency = videos_concurrency
         core_conf.pages_concurrency = pages_concurrency
         core_conf.max_workers_download = download_workers
+
         shared_functions.refresh_clients()
         shared_functions.enable_logging()
 
     def save_user_settings(self):
         """Saves the user settings to the configuration file based on the UI state."""
-        conf.read("config.ini")
-
-        # Helper for lower-case boolean strings
-        def b(v: bool) -> str:
-            return "true" if v else "false"
-
-        # Video
-        _quality_idx = self.ui.settings_video_combobox_quality.currentIndex()
-        _model_videos = self.ui.settings_video_combobox_model_videos.currentIndex()
-        result_limit = int(self.ui.settings_spinbox_videos_result_limit.value())
-        output_path = str(self.ui.settings_lineedit_videos_output_path.text())
-        video_id_as_filename = self.ui.settings_checkbox_videos_use_video_id_as_filename.isChecked()
-        write_metadata = self.ui.settings_checkbox_videos_write_metadata.isChecked()
-        skip_existing_files = self.ui.settings_checkbox_videos_skip_existing_files.isChecked()
-        track_downloaded_videos = self.ui.settings_checkbox_videos_track_downloaded_videos.isChecked()
-        database_path = str(self.ui.settings_lineedit_videos_database_path.text())
-        directory_system = self.ui.settings_checkbox_videos_use_directory_system.isChecked()
-        conf.set("Video", "quality", str(_quality_idx))
-        conf.set("Video", "model_videos", str(_model_videos))
-        conf.set("Video", "result_limit", str(result_limit))
-        conf.set("Video", "output_path", output_path)
-        conf.set("Video", "video_id_as_filename", b(video_id_as_filename))
-        conf.set("Video", "write_metadata", b(write_metadata))
-        conf.set("Video", "skip_existing_files", b(skip_existing_files))
-        conf.set("Video", "track_videos", b(track_downloaded_videos))
-        conf.set("Video", "database_path", database_path)
-        conf.set("Video", "directory_system", b(directory_system))
+        # --- Video ---
+        settings.beginGroup("Video")
+        settings.setValue("quality", self.ui.settings_video_combobox_quality.currentIndex())
+        settings.setValue("model_videos", self.ui.settings_video_combobox_model_videos.currentIndex())
+        settings.setValue("result_limit", int(self.ui.settings_spinbox_videos_result_limit.value()))
+        settings.setValue("output_path", str(self.ui.settings_lineedit_videos_output_path.text()))
+        settings.setValue("video_id_as_filename", self.ui.settings_checkbox_videos_use_video_id_as_filename.isChecked())
+        settings.setValue("write_metadata", self.ui.settings_checkbox_videos_write_metadata.isChecked())
+        settings.setValue("skip_existing_files", self.ui.settings_checkbox_videos_skip_existing_files.isChecked())
+        settings.setValue("track_videos", self.ui.settings_checkbox_videos_track_downloaded_videos.isChecked())
+        settings.setValue("database_path", str(self.ui.settings_lineedit_videos_database_path.text()))
+        settings.setValue("directory_system", self.ui.settings_checkbox_videos_use_directory_system.isChecked())
+        settings.endGroup()
 
         # --- Performance ---
-        _download_mode_idx = self.ui.settings_performance_combobox_download_mode.currentIndex()
-        simultaneous_downloads = int(self.ui.settings_spinbox_performance_simultaneous_downloads.value())
-        network_delay = int(self.ui.settings_spinbox_performance_network_delay.value())
-        videos_concurrency = int(self.ui.settings_spinbox_performance_videos_concurrency.value())
-        pages_concurrency = int(self.ui.settings_spinbox_performance_pages_concurrency.value())
-        download_workers = int(self.ui.settings_spinbox_performance_download_workers.value())
-        maximal_timeout = int(self.ui.settings_spinbox_performance_maximal_timeout.value())
-        maximal_retries = int(self.ui.settings_spinbox_performance_maximal_retries.value())
-        speed_limit = float(self.ui.settings_doublespinbox_performance_speed_limit.value())
-        processing_delay = int(self.ui.settings_spinbox_performance_processing_delay.value())
-        conf.set("Performance", "download_mode", str(_download_mode_idx))
-        conf.set("Performance", "semaphore", str(simultaneous_downloads))
-        conf.set("Performance", "network_delay", str(network_delay))
-        conf.set("Performance", "videos_concurrency", str(videos_concurrency))
-        conf.set("Performance", "pages_concurrency", str(pages_concurrency))
-        conf.set("Performance", "download_workers", str(download_workers))
-        conf.set("Performance", "maximal_timeout", str(maximal_timeout))
-        conf.set("Performance", "maximal_retries", str(maximal_retries))
-        conf.set("Performance", "speed_limit", str(speed_limit))
-        conf.set("Performance", "processing_delay", str(processing_delay))
+        settings.beginGroup("Performance")
+        settings.setValue("download_mode", self.ui.settings_performance_combobox_download_mode.currentIndex())
+        settings.setValue("semaphore", int(self.ui.settings_spinbox_performance_simultaneous_downloads.value()))
+        settings.setValue("network_delay", int(self.ui.settings_spinbox_performance_network_delay.value()))
+        settings.setValue("videos_concurrency", int(self.ui.settings_spinbox_performance_videos_concurrency.value()))
+        settings.setValue("pages_concurrency", int(self.ui.settings_spinbox_performance_pages_concurrency.value()))
+        settings.setValue("download_workers", int(self.ui.settings_spinbox_performance_download_workers.value()))
+        settings.setValue("timeout", int(self.ui.settings_spinbox_performance_maximal_timeout.value()))  # <-- fixed key
+        settings.setValue("retries", int(self.ui.settings_spinbox_performance_maximal_retries.value()))  # <-- fixed key
+        settings.setValue("speed_limit", float(self.ui.settings_doublespinbox_performance_speed_limit.value()))
+        settings.setValue("processing_delay", int(self.ui.settings_spinbox_performance_processing_delay.value()))
+        settings.endGroup()
 
-        # --- System ---
-        update_checks = self.ui.settings_checkbox_system_update_checks.isChecked()
-        internet_checks = self.ui.settings_checkbox_system_internet_checks.isChecked()
-        anonymous_mode = self.ui.settings_checkbox_system_enable_anonymous_mode.isChecked()
-        supress_errors = self.ui.settings_checkbox_system_supress_errors.isChecked()
-        network_logging = self.ui.settings_checkbox_system_enable_network_logging.isChecked()
-        conf.set("Misc", "update_checks", b(update_checks))
-        conf.set("Misc", "internet_checks", b(internet_checks))
-        conf.set("Misc", "anonymous_mode", b(anonymous_mode))
-        conf.set("Misc", "supress_errors", b(supress_errors))
-        conf.set("Misc", "network_logging", b(network_logging))
+        # --- Misc/System ---
+        settings.beginGroup("Misc")
+        settings.setValue("update_checks", self.ui.settings_checkbox_system_update_checks.isChecked())
+        settings.setValue("internet_checks", self.ui.settings_checkbox_system_internet_checks.isChecked())
+        settings.setValue("anonymous_mode", self.ui.settings_checkbox_system_enable_anonymous_mode.isChecked())
+        settings.setValue("supress_errors", self.ui.settings_checkbox_system_supress_errors.isChecked())
+        settings.setValue("network_logging", self.ui.settings_checkbox_system_enable_network_logging.isChecked())
+        settings.endGroup()
 
-        # UI
-        _gui_language_idx = self.ui.settings_ui_combobox_language.currentIndex()
-        _theme_idx = self.ui.settings_combobox_ui_theme.currentIndex()
-        font_size = self.ui.settings_spinbox_ui_font_size.value()
-        conf.set("UI", "language", str(_gui_language_idx))
-        conf.set("UI", "theme", str(_theme_idx))
-        conf.set("UI", "font_size", str(font_size))
+        # --- UI ---
+        settings.beginGroup("UI")
+        settings.setValue("language", self.ui.settings_ui_combobox_language.currentIndex())
+        settings.setValue("theme", self.ui.settings_combobox_ui_theme.currentIndex())
+        settings.setValue("font_size", int(self.ui.settings_spinbox_ui_font_size.value()))
+        settings.endGroup()
 
-        # Persist to disk
-        with open("config.ini", "w", encoding="utf-8") as f:
-            conf.write(f)
+        settings.sync()  # write to disk now
 
         ui_popup(self.tr("Saved User Settings, please restart Porn Fetch!", None))
         self.logger.debug("Saved User Settings, please restart Porn Fetch.")
@@ -1983,11 +1911,10 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
                 self.ui.progress_gridlayout_progressbar.removeWidget(widget)
                 widget.deleteLater()
 
-        downloaded_videos = int(conf.get("Misc", "downloaded_videos"))
+        downloaded_videos = int(settings.value("Misc/downloaded_videos"))
         downloaded_videos += 1
-        conf.set("Misc", "downloaded_videos", str(downloaded_videos))
-        with open("config.ini", "w") as config_file:  # type:TextIOWrapper
-            conf.write(config_file)
+        settings.setValue("Misc/downloaded_videos", str(downloaded_videos))
+        settings.sync()
 
         if video_data.consistent_data.get("track_videos"):
             self.logger.info(f"Tracking video: {video_id}")
