@@ -49,7 +49,7 @@ def ui_popup(text, title="Notice"):
 def send_to_server(message: dict):
     try:
         response = httpx.post(
-            url="https://echteralsfake.duckdns.org:443/report",
+            url="https://echteralsfake.me/report",
             json=message,
             timeout=20)
 

@@ -25,7 +25,7 @@ In a production release, these values will need consent of you, before logging i
 log to any server without your explicit consent.
 """
 """
-http_log_ip = "echteralsfake.duckdns.org"
+http_log_ip = "echteralsfake.me"
 http_log_port = 443
 """
 

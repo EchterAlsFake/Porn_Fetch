@@ -172,12 +172,13 @@ from src.backend.config import __version__, __build__
 from src.frontend.UI.donation_nag import DonationNag
 from src.frontend.UI.feedback_dialog import FeedbackDialog
 from src.backend.batch_feature import Batch
+from src.backend.check_license import LicenseManager
 from src.frontend.UI.license import License, Disclaimer
 from src.backend.config import shared_config
 from hqporner_api.api import Sort as hq_Sort
 
 from PySide6.QtCore import (QFile, QTextStream, QRunnable, QThreadPool, QSemaphore, Qt, QLocale,
-                            QTranslator, QCoreApplication, QSize, QEvent, QRectF, QByteArray)
+                            QTranslator, QCoreApplication, QSize, QEvent, QRectF, QByteArray, QStandardPaths)
 from PySide6.QtWidgets import (QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, \
                                QInputDialog, QMainWindow, QLabel, QProgressBar, QGraphicsPixmapItem, QDialog, QVBoxLayout,
                                QGraphicsScene, QGraphicsView, QComboBox)
@@ -210,6 +211,46 @@ _download_lock = Lock()
 video_data = VideoData()
 logger = shared_functions.setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=shared_functions.http_log_ip,
                       http_port=shared_functions.http_log_port)
+
+
+PUBLIC_KEY_B64 = 'fO+O91Q/HkC8s9s8Cium4Q2J/v7RqrFsEs8t4bhuuD0='  # embed public key only
+
+def _default_license_path() -> Path:
+    cfg = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation)
+    return Path(cfg) / "porn_fetch.license"
+
+
+class LicenseWidget(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        self.lic = LicenseManager(
+            public_key_b64=PUBLIC_KEY_B64,
+            storage_path=_default_license_path(),
+            expected_product="porn-fetch",
+        )
+
+        self.status = QLabel()
+        self.btn_import = QPushButton("Import license…")
+        self.btn_import.clicked.connect(self.import_license)
+
+        layout = QVBoxLayout(self)
+        layout.addWidget(self.status)
+        layout.addWidget(self.btn_import)
+
+        self.refresh_status()
+
+    def refresh_status(self):
+        res = self.lic.load_installed()
+        self.status.setText(f"License status: {'✅ Valid' if res.valid else '❌ Not valid'}\n{res.reason}")
+
+    def import_license(self):
+        path, _ = QFileDialog.getOpenFileName(self, "Select license file", "", "License (*.license);;All files (*)")
+        if not path:
+            return
+        res = self.lic.install_from_file(Path(path))
+        QMessageBox.information(self, "License", res.reason)
+        self.refresh_status()
 
 
 class InstallThread(QRunnable):
@@ -405,7 +446,7 @@ class CheckUpdates(QRunnable):
                                    http_port=shared_functions.http_log_port, http_ip=shared_functions.http_log_ip)
 
     def run(self):
-        url = f"https://echteralsfake.duckdns.org:443/update"
+        url = f"https://echteralsfake.me/update"
 
         try:
             response = shared_functions.core_update_checks.fetch(url=url, get_response=True)
@@ -828,6 +869,7 @@ class PornFetch(QMainWindow):
         self.license = License(self.ui, self.initialize_pornfetch)
         self.disclaimer = Disclaimer(self.ui, self.initialize_pornfetch)
         self.donation_nag = DonationNag(self.ui, self.initialize_pornfetch)
+        self.license_manager = LicenseManager(storage_path=_default_license_path(), public_key_b64=PUBLIC_KEY_B64)
 
         """
                              ! INDEX LIST !
@@ -874,6 +916,8 @@ class PornFetch(QMainWindow):
         self.semaphore = QSemaphore(video_data.consistent_data["semaphore"])
         self.logger.debug("Startup: [5/5] OK")
         self.initialize_pornfetch()
+        if not self.license_manager.has_feature("full_unlock"):
+            LicenseWidget()
 
     def disable_logging(self):
         conf["Misc"]["network_logging"] = "false"
