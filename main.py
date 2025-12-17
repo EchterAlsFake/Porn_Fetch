@@ -1096,6 +1096,18 @@ class PornFetch(QMainWindow):
         self.ui.settings_stacked_widget_main.setCurrentIndex(0)
 
         install_focus_outline(self)
+
+        stylesheet_license_buttons = QFile(":/style/UI/stylesheet_license_button.qss")
+        stylesheet_license_buttons.open(QIODevice.ReadOnly | QIODevice.Text)
+        stream = QTextStream(stylesheet_license_buttons)
+        style = stream.readAll()
+
+        self.ui.settings_button_buy_license.setProperty("variant", "primary")
+        self.ui.settings_button_buy_license.setStyleSheet(style)
+
+        self.ui.settings_button_import_license.setProperty("variant", "danger")
+        self.ui.settings_button_import_license.setStyleSheet(style)
+
         self.switch_to_download()
 
     def install_pornfetch(self):
@@ -1168,6 +1180,8 @@ class PornFetch(QMainWindow):
         self.ui.settings_button_switch_performance.clicked.connect(lambda _=False, i=1: self.ui.settings_stacked_widget_main.setCurrentIndex(i))
         self.ui.settings_button_switch_system.clicked.connect(lambda _=False, i=2: self.ui.settings_stacked_widget_main.setCurrentIndex(i))
         self.ui.settings_button_switch_ui.clicked.connect(lambda _=False, i=3: self.ui.settings_stacked_widget_main.setCurrentIndex(i))
+        self.ui.settings_button_buy_license.clicked.connect()
+
 
         self.ui.settings_button_apply.clicked.connect(self.save_user_settings)
         self.ui.settings_button_reset.clicked.connect(reset_pornfetch)
