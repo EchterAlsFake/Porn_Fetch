@@ -38,16 +38,53 @@ class Ui_MainWindow(object):
         self.centralwidget.setSizePolicy(sizePolicy)
         self.gridLayout_12 = QGridLayout(self.centralwidget)
         self.gridLayout_12.setObjectName(u"gridLayout_12")
+        self.formlayout_progressbar = QFormLayout()
+        self.formlayout_progressbar.setObjectName(u"formlayout_progressbar")
+        self.formlayout_progressbar.setHorizontalSpacing(0)
+        self.formlayout_progressbar.setVerticalSpacing(0)
+        self.main_label_progressbar_total = QLabel(self.centralwidget)
+        self.main_label_progressbar_total.setObjectName(u"main_label_progressbar_total")
+
+        self.formlayout_progressbar.setWidget(0, QFormLayout.ItemRole.LabelRole, self.main_label_progressbar_total)
+
+        self.main_progressbar_total = QProgressBar(self.centralwidget)
+        self.main_progressbar_total.setObjectName(u"main_progressbar_total")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.main_progressbar_total.sizePolicy().hasHeightForWidth())
+        self.main_progressbar_total.setSizePolicy(sizePolicy1)
+        self.main_progressbar_total.setMinimumSize(QSize(300, 0))
+        self.main_progressbar_total.setStyleSheet(u"text-align: center; /* Centered text */")
+        self.main_progressbar_total.setValue(0)
+
+        self.formlayout_progressbar.setWidget(0, QFormLayout.ItemRole.FieldRole, self.main_progressbar_total)
+
+        self.main_label_progressbar_converting = QLabel(self.centralwidget)
+        self.main_label_progressbar_converting.setObjectName(u"main_label_progressbar_converting")
+
+        self.formlayout_progressbar.setWidget(1, QFormLayout.ItemRole.LabelRole, self.main_label_progressbar_converting)
+
+        self.main_progressbar_converting = QProgressBar(self.centralwidget)
+        self.main_progressbar_converting.setObjectName(u"main_progressbar_converting")
+        self.main_progressbar_converting.setStyleSheet(u"text-align: center; /* Centered text */")
+        self.main_progressbar_converting.setValue(0)
+
+        self.formlayout_progressbar.setWidget(1, QFormLayout.ItemRole.FieldRole, self.main_progressbar_converting)
+
+
+        self.gridLayout_12.addLayout(self.formlayout_progressbar, 2, 0, 1, 1)
+
         self.main_horizontallayout_menu_buttons = QHBoxLayout()
         self.main_horizontallayout_menu_buttons.setSpacing(5)
         self.main_horizontallayout_menu_buttons.setObjectName(u"main_horizontallayout_menu_buttons")
         self.main_button_switch_home = QPushButton(self.centralwidget)
         self.main_button_switch_home.setObjectName(u"main_button_switch_home")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Maximum)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.main_button_switch_home.sizePolicy().hasHeightForWidth())
-        self.main_button_switch_home.setSizePolicy(sizePolicy1)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Maximum)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.main_button_switch_home.sizePolicy().hasHeightForWidth())
+        self.main_button_switch_home.setSizePolicy(sizePolicy2)
         self.main_button_switch_home.setMinimumSize(QSize(50, 35))
         self.main_button_switch_home.setMaximumSize(QSize(16777215, 35))
         self.main_button_switch_home.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -62,8 +99,8 @@ class Ui_MainWindow(object):
 
         self.main_button_switch_account = QPushButton(self.centralwidget)
         self.main_button_switch_account.setObjectName(u"main_button_switch_account")
-        sizePolicy1.setHeightForWidth(self.main_button_switch_account.sizePolicy().hasHeightForWidth())
-        self.main_button_switch_account.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.main_button_switch_account.sizePolicy().hasHeightForWidth())
+        self.main_button_switch_account.setSizePolicy(sizePolicy2)
         self.main_button_switch_account.setMinimumSize(QSize(50, 35))
         self.main_button_switch_account.setMaximumSize(QSize(16777215, 35))
         self.main_button_switch_account.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -79,8 +116,8 @@ class Ui_MainWindow(object):
 
         self.main_button_switch_tools = QPushButton(self.centralwidget)
         self.main_button_switch_tools.setObjectName(u"main_button_switch_tools")
-        sizePolicy1.setHeightForWidth(self.main_button_switch_tools.sizePolicy().hasHeightForWidth())
-        self.main_button_switch_tools.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.main_button_switch_tools.sizePolicy().hasHeightForWidth())
+        self.main_button_switch_tools.setSizePolicy(sizePolicy2)
         self.main_button_switch_tools.setMinimumSize(QSize(50, 35))
         self.main_button_switch_tools.setMaximumSize(QSize(16777215, 35))
         font = QFont()
@@ -98,8 +135,8 @@ class Ui_MainWindow(object):
 
         self.main_button_switch_settings = QPushButton(self.centralwidget)
         self.main_button_switch_settings.setObjectName(u"main_button_switch_settings")
-        sizePolicy1.setHeightForWidth(self.main_button_switch_settings.sizePolicy().hasHeightForWidth())
-        self.main_button_switch_settings.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.main_button_switch_settings.sizePolicy().hasHeightForWidth())
+        self.main_button_switch_settings.setSizePolicy(sizePolicy2)
         self.main_button_switch_settings.setMinimumSize(QSize(50, 35))
         self.main_button_switch_settings.setMaximumSize(QSize(16777215, 35))
         self.main_button_switch_settings.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -115,8 +152,8 @@ class Ui_MainWindow(object):
 
         self.main_button_switch_credits = QPushButton(self.centralwidget)
         self.main_button_switch_credits.setObjectName(u"main_button_switch_credits")
-        sizePolicy1.setHeightForWidth(self.main_button_switch_credits.sizePolicy().hasHeightForWidth())
-        self.main_button_switch_credits.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.main_button_switch_credits.sizePolicy().hasHeightForWidth())
+        self.main_button_switch_credits.setSizePolicy(sizePolicy2)
         self.main_button_switch_credits.setMinimumSize(QSize(50, 35))
         self.main_button_switch_credits.setMaximumSize(QSize(16777215, 35))
         self.main_button_switch_credits.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -132,8 +169,8 @@ class Ui_MainWindow(object):
 
         self.main_button_view_progress_bars = QPushButton(self.centralwidget)
         self.main_button_view_progress_bars.setObjectName(u"main_button_view_progress_bars")
-        sizePolicy1.setHeightForWidth(self.main_button_view_progress_bars.sizePolicy().hasHeightForWidth())
-        self.main_button_view_progress_bars.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.main_button_view_progress_bars.sizePolicy().hasHeightForWidth())
+        self.main_button_view_progress_bars.setSizePolicy(sizePolicy2)
         self.main_button_view_progress_bars.setMinimumSize(QSize(50, 35))
         self.main_button_view_progress_bars.setMaximumSize(QSize(16777215, 35))
         self.main_button_view_progress_bars.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -148,8 +185,8 @@ class Ui_MainWindow(object):
 
         self.main_button_switch_supported_websites = QPushButton(self.centralwidget)
         self.main_button_switch_supported_websites.setObjectName(u"main_button_switch_supported_websites")
-        sizePolicy1.setHeightForWidth(self.main_button_switch_supported_websites.sizePolicy().hasHeightForWidth())
-        self.main_button_switch_supported_websites.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.main_button_switch_supported_websites.sizePolicy().hasHeightForWidth())
+        self.main_button_switch_supported_websites.setSizePolicy(sizePolicy2)
         self.main_button_switch_supported_websites.setMinimumSize(QSize(50, 35))
         self.main_button_switch_supported_websites.setMaximumSize(QSize(16777215, 35))
         self.main_button_switch_supported_websites.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -180,11 +217,11 @@ class Ui_MainWindow(object):
         self.main_verticallayout.setContentsMargins(-1, 0, -1, -1)
         self.main_stacked_widget_top = QStackedWidget(self.page_main)
         self.main_stacked_widget_top.setObjectName(u"main_stacked_widget_top")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.main_stacked_widget_top.sizePolicy().hasHeightForWidth())
-        self.main_stacked_widget_top.setSizePolicy(sizePolicy2)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.main_stacked_widget_top.sizePolicy().hasHeightForWidth())
+        self.main_stacked_widget_top.setSizePolicy(sizePolicy3)
         self.main_stacked_widget_top.setMinimumSize(QSize(0, 150))
         self.main_stacked_widget_top.setMaximumSize(QSize(16777215, 150))
         self.main_stacked_widget_top.setStyleSheet(u"")
@@ -216,11 +253,11 @@ class Ui_MainWindow(object):
         self.download_website_combobox.addItem("")
         self.download_website_combobox.addItem("")
         self.download_website_combobox.setObjectName(u"download_website_combobox")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.download_website_combobox.sizePolicy().hasHeightForWidth())
-        self.download_website_combobox.setSizePolicy(sizePolicy3)
+        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.download_website_combobox.sizePolicy().hasHeightForWidth())
+        self.download_website_combobox.setSizePolicy(sizePolicy4)
         self.download_website_combobox.setMinimumSize(QSize(0, 35))
         self.download_website_combobox.setMaximumSize(QSize(16777215, 35))
         font1 = QFont()
@@ -232,11 +269,8 @@ class Ui_MainWindow(object):
 
         self.download_lineedit_url = QLineEdit(self.page_download)
         self.download_lineedit_url.setObjectName(u"download_lineedit_url")
-        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Fixed)
-        sizePolicy4.setHorizontalStretch(0)
-        sizePolicy4.setVerticalStretch(0)
-        sizePolicy4.setHeightForWidth(self.download_lineedit_url.sizePolicy().hasHeightForWidth())
-        self.download_lineedit_url.setSizePolicy(sizePolicy4)
+        sizePolicy1.setHeightForWidth(self.download_lineedit_url.sizePolicy().hasHeightForWidth())
+        self.download_lineedit_url.setSizePolicy(sizePolicy1)
         self.download_lineedit_url.setMinimumSize(QSize(300, 30))
         font2 = QFont()
         font2.setBold(True)
@@ -413,8 +447,8 @@ class Ui_MainWindow(object):
 
         self.login_lineedit_password = QLineEdit(self.page_login)
         self.login_lineedit_password.setObjectName(u"login_lineedit_password")
-        sizePolicy4.setHeightForWidth(self.login_lineedit_password.sizePolicy().hasHeightForWidth())
-        self.login_lineedit_password.setSizePolicy(sizePolicy4)
+        sizePolicy1.setHeightForWidth(self.login_lineedit_password.sizePolicy().hasHeightForWidth())
+        self.login_lineedit_password.setSizePolicy(sizePolicy1)
         self.login_lineedit_password.setMinimumSize(QSize(0, 35))
         self.login_lineedit_password.setFont(font2)
         self.login_lineedit_password.setCursor(QCursor(Qt.CursorShape.IBeamCursor))
@@ -424,8 +458,8 @@ class Ui_MainWindow(object):
 
         self.login_lineedit_username = QLineEdit(self.page_login)
         self.login_lineedit_username.setObjectName(u"login_lineedit_username")
-        sizePolicy4.setHeightForWidth(self.login_lineedit_username.sizePolicy().hasHeightForWidth())
-        self.login_lineedit_username.setSizePolicy(sizePolicy4)
+        sizePolicy1.setHeightForWidth(self.login_lineedit_username.sizePolicy().hasHeightForWidth())
+        self.login_lineedit_username.setSizePolicy(sizePolicy1)
         self.login_lineedit_username.setMinimumSize(QSize(150, 35))
         self.login_lineedit_username.setFont(font2)
 
@@ -465,56 +499,6 @@ class Ui_MainWindow(object):
         self.gridLayout_2.addLayout(self.login_gridlayout_login_box, 0, 0, 1, 1)
 
         self.main_stacked_widget_top.addWidget(self.page_login)
-        self.page_progressbars = QWidget()
-        self.page_progressbars.setObjectName(u"page_progressbars")
-        sizePolicy10.setHeightForWidth(self.page_progressbars.sizePolicy().hasHeightForWidth())
-        self.page_progressbars.setSizePolicy(sizePolicy10)
-        self.page_progressbars.setMinimumSize(QSize(20, 10))
-        self.page_progressbars.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
-        self.gridLayout_6 = QGridLayout(self.page_progressbars)
-        self.gridLayout_6.setSpacing(0)
-        self.gridLayout_6.setObjectName(u"gridLayout_6")
-        self.gridLayout_6.setContentsMargins(0, 0, 0, 0)
-        self.scrollarea_progressbars = QScrollArea(self.page_progressbars)
-        self.scrollarea_progressbars.setObjectName(u"scrollarea_progressbars")
-        self.scrollarea_progressbars.setWidgetResizable(True)
-        self.scrollAreaWidgetContents_5 = QWidget()
-        self.scrollAreaWidgetContents_5.setObjectName(u"scrollAreaWidgetContents_5")
-        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 308, 32))
-        self.gridLayout_11 = QGridLayout(self.scrollAreaWidgetContents_5)
-        self.gridLayout_11.setSpacing(0)
-        self.gridLayout_11.setObjectName(u"gridLayout_11")
-        self.gridLayout_11.setContentsMargins(0, 0, 0, 0)
-        self.progress_gridlayout_progressbar = QGridLayout()
-        self.progress_gridlayout_progressbar.setObjectName(u"progress_gridlayout_progressbar")
-        self.progress_gridlayout_progressbar.setHorizontalSpacing(6)
-        self.progress_gridlayout_progressbar.setContentsMargins(-1, -1, -1, 0)
-        self.progress_label_info = QLabel(self.scrollAreaWidgetContents_5)
-        self.progress_label_info.setObjectName(u"progress_label_info")
-        self.progress_label_info.setMinimumSize(QSize(0, 30))
-
-        self.progress_gridlayout_progressbar.addWidget(self.progress_label_info, 1, 0, 1, 1)
-
-        self.progress_lineedit_download_info = QLineEdit(self.scrollAreaWidgetContents_5)
-        self.progress_lineedit_download_info.setObjectName(u"progress_lineedit_download_info")
-        sizePolicy9.setHeightForWidth(self.progress_lineedit_download_info.sizePolicy().hasHeightForWidth())
-        self.progress_lineedit_download_info.setSizePolicy(sizePolicy9)
-        self.progress_lineedit_download_info.setReadOnly(True)
-
-        self.progress_gridlayout_progressbar.addWidget(self.progress_lineedit_download_info, 1, 1, 1, 1)
-
-
-        self.gridLayout_11.addLayout(self.progress_gridlayout_progressbar, 0, 0, 1, 1)
-
-        self.verticalSpacer_2 = QSpacerItem(308, 18, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.gridLayout_11.addItem(self.verticalSpacer_2, 1, 0, 1, 1)
-
-        self.scrollarea_progressbars.setWidget(self.scrollAreaWidgetContents_5)
-
-        self.gridLayout_6.addWidget(self.scrollarea_progressbars, 1, 0, 1, 1)
-
-        self.main_stacked_widget_top.addWidget(self.page_progressbars)
         self.page_tools = QWidget()
         self.page_tools.setObjectName(u"page_tools")
         sizePolicy7.setHeightForWidth(self.page_tools.sizePolicy().hasHeightForWidth())
@@ -529,7 +513,7 @@ class Ui_MainWindow(object):
         self.scrollArea_5.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 444, 182))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 942, 182))
         self.gridLayout_8 = QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_8.setSpacing(0)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
@@ -699,6 +683,56 @@ class Ui_MainWindow(object):
         self.gridLayout_17.addWidget(self.scrollArea_5, 0, 0, 1, 1)
 
         self.main_stacked_widget_top.addWidget(self.page_tools)
+        self.page_progressbars = QWidget()
+        self.page_progressbars.setObjectName(u"page_progressbars")
+        sizePolicy10.setHeightForWidth(self.page_progressbars.sizePolicy().hasHeightForWidth())
+        self.page_progressbars.setSizePolicy(sizePolicy10)
+        self.page_progressbars.setMinimumSize(QSize(20, 10))
+        self.page_progressbars.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.gridLayout_6 = QGridLayout(self.page_progressbars)
+        self.gridLayout_6.setSpacing(0)
+        self.gridLayout_6.setObjectName(u"gridLayout_6")
+        self.gridLayout_6.setContentsMargins(0, 0, 0, 0)
+        self.scrollarea_progressbars = QScrollArea(self.page_progressbars)
+        self.scrollarea_progressbars.setObjectName(u"scrollarea_progressbars")
+        self.scrollarea_progressbars.setWidgetResizable(True)
+        self.scrollAreaWidgetContents_5 = QWidget()
+        self.scrollAreaWidgetContents_5.setObjectName(u"scrollAreaWidgetContents_5")
+        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 308, 32))
+        self.gridLayout_11 = QGridLayout(self.scrollAreaWidgetContents_5)
+        self.gridLayout_11.setSpacing(0)
+        self.gridLayout_11.setObjectName(u"gridLayout_11")
+        self.gridLayout_11.setContentsMargins(0, 0, 0, 0)
+        self.progress_gridlayout_progressbar = QGridLayout()
+        self.progress_gridlayout_progressbar.setObjectName(u"progress_gridlayout_progressbar")
+        self.progress_gridlayout_progressbar.setHorizontalSpacing(6)
+        self.progress_gridlayout_progressbar.setContentsMargins(-1, -1, -1, 0)
+        self.progress_label_info = QLabel(self.scrollAreaWidgetContents_5)
+        self.progress_label_info.setObjectName(u"progress_label_info")
+        self.progress_label_info.setMinimumSize(QSize(0, 30))
+
+        self.progress_gridlayout_progressbar.addWidget(self.progress_label_info, 1, 0, 1, 1)
+
+        self.progress_lineedit_download_info = QLineEdit(self.scrollAreaWidgetContents_5)
+        self.progress_lineedit_download_info.setObjectName(u"progress_lineedit_download_info")
+        sizePolicy9.setHeightForWidth(self.progress_lineedit_download_info.sizePolicy().hasHeightForWidth())
+        self.progress_lineedit_download_info.setSizePolicy(sizePolicy9)
+        self.progress_lineedit_download_info.setReadOnly(True)
+
+        self.progress_gridlayout_progressbar.addWidget(self.progress_lineedit_download_info, 1, 1, 1, 1)
+
+
+        self.gridLayout_11.addLayout(self.progress_gridlayout_progressbar, 0, 0, 1, 1)
+
+        self.verticalSpacer_2 = QSpacerItem(308, 18, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.gridLayout_11.addItem(self.verticalSpacer_2, 1, 0, 1, 1)
+
+        self.scrollarea_progressbars.setWidget(self.scrollAreaWidgetContents_5)
+
+        self.gridLayout_6.addWidget(self.scrollarea_progressbars, 1, 0, 1, 1)
+
+        self.main_stacked_widget_top.addWidget(self.page_progressbars)
         self.page_range = QWidget()
         self.page_range.setObjectName(u"page_range")
         self.gridLayout_10 = QGridLayout(self.page_range)
@@ -818,8 +852,8 @@ class Ui_MainWindow(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.main_button_tree_download = QPushButton(self.main_scrollarea_treewidget_content)
         self.main_button_tree_download.setObjectName(u"main_button_tree_download")
-        sizePolicy1.setHeightForWidth(self.main_button_tree_download.sizePolicy().hasHeightForWidth())
-        self.main_button_tree_download.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.main_button_tree_download.sizePolicy().hasHeightForWidth())
+        self.main_button_tree_download.setSizePolicy(sizePolicy2)
         self.main_button_tree_download.setMinimumSize(QSize(0, 30))
         self.main_button_tree_download.setFont(font1)
         self.main_button_tree_download.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -833,16 +867,16 @@ class Ui_MainWindow(object):
         self.gridLayout_13.setObjectName(u"gridLayout_13")
         self.main_button_tree_keyboard_shortcuts = QPushButton(self.main_scrollarea_treewidget_content)
         self.main_button_tree_keyboard_shortcuts.setObjectName(u"main_button_tree_keyboard_shortcuts")
-        sizePolicy3.setHeightForWidth(self.main_button_tree_keyboard_shortcuts.sizePolicy().hasHeightForWidth())
-        self.main_button_tree_keyboard_shortcuts.setSizePolicy(sizePolicy3)
+        sizePolicy4.setHeightForWidth(self.main_button_tree_keyboard_shortcuts.sizePolicy().hasHeightForWidth())
+        self.main_button_tree_keyboard_shortcuts.setSizePolicy(sizePolicy4)
         self.main_button_tree_keyboard_shortcuts.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         self.gridLayout_13.addWidget(self.main_button_tree_keyboard_shortcuts, 3, 2, 1, 1)
 
         self.main_checkbox_direct_download = QCheckBox(self.main_scrollarea_treewidget_content)
         self.main_checkbox_direct_download.setObjectName(u"main_checkbox_direct_download")
-        sizePolicy3.setHeightForWidth(self.main_checkbox_direct_download.sizePolicy().hasHeightForWidth())
-        self.main_checkbox_direct_download.setSizePolicy(sizePolicy3)
+        sizePolicy4.setHeightForWidth(self.main_checkbox_direct_download.sizePolicy().hasHeightForWidth())
+        self.main_checkbox_direct_download.setSizePolicy(sizePolicy4)
         self.main_checkbox_direct_download.setFont(font1)
         self.main_checkbox_direct_download.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
@@ -850,8 +884,8 @@ class Ui_MainWindow(object):
 
         self.main_button_tree_stop = QPushButton(self.main_scrollarea_treewidget_content)
         self.main_button_tree_stop.setObjectName(u"main_button_tree_stop")
-        sizePolicy3.setHeightForWidth(self.main_button_tree_stop.sizePolicy().hasHeightForWidth())
-        self.main_button_tree_stop.setSizePolicy(sizePolicy3)
+        sizePolicy4.setHeightForWidth(self.main_button_tree_stop.sizePolicy().hasHeightForWidth())
+        self.main_button_tree_stop.setSizePolicy(sizePolicy4)
         self.main_button_tree_stop.setMinimumSize(QSize(0, 30))
         self.main_button_tree_stop.setFont(font1)
         self.main_button_tree_stop.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -860,16 +894,16 @@ class Ui_MainWindow(object):
 
         self.main_checkbox_tree_do_not_clear_videos = QCheckBox(self.main_scrollarea_treewidget_content)
         self.main_checkbox_tree_do_not_clear_videos.setObjectName(u"main_checkbox_tree_do_not_clear_videos")
-        sizePolicy3.setHeightForWidth(self.main_checkbox_tree_do_not_clear_videos.sizePolicy().hasHeightForWidth())
-        self.main_checkbox_tree_do_not_clear_videos.setSizePolicy(sizePolicy3)
+        sizePolicy4.setHeightForWidth(self.main_checkbox_tree_do_not_clear_videos.sizePolicy().hasHeightForWidth())
+        self.main_checkbox_tree_do_not_clear_videos.setSizePolicy(sizePolicy4)
         self.main_checkbox_tree_do_not_clear_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         self.gridLayout_13.addWidget(self.main_checkbox_tree_do_not_clear_videos, 0, 2, 1, 1)
 
         self.main_button_tree_automated_selection = QPushButton(self.main_scrollarea_treewidget_content)
         self.main_button_tree_automated_selection.setObjectName(u"main_button_tree_automated_selection")
-        sizePolicy3.setHeightForWidth(self.main_button_tree_automated_selection.sizePolicy().hasHeightForWidth())
-        self.main_button_tree_automated_selection.setSizePolicy(sizePolicy3)
+        sizePolicy4.setHeightForWidth(self.main_button_tree_automated_selection.sizePolicy().hasHeightForWidth())
+        self.main_button_tree_automated_selection.setSizePolicy(sizePolicy4)
         self.main_button_tree_automated_selection.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         self.gridLayout_13.addWidget(self.main_button_tree_automated_selection, 3, 1, 1, 1)
@@ -956,16 +990,16 @@ class Ui_MainWindow(object):
         self.CentralStackedWidget.addWidget(self.page_main)
         self.page_settings = QWidget()
         self.page_settings.setObjectName(u"page_settings")
-        sizePolicy3.setHeightForWidth(self.page_settings.sizePolicy().hasHeightForWidth())
-        self.page_settings.setSizePolicy(sizePolicy3)
+        sizePolicy4.setHeightForWidth(self.page_settings.sizePolicy().hasHeightForWidth())
+        self.page_settings.setSizePolicy(sizePolicy4)
         self.gridLayout_7 = QGridLayout(self.page_settings)
         self.gridLayout_7.setSpacing(0)
         self.gridLayout_7.setObjectName(u"gridLayout_7")
         self.gridLayout_7.setContentsMargins(0, 0, 0, 0)
         self.settings_scrollarea = QScrollArea(self.page_settings)
         self.settings_scrollarea.setObjectName(u"settings_scrollarea")
-        sizePolicy3.setHeightForWidth(self.settings_scrollarea.sizePolicy().hasHeightForWidth())
-        self.settings_scrollarea.setSizePolicy(sizePolicy3)
+        sizePolicy4.setHeightForWidth(self.settings_scrollarea.sizePolicy().hasHeightForWidth())
+        self.settings_scrollarea.setSizePolicy(sizePolicy4)
         self.settings_scrollarea.setWidgetResizable(True)
         self.settings_scrollarea_widget_contents = QWidget()
         self.settings_scrollarea_widget_contents.setObjectName(u"settings_scrollarea_widget_contents")
@@ -1006,8 +1040,8 @@ class Ui_MainWindow(object):
 
         self.settings_stacked_widget_main = QStackedWidget(self.settings_scrollarea_widget_contents)
         self.settings_stacked_widget_main.setObjectName(u"settings_stacked_widget_main")
-        sizePolicy3.setHeightForWidth(self.settings_stacked_widget_main.sizePolicy().hasHeightForWidth())
-        self.settings_stacked_widget_main.setSizePolicy(sizePolicy3)
+        sizePolicy4.setHeightForWidth(self.settings_stacked_widget_main.sizePolicy().hasHeightForWidth())
+        self.settings_stacked_widget_main.setSizePolicy(sizePolicy4)
         self.page_video = QWidget()
         self.page_video.setObjectName(u"page_video")
         sizePolicy19 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
@@ -1592,7 +1626,7 @@ class Ui_MainWindow(object):
         self.scrollArea_3.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 226, 112))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 958, 532))
         self.gridLayout_23 = QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_23.setSpacing(0)
         self.gridLayout_23.setObjectName(u"gridLayout_23")
@@ -1658,13 +1692,6 @@ class Ui_MainWindow(object):
         self.gridLayout_24.addWidget(self.scrollArea_3, 0, 0, 1, 1)
 
         self.CentralStackedWidget.addWidget(self.page_license)
-        self.page_range_selector = QWidget()
-        self.page_range_selector.setObjectName(u"page_range_selector")
-        self.gridLayout_53 = QGridLayout(self.page_range_selector)
-        self.gridLayout_53.setSpacing(0)
-        self.gridLayout_53.setObjectName(u"gridLayout_53")
-        self.gridLayout_53.setContentsMargins(0, 0, 0, 0)
-        self.CentralStackedWidget.addWidget(self.page_range_selector)
         self.page_keyboard_shortcuts = QWidget()
         self.page_keyboard_shortcuts.setObjectName(u"page_keyboard_shortcuts")
         self.gridLayout_55 = QGridLayout(self.page_keyboard_shortcuts)
@@ -1676,7 +1703,7 @@ class Ui_MainWindow(object):
         self.scrollArea_9.setWidgetResizable(True)
         self.scrollAreaWidgetContents_11 = QWidget()
         self.scrollAreaWidgetContents_11.setObjectName(u"scrollAreaWidgetContents_11")
-        self.scrollAreaWidgetContents_11.setGeometry(QRect(0, 0, 256, 192))
+        self.scrollAreaWidgetContents_11.setGeometry(QRect(0, 0, 958, 532))
         self.gridLayout_54 = QGridLayout(self.scrollAreaWidgetContents_11)
         self.gridLayout_54.setSpacing(0)
         self.gridLayout_54.setObjectName(u"gridLayout_54")
@@ -1694,28 +1721,6 @@ class Ui_MainWindow(object):
         self.gridLayout_55.addWidget(self.scrollArea_9, 0, 0, 1, 1)
 
         self.CentralStackedWidget.addWidget(self.page_keyboard_shortcuts)
-        self.page_update_available = QWidget()
-        self.page_update_available.setObjectName(u"page_update_available")
-        self.gridLayout_28 = QGridLayout(self.page_update_available)
-        self.gridLayout_28.setSpacing(0)
-        self.gridLayout_28.setObjectName(u"gridLayout_28")
-        self.gridLayout_28.setContentsMargins(0, 0, 0, 0)
-        self.gridLayout_27 = QGridLayout()
-        self.gridLayout_27.setObjectName(u"gridLayout_27")
-        self.text_browser_update_available = QTextBrowser(self.page_update_available)
-        self.text_browser_update_available.setObjectName(u"text_browser_update_available")
-
-        self.gridLayout_27.addWidget(self.text_browser_update_available, 0, 0, 1, 1)
-
-        self.button_update_acknowledged = QPushButton(self.page_update_available)
-        self.button_update_acknowledged.setObjectName(u"button_update_acknowledged")
-
-        self.gridLayout_27.addWidget(self.button_update_acknowledged, 1, 0, 1, 1)
-
-
-        self.gridLayout_28.addLayout(self.gridLayout_27, 0, 0, 1, 1)
-
-        self.CentralStackedWidget.addWidget(self.page_update_available)
         self.page_install_dialog = QWidget()
         self.page_install_dialog.setObjectName(u"page_install_dialog")
         self.gridLayout_57 = QGridLayout(self.page_install_dialog)
@@ -1727,7 +1732,7 @@ class Ui_MainWindow(object):
         self.scrollArea_10.setWidgetResizable(True)
         self.scrollAreaWidgetContents_12 = QWidget()
         self.scrollAreaWidgetContents_12.setObjectName(u"scrollAreaWidgetContents_12")
-        self.scrollAreaWidgetContents_12.setGeometry(QRect(0, 0, 172, 140))
+        self.scrollAreaWidgetContents_12.setGeometry(QRect(0, 0, 958, 532))
         self.gridLayout_56 = QGridLayout(self.scrollAreaWidgetContents_12)
         self.gridLayout_56.setSpacing(0)
         self.gridLayout_56.setObjectName(u"gridLayout_56")
@@ -1788,7 +1793,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 98, 70))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 958, 532))
         self.gridLayout_20 = QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_20.setSpacing(0)
         self.gridLayout_20.setObjectName(u"gridLayout_20")
@@ -1804,69 +1809,6 @@ class Ui_MainWindow(object):
         self.gridLayout_18.addWidget(self.scrollArea, 0, 0, 1, 1)
 
         self.CentralStackedWidget.addWidget(self.page_supported_websites)
-        self.page_donation_nag = QWidget()
-        self.page_donation_nag.setObjectName(u"page_donation_nag")
-        self.gridLayout_60 = QGridLayout(self.page_donation_nag)
-        self.gridLayout_60.setSpacing(0)
-        self.gridLayout_60.setObjectName(u"gridLayout_60")
-        self.gridLayout_60.setContentsMargins(0, 0, 0, 0)
-        self.scrollArea_11 = QScrollArea(self.page_donation_nag)
-        self.scrollArea_11.setObjectName(u"scrollArea_11")
-        self.scrollArea_11.setWidgetResizable(True)
-        self.scrollAreaWidgetContents_13 = QWidget()
-        self.scrollAreaWidgetContents_13.setObjectName(u"scrollAreaWidgetContents_13")
-        self.scrollAreaWidgetContents_13.setGeometry(QRect(0, 0, 462, 102))
-        self.gridLayout_59 = QGridLayout(self.scrollAreaWidgetContents_13)
-        self.gridLayout_59.setObjectName(u"gridLayout_59")
-        self.gridLayout_59.setHorizontalSpacing(0)
-        self.gridLayout_59.setContentsMargins(0, 0, 0, 0)
-        self.gridLayout_58 = QGridLayout()
-        self.gridLayout_58.setObjectName(u"gridLayout_58")
-        self.button_donate_kofi = QPushButton(self.scrollAreaWidgetContents_13)
-        self.button_donate_kofi.setObjectName(u"button_donate_kofi")
-        self.button_donate_kofi.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_58.addWidget(self.button_donate_kofi, 1, 1, 1, 1)
-
-        self.button_donate_already_donated = QPushButton(self.scrollAreaWidgetContents_13)
-        self.button_donate_already_donated.setObjectName(u"button_donate_already_donated")
-        self.button_donate_already_donated.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_58.addWidget(self.button_donate_already_donated, 1, 3, 1, 1)
-
-        self.button_donate_paypal = QPushButton(self.scrollAreaWidgetContents_13)
-        self.button_donate_paypal.setObjectName(u"button_donate_paypal")
-        self.button_donate_paypal.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_58.addWidget(self.button_donate_paypal, 1, 0, 1, 1)
-
-        self.button_donate_copy_xmr = QPushButton(self.scrollAreaWidgetContents_13)
-        self.button_donate_copy_xmr.setObjectName(u"button_donate_copy_xmr")
-        self.button_donate_copy_xmr.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_58.addWidget(self.button_donate_copy_xmr, 1, 2, 1, 1)
-
-        self.button_donate_close = QPushButton(self.scrollAreaWidgetContents_13)
-        self.button_donate_close.setObjectName(u"button_donate_close")
-        self.button_donate_close.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_58.addWidget(self.button_donate_close, 1, 4, 1, 1)
-
-        self.textbrowser_donation_nag = QTextBrowser(self.scrollAreaWidgetContents_13)
-        self.textbrowser_donation_nag.setObjectName(u"textbrowser_donation_nag")
-        self.textbrowser_donation_nag.setStyleSheet(u"border-radius: 15px;")
-        self.textbrowser_donation_nag.setOpenExternalLinks(True)
-
-        self.gridLayout_58.addWidget(self.textbrowser_donation_nag, 0, 0, 1, 5)
-
-
-        self.gridLayout_59.addLayout(self.gridLayout_58, 0, 0, 1, 1)
-
-        self.scrollArea_11.setWidget(self.scrollAreaWidgetContents_13)
-
-        self.gridLayout_60.addWidget(self.scrollArea_11, 0, 0, 1, 1)
-
-        self.CentralStackedWidget.addWidget(self.page_donation_nag)
         self.page_disclaimer = QWidget()
         self.page_disclaimer.setObjectName(u"page_disclaimer")
         self.gridLayout_62 = QGridLayout(self.page_disclaimer)
@@ -1878,7 +1820,7 @@ class Ui_MainWindow(object):
         self.scrollArea_12.setWidgetResizable(True)
         self.scrollAreaWidgetContents_14 = QWidget()
         self.scrollAreaWidgetContents_14.setObjectName(u"scrollAreaWidgetContents_14")
-        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 98, 120))
+        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 958, 532))
         self.gridLayout_61 = QGridLayout(self.scrollAreaWidgetContents_14)
         self.gridLayout_61.setObjectName(u"gridLayout_61")
         self.textbrowser_disclaimer = QTextBrowser(self.scrollAreaWidgetContents_14)
@@ -1896,36 +1838,48 @@ class Ui_MainWindow(object):
         self.gridLayout_62.addWidget(self.scrollArea_12, 0, 0, 1, 1)
 
         self.CentralStackedWidget.addWidget(self.page_disclaimer)
-        self.page_privacy_information = QWidget()
-        self.page_privacy_information.setObjectName(u"page_privacy_information")
-        self.gridLayout_30 = QGridLayout(self.page_privacy_information)
-        self.gridLayout_30.setSpacing(0)
-        self.gridLayout_30.setObjectName(u"gridLayout_30")
-        self.gridLayout_30.setContentsMargins(0, 0, 0, 0)
-        self.gridLayout_29 = QGridLayout()
-        self.gridLayout_29.setSpacing(0)
-        self.gridLayout_29.setObjectName(u"gridLayout_29")
-        self.textbrowser_data_collection = QTextBrowser(self.page_privacy_information)
-        self.textbrowser_data_collection.setObjectName(u"textbrowser_data_collection")
-        self.textbrowser_data_collection.setLineWidth(1)
-        self.textbrowser_data_collection.setOpenExternalLinks(True)
+        self.page_one_time_setup = QWidget()
+        self.page_one_time_setup.setObjectName(u"page_one_time_setup")
+        self.gridLayout_35 = QGridLayout(self.page_one_time_setup)
+        self.gridLayout_35.setObjectName(u"gridLayout_35")
+        self.verticalLayout_6 = QVBoxLayout()
+        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
+        self.vbox_info = QVBoxLayout()
+        self.vbox_info.setObjectName(u"vbox_info")
 
-        self.gridLayout_29.addWidget(self.textbrowser_data_collection, 0, 0, 1, 2)
+        self.verticalLayout_6.addLayout(self.vbox_info)
 
-        self.button_server_enable_logging = QPushButton(self.page_privacy_information)
-        self.button_server_enable_logging.setObjectName(u"button_server_enable_logging")
+        self.gridLayout_32 = QGridLayout()
+        self.gridLayout_32.setObjectName(u"gridLayout_32")
 
-        self.gridLayout_29.addWidget(self.button_server_enable_logging, 1, 0, 1, 1)
-
-        self.button_server_disable_logging = QPushButton(self.page_privacy_information)
-        self.button_server_disable_logging.setObjectName(u"button_server_disable_logging")
-
-        self.gridLayout_29.addWidget(self.button_server_disable_logging, 1, 1, 1, 1)
+        self.verticalLayout_6.addLayout(self.gridLayout_32)
 
 
-        self.gridLayout_30.addLayout(self.gridLayout_29, 0, 0, 1, 1)
+        self.gridLayout_35.addLayout(self.verticalLayout_6, 0, 0, 1, 1)
 
-        self.CentralStackedWidget.addWidget(self.page_privacy_information)
+        self.CentralStackedWidget.addWidget(self.page_one_time_setup)
+        self.page_update_available = QWidget()
+        self.page_update_available.setObjectName(u"page_update_available")
+        self.gridLayout_28 = QGridLayout(self.page_update_available)
+        self.gridLayout_28.setSpacing(0)
+        self.gridLayout_28.setObjectName(u"gridLayout_28")
+        self.gridLayout_28.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_27 = QGridLayout()
+        self.gridLayout_27.setObjectName(u"gridLayout_27")
+        self.text_browser_update_available = QTextBrowser(self.page_update_available)
+        self.text_browser_update_available.setObjectName(u"text_browser_update_available")
+
+        self.gridLayout_27.addWidget(self.text_browser_update_available, 0, 0, 1, 1)
+
+        self.button_update_acknowledged = QPushButton(self.page_update_available)
+        self.button_update_acknowledged.setObjectName(u"button_update_acknowledged")
+
+        self.gridLayout_27.addWidget(self.button_update_acknowledged, 1, 0, 1, 1)
+
+
+        self.gridLayout_28.addLayout(self.gridLayout_27, 0, 0, 1, 1)
+
+        self.CentralStackedWidget.addWidget(self.page_update_available)
         self.page_batch = QWidget()
         self.page_batch.setObjectName(u"page_batch")
         self.gridLayout_31 = QGridLayout(self.page_batch)
@@ -1933,42 +1887,29 @@ class Ui_MainWindow(object):
         self.gridLayout_31.setObjectName(u"gridLayout_31")
         self.gridLayout_31.setContentsMargins(0, 0, 0, 0)
         self.CentralStackedWidget.addWidget(self.page_batch)
+        self.widget = QWidget()
+        self.widget.setObjectName(u"widget")
+        self.gridLayout_30 = QGridLayout(self.widget)
+        self.gridLayout_30.setSpacing(0)
+        self.gridLayout_30.setObjectName(u"gridLayout_30")
+        self.gridLayout_30.setContentsMargins(0, 0, 0, 0)
+        self.CentralStackedWidget.addWidget(self.widget)
+        self.widget_2 = QWidget()
+        self.widget_2.setObjectName(u"widget_2")
+        self.gridLayout_60 = QGridLayout(self.widget_2)
+        self.gridLayout_60.setSpacing(0)
+        self.gridLayout_60.setObjectName(u"gridLayout_60")
+        self.gridLayout_60.setContentsMargins(0, 0, 0, 0)
+        self.CentralStackedWidget.addWidget(self.widget_2)
+        self.widget_3 = QWidget()
+        self.widget_3.setObjectName(u"widget_3")
+        self.gridLayout_53 = QGridLayout(self.widget_3)
+        self.gridLayout_53.setSpacing(0)
+        self.gridLayout_53.setObjectName(u"gridLayout_53")
+        self.gridLayout_53.setContentsMargins(0, 0, 0, 0)
+        self.CentralStackedWidget.addWidget(self.widget_3)
 
         self.gridLayout_12.addWidget(self.CentralStackedWidget, 1, 0, 1, 1)
-
-        self.formlayout_progressbar = QFormLayout()
-        self.formlayout_progressbar.setObjectName(u"formlayout_progressbar")
-        self.formlayout_progressbar.setHorizontalSpacing(0)
-        self.formlayout_progressbar.setVerticalSpacing(0)
-        self.main_label_progressbar_total = QLabel(self.centralwidget)
-        self.main_label_progressbar_total.setObjectName(u"main_label_progressbar_total")
-
-        self.formlayout_progressbar.setWidget(0, QFormLayout.ItemRole.LabelRole, self.main_label_progressbar_total)
-
-        self.main_progressbar_total = QProgressBar(self.centralwidget)
-        self.main_progressbar_total.setObjectName(u"main_progressbar_total")
-        sizePolicy4.setHeightForWidth(self.main_progressbar_total.sizePolicy().hasHeightForWidth())
-        self.main_progressbar_total.setSizePolicy(sizePolicy4)
-        self.main_progressbar_total.setMinimumSize(QSize(300, 0))
-        self.main_progressbar_total.setStyleSheet(u"text-align: center; /* Centered text */")
-        self.main_progressbar_total.setValue(0)
-
-        self.formlayout_progressbar.setWidget(0, QFormLayout.ItemRole.FieldRole, self.main_progressbar_total)
-
-        self.main_label_progressbar_converting = QLabel(self.centralwidget)
-        self.main_label_progressbar_converting.setObjectName(u"main_label_progressbar_converting")
-
-        self.formlayout_progressbar.setWidget(1, QFormLayout.ItemRole.LabelRole, self.main_label_progressbar_converting)
-
-        self.main_progressbar_converting = QProgressBar(self.centralwidget)
-        self.main_progressbar_converting.setObjectName(u"main_progressbar_converting")
-        self.main_progressbar_converting.setStyleSheet(u"text-align: center; /* Centered text */")
-        self.main_progressbar_converting.setValue(0)
-
-        self.formlayout_progressbar.setWidget(1, QFormLayout.ItemRole.FieldRole, self.main_progressbar_converting)
-
-
-        self.gridLayout_12.addLayout(self.formlayout_progressbar, 2, 0, 1, 1)
 
         MainWindow.setCentralWidget(self.centralwidget)
         QWidget.setTabOrder(self.main_button_switch_home, self.main_button_switch_account)
@@ -2027,21 +1968,14 @@ class Ui_MainWindow(object):
         QWidget.setTabOrder(self.button_update_acknowledged, self.textbrowser_install_dialog)
         QWidget.setTabOrder(self.textbrowser_install_dialog, self.settings_button_apply)
         QWidget.setTabOrder(self.settings_button_apply, self.main_textbrowser_supported_websites)
-        QWidget.setTabOrder(self.main_textbrowser_supported_websites, self.scrollArea_11)
-        QWidget.setTabOrder(self.scrollArea_11, self.button_donate_kofi)
-        QWidget.setTabOrder(self.button_donate_kofi, self.button_donate_already_donated)
-        QWidget.setTabOrder(self.button_donate_already_donated, self.button_donate_paypal)
-        QWidget.setTabOrder(self.button_donate_paypal, self.button_donate_copy_xmr)
-        QWidget.setTabOrder(self.button_donate_copy_xmr, self.button_donate_close)
-        QWidget.setTabOrder(self.button_donate_close, self.textbrowser_donation_nag)
-        QWidget.setTabOrder(self.textbrowser_donation_nag, self.scrollArea_12)
+        QWidget.setTabOrder(self.main_textbrowser_supported_websites, self.scrollArea_12)
         QWidget.setTabOrder(self.scrollArea_12, self.textbrowser_disclaimer)
         QWidget.setTabOrder(self.textbrowser_disclaimer, self.button_disclaimer_accept)
 
         self.retranslateUi(MainWindow)
 
-        self.CentralStackedWidget.setCurrentIndex(1)
-        self.main_stacked_widget_top.setCurrentIndex(0)
+        self.CentralStackedWidget.setCurrentIndex(0)
+        self.main_stacked_widget_top.setCurrentIndex(4)
         self.settings_stacked_widget_main.setCurrentIndex(3)
 
 
@@ -2056,6 +1990,8 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(accessibility)
         MainWindow.setAccessibleName(QCoreApplication.translate("MainWindow", u"Button Tools section", None))
 #endif // QT_CONFIG(accessibility)
+        self.main_label_progressbar_total.setText(QCoreApplication.translate("MainWindow", u"Total:", None))
+        self.main_label_progressbar_converting.setText(QCoreApplication.translate("MainWindow", u"Converting:", None))
 #if QT_CONFIG(accessibility)
         self.main_button_switch_home.setAccessibleName(QCoreApplication.translate("MainWindow", u"Button home page", None))
 #endif // QT_CONFIG(accessibility)
@@ -2182,14 +2118,6 @@ class Ui_MainWindow(object):
         self.login_label_username.setAccessibleName(QCoreApplication.translate("MainWindow", u"label username", None))
 #endif // QT_CONFIG(accessibility)
         self.login_label_username.setText(QCoreApplication.translate("MainWindow", u"E-Mail:", None))
-#if QT_CONFIG(accessibility)
-        self.progress_label_info.setAccessibleName(QCoreApplication.translate("MainWindow", u"label information (this shows how many videos have been downloaded)", None))
-#endif // QT_CONFIG(accessibility)
-        self.progress_label_info.setText(QCoreApplication.translate("MainWindow", u"Info:", None))
-#if QT_CONFIG(accessibility)
-        self.progress_lineedit_download_info.setAccessibleName(QCoreApplication.translate("MainWindow", u"information (the actual value) ", None))
-#endif // QT_CONFIG(accessibility)
-        self.progress_lineedit_download_info.setText("")
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"HQPorner", None))
 #if QT_CONFIG(accessibility)
         self.tools_button_get_random_videos.setAccessibleName(QCoreApplication.translate("MainWindow", u"tools button hqporner get random video", None))
@@ -2245,6 +2173,14 @@ class Ui_MainWindow(object):
         self.tools_label_videos_by_category_eporner.setAccessibleName(QCoreApplication.translate("MainWindow", u"label tools eporner get videos by category", None))
 #endif // QT_CONFIG(accessibility)
         self.tools_label_videos_by_category_eporner.setText(QCoreApplication.translate("MainWindow", u"Get videos by category", None))
+#if QT_CONFIG(accessibility)
+        self.progress_label_info.setAccessibleName(QCoreApplication.translate("MainWindow", u"label information (this shows how many videos have been downloaded)", None))
+#endif // QT_CONFIG(accessibility)
+        self.progress_label_info.setText(QCoreApplication.translate("MainWindow", u"Info:", None))
+#if QT_CONFIG(accessibility)
+        self.progress_lineedit_download_info.setAccessibleName(QCoreApplication.translate("MainWindow", u"information (the actual value) ", None))
+#endif // QT_CONFIG(accessibility)
+        self.progress_lineedit_download_info.setText("")
 #if QT_CONFIG(accessibility)
         self.button_range_apply_index.setAccessibleName(QCoreApplication.translate("MainWindow", u"button apply automated selection by index", None))
 #endif // QT_CONFIG(accessibility)
@@ -2924,13 +2860,6 @@ class Ui_MainWindow(object):
                         "; text-indent:0px; font-family:'Sans Serif'; font-size:16pt;\"><br /></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:16pt;\">   </span></p></body></html>", None))
 #if QT_CONFIG(accessibility)
-        self.text_browser_update_available.setAccessibleName(QCoreApplication.translate("MainWindow", u"textbrowser update changelog notification", None))
-#endif // QT_CONFIG(accessibility)
-#if QT_CONFIG(accessibility)
-        self.button_update_acknowledged.setAccessibleName(QCoreApplication.translate("MainWindow", u"button acknowledge that a new version is out", None))
-#endif // QT_CONFIG(accessibility)
-        self.button_update_acknowledged.setText(QCoreApplication.translate("MainWindow", u"OK", None))
-#if QT_CONFIG(accessibility)
         self.textbrowser_install_dialog.setAccessibleName(QCoreApplication.translate("MainWindow", u"textbrowser install dialog", None))
 #endif // QT_CONFIG(accessibility)
         self.textbrowser_install_dialog.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
@@ -3077,52 +3006,6 @@ class Ui_MainWindow(object):
 "<td>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">HQporner</span></p></td></tr></table></body></html>", None))
 #if QT_CONFIG(accessibility)
-        self.button_donate_kofi.setAccessibleName(QCoreApplication.translate("MainWindow", u"button donate ko-fi", None))
-#endif // QT_CONFIG(accessibility)
-        self.button_donate_kofi.setText(QCoreApplication.translate("MainWindow", u"Ko-Fi", None))
-#if QT_CONFIG(accessibility)
-        self.button_donate_already_donated.setAccessibleName(QCoreApplication.translate("MainWindow", u"button already donated", None))
-#endif // QT_CONFIG(accessibility)
-        self.button_donate_already_donated.setText(QCoreApplication.translate("MainWindow", u"Already Donated", None))
-#if QT_CONFIG(accessibility)
-        self.button_donate_paypal.setAccessibleName(QCoreApplication.translate("MainWindow", u"button donate paypal", None))
-#endif // QT_CONFIG(accessibility)
-        self.button_donate_paypal.setText(QCoreApplication.translate("MainWindow", u"PayPal", None))
-#if QT_CONFIG(accessibility)
-        self.button_donate_copy_xmr.setAccessibleName(QCoreApplication.translate("MainWindow", u"button copy XMR address for donations", None))
-#endif // QT_CONFIG(accessibility)
-        self.button_donate_copy_xmr.setText(QCoreApplication.translate("MainWindow", u"Copy XMR", None))
-#if QT_CONFIG(accessibility)
-        self.button_donate_close.setAccessibleName(QCoreApplication.translate("MainWindow", u"button close donation message", None))
-#endif // QT_CONFIG(accessibility)
-        self.button_donate_close.setText(QCoreApplication.translate("MainWindow", u"Close", None))
-#if QT_CONFIG(accessibility)
-        self.textbrowser_donation_nag.setAccessibleName(QCoreApplication.translate("MainWindow", u"textbrowser for donation message", None))
-#endif // QT_CONFIG(accessibility)
-        self.textbrowser_donation_nag.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Sans'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#ffc800;\">y</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#cc00ff;\">o</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#ffffff;\"> </span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#37ff00;\">w</span><span style=\" font-family:'Sans Serif'; font-size:36pt; col"
-                        "or:#ff00bb;\">a</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#ff0000;\">s</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#0000ff;\">s</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#00fff7;\">u</span><span style=\" font-family:'Sans Serif'; font-size:36pt; color:#ff55ff;\">p</span></p>\n"
-"<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#ffffff;\">If you have a moment to read this, I'd appreciate it a lot...</span><span style=\" font-family:'Sans Serif'; font-size:9pt; color:#ffffff;\"><br /></span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:11pt; color:#ffffff;\">I have started developing Porn Fetch ~2 years ago as a fun proje"
-                        "ct for learning graphical user interfaces. Over the years Porn Fetch became more professional, as my programming skills increased and more people started using it. That I reach even 1000 downloads on this was something I'd never thought was possible and now we are over 20.000 xD</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:11pt; color:#ffffff;\">Although I absolutely love what I am doing here, and unless I receive a Cease and Desist letter, will never stop it, I haven't earned much from this project except for the few people that donated me something (Thank you so much btw).</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:11pt; color:#ffffff;\">If you have a few cents left on your pocket, I'd absolutely appreciate it. I know it mi"
-                        "ght not seem much but it's a thank you and it keeps me motivated. Also since I still go to school small amounts of money are much more in relation to me than it is for someone who already has a job.</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:11pt; color:#ffffff;\">But even if you don't donate, please don't feel bad. I don't expect it from you. I just kindly ask, but it's absolutely okay if you don't want to.</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt; color:#0000ff;\">Donation options</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://paypal.me/EchterAlsFake\"><span style=\" font-family:'Sans Serif'; font-size:14pt;"
-                        " text-decoration: underline; color:#27bf73;\">1) PayPal (https://paypal.me/EchterAlsFake)</span></a></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"https://paypal.me/EchterAlsFake\"><span style=\" font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#aa00ff;\">2) K</span></a><a href=\"https://ko-fi.com/EchterAlsFake\"><span style=\" font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#aa00ff;\">o-Fi (https://ko-fi.com/EchterAlsFake)</span></a></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt;\">3) Crypto (XMR / Monero) : </span><span style=\" font-family:'ui-monospace','SFMono-Regular','SF Mono','Menlo','Consolas','Liberation Mono','monospace'; font-size:9pt; color:#ff7700; background-color:rgba(101,108,118,0.2);\">42XwGZYbSxpMvhn9eeP4D"
-                        "wMwZV91tQgAm3UQr6Zwb2wzBf5HcuZCHrsVxa4aV2jhP4gLHsWWELxSoNjfnkt4rMfDDwXy9jR</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt; color:#00ffb3;\">[This message won't be shown again, except if you update to a new version]</span></p></body></html>", None))
-#if QT_CONFIG(accessibility)
         self.textbrowser_disclaimer.setAccessibleName(QCoreApplication.translate("MainWindow", u"textbrowser disclaimer message", None))
 #endif // QT_CONFIG(accessibility)
 #if QT_CONFIG(accessibility)
@@ -3158,52 +3041,11 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(accessibility)
         self.button_disclaimer_accept.setText(QCoreApplication.translate("MainWindow", u"Accept", None))
 #if QT_CONFIG(accessibility)
-        self.textbrowser_data_collection.setAccessibleName(QCoreApplication.translate("MainWindow", u"textbrowser data collection", None))
+        self.text_browser_update_available.setAccessibleName(QCoreApplication.translate("MainWindow", u"textbrowser update changelog notification", None))
 #endif // QT_CONFIG(accessibility)
 #if QT_CONFIG(accessibility)
-        self.textbrowser_data_collection.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"This contains information of how Porn Fetch processes collected errors, where they go to and how they are transmitted. ", None))
+        self.button_update_acknowledged.setAccessibleName(QCoreApplication.translate("MainWindow", u"button acknowledge that a new version is out", None))
 #endif // QT_CONFIG(accessibility)
-        self.textbrowser_data_collection.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Sans'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">Data Collection &amp; Privacy Information</span></h2>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">This application now uses my own server for update checking and error reporting, instead "
-                        "of relying on GitHub. This gives me greater control over the process and the data transmitted. However, my server is </span><span style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:700;\">IPv6-only</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\">. This means that only about 50% of internet users will be able to connect. </span></p>\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">About the Server</span></h3>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">The server is a small, older Acer Swift 3 laptop running 24/7 in my room. The full source code for the server is publicly available here:<br /></span><a href=\"https://github.com/EchterAlsFake/Server\"><span style=\" font-family:'Sans Serif'; f"
-                        "ont-size:12pt; text-decoration: underline; color:#f700ff;\">https://github.com/EchterAlsFake/Server</span></a><span style=\" font-family:'Sans Serif'; font-size:12pt;\"> </span></p>\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt; font-weight:700;\">Data Collected via Error Reports</span></h3>\n"
-"<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\">\n"
-"<li style=\" font-family:'Sans Serif'; font-size:9pt;\" style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">The version of Porn Fetch you are using</span></li>\n"
-"<li style=\" font-family:'Sans Serif'; font-size:12pt;\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Your operating system (e.g., Windows, "
-                        "Linux, or macOS)</li>\n"
-"<li style=\" font-family:'Sans Serif'; font-size:12pt;\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The current date and time</li>\n"
-"<li style=\" font-family:'Sans Serif'; font-size:12pt;\" style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The error details (full Python traceback)</li></ul>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:700;\">Important:</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\"> The Python traceback may, in some cases, include incidental personal information \u2014 for example, your system username if it appears in a file path. No other personal data is intentionally collected. </span></p>\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:"
-                        "0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:700;\">Data Storage &amp; Security</span></h3>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">Error reports are stored in plain text on my server. The server\u2019s storage device is encrypted with LUKS and secured with a strong password (40+ characters). </span><span style=\" font-family:'Sans Serif'; font-size:12pt; color:#ff0000;\">Your </span><span style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:700; color:#ff0000;\">IP address is never logged, stored, or displayed</span><span style=\" font-family:'Sans Serif'; font-size:12pt; color:#ff0000;\">. </span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-"
-                        "size:9pt; font-weight:700;\">Optional Participation</span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">Whether you enable error reporting or not will have no impact on the application's functionality. It simply helps me identify and fix issues faster. You can also manually check for updates on GitHub, although most users do not do this. </span></p>\n"
-"<h3 style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:14pt; font-weight:700;\">IPv6 Connectivity Check</span></h3>\n"
-"<p style=\" margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">To see if you have IPv6 connectivity, visit:</span><span style=\" font-family:'Sans Serif'; font-size:"
-                        "14pt;\"><br /></span><a href=\"https://echteralsfake.duckdns.org/ping\"><span style=\" font-family:'Sans Serif'; font-size:14pt; text-decoration: underline; color:#1aff00;\">https://echteralsfake.duckdns.org/ping</span></a><span style=\" font-family:'Sans Serif'; font-size:9pt;\"><br /></span><span style=\" font-family:'Sans Serif'; font-size:12pt;\">If you see a white page with </span><span style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:700;\">Success</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\">, you have IPv6. If not, you do not. </span></p>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Sans Serif'; font-size:12pt;\">You can also verify your IP addresses by visiting: </span><a href=\"https://ipleak.net\"><span style=\" font-family:'Sans Serif'; font-size:12pt; text-decoration: underline; color:#ffff00;\">https://ipleak.net</span></a><span style=\" font-family:'Sans"
-                        " Serif'; font-size:12pt;\"><br />Example formats:<br />IPv4: </span><span style=\" font-family:'monospace'; font-size:12pt;\">135.215.32.64</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\"><br />IPv6: </span><span style=\" font-family:'monospace'; font-size:12pt;\">2a02:810a:186:b400::5c51</span><span style=\" font-family:'Sans Serif'; font-size:12pt;\"> </span></p></body></html>", None))
-#if QT_CONFIG(accessibility)
-        self.button_server_enable_logging.setAccessibleName(QCoreApplication.translate("MainWindow", u"button enable IPv6 logging", None))
-#endif // QT_CONFIG(accessibility)
-        self.button_server_enable_logging.setText(QCoreApplication.translate("MainWindow", u"I have IPv6 :) (and want to enable it)", None))
-#if QT_CONFIG(accessibility)
-        self.button_server_disable_logging.setAccessibleName(QCoreApplication.translate("MainWindow", u"button disable IPv6 logging completely", None))
-#endif // QT_CONFIG(accessibility)
-        self.button_server_disable_logging.setText(QCoreApplication.translate("MainWindow", u"I don't have IPv6 / I don't want to enable this feature", None))
-        self.main_label_progressbar_total.setText(QCoreApplication.translate("MainWindow", u"Total:", None))
-        self.main_label_progressbar_converting.setText(QCoreApplication.translate("MainWindow", u"Converting:", None))
+        self.button_update_acknowledged.setText(QCoreApplication.translate("MainWindow", u"OK", None))
     # retranslateUi
 

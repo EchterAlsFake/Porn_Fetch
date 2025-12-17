@@ -56,9 +56,7 @@ from src.frontend.UI.ui_form_main_window import Ui_MainWindow
 from src.frontend.UI.ui_form_android import Ui_PornFetchAndroid
 from src.frontend.UI.theme import *
 from src.backend.config import __version__, __build__
-from src.frontend.UI.donation_nag import DonationNag
-from src.frontend.UI.feedback_dialog import FeedbackDialog
-from src.backend.batch_feature import Batch
+from src.frontend.UI.pornfetch_info_dialog import PornFetchInfoWidget
 from src.backend.check_license import LicenseManager
 from src.frontend.UI.license import License, Disclaimer
 from src.backend.config import shared_config
@@ -833,7 +831,9 @@ class PornFetch(QMainWindow):
         self.load_style()
         self.license = License(self.ui, self.initialize_pornfetch)
         self.disclaimer = Disclaimer(self.ui, self.initialize_pornfetch)
-        self.donation_nag = DonationNag(self.ui, self.initialize_pornfetch)
+        self.pornfetch_info_dialog = PornFetchInfoWidget()
+        self.ui.vbox_info.addWidget(self.pornfetch_info_dialog)
+
         self.license_manager = LicenseManager(storage_path=_default_license_path(), public_key_b64=PUBLIC_KEY_B64)
 
         """
@@ -843,18 +843,20 @@ class PornFetch(QMainWindow):
         :: Index list for main application ::
         - 0: Download
         - 1: Login
-        - 2: Progress Bars
-        - 3: Tools
-
+        - 2: Tools
+        - 3: Progressbars
+        - 4: Range selector
+        
         1) Settings
         2) Credits
         3) License
-        4) Range Selector (for automatically selecting videos in the tree widget)
-        5) Keyboard Shortcuts
-        6) Install Dialog
-        7) Supported websites
-        8) Donation Nag        
-        9) Disclaimer text
+        4) Keyboard Shortcuts
+        5) Install Dialog
+        6) Supported websites
+        7) Donation Nag        
+        8) Disclaimer text
+        9) One-Time Information
+        10) Batch Feature (Not implemented yet)
         This may look a little bit confusing, but once you understand it, it makes sense, trust me :)
         """
 
@@ -902,6 +904,8 @@ class PornFetch(QMainWindow):
     The following functions just switch the Stacked Widget to the different widgets
     """
 
+    """Stacked Widget Main:"""
+
     def switch_to_main(self):
         self.ui.CentralStackedWidget.setCurrentIndex(0)
 
@@ -915,23 +919,28 @@ class PornFetch(QMainWindow):
     def switch_to_license(self):
         self.ui.CentralStackedWidget.setCurrentIndex(3)
 
-    def switch_to_range_selector(self):
-        self.ui.main_stacked_widget_top.setCurrentIndex(4)
-
     def switch_to_keyboard_shortcuts(self):
-        self.ui.CentralStackedWidget.setCurrentIndex(5)
+        self.ui.CentralStackedWidget.setCurrentIndex(4)
 
     def switch_to_install_dialog(self):
-        self.ui.CentralStackedWidget.setCurrentIndex(7)
+        self.ui.CentralStackedWidget.setCurrentIndex(5)
 
     def switch_to_supported_sites(self):
+        self.ui.CentralStackedWidget.setCurrentIndex(6)
+
+    def switch_to_disclaimer(self):
+        self.ui.CentralStackedWidget.setCurrentIndex(7)
+
+    def switch_to_one_time_setup(self):
         self.ui.CentralStackedWidget.setCurrentIndex(8)
 
-    def switch_to_donation_nag(self):
+    def switch_to_update_available(self):
         self.ui.CentralStackedWidget.setCurrentIndex(9)
 
     def switch_to_batch(self):
-        self.ui.CentralStackedWidget.setCurrentIndex(12)
+        self.ui.CentralStackedWidget.setCurrentIndex(10)
+
+    """Stacked Widget Top:"""
 
     def switch_to_download(self):
         self.ui.main_stacked_widget_top.setCurrentIndex(0)
@@ -941,19 +950,17 @@ class PornFetch(QMainWindow):
         self.ui.main_stacked_widget_top.setCurrentIndex(1)
         self.switch_to_main()
 
-    def switch_to_progressbars(self):
+    def switch_to_tools(self):
         self.ui.main_stacked_widget_top.setCurrentIndex(2)
         self.switch_to_main()
 
-    def switch_to_tools(self):
+    def switch_to_progressbars(self):
         self.ui.main_stacked_widget_top.setCurrentIndex(3)
         self.switch_to_main()
 
-    def switch_to_disclaimer(self):
-        self.ui.CentralStackedWidget.setCurrentIndex(10)
-
-    def switch_to_logging(self):
-        self.ui.CentralStackedWidget.setCurrentIndex(11)
+    def switch_to_range_selector(self):
+        self.ui.main_stacked_widget_top.setCurrentIndex(4)
+        self.switch_to_main()
 
     def load_style(self):
         #self.ui.CentralStackedWidget.insertWidget(12, Batch())
@@ -1580,11 +1587,14 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
 
         if not self.disclaimer.check_disclaimer():
             self.switch_to_disclaimer()
+
+        if settings.value("Misc/first_run_gui") == "true":
+            print(f"FIRST RUN SWITCHDDDDDDd")
+            self.switch_to_one_time_setup()
             return
 
-        if not self.donation_nag.check_donation_nag():
-            self.switch_to_donation_nag()
-            return
+        else:
+            print(f"Nope, not true")
 
         if conf["Misc"]["network_logging"] == "not_set":
             self.handle_network_logging()
