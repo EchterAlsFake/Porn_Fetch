@@ -22,6 +22,7 @@ Discord: echteralsfake (faster response)
 
 # macOS Setup...
 import sys
+import webbrowser
 
 if sys.platform == "darwin":
     from src.backend.macos_setup import macos_setup
@@ -37,12 +38,10 @@ except Exception:
 
 
 import time
-import shutil
 import os.path
 import logging
 import argparse
 import markdown
-import traceback
 import truststore
 import src.frontend.UI.resources
 import src.backend.shared_functions as shared_functions
@@ -96,12 +95,13 @@ core_conf = shared_functions.config
 stop_flag = Event()
 _download_lock = Lock()
 video_data = VideoData()
-settings: QSettings = None
+settings: QSettings = QSettings()
 logger = shared_functions.setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=shared_functions.http_log_ip,
                       http_port=shared_functions.http_log_port)
 
 
 PUBLIC_KEY_B64 = 'zGUmG8Z5InvoYIwnIokQi+SysjEodvfP8kLoCur3KjM=' # This is the public key lol
+license_storage_path = os.path.join(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation), "pornfetch.license")
 
 
 def _mkpath(path: str) -> None:
@@ -831,9 +831,7 @@ class PornFetch(QMainWindow):
         self.load_style()
         self.license = License(self.ui, self.initialize_pornfetch)
         self.disclaimer = Disclaimer(self.ui, self.initialize_pornfetch)
-        self.pornfetch_info_dialog = PornFetchInfoWidget()
-        self.ui.vbox_info.addWidget(self.pornfetch_info_dialog)
-
+        self.ui.vbox_info.addWidget(PornFetchInfoWidget())
         self.license_manager = LicenseManager(storage_path=_default_license_path(), public_key_b64=PUBLIC_KEY_B64)
 
         """
@@ -1025,6 +1023,11 @@ class PornFetch(QMainWindow):
         mark(self.ui.main_progressbar_total, role="total")
         mark(self.ui.main_progressbar_converting, role="convert")
 
+        mark(self.ui.button_info_enable_all, intent="success")
+        mark(self.ui.button_info_disable_all, intent="danger")
+        mark(self.ui.button_info_enable_update, intent="primary")
+
+
         # most of these are secondary or flat so they don’t compete visually
         for b in [
             self.ui.main_button_switch_supported_websites,
@@ -1098,7 +1101,7 @@ class PornFetch(QMainWindow):
         install_focus_outline(self)
 
         stylesheet_license_buttons = QFile(":/style/UI/stylesheet_license_button.qss")
-        stylesheet_license_buttons.open(QIODevice.ReadOnly | QIODevice.Text)
+        stylesheet_license_buttons.open(QIODevice.OpenModeFlag.ReadOnly | QIODevice.OpenModeFlag.Text)
         stream = QTextStream(stylesheet_license_buttons)
         style = stream.readAll()
 
@@ -1180,8 +1183,7 @@ class PornFetch(QMainWindow):
         self.ui.settings_button_switch_performance.clicked.connect(lambda _=False, i=1: self.ui.settings_stacked_widget_main.setCurrentIndex(i))
         self.ui.settings_button_switch_system.clicked.connect(lambda _=False, i=2: self.ui.settings_stacked_widget_main.setCurrentIndex(i))
         self.ui.settings_button_switch_ui.clicked.connect(lambda _=False, i=3: self.ui.settings_stacked_widget_main.setCurrentIndex(i))
-        self.ui.settings_button_buy_license.clicked.connect()
-
+        self.ui.settings_button_buy_license.clicked.connect(self.buy_license)
 
         self.ui.settings_button_apply.clicked.connect(self.save_user_settings)
         self.ui.settings_button_reset.clicked.connect(reset_pornfetch)
@@ -1219,7 +1221,6 @@ class PornFetch(QMainWindow):
         self.ui.main_button_tree_keyboard_shortcuts.clicked.connect(self.switch_to_keyboard_shortcuts)
         self.ui.main_button_tree_automated_selection.clicked.connect(self.select_range_of_items)
         self.ui.settings_checkbox_system_proxy_kill_switch.toggled.connect(self.toggle_killswitch)
-        self.ui.button_credits_send_feedback.clicked.connect(self.send_feedback)
 
     def shortcuts(self):
         quit_shortcut = QShortcut(QKeySequence("Ctrl+Q"), self)
@@ -1459,23 +1460,6 @@ class PornFetch(QMainWindow):
         ui_popup(self.tr("Saved User Settings, please restart Porn Fetch!", None))
         self.logger.debug("Saved User Settings, please restart Porn Fetch.")
 
-    def send_feedback(self):
-        dlg = FeedbackDialog(parent=self)
-        if dlg.exec() != QDialog.Accepted:
-            # User cancelled or closed the dialog: do nothing.
-            return None
-
-        feedback_message = dlg.feedback_text()
-        message = f"""
-        [Feedback]
-        Time: {datetime.datetime.now()}
-        Version: {__version__}
-        System: {sys.platform}
-        Feedback: {feedback_message}
-        """
-        payload = {"message": message}
-        handle_error_gracefully(self=self, data=video_data.consistent_data, error_message=payload, is_feedback=True)
-
     def set_proxies(self):
         message = self.tr("""
 Please read this before setting proxies:
@@ -1607,12 +1591,6 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
             self.switch_to_one_time_setup()
             return
 
-        else:
-            print(f"Nope, not true")
-
-        if conf["Misc"]["network_logging"] == "not_set":
-            self.handle_network_logging()
-            return
 
         if not FORCE_PORTABLE_RUN:
             if sys.platform == "darwin":
@@ -1624,13 +1602,6 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
                 return
 
         self.ui.CentralStackedWidget.setCurrentIndex(0)
-
-    def handle_network_logging(self):
-        self.switch_to_logging()
-        mark(self.ui.button_server_enable_logging, intent="primary")
-        mark(self.ui.button_server_disable_logging, intent="secondary")
-        self.ui.button_server_enable_logging.clicked.connect(self.enable_logging)
-        self.ui.button_server_disable_logging.clicked.connect(self.disable_logging)
 
     def start_single_video(self):
         """
@@ -2462,6 +2433,10 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
             self.ui.text_browser_update_available.setHtml(html)
             self.ui.CentralStackedWidget.setCurrentIndex(6)
             self.ui.button_update_acknowledged.clicked.connect(self.switch_to_download)
+
+    @staticmethod
+    def buy_license():
+        webbrowser.open("https://echteralsfake.me/buy_license")
 
     def check_internet(self):
         """Checks if the porn sites are accessible"""

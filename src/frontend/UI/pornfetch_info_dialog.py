@@ -1,15 +1,34 @@
-# pornfetch_info_widget.py
-# Drop-in QWidget for a QStackedWidget: native layout, no QTextBrowser.
+# pornfetch_info_dialog.py
+# Refactored info widget (PySide6): higher-contrast dark theme with violet accents,
+# orange reserved for legal/disclaimer callouts, improved readability, and tighter layout.
 
 from __future__ import annotations
 
-# Works with PySide6 / PyQt6 / PyQt5
 from PySide6.QtCore import Qt, QUrl
 from PySide6.QtGui import QFont, QDesktopServices
 from PySide6.QtWidgets import (
-    QWidget, QScrollArea, QVBoxLayout, QHBoxLayout, QLabel, QFrame,
-    QSizePolicy, QGridLayout, QApplication
+    QApplication,
+    QFrame,
+    QGridLayout,
+    QHBoxLayout,
+    QLabel,
+    QScrollArea,
+    QSizePolicy,
+    QVBoxLayout,
+    QWidget,
 )
+
+# --- Typography (pt) ---
+BASE_PT = 11.0
+SMALL_PT = 10.0
+HERO_PT = 18.0
+SECTION_TITLE_PT = 12.5
+CALLOUT_TITLE_PT = 12.0
+LICENSE_PT = 12.5
+
+
+def _open_url(url: str) -> None:
+    QDesktopServices.openUrl(QUrl(url))
 
 
 def _label(
@@ -20,11 +39,17 @@ def _label(
     color: str | None = None,
     rich: bool = True,
     selectable: bool = True,
+    object_name: str | None = None,
 ) -> QLabel:
+    """Create a QLabel with sane defaults (word-wrap, selectable text, link handling)."""
     lab = QLabel()
+    if object_name:
+        lab.setObjectName(object_name)
+
     lab.setWordWrap(True)
     lab.setTextFormat(Qt.TextFormat.RichText if rich else Qt.TextFormat.PlainText)
     lab.setText(text)
+
     if selectable:
         lab.setTextInteractionFlags(
             Qt.TextInteractionFlag.TextSelectableByMouse
@@ -33,31 +58,33 @@ def _label(
     else:
         lab.setTextInteractionFlags(Qt.TextInteractionFlag.LinksAccessibleByMouse)
 
-    lab.setOpenExternalLinks(False)  # we handle via linkActivated for consistency
+    lab.setOpenExternalLinks(False)  # open via linkActivated so it works everywhere consistently
+    lab.linkActivated.connect(_open_url)
 
     f = lab.font()
+    f.setPointSizeF(size_pt if size_pt is not None else BASE_PT)
     if bold:
         f.setWeight(QFont.Weight.DemiBold if hasattr(QFont, "Weight") else QFont.DemiBold)
-    if size_pt is not None:
-        f.setPointSizeF(size_pt)
     lab.setFont(f)
 
     if color:
         lab.setStyleSheet(f"color: {color};")
-
-    lab.linkActivated.connect(lambda url: QDesktopServices.openUrl(QUrl(url)))
     return lab
 
 
 class _Card(QFrame):
-    def __init__(self, object_name: str, parent: QWidget | None = None):
+    """A rounded container with tight but comfortable padding."""
+
+    def __init__(self, object_name: str, *, padding: int = 10, parent: QWidget | None = None):
         super().__init__(parent)
         self.setObjectName(object_name)
         self.setFrameShape(QFrame.Shape.NoFrame)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
-        self._layout = QVBoxLayout(self)
-        self._layout.setContentsMargins(14, 14, 14, 14)
-        self._layout.setSpacing(10)
+
+        l = QVBoxLayout(self)
+        l.setContentsMargins(padding, padding, padding, padding)
+        l.setSpacing(8)
+        self._layout = l
 
     @property
     def layout_(self) -> QVBoxLayout:
@@ -65,7 +92,9 @@ class _Card(QFrame):
 
 
 class _Section(QFrame):
-    def __init__(self, title: str, object_name: str = "SectionCard", parent: QWidget | None = None):
+    """Section with a title bar and body; keeps spacing tight to avoid wasted room."""
+
+    def __init__(self, title: str, *, object_name: str = "SectionCard", parent: QWidget | None = None):
         super().__init__(parent)
         self.setObjectName(object_name)
         self.setFrameShape(QFrame.Shape.NoFrame)
@@ -74,19 +103,18 @@ class _Section(QFrame):
         outer.setContentsMargins(0, 0, 0, 0)
         outer.setSpacing(0)
 
-        # Title bar
         bar = QFrame()
         bar.setObjectName("SectionTitleBar")
-        bar_l = QVBoxLayout(bar)
-        bar_l.setContentsMargins(12, 10, 12, 10)
-        bar_l.addWidget(_label(title, bold=True, size_pt=12.0, rich=False, selectable=False))
+        bar_l = QHBoxLayout(bar)
+        bar_l.setContentsMargins(10, 8, 10, 8)
+        bar_l.setSpacing(8)
+        bar_l.addWidget(_label(title, bold=True, size_pt=SECTION_TITLE_PT, rich=False, selectable=False), 1)
         outer.addWidget(bar)
 
-        # Body
         body = QWidget()
         body_l = QVBoxLayout(body)
-        body_l.setContentsMargins(12, 10, 12, 12)
-        body_l.setSpacing(8)
+        body_l.setContentsMargins(10, 8, 10, 10)
+        body_l.setSpacing(9)
         outer.addWidget(body)
 
         self.body_layout = body_l
@@ -101,9 +129,8 @@ class PornFetchInfoWidget(QWidget):
         stacked.addWidget(page)
     """
 
-    def __init__(self, parent: QWidget | None = None, ui = None, initialize_porn_fetch = None):
+    def __init__(self, parent: QWidget | None = None, ui=None, initialize_porn_fetch=None):
         super().__init__(parent)
-
         self.setObjectName("PornFetchInfoRoot")
 
         root = QVBoxLayout(self)
@@ -117,203 +144,274 @@ class PornFetchInfoWidget(QWidget):
         root.addWidget(scroll)
 
         content = QWidget()
+        content.setObjectName("Content")
         scroll.setWidget(content)
 
         layout = QVBoxLayout(content)
-        layout.setSpacing(12)
+        layout.setContentsMargins(8, 8, 8, 8)  # tight outer padding (no wasted margins)
+        layout.setSpacing(10)
 
-        # Main container card (white)
-        main = _Card("MainCard")
-        layout.addWidget(main)
-
-        # Header (dark)
-        header = _Card("HeaderCard")
-        header.layout_.setContentsMargins(14, 14, 14, 14)
+        # --- Header ---
+        header = _Card("HeaderCard", padding=12)
         header.layout_.setSpacing(6)
-        header.layout_.addWidget(_label("Welcome", bold=True, size_pt=16.0, color="#ffffff", rich=False, selectable=False))
+        header.layout_.addWidget(_label("Welcome", bold=True, size_pt=HERO_PT, rich=False, selectable=False))
+
         header.layout_.addWidget(
             _label(
+                "<div style='line-height:140%'>"
                 "Please read the information below carefully. It explains the basics of "
-                "<b>Porn Fetch</b>, paid features, data collection, supported features, and legal aspects.",
-                color="#ffffff",
+                "<b>Porn Fetch</b>, paid features, data collection, supported features, and legal aspects."
+                "</div>"
             )
         )
-        main.layout_.addWidget(header)
+        layout.addWidget(header)
 
-        # Important callout
-        important = _Card("CalloutImportant")
-        important.layout_.setContentsMargins(12, 10, 12, 10)
+        # --- Important callout ---
+        important = _Card("CalloutImportant", padding=10)
         important.layout_.setSpacing(6)
-        important.layout_.addWidget(_label("Important", bold=True, color="#1d4ed8", rich=False, selectable=False))
+        important.layout_.addWidget(_label("Important", bold=True, size_pt=CALLOUT_TITLE_PT, color="#C4B5FD", rich=False, selectable=False))
         important.layout_.addWidget(
             _label(
+                "<div style='line-height:145%'>"
                 "The following information is <b>very important</b>, so please read through it. "
                 "After reading, select your options below."
+                "</div>"
             )
         )
-        main.layout_.addWidget(important)
+        layout.addWidget(important)
 
         # --- 1) Data Collection ---
         s1 = _Section("1) Data Collection")
-        s1.body_layout.addWidget(_label("<b>Porn Fetch does NOT send any data to third-party services</b> unless you explicitly agree to it."))
         s1.body_layout.addWidget(
             _label(
-                "Porn Fetch includes an <b>optional automatic error reporting</b> feature. "
-                "If enabled, errors are sent to my own server (running 24/7 at home on Arch Linux)."
+                "<div style='line-height:145%'>"
+                "<b>Porn Fetch does NOT send any data to third-party services</b> unless you explicitly agree to it."
+                "</div>"
             )
         )
-        s1.body_layout.addWidget(_label("<b>Error logs include:</b>", rich=True))
-        s1.body_layout.addWidget(self._bullets([
-            "Python traceback",
-            "Timestamp",
-            "Porn Fetch version",
-        ]))
         s1.body_layout.addWidget(
             _label(
+                "<div style='line-height:145%'>"
+                "Porn Fetch includes an <b>optional automatic error reporting</b> feature. "
+                "If enabled, errors are sent to my own server (running 24/7 at home on Arch Linux)."
+                "</div>"
+            )
+        )
+        s1.body_layout.addWidget(_label("<b>Error logs include:</b>"))
+        s1.body_layout.addWidget(self._bullets(["Python traceback", "Timestamp", "Porn Fetch version"]))
+        s1.body_layout.addWidget(
+            _label(
+                "<div style='line-height:145%'>"
                 "You can also send feedback directly using the same scheme. This is <b>completely optional</b> and "
                 "has <b>no effect</b> on how you can use Porn Fetch. Sent error/feedback messages are deleted from my "
                 "server with each new version release."
+                "</div>"
             )
         )
-        main.layout_.addWidget(s1)
+        layout.addWidget(s1)
 
         # --- 2) Paid Features ---
         s2 = _Section("2) Paid Features", object_name="SectionCardPaid")
         s2.body_layout.addWidget(_label("Some features of Porn Fetch are <b>paid-only</b>, including:"))
-        s2.body_layout.addWidget(self._bullets([
-            "<b>1080p+</b> resolution for video downloading",
-            "<b>Simultaneous / parallel</b> downloads",
-            "<b>Proxy</b> support",
-        ]))
-        s2.body_layout.addSpacing(6)
-        s2.body_layout.addWidget(_label("<b>How to get a license</b>", rich=True))
-
-        s2.body_layout.addWidget(self._kv_table([
-            ("Website", '<a href="https://echteralsfake.me"><b>https://echteralsfake.me</b></a>'),
-            ("Cost", "<b>5€</b> (one-time purchase)"),
-            ("Includes", "Unlimited activations, valid forever, offline activation"),
-        ]))
-
         s2.body_layout.addWidget(
-            _label(
-                "Alternatively, you can contribute <b>code</b> or <b>translations</b> to Porn Fetch to get a license. "
-                "You can also run Porn Fetch from source to unlock everything."
+            self._bullets(
+                [
+                    "<b>1080p+</b> resolution for video downloading",
+                    "<b>Simultaneous / parallel</b> downloads",
+                    "<b>Proxy</b> support",
+                ]
             )
         )
-        main.layout_.addWidget(s2)
+        s2.body_layout.addSpacing(2)
+
+        # License callout (focus area)
+        s2.body_layout.addWidget(self._license_callout())
+        s2.body_layout.addWidget(
+            _label(
+                "<div style='line-height:145%'>"
+                "Alternatively, you can contribute <b>code</b> or <b>translations</b> to Porn Fetch to get a license. "
+                "You can also run Porn Fetch from source to unlock everything."
+                "</div>"
+            )
+        )
+        layout.addWidget(s2)
 
         # --- 3) Is it legal? ---
         s3 = _Section("3) Is it legal?")
         s3.body_layout.addWidget(
             _label(
+                "<div style='line-height:145%'>"
                 "Generally, <b>yes</b>—in terms of the law and DMCA it is legal, unless you download copyrighted content "
                 "<b>and redistribute it</b> or use it commercially. If you only use the content for private purposes this is typically fine."
+                "</div>"
             )
         )
 
-        warning = _Card("CalloutWarning")
-        warning.layout_.setContentsMargins(12, 10, 12, 10)
+        warning = _Card("CalloutWarning", padding=10)
         warning.layout_.setSpacing(6)
-        warning.layout_.addWidget(_label("Terms of Service notice", bold=True, color="#9a3412", rich=False, selectable=False))
+        warning.layout_.addWidget(
+            _label("Terms of Service notice", bold=True, size_pt=CALLOUT_TITLE_PT, color="#FDBA74", rich=False, selectable=False)
+        )
         warning.layout_.addWidget(
             _label(
+                "<div style='line-height:150%'>"
                 "Web scraping and automation may still violate website Terms of Service. Sites can ban accounts, block IPs, "
                 "or (in rare cases) take legal action if you disrupt their services. This is <b>very unlikely</b> unless "
                 "you download extreme volumes (e.g., 1000+ videos/day)."
+                "</div>"
             )
         )
         s3.body_layout.addWidget(warning)
-        main.layout_.addWidget(s3)
+        layout.addWidget(s3)
 
         # --- 4) Supported Features ---
         s4 = _Section("4) Supported Features")
         s4.body_layout.addWidget(_label("Porn Fetch in general supports:"))
-        s4.body_layout.addWidget(self._bullets([
-            "Downloading videos",
-            "Downloading model / channel / creator accounts",
-            "Downloading playlists",
-            "Searching on websites",
-            "(Sometimes) specific website functions",
-        ], rich=False))
         s4.body_layout.addWidget(
-            _label(
-                "For info dedicated to the actually supported sites, please click on the <b>Supported Websites</b> button "
-                "after you have continued with this dialog."
+            self._bullets(
+                [
+                    "Downloading videos",
+                    "Downloading model / channel / creator accounts",
+                    "Downloading playlists",
+                    "Searching on websites",
+                    "(Sometimes) specific website functions",
+                ],
+                rich=False,
             )
         )
-        main.layout_.addWidget(s4)
+        s4.body_layout.addWidget(
+            _label(
+                "<div style='line-height:145%'>"
+                "For info dedicated to the actually supported sites, please click on the <b>Supported Websites</b> button "
+                "after you have continued with this dialog."
+                "</div>"
+            )
+        )
+        layout.addWidget(s4)
 
         # --- 5) How it works ---
         s5 = _Section("5) How it works")
         s5.body_layout.addWidget(
             _label(
+                "<div style='line-height:145%'>"
                 "Porn Fetch uses <b>web scraping</b> to fetch videos and extract useful information from their HTML / JavaScript. "
                 "That means Porn Fetch mimics your browser. This works great in most cases, but if the website changes something "
                 "then it breaks functionality and I need to make an update."
+                "</div>"
             )
         )
         s5.body_layout.addWidget(
             _label(
+                "<div style='line-height:145%'>"
                 "Porn Fetch explicitly ONLY works for the given supported list of websites. This is <b>NOT</b> a yt-dlp wrapper! "
                 "After fetching a video the HLS URL that contains the segments is extracted and those are downloaded to your PC "
                 "and converted into one file."
+                "</div>"
             )
         )
 
-        note = _Card("CalloutNote")
-        note.layout_.setContentsMargins(12, 10, 12, 10)
+        note = _Card("CalloutNote", padding=10)
         note.layout_.setSpacing(6)
-        note.layout_.addWidget(_label("Note", bold=True, rich=False, selectable=False))
+        note.layout_.addWidget(_label("Note", bold=True, size_pt=CALLOUT_TITLE_PT, color="#E5E7EB", rich=False, selectable=False))
         note.layout_.addWidget(
             _label(
+                "<div style='line-height:150%'>"
                 "Porn Fetch is in no way a perfect software. Don't expect everything to work here all the time — "
                 "I am working on this in my absolute free time after school."
+                "</div>"
             )
         )
         s5.body_layout.addWidget(note)
-        main.layout_.addWidget(s5)
+        layout.addWidget(s5)
 
-        # Footer
-        footer = _label("Thanks for taking the time to read this.", rich=False, selectable=False)
-        footer.setStyleSheet("color:#6b7280; font-size:9.5pt;")
-        main.layout_.addWidget(footer)
-
-        # Let main card stop stretching weirdly
-        layout.addStretch(1)
+        footer = _label("Thanks for taking the time to read this.", rich=False, selectable=False, object_name="Footer")
+        layout.addWidget(footer)
 
         self._apply_styles()
 
-    def _bullets(self, items: list[str], rich: bool = True) -> QWidget:
+    # --- UI helpers ---
+
+    def _bullets(self, items: list[str], *, rich: bool = True) -> QWidget:
         w = QWidget()
         l = QVBoxLayout(w)
         l.setContentsMargins(0, 0, 0, 0)
-        l.setSpacing(4)
+        l.setSpacing(6)
+
         for it in items:
             row = QHBoxLayout()
             row.setContentsMargins(0, 0, 0, 0)
             row.setSpacing(8)
-            dot = _label("•", rich=False, selectable=False)
-            dot.setStyleSheet("color:#e5e7eb;")
-            dot.setFixedWidth(12)
-            txt = _label(it, rich=rich)
+
+            dot = _label("•", rich=False, selectable=False, object_name="BulletDot")
+            dot.setFixedWidth(14)
+
+            txt = _label(f"<div style='line-height:140%'>{it}</div>" if rich else it, rich=rich)
             row.addWidget(dot, 0)
             row.addWidget(txt, 1)
             l.addLayout(row)
+
         return w
+
+    def _license_callout(self) -> QWidget:
+        card = _Card("LicenseCallout", padding=12)
+        card.layout_.setSpacing(8)
+
+        card.layout_.addWidget(
+            _label("How to get a license", bold=True, size_pt=LICENSE_PT, rich=False, selectable=False)
+        )
+
+        # Build link with inline style to guarantee color + underline, regardless of platform theme.
+        website = (
+            '<a href="https://echteralsfake.me" '
+            'style="color:#C4B5FD; text-decoration: underline; font-weight: 700;">'
+            "https://echteralsfake.me"
+            "</a>"
+        )
+
+        card.layout_.addWidget(
+            _label(
+                "<div style='line-height:150%'>"
+                "<b>One-time purchase:</b> <span style='opacity:0.95'>5€</span> — "
+                "unlimited activations, valid forever, offline activation."
+                "</div>"
+            )
+        )
+
+        card.layout_.addWidget(self._kv_table([
+            ("Website", website),
+            ("Cost", "<b>5€</b> (one-time purchase)"),
+            ("Includes", "Unlimited activations, valid forever, offline activation"),
+        ]))
+
+        card.layout_.addWidget(
+            _label(
+                "<div style='line-height:150%'>"
+                "If the link doesn't open, copy it and open it manually."
+                "</div>",
+                size_pt=SMALL_PT,
+                object_name="SubtleHint",
+            )
+        )
+        return card
 
     def _kv_table(self, rows: list[tuple[str, str]]) -> QWidget:
         frame = QFrame()
         frame.setObjectName("KVTable")
+
         grid = QGridLayout(frame)
         grid.setContentsMargins(0, 0, 0, 0)
         grid.setHorizontalSpacing(0)
         grid.setVerticalSpacing(0)
 
         for r, (k, v) in enumerate(rows):
-            k_lab = _label(k, rich=False, selectable=False)
-            k_lab.setObjectName("KVKey")
-            v_lab = _label(v, rich=True)
-            v_lab.setObjectName("KVValue")
+            k_lab = _label(k, rich=False, selectable=False, object_name="KVKey")
+            v_lab = _label(v, rich=True, object_name="KVValue")
+            v_lab.setTextInteractionFlags(
+                Qt.TextInteractionFlag.TextSelectableByMouse
+                | Qt.TextInteractionFlag.LinksAccessibleByMouse
+            )
+            v_lab.setOpenExternalLinks(False)
+            v_lab.linkActivated.connect(_open_url)
 
             grid.addWidget(k_lab, r, 0)
             grid.addWidget(v_lab, r, 1)
@@ -322,94 +420,133 @@ class PornFetchInfoWidget(QWidget):
         grid.setColumnStretch(1, 1)
         return frame
 
+    # --- Theme ---
+
     def _apply_styles(self) -> None:
-        self.setStyleSheet("""
+        # Palette targets:
+        # - Violet/purple for primary accents
+        # - Orange reserved for legal/disclaimer warnings
+        self.setStyleSheet(r"""
         QWidget#PornFetchInfoRoot {
+            background: #05040B;
+            color: #F5F3FF;
+            font-size: 11pt;
+        }
+
+        QScrollArea, QWidget#Content {
             background: transparent;
         }
 
-        QScrollArea {
-            background: transparent;
-        }
-
-        /* Outer card */
-        QFrame#MainCard {
-            background: #0b1220;
-            border: 1px solid #334155;
+        /* Common cards */
+        QFrame#HeaderCard,
+        QFrame#CalloutImportant,
+        QFrame#CalloutNote,
+        QFrame#CalloutWarning,
+        QFrame#SectionCard,
+        QFrame#SectionCardPaid,
+        QFrame#LicenseCallout {
             border-radius: 14px;
         }
 
-        /* Top header */
+        /* Header: high contrast with subtle violet glow */
         QFrame#HeaderCard {
-            background: #020617;
-            border: 1px solid #0f172a;
-            border-radius: 12px;
+            background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                        stop:0 #14062A, stop:1 #080B1A);
+            border: 1px solid #6D28D9;
         }
 
-        /* Callouts */
+        /* Important: violet accent */
         QFrame#CalloutImportant {
-            background: #0b1b3a;
-            border: 1px solid #1d4ed8;
-            border-left: 6px solid #3b82f6;
-            border-radius: 12px;
+            background: #0E0A1D;
+            border: 1px solid #8B5CF6;
+            border-left: 6px solid #A78BFA;
         }
 
-        QFrame#CalloutWarning {
-            background: #2a1405;
-            border: 1px solid #f97316;
-            border-left: 6px solid #fb923c;
-            border-radius: 12px;
-        }
-
+        /* Note: neutral */
         QFrame#CalloutNote {
-            background: #0f172a;
-            border: 1px solid #334155;
-            border-left: 6px solid #94a3b8;
-            border-radius: 12px;
+            background: #0B1020;
+            border: 1px solid #2A3558;
+            border-left: 6px solid #A1A1AA;
+        }
+
+        /* Warning / legal disclaimer: ORANGE only */
+        QFrame#CalloutWarning {
+            background: #241206;
+            border: 1px solid #FB923C;
+            border-left: 6px solid #F97316;
         }
 
         /* Sections */
-        QFrame#SectionCard, QFrame#SectionCardPaid {
-            background: #0b1220;
-            border: 1px solid #334155;
-            border-radius: 12px;
+        QFrame#SectionCard {
+            background: #090A14;
+            border: 1px solid #2D2A45;
         }
-
         QFrame#SectionCardPaid {
-            border: 1px solid #7c5e12; /* warm border */
+            background: #090A14;
+            border: 1px solid #8B5CF6;
         }
 
         QFrame#SectionTitleBar {
-            background: #111827;
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
+            background: #0D0B1A;
+            border-top-left-radius: 14px;
+            border-top-right-radius: 14px;
+            border-bottom: 1px solid #2D2A45;
         }
-
-        /* Paid section title bar */
         QFrame#SectionCardPaid QFrame#SectionTitleBar {
-            background: #1b1407;
+            background: #120828;
+            border-bottom: 1px solid #6D28D9;
         }
 
-        /* KV table */
+        /* License focus area */
+        QFrame#LicenseCallout {
+            background: #120828;
+            border: 1px solid #A78BFA;
+            border-left: 6px solid #8B5CF6;
+        }
+
+        /* KV table in license */
         QFrame#KVTable {
-            border: 1px solid #334155;
-            border-radius: 10px;
-            background: #0b1220;
+            border: 1px solid #3B2E66;
+            border-radius: 12px;
+            background: #0B0A14;
         }
         QLabel#KVKey {
-            background: #111827;
-            color: #94a3b8;
-            padding: 8px 10px;
-            border-right: 1px solid #334155;
+            background: #0E0B1E;
+            color: #DDD6FE;
+            padding: 10px 10px;
+            border-right: 1px solid #3B2E66;
+            font-weight: 600;
         }
         QLabel#KVValue {
-            padding: 8px 10px;
-            color: #e5e7eb;
+            padding: 10px 10px;
+            color: #F5F3FF;
         }
 
-        /* Default text */
+        /* Link color for rich text inside labels (best effort). Inline CSS in HTML ensures consistency. */
+        QLabel#KVValue a { color: #C4B5FD; text-decoration: underline; }
+
+        /* Bullets */
+        QLabel#BulletDot {
+            color: #A78BFA;
+            font-size: 12pt;
+        }
+
+        /* Subtle hint text */
+        QLabel#SubtleHint {
+            color: #C7C3E6;
+        }
+
+        /* Footer */
+        QLabel#Footer {
+            color: #A1A1AA;
+            font-size: 10pt;
+            padding-top: 2px;
+            padding-bottom: 4px;
+        }
+
+        /* Default label color (kept very bright for readability) */
         QLabel {
-            color: #e5e7eb;
+            color: #F5F3FF;
         }
         """)
 
@@ -417,6 +554,7 @@ class PornFetchInfoWidget(QWidget):
 # --- Minimal demo (optional) ---
 if __name__ == "__main__":
     import sys
+
     app = QApplication(sys.argv)
     w = PornFetchInfoWidget()
     w.resize(820, 720)
