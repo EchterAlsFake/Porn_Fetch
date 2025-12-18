@@ -23,6 +23,7 @@ Discord: echteralsfake (faster response)
 # macOS Setup...
 import sys
 import webbrowser
+from collections.abc import Callable
 
 if sys.platform == "darwin":
     from src.backend.macos_setup import macos_setup
@@ -40,6 +41,7 @@ except Exception:
 import time
 import os.path
 import logging
+import pathlib
 import argparse
 import markdown
 import truststore
@@ -182,8 +184,9 @@ def get_settings(*, portable: bool, portable_dir: str | None = None) -> QSetting
 
 
 class LicenseWidget(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, setup_restrictions: Callable, parent=None):
         super().__init__(parent)
+        self.setup_restrictions = setup_restrictions
 
         self.lic = LicenseManager(
             public_key_b64=PUBLIC_KEY_B64,
@@ -204,6 +207,7 @@ class LicenseWidget(QWidget):
     def refresh_status(self):
         res = self.lic.load_installed()
         self.status.setText(f"License status: {'✅ Valid' if res.valid else '❌ Not valid'}\n{res.reason}")
+        self.setup_restrictions()
 
     def import_license(self):
         path, _ = QFileDialog.getOpenFileName(self, "Select license file", "", "License (*.license);;All files (*)")
@@ -669,7 +673,6 @@ class DownloadThread(QRunnable):
         # Update the last update time to the current time
         self.last_update_time = current_time
 
-
     def update_total_progress(self):
         """Update total download progress."""
         global downloaded_segments
@@ -833,6 +836,7 @@ class PornFetch(QMainWindow):
         self.disclaimer = Disclaimer(self.ui, self.initialize_pornfetch)
         self.ui.vbox_info.addWidget(PornFetchInfoWidget())
         self.license_manager = LicenseManager(storage_path=_default_license_path(), public_key_b64=PUBLIC_KEY_B64)
+        self.setup_license_restrictions()
 
         """
                              ! INDEX LIST !
@@ -881,8 +885,6 @@ class PornFetch(QMainWindow):
         self.semaphore = QSemaphore(video_data.consistent_data["semaphore"])
         self.logger.debug("Startup: [5/5] OK")
         self.initialize_pornfetch()
-        if not self.license_manager.has_feature("full_unlock"):
-            LicenseWidget()
 
     def disable_logging(self):
         conf["Misc"]["network_logging"] = "false"
@@ -1184,6 +1186,7 @@ class PornFetch(QMainWindow):
         self.ui.settings_button_switch_system.clicked.connect(lambda _=False, i=2: self.ui.settings_stacked_widget_main.setCurrentIndex(i))
         self.ui.settings_button_switch_ui.clicked.connect(lambda _=False, i=3: self.ui.settings_stacked_widget_main.setCurrentIndex(i))
         self.ui.settings_button_buy_license.clicked.connect(self.buy_license)
+        self.ui.settings_button_import_license.clicked.connect(self.import_license)
 
         self.ui.settings_button_apply.clicked.connect(self.save_user_settings)
         self.ui.settings_button_reset.clicked.connect(reset_pornfetch)
@@ -1284,6 +1287,10 @@ class PornFetch(QMainWindow):
     def load_user_settings(self):
         # --- Video ---
         _quality = settings.value("Video/quality", 0, int)
+        if _quality <= 5 and not self.license_manager.has_feature("full_unlock"):
+            ui_popup("Warning! You have selected (somehow) a higher quality than 720p. You need a license to unlock it. Please go into the settings to get and import one...")
+            _quality = 6 # Correcting back to 720p
+
         video_data.consistent_data.update({"quality": self.mappings_quality.get(_quality)})
         self.ui.settings_video_combobox_quality.setCurrentIndex(_quality)
 
@@ -1329,6 +1336,11 @@ class PornFetch(QMainWindow):
         self.ui.settings_performance_combobox_download_mode.setCurrentIndex(_download_mode)
 
         simultaneous_downloads = settings.value("Performance/semaphore", 2, int)
+
+        if int(simultaneous_downloads) > 1 and not self.license_manager.has_feature("full_unlock"):
+            ui_popup("Warning! You have selected (somehow) a higher amount of parallel downloads than you are supposed to. You need a license to unlock it. Please go into the settings to get and import one...")
+            simultaneous_downloads = 1 # Correcting back to 720p
+
         video_data.consistent_data.update({"semaphore": simultaneous_downloads})
         self.ui.settings_spinbox_performance_simultaneous_downloads.setValue(simultaneous_downloads)
 
@@ -2437,6 +2449,50 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
     @staticmethod
     def buy_license():
         webbrowser.open("https://echteralsfake.me/buy_license")
+
+    def import_license(self):
+        self.widget = LicenseWidget(setup_restrictions=self.setup_license_restrictions)
+        self.widget.show()
+
+    def set_item_enabled(self, combo: QComboBox, index: int, enabled: bool) -> None:
+        model = combo.model()
+        item = model.item(index)  # works when model is QStandardItemModel (default for QComboBox)
+        if item is None:
+            return
+        flags = item.flags()
+        if enabled:
+            item.setFlags(flags | Qt.ItemFlag.ItemIsEnabled)
+        else:
+            item.setFlags(flags & ~Qt.ItemFlag.ItemIsEnabled)
+
+    def apply_license_state(self, combo: QComboBox, has_license: bool) -> None:
+        locked = range(0, 6)  # 0..5 locked
+        free = range(6, 11)  # 6..10 free (optional)
+
+        for i in locked:
+            self.set_item_enabled(combo, i, has_license)
+
+        for i in free:
+            self.set_item_enabled(combo, i, True)  # keep enabled
+
+        # If current selection is now disabled, move to first enabled entry
+        if not combo.model().item(combo.currentIndex()).flags() & Qt.ItemFlag.ItemIsEnabled:
+            for i in range(combo.count()):
+                item = combo.model().item(i)
+                if item and (item.flags() & Qt.ItemFlag.ItemIsEnabled):
+                    combo.setCurrentIndex(i)
+                    break
+
+        if has_license:
+            self.ui.settings_spinbox_performance_simultaneous_downloads.setMaximum(100)
+
+        else:
+            self.ui.settings_spinbox_performance_simultaneous_downloads.setValue(1)
+            self.ui.settings_spinbox_performance_simultaneous_downloads.setMaximum(1)
+
+    def setup_license_restrictions(self):
+        has_license = self.license_manager.has_feature("full_unlock")
+        self.apply_license_state(combo = self.ui.settings_video_combobox_quality, has_license=has_license)
 
     def check_internet(self):
         """Checks if the porn sites are accessible"""
