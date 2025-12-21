@@ -354,9 +354,10 @@ class InternetCheck(QRunnable):
             "https://www.missav.ws",
             "https://www.xhamster.com",
             "https://www.spankbang.com",
-            "https://www.youporn.com"
-            "https://www.beeg.com"
-            "https://www.porntrex.com"
+            "https://www.youporn.com",
+            "https://www.beeg.com",
+            "https://www.porntrex.com",
+            "https://www.xfreehd.com"
             # Append new URLs here
         ]
 
@@ -705,7 +706,8 @@ class DownloadThread(QRunnable):
 
 
             # We need to specify the sources, so that it knows which individual progressbar to use
-            instances_legacy = [shared_functions.hq_Video, shared_functions.ep_Video, shared_functions.pt_Video]
+            instances_legacy = [shared_functions.hq_Video, shared_functions.ep_Video, shared_functions.pt_Video,
+                                shared_functions.xf_Video]
 
             if isinstance(self.video, tuple(instances_legacy)):
                 video_source = "raw"

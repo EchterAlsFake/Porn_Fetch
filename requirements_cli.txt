@@ -21,3 +21,4 @@ fake-useragent
 lxml
 porntrex_api
 truststore
+xfreehd_api

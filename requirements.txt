@@ -22,3 +22,4 @@ lxml
 truststore
 porntrex_api
 cryptography
+xfreehd_api
