@@ -607,6 +607,7 @@ to be refactored.
 - Added Video support for porntrex.com
 - Added Model / Channel support for porntrex.com
 - Added Searching support for porntrex.com
+- Added support for xfreehd.com
 
 ### Bug Fixes
 - Fixed 403 missav error
