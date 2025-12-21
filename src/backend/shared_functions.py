@@ -148,7 +148,7 @@ supress_errors = false
 
 [Performance]
 download_mode = 0
-semaphore = 2
+semaphore = 1
 videos_concurrency = 10
 pages_concurrency = 2
 download_workers = 20
@@ -159,7 +159,7 @@ processing_delay = 0
 network_delay = 0
 
 [Video]
-quality = 0
+quality = 6
 model_videos = 0
 result_limit = 50
 output_path = ./
