@@ -1264,9 +1264,10 @@ class PornFetch(QMainWindow):
             5: 1080,
             6: 720,
             7: 540,
-            8: 360,
-            9: 240,
-            10: 144
+            8: 480,
+            9: 360,
+            10: 240,
+            11: 144
         }
         self.mappings_ui_theme = {
             0: "dark",
