@@ -121,7 +121,7 @@ as they are indeed needed for the main applications!
 # TODO: Implement logging
 sections = [ "Misc", "Performance", "Video", "UI"]
 
-options_misc = ["first_run_gui", "license_accepted", "install_type", "update_checks", "internet_checks", "anonymous_mode", "disclaimer_shown",
+options_misc = ["debug_mode", "first_run_gui", "license_accepted", "install_type", "update_checks", "internet_checks", "anonymous_mode", "disclaimer_shown",
                 "network_logging", "first_run_cli", "downloaded_videos", "notice_shown", "android_warning_shown", "supress_errors"]
 options_performance = ["download_mode", "semaphore", "videos_concurrency", "pages_concurrency", "download_workers",
                        "timeout", "retries", "speed_limit", "processing_delay", "network_delay"]
@@ -132,6 +132,7 @@ options_ui = ["language", "font_size", "theme"]
 
 default_configuration = f"""
 [Misc]
+debug_mode = false
 first_run_gui = true
 license_accepted = false
 install_type = unknown

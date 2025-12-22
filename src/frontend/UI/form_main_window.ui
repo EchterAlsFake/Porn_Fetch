@@ -2247,7 +2247,7 @@ This can save a lot of time in certain scenarios.
              <x>0</x>
              <y>0</y>
              <width>958</width>
-             <height>534</height>
+             <height>499</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_19">
@@ -2333,7 +2333,7 @@ This can save a lot of time in certain scenarios.
                  </sizepolicy>
                 </property>
                 <property name="currentIndex">
-                 <number>0</number>
+                 <number>2</number>
                 </property>
                 <widget class="QWidget" name="page_video">
                  <property name="sizePolicy">
@@ -3193,45 +3193,49 @@ a URL for a website there will be &lt;AMOUNT&gt; of attempts until an error is t
                     <property name="spacing">
                      <number>0</number>
                     </property>
-                    <item row="2" column="2">
-                     <widget class="QCheckBox" name="settings_checkbox_system_activate_proxy">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="accessibleName">
-                       <string>checkbox activate a proxy</string>
-                      </property>
-                      <property name="text">
-                       <string>Activate Proxy</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="2">
-                     <widget class="QCheckBox" name="settings_checkbox_system_internet_checks">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="accessibleName">
-                       <string>checkbox enable internet checks</string>
-                      </property>
-                      <property name="text">
-                       <string>Internet checks</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="1" colspan="2">
-                     <widget class="QCheckBox" name="settings_checkbox_system_enable_network_logging">
+                    <item row="3" column="2">
+                     <widget class="QCheckBox" name="settings_checkbox_system_proxy_kill_switch">
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
                       </property>
                       <property name="toolTip">
-                       <string/>
+                       <string>The proxy kill switch is an additional security layer if you use proxies. It will check your IP each time before making
+a request and if it's leaked it will immediately exit everything.
+
+My priority on developing this is low. Please do not report errors. Thank you &lt;3</string>
                       </property>
                       <property name="accessibleName">
-                       <string>checkbox enable network logging</string>
+                       <string>checkbox enable proxy kill switch</string>
                       </property>
                       <property name="text">
-                       <string>Enable Network Logging</string>
+                       <string>Proxy Kill Switch</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="QLineEdit" name="settings_lineedit_system_custom_app_name">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="placeholderText">
+                       <string>Write a custom app name here</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QLabel" name="label_tooltip_supress_errors">
+                      <property name="toolTip">
+                       <string>If you enable this function, all errors will be suppressed. This does not mean that they will be completely ignored, but
+you won't get a big notification for it. 
+
+If you have activated Network Logging, they will still be reported. If an error happens while iterating through videos,
+the current video will be skipped and Porn Fetch will continue with the next one.  </string>
+                      </property>
+                      <property name="text">
+                       <string/>
                       </property>
                      </widget>
                     </item>
@@ -3257,6 +3261,55 @@ You'd help me a lot by enabling network logging :) </string>
                       </property>
                       <property name="text">
                        <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="2">
+                     <widget class="QCheckBox" name="settings_checkbox_system_activate_proxy">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox activate a proxy</string>
+                      </property>
+                      <property name="text">
+                       <string>Activate Proxy</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_tooltip_anonymous_mode">
+                      <property name="toolTip">
+                       <string>The anonymous mode renames all of Porn Fetch's elements to look NOT like a Porn downloader.
+This makes it useful for downloading Porn content if you are in public, or multiple people use your PC / Phone.
+
+This also disables thumbnail preview. All titles will be replaced with: [redacted] as well as all authors.</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2">
+                     <widget class="QCheckBox" name="settings_checkbox_system_internet_checks">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox enable internet checks</string>
+                      </property>
+                      <property name="text">
+                       <string>Internet checks</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0" colspan="2">
+                     <widget class="QPushButton" name="settings_button_system_install_pornfetch">
+                      <property name="accessibleName">
+                       <string>button install porn fetch (This is optional) </string>
+                      </property>
+                      <property name="text">
+                       <string>Install Porn Fetch</string>
                       </property>
                      </widget>
                     </item>
@@ -3292,16 +3345,16 @@ You'd help me a lot by enabling network logging :) </string>
                       </property>
                      </widget>
                     </item>
-                    <item row="2" column="0">
-                     <widget class="QLabel" name="label_tooltip_anonymous_mode">
-                      <property name="toolTip">
-                       <string>The anonymous mode renames all of Porn Fetch's elements to look NOT like a Porn downloader.
-This makes it useful for downloading Porn content if you are in public, or multiple people use your PC / Phone.
-
-This also disables thumbnail preview. All titles will be replaced with: [redacted] as well as all authors.</string>
+                    <item row="1" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_system_update_checks">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox enable update checks</string>
                       </property>
                       <property name="text">
-                       <string/>
+                       <string>Update checks</string>
                       </property>
                      </widget>
                     </item>
@@ -3321,72 +3374,26 @@ This also disables thumbnail preview. All titles will be replaced with: [redacte
                       </property>
                      </widget>
                     </item>
-                    <item row="1" column="1">
-                     <widget class="QCheckBox" name="settings_checkbox_system_update_checks">
+                    <item row="4" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_system_enable_network_logging">
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
                       </property>
-                      <property name="accessibleName">
-                       <string>checkbox enable update checks</string>
-                      </property>
-                      <property name="text">
-                       <string>Update checks</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="0">
-                     <widget class="QLabel" name="label_tooltip_supress_errors">
                       <property name="toolTip">
-                       <string>If you enable this function, all errors will be suppressed. This does not mean that they will be completely ignored, but
-you won't get a big notification for it. 
-
-If you have activated Network Logging, they will still be reported. If an error happens while iterating through videos,
-the current video will be skipped and Porn Fetch will continue with the next one.  </string>
-                      </property>
-                      <property name="text">
                        <string/>
                       </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="2">
-                     <widget class="QCheckBox" name="settings_checkbox_system_proxy_kill_switch">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="toolTip">
-                       <string>The proxy kill switch is an additional security layer if you use proxies. It will check your IP each time before making
-a request and if it's leaked it will immediately exit everything.
-
-My priority on developing this is low. Please do not report errors. Thank you &lt;3</string>
-                      </property>
                       <property name="accessibleName">
-                       <string>checkbox enable proxy kill switch</string>
+                       <string>checkbox enable network logging</string>
                       </property>
                       <property name="text">
-                       <string>Proxy Kill Switch</string>
+                       <string>Enable Network Logging</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="0" column="0" colspan="2">
-                     <widget class="QPushButton" name="settings_button_system_install_pornfetch">
-                      <property name="accessibleName">
-                       <string>button install porn fetch (This is optional) </string>
-                      </property>
+                    <item row="4" column="2">
+                     <widget class="QCheckBox" name="settings_checkbox_system_enable_debug_mode">
                       <property name="text">
-                       <string>Install Porn Fetch</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="2">
-                     <widget class="QLineEdit" name="settings_lineedit_system_custom_app_name">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="placeholderText">
-                       <string>Write a custom app name here</string>
+                       <string>Enable Debug Mode (Not recommended) </string>
                       </property>
                      </widget>
                     </item>
@@ -4150,7 +4157,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
+             <width>84</width>
              <height>70</height>
             </rect>
            </property>
@@ -4511,12 +4518,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
        <number>0</number>
       </property>
       <property name="verticalSpacing">
-       <number>0</number>
+       <number>5</number>
       </property>
       <item row="0" column="0">
        <widget class="QLabel" name="main_label_progressbar_total">
         <property name="text">
-         <string>Total:</string>
+         <string>Total (HLS):</string>
         </property>
        </widget>
       </item>
@@ -4542,18 +4549,32 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="2" column="0">
        <widget class="QLabel" name="main_label_progressbar_converting">
         <property name="text">
          <string>Converting:</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="2" column="1">
        <widget class="QProgressBar" name="main_progressbar_converting">
         <property name="styleSheet">
          <string notr="true">text-align: center; /* Centered text */</string>
         </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="main_label_progressbar_total_direct">
+        <property name="text">
+         <string>Total (direct):</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QProgressBar" name="main_progressbar_total_direct">
         <property name="value">
          <number>0</number>
         </property>

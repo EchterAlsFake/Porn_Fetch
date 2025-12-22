@@ -619,6 +619,7 @@ to be refactored.
 - You can also set a custom app name when installing Porn Fetch from the settings
 - Infinite loading animation works better now
 - Added 480p to quality selection (#98)
+- Added an information dialog for the first run basically telling about all useful aspects of Porn Fetch
 
 ### Code Optimizations
 - Refactored `check_video` function to be faster and less redundant

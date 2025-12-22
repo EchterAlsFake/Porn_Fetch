@@ -888,20 +888,6 @@ class PornFetch(QMainWindow):
         self.logger.debug("Startup: [5/5] OK")
         self.initialize_pornfetch()
 
-    def disable_logging(self):
-        conf["Misc"]["network_logging"] = "false"
-        with open("config.ini", "w") as configuration:
-            conf.write(configuration)
-
-        self.initialize_pornfetch()
-
-    def enable_logging(self):
-        conf["Misc"]["network_logging"] = "true"
-        with open("config.ini", "w") as configuration:
-            conf.write(configuration)
-
-        self.initialize_pornfetch()
-
     """
     The following functions just switch the Stacked Widget to the different widgets
     """
@@ -1130,10 +1116,8 @@ class PornFetch(QMainWindow):
         self.threadpool.start(self.install_thread)
 
     def install_porn_fetch_portable(self):
-        conf["Misc"]["install_type"] = "portable"
-        with open("config.ini", "w") as config: # type: TextIOWrapper
-            conf.write(config)
-
+        settings.setValue("Misc/install_type", "portable")
+        settings.sync()
         self.switch_to_download()
 
     def install_pornfetch_result(self, result):
@@ -1190,6 +1174,12 @@ class PornFetch(QMainWindow):
         self.ui.settings_button_buy_license.clicked.connect(self.buy_license)
         self.ui.settings_button_import_license.clicked.connect(self.import_license)
 
+        # Info Dialog
+        self.ui.button_info_enable_all.clicked.connect(self.info_dialog_enable_all)
+        self.ui.button_info_disable_all.clicked.connect(self.info_dialog_disable_all)
+        self.ui.button_info_enable_update.clicked.connect(self.info_dialog_enable_update)
+
+
         self.ui.settings_button_apply.clicked.connect(self.save_user_settings)
         self.ui.settings_button_reset.clicked.connect(reset_pornfetch)
         self.ui.settings_button_system_install_pornfetch.clicked.connect(self.switch_to_install_dialog)
@@ -1226,6 +1216,24 @@ class PornFetch(QMainWindow):
         self.ui.main_button_tree_keyboard_shortcuts.clicked.connect(self.switch_to_keyboard_shortcuts)
         self.ui.main_button_tree_automated_selection.clicked.connect(self.select_range_of_items)
         self.ui.settings_checkbox_system_proxy_kill_switch.toggled.connect(self.toggle_killswitch)
+
+    def info_dialog_enable_update(self):
+        self.ui.settings_checkbox_system_enable_network_logging.setChecked(False)
+        self.ui.settings_checkbox_system_update_checks.setChecked(True)
+        self.save_user_settings()
+        self.initialize_pornfetch()
+
+    def info_dialog_disable_all(self):
+        self.ui.settings_checkbox_system_enable_network_logging.setChecked(False)
+        self.ui.settings_checkbox_system_update_checks.setChecked(False)
+        self.save_user_settings()
+        self.initialize_pornfetch()
+
+    def info_dialog_enable_all(self):
+        self.ui.settings_checkbox_system_enable_network_logging.setChecked(True)
+        self.ui.settings_checkbox_system_update_checks.setChecked(True)
+        self.save_user_settings()
+        self.initialize_pornfetch()
 
     def shortcuts(self):
         quit_shortcut = QShortcut(QKeySequence("Ctrl+Q"), self)
@@ -1288,6 +1296,7 @@ class PornFetch(QMainWindow):
         }
 
     def load_user_settings(self):
+        settings.sync()
         # --- Video ---
         _quality = settings.value("Video/quality", 0, int)
         if _quality <= 5 and not self.license_manager.has_feature("full_unlock"):
@@ -1401,6 +1410,10 @@ class PornFetch(QMainWindow):
         video_data.consistent_data.update({"network_logging": network_logging})
         self.ui.settings_checkbox_system_enable_network_logging.setChecked(network_logging)
 
+        debug_mode = settings.value("Misc/debug_mode", False, bool)
+        video_data.consistent_data.update({"debug_mode": debug_mode})
+        self.ui.settings_checkbox_system_enable_debug_mode.setChecked(debug_mode)
+
         # --- UI ---
         ui_language_idx = settings.value("UI/language", 0, int)
         self.ui.settings_ui_combobox_language.setCurrentIndex(ui_language_idx)
@@ -1425,6 +1438,13 @@ class PornFetch(QMainWindow):
         shared_functions.enable_logging()
 
     def save_user_settings(self):
+        print(f"In settings....")
+        print(id(settings))
+        print(settings.fileName())
+
+        settings.sync()
+
+
         """Saves the user settings to the configuration file based on the UI state."""
         # --- Video ---
         settings.beginGroup("Video")
@@ -1593,26 +1613,37 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         if the License was shown and accepted, if the disclaimer text was shown, if the user downloaded the amount
         of videos to show the sponsoring dialog and after all that switch to the main widget.
         """
+
+        print(id(settings))
+        print(settings.fileName())
+
         global FORCE_PORTABLE_RUN
+        settings.sync()
         if not self.license.check_license():
             self.switch_to_license()
             return
 
         if not self.disclaimer.check_disclaimer():
             self.switch_to_disclaimer()
-
-        if settings.value("Misc/first_run_gui") == "true":
-            print(f"FIRST RUN SWITCHDDDDDDd")
-            self.switch_to_one_time_setup()
             return
 
+        v = settings.value("Misc/first_run_gui")
+        print(v, type(v))
+
+        first = settings.value("Misc/first_run_gui", True, type=bool)
+        if first:
+            print(f"It's true lol ")
+            settings.setValue("Misc/first_run_gui", False)
+            settings.sync()
+            self.switch_to_one_time_setup()
+            return
 
         if not FORCE_PORTABLE_RUN:
             if sys.platform == "darwin":
                 self.ui.CentralStackedWidget.setCurrentIndex(0)
                 return
 
-            if conf["Misc"]["install_type"] == "unknown":
+            if settings.value("Misc/install_type") == "unknown":
                 self.switch_to_install_dialog()
                 return
 

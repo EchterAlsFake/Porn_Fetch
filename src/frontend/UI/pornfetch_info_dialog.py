@@ -198,7 +198,7 @@ class PornFetchInfoWidget(QWidget):
             )
         )
         s1.body_layout.addWidget(_label("<b>Error logs include:</b>"))
-        s1.body_layout.addWidget(self._bullets(["Python traceback", "Timestamp", "Porn Fetch version"]))
+        s1.body_layout.addWidget(self._bullets(["Python traceback", "Timestamp", "Porn Fetch version", "Your Operating System"]))
         s1.body_layout.addWidget(
             _label(
                 "<div style='line-height:145%'>"

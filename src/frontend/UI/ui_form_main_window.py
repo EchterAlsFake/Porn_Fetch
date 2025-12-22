@@ -1361,11 +1361,39 @@ class Ui_MainWindow(object):
         self.settings_gridlayout_system = QGridLayout()
         self.settings_gridlayout_system.setSpacing(0)
         self.settings_gridlayout_system.setObjectName(u"settings_gridlayout_system")
+        self.settings_checkbox_system_proxy_kill_switch = QCheckBox(self.page_system)
+        self.settings_checkbox_system_proxy_kill_switch.setObjectName(u"settings_checkbox_system_proxy_kill_switch")
+        self.settings_checkbox_system_proxy_kill_switch.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_proxy_kill_switch, 3, 2, 1, 1)
+
+        self.settings_lineedit_system_custom_app_name = QLineEdit(self.page_system)
+        self.settings_lineedit_system_custom_app_name.setObjectName(u"settings_lineedit_system_custom_app_name")
+        sizePolicy7.setHeightForWidth(self.settings_lineedit_system_custom_app_name.sizePolicy().hasHeightForWidth())
+        self.settings_lineedit_system_custom_app_name.setSizePolicy(sizePolicy7)
+
+        self.settings_gridlayout_system.addWidget(self.settings_lineedit_system_custom_app_name, 0, 2, 1, 1)
+
+        self.label_tooltip_supress_errors = QLabel(self.page_system)
+        self.label_tooltip_supress_errors.setObjectName(u"label_tooltip_supress_errors")
+
+        self.settings_gridlayout_system.addWidget(self.label_tooltip_supress_errors, 3, 0, 1, 1)
+
+        self.label_tooltip_network_logging = QLabel(self.page_system)
+        self.label_tooltip_network_logging.setObjectName(u"label_tooltip_network_logging")
+
+        self.settings_gridlayout_system.addWidget(self.label_tooltip_network_logging, 4, 0, 1, 1)
+
         self.settings_checkbox_system_activate_proxy = QCheckBox(self.page_system)
         self.settings_checkbox_system_activate_proxy.setObjectName(u"settings_checkbox_system_activate_proxy")
         self.settings_checkbox_system_activate_proxy.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_activate_proxy, 2, 2, 1, 1)
+
+        self.label_tooltip_anonymous_mode = QLabel(self.page_system)
+        self.label_tooltip_anonymous_mode.setObjectName(u"label_tooltip_anonymous_mode")
+
+        self.settings_gridlayout_system.addWidget(self.label_tooltip_anonymous_mode, 2, 0, 1, 1)
 
         self.settings_checkbox_system_internet_checks = QCheckBox(self.page_system)
         self.settings_checkbox_system_internet_checks.setObjectName(u"settings_checkbox_system_internet_checks")
@@ -1373,16 +1401,10 @@ class Ui_MainWindow(object):
 
         self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_internet_checks, 1, 2, 1, 1)
 
-        self.settings_checkbox_system_enable_network_logging = QCheckBox(self.page_system)
-        self.settings_checkbox_system_enable_network_logging.setObjectName(u"settings_checkbox_system_enable_network_logging")
-        self.settings_checkbox_system_enable_network_logging.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.settings_button_system_install_pornfetch = QPushButton(self.page_system)
+        self.settings_button_system_install_pornfetch.setObjectName(u"settings_button_system_install_pornfetch")
 
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_enable_network_logging, 4, 1, 1, 2)
-
-        self.label_tooltip_network_logging = QLabel(self.page_system)
-        self.label_tooltip_network_logging.setObjectName(u"label_tooltip_network_logging")
-
-        self.settings_gridlayout_system.addWidget(self.label_tooltip_network_logging, 4, 0, 1, 1)
+        self.settings_gridlayout_system.addWidget(self.settings_button_system_install_pornfetch, 0, 0, 1, 2)
 
         self.settings_checkbox_system_supress_errors = QCheckBox(self.page_system)
         self.settings_checkbox_system_supress_errors.setObjectName(u"settings_checkbox_system_supress_errors")
@@ -1397,10 +1419,11 @@ class Ui_MainWindow(object):
 
         self.settings_gridlayout_system.addWidget(self.label_tooltip_update_checks, 1, 0, 1, 1)
 
-        self.label_tooltip_anonymous_mode = QLabel(self.page_system)
-        self.label_tooltip_anonymous_mode.setObjectName(u"label_tooltip_anonymous_mode")
+        self.settings_checkbox_system_update_checks = QCheckBox(self.page_system)
+        self.settings_checkbox_system_update_checks.setObjectName(u"settings_checkbox_system_update_checks")
+        self.settings_checkbox_system_update_checks.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.settings_gridlayout_system.addWidget(self.label_tooltip_anonymous_mode, 2, 0, 1, 1)
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_update_checks, 1, 1, 1, 1)
 
         self.settings_checkbox_system_enable_anonymous_mode = QCheckBox(self.page_system)
         self.settings_checkbox_system_enable_anonymous_mode.setObjectName(u"settings_checkbox_system_enable_anonymous_mode")
@@ -1408,34 +1431,16 @@ class Ui_MainWindow(object):
 
         self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_enable_anonymous_mode, 2, 1, 1, 1)
 
-        self.settings_checkbox_system_update_checks = QCheckBox(self.page_system)
-        self.settings_checkbox_system_update_checks.setObjectName(u"settings_checkbox_system_update_checks")
-        self.settings_checkbox_system_update_checks.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.settings_checkbox_system_enable_network_logging = QCheckBox(self.page_system)
+        self.settings_checkbox_system_enable_network_logging.setObjectName(u"settings_checkbox_system_enable_network_logging")
+        self.settings_checkbox_system_enable_network_logging.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_update_checks, 1, 1, 1, 1)
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_enable_network_logging, 4, 1, 1, 1)
 
-        self.label_tooltip_supress_errors = QLabel(self.page_system)
-        self.label_tooltip_supress_errors.setObjectName(u"label_tooltip_supress_errors")
+        self.settings_checkbox_system_enable_debug_mode = QCheckBox(self.page_system)
+        self.settings_checkbox_system_enable_debug_mode.setObjectName(u"settings_checkbox_system_enable_debug_mode")
 
-        self.settings_gridlayout_system.addWidget(self.label_tooltip_supress_errors, 3, 0, 1, 1)
-
-        self.settings_checkbox_system_proxy_kill_switch = QCheckBox(self.page_system)
-        self.settings_checkbox_system_proxy_kill_switch.setObjectName(u"settings_checkbox_system_proxy_kill_switch")
-        self.settings_checkbox_system_proxy_kill_switch.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_proxy_kill_switch, 3, 2, 1, 1)
-
-        self.settings_button_system_install_pornfetch = QPushButton(self.page_system)
-        self.settings_button_system_install_pornfetch.setObjectName(u"settings_button_system_install_pornfetch")
-
-        self.settings_gridlayout_system.addWidget(self.settings_button_system_install_pornfetch, 0, 0, 1, 2)
-
-        self.settings_lineedit_system_custom_app_name = QLineEdit(self.page_system)
-        self.settings_lineedit_system_custom_app_name.setObjectName(u"settings_lineedit_system_custom_app_name")
-        sizePolicy7.setHeightForWidth(self.settings_lineedit_system_custom_app_name.sizePolicy().hasHeightForWidth())
-        self.settings_lineedit_system_custom_app_name.setSizePolicy(sizePolicy7)
-
-        self.settings_gridlayout_system.addWidget(self.settings_lineedit_system_custom_app_name, 0, 2, 1, 1)
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_enable_debug_mode, 4, 2, 1, 1)
 
 
         self.gridLayout_33.addLayout(self.settings_gridlayout_system, 0, 0, 1, 1)
@@ -1777,7 +1782,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 98, 70))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 84, 70))
         self.gridLayout_20 = QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_20.setSpacing(0)
         self.gridLayout_20.setObjectName(u"gridLayout_20")
@@ -2009,7 +2014,7 @@ class Ui_MainWindow(object):
 
         self.CentralStackedWidget.setCurrentIndex(1)
         self.main_stacked_widget_top.setCurrentIndex(4)
-        self.settings_stacked_widget_main.setCurrentIndex(0)
+        self.settings_stacked_widget_main.setCurrentIndex(2)
         self.settings_video_combobox_quality.setCurrentIndex(0)
 
 
@@ -2656,21 +2661,25 @@ class Ui_MainWindow(object):
 "a URL for a website there will be <AMOUNT> of attempts until an error is thrown.", None))
 #endif // QT_CONFIG(tooltip)
         self.label_tooltip_maximum_retries.setText("")
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_system_activate_proxy.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox activate a proxy", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_system_activate_proxy.setText(QCoreApplication.translate("MainWindow", u"Activate Proxy", None))
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_system_internet_checks.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable internet checks", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_system_internet_checks.setText(QCoreApplication.translate("MainWindow", u"Internet checks", None))
 #if QT_CONFIG(tooltip)
-        self.settings_checkbox_system_enable_network_logging.setToolTip("")
+        self.settings_checkbox_system_proxy_kill_switch.setToolTip(QCoreApplication.translate("MainWindow", u"The proxy kill switch is an additional security layer if you use proxies. It will check your IP each time before making\n"
+"a request and if it's leaked it will immediately exit everything.\n"
+"\n"
+"My priority on developing this is low. Please do not report errors. Thank you <3", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(accessibility)
-        self.settings_checkbox_system_enable_network_logging.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable network logging", None))
+        self.settings_checkbox_system_proxy_kill_switch.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable proxy kill switch", None))
 #endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_system_enable_network_logging.setText(QCoreApplication.translate("MainWindow", u"Enable Network Logging", None))
+        self.settings_checkbox_system_proxy_kill_switch.setText(QCoreApplication.translate("MainWindow", u"Proxy Kill Switch", None))
+        self.settings_lineedit_system_custom_app_name.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Write a custom app name here", None))
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_supress_errors.setToolTip(QCoreApplication.translate("MainWindow", u"If you enable this function, all errors will be suppressed. This does not mean that they will be completely ignored, but\n"
+"you won't get a big notification for it. \n"
+"\n"
+"If you have activated Network Logging, they will still be reported. If an error happens while iterating through videos,\n"
+"the current video will be skipped and Porn Fetch will continue with the next one.  ", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_supress_errors.setText("")
 #if QT_CONFIG(tooltip)
         self.label_tooltip_network_logging.setToolTip(QCoreApplication.translate("MainWindow", u"I have created my own server that runs 24/7 in my home. Porn Fetch (ONLY if you enable it) logs specific types of errors,\n"
 "that I don't know of, or that I need your help to fix them, to my server using a simple JSON post request.\n"
@@ -2691,6 +2700,25 @@ class Ui_MainWindow(object):
 "You'd help me a lot by enabling network logging :) ", None))
 #endif // QT_CONFIG(tooltip)
         self.label_tooltip_network_logging.setText("")
+#if QT_CONFIG(accessibility)
+        self.settings_checkbox_system_activate_proxy.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox activate a proxy", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_checkbox_system_activate_proxy.setText(QCoreApplication.translate("MainWindow", u"Activate Proxy", None))
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_anonymous_mode.setToolTip(QCoreApplication.translate("MainWindow", u"The anonymous mode renames all of Porn Fetch's elements to look NOT like a Porn downloader.\n"
+"This makes it useful for downloading Porn content if you are in public, or multiple people use your PC / Phone.\n"
+"\n"
+"This also disables thumbnail preview. All titles will be replaced with: [redacted] as well as all authors.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_anonymous_mode.setText("")
+#if QT_CONFIG(accessibility)
+        self.settings_checkbox_system_internet_checks.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable internet checks", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_checkbox_system_internet_checks.setText(QCoreApplication.translate("MainWindow", u"Internet checks", None))
+#if QT_CONFIG(accessibility)
+        self.settings_button_system_install_pornfetch.setAccessibleName(QCoreApplication.translate("MainWindow", u"button install porn fetch (This is optional) ", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_button_system_install_pornfetch.setText(QCoreApplication.translate("MainWindow", u"Install Porn Fetch", None))
 #if QT_CONFIG(tooltip)
         self.settings_checkbox_system_supress_errors.setToolTip("")
 #endif // QT_CONFIG(tooltip)
@@ -2702,13 +2730,10 @@ class Ui_MainWindow(object):
         self.label_tooltip_update_checks.setToolTip(QCoreApplication.translate("MainWindow", u"Porn Fetch will check for updates each time it starts, using my own server. This will require a working IPv6 connection. No personal data nor any other data is sent during this process.", None))
 #endif // QT_CONFIG(tooltip)
         self.label_tooltip_update_checks.setText("")
-#if QT_CONFIG(tooltip)
-        self.label_tooltip_anonymous_mode.setToolTip(QCoreApplication.translate("MainWindow", u"The anonymous mode renames all of Porn Fetch's elements to look NOT like a Porn downloader.\n"
-"This makes it useful for downloading Porn content if you are in public, or multiple people use your PC / Phone.\n"
-"\n"
-"This also disables thumbnail preview. All titles will be replaced with: [redacted] as well as all authors.", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_tooltip_anonymous_mode.setText("")
+#if QT_CONFIG(accessibility)
+        self.settings_checkbox_system_update_checks.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable update checks", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_checkbox_system_update_checks.setText(QCoreApplication.translate("MainWindow", u"Update checks", None))
 #if QT_CONFIG(tooltip)
         self.settings_checkbox_system_enable_anonymous_mode.setToolTip("")
 #endif // QT_CONFIG(tooltip)
@@ -2716,33 +2741,14 @@ class Ui_MainWindow(object):
         self.settings_checkbox_system_enable_anonymous_mode.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable anonymous mode", None))
 #endif // QT_CONFIG(accessibility)
         self.settings_checkbox_system_enable_anonymous_mode.setText(QCoreApplication.translate("MainWindow", u"Enable Anonymous mode", None))
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_system_update_checks.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable update checks", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_system_update_checks.setText(QCoreApplication.translate("MainWindow", u"Update checks", None))
 #if QT_CONFIG(tooltip)
-        self.label_tooltip_supress_errors.setToolTip(QCoreApplication.translate("MainWindow", u"If you enable this function, all errors will be suppressed. This does not mean that they will be completely ignored, but\n"
-"you won't get a big notification for it. \n"
-"\n"
-"If you have activated Network Logging, they will still be reported. If an error happens while iterating through videos,\n"
-"the current video will be skipped and Porn Fetch will continue with the next one.  ", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_tooltip_supress_errors.setText("")
-#if QT_CONFIG(tooltip)
-        self.settings_checkbox_system_proxy_kill_switch.setToolTip(QCoreApplication.translate("MainWindow", u"The proxy kill switch is an additional security layer if you use proxies. It will check your IP each time before making\n"
-"a request and if it's leaked it will immediately exit everything.\n"
-"\n"
-"My priority on developing this is low. Please do not report errors. Thank you <3", None))
+        self.settings_checkbox_system_enable_network_logging.setToolTip("")
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(accessibility)
-        self.settings_checkbox_system_proxy_kill_switch.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable proxy kill switch", None))
+        self.settings_checkbox_system_enable_network_logging.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable network logging", None))
 #endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_system_proxy_kill_switch.setText(QCoreApplication.translate("MainWindow", u"Proxy Kill Switch", None))
-#if QT_CONFIG(accessibility)
-        self.settings_button_system_install_pornfetch.setAccessibleName(QCoreApplication.translate("MainWindow", u"button install porn fetch (This is optional) ", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_button_system_install_pornfetch.setText(QCoreApplication.translate("MainWindow", u"Install Porn Fetch", None))
-        self.settings_lineedit_system_custom_app_name.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Write a custom app name here", None))
+        self.settings_checkbox_system_enable_network_logging.setText(QCoreApplication.translate("MainWindow", u"Enable Network Logging", None))
+        self.settings_checkbox_system_enable_debug_mode.setText(QCoreApplication.translate("MainWindow", u"Enable Debug Mode (Not recommended) ", None))
 #if QT_CONFIG(accessibility)
         self.settings_label_ui_theme.setAccessibleName(QCoreApplication.translate("MainWindow", u"label porn fetch theme ", None))
 #endif // QT_CONFIG(accessibility)
