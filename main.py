@@ -23,7 +23,6 @@ Discord: echteralsfake (faster response)
 # macOS Setup...
 import sys
 import webbrowser
-from collections.abc import Callable
 
 if sys.platform == "darwin":
     from src.backend.macos_setup import macos_setup
@@ -82,7 +81,7 @@ from eporner_api.modules.errors import NotAvailable as NotAvailable_EP, VideoDis
 from youporn_api.modules.errors import VideoUnavailable as VideoUnavailable_YP, RegionBlocked as RegionBlocked_YP
 from phub.errors import VideoError as VideoError_PH
 from eporner_api.modules.locals import Category as ep_Category
-
+from typing import Callable
 
 truststore.inject_into_ssl() # Uses System CAs instead of ceritfi's cacert.pem
 
@@ -274,7 +273,7 @@ class InstallThread(QRunnable):
             apps_dir = os.path.expanduser("~/.local/share/applications")
         _mkpath(apps_dir)
 
-        src_exe = QCoreApplication.applicationFilePath()
+        src_exe = filename
         dst_exe = os.path.join(install_dir, filename)
         _move_or_copy(src_exe, dst_exe)
         _chmod_755(dst_exe)
@@ -313,10 +312,13 @@ StartupNotify=true
 
         filename = "PornFetch_Windows_GUI_x64.exe"
 
+        if os.path.exists("PornFetch_Windows_GUI_arm64.bin"):
+            filename = "PornFetch_Windows_GUI_arm64.bin"
+
         install_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
         _mkpath(install_dir)
 
-        src_exe = os.path.abspath(filename)
+        src_exe = filename
         if not os.path.exists(src_exe):
             raise RuntimeError(f"Missing installer payload: {src_exe}")
 

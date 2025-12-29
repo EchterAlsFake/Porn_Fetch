@@ -50,3 +50,58 @@ But it's possible with enough time.
 
 
 
+# Installation (Jailbreak)
+#### Supported iPhones (theoretical)
+- iPhone 6s
+- iPhone 6s Plus
+- iPhone SE
+- iPhone 7
+- iPhone 7 Plus
+- iPhone 8
+- iPhone 8 Plus
+- iPhone X
+
+You can maybe also run on iPad, iPod or Apple TV,
+however, I can't test it and I can't provide any guide on how
+to do it. You are absolutely on your own, but feel free to do it.
+
+> [!IMPORTANT]
+> If you haven't already, jailbreak your iPhone using: [Paler1n](https://palera.in/). This can destroy your
+> device, some apps may stop working, you (probably) lose Apple's warranty, and Apple may even sue you for breaking
+> into their system. Usage is on your risk. I can't help you if something goes wrong!
+
+# Installation Tutorial
+#### Jailbreaking your device
+
+> [!IMPORTANT]
+> Use a USB-A to Lightning Cable. The USB-C variants usually don't work well. 
+
+1) Run: `sudo palera1n -l -V -vvv` to jailbreak your device
+
+If you get this error: `UaF race: heuristic strategy failed, setup packet was not accepted`
+<br>Use an Intel CPU based system (yes seriously)
+
+If you get stuck in the Pongo OS screen and nothing happens,
+disconnect and reconnect cable and it will boot fine. 
+
+If your iPhone breaks, buy a Google Pixel instead 🔥
+
+2) Open Sileo and Install the CyPwn repository
+3) Install Python 3.12.5-1 by kitty-xz (or compile yourself if you have no life LMAO)
+4) Install some terminal e.g., NewTerm
+
+Now everything wors as usual on Linux
+
+5) Clone the repository, cd into the project, create a virtual environment, install the CLI requirements 
+6) Run Porn Fetch CLI
+
+That's it. (In theory)
+e
+
+
+
+
+
+
+
+
