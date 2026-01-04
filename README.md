@@ -5,6 +5,8 @@
 Porn Fetch will be rewritten in QML and core functions will be rewritten from scratch to turn this legacy Qt Widgets app into a hyper modern touch friendly and future proof application. 
 This will take a lot of time. I can't tell you if it's gonna be 1 month or 5, but probably something like this :) 
 
+I'll create a seperate branch for that and you can see the progress in the status updates. However, I have no idea how QML works, so it's gonna be hard lol.
+
 
 <div align = center>
 <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
