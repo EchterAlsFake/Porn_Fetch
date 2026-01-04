@@ -1,6 +1,11 @@
 > [!IMPORTANT]
 > Porn Fetch will receive paid only features with a license system. Please join the [DISCUSSION](https://github.com/EchterAlsFake/Porn_Fetch/discussions/101), I'd like to know your ideas / feedback!
 
+# Rewrite 
+Porn Fetch will be rewritten in QML and core functions will be rewritten from scratch to turn this legacy Qt Widgets app into a hyper modern touch friendly and future proof application. 
+This will take a lot of time. I can't tell you if it's gonna be 1 month or 5, but probably something like this :) 
+
+
 <div align = center>
 <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
 <br>
@@ -200,6 +205,11 @@ bash build_android.sh
 ```
 
 ## 🌍 Translating
+
+> [!CAUTION]
+> Translating is currently broken and I need to find a different method and completely refactor this. DO NOT translate anything, everything is outdated and you will waste your time!
+
+
 Currently available in:
 - German (3.0)
 - English
