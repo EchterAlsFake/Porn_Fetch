@@ -2,10 +2,7 @@
 > Porn Fetch will receive paid only features with a license system. Please join the [DISCUSSION](https://github.com/EchterAlsFake/Porn_Fetch/discussions/101), I'd like to know your ideas / feedback!
 
 # Rewrite 
-Porn Fetch will be rewritten in QML and core functions will be rewritten from scratch to turn this legacy Qt Widgets app into a hyper modern touch friendly and future proof application. 
-This will take a lot of time. I can't tell you if it's gonna be 1 month or 5, but probably something like this :) 
-
-I'll create a seperate branch for that and you can see the progress in the status updates. However, I have no idea how QML works, so it's gonna be hard lol.
+Okay, NO. I won't rewrite it in QML, instead I will learn Kotlin and make a seperate native Android App for Porn Fetch in Kotlin 🔥
 
 
 <div align = center>
