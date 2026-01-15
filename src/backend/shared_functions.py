@@ -5,6 +5,7 @@ If you know what you do, you can change a few things here :)
 
 import os
 import re
+import httpx
 import json
 import sqlite3
 import logging
@@ -51,6 +52,77 @@ core_internet_checks = BaseCore(config=config)
 core_update_checks.config.max_retries = 1
 core_update_checks.config.use_http2 = False
 core_update_checks.config.timeout = 10
+
+
+class VideoData:
+    """
+    This class stores the video objects and their loaded data across Porn Fetch.
+    It allows for re-fetching data if needed, update data if needed and handles caching thanks to
+    a dictionary.
+
+    (Okay, I am overhyping it a bit, but yeah, let's put that away xD)
+    """
+
+    data_objects = {}
+    consistent_data = {}  # This dictionary stores other important data which will be re-used for the entire
+    # run of Porn Fetch
+
+    """
+    If a video object isn't used anymore e.g., the video finished downloading or the tree widget was loaded with other
+    videos, than those videos will be cleaned up in the dictionary, to be as memory and performance efficient as
+    possible.
+    """
+
+    def clean_dict(self, video_titles):
+        if not isinstance(video_titles, list):  # In case we only have one video title to delete
+            video_titles = [video_titles]
+
+        for video_title in video_titles:
+            del self.data_objects[video_title]  # Del is faster than pop :)
+
+
+def send_to_server(message: dict):
+    try:
+        response = httpx.post(
+            url="https://echteralsfake.me/report",
+            json=message,
+            timeout=20)
+
+        if response.status_code == 200:
+            return(f"The error / feedback was successfully reported! Thanks :)")
+
+        elif response.status_code == 500:
+            return("An internal server error occurred. I am probably already fixing this.")
+
+    except Exception:
+        error = traceback.format_exc()
+        return(f"Couldn't report to server due to error -->: {error}")
+
+
+def handle_error_gracefully(self, data: dict, error_message: str | dict, needs_network_log: bool= False, is_feedback=False):
+    if is_feedback:
+        send_to_server(message=error_message)
+        return
+
+    self.logger.error(error_message)
+    if not data.get("supress_errors") is True:
+        self.signals.error_signal.emit(error_message)
+
+    if needs_network_log:
+        if data.get("activate_logging"):
+            self.logger.info(f"Logging Error: {error_message} to network server...")
+            message = f"""
+            An error occurred in Porn Fetch!
+            Time: {datetime.datetime.now()}
+            Version: {__version__}
+            System: {sys.platform}
+            Error message: {error_message}
+            """
+            payload = {"message": message}
+            send_to_server(message=payload)
+
+        else:
+            self.logger.info("Logging is disabled. Error will NOT be reported!")
 
 
 def refresh_clients(enable_kill_switch=False):

@@ -273,7 +273,7 @@ class InstallThread(QRunnable):
             apps_dir = os.path.expanduser("~/.local/share/applications")
         _mkpath(apps_dir)
 
-        src_exe = filename
+        src_exe = QCoreApplication.applicationFilePath()
         dst_exe = os.path.join(install_dir, filename)
         _move_or_copy(src_exe, dst_exe)
         _chmod_755(dst_exe)
