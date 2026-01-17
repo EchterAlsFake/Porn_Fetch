@@ -60,6 +60,7 @@ from src.frontend.UI.pornfetch_info_dialog import PornFetchInfoWidget
 from src.backend.check_license import LicenseManager
 from src.frontend.UI.license import License, Disclaimer
 from src.backend.config import shared_config
+from src.backend.shared_functions import *
 from hqporner_api.api import Sort as hq_Sort
 from pathlib import Path
 

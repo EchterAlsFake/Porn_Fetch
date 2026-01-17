@@ -1,10 +1,6 @@
 # Needed for UV Project management.
 # Porn Fetch is NOT published in PyPi!
 
-[build-system]
-requires = ["uv_build >= 0.9.21, <0.10.0"]
-build-backend = "uv_build"
-
 [project]
 requires-python = ">=3.10,<3.14"
 # 3.10 is needed due to truststore.
@@ -13,9 +9,16 @@ requires-python = ">=3.10,<3.14"
 # 3.14+ is not supported, due to Qt limitations.
 # This is ONLY for the GUI, CLI is different
 
-
 name = "Porn_Fetch"
 version = "3.8"
+authors = [
+    {name = "Johannes Habel", email = "EchterAlsFake@proton.me"}
+]
+
+description = "a downloader for pornographic content"
+readme = {file = "README.md", content-type = "text/markdown"}
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
 
 dependencies = [
     "anyio",
@@ -59,17 +62,13 @@ dependencies = [
     "xhamster_api",
     "xnxx_api",
     "xvideos_api",
-    "youporn_api"
+    "youporn_api",
 ]
+
+# Note: This dependency list includes ALL dependencies of this project, and the dependencies of the dependencies.
+# Usually you would only say: httpx, but httpx also depends on h11, httpcore and so on and I listed them all here.
 
 [project.optional-dependencies]
-gui = ["PySide6", "truststore"]
+gui = ["PySide6", "truststore", "pywin32; sys_platform == 'win32'"]
 cli = ["rich", "hue_shift"]
-
-authors = [
-    {name = "Johannes Habel", email = "EchterAlsFake@proton.me"}
-]
-
-description = "a downloader for pornographic content"
-readme = {file = "README.md", content-type = "text/markdown"}
-license = "GPL-3.0-or-later"
+dev = ["rich", "hue_shift", "PySide6", "truststore", "pywin32; sys_platform == 'win32'"]

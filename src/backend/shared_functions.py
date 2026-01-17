@@ -5,12 +5,15 @@ If you know what you do, you can change a few things here :)
 
 import os
 import re
+import sys
 import httpx
 import json
 import sqlite3
 import logging
 import traceback
+import datetime
 
+from config import __version__
 from src.backend.config import *
 from urllib.parse import urlsplit
 from mutagen.mp4 import MP4, MP4Cover, MP4Tags
