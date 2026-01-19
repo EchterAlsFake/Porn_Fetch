@@ -1,102 +1,364 @@
+# ============================
+# PornFetch Windows Builder
+# - Select latest commit OR stable release tag (last 5)
+# - Uses uv + Python 3.13 + pyside6-deploy
+# ============================
+
 # Ensure the script is running with elevated privileges
-if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(
+    [Security.Principal.WindowsBuiltInRole] "Administrator")) {
     Write-Warning "You need to run this script as an Administrator!"
-    Start-Process powershell -ArgumentList "-noprofile -executionpolicy bypass -file $($myinvocation.mycommand)" -verb RunAs
+    Start-Process powershell -ArgumentList "-noprofile -executionpolicy bypass -file `"$($myinvocation.mycommand)`"" -verb RunAs
     exit
 }
 
-$userDir = [Environment]::GetFolderPath('UserProfile')
-$desktopDir = [System.IO.Path]::Combine($userDir, "Desktop")
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
+$ProgressPreference = "SilentlyContinue"
 
-# Define the downloads directory
-$downloadsDir = "$env:TEMP"
+# Ensure TLS 1.2 for older PowerShell (WinPS 5.1)
+try { [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 } catch {}
 
-function Check-PythonInstalled {
+# ----------------------------
+# Basic paths
+# ----------------------------
+$userDir    = [Environment]::GetFolderPath('UserProfile')
+$desktopDir = Join-Path $userDir "Desktop"
+$tmpRoot    = $env:TEMP
+
+# Repo info
+$Owner = "EchterAlsFake"
+$Repo  = "Porn_Fetch"
+$RepoWeb = "https://github.com/$Owner/$Repo"
+$ApiBase = "https://api.github.com"
+
+$Headers = @{
+    "User-Agent" = "PornFetchBuilder"
+    "Accept"     = "application/vnd.github+json"
+}
+
+# Arch for naming
+$archRaw = $env:PROCESSOR_ARCHITECTURE
+$archTag = switch ($archRaw) {
+    "AMD64" { "x64" }
+    "ARM64" { "arm64" }
+    "x86"   { "x86" }
+    default { $archRaw.ToLower() }
+}
+
+# ----------------------------
+# Pretty output helpers
+# ----------------------------
+function Info($msg) { Write-Host "[INFO] $msg" -ForegroundColor Cyan }
+function Ok($msg)   { Write-Host "[ OK ] $msg" -ForegroundColor Green }
+function Warn($msg) { Write-Host "[WARN] $msg" -ForegroundColor Yellow }
+function Err($msg)  { Write-Host "[ERR ] $msg" -ForegroundColor Red }
+
+function Run {
+    param(
+        [Parameter(Mandatory=$true)][string]$Exe,
+        [Parameter(ValueFromRemainingArguments=$true)]$Args
+    )
+    Write-Host ">> $Exe $($Args -join ' ')" -ForegroundColor Magenta
+    & $Exe @Args
+    if ($LASTEXITCODE -ne 0) {
+        throw "Command failed: $Exe $($Args -join ' ')"
+    }
+}
+
+# ----------------------------
+# Ensure uv exists
+# ----------------------------
+function Ensure-Uv {
+    if (Get-Command uv -ErrorAction SilentlyContinue) {
+        Ok "uv already installed: $(uv --version)"
+        return
+    }
+
+    Warn "uv not found. Attempting installation..."
+
+    if (Get-Command winget -ErrorAction SilentlyContinue) {
+        Info "Installing uv via winget..."
+        # Accept agreements to prevent interactive prompts
+        Run winget "install" "--id=astral-sh.uv" "-e" "--accept-package-agreements" "--accept-source-agreements"
+    }
+    else {
+        Info "winget not found. Installing uv via official installer script..."
+        # Official installer:
+        # powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+        $script = Invoke-RestMethod -Uri "https://astral.sh/uv/install.ps1" -Headers $Headers
+        Invoke-Expression $script
+    }
+
+    # The uv installer defaults to the "user executable directory":
+    # %USERPROFILE%\.local\bin  (per uv docs)
+    $uvBin = Join-Path $env:USERPROFILE ".local\bin"
+    if (Test-Path (Join-Path $uvBin "uv.exe")) {
+        $env:Path = "$uvBin;$env:Path"
+    }
+
+    if (-not (Get-Command uv -ErrorAction SilentlyContinue)) {
+        throw "uv installation finished but 'uv' is still not on PATH. Try restarting PowerShell."
+    }
+
+    Ok "uv installed successfully: $(uv --version)"
+}
+
+# ----------------------------
+# GitHub helper: default branch + tags + latest commit sha
+# ----------------------------
+function Get-DefaultBranch {
+    $repoInfo = Invoke-RestMethod -Uri "$ApiBase/repos/$Owner/$Repo" -Headers $Headers
+    return $repoInfo.default_branch
+}
+
+function Get-StableTags([int]$Count = 5) {
+    # Pull up to 100 tags and filter stable numeric tags: X.Y
+    $tags = Invoke-RestMethod -Uri "$ApiBase/repos/$Owner/$Repo/tags?per_page=100" -Headers $Headers
+    $stable = $tags | Where-Object { $_.name -match '^[0-9]+\.[0-9]+$' }
+
+    # Sort by version descending and take last 5
+    $stableSorted = $stable | Sort-Object { [version]$_.name } -Descending
+    return $stableSorted | Select-Object -First $Count
+}
+
+function Get-LatestCommitShort([string]$Branch) {
+    $commit = Invoke-RestMethod -Uri "$ApiBase/repos/$Owner/$Repo/commits/$Branch" -Headers $Headers
+    return $commit.sha.Substring(0, 7)
+}
+
+# ----------------------------
+# Build selection menu
+# ----------------------------
+function Choose-BuildSource {
+    $defaultBranch = Get-DefaultBranch
+    $headShort = Get-LatestCommitShort -Branch $defaultBranch
+    $tagObjs = Get-StableTags -Count 5
+
+    $tags = @()
+    foreach ($t in $tagObjs) { $tags += $t.name }
+
+    Write-Host ""
+    Info "Build source selection"
+    Write-Host "------------------------------------------------------------" -ForegroundColor DarkGray
+    Write-Host "0) Latest commit on $defaultBranch ($headShort) [UNSTABLE]" -ForegroundColor Yellow
+
+    if ($tags.Count -gt 0) {
+        for ($i = 0; $i -lt $tags.Count; $i++) {
+            $n = $i + 1
+            if ($i -eq 0) {
+                Write-Host "$n) $($tags[$i]) [RECOMMENDED - latest stable release]" -ForegroundColor Green
+            } else {
+                Write-Host "$n) $($tags[$i])"
+            }
+        }
+    } else {
+        Warn "No stable release tags found matching pattern 'X.Y'."
+        Warn "Only 'Latest commit' build is available."
+    }
+
+    Write-Host ""
+    Warn "Notice: Building from the latest commit might cause issues because it's not a stable release."
+    Write-Host "INFO: This script only supports building >= 3.8, due to massive build changes prior to 3.8!" -ForegroundColor Cyan
+    Write-Host "Tip: Press Enter to use the recommended tag (if available)." -ForegroundColor DarkGray
+    Write-Host "------------------------------------------------------------" -ForegroundColor DarkGray
+    Write-Host ""
+
+    $maxChoice = $tags.Count
+    $defaultChoice = if ($maxChoice -gt 0) { "1" } else { "0" }
+
+    while ($true) {
+        $choice = Read-Host "Enter choice (0-$maxChoice) [$defaultChoice]"
+        if ([string]::IsNullOrWhiteSpace($choice)) { $choice = $defaultChoice }
+
+        if ($choice -match '^\d+$') {
+            $c = [int]$choice
+            if ($c -ge 0 -and $c -le $maxChoice) {
+
+                if ($c -eq 0) {
+                    return @{
+                        Mode   = "branch"
+                        Ref    = $defaultBranch
+                        Commit = $headShort
+                    }
+                }
+
+                $selectedTag = $tags[$c - 1]
+                return @{
+                    Mode   = "tag"
+                    Ref    = $selectedTag
+                    Commit = $null
+                }
+            }
+        }
+
+        Warn "Invalid choice. Please enter a number between 0 and $maxChoice."
+    }
+}
+
+# ----------------------------
+# Download + extract source
+# ----------------------------
+function Download-And-Extract {
+    param(
+        [Parameter(Mandatory=$true)][string]$ZipUrl,
+        [Parameter(Mandatory=$true)][string]$WorkDir
+    )
+
+    if (Test-Path $WorkDir) {
+        Remove-Item -Recurse -Force $WorkDir
+    }
+    New-Item -ItemType Directory -Path $WorkDir | Out-Null
+
+    $zipPath = Join-Path $WorkDir "src.zip"
+
+    Info "Downloading source ZIP..."
+    Info $ZipUrl
+    Invoke-WebRequest -Uri $ZipUrl -OutFile $zipPath -UseBasicParsing
+
+    Info "Extracting..."
+    Expand-Archive -Path $zipPath -DestinationPath $WorkDir -Force
+
+    # Find extracted folder (usually Porn_Fetch-<branch/tag>)
+    $extracted = Get-ChildItem -Path $WorkDir -Directory | Where-Object { $_.Name -like "Porn_Fetch-*" } | Select-Object -First 1
+    if (-not $extracted) {
+        throw "Extraction failed: could not find extracted 'Porn_Fetch-*' directory."
+    }
+
+    return @{
+        ZipPath     = $zipPath
+        ProjectPath = $extracted.FullName
+    }
+}
+
+# ----------------------------
+# Main
+# ----------------------------
+Info "Detected Windows ($archTag)"
+
+Ensure-Uv
+
+# Choose build source
+$selection = Choose-BuildSource
+
+$workDir = Join-Path $tmpRoot ("PornFetch_Build_" + $PID)
+$zipUrl = ""
+
+if ($selection.Mode -eq "branch") {
+    $zipUrl = "$RepoWeb/archive/refs/heads/$($selection.Ref).zip"
+    Warn "Selected: Latest commit (unstable). If anything breaks, try the recommended release tag instead."
+} else {
+    $zipUrl = "$RepoWeb/archive/refs/tags/$($selection.Ref).zip"
+    Info "Selected tag: $($selection.Ref)"
+
+    # Optional safety check for >= 3.8 (interactive)
     try {
-        $pythonVersion = py --version 2>&1
-        if ($pythonVersion -match "Python (\d+\.\d+\.\d+)") {
-            return $true
-        } else {
-            return $false
+        $v = [version]$selection.Ref
+        if ($v -lt [version]"3.8") {
+            Warn "Selected tag $($selection.Ref) is < 3.8."
+            $confirm = Read-Host "This may NOT build with this script. Continue anyway? (y/N)"
+            if ($confirm.ToLower() -ne "y") {
+                throw "Aborted by user (tag too old)."
+            }
         }
     } catch {
-        return $false
+        # ignore parse errors
     }
 }
 
-function Install-Python {
-    # Download and install Python
-    Write-Output "Downloading Python 3.12.8..."
-    $pythonInstallerPath = [System.IO.Path]::Combine($downloadsDir, "python-3.12.8-amd64.exe")
-    try {
-        Invoke-WebRequest -Uri "https://www.python.org/ftp/python/3.12.8/python-3.12.8-amd64.exe" -OutFile $pythonInstallerPath -ErrorAction Stop
-    } catch {
-        Write-Output "Failed to download Python installer. Please check your internet connection."
-        return
-    }
+$result = Download-And-Extract -ZipUrl $zipUrl -WorkDir $workDir
+$projectDir = $result.ProjectPath
 
-    Write-Output "Installing Python 3.12.8 silently..."
-    try {
-        Start-Process -FilePath $pythonInstallerPath -ArgumentList "/quiet InstallAllUsers=1 PrependPath=1" -Wait -ErrorAction Stop
-    } catch {
-        Write-Output "Python installation failed. Please run the installer manually."
-        return
-    }
-
-    # Verify installation
-    if (Check-PythonInstalled) {
-        Write-Output "Python installation succeeded. Version: $(py --version 2>&1)"
-    } else {
-        Write-Output "Python installation failed. Please install it manually from https://www.python.org/downloads/"
-    }
-}
-
-if (Check-PythonInstalled) {
-    Write-Output "Python is already installed. Version: $(py --version 2>&1)"
-} else {
-    Write-Output "Python is not installed."
-    Install-Python
-}
-
-# Download and extract the project ZIP
-Write-Output "Downloading project ZIP..."
-$projectZipPath = [System.IO.Path]::Combine($downloadsDir, "master.zip")
-Invoke-WebRequest -Uri "https://github.com/EchterAlsFake/Porn_Fetch/archive/refs/heads/master.zip" -OutFile $projectZipPath
-Write-Output "Extracting project ZIP..."
-Expand-Archive -Path $projectZipPath -DestinationPath $downloadsDir -Force
-
-# Use Invoke-Command to run commands within the virtual environment
-$projectDir = Join-Path -Path $downloadsDir -ChildPath "Porn_Fetch-master"
+Info "Project directory: $projectDir"
 Set-Location -Path $projectDir
-py -m venv ..\venv\
-..\venv\Scripts\activate.ps1
-pip install -r requirements.txt
-pip install pywin32 av
-$env:NUITKA_ASSUME_YES_FOR_DOWNLOADS = "1"
-Write-Host "NUITKA_ASSUME_YES_FOR_DOWNLOADS is set to $env:NUITKA_ASSUME_YES_FOR_DOWNLOADS"
 
-# Invoke the UI update script
-Write-Output "Running UI update script..."
-$uiUpdateScriptPath = Join-Path -Path $projectDir -ChildPath "src/frontend/update.ps1"
-if (Test-Path -Path $uiUpdateScriptPath) {
+# Create a temporary uv venv in TEMP
+$venvDir = Join-Path $tmpRoot ("porn_fetch_uv_venv_" + $env:USERNAME + "_" + $PID)
+if (Test-Path $venvDir) { Remove-Item -Recurse -Force $venvDir }
+
+Info "Using temporary uv environment: $venvDir"
+
+Run uv "--color" "always" "python" "install" "3.13"
+Run uv "--color" "always" "venv" $venvDir "--python" "3.13"
+
+$env:UV_PROJECT_ENVIRONMENT = $venvDir
+
+Info "Syncing dependencies using uv (with --extra gui)..."
+Run uv "--color" "always" "sync" "--extra" "gui"
+
+# Activate the venv for update script convenience
+$activateScript = Join-Path $venvDir "Scripts\Activate.ps1"
+if (-not (Test-Path $activateScript)) {
+    throw "Activate script not found: $activateScript"
+}
+
+Info "Activating virtual environment..."
+. $activateScript
+
+# Keep Nuitka quiet / auto-download
+$env:NUITKA_ASSUME_YES_FOR_DOWNLOADS = "1"
+Info "NUITKA_ASSUME_YES_FOR_DOWNLOADS=$env:NUITKA_ASSUME_YES_FOR_DOWNLOADS"
+
+# Run frontend update script (your existing step)
+Info "Synchronizing frontend, translations and resources to Windows + Updating Qt"
+$uiUpdateScriptPath = Join-Path $projectDir "src\frontend\update.ps1"
+
+if (Test-Path $uiUpdateScriptPath) {
     & $uiUpdateScriptPath
 } else {
-    Write-Error "UI update script not found at $uiUpdateScriptPath. Please ensure it exists."
-    exit 1
+    throw "UI update script not found at $uiUpdateScriptPath"
 }
-Set-Location -Path $projectDir
-pyside6-deploy -c src/build/pysidedeploy_windows.spec -f -v
 
-# Move the final executable to the user's Desktop
-$finalExePath = Join-Path -Path $projectDir -ChildPath "Porn Fetch.exe"
-$renamedExe = Join-Path -Path $projectDir -ChildPath "PornFetch_Windows_GUI_x64.exe"
-Rename-Item -Path $finalExePath -NewName "PornFetch_Windows_GUI_x64.exe"
-Move-Item -Path $renamedExe -Destination (Join-Path $desktopDir "PornFetch_Windows_GUI_x64.exe")
+# Deploy spec
+$deploySpec = Join-Path $projectDir "src\build\pysidedeploy_windows.spec"
+if (-not (Test-Path $deploySpec)) {
+    throw "Deploy spec not found: $deploySpec"
+}
 
-# Clean up
-deactivate
-Set-Location C:\ # Just leaves the directory, so that I can remove the downloaded archive
-Write-Output "Cleaning up..."
-Remove-Item -Path $projectZipPath -Force
-Remove-Item -Recurse -Force -Path (Join-Path $downloadsDir "Porn_Fetch-master")
-Write-Output "Done!"
+Ok "Using deploy spec: $deploySpec"
+
+# Copy spec to temp to avoid dirty repo changes
+$deploySpecTmp = Join-Path $venvDir "pysidedeploy.spec"
+Copy-Item -Force $deploySpec $deploySpecTmp
+
+Info "Building with pyside6-deploy..."
+Run uv "--color" "always" "run" "--" "pyside6-deploy" "-c" $deploySpecTmp "-f" "-v"
+
+# Find output exe
+$finalExe = Join-Path $projectDir "Porn Fetch.exe"
+if (-not (Test-Path $finalExe)) {
+    $found = Get-ChildItem -Path $projectDir -Recurse -Filter "Porn Fetch.exe" -ErrorAction SilentlyContinue | Select-Object -First 1
+    if ($found) {
+        $finalExe = $found.FullName
+    }
+}
+
+if (-not (Test-Path $finalExe)) {
+    throw "Build finished but output 'Porn Fetch.exe' was not found! Check logs above."
+}
+
+# Rename + move to Desktop
+$renamedExeName = "PornFetch_Windows_GUI_$archTag.exe"
+$renamedExePath = Join-Path (Split-Path $finalExe -Parent) $renamedExeName
+
+Info "Renaming output..."
+if (Test-Path $renamedExePath) { Remove-Item -Force $renamedExePath }
+Rename-Item -Path $finalExe -NewName $renamedExeName
+
+$destPath = Join-Path $desktopDir $renamedExeName
+Info "Moving final exe to Desktop..."
+if (Test-Path $destPath) { Remove-Item -Force $destPath }
+Move-Item -Path $renamedExePath -Destination $destPath
+
+Ok "Build successful: $destPath"
+
+# Cleanup temp workspace + venv
+Info "Cleaning up..."
+try { Deactivate } catch {}  # ignore if not available
+
+Set-Location C:\
+
+if (Test-Path $venvDir) { Remove-Item -Recurse -Force $venvDir }
+if (Test-Path $workDir) { Remove-Item -Recurse -Force $workDir }
+
+Ok "Done!"

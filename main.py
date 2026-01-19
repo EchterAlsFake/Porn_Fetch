@@ -53,7 +53,6 @@ from itertools import islice, chain
 from src.backend.shared_gui import *
 from src.frontend.UI.ssl_warning import *
 from src.frontend.UI.ui_form_main_window import Ui_MainWindow
-from src.frontend.UI.ui_form_android import Ui_PornFetchAndroid
 from src.frontend.UI.theme import *
 from src.backend.config import __version__, __build__
 from src.frontend.UI.pornfetch_info_dialog import PornFetchInfoWidget
@@ -823,12 +822,7 @@ class PornFetch(QMainWindow):
         global settings
         settings = get_settings(portable=True, portable_dir=os.getcwd())
 
-        if __build__ == "android":
-            self.ui = Ui_PornFetchAndroid()
-
-        elif __build__ == "desktop":
-            self.ui = Ui_MainWindow()
-
+        self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.logger = shared_functions.setup_logger(name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG,
                                    http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
