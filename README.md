@@ -100,13 +100,11 @@ Okay, NO. I won't rewrite it in QML, instead I will learn Kotlin and make a sepe
 | **Android**                   | CLI (via Termux) | All                                             |
 | **iOS** **(IN DEVELOPMENT!)** | CLI              | iOS 15.8+, rootless<br>Jailbroken with palera1n |
 
-The GUI of Android currently doesn't work. I will try to get it working in v3.8
 
 † Intel build; runs on Apple Silicon (M1/M2/M3) via Rosetta 2.
 
 > [!NOTE]
 > Porn Fetch is mainly developed and tested on Arch Linux with Hyprland and Gnome. 
-
 
 ## 🌐 Supported Websites
 - [PornHub.com](https://github.com/Egsagon/PHUB)
@@ -168,43 +166,6 @@ Set-ExecutionPolicy Bypass -Scope Process
 Invoke-Expression (Invoke-WebRequest -Uri https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_windows.ps1 -UseBasicParsing).Content
 ```
 
-### macOS
-> [!NOTE]
-> You need to have the Apple Developer command line tools installed. You can install them by going into your terminal
-> and run `xcode-select --install`
-
-
-```bash
-curl "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_macos.sh" -o install.sh
-bash install.sh
-```
-
-**Please Read:**
-<br>The created file will be a `.app` file. You cannot usually run it as you would, because it doesn't work for some reason...
-Instead, you need to go inside the `.app` package using a Terminal and run the main file in it.
-
-You can do that with something like `./<the_app_package.app/Contents/MacOS/main`
-
-
-## 📱 Android
-> [!IMPORTANT]
-> Building for Android is a hard and complex topic. If you need help feel free to ask me on Discord. However, I absolutely
-> **DO NOT** recommend you doing that now. Please wait until things get easier in the next months...
-
-**Make sure your host system has the following dependencies installed**
-- jdk17-openjdk
-- llvm
-- openssl
-- python3.11
-- zip
-- libtool
-- libssl-dev
-- openssl
-
-```bash
-curl "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/build_android.sh" -o build_android.sh
-bash build_android.sh
-```
 
 ## 🌍 Translating
 
