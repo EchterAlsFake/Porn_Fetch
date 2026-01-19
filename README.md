@@ -126,32 +126,35 @@ The GUI of Android currently doesn't work. I will try to get it working in v3.8
 ### You can find more information [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/WEBSITES.md)
 
 ## 🔨 Building from Source
-Easy-to-use build scripts are available for various platforms.
+Building will be done through a fully automated script, that lets you select the version / commit to 
+build from and will install all dependencies automatically for you, including Python.
 
 > [!NOTE]
-> Building will be done using Python3.12 and [Nuitka](https://github.com/Nuitka/Nuitka) using Qt's `pyside6-deploy` tool.
+> Building will be done using Python3.13.11 and [Nuitka](https://github.com/Nuitka/Nuitka) using Qt's `pyside6-deploy` tool.
 
 Hardware requirements:
-- ~1.5 GB of hard disk space
+- ~3-5 GB of disk space (for macOS more like 10 GB) 
 - ~2–3 GB of RAM
 - A processor that can do some math
 
-> Compilation takes around 30-60 minutes depending on your system and hardware.
+> Compilation takes around 20-60 minutes depending on your system and hardware.
 
-### Linux (Ubuntu, Arch-based, Debian-based, OpenSUSE)
+### Linux / macOS
 > [!NOTE]
 > There is no official list of tested Linux distributions. I develop Porn Fetch only on Arch Linux. If you come across
 > an issue, you can always report it and I will distro-hop to solve it.
 
+> [!IMPORTANT]
+> If using macOS, you need to install XCode developer tools and Homebrew.
+
 ```bash
-wget "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install.sh" -O install.sh
+curl "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install.sh" -o install.sh
 bash install.sh
 ```
 
 ### Termux
 > [!NOTE]
 > You do **NOT** need a rooted Android device to compile and run Porn Fetch on Android
-
 
 ```bash
 apt install wget -y && wget -O - "https://raw.githubusercontent.com/EchterAlsFake/Porn_Fetch/master/src/scripts/install_termux.sh" | bash
