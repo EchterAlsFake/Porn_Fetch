@@ -73,4 +73,4 @@ gui = ["PySide6", "truststore", "pywin32; sys_platform == 'win32'", "pip"]
 # pip is needed, because pyside6-deploy invokes pip when building the project with pyside6-deploy
 
 cli = ["rich", "hue_shift"]
-dev = ["rich", "hue_shift", "PySide6", "truststore", "pywin32; sys_platform == 'win32'"]
+dev = ["rich", "hue_shift", "PySide6", "truststore", "pywin32; sys_platform == 'win32'", "pip"]

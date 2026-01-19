@@ -13,8 +13,7 @@ import logging
 import traceback
 import datetime
 
-from config import __version__
-from src.backend.config import *
+from src.backend.config import __version__, __build__, http_log_ip, http_log_port, ConfigParser
 from urllib.parse import urlsplit
 from mutagen.mp4 import MP4, MP4Cover, MP4Tags
 from base_api.base import BaseCore, setup_logger
