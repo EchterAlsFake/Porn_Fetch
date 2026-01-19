@@ -27,7 +27,7 @@ run() {
 }
 
 # ------------------------------------------------------------
-# OS detection (same idea as your script)
+# OS detection
 # ------------------------------------------------------------
 detect_os() {
   local os="unknown"
@@ -44,12 +44,25 @@ detect_os() {
 }
 
 OS="$(detect_os)"
+ARCH="$(uname -m 2>/dev/null || echo unknown)"
 
 # ------------------------------------------------------------
-# Cleanup trap for temp venv
+# Cleanup trap for temp venv + optional git restore
 # ------------------------------------------------------------
 VENV_DIR=""
+ORIGINAL_BRANCH=""
+
 cleanup() {
+  # restore branch if we detached to a tag
+  if [[ -n "${ORIGINAL_BRANCH}" ]]; then
+    if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+      if ! git symbolic-ref -q HEAD >/dev/null 2>&1; then
+        warn "Restoring original branch: ${ORIGINAL_BRANCH}"
+        git checkout -q "${ORIGINAL_BRANCH}" || true
+      fi
+    fi
+  fi
+
   if [[ -n "${VENV_DIR}" && -d "${VENV_DIR}" ]]; then
     warn "Cleaning up temporary environment: ${VENV_DIR}"
     rm -rf "${VENV_DIR}" || true
@@ -90,7 +103,7 @@ install_uv_if_missing() {
     return 0
   fi
 
-  info "uv not found. Installing via official inf-staller..."
+  info "uv not found. Installing via official installer..."
   ensure_downloader_tools
 
   # Official installer for Linux/macOS:
@@ -111,7 +124,7 @@ install_uv_if_missing() {
 }
 
 # ------------------------------------------------------------
-# Install system dependencies (Linux only)
+# Install system dependencies
 # ------------------------------------------------------------
 install_linux_build_deps() {
   if command -v pacman >/dev/null 2>&1; then
@@ -143,8 +156,187 @@ install_linux_build_deps() {
   fi
 }
 
+ensure_macos_clt() {
+  # Xcode Command Line Tools are required for compiling many Python deps
+  if xcode-select -p >/dev/null 2>&1; then
+    ok "Xcode Command Line Tools detected."
+    return 0
+  fi
+
+  warn "Xcode Command Line Tools not found."
+  info "Triggering installation (macOS will show a GUI dialog)..."
+  xcode-select --install || true
+  error "Please complete the Xcode Command Line Tools installation, then re-run this script."
+  exit 1
+}
+
+install_macos_build_deps() {
+  info "Setting up macOS build dependencies..."
+
+  ensure_macos_clt
+
+  if ! command -v brew >/dev/null 2>&1; then
+    error "Homebrew not found."
+    error "Install Homebrew first (https://brew.sh), then re-run this script."
+    exit 1
+  fi
+
+  run brew update
+
+  # Basics used by builds & fetch/update
+  run brew install git cmake wget curl pkg-config || true
+
+  ok "macOS build deps installed (or already present)."
+}
+
 # ------------------------------------------------------------
-# Main
+# Helpers: git default branch + build ref chooser
+# ------------------------------------------------------------
+get_default_branch() {
+  local dir="$1"
+  local ref=""
+  ref="$(git -C "${dir}" symbolic-ref -q --short refs/remotes/origin/HEAD 2>/dev/null || true)"
+  if [[ -n "${ref}" ]]; then
+    echo "${ref#origin/}"
+  else
+    echo "main"
+  fi
+}
+
+choose_build_ref() {
+  run git fetch --tags --force --prune
+
+  local default_branch=""
+  default_branch="$(get_default_branch ".")"
+
+  local head_short=""
+  head_short="$(git rev-parse --short HEAD)"
+
+  # Last 5 stable version tags ONLY (X.Y exactly, no suffix)
+  local tags=()
+  while IFS= read -r t; do
+    [[ -n "$t" ]] && tags+=("$t")
+  done < <(
+    git tag -l --sort=-v:refname \
+      | grep -E '^[0-9]+\.[0-9]+$' \
+      | head -n 5 || true
+  )
+
+  echo
+  info "Build source selection"
+  echo -e "${DIM}------------------------------------------------------------${RESET}"
+  echo -e "${BOLD}0)${RESET} Latest commit on ${BOLD}${default_branch}${RESET} (${head_short}) ${YELLOW}[UNSTABLE]${RESET}"
+
+  if ((${#tags[@]} > 0)); then
+    local i=1
+    for t in "${tags[@]}"; do
+      if [[ $i -eq 1 ]]; then
+        echo -e "${BOLD}${i})${RESET} ${BOLD}${t}${RESET} ${GREEN}[RECOMMENDED - latest stable release]${RESET}"
+      else
+        echo -e "${BOLD}${i})${RESET} ${t}"
+      fi
+      ((i++))
+    done
+  else
+    warn "No release tags found matching pattern 'X.Y'."
+    warn "Only 'Latest commit' build is available."
+  fi
+
+  echo
+  echo -e "${YELLOW}${BOLD}Notice:${RESET} Building from the latest commit may cause issues because it's not a stable release."
+  echo -e "INFO: This script only supports building >= 3.8, due to massive build changes prior to 3.8!"
+  echo -e "${DIM}Tip:${RESET} Press Enter to use the recommended tag (if available)."
+  echo -e "${DIM}------------------------------------------------------------${RESET}"
+  echo
+
+  local max_choice="${#tags[@]}"
+  local choice=""
+
+  local default_choice="0"
+  if ((${#tags[@]} > 0)); then
+    default_choice="1"
+  fi
+
+  while true; do
+    read -rp "Enter choice (0-${max_choice}) [${default_choice}]: " choice
+    choice="${choice:-$default_choice}"
+
+    if [[ "${choice}" =~ ^[0-9]+$ ]] && (( choice >= 0 && choice <= max_choice )); then
+      break
+    fi
+
+    warn "Invalid choice. Please enter a number between 0 and ${max_choice}."
+  done
+
+  if (( choice == 0 )); then
+    warn "Selected: Latest commit (unstable). If anything breaks, try the recommended release tag instead."
+    ok "Using current HEAD: $(git rev-parse --short HEAD)"
+    return 0
+  fi
+
+  local selected_tag="${tags[$((choice - 1))]}"
+  info "Selected tag: ${selected_tag}"
+  info "Checking out ${selected_tag} (detached HEAD)..."
+  run git checkout --detach "${selected_tag}"
+  ok "Now on tag ${selected_tag} ($(git rev-parse --short HEAD))"
+}
+
+
+# --------------------------------------
+# ----------------------
+# macOS: package .app into a simple drag-and-drop .dmg (no signing)
+# ------------------------------------------------------------
+make_macos_dmg() {
+  local app_bundle="$1"                 # e.g. ./PornFetch_macOS_GUI_arm64.app
+  local dmg_out="${2:-${app_bundle%.app}.dmg}"
+  local vol_name="${3:-PornFetch}"
+
+  if [[ ! -d "${app_bundle}" ]]; then
+    error "DMG packaging failed: app bundle not found: ${app_bundle}"
+    return 1
+  fi
+
+  if ! command -v hdiutil >/dev/null 2>&1; then
+    error "DMG packaging failed: hdiutil not available (should exist on macOS)."
+    return 1
+  fi
+
+  local stage_dir
+  stage_dir="$(mktemp -d "/tmp/pornfetch_dmg_stage.XXXXXX")"
+  local app_name
+  app_name="$(basename "${app_bundle}")"
+
+  info "Creating DMG staging folder: ${stage_dir}"
+
+  # Copy app bundle preserving metadata
+  run ditto "${app_bundle}" "${stage_dir}/${app_name}"
+
+  # Classic DMG convenience link
+  run ln -s /Applications "${stage_dir}/Applications"
+
+  # Overwrite existing dmg if present
+  if [[ -f "${dmg_out}" ]]; then
+    warn "Overwriting existing DMG: ${dmg_out}"
+    run rm -f "${dmg_out}"
+  fi
+
+  info "Packaging DMG: ${dmg_out}"
+  run hdiutil create \
+    -quiet \
+    -volname "${vol_name}" \
+    -srcfolder "${stage_dir}" \
+    -ov \
+    -format UDZO \
+    -imagekey zlib-level=9 \
+    "${dmg_out}"
+
+  run rm -rf "${stage_dir}"
+  ok "DMG created: $(pwd)/$(basename "${dmg_out}")"
+}
+
+
+# ------------------------------------------------------------
+# Main (OS handling)
 # ------------------------------------------------------------
 case "$OS" in
   termux)
@@ -153,9 +345,8 @@ case "$OS" in
     warn "If you want, you can still try, but expect issues."
     ;;
   darwin)
-    info "Detected macOS"
-    error "macOS is not supported by this script!, use the other one, thanks :)"
-    exit 1
+    info "Detected macOS (${ARCH})"
+    install_macos_build_deps
     ;;
   *)
     info "Detected OS: ${OS}"
@@ -173,6 +364,10 @@ PROJECT_DIR="Porn_Fetch"
 
 if [[ -d "${PROJECT_DIR}/.git" ]]; then
   info "Repository already exists. Updating..."
+  DEFAULT_BRANCH="$(get_default_branch "${PROJECT_DIR}")"
+
+  run git -C "${PROJECT_DIR}" fetch --prune --tags --force
+  run git -C "${PROJECT_DIR}" checkout "${DEFAULT_BRANCH}" || true
   run git -C "${PROJECT_DIR}" pull --ff-only
 else
   info "Cloning repository..."
@@ -181,21 +376,23 @@ fi
 
 cd "${PROJECT_DIR}"
 
+ORIGINAL_BRANCH="$(git symbolic-ref -q --short HEAD || true)"
+
+choose_build_ref
+
 # ------------------------------------------------------------
 # Create a temporary uv environment in /tmp
-# (Qt can be unhappy if the venv is inside the project dir)
 # ------------------------------------------------------------
 VENV_DIR="/tmp/porn_fetch_uv_venv_${USER:-user}_$$"
 info "Using temporary uv environment: ${VENV_DIR}"
 rm -rf "${VENV_DIR}" || true
 
-# Install Python 3.13 (uv will download it if needed)
+# Install Python 3.13
 run uv --color always python install 3.13
 
 # Create the venv with Python 3.13
 run uv --color always venv "${VENV_DIR}" --python 3.13
 
-# Tell uv to use this venv for the project
 export UV_PROJECT_ENVIRONMENT="${VENV_DIR}"
 
 # ------------------------------------------------------------
@@ -205,20 +402,89 @@ info "Syncing dependencies using uv (with --extra gui)..."
 run uv --color always sync --extra gui
 
 # ------------------------------------------------------------
-# Build using pyside6-deploy (verbose)
+# Build using pyside6-deploy (platform-aware)
 # ------------------------------------------------------------
-info "Building with pyside6-deploy..."
-run uv --color always run -- \
-  pyside6-deploy -c src/build/pysidedeploy_linux.spec -f -v
+info "Activating virtual environment for update script..."
+source "${VENV_DIR}/bin/activate"
 
-# Rename output (same as before)
-if [[ -f "Porn Fetch.bin" ]]; then
-  run mv "Porn Fetch.bin" "PornFetch_Linux_GUI_x64.bin"
-  ok "Build successful: $(pwd)/PornFetch_Linux_GUI_x64.bin"
+info "Synchronizing frontend, translations and resources to your OS + Updating Qt"
+cd src/frontend/
+bash update.sh
+cd ../../
+
+# Pick the correct deploy spec for the platform
+SPEC_CANDIDATES=()
+if [[ "${OS}" == "darwin" ]]; then
+  SPEC_CANDIDATES+=("src/build/pysidedeploy_macos.spec")
+  SPEC_CANDIDATES+=("src/build/pysidedeploy_darwin.spec")
+  SPEC_CANDIDATES+=("src/build/pysidedeploy_mac.spec")
+  SPEC_CANDIDATES+=("src/build/pysidedeploy.spec")
 else
-  error "Build finished but output file 'Porn Fetch.bin' was not found!"
+  SPEC_CANDIDATES+=("src/build/pysidedeploy_linux.spec")
+  SPEC_CANDIDATES+=("src/build/pysidedeploy.spec")
+fi
+
+DEPLOY_SPEC=""
+for f in "${SPEC_CANDIDATES[@]}"; do
+  if [[ -f "${f}" ]]; then
+    DEPLOY_SPEC="${f}"
+    break
+  fi
+done
+
+if [[ -z "${DEPLOY_SPEC}" ]]; then
+  error "No pyside6-deploy spec file found."
+  error "Tried: ${SPEC_CANDIDATES[*]}"
   exit 1
 fi
 
-ok "Done."
+ok "Using deploy spec: ${DEPLOY_SPEC}"
 
+# IMPORTANT: pyside6-deploy may rewrite the spec file -> copy to temp to avoid dirtying the repo
+DEPLOY_SPEC_TMP="${VENV_DIR}/pysidedeploy.spec"
+run cp -f "${DEPLOY_SPEC}" "${DEPLOY_SPEC_TMP}"
+
+info "Building with pyside6-deploy..."
+run uv --color always run -- \
+  pyside6-deploy -c "${DEPLOY_SPEC_TMP}" -f -v
+
+# ------------------------------------------------------------
+# Rename output (Linux .bin / macOS .app)
+# ------------------------------------------------------------
+if [[ "${OS}" == "darwin" ]]; then
+  # pyside6-deploy usually outputs "<AppName>.app" on macOS
+  if [[ -d "Porn Fetch.app" ]]; then
+    OUT_NAME="PornFetch_macOS_GUI_${ARCH}.app"
+    run rm -rf "${OUT_NAME}" || true
+    run mv "Porn Fetch.app" "${OUT_NAME}"
+    ok "Build successful: $(pwd)/${OUT_NAME}"
+  else
+    # fallback search (in case tool changed output location)
+    FOUND_APP="$(find . -maxdepth 3 -name "Porn Fetch.app" -print -quit 2>/dev/null || true)"
+    if [[ -n "${FOUND_APP}" && -d "${FOUND_APP}" ]]; then
+      OUT_NAME="PornFetch_macOS_GUI_${ARCH}.app"
+      run rm -rf "${OUT_NAME}" || true
+      run mv "${FOUND_APP}" "${OUT_NAME}"
+      ok "Build successful: $(pwd)/${OUT_NAME}"
+      # Create a drag-and-drop DMG (unsigned)
+      make_macos_dmg "./${OUT_NAME}" "./${OUT_NAME%.app}.dmg" "PornFetch"
+
+    else
+      error "Build finished but output 'Porn Fetch.app' was not found!"
+      error "Check pyside6-deploy logs above for the output directory."
+      exit 1
+    fi
+  fi
+else
+  # Linux: expected ".bin"
+  if [[ -f "Porn Fetch.bin" ]]; then
+    OUT_NAME="PornFetch_Linux_GUI_${ARCH}.bin"
+    run mv "Porn Fetch.bin" "${OUT_NAME}"
+    ok "Build successful: $(pwd)/${OUT_NAME}"
+  else
+    error "Build finished but output file 'Porn Fetch.bin' was not found!"
+    exit 1
+  fi
+fi
+
+ok "Done."

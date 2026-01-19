@@ -627,6 +627,12 @@ to be refactored.
 - When installing Porn Fetch on Linux, the logo will not be downloaded and is embedded in the app
 - Improved installation by using standartized paths, instead of hardcoded ones
 
+### Other
+- Fixed build scripts
+- Improved building speed thanks to uv
+- You can now select which tag / commit to build
+- Unified macOS / Linux build into one file
+
 
 
 
