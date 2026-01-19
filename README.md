@@ -159,6 +159,12 @@ apt install wget -y && wget -O - "https://raw.githubusercontent.com/EchterAlsFak
 ```
 
 ### Windows (PowerShell as Admin)
+> [!CAUTION]
+> You absolutely **NEED** to disable Microsoft Defender (Realtime protection). Otherwise, Windows will just randomly delete
+> files during build which makes it completely impossible to do anything.
+
+You can read through the full rage letter [here](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/why_windows_sucks.md)
+
 ```
 # Enable script execution
 Set-ExecutionPolicy RemoteSigned 
