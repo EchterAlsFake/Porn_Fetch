@@ -2,11 +2,9 @@ name: Build CLI (Linux x32,x64)
 
 on:
   pull_request:
-    branches:
-      - master
+    branches: [ master ]
   push:
-    branches:
-      - master
+    branches: [ master ]
 
 permissions:
   contents: read
@@ -15,21 +13,28 @@ jobs:
   build-pornfetch-cli-linux-64:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
       - name: Set up Python 3.13
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v6
         with:
           python-version: "3.13"
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install pyinstaller av
-          if [ -f requirements_cli.txt ]; then pip install -r requirements_cli.txt; fi
+      - name: Install uv (with cache)
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
 
-      - name: Build Porn Fetch (CLI) (PyInstaller - Termux)
+      - name: Sync dependencies (uv)
         run: |
-          pyinstaller -F Porn_Fetch_CLI.py && cd dist && mv Porn_Fetch_CLI PornFetch_Linux_CLI_x64 && chmod +x PornFetch_Linux_CLI_x64
+          uv sync --extra dev
+
+      - name: Build Porn Fetch (CLI) (PyInstaller)
+        run: |
+          uv run pyinstaller -F Porn_Fetch_CLI.py
+          cd dist
+          mv Porn_Fetch_CLI PornFetch_Linux_CLI_x64
+          chmod +x PornFetch_Linux_CLI_x64
 
       - name: Generate SHA256 Checksum
         run: |
@@ -82,22 +87,34 @@ jobs:
           sudo make altinstall
           echo "${PY32_PREFIX}/bin" >> "$GITHUB_PATH"
 
-      - name: Create 32-bit venv & install deps (no av)
+      - name: Install uv (with cache)
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Create 32-bit env + install deps (uv)
         shell: bash
+        env:
+          UV_PYTHON: /opt/python-32/bin/python3.11
+          UV_PROJECT_ENVIRONMENT: ${{ github.workspace }}/.venv32
         run: |
-          python3.11 -m venv venv
-          source venv/bin/activate
-          python -m pip install --upgrade pip wheel setuptools
-          # Build PyInstaller from source so its bootloader is compiled for i686
-          pip install --no-binary=:all: pyinstaller
-          pip install -r requirements_cli.txt
+          uv venv "$UV_PROJECT_ENVIRONMENT"
+          # try dev extra, but fallback to base sync if a dev dep has no i386 wheels
+          uv sync --extra dev || uv sync
+
+          # Ensure pyinstaller bootloader is i686 by rebuilding it from source
+          uv pip uninstall -y pyinstaller || true
+          uv pip install --no-binary=:all: pyinstaller
 
       - name: Build Porn Fetch (CLI) (PyInstaller - x32)
         shell: bash
+        env:
+          UV_PROJECT_ENVIRONMENT: ${{ github.workspace }}/.venv32
         run: |
-          source venv/bin/activate
-          pyinstaller -F Porn_Fetch_CLI.py
-          cd dist && mv Porn_Fetch_CLI PornFetch_Linux_CLI_x32 && chmod +x PornFetch_Linux_CLI_x32
+          uv run pyinstaller -F Porn_Fetch_CLI.py
+          cd dist
+          mv Porn_Fetch_CLI PornFetch_Linux_CLI_x32
+          chmod +x PornFetch_Linux_CLI_x32
 
       - name: Generate SHA256 Checksum
         run: sha256sum dist/PornFetch_Linux_CLI_x32 > dist/PornFetch_Linux_CLI_x32.sha256

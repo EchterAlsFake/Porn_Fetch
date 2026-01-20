@@ -13,8 +13,8 @@
 - [] Enable easy one click uninstalling
 - [] auto updating support
 - [] Fix translations (once again)
-- [] Updating macOS Python build to include truststore
-- [] Entire rework of the build scripts
+- [x] Updating macOS Python build to include truststore
+- [x] Entire rework of the build scripts
 - [] Include a License system in Porn Fetch
 
 ### Support for more websites

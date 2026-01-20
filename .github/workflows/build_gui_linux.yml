@@ -2,11 +2,9 @@ name: Build GUI (Linux x64)
 
 on:
   pull_request:
-    branches:
-      - master
+    branches: [ master ]
   push:
-    branches:
-      - master
+    branches: [ master ]
 
 permissions:
   contents: read
@@ -15,46 +13,47 @@ jobs:
   build-pornfetch-gui-linux-x64:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python 3.13 x64
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v6
         with:
           python-version: "3.13"
-          architecture: x64
 
-      - name: Install Python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install virtualenv
-          virtualenv venv
-          source venv/bin/activate
-          pip install -r requirements.txt
-          pip install PySide6 nuitka zstandard av
+      - name: Install uv (with cache)
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
 
-      - name: Build application for x64
+      - name: Sync dependencies (uv)
         run: |
-          mkdir deploy
-          shopt -s extglob
-          mv !(deploy|venv) deploy/
-          cd deploy
-          source ../venv/bin/activate
-          pyside6-deploy -c src/build/pysidedeploy_linux.spec -f -v
+          uv sync --extra dev
+
+      - name: Frontend update (Linux)
+        run: |
+          cd src/frontend
+          bash update.sh
+          cd ../../
+
+      - name: Build GUI (Linux x64) (pyside6-deploy)
+        run: |
+          cp -f src/build/pysidedeploy_linux.spec /tmp/pysidedeploy_linux.spec
+          uv run -- pyside6-deploy -c /tmp/pysidedeploy_linux.spec -f -v
+          mv "Porn Fetch.bin" "PornFetch_Linux_GUI_x64.bin"
 
       - name: Generate SHA256 Checksum
         run: |
-          sha256sum "deploy/Porn Fetch.bin" > "deploy/Porn_Fetch_Linux_GUI_x64.sha256"
+          sha256sum "PornFetch_Linux_GUI_x64.bin" > "PornFetch_Linux_GUI_x64.sha256"
 
       - name: Publish SHA256 to GitHub Actions Summary
         run: |
           echo "### SHA256 Checksum for PornFetch_Linux_GUI_x64.bin" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          cat "deploy/Porn_Fetch_Linux_GUI_x64.sha256" >> $GITHUB_STEP_SUMMARY
+          cat "PornFetch_Linux_GUI_x64.sha256" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
 
-      - name: Archive x64 build
+      - name: Archive GUI build
         uses: actions/upload-artifact@v4
         with:
-          name: pyside6-application-x64
-          path: "deploy/Porn Fetch.bin"
+          name: PornFetch_Linux_GUI_x64
+          path: PornFetch_Linux_GUI_x64.bin
