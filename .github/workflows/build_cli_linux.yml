@@ -96,7 +96,7 @@ jobs:
       - name: Create 32-bit env + install deps (uv)
         shell: bash
         env:
-          UV_PROJECT_ENVIRONMENT: ${{ github.workspace }}/.venv32
+          UV_PROJECT_ENVIRONMENT: ${{ github.workspace }}/.venv
           UV_PYTHON: /opt/python-32/bin/python3.11
           UV_NO_MANAGED_PYTHON: "1"
           UV_PYTHON_DOWNLOADS: "never"
@@ -104,6 +104,7 @@ jobs:
           rm -rf "$UV_PROJECT_ENVIRONMENT"
           
           uv venv "$UV_PROJECT_ENVIRONMENT" --python "$UV_PYTHON" --no-managed-python
+          source venv/bin/activate
           uv sync --extra cli || uv sync
           
           # Make sure we're REALLY in 32-bit Python
