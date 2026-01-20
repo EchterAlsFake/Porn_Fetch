@@ -27,7 +27,7 @@ jobs:
           enable-cache: true
 
       - name: Sync dependencies (uv)
-        run: uv sync --extra dev
+        run: uv sync --extra cli
 
       - name: Build Porn Fetch (CLI - Windows - x64)
         run: |
@@ -69,7 +69,8 @@ jobs:
           enable-cache: true
 
       - name: Sync dependencies (uv)
-        run: uv sync --extra dev
+        run: uv sync --extra cli
+
 
       - name: Build Porn Fetch (CLI - Windows - x32)
         run: |

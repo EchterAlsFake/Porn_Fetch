@@ -27,7 +27,8 @@ jobs:
 
       - name: Sync dependencies (uv)
         run: |
-          uv sync --extra dev
+          uv sync --extra cli
+          uv pip install pyinstaller
 
       - name: Build Porn Fetch (CLI) (PyInstaller)
         run: |
@@ -100,7 +101,7 @@ jobs:
         run: |
           uv venv "$UV_PROJECT_ENVIRONMENT"
           # try dev extra, but fallback to base sync if a dev dep has no i386 wheels
-          uv sync --extra dev || uv sync
+          uv sync --extra cli || uv sync
 
           # Ensure pyinstaller bootloader is i686 by rebuilding it from source
           uv pip uninstall -y pyinstaller || true
