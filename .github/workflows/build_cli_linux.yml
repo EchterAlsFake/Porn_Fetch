@@ -125,6 +125,7 @@ jobs:
           UV_PROJECT_ENVIRONMENT: ${{ github.workspace }}/.venv
         run: |
           source "$UV_PROJECT_ENVIRONMENT/bin/activate"
+          rm .python-version
           python -m PyInstaller -F Porn_Fetch_CLI.py
           cd dist
           mv Porn_Fetch_CLI PornFetch_Linux_CLI_x32
