@@ -57,7 +57,7 @@ jobs:
   build-pornfetch-cli-linux-32:
     runs-on: ubuntu-latest
     env:
-      PY311_VERSION: "3.11.5"
+      PY311_VERSION: "3.13.5"
       PY32_PREFIX: "/opt/python-32"
       LD_LIBRARY_PATH: "/opt/python-32/lib:/usr/lib/i386-linux-gnu"
       CC: "gcc -m32"
@@ -104,7 +104,7 @@ jobs:
           
           # Create venv using the 32-bit interpreter
           uv venv "$UV_PROJECT_ENVIRONMENT" \
-            --python /opt/python-32/bin/python3.11 \
+            --python /opt/python-32/bin/python3.13 \
             --no-managed-python
           
           # Install project deps into that venv
