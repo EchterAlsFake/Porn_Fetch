@@ -97,22 +97,25 @@ jobs:
         shell: bash
         env:
           UV_PROJECT_ENVIRONMENT: ${{ github.workspace }}/.venv
-          UV_PYTHON: /opt/python-32/bin/python3.11
           UV_NO_MANAGED_PYTHON: "1"
           UV_PYTHON_DOWNLOADS: "never"
         run: |
           rm -rf "$UV_PROJECT_ENVIRONMENT"
           
-          uv venv "$UV_PROJECT_ENVIRONMENT" --python "$UV_PYTHON" --no-managed-python
-          source .venv/bin/activate
+          # Create venv using the 32-bit interpreter
+          uv venv "$UV_PROJECT_ENVIRONMENT" \
+            --python /opt/python-32/bin/python3.11 \
+            --no-managed-python
+          
+          # Install project deps into that venv
           uv sync --extra cli || uv sync
           
-          # Make sure we're REALLY in 32-bit Python
+          # Prove it's 32-bit
           source "$UV_PROJECT_ENVIRONMENT/bin/activate"
           python -c "import struct,sys; print(sys.executable); print('bits:', struct.calcsize('P')*8)"
           
-          # Rebuild pyinstaller from source in this env
-          uv pip uninstall pyinstaller -y || true
+          # Rebuild pyinstaller from source INSIDE the venv
+          uv pip uninstall pyinstaller || true
           uv pip install --no-binary=:all: pyinstaller
 
 
