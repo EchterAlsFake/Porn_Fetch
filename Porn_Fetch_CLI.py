@@ -6,7 +6,6 @@ import argparse
 import threading
 import traceback
 import itertools
-import truststore
 
 from colorama import *
 from io import TextIOWrapper
@@ -16,6 +15,7 @@ from rich.markdown import Markdown
 from base_api.modules.progress_bars import *
 from base_api.base import BaseCore, setup_logger
 from base_api.modules.config import RuntimeConfig
+from configparser import ConfigParser
 from src.backend.CLI_model_feature_addon import *
 import src.backend.shared_functions as shared_functions
 from base_api.modules.errors import (InvalidProxy, ProxySSLError)
@@ -30,14 +30,13 @@ except (ModuleNotFoundError, ImportError):
     remux = False
 
 
-truststore.inject_into_ssl()
 proxy_one_time_config_stuff_please_dont_ask_thank_you_very_mushhh = RuntimeConfig()
 STATE_FILE = "model_database.json"
 
 logger = setup_logger(name="Porn Fetch - [CLI]", log_file="PornFetch_CLI_LOG.log", level=logging.ERROR)
 logger_model_feature = setup_logger(name="Porn Fetch - [ModelBatchDownload]", log_file="PornFetch___ModelDownload___.log", level=logging.INFO)
 init(autoreset=True)
-conf = shared_functions.shared_config
+conf = ConfigParser()
 logging.disable(level=logging.DEBUG)
 
 

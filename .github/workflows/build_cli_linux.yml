@@ -96,21 +96,23 @@ jobs:
       - name: Create 32-bit env + install deps (uv)
         shell: bash
         env:
-          UV_PYTHON: /opt/python-32/bin/python3.11
           UV_PROJECT_ENVIRONMENT: ${{ github.workspace }}/.venv32
         run: |
-          uv venv "$UV_PROJECT_ENVIRONMENT"
-          # try dev extra, but fallback to base sync if a dev dep has no i386 wheels
+          uv venv "$UV_PROJECT_ENVIRONMENT" --python /opt/python-32/bin/python3.11
           uv sync --extra cli || uv sync
-
-          # Ensure pyinstaller bootloader is i686 by rebuilding it from source
+          
+          # IMPORTANT: point uv pip at the venv you just created
+          export VIRTUAL_ENV="$UV_PROJECT_ENVIRONMENT"
+          export PATH="$VIRTUAL_ENV/bin:$PATH"
+          
+          # Rebuild pyinstaller bootloader as i686
           uv pip uninstall pyinstaller || true
           uv pip install --no-binary=:all: pyinstaller
 
       - name: Build Porn Fetch (CLI) (PyInstaller - x32)
         shell: bash
         env:
-          UV_PROJECT_ENVIRONMENT: ${{ github.workspace }}/.venv32
+          UV_PROJECT_ENVIRONMENT: ${{ github.workspace }}/.venv
         run: |
           uv run pyinstaller -F Porn_Fetch_CLI.py
           cd dist
