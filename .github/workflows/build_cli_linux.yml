@@ -104,7 +104,7 @@ jobs:
           rm -rf "$UV_PROJECT_ENVIRONMENT"
           
           uv venv "$UV_PROJECT_ENVIRONMENT" --python "$UV_PYTHON" --no-managed-python
-          source venv/bin/activate
+          source .venv/bin/activate
           uv sync --extra cli || uv sync
           
           # Make sure we're REALLY in 32-bit Python
