@@ -97,24 +97,31 @@ jobs:
         shell: bash
         env:
           UV_PROJECT_ENVIRONMENT: ${{ github.workspace }}/.venv32
+          UV_PYTHON: /opt/python-32/bin/python3.11
+          UV_NO_MANAGED_PYTHON: "1"
+          UV_PYTHON_DOWNLOADS: "never"
         run: |
-          uv venv "$UV_PROJECT_ENVIRONMENT" --python /opt/python-32/bin/python3.11
+          rm -rf "$UV_PROJECT_ENVIRONMENT"
+          
+          uv venv "$UV_PROJECT_ENVIRONMENT" --python "$UV_PYTHON" --no-managed-python
           uv sync --extra cli || uv sync
           
-          # IMPORTANT: point uv pip at the venv you just created
-          export VIRTUAL_ENV="$UV_PROJECT_ENVIRONMENT"
-          export PATH="$VIRTUAL_ENV/bin:$PATH"
+          # Make sure we're REALLY in 32-bit Python
+          source "$UV_PROJECT_ENVIRONMENT/bin/activate"
+          python -c "import struct,sys; print(sys.executable); print('bits:', struct.calcsize('P')*8)"
           
-          # Rebuild pyinstaller bootloader as i686
-          uv pip uninstall pyinstaller || true
+          # Rebuild pyinstaller from source in this env
+          uv pip uninstall pyinstaller -y || true
           uv pip install --no-binary=:all: pyinstaller
+
 
       - name: Build Porn Fetch (CLI) (PyInstaller - x32)
         shell: bash
         env:
           UV_PROJECT_ENVIRONMENT: ${{ github.workspace }}/.venv
         run: |
-          uv run pyinstaller -F Porn_Fetch_CLI.py
+          source "$UV_PROJECT_ENVIRONMENT/bin/activate"
+          python -m PyInstaller -F Porn_Fetch_CLI.py
           cd dist
           mv Porn_Fetch_CLI PornFetch_Linux_CLI_x32
           chmod +x PornFetch_Linux_CLI_x32
