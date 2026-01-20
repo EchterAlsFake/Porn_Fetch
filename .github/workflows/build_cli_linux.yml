@@ -104,7 +104,7 @@ jobs:
           uv sync --extra cli || uv sync
 
           # Ensure pyinstaller bootloader is i686 by rebuilding it from source
-          uv pip uninstall -y pyinstaller || true
+          uv pip uninstall pyinstaller || true
           uv pip install --no-binary=:all: pyinstaller
 
       - name: Build Porn Fetch (CLI) (PyInstaller - x32)
