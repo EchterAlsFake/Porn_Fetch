@@ -1,6 +1,6 @@
 # v3.8
 
-- [] Switching environment managing to `uv`
+- [x] Switching environment managing to `uv`
 - [] Excluding core functions from GUI to separate files
 - [] Refactoring core logic to be easier used across different files
 - [] Refactoring code in general and simplifying / optimizing things

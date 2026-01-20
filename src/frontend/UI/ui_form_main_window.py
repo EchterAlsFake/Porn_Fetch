@@ -15,6 +15,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtQuickWidgets import QQuickWidget
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDoubleSpinBox,
     QFormLayout, QGraphicsView, QGridLayout, QGroupBox,
     QHBoxLayout, QHeaderView, QLabel, QLayout,
@@ -969,7 +970,7 @@ class Ui_MainWindow(object):
         self.settings_scrollarea.setWidgetResizable(True)
         self.settings_scrollarea_widget_contents = QWidget()
         self.settings_scrollarea_widget_contents.setObjectName(u"settings_scrollarea_widget_contents")
-        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 958, 534))
+        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 550, 287))
         self.gridLayout_19 = QGridLayout(self.settings_scrollarea_widget_contents)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.gridLayout_19.setContentsMargins(0, 0, 0, 0)
@@ -1615,7 +1616,7 @@ class Ui_MainWindow(object):
         self.scrollArea_3.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 226, 112))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 958, 499))
         self.gridLayout_23 = QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_23.setSpacing(0)
         self.gridLayout_23.setObjectName(u"gridLayout_23")
@@ -1640,7 +1641,7 @@ class Ui_MainWindow(object):
 "}\n"
 "")
 
-        self.gridLayout_23.addWidget(self.button_accept, 1, 0, 1, 1)
+        self.gridLayout_23.addWidget(self.button_accept, 1, 1, 1, 1)
 
         self.button_deny = QPushButton(self.scrollAreaWidgetContents_4)
         self.button_deny.setObjectName(u"button_deny")
@@ -1662,7 +1663,7 @@ class Ui_MainWindow(object):
 "}\n"
 "")
 
-        self.gridLayout_23.addWidget(self.button_deny, 1, 1, 1, 1)
+        self.gridLayout_23.addWidget(self.button_deny, 1, 2, 1, 1)
 
         self.textBrowser = QTextBrowser(self.scrollAreaWidgetContents_4)
         self.textBrowser.setObjectName(u"textBrowser")
@@ -1674,7 +1675,14 @@ class Ui_MainWindow(object):
         self.textBrowser.setTextInteractionFlags(Qt.TextInteractionFlag.LinksAccessibleByKeyboard|Qt.TextInteractionFlag.LinksAccessibleByMouse|Qt.TextInteractionFlag.TextBrowserInteraction|Qt.TextInteractionFlag.TextSelectableByKeyboard|Qt.TextInteractionFlag.TextSelectableByMouse)
         self.textBrowser.setOpenExternalLinks(True)
 
-        self.gridLayout_23.addWidget(self.textBrowser, 0, 0, 1, 2)
+        self.gridLayout_23.addWidget(self.textBrowser, 0, 1, 1, 2)
+
+        self.quickWidget = QQuickWidget(self.scrollAreaWidgetContents_4)
+        self.quickWidget.setObjectName(u"quickWidget")
+        self.quickWidget.setResizeMode(QQuickWidget.ResizeMode.SizeRootObjectToView)
+        self.quickWidget.setSource(QUrl(u"file:///run/media/asuna/EA6810736810412D/Users/habel/Documents/UntitledProject/UntitledProjectContent/main.qml"))
+
+        self.gridLayout_23.addWidget(self.quickWidget, 0, 0, 2, 1)
 
         self.scrollArea_3.setWidget(self.scrollAreaWidgetContents_4)
 
@@ -1918,7 +1926,7 @@ class Ui_MainWindow(object):
         self.formlayout_progressbar = QFormLayout()
         self.formlayout_progressbar.setObjectName(u"formlayout_progressbar")
         self.formlayout_progressbar.setHorizontalSpacing(0)
-        self.formlayout_progressbar.setVerticalSpacing(0)
+        self.formlayout_progressbar.setVerticalSpacing(5)
         self.main_label_progressbar_total = QLabel(self.centralwidget)
         self.main_label_progressbar_total.setObjectName(u"main_label_progressbar_total")
 
@@ -1937,14 +1945,25 @@ class Ui_MainWindow(object):
         self.main_label_progressbar_converting = QLabel(self.centralwidget)
         self.main_label_progressbar_converting.setObjectName(u"main_label_progressbar_converting")
 
-        self.formlayout_progressbar.setWidget(1, QFormLayout.ItemRole.LabelRole, self.main_label_progressbar_converting)
+        self.formlayout_progressbar.setWidget(2, QFormLayout.ItemRole.LabelRole, self.main_label_progressbar_converting)
 
         self.main_progressbar_converting = QProgressBar(self.centralwidget)
         self.main_progressbar_converting.setObjectName(u"main_progressbar_converting")
         self.main_progressbar_converting.setStyleSheet(u"text-align: center; /* Centered text */")
         self.main_progressbar_converting.setValue(0)
 
-        self.formlayout_progressbar.setWidget(1, QFormLayout.ItemRole.FieldRole, self.main_progressbar_converting)
+        self.formlayout_progressbar.setWidget(2, QFormLayout.ItemRole.FieldRole, self.main_progressbar_converting)
+
+        self.main_label_progressbar_total_direct = QLabel(self.centralwidget)
+        self.main_label_progressbar_total_direct.setObjectName(u"main_label_progressbar_total_direct")
+
+        self.formlayout_progressbar.setWidget(1, QFormLayout.ItemRole.LabelRole, self.main_label_progressbar_total_direct)
+
+        self.main_progressbar_total_direct = QProgressBar(self.centralwidget)
+        self.main_progressbar_total_direct.setObjectName(u"main_progressbar_total_direct")
+        self.main_progressbar_total_direct.setValue(0)
+
+        self.formlayout_progressbar.setWidget(1, QFormLayout.ItemRole.FieldRole, self.main_progressbar_total_direct)
 
 
         self.gridLayout_12.addLayout(self.formlayout_progressbar, 2, 0, 1, 1)
@@ -2012,7 +2031,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.CentralStackedWidget.setCurrentIndex(1)
+        self.CentralStackedWidget.setCurrentIndex(3)
         self.main_stacked_widget_top.setCurrentIndex(4)
         self.settings_stacked_widget_main.setCurrentIndex(2)
         self.settings_video_combobox_quality.setCurrentIndex(0)
@@ -2855,26 +2874,20 @@ class Ui_MainWindow(object):
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Porn Fetch</span> was created solely for the purpose of enabling offline access to videos in scenarios where internet access is unavailable. </p>\n"
 "<ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\">\n"
 ""
-                        "<li style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The redistribution of copyright-protected content obtained through Porn Fetch is <span style=\" font-weight:700;\">strictly forbidden</span>. </li>\n"
+                        "<li style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The redistribution of copyright-protected content obtained through Porn Fetch is <span style=\" font-weight:700;\">strictly discouraged</span>. </li>\n"
 "<li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Any misuse of this software to steal and redistribute copyrighted material is against its intended purpose and is not endorsed by the creator. </li></ul>\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The <span style=\" font-weight:700;\">batch processing feature</span> in Porn Fetch is intended to assist users without graphical user interfaces in downloading content for personal use, not for large-scale video theft or redistribution.</p>\n"
 "<hr />\n"
-"<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-"
-                        "block-indent:0; text-indent:0px;\"><span style=\" font-size:x-large; font-weight:700;\">Third-Party Software</span></h2>\n"
+"<h2 style=\" margin-top:16px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:x-large; font-weight:700;\">Third-Party Software</span></h2>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Porn Fetch</span> utilizes the following third-party tools and resources:</p>\n"
-"<ol style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\">\n"
-"<li style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">FFmpeg</span> </li>\n"
+"<ol"
+                        " style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\">\n"
+"<li style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">FFmpeg</span> </li></ol>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;\">Used for video processing and conversion. </p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;\">FFmpeg is free software licensed under the GPL. </p>\n"
-"<p style=\" margi"
-                        "n-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;\">For more information, visit <a href=\"https://ffmpeg.org\"><span style=\" text-decoration: underline; color:#007af4;\">https://ffmpeg.org</span></a>.</p>\n"
-"<li style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">JetBrains Mono Font</span> </li></ol>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;\">Copyright \u00a9 2019 JetBrains. All Rights Reserved. </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;\">Licensed under the SIL Open Font License, Version 1.1. </p>\n"
-"<p style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;\">License details: <a href=\"https://scripts.sil.org/OFL\"><span style=\""
-                        " text-decoration: underline; color:#007af4;\">https://scripts.sil.org/OFL</span></a>.</p>\n"
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px;\">For more information, visit <a href=\"https://ffmpeg.org\"><span style=\" text-decoration: underline; color:#007af4;\">https://ffmpeg.org</span></a>.</p>\n"
 "<hr />\n"
-"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Thank you for using <span style=\" font-weight:700;\">Porn Fetch</span> responsibly!</p></body></html>", None))
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt"
+                        "-block-indent:0; text-indent:0px;\">Thank you for using <span style=\" font-weight:700;\">Porn Fetch</span> responsibly!</p></body></html>", None))
 #if QT_CONFIG(accessibility)
         self.text_browser_keyboard_shortcuts.setAccessibleName(QCoreApplication.translate("MainWindow", u"textbrowser keyboard shortcuts", None))
 #endif // QT_CONFIG(accessibility)
@@ -3088,7 +3101,8 @@ class Ui_MainWindow(object):
         self.button_update_acknowledged.setAccessibleName(QCoreApplication.translate("MainWindow", u"button acknowledge that a new version is out", None))
 #endif // QT_CONFIG(accessibility)
         self.button_update_acknowledged.setText(QCoreApplication.translate("MainWindow", u"OK", None))
-        self.main_label_progressbar_total.setText(QCoreApplication.translate("MainWindow", u"Total:", None))
+        self.main_label_progressbar_total.setText(QCoreApplication.translate("MainWindow", u"Total (HLS):", None))
         self.main_label_progressbar_converting.setText(QCoreApplication.translate("MainWindow", u"Converting:", None))
+        self.main_label_progressbar_total_direct.setText(QCoreApplication.translate("MainWindow", u"Total (direct):", None))
     # retranslateUi
 

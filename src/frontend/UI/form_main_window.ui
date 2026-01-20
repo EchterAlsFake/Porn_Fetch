@@ -2246,8 +2246,8 @@ This can save a lot of time in certain scenarios.
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>958</width>
-             <height>499</height>
+             <width>550</width>
+             <height>287</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_19">
@@ -3658,8 +3658,8 @@ QPushButton:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>958</width>
-             <height>499</height>
+             <width>188</width>
+             <height>103</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_21">
@@ -3749,7 +3749,7 @@ QPushButton:pressed {
             <property name="spacing">
              <number>0</number>
             </property>
-            <item row="1" column="0">
+            <item row="1" column="1">
              <widget class="QPushButton" name="button_accept">
               <property name="accessibleName">
                <string>button accept license</string>
@@ -3778,7 +3778,7 @@ QPushButton:pressed {
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
+            <item row="1" column="2">
              <widget class="QPushButton" name="button_deny">
               <property name="accessibleName">
                <string>button deny license</string>
@@ -3807,7 +3807,7 @@ QPushButton:pressed {
               </property>
              </widget>
             </item>
-            <item row="0" column="0" colspan="2">
+            <item row="0" column="1" colspan="2">
              <widget class="QTextBrowser" name="textBrowser">
               <property name="font">
                <font>
@@ -3879,6 +3879,18 @@ li.checked::marker { content: &quot;\2612&quot;; }
               </property>
               <property name="openExternalLinks">
                <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0" rowspan="2">
+             <widget class="QQuickWidget" name="quickWidget">
+              <property name="resizeMode">
+               <enum>QQuickWidget::ResizeMode::SizeRootObjectToView</enum>
+              </property>
+              <property name="source">
+               <url>
+                <string>file:///run/media/asuna/EA6810736810412D/Users/habel/Documents/UntitledProject/UntitledProjectContent/main.qml</string>
+               </url>
               </property>
              </widget>
             </item>
@@ -4300,8 +4312,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>958</width>
-             <height>499</height>
+             <width>98</width>
+             <height>119</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_61">
@@ -4580,6 +4592,13 @@ li.checked::marker { content: &quot;\2612&quot;; }
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QQuickWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">QtQuickWidgets/QQuickWidget</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>main_button_switch_home</tabstop>
   <tabstop>main_button_switch_account</tabstop>
