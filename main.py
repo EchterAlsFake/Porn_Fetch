@@ -221,6 +221,52 @@ class LicenseWidget(QWidget):
         self.refresh_status()
 
 
+def get_original_executable_path() -> str:
+    """
+    This function is needed bcause if we use Qt's native version to get the file source, it gives us the issue,
+    that Qt thinks the real file, so our execution file would be the extracted one inside of the Nuitka container inside
+    of the /tmp directory.
+
+    So, when I then compile the file, we don't compile the real file, but the extracted one which will give a segmentation
+    fault because it misses the bootstrapper.
+    """
+
+    # 1) Nuitka: best source for onefile
+    try:
+        import __compiled__  # provided by Nuitka
+        orig = getattr(__compiled__, "original_argv0", None)
+        if orig and os.path.exists(orig):
+            return os.path.realpath(orig)
+    except Exception:
+        pass
+
+    # 2) AppImage-style runtime env var (often set in onefile on Linux)
+    appimage = os.environ.get("APPIMAGE")
+    if appimage and os.path.exists(appimage):
+        return os.path.realpath(appimage)
+
+    # 3) Fallback: argv[0] (often the real onefile path)
+    if sys.argv and os.path.exists(sys.argv[0]):
+        return os.path.realpath(sys.argv[0])
+
+
+def copy_overwrite_atomic(src: str, dst: str):
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+
+    tmp = dst + ".tmp"
+    if os.path.exists(tmp):
+        os.remove(tmp)
+
+    shutil.copy2(src, tmp)      # full binary-safe copy
+    os.replace(tmp, dst)        # atomic swap
+
+    # sanity check
+    if os.path.getsize(src) != os.path.getsize(dst):
+        raise RuntimeError(
+            f"Copy verification failed: {src} ({os.path.getsize(src)}) != {dst} ({os.path.getsize(dst)})"
+        )
+
+
 class InstallThread(QRunnable):
     def __init__(self, app_name: str, app_id: str = "pornfetch", org_name: str = "EchterAlsFake"):
         super().__init__()
@@ -279,11 +325,19 @@ class InstallThread(QRunnable):
             apps_dir = os.path.expanduser("~/.local/share/applications")
         _mkpath(apps_dir)
 
-        src_exe = QCoreApplication.applicationFilePath()
+        src_exe = get_original_executable_path()
         dst_exe = os.path.join(install_dir, filename)
-        _move_or_copy(src_exe, dst_exe)
-        _chmod_755(dst_exe)
+        try:
+            copy_overwrite_atomic(src=src_exe, dst=dst_exe)
 
+        except RuntimeError:
+            self.signals.error_signal.emit(f"""
+A Runtime error occurred during the installation process. This typically occurs, because I couldn't
+find the real path of the extracted file from the main application.
+
+In short: You can't fix that, please report this!""")
+
+        _chmod_755(dst_exe)
         icon_dst = os.path.join(install_dir, "logo.png")
         if not QFile.exists(icon_dst):
             QFile.copy(":/images/graphics/logo.png", icon_dst)
