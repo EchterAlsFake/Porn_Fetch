@@ -6,14 +6,16 @@ If you know what you do, you can change a few things here :)
 import os
 import re
 import sys
-import httpx
 import json
+import httpx
 import sqlite3
 import logging
-import traceback
+import platform
 import datetime
+import traceback
 
-from src.backend.config import __version__, __build__, http_log_ip, http_log_port, ConfigParser
+from typing import Literal
+from src.backend.config import __version__, http_log_ip, http_log_port, ConfigParser, __next_release__
 from urllib.parse import urlsplit
 from mutagen.mp4 import MP4, MP4Cover, MP4Tags
 from base_api.base import BaseCore, setup_logger
@@ -54,6 +56,17 @@ core_update_checks.config.max_retries = 1
 core_update_checks.config.use_http2 = False
 core_update_checks.config.timeout = 10
 
+
+def normalized_arch() -> str:
+    m = platform.machine().lower()
+    if m in ("x86_64", "amd64"):
+        return "x86_64"
+    if m in ("arm64", "aarch64"):
+        return "arm64"
+
+    else:
+        logger.warning(f"Couldn't normalize platform: {m}, please report this")
+        return m
 
 class VideoData:
     """
@@ -194,7 +207,7 @@ as they are indeed needed for the main applications!
 # TODO: Implement logging
 sections = [ "Misc", "Performance", "Video", "UI"]
 
-options_misc = ["debug_mode", "first_run_gui", "license_accepted", "install_type", "update_checks", "internet_checks", "anonymous_mode", "disclaimer_shown",
+options_misc = ["app_name", "debug_mode", "first_run_gui", "license_accepted", "install_type", "update_checks", "internet_checks", "anonymous_mode", "disclaimer_shown",
                 "network_logging", "first_run_cli", "downloaded_videos", "notice_shown", "android_warning_shown", "supress_errors"]
 options_performance = ["download_mode", "semaphore", "videos_concurrency", "pages_concurrency", "download_workers",
                        "timeout", "retries", "speed_limit", "processing_delay", "network_delay"]
@@ -205,6 +218,7 @@ options_ui = ["language", "font_size", "theme"]
 
 default_configuration = f"""
 [Misc]
+app_name = none
 debug_mode = false
 first_run_gui = true
 license_accepted = false

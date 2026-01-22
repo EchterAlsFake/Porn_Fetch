@@ -42,8 +42,12 @@ import os.path
 import logging
 import pathlib
 import argparse
+import platform
+import shutil
 import markdown
+import tempfile
 import truststore
+import subprocess
 import src.frontend.UI.resources
 import src.backend.shared_functions as shared_functions
 
@@ -69,7 +73,7 @@ from PySide6.QtCore import (QFile, QTextStream, QRunnable, QThreadPool, QSemapho
                             QDir, QIODevice, QFileDevice, QSettings, QSaveFile)
 from PySide6.QtWidgets import (QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, \
                                QInputDialog, QMainWindow, QLabel, QProgressBar, QGraphicsPixmapItem, QDialog, QVBoxLayout,
-                               QGraphicsScene, QGraphicsView, QComboBox)
+                               QGraphicsScene, QGraphicsView, QComboBox, QDialogButtonBox)
 from PySide6.QtGui import QIcon, QFontDatabase, QPixmap, QShortcut, QKeySequence, QPainter
 
 # Possible errors from APIs
@@ -251,6 +255,52 @@ class LicenseWidget(QWidget):
         self.refresh_status()
 
 
+def get_original_executable_path() -> str:
+    """
+    This function is needed bcause if we use Qt's native version to get the file source, it gives us the issue,
+    that Qt thinks the real file, so our execution file would be the extracted one inside of the Nuitka container inside
+    of the /tmp directory.
+
+    So, when I then compile the file, we don't compile the real file, but the extracted one which will give a segmentation
+    fault because it misses the bootstrapper.
+    """
+
+    # 1) Nuitka: best source for onefile
+    try:
+        import __compiled__  # provided by Nuitka
+        orig = getattr(__compiled__, "original_argv0", None)
+        if orig and os.path.exists(orig):
+            return os.path.realpath(orig)
+    except Exception:
+        pass
+
+    # 2) AppImage-style runtime env var (often set in onefile on Linux)
+    appimage = os.environ.get("APPIMAGE")
+    if appimage and os.path.exists(appimage):
+        return os.path.realpath(appimage)
+
+    # 3) Fallback: argv[0] (often the real onefile path)
+    if sys.argv and os.path.exists(sys.argv[0]):
+        return os.path.realpath(sys.argv[0])
+
+
+def copy_overwrite_atomic(src: str, dst: str):
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+
+    tmp = dst + ".tmp"
+    if os.path.exists(tmp):
+        os.remove(tmp)
+
+    shutil.copy2(src, tmp)      # full binary-safe copy
+    os.replace(tmp, dst)        # atomic swap
+
+    # sanity check
+    if os.path.getsize(src) != os.path.getsize(dst):
+        raise RuntimeError(
+            f"Copy verification failed: {src} ({os.path.getsize(src)}) != {dst} ({os.path.getsize(dst)})"
+        )
+
+
 class InstallThread(QRunnable):
     def __init__(self, app_name: str, app_id: str = "pornfetch", org_name: str = "EchterAlsFake"):
         super().__init__()
@@ -266,6 +316,8 @@ class InstallThread(QRunnable):
         self.logger = logging.getLogger("InstallThread")
 
     def run(self):
+        settings.setValue("Misc/app_name", self.app_name)
+
         try:
             self.signals.start_undefined_range.emit()
 
@@ -307,11 +359,19 @@ class InstallThread(QRunnable):
             apps_dir = os.path.expanduser("~/.local/share/applications")
         _mkpath(apps_dir)
 
-        src_exe = QCoreApplication.applicationFilePath()
+        src_exe = get_original_executable_path()
         dst_exe = os.path.join(install_dir, filename)
-        _move_or_copy(src_exe, dst_exe)
-        _chmod_755(dst_exe)
+        try:
+            copy_overwrite_atomic(src=src_exe, dst=dst_exe)
 
+        except RuntimeError:
+            self.signals.error_signal.emit(f"""
+A Runtime error occurred during the installation process. This typically occurs, because I couldn't
+find the real path of the extracted file from the main application.
+
+In short: You can't fix that, please report this!""")
+
+        _chmod_755(dst_exe)
         icon_dst = os.path.join(install_dir, "logo.png")
         if not QFile.exists(icon_dst):
             QFile.copy(":/images/graphics/logo.png", icon_dst)
@@ -381,6 +441,236 @@ StartupNotify=true
         shortcut.Save()
 
         self.logger.info(f"Installed to {install_dir}, shortcut {shortcut_path}")
+
+
+def _safe_unlink(path: str):
+    """Delete a file if it exists (ignore missing)."""
+    try:
+        if path and os.path.isfile(path):
+            os.remove(path)
+    except FileNotFoundError:
+        pass
+
+def _safe_rmtree(path: str):
+    """Delete a directory tree if it exists (ignore missing)."""
+    try:
+        if path and os.path.isdir(path):
+            shutil.rmtree(path, ignore_errors=False)
+    except FileNotFoundError:
+        pass
+
+
+class UninstallThread(QRunnable):
+    """
+    Uninstalls the *user-local installed* version:
+      - Linux: removes ~/.local/share/applications/<app_id>.desktop
+               removes AppLocalDataLocation payload folder (binary/icon)
+      - Windows: removes Start Menu shortcut
+                 removes AppLocalDataLocation payload folder
+                 uses a .bat helper to delete after app exit (because Windows locks running exe)
+    """
+
+    def __init__(self, app_id: str = "pornfetch", org_name: str = "EchterAlsFake"):
+        super().__init__()
+        global settings
+        settings = get_settings(portable=False)
+        self.app_name = settings.value("Misc/app_name")
+        print(f"Got Application name: {self.app_name}")
+
+        self.app_id = app_id
+        self.org_name = org_name
+        self.signals = Signals()
+
+        self.logger = logging.getLogger("UninstallThread")
+
+    def run(self):
+        try:
+            self.signals.start_undefined_range.emit()
+
+            # Match the settings identity of installed mode
+            QCoreApplication.setOrganizationName(self.org_name)
+            QCoreApplication.setApplicationName(self.app_name)
+
+            if sys.platform.startswith("linux"):
+                self._uninstall_linux_user()
+            elif sys.platform == "win32":
+                self._uninstall_windows_user()
+            else:
+                raise RuntimeError(f"Unsupported platform: {sys.platform}")
+
+        except Exception:
+            error = traceback.format_exc()
+            self.logger.error(error)
+
+            # You can reuse install_finished if you want, but it's nicer to add uninstall_finished
+            if hasattr(self.signals, "uninstall_finished"):
+                self.signals.uninstall_finished.emit([False, error])
+            else:
+                self.signals.install_finished.emit([False, error])
+
+            self.signals.stop_undefined_range.emit()
+            return
+
+        self.signals.stop_undefined_range.emit()
+
+        if hasattr(self.signals, "uninstall_finished"):
+            self.signals.uninstall_finished.emit([True, ""])
+        else:
+            self.signals.install_finished.emit([True, ""])
+
+    # ----------------------------
+    # Linux (user-local uninstall)
+    # ----------------------------
+    def _uninstall_linux_user(self):
+        install_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
+
+        apps_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.ApplicationsLocation)
+        if not apps_dir:
+            apps_dir = os.path.expanduser("~/.local/share/applications")
+
+        desktop_path = os.path.join(apps_dir, f"{self.app_id}.desktop")
+
+        # Remove desktop entry
+        _safe_unlink(desktop_path)
+
+        # Remove payload files (best effort)
+        if install_dir and os.path.isdir(install_dir):
+            # delete known payload bits if you want a "soft" uninstall
+            # _safe_unlink(os.path.join(install_dir, "PornFetch_Linux_GUI_x64.bin"))
+            # _safe_unlink(os.path.join(install_dir, "logo.png"))
+
+            # or "hard" uninstall: remove the entire dir
+            _safe_rmtree(install_dir)
+
+        # Clear settings keys / file
+        self._clear_qt_settings()
+
+        self.logger.info(f"Uninstalled (Linux). Removed: {desktop_path} and {install_dir}")
+
+    # ----------------------------
+    # Windows (user-local uninstall)
+    # ----------------------------
+    def _uninstall_windows_user(self):
+        install_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
+
+        # Start Menu Programs folder via Qt
+        start_menu_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.ApplicationsLocation)
+        if not start_menu_dir:
+            start_menu_dir = os.path.join(os.getenv("APPDATA", ""), "Microsoft", "Windows", "Start Menu", "Programs")
+
+        shortcut_path = os.path.join(start_menu_dir, f"{self.app_name}.lnk")
+
+        # Remove shortcut now (usually possible even while app runs)
+        _safe_unlink(shortcut_path)
+
+        # Clear settings first
+        self._clear_qt_settings()
+
+        # Now remove install_dir.
+        # On Windows you typically cannot delete the running exe, so we spawn a helper bat
+        # that waits for this process to exit, then deletes the folder.
+        QCoreApplication.quit() # Hopefully this works
+        if install_dir and os.path.isdir(install_dir):
+            self._spawn_windows_cleanup_bat(
+                pid=os.getpid(),
+                install_dir=install_dir,
+                shortcut_path=shortcut_path,
+            )
+
+        self.logger.info(f"Uninstall scheduled (Windows). Shortcut removed: {shortcut_path}, install_dir: {install_dir}")
+
+    def _clear_qt_settings(self):
+        """
+        Clear the app's Qt settings.
+        Works for INI-based settings and registry-based ones.
+        """
+        try:
+            s = make_settings(portable=False)
+            s.clear()
+            s.sync()
+
+            # If this is an ini file, you can also delete it for a "clean uninstall"
+            fname = ""
+            try:
+                fname = s.fileName()
+            except Exception:
+                fname = ""
+
+            if fname and os.path.exists(fname):
+                _safe_unlink(fname)
+
+        except Exception as e:
+            # Don't fail uninstall if settings cleanup fails
+            self.logger.warning(f"Settings cleanup failed: {e}")
+
+    def _spawn_windows_cleanup_bat(self, pid: int, install_dir: str, shortcut_path: str):
+        """
+        Creates and runs a .bat that waits until PID exits, then deletes install_dir.
+        The .bat deletes itself at the end.
+        """
+        bat_path = os.path.join(tempfile.gettempdir(), f"{self.app_id}_uninstall_cleanup.bat")
+
+        # Use rmdir /s /q for full folder wipe
+        # "tasklist /FI" loop waits until PID is gone
+        script = rf"""@echo off
+setlocal ENABLEDELAYEDEXPANSION
+
+REM Wait for the app process to exit
+:loop
+tasklist /FI "PID eq {pid}" 2>NUL | find /I "{pid}" >NUL
+if "%ERRORLEVEL%"=="0" (
+    timeout /t 1 /nobreak >NUL
+    goto loop
+)
+
+REM Remove shortcut (best effort)
+del /f /q "{shortcut_path}" >NUL 2>&1
+
+REM Remove install folder
+rmdir /s /q "{install_dir}" >NUL 2>&1
+
+REM Self-delete
+del /f /q "%~f0" >NUL 2>&1
+endlocal
+"""
+
+        with open(bat_path, "w", encoding="utf-8") as f:
+            f.write(script)
+
+        # Launch hidden
+        creationflags = 0
+        try:
+            creationflags = subprocess.CREATE_NO_WINDOW
+        except Exception:
+            creationflags = 0
+
+        subprocess.Popen(
+            ["cmd.exe", "/c", bat_path],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            creationflags=creationflags,
+            close_fds=True,
+        )
+
+
+class AutoUpdatingThread(QRunnable):
+    def __init__(self, asset_path):
+        super(AutoUpdatingThread, self).__init__()
+        self.asset_path = asset_path
+        self.signals = Signals()
+
+    def run(self):
+
+
+
+
+
+
+
+
+
+
+
 
 
 class InternetCheck(QRunnable):
@@ -1138,6 +1428,22 @@ class PornFetch(QMainWindow):
 
         self.switch_to_download()
 
+    def uninstall_porn_fetch(self):
+        ui_popup(self.tr("""
+Important: 
+
+Porn Fetch will start uninstalling and thus deleting all of the settings, the shortcuts, icons, folders
+and the main file.
+
+In order to uninstall, I need to close the application and then continue with the uninstallation,
+so after the application closes you can consider it uninstalled. 
+"""))
+
+
+        self.uninstall_thread = UninstallThread()
+        self.threadpool.start(self.uninstall_thread)
+
+
     def install_pornfetch(self):
         app_name = self.ui.lineedit_custom_app_name.text() or self.ui.settings_lineedit_system_custom_app_name.text()
         if app_name == "" or app_name is None:
@@ -1193,7 +1499,6 @@ class PornFetch(QMainWindow):
         self.ui.main_button_switch_account.clicked.connect(self.switch_to_login)
         self.ui.main_button_switch_supported_websites.clicked.connect(self.switch_to_supported_sites)
         self.ui.main_button_view_progress_bars.clicked.connect(self.switch_to_progressbars)
-        #self.ui.main_button_switch_batch.clicked.connect(self.switch_to_batch) (Not implemented yet)
 
         # Video Download Button Connections
         self.ui.main_button_tree_download.clicked.connect(self.download_tree_widget)
@@ -1208,6 +1513,7 @@ class PornFetch(QMainWindow):
         self.ui.settings_button_switch_ui.clicked.connect(lambda _=False, i=3: self.ui.settings_stacked_widget_main.setCurrentIndex(i))
         self.ui.settings_button_buy_license.clicked.connect(self.buy_license)
         self.ui.settings_button_import_license.clicked.connect(self.import_license)
+        self.ui.settings_button_uninstall_porn_fetch.clicked.connect(self.uninstall_porn_fetch)
 
         # Info Dialog
         self.ui.button_info_enable_all.clicked.connect(self.info_dialog_enable_all)
@@ -2372,6 +2678,10 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         self.update_thread = CheckUpdates()
         self.update_thread.signals.update_check.connect(self.check_for_updates_result)
         self.threadpool.start(self.update_thread)
+
+    def auto_update(self):
+        """
+        """
 
     def eventFilter(self, source, event):
         gv = self.ui.graphicsView
