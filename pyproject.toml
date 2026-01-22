@@ -68,7 +68,7 @@ dependencies = [
 # Usually you would only say: httpx, but httpx also depends on h11, httpcore and so on and I listed them all here.
 
 [project.optional-dependencies]
-gui = ["PySide6", "truststore", "pywin32; sys_platform == 'win32'", "pip", "cryptography", "pyobjc; sys_platform == 'darwin'"]
+gui = ["PySide6", "truststore", "pywin32; sys_platform == 'win32'", "pip", "cryptography"]
 # pip is needed, because pyside6-deploy invokes pip when building the project with pyside6-deploy
 
 cli = ["rich", "hue_shift", "pyinstaller"]

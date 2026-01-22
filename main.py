@@ -25,7 +25,7 @@ import sys
 import webbrowser
 
 if sys.platform == "darwin":
-    from src.backend.macos_setup import macos_setup
+    from src.backend.macos_setup import macos_setup, SparkleUpdater
     macos_setup()
 
 try:
@@ -73,7 +73,7 @@ from PySide6.QtCore import (QFile, QTextStream, QRunnable, QThreadPool, QSemapho
                             QDir, QIODevice, QFileDevice, QSettings, QSaveFile, QTimer)
 from PySide6.QtWidgets import (QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, \
                                QInputDialog, QMainWindow, QLabel, QProgressBar, QGraphicsPixmapItem, QDialog, QVBoxLayout,
-                               QGraphicsScene, QGraphicsView, QComboBox, QDialogButtonBox)
+                               QGraphicsScene, QGraphicsView, QComboBox)
 from PySide6.QtGui import QIcon, QFontDatabase, QPixmap, QShortcut, QKeySequence, QPainter
 
 # Possible errors from APIs
@@ -108,44 +108,6 @@ logger = shared_functions.setup_logger("Porn Fetch - [MAIN]", log_file="PornFetc
 
 PUBLIC_KEY_B64 = 'zGUmG8Z5InvoYIwnIokQi+SysjEodvfP8kLoCur3KjM=' # This is the public key lol
 license_storage_path = os.path.join(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation), "pornfetch.license")
-
-
-def setup_sparkle():
-    if sys.platform != "darwin":
-        print("[Sparkle] Not on macOS")
-        return None
-
-    try:
-        import objc
-        from Foundation import NSBundle
-
-        bundle = NSBundle.mainBundle()
-        print("[Sparkle] Bundle path:", bundle.bundlePath())
-
-        feed_url = bundle.objectForInfoDictionaryKey_("SUFeedURL")
-        print("[Sparkle] SUFeedURL:", feed_url)
-
-        frameworks_path = bundle.privateFrameworksPath()
-        print("[Sparkle] Frameworks path:", frameworks_path)
-
-        sparkle_path = os.path.join(frameworks_path or "", "Sparkle.framework")
-        print("[Sparkle] Sparkle.framework path:", sparkle_path)
-
-        if not os.path.exists(sparkle_path):
-            print("[Sparkle] Sparkle.framework NOT FOUND")
-            return None
-
-        objc.loadBundle("Sparkle", bundle_path=sparkle_path, module_globals=globals())
-
-        from Sparkle import SPUStandardUpdaterController
-        controller = SPUStandardUpdaterController.alloc().initWithStartingUpdater(True, None, None)
-
-        print("[Sparkle] Controller created OK")
-        return controller
-
-    except Exception as e:
-        print("[Sparkle] Disabled:", e)
-        return None
 
 
 def _mkpath(path: str) -> None:
@@ -1205,15 +1167,7 @@ class PornFetch(QMainWindow):
         self.semaphore = QSemaphore(video_data.consistent_data["semaphore"])
         self.logger.debug("Startup: [5/5] OK")
         self.initialize_pornfetch()
-        self.sparkle_controller = setup_sparkle()
 
-        self.sparkle_controller = setup_sparkle()
-        if self.sparkle_controller:
-            print("Starting timer")
-            QTimer.singleShot(1500, lambda: self.sparkle_controller.updater().checkForUpdates_(None))
-
-        else:
-            print("Sparkle controller doesn't work...")
 
     """
     The following functions just switch the Stacked Widget to the different widgets
@@ -2677,9 +2631,15 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
 
     def check_for_updates(self):
         """Checks for updates in a thread, so that the main UI isn't blocked, until update checks are done"""
-        self.update_thread = CheckUpdates()
-        self.update_thread.signals.update_check.connect(self.check_for_updates_result)
-        self.threadpool.start(self.update_thread)
+        if sys.platform == "darwin":
+            self.sparkle = SparkleUpdater()
+            self.sparkle.check_for_updates()
+
+        else:
+            self.update_thread = CheckUpdates()
+            self.update_thread.signals.update_check.connect(self.check_for_updates_result)
+            self.threadpool.start(self.update_thread)
+
 
     def auto_update(self):
         """
