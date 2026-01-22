@@ -70,7 +70,7 @@ from pathlib import Path
 
 from PySide6.QtCore import (QFile, QTextStream, QRunnable, QThreadPool, QSemaphore, Qt, QLocale,
                             QTranslator, QCoreApplication, QSize, QEvent, QRectF, QByteArray, QStandardPaths,
-                            QDir, QIODevice, QFileDevice, QSettings, QSaveFile)
+                            QDir, QIODevice, QFileDevice, QSettings, QSaveFile, QTimer)
 from PySide6.QtWidgets import (QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, \
                                QInputDialog, QMainWindow, QLabel, QProgressBar, QGraphicsPixmapItem, QDialog, QVBoxLayout,
                                QGraphicsScene, QGraphicsView, QComboBox, QDialogButtonBox)
@@ -111,35 +111,40 @@ license_storage_path = os.path.join(QStandardPaths.writableLocation(QStandardPat
 
 
 def setup_sparkle():
-    # Load Sparkle.framework from inside the .app bundle
-
-    """
-    Sparkle is the program that Porn Fetch uses on macOS for automatically updating itself, as it
-    makes my life (and yours) really easy.
-
-    See: https://sparkle-project.org/
-    """
+    if sys.platform != "darwin":
+        print("[Sparkle] Not on macOS")
+        return None
 
     try:
         import objc
         from Foundation import NSBundle
 
-        frameworks_path = NSBundle.mainBundle().privateFrameworksPath()
-        if not frameworks_path:
-            return None
+        bundle = NSBundle.mainBundle()
+        print("[Sparkle] Bundle path:", bundle.bundlePath())
 
-        sparkle_path = os.path.join(frameworks_path, "Sparkle.framework")
+        feed_url = bundle.objectForInfoDictionaryKey_("SUFeedURL")
+        print("[Sparkle] SUFeedURL:", feed_url)
+
+        frameworks_path = bundle.privateFrameworksPath()
+        print("[Sparkle] Frameworks path:", frameworks_path)
+
+        sparkle_path = os.path.join(frameworks_path or "", "Sparkle.framework")
+        print("[Sparkle] Sparkle.framework path:", sparkle_path)
+
         if not os.path.exists(sparkle_path):
+            print("[Sparkle] Sparkle.framework NOT FOUND")
             return None
 
         objc.loadBundle("Sparkle", bundle_path=sparkle_path, module_globals=globals())
 
         from Sparkle import SPUStandardUpdaterController
         controller = SPUStandardUpdaterController.alloc().initWithStartingUpdater(True, None, None)
+
+        print("[Sparkle] Controller created OK")
         return controller
 
     except Exception as e:
-        print(f"[Sparkle] Disabled: {e}")
+        print("[Sparkle] Disabled:", e)
         return None
 
 
@@ -1202,8 +1207,13 @@ class PornFetch(QMainWindow):
         self.initialize_pornfetch()
         self.sparkle_controller = setup_sparkle()
 
+        self.sparkle_controller = setup_sparkle()
         if self.sparkle_controller:
-            self.sparkle_controller.checkForUpdates_(None)
+            print("Starting timer")
+            QTimer.singleShot(1500, lambda: self.sparkle_controller.updater().checkForUpdates_(None))
+
+        else:
+            print("Sparkle controller doesn't work...")
 
     """
     The following functions just switch the Stacked Widget to the different widgets
