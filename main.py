@@ -42,6 +42,7 @@ import os.path
 import logging
 import pathlib
 import argparse
+import platform
 import shutil
 import markdown
 import tempfile
@@ -72,7 +73,7 @@ from PySide6.QtCore import (QFile, QTextStream, QRunnable, QThreadPool, QSemapho
                             QDir, QIODevice, QFileDevice, QSettings, QSaveFile)
 from PySide6.QtWidgets import (QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, \
                                QInputDialog, QMainWindow, QLabel, QProgressBar, QGraphicsPixmapItem, QDialog, QVBoxLayout,
-                               QGraphicsScene, QGraphicsView, QComboBox)
+                               QGraphicsScene, QGraphicsView, QComboBox, QDialogButtonBox)
 from PySide6.QtGui import QIcon, QFontDatabase, QPixmap, QShortcut, QKeySequence, QPainter
 
 # Possible errors from APIs
@@ -617,6 +618,26 @@ endlocal
             creationflags=creationflags,
             close_fds=True,
         )
+
+
+class AutoUpdatingThread(QRunnable):
+    def __init__(self, asset_path):
+        super(AutoUpdatingThread, self).__init__()
+        self.asset_path = asset_path
+        self.signals = Signals()
+
+    def run(self):
+
+
+
+
+
+
+
+
+
+
+
 
 
 class InternetCheck(QRunnable):
@@ -2620,6 +2641,10 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         self.update_thread = CheckUpdates()
         self.update_thread.signals.update_check.connect(self.check_for_updates_result)
         self.threadpool.start(self.update_thread)
+
+    def auto_update(self):
+        """
+        """
 
     def eventFilter(self, source, event):
         gv = self.ui.graphicsView
