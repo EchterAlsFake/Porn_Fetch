@@ -106,6 +106,39 @@ PUBLIC_KEY_B64 = 'zGUmG8Z5InvoYIwnIokQi+SysjEodvfP8kLoCur3KjM=' # This is the pu
 license_storage_path = os.path.join(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation), "pornfetch.license")
 
 
+def setup_sparkle():
+    # Load Sparkle.framework from inside the .app bundle
+
+    """
+    Sparkle is the program that Porn Fetch uses on macOS for automatically updating itself, as it
+    makes my life (and yours) really easy.
+
+    See: https://sparkle-project.org/
+    """
+
+    try:
+        import objc
+        from Foundation import NSBundle
+
+        frameworks_path = NSBundle.mainBundle().privateFrameworksPath()
+        if not frameworks_path:
+            return None
+
+        sparkle_path = os.path.join(frameworks_path, "Sparkle.framework")
+        if not os.path.exists(sparkle_path):
+            return None
+
+        objc.loadBundle("Sparkle", bundle_path=sparkle_path, module_globals=globals())
+
+        from Sparkle import SPUStandardUpdaterController
+        controller = SPUStandardUpdaterController.alloc().initWithStartingUpdater(True, None, None)
+        return controller
+
+    except Exception as e:
+        print(f"[Sparkle] Disabled: {e}")
+        return None
+
+
 def _mkpath(path: str) -> None:
     if not path:
         raise RuntimeError("Got empty path from QStandardPaths.")
@@ -885,6 +918,10 @@ class PornFetch(QMainWindow):
         self.semaphore = QSemaphore(video_data.consistent_data["semaphore"])
         self.logger.debug("Startup: [5/5] OK")
         self.initialize_pornfetch()
+        self.sparkle_controller = setup_sparkle()
+
+        if self.sparkle_controller:
+            self.sparkle_controller.checkForUpdates_(None)
 
     """
     The following functions just switch the Stacked Widget to the different widgets

@@ -16,6 +16,8 @@
 - [x] Updating macOS Python build to include truststore
 - [x] Entire rework of the build scripts
 - [] Include a License system in Porn Fetch
+- [] Make truststore optional in settings
+- [] Include macOS auto updating through sparkle
 
 ### Support for more websites
 - [] ...
