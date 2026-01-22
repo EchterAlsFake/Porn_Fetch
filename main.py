@@ -660,15 +660,7 @@ class AutoUpdatingThread(QRunnable):
         self.signals = Signals()
 
     def run(self):
-
-
-
-
-
-
-
-
-
+        ""
 
 
 
@@ -738,7 +730,7 @@ class CheckUpdates(QRunnable):
 
     def run(self):
         url = f"https://echteralsfake.me/update"
-
+        return # Doesn't matter now
         try:
             response = shared_functions.core_update_checks.fetch(url=url, get_response=True)
             if response.status_code == 200:
