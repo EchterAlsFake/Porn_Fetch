@@ -26,24 +26,6 @@ import subprocess
 from pathlib import Path
 
 
-def compute_build_version(short_version: str) -> str:
-    """
-    Convert "1.0" / "2.1" / "1.10.3" into a monotonically increasing integer-like string.
-    Examples:
-      1.0     -> 10000
-      1.9     -> 10900
-      2.0     -> 20000
-      2.1     -> 20100
-      1.10.3  -> 11003
-    """
-    parts = short_version.strip().split(".")
-    nums = [int(p) for p in parts if p != ""]
-    while len(nums) < 3:
-        nums.append(0)
-    major, minor, patch = nums[:3]
-    return str(major * 10000 + minor * 100 + patch)
-
-
 def load_plist(plist_path: Path) -> dict:
     with plist_path.open("rb") as f:
         return plistlib.load(f)
@@ -108,7 +90,7 @@ def main() -> None:
     if not app.exists() or not plist_path.exists():
         raise SystemExit(f"Invalid app bundle or missing Info.plist: {plist_path}")
 
-    build_version = compute_build_version(args.short_version)
+    build_version = args.short_version
 
     # 1) Copy Sparkle.framework + bridge dylib (optional)
     sparkle_framework = Path(sparkle_framework).expanduser().resolve()
