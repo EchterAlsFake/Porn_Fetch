@@ -8,7 +8,8 @@
 - missav.ws (3.5) supports all other top level domains too
 - spankbang.com (3.6)
 - youporn.com (3.7)
-
+- xfreehd.com (3.8)
+- beeg.com (3.8)
 
 
 > Porn Fetch was built for PornHub in the first place, but I decided to support as many websites as possible

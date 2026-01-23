@@ -49,6 +49,7 @@ import src.backend.shared_functions as shared_functions
 from threading import Event, Lock
 from itertools import islice, chain
 from src.backend.shared_gui import *
+from src.backend.database import *
 from src.frontend.UI.ssl_warning import *
 from src.frontend.UI.ui_form_main_window import Ui_MainWindow
 from src.frontend.UI.theme import *
@@ -57,9 +58,11 @@ from src.frontend.UI.pornfetch_info_dialog import PornFetchInfoWidget
 from src.backend.check_license import LicenseManager
 from src.frontend.UI.license import License, Disclaimer
 from src.backend.shared_functions import *
+from phub import errors as ph_errors
 
 from src.backend import clients # Singleton instance for the client objects (really important)
-7
+from urllib.parse import urlsplit
+
 
 from src.backend.helper_functions import *
 from hqporner_api.api import Sort as hq_Sort
@@ -318,7 +321,7 @@ class UninstallThread(QRunnable):
     def __init__(self, app_id: str = "pornfetch", org_name: str = "EchterAlsFake"):
         super().__init__()
         global settings
-        settings = get_settings(portable=False)
+        settings = make_settings(portable=False)
         self.app_name = settings.value("Misc/app_name")
         print(f"Got Application name: {self.app_name}")
 
@@ -628,10 +631,10 @@ class AddToTreeWidget(QRunnable):
             try:
                 video_identifier = random.randint(0, 99999999) # Creates a random ID for each video
                 if isinstance(video, str):
-                    video = shared_functions.check_video(url=video)
+                    video = clients.check_video(url=video)
 
                 self.logger.debug(f"Created ID: {video_identifier} for: {video.url}")
-                data = shared_functions.load_video_attributes(video)
+                data = clients.load_video_attributes(video)
                 self.logger.debug("Loaded video attributes")
                 session_urls.append(video.url)
                 title = data.get("title")
@@ -663,18 +666,18 @@ class AddToTreeWidget(QRunnable):
                 video_data.data_objects.update({video_identifier: data})
                 return video_identifier
 
-            except (shared_functions.errors.PremiumVideo, IndexError):
+            except (ph_errors.PremiumVideo, IndexError):
                 handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Premium-only video skipped: {video.url}")
                 return False
 
-            except shared_functions.errors.RegionBlocked:
+            except ph_errors.RegionBlocked:
                 handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Region-blocked video skipped: {video.url}")
                 return False
 
-            except shared_functions.errors.VideoDisabled:
+            except ph_errors.VideoDisabled:
                 handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Warning: The video {video.url} is disabled. It will be skipped")
 
-            except shared_functions.errors.RegexError:
+            except ph_errors.RegexError:
                 message = f"""
                 A regex error occurred. This is always a 50/50 chance if it's my or PornHub's fault. If this happens again on
                 the same video, please consider reporting it. If you have logging enabled, this issue will automatically be reported.
@@ -690,7 +693,7 @@ class AddToTreeWidget(QRunnable):
                     handle_error_gracefully(self, data=video_data.consistent_data, error_message=message, needs_network_log=True)
                     return False
 
-            except shared_functions.errors.VideoPendingReview:
+            except ph_errors.VideoPendingReview:
                 handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Warning: The video {video.url} is pending review. It will be skipped")
                 return False
 
@@ -872,8 +875,8 @@ class DownloadThread(QRunnable):
 
 
             # We need to specify the sources, so that it knows which individual progressbar to use
-            instances_legacy = [shared_functions.hq_Video, shared_functions.ep_Video, shared_functions.pt_Video,
-                                shared_functions.xf_Video]
+            instances_legacy = [clients.hq_Video, clients.ep_Video, clients.pt_Video,
+                                clients.xf_Video]
 
             if isinstance(self.video, tuple(instances_legacy)):
                 video_source = "raw"
@@ -886,7 +889,7 @@ class DownloadThread(QRunnable):
                     error = traceback.format_exc()
                     handle_error_gracefully(data=self.consistent_data, self=self, error_message=f"An error happened while downloading a video from HQPorner / EPorner: {error}", needs_network_log=True)
 
-            elif isinstance(self.video, shared_functions.ph_Video):  # Assuming 'Video' is the class for Pornhub
+            elif isinstance(self.video, clients.ph_Video):  # Assuming 'Video' is the class for Pornhub
                 video_source = "general"
                 self.logger.debug("Starting the Download!")
                 self.video.download(downloader=str(self.download_mode), path=self.output_path,
@@ -907,7 +910,7 @@ class DownloadThread(QRunnable):
             if self.consistent_data.get("write_metadata"):
                 try:
                     if not FORCE_DISABLE_AV:
-                        shared_functions.write_tags(path=self.output_path, data=video_data.data_objects.get(self.video_id))
+                        clients.write_tags(path=self.output_path, data=video_data.data_objects.get(self.video_id))
 
                 except Exception:
                     error = traceback.format_exc()
@@ -980,7 +983,7 @@ class PornFetch(QMainWindow):
         self.signals.error_signal.connect(ui_popup)
 
         global settings
-        settings = get_settings(portable=True, portable_dir=os.getcwd())
+        settings = make_settings(portable=True, portable_dir=os.getcwd())
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
@@ -1599,17 +1602,16 @@ so after the application closes you can consider it uninstalled.
         self.ui.settings_combobox_ui_theme.setCurrentIndex(ui_theme_idx)
 
         # Apply to your core_conf
-        core_conf.timeout = timeout
-        core_conf.max_retries = retries
-        core_conf.max_bandwidth_mb = speed_limit
-        core_conf.raise_bot_protection = False
-        core_conf.request_delay = network_delay
-        core_conf.videos_concurrency = videos_concurrency
-        core_conf.pages_concurrency = pages_concurrency
-        core_conf.max_workers_download = download_workers
+        clients.config.timeout = timeout
+        clients.config.max_retries = retries
+        clients.config.max_bandwidth_mb = speed_limit
+        clients.config.raise_bot_protection = False
+        clients.config.request_delay = network_delay
+        clients.config.videos_concurrency = videos_concurrency
+        clients.config.core_conf.pages_concurrency = pages_concurrency
+        clients.config.max_workers_download = download_workers
 
         clients.refresh_clients()
-        shared_functions.enable_logging()
 
     def save_user_settings(self):
         print(f"In settings....")
@@ -1728,15 +1730,15 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
             clients.refresh_clients()
             self.logger.info(f"Unmasked IP is -->: {ip}")
             try:
-                ip_masked = shared_functions.core.fetch(url="https://httpbin.org/ip", get_response=True).json()["origin"]
+                ip_masked = clients.core.fetch(url="https://httpbin.org/ip", get_response=True).json()["origin"]
 
             except ProxySSLError:
                 dialog = SSLWarningDialog()
                 if dialog.exec():
                     self.logger.warning("Disabling SSL Verification")
-                    shared_functions.config.verify_ssl = False
-                    shared_functions.refresh_clients()
-                    ip_masked = shared_functions.core.fetch(url="https://httpbin.org/ip", get_response=True).json()[
+                    clients.config.verify_ssl = False
+                    clients.refresh_clients()
+                    ip_masked = clients.core.fetch(url="https://httpbin.org/ip", get_response=True).json()[
                         "origin"]
 
                 else:
@@ -1764,7 +1766,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
     def toggle_killswitch(self):
         if self.kill_switch:
             self.logger.info(f"Disabling Kill Switch for -->: {self.proxy}")
-            shared_functions.refresh_clients(enable_kill_switch=False)
+            clients.refresh_clients(enable_kill_switch=False)
             return None
 
         else:
@@ -1774,7 +1776,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
                 return None
 
             self.logger.info(f"Enabling Kill Switch for -->: {self.proxy}")
-            shared_functions.refresh_clients(enable_kill_switch=True)
+            clients.refresh_clients(enable_kill_switch=True)
             return None
 
     """
@@ -1845,7 +1847,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         self.ui.download_lineedit_model_url.clear()
         self.logger.info(f"Checking model: {model}")
         if "pornhub" in str(model) and ("model" or "user") in str(model):
-            model_object = shared_functions.ph_client.get_user(model)
+            model_object = clients.ph_client.get_user(model)
             videos = model_object.videos
             uploads = model_object.uploads
             model_type = self.ui.settings_video_combobox_model_videos.currentIndex()
@@ -1860,7 +1862,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
 
         elif "hqporner" in str(model):
             try:
-                videos = shared_functions.hq_client.get_videos_by_actress(name=model)
+                videos = clients.hq_client.get_videos_by_actress(name=model)
 
             except InvalidActress_HQ:
                 handle_error_gracefully(self, data=video_data.consistent_data, error_message="Invalid Actress URL!")
@@ -1871,55 +1873,55 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
                 return
 
         elif "eporner" in str(model):
-            videos = shared_functions.ep_client.get_pornstar(url=model, enable_html_scraping=True).videos()
+            videos = clients.ep_client.get_pornstar(url=model, enable_html_scraping=True).videos()
 
         elif "xnxx" in str(model):
-            videos = shared_functions.xn_client.get_user(url=model).videos
+            videos = clients.xn_client.get_user(url=model).videos
 
         elif "youporn" in str(model) and "channel" in model:
-            videos = shared_functions.yp_client.get_channel(url=model).videos()
+            videos = clients.yp_client.get_channel(url=model).videos()
 
         elif "youporn" in str(model):
-            videos = shared_functions.yp_client.get_pornstar(url=model).videos()
+            videos = clients.yp_client.get_pornstar(url=model).videos()
 
         elif "xvideos" in str(model) and ("model" or "pornstar") in str(model):
-            videos = shared_functions.xv_client.get_pornstar(url=model).videos()
+            videos = clients.xv_client.get_pornstar(url=model).videos()
 
         elif "xvideos" in str(model) and "channel" in str(model):
-            videos = shared_functions.xv_client.get_channel(url=model).videos()
+            videos = clients.xv_client.get_channel(url=model).videos()
 
         elif "xvideos" in str(model):
-            videos = shared_functions.xv_client.get_channel(url=model).videos()
+            videos = clients.xv_client.get_channel(url=model).videos()
 
         elif "spankbang" in str(model) and "pornstar" in str(model):
-            videos = shared_functions.sp_client.get_pornstar(url=model).videos()
+            videos = clients.sp_client.get_pornstar(url=model).videos()
 
         elif "spankbang" in str(model) and "creator" in str(model):
-            videos = shared_functions.sp_client.get_creator(url=model).videos()
+            videos = clients.sp_client.get_creator(url=model).videos()
 
         elif "spankbang" in str(model) and "channel" in str(model):
-            videos = shared_functions.sp_client.get_channel(url=model).videos()
+            videos = clients.sp_client.get_channel(url=model).videos()
 
         elif "xhamster" in str(model) and "pornstars" in str(model):
-            videos = shared_functions.xh_client.get_pornstar(url=model).videos()
+            videos = clients.xh_client.get_pornstar(url=model).videos()
 
         elif "xhamster" in str(model) and "creators" in str(model):
-            videos = shared_functions.xh_client.get_creator(url=model).videos()
+            videos = clients.xh_client.get_creator(url=model).videos()
 
         elif "xhamster" in str(model) and "channels" in str(model):
-            videos = shared_functions.xh_client.get_channel(url=model).videos()
+            videos = clients.xh_client.get_channel(url=model).videos()
 
         elif "youporn" in str(model) and "pornstar" in str(model):
-            videos = shared_functions.yp_client.get_pornstar(url=model).videos()
+            videos = clients.yp_client.get_pornstar(url=model).videos()
 
         elif "youporn" in str(model) and "channel" in str(model):
-            videos = shared_functions.yp_client.get_channel(url=model).videos()
+            videos = clients.yp_client.get_channel(url=model).videos()
 
         elif "porntrex" in str(model) and "channel" in str(model):
-            videos = shared_functions.pt_client.get_channel(url=model).videos()
+            videos = clients.pt_client.get_channel(url=model).videos()
 
         elif "porntrex" in str(model) and "model" in str(model):
-            videos = shared_functions.pt_client.get_model(url=model).videos()
+            videos = clients.pt_client.get_model(url=model).videos()
 
         else:
             videos = None
@@ -1933,14 +1935,14 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         self.logger.info(f"Requesting playlist videos for -->: {url}")
         self.ui.download_lineedit_playlist_url.clear()
         if "pornhub" in str(url) and "playlist" in str(url):
-            playlist = shared_functions.ph_client.get_playlist(url)
+            playlist = clients.ph_client.get_playlist(url)
             videos = playlist.sample()
 
         elif "xvideos" in url:
-            videos = shared_functions.xv_client.get_playlist(url=url, pages=400)
+            videos = clients.xv_client.get_playlist(url=url, pages=400)
 
         elif "youporn" in str(url) and "collection" in str(url):
-            videos = shared_functions.yp_client.get_collection(url).videos()
+            videos = clients.yp_client.get_collection(url).videos()
 
         else:
             handle_error_gracefully(data=video_data.consistent_data, needs_network_log=False, error_message="""
@@ -1958,34 +1960,34 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         query = self.ui.download_lineedit_search_query.text()
         self.logger.debug(f"Searching with query: {query}")
         if self.ui.download_website_combobox.currentIndex() == 0:
-            videos = shared_functions.hq_client.search_videos(query, pages=500)
+            videos = clients.hq_client.search_videos(query, pages=500)
 
         elif self.ui.download_website_combobox.currentIndex() == 1:
-            videos = shared_functions.ph_client.search(query)
+            videos = clients.ph_client.search(query)
 
         elif self.ui.download_website_combobox.currentIndex() == 2:
-            videos = shared_functions.ep_client.search_videos(query, sorting_gay="", sorting_order="",
+            videos = clients.ep_client.search_videos(query, sorting_gay="", sorting_order="",
                                                               sorting_low_quality="", page=20, per_page=200)
         elif self.ui.download_website_combobox.currentIndex() == 3:
-            videos = shared_functions.xv_client.search(query, pages=500)
+            videos = clients.xv_client.search(query, pages=500)
 
         elif self.ui.download_website_combobox.currentIndex() == 4:
-            videos = shared_functions.xh_client.search_videos(query=query, pages=500)
+            videos = clients.xh_client.search_videos(query=query, pages=500)
 
         elif self.ui.download_website_combobox.currentIndex() == 5:
-            videos = shared_functions.xn_client.search(query).videos(pages=500)
+            videos = clients.xn_client.search(query).videos(pages=500)
 
         elif self.ui.download_website_combobox.currentIndex() == 6:
-            videos = shared_functions.sp_client.search(query=query, pages=500)
+            videos = clients.sp_client.search(query=query, pages=500)
 
         elif self.ui.download_website_combobox.currentIndex() == 7:
-            videos = shared_functions.mv_client.search(query=query, video_count=500)
+            videos = clients.mv_client.search(query=query, video_count=500)
 
         elif self.ui.download_website_combobox.currentIndex() == 8:
-            videos = shared_functions.yp_client.search_videos(query=query, pages=500)
+            videos = clients.yp_client.search_videos(query=query, pages=500)
 
         elif self.ui.download_website_combobox.currentIndex() == 9:
-            videos = shared_functions.pt_client.search(query=query, pages=500)
+            videos = clients.pt_client.search(query=query, pages=500)
 
         else:
             ui_popup(
@@ -2039,7 +2041,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         thumbnail_data = data.get("thumbnail_data")
 
         # Parse the raw length, passing video as a hint for the source.
-        parsed_length = shared_functions.parse_length(raw_length, video)
+        parsed_length = clients.parse_length(raw_length, video)
 
         item = QTreeWidgetItem(self.ui.treeWidget)
 
@@ -2133,9 +2135,9 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
 
         if video_data.consistent_data.get("track_videos"):
             self.logger.info(f"Tracking video: {video_id}")
-            shared_functions.init_db(video_data.consistent_data.get("database_path"))
+            init_db(video_data.consistent_data.get("database_path"))
             data = video_data.data_objects.get(video_id)
-            shared_functions.save_video_metadata(video_id, data, video_data.consistent_data.get("database_path"))
+            save_video_metadata(video_id, data, video_data.consistent_data.get("database_path"))
 
         try:
             video_data.clean_dict(video_id)
@@ -2363,27 +2365,27 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
 
         try:
             self.logger.debug("Associating a new client object with a logged in session")
-            shared_functions.ph_client = shared_functions.ph_Client(email=username, password=password, core=shared_functions.core_ph)
+            shared_functions.ph_client = clients.ph_Client(email=username, password=password, core=clients.ph_client) # Recheck this when I am not drunk
             self.logger.debug("Login Successful!")
             ui_popup(self.tr("Login Successful!", None))
             # TODO
 
-        except shared_functions.errors.LoginFailed:
+        except ph_errors.LoginFailed:
             self.logger.error("Login Failed, because of invalid credentials")
             ui_popup(self.tr("Login Failed, please check your credentials and try again!", None))
 
-        except shared_functions.errors.ClientAlreadyLogged:
+        except ph_errors.ClientAlreadyLogged:
             self.logger.warning("Client already logged in?!! wait what??")
             ui_popup(self.tr("You are already logged in!", None))
 
     def check_login(self):
         """Checks if the user is logged in, so that no errors are threw if not"""
-        if shared_functions.ph_client.logged:
+        if clients.ph_client.logged:
             return True
 
-        elif not shared_functions.ph_client.logged:
+        elif not clients.ph_client.logged:
             self.login()
-            if not shared_functions.ph_client.logged:
+            if not clients.ph_client.logged:
                 text = self.tr("There's a problem with the login. Please make sure you login first and then "
                                "you try to get videos based on your account.", None)
                 ui_popup(text)
@@ -2395,19 +2397,19 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
     def get_watched_videos(self):
         """Returns the videos watched by the user"""
         if self.check_login():
-            watched = shared_functions.ph_client.account.watched
+            watched = clients.ph_client.account.watched
             self.add_to_tree_widget_thread(watched)
 
     def get_liked_videos(self):
         """Returns the videos liked by the user"""
         if self.check_login():
-            liked = shared_functions.ph_client.account.liked
+            liked = clients.ph_client.account.liked
             self.add_to_tree_widget_thread(liked)
 
     def get_recommended_videos(self):
         """Returns the videos recommended for the user"""
         if self.check_login():
-            recommended = shared_functions.ph_client.account.recommended
+            recommended = clients.ph_client.account.recommended
             self.add_to_tree_widget_thread(recommended)
 
     """
@@ -2417,7 +2419,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
 
     def get_top_porn_hqporner(self):
         try:
-            videos = shared_functions.hq_client.get_top_porn(sort_by=self.mappings_hqporner_tools[self.ui.tools_combobox_hqporner_top_porn.currentIndex()])
+            videos = clients.hq_client.get_top_porn(sort_by=self.mappings_hqporner_tools[self.ui.tools_combobox_hqporner_top_porn.currentIndex()])
 
         except NoVideosFound:
             handle_error_gracefully(self, data=video_data.consistent_data, error_message="No videos found. This is likely an issue and will be reported", needs_network_log=True)
@@ -2428,19 +2430,19 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
     def get_by_category_hqporner(self):
         """Returns video by category from HQPorner."""
         category_name = self.ui.tools_lineedit_hqporner_category.text()
-        all_categories = shared_functions.hq_client.get_all_categories()
+        all_categories = clients.hq_client.get_all_categories()
 
         if not category_name in all_categories:
             ui_popup(self.tr("Invalid Category. Press 'list categories' to see all "
                              "possible ones.", None))
 
         else:
-            videos = shared_functions.hq_client.get_videos_by_category(category=category_name)
+            videos = clients.hq_client.get_videos_by_category(category=category_name)
             self.add_to_tree_widget_thread(videos)
 
     def list_categories_hqporner(self):
         """Get all available categories. I want to also extend that for EPorner (and maybe even more sites)"""
-        categories_ = shared_functions.hq_client.get_all_categories()
+        categories_ = clients.hq_client.get_all_categories()
         categories = ",".join(categories_)
         ui_popup(categories)
 
@@ -2454,7 +2456,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
                              "possible ones.", None))
 
         else:
-            videos = shared_functions.ep_client.get_videos_by_category(category=category_name, enable_html_scraping=True)
+            videos = clients.ep_client.get_videos_by_category(category=category_name, enable_html_scraping=True)
             self.add_to_tree_widget_thread(iterator=videos)
 
     def list_categories_eporner(self):
@@ -2468,7 +2470,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
     def get_brazzers_videos(self):
         """Get brazzers videos from HQPorner"""
         try:
-            videos = shared_functions.hq_client.get_brazzers_videos()
+            videos = clients.hq_client.get_brazzers_videos()
 
         except NoVideosFound:
             handle_error_gracefully(self, data=video_data.consistent_data, error_message="No videos found. This is likely an issue and will be reported", needs_network_log=True)
@@ -2479,7 +2481,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
     def get_random_video(self):
         """Gets a random video from HQPorner"""
         try:
-            video = shared_functions.hq_client.get_random_video()
+            video = clients.hq_client.get_random_video()
             some_list = [video]
 
         except NoVideosFound:
@@ -2745,7 +2747,7 @@ def main(args: argparse.Namespace):
     if args.portable:
         FORCE_PORTABLE_RUN = True
 
-    setup_config_file()
+    # TODO: ensure config file
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
     conf.read("config.ini")
