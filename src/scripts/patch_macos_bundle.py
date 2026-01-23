@@ -155,15 +155,6 @@ def main() -> None:
     print(f"  SUAllowsAutomaticUpdates     = {data.get('SUAllowsAutomaticUpdates')}")
     print(f"  SUAutomaticallyUpdate        = {data.get('SUAutomaticallyUpdate')}")
 
-    # 3) Optional ad-hoc sign
-    if args.adhoc_sign:
-        print("\n🔐 Ad-hoc signing the app (no Developer ID required)…")
-        run(["/usr/bin/codesign", "--force", "--deep", "--sign", "-", str(app)])
-        run(["/usr/bin/codesign", "--verify", "--deep", "--strict", str(app)])
-        print("✅ codesign verification OK")
-
-    print("\nDone.")
-
 
 if __name__ == "__main__":
     main()
