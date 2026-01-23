@@ -1,11 +1,4 @@
-import sys
-import traceback
-
-import httpx
-import datetime
-
 from PySide6.QtGui import QFont, QPixmap
-from src.backend.config import __version__
 from PySide6.QtWidgets import QMainWindow, QMessageBox
 from src.backend.shared_functions import setup_config_file
 from PySide6.QtCore import Signal, QObject, QCoreApplication
@@ -16,7 +9,6 @@ def ui_popup(text, title="Notice"):
     message_box = QMessageBox()
     message_box.setWindowTitle(title)
     message_box.setText(text)
-    message_box.setFont(QFont("Segoe UI", 12))
 
     # Apply custom style sheet
     message_box.setStyleSheet("""

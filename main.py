@@ -2858,7 +2858,16 @@ Some websites couldn't be accessed. Here's a detailed report:
 {formatted_results}"""))
 
 
-def main():
+def main(args: argparse.Namespace):
+    global FORCE_PORTABLE_RUN
+
+    if args.version:
+        print(__version__)
+        return
+
+    if args.portable:
+        FORCE_PORTABLE_RUN = True
+
     setup_config_file()
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
@@ -2961,12 +2970,6 @@ if __name__ == "__main__":
     parser.add_argument("-v", "--version", help="Shows the version information", action="store_true")
     parser.add_argument("-p", "--portable", help="Forces a portable run of Porn Fetch (skips install dialog)", action="store_true")
     args = parser.parse_args()
+    main(args)
 
-    if args.version:
-        print(__version__)
-
-
-    if args.portable:
-        FORCE_PORTABLE_RUN = True
-
-    main()
+# EOF

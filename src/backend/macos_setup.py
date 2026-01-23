@@ -8,9 +8,12 @@ import sys
 import ctypes
 
 from pathlib import Path
-from PySide6.QtWidgets import QApplication, QMessageBox
+from base_api.base import setup_logger
 from PySide6.QtCore import QObject, Slot
+from PySide6.QtWidgets import QApplication, QMessageBox
 
+
+logger = setup_logger("Porn Fetch (macOS) - [Sparkle]")
 app_path = Path(sys.argv[0]).resolve()
 
 
@@ -26,15 +29,19 @@ class SparkleUpdater(QObject):
 
     def __init__(self, feed_url: str | None = None):
         super().__init__()
+        logger.info("Trying to interact with Sparkle!")
 
         # In a macOS .app:
         # sys.executable -> .../MyApp.app/Contents/MacOS/MyApp
         macos_dir = os.path.dirname(os.path.realpath(sys.executable))
+        logger.debug(f"macOS Directory: {macos_dir}")
         frameworks_dir = os.path.realpath(os.path.join(macos_dir, "..", "Frameworks"))
+        logger.debug(f"Sparkle Framework: {frameworks_dir}")
         dylib_path = os.path.join(frameworks_dir, "sparkle_bridge.dylib")
+        logger.debug(f"dylib bridge for talking to native code: {dylib_path}")
 
         self._lib = ctypes.CDLL(dylib_path)
-
+        logger.info("Loaded dylib bridge, trying to talk to sparkle now...")
         # Define signatures
         self._lib.sparkle_start_updater.argtypes = [ctypes.c_char_p]
         self._lib.sparkle_start_updater.restype = None
@@ -47,6 +54,7 @@ class SparkleUpdater(QObject):
 
         self._lib.sparkle_can_check_for_updates.argtypes = []
         self._lib.sparkle_can_check_for_updates.restype = ctypes.c_int
+        logger.debug("Defined the necessary structures")
 
         # Start Sparkle once (use Info.plist SUFeedURL if feed_url is None)
         if feed_url:
@@ -57,14 +65,24 @@ class SparkleUpdater(QObject):
     @Slot()
     def check_for_updates(self):
         # Must be called from Qt main thread (your UI thread)
+        logger.info("Checking for Updates...")
         self._lib.sparkle_check_for_updates()
 
     @Slot()
     def check_for_updates_in_background(self):
+        logger.info("Checking for Updates (background)....")
         self._lib.sparkle_check_for_updates_in_background()
 
     def can_check_for_updates(self) -> bool:
         return bool(self._lib.sparkle_can_check_for_updates())
+
+"""
+The following functions exist, to automatically install Porn Fetch into the users's application directory
+when they execute it the first time over the .dmg container.
+
+This may or may not work idk.
+"""
+
 
 def _is_running_from_dmg(path: Path) -> bool:
     # /Volumes is the mountpoint for .dmg files
@@ -122,10 +140,8 @@ def _install_and_relaunch_mac(app_exec_path: Path) -> bool:
 
 
 def macos_setup():
-
     if sys.platform == "darwin" and _is_running_from_dmg(app_path):
         # Small confirmation dialog instead of manual drag & drop
-        app = QApplication(sys.argv)
         reply = QMessageBox.question(
             None,
             "Install Porn Fetch",
@@ -154,3 +170,6 @@ def macos_setup():
         else:
             # User declined: you can either exit or fall back to your old notice
             sys.exit(0)
+
+
+# EOF

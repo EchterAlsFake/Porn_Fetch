@@ -43,7 +43,6 @@ dependencies = [
     "markdown",
     "mutagen",
     "pycparser",
-    "requests",
     "sniffio",
     "socksio",
     "soupsieve",

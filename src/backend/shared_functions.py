@@ -6,15 +6,12 @@ If you know what you do, you can change a few things here :)
 import os
 import re
 import sys
-import json
 import httpx
-import sqlite3
 import logging
 import platform
 import datetime
 import traceback
 
-from typing import Literal
 from src.backend.config import __version__, http_log_ip, http_log_port, ConfigParser, __next_release__
 from urllib.parse import urlsplit
 from mutagen.mp4 import MP4, MP4Cover, MP4Tags
@@ -35,26 +32,11 @@ from beeg_api.beeg_api import Client as bg_Client, Video as bg_Video
 from base_api.modules.config import config # This is the global configuration instance of base core config
 # which is also affecting all other APIs when the refresh_clients function is called
 # Initialize clients globally, so that we can override them later with a new configuration from BaseCore if needed
-mv_client = mv_Client()
-ep_client = ep_Client()
-ph_client = ph_Client()
-xv_client = xv_Client()
-xh_client = xh_Client()
-sp_client = sp_Client()
-hq_client = hq_Client()
-xn_client = xn_Client()
-yp_client = yp_Client()
-bg_client = bg_Client()
-pt_client = pt_Client()
-xf_client = xf_Client()
-core = BaseCore() # We need that sometimes in Porn Fetch's main class e.g., thumbnail fetching
-core_update_checks = BaseCore()
-core_ph = None
-core_internet_checks = BaseCore(config=config)
 
-core_update_checks.config.max_retries = 1
-core_update_checks.config.use_http2 = False
-core_update_checks.config.timeout = 10
+
+from src.backend import clients
+
+
 
 
 def normalized_arch() -> str:
@@ -138,55 +120,6 @@ def handle_error_gracefully(self, data: dict, error_message: str | dict, needs_n
         else:
             self.logger.info("Logging is disabled. Error will NOT be reported!")
 
-
-def refresh_clients(enable_kill_switch=False):
-    global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, \
-        hq_client, xn_client, core, core_ph, yp_client, bg_client, pt_client, xf_client
-
-    # One BaseCore per site, with its own RuntimeConfig (isolated headers/cookies)
-    core_common = BaseCore(config=config)   # if you want a “generic” core
-    core_hq    = BaseCore(config=config)
-    core_mv    = BaseCore(config=config)
-    core_ep    = BaseCore(config=config)
-    core_ph    = BaseCore(config=config)
-    core_xv    = BaseCore(config=config)
-    core_xh    = BaseCore(config=config)
-    core_xn    = BaseCore(config=config)
-    core_sp    = BaseCore(config=config)
-    core_yp    = BaseCore(config=config)
-    core_bg    = BaseCore(config=config)
-    core_pt    = BaseCore(config=config)
-    core_xf    = BaseCore(config=config)
-
-    if enable_kill_switch:
-        core_common.enable_kill_switch()
-        core_hq.enable_kill_switch()
-        core_mv.enable_kill_switch()
-        core_ep.enable_kill_switch()
-        core_ph.enable_kill_switch()
-        core_xv.enable_kill_switch()
-        core_xh.enable_kill_switch()
-        core_xn.enable_kill_switch()
-        core_yp.enable_kill_switch()
-        core_bg.enable_kill_switch()
-        core_pt.enable_kill_switch()
-        core_xf.enable_kill_switch()
-
-    # Instantiate clients with their site-specific cores
-    mv_client = mv_Client(core=core_mv)
-    ep_client = ep_Client(core=core_ep)
-    ph_client = ph_Client(core=core_ph, use_webmaster_api=True)
-    xv_client = xv_Client(core=core_xv)
-    xh_client = xh_Client(core=core_xh)
-    sp_client = sp_Client(core=core_sp)
-    hq_client = hq_Client(core=core_hq)
-    xn_client = xn_Client(core=core_xn)
-    yp_client = yp_Client(core=core_yp)
-    bg_client = bg_Client(core=core_bg)
-    pt_client = pt_Client(core=core_pt)
-    xf_client = xf_Client(core=core_xf)
-
-    core = core_common
 
 def origin(url: str) -> str:
     p = urlsplit(url)
@@ -513,44 +446,6 @@ def load_video_attributes(video):
 
     return data
 
-def save_video_metadata(video_id, data, database_path: str):
-    conn = sqlite3.connect(database_path)
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT OR REPLACE INTO videos (video_id, url, title, author, length, tags, publish_date, thumbnail)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    """, (
-        video_id,
-        data.get("url"),
-        data.get("title"),
-        data.get("author"),
-        data.get("length"),
-        json.dumps(data.get("tags")),  # store tags list as JSON
-        data.get("publish_date"),
-        data.get("thumbnail")
-    ))
-    conn.commit()
-    conn.close()
-
-def init_db(database_path: str):
-    conn = sqlite3.connect(database_path)
-    cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS videos (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            video_id TEXT UNIQUE,
-            url TEXT,
-            title TEXT,
-            author TEXT,
-            length INTEGER,
-            tags TEXT,
-            publish_date TEXT,
-            thumbnail TEXT,
-            downloaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-    conn.commit()
-    conn.close()
 
 def write_tags(path, data: dict):
     comment   = "Downloaded with Porn Fetch (GPLv3)"
