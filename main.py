@@ -22,7 +22,6 @@ Discord: echteralsfake (faster response)
 
 # macOS Setup...
 import sys
-import webbrowser
 
 if sys.platform == "darwin":
     from src.backend.macos_setup import macos_setup, SparkleUpdater
@@ -39,38 +38,36 @@ except Exception:
 
 import time
 import os.path
-import logging
-import pathlib
 import argparse
-import platform
-import shutil
+import webbrowser
 import markdown
 import tempfile
-import truststore
 import subprocess
 import src.frontend.UI.resources
 import src.backend.shared_functions as shared_functions
 
-from io import TextIOWrapper
 from threading import Event, Lock
 from itertools import islice, chain
 from src.backend.shared_gui import *
 from src.frontend.UI.ssl_warning import *
 from src.frontend.UI.ui_form_main_window import Ui_MainWindow
 from src.frontend.UI.theme import *
-from src.backend.config import __version__, __build__
+from src.backend.config import __version__, __build__, PUBLIC_KEY_B64, shared_config
 from src.frontend.UI.pornfetch_info_dialog import PornFetchInfoWidget
 from src.backend.check_license import LicenseManager
 from src.frontend.UI.license import License, Disclaimer
-from src.backend.config import shared_config
 from src.backend.shared_functions import *
 
-from hqporner_api.api import Sort as hq_Sort
-from pathlib import Path
+from src.backend import clients # Singleton instance for the client objects (really important)
+7
 
-from PySide6.QtCore import (QFile, QTextStream, QRunnable, QThreadPool, QSemaphore, Qt, QLocale,
+from src.backend.helper_functions import *
+from hqporner_api.api import Sort as hq_Sort
+
+
+from PySide6.QtCore import (QTextStream, QRunnable, QThreadPool, QSemaphore, Qt, QLocale,
                             QTranslator, QCoreApplication, QSize, QEvent, QRectF, QByteArray, QStandardPaths,
-                            QDir, QIODevice, QFileDevice, QSettings, QSaveFile, QTimer)
+                            QSettings)
 from PySide6.QtWidgets import (QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, \
                                QInputDialog, QMainWindow, QLabel, QProgressBar, QGraphicsPixmapItem, QDialog, QVBoxLayout,
                                QGraphicsScene, QGraphicsView, QComboBox)
@@ -88,8 +85,6 @@ from phub.errors import VideoError as VideoError_PH
 from eporner_api.modules.locals import Category as ep_Category
 from typing import Callable
 
-truststore.inject_into_ssl() # Uses System CAs instead of ceritfi's cacert.pem
-
 FORCE_PORTABLE_RUN = False
 total_segments = 0
 downloaded_segments = 0
@@ -97,94 +92,40 @@ total_downloaded_videos = 0  # All videos that actually successfully downloaded
 total_downloaded_videos_attempt = 0  # All videos the user tries to download
 session_urls = []  # This list saves all URls used in the current session. Used for the URL export function
 conf = shared_config
-core_conf = shared_functions.config
 stop_flag = Event()
 _download_lock = Lock()
-video_data = VideoData()
+video_data = clients.VideoData()
 settings: QSettings = QSettings()
-logger = shared_functions.setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG, http_ip=shared_functions.http_log_ip,
-                      http_port=shared_functions.http_log_port)
-
-
-PUBLIC_KEY_B64 = 'zGUmG8Z5InvoYIwnIokQi+SysjEodvfP8kLoCur3KjM=' # This is the public key lol
+logger = shared_functions.setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG)
 license_storage_path = os.path.join(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation), "pornfetch.license")
 
 
-def _mkpath(path: str) -> None:
-    if not path:
-        raise RuntimeError("Got empty path from QStandardPaths.")
-    if not QDir().mkpath(path):
-        raise RuntimeError(f"Failed to create directory: {path}")
+def _resolve_config_path(portable: bool, portable_dir: str | None = None) -> Path:
+    """
+    Portable  -> ./config.ini (portable_dir or CWD)
+    Installed -> config.ini in AppConfigLocation (per-user standard location)
+    """
+    if portable:
+        base = Path(portable_dir) if portable_dir else Path.cwd()
+        return base / "config.ini"
 
-
-def _move_or_copy(src: str, dst: str) -> None:
-    # Prefer atomic-ish rename, but fall back to copy+remove (cross-device, etc.)
-    if QFile.exists(dst):
-        QFile.remove(dst)
-
-    if QFile.rename(src, dst):
-        return
-
-    if not QFile.copy(src, dst):
-        raise RuntimeError(f"Could not move/copy '{src}' -> '{dst}'")
-
-    # Only remove original after successful copy
-    QFile.remove(src)
-
-
-def _write_text_atomic(path: str, text: str) -> None:
-    f = QSaveFile(path)
-    if not f.open(QIODevice.OpenModeFlag.WriteOnly | QIODevice.OpenModeFlag.Text):
-        raise RuntimeError(f"Could not open for writing: {path}")
-    f.write(text.encode("utf-8"))
-    if not f.commit():
-        raise RuntimeError(f"Could not commit: {path}")
-
-
-def _chmod_755(path: str) -> None:
-    perms = (
-        QFileDevice.Permission.ReadOwner | QFileDevice.Permission.WriteOwner | QFileDevice.Permission.ExeOwner |
-        QFileDevice.Permission.ReadGroup | QFileDevice.Permission.ExeGroup |
-        QFileDevice.Permission.ReadOther | QFileDevice.Permission.ExeOther
-    )
-    QFile.setPermissions(path, perms)
-
-
-def _default_license_path() -> Path:
-    cfg = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation)
-    return Path(cfg) / "porn_fetch.license"
+    cfg_dir = Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation))
+    QDir().mkpath(str(cfg_dir))
+    return cfg_dir / "config.ini"
 
 
 def make_settings(portable: bool, portable_dir: str | None = None) -> QSettings:
     """
-    One clean place to decide where settings go.
-    - Portable: INI next to the portable app folder
-    - Installed: native backend (registry/plist/ini in standard locations) OR INI in AppConfigLocation
+    Returns QSettings bound to a real INI file (portable or installed).
+    Also ensures the INI exists and contains merged defaults (no overwriting user values).
+
+    This is needed, because the CLI can't use QSettings, but I want to use it in the GUI, so we keep both
+    compatible.
     """
-    if portable:
-        if not portable_dir:
-            portable_dir = os.getcwd()
-        ini_path = os.path.join(portable_dir, "config.ini")
-        return QSettings(ini_path, QSettings.Format.IniFormat)
+    ini_path = _resolve_config_path(portable, portable_dir)
+    ensure_config_file(ini_path)
 
-    # Installed:
-    return QSettings()  # uses org/app + platform standard location/backend
-
-
-def get_settings(*, portable: bool, portable_dir: str | None = None) -> QSettings:
-    """
-    Portable  -> ./config.ini (next to app / CWD or portable_dir)
-    Installed -> config.ini in AppConfigLocation (per-user standard location)
-    """
-    QSettings.setDefaultFormat(QSettings.Format.IniFormat)
-
-    if portable:
-        base = portable_dir or os.getcwd()
-        return QSettings(os.path.join(base, "config.ini"), QSettings.Format.IniFormat)
-
-    cfg_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation)
-    QDir().mkpath(cfg_dir)
-    return QSettings(os.path.join(cfg_dir, "config.ini"), QSettings.Format.IniFormat)
+    return QSettings(str(ini_path), QSettings.Format.IniFormat)
 
 
 class LicenseWidget(QWidget):
@@ -194,7 +135,7 @@ class LicenseWidget(QWidget):
 
         self.lic = LicenseManager(
             public_key_b64=PUBLIC_KEY_B64,
-            storage_path=_default_license_path(),
+            storage_path=default_license_path(),
             expected_product="porn-fetch",
         )
 
@@ -222,57 +163,11 @@ class LicenseWidget(QWidget):
         self.refresh_status()
 
 
-def get_original_executable_path() -> str:
-    """
-    This function is needed bcause if we use Qt's native version to get the file source, it gives us the issue,
-    that Qt thinks the real file, so our execution file would be the extracted one inside of the Nuitka container inside
-    of the /tmp directory.
-
-    So, when I then compile the file, we don't compile the real file, but the extracted one which will give a segmentation
-    fault because it misses the bootstrapper.
-    """
-
-    # 1) Nuitka: best source for onefile
-    try:
-        import __compiled__  # provided by Nuitka
-        orig = getattr(__compiled__, "original_argv0", None)
-        if orig and os.path.exists(orig):
-            return os.path.realpath(orig)
-    except Exception:
-        pass
-
-    # 2) AppImage-style runtime env var (often set in onefile on Linux)
-    appimage = os.environ.get("APPIMAGE")
-    if appimage and os.path.exists(appimage):
-        return os.path.realpath(appimage)
-
-    # 3) Fallback: argv[0] (often the real onefile path)
-    if sys.argv and os.path.exists(sys.argv[0]):
-        return os.path.realpath(sys.argv[0])
-
-
-def copy_overwrite_atomic(src: str, dst: str):
-    os.makedirs(os.path.dirname(dst), exist_ok=True)
-
-    tmp = dst + ".tmp"
-    if os.path.exists(tmp):
-        os.remove(tmp)
-
-    shutil.copy2(src, tmp)      # full binary-safe copy
-    os.replace(tmp, dst)        # atomic swap
-
-    # sanity check
-    if os.path.getsize(src) != os.path.getsize(dst):
-        raise RuntimeError(
-            f"Copy verification failed: {src} ({os.path.getsize(src)}) != {dst} ({os.path.getsize(dst)})"
-        )
-
-
 class InstallThread(QRunnable):
     def __init__(self, app_name: str, app_id: str = "pornfetch", org_name: str = "EchterAlsFake"):
         super().__init__()
         global settings
-        settings = get_settings(portable=False) # At the first run, I assume the user goes for a portable install-type, however if the installation is called we need to switch that behaviour
+        settings = make_settings(portable=False) # At the first run, I assume the user goes for a portable install-type, however if the installation is called we need to switch that behaviour
 
         self.app_name = app_name
         self.app_id = app_id  # used for desktop file name, etc.
@@ -317,14 +212,14 @@ class InstallThread(QRunnable):
 
         # Install “payload” (binary + assets) into local app data:
         install_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
-        _mkpath(install_dir)
+        mkpath(install_dir)
 
 
         apps_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.ApplicationsLocation)
         if not apps_dir:
             # Rare, but some environments can return empty; keep a safe fallback.
             apps_dir = os.path.expanduser("~/.local/share/applications")
-        _mkpath(apps_dir)
+        mkpath(apps_dir)
 
         src_exe = get_original_executable_path()
         dst_exe = os.path.join(install_dir, filename)
@@ -338,7 +233,7 @@ find the real path of the extracted file from the main application.
 
 In short: You can't fix that, please report this!""")
 
-        _chmod_755(dst_exe)
+        chmod_755(dst_exe)
         icon_dst = os.path.join(install_dir, "logo.png")
         if not QFile.exists(icon_dst):
             QFile.copy(":/images/graphics/logo.png", icon_dst)
@@ -356,7 +251,7 @@ Terminal=false
 Categories=Utility;
 StartupNotify=true
 """
-        _write_text_atomic(desktop_path, entry)
+        write_text_atomic(desktop_path, entry)
 
         # Store “installed” flag using Qt settings
         settings = make_settings(portable=False)
@@ -377,14 +272,14 @@ StartupNotify=true
             filename = "PornFetch_Windows_GUI_arm64.bin"
 
         install_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
-        _mkpath(install_dir)
+        mkpath(install_dir)
 
         src_exe = filename
         if not os.path.exists(src_exe):
             raise RuntimeError(f"Missing installer payload: {src_exe}")
 
         dst_exe = os.path.join(install_dir, filename)
-        _move_or_copy(src_exe, dst_exe)
+        move_or_copy(src_exe, dst_exe)
 
         # Settings flag
         settings = make_settings(portable=False)
@@ -396,7 +291,7 @@ StartupNotify=true
         if not start_menu_dir:
             # Fallback (usually not needed)
             start_menu_dir = os.path.join(os.getenv("APPDATA"), "Microsoft", "Windows", "Start Menu", "Programs")
-        _mkpath(start_menu_dir)
+        mkpath(start_menu_dir)
 
         shortcut_path = os.path.join(start_menu_dir, f"{self.app_name}.lnk")
 
@@ -408,23 +303,6 @@ StartupNotify=true
         shortcut.Save()
 
         self.logger.info(f"Installed to {install_dir}, shortcut {shortcut_path}")
-
-
-def _safe_unlink(path: str):
-    """Delete a file if it exists (ignore missing)."""
-    try:
-        if path and os.path.isfile(path):
-            os.remove(path)
-    except FileNotFoundError:
-        pass
-
-def _safe_rmtree(path: str):
-    """Delete a directory tree if it exists (ignore missing)."""
-    try:
-        if path and os.path.isdir(path):
-            shutil.rmtree(path, ignore_errors=False)
-    except FileNotFoundError:
-        pass
 
 
 class UninstallThread(QRunnable):
@@ -498,7 +376,7 @@ class UninstallThread(QRunnable):
         desktop_path = os.path.join(apps_dir, f"{self.app_id}.desktop")
 
         # Remove desktop entry
-        _safe_unlink(desktop_path)
+        safe_unlink(desktop_path)
 
         # Remove payload files (best effort)
         if install_dir and os.path.isdir(install_dir):
@@ -507,7 +385,7 @@ class UninstallThread(QRunnable):
             # _safe_unlink(os.path.join(install_dir, "logo.png"))
 
             # or "hard" uninstall: remove the entire dir
-            _safe_rmtree(install_dir)
+            safe_rmtree(install_dir)
 
         # Clear settings keys / file
         self._clear_qt_settings()
@@ -528,7 +406,7 @@ class UninstallThread(QRunnable):
         shortcut_path = os.path.join(start_menu_dir, f"{self.app_name}.lnk")
 
         # Remove shortcut now (usually possible even while app runs)
-        _safe_unlink(shortcut_path)
+        safe_unlink(shortcut_path)
 
         # Clear settings first
         self._clear_qt_settings()
@@ -564,7 +442,7 @@ class UninstallThread(QRunnable):
                 fname = ""
 
             if fname and os.path.exists(fname):
-                _safe_unlink(fname)
+                safe_unlink(fname)
 
         except Exception as e:
             # Don't fail uninstall if settings cleanup fails
@@ -652,16 +530,20 @@ class InternetCheck(QRunnable):
 
         self.website_results = {}
         self.signals = Signals()
-        self.logger = shared_functions.setup_logger(name="Porn Fetch - [InternetCheck]", log_file="PornFetch.log", level=logging.DEBUG,
-                                   http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
+        self.logger = shared_functions.setup_logger(name="Porn Fetch - [InternetCheck]", log_file="PornFetch.log", level=logging.DEBUG)
+
+    @staticmethod
+    def origin(url: str) -> str:
+        p = urlsplit(url)
+        return f"{p.scheme}://{p.netloc}/"
 
     def run(self):
         for idx, website in enumerate(self.websites, start=1):
             try:
-                ref = shared_functions.origin(website)
+                ref = self.origin(website)
 
                 # DUMMY FIX: rebuild session with per-site headers
-                shared_functions.core_internet_checks.initialize_session(headers={
+                clients.core.initialize_session(headers={
                     "Referer": ref,
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                                   "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -671,9 +553,9 @@ class InternetCheck(QRunnable):
                 })
 
                 # Try HEAD first (lighter); some sites disallow HEAD -> fallback to GET
-                resp = shared_functions.core_internet_checks.session.head(website, timeout=10)
+                resp = clients.core.session.head(website, timeout=10)
                 if resp.status_code in (405, 501):  # method not allowed / not implemented
-                    resp = shared_functions.core_internet_checks.session.get(website, timeout=10)
+                    resp = clients.core.session.get(website, timeout=10)
 
                 if resp.status_code == 200:
                     self.logger.debug(f"Internet Check: {website} : OK")
@@ -692,14 +574,12 @@ class CheckUpdates(QRunnable):
     def __init__(self):
         super(CheckUpdates, self).__init__()
         self.signals = Signals()
-        self.logger = shared_functions.setup_logger(name="Porn Fetch - [CheckUpdates]", log_file="PornFetch.log", level=logging.DEBUG,
-                                   http_port=shared_functions.http_log_port, http_ip=shared_functions.http_log_ip)
+        self.logger = shared_functions.setup_logger(name="Porn Fetch - [CheckUpdates]", log_file="PornFetch.log", level=logging.DEBUG,)
 
     def run(self):
         url = f"https://echteralsfake.me/update"
-        return # Doesn't matter now
         try:
-            response = shared_functions.core_update_checks.fetch(url=url, get_response=True)
+            response = clients.core.fetch(url=url, get_response=True)
             if response.status_code == 200:
                 json_stuff = response.json()
                 if float(json_stuff["version"]) > float(__version__):
@@ -735,8 +615,7 @@ class AddToTreeWidget(QRunnable):
         self.result_limit = self.consistent_data.get("result_limit")
         self.supress_errors = self.consistent_data.get("supress_errors")
         self.activate_logging = self.consistent_data.get("activate_logging")
-        self.logger = shared_functions.setup_logger(name="Porn Fetch - [AddToTreeWidget]", log_file="PornFetch.log", level=logging.DEBUG,
-                                   http_port=shared_functions.http_log_port, http_ip=shared_functions.http_log_ip)
+        self.logger = shared_functions.setup_logger(name="Porn Fetch - [AddToTreeWidget]", log_file="PornFetch.log", level=logging.DEBUG)
 
     def process_video(self, video, index):
         if not isinstance(video, str):
@@ -757,8 +636,8 @@ class AddToTreeWidget(QRunnable):
                 session_urls.append(video.url)
                 title = data.get("title")
                 video_id = data.get("video_id")
-                stripped_title_1 = shared_functions.core.strip_title(title) # Clears special characters
-                stripped_title_2 = shared_functions.core.strip_title(title)
+                stripped_title_1 = clients.core.strip_title(title) # Clears special characters
+                stripped_title_2 = clients.core.strip_title(title)
 
                 if self.consistent_data.get("video_id_as_filename"):
                     stripped_title_1 = video_id # Only PornHub / EPorner / MissAV
@@ -915,8 +794,7 @@ class DownloadThread(QRunnable):
         self.quality = self.consistent_data.get("quality")
         data_object: dict = video_data.data_objects[self.video_id]
         self.output_path = data_object.get("output_path")
-        self.logger = shared_functions.setup_logger(name="Porn Fetch - [DownloadThread]", log_file="PornFetch.log", level=logging.DEBUG,
-                                   http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
+        self.logger = shared_functions.setup_logger(name="Porn Fetch - [DownloadThread]", log_file="PornFetch.log", level=logging.DEBUG)
 
         self.download_mode = self.consistent_data.get("download_mode")
         self.signals = Signals()
@@ -1051,7 +929,7 @@ class QTreeWidgetDownloadThread(QRunnable):
         self.quality = self.consistent_data.get("quality")
         self.semaphore = semaphore
         self.logger = shared_functions.setup_logger(name="Porn Fetch - [QTreeWidgetDownloadThread]", log_file="PornFetch.log",
-                                   level=logging.DEBUG, http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
+                                   level=logging.DEBUG)
 
     def run(self):
         self.signals.start_undefined_range.emit()
@@ -1106,8 +984,7 @@ class PornFetch(QMainWindow):
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.logger = shared_functions.setup_logger(name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG,
-                                   http_ip=shared_functions.http_log_ip, http_port=shared_functions.http_log_port)
+        self.logger = shared_functions.setup_logger(name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG)
 
         self.last_index = 0  # Keeps track of the last index of videos added to the tree widget
         self.kill_switch = False
@@ -1117,7 +994,7 @@ class PornFetch(QMainWindow):
         self.license = License(self.ui, self.initialize_pornfetch)
         self.disclaimer = Disclaimer(self.ui, self.initialize_pornfetch)
         self.ui.vbox_info.addWidget(PornFetchInfoWidget())
-        self.license_manager = LicenseManager(storage_path=_default_license_path(), public_key_b64=PUBLIC_KEY_B64)
+        self.license_manager = LicenseManager(storage_path=default_license_path(), public_key_b64=PUBLIC_KEY_B64)
         self.setup_license_restrictions()
 
         """
@@ -1731,7 +1608,7 @@ so after the application closes you can consider it uninstalled.
         core_conf.pages_concurrency = pages_concurrency
         core_conf.max_workers_download = download_workers
 
-        shared_functions.refresh_clients()
+        clients.refresh_clients()
         shared_functions.enable_logging()
 
     def save_user_settings(self):
@@ -1845,10 +1722,10 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         else:
             self.logger.info(f"Using Proxy -->: {proxy_input}")
             self.logger.info("Getting IP address without Proxy")
-            ip = shared_functions.core.fetch(url="https://httpbin.org/ip", get_response=True).json()["origin"]
+            ip = clients.core.fetch(url="https://httpbin.org/ip", get_response=True).json()["origin"]
             self.logger.info("Applying Proxy to all session objects...")
-            shared_functions.config.proxy = proxy_input
-            shared_functions.refresh_clients()
+            clients.config.proxy = proxy_input
+            clients.refresh_clients()
             self.logger.info(f"Unmasked IP is -->: {ip}")
             try:
                 ip_masked = shared_functions.core.fetch(url="https://httpbin.org/ip", get_response=True).json()["origin"]

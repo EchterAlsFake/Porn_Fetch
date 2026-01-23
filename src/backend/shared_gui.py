@@ -1,6 +1,6 @@
-from PySide6.QtGui import QFont, QPixmap
+from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QMainWindow, QMessageBox
-from src.backend.shared_functions import setup_config_file
+from src.backend.shared_functions import ensure_config_file
 from PySide6.QtCore import Signal, QObject, QCoreApplication
 
 
@@ -40,7 +40,7 @@ def ui_popup(text, title="Notice"):
 
 
 def reset_pornfetch():
-    setup_config_file(force=True)
+    ensure_config_file(force=True)
     ui_popup(QCoreApplication.translate("main", "Done! Please restart.", None))
 
 

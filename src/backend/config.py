@@ -16,19 +16,6 @@ __build__ = "desktop"  # android or desktop
 __author__ = "Johannes Habel"
 __next_release__ = "3.8"
 __type__ = "source"
-
-"""
-This stores some values that are shared between all files. One example is the http log IP and port. Please
-note that I only need this for Android development, as this is the only proper way of logging and debugging
-on Android.
-
-In a production release, these values will need consent of you, before logging is applied. Porn Fetch will never
-log to any server without your explicit consent.
-"""
-"""
-http_log_ip = "echteralsfake.me"
-http_log_port = 443
-"""
-
-http_log_ip = None
-http_log_port = None
+__bundle_id__ = "me.echteralsfake.pornfetch"
+__org__ = "EchterAlsFake"
+PUBLIC_KEY_B64 = 'zGUmG8Z5InvoYIwnIokQi+SysjEodvfP8kLoCur3KjM=' # This is the public key for the license verification

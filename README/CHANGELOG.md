@@ -608,10 +608,10 @@ to be refactored.
 - Added Model / Channel support for porntrex.com
 - Added Searching support for porntrex.com
 - Added support for xfreehd.com
+- Your configuration values are now saved after an update
 
 ### Bug Fixes
 - Fixed 403 missav error
-- 
 
 ### User Interface
 - Added Italian translations (Thanks: @FatalPuppet)

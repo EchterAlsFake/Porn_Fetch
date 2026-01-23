@@ -1,21 +1,9 @@
 #!/usr/bin/env python3
 """
-patch_app_bundle.py
+This script will basically generate the correct Info.plist file for macOS. The Info.plist file needs special
+changes like the public key for sparkle, version and bundle identifier and so on.
 
-Patch a macOS .app bundle (built by Nuitka or similar) with recommended Info.plist
-settings + Sparkle 2 keys.
-
-Usage example:
-  python3 patch_app_bundle.py \
-    --app "dist/Porn Fetch.app" \
-    --bundle-id "me.echteralsfake.pornfetch" \
-    --display-name "Porn Fetch" \
-    --short-version "2.1" \
-    --feed-url "https://echteralsfake.me/appcast.xml" \
-    --public-ed-key "haYqwZA03OrYQUrP0tBrBye6Sk+UXObkR+yb0rAK5TQ=" \
-    --sparkle-framework "/path/to/Sparkle.framework" \
-    --bridge-dylib "/path/to/sparkle_bridge.dylib" \
-    --adhoc-sign
+I could of course manually copy this each time, but why not using a script to make my life simpler yk
 """
 
 
@@ -24,6 +12,7 @@ import argparse
 import plistlib
 import subprocess
 from pathlib import Path
+from src.backend.config import __bundle_id__
 
 
 def load_plist(plist_path: Path) -> dict:
@@ -62,7 +51,7 @@ def run(cmd: list[str]) -> None:
 
 def main() -> None:
     app = "Porn Fetch.app"
-    bundle_id = "me.echteralsfake.pornfetch"
+    bundle_id = __bundle_id__
     display_name = "Porn Fetch"
     feed_url = "https://echteralsfake.me/appcast.xml"
     public_ed_key = "haYqwZA03OrYQUrP0tBrBye6Sk+UXObkR+yb0rAK5TQ="
@@ -127,16 +116,15 @@ def main() -> None:
     run(["/usr/bin/plutil", "-lint", str(plist_path)])
 
     print("\n✅ Patched Info.plist values:")
-    print(f"  CFBundleIdentifier           = {data.get('CFBundleIdentifier')}")
-    print(f"  CFBundleShortVersionString   = {data.get('CFBundleShortVersionString')}")
-    print(f"  CFBundleVersion              = {data.get('CFBundleVersion')}")
-    print(f"  SUFeedURL                    = {data.get('SUFeedURL')}")
-    print(f"  SUPublicEDKey                = {data.get('SUPublicEDKey')}")
-    print(f"  SUEnableAutomaticChecks      = {data.get('SUEnableAutomaticChecks')}")
-    print(f"  SUScheduledCheckInterval     = {data.get('SUScheduledCheckInterval')}")
-    print(f"  SUAllowsAutomaticUpdates     = {data.get('SUAllowsAutomaticUpdates')}")
-    print(f"  SUAutomaticallyUpdate        = {data.get('SUAutomaticallyUpdate')}")
-
+    print(f"CFBundleIdentifier           = {data.get('CFBundleIdentifier')}")
+    print(f"CFBundleShortVersionString   = {data.get('CFBundleShortVersionString')}")
+    print(f"CFBundleVersion              = {data.get('CFBundleVersion')}")
+    print(f"SUFeedURL                    = {data.get('SUFeedURL')}")
+    print(f"SUPublicEDKey                = {data.get('SUPublicEDKey')}")
+    print(f"SUEnableAutomaticChecks      = {data.get('SUEnableAutomaticChecks')}")
+    print(f"SUScheduledCheckInterval     = {data.get('SUScheduledCheckInterval')}")
+    print(f"SUAllowsAutomaticUpdates     = {data.get('SUAllowsAutomaticUpdates')}")
+    print(f"SUAutomaticallyUpdate        = {data.get('SUAutomaticallyUpdate')}")
 
 if __name__ == "__main__":
     main()
