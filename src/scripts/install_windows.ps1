@@ -287,7 +287,7 @@ Run uv "--color" "always" "venv" $venvDir "--python" "3.13"
 $env:UV_PROJECT_ENVIRONMENT = $venvDir
 
 Info "Syncing dependencies using uv (with --extra gui)..."
-Run uv "--color" "always" "sync" "--extra" "gui"
+Run uv "--color" "always" "sync" "--extra" "gui" "--extra" "av"
 
 # Activate the venv for update script convenience
 $activateScript = Join-Path $venvDir "Scripts\Activate.ps1"

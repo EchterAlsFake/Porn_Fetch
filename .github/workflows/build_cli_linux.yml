@@ -27,7 +27,7 @@ jobs:
 
       - name: Sync dependencies (uv)
         run: |
-          uv sync --extra cli
+          uv sync --extra cli --extra av
           uv pip install pyinstaller
 
       - name: Build Porn Fetch (CLI) (PyInstaller)

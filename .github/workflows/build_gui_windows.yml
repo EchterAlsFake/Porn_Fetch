@@ -27,7 +27,7 @@ jobs:
           enable-cache: true
 
       - name: Sync dependencies (uv)
-        run: uv sync --extra dev
+        run: uv sync --extra dev --extra av
 
       - name: Frontend update (Windows)
         shell: pwsh

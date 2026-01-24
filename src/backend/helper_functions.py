@@ -9,7 +9,7 @@ from PySide6.QtCore import QFile, QFileDevice, QIODevice, QDir, QSaveFile, QStan
 
 
 logger = setup_logger(name=".ff")
-# TODO
+
 
 def get_original_executable_path() -> str:
     """
@@ -23,28 +23,47 @@ def get_original_executable_path() -> str:
 
     # 1) Nuitka: best source for onefile
     try:
+        logger.debug("""
+Note:
+
+Since you are trying to install Porn Fetch, I am trying to get the path of Porn Fetch. When you run Porn Fetch,
+it will extract itself into a temporary path, however, that is the wrong thing here. I actually want the source executable,
+so basically the file you just clicked on. I will now try different things to get that...
+""")
+
+
         import __compiled__  # provided by Nuitka
         orig = getattr(__compiled__, "original_argv0", None)
         if orig and os.path.exists(orig):
+            logger.info(f"Successfully got path: {orig}")
             return os.path.realpath(orig)
+
+        logger.debug("Couldn't get executable from nuitka, trying second method...")
     except Exception:
         pass
 
     # 2) AppImage-style runtime env var (often set in onefile on Linux)
     appimage = os.environ.get("APPIMAGE")
     if appimage and os.path.exists(appimage):
+        logger.info(f"Successfully got path: {appimage}")
         return os.path.realpath(appimage)
 
+    else:
+        logger.warning("""Couldn't get executable path through nuitka nor appimage env.
+        Falling back to argv path, however, this may cause issues...""")
     # 3) Fallback: argv[0] (often the real onefile path)
     if sys.argv and os.path.exists(sys.argv[0]):
+        logger.info(f"Using path: {sys.argv} for the executable!")
         return os.path.realpath(sys.argv[0])
 
 
 def copy_overwrite_atomic(src: str, dst: str):
     os.makedirs(os.path.dirname(dst), exist_ok=True)
+    logger.debug(f"(probably) created directory: {dst}")
 
     tmp = dst + ".tmp"
     if os.path.exists(tmp):
+        logger.debug(f"Removed directory: {tmp}")
         os.remove(tmp)
 
     shutil.copy2(src, tmp)  # full binary-safe copy
@@ -95,10 +114,12 @@ def chmod_755(path: str) -> None:
         QFileDevice.Permission.ReadOther | QFileDevice.Permission.ExeOther
     )
     QFile.setPermissions(path, perms)
+    logger.debug(f"Applied 755 permissions to: {path}")
 
 
 def default_license_path() -> Path:
     cfg = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation)
+    logger.info(f"License path: {cfg}")
     return Path(cfg) / "porn_fetch.license"
 
 
@@ -107,6 +128,7 @@ def safe_unlink(path: str):
     try:
         if path and os.path.isfile(path):
             os.remove(path)
+            logger.info(f"Deleted file: {path}")
     except FileNotFoundError:
         pass
 
@@ -115,6 +137,7 @@ def safe_rmtree(path: str):
     try:
         if path and os.path.isdir(path):
             shutil.rmtree(path, ignore_errors=False)
+            logger.info(f"Deleted directory: {path}")
     except FileNotFoundError:
         pass
 
@@ -129,3 +152,5 @@ def normalized_arch() -> str:
     else:
         logger.warning(f"Couldn't normalize platform: {m}, please report this")
         return m
+
+# EOF

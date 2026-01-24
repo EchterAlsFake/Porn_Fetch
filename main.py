@@ -53,7 +53,7 @@ from src.backend.database import *
 from src.frontend.UI.ssl_warning import *
 from src.frontend.UI.ui_form_main_window import Ui_MainWindow
 from src.frontend.UI.theme import *
-from src.backend.config import __version__, __build__, PUBLIC_KEY_B64, shared_config
+from src.backend.config import __version__, PUBLIC_KEY_B64, shared_config
 from src.frontend.UI.pornfetch_info_dialog import PornFetchInfoWidget
 from src.backend.check_license import LicenseManager
 from src.frontend.UI.license import License, Disclaimer
@@ -323,7 +323,6 @@ class UninstallThread(QRunnable):
         global settings
         settings = make_settings(portable=False)
         self.app_name = settings.value("Misc/app_name")
-        print(f"Got Application name: {self.app_name}")
 
         self.app_id = app_id
         self.org_name = org_name
@@ -509,8 +508,6 @@ class AutoUpdatingThread(QRunnable):
 
     def run(self):
         ""
-
-
 
 
 class InternetCheck(QRunnable):
@@ -1222,19 +1219,17 @@ class PornFetch(QMainWindow):
         # --- misc you already had ---
         self.ui.treeWidget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
         self.ui.progress_gridlayout_progressbar.setAlignment(Qt.AlignmentFlag.AlignTop)
-
-        if __build__ == "desktop":
-            gv = self.ui.graphicsView
-            gv.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
-            gv.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-            gv.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-            self._scene = QGraphicsScene(self)
-            gv.setScene(self._scene)
-            self._pixmap_item = QGraphicsPixmapItem()
-            self._scene.addItem(self._pixmap_item)
-            self._full_pixmap = QPixmap()
-            gv.installEventFilter(self)
-            gv.viewport().installEventFilter(self)
+        gv = self.ui.graphicsView
+        gv.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+        gv.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        gv.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self._scene = QGraphicsScene(self)
+        gv.setScene(self._scene)
+        self._pixmap_item = QGraphicsPixmapItem()
+        self._scene.addItem(self._pixmap_item)
+        self._full_pixmap = QPixmap()
+        gv.installEventFilter(self)
+        gv.viewport().installEventFilter(self)
 
         self.header = self.ui.treeWidget.header()
         self.header.resizeSection(0, 300)
@@ -1263,49 +1258,6 @@ class PornFetch(QMainWindow):
         self.ui.settings_button_import_license.setStyleSheet(style)
 
         self.switch_to_download()
-
-    def uninstall_porn_fetch(self):
-        ui_popup(self.tr("""
-Important: 
-
-Porn Fetch will start uninstalling and thus deleting all of the settings, the shortcuts, icons, folders
-and the main file.
-
-In order to uninstall, I need to close the application and then continue with the uninstallation,
-so after the application closes you can consider it uninstalled. 
-"""))
-
-
-        self.uninstall_thread = UninstallThread()
-        self.threadpool.start(self.uninstall_thread)
-
-
-    def install_pornfetch(self):
-        app_name = self.ui.lineedit_custom_app_name.text() or self.ui.settings_lineedit_system_custom_app_name.text()
-        if app_name == "" or app_name is None:
-            self.logger.info("You did not provide a custom App name. Using 'Porn Fetch' for the installation.")
-            app_name = "Porn Fetch"
-
-        self.install_thread = InstallThread(app_name=app_name)
-        self.install_thread.signals.start_undefined_range.connect(self.start_undefined_range)
-        self.install_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
-        self.install_thread.signals.install_finished.connect(self.install_pornfetch_result)
-        self.threadpool.start(self.install_thread)
-
-    def install_porn_fetch_portable(self):
-        settings.setValue("Misc/install_type", "portable")
-        settings.sync()
-        self.switch_to_download()
-
-    def install_pornfetch_result(self, result):
-        if result[0]:
-            ui_popup(self.tr("Porn Fetch has been installed. The app will now close! Please start Porn Fetch from"
-                     " your context menu again.", disambiguation=None))
-
-            self.close()
-
-        else:
-            ui_popup(self.tr(f"Porn Fetch installation failed, because of: {result[1]}", disambiguation=None))
 
     def anonymous_mode(self):
         """
@@ -1393,6 +1345,42 @@ so after the application closes you can consider it uninstalled.
         self.ui.main_button_tree_keyboard_shortcuts.clicked.connect(self.switch_to_keyboard_shortcuts)
         self.ui.main_button_tree_automated_selection.clicked.connect(self.select_range_of_items)
         self.ui.settings_checkbox_system_proxy_kill_switch.toggled.connect(self.toggle_killswitch)
+
+    def initialize_pornfetch(self):
+        """
+        After all stylesheets and icons are loaded, this function will initiate the process for checking
+        if the License was shown and accepted, if the disclaimer text was shown, if the user downloaded the amount
+        of videos to show the sponsoring dialog and after all that switch to the main widget.
+        """
+        global FORCE_PORTABLE_RUN
+        settings.sync()
+        if not self.license.check_license():
+            self.switch_to_license()
+            return
+
+        if not self.disclaimer.check_disclaimer():
+            self.switch_to_disclaimer()
+            return
+
+        v = settings.value("Misc/first_run_gui")
+
+        first = settings.value("Misc/first_run_gui", True, type=bool)
+        if first:
+            settings.setValue("Misc/first_run_gui", False)
+            settings.sync()
+            self.switch_to_one_time_setup()
+            return
+
+        if not FORCE_PORTABLE_RUN:
+            if sys.platform == "darwin":
+                self.ui.CentralStackedWidget.setCurrentIndex(0)
+                return
+
+            if settings.value("Misc/install_type") == "unknown":
+                self.switch_to_install_dialog()
+                return
+
+        self.ui.CentralStackedWidget.setCurrentIndex(0)
 
     def info_dialog_enable_update(self):
         self.ui.settings_checkbox_system_enable_network_logging.setChecked(False)
@@ -1608,18 +1596,12 @@ so after the application closes you can consider it uninstalled.
         clients.config.raise_bot_protection = False
         clients.config.request_delay = network_delay
         clients.config.videos_concurrency = videos_concurrency
-        clients.config.core_conf.pages_concurrency = pages_concurrency
+        clients.config.pages_concurrency = pages_concurrency
         clients.config.max_workers_download = download_workers
-
         clients.refresh_clients()
 
     def save_user_settings(self):
-        print(f"In settings....")
-        print(id(settings))
-        print(settings.fileName())
-
         settings.sync()
-
 
         """Saves the user settings to the configuration file based on the UI state."""
         # --- Video ---
@@ -1762,7 +1744,6 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
                 self.proxy = proxy_input
                 return None
 
-
     def toggle_killswitch(self):
         if self.kill_switch:
             self.logger.info(f"Disabling Kill Switch for -->: {self.proxy}")
@@ -1782,48 +1763,6 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
     """
     These are the core functions of Porn Fetch outside of the UI stuff. They are used to process user input.
     """
-
-    def initialize_pornfetch(self):
-        """
-        After all stylesheets and icons are loaded, this function will initiate the process for checking
-        if the License was shown and accepted, if the disclaimer text was shown, if the user downloaded the amount
-        of videos to show the sponsoring dialog and after all that switch to the main widget.
-        """
-
-        print(id(settings))
-        print(settings.fileName())
-
-        global FORCE_PORTABLE_RUN
-        settings.sync()
-        if not self.license.check_license():
-            self.switch_to_license()
-            return
-
-        if not self.disclaimer.check_disclaimer():
-            self.switch_to_disclaimer()
-            return
-
-        v = settings.value("Misc/first_run_gui")
-        print(v, type(v))
-
-        first = settings.value("Misc/first_run_gui", True, type=bool)
-        if first:
-            print(f"It's true lol ")
-            settings.setValue("Misc/first_run_gui", False)
-            settings.sync()
-            self.switch_to_one_time_setup()
-            return
-
-        if not FORCE_PORTABLE_RUN:
-            if sys.platform == "darwin":
-                self.ui.CentralStackedWidget.setCurrentIndex(0)
-                return
-
-            if settings.value("Misc/install_type") == "unknown":
-                self.switch_to_install_dialog()
-                return
-
-        self.ui.CentralStackedWidget.setCurrentIndex(0)
 
     def start_single_video(self):
         """
@@ -2082,9 +2021,6 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         self.update_total_progressbar_range(1)
         self.update_total_progressbar(1)
 
-    def show_error(self, message):
-        ui_popup(text=message, title="Error")
-
     def download_tree_widget(self):
         """
         Starts the thread for downloading the tree widget (All selected videos)
@@ -2228,9 +2164,6 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
 
     def set_thumbnail(self, item_current: QTreeWidgetItem, item_previous=None): # Won's use the previous item
         """Replace your QLabel code with this, feeding the graphicsView."""
-
-        if __build__ == "android":
-            return
 
         if time.time() - self.last_thumbnail_change < 0.1: # Bypasses a bug where the function would be called 2 times always
             return
@@ -2585,6 +2518,47 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         layout.addWidget(view)
         dialog.setFixedSize(1280, 720)
         dialog.exec()
+
+    def uninstall_porn_fetch(self):
+        ui_popup(self.tr("""
+Important: 
+
+Porn Fetch will start uninstalling and thus deleting all of the settings, the shortcuts, icons, folders
+and the main file.
+
+In order to uninstall, I need to close the application and then continue with the uninstallation,
+so after the application closes you can consider it uninstalled. 
+"""))
+
+        self.uninstall_thread = UninstallThread()
+        self.threadpool.start(self.uninstall_thread)
+
+    def install_pornfetch(self):
+        app_name = self.ui.lineedit_custom_app_name.text() or self.ui.settings_lineedit_system_custom_app_name.text()
+        if app_name == "" or app_name is None:
+            self.logger.info("You did not provide a custom App name. Using 'Porn Fetch' for the installation.")
+            app_name = "Porn Fetch"
+
+        self.install_thread = InstallThread(app_name=app_name)
+        self.install_thread.signals.start_undefined_range.connect(self.start_undefined_range)
+        self.install_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
+        self.install_thread.signals.install_finished.connect(self.install_pornfetch_result)
+        self.threadpool.start(self.install_thread)
+
+    def install_porn_fetch_portable(self):
+        settings.setValue("Misc/install_type", "portable")
+        settings.sync()
+        self.switch_to_download()
+
+    def install_pornfetch_result(self, result):
+        if result[0]:
+            ui_popup(self.tr("Porn Fetch has been installed. The app will now close! Please start Porn Fetch from"
+                             " your context menu again.", disambiguation=None))
+
+            self.close()
+
+        else:
+            ui_popup(self.tr(f"Porn Fetch installation failed, because of: {result[1]}", disambiguation=None))
 
     def check_for_updates_result(self, success: bool, dictionary: dict):
         if success:

@@ -44,6 +44,10 @@ def reset_pornfetch():
     ui_popup(QCoreApplication.translate("main", "Done! Please restart.", None))
 
 
+def show_error(message):
+    ui_popup(text=message, title="Error")
+
+
 class Signals(QObject):
     """Signals for the Download class"""
     # Progress Signal

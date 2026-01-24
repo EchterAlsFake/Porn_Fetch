@@ -27,7 +27,7 @@ jobs:
 
       - name: Sync dependencies (uv)
         run: |
-          uv sync --extra dev
+          uv sync --extra dev --extra av
 
       - name: Frontend update (Linux)
         run: |

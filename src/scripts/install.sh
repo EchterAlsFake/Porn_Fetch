@@ -401,7 +401,7 @@ export UV_PROJECT_ENVIRONMENT="${VENV_DIR}"
 # Sync dependencies (GUI extra) with verbose output
 # ------------------------------------------------------------
 info "Syncing dependencies using uv (with --extra gui)..."
-run uv --color always sync --extra gui
+run uv --color always sync --extra gui --extra av
 
 # ------------------------------------------------------------
 # Build using pyside6-deploy (platform-aware)
