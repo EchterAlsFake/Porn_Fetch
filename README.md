@@ -1,10 +1,3 @@
-> [!IMPORTANT]
-> Porn Fetch will receive paid only features with a license system. Please join the [DISCUSSION](https://github.com/EchterAlsFake/Porn_Fetch/discussions/101), I'd like to know your ideas / feedback!
-
-# Rewrite 
-Okay, NO. I won't rewrite it in QML, instead I will learn Kotlin and make a seperate native Android App for Porn Fetch in Kotlin 🔥
-
-
 <div align = center>
 <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
 <br>
@@ -31,7 +24,7 @@ Okay, NO. I won't rewrite it in QML, instead I will learn Kotlin and make a sepe
 ---
 </div>
 
-[![Stop Scanning Me](https://stopscanningme.eu/img/organise/SSM_mailing-banner1.png)](https://stopscanningme.eu/)
+### #FreeHongKong
 
 > [!WARNING]
 > Porn Fetch is NOT associated with the websites. Porn Fetch is AGAINST the Terms of Services of EVERY website! Usage is on YOUR risk.
@@ -56,29 +49,25 @@ Okay, NO. I won't rewrite it in QML, instead I will learn Kotlin and make a sepe
 - [License](#-license)
 
 ## 🌟 Features
+- Cross-platform
 - Downloading Videos
 - Downloading Playlists
 - Downloading whole model / channel accounts
 - Searching for videos (and downloading them directly)
-- Downloading from a file
-- Optional account login
 - Multithreaded downloading
 - Dark mode and CLI support
 - No ads or mandatory logins
-- Cross-platform compatibility
-- Multiple supported websites
-- Multiple user interface languages
-- Native Android application (Only v3.6) 
+- Multiple supported websites 
 - modern looking user interface
 - Supports over 115 MB/s download speed thanks to well optimized HLS downloading
 - Proxy support
-- Model Batch download with database updating
-- Native macOS support
+- Model Batch download with database updating (CLI only)
 - A lot of available settings
 - In-App speed limit
 - Installation AND portable mode selectable
 - Automatic file tagging (metadata)
 - Automatic conversion from MPEG-TS to mp4 (within seconds)
+- 100% Open-Source, made with ❤️ in 🇩🇪
 
 ## Installation
 > [!IMPORTANT]
@@ -122,6 +111,15 @@ Okay, NO. I won't rewrite it in QML, instead I will learn Kotlin and make a sepe
 > Some might only support downloading, while others support searching
 
 ### You can find more information [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/WEBSITES.md)
+
+### For Developers
+If you want to develop on Porn Fetch and do local changes, contribute code or do whatever, please
+have a look at the internal code documentation which explains the core structure of the project,
+as well as the different concepts used here.
+
+See: https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/FOR_DEVELOPERS.md
+
+
 
 ## 🔨 Building from Source
 Building will be done through a fully automated script, that lets you select the version / commit to 
@@ -177,7 +175,6 @@ Invoke-Expression (Invoke-WebRequest -Uri https://raw.githubusercontent.com/Echt
 
 > [!CAUTION]
 > Translating is currently broken and I need to find a different method and completely refactor this. DO NOT translate anything, everything is outdated and you will waste your time!
-
 
 Currently available in:
 - German (3.0)
