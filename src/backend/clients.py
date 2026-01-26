@@ -337,6 +337,43 @@ def load_video_attributes(video):
     return data
 
 
+def download_android(url: str, downloader="threaded", quality="best", path="./", remux=False):
+    """
+    Downloads a video and reports progress back to Kotlin ProgressBridge.
+    Note: This is intended to be used by the Android App, NOT the main gui in `main.py` nor the CLI!
+    """
+    video = check_video(url)
+    if not video:
+        return False
+
+    from java import jclass
+    ProgressBridge = jclass("me.echteralsfake.pornfetch.ProgressBridge")
+
+    def cb(current, total):
+        try:
+            ProgressBridge.onProgress(int(current), int(total))
+        except Exception:
+            pass
+
+    if isinstance(video, ph_Video):
+        return video.download(
+            downloader=downloader,
+            quality=quality,
+            path=path,
+            display=cb,
+            remux=remux
+        )
+
+    else:
+        return video.download(
+            downloader=downloader,
+            quality=quality,
+            path=path,
+            callback=cb,
+            remux=remux
+        )
+
+
 def write_tags(path: str, data: dict):
     """
     Writes the tags of the video into the file. This needs a correct MP4 header either from a remuxed mpeg-ts stream
