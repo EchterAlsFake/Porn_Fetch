@@ -1,8 +1,8 @@
 # v3.8
 
 - [x] Switching environment managing to `uv`
-- [] Excluding core functions from GUI to separate files
-- [] Refactoring core logic to be easier used across different files
+- [x] Excluding core functions from GUI to separate files
+- [x] Refactoring core logic to be easier used across different files
 - [] Refactoring code in general and simplifying / optimizing things
 - [] Changing the GUI to a true dark mode themed version
 - [] Changing different GUI elements to be more intuitive 

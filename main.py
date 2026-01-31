@@ -1,5 +1,5 @@
 """
-Copyright (C) 2023-2025 Johannes Habel
+Copyright (C) 2023-2026 Johannes Habel
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -27,6 +27,62 @@ if sys.platform == "darwin":
     from src.backend.macos_setup import macos_setup, SparkleUpdater
     macos_setup()
 
+
+# General imports
+import time
+import os.path
+import argparse
+import markdown
+import tempfile
+import webbrowser
+import subprocess
+import src.frontend.UI.resources
+
+from threading import Event, Lock
+from itertools import islice, chain
+from typing import Callable
+from urllib.parse import urlsplit
+
+# Backend imports
+from src.backend import clients # Singleton instance for the client objects (really important)
+from src.backend.database import *
+from src.backend.shared_gui import *
+from src.backend.shared_functions import *
+from src.backend.helper_functions import *
+from src.backend.check_license import LicenseManager
+import src.backend.shared_functions as shared_functions
+from src.backend.config import __version__, PUBLIC_KEY_B64, shared_config
+
+# Frontend imports
+from src.frontend.UI.ssl_warning import *
+from src.frontend.UI.ui_form_main_window import Ui_MainWindow
+from src.frontend.UI.theme import *
+from src.frontend.UI.pornfetch_info_dialog import PornFetchInfoWidget
+from src.frontend.UI.license import License, Disclaimer
+
+
+# Qt / PySide6 related imports
+from PySide6.QtGui import QIcon, QFontDatabase, QPixmap, QShortcut, QKeySequence, QPainter
+from PySide6.QtCore import (QTextStream, QRunnable, QThreadPool, QSemaphore, Qt, QLocale, QSize, QEvent, QRectF,
+                            QTranslator, QCoreApplication, QByteArray, QStandardPaths, QSettings)
+from PySide6.QtWidgets import (QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QComboBox, QLabel,
+                               QInputDialog, QMainWindow, QProgressBar, QGraphicsPixmapItem, QDialog, QVBoxLayout,
+                               QGraphicsScene, QGraphicsView)
+
+# Errors from different APIs
+from phub import errors as ph_errors
+from xnxx_api.modules.errors import InvalidResponse
+from phub.errors import VideoError as VideoError_PH
+from base_api.modules.errors import ProxySSLError, InvalidProxy
+from xvideos_api.modules.errors import (VideoUnavailable as VideoUnavailable_XV)
+from eporner_api.modules.errors import NotAvailable as NotAvailable_EP, VideoDisabled as VideoDisabled_EP
+from youporn_api.modules.errors import VideoUnavailable as VideoUnavailable_YP, RegionBlocked as RegionBlocked_YP
+from hqporner_api.modules.errors import InvalidActress as InvalidActress_HQ, NoVideosFound, NotAvailable as NotAvailable_HQ, WeirdError as WeirdError_HQ
+
+# Other
+from eporner_api.modules.locals import Category as ep_Category
+from hqporner_api.api import Sort as hq_Sort
+
 try:
     from av import open as av_open  # Don't ask
     from av.audio.resampler import AudioResampler  # Don't ask
@@ -35,58 +91,6 @@ try:
 except Exception:
     FORCE_DISABLE_AV = True
 
-
-import time
-import os.path
-import argparse
-import webbrowser
-import markdown
-import tempfile
-import subprocess
-import src.frontend.UI.resources
-import src.backend.shared_functions as shared_functions
-
-from threading import Event, Lock
-from itertools import islice, chain
-from src.backend.shared_gui import *
-from src.backend.database import *
-from src.frontend.UI.ssl_warning import *
-from src.frontend.UI.ui_form_main_window import Ui_MainWindow
-from src.frontend.UI.theme import *
-from src.backend.config import __version__, PUBLIC_KEY_B64, shared_config
-from src.frontend.UI.pornfetch_info_dialog import PornFetchInfoWidget
-from src.backend.check_license import LicenseManager
-from src.frontend.UI.license import License, Disclaimer
-from src.backend.shared_functions import *
-from phub import errors as ph_errors
-
-from src.backend import clients # Singleton instance for the client objects (really important)
-from urllib.parse import urlsplit
-
-
-from src.backend.helper_functions import *
-from hqporner_api.api import Sort as hq_Sort
-
-
-from PySide6.QtCore import (QTextStream, QRunnable, QThreadPool, QSemaphore, Qt, QLocale,
-                            QTranslator, QCoreApplication, QSize, QEvent, QRectF, QByteArray, QStandardPaths,
-                            QSettings)
-from PySide6.QtWidgets import (QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, \
-                               QInputDialog, QMainWindow, QLabel, QProgressBar, QGraphicsPixmapItem, QDialog, QVBoxLayout,
-                               QGraphicsScene, QGraphicsView, QComboBox)
-from PySide6.QtGui import QIcon, QFontDatabase, QPixmap, QShortcut, QKeySequence, QPainter
-
-# Possible errors from APIs
-from base_api.modules.errors import ProxySSLError, InvalidProxy
-from xnxx_api.modules.errors import InvalidResponse
-from hqporner_api.modules.errors import (InvalidActress as InvalidActress_HQ, NoVideosFound,
-                                         NotAvailable as NotAvailable_HQ, WeirdError as WeirdError_HQ)
-from xvideos_api.modules.errors import (VideoUnavailable as VideoUnavailable_XV)
-from eporner_api.modules.errors import NotAvailable as NotAvailable_EP, VideoDisabled as VideoDisabled_EP
-from youporn_api.modules.errors import VideoUnavailable as VideoUnavailable_YP, RegionBlocked as RegionBlocked_YP
-from phub.errors import VideoError as VideoError_PH
-from eporner_api.modules.locals import Category as ep_Category
-from typing import Callable
 
 FORCE_PORTABLE_RUN = False
 total_segments = 0
@@ -1134,7 +1138,6 @@ class PornFetch(QMainWindow):
             self.ui.main_button_switch_tools,
             self.ui.main_button_switch_settings,
             self.ui.main_button_switch_credits,
-            #self.ui.main_button_switch_batch, (Not implemented yet)
             self.ui.main_button_view_progress_bars,
         ]
         group_menu_bar = QButtonGroup(self)

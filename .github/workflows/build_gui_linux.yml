@@ -33,7 +33,11 @@ jobs:
         run: |
           cd src/frontend
           bash update.sh
+          cd ../
+          cd scripts
+          uv run patch.py
           cd ../../
+          
 
       - name: Build GUI (Linux x64) (pyside6-deploy)
         run: |

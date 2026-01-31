@@ -39,6 +39,13 @@ jobs:
             Pop-Location
           }
 
+          Push-Location "src\scripts"
+          try {
+            uv run patch.py
+          } finally {
+            Pop-Location
+          }
+
       - name: Build GUI (Windows ARM64) (pyside6-deploy)
         shell: pwsh
         run: |

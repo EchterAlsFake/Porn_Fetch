@@ -38,6 +38,13 @@ jobs:
           } finally {
             Pop-Location
           }
+          
+          Push-Location "src\scripts"
+          try {
+            uv run patch.py
+          } finally {
+            Pop-Location
+          }
 
       - name: Build GUI (Windows x64) (pyside6-deploy)
         shell: pwsh
