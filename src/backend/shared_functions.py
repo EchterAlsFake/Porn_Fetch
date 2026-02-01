@@ -75,7 +75,6 @@ DEFAULTS: dict[str, dict[str, Any]] = {
         "license_accepted": False,
         "install_type": "unknown",
         "update_checks": True,
-        "internet_checks": True,
         "anonymous_mode": False,
         "disclaimer_shown": False,
         "network_logging": False,

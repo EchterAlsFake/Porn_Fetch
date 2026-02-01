@@ -51,7 +51,7 @@ from src.backend.shared_functions import *
 from src.backend.helper_functions import *
 from src.backend.check_license import LicenseManager
 import src.backend.shared_functions as shared_functions
-from src.backend.config import __version__, PUBLIC_KEY_B64, shared_config
+from src.backend.config import __version__, PUBLIC_KEY_B64, shared_config, IS_SOURCE_RUN
 
 # Frontend imports
 from src.frontend.UI.ssl_warning import *
@@ -514,65 +514,6 @@ class AutoUpdatingThread(QRunnable):
         ""
 
 
-class InternetCheck(QRunnable):
-    def __init__(self):
-        super(InternetCheck, self).__init__()
-        self.websites = [
-            "https://www.pornhub.com",
-            "https://www.hqporner.com",
-            "https://www.xvideos.com",
-            "https://www.xnxx.com",
-            "https://www.missav.ws",
-            "https://www.xhamster.com",
-            "https://www.spankbang.com",
-            "https://www.youporn.com",
-            "https://www.beeg.com",
-            "https://www.porntrex.com",
-            "https://www.xfreehd.com"
-            # Append new URLs here
-        ]
-
-        self.website_results = {}
-        self.signals = Signals()
-        self.logger = shared_functions.setup_logger(name="Porn Fetch - [InternetCheck]", log_file="PornFetch.log", level=logging.DEBUG)
-
-    @staticmethod
-    def origin(url: str) -> str:
-        p = urlsplit(url)
-        return f"{p.scheme}://{p.netloc}/"
-
-    def run(self):
-        for idx, website in enumerate(self.websites, start=1):
-            try:
-                ref = self.origin(website)
-
-                # DUMMY FIX: rebuild session with per-site headers
-                clients.core.initialize_session(headers={
-                    "Referer": ref,
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                                  "AppleWebKit/537.36 (KHTML, like Gecko) "
-                                  "Chrome/139.0.0.0 Safari/537.36",
-                    "Accept-Language": "en-US,en;q=0.9",
-                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                })
-
-                # Try HEAD first (lighter); some sites disallow HEAD -> fallback to GET
-                resp = clients.core.session.head(website, timeout=10)
-                if resp.status_code in (405, 501):  # method not allowed / not implemented
-                    resp = clients.core.session.get(website, timeout=10)
-
-                if resp.status_code == 200:
-                    self.logger.debug(f"Internet Check: {website} : OK")
-                    self.website_results[website] = "OK"
-                elif resp.status_code == 404 and website != "https://www.missav.ws":
-                    self.website_results[website] = "Failed, website doesn't exist? Please report this error"
-
-            except Exception:
-                # swallow per your current behavior
-                pass
-
-        self.signals.internet_check.emit(self.website_results)
-
 
 class CheckUpdates(QRunnable):
     def __init__(self):
@@ -586,8 +527,10 @@ class CheckUpdates(QRunnable):
             response = clients.core.fetch(url=url, get_response=True)
             if response.status_code == 200:
                 json_stuff = response.json()
-                if float(json_stuff["version"]) > float(__version__):
-                    self.logger.info(f"A new update is available -->: {json_stuff['version']}")
+                version = str(json_stuff["version"]).strip("latest - ")
+
+                if float(version) > float(__version__):
+                    self.logger.info(f"A new update is available -->: {version}")
                     self.signals.update_check.emit(True, json_stuff)
 
                 else:
@@ -1033,10 +976,6 @@ class PornFetch(QMainWindow):
         self.logger.debug("Startup: [4/5] Loaded the user settings")
         self.progress_widgets = {}  # video_id -> {'label': QLabel, 'progressbar': QProgressBar}
 
-        if video_data.consistent_data.get("internet_checks"):
-            self.logger.info("Running internet checks")
-            self.check_internet()
-
         if video_data.consistent_data.get("update_checks"):
             self.logger.info("Running update checks")
             self.check_for_updates()
@@ -1365,13 +1304,21 @@ class PornFetch(QMainWindow):
             self.switch_to_disclaimer()
             return
 
-        v = settings.value("Misc/first_run_gui")
-
         first = settings.value("Misc/first_run_gui", True, type=bool)
         if first:
             settings.setValue("Misc/first_run_gui", False)
             settings.sync()
             self.switch_to_one_time_setup()
+
+            ui_popup("""
+Warning:
+
+You are using Porn Fetch from the latest source code. This can cause weird behaviour or other issues.
+Do not report issues when using Porn Fetch from source code.
+
+You have all paid features unlocked :)
+""")
+
             return
 
         if not FORCE_PORTABLE_RUN:
@@ -1465,9 +1412,11 @@ class PornFetch(QMainWindow):
 
     def load_user_settings(self):
         settings.sync()
+        license_ok = self.license_manager.has_feature("full_unlock")
+
         # --- Video ---
         _quality = settings.value("Video/quality", 0, int)
-        if _quality <= 5 and not self.license_manager.has_feature("full_unlock"):
+        if _quality <= 5 and not (license_ok or IS_SOURCE_RUN):
             ui_popup("Warning! You have selected (somehow) a higher quality than 720p. You need a license to unlock it. Please go into the settings to get and import one...")
             _quality = 6 # Correcting back to 720p
 
@@ -1517,7 +1466,7 @@ class PornFetch(QMainWindow):
 
         simultaneous_downloads = settings.value("Performance/semaphore", 2, int)
 
-        if int(simultaneous_downloads) > 1 and not self.license_manager.has_feature("full_unlock"):
+        if int(simultaneous_downloads) > 1 and not (license_ok or IS_SOURCE_RUN):
             ui_popup("Warning! You have selected (somehow) a higher amount of parallel downloads than you are supposed to. You need a license to unlock it. Please go into the settings to get and import one...")
             simultaneous_downloads = 1 # Correcting back to 720p
 
@@ -1560,10 +1509,6 @@ class PornFetch(QMainWindow):
         update_checks = settings.value("Misc/update_checks", True, bool)
         video_data.consistent_data.update({"update_checks": update_checks})
         self.ui.settings_checkbox_system_update_checks.setChecked(update_checks)
-
-        internet_checks = settings.value("Misc/internet_checks", True, bool)
-        video_data.consistent_data.update({"internet_checks": internet_checks})
-        self.ui.settings_checkbox_system_internet_checks.setChecked(internet_checks)
 
         anonymous_mode = settings.value("Misc/anonymous_mode", False, bool)
         self._anonymous_mode = anonymous_mode
@@ -1638,7 +1583,6 @@ class PornFetch(QMainWindow):
         # --- Misc/System ---
         settings.beginGroup("Misc")
         settings.setValue("update_checks", self.ui.settings_checkbox_system_update_checks.isChecked())
-        settings.setValue("internet_checks", self.ui.settings_checkbox_system_internet_checks.isChecked())
         settings.setValue("anonymous_mode", self.ui.settings_checkbox_system_enable_anonymous_mode.isChecked())
         settings.setValue("supress_errors", self.ui.settings_checkbox_system_supress_errors.isChecked())
         settings.setValue("network_logging", self.ui.settings_checkbox_system_enable_network_logging.isChecked())
@@ -2688,30 +2632,8 @@ so after the application closes you can consider it uninstalled.
             self.ui.settings_spinbox_performance_simultaneous_downloads.setMaximum(1)
 
     def setup_license_restrictions(self):
-        has_license = self.license_manager.has_feature("full_unlock")
+        has_license = self.license_manager.has_feature("full_unlock") or IS_SOURCE_RUN
         self.apply_license_state(combo = self.ui.settings_video_combobox_quality, has_license=has_license)
-
-    def check_internet(self):
-        """Checks if the porn sites are accessible"""
-        self.internet_check_thread = InternetCheck()
-        self.internet_check_thread.signals.internet_check.connect(self.internet_check_result)
-        self.threadpool.start(self.internet_check_thread)
-
-    def internet_check_result(self, results: dict):
-        show = False
-        formatted_results = ""
-
-        for website, status in results.items():
-            if status != "OK":
-                formatted_results += f"{website} -->: {status}\n\n"
-                show = True
-
-        if show:
-            ui_popup(self.tr(f"""
-! Warning !
-Some websites couldn't be accessed. Here's a detailed report:
-------------------------------------------------------------
-{formatted_results}"""))
 
 
 def main(args: argparse.Namespace):
@@ -2725,6 +2647,7 @@ def main(args: argparse.Namespace):
         FORCE_PORTABLE_RUN = True
 
     # TODO: ensure config file
+    ensure_config_file()
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
     conf.read("config.ini")

@@ -1,8 +1,10 @@
 # pornfetch_info_dialog.py
-# Refactored info widget (PySide6): higher-contrast dark theme with violet accents,
-# orange reserved for legal/disclaimer callouts, improved readability, and tighter layout.
+# Refactored info widget (PySide6): clearer section hierarchy with accent rails + number pills,
+# refined borders/contrast, and added a dedicated Disclaimer section (orange/legal).
 
 from __future__ import annotations
+
+import re
 
 from PySide6.QtCore import Qt, QUrl
 from PySide6.QtGui import QFont, QDesktopServices
@@ -92,11 +94,26 @@ class _Card(QFrame):
 
 
 class _Section(QFrame):
-    """Section with a title bar and body; keeps spacing tight to avoid wasted room."""
+    """
+    Section with a title bar and body.
 
-    def __init__(self, title: str, *, object_name: str = "SectionCard", parent: QWidget | None = None):
+    - Adds an accent "rail" (left colored stripe) and a number "pill" if the title starts with `N)`.
+    - Accent is controlled via dynamic property `accent`: neutral | violet | orange
+    """
+
+    _re_num = re.compile(r"^\s*(\d+)\)\s*(.+)$")
+
+    def __init__(
+        self,
+        title: str,
+        *,
+        accent: str = "neutral",
+        object_name: str = "SectionCard",
+        parent: QWidget | None = None,
+    ):
         super().__init__(parent)
         self.setObjectName(object_name)
+        self.setProperty("accent", accent)
         self.setFrameShape(QFrame.Shape.NoFrame)
 
         outer = QVBoxLayout(self)
@@ -105,15 +122,40 @@ class _Section(QFrame):
 
         bar = QFrame()
         bar.setObjectName("SectionTitleBar")
+        bar.setProperty("accent", accent)
+
         bar_l = QHBoxLayout(bar)
         bar_l.setContentsMargins(10, 8, 10, 8)
         bar_l.setSpacing(8)
-        bar_l.addWidget(_label(title, bold=True, size_pt=SECTION_TITLE_PT, rich=False, selectable=False), 1)
+
+        # Accent rail
+        rail = QFrame()
+        rail.setObjectName("SectionAccent")
+        rail.setProperty("accent", accent)
+        rail.setFixedWidth(8)
+        rail.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
+        bar_l.addWidget(rail, 0)
+
+        # Optional number pill
+        m = self._re_num.match(title)
+        if m:
+            num, rest = m.group(1), m.group(2)
+
+            pill = _label(num, bold=True, size_pt=10.5, rich=False, selectable=False, object_name="SectionPill")
+            pill.setProperty("accent", accent)
+            pill.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            pill.setFixedWidth(30)
+            bar_l.addWidget(pill, 0)
+
+            bar_l.addWidget(_label(rest, bold=True, size_pt=SECTION_TITLE_PT, rich=False, selectable=False), 1)
+        else:
+            bar_l.addWidget(_label(title, bold=True, size_pt=SECTION_TITLE_PT, rich=False, selectable=False), 1)
+
         outer.addWidget(bar)
 
         body = QWidget()
         body_l = QVBoxLayout(body)
-        body_l.setContentsMargins(10, 8, 10, 10)
+        body_l.setContentsMargins(12, 10, 12, 12)
         body_l.setSpacing(9)
         outer.addWidget(body)
 
@@ -148,17 +190,17 @@ class PornFetchInfoWidget(QWidget):
         scroll.setWidget(content)
 
         layout = QVBoxLayout(content)
-        layout.setContentsMargins(8, 8, 8, 8)  # tight outer padding (no wasted margins)
-        layout.setSpacing(10)
+        layout.setContentsMargins(10, 10, 10, 10)  # slightly more breathing room
+        layout.setSpacing(12)
 
         # --- Header ---
-        header = _Card("HeaderCard", padding=12)
+        header = _Card("HeaderCard", padding=14)
         header.layout_.setSpacing(6)
         header.layout_.addWidget(_label("Welcome", bold=True, size_pt=HERO_PT, rich=False, selectable=False))
 
         header.layout_.addWidget(
             _label(
-                "<div style='line-height:140%'>"
+                "<div style='line-height:145%'>"
                 "Please read the information below carefully. It explains the basics of "
                 "<b>Porn Fetch</b>, paid features, data collection, supported features, and legal aspects."
                 "</div>"
@@ -167,12 +209,14 @@ class PornFetchInfoWidget(QWidget):
         layout.addWidget(header)
 
         # --- Important callout ---
-        important = _Card("CalloutImportant", padding=10)
+        important = _Card("CalloutImportant", padding=12)
         important.layout_.setSpacing(6)
-        important.layout_.addWidget(_label("Important", bold=True, size_pt=CALLOUT_TITLE_PT, color="#C4B5FD", rich=False, selectable=False))
+        important.layout_.addWidget(
+            _label("Important", bold=True, size_pt=CALLOUT_TITLE_PT, color="#C4B5FD", rich=False, selectable=False)
+        )
         important.layout_.addWidget(
             _label(
-                "<div style='line-height:145%'>"
+                "<div style='line-height:150%'>"
                 "The following information is <b>very important</b>, so please read through it. "
                 "After reading, select your options below."
                 "</div>"
@@ -181,17 +225,17 @@ class PornFetchInfoWidget(QWidget):
         layout.addWidget(important)
 
         # --- 1) Data Collection ---
-        s1 = _Section("1) Data Collection")
+        s1 = _Section("1) Data Collection", accent="neutral")
         s1.body_layout.addWidget(
             _label(
-                "<div style='line-height:145%'>"
+                "<div style='line-height:150%'>"
                 "<b>Porn Fetch does NOT send any data to third-party services</b> unless you explicitly agree to it."
                 "</div>"
             )
         )
         s1.body_layout.addWidget(
             _label(
-                "<div style='line-height:145%'>"
+                "<div style='line-height:150%'>"
                 "Porn Fetch includes an <b>optional automatic error reporting</b> feature. "
                 "If enabled, errors are sent to my own server (running 24/7 at home on Arch Linux)."
                 "</div>"
@@ -201,7 +245,7 @@ class PornFetchInfoWidget(QWidget):
         s1.body_layout.addWidget(self._bullets(["Python traceback", "Timestamp", "Porn Fetch version", "Your Operating System"]))
         s1.body_layout.addWidget(
             _label(
-                "<div style='line-height:145%'>"
+                "<div style='line-height:150%'>"
                 "You can also send feedback directly using the same scheme. This is <b>completely optional</b> and "
                 "has <b>no effect</b> on how you can use Porn Fetch. Sent error/feedback messages are deleted from my "
                 "server with each new version release."
@@ -211,7 +255,7 @@ class PornFetchInfoWidget(QWidget):
         layout.addWidget(s1)
 
         # --- 2) Paid Features ---
-        s2 = _Section("2) Paid Features", object_name="SectionCardPaid")
+        s2 = _Section("2) Paid Features", accent="violet", object_name="SectionCardPaid")
         s2.body_layout.addWidget(_label("Some features of Porn Fetch are <b>paid-only</b>, including:"))
         s2.body_layout.addWidget(
             self._bullets(
@@ -228,7 +272,7 @@ class PornFetchInfoWidget(QWidget):
         s2.body_layout.addWidget(self._license_callout())
         s2.body_layout.addWidget(
             _label(
-                "<div style='line-height:145%'>"
+                "<div style='line-height:150%'>"
                 "Alternatively, you can contribute <b>code</b> or <b>translations</b> to Porn Fetch to get a license. "
                 "You can also run Porn Fetch from source to unlock everything."
                 "</div>"
@@ -237,24 +281,24 @@ class PornFetchInfoWidget(QWidget):
         layout.addWidget(s2)
 
         # --- 3) Is it legal? ---
-        s3 = _Section("3) Is it legal?")
+        s3 = _Section("3) Is it legal?", accent="orange")
         s3.body_layout.addWidget(
             _label(
-                "<div style='line-height:145%'>"
+                "<div style='line-height:150%'>"
                 "Generally, <b>yes</b>—in terms of the law and DMCA it is legal, unless you download copyrighted content "
                 "<b>and redistribute it</b> or use it commercially. If you only use the content for private purposes this is typically fine."
                 "</div>"
             )
         )
 
-        warning = _Card("CalloutWarning", padding=10)
+        warning = _Card("CalloutWarning", padding=12)
         warning.layout_.setSpacing(6)
         warning.layout_.addWidget(
             _label("Terms of Service notice", bold=True, size_pt=CALLOUT_TITLE_PT, color="#FDBA74", rich=False, selectable=False)
         )
         warning.layout_.addWidget(
             _label(
-                "<div style='line-height:150%'>"
+                "<div style='line-height:155%'>"
                 "Web scraping and automation may still violate website Terms of Service. Sites can ban accounts, block IPs, "
                 "or (in rare cases) take legal action if you disrupt their services. This is <b>very unlikely</b> unless "
                 "you download extreme volumes (e.g., 1000+ videos/day)."
@@ -264,8 +308,22 @@ class PornFetchInfoWidget(QWidget):
         s3.body_layout.addWidget(warning)
         layout.addWidget(s3)
 
+        # --- Disclaimer (NEW) ---
+        s_disclaimer = _Section("Disclaimer", accent="orange", object_name="SectionCardDisclaimer")
+        s_disclaimer.body_layout.addWidget(
+            _label(
+                "<div style='line-height:155%'>"
+                "Porn Fetch can and will never support downloading paid content from premium sites like Brazzers, BangBros or other networks. "
+                "Premium content from free sites such as PornHub Premium and XVideos Red are also NOT supported, even if you login with your account."
+                "<br><br>"
+                "Porn Fetch is not made to steal copyright protected content"
+                "</div>"
+            )
+        )
+        layout.addWidget(s_disclaimer)
+
         # --- 4) Supported Features ---
-        s4 = _Section("4) Supported Features")
+        s4 = _Section("4) Supported Features", accent="violet")
         s4.body_layout.addWidget(_label("Porn Fetch in general supports:"))
         s4.body_layout.addWidget(
             self._bullets(
@@ -281,7 +339,7 @@ class PornFetchInfoWidget(QWidget):
         )
         s4.body_layout.addWidget(
             _label(
-                "<div style='line-height:145%'>"
+                "<div style='line-height:150%'>"
                 "For info dedicated to the actually supported sites, please click on the <b>Supported Websites</b> button "
                 "after you have continued with this dialog."
                 "</div>"
@@ -290,10 +348,10 @@ class PornFetchInfoWidget(QWidget):
         layout.addWidget(s4)
 
         # --- 5) How it works ---
-        s5 = _Section("5) How it works")
+        s5 = _Section("5) How it works", accent="neutral")
         s5.body_layout.addWidget(
             _label(
-                "<div style='line-height:145%'>"
+                "<div style='line-height:150%'>"
                 "Porn Fetch uses <b>web scraping</b> to fetch videos and extract useful information from their HTML / JavaScript. "
                 "That means Porn Fetch mimics your browser. This works great in most cases, but if the website changes something "
                 "then it breaks functionality and I need to make an update."
@@ -302,7 +360,7 @@ class PornFetchInfoWidget(QWidget):
         )
         s5.body_layout.addWidget(
             _label(
-                "<div style='line-height:145%'>"
+                "<div style='line-height:150%'>"
                 "Porn Fetch explicitly ONLY works for the given supported list of websites. This is <b>NOT</b> a yt-dlp wrapper! "
                 "After fetching a video the HLS URL that contains the segments is extracted and those are downloaded to your PC "
                 "and converted into one file."
@@ -310,12 +368,12 @@ class PornFetchInfoWidget(QWidget):
             )
         )
 
-        note = _Card("CalloutNote", padding=10)
+        note = _Card("CalloutNote", padding=12)
         note.layout_.setSpacing(6)
         note.layout_.addWidget(_label("Note", bold=True, size_pt=CALLOUT_TITLE_PT, color="#E5E7EB", rich=False, selectable=False))
         note.layout_.addWidget(
             _label(
-                "<div style='line-height:150%'>"
+                "<div style='line-height:155%'>"
                 "Porn Fetch is in no way a perfect software. Don't expect everything to work here all the time — "
                 "I am working on this in my absolute free time after school."
                 "</div>"
@@ -345,7 +403,7 @@ class PornFetchInfoWidget(QWidget):
             dot = _label("•", rich=False, selectable=False, object_name="BulletDot")
             dot.setFixedWidth(14)
 
-            txt = _label(f"<div style='line-height:140%'>{it}</div>" if rich else it, rich=rich)
+            txt = _label(f"<div style='line-height:145%'>{it}</div>" if rich else it, rich=rich)
             row.addWidget(dot, 0)
             row.addWidget(txt, 1)
             l.addLayout(row)
@@ -370,7 +428,7 @@ class PornFetchInfoWidget(QWidget):
 
         card.layout_.addWidget(
             _label(
-                "<div style='line-height:150%'>"
+                "<div style='line-height:155%'>"
                 "<b>One-time purchase:</b> <span style='opacity:0.95'>5€</span> — "
                 "unlimited activations, valid forever, offline activation."
                 "</div>"
@@ -385,7 +443,7 @@ class PornFetchInfoWidget(QWidget):
 
         card.layout_.addWidget(
             _label(
-                "<div style='line-height:150%'>"
+                "<div style='line-height:155%'>"
                 "If the link doesn't open, copy it and open it manually."
                 "</div>",
                 size_pt=SMALL_PT,
@@ -429,7 +487,7 @@ class PornFetchInfoWidget(QWidget):
         self.setStyleSheet(r"""
         QWidget#PornFetchInfoRoot {
             background: #05040B;
-            color: #F5F3FF;
+            color: #EDE9FE;
             font-size: 11pt;
         }
 
@@ -444,6 +502,7 @@ class PornFetchInfoWidget(QWidget):
         QFrame#CalloutWarning,
         QFrame#SectionCard,
         QFrame#SectionCardPaid,
+        QFrame#SectionCardDisclaimer,
         QFrame#LicenseCallout {
             border-radius: 14px;
         }
@@ -459,49 +518,96 @@ class PornFetchInfoWidget(QWidget):
         QFrame#CalloutImportant {
             background: #0E0A1D;
             border: 1px solid #8B5CF6;
-            border-left: 6px solid #A78BFA;
+            border-left: 7px solid #A78BFA;
         }
 
         /* Note: neutral */
         QFrame#CalloutNote {
             background: #0B1020;
             border: 1px solid #2A3558;
-            border-left: 6px solid #A1A1AA;
+            border-left: 7px solid #A1A1AA;
         }
 
         /* Warning / legal disclaimer: ORANGE only */
         QFrame#CalloutWarning {
             background: #241206;
             border: 1px solid #FB923C;
-            border-left: 6px solid #F97316;
+            border-left: 7px solid #F97316;
         }
 
-        /* Sections */
-        QFrame#SectionCard {
+        /* Sections (base) */
+        QFrame#SectionCard,
+        QFrame#SectionCardPaid,
+        QFrame#SectionCardDisclaimer {
             background: #090A14;
-            border: 1px solid #2D2A45;
+            border: 1px solid #332F52;   /* slightly stronger than before for clearer separation */
         }
-        QFrame#SectionCardPaid {
-            background: #090A14;
+
+        /* Accent rails + slightly different borders per category */
+        QFrame#SectionCard[accent="neutral"] { border-left: 7px solid #2D2A45; }
+        QFrame#SectionCard[accent="violet"]  { border-left: 7px solid #A78BFA; border: 1px solid #6D28D9; }
+        QFrame#SectionCard[accent="orange"]  { border-left: 7px solid #F97316; border: 1px solid #FB923C; }
+
+        QFrame#SectionCardPaid { /* keep paid slightly more vivid */
+            border-left: 7px solid #A78BFA;
             border: 1px solid #8B5CF6;
         }
 
+        QFrame#SectionCardDisclaimer { /* dedicated disclaimer section */
+            border-left: 7px solid #F97316;
+            border: 1px solid #FB923C;
+            background: #0C0A12;
+        }
+
+        /* Title bars */
         QFrame#SectionTitleBar {
             background: #0D0B1A;
             border-top-left-radius: 14px;
             border-top-right-radius: 14px;
-            border-bottom: 1px solid #2D2A45;
+            border-bottom: 1px solid #332F52;
         }
-        QFrame#SectionCardPaid QFrame#SectionTitleBar {
+        QFrame#SectionTitleBar[accent="violet"] {
             background: #120828;
             border-bottom: 1px solid #6D28D9;
+        }
+        QFrame#SectionTitleBar[accent="orange"] {
+            background: #1A0F07;
+            border-bottom: 1px solid #FB923C;
+        }
+
+        /* The small accent rail inside the title bar */
+        QFrame#SectionAccent {
+            border-radius: 4px;
+            background: #2D2A45;
+        }
+        QFrame#SectionAccent[accent="neutral"] { background: #2D2A45; }
+        QFrame#SectionAccent[accent="violet"]  { background: #A78BFA; }
+        QFrame#SectionAccent[accent="orange"]  { background: #F97316; }
+
+        /* Number pill */
+        QLabel#SectionPill {
+            padding: 3px 0px;
+            border-radius: 10px;
+            background: #141027;
+            border: 1px solid #2D2A45;
+            color: #F5F3FF;
+        }
+        QLabel#SectionPill[accent="violet"] {
+            background: #2E1065;
+            border: 1px solid #A78BFA;
+            color: #F5F3FF;
+        }
+        QLabel#SectionPill[accent="orange"] {
+            background: #2A1407;
+            border: 1px solid #FB923C;
+            color: #FFE7D1;
         }
 
         /* License focus area */
         QFrame#LicenseCallout {
             background: #120828;
             border: 1px solid #A78BFA;
-            border-left: 6px solid #8B5CF6;
+            border-left: 7px solid #8B5CF6;
         }
 
         /* KV table in license */
@@ -540,13 +646,13 @@ class PornFetchInfoWidget(QWidget):
         QLabel#Footer {
             color: #A1A1AA;
             font-size: 10pt;
-            padding-top: 2px;
-            padding-bottom: 4px;
+            padding-top: 4px;
+            padding-bottom: 6px;
         }
 
-        /* Default label color (kept very bright for readability) */
+        /* Default label color (slightly softened to let headings/callouts stand out) */
         QLabel {
-            color: #F5F3FF;
+            color: #EDE9FE;
         }
         """)
 
