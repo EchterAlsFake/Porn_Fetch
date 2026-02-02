@@ -105,6 +105,7 @@ video_data = clients.VideoData()
 settings: QSettings = QSettings()
 logger = shared_functions.setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG)
 license_storage_path = os.path.join(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation), "pornfetch.license")
+x = False # Don't ask (this is a secret ;)
 
 
 def _resolve_config_path(portable: bool, portable_dir: str | None = None) -> Path:
@@ -919,6 +920,14 @@ class QTreeWidgetDownloadThread(QRunnable):
 
 
 class PornFetch(QMainWindow):
+    COL_DOWNLOAD = 0
+    COL_TITLE = 1
+    COL_AUTHOR = 2
+    COL_LENGTH = 3
+    COL_QUALITY = 4
+    COL_STOP = 6
+    COL_PROGRESS = 7
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.last_update_time = time.time()
@@ -1059,7 +1068,6 @@ class PornFetch(QMainWindow):
             self.ui.main_button_switch_credits: "information.svg",
             self.ui.main_button_switch_account: "account.svg",
             self.ui.main_button_switch_tools: "tools.svg",
-            self.ui.main_button_view_progress_bars: "progressbars.svg",
         }
         self.setWindowIcon(QIcon(":/images/graphics/logo_transparent.ico"))
 
@@ -1077,7 +1085,6 @@ class PornFetch(QMainWindow):
             self.ui.main_button_switch_tools,
             self.ui.main_button_switch_settings,
             self.ui.main_button_switch_credits,
-            self.ui.main_button_view_progress_bars,
         ]
         group_menu_bar = QButtonGroup(self)
         group_menu_bar.setExclusive(True)
@@ -1103,7 +1110,6 @@ class PornFetch(QMainWindow):
 
         # --- intent & size instead of dozens of QSS files ---
         mark(self.ui.download_button_download, intent="primary", size="lg")
-        mark(self.ui.main_button_tree_download, intent="primary")
         mark(self.ui.login_button_login, intent="primary")
         mark(self.ui.settings_button_apply, intent="primary")
 
@@ -1111,7 +1117,6 @@ class PornFetch(QMainWindow):
         mark(self.ui.settings_button_reset, intent="danger")
 
         mark(self.ui.main_progressbar_total, role="total")
-        mark(self.ui.main_progressbar_converting, role="convert")
 
         mark(self.ui.button_info_enable_all, intent="success")
         mark(self.ui.button_info_disable_all, intent="danger")
@@ -1146,25 +1151,39 @@ class PornFetch(QMainWindow):
 
         # --- progress bars: mark roles instead of separate QSS files ---
         mark(self.ui.main_progressbar_total, role="total")
-        mark(self.ui.main_progressbar_converting, role="convert")
 
         # --- tree header sizing / behavior ---
-        hdr = self.ui.treeWidget.header()
-        hdr.setStretchLastSection(False)
-        hdr.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)  # Title
-        hdr.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)  # Author
-        hdr.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)  # Length
-        hdr.setSectionResizeMode(3, QHeaderView.ResizeMode.Fixed)  # Actions/Status
-        self.ui.treeWidget.setColumnWidth(3, 150)
+        self.ui.treeWidget.setColumnCount(6)
+        self.ui.treeWidget.setHeaderLabels([
+            "Title", "Author", "Length",
+            "", "", "",  # your hidden data cols (3,4,5) if you want
+            "Stop", "Progress"
+        ])
+
+        # Optional: hide your data-only columns (since they’re just storage)
+        for col in (3, 4, 5):
+            self.ui.treeWidget.setColumnHidden(col, True)
+        self.ui.treeWidget.setRootIsDecorated(False)  # looks more like a table
         self.ui.treeWidget.setAlternatingRowColors(True)
+        self.ui.treeWidget.setSelectionBehavior(self.ui.treeWidget.SelectionBehavior.SelectRows)
+
+        # Make it look reasonable
+        self.ui.treeWidget.setColumnWidth(self.COL_DOWNLOAD, 110)
+        self.ui.treeWidget.setColumnWidth(self.COL_TITLE, 260)
+        self.ui.treeWidget.setColumnWidth(self.COL_AUTHOR, 180)
+        self.ui.treeWidget.setColumnWidth(self.COL_LENGTH, 80)
+        self.ui.treeWidget.setColumnWidth(self.COL_QUALITY, 120)
+        self.ui.treeWidget.setColumnWidth(self.COL_PROGRESS, 220)
 
         # --- misc you already had ---
         self.ui.treeWidget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
         self.ui.progress_gridlayout_progressbar.setAlignment(Qt.AlignmentFlag.AlignTop)
+        """         
         gv = self.ui.graphicsView
         gv.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
         gv.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         gv.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+       
         self._scene = QGraphicsScene(self)
         gv.setScene(self._scene)
         self._pixmap_item = QGraphicsPixmapItem()
@@ -1172,15 +1191,15 @@ class PornFetch(QMainWindow):
         self._full_pixmap = QPixmap()
         gv.installEventFilter(self)
         gv.viewport().installEventFilter(self)
-
+        """
         self.header = self.ui.treeWidget.header()
         self.header.resizeSection(0, 300)
         self.header.resizeSection(1, 150)
         self.header.resizeSection(2, 50)
         self.header.setSectionResizeMode(3, QHeaderView.ResizeMode.Fixed)
         self.ui.treeWidget.setColumnWidth(3, 150)
-        self.ui.treeWidget.itemClicked.connect(self.set_thumbnail)
-        self.ui.treeWidget.currentItemChanged.connect(self.set_thumbnail)
+        #self.ui.treeWidget.itemClicked.connect(self.set_thumbnail)
+        #self.ui.treeWidget.currentItemChanged.connect(self.set_thumbnail)
         self.setWindowTitle(f"Porn Fetch v{__version__} Copyright (C) Johannes Habel 2023-2025")
         self.ui.treeWidget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
         self.ui.progress_gridlayout_progressbar.setAlignment(Qt.AlignmentFlag.AlignTop)
@@ -1228,10 +1247,8 @@ class PornFetch(QMainWindow):
         self.ui.main_button_switch_credits.clicked.connect(self.switch_to_credits)
         self.ui.main_button_switch_account.clicked.connect(self.switch_to_login)
         self.ui.main_button_switch_supported_websites.clicked.connect(self.switch_to_supported_sites)
-        self.ui.main_button_view_progress_bars.clicked.connect(self.switch_to_progressbars)
 
         # Video Download Button Connections
-        self.ui.main_button_tree_download.clicked.connect(self.download_tree_widget)
         self.ui.download_button_download.clicked.connect(self.start_single_video)
         self.ui.download_button_model.clicked.connect(self.start_model)
         self.ui.download_button_playlist_get_videos.clicked.connect(self.start_playlist)
@@ -1411,8 +1428,9 @@ You have all paid features unlocked :)
         }
 
     def load_user_settings(self):
+        global x
         settings.sync()
-        license_ok = self.license_manager.has_feature("full_unlock")
+        license_ok = self.license_manager.has_feature("full_unlock") or x
 
         # --- Video ---
         _quality = settings.value("Video/quality", 0, int)
@@ -1894,7 +1912,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
                                                           is_checked=is_checked,
                                                           last_index=self.last_index)
         self.add_to_tree_widget_thread_.signals.text_data_to_tree_widget.connect(self.add_to_tree_widget_signal)
-        self.add_to_tree_widget_thread_.signals.error_signal.connect(self.show_error)
+        self.add_to_tree_widget_thread_.signals.error_signal.connect(show_error)
         self.add_to_tree_widget_thread_.signals.clear_tree_widget_signal.connect(self.clear_tree_widget)
         self.add_to_tree_widget_thread_.signals.start_undefined_range.connect(self.start_undefined_range)
         self.add_to_tree_widget_thread_.signals.stop_undefined_range.connect(self.stop_undefined_range)
@@ -1907,31 +1925,23 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
     def add_to_tree_widget_signal(self, identifier: int):
         """
         Receives video data (by identifier) and applies it to the GUI tree widget.
-
-        The video length is parsed using parse_length(), which now handles multiple formats:
-          - "mm:ss" (e.g. "16:19")
-          - Digits-only strings that are interpreted based on video source (xnxx vs. eporner/phub)
-          - Decimal, mixed-unit, and other formats.
-
-        A display string and a zero-padded sorting key are then generated.
         """
         self.logger.info(f"Applying video data for ID -->: {identifier}")
         self.last_index += 1
+
         data = video_data.data_objects.get(identifier)
         title = data.get("title")
         author = data.get("author")
-        raw_length = data.get("length")  # Raw length from the data source.
+        raw_length = data.get("length")
         index = data.get("index")
-        video = data.get("video")  # e.g. a URL or identifier that may contain "xnxx", "eporner", etc.
+        video = data.get("video")
         thumbnail = data.get("thumbnail")
         thumbnail_data = data.get("thumbnail_data")
 
-        # Parse the raw length, passing video as a hint for the source.
         parsed_length = clients.parse_length(raw_length, video)
 
         item = QTreeWidgetItem(self.ui.treeWidget)
 
-        # If in anonymous mode, set tooltips and redact title/author.
         if self._anonymous_mode:
             item.setToolTip(0, title)
             item.setToolTip(1, author)
@@ -1941,23 +1951,40 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         item.setText(0, f"{index}) {title}")
         item.setText(1, author)
 
-        # Prepare display and sort keys for the duration.
         if parsed_length == "Not available" or parsed_length is None:
             display_duration = "Not available"
             formatted_duration = "000000000"
         else:
-            # Use the parsed_length (which should be an integer representing minutes).
             display_duration = str(parsed_length)
             formatted_duration = f"{parsed_length:05d}"
 
         item.setCheckState(0, Qt.CheckState.Unchecked)
         item.setData(0, Qt.ItemDataRole.UserRole, video)
         item.setData(1, Qt.ItemDataRole.UserRole, identifier)
-        item.setText(2, display_duration)  # What the user sees.
-        item.setData(2, Qt.ItemDataRole.UserRole, formatted_duration)  # Hidden sort key.
+
+        item.setText(2, display_duration)
+        item.setData(2, Qt.ItemDataRole.UserRole, formatted_duration)
+
+        # Keep your existing hidden storage columns unchanged
         item.setData(3, Qt.ItemDataRole.UserRole, str(thumbnail))
         item.setData(4, Qt.ItemDataRole.UserRole, str(author))
-        item.setData(5, Qt.ItemDataRole.UserRole, thumbnail_data) # Thumbnail in bytes form
+        item.setData(5, Qt.ItemDataRole.UserRole, thumbnail_data)
+
+        # --- NEW: Stop button (UI only) ---
+        stop_btn = QPushButton("Stop")
+        stop_btn.setToolTip("Stop this download")
+        stop_btn.setEnabled(True)  # or False until download starts, up to you
+        # no logic connected for now
+
+        # --- NEW: Progress bar (UI only) ---
+        progress = QProgressBar()
+        progress.setRange(0, 100)
+        progress.setValue(0)
+        progress.setTextVisible(True)
+
+        # Put them into the row: stop BEFORE progress
+        self.ui.treeWidget.setItemWidget(item, self.COL_STOP, stop_btn)
+        self.ui.treeWidget.setItemWidget(item, self.COL_PROGRESS, progress)
 
     def tree_widget_finished(self):
         if self.ui.main_checkbox_direct_download.isChecked():
@@ -1985,7 +2012,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         """Checks which of the three types of threading the user selected and handles them."""
         self.create_video_progressbar(video_id=video_id, title=video.title)
         self.download_thread = DownloadThread(video=video, video_id=video_id)
-        self.download_thread.signals.progress_video_converting.connect(self.progress_video_remuxing)
+        #self.download_thread.signals.progress_video_converting.connect(self.progress_video_remuxing)
         self.download_thread.signals.progress_video.connect(self.update_video_progressbar)
         self.download_thread.signals.progress_video_range.connect(self.set_video_progress_range)
         self.download_thread.signals.total_progress_range.connect(self.update_total_progressbar_range)
@@ -2003,8 +2030,6 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
             f"Downloaded: {total_downloaded_videos} video(s) this session.")
         self.ui.main_progressbar_total.setMaximum(100)
         self.ui.main_progressbar_total.setValue(0)
-        self.ui.main_progressbar_converting.setMaximum(100)
-        self.ui.main_progressbar_converting.setValue(0)
         widgets = self.progress_widgets.pop(video_id, None)
         if widgets:
             for widget in widgets.values():
@@ -2109,8 +2134,9 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
             if str(author).lower() == str(name).lower():
                 item.setCheckState(0, Qt.CheckState.Checked)
 
+    """
     def set_thumbnail(self, item_current: QTreeWidgetItem, item_previous=None): # Won's use the previous item
-        """Replace your QLabel code with this, feeding the graphicsView."""
+        Replace your QLabel code with this, feeding the graphicsView.
 
         if time.time() - self.last_thumbnail_change < 0.1: # Bypasses a bug where the function would be called 2 times always
             return
@@ -2151,7 +2177,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         self._scene.setSceneRect(QRectF(pixmap.rect()))
         self.ui.graphicsView.fitInView(self._scene.sceneRect(),
                                        Qt.AspectRatioMode.KeepAspectRatioByExpanding)
-
+    """
 
     """
     The following functions are used to connect data between Threads and the Main UI
@@ -2180,15 +2206,6 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         bar.setRange(0, maximum)
         # optional: reset to zero if you like
         bar.setValue(0)
-
-    def progress_video_remuxing(self, pos, total):
-        """Updates the progress when the video gets remuxed"""
-        if time.time() - self.last_thumbnail_change < 0.3:
-            return
-
-        self.ui.main_progressbar_converting.setMaximum(total)
-        self.ui.main_progressbar_converting.setValue(pos)
-        self.last_update_time = time.time()
 
     def update_video_progressbar(self, video_id, pos, maximum):
         """Fired repeatedly—only updates the current value."""
@@ -2404,6 +2421,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         """
         """
 
+    """
     def eventFilter(self, source, event):
         gv = self.ui.graphicsView
 
@@ -2426,7 +2444,6 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         return super().eventFilter(source, event)
 
     def _show_full_thumbnail(self):
-        """Open a fixed 1280×720 preview, aspect-fill + center-crop."""
         # Made by ChatGPT :)
         if self._full_pixmap.isNull():
             return
@@ -2465,7 +2482,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         layout.addWidget(view)
         dialog.setFixedSize(1280, 720)
         dialog.exec()
-
+    """
     def uninstall_porn_fetch(self):
         ui_popup(self.tr("""
 Important: 
@@ -2632,7 +2649,8 @@ so after the application closes you can consider it uninstalled.
             self.ui.settings_spinbox_performance_simultaneous_downloads.setMaximum(1)
 
     def setup_license_restrictions(self):
-        has_license = self.license_manager.has_feature("full_unlock") or IS_SOURCE_RUN
+        global x
+        has_license = self.license_manager.has_feature("full_unlock") or IS_SOURCE_RUN or x
         self.apply_license_state(combo = self.ui.settings_video_combobox_quality, has_license=has_license)
 
 
@@ -2646,7 +2664,6 @@ def main(args: argparse.Namespace):
     if args.portable:
         FORCE_PORTABLE_RUN = True
 
-    # TODO: ensure config file
     ensure_config_file()
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
@@ -2672,6 +2689,19 @@ def main(args: argparse.Namespace):
         # Get the system's locale
         locale = QLocale.system()
         language_code = locale.name()
+
+        if language_code.startswith("ua"):
+            global x
+            x = True
+            ui_popup("""
+You got Porn Fetch's paid features for free.
+Don't tell anyone, and don't change your language in settings
+
+🤫
+""")
+
+# Yes, you can get a free license by setting your system language to ukrainian
+# Please don't make a YouTube Tutorial out of it 🥀
 
     else:
         if str(language) == "1":
