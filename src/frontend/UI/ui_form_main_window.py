@@ -787,28 +787,28 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_5 = QHBoxLayout()
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
-        self.pushButton = QPushButton(self.page_main)
-        self.pushButton.setObjectName(u"pushButton")
+        self.button_treewidget_downloads = QPushButton(self.page_main)
+        self.button_treewidget_downloads.setObjectName(u"button_treewidget_downloads")
 
-        self.horizontalLayout_5.addWidget(self.pushButton)
+        self.horizontalLayout_5.addWidget(self.button_treewidget_downloads)
 
-        self.pushButton_2 = QPushButton(self.page_main)
-        self.pushButton_2.setObjectName(u"pushButton_2")
+        self.button_treewidget_advanced_configuration = QPushButton(self.page_main)
+        self.button_treewidget_advanced_configuration.setObjectName(u"button_treewidget_advanced_configuration")
 
-        self.horizontalLayout_5.addWidget(self.pushButton_2)
+        self.horizontalLayout_5.addWidget(self.button_treewidget_advanced_configuration)
 
 
         self.verticalLayout_3.addLayout(self.horizontalLayout_5)
 
-        self.stackedWidget = QStackedWidget(self.page_main)
-        self.stackedWidget.setObjectName(u"stackedWidget")
-        self.page = QWidget()
-        self.page.setObjectName(u"page")
-        self.gridLayout = QGridLayout(self.page)
+        self.stacked_widget_tree = QStackedWidget(self.page_main)
+        self.stacked_widget_tree.setObjectName(u"stacked_widget_tree")
+        self.page_downloads = QWidget()
+        self.page_downloads.setObjectName(u"page_downloads")
+        self.gridLayout = QGridLayout(self.page_downloads)
         self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
-        self.main_scrollarea_treewidget = QScrollArea(self.page)
+        self.main_scrollarea_treewidget = QScrollArea(self.page_downloads)
         self.main_scrollarea_treewidget.setObjectName(u"main_scrollarea_treewidget")
         self.main_scrollarea_treewidget.setWidgetResizable(True)
         self.main_scrollarea_treewidget_content = QWidget()
@@ -840,14 +840,14 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.main_scrollarea_treewidget, 0, 0, 1, 1)
 
-        self.stackedWidget.addWidget(self.page)
-        self.page_2 = QWidget()
-        self.page_2.setObjectName(u"page_2")
-        self.gridLayout_32 = QGridLayout(self.page_2)
+        self.stacked_widget_tree.addWidget(self.page_downloads)
+        self.page_advanced_configuration = QWidget()
+        self.page_advanced_configuration.setObjectName(u"page_advanced_configuration")
+        self.gridLayout_32 = QGridLayout(self.page_advanced_configuration)
         self.gridLayout_32.setObjectName(u"gridLayout_32")
         self.gridLayout_13 = QGridLayout()
         self.gridLayout_13.setObjectName(u"gridLayout_13")
-        self.main_button_tree_stop = QPushButton(self.page_2)
+        self.main_button_tree_stop = QPushButton(self.page_advanced_configuration)
         self.main_button_tree_stop.setObjectName(u"main_button_tree_stop")
         sizePolicy8.setHeightForWidth(self.main_button_tree_stop.sizePolicy().hasHeightForWidth())
         self.main_button_tree_stop.setSizePolicy(sizePolicy8)
@@ -857,7 +857,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_13.addWidget(self.main_button_tree_stop, 5, 0, 1, 3)
 
-        self.main_checkbox_tree_do_not_clear_videos = QCheckBox(self.page_2)
+        self.main_checkbox_tree_do_not_clear_videos = QCheckBox(self.page_advanced_configuration)
         self.main_checkbox_tree_do_not_clear_videos.setObjectName(u"main_checkbox_tree_do_not_clear_videos")
         sizePolicy8.setHeightForWidth(self.main_checkbox_tree_do_not_clear_videos.sizePolicy().hasHeightForWidth())
         self.main_checkbox_tree_do_not_clear_videos.setSizePolicy(sizePolicy8)
@@ -865,7 +865,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_13.addWidget(self.main_checkbox_tree_do_not_clear_videos, 0, 1, 1, 1)
 
-        self.main_button_tree_automated_selection = QPushButton(self.page_2)
+        self.main_button_tree_automated_selection = QPushButton(self.page_advanced_configuration)
         self.main_button_tree_automated_selection.setObjectName(u"main_button_tree_automated_selection")
         sizePolicy8.setHeightForWidth(self.main_button_tree_automated_selection.sizePolicy().hasHeightForWidth())
         self.main_button_tree_automated_selection.setSizePolicy(sizePolicy8)
@@ -873,7 +873,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_13.addWidget(self.main_button_tree_automated_selection, 4, 0, 1, 1)
 
-        self.main_checkbox_direct_download = QCheckBox(self.page_2)
+        self.main_checkbox_direct_download = QCheckBox(self.page_advanced_configuration)
         self.main_checkbox_direct_download.setObjectName(u"main_checkbox_direct_download")
         sizePolicy8.setHeightForWidth(self.main_checkbox_direct_download.sizePolicy().hasHeightForWidth())
         self.main_checkbox_direct_download.setSizePolicy(sizePolicy8)
@@ -882,7 +882,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_13.addWidget(self.main_checkbox_direct_download, 0, 0, 1, 1)
 
-        self.main_button_tree_keyboard_shortcuts = QPushButton(self.page_2)
+        self.main_button_tree_keyboard_shortcuts = QPushButton(self.page_advanced_configuration)
         self.main_button_tree_keyboard_shortcuts.setObjectName(u"main_button_tree_keyboard_shortcuts")
         sizePolicy8.setHeightForWidth(self.main_button_tree_keyboard_shortcuts.sizePolicy().hasHeightForWidth())
         self.main_button_tree_keyboard_shortcuts.setSizePolicy(sizePolicy8)
@@ -892,7 +892,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.label_tooltip_index_videos = QLabel(self.page_2)
+        self.label_tooltip_index_videos = QLabel(self.page_advanced_configuration)
         self.label_tooltip_index_videos.setObjectName(u"label_tooltip_index_videos")
         sizePolicy18 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Preferred)
         sizePolicy18.setHorizontalStretch(0)
@@ -902,14 +902,14 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_3.addWidget(self.label_tooltip_index_videos)
 
-        self.label_index_start = QLabel(self.page_2)
+        self.label_index_start = QLabel(self.page_advanced_configuration)
         self.label_index_start.setObjectName(u"label_index_start")
         sizePolicy18.setHeightForWidth(self.label_index_start.sizePolicy().hasHeightForWidth())
         self.label_index_start.setSizePolicy(sizePolicy18)
 
         self.horizontalLayout_3.addWidget(self.label_index_start)
 
-        self.spinbox_index_fetching_start = QSpinBox(self.page_2)
+        self.spinbox_index_fetching_start = QSpinBox(self.page_advanced_configuration)
         self.spinbox_index_fetching_start.setObjectName(u"spinbox_index_fetching_start")
 
         self.horizontalLayout_3.addWidget(self.spinbox_index_fetching_start)
@@ -917,12 +917,12 @@ class Ui_MainWindow(object):
 
         self.gridLayout_13.addLayout(self.horizontalLayout_3, 3, 0, 1, 1)
 
-        self.spinbox_index_fetching_end = QSpinBox(self.page_2)
+        self.spinbox_index_fetching_end = QSpinBox(self.page_advanced_configuration)
         self.spinbox_index_fetching_end.setObjectName(u"spinbox_index_fetching_end")
 
         self.gridLayout_13.addWidget(self.spinbox_index_fetching_end, 3, 2, 1, 1)
 
-        self.label_index_end = QLabel(self.page_2)
+        self.label_index_end = QLabel(self.page_advanced_configuration)
         self.label_index_end.setObjectName(u"label_index_end")
         sizePolicy18.setHeightForWidth(self.label_index_end.sizePolicy().hasHeightForWidth())
         self.label_index_end.setSizePolicy(sizePolicy18)
@@ -936,9 +936,9 @@ class Ui_MainWindow(object):
 
         self.gridLayout_32.addItem(self.verticalSpacer, 1, 0, 1, 1)
 
-        self.stackedWidget.addWidget(self.page_2)
+        self.stacked_widget_tree.addWidget(self.page_advanced_configuration)
 
-        self.verticalLayout_3.addWidget(self.stackedWidget)
+        self.verticalLayout_3.addWidget(self.stacked_widget_tree)
 
 
         self.gridLayout_9.addLayout(self.verticalLayout_3, 0, 0, 1, 1)
@@ -1568,7 +1568,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 1136, 544))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 188, 103))
         self.gridLayout_21 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_21.setSpacing(0)
         self.gridLayout_21.setObjectName(u"gridLayout_21")
@@ -1604,7 +1604,7 @@ class Ui_MainWindow(object):
         self.scrollArea_3.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 1136, 544))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 226, 112))
         self.gridLayout_23 = QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_23.setSpacing(0)
         self.gridLayout_23.setObjectName(u"gridLayout_23")
@@ -1681,7 +1681,7 @@ class Ui_MainWindow(object):
         self.scrollArea_9.setWidgetResizable(True)
         self.scrollAreaWidgetContents_11 = QWidget()
         self.scrollAreaWidgetContents_11.setObjectName(u"scrollAreaWidgetContents_11")
-        self.scrollAreaWidgetContents_11.setGeometry(QRect(0, 0, 1136, 544))
+        self.scrollAreaWidgetContents_11.setGeometry(QRect(0, 0, 256, 192))
         self.gridLayout_54 = QGridLayout(self.scrollAreaWidgetContents_11)
         self.gridLayout_54.setSpacing(0)
         self.gridLayout_54.setObjectName(u"gridLayout_54")
@@ -1710,7 +1710,7 @@ class Ui_MainWindow(object):
         self.scrollArea_10.setWidgetResizable(True)
         self.scrollAreaWidgetContents_12 = QWidget()
         self.scrollAreaWidgetContents_12.setObjectName(u"scrollAreaWidgetContents_12")
-        self.scrollAreaWidgetContents_12.setGeometry(QRect(0, 0, 620, 406))
+        self.scrollAreaWidgetContents_12.setGeometry(QRect(0, 0, 170, 138))
         self.gridLayout_56 = QGridLayout(self.scrollAreaWidgetContents_12)
         self.gridLayout_56.setSpacing(0)
         self.gridLayout_56.setObjectName(u"gridLayout_56")
@@ -1771,7 +1771,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 84, 70))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 98, 70))
         self.gridLayout_20 = QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_20.setSpacing(0)
         self.gridLayout_20.setObjectName(u"gridLayout_20")
@@ -1798,7 +1798,7 @@ class Ui_MainWindow(object):
         self.scrollArea_12.setWidgetResizable(True)
         self.scrollAreaWidgetContents_14 = QWidget()
         self.scrollAreaWidgetContents_14.setObjectName(u"scrollAreaWidgetContents_14")
-        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 1136, 544))
+        self.scrollAreaWidgetContents_14.setGeometry(QRect(0, 0, 98, 119))
         self.gridLayout_61 = QGridLayout(self.scrollAreaWidgetContents_14)
         self.gridLayout_61.setObjectName(u"gridLayout_61")
         self.textbrowser_disclaimer = QTextBrowser(self.scrollAreaWidgetContents_14)
@@ -1993,7 +1993,7 @@ class Ui_MainWindow(object):
 
         self.CentralStackedWidget.setCurrentIndex(0)
         self.main_stacked_widget_top.setCurrentIndex(2)
-        self.stackedWidget.setCurrentIndex(0)
+        self.stacked_widget_tree.setCurrentIndex(1)
         self.settings_stacked_widget_main.setCurrentIndex(1)
         self.settings_video_combobox_quality.setCurrentIndex(0)
 
@@ -2260,8 +2260,8 @@ class Ui_MainWindow(object):
         self.label_apply_by_index.setAccessibleName(QCoreApplication.translate("MainWindow", u"label apply by index", None))
 #endif // QT_CONFIG(accessibility)
         self.label_apply_by_index.setText(QCoreApplication.translate("MainWindow", u"Apply by Index:", None))
-        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Downloads", None))
-        self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Advanced Configuration", None))
+        self.button_treewidget_downloads.setText(QCoreApplication.translate("MainWindow", u"Downloads", None))
+        self.button_treewidget_advanced_configuration.setText(QCoreApplication.translate("MainWindow", u"Advanced Configuration", None))
         ___qtreewidgetitem = self.treeWidget.headerItem()
         ___qtreewidgetitem.setText(2, QCoreApplication.translate("MainWindow", u"Duration (minutes)", None));
         ___qtreewidgetitem.setText(1, QCoreApplication.translate("MainWindow", u"Author", None));

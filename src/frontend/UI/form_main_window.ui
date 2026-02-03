@@ -1860,14 +1860,14 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
-             <widget class="QPushButton" name="pushButton">
+             <widget class="QPushButton" name="button_treewidget_downloads">
               <property name="text">
                <string>Downloads</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_2">
+             <widget class="QPushButton" name="button_treewidget_advanced_configuration">
               <property name="text">
                <string>Advanced Configuration</string>
               </property>
@@ -1876,11 +1876,11 @@
            </layout>
           </item>
           <item>
-           <widget class="QStackedWidget" name="stackedWidget">
+           <widget class="QStackedWidget" name="stacked_widget_tree">
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
-            <widget class="QWidget" name="page">
+            <widget class="QWidget" name="page_downloads">
              <layout class="QGridLayout" name="gridLayout">
               <property name="leftMargin">
                <number>0</number>
@@ -1967,7 +1967,7 @@
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="page_2">
+            <widget class="QWidget" name="page_advanced_configuration">
              <layout class="QGridLayout" name="gridLayout_32">
               <item row="0" column="0">
                <layout class="QGridLayout" name="gridLayout_13">
@@ -3612,8 +3612,8 @@ QPushButton:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1136</width>
-             <height>544</height>
+             <width>188</width>
+             <height>103</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_21">
@@ -3683,8 +3683,8 @@ QPushButton:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1136</width>
-             <height>544</height>
+             <width>226</width>
+             <height>112</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_23">
@@ -3869,8 +3869,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1136</width>
-             <height>544</height>
+             <width>256</width>
+             <height>192</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_54">
@@ -3962,8 +3962,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>620</width>
-             <height>406</height>
+             <width>170</width>
+             <height>138</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_56">
@@ -4106,7 +4106,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>84</width>
+             <width>98</width>
              <height>70</height>
             </rect>
            </property>
@@ -4254,8 +4254,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1136</width>
-             <height>544</height>
+             <width>98</width>
+             <height>119</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_61">

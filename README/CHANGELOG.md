@@ -607,8 +607,9 @@ to be refactored.
 - Added Video support for porntrex.com
 - Added Model / Channel support for porntrex.com
 - Added Searching support for porntrex.com
-- Added support for xfreehd.com
+- Added Video support for xfreehd.com
 - Your configuration values are now saved after an update
+- Added automatic updating for macOS (natively, yes really 🔥)
 
 ### Bug Fixes
 - Fixed 403 missav error
@@ -620,6 +621,7 @@ to be refactored.
 - Infinite loading animation works better now
 - Added 480p to quality selection (#98)
 - Added an information dialog for the first run basically telling about all useful aspects of Porn Fetch
+- QCombobox items have a correct size and the text isn't hidden anymore
 
 ### Code Optimizations
 - Refactored `check_video` function to be faster and less redundant
@@ -635,7 +637,7 @@ to be refactored.
 - Updated build to Python 3.13.11 (All systems)
 - Updated Qt to 6.10.1
 - Updated Nuitka to 2.8.9
-
+- Removed Internet checks entirely
 
 
 

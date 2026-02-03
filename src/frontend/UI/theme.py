@@ -65,74 +65,89 @@ QAbstractButton[seg="1"]:checked {
   background:#3b82f6; border-color:#3b82f6; color:white;
 }
 
+/* The actual popup frame (container around the view) */
+QComboBoxPrivateContainer {
+  background: #2a2b2e;
+  border: 1px solid #3a3b3f;
+  border-radius: 8px;
+  padding: 6px;      /* move the inset here */
+}
+
+/* The view itself shouldn't add extra padding/border anymore */
+QComboBox QAbstractItemView {
+  background: transparent;
+  border: none;
+  padding: 0px;
+  outline: 0;
+  selection-background-color: transparent;
+}
+
 /* Tree selection + header alignment */
 QTreeWidget::item:selected { background:#2f80ed; color:white; }
 QHeaderView::section { background:#2a2b2e; padding:6px 8px}
-
 /* Popup container */
 QComboBox QAbstractItemView {
   background: #2a2b2e;
   border: 1px solid #3a3b3f;
   border-radius: 8px;
-  padding: 6px;                 /* inset around the list */
+  padding: 6px;
   outline: 0;
+
   selection-background-color: transparent;  /* we'll style items ourselves */
+  show-decoration-selected: 0;
 }
 
 /* Each entry “card” */
 QComboBox QAbstractItemView::item {
   padding: 6px 8px;
-  border: 1px solid #3a3b3f;    /* the outline */
+  border: 1px solid #3a3b3f;
   border-radius: 8px;
-  margin: 2px 0;                /* may be ignored on some platforms – see code below */
+  margin: 2px 0;
 }
 
-/* Hover / selected states */
+/* Hover */
 QComboBox QAbstractItemView::item:hover {
   border-color: #4b8dff;
   background: rgba(59,130,246,0.08);
 }
-QComboBox QAbstractItemView::item:selected {
-  border: 2px solid #3b82f6;
-  background: rgba(59,130,246,0.16);
+
+/* Selected/current item: violet/pink ring */
+QComboBox QAbstractItemView::item:selected,
+QComboBox QAbstractItemView::item:selected:active,
+QComboBox QAbstractItemView::item:selected:!active {
+  border: 2px solid #d946ef;                 /* violet/pink */
+  background: rgba(217,70,239,0.16);
   color: white;
+
+  /* compensate for thicker border so item height doesn't jump */
+  padding: 5px 7px;
 }
 
-/* subtle card you already have */
-*[variant="card"] {
-  background:#26292f; border:1px solid #3d4148; border-radius:12px;
-}
+/* Your other rules (kept as-is) */
+*[variant="card"] { background:#26292f; border:1px solid #3d4148; border-radius:12px; }
 
-/* on-demand highlight borders */
 *[highlight="accent"]  { border:2px solid #3b82f6; border-radius:12px; }
 *[highlight="success"] { border:2px solid #22c55e; border-radius:12px; }
 *[highlight="warning"] { border:2px solid #f59e0b; border-radius:12px; }
 
-QTreeView::item { height: 28px; }             /* bigger row targets */
-
-QComboBox QAbstractItemView { padding:6px; border-radius:8px; }
-QComboBox QAbstractItemView::item { padding:6px 8px; border:1px solid #3a3b3f; border-radius:8px; margin:2px 0; }
-QComboBox QAbstractItemView::item:hover    { border-color:#4b8dff; background:rgba(59,130,246,.08); }
-QComboBox QAbstractItemView::item:selected { border:2px solid #3b82f6; background:rgba(59,130,246,.16); color:white; }
+QTreeView::item { height: 28px; }
 
 /* Base: neutral 2px ring on interactive widgets */
 QLineEdit, QComboBox, QTextEdit, QPlainTextEdit,
 QSpinBox, QDoubleSpinBox, QAbstractButton {
-  border: 2px solid #3a3b3f;          /* neutral ring */
+  border: 2px solid #3a3b3f;
   border-radius: 8px;
 }
 
-/* Mouse hover ring (subtle) */
 QLineEdit:hover, QComboBox:hover, QTextEdit:hover, QPlainTextEdit:hover,
 QSpinBox:hover, QDoubleSpinBox:hover, QAbstractButton:hover {
-  border-color: #4b8dff;               /* hover ring */
+  border-color: #4b8dff;
 }
 
-/* Keyboard focus ring (strong) */
-*[kbd="1"],                            /* set by our event filter below */
+*[kbd="1"],
 QLineEdit:focus, QComboBox:focus, QTextEdit:focus, QPlainTextEdit:focus,
 QSpinBox:focus, QDoubleSpinBox:focus, QAbstractButton:focus {
-  border-color: #3b82f6;               /* focus ring */
+  border-color: #3b82f6;
 }
 
 /* Don’t show hover/focus ring for disabled */

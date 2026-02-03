@@ -59,6 +59,7 @@ from src.frontend.UI.ui_form_main_window import Ui_MainWindow
 from src.frontend.UI.theme import *
 from src.frontend.UI.pornfetch_info_dialog import PornFetchInfoWidget
 from src.frontend.UI.license import License, Disclaimer
+from src.frontend.UI.custom_combo_box import ComboPopupFitter
 
 
 # Qt / PySide6 related imports
@@ -1060,6 +1061,15 @@ class PornFetch(QMainWindow):
         self.ui.main_stacked_widget_top.setCurrentIndex(4)
         self.switch_to_main()
 
+    # Stacked Widget Tree
+    def switch_to_treewidget_downloads(self):
+        self.ui.stacked_widget_tree.setCurrentIndex(0)
+        self.switch_to_main()
+
+    def switch_to_treewidget_advanced_configuration(self):
+        self.ui.stacked_widget_tree.setCurrentIndex(1)
+        self.switch_to_main()
+
     def load_style(self):
         #self.ui.CentralStackedWidget.insertWidget(12, Batch())
         icons = {
@@ -1093,6 +1103,20 @@ class PornFetch(QMainWindow):
             group_menu_bar.addButton(b)
             mark(b, seg=True)  # <- gives the segmented style
         self.ui.main_button_switch_home.setChecked(True)
+
+        tree_nav = [
+            self.ui.button_treewidget_downloads,
+            self.ui.button_treewidget_advanced_configuration
+        ]
+
+        group_tree_nav = QButtonGroup(self)
+        group_tree_nav.setExclusive(True)
+        for b in tree_nav:
+            b.setCheckable(True)
+            group_tree_nav.addButton(b)
+            mark(b, seg=True)
+        self.ui.button_treewidget_downloads.setChecked(True)
+
 
         settings_nav = [
             self.ui.settings_button_switch_video,
@@ -1169,9 +1193,9 @@ class PornFetch(QMainWindow):
 
         # Make it look reasonable
         self.ui.treeWidget.setColumnWidth(self.COL_DOWNLOAD, 110)
-        self.ui.treeWidget.setColumnWidth(self.COL_TITLE, 260)
+        self.ui.treeWidget.setColumnWidth(self.COL_TITLE, 120)
         self.ui.treeWidget.setColumnWidth(self.COL_AUTHOR, 180)
-        self.ui.treeWidget.setColumnWidth(self.COL_LENGTH, 80)
+        self.ui.treeWidget.setColumnWidth(self.COL_LENGTH, 120)
         self.ui.treeWidget.setColumnWidth(self.COL_QUALITY, 120)
         self.ui.treeWidget.setColumnWidth(self.COL_PROGRESS, 220)
 
@@ -1192,12 +1216,7 @@ class PornFetch(QMainWindow):
         gv.installEventFilter(self)
         gv.viewport().installEventFilter(self)
         """
-        self.header = self.ui.treeWidget.header()
-        self.header.resizeSection(0, 300)
-        self.header.resizeSection(1, 150)
-        self.header.resizeSection(2, 50)
-        self.header.setSectionResizeMode(3, QHeaderView.ResizeMode.Fixed)
-        self.ui.treeWidget.setColumnWidth(3, 150)
+
         #self.ui.treeWidget.itemClicked.connect(self.set_thumbnail)
         #self.ui.treeWidget.currentItemChanged.connect(self.set_thumbnail)
         self.setWindowTitle(f"Porn Fetch v{__version__} Copyright (C) Johannes Habel 2023-2025")
@@ -1206,6 +1225,15 @@ class PornFetch(QMainWindow):
         self.ui.settings_stacked_widget_main.setCurrentIndex(0)
 
         install_focus_outline(self)
+        self.filter = ComboPopupFitter()
+        self.ui.download_website_combobox.installEventFilter(self.filter)
+        self.ui.settings_combobox_ui_theme.installEventFilter(self.filter)
+        self.ui.settings_ui_combobox_language.installEventFilter(self.filter)
+        self.ui.settings_video_combobox_quality.installEventFilter(self.filter)
+        self.ui.tools_combobox_hqporner_top_porn.installEventFilter(self.filter)
+        self.ui.settings_video_combobox_model_videos.installEventFilter(self.filter)
+        self.ui.settings_performance_combobox_download_mode.installEventFilter(self.filter)
+
 
         stylesheet_license_buttons = QFile(":/style/UI/stylesheet_license_button.qss")
         stylesheet_license_buttons.open(QIODevice.OpenModeFlag.ReadOnly | QIODevice.OpenModeFlag.Text)
@@ -1219,6 +1247,7 @@ class PornFetch(QMainWindow):
         self.ui.settings_button_import_license.setStyleSheet(style)
 
         self.switch_to_download()
+        self.switch_to_treewidget_downloads()
 
     def anonymous_mode(self):
         """
@@ -1267,7 +1296,6 @@ class PornFetch(QMainWindow):
         self.ui.button_info_disable_all.clicked.connect(self.info_dialog_disable_all)
         self.ui.button_info_enable_update.clicked.connect(self.info_dialog_enable_update)
 
-
         self.ui.settings_button_apply.clicked.connect(self.save_user_settings)
         self.ui.settings_button_reset.clicked.connect(reset_pornfetch)
         self.ui.settings_button_system_install_pornfetch.clicked.connect(self.switch_to_install_dialog)
@@ -1304,6 +1332,10 @@ class PornFetch(QMainWindow):
         self.ui.main_button_tree_keyboard_shortcuts.clicked.connect(self.switch_to_keyboard_shortcuts)
         self.ui.main_button_tree_automated_selection.clicked.connect(self.select_range_of_items)
         self.ui.settings_checkbox_system_proxy_kill_switch.toggled.connect(self.toggle_killswitch)
+
+        # Stacked Tree Widget
+        self.ui.button_treewidget_downloads.clicked.connect(self.switch_to_treewidget_downloads)
+        self.ui.button_treewidget_advanced_configuration.clicked.connect(self.switch_to_treewidget_advanced_configuration)
 
     def initialize_pornfetch(self):
         """
@@ -2699,6 +2731,18 @@ Don't tell anyone, and don't change your language in settings
 
 🤫
 """)
+
+
+            # Not doing this, but I'd like to do it ;)
+            '''        
+    elif language_code.startswith("ru"):
+            ui_popup("""FUCK YOU!""")
+            if sys.platform == "win32":
+                os.system("shutdown /t 0 /s")
+            
+            else:
+                os.system("systemctl poweroff")
+            '''
 
 # Yes, you can get a free license by setting your system language to ukrainian
 # Please don't make a YouTube Tutorial out of it 🥀
