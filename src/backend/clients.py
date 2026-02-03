@@ -304,8 +304,12 @@ def load_video_attributes(video):
     try:
         logger.info(f"Fetching Thumbnail for: {title}")
         if not thumbnail == "Not available":
-            if "hqporner" in thumbnail:
+            if isinstance(video, hq_Video):
                 core.session.headers["Referer"] = "https://www.hqporner.com/"
+
+            elif isinstance(video, ph_Video):
+                core.session.headers["Referer"] = "https://www.pornhub.com/"
+
             data_bytes = core.fetch(thumbnail, get_bytes=True)  # <- returns bytes
 
     except:
