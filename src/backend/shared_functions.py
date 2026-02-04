@@ -40,6 +40,20 @@ def send_to_server(message: dict):
         return(f"Couldn't report to server due to error -->: {error}")
 
 
+def build_quality_options(heights: list[int], include_auto=True):
+    """
+    Returns list of (label, value) where value is what you pass to download():
+      - int heights: 720
+      - auto labels: "best"/"half"/"worst"
+    """
+    opts: list[tuple[str, str | int]] = []
+    if include_auto:
+        opts += [("Worst", "worst"), ("Half", "half"), ("Best", "best")]
+    for h in heights:
+        opts.append((f"{h}p", h))
+    return opts
+
+
 def handle_error_gracefully(self, data: dict, error_message: str | dict, needs_network_log: bool= False, is_feedback=False):
     if is_feedback:
         send_to_server(message=error_message)

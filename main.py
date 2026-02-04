@@ -38,10 +38,11 @@ import webbrowser
 import subprocess
 import src.frontend.UI.resources
 
+from typing import Callable
+from collections import deque
 from threading import Event, Lock
 from itertools import islice, chain
-from typing import Callable
-from urllib.parse import urlsplit
+
 
 # Backend imports
 from src.backend import clients # Singleton instance for the client objects (really important)
@@ -59,16 +60,14 @@ from src.frontend.UI.ui_form_main_window import Ui_MainWindow
 from src.frontend.UI.theme import *
 from src.frontend.UI.pornfetch_info_dialog import PornFetchInfoWidget
 from src.frontend.UI.license import License, Disclaimer
-from src.frontend.UI.custom_combo_box import ComboPopupFitter
-
+from src.frontend.UI.custom_combo_box import ComboPopupFitter, make_quality_combobox
 
 # Qt / PySide6 related imports
-from PySide6.QtGui import QIcon, QFontDatabase, QPixmap, QShortcut, QKeySequence, QPainter
-from PySide6.QtCore import (QTextStream, QRunnable, QThreadPool, QSemaphore, Qt, QLocale, QSize, QEvent, QRectF,
-                            QTranslator, QCoreApplication, QByteArray, QStandardPaths, QSettings)
+from PySide6.QtGui import QIcon, QFontDatabase, QPixmap, QShortcut, QKeySequence
+from PySide6.QtCore import (QTextStream, QRunnable, QThreadPool, QSemaphore, Qt, QLocale, QSize,
+                            QTranslator, QCoreApplication, QStandardPaths, QSettings, Slot)
 from PySide6.QtWidgets import (QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QComboBox, QLabel,
-                               QInputDialog, QMainWindow, QProgressBar, QGraphicsPixmapItem, QDialog, QVBoxLayout,
-                               QGraphicsScene, QGraphicsView)
+                               QInputDialog, QMainWindow, QProgressBar, QVBoxLayout, QSizePolicy, QLayout)
 
 # Errors from different APIs
 from phub import errors as ph_errors
@@ -733,14 +732,44 @@ class AddToTreeWidget(QRunnable):
         self.signals.tree_widget_finished.emit()
 
 
+class DownloadScheduler(QObject):
+    worker_started = Signal(int, object)  # video_id, worker
+
+    def __init__(self, threadpool, max_concurrent: int, parent=None):
+        super().__init__(parent)
+        self.pool = threadpool
+        self.sem = QSemaphore(max_concurrent)
+        self.queue = deque()
+
+    def enqueue(self, video_obj, video_id: int, quality, stop_event):
+        self.queue.append((video_obj, video_id, quality, stop_event))
+        self._try_start()
+
+    def _try_start(self):
+        while self.queue and self.sem.tryAcquire(1):
+            video_obj, video_id, quality, stop_event = self.queue.popleft()
+
+            worker = DownloadThread(video=video_obj, video_id=video_id, quality=quality, stop_event=stop_event)
+            worker.signals.download_completed.connect(self._on_done)
+
+            self.worker_started.emit(video_id, worker)
+            self.pool.start(worker)
+
+    @Slot(int)
+    def _on_done(self, video_id: int):
+        self.sem.release(1)
+        self._try_start()
+
+
 class DownloadThread(QRunnable):
     """Refactored threading class to download videos with improved performance and logic."""
-    def __init__(self, video, video_id):
+    def __init__(self, video, video_id, quality, stop_event):
         super().__init__()
         self.video = video
         self.video_id = video_id
         self.consistent_data = video_data.consistent_data
-        self.quality = self.consistent_data.get("quality")
+        self.quality = quality
+        self.stop_event = stop_event
         data_object: dict = video_data.data_objects[self.video_id]
         self.output_path = data_object.get("output_path")
         self.logger = shared_functions.setup_logger(name="Porn Fetch - [DownloadThread]", log_file="PornFetch.log", level=logging.DEBUG)
@@ -754,10 +783,13 @@ class DownloadThread(QRunnable):
         self._range_emitted = False
 
     def callback_remux(self, pos, total):
-        self.signals.progress_video_converting.emit(pos, total)
+        self.signals.progress_video_converting.emit(self.video_id, pos, total)
 
     def generic_callback(self, pos, total,  video_source="general"):
         """Generic callback function to emit progress signals with rate limiting."""
+        if self.stop_event.is_set():
+            return # TODO (need actual implementation here)
+
         current_time = time.time()
         if self.stop_flag.is_set():
             return
@@ -866,68 +898,14 @@ class DownloadThread(QRunnable):
             self.signals.download_completed.emit(self.video_id)
 
 
-class QTreeWidgetDownloadThread(QRunnable):
-    """Threading class for the QTreeWidget (sends objects to the download class defined above)"""
-
-    def __init__(self, tree_widget, semaphore):
-        super(QTreeWidgetDownloadThread, self).__init__()
-        self.treeWidget = tree_widget
-        self.signals = Signals()
-        self.consistent_data = video_data.consistent_data
-        self.download_mode = self.consistent_data.get("download_mode")
-        self.quality = self.consistent_data.get("quality")
-        self.semaphore = semaphore
-        self.logger = shared_functions.setup_logger(name="Porn Fetch - [QTreeWidgetDownloadThread]", log_file="PornFetch.log",
-                                   level=logging.DEBUG)
-
-    def run(self):
-        self.signals.start_undefined_range.emit()
-        video_objects = []
-        data_objects = []
-        global total_segments, downloaded_segments
-
-        for i in range(self.treeWidget.topLevelItemCount()):
-            item = self.treeWidget.topLevelItem(i)
-            check_state = item.checkState(0)
-            if check_state == Qt.CheckState.Checked:
-                video_objects.append(item.data(0, Qt.ItemDataRole.UserRole))
-                data_objects.append(item.data(1, Qt.ItemDataRole.UserRole))
-
-
-        self.logger.debug("Retrieving total length of video segments to calculate total progress...")
-
-        video_objects_with_hls = []
-        for video in video_objects:
-            if hasattr(video, "get_segments"):
-                video_objects_with_hls.append(video)
-
-        self.signals.total_progress_range.emit(len(video_objects_with_hls))
-        for idx, video in enumerate(video_objects_with_hls):
-            total_segments += len(video.get_segments(quality=self.quality))
-            self.signals.total_progress.emit(idx)
-
-        self.logger.debug(f"Got {total_segments} segments...")
-        # This basically looks how many segments exist in all videos together, so that we can calculate the total
-        # progress
-
-        downloaded_segments = 0
-        self.signals.stop_undefined_range.emit()
-
-        for idx, video in enumerate(video_objects):
-            self.semaphore.acquire()  # Trying to start the download if the thread isn't locked
-            self.logger.debug("Semaphore Acquired")
-            self.signals.progress_send_video.emit(video, data_objects[
-                idx])  # Now emits the video to the main class for further processing
-
-
 class PornFetch(QMainWindow):
     COL_DOWNLOAD = 0
     COL_TITLE = 1
     COL_AUTHOR = 2
     COL_LENGTH = 3
     COL_QUALITY = 4
-    COL_STOP = 6
-    COL_PROGRESS = 7
+    COL_STOP = 5
+    COL_PROGRESS = 6
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -945,7 +923,11 @@ class PornFetch(QMainWindow):
 
         self.last_index = 0  # Keeps track of the last index of videos added to the tree widget
         self.kill_switch = False
+        self._row = {} # Video ID -> dict of widgets + state
         self.threadpool = QThreadPool()
+        max_concurrent = int(video_data.consistent_data.get("simultaneous_downloads", 1))
+        self.download_scheduler = DownloadScheduler(self.threadpool, max_concurrent, self)
+        self.download_scheduler.worker_started.connect(self._wire_worker_signals)
         self.maps()
         self.load_style()
         self.license = License(self.ui, self.initialize_pornfetch)
@@ -1177,16 +1159,11 @@ class PornFetch(QMainWindow):
         mark(self.ui.main_progressbar_total, role="total")
 
         # --- tree header sizing / behavior ---
-        self.ui.treeWidget.setColumnCount(6)
-        self.ui.treeWidget.setHeaderLabels([
-            "Title", "Author", "Length",
-            "", "", "",  # your hidden data cols (3,4,5) if you want
-            "Stop", "Progress"
-        ])
 
-        # Optional: hide your data-only columns (since they’re just storage)
-        for col in (3, 4, 5):
-            self.ui.treeWidget.setColumnHidden(col, True)
+        self.ui.treeWidget.setColumnCount(7)
+        self.ui.treeWidget.setHeaderLabels([
+            "Download", "Title", "Author", "Length", "Quality", "Stop", "Progress"
+        ])
         self.ui.treeWidget.setRootIsDecorated(False)  # looks more like a table
         self.ui.treeWidget.setAlternatingRowColors(True)
         self.ui.treeWidget.setSelectionBehavior(self.ui.treeWidget.SelectionBehavior.SelectRows)
@@ -1198,6 +1175,16 @@ class PornFetch(QMainWindow):
         self.ui.treeWidget.setColumnWidth(self.COL_LENGTH, 120)
         self.ui.treeWidget.setColumnWidth(self.COL_QUALITY, 120)
         self.ui.treeWidget.setColumnWidth(self.COL_PROGRESS, 220)
+        self.ui.treeWidget.header().setSectionResizeMode(self.COL_DOWNLOAD, QHeaderView.ResizeMode.ResizeToContents)
+        self.ui.treeWidget.header().setSectionResizeMode(self.COL_QUALITY, QHeaderView.ResizeMode.ResizeToContents)
+        self.ui.treeWidget.header().setSectionResizeMode(self.COL_STOP, QHeaderView.ResizeMode.ResizeToContents)
+        self.ui.treeWidget.header().setSectionResizeMode(self.COL_LENGTH, QHeaderView.ResizeMode.ResizeToContents)
+
+        # Let the title take the free space
+        self.ui.treeWidget.header().setSectionResizeMode(self.COL_TITLE, QHeaderView.ResizeMode.Stretch)
+
+        # Progress is last: let it stretch too (it will consume remaining space)
+        self.ui.treeWidget.header().setStretchLastSection(True)
 
         # --- misc you already had ---
         self.ui.treeWidget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
@@ -1330,7 +1317,6 @@ class PornFetch(QMainWindow):
         # Other stuff IDK
         self.ui.main_button_tree_stop.clicked.connect(switch_stop_state)
         self.ui.main_button_tree_keyboard_shortcuts.clicked.connect(self.switch_to_keyboard_shortcuts)
-        self.ui.main_button_tree_automated_selection.clicked.connect(self.select_range_of_items)
         self.ui.settings_checkbox_system_proxy_kill_switch.toggled.connect(self.toggle_killswitch)
 
         # Stacked Tree Widget
@@ -1406,20 +1392,12 @@ You have all paid features unlocked :)
         export_urls_shortcut = QShortcut(QKeySequence("Ctrl+E"), self)
         export_urls_shortcut.activated.connect(export_urls)
 
-        download_tree_widget = QShortcut(QKeySequence("Ctrl+T"), self)
-        download_tree_widget.activated.connect(self.download_tree_widget)
-
         enable_anonymous_mode = QShortcut(QKeySequence("Ctrl+A"), self)
         enable_anonymous_mode.activated.connect(self.anonymous_mode)
 
         save_settings = QShortcut(QKeySequence("Ctrl+S"), self)
         save_settings.activated.connect(self.save_user_settings)
 
-        select_all_items = QShortcut(QKeySequence("Ctrl+X"), self)
-        select_all_items.activated.connect(self.select_all_items)
-
-        unselect_all_items = QShortcut(QKeySequence("Ctrl+Z"), self)
-        unselect_all_items.activated.connect(self.unselect_all_items)
 
     def maps(self):
         self.mappings_hqporner_tools = {
@@ -1954,10 +1932,20 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         self.threadpool.start(self.add_to_tree_widget_thread_)
         self.logger.debug("Started the thread for adding videos...")
 
+    @staticmethod
+    def _cell_widget(widget, margins=(2, 2, 2, 2), align=Qt.AlignmentFlag.AlignCenter):
+        container = QWidget()
+        layout = QHBoxLayout(container)
+        layout.setContentsMargins(*margins)
+        layout.setSpacing(0)
+        layout.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)  # key
+        layout.addWidget(widget)
+        layout.setAlignment(align)
+
+        container.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)  # key
+        return container
+
     def add_to_tree_widget_signal(self, identifier: int):
-        """
-        Receives video data (by identifier) and applies it to the GUI tree widget.
-        """
         self.logger.info(f"Applying video data for ID -->: {identifier}")
         self.last_index += 1
 
@@ -1969,80 +1957,171 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         video = data.get("video")
         thumbnail = data.get("thumbnail")
         thumbnail_data = data.get("thumbnail_data")
-
         parsed_length = clients.parse_length(raw_length, video)
 
         item = QTreeWidgetItem(self.ui.treeWidget)
 
         if self._anonymous_mode:
-            item.setToolTip(0, title)
-            item.setToolTip(1, author)
+            item.setToolTip(self.COL_TITLE, title)
+            item.setToolTip(self.COL_AUTHOR, author)
             title = "[redacted]"
             author = "[redacted]"
 
-        item.setText(0, f"{index}) {title}")
-        item.setText(1, author)
+        # Visible text columns
+        item.setText(self.COL_TITLE, f"{index}) {title}")
+        item.setText(self.COL_AUTHOR, author)
 
-        if parsed_length == "Not available" or parsed_length is None:
+        if parsed_length in (None, "Not available"):
             display_duration = "Not available"
             formatted_duration = "000000000"
         else:
             display_duration = str(parsed_length)
             formatted_duration = f"{parsed_length:05d}"
 
-        item.setCheckState(0, Qt.CheckState.Unchecked)
-        item.setData(0, Qt.ItemDataRole.UserRole, video)
-        item.setData(1, Qt.ItemDataRole.UserRole, identifier)
+        item.setText(self.COL_LENGTH, display_duration)
 
-        item.setText(2, display_duration)
-        item.setData(2, Qt.ItemDataRole.UserRole, formatted_duration)
+        # Store metadata using roles (no hidden columns needed)
+        item.setData(self.COL_TITLE, Qt.ItemDataRole.UserRole, video)
+        item.setData(self.COL_TITLE, Qt.ItemDataRole.UserRole + 1, identifier)
+        item.setData(self.COL_TITLE, Qt.ItemDataRole.UserRole + 2, formatted_duration)
+        item.setData(self.COL_TITLE, Qt.ItemDataRole.UserRole + 3, str(thumbnail))
+        item.setData(self.COL_TITLE, Qt.ItemDataRole.UserRole + 4, str(author))
+        item.setData(self.COL_TITLE, Qt.ItemDataRole.UserRole + 5, thumbnail_data)
 
-        # Keep your existing hidden storage columns unchanged
-        item.setData(3, Qt.ItemDataRole.UserRole, str(thumbnail))
-        item.setData(4, Qt.ItemDataRole.UserRole, str(author))
-        item.setData(5, Qt.ItemDataRole.UserRole, thumbnail_data)
+        # --- Download button (UI only) ---
+        download_btn = QPushButton("Download")
+        download_btn.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
-        # --- NEW: Stop button (UI only) ---
+        # --- Quality combobox (UI only) ---
+        available = data.get("qualities", [])  # list[int] you’re already populating now
+        preferred = video_data.consistent_data.get("quality", "best")  # your settings mapping output
+
+        has_license = (
+                self.license_manager.has_feature("full_unlock")
+                or IS_SOURCE_RUN
+                or x
+        )
+
+        quality_box = make_quality_combobox(
+            available_heights=available,
+            preferred_quality=preferred,
+            has_license=has_license
+        )
+
+        # --- Stop button (UI only) ---
         stop_btn = QPushButton("Stop")
         stop_btn.setToolTip("Stop this download")
-        stop_btn.setEnabled(True)  # or False until download starts, up to you
-        # no logic connected for now
+        stop_btn.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        stop_btn.setMinimumWidth(60)  # tweak
+        stop_btn.setMinimumHeight(24)  # tweak
+        mark(stop_btn, intent="danger")  # keep if you want your theme styling
 
-        # --- NEW: Progress bar (UI only) ---
+        # --- Progress bar (UI only) ---
         progress = QProgressBar()
         progress.setRange(0, 100)
         progress.setValue(0)
-        progress.setTextVisible(True)
 
-        # Put them into the row: stop BEFORE progress
-        self.ui.treeWidget.setItemWidget(item, self.COL_STOP, stop_btn)
+        # Put widgets into cells
+        self.ui.treeWidget.setItemWidget(item, self.COL_DOWNLOAD, self._cell_widget(download_btn, margins=(1, 1, 1, 1)))
+        self.ui.treeWidget.setItemWidget(item, self.COL_QUALITY, self._cell_widget(quality_box, margins=(1, 1, 1, 1)))
+        self.ui.treeWidget.setItemWidget(item, self.COL_STOP, self._cell_widget(stop_btn, margins=(1, 1, 1, 1)))
         self.ui.treeWidget.setItemWidget(item, self.COL_PROGRESS, progress)
 
-    def tree_widget_finished(self):
-        if self.ui.main_checkbox_direct_download.isChecked():
-            self.logger.info("Automatically downloading all videos in the tree widget!")
-            self.select_all_items()
-            self.download_tree_widget()
+        self._row[identifier] = {
+            "item": item,
+            "download_btn": download_btn,
+            "stop_btn": stop_btn,
+            "quality_box": quality_box,
+            "progress": progress,
+            "stop_event": Event(),
+        }
 
+        download_btn.clicked.connect(lambda _=False, vid=identifier: self.queue_download(vid))
+        stop_btn.clicked.connect(lambda _=False, vid=identifier: self.stop_download(vid))
+
+    def _wire_worker_signals(self, video_id: int, worker):
+        # Download progress
+        worker.signals.progress_video_range.connect(self.on_row_download_range)
+        worker.signals.progress_video.connect(self.on_row_download_progress)
+
+        # Remux progress
+        worker.signals.progress_remux.connect(self.on_row_remux_progress)
+
+        # Completed
+        worker.signals.download_completed.connect(self.on_row_download_done)
+
+    def on_row_download_range(self, video_id: int, total: int):
+        row = self._row.get(video_id)
+        if not row:
+            return
+        pb = row["progress"]
+        pb.setRange(0, max(1, int(total)))
+        pb.setValue(0)
+        pb.setFormat("Downloading… %p%")
+
+    def on_row_download_progress(self, video_id: int, pos: int, total: int):
+        row = self._row.get(video_id)
+        if not row:
+            return
+        row["progress"].setValue(int(pos))
+
+    def on_row_remux_progress(self, video_id: int, pos: int, total: int):
+        row = self._row.get(video_id)
+        if not row:
+            return
+        pb = row["progress"]
+        pb.setRange(0, max(1, int(total)))
+        pb.setValue(int(pos))
+        pb.setFormat("Remuxing… %p%")
+
+    def on_row_download_done(self, video_id: int):
+        row = self._row.get(video_id)
+        if not row:
+            return
+        row["progress"].setRange(0, 100)
+        row["progress"].setValue(100)
+        row["progress"].setFormat("Done")
+        row["download_btn"].setEnabled(True)
+        row["stop_btn"].setEnabled(False)
+
+
+    def queue_download(self, video_id: int):
+        row = self._row[video_id]
+        item = row["item"]
+
+        # video object was stored in UserRole in your function:
+        video_obj = item.data(self.COL_TITLE, Qt.ItemDataRole.UserRole)
+        quality = row["quality_box"].currentData()  # "best"/720/etc.
+
+        # reset stop flag for this run
+        row["stop_event"].clear()
+
+        # UI: show queued/busy indicator
+        pb = row["progress"]
+        pb.setRange(0, 0)  # busy indicator
+        pb.setFormat("Queued…")
+        row["download_btn"].setEnabled(False)
+        row["stop_btn"].setEnabled(True)
+
+        self.download_scheduler.enqueue(video_obj, video_id, quality, row["stop_event"])
+
+    def stop_download(self, video_id: int):
+        row = self._row.get(video_id)
+        if not row:
+            return
+        row["stop_event"].set()
+        # UI hint (actual cancel depends on downloader honoring cancellation)
+        pb = row["progress"]
+        pb.setFormat("Stopping…")
+
+
+    def tree_widget_finished(self):
         self.update_total_progressbar_range(1)
         self.update_total_progressbar(1)
 
-    def download_tree_widget(self):
-        """
-        Starts the thread for downloading the tree widget (All selected videos)
-        """
-        tree_widget = self.ui.treeWidget
-        self.download_tree_thread = QTreeWidgetDownloadThread(tree_widget=tree_widget, semaphore=self.semaphore)
-        self.download_tree_thread.signals.total_progress_range.connect(self.update_total_progressbar_range)
-        self.download_tree_thread.signals.total_progress.connect(self.update_total_progressbar)
-        self.download_tree_thread.signals.start_undefined_range.connect(self.start_undefined_range)
-        self.download_tree_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
-        self.download_tree_thread.signals.progress_send_video.connect(self.process_video_thread)
-        self.threadpool.start(self.download_tree_thread)
-
     def process_video_thread(self, video, video_id):
         """Checks which of the three types of threading the user selected and handles them."""
-        self.create_video_progressbar(video_id=video_id, title=video.title)
+
         self.download_thread = DownloadThread(video=video, video_id=video_id)
         #self.download_thread.signals.progress_video_converting.connect(self.progress_video_remuxing)
         self.download_thread.signals.progress_video.connect(self.update_video_progressbar)
@@ -2095,139 +2174,10 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         if not self.ui.main_checkbox_tree_do_not_clear_videos.isChecked():
             self.ui.treeWidget.clear()
 
-    """These functions are related to selecting video items within the tree widget"""
-
-    def unselect_all_items(self):
-        """Unselects all items from the tree widget"""
-        self.logger.info("Unselected all items")
-        root = self.ui.treeWidget.invisibleRootItem()
-        item_count = root.childCount()
-        for i in range(item_count):
-            item = root.child(i)
-            item.setCheckState(0, Qt.CheckState.Unchecked)
-
-    def select_range_of_items(self):
-        # Create an instance of the UI form widget
-        self.switch_to_range_selector()
-        root = self.ui.treeWidget.invisibleRootItem()
-        item_count = root.childCount()
-        self.ui.spinbox_range_end.setMaximum(item_count)
-        self.ui.button_range_apply_index.clicked.connect(self.process_range_of_items_selection_index)
-        self.ui.button_range_apply_time.clicked.connect(self.process_range_of_items_selection_time)
-        self.ui.button_range_apply_author.clicked.connect(self.process_range_of_items_author)
-        self.ui.button_range_select_all.clicked.connect(self.select_all_items)
-        self.ui.button_range_unselect_all.clicked.connect(self.unselect_all_items)
-
-    def select_all_items(self):
-        """Selects all items from the tree widget"""
-        self.logger.info("Selected all items")
-        root = self.ui.treeWidget.invisibleRootItem()
-        item_count = root.childCount()
-        for i in range(item_count):
-            item = root.child(i)
-            item.setCheckState(0, Qt.CheckState.Checked)
-
-    def process_range_of_items_selection_index(self):
-        start = self.ui.spinbox_range_start.value()
-        end = self.ui.spinbox_range_end.value()
-        root = self.ui.treeWidget.invisibleRootItem()
-
-        # Adjust start and end indices to match tree widget indexing
-        start -= 1
-        end -= 1
-
-        for i in range(start, end + 1):  # Adjust the range to be inclusive of the end
-            item = root.child(i)
-            item.setCheckState(0, Qt.CheckState.Checked)
-
-    def process_range_of_items_selection_time(self):
-        start_time = int(self.ui.lineedit_range_start.text())
-        end_time = int(self.ui.lineedit_range_end.text())
-        root = self.ui.treeWidget.invisibleRootItem()
-
-        # Loop through all items in the QTreeWidget
-        for i in range(root.childCount()):
-            item = root.child(i)
-
-            # Retrieve the duration from the item, assuming it's stored as an integer in UserRole
-            duration = int(item.data(2, Qt.ItemDataRole.UserRole))
-
-            # Check if the duration is within the specified start and end times
-            if start_time <= duration <= end_time:
-                item.setCheckState(0, Qt.CheckState.Checked)
-
-    def process_range_of_items_author(self):
-        name = str(self.ui.lineedit_range_author.text())
-        root = self.ui.treeWidget.invisibleRootItem()
-
-        for i in range(root.childCount()):
-            item = root.child(i)
-            author = str(item.data(4, Qt.ItemDataRole.UserRole))
-            if str(author).lower() == str(name).lower():
-                item.setCheckState(0, Qt.CheckState.Checked)
-
-    """
-    def set_thumbnail(self, item_current: QTreeWidgetItem, item_previous=None): # Won's use the previous item
-        Replace your QLabel code with this, feeding the graphicsView.
-
-        if time.time() - self.last_thumbnail_change < 0.1: # Bypasses a bug where the function would be called 2 times always
-            return
-
-        data = item_current.data(5, Qt.ItemDataRole.UserRole)
-        self.last_thumbnail_change = time.time()
-        item = item_current
-
-        # clear if nothing to show
-        if item is None or self._anonymous_mode:
-            self._pixmap_item.setPixmap(QPixmap())
-            return
-
-        pixmap = QPixmap()
-
-        if not data:
-            self._pixmap_item.setPixmap(QPixmap())
-            return
-
-        if isinstance(data, (bytes, bytearray, memoryview)):
-            ok = pixmap.loadFromData(bytes(data))
-        elif isinstance(data, QByteArray):
-            ok = pixmap.loadFromData(data)
-        elif isinstance(data, QPixmap):
-            pixmap = data
-            ok = True
-        else:
-            self.logger.warning("Unexpected thumbnail_data type: %r", type(data))
-            ok = False
-
-        if not ok:
-            self.logger.warning("Failed to load pixmap from thumbnail data")
-            self._pixmap_item.setPixmap(QPixmap())
-            return
-
-        self._full_pixmap = pixmap
-        self._pixmap_item.setPixmap(pixmap)
-        self._scene.setSceneRect(QRectF(pixmap.rect()))
-        self.ui.graphicsView.fitInView(self._scene.sceneRect(),
-                                       Qt.AspectRatioMode.KeepAspectRatioByExpanding)
-    """
 
     """
     The following functions are used to connect data between Threads and the Main UI
     """
-
-    def create_video_progressbar(self, video_id, title):
-        truncated_title = (title[:30] + '...') if len(title) > 30 else title
-        label = QLabel(truncated_title)
-        progressbar = QProgressBar()
-        progressbar.setStyleSheet(generate_random_progressbar_qss())
-        progressbar.setMaximum(100)
-        progressbar.setValue(0)
-
-        row = self.ui.progress_gridlayout_progressbar.rowCount()
-        self.ui.progress_gridlayout_progressbar.addWidget(label, row, 0)
-        self.ui.progress_gridlayout_progressbar.addWidget(progressbar, row, 1)
-
-        self.progress_widgets[video_id] = {'label': label, 'progressbar': progressbar}
 
     def set_video_progress_range(self, video_id, maximum):
         """Called once per video to set up [0.maximum] on the bar."""

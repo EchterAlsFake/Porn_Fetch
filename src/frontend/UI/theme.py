@@ -123,6 +123,19 @@ QComboBox QAbstractItemView::item:selected:!active {
   padding: 5px 7px;
 }
 
+QComboBox QAbstractItemView::item:disabled {
+  border: 1px solid #ef4444;                 /* red border */
+  background: rgba(239, 68, 68, 0.16);        /* soft red */
+  color: rgba(234, 234, 234, 0.55);           /* faded text */
+}
+
+/* Prevent hover effects for disabled entries */
+QComboBox QAbstractItemView::item:disabled:hover {
+  border: 1px solid #ef4444;
+  background: rgba(239, 68, 68, 0.16);
+}
+
+
 /* Your other rules (kept as-is) */
 *[variant="card"] { background:#26292f; border:1px solid #3d4148; border-radius:12px; }
 

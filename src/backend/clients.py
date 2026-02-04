@@ -31,6 +31,7 @@ import re
 import logging
 import traceback
 
+from typing import Any, List
 from mutagen.mp4 import MP4, MP4Cover, MP4Tags
 from phub import Client as ph_Client, Video as ph_Video
 from xnxx_api import Client as xn_Client, Video as xn_Video
@@ -183,8 +184,47 @@ def check_video(url):
     return False
 
 
+def get_available_qualities(video: Any) -> List[int]:
+    """
+    Returns sorted unique qualities worst->best as ints.
+    Works for:
+      - HLS videos: video.m3u8_base_url + video.core.list_available_qualities()
+      - Legacy videos: video.video_qualities (e.g. ["360", "480", "720"])
+    """
+    # ---- HLS (m3u8) ----
+    m3u8_url = getattr(video, "m3u8_base_url", None)
+    print(f"Got m3u8 URL -->: {m3u8_url}")
+    if m3u8_url:
+        print(f"Yes m3u8 is actually existing")
+        try:
+            if hasattr(video, "core"):
+                heights = video.core.list_available_qualities(m3u8_url)  # your existing function
+
+            else:
+                heights = video.client.core.list_available_qualities(m3u8_url)
+
+            return sorted({int(h) for h in heights if h is not None})
+        except Exception:
+            error = traceback.format_exc()
+            print(error)
+            return []
+
+    # ---- Legacy ----
+    # Your legacy wrapper already exposes `video_qualities` as list[str]
+    quals = getattr(video, "video_qualities", None)
+    if quals:
+        try:
+            return sorted({int(q) for q in quals})
+        except Exception:
+            return []
+
+    return []
+
+
 def load_video_attributes(video):
     title = video.title
+    qualities = get_available_qualities(video) # Returns a list with: [144,240,360...] for the GUI
+    print(f"Got Qualities: {qualities}")
 
     if isinstance(video, ph_Video):
         try:
@@ -334,7 +374,8 @@ def load_video_attributes(video):
         "thumbnail": thumbnail,
         "url": video.url,
         "thumbnail_data": data_bytes,
-        "video_id": video_id
+        "video_id": video_id,
+        "qualities": qualities
     }
     logger.debug(f"Successfully loaded video data for: {title}")
 

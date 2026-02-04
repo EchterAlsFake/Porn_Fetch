@@ -572,6 +572,7 @@ And even more that I forgot here...
 
 ### User Interface
 - Completely new design (finally good)
+- You can now select quality per video
 - Font sizes scale correctly now, thanks to point size
   instead of pixels
 - Redesigned the settings widget (compact now)

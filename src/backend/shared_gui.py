@@ -55,9 +55,10 @@ class Signals(QObject):
     total_progress_range = Signal(int) # Sets the maximum for the total progressbar
     progress_add_to_tree_widget = Signal(int, int)  # Tracks the number of videos
     # loaded and processed into the tree widget
-
-    progress_video = Signal(int, int, int)
-    progress_video_range = Signal(int, int)
+    progress_video_range = Signal(int, int)         # video_id, total
+    progress_video = Signal(int, int, int)          # video_id, pos, total
+    progress_remux = Signal(int, int, int)          # video_id, pos, total   <-- NEW
+    download_completed = Signal(int)                # video_id
     progress_video_converting = Signal(int, int)
 
     error_signal = Signal(object)
@@ -73,7 +74,6 @@ class Signals(QObject):
     result = Signal(dict)  # Reports the result of the internet checks if something went wrong
     clear_tree_widget_signal = Signal()  # A signal to clear the tree widget
     text_data_to_tree_widget = Signal(int)  # Sends the text data in the form of a dictionary to the main class
-    download_completed = Signal(object)  # Reports a successfully downloaded video
     progress_send_video = Signal(object,
                                  object)  # Sends the selected video objects from the tree widget to the main class
     tree_widget_finished = Signal()
