@@ -38,9 +38,9 @@ import webbrowser
 import subprocess
 import src.frontend.UI.resources
 
-from typing import Callable
 from collections import deque
 from threading import Event, Lock
+from typing import Callable, Union
 from itertools import islice, chain
 
 
@@ -765,7 +765,7 @@ class DownloadThread(QRunnable):
     """Refactored threading class to download videos with improved performance and logic."""
     def __init__(self, video, video_id, quality, stop_event):
         super().__init__()
-        self.video = video
+        self.video: clients.AllowedVideoType = video
         self.video_id = video_id
         self.consistent_data = video_data.consistent_data
         self.quality = quality
@@ -787,9 +787,6 @@ class DownloadThread(QRunnable):
 
     def generic_callback(self, pos, total,  video_source="general"):
         """Generic callback function to emit progress signals with rate limiting."""
-        if self.stop_event.is_set():
-            return # TODO (need actual implementation here)
-
         current_time = time.time()
         if self.stop_flag.is_set():
             return
@@ -828,17 +825,33 @@ class DownloadThread(QRunnable):
     def run(self):
         """Run the download in a thread, optimizing for different video sources and modes."""
         try:
+            do_not_skip = False
             if os.path.isfile(self.output_path):
-                if self.skip_existing_files:
+                self.logger.info("File already exists, checking integrity...")
+                clients.core.session.headers.update({"Accept-Encoding": "identity"}) # Chad told me to do this idk
+                direct_download_url = clients.get_direct_url_legacy(video=self.video, quality=self.quality)
+                response = clients.core.fetch(method="HEAD", url=direct_download_url, get_response=True)
+                size = int(response.headers.get("Content-Length"))
+                do_not_skip = True
+                size_of_file = os.path.getsize(self.output_path)
+                if size != size_of_file:
+                    self.logger.info("File seems to be incomplete, appending the rest of bytes, please wait...")
+
+                else:
+                    self.logger.info("Checked Integrity -->: 100% :)")
+                    return
+
+                if self.skip_existing_files and not do_not_skip:
                     self.logger.debug("The file already exists, skipping...")
                     self.signals.download_completed.emit(True)
                     return
 
                 else:
-                    self.logger.debug("The file already exists, appending random number...")
-                    path = str(self.output_path).split(".")
-                    path = path[0] + str(random.randint(0, 1000)) + ".mp4"
-                    self.output_path = path
+                    if not do_not_skip:
+                        self.logger.debug("The file already exists, appending random number...")
+                        path = str(self.output_path).split(".")
+                        path = path[0] + str(random.randint(0, 1000)) + ".mp4"
+                        self.output_path = path
 
             if int(self.consistent_data.get("processing_delay")) != 0:
                 time.sleep(int(self.consistent_data.get("processing_delay")))
@@ -861,23 +874,16 @@ class DownloadThread(QRunnable):
                 try:
                     self.logger.debug("Starting the Download!")
                     self.video.download(quality=self.quality, path=self.output_path, no_title=True,
-                                    callback=lambda pos, total: self.generic_callback(pos, total, video_source))
+                                    callback=lambda pos, total: self.generic_callback(pos, total, video_source), stop_event=self.stop_event)
 
                 except Exception:
                     error = traceback.format_exc()
                     handle_error_gracefully(data=self.consistent_data, self=self, error_message=f"An error happened while downloading a video from HQPorner / EPorner: {error}", needs_network_log=True)
 
-            elif isinstance(self.video, clients.ph_Video):  # Assuming 'Video' is the class for Pornhub
-                video_source = "general"
-                self.logger.debug("Starting the Download!")
-                self.video.download(downloader=str(self.download_mode), path=self.output_path,
-                                    quality=self.quality, remux=remux, display_remux=self.callback_remux,
-                                    display=lambda pos, total: self.generic_callback(pos, total),
-                                    )
-
             else:
-                self.video.download(downloader=str(self.download_mode), path=self.output_path, callback_remux=self.callback_remux, no_title=True,
-                                    quality=self.quality, remux=remux, callback=lambda pos, total: self.generic_callback(pos, total))
+                self.video.download(path=self.output_path, callback_remux=self.callback_remux, no_title=True,
+                                    quality=self.quality, remux=remux, stop_event=self.stop_event,
+                                    callback=lambda pos, total: self.generic_callback(pos, total))
 
         except Exception:
             error = traceback.format_exc()
@@ -1397,7 +1403,6 @@ You have all paid features unlocked :)
 
         save_settings = QShortcut(QKeySequence("Ctrl+S"), self)
         save_settings.activated.connect(self.save_user_settings)
-
 
     def maps(self):
         self.mappings_hqporner_tools = {
@@ -2084,7 +2089,6 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         row["download_btn"].setEnabled(True)
         row["stop_btn"].setEnabled(False)
 
-
     def queue_download(self, video_id: int):
         row = self._row[video_id]
         item = row["item"]
@@ -2118,19 +2122,6 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
     def tree_widget_finished(self):
         self.update_total_progressbar_range(1)
         self.update_total_progressbar(1)
-
-    def process_video_thread(self, video, video_id):
-        """Checks which of the three types of threading the user selected and handles them."""
-
-        self.download_thread = DownloadThread(video=video, video_id=video_id)
-        #self.download_thread.signals.progress_video_converting.connect(self.progress_video_remuxing)
-        self.download_thread.signals.progress_video.connect(self.update_video_progressbar)
-        self.download_thread.signals.progress_video_range.connect(self.set_video_progress_range)
-        self.download_thread.signals.total_progress_range.connect(self.update_total_progressbar_range)
-        self.download_thread.signals.total_progress.connect(self.update_total_progressbar)
-        self.download_thread.signals.download_completed.connect(self.download_completed)
-        self.threadpool.start(self.download_thread)
-        self.logger.debug("Started Download Thread!")
 
     def download_completed(self, video_id):
         """If a video is downloaded, the semaphore is released"""

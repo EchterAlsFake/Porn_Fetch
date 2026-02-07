@@ -18,4 +18,4 @@ __type__ = "source"
 __bundle_id__ = "me.echteralsfake.pornfetch"
 __org__ = "EchterAlsFake"
 PUBLIC_KEY_B64 = 'zGUmG8Z5InvoYIwnIokQi+SysjEodvfP8kLoCur3KjM=' # This is the public key for the license verification
-IS_SOURCE_RUN = False
+IS_SOURCE_RUN = True

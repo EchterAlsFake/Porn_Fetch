@@ -31,7 +31,7 @@ import re
 import logging
 import traceback
 
-from typing import Any, List
+from typing import Any, List, TypeAlias
 from mutagen.mp4 import MP4, MP4Cover, MP4Tags
 from phub import Client as ph_Client, Video as ph_Video
 from xnxx_api import Client as xn_Client, Video as xn_Video
@@ -40,15 +40,25 @@ from xvideos_api import Client as xv_Client, Video as xv_Video
 from eporner_api import Client as ep_Client, Video as ep_Video
 from xhamster_api import Client as xh_Client, Video as xh_Video
 from spankbang_api import Client as sp_Client, Video as sp_Video
-from base_api.base import BaseCore, setup_logger
-from beeg_api.beeg_api import Client as bg_Client, Video as bg_Video
-from missav_api.missav_api import Client as mv_Client, Video as mv_Video
+from base_api import BaseCore, setup_logger
+from beeg_api import Client as bg_Client, Video as bg_Video
+from missav_api import Client as mv_Client, Video as mv_Video
+from porntrex_api import Client as pt_Client, Video as pt_Video
+from base_api.base import _normalize_quality_value, _choose_quality_from_list
 from youporn_api.youporn_api import Client as yp_Client, Video as yp_Video
 from xfreehd_api.xfreehd_api import Client as xf_Client, Video as xf_Video
-from porntrex_api.porntrex_api import Client as pt_Client, Video as pt_Video
 from hqporner_api import Client as hq_Client, Video as hq_Video, errors as hq_errors
 # Note, the Video instances are mostly used in `shared_functions.py`
+AllowedVideoType: TypeAlias = (
+    type[ph_Video] | type[xn_Video] | type[xv_Video] | type[yp_Video] |
+    type[xh_Video] | type[sp_Video] | type[bg_Video] | type[mv_Video]
+    # Those are all HLS streams
+)
 
+AllowedVideoType_Legacy: TypeAlias = (
+    type[hq_Video] | type[xf_Video] | type[ep_Video] | type[pt_Video]
+    # Those are all non HLS streams for now
+)
 
 logger = setup_logger(name="Porn Fetch - [Clients]", level=logging.DEBUG)
 
@@ -73,9 +83,48 @@ core = BaseCore() # We need that sometimes in Porn Fetch's main class e.g., thum
 core.config.max_retries = 2 # Only use 2 retries to prevent blocking
 core.config.use_http2 = False # Fallback to http 1 for critical operations
 core.config.timeout = 10 # Medium to low timeout to prevent blocking
+core.initialize_session()
 
 
-def refresh_clients(enable_kill_switch=False):
+def get_direct_url_legacy(video: AllowedVideoType_Legacy, quality: str | int):
+    """
+    Since the non HLS downloads now support resuming by getting the current filesize
+    and appending missing bytes, we need a way in Porn Fetch to actually see if a file is incomplete.
+
+    If we don't do this, the skip existing files feature wouldn't work or I would need to find another
+    more complex implementation for this.
+
+    This helper function basically just gets the direct download URL for a given quality based on each API
+    that uses mp4 streams.
+    """
+
+    if isinstance(video, xf_Video):
+        if quality > "480p" or quality > 480 or quality == "best" or quality == "half": # Bro pls don't ask :rose:
+            try:
+                return video.cdn_urls[1]
+
+            except IndexError:
+                return video.cdn_urls[0]
+
+        return video.cdn_urls[0]
+
+    elif isinstance(video, hq_Video) or isinstance(video, pt_Video):
+        qn = _normalize_quality_value(quality)
+        chosen_height = _choose_quality_from_list(video.video_qualities, qn)
+
+        quality_url_map = {int(re.search(r'(\d{3,4})', q).group(1)): url for q, url in zip(video.video_qualities, video.direct_download_urls())}
+        download_url = f"https://{quality_url_map[chosen_height]}"
+        return download_url # Uhhh
+
+    elif isinstance(video, ep_Video):
+        return video.direct_download_link(quality=quality, mode="h264") # Pls don't download AV1, thank you
+        # NO I won't spend half on hour to handle this edge case where one video on this whole platform might not have
+        # A h264 stream bro
+
+    return "MakesNoSense"
+
+
+def refresh_clients(enable_kill_switch: bool = False, debug_mode: bool = False) -> None:
     logger.info(f"Refreshing clients!")
     global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, \
         hq_client, xn_client, core, yp_client, bg_client, pt_client, xf_client
@@ -345,10 +394,14 @@ def load_video_attributes(video):
         logger.info(f"Fetching Thumbnail for: {title}")
         if not thumbnail == "Not available":
             if isinstance(video, hq_Video):
-                core.session.headers["Referer"] = "https://www.hqporner.com/"
+                core.session.headers.update(headers={
+                    "Referer": "https://www.hqporner.com/"
+                })
 
             elif isinstance(video, ph_Video):
-                core.session.headers["Referer"] = "https://www.pornhub.com/"
+                core.session.headers.update(headers={
+                    "Referer": "https://www.pornhub.com/"
+                })
 
             data_bytes = core.fetch(thumbnail, get_bytes=True)  # <- returns bytes
 
@@ -402,7 +455,6 @@ def download_android(url: str, downloader="threaded", quality="best", path="./",
 
     if isinstance(video, ph_Video):
         return video.download(
-            downloader=downloader,
             quality=quality,
             path=path,
             display=cb,
@@ -411,7 +463,6 @@ def download_android(url: str, downloader="threaded", quality="best", path="./",
 
     else:
         return video.download(
-            downloader=downloader,
             quality=quality,
             path=path,
             callback=cb,

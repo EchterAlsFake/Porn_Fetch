@@ -611,9 +611,14 @@ to be refactored.
 - Added Video support for xfreehd.com
 - Your configuration values are now saved after an update
 - Added automatic updating for macOS (natively, yes really 🔥)
+- You can now resume downloads
+- You can now actually stop downloads lol
+- You can now choose quality for each download separately
 
 ### Bug Fixes
 - Fixed 403 missav error
+- Fixed PornHub download issue
+- Fixed PornHub thumbnail issue
 
 ### User Interface
 - Added Italian translations (Thanks: @FatalPuppet)
