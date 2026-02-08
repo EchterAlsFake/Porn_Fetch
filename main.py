@@ -585,6 +585,17 @@ class AddToTreeWidget(QRunnable):
         self.logger = shared_functions.setup_logger(name="Porn Fetch - [AddToTreeWidget]", log_file="PornFetch.log", level=logging.DEBUG)
 
     def process_video(self, video, index):
+        if isinstance(video, str):
+            report = video
+
+        else:
+            try:
+                report = video.url
+
+            except: # Don't asl
+                pass
+
+
         if not isinstance(video, str):
             self.logger.debug(f"Requesting video processing of: {video.url}")
 
@@ -631,15 +642,15 @@ class AddToTreeWidget(QRunnable):
                 return video_identifier
 
             except (ph_errors.PremiumVideo, IndexError):
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Premium-only video skipped: {video.url}")
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Premium-only video skipped: {report}")
                 return False
 
             except ph_errors.RegionBlocked:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Region-blocked video skipped: {video.url}")
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Region-blocked video skipped: {report}")
                 return False
 
             except ph_errors.VideoDisabled:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Warning: The video {video.url} is disabled. It will be skipped")
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Warning: The video {report} is disabled. It will be skipped")
 
             except ph_errors.RegexError:
                 message = f"""
@@ -647,7 +658,7 @@ class AddToTreeWidget(QRunnable):
                 the same video, please consider reporting it. If you have logging enabled, this issue will automatically be reported.
                 
                 Current Index: {index}
-                Additional Info: URL: {video.url}
+                Additional Info: URL: {report}
                 """
                 self.logger.error("Regex error occurred, sleeping one second...")
                 time.sleep(1)
@@ -658,46 +669,46 @@ class AddToTreeWidget(QRunnable):
                     return False
 
             except ph_errors.VideoPendingReview:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Warning: The video {video.url} is pending review. It will be skipped")
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Warning: The video {report} is pending review. It will be skipped")
                 return False
 
             except InvalidResponse:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Warning: The video: {video.url} returned an empty response when trying"
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Warning: The video: {report} returned an empty response when trying"
                                              f"to fetch its content. There is nothing I can do. It will be skipped")
                 return False
 
             except NotAvailable_HQ:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {video.url} is not available, because the CDN network has an issue. "
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {report} is not available, because the CDN network has an issue. "
                                               f"This is not my fault, please do NOT report this error, thank you :)")
                 return False
 
 
             except WeirdError_HQ:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"An error happened with: {video.url} this is a weird error i have no fix for yet,"
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"An error happened with: {report} this is a weird error i have no fix for yet,"
                                               f" however this will be reported, to help me fixing it :) ", needs_network_log=True)
                 return False
 
             except VideoUnavailable_XV:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message= f"The video {video.url} is not available. Do not report this error... Not my fault :)")
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message= f"The video {report} is not available. Do not report this error... Not my fault :)")
                 return False
 
             except NotAvailable_EP:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {video.url} is not available on HQPorner. This is not my fault, skipping...")
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {report} is not available on HQPorner. This is not my fault, skipping...")
                 return False
 
             except VideoDisabled_EP:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {video.url} has been disabled by EPorner itself. It will be skippled...")
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {report} has been disabled by EPorner itself. It will be skippled...")
                 return False
 
             except VideoError_PH:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {video.url} has an error. However, in this case it's PornHub's fault. It will be skipped!")
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {report} has an error. However, in this case it's PornHub's fault. It will be skipped!")
                 return False
 
             except RegionBlocked_YP:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {video.url} is region locked. It will be skipped...")
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {report} is region locked. It will be skipped...")
 
             except VideoUnavailable_YP:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {video.url} is unavailable on YouPorn. It will be skipped...")
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {report} is unavailable on YouPorn. It will be skipped...")
 
             except Exception:
                 error = traceback.format_exc()
@@ -810,7 +821,7 @@ class DownloadThread(QRunnable):
         self._range_emitted = False
 
     def callback_remux(self, pos, total):
-        self.signals.progress_video_converting.emit(self.video_id, pos, total)
+        self.signals.progress_video_converting.emit(pos, total)
 
     def generic_callback(self, pos, total,  video_source="general"):
         """Generic callback function to emit progress signals with rate limiting."""
@@ -1075,7 +1086,6 @@ class PornFetch(QMainWindow):
         self.switch_to_main()
 
     def load_style(self):
-        #self.ui.CentralStackedWidget.insertWidget(12, Batch())
         icons = {
             self.ui.main_button_switch_home: "download.svg",
             self.ui.main_button_switch_settings: "settings.svg",

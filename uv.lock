@@ -429,15 +429,15 @@ wheels = [
 
 [[package]]
 name = "eporner-api"
-version = "1.9.6"
+version = "1.9.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "bs4" },
     { name = "eaf-base-api" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/2f/43/472ae06739c352c59c4ce879812a6726a976bd69acf3b9b57f8bec3fa1db/eporner_api-1.9.6.tar.gz", hash = "sha256:5e8eb92c974f4f8bfbdec4d83a788fd70b92911f2af167f0963a2d6ccafdabc8", size = 14639, upload-time = "2026-02-06T21:39:10.389Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/fb/88/4f70617751bde33d27cc47194934e915f35af2d312fd0eec94994ab995c5/eporner_api-1.9.7.tar.gz", hash = "sha256:07927a9227f829b37075d7bb93d03feb44a1a3d4c469a5fbe4b1812f54919fba", size = 14718, upload-time = "2026-02-08T04:51:42.487Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/3c/df/db5cc8b375e2117a26bd4f43a720d23148afc23cff46798b89fe8ad46396/eporner_api-1.9.6-py3-none-any.whl", hash = "sha256:3db0d3e3421b179e6e9496fd39cff036cfda4a5c8281c021f9aaa2e0a481e338", size = 19023, upload-time = "2026-02-06T21:39:08.793Z" },
+    { url = "https://files.pythonhosted.org/packages/40/20/543b0e1b096b849649de8e760f173bb94166c0ec4247606865ad75eb134c/eporner_api-1.9.7-py3-none-any.whl", hash = "sha256:df894ee5ae9c258e277896a33ab4f3c0d5930d242d23dd738d62bdd68ee0b54e", size = 19095, upload-time = "2026-02-08T04:51:43.81Z" },
 ]
 
 [[package]]
@@ -719,16 +719,16 @@ wheels = [
 
 [[package]]
 name = "missav-api"
-version = "1.4.9"
+version = "1.5.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "bs4" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/89/2e/bd6eea8b05ae89db63cbc03f6251fae26fda5d97374ee76b776fa31aded8/missav_api-1.4.9.tar.gz", hash = "sha256:74cc73a7167dfb44fd8088ea6ca8160ba1a9265270191ea19708d19da09371c4", size = 7995, upload-time = "2026-02-06T21:41:14.613Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/11/5b/4c2d15db500dc47731eeb1e334355d561e5a33cb673633351f4ca80e3662/missav_api-1.5.0.tar.gz", hash = "sha256:3ab85a25e9e1daf40de64c6348b7e7570a2871ddd37e0d792d0b244ffd75da2b", size = 8001, upload-time = "2026-02-08T04:58:50.498Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ab/be/eb74d68305789af64367bd49a84bd1f54257219cf2cf38fab8bdd662a545/missav_api-1.4.9-py3-none-any.whl", hash = "sha256:f4811d5742446be2f3eafbe3eea00fa65d124902a16a9b2e23ae553addecfa21", size = 10095, upload-time = "2026-02-06T21:41:13.676Z" },
+    { url = "https://files.pythonhosted.org/packages/68/42/1b76bd44d82a7f79339dfd13378a4639fb106ef4b6601828c8742281504e/missav_api-1.5.0-py3-none-any.whl", hash = "sha256:3c5bbbe22eed28e42c2c8af64ee38cdfd6b4713f1a671e91639ef293fb930568", size = 10096, upload-time = "2026-02-08T04:58:48.882Z" },
 ]
 
 [[package]]
@@ -760,16 +760,16 @@ wheels = [
 
 [[package]]
 name = "phub"
-version = "4.8.9"
+version = "4.9.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "eaf-base-api" },
     { name = "lxml" },
     { name = "m3u8" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c6/d8/daa2fe327dce1893ea20d3efa3a6602ab21b306c2758ef435ac5f26d262c/phub-4.8.9.tar.gz", hash = "sha256:e1a2848ae85ec989ead3ad737e66903e2b95995657e30c6922528c0a68626f09", size = 46982, upload-time = "2026-02-06T21:43:02.643Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/32/75/241ac8c904757e2b77ced228f5b26bce04bcc28be958b2ccfcfb36df9dcd/phub-4.9.1.tar.gz", hash = "sha256:b31485d500fb4b3a4f322557ccc00cd4d4abec993fda0e26fa36b4802869e93e", size = 47207, upload-time = "2026-02-08T04:23:21.964Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ca/77/5505b75acad1a71a1d777e2e8d8100b0ad60bca85256fc06c40cb9534f73/phub-4.8.9-py3-none-any.whl", hash = "sha256:2a56f8b7460ec1cbb27333e08ca18b3b0d95aea0d055d99e74b3491743d949af", size = 58925, upload-time = "2026-02-06T21:43:03.733Z" },
+    { url = "https://files.pythonhosted.org/packages/59/94/027789aa1213e52f7fd4ec92079a001c5c1b3a6f1b915b19ab92b4a23da4/phub-4.9.1-py3-none-any.whl", hash = "sha256:705fdce5795745321bffdb4cc6991e190a739545838a258b7a86b4678b56e3fd", size = 59168, upload-time = "2026-02-08T04:23:20.078Z" },
 ]
 
 [[package]]
@@ -919,16 +919,16 @@ provides-extras = ["gui", "cli", "dev", "av"]
 
 [[package]]
 name = "porntrex-api"
-version = "1.1"
+version = "1.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "bs4" },
     { name = "eaf-base-api" },
     { name = "json5" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/35/9c/8c5aa0883a9761a071c47f61ebe94620609a4eeb4b4c2ad47f76b31d81c6/porntrex_api-1.1.tar.gz", hash = "sha256:56310120b599115ef1a5dfb0a76a5e505ff57eb391c07782decd6bc9654b2fe8", size = 8964, upload-time = "2026-02-06T21:36:06.303Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/2f/c6/2a6d49f56fca13af9e83b3978ed514c165c00231ed74d96920907baf280d/porntrex_api-1.2.tar.gz", hash = "sha256:290c2883ca84b6d824f38745f992c222a3f39998003d18b6be448b40143ceb05", size = 8988, upload-time = "2026-02-08T05:09:50.562Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/85/4c/d4ea37ea3624e01f106f3d86df11bbd5cad694b39804bed8738ba69dcd2a/porntrex_api-1.1-py3-none-any.whl", hash = "sha256:2d60f862dfe4308ffbfd74a6b825acaee98bef7d7660f505d85d9f346d0173ec", size = 12141, upload-time = "2026-02-06T21:36:07.915Z" },
+    { url = "https://files.pythonhosted.org/packages/6c/7c/ebe9c357c774c6a9f2b02ff6eacb6d4a1d83f9a6f602ec74c675aaa7143c/porntrex_api-1.2-py3-none-any.whl", hash = "sha256:85aa87ea615290978c9e3b81a64d379f7b26d079069b5b3bf8dcb3291f72ab66", size = 12171, upload-time = "2026-02-08T05:09:49Z" },
 ]
 
 [[package]]
@@ -1170,15 +1170,15 @@ wheels = [
 
 [[package]]
 name = "xfreehd-api"
-version = "1.2"
+version = "1.3.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "bs4" },
     { name = "eaf-base-api" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/8d/91/0a3815d26a3721b3b4345685ff1181dbf0f5ab3cef0b4008d4499dff8d85/xfreehd_api-1.2.tar.gz", hash = "sha256:ecae17eac12ce965c06ec8f781a094b154760bca8963733dc1984081f16416cc", size = 7218, upload-time = "2026-02-06T21:36:49.177Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/07/93/51a046ddd72230b68aee54259f5d63d9f15218ffeebdaa8cd878758610dd/xfreehd_api-1.3.1.tar.gz", hash = "sha256:cc0658bf87f8f6cd5376e6de52fab8da7e42efe0f5fabc6e7aa73b4cce39540b", size = 7399, upload-time = "2026-02-08T05:29:20.062Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a5/c8/dac3b6fafadf735b7155efb04aea3e4afca54de67886f8dc273a3d7de756/xfreehd_api-1.2-py3-none-any.whl", hash = "sha256:5df865d459a8956cd10bb11251d2ca7e638349082da6fbf4a045cc29510ba42a", size = 9578, upload-time = "2026-02-06T21:36:48.237Z" },
+    { url = "https://files.pythonhosted.org/packages/a1/0b/c56731c274f5d3ad9991b77c142bcd4e391e3898660b22803d8774ffe72c/xfreehd_api-1.3.1-py3-none-any.whl", hash = "sha256:6b1ea893830d2d518dcc06f818ee56f38395c719ed9c904f32848e6785366079", size = 9781, upload-time = "2026-02-08T05:29:21.845Z" },
 ]
 
 [[package]]

@@ -32,22 +32,21 @@ import logging
 import traceback
 
 from typing import Any, List, TypeAlias
+from base_api.modules.config import config # This is the global configuration instance of base core config
 from mutagen.mp4 import MP4, MP4Cover, MP4Tags
 from phub import Client as ph_Client, Video as ph_Video
 from xnxx_api import Client as xn_Client, Video as xn_Video
-from base_api.modules.config import config # This is the global configuration instance of base core config
-from xvideos_api import Client as xv_Client, Video as xv_Video
-from eporner_api import Client as ep_Client, Video as ep_Video
-from xhamster_api import Client as xh_Client, Video as xh_Video
-from spankbang_api import Client as sp_Client, Video as sp_Video
-from base_api import BaseCore, setup_logger
 from beeg_api import Client as bg_Client, Video as bg_Video
 from missav_api import Client as mv_Client, Video as mv_Video
+from xvideos_api import Client as xv_Client, Video as xv_Video
+from xfreehd_api import Client as xf_Client, Video as xf_Video
+from eporner_api import Client as ep_Client, Video as ep_Video
 from porntrex_api import Client as pt_Client, Video as pt_Video
-from base_api.base import _normalize_quality_value, _choose_quality_from_list
+from xhamster_api import Client as xh_Client, Video as xh_Video
+from spankbang_api import Client as sp_Client, Video as sp_Video
 from youporn_api.youporn_api import Client as yp_Client, Video as yp_Video
-from xfreehd_api.xfreehd_api import Client as xf_Client, Video as xf_Video
 from hqporner_api import Client as hq_Client, Video as hq_Video, errors as hq_errors
+from base_api.base import BaseCore, setup_logger, _normalize_quality_value, _choose_quality_from_list
 # Note, the Video instances are mostly used in `shared_functions.py`
 AllowedVideoType: TypeAlias = (
     type[ph_Video] | type[xn_Video] | type[xv_Video] | type[yp_Video] |
@@ -260,7 +259,14 @@ def get_available_qualities(video: Any) -> List[int]:
 
     # ---- Legacy ----
     # Your legacy wrapper already exposes `video_qualities` as list[str]
-    quals = getattr(video, "video_qualities", None)
+    print(video.video_qualities)
+    print(video.cdn_urls)
+    if isinstance(video, ep_Video):
+        quals = video.video_qualities()
+
+    else:
+        quals = getattr(video, "video_qualities", None)
+
     if quals:
         try:
             return sorted({int(q) for q in quals})
@@ -435,7 +441,7 @@ def load_video_attributes(video):
     return data
 
 
-def download_android(url: str, downloader="threaded", quality="best", path="./", remux=False):
+def download_android(url: str, quality="best", path="./", remux=False):
     """
     Downloads a video and reports progress back to Kotlin ProgressBridge.
     Note: This is intended to be used by the Android App, NOT the main gui in `main.py` nor the CLI!
@@ -453,21 +459,12 @@ def download_android(url: str, downloader="threaded", quality="best", path="./",
         except Exception:
             pass
 
-    if isinstance(video, ph_Video):
-        return video.download(
-            quality=quality,
-            path=path,
-            display=cb,
-            remux=remux
-        )
-
-    else:
-        return video.download(
-            quality=quality,
-            path=path,
-            callback=cb,
-            remux=remux
-        )
+    return video.download(
+        quality=quality,
+        path=path,
+        callback=cb,
+        remux=remux
+    )
 
 
 def write_tags(path: str, data: dict):
