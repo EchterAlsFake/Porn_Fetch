@@ -592,9 +592,8 @@ class AddToTreeWidget(QRunnable):
             try:
                 report = video.url
 
-            except: # Don't asl
-                pass
-
+            except: # Don't ask
+                report = "If you can read this, then you know I fucked up badly. Please call ChatGPT and ask it to fix this code"
 
         if not isinstance(video, str):
             self.logger.debug(f"Requesting video processing of: {video.url}")
@@ -821,7 +820,7 @@ class DownloadThread(QRunnable):
         self._range_emitted = False
 
     def callback_remux(self, pos, total):
-        self.signals.progress_video_converting.emit(pos, total)
+        self.signals.progress_remux.emit(self.video_id, pos, total)
 
     def generic_callback(self, pos, total,  video_source="general"):
         """Generic callback function to emit progress signals with rate limiting."""
@@ -2100,6 +2099,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         row = self._row.get(video_id)
         if not row:
             return
+
         pb = row["progress"]
         pb.setRange(0, max(1, int(total)))
         pb.setValue(int(pos))

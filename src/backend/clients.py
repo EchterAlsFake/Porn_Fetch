@@ -241,9 +241,7 @@ def get_available_qualities(video: Any) -> List[int]:
     """
     # ---- HLS (m3u8) ----
     m3u8_url = getattr(video, "m3u8_base_url", None)
-    print(f"Got m3u8 URL -->: {m3u8_url}")
     if m3u8_url:
-        print(f"Yes m3u8 is actually existing")
         try:
             if hasattr(video, "core"):
                 heights = video.core.list_available_qualities(m3u8_url)  # your existing function
@@ -259,8 +257,6 @@ def get_available_qualities(video: Any) -> List[int]:
 
     # ---- Legacy ----
     # Your legacy wrapper already exposes `video_qualities` as list[str]
-    print(video.video_qualities)
-    print(video.cdn_urls)
     if isinstance(video, ep_Video):
         quals = video.video_qualities()
 
@@ -279,7 +275,6 @@ def get_available_qualities(video: Any) -> List[int]:
 def load_video_attributes(video):
     title = video.title
     qualities = get_available_qualities(video) # Returns a list with: [144,240,360...] for the GUI
-    print(f"Got Qualities: {qualities}")
 
     if isinstance(video, ph_Video):
         try:

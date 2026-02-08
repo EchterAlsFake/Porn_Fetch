@@ -59,7 +59,6 @@ class Signals(QObject):
     progress_video = Signal(int, int, int)          # video_id, pos, total
     progress_remux = Signal(int, int, int)          # video_id, pos, total   <-- NEW
     download_completed = Signal(int)                # video_id
-    progress_video_converting = Signal(int, int)
 
     error_signal = Signal(object)
 
