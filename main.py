@@ -19,7 +19,6 @@ Contact:
 E-Mail: EchterAlsFake@proton.me
 Discord: echteralsfake (faster response)
 """
-
 # macOS Setup...
 import sys
 
@@ -38,9 +37,9 @@ import webbrowser
 import subprocess
 import src.frontend.UI.resources
 
+from typing import Callable
 from collections import deque
 from threading import Event, Lock
-from typing import Callable, Union
 from itertools import islice, chain
 
 
@@ -55,11 +54,11 @@ import src.backend.shared_functions as shared_functions
 from src.backend.config import __version__, PUBLIC_KEY_B64, shared_config, IS_SOURCE_RUN
 
 # Frontend imports
-from src.frontend.UI.ssl_warning import *
-from src.frontend.UI.ui_form_main_window import Ui_MainWindow
 from src.frontend.UI.theme import *
-from src.frontend.UI.pornfetch_info_dialog import PornFetchInfoWidget
+from src.frontend.UI.ssl_warning import *
 from src.frontend.UI.license import License, Disclaimer
+from src.frontend.UI.ui_form_main_window import Ui_MainWindow
+from src.frontend.UI.pornfetch_info_dialog import PornFetchInfoWidget
 from src.frontend.UI.custom_combo_box import ComboPopupFitter, make_quality_combobox
 
 # Qt / PySide6 related imports
@@ -80,8 +79,8 @@ from youporn_api.modules.errors import VideoUnavailable as VideoUnavailable_YP, 
 from hqporner_api.modules.errors import InvalidActress as InvalidActress_HQ, NoVideosFound, NotAvailable as NotAvailable_HQ, WeirdError as WeirdError_HQ
 
 # Other
-from eporner_api.modules.locals import Category as ep_Category
 from hqporner_api.api import Sort as hq_Sort
+from eporner_api.modules.locals import Category as ep_Category
 
 try:
     from av import open as av_open  # Don't ask
@@ -92,17 +91,16 @@ except Exception:
     FORCE_DISABLE_AV = True
 
 
-FORCE_PORTABLE_RUN = False
-total_segments = 0
-downloaded_segments = 0
+FORCE_PORTABLE_RUN = False # Holds a value for argparse later (see main function)
+total_segments = 0 # Total segments kept in a queue (for total progress tracking)
+downloaded_segments = 0 # Amount of segments that have been downloaded (for total progress tracking)
 total_downloaded_videos = 0  # All videos that actually successfully downloaded
-total_downloaded_videos_attempt = 0  # All videos the user tries to download
-session_urls = []  # This list saves all URls used in the current session. Used for the URL export function
-conf = shared_config
-stop_flag = Event()
-_download_lock = Lock()
-video_data = clients.VideoData()
-settings: QSettings = QSettings()
+session_urls = []  # This list saves all URls used in the current session. Used for the URL export function (CTRL + E)
+conf = shared_config # Holds the configuration instance (converted to QSettings INI format)
+stop_flag = Event() # Stops loading videos into the tree widget (does not stop any downloads)
+_download_lock = Lock() # I actually don't really know why this is here
+video_data = clients.VideoData() # Stores general video data as long as the data for each loaded video
+settings: QSettings = QSettings() # Global instance of the settings used in Porn Fetch
 logger = shared_functions.setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG)
 license_storage_path = os.path.join(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation), "pornfetch.license")
 x = False # Don't ask (this is a secret ;)
@@ -120,6 +118,7 @@ def _resolve_config_path(portable: bool, portable_dir: str | None = None) -> Pat
     cfg_dir = Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation))
     QDir().mkpath(str(cfg_dir))
     return cfg_dir / "config.ini"
+    # We need this, because the configuration path is different whether used portably or if installed.
 
 
 def make_settings(portable: bool, portable_dir: str | None = None) -> QSettings:
@@ -134,17 +133,24 @@ def make_settings(portable: bool, portable_dir: str | None = None) -> QSettings:
     ensure_config_file(ini_path)
 
     return QSettings(str(ini_path), QSettings.Format.IniFormat)
+    # This ensures the configuration fil exists, will get the current path and convert the ini format
+    # Into an actual QSettings object that I can work with.
+    # I wouldn't really need to use QSettings here, but if Qt provides a method, why not use it
 
 
 class LicenseWidget(QWidget):
+    """
+    This is the License Widget which will let a user import the actual license and see if it's valid
+    Still in experimental / beta mode, will be improved in v3.9 # TODO
+    """
     def __init__(self, setup_restrictions: Callable, parent=None):
         super().__init__(parent)
-        self.setup_restrictions = setup_restrictions
+        self.setup_restrictions = setup_restrictions # A function that basically creates the restrictions
 
         self.lic = LicenseManager(
-            public_key_b64=PUBLIC_KEY_B64,
-            storage_path=default_license_path(),
-            expected_product="porn-fetch",
+            public_key_b64=PUBLIC_KEY_B64, # Public License to check the generated key
+            storage_path=default_license_path(), # Storage path for the license
+            expected_product="porn-fetch", # Yeah this is just an identifier, doesn't really matter
         )
 
         self.status = QLabel()
@@ -158,14 +164,15 @@ class LicenseWidget(QWidget):
         self.refresh_status()
 
     def refresh_status(self):
-        res = self.lic.load_installed()
+        res = self.lic.load_installed() # Checks if a license has already been installed before
         self.status.setText(f"License status: {'✅ Valid' if res.valid else '❌ Not valid'}\n{res.reason}")
-        self.setup_restrictions()
+        self.setup_restrictions() # Enforces the restrictions
 
     def import_license(self):
+        # Opens a Dialog for importing the actual license
         path, _ = QFileDialog.getOpenFileName(self, "Select license file", "", "License (*.license);;All files (*)")
         if not path:
-            return
+            return # User aborted (probably)
         res = self.lic.install_from_file(Path(path))
         QMessageBox.information(self, "License", res.reason)
         self.refresh_status()
@@ -174,54 +181,65 @@ class LicenseWidget(QWidget):
 class InstallThread(QRunnable):
     def __init__(self, app_name: str, app_id: str = "pornfetch", org_name: str = "EchterAlsFake"):
         super().__init__()
+        """
+        This function installs Porn Fetch for Windows and Linux based systems.
+        macOS has its own method and is not handled here.
+        
+        The installation works as simple as we take the install directory from a Qt provided default path, on 
+        Linux typically somewhere in the user directory, and on Windows in the APPDATA directory.
+        We will take the main executable of Porn Fetch + settings, write those into the new directory
+        and write a desktop entry file / Shortcut with the executable path + Logo, 
+        so that the user can run Porn Fetch from their start menu.
+        """
+
         global settings
         settings = make_settings(portable=False) # At the first run, I assume the user goes for a portable install-type, however if the installation is called we need to switch that behaviour
 
-        self.app_name = app_name
+        self.app_name = app_name # Custom app name, otherwise 'Porn Fetch'
         self.app_id = app_id  # used for desktop file name, etc.
-        self.org_name = org_name
-        self.signals = Signals()
+        self.org_name = org_name # All handled in config.py
+        self.signals = Signals() # Signals for error / progress reporting
 
         # keep your logger setup if you want; using basic logging here
-        self.logger = logging.getLogger("InstallThread")
+        self.logger = setup_logger(name="Porn Fetch - [InstallThread]", level=logging.DEBUG)
 
     def run(self):
-        settings.setValue("Misc/app_name", self.app_name)
+        settings.setValue("Misc/app_name", self.app_name) # Sets app name, because we need that later in PF
 
         try:
-            self.signals.start_undefined_range.emit()
+            self.signals.start_undefined_range.emit() # Starts a loading animation until we have more information
 
             # These matter for QSettings() “installed” mode:
             QCoreApplication.setOrganizationName(self.org_name)
             QCoreApplication.setApplicationName(self.app_name)
 
             if sys.platform.startswith("linux"):
-                self._install_linux_user()
+                self._install_linux_user() # Starts Linux install
             elif sys.platform == "win32":
-                self._install_windows_user()
+                self._install_windows_user() # Starts Windows install
             else:
-                raise RuntimeError(f"Unsupported platform: {sys.platform}")
+                raise RuntimeError(f"Unsupported platform: {sys.platform}") # lol
 
-        except Exception:
+        except Exception: # Some error happened during installation
             error = traceback.format_exc()
-            self.logger.error(error)
-            self.signals.install_finished.emit([False, error])
-            self.signals.stop_undefined_range.emit()
+            self.logger.error(error) # Log the error
+            self.signals.install_finished.emit([False, error]) # Report the error (shows GUI message)
+            self.signals.stop_undefined_range.emit() # Stop loading animation
             return
 
-        self.signals.stop_undefined_range.emit()
-        self.signals.install_finished.emit([True, ""])
+        self.signals.stop_undefined_range.emit() # Stop loading animation
+        self.signals.install_finished.emit([True, ""]) # Successful install :)
 
     # ----------------------------
     # Linux (user-local install)
     # ----------------------------
     def _install_linux_user(self):
-        filename = "PornFetch_Linux_GUI_x64.bin"
+        filename = "PornFetch_Linux_GUI_x64.bin" # Typical filename, but needs to be improved # TODO
 
         # Install “payload” (binary + assets) into local app data:
         install_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
         mkpath(install_dir)
-
+        # We use the provided path by Qt as this is the most stable option for this
 
         apps_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.ApplicationsLocation)
         if not apps_dir:
@@ -229,10 +247,10 @@ class InstallThread(QRunnable):
             apps_dir = os.path.expanduser("~/.local/share/applications")
         mkpath(apps_dir)
 
-        src_exe = get_original_executable_path()
-        dst_exe = os.path.join(install_dir, filename)
+        src_exe = get_original_executable_path() # Gets source executable path
+        dst_exe = os.path.join(install_dir, filename) # Creates the final path for the destination executable
         try:
-            copy_overwrite_atomic(src=src_exe, dst=dst_exe)
+            copy_overwrite_atomic(src=src_exe, dst=dst_exe) # Copies the actual file
 
         except RuntimeError:
             self.signals.error_signal.emit(f"""
@@ -241,10 +259,11 @@ find the real path of the extracted file from the main application.
 
 In short: You can't fix that, please report this!""")
 
-        chmod_755(dst_exe)
-        icon_dst = os.path.join(install_dir, "logo.png")
+        chmod_755(dst_exe) # Grant execute permission (should be something like chmod +x I guess)
+        icon_dst = os.path.join(install_dir, "logo.png") # Creates the destination for the logo
         if not QFile.exists(icon_dst):
-            QFile.copy(":/images/graphics/logo.png", icon_dst)
+            QFile.copy(":/images/graphics/logo.png", icon_dst) # We get the logo directly from the embedded resources
+            # On Linux .png files are typically fine, on Windows this is handled differently
 
         # Write desktop file atomically
         desktop_path = os.path.join(apps_dir, f"{self.app_id}.desktop")
@@ -259,12 +278,13 @@ Terminal=false
 Categories=Utility;
 StartupNotify=true
 """
-        write_text_atomic(desktop_path, entry)
+        write_text_atomic(desktop_path, entry) # Creates the desktop entry for running PF from start menu
 
         # Store “installed” flag using Qt settings
         settings = make_settings(portable=False)
         settings.setValue("Misc/install_type", "installed")
-        settings.sync()
+        settings.sync() # Synchronizes also the values that have been applied in the portable run,
+        # so that the user doesn't have to answer all the dialogs again
 
         self.logger.info(f"Installed to {install_dir}, desktop entry {desktop_path}")
 
@@ -272,13 +292,14 @@ StartupNotify=true
     # Windows (user-local install)
     # ----------------------------
     def _install_windows_user(self):
-        import win32com.client  # pywin32
+        import win32com.client  # pywin32; Only available on Windows systems
 
-        filename = "PornFetch_Windows_GUI_x64.exe"
+        filename = "PornFetch_Windows_GUI_x64.exe" # Needs to be improved # TODO
 
         if os.path.exists("PornFetch_Windows_GUI_arm64.bin"):
-            filename = "PornFetch_Windows_GUI_arm64.bin"
+            filename = "PornFetch_Windows_GUI_arm64.bin" # For ARM based CPUs
 
+        # Every comment that hasn't been done here, see Linux install as it's the same
         install_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
         mkpath(install_dir)
 
@@ -342,11 +363,13 @@ class UninstallThread(QRunnable):
             # Match the settings identity of installed mode
             QCoreApplication.setOrganizationName(self.org_name)
             QCoreApplication.setApplicationName(self.app_name)
+            # This is the reason why we need to save the app name in config, so that we later know
+            # where it's actually installed
 
             if sys.platform.startswith("linux"):
-                self._uninstall_linux_user()
+                self._uninstall_linux_user() # Linux uninstall
             elif sys.platform == "win32":
-                self._uninstall_windows_user()
+                self._uninstall_windows_user() # Windows uninstall
             else:
                 raise RuntimeError(f"Unsupported platform: {sys.platform}")
 
@@ -375,6 +398,7 @@ class UninstallThread(QRunnable):
     # ----------------------------
     def _uninstall_linux_user(self):
         install_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
+        # The directory where stuff is currently installed to
 
         apps_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.ApplicationsLocation)
         if not apps_dir:
@@ -387,16 +411,10 @@ class UninstallThread(QRunnable):
 
         # Remove payload files (best effort)
         if install_dir and os.path.isdir(install_dir):
-            # delete known payload bits if you want a "soft" uninstall
-            # _safe_unlink(os.path.join(install_dir, "PornFetch_Linux_GUI_x64.bin"))
-            # _safe_unlink(os.path.join(install_dir, "logo.png"))
-
-            # or "hard" uninstall: remove the entire dir
-            safe_rmtree(install_dir)
+            safe_rmtree(install_dir) # Delete the entire directory
 
         # Clear settings keys / file
         self._clear_qt_settings()
-
         self.logger.info(f"Uninstalled (Linux). Removed: {desktop_path} and {install_dir}")
 
     # ----------------------------
@@ -446,7 +464,7 @@ class UninstallThread(QRunnable):
             try:
                 fname = s.fileName()
             except Exception:
-                fname = ""
+                fname = "config.ini" # What could go wrong?
 
             if fname and os.path.exists(fname):
                 safe_unlink(fname)
@@ -463,6 +481,7 @@ class UninstallThread(QRunnable):
         bat_path = os.path.join(tempfile.gettempdir(), f"{self.app_id}_uninstall_cleanup.bat")
 
         # Use rmdir /s /q for full folder wipe
+        # Hopefully this doesn't delete your PC LMAO
         # "tasklist /FI" loop waits until PID is gone
         script = rf"""@echo off
 setlocal ENABLEDELAYEDEXPANSION
@@ -737,28 +756,36 @@ class DownloadScheduler(QObject):
 
     def __init__(self, threadpool, max_concurrent: int, parent=None):
         super().__init__(parent)
-        self.pool = threadpool
-        self.sem = QSemaphore(max_concurrent)
-        self.queue = deque()
+        self.pool = threadpool # Threadpool from the GUI (QThreadPool)
+        self.sem = QSemaphore(max_concurrent) # Creates a semaphore that limits the maximum number of concurrent downloads
+        self.queue = deque() # This is a queue, that keeps track of all vidos that are currently being downloaded
 
     def enqueue(self, video_obj, video_id: int, quality, stop_event):
-        self.queue.append((video_obj, video_id, quality, stop_event))
+        self.queue.append((video_obj, video_id, quality, stop_event)) # Appends a video to the queue
+        # Video OBJ ->: This is the actual video object
+        # Video ID -->: Unique ID of the video generated by AddToTreWidget class, so that we can access its data
+        # Quality -->: The selected download quality from the quality box
+        # Stop Event -->: This is associated with the stop button. If pressed the event
+        # will raise an internal exception in the download process of eaf_base_api which gracefully stops the download
+        # and all network requests
         self._try_start()
 
     def _try_start(self):
-        while self.queue and self.sem.tryAcquire(1):
+        while self.queue and self.sem.tryAcquire(1): # Tries to start the download
             video_obj, video_id, quality, stop_event = self.queue.popleft()
-
+            # Deletes the video from the queue, gets the data and then starts the download
             worker = DownloadThread(video=video_obj, video_id=video_id, quality=quality, stop_event=stop_event)
+            # Creates the actual download object
             worker.signals.download_completed.connect(self._on_done)
-
-            self.worker_started.emit(video_id, worker)
-            self.pool.start(worker)
+            # Connects the completed signal to the UI
+            self.worker_started.emit(video_id, worker) # Does something idk???
+            self.pool.start(worker) # Starts the actual download
 
     @Slot(int)
     def _on_done(self, video_id: int):
         self.sem.release(1)
         self._try_start()
+        # Releases the semaphore, so that the next video can be downloaded
 
 
 class DownloadThread(QRunnable):
@@ -1024,9 +1051,6 @@ class PornFetch(QMainWindow):
     def switch_to_update_available(self):
         self.ui.CentralStackedWidget.setCurrentIndex(9)
 
-    def switch_to_batch(self):
-        self.ui.CentralStackedWidget.setCurrentIndex(10)
-
     """Stacked Widget Top:"""
 
     def switch_to_download(self):
@@ -1039,14 +1063,6 @@ class PornFetch(QMainWindow):
 
     def switch_to_tools(self):
         self.ui.main_stacked_widget_top.setCurrentIndex(2)
-        self.switch_to_main()
-
-    def switch_to_progressbars(self):
-        self.ui.main_stacked_widget_top.setCurrentIndex(3)
-        self.switch_to_main()
-
-    def switch_to_range_selector(self):
-        self.ui.main_stacked_widget_top.setCurrentIndex(4)
         self.switch_to_main()
 
     # Stacked Widget Tree
@@ -1195,23 +1211,6 @@ class PornFetch(QMainWindow):
         # --- misc you already had ---
         self.ui.treeWidget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
         self.ui.progress_gridlayout_progressbar.setAlignment(Qt.AlignmentFlag.AlignTop)
-        """         
-        gv = self.ui.graphicsView
-        gv.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
-        gv.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        gv.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-       
-        self._scene = QGraphicsScene(self)
-        gv.setScene(self._scene)
-        self._pixmap_item = QGraphicsPixmapItem()
-        self._scene.addItem(self._pixmap_item)
-        self._full_pixmap = QPixmap()
-        gv.installEventFilter(self)
-        gv.viewport().installEventFilter(self)
-        """
-
-        #self.ui.treeWidget.itemClicked.connect(self.set_thumbnail)
-        #self.ui.treeWidget.currentItemChanged.connect(self.set_thumbnail)
         self.setWindowTitle(f"Porn Fetch v{__version__} Copyright (C) Johannes Habel 2023-2025")
         self.ui.treeWidget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
         self.ui.progress_gridlayout_progressbar.setAlignment(Qt.AlignmentFlag.AlignTop)
@@ -1954,33 +1953,36 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         self.logger.info(f"Applying video data for ID -->: {identifier}")
         self.last_index += 1
 
-        data = video_data.data_objects.get(identifier)
+        data = video_data.data_objects.get(identifier) # Gets the actual dict data
         title = data.get("title")
         author = data.get("author")
         raw_length = data.get("length")
-        index = data.get("index")
+        index = data.get("index") # The index of the video that will be shown in the tree widget
         video = data.get("video")
-        thumbnail = data.get("thumbnail")
-        thumbnail_data = data.get("thumbnail_data")
-        parsed_length = clients.parse_length(raw_length, video)
+        thumbnail = data.get("thumbnail") # Thumbnail URL
+        thumbnail_data = data.get("thumbnail_data") # Actual data in bytes
+        parsed_length = clients.parse_length(raw_length, video) # This unifies the length format
+        # because every site uses a different length format
 
-        item = QTreeWidgetItem(self.ui.treeWidget)
+        item = QTreeWidgetItem(self.ui.treeWidget) # Creates a tree widget item where we can store stuff
 
-        if self._anonymous_mode:
+        if self._anonymous_mode: # Redacts sensitive information
             item.setToolTip(self.COL_TITLE, title)
             item.setToolTip(self.COL_AUTHOR, author)
             title = "[redacted]"
             author = "[redacted]"
 
         # Visible text columns
-        item.setText(self.COL_TITLE, f"{index}) {title}")
-        item.setText(self.COL_AUTHOR, author)
+        item.setText(self.COL_TITLE, f"{index}) {title}") # Shows the title + index
+        item.setText(self.COL_AUTHOR, author) # Shows the author of the video
+        # Author can be either the actual uploader, or the name of the first pornstar, or the channel name
 
         if parsed_length in (None, "Not available"):
-            display_duration = "Not available"
-            formatted_duration = "000000000"
+            display_duration = "Not available" # Some videos simply don't give us a length value
+            formatted_duration = "000000000" # Formats duration to a unique format, for sorting later
+
         else:
-            display_duration = str(parsed_length)
+            display_duration = str(parsed_length) # Display duration is different from the formatted one
             formatted_duration = f"{parsed_length:05d}"
 
         item.setText(self.COL_LENGTH, display_duration)
@@ -1996,10 +1998,14 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         # --- Download button (UI only) ---
         download_btn = QPushButton("Download")
         download_btn.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        # The actual download button that the user clicks, later connected to Qt core
 
         # --- Quality combobox (UI only) ---
         available = data.get("qualities", [])  # list[int] you’re already populating now
         preferred = video_data.consistent_data.get("quality", "best")  # your settings mapping output
+        # This is the quality box, it will provide the integer options for each video, but also
+        # best, half and worst if you want an automatic selection.
+        # Some qualities are restricted if you don't have a license, see information dialog here.
 
         has_license = (
                 self.license_manager.has_feature("full_unlock")
@@ -2012,6 +2018,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
             preferred_quality=preferred,
             has_license=has_license
         )
+        # Creates the actual quality box, with license restrictions being applied
 
         # --- Stop button (UI only) ---
         stop_btn = QPushButton("Stop")
@@ -2020,17 +2027,23 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         stop_btn.setMinimumWidth(60)  # tweak
         stop_btn.setMinimumHeight(24)  # tweak
         mark(stop_btn, intent="danger")  # keep if you want your theme styling
+        # This is the stop button that will stop not only the thread for downloading, but
+        # also the actual download process.
+        # This allows for resuming and does not clean up temporary files, unless configured otherwise in settings
+
 
         # --- Progress bar (UI only) ---
         progress = QProgressBar()
         progress.setRange(0, 100)
         progress.setValue(0)
+        # Simple progressbar :)
 
         # Put widgets into cells
         self.ui.treeWidget.setItemWidget(item, self.COL_DOWNLOAD, self._cell_widget(download_btn, margins=(1, 1, 1, 1)))
         self.ui.treeWidget.setItemWidget(item, self.COL_QUALITY, self._cell_widget(quality_box, margins=(1, 1, 1, 1)))
         self.ui.treeWidget.setItemWidget(item, self.COL_STOP, self._cell_widget(stop_btn, margins=(1, 1, 1, 1)))
         self.ui.treeWidget.setItemWidget(item, self.COL_PROGRESS, progress)
+        # This creates the final widget and so on
 
         self._row[identifier] = {
             "item": item,
@@ -2040,6 +2053,9 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
             "progress": progress,
             "stop_event": Event(),
         }
+        # This creates the final row, using the video as an identifier.
+        # This will be given and connected to in the QRunnable class, so that
+        # we can send signals and events later
 
         download_btn.clicked.connect(lambda _=False, vid=identifier: self.queue_download(vid))
         stop_btn.clicked.connect(lambda _=False, vid=identifier: self.stop_download(vid))
@@ -2089,6 +2105,37 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         row["download_btn"].setEnabled(True)
         row["stop_btn"].setEnabled(False)
 
+        self.logger.debug("Download Completed!")
+        global total_downloaded_videos
+        total_downloaded_videos += 1
+        self.ui.progress_lineedit_download_info.setText(
+            f"Downloaded: {total_downloaded_videos} video(s) this session.")
+        self.ui.main_progressbar_total.setMaximum(100)
+        self.ui.main_progressbar_total.setValue(0)
+        widgets = self.progress_widgets.pop(video_id, None)
+        if widgets:
+            for widget in widgets.values():
+                self.ui.progress_gridlayout_progressbar.removeWidget(widget)
+                widget.deleteLater()
+
+        downloaded_videos = int(settings.value("Misc/downloaded_videos"))
+        downloaded_videos += 1
+        settings.setValue("Misc/downloaded_videos", str(downloaded_videos))
+        settings.sync()
+
+        if video_data.consistent_data.get("track_videos"):
+            self.logger.info(f"Tracking video: {video_id}")
+            init_db(video_data.consistent_data.get("database_path"))
+            data = video_data.data_objects.get(video_id)
+            save_video_metadata(video_id, data, video_data.consistent_data.get("database_path"))
+
+        try:
+            video_data.clean_dict(video_id)
+
+        except KeyError:
+            pass  # Doesn't matter
+
+
     def queue_download(self, video_id: int):
         row = self._row[video_id]
         item = row["item"]
@@ -2123,40 +2170,6 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         self.update_total_progressbar_range(1)
         self.update_total_progressbar(1)
 
-    def download_completed(self, video_id):
-        """If a video is downloaded, the semaphore is released"""
-        self.logger.debug("Download Completed!")
-        global total_downloaded_videos
-        total_downloaded_videos += 1
-        self.ui.progress_lineedit_download_info.setText(
-            f"Downloaded: {total_downloaded_videos} video(s) this session.")
-        self.ui.main_progressbar_total.setMaximum(100)
-        self.ui.main_progressbar_total.setValue(0)
-        widgets = self.progress_widgets.pop(video_id, None)
-        if widgets:
-            for widget in widgets.values():
-                self.ui.progress_gridlayout_progressbar.removeWidget(widget)
-                widget.deleteLater()
-
-        downloaded_videos = int(settings.value("Misc/downloaded_videos"))
-        downloaded_videos += 1
-        settings.setValue("Misc/downloaded_videos", str(downloaded_videos))
-        settings.sync()
-
-        if video_data.consistent_data.get("track_videos"):
-            self.logger.info(f"Tracking video: {video_id}")
-            init_db(video_data.consistent_data.get("database_path"))
-            data = video_data.data_objects.get(video_id)
-            save_video_metadata(video_id, data, video_data.consistent_data.get("database_path"))
-
-        try:
-            video_data.clean_dict(video_id)
-
-        except KeyError:
-            pass # Doesn't matter
-
-        self.semaphore.release()
-
     def clear_tree_widget(self):
         """
         This (like the name says) clears the tree widget.
@@ -2169,24 +2182,6 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
     """
     The following functions are used to connect data between Threads and the Main UI
     """
-
-    def set_video_progress_range(self, video_id, maximum):
-        """Called once per video to set up [0.maximum] on the bar."""
-        widget_set = self.progress_widgets.get(video_id)
-        if not widget_set:
-            return
-        bar = widget_set['progressbar']
-        bar.setRange(0, maximum)
-        # optional: reset to zero if you like
-        bar.setValue(0)
-
-    def update_video_progressbar(self, video_id, pos, maximum):
-        """Fired repeatedly—only updates the current value."""
-        widget_set = self.progress_widgets.get(video_id)
-        if not widget_set:
-            return
-        bar = widget_set['progressbar']
-        bar.setValue(pos)
 
     def update_total_progressbar_range(self, maximum):
         """Sets the maximum value for the total progressbar"""
@@ -2381,81 +2376,20 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
     def check_for_updates(self):
         """Checks for updates in a thread, so that the main UI isn't blocked, until update checks are done"""
         if sys.platform == "darwin":
-            self.sparkle = SparkleUpdater()
+            self.sparkle = SparkleUpdater() # Checks for Updates on macOS using Sparkle Framework
             self.sparkle.check_for_updates()
 
         else:
             self.update_thread = CheckUpdates()
             self.update_thread.signals.update_check.connect(self.check_for_updates_result)
-            self.threadpool.start(self.update_thread)
+            self.threadpool.start(self.update_thread) # Starts a silent update check that will
+            # if a new version is out show the user a dialog with the changelog and allow for auto updating
 
 
     def auto_update(self):
         """
         """
 
-    """
-    def eventFilter(self, source, event):
-        gv = self.ui.graphicsView
-
-        # ——————————————————————————————
-        # A) On the view resizing → re-fit & fill
-        if source is gv and event.type() == QEvent.Type.Resize:
-            rect = self._scene.sceneRect()
-            if not rect.isNull():
-                gv.fitInView(rect, Qt.AspectRatioMode.KeepAspectRatioByExpanding)
-            return False  # let the usual painting happen too
-
-        # ——————————————————————————————
-        # B) On double-click in the viewport → popup
-        if source is gv.viewport() and event.type() == QEvent.Type.MouseButtonDblClick:
-            if not self._full_pixmap.isNull():
-                self._show_full_thumbnail()
-                return True  # swallow the event
-            return False
-
-        return super().eventFilter(source, event)
-
-    def _show_full_thumbnail(self):
-        # Made by ChatGPT :)
-        if self._full_pixmap.isNull():
-            return
-
-        # 1) Scale up so it at least covers 1280×720, preserving aspect
-        scaled = self._full_pixmap.scaled(
-            1280, 720,
-            Qt.AspectRatioMode.KeepAspectRatioByExpanding,
-            Qt.TransformationMode.SmoothTransformation
-        )
-
-        # 2) Center-crop the scaled pixmap to exactly 1280×720
-        w, h = scaled.width(), scaled.height()
-        x = max(0, (w - 1280) // 2)
-        y = max(0, (h - 720) // 2)
-        final_pix = scaled.copy(x, y, 1280, 720)
-
-        # 3) Build a simple scene/view that will show that pixmap 1:1
-        dialog = QDialog(self)
-        dialog.setWindowTitle(self.tr("Full Thumbnail"))
-
-        scene = QGraphicsScene(dialog)
-        item = QGraphicsPixmapItem(final_pix)
-        scene.addItem(item)
-        scene.setSceneRect(item.boundingRect())
-
-        view = QGraphicsView(dialog)
-        view.setScene(scene)
-        view.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
-        # no scrollbars — we’ve already cropped exactly
-        view.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        view.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-
-        # 4) Layout + force the dialog itself to 1280×720
-        layout = QVBoxLayout(dialog)
-        layout.addWidget(view)
-        dialog.setFixedSize(1280, 720)
-        dialog.exec()
-    """
     def uninstall_porn_fetch(self):
         ui_popup(self.tr("""
 Important: 
@@ -2465,6 +2399,9 @@ and the main file.
 
 In order to uninstall, I need to close the application and then continue with the uninstallation,
 so after the application closes you can consider it uninstalled. 
+
+If you still find any traces of Porn Fetch left, please open an Issue on Github with the file location :)
+Thank you for using Porn Fetch ^^
 """))
 
         self.uninstall_thread = UninstallThread()
