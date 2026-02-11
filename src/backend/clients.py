@@ -128,8 +128,28 @@ def refresh_clients(enable_kill_switch: bool = False, debug_mode: bool = False) 
     global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, \
         hq_client, xn_client, core, yp_client, bg_client, pt_client, xf_client
 
+    if debug_mode:
+        level = logging.DEBUG
+
+    else:
+        level = logging.ERROR
+
+
+    log_file_core = "BaseCore.log" if debug_mode else None
+    log_file_core_hq = "BaseCore_HQ.log" if debug_mode else None
+    log_file_core_mv = "BaseCore_MV.log" if debug_mode else None
+    log_file_core_ep = "BaseCore_EP.log" if debug_mode else None
+    log_file_core_ph = "BaseCore_PH.log" if debug_mode else None
+    log_file_core_xv = "BaseCore_XV.log" if debug_mode else None
+    log_file_core_xh = "BaseCore_XH.log" if debug_mode else None
+    log_file_core_xn = "BaseCore_XN.log" if debug_mode else None
+    log_file_core_sp = "BaseCore_SP.log" if debug_mode else None
+    log_file_core_yp = "BaseCore_YP.log" if debug_mode else None
+    log_file_core_bg = "BaseCore_BG.log" if debug_mode else None
+    log_file_core_pt = "BaseCore_PT.log" if debug_mode else None
+    log_file_core_xf = "BaseCore_XF.log" if debug_mode else None
+
     # One BaseCore per site, with its own RuntimeConfig (isolated headers/cookies)
-    core_common = BaseCore(config=config)   # if you want a “generic” core
     core_hq    = BaseCore(config=config)
     core_mv    = BaseCore(config=config)
     core_ep    = BaseCore(config=config)
@@ -143,9 +163,23 @@ def refresh_clients(enable_kill_switch: bool = False, debug_mode: bool = False) 
     core_pt    = BaseCore(config=config)
     core_xf    = BaseCore(config=config)
 
+    core.enable_logging(level=level, log_file=log_file_core)
+    core_hq.enable_logging(level=level, log_file=log_file_core_hq)
+    core_mv.enable_logging(level=level, log_file=log_file_core_mv)
+    core_ep.enable_logging(level=level, log_file=log_file_core_ep)
+    core_ph.enable_logging(level=level, log_file=log_file_core_ph)
+    core_xv.enable_logging(level=level, log_file=log_file_core_xv)
+    core_xh.enable_logging(level=level, log_file=log_file_core_xh)
+    core_xn.enable_logging(level=level, log_file=log_file_core_xn)
+    core_sp.enable_logging(level=level, log_file=log_file_core_sp)
+    core_yp.enable_logging(level=level, log_file=log_file_core_yp)
+    core_bg.enable_logging(level=level, log_file=log_file_core_bg)
+    core_pt.enable_logging(level=level, log_file=log_file_core_pt)
+    core_xf.enable_logging(level=level, log_file=log_file_core_xf)
+
+
     if enable_kill_switch:
         logger.warning("Warning: You have enabled the kill switch, refreshing clients with enabled kill switch")
-        core_common.enable_kill_switch()
         core_hq.enable_kill_switch()
         core_mv.enable_kill_switch()
         core_ep.enable_kill_switch()
@@ -157,6 +191,7 @@ def refresh_clients(enable_kill_switch: bool = False, debug_mode: bool = False) 
         core_bg.enable_kill_switch()
         core_pt.enable_kill_switch()
         core_xf.enable_kill_switch()
+        core.enable_kill_switch()
 
     # Instantiate clients with their site-specific cores
     mv_client = mv_Client(core=core_mv)

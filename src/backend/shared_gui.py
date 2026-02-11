@@ -96,3 +96,17 @@ def mark_help_buttons(ui: QMainWindow, pixmap: QPixmap):
     for label in labels:
         ui.__getattribute__(label).setPixmap(pixmap)
 
+
+def on_checkbox_clicked(checked: bool):
+    if checked:
+        debug_mode_warning()
+
+
+def debug_mode_warning():
+    text = QCoreApplication.translate("main",
+"""
+Debug mode is only intended for developing with Porn Fetch or for very specific error traceback. It will print a lot of things,
+that are going on into your Terminal and will save VERY detailed log files that can contain sensitive information.
+
+If you are using only the GUI this will not affect your user experience, but may slow down your system.""")
+    ui_popup(text)

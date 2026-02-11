@@ -607,9 +607,9 @@ class AddToTreeWidget(QRunnable):
                 if isinstance(video, str):
                     video = clients.check_video(url=video)
 
-                self.logger.debug(f"Created ID: {video_identifier} for: {video.url}")
+                self.logger.info(f"[Download (3/10) - Video ID] -->: {video_identifier}")
                 data = clients.load_video_attributes(video)
-                self.logger.debug("Loaded video attributes")
+                self.logger.debug("[Download (4/10) - Fetched Attributes")
                 session_urls.append(video.url)
                 title = data.get("title")
                 video_id = data.get("video_id")
@@ -638,6 +638,7 @@ class AddToTreeWidget(QRunnable):
                     })
 
                 video_data.data_objects.update({video_identifier: data})
+                self.logger.info(f"[Download (5/10) - Finished Processing]")
                 return video_identifier
 
             except (ph_errors.PremiumVideo, IndexError):
@@ -790,6 +791,7 @@ class DownloadScheduler(QObject):
             # Connects the completed signal to the UI
             self.worker_started.emit(video_id, worker) # Does something idk???
             self.pool.start(worker) # Starts the actual download
+            logger.info(f"[Download (9/10) - Started Download]")
 
     @Slot(int)
     def _on_done(self, video_id: int):
@@ -928,6 +930,7 @@ class DownloadThread(QRunnable):
             handle_error_gracefully(self, data=video_data.consistent_data, error_message=error, needs_network_log=True)
 
         finally:
+            self.logger.info(f"[Download (10/10) - Download Completed!]")
             if self.consistent_data.get("write_metadata"):
                 try:
                     if not FORCE_DISABLE_AV:
@@ -1119,7 +1122,7 @@ class PornFetch(QMainWindow):
 
         tree_nav = [
             self.ui.button_treewidget_downloads,
-            self.ui.button_treewidget_advanced_configuration
+            self.ui.button_treewidget_advanced_configuration,
         ]
 
         group_tree_nav = QButtonGroup(self)
@@ -1332,6 +1335,7 @@ class PornFetch(QMainWindow):
         self.ui.main_button_tree_stop.clicked.connect(switch_stop_state)
         self.ui.main_button_tree_keyboard_shortcuts.clicked.connect(self.switch_to_keyboard_shortcuts)
         self.ui.settings_checkbox_system_proxy_kill_switch.toggled.connect(self.toggle_killswitch)
+        self.ui.settings_checkbox_system_enable_debug_mode.clicked.connect(on_checkbox_clicked)
 
         # Stacked Tree Widget
         self.ui.button_treewidget_downloads.clicked.connect(self.switch_to_treewidget_downloads)
@@ -1587,7 +1591,7 @@ You have all paid features unlocked :)
         clients.config.videos_concurrency = videos_concurrency
         clients.config.pages_concurrency = pages_concurrency
         clients.config.max_workers_download = download_workers
-        clients.refresh_clients()
+        clients.refresh_clients(debug_mode=bool(debug_mode))
 
     def save_user_settings(self):
         settings.sync()
@@ -1627,6 +1631,7 @@ You have all paid features unlocked :)
         settings.setValue("anonymous_mode", self.ui.settings_checkbox_system_enable_anonymous_mode.isChecked())
         settings.setValue("supress_errors", self.ui.settings_checkbox_system_supress_errors.isChecked())
         settings.setValue("network_logging", self.ui.settings_checkbox_system_enable_network_logging.isChecked())
+        settings.setValue("debug_mode", self.ui.settings_checkbox_system_enable_debug_mode.isChecked())
         settings.endGroup()
 
         # --- UI ---
@@ -1759,7 +1764,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         implemented this feature into the tree widget and I don't want to write code 2 times
         """
         url = self.ui.download_lineedit_url.text()
-        self.logger.info(f"Starting a single shot download for -->: {url}")
+        self.logger.info(f"[Download (1/10) - Preparing] -->: {url}")
         self.ui.download_lineedit_url.clear()
         self.add_to_tree_widget_thread(iterator=url)
 
@@ -1943,6 +1948,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         self.add_to_tree_widget_thread_.signals.total_progress_range.connect(self.update_total_progressbar_range)
         self.add_to_tree_widget_thread_.signals.total_progress.connect(self.update_total_progressbar)
         self.threadpool.start(self.add_to_tree_widget_thread_)
+        self.logger.info(f"[Download (2/10) - Started Preparing Thread]")
         self.logger.debug("Started the thread for adding videos...")
 
     @staticmethod
@@ -2068,6 +2074,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
 
         download_btn.clicked.connect(lambda _=False, vid=identifier: self.queue_download(vid))
         stop_btn.clicked.connect(lambda _=False, vid=identifier: self.stop_download(vid))
+        self.logger.info(f"[Download (6/10) - Created Item]")
 
     def _wire_worker_signals(self, video_id: int, worker):
         # Download progress
@@ -2115,7 +2122,6 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         row["download_btn"].setEnabled(True)
         row["stop_btn"].setEnabled(False)
 
-        self.logger.debug("Download Completed!")
         global total_downloaded_videos
         total_downloaded_videos += 1
         self.ui.progress_lineedit_download_info.setText(
@@ -2145,6 +2151,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         except KeyError:
             pass  # Doesn't matter
 
+        self.logger.debug("Download Completed!")
 
     def queue_download(self, video_id: int):
         row = self._row[video_id]
@@ -2165,6 +2172,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         row["stop_btn"].setEnabled(True)
 
         self.download_scheduler.enqueue(video_obj, video_id, quality, row["stop_event"])
+        self.logger.info(f"[Download (8/10) - Added Video to queue]")
 
     def stop_download(self, video_id: int):
         row = self._row.get(video_id)
@@ -2174,7 +2182,6 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         # UI hint (actual cancel depends on downloader honoring cancellation)
         pb = row["progress"]
         pb.setFormat("Stopping…")
-
 
     def tree_widget_finished(self):
         self.update_total_progressbar_range(1)
