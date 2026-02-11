@@ -471,15 +471,15 @@ class Ui_MainWindow(object):
         self.gridLayout_8.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_2 = QVBoxLayout()
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.groupBox = QGroupBox(self.scrollAreaWidgetContents)
-        self.groupBox.setObjectName(u"groupBox")
-        self.gridLayout_15 = QGridLayout(self.groupBox)
+        self.groupbox_tools_hqporner = QGroupBox(self.scrollAreaWidgetContents)
+        self.groupbox_tools_hqporner.setObjectName(u"groupbox_tools_hqporner")
+        self.gridLayout_15 = QGridLayout(self.groupbox_tools_hqporner)
         self.gridLayout_15.setSpacing(0)
         self.gridLayout_15.setObjectName(u"gridLayout_15")
         self.gridLayout_15.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_3 = QGridLayout()
         self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.tools_button_get_random_videos = QPushButton(self.groupBox)
+        self.tools_button_get_random_videos = QPushButton(self.groupbox_tools_hqporner)
         self.tools_button_get_random_videos.setObjectName(u"tools_button_get_random_videos")
         sizePolicy11.setHeightForWidth(self.tools_button_get_random_videos.sizePolicy().hasHeightForWidth())
         self.tools_button_get_random_videos.setSizePolicy(sizePolicy11)
@@ -488,7 +488,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addWidget(self.tools_button_get_random_videos, 3, 0, 1, 1)
 
-        self.tools_button_hqporner_category_get_videos = QPushButton(self.groupBox)
+        self.tools_button_hqporner_category_get_videos = QPushButton(self.groupbox_tools_hqporner)
         self.tools_button_hqporner_category_get_videos.setObjectName(u"tools_button_hqporner_category_get_videos")
         sizePolicy12 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
         sizePolicy12.setHorizontalStretch(0)
@@ -501,7 +501,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addWidget(self.tools_button_hqporner_category_get_videos, 1, 2, 1, 1)
 
-        self.tools_label_videos_by_category = QLabel(self.groupBox)
+        self.tools_label_videos_by_category = QLabel(self.groupbox_tools_hqporner)
         self.tools_label_videos_by_category.setObjectName(u"tools_label_videos_by_category")
         sizePolicy10.setHeightForWidth(self.tools_label_videos_by_category.sizePolicy().hasHeightForWidth())
         self.tools_label_videos_by_category.setSizePolicy(sizePolicy10)
@@ -509,7 +509,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addWidget(self.tools_label_videos_by_category, 1, 0, 1, 1)
 
-        self.tools_lineedit_hqporner_category = QLineEdit(self.groupBox)
+        self.tools_lineedit_hqporner_category = QLineEdit(self.groupbox_tools_hqporner)
         self.tools_lineedit_hqporner_category.setObjectName(u"tools_lineedit_hqporner_category")
         sizePolicy13 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         sizePolicy13.setHorizontalStretch(0)
@@ -520,7 +520,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addWidget(self.tools_lineedit_hqporner_category, 1, 1, 1, 1)
 
-        self.tools_label_get_top_porn = QLabel(self.groupBox)
+        self.tools_label_get_top_porn = QLabel(self.groupbox_tools_hqporner)
         self.tools_label_get_top_porn.setObjectName(u"tools_label_get_top_porn")
         sizePolicy10.setHeightForWidth(self.tools_label_get_top_porn.sizePolicy().hasHeightForWidth())
         self.tools_label_get_top_porn.setSizePolicy(sizePolicy10)
@@ -528,7 +528,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addWidget(self.tools_label_get_top_porn, 0, 0, 1, 1)
 
-        self.tools_button_get_brazzers_videos = QPushButton(self.groupBox)
+        self.tools_button_get_brazzers_videos = QPushButton(self.groupbox_tools_hqporner)
         self.tools_button_get_brazzers_videos.setObjectName(u"tools_button_get_brazzers_videos")
         sizePolicy11.setHeightForWidth(self.tools_button_get_brazzers_videos.sizePolicy().hasHeightForWidth())
         self.tools_button_get_brazzers_videos.setSizePolicy(sizePolicy11)
@@ -537,7 +537,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addWidget(self.tools_button_get_brazzers_videos, 3, 1, 1, 1)
 
-        self.tools_combobox_hqporner_top_porn = QComboBox(self.groupBox)
+        self.tools_combobox_hqporner_top_porn = QComboBox(self.groupbox_tools_hqporner)
         self.tools_combobox_hqporner_top_porn.addItem("")
         self.tools_combobox_hqporner_top_porn.addItem("")
         self.tools_combobox_hqporner_top_porn.addItem("")
@@ -546,7 +546,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addWidget(self.tools_combobox_hqporner_top_porn, 0, 1, 1, 1)
 
-        self.tools_button_top_porn_get_videos = QPushButton(self.groupBox)
+        self.tools_button_top_porn_get_videos = QPushButton(self.groupbox_tools_hqporner)
         self.tools_button_top_porn_get_videos.setObjectName(u"tools_button_top_porn_get_videos")
         sizePolicy5.setHeightForWidth(self.tools_button_top_porn_get_videos.sizePolicy().hasHeightForWidth())
         self.tools_button_top_porn_get_videos.setSizePolicy(sizePolicy5)
@@ -555,7 +555,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addWidget(self.tools_button_top_porn_get_videos, 0, 2, 1, 1)
 
-        self.tools_button_list_categories = QPushButton(self.groupBox)
+        self.tools_button_list_categories = QPushButton(self.groupbox_tools_hqporner)
         self.tools_button_list_categories.setObjectName(u"tools_button_list_categories")
         sizePolicy5.setHeightForWidth(self.tools_button_list_categories.sizePolicy().hasHeightForWidth())
         self.tools_button_list_categories.setSizePolicy(sizePolicy5)
@@ -568,11 +568,11 @@ class Ui_MainWindow(object):
         self.gridLayout_15.addLayout(self.gridLayout_3, 0, 0, 1, 1)
 
 
-        self.verticalLayout_2.addWidget(self.groupBox)
+        self.verticalLayout_2.addWidget(self.groupbox_tools_hqporner)
 
-        self.groupBox_2 = QGroupBox(self.scrollAreaWidgetContents)
-        self.groupBox_2.setObjectName(u"groupBox_2")
-        self.gridLayout_16 = QGridLayout(self.groupBox_2)
+        self.groupbox_tools_eporner = QGroupBox(self.scrollAreaWidgetContents)
+        self.groupbox_tools_eporner.setObjectName(u"groupbox_tools_eporner")
+        self.gridLayout_16 = QGridLayout(self.groupbox_tools_eporner)
         self.gridLayout_16.setSpacing(0)
         self.gridLayout_16.setObjectName(u"gridLayout_16")
         self.gridLayout_16.setContentsMargins(0, 0, 0, 0)
@@ -580,7 +580,7 @@ class Ui_MainWindow(object):
         self.tools_gridlayout_tools.setSpacing(6)
         self.tools_gridlayout_tools.setObjectName(u"tools_gridlayout_tools")
         self.tools_gridlayout_tools.setContentsMargins(-1, 0, -1, -1)
-        self.tools_lineedit_videos_by_category_eporner = QLineEdit(self.groupBox_2)
+        self.tools_lineedit_videos_by_category_eporner = QLineEdit(self.groupbox_tools_eporner)
         self.tools_lineedit_videos_by_category_eporner.setObjectName(u"tools_lineedit_videos_by_category_eporner")
         sizePolicy14 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         sizePolicy14.setHorizontalStretch(0)
@@ -591,7 +591,7 @@ class Ui_MainWindow(object):
 
         self.tools_gridlayout_tools.addWidget(self.tools_lineedit_videos_by_category_eporner, 4, 1, 1, 2)
 
-        self.tools_button_eporner_category_get_videos = QPushButton(self.groupBox_2)
+        self.tools_button_eporner_category_get_videos = QPushButton(self.groupbox_tools_eporner)
         self.tools_button_eporner_category_get_videos.setObjectName(u"tools_button_eporner_category_get_videos")
         sizePolicy15 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy15.setHorizontalStretch(0)
@@ -603,7 +603,7 @@ class Ui_MainWindow(object):
 
         self.tools_gridlayout_tools.addWidget(self.tools_button_eporner_category_get_videos, 4, 4, 1, 1)
 
-        self.tools_button_list_categories_eporner = QPushButton(self.groupBox_2)
+        self.tools_button_list_categories_eporner = QPushButton(self.groupbox_tools_eporner)
         self.tools_button_list_categories_eporner.setObjectName(u"tools_button_list_categories_eporner")
         sizePolicy5.setHeightForWidth(self.tools_button_list_categories_eporner.sizePolicy().hasHeightForWidth())
         self.tools_button_list_categories_eporner.setSizePolicy(sizePolicy5)
@@ -612,7 +612,7 @@ class Ui_MainWindow(object):
 
         self.tools_gridlayout_tools.addWidget(self.tools_button_list_categories_eporner, 4, 3, 1, 1)
 
-        self.tools_label_videos_by_category_eporner = QLabel(self.groupBox_2)
+        self.tools_label_videos_by_category_eporner = QLabel(self.groupbox_tools_eporner)
         self.tools_label_videos_by_category_eporner.setObjectName(u"tools_label_videos_by_category_eporner")
         sizePolicy11.setHeightForWidth(self.tools_label_videos_by_category_eporner.sizePolicy().hasHeightForWidth())
         self.tools_label_videos_by_category_eporner.setSizePolicy(sizePolicy11)
@@ -624,7 +624,7 @@ class Ui_MainWindow(object):
         self.gridLayout_16.addLayout(self.tools_gridlayout_tools, 0, 0, 1, 1)
 
 
-        self.verticalLayout_2.addWidget(self.groupBox_2)
+        self.verticalLayout_2.addWidget(self.groupbox_tools_eporner)
 
 
         self.gridLayout_8.addLayout(self.verticalLayout_2, 0, 0, 1, 1)
@@ -2131,7 +2131,7 @@ class Ui_MainWindow(object):
         self.login_label_username.setAccessibleName(QCoreApplication.translate("MainWindow", u"label username", None))
 #endif // QT_CONFIG(accessibility)
         self.login_label_username.setText(QCoreApplication.translate("MainWindow", u"E-Mail:", None))
-        self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"HQPorner", None))
+        self.groupbox_tools_hqporner.setTitle(QCoreApplication.translate("MainWindow", u"HQPorner", None))
 #if QT_CONFIG(accessibility)
         self.tools_button_get_random_videos.setAccessibleName(QCoreApplication.translate("MainWindow", u"tools button hqporner get random video", None))
 #endif // QT_CONFIG(accessibility)
@@ -2170,7 +2170,7 @@ class Ui_MainWindow(object):
         self.tools_button_list_categories.setAccessibleName(QCoreApplication.translate("MainWindow", u"tools button hqporner list all categories", None))
 #endif // QT_CONFIG(accessibility)
         self.tools_button_list_categories.setText(QCoreApplication.translate("MainWindow", u"List of all categories", None))
-        self.groupBox_2.setTitle(QCoreApplication.translate("MainWindow", u"EPorner", None))
+        self.groupbox_tools_eporner.setTitle(QCoreApplication.translate("MainWindow", u"EPorner", None))
 #if QT_CONFIG(accessibility)
         self.tools_lineedit_videos_by_category_eporner.setAccessibleName(QCoreApplication.translate("MainWindow", u"lineedit tools eporner enter category here", None))
 #endif // QT_CONFIG(accessibility)

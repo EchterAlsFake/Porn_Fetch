@@ -1163,7 +1163,7 @@
                   <item row="0" column="0">
                    <layout class="QVBoxLayout" name="verticalLayout_2">
                     <item>
-                     <widget class="QGroupBox" name="groupBox">
+                     <widget class="QGroupBox" name="groupbox_tools_hqporner">
                       <property name="title">
                        <string>HQPorner</string>
                       </property>
@@ -1407,7 +1407,7 @@
                      </widget>
                     </item>
                     <item>
-                     <widget class="QGroupBox" name="groupBox_2">
+                     <widget class="QGroupBox" name="groupbox_tools_eporner">
                       <property name="title">
                        <string>EPorner</string>
                       </property>

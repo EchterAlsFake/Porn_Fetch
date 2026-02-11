@@ -1266,11 +1266,27 @@ class PornFetch(QMainWindow):
         self.ui.settings_label_performance_network_delay.setText("Delay (0 = Disabled) in seconds:")
         self.ui.settings_label_videos_model_vdeos_type.setText("Actors video types:")
         self.ui.settings_button_system_install_pornfetch.setText("Install Program")
+        self.ui.tools_label_get_top_porn.setText("Get 'Top' videos")
+        self.ui.tools_button_get_brazzers_videos.setText("Get BRZ videos")
         self.ui.main_textbrowser_supported_websites.setText(
             "Running in anonymous mode, please deactivate to display...")
+        self.ui.groupbox_tools_hqporner.setTitle("HQ")
+        self.ui.groupbox_tools_eporner.setTitle("EP")
         self.ui.download_lineedit_playlist_url.setPlaceholderText("Enter playlist URL")
+        self.ui.settings_button_reset.setText("Reset PF")
+        self.ui.settings_button_uninstall_porn_fetch.setText("Uninstall PF")
         self._anonymous_mode = True  # Makes sense, trust
+
+        # read all texts
+        texts = [self.ui.download_website_combobox.itemText(i) for i in range(self.ui.download_website_combobox.count())]
+
+        # change them (example: prefix each item)
+        for i in range(self.ui.download_website_combobox.count()):
+            self.ui.download_website_combobox.setItemText(i, f"{i}")
+
         self.logger.info("Enabled anonymous mode!")
+
+
 
     def button_connections(self):
         """a function to link the buttons to their functions"""
@@ -2380,7 +2396,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
 
     def show_credits(self):
         """Loads the credits from the CREDITS.md.  Credits need to be recompiled in the resource file every time"""
-        if self.ui.settings_checkbox_system_enable_anonymous_mode.isChecked():
+        if self.ui.settings_checkbox_system_enable_anonymous_mode.isChecked() or self._anonymous_mode:
             self.ui.main_textbrowser_credits.setText("Running in anonymous mode...")
 
         else:

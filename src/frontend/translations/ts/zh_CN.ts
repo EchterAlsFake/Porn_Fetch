@@ -1792,17 +1792,17 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>PornFetch</name>
     <message>
-        <location filename="../../../../main.py" line="2453"/>
+        <location filename="../../../../main.py" line="2466"/>
         <source>Porn Fetch installation failed, because of: {result[1]}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1647"/>
+        <location filename="../../../../main.py" line="1660"/>
         <source>Saved User Settings, please restart Porn Fetch!</source>
         <translation type="unfinished">已保存用户设置，请重新启动 Porn Fetch！</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1651"/>
+        <location filename="../../../../main.py" line="1664"/>
         <source>
 Please read this before setting proxies:
 
@@ -1844,73 +1844,73 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1861"/>
+        <location filename="../../../../main.py" line="1874"/>
         <source>The model URL you entered seems to be invalid. Please check your input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1927"/>
+        <location filename="../../../../main.py" line="1940"/>
         <source>Couldn&apos;t determine which site you want to search on??? Please report this immediately!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2447"/>
+        <location filename="../../../../main.py" line="2460"/>
         <source>Porn Fetch has been installed. The app will now close! Please start Porn Fetch from your context menu again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1721"/>
+        <location filename="../../../../main.py" line="1734"/>
         <source>You did choose to not disable SSL Verifications. Retuning to GUI without applying proxies now...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1725"/>
+        <location filename="../../../../main.py" line="1738"/>
         <source>Your proxy seems to be invalid, please try again...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1732"/>
+        <location filename="../../../../main.py" line="1745"/>
         <source>Proxy IP: {ip_masked} Your IP: {ip} are the same! Please check the proxy you&apos;ve used!, aborting...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1749"/>
+        <location filename="../../../../main.py" line="1762"/>
         <source>Can not enable Kill Switch if you haven&apos;t applied a proxy yet!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2246"/>
+        <location filename="../../../../main.py" line="2259"/>
         <source>Those credentials don&apos;t seem to be valid...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2253"/>
+        <location filename="../../../../main.py" line="2266"/>
         <source>Login Successful!</source>
         <translation type="unfinished">登陆成功！</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2258"/>
+        <location filename="../../../../main.py" line="2271"/>
         <source>Login Failed, please check your credentials and try again!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2262"/>
+        <location filename="../../../../main.py" line="2275"/>
         <source>You are already logged in!</source>
         <translation type="unfinished">您已经登录！</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2272"/>
+        <location filename="../../../../main.py" line="2285"/>
         <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
         <translation type="unfinished">登录有问题。请确保您先登录，然后尝试根据您的帐户获取视频。</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2319"/>
-        <location filename="../../../../main.py" line="2338"/>
+        <location filename="../../../../main.py" line="2332"/>
+        <location filename="../../../../main.py" line="2351"/>
         <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
         <translation type="unfinished">类别无效。按“列出类别”查看所有可能的类别。</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2412"/>
+        <location filename="../../../../main.py" line="2425"/>
         <source>
 Important: 
 
@@ -1929,7 +1929,7 @@ Thank you for using Porn Fetch ^^
 <context>
     <name>main</name>
     <message>
-        <location filename="../../../../main.py" line="2715"/>
+        <location filename="../../../../main.py" line="2728"/>
         <source>No URLs in the current session...</source>
         <translation type="unfinished"></translation>
     </message>
