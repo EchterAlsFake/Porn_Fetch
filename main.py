@@ -710,6 +710,9 @@ class AddToTreeWidget(QRunnable):
             except VideoUnavailable_YP:
                 handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {report} is unavailable on YouPorn. It will be skipped...")
 
+            except ProxySSLError:
+                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"SSL Error, are you are you using  a public network?")
+
             except Exception:
                 error = traceback.format_exc()
                 handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Unexpected error occurred: {error}", needs_network_log=True)
@@ -861,6 +864,32 @@ class DownloadThread(QRunnable):
             downloaded_segments += 1
             self.signals.total_progress.emit(downloaded_segments)
 
+    def _add_total_segments(self):
+        """Fetch segment count off the UI thread and update total progress range."""
+        global total_segments
+        if self.stop_flag.is_set() or self.stop_event.is_set():
+            return
+        if not hasattr(self.video, "get_segments"):
+            return
+        try:
+            segments = self.video.get_segments(quality=self.quality)
+        except Exception:
+            self.logger.debug("Failed to get segments for total progress", exc_info=True)
+            return
+
+        try:
+            count = len(segments)
+        except TypeError:
+            count = sum(1 for _ in segments)
+
+        if count <= 0:
+            return
+
+        with _download_lock:
+            total_segments += count
+            current_total = total_segments
+        self.signals.total_progress_range.emit(current_total)
+
     def run(self):
         """Run the download in a thread, optimizing for different video sources and modes."""
         try:
@@ -892,10 +921,10 @@ class DownloadThread(QRunnable):
                         path = path[0] + str(random.randint(0, 1000)) + ".mp4"
                         self.output_path = path
 
+            self._add_total_segments()
             if int(self.consistent_data.get("processing_delay")) != 0:
                 time.sleep(int(self.consistent_data.get("processing_delay")))
             self.logger.debug(f"Downloading Video to: {self.output_path}")
-            self.signals.total_progress_range.emit(total_segments)
             global FORCE_DISABLE_AV
             if not FORCE_DISABLE_AV:
                 remux = True
@@ -971,9 +1000,6 @@ class PornFetch(QMainWindow):
         self.kill_switch = False
         self._row = {} # Video ID -> dict of widgets + state
         self.threadpool = QThreadPool()
-        max_concurrent = int(video_data.consistent_data.get("simultaneous_downloads", 1))
-        self.download_scheduler = DownloadScheduler(self.threadpool, max_concurrent, self)
-        self.download_scheduler.worker_started.connect(self._wire_worker_signals)
         self.maps()
         self.load_style()
         self.license = License(self.ui, self.initialize_pornfetch)
@@ -1012,6 +1038,9 @@ class PornFetch(QMainWindow):
         self.logger.debug("Startup: [3/5] Initialized the User Interface")
         self.load_user_settings()  # Loads the user settings and applies selected values to the UI
         self.logger.debug("Startup: [4/5] Loaded the user settings")
+        max_concurrent = int(video_data.consistent_data.get("semaphore", 1))
+        self.download_scheduler = DownloadScheduler(self.threadpool, max_concurrent, self)
+        self.download_scheduler.worker_started.connect(self._wire_worker_signals)
         self.progress_widgets = {}  # video_id -> {'label': QLabel, 'progressbar': QProgressBar}
 
         if video_data.consistent_data.get("update_checks"):
@@ -2096,6 +2125,10 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         # Download progress
         worker.signals.progress_video_range.connect(self.on_row_download_range)
         worker.signals.progress_video.connect(self.on_row_download_progress)
+
+        # Total progress (HLS/segmented downloads)
+        worker.signals.total_progress_range.connect(self.update_total_progressbar_range)
+        worker.signals.total_progress.connect(self.update_total_progressbar)
 
         # Remux progress
         worker.signals.progress_remux.connect(self.on_row_remux_progress)

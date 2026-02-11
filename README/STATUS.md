@@ -3,11 +3,11 @@
 - [x] Switching environment managing to `uv`
 - [x] Excluding core functions from GUI to separate files
 - [x] Refactoring core logic to be easier used across different files
-- [] Refactoring code in general and simplifying / optimizing things
+- [x] Refactoring code in general and simplifying / optimizing things
 - [] Changing the GUI to a true dark mode themed version
 - [] Changing different GUI elements to be more intuitive 
 - [] Rewriting the menu bar in QML (mixing Qt Widgets + QML)
-- [] Fixing progress logic
+- [x] Fixing progress logic
 - [] Fixing error reporting
 - [] Fixing installation
 - [] Enable easy one click uninstalling
@@ -17,7 +17,7 @@
 - [x] Entire rework of the build scripts
 - [] Include a License system in Porn Fetch
 - [] Make truststore optional in settings
-- [] Include macOS auto updating through sparkle
+- [x] Include macOS auto updating through sparkle
 
 ### Support for more websites
 - [] ...
