@@ -34,6 +34,7 @@ import traceback
 from typing import Any, List, TypeAlias
 from base_api.modules.config import config # This is the global configuration instance of base core config
 from mutagen.mp4 import MP4, MP4Cover, MP4Tags
+from src.backend.handle_ssl import build_ssl_context
 from phub import Client as ph_Client, Video as ph_Video
 from xnxx_api import Client as xn_Client, Video as xn_Video
 from beeg_api import Client as bg_Client, Video as bg_Video
@@ -123,8 +124,10 @@ def get_direct_url_legacy(video: AllowedVideoType_Legacy, quality: str | int):
     return "MakesNoSense"
 
 
-def refresh_clients(enable_kill_switch: bool = False, debug_mode: bool = False) -> None:
+def refresh_clients(enable_kill_switch: bool = False, debug_mode: bool = False, use_truststore: bool = True) -> None:
     logger.info(f"Refreshing clients!")
+    config.ssl_context = build_ssl_context(use_truststore) # Decides whether to use truststore (OS CA's) or Certifi CA's
+
     global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, \
         hq_client, xn_client, core, yp_client, bg_client, pt_client, xf_client
 

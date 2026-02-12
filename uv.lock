@@ -417,14 +417,14 @@ wheels = [
 
 [[package]]
 name = "eaf-base-api"
-version = "2.5.2"
+version = "2.5.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "httpx", extra = ["brotli"] },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/97/32/fad351b84e4c6e50545689f3f55c8f52d567d0cb99c1f645867febe198ac/eaf_base_api-2.5.2.tar.gz", hash = "sha256:f613449b6e362b83c11a41688720b92b36756ab0ce8ff516ccd59c841fb131bb", size = 31038, upload-time = "2026-02-06T21:40:05.075Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/16/c7/7f07fab0f333c274278f766ee59f28dea406886fcd8dbb31752042f3c60c/eaf_base_api-2.5.4.tar.gz", hash = "sha256:c59d42be25805d809ba714201eb6f44ed27d081ae249357325812807100533f1", size = 31070, upload-time = "2026-02-12T21:34:48.531Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/48/86/1f89d878a7140f26c804cf8fd32352922ee8ec4fdf04eba4a3f5553fdc10/eaf_base_api-2.5.2-py3-none-any.whl", hash = "sha256:4b62e33f0d0b7a30a0c99ffa9c21b3d60820ff8a0ce9736ac94e3e2533d130fe", size = 32909, upload-time = "2026-02-06T21:40:03.664Z" },
+    { url = "https://files.pythonhosted.org/packages/b7/b0/6df0e686c9cffd443c81c68664547168041d86561f37b04aeb681968fb34/eaf_base_api-2.5.4-py3-none-any.whl", hash = "sha256:a53894a04a7c314a43fa25898dcf33f5aa9fc3e9cc34d266268357bfb7eea251", size = 32947, upload-time = "2026-02-12T21:34:47.502Z" },
 ]
 
 [[package]]

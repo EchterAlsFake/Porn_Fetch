@@ -817,8 +817,6 @@ class DownloadThread(QRunnable):
         data_object: dict = video_data.data_objects[self.video_id]
         self.output_path = data_object.get("output_path")
         self.logger = shared_functions.setup_logger(name="Porn Fetch - [DownloadThread]", log_file="PornFetch.log", level=logging.DEBUG)
-
-        self.download_mode = self.consistent_data.get("download_mode")
         self.signals = Signals()
         self.stop_flag = stop_event
         self.skip_existing_files = self.consistent_data.get("skip_existing_files")
@@ -895,9 +893,14 @@ class DownloadThread(QRunnable):
     def run(self):
         """Run the download in a thread, optimizing for different video sources and modes."""
         report = None  # Needed for HLS downloads
+
+        # We need to specify the sources, so that it knows which individual progressbar to use
+        instances_legacy = [clients.hq_Video, clients.ep_Video, clients.pt_Video,
+                            clients.xf_Video]
+
         try:
             do_not_skip = False
-            if os.path.isfile(self.output_path):
+            if os.path.isfile(self.output_path) and isinstance(self.video, tuple(instances_legacy)):
                 self.logger.info("File already exists, checking integrity...")
                 clients.core.session.headers.update({"Accept-Encoding": "identity"}) # Chad told me to do this idk
                 direct_download_url = clients.get_direct_url_legacy(video=self.video, quality=self.quality)
@@ -934,11 +937,6 @@ class DownloadThread(QRunnable):
 
             else:
                 remux = False
-
-
-            # We need to specify the sources, so that it knows which individual progressbar to use
-            instances_legacy = [clients.hq_Video, clients.ep_Video, clients.pt_Video,
-                                clients.xf_Video]
 
             if isinstance(self.video, tuple(instances_legacy)):
                 video_source = "raw"
@@ -1271,7 +1269,6 @@ class PornFetch(QMainWindow):
         self.ui.settings_video_combobox_quality.installEventFilter(self.filter)
         self.ui.tools_combobox_hqporner_top_porn.installEventFilter(self.filter)
         self.ui.settings_video_combobox_model_videos.installEventFilter(self.filter)
-        self.ui.settings_performance_combobox_download_mode.installEventFilter(self.filter)
 
 
         stylesheet_license_buttons = QFile(":/style/UI/stylesheet_license_button.qss")
@@ -1500,11 +1497,6 @@ You have all paid features unlocked :)
             3: "chinese",
             4: "french"
         }
-        self.mappings_download_mode = {
-            0: "threaded",
-            1: "ffmpeg",
-            2: "default"
-        }
 
     def load_user_settings(self):
         global x
@@ -1557,10 +1549,6 @@ You have all paid features unlocked :)
         self.ui.settings_checkbox_videos_use_directory_system.setChecked(directory_system)
 
         # --- Performance ---
-        _download_mode = settings.value("Performance/download_mode", 0, int)
-        video_data.consistent_data.update({"download_mode": self.mappings_download_mode.get(_download_mode)})
-        self.ui.settings_performance_combobox_download_mode.setCurrentIndex(_download_mode)
-
         simultaneous_downloads = settings.value("Performance/semaphore", 2, int)
 
         if int(simultaneous_downloads) > 1 and not (license_ok or IS_SOURCE_RUN):
@@ -1624,6 +1612,10 @@ You have all paid features unlocked :)
         video_data.consistent_data.update({"debug_mode": debug_mode})
         self.ui.settings_checkbox_system_enable_debug_mode.setChecked(debug_mode)
 
+        use_truststore = settings.value("Misc/use_truststore", False, type=bool)
+        video_data.consistent_data.update({"use_truststore": use_truststore})
+        self.ui.settings_checkbox_use_truststore.setChecked(use_truststore)
+
         # --- UI ---
         ui_language_idx = settings.value("UI/language", 0, int)
         self.ui.settings_ui_combobox_language.setCurrentIndex(ui_language_idx)
@@ -1643,7 +1635,7 @@ You have all paid features unlocked :)
         clients.config.videos_concurrency = videos_concurrency
         clients.config.pages_concurrency = pages_concurrency
         clients.config.max_workers_download = download_workers
-        clients.refresh_clients(debug_mode=bool(debug_mode))
+        clients.refresh_clients(debug_mode=bool(debug_mode), use_truststore=bool(use_truststore))
 
     def save_user_settings(self):
         settings.sync()
@@ -1665,7 +1657,6 @@ You have all paid features unlocked :)
 
         # --- Performance ---
         settings.beginGroup("Performance")
-        settings.setValue("download_mode", self.ui.settings_performance_combobox_download_mode.currentIndex())
         settings.setValue("semaphore", int(self.ui.settings_spinbox_performance_simultaneous_downloads.value()))
         settings.setValue("network_delay", int(self.ui.settings_spinbox_performance_network_delay.value()))
         settings.setValue("videos_concurrency", int(self.ui.settings_spinbox_performance_videos_concurrency.value()))
@@ -1684,6 +1675,7 @@ You have all paid features unlocked :)
         settings.setValue("supress_errors", self.ui.settings_checkbox_system_supress_errors.isChecked())
         settings.setValue("network_logging", self.ui.settings_checkbox_system_enable_network_logging.isChecked())
         settings.setValue("debug_mode", self.ui.settings_checkbox_system_enable_debug_mode.isChecked())
+        settings.setValue("use_truststore", self.ui.settings_checkbox_use_truststore.isChecked())
         settings.endGroup()
 
         # --- UI ---

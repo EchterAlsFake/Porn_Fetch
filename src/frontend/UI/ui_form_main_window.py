@@ -18,10 +18,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDoubleSpinBox,
     QFormLayout, QGridLayout, QGroupBox, QHBoxLayout,
     QHeaderView, QLabel, QLayout, QLineEdit,
-    QMainWindow, QProgressBar, QPushButton, QRadioButton,
-    QScrollArea, QSizePolicy, QSpacerItem, QSpinBox,
-    QStackedWidget, QTextBrowser, QTreeWidget, QTreeWidgetItem,
-    QVBoxLayout, QWidget)
+    QMainWindow, QProgressBar, QPushButton, QScrollArea,
+    QSizePolicy, QSpacerItem, QSpinBox, QStackedWidget,
+    QTextBrowser, QTreeWidget, QTreeWidgetItem, QVBoxLayout,
+    QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -36,8 +36,8 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
         self.centralwidget.setSizePolicy(sizePolicy)
-        self.gridLayout_12 = QGridLayout(self.centralwidget)
-        self.gridLayout_12.setObjectName(u"gridLayout_12")
+        self.gridLayout_11 = QGridLayout(self.centralwidget)
+        self.gridLayout_11.setObjectName(u"gridLayout_11")
         self.main_horizontallayout_menu_buttons = QHBoxLayout()
         self.main_horizontallayout_menu_buttons.setSpacing(5)
         self.main_horizontallayout_menu_buttons.setObjectName(u"main_horizontallayout_menu_buttons")
@@ -147,7 +147,7 @@ class Ui_MainWindow(object):
         self.main_horizontallayout_menu_buttons.addWidget(self.main_button_switch_supported_websites)
 
 
-        self.gridLayout_12.addLayout(self.main_horizontallayout_menu_buttons, 0, 0, 1, 1)
+        self.gridLayout_11.addLayout(self.main_horizontallayout_menu_buttons, 0, 0, 1, 1)
 
         self.CentralStackedWidget = QStackedWidget(self.centralwidget)
         self.CentralStackedWidget.setObjectName(u"CentralStackedWidget")
@@ -784,7 +784,7 @@ class Ui_MainWindow(object):
         self.main_scrollarea_treewidget.setWidgetResizable(True)
         self.main_scrollarea_treewidget_content = QWidget()
         self.main_scrollarea_treewidget_content.setObjectName(u"main_scrollarea_treewidget_content")
-        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 300, 28))
+        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 300, 16))
         sizePolicy16 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
         sizePolicy16.setHorizontalStretch(0)
         sizePolicy16.setVerticalStretch(0)
@@ -1128,13 +1128,6 @@ class Ui_MainWindow(object):
 
         self.settings_gridlayout_performance.addWidget(self.settings_label_performance_speed_limit, 7, 1, 1, 1)
 
-        self.settings_label_performance_download_mode = QLabel(self.page_performance)
-        self.settings_label_performance_download_mode.setObjectName(u"settings_label_performance_download_mode")
-        sizePolicy10.setHeightForWidth(self.settings_label_performance_download_mode.sizePolicy().hasHeightForWidth())
-        self.settings_label_performance_download_mode.setSizePolicy(sizePolicy10)
-
-        self.settings_gridlayout_performance.addWidget(self.settings_label_performance_download_mode, 0, 1, 1, 1)
-
         self.label_tooltip_maximum_timeout = QLabel(self.page_performance)
         self.label_tooltip_maximum_timeout.setObjectName(u"label_tooltip_maximum_timeout")
 
@@ -1196,12 +1189,6 @@ class Ui_MainWindow(object):
 
         self.settings_gridlayout_performance.addWidget(self.settings_doublespinbox_performance_speed_limit, 7, 2, 1, 1)
 
-        self.settings_spinbox_performance_download_workers = QSpinBox(self.page_performance)
-        self.settings_spinbox_performance_download_workers.setObjectName(u"settings_spinbox_performance_download_workers")
-        self.settings_spinbox_performance_download_workers.setMinimum(1)
-
-        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_download_workers, 8, 5, 1, 1)
-
         self.settings_spinbox_performance_videos_concurrency = QSpinBox(self.page_performance)
         self.settings_spinbox_performance_videos_concurrency.setObjectName(u"settings_spinbox_performance_videos_concurrency")
         self.settings_spinbox_performance_videos_concurrency.setMinimum(1)
@@ -1251,24 +1238,10 @@ class Ui_MainWindow(object):
 
         self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_maximal_timeout, 5, 2, 1, 1)
 
-        self.settings_performance_combobox_download_mode = QComboBox(self.page_performance)
-        self.settings_performance_combobox_download_mode.addItem("")
-        self.settings_performance_combobox_download_mode.addItem("")
-        self.settings_performance_combobox_download_mode.addItem("")
-        self.settings_performance_combobox_download_mode.setObjectName(u"settings_performance_combobox_download_mode")
-        self.settings_performance_combobox_download_mode.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.settings_gridlayout_performance.addWidget(self.settings_performance_combobox_download_mode, 0, 2, 1, 1)
-
         self.settings_label_performance_network_delay = QLabel(self.page_performance)
         self.settings_label_performance_network_delay.setObjectName(u"settings_label_performance_network_delay")
 
         self.settings_gridlayout_performance.addWidget(self.settings_label_performance_network_delay, 0, 4, 1, 1)
-
-        self.label_settings_performance_download_workers = QLabel(self.page_performance)
-        self.label_settings_performance_download_workers.setObjectName(u"label_settings_performance_download_workers")
-
-        self.settings_gridlayout_performance.addWidget(self.label_settings_performance_download_workers, 8, 4, 1, 1)
 
         self.label_tooltip_network_delay = QLabel(self.page_performance)
         self.label_tooltip_network_delay.setObjectName(u"label_tooltip_network_delay")
@@ -1297,6 +1270,17 @@ class Ui_MainWindow(object):
 
         self.settings_gridlayout_performance.addWidget(self.label_tooltip_maximum_retries, 2, 3, 1, 1)
 
+        self.label_settings_performance_download_workers = QLabel(self.page_performance)
+        self.label_settings_performance_download_workers.setObjectName(u"label_settings_performance_download_workers")
+
+        self.settings_gridlayout_performance.addWidget(self.label_settings_performance_download_workers, 0, 1, 1, 1)
+
+        self.settings_spinbox_performance_download_workers = QSpinBox(self.page_performance)
+        self.settings_spinbox_performance_download_workers.setObjectName(u"settings_spinbox_performance_download_workers")
+        self.settings_spinbox_performance_download_workers.setMinimum(1)
+
+        self.settings_gridlayout_performance.addWidget(self.settings_spinbox_performance_download_workers, 0, 2, 1, 1)
+
 
         self.gridLayout_26.addLayout(self.settings_gridlayout_performance, 0, 0, 1, 1)
 
@@ -1312,38 +1296,51 @@ class Ui_MainWindow(object):
         self.settings_gridlayout_system = QGridLayout()
         self.settings_gridlayout_system.setSpacing(0)
         self.settings_gridlayout_system.setObjectName(u"settings_gridlayout_system")
-        self.settings_lineedit_system_custom_app_name = QLineEdit(self.page_system)
-        self.settings_lineedit_system_custom_app_name.setObjectName(u"settings_lineedit_system_custom_app_name")
-        sizePolicy11.setHeightForWidth(self.settings_lineedit_system_custom_app_name.sizePolicy().hasHeightForWidth())
-        self.settings_lineedit_system_custom_app_name.setSizePolicy(sizePolicy11)
+        self.settings_checkbox_system_enable_anonymous_mode = QCheckBox(self.page_system)
+        self.settings_checkbox_system_enable_anonymous_mode.setObjectName(u"settings_checkbox_system_enable_anonymous_mode")
+        self.settings_checkbox_system_enable_anonymous_mode.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.settings_gridlayout_system.addWidget(self.settings_lineedit_system_custom_app_name, 0, 2, 1, 1)
-
-        self.label_tooltip_supress_errors = QLabel(self.page_system)
-        self.label_tooltip_supress_errors.setObjectName(u"label_tooltip_supress_errors")
-
-        self.settings_gridlayout_system.addWidget(self.label_tooltip_supress_errors, 3, 0, 1, 1)
-
-        self.label_tooltip_network_logging = QLabel(self.page_system)
-        self.label_tooltip_network_logging.setObjectName(u"label_tooltip_network_logging")
-
-        self.settings_gridlayout_system.addWidget(self.label_tooltip_network_logging, 4, 0, 1, 1)
-
-        self.label_tooltip_anonymous_mode = QLabel(self.page_system)
-        self.label_tooltip_anonymous_mode.setObjectName(u"label_tooltip_anonymous_mode")
-
-        self.settings_gridlayout_system.addWidget(self.label_tooltip_anonymous_mode, 2, 0, 1, 1)
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_enable_anonymous_mode, 2, 1, 1, 1)
 
         self.settings_button_system_install_pornfetch = QPushButton(self.page_system)
         self.settings_button_system_install_pornfetch.setObjectName(u"settings_button_system_install_pornfetch")
 
         self.settings_gridlayout_system.addWidget(self.settings_button_system_install_pornfetch, 0, 0, 1, 2)
 
+        self.label_tooltip_supress_errors = QLabel(self.page_system)
+        self.label_tooltip_supress_errors.setObjectName(u"label_tooltip_supress_errors")
+
+        self.settings_gridlayout_system.addWidget(self.label_tooltip_supress_errors, 3, 0, 1, 1)
+
         self.settings_checkbox_system_supress_errors = QCheckBox(self.page_system)
         self.settings_checkbox_system_supress_errors.setObjectName(u"settings_checkbox_system_supress_errors")
         self.settings_checkbox_system_supress_errors.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_supress_errors, 3, 1, 1, 1)
+
+        self.settings_checkbox_system_update_checks = QCheckBox(self.page_system)
+        self.settings_checkbox_system_update_checks.setObjectName(u"settings_checkbox_system_update_checks")
+        self.settings_checkbox_system_update_checks.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_update_checks, 1, 1, 1, 1)
+
+        self.label_tooltip_ssl_context = QLabel(self.page_system)
+        self.label_tooltip_ssl_context.setObjectName(u"label_tooltip_ssl_context")
+        sizePolicy18.setHeightForWidth(self.label_tooltip_ssl_context.sizePolicy().hasHeightForWidth())
+        self.label_tooltip_ssl_context.setSizePolicy(sizePolicy18)
+
+        self.settings_gridlayout_system.addWidget(self.label_tooltip_ssl_context, 4, 2, 1, 1)
+
+        self.settings_checkbox_system_enable_network_logging = QCheckBox(self.page_system)
+        self.settings_checkbox_system_enable_network_logging.setObjectName(u"settings_checkbox_system_enable_network_logging")
+        self.settings_checkbox_system_enable_network_logging.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_enable_network_logging, 4, 1, 1, 1)
+
+        self.label_tooltip_anonymous_mode = QLabel(self.page_system)
+        self.label_tooltip_anonymous_mode.setObjectName(u"label_tooltip_anonymous_mode")
+
+        self.settings_gridlayout_system.addWidget(self.label_tooltip_anonymous_mode, 2, 0, 1, 1)
 
         self.label_tooltip_update_checks = QLabel(self.page_system)
         self.label_tooltip_update_checks.setObjectName(u"label_tooltip_update_checks")
@@ -1352,65 +1349,39 @@ class Ui_MainWindow(object):
 
         self.settings_gridlayout_system.addWidget(self.label_tooltip_update_checks, 1, 0, 1, 1)
 
-        self.settings_checkbox_system_update_checks = QCheckBox(self.page_system)
-        self.settings_checkbox_system_update_checks.setObjectName(u"settings_checkbox_system_update_checks")
-        self.settings_checkbox_system_update_checks.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.label_tooltip_network_logging = QLabel(self.page_system)
+        self.label_tooltip_network_logging.setObjectName(u"label_tooltip_network_logging")
 
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_update_checks, 1, 1, 1, 1)
+        self.settings_gridlayout_system.addWidget(self.label_tooltip_network_logging, 4, 0, 1, 1)
 
-        self.settings_checkbox_system_enable_anonymous_mode = QCheckBox(self.page_system)
-        self.settings_checkbox_system_enable_anonymous_mode.setObjectName(u"settings_checkbox_system_enable_anonymous_mode")
-        self.settings_checkbox_system_enable_anonymous_mode.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.settings_checkbox_use_truststore = QCheckBox(self.page_system)
+        self.settings_checkbox_use_truststore.setObjectName(u"settings_checkbox_use_truststore")
 
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_enable_anonymous_mode, 2, 1, 1, 1)
-
-        self.settings_checkbox_system_enable_network_logging = QCheckBox(self.page_system)
-        self.settings_checkbox_system_enable_network_logging.setObjectName(u"settings_checkbox_system_enable_network_logging")
-        self.settings_checkbox_system_enable_network_logging.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_enable_network_logging, 4, 1, 1, 1)
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_use_truststore, 4, 3, 1, 1)
 
         self.settings_checkbox_system_activate_proxy = QCheckBox(self.page_system)
         self.settings_checkbox_system_activate_proxy.setObjectName(u"settings_checkbox_system_activate_proxy")
         self.settings_checkbox_system_activate_proxy.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_activate_proxy, 1, 2, 1, 1)
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_activate_proxy, 1, 2, 1, 2)
 
         self.settings_checkbox_system_proxy_kill_switch = QCheckBox(self.page_system)
         self.settings_checkbox_system_proxy_kill_switch.setObjectName(u"settings_checkbox_system_proxy_kill_switch")
         self.settings_checkbox_system_proxy_kill_switch.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_proxy_kill_switch, 2, 2, 1, 1)
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_proxy_kill_switch, 2, 2, 1, 2)
 
         self.settings_checkbox_system_enable_debug_mode = QCheckBox(self.page_system)
         self.settings_checkbox_system_enable_debug_mode.setObjectName(u"settings_checkbox_system_enable_debug_mode")
 
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_enable_debug_mode, 3, 2, 1, 1)
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_enable_debug_mode, 3, 2, 1, 2)
 
-        self.horizontalLayout_6 = QHBoxLayout()
-        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-        self.label_tooltip_ssl_context = QLabel(self.page_system)
-        self.label_tooltip_ssl_context.setObjectName(u"label_tooltip_ssl_context")
+        self.settings_lineedit_system_custom_app_name = QLineEdit(self.page_system)
+        self.settings_lineedit_system_custom_app_name.setObjectName(u"settings_lineedit_system_custom_app_name")
+        sizePolicy11.setHeightForWidth(self.settings_lineedit_system_custom_app_name.sizePolicy().hasHeightForWidth())
+        self.settings_lineedit_system_custom_app_name.setSizePolicy(sizePolicy11)
 
-        self.horizontalLayout_6.addWidget(self.label_tooltip_ssl_context)
-
-        self.settings_label_system_ssl_context = QLabel(self.page_system)
-        self.settings_label_system_ssl_context.setObjectName(u"settings_label_system_ssl_context")
-
-        self.horizontalLayout_6.addWidget(self.settings_label_system_ssl_context)
-
-        self.settings_system_radio_truststore = QRadioButton(self.page_system)
-        self.settings_system_radio_truststore.setObjectName(u"settings_system_radio_truststore")
-
-        self.horizontalLayout_6.addWidget(self.settings_system_radio_truststore)
-
-        self.settings_system_radio_certifi = QRadioButton(self.page_system)
-        self.settings_system_radio_certifi.setObjectName(u"settings_system_radio_certifi")
-
-        self.horizontalLayout_6.addWidget(self.settings_system_radio_certifi)
-
-
-        self.settings_gridlayout_system.addLayout(self.horizontalLayout_6, 4, 2, 1, 1)
+        self.settings_gridlayout_system.addWidget(self.settings_lineedit_system_custom_app_name, 0, 2, 1, 2)
 
 
         self.gridLayout_33.addLayout(self.settings_gridlayout_system, 0, 0, 1, 1)
@@ -1762,7 +1733,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 98, 70))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 84, 70))
         self.gridLayout_20 = QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_20.setSpacing(0)
         self.gridLayout_20.setObjectName(u"gridLayout_20")
@@ -1893,7 +1864,7 @@ class Ui_MainWindow(object):
         self.gridLayout_53.setContentsMargins(0, 0, 0, 0)
         self.CentralStackedWidget.addWidget(self.widget_3)
 
-        self.gridLayout_12.addWidget(self.CentralStackedWidget, 1, 0, 1, 1)
+        self.gridLayout_11.addWidget(self.CentralStackedWidget, 1, 0, 1, 1)
 
         self.formlayout_progressbar = QFormLayout()
         self.formlayout_progressbar.setObjectName(u"formlayout_progressbar")
@@ -1915,7 +1886,7 @@ class Ui_MainWindow(object):
         self.formlayout_progressbar.setWidget(0, QFormLayout.ItemRole.FieldRole, self.main_progressbar_total)
 
 
-        self.gridLayout_12.addLayout(self.formlayout_progressbar, 2, 0, 1, 1)
+        self.gridLayout_11.addLayout(self.formlayout_progressbar, 2, 0, 1, 1)
 
         MainWindow.setCentralWidget(self.centralwidget)
         QWidget.setTabOrder(self.main_button_switch_home, self.main_button_switch_account)
@@ -1970,10 +1941,10 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.CentralStackedWidget.setCurrentIndex(0)
+        self.CentralStackedWidget.setCurrentIndex(1)
         self.main_stacked_widget_top.setCurrentIndex(3)
         self.stacked_widget_tree.setCurrentIndex(1)
-        self.settings_stacked_widget_main.setCurrentIndex(2)
+        self.settings_stacked_widget_main.setCurrentIndex(1)
         self.settings_video_combobox_quality.setCurrentIndex(0)
 
 
@@ -2465,13 +2436,6 @@ class Ui_MainWindow(object):
         self.settings_label_performance_speed_limit.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"Pages concurrency", None))
 #endif // QT_CONFIG(accessibility)
         self.settings_label_performance_speed_limit.setText(QCoreApplication.translate("MainWindow", u"Speed Limit (MB/s):", None))
-#if QT_CONFIG(accessibility)
-        self.settings_label_performance_download_mode.setAccessibleName(QCoreApplication.translate("MainWindow", u"Download Mode", None))
-#endif // QT_CONFIG(accessibility)
-#if QT_CONFIG(accessibility)
-        self.settings_label_performance_download_mode.setAccessibleDescription("")
-#endif // QT_CONFIG(accessibility)
-        self.settings_label_performance_download_mode.setText(QCoreApplication.translate("MainWindow", u"Download Mode:", None))
 #if QT_CONFIG(tooltip)
         self.label_tooltip_maximum_timeout.setToolTip(QCoreApplication.translate("MainWindow", u"The timeout handles the timeout for retrieving segments when using the threaded download mode. If you have a poor \n"
 "internet connection you can set this higher than 10. But this isn't required for most users!", None))
@@ -2556,13 +2520,6 @@ class Ui_MainWindow(object):
         self.settings_label_performance_videos_concurrency.setAccessibleName(QCoreApplication.translate("MainWindow", u"Videos Concurrency", None))
 #endif // QT_CONFIG(accessibility)
         self.settings_label_performance_videos_concurrency.setText(QCoreApplication.translate("MainWindow", u"Videos Concurrency:", None))
-        self.settings_performance_combobox_download_mode.setItemText(0, QCoreApplication.translate("MainWindow", u"High Performance", None))
-        self.settings_performance_combobox_download_mode.setItemText(1, QCoreApplication.translate("MainWindow", u"FFMPEG", None))
-        self.settings_performance_combobox_download_mode.setItemText(2, QCoreApplication.translate("MainWindow", u"Default", None))
-
-#if QT_CONFIG(tooltip)
-        self.settings_performance_combobox_download_mode.setToolTip("")
-#endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
         self.settings_label_performance_network_delay.setToolTip("")
 #endif // QT_CONFIG(tooltip)
@@ -2570,13 +2527,6 @@ class Ui_MainWindow(object):
         self.settings_label_performance_network_delay.setAccessibleName(QCoreApplication.translate("MainWindow", u"Network delay (requests/sec)", None))
 #endif // QT_CONFIG(accessibility)
         self.settings_label_performance_network_delay.setText(QCoreApplication.translate("MainWindow", u"Network delay (requests/sec):", None))
-#if QT_CONFIG(tooltip)
-        self.label_settings_performance_download_workers.setToolTip("")
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(accessibility)
-        self.label_settings_performance_download_workers.setAccessibleName(QCoreApplication.translate("MainWindow", u"Download workers:", None))
-#endif // QT_CONFIG(accessibility)
-        self.label_settings_performance_download_workers.setText(QCoreApplication.translate("MainWindow", u"Download workers:", None))
 #if QT_CONFIG(tooltip)
         self.label_tooltip_network_delay.setToolTip(QCoreApplication.translate("MainWindow", u"You can set a delay between requests from you and a site. If you are downloading a lot of videos or experiencing \n"
 "errors, you should enable a delay. By default the delay is turned off with the value 0\n"
@@ -2606,7 +2556,24 @@ class Ui_MainWindow(object):
 "a URL for a website there will be <AMOUNT> of attempts until an error is thrown.", None))
 #endif // QT_CONFIG(tooltip)
         self.label_tooltip_maximum_retries.setText("")
-        self.settings_lineedit_system_custom_app_name.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Write a custom app name here", None))
+#if QT_CONFIG(tooltip)
+        self.label_settings_performance_download_workers.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.label_settings_performance_download_workers.setAccessibleName(QCoreApplication.translate("MainWindow", u"Download workers:", None))
+#endif // QT_CONFIG(accessibility)
+        self.label_settings_performance_download_workers.setText(QCoreApplication.translate("MainWindow", u"Download workers:", None))
+#if QT_CONFIG(tooltip)
+        self.settings_checkbox_system_enable_anonymous_mode.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.settings_checkbox_system_enable_anonymous_mode.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable anonymous mode", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_checkbox_system_enable_anonymous_mode.setText(QCoreApplication.translate("MainWindow", u"Enable Anonymous mode", None))
+#if QT_CONFIG(accessibility)
+        self.settings_button_system_install_pornfetch.setAccessibleName(QCoreApplication.translate("MainWindow", u"button install porn fetch (This is optional) ", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_button_system_install_pornfetch.setText(QCoreApplication.translate("MainWindow", u"Install Porn Fetch", None))
 #if QT_CONFIG(tooltip)
         self.label_tooltip_supress_errors.setToolTip(QCoreApplication.translate("MainWindow", u"If you enable this function, all errors will be suppressed. This does not mean that they will be completely ignored, but\n"
 "you won't get a big notification for it. \n"
@@ -2615,6 +2582,39 @@ class Ui_MainWindow(object):
 "the current video will be skipped and Porn Fetch will continue with the next one.  ", None))
 #endif // QT_CONFIG(tooltip)
         self.label_tooltip_supress_errors.setText("")
+#if QT_CONFIG(tooltip)
+        self.settings_checkbox_system_supress_errors.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.settings_checkbox_system_supress_errors.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox supress errors silently", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_checkbox_system_supress_errors.setText(QCoreApplication.translate("MainWindow", u"Supress errors silently", None))
+#if QT_CONFIG(accessibility)
+        self.settings_checkbox_system_update_checks.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable update checks", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_checkbox_system_update_checks.setText(QCoreApplication.translate("MainWindow", u"Update checks", None))
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_ssl_context.setToolTip(QCoreApplication.translate("MainWindow", u"<html><head/><body><p>If you use truststore as your SSL context, your system's OS will validate whether the HTTPS (SSL)) certificate of the website is valid or not. On newer systems, truststore is the recommended and default way, because again, your system manages everything and makes sure it's up to date.</p><p>However, if your system is too old, e.g., some old legacy WIndows XP build, then you might want to use the pre-shipped CA which is the one that comes with certifi. </p><p><br/></p><p>This is a complex topic, just leave the default options and you'll be good to go. </p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_ssl_context.setText("")
+#if QT_CONFIG(tooltip)
+        self.settings_checkbox_system_enable_network_logging.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.settings_checkbox_system_enable_network_logging.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable network logging", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_checkbox_system_enable_network_logging.setText(QCoreApplication.translate("MainWindow", u"Enable Network Logging", None))
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_anonymous_mode.setToolTip(QCoreApplication.translate("MainWindow", u"The anonymous mode renames all of Porn Fetch's elements to look NOT like a Porn downloader.\n"
+"This makes it useful for downloading Porn content if you are in public, or multiple people use your PC / Phone.\n"
+"\n"
+"This also disables thumbnail preview. All titles will be replaced with: [redacted] as well as all authors.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_anonymous_mode.setText("")
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_update_checks.setToolTip(QCoreApplication.translate("MainWindow", u"Porn Fetch will check for updates each time it starts, using my own server. This will require a working IPv6 connection. No personal data nor any other data is sent during this process.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_update_checks.setText("")
 #if QT_CONFIG(tooltip)
         self.label_tooltip_network_logging.setToolTip(QCoreApplication.translate("MainWindow", u"I have created my own server that runs 24/7 in my home. Porn Fetch (ONLY if you enable it) logs specific types of errors,\n"
 "that I don't know of, or that I need your help to fix them, to my server using a simple JSON post request.\n"
@@ -2635,46 +2635,7 @@ class Ui_MainWindow(object):
 "You'd help me a lot by enabling network logging :) ", None))
 #endif // QT_CONFIG(tooltip)
         self.label_tooltip_network_logging.setText("")
-#if QT_CONFIG(tooltip)
-        self.label_tooltip_anonymous_mode.setToolTip(QCoreApplication.translate("MainWindow", u"The anonymous mode renames all of Porn Fetch's elements to look NOT like a Porn downloader.\n"
-"This makes it useful for downloading Porn content if you are in public, or multiple people use your PC / Phone.\n"
-"\n"
-"This also disables thumbnail preview. All titles will be replaced with: [redacted] as well as all authors.", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_tooltip_anonymous_mode.setText("")
-#if QT_CONFIG(accessibility)
-        self.settings_button_system_install_pornfetch.setAccessibleName(QCoreApplication.translate("MainWindow", u"button install porn fetch (This is optional) ", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_button_system_install_pornfetch.setText(QCoreApplication.translate("MainWindow", u"Install Porn Fetch", None))
-#if QT_CONFIG(tooltip)
-        self.settings_checkbox_system_supress_errors.setToolTip("")
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_system_supress_errors.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox supress errors silently", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_system_supress_errors.setText(QCoreApplication.translate("MainWindow", u"Supress errors silently", None))
-#if QT_CONFIG(tooltip)
-        self.label_tooltip_update_checks.setToolTip(QCoreApplication.translate("MainWindow", u"Porn Fetch will check for updates each time it starts, using my own server. This will require a working IPv6 connection. No personal data nor any other data is sent during this process.", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_tooltip_update_checks.setText("")
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_system_update_checks.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable update checks", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_system_update_checks.setText(QCoreApplication.translate("MainWindow", u"Update checks", None))
-#if QT_CONFIG(tooltip)
-        self.settings_checkbox_system_enable_anonymous_mode.setToolTip("")
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_system_enable_anonymous_mode.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable anonymous mode", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_system_enable_anonymous_mode.setText(QCoreApplication.translate("MainWindow", u"Enable Anonymous mode", None))
-#if QT_CONFIG(tooltip)
-        self.settings_checkbox_system_enable_network_logging.setToolTip("")
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_system_enable_network_logging.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable network logging", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_system_enable_network_logging.setText(QCoreApplication.translate("MainWindow", u"Enable Network Logging", None))
+        self.settings_checkbox_use_truststore.setText(QCoreApplication.translate("MainWindow", u"Use Truststore", None))
 #if QT_CONFIG(accessibility)
         self.settings_checkbox_system_activate_proxy.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox activate a proxy", None))
 #endif // QT_CONFIG(accessibility)
@@ -2690,10 +2651,7 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(accessibility)
         self.settings_checkbox_system_proxy_kill_switch.setText(QCoreApplication.translate("MainWindow", u"Proxy Kill Switch", None))
         self.settings_checkbox_system_enable_debug_mode.setText(QCoreApplication.translate("MainWindow", u"Enable Debug Mode (Not recommended) ", None))
-        self.label_tooltip_ssl_context.setText("")
-        self.settings_label_system_ssl_context.setText(QCoreApplication.translate("MainWindow", u"SSL Context:", None))
-        self.settings_system_radio_truststore.setText(QCoreApplication.translate("MainWindow", u"Truststore", None))
-        self.settings_system_radio_certifi.setText(QCoreApplication.translate("MainWindow", u"Certifi", None))
+        self.settings_lineedit_system_custom_app_name.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Write a custom app name here", None))
 #if QT_CONFIG(accessibility)
         self.settings_label_ui_theme.setAccessibleName(QCoreApplication.translate("MainWindow", u"label porn fetch theme ", None))
 #endif // QT_CONFIG(accessibility)

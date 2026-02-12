@@ -615,6 +615,7 @@ to be refactored.
 - You can now resume downloads
 - You can now actually stop downloads lol
 - You can now choose quality for each download separately
+- You can now choose between system's CA for SSL or Certifi's CA 
 
 ### Bug Fixes
 - Fixed 403 missav error

@@ -29,7 +29,7 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <layout class="QGridLayout" name="gridLayout_12">
+   <layout class="QGridLayout" name="gridLayout_11">
     <item row="0" column="0">
      <layout class="QHBoxLayout" name="main_horizontallayout_menu_buttons">
       <property name="spacing">
@@ -311,7 +311,7 @@
     <item row="1" column="0">
      <widget class="QStackedWidget" name="CentralStackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page_main">
        <property name="maximumSize">
@@ -1849,7 +1849,7 @@
                    <x>0</x>
                    <y>0</y>
                    <width>300</width>
-                   <height>28</height>
+                   <height>16</height>
                   </rect>
                  </property>
                  <property name="sizePolicy">
@@ -2201,7 +2201,7 @@ This can save a lot of time in certain scenarios.
                  </sizepolicy>
                 </property>
                 <property name="currentIndex">
-                 <number>2</number>
+                 <number>1</number>
                 </property>
                 <widget class="QWidget" name="page_video">
                  <property name="sizePolicy">
@@ -2660,25 +2660,6 @@ Spain_didnt_win_against_Germany_118251.mp4</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="0" column="1">
-                     <widget class="QLabel" name="settings_label_performance_download_mode">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="accessibleName">
-                       <string>Download Mode</string>
-                      </property>
-                      <property name="accessibleDescription">
-                       <string/>
-                      </property>
-                      <property name="text">
-                       <string>Download Mode:</string>
-                      </property>
-                     </widget>
-                    </item>
                     <item row="5" column="0">
                      <widget class="QLabel" name="label_tooltip_maximum_timeout">
                       <property name="toolTip">
@@ -2800,13 +2781,6 @@ If you need something more 'exact / precise', use applications like NetLimiter 4
                       </property>
                      </widget>
                     </item>
-                    <item row="8" column="5">
-                     <widget class="QSpinBox" name="settings_spinbox_performance_download_workers">
-                      <property name="minimum">
-                       <number>1</number>
-                      </property>
-                     </widget>
-                    </item>
                     <item row="7" column="5">
                      <widget class="QSpinBox" name="settings_spinbox_performance_videos_concurrency">
                       <property name="minimum">
@@ -2913,31 +2887,6 @@ With the High Performance method, we can just download other segments while wait
                       </property>
                      </widget>
                     </item>
-                    <item row="0" column="2">
-                     <widget class="QComboBox" name="settings_performance_combobox_download_mode">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="toolTip">
-                       <string/>
-                      </property>
-                      <item>
-                       <property name="text">
-                        <string>High Performance</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>FFMPEG</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>Default</string>
-                       </property>
-                      </item>
-                     </widget>
-                    </item>
                     <item row="0" column="4">
                      <widget class="QLabel" name="settings_label_performance_network_delay">
                       <property name="toolTip">
@@ -2948,19 +2897,6 @@ With the High Performance method, we can just download other segments while wait
                       </property>
                       <property name="text">
                        <string>Network delay (requests/sec):</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="8" column="4">
-                     <widget class="QLabel" name="label_settings_performance_download_workers">
-                      <property name="toolTip">
-                       <string/>
-                      </property>
-                      <property name="accessibleName">
-                       <string>Download workers:</string>
-                      </property>
-                      <property name="text">
-                       <string>Download workers:</string>
                       </property>
                      </widget>
                     </item>
@@ -3029,6 +2965,26 @@ a URL for a website there will be &lt;AMOUNT&gt; of attempts until an error is t
                       </property>
                      </widget>
                     </item>
+                    <item row="0" column="1">
+                     <widget class="QLabel" name="label_settings_performance_download_workers">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="accessibleName">
+                       <string>Download workers:</string>
+                      </property>
+                      <property name="text">
+                       <string>Download workers:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="QSpinBox" name="settings_spinbox_performance_download_workers">
+                      <property name="minimum">
+                       <number>1</number>
+                      </property>
+                     </widget>
+                    </item>
                    </layout>
                   </item>
                  </layout>
@@ -3061,16 +3017,29 @@ a URL for a website there will be &lt;AMOUNT&gt; of attempts until an error is t
                     <property name="spacing">
                      <number>0</number>
                     </property>
-                    <item row="0" column="2">
-                     <widget class="QLineEdit" name="settings_lineedit_system_custom_app_name">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
+                    <item row="2" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_system_enable_anonymous_mode">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
                       </property>
-                      <property name="placeholderText">
-                       <string>Write a custom app name here</string>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox enable anonymous mode</string>
+                      </property>
+                      <property name="text">
+                       <string>Enable Anonymous mode</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0" colspan="2">
+                     <widget class="QPushButton" name="settings_button_system_install_pornfetch">
+                      <property name="accessibleName">
+                       <string>button install porn fetch (This is optional) </string>
+                      </property>
+                      <property name="text">
+                       <string>Install Porn Fetch</string>
                       </property>
                      </widget>
                     </item>
@@ -3082,6 +3051,96 @@ you won't get a big notification for it.
 
 If you have activated Network Logging, they will still be reported. If an error happens while iterating through videos,
 the current video will be skipped and Porn Fetch will continue with the next one.  </string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_system_supress_errors">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox supress errors silently</string>
+                      </property>
+                      <property name="text">
+                       <string>Supress errors silently</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_system_update_checks">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox enable update checks</string>
+                      </property>
+                      <property name="text">
+                       <string>Update checks</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="2">
+                     <widget class="QLabel" name="label_tooltip_ssl_context">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="toolTip">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If you use truststore as your SSL context, your system's OS will validate whether the HTTPS (SSL)) certificate of the website is valid or not. On newer systems, truststore is the recommended and default way, because again, your system manages everything and makes sure it's up to date.&lt;/p&gt;&lt;p&gt;However, if your system is too old, e.g., some old legacy WIndows XP build, then you might want to use the pre-shipped CA which is the one that comes with certifi. &lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;This is a complex topic, just leave the default options and you'll be good to go. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_system_enable_network_logging">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox enable network logging</string>
+                      </property>
+                      <property name="text">
+                       <string>Enable Network Logging</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_tooltip_anonymous_mode">
+                      <property name="toolTip">
+                       <string>The anonymous mode renames all of Porn Fetch's elements to look NOT like a Porn downloader.
+This makes it useful for downloading Porn content if you are in public, or multiple people use your PC / Phone.
+
+This also disables thumbnail preview. All titles will be replaced with: [redacted] as well as all authors.</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="label_tooltip_update_checks">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="toolTip">
+                       <string>Porn Fetch will check for updates each time it starts, using my own server. This will require a working IPv6 connection. No personal data nor any other data is sent during this process.</string>
                       </property>
                       <property name="text">
                        <string/>
@@ -3113,107 +3172,14 @@ You'd help me a lot by enabling network logging :) </string>
                       </property>
                      </widget>
                     </item>
-                    <item row="2" column="0">
-                     <widget class="QLabel" name="label_tooltip_anonymous_mode">
-                      <property name="toolTip">
-                       <string>The anonymous mode renames all of Porn Fetch's elements to look NOT like a Porn downloader.
-This makes it useful for downloading Porn content if you are in public, or multiple people use your PC / Phone.
-
-This also disables thumbnail preview. All titles will be replaced with: [redacted] as well as all authors.</string>
-                      </property>
+                    <item row="4" column="3">
+                     <widget class="QCheckBox" name="settings_checkbox_use_truststore">
                       <property name="text">
-                       <string/>
+                       <string>Use Truststore</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="0" column="0" colspan="2">
-                     <widget class="QPushButton" name="settings_button_system_install_pornfetch">
-                      <property name="accessibleName">
-                       <string>button install porn fetch (This is optional) </string>
-                      </property>
-                      <property name="text">
-                       <string>Install Porn Fetch</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="1">
-                     <widget class="QCheckBox" name="settings_checkbox_system_supress_errors">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="toolTip">
-                       <string/>
-                      </property>
-                      <property name="accessibleName">
-                       <string>checkbox supress errors silently</string>
-                      </property>
-                      <property name="text">
-                       <string>Supress errors silently</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="0">
-                     <widget class="QLabel" name="label_tooltip_update_checks">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="toolTip">
-                       <string>Porn Fetch will check for updates each time it starts, using my own server. This will require a working IPv6 connection. No personal data nor any other data is sent during this process.</string>
-                      </property>
-                      <property name="text">
-                       <string/>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="1">
-                     <widget class="QCheckBox" name="settings_checkbox_system_update_checks">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="accessibleName">
-                       <string>checkbox enable update checks</string>
-                      </property>
-                      <property name="text">
-                       <string>Update checks</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="1">
-                     <widget class="QCheckBox" name="settings_checkbox_system_enable_anonymous_mode">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="toolTip">
-                       <string/>
-                      </property>
-                      <property name="accessibleName">
-                       <string>checkbox enable anonymous mode</string>
-                      </property>
-                      <property name="text">
-                       <string>Enable Anonymous mode</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="1">
-                     <widget class="QCheckBox" name="settings_checkbox_system_enable_network_logging">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="toolTip">
-                       <string/>
-                      </property>
-                      <property name="accessibleName">
-                       <string>checkbox enable network logging</string>
-                      </property>
-                      <property name="text">
-                       <string>Enable Network Logging</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="2">
+                    <item row="1" column="2" colspan="2">
                      <widget class="QCheckBox" name="settings_checkbox_system_activate_proxy">
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
@@ -3226,7 +3192,7 @@ This also disables thumbnail preview. All titles will be replaced with: [redacte
                       </property>
                      </widget>
                     </item>
-                    <item row="2" column="2">
+                    <item row="2" column="2" colspan="2">
                      <widget class="QCheckBox" name="settings_checkbox_system_proxy_kill_switch">
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
@@ -3245,44 +3211,25 @@ My priority on developing this is low. Please do not report errors. Thank you &l
                       </property>
                      </widget>
                     </item>
-                    <item row="3" column="2">
+                    <item row="3" column="2" colspan="2">
                      <widget class="QCheckBox" name="settings_checkbox_system_enable_debug_mode">
                       <property name="text">
                        <string>Enable Debug Mode (Not recommended) </string>
                       </property>
                      </widget>
                     </item>
-                    <item row="4" column="2">
-                     <layout class="QHBoxLayout" name="horizontalLayout_6">
-                      <item>
-                       <widget class="QLabel" name="label_tooltip_ssl_context">
-                        <property name="text">
-                         <string/>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QLabel" name="settings_label_system_ssl_context">
-                        <property name="text">
-                         <string>SSL Context:</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QRadioButton" name="settings_system_radio_truststore">
-                        <property name="text">
-                         <string>Truststore</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QRadioButton" name="settings_system_radio_certifi">
-                        <property name="text">
-                         <string>Certifi</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
+                    <item row="0" column="2" colspan="2">
+                     <widget class="QLineEdit" name="settings_lineedit_system_custom_app_name">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="placeholderText">
+                       <string>Write a custom app name here</string>
+                      </property>
+                     </widget>
                     </item>
                    </layout>
                   </item>
@@ -4053,7 +4000,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
+             <width>84</width>
              <height>70</height>
             </rect>
            </property>

@@ -98,6 +98,7 @@ DEFAULTS: dict[str, dict[str, Any]] = {
         "notice_shown": False,
         "android_warning_shown": False,
         "supress_errors": False,
+        "use_truststore": True
         # add this (important for migrations)
     },
     "Performance": {

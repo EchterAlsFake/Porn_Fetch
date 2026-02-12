@@ -11,6 +11,7 @@ can establish a secure https connection.
 
 """
 import logging
+import os
 import ssl # Main library for handling ssl
 from base_api.base import setup_logger
 
@@ -18,38 +19,39 @@ from base_api.base import setup_logger
 logger = setup_logger(name="Porn Fetch - [SSL Handler]", level=logging.DEBUG)
 
 
-def build_ssl_context() -> ssl.SSLContext:
+def build_ssl_context(use_truststore: bool = True) -> ssl.SSLContext:
     """
     Robust SSL context:
     1) Try native system trust store (truststore)
-    2) ALSO load certifi roots (helps on stale systems)
+    2) Fall back to the default SSL context (respects SSL_CERT_FILE/SSL_CERT_DIR)
+    3) Optionally add certifi roots as a last resort when no CA env vars are set
 
-    You can specify your own CA bundle through environment variables.
-    Please read the documentation of httpx for more information on that!
+    You can specify your own CA bundle through SSL_CERT_FILE/SSL_CERT_DIR.
+    Please read the documentation of httpx for more information on that.
     """
     ctx: ssl.SSLContext
 
     # 1) Prefer system trust store (corporate roots, auto-updates, etc.)
-    try:
-        import truststore
-        ctx = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-        logger.info(f"""Truststore is available! Porn Fetch will use your OS SSL context.""")
+    if use_truststore:
+        try:
+            import truststore
+            ctx = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+            logger.info("Truststore is available! Porn Fetch will use your OS SSL context.")
+            return ctx
+        except Exception:
+            logger.info("Truststore is unavailable; falling back to default SSL context.")
 
-        # 2) Add certifi as additional roots (fallback for old systems)
+    # 2) Default context respects SSL_CERT_FILE / SSL_CERT_DIR
+    ctx = ssl.create_default_context()
+    if not os.getenv("SSL_CERT_FILE") and not os.getenv("SSL_CERT_DIR"):
         try:
             import certifi
             ctx.load_verify_locations(cafile=certifi.where())
-            logger.debug("Added legacy certifi CA as an additional backup in case your system fails to resolve https")
+            logger.debug("Added certifi CA bundle as a fallback for stale systems.")
         except Exception:
-            logger.warning("Couldn't add certifi CA. This is NOT an error, but can cause issues later (rare)")
-            pass
-
-    except Exception:
-        # truststore missing/unavailable -> use certifi bundle
-        import certifi
-        ctx = ssl.create_default_context(cafile=certifi.where())
-        logger.info(f"""Couldn't import truststore due to an error. Using certifi's SSL context instead!""")
-
+            logger.warning("Couldn't add certifi CA bundle; using default SSL context.")
+    else:
+        logger.debug("SSL_CERT_FILE/SSL_CERT_DIR set; using default SSL context without certifi fallback.")
     return ctx
 
 # EOF
