@@ -604,6 +604,7 @@ to be refactored.
 
 # 3.8
 ### New Features
+- Added support for xhamster's alternative "xhopen" domain
 - Added Video support for beeg.com
 - Added Video support for porntrex.com
 - Added Model / Channel support for porntrex.com

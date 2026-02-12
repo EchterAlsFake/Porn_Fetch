@@ -243,7 +243,7 @@ def check_video(url):
         elif "xhamster" in str(url) and "moments" in str(url) and not isinstance(url, xh_Video):
             return xh_client.get_short(url)
 
-        elif "xhamster" in url:
+        elif "xhamster" in url or "xhopen" in url:
             return xh_client.get_video(url)
 
         elif "spankbang" in url:
