@@ -26,6 +26,35 @@ jobs:
         with:
           enable-cache: true
 
+      - name: Install OpenSSL (ARM64) via vcpkg
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          $vcpkgRoot = Join-Path $env:RUNNER_TEMP "vcpkg"
+          if (!(Test-Path $vcpkgRoot)) {
+            git clone --depth 1 https://github.com/microsoft/vcpkg $vcpkgRoot
+            & "$vcpkgRoot\bootstrap-vcpkg.bat" -disableMetrics
+          }
+
+          # Build/install OpenSSL for the ARM64 MSVC target
+          & "$vcpkgRoot\vcpkg.exe" install openssl --triplet arm64-windows
+
+          $opensslDir = Join-Path $vcpkgRoot "installed\arm64-windows"
+
+          # Make it visible to subsequent steps (uv -> maturin/cargo -> openssl-sys)
+          "VCPKG_ROOT=$vcpkgRoot" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "OPENSSL_DIR=$opensslDir" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "OPENSSL_LIB_DIR=$($opensslDir)\lib" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "OPENSSL_INCLUDE_DIR=$($opensslDir)\include" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+          # (Optional) also set target-specific vars that openssl-sys prints in your log
+          "AARCH64_PC_WINDOWS_MSVC_OPENSSL_DIR=$opensslDir" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "AARCH64_PC_WINDOWS_MSVC_OPENSSL_LIB_DIR=$($opensslDir)\lib" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "AARCH64_PC_WINDOWS_MSVC_OPENSSL_INCLUDE_DIR=$($opensslDir)\include" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+          Write-Host "OpenSSL installed at: $opensslDir"
+
       - name: Sync dependencies (uv)
         run: uv sync --extra dev --extra av
 
