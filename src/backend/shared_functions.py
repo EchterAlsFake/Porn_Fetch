@@ -94,6 +94,7 @@ DEFAULTS: dict[str, dict[str, Any]] = {
         "network_logging": False,
         "first_run_cli": True,
         "downloaded_videos": 0,
+        "failed_dialog": False,
         "notice_shown": False,
         "android_warning_shown": False,
         "supress_errors": False,

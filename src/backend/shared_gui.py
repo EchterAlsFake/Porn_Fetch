@@ -12,27 +12,75 @@ def ui_popup(text, title="Notice"):
 
     # Apply custom style sheet
     message_box.setStyleSheet("""
-        QMessageBox {
-            background-color: #2e2e2e;
-            color: white;
-            border: 2px solid #4CAF50;
-            border-radius: 10px;
-        }
-        QPushButton {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            font-size: 10pt;
-            min-width: 80px;
-            border-radius: 5px;
-        }
-        QPushButton:hover {
-            background-color: #45a049;
-        }
-        QPushButton:pressed {
-            background-color: #3e8e41;
-        }
+    /* Dialog surface */
+    QMessageBox {
+      background: #262628;
+      color: #EAEAEA;
+      border: 1px solid #333437;
+      border-radius: 12px;
+    }
+
+    /* Main text */
+    QMessageBox QLabel#qt_msgbox_label {
+      color: #EAEAEA;
+      font-size: 11pt;
+      padding: 2px 0px;
+    }
+
+    /* Optional informative text (if you use setInformativeText) */
+    QMessageBox QLabel#qt_msgbox_informativelabel {
+      color: rgba(234,234,234,0.80);
+      font-size: 10pt;
+      padding-top: 4px;
+    }
+
+    /* Icon spacing */
+    QMessageBox QLabel#qt_msgboxex_icon_label {
+      padding-right: 14px;
+    }
+
+    /* Button row spacing */
+    QMessageBox QDialogButtonBox {
+      margin-top: 12px;
+    }
+
+    /* Buttons (mirror your global QPushButton rule) */
+    QMessageBox QPushButton {
+      border: 1px solid #3a3b3f;
+      background: #2a2b2e;
+      color: #EAEAEA;
+      border-radius: 8px;
+      padding: 6px 12px;
+      min-width: 96px;
+    }
+
+    QMessageBox QPushButton:hover {
+      background: #323338;
+      border-color: #4b8dff;
+    }
+
+    QMessageBox QPushButton:pressed {
+      background: #262628;
+    }
+
+    /* Make the default action look like your primary intent */
+    QMessageBox QPushButton:default {
+      background: #3b82f6;
+      border-color: #3b82f6;
+      color: white;
+    }
+
+    QMessageBox QPushButton:default:hover {
+      background: #2563eb;
+      border-color: #2563eb;
+    }
+
+    /* Disabled */
+    QMessageBox QPushButton:disabled {
+      color: rgba(234,234,234,0.45);
+      background: #242427;
+      border-color: #2c2d31;
+    }
     """)
 
     message_box.setStandardButtons(QMessageBox.StandardButton.Ok)
@@ -58,7 +106,7 @@ class Signals(QObject):
     progress_video_range = Signal(int, int)         # video_id, total
     progress_video = Signal(int, int, int)          # video_id, pos, total
     progress_remux = Signal(int, int, int)          # video_id, pos, total   <-- NEW
-    download_completed = Signal(int)                # video_id
+    download_completed = Signal(int, dict)                # video_id
 
     error_signal = Signal(object)
 

@@ -607,9 +607,9 @@ to be refactored.
 - Added support for xhamster's alternative "xhopen" domain
 - Added Video support for beeg.com
 - Added Video support for porntrex.com
+- Added Video support for xfreehd.com
 - Added Model / Channel support for porntrex.com
 - Added Searching support for porntrex.com
-- Added Video support for xfreehd.com
 - Your configuration values are now saved after an update
 - Added automatic updating for macOS (natively, yes really 🔥)
 - You can now resume downloads
@@ -629,6 +629,7 @@ to be refactored.
 - Added 480p to quality selection (#98)
 - Added an information dialog for the first run basically telling about all useful aspects of Porn Fetch
 - QCombobox items have a correct size and the text isn't hidden anymore
+- Changed UI to be smoother and more modern friendly
 
 ### Code Optimizations
 - Refactored `check_video` function to be faster and less redundant
