@@ -1461,24 +1461,22 @@ You have all paid features unlocked :)
                 self.switch_to_install_dialog()
                 return
 
+        self.save_user_settings()
         self.ui.CentralStackedWidget.setCurrentIndex(0)
 
     def info_dialog_enable_update(self):
         self.ui.settings_checkbox_system_enable_network_logging.setChecked(False)
         self.ui.settings_checkbox_system_update_checks.setChecked(True)
-        self.save_user_settings()
         self.initialize_pornfetch()
 
     def info_dialog_disable_all(self):
         self.ui.settings_checkbox_system_enable_network_logging.setChecked(False)
         self.ui.settings_checkbox_system_update_checks.setChecked(False)
-        self.save_user_settings()
         self.initialize_pornfetch()
 
     def info_dialog_enable_all(self):
         self.ui.settings_checkbox_system_enable_network_logging.setChecked(True)
         self.ui.settings_checkbox_system_update_checks.setChecked(True)
-        self.save_user_settings()
         self.initialize_pornfetch()
 
     def shortcuts(self):
