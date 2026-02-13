@@ -191,4 +191,4 @@ ${video.author.name}
 Please note, that this is intended for advanced users. I will not show general
 examples or ways to use all this. Please ask ChatGPT if you need further information.
 """)
-
+    ui_popup(text)

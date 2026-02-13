@@ -405,6 +405,8 @@ class VideoAttributes:
     video_id: str
     # rendered output
     output_name: str
+    index: int
+    video: object
 
 def _public_attr_snapshot(obj: Any) -> Dict[str, Any]:
     """
@@ -584,6 +586,8 @@ def load_video_attributes(video, name_template: str, *, now: Optional[datetime] 
         thumbnail=str(thumbnail),
         video_id=str(video_id),
         output_name=rendered,
+        index=0,
+        video=video
     )
 
 
@@ -707,11 +711,10 @@ def write_tags(path: str, data: dict):
     """
     comment   = "Downloaded with Porn Fetch (GPLv3)"
     genre     = "Porn"
-    title     = data.get("title")
-    artist    = data.get("author")
-    date      = data.get("publish_date")  # e.g. "2025-10-26" or "2025"
-    thumbnail = data.get("thumbnail_data")
-
+    title     = data.title
+    artist    = data.author
+    date      = data.publish_date  # e.g. "2025-10-26" or "2025"
+    thumbnail = None # For now # TODO
     logging.debug("Tags [1/3]")
 
     audio = MP4(path)

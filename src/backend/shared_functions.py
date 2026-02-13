@@ -88,7 +88,7 @@ DEFAULTS: dict[str, dict[str, Any]] = {
         "first_run_gui": True,
         "license_accepted": False,
         "install_type": "unknown",
-        "update_checks": True,
+        "update_checks": False,
         "anonymous_mode": False,
         "disclaimer_shown": False,
         "network_logging": False,

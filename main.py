@@ -598,13 +598,14 @@ class CheckUpdates(QRunnable):
 
 
 class AddToTreeWidget(QRunnable):
-    def __init__(self, iterator, is_checked, last_index):
+    def __init__(self, iterator, is_checked, last_index, custom_options: str):
         super(AddToTreeWidget, self).__init__()
         self.signals = Signals()  # Processing signals for progress and information
         self.iterator = iterator  # The video iterator (Search or model object yk)
         self.stop_flag = stop_flag  # If the user pressed the stop process button
         self.is_checked = is_checked  # If the "do not clear videos" checkbox is checked
         self.last_index = last_index  # The last index (video) of the tree widget to maintain a correct order of numbers
+        self.custom_options = custom_options
         self.consistent_data = video_data.consistent_data
         self.output_path = self.consistent_data.get("output_path")
         self.result_limit = self.consistent_data.get("result_limit")
@@ -636,11 +637,11 @@ class AddToTreeWidget(QRunnable):
                     video = clients.check_video(url=video)
 
                 self.logger.info(f"[Download (3/10) - Video ID] -->: {video_identifier}")
-                data = clients.load_video_attributes(video)
+                data = clients.load_video_attributes(video, self.custom_options)
                 self.logger.debug("[Download (4/10) - Fetched Attributes")
                 session_urls.append(video.url)
-                title = data.get("title")
-                video_id = data.get("video_id")
+                title = data.title
+                video_id = data.video_id
                 stripped_title_1 = clients.core.strip_title(title) # Clears special characters
                 stripped_title_2 = clients.core.strip_title(title)
 
@@ -649,7 +650,7 @@ class AddToTreeWidget(QRunnable):
 
                 if self.consistent_data.get(
                         "directory_system"):  # If the directory system is enabled, this will create an additional folder
-                    author_path = os.path.join(self.output_path, data.get("author"))
+                    author_path = os.path.join(self.output_path, data.author)
                     os.makedirs(author_path, exist_ok=True)
                     output_path = os.path.join(str(author_path), stripped_title_1 + ".mp4")
 
@@ -657,13 +658,10 @@ class AddToTreeWidget(QRunnable):
                     output_path = os.path.join(self.output_path, stripped_title_1 + ".mp4")
 
                 # Emit the loaded signal with all the required information
-                data.update(
-                    {
-                        "title": stripped_title_2,
-                        "output_path": output_path,
-                        "index": index,
-                        "video": video
-                    })
+                data.title = stripped_title_2
+                data.output_name = output_path
+                data.index = index
+                data.video = video
 
                 video_data.data_objects.update({video_identifier: data})
                 self.logger.info(f"[Download (5/10) - Finished Processing]")
@@ -842,8 +840,8 @@ class DownloadThread(QRunnable):
         self.segment_state_path = segment_state_path
         self.segment_dir = segment_dir
         self.stop_event = stop_event
-        data_object: dict = video_data.data_objects[self.video_id]
-        self.output_path = data_object.get("output_path")
+        data_object = video_data.data_objects[self.video_id]
+        self.output_path = data_object.output_name
         self.logger = shared_functions.setup_logger(name="Porn Fetch - [DownloadThread]", log_file="PornFetch.log", level=logging.DEBUG)
         self.signals = Signals()
         self.stop_flag = stop_event
@@ -1088,7 +1086,6 @@ class PornFetch(QMainWindow):
         self.semaphore = QSemaphore(video_data.consistent_data["semaphore"])
         self.logger.debug("Startup: [5/5] OK")
         self.initialize_pornfetch()
-
 
     """
     The following functions just switch the Stacked Widget to the different widgets
@@ -1413,6 +1410,7 @@ class PornFetch(QMainWindow):
         self.ui.settings_checkbox_system_proxy_kill_switch.toggled.connect(self.toggle_killswitch)
         self.ui.settings_checkbox_system_enable_debug_mode.clicked.connect(on_checkbox_clicked)
         self.ui.button_settings_clear_temp.clicked.connect(self.clean_temporary_files)
+        self.ui.advanced_button_custom_title_options.clicked.connect(available_title_formatting_options)
 
         # Stacked Tree Widget
         self.ui.button_treewidget_downloads.clicked.connect(self.switch_to_treewidget_downloads)
@@ -1426,14 +1424,20 @@ class PornFetch(QMainWindow):
         """
         global FORCE_PORTABLE_RUN
         settings.sync()
+
+        self.ui.main_progressbar_total.setMaximum(4)
+
         if not self.license.check_license():
             self.switch_to_license()
             return
+
+        self.ui.main_progressbar_total.setValue(1)
 
         if not self.disclaimer.check_disclaimer():
             self.switch_to_disclaimer()
             return
 
+        self.ui.main_progressbar_total.setValue(2)
         first = settings.value("Misc/first_run_gui", True, type=bool)
         if first:
             settings.setValue("Misc/first_run_gui", False)
@@ -1451,6 +1455,7 @@ You have all paid features unlocked :)
 
             return
 
+        self.ui.main_progressbar_total.setValue(3)
         if not FORCE_PORTABLE_RUN:
             if sys.platform == "darwin":
                 self.ui.CentralStackedWidget.setCurrentIndex(0)
@@ -1460,7 +1465,12 @@ You have all paid features unlocked :)
                 self.switch_to_install_dialog()
                 return
 
-        self.save_user_settings()
+        self.ui.main_progressbar_total.setValue(0) # Clear
+        self.ui.main_progressbar_total.setMaximum(100)
+
+        if first:
+            self.save_user_settings()
+
         self.ui.CentralStackedWidget.setCurrentIndex(0)
 
     def info_dialog_enable_update(self):
@@ -2008,7 +2018,8 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         is_checked = self.ui.main_checkbox_tree_do_not_clear_videos.isChecked()
         self.add_to_tree_widget_thread_ = AddToTreeWidget(iterator=iterator,
                                                           is_checked=is_checked,
-                                                          last_index=self.last_index)
+                                                          last_index=self.last_index,
+                                                          custom_options=self.ui.advanced_button_custom_title_options.text())
         self.add_to_tree_widget_thread_.signals.text_data_to_tree_widget.connect(self.add_to_tree_widget_signal)
         self.add_to_tree_widget_thread_.signals.error_signal.connect(show_error)
         self.add_to_tree_widget_thread_.signals.clear_tree_widget_signal.connect(self.clear_tree_widget)
@@ -2039,13 +2050,12 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         self.last_index += 1
 
         data = video_data.data_objects.get(identifier) # Gets the actual dict data
-        title = data.get("title")
-        author = data.get("author")
-        raw_length = data.get("length")
-        index = data.get("index") # The index of the video that will be shown in the tree widget
-        video = data.get("video")
-        thumbnail = data.get("thumbnail") # Thumbnail URL
-        thumbnail_data = data.get("thumbnail_data") # Actual data in bytes
+        title = data.title
+        author = data.author
+        raw_length = data.length
+        index = data.index # The index of the video that will be shown in the tree widget
+        video = data.video
+        thumbnail = data.thumbnail # Thumbnail URL
         parsed_length = clients.parse_length(raw_length, video) # This unifies the length format
         # because every site uses a different length format
 
@@ -2078,7 +2088,6 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         item.setData(self.COL_TITLE, Qt.ItemDataRole.UserRole + 2, formatted_duration)
         item.setData(self.COL_TITLE, Qt.ItemDataRole.UserRole + 3, str(thumbnail))
         item.setData(self.COL_TITLE, Qt.ItemDataRole.UserRole + 4, str(author))
-        item.setData(self.COL_TITLE, Qt.ItemDataRole.UserRole + 5, thumbnail_data)
 
         # --- Download button (UI only) ---
         download_btn = QPushButton("Download")
@@ -2086,7 +2095,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         # The actual download button that the user clicks, later connected to Qt core
 
         # --- Quality combobox (UI only) ---
-        available = data.get("qualities", [])  # list[int] you’re already populating now
+        available = data.qualities  # list[int] you’re already populating now
         preferred = video_data.consistent_data.get("quality", "best")  # your settings mapping output
         # This is the quality box, it will provide the integer options for each video, but also
         # best, half and worst if you want an automatic selection.
@@ -2353,10 +2362,9 @@ Segment State Path: {report["segment_state_path"]}
 
         try:
             self.logger.debug("Associating a new client object with a logged in session")
-            shared_functions.ph_client = clients.ph_Client(email=username, password=password, core=clients.ph_client) # Recheck this when I am not drunk
+            shared_functions.ph_client = clients.ph_Client(email=username, password=password)
             self.logger.debug("Login Successful!")
             ui_popup(self.tr("Login Successful!", None))
-            # TODO
 
         except ph_errors.LoginFailed:
             self.logger.error("Login Failed, because of invalid credentials")
@@ -2372,6 +2380,7 @@ Segment State Path: {report["segment_state_path"]}
             return True
 
         elif not clients.ph_client.logged:
+            print(f"Client seems to be not loggeed in")
             self.login()
             if not clients.ph_client.logged:
                 text = self.tr("There's a problem with the login. Please make sure you login first and then "
@@ -2561,7 +2570,8 @@ Thank you for using Porn Fetch ^^
     def install_porn_fetch_portable(self):
         settings.setValue("Misc/install_type", "portable")
         settings.sync()
-        self.switch_to_download()
+        # Resume normal startup flow so the progress bar reset and final init run.
+        self.initialize_pornfetch()
 
     def install_pornfetch_result(self, result):
         if result[0]:
