@@ -311,7 +311,7 @@
     <item row="1" column="0">
      <widget class="QStackedWidget" name="CentralStackedWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="page_main">
        <property name="maximumSize">
@@ -1909,92 +1909,10 @@
              </layout>
             </widget>
             <widget class="QWidget" name="page_advanced_configuration">
-             <layout class="QGridLayout" name="gridLayout_32">
+             <layout class="QGridLayout" name="gridLayout_12">
               <item row="0" column="0">
                <layout class="QGridLayout" name="gridLayout_13">
-                <item row="0" column="1">
-                 <widget class="QCheckBox" name="main_checkbox_tree_do_not_clear_videos">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="accessibleName">
-                   <string>checkbox do not clear videos</string>
-                  </property>
-                  <property name="text">
-                   <string>Do not clear videos</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="4" column="0">
-                 <widget class="QPushButton" name="main_button_tree_automated_selection">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="accessibleName">
-                   <string>button automated selection tool</string>
-                  </property>
-                  <property name="text">
-                   <string>Automated selection tool</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QCheckBox" name="main_checkbox_direct_download">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <bold>false</bold>
-                   </font>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="accessibleName">
-                   <string>checkbox directly download videos</string>
-                  </property>
-                  <property name="text">
-                   <string>Download videos 
-directly </string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="1">
-                 <widget class="QPushButton" name="main_button_tree_keyboard_shortcuts">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="accessibleName">
-                   <string>button keyboard shortcuts</string>
-                  </property>
-                  <property name="text">
-                   <string>Keyboard shortcuts</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0">
                  <layout class="QHBoxLayout" name="horizontalLayout_3">
                   <item>
                    <widget class="QLabel" name="label_tooltip_index_videos">
@@ -2036,21 +1954,114 @@ This can save a lot of time in certain scenarios.
                   </item>
                  </layout>
                 </item>
-                <item row="3" column="2">
-                 <widget class="QSpinBox" name="spinbox_index_fetching_end"/>
-                </item>
-                <item row="3" column="1">
-                 <widget class="QLabel" name="label_index_end">
+                <item row="1" column="0">
+                 <widget class="QCheckBox" name="main_checkbox_tree_do_not_clear_videos">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="accessibleName">
+                   <string>checkbox do not clear videos</string>
+                  </property>
                   <property name="text">
-                   <string>End:</string>
+                   <string>Do not clear videos</string>
                   </property>
                  </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QPushButton" name="main_button_tree_automated_selection">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="accessibleName">
+                   <string>button automated selection tool</string>
+                  </property>
+                  <property name="text">
+                   <string>Automated selection tool</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <layout class="QHBoxLayout" name="horizontalLayout_7">
+                  <item>
+                   <widget class="QLabel" name="label_index_end">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>End:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QSpinBox" name="spinbox_index_fetching_end"/>
+                  </item>
+                 </layout>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QCheckBox" name="checkBox">
+                  <property name="text">
+                   <string>Cleanup on stop (disables resume feature for HLS) </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QPushButton" name="main_button_tree_keyboard_shortcuts">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="accessibleName">
+                   <string>button keyboard shortcuts</string>
+                  </property>
+                  <property name="text">
+                   <string>Keyboard shortcuts</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0" colspan="2">
+                 <layout class="QHBoxLayout" name="horizontalLayout_8">
+                  <item>
+                   <widget class="QLabel" name="advanced_label_custom_title">
+                    <property name="text">
+                     <string>Custom Title formatting:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="advanced_lineedit_custom_title">
+                    <property name="placeholderText">
+                     <string>$title</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="advanced_button_custom_title_options">
+                    <property name="text">
+                     <string>Options</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                </layout>
               </item>

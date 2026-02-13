@@ -31,10 +31,14 @@ import re
 import logging
 import traceback
 
-from typing import Any, List, TypeAlias
+
+from dataclasses import dataclass
 from base_api.modules.config import config # This is the global configuration instance of base core config
 from mutagen.mp4 import MP4, MP4Cover, MP4Tags
+from dateutil.relativedelta import relativedelta
+from datetime import datetime, timedelta, timezone
 from src.backend.handle_ssl import build_ssl_context
+from typing import Any, List, TypeAlias, Optional, Dict
 from phub import Client as ph_Client, Video as ph_Video
 from xnxx_api import Client as xn_Client, Video as xn_Video
 from beeg_api import Client as bg_Client, Video as bg_Video
@@ -60,6 +64,19 @@ AllowedVideoType_Legacy: TypeAlias = (
     # Those are all non HLS streams for now
 )
 
+_RELATIVE_RE = re.compile(
+    r"^\s*(?P<num>\d+)\s*(?P<unit>second|minute|hour|day|week|month|year)s?\s+ago\s*$",
+    re.IGNORECASE,
+)
+
+_PUBLISHED_ON_RE = re.compile(
+    r"^\s*published\s+on\s+(?P<date>.+?)\s*$",
+    re.IGNORECASE,
+)
+
+_TEMPLATE_RE = re.compile(r"\$(\w+)|\$\{([^}]+)}")
+
+_NOT_AVAILABLE_RE = re.compile(r"^\s*(not\s+available|n/?a|none|null)?\s*$", re.IGNORECASE)
 logger = setup_logger(name="Porn Fetch - [Clients]", level=logging.DEBUG)
 
 # which is also affecting all other APIs when the refresh_clients function is called
@@ -309,22 +326,117 @@ def get_available_qualities(video: Any) -> List[int]:
 
     return []
 
+def _safe_getattr(obj: Any, attr: str) -> Any:
+    try:
+        return getattr(obj, attr)
+    except Exception:
+        return None
 
-def load_video_attributes(video):
+def resolve_path(context: Dict[str, Any], path: str) -> Any:
+    """
+    Resolve 'title' or 'author.name' or 'video.some_attr' from context.
+    """
+    cur: Any = context
+    for part in path.split("."):
+        if isinstance(cur, dict):
+            cur = cur.get(part)
+        else:
+            cur = _safe_getattr(cur, part)
+        if cur is None:
+            return None
+    return cur
+
+def render_name_template(
+    template: str,
+    context: Dict[str, Any],
+    *,
+    missing: str = "",
+) -> str:
+    """
+    Supports:
+      $title
+      ${author.name}
+      ${publish_date:%Y-%m-%d}
+      ${length:0.1f}  (uses Python's format())
+    """
+    def repl(m: re.Match) -> str:
+        simple = m.group(1)
+        braced = m.group(2)
+
+        if simple:
+            value = resolve_path(context, simple)
+            return missing if value is None else str(value)
+
+        expr = (braced or "").strip()
+
+        # optional format: path:format_spec
+        path, fmt = expr, None
+        if ":" in expr:
+            # split on first ':' (good enough for your use-case)
+            path, fmt = expr.split(":", 1)
+            path, fmt = path.strip(), fmt.strip()
+
+        value = resolve_path(context, path)
+        if value is None:
+            return missing
+
+        if fmt:
+            if isinstance(value, datetime):
+                return value.strftime(fmt)
+            try:
+                return format(value, fmt)
+            except Exception:
+                return str(value)
+
+        return str(value)
+
+    return _TEMPLATE_RE.sub(repl, template)
+
+@dataclass
+class VideoAttributes:
+    title: str
+    qualities: list[int]
+    author: str
+    length: Any
+    tags: str
+    publish_date: Any
+    publish_dt_utc: Optional[datetime]
+    thumbnail: str
+    video_id: str
+    # rendered output
+    output_name: str
+
+def _public_attr_snapshot(obj: Any) -> Dict[str, Any]:
+    """
+    Best-effort map of public attrs without calling methods.
+    WARNING: some properties may still perform I/O when accessed.
+    """
+    out: Dict[str, Any] = {}
+    for name in dir(obj):
+        if name.startswith("_"):
+            continue
+        # skip obvious methods/iterables by type check after getattr
+        val = _safe_getattr(obj, name)
+        if callable(val):
+            continue
+        out[name] = val
+    return out
+
+def load_video_attributes(video, name_template: str, *, now: Optional[datetime] = None) -> VideoAttributes:
     title = video.title
-    qualities = get_available_qualities(video) # Returns a list with: [144,240,360...] for the GUI
+    qualities = get_available_qualities(video)  # [144, 240, 360, ...]
 
+    # --- your per-site extraction (unchanged logic) ---
     if isinstance(video, ph_Video):
         try:
             author = video.author.name
-
         except Exception:
             author = video.pornstars[0]
 
         length = video.duration.seconds / 60
         tags = ",".join([tag.name for tag in video.tags])
         publish_date = video.date
-        video.refresh()  # Throws an error otherwise. I have no idea why.
+        video.refresh()  # as before
         thumbnail = video.image.url
         video_id = video.id
 
@@ -356,7 +468,7 @@ def load_video_attributes(video):
         try:
             author = video.pornstars[0]
         except Exception:
-            author = "No pornstars / author"  # This can sometimes happen. Very rarely, but can happen...
+            author = "No pornstars / author"
 
         length = video.length
         tags = ",".join([category for category in video.tags])
@@ -364,9 +476,8 @@ def load_video_attributes(video):
         video_id = video.title
         try:
             thumbnail = video.get_thumbnails()[0]
-
         except (TypeError, hq_errors.WeirdError):
-            thumbnail = "Not available" # Expected, it's an error on HQPorners end.
+            thumbnail = "Not available"
 
     elif isinstance(video, mv_Video):
         author = "Not available"
@@ -425,53 +536,142 @@ def load_video_attributes(video):
         video_id = video.title
 
     else:
-        raise "Instance Error! Please report this immediately on GitHub!"
+        # fallback if you ever add a new site and forget to implement it
+        author = _safe_getattr(video, "author") or "Not available"
+        length = _safe_getattr(video, "length") or "Not available"
+        tags = _safe_getattr(video, "tags") or "Not available"
+        publish_date = _safe_getattr(video, "publish_date") or "Not available"
+        thumbnail = _safe_getattr(video, "thumbnail") or "Not available"
+        video_id = _safe_getattr(video, "id") or title
 
-    data_bytes = None
+    # Normalize publish date into UTC datetime (optional extra field)
+    publish_dt_utc = parse_publish_date(publish_date, now=now)
 
-    try:
-        logger.info(f"Fetching Thumbnail for: {title}")
-        if not thumbnail == "Not available":
-            if isinstance(video, hq_Video):
-                core.session.headers.update(headers={
-                    "Referer": "https://www.hqporner.com/"
-                })
-
-            elif isinstance(video, ph_Video):
-                core.session.headers.update(headers={
-                    "Referer": "https://www.pornhub.com/"
-                })
-
-            data_bytes = core.fetch(thumbnail, get_bytes=True)  # <- returns bytes
-
-    except:
-        error = traceback.format_exc()
-        logger.error(f"An error occurred when fetching Thumbnail for: {title}: {error}")
-        data_bytes = None
-
-    finally:
-        # remove header if present (no KeyError)
-        try:
-            core.session.headers.pop("Referer", None)
-
-        except AttributeError:
-            pass
-
-    data = {
+    # Build template context:
+    # - normalized keys (stable)
+    # - "video" for deep access: ${video.some_attr}
+    # - raw snapshot so users can also do $some_attr if it exists
+    normalized = {
         "title": title,
+        "qualities": qualities,
+        "qualities_csv": ",".join(map(str, qualities)),
         "author": author,
-        "length": parse_length(length), # Make sure the video duration is not something like 6.7777777779
+        "length": length,
         "tags": tags,
-        "publish_date": publish_date,
+        "publish_date": publish_date,         # original
+        "publish_dt": publish_dt_utc,         # parsed datetime (UTC)
         "thumbnail": thumbnail,
-        "url": video.url,
-        "thumbnail_data": data_bytes,
         "video_id": video_id,
-        "qualities": qualities
     }
-    logger.debug(f"Successfully loaded video data for: {title}")
+    raw = _public_attr_snapshot(video)
 
-    return data
+    context: Dict[str, Any] = {}
+    context.update(raw)        # allow $publish_date if the object has it, etc.
+    context.update(normalized) # normalized wins if same name
+    context["video"] = video   # allow ${video.author.name} etc.
+
+    rendered = render_name_template(name_template, context, missing="")
+    rendered = core.strip_title(rendered)
+
+    return VideoAttributes(
+        title=title,
+        qualities=qualities,
+        author=str(author),
+        length=length,
+        tags=str(tags),
+        publish_date=publish_date,
+        publish_dt_utc=publish_dt_utc,
+        thumbnail=str(thumbnail),
+        video_id=str(video_id),
+        output_name=rendered,
+    )
+
+
+
+def parse_publish_date(value: str, *, now: Optional[datetime] = None) -> Optional[datetime]:
+    """
+    Parse a publish-date string from various sites and return a timezone-aware datetime in UTC.
+
+    Parameters
+    ----------
+    value : str
+        Raw publish date text.
+    now : datetime | None
+        Reference time for relative strings like "7 days ago".
+        Defaults to current time in UTC.
+
+    Returns
+    -------
+    datetime | None
+        A timezone-aware datetime in UTC, or None if not parseable / not available.
+    """
+    if value is None:
+        return None
+
+    s = str(value).strip()
+    if _NOT_AVAILABLE_RE.match(s):
+        return None
+
+    now_utc = (now or datetime.now(timezone.utc))
+    if now_utc.tzinfo is None:
+        now_utc = now_utc.replace(tzinfo=timezone.utc)
+    else:
+        now_utc = now_utc.astimezone(timezone.utc)
+
+    # 1) Relative: "7 days ago", "4 months ago", etc.
+    m = _RELATIVE_RE.match(s)
+    if m:
+        num = int(m.group("num"))
+        unit = m.group("unit").lower()
+
+        if unit in ("second", "minute", "hour", "day", "week"):
+            seconds = {
+                "second": 1,
+                "minute": 60,
+                "hour": 3600,
+                "day": 86400,
+                "week": 7 * 86400,
+            }[unit]
+            return now_utc - timedelta(seconds=num * seconds)
+
+        # month/year need calendar arithmetic
+        if relativedelta is None:
+            raise ImportError(
+                "Parsing 'months ago'/'years ago' requires python-dateutil. "
+                "Install with: pip install python-dateutil"
+            )
+
+        if unit == "month":
+            return now_utc - relativedelta(months=num)
+        if unit == "year":
+            return now_utc - relativedelta(years=num)
+
+    # 2) "Published on September 17, 2024"
+    m = _PUBLISHED_ON_RE.match(s)
+    if m:
+        s = m.group("date").strip()
+
+    # 3) Try ISO 8601 (handles "2025-10-17T22:56:30+00:00")
+    # datetime.fromisoformat also accepts "YYYY-MM-DD" and "YYYY-MM-DD HH:MM:SS" in many cases.
+    try:
+        dt = datetime.fromisoformat(s.replace("Z", "+00:00"))
+        if dt.tzinfo is None:
+            # Assume naive timestamps are UTC. Change this if you prefer local time.
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone(timezone.utc)
+    except ValueError:
+        pass
+
+    # 4) Try common long-form date (after stripping "Published on")
+    # Example: "September 17, 2024"
+    for fmt in ("%B %d, %Y", "%b %d, %Y"):
+        try:
+            dt = datetime.strptime(s, fmt).replace(tzinfo=timezone.utc)
+            return dt
+        except ValueError:
+            continue
+
+    return None
 
 
 def download_android(url: str, quality="best", path="./", remux=False):

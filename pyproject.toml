@@ -47,6 +47,7 @@ dependencies = [
     "socksio",
     "soupsieve",
     "typing_extensions",
+    "python-dateutil",
     "urllib3",
     "beeg_api",
     "eaf_base_api",

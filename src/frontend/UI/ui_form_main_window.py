@@ -814,43 +814,10 @@ class Ui_MainWindow(object):
         self.stacked_widget_tree.addWidget(self.page_downloads)
         self.page_advanced_configuration = QWidget()
         self.page_advanced_configuration.setObjectName(u"page_advanced_configuration")
-        self.gridLayout_32 = QGridLayout(self.page_advanced_configuration)
-        self.gridLayout_32.setObjectName(u"gridLayout_32")
+        self.gridLayout_12 = QGridLayout(self.page_advanced_configuration)
+        self.gridLayout_12.setObjectName(u"gridLayout_12")
         self.gridLayout_13 = QGridLayout()
         self.gridLayout_13.setObjectName(u"gridLayout_13")
-        self.main_checkbox_tree_do_not_clear_videos = QCheckBox(self.page_advanced_configuration)
-        self.main_checkbox_tree_do_not_clear_videos.setObjectName(u"main_checkbox_tree_do_not_clear_videos")
-        sizePolicy8.setHeightForWidth(self.main_checkbox_tree_do_not_clear_videos.sizePolicy().hasHeightForWidth())
-        self.main_checkbox_tree_do_not_clear_videos.setSizePolicy(sizePolicy8)
-        self.main_checkbox_tree_do_not_clear_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_13.addWidget(self.main_checkbox_tree_do_not_clear_videos, 0, 1, 1, 1)
-
-        self.main_button_tree_automated_selection = QPushButton(self.page_advanced_configuration)
-        self.main_button_tree_automated_selection.setObjectName(u"main_button_tree_automated_selection")
-        sizePolicy8.setHeightForWidth(self.main_button_tree_automated_selection.sizePolicy().hasHeightForWidth())
-        self.main_button_tree_automated_selection.setSizePolicy(sizePolicy8)
-        self.main_button_tree_automated_selection.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_13.addWidget(self.main_button_tree_automated_selection, 4, 0, 1, 1)
-
-        self.main_checkbox_direct_download = QCheckBox(self.page_advanced_configuration)
-        self.main_checkbox_direct_download.setObjectName(u"main_checkbox_direct_download")
-        sizePolicy8.setHeightForWidth(self.main_checkbox_direct_download.sizePolicy().hasHeightForWidth())
-        self.main_checkbox_direct_download.setSizePolicy(sizePolicy8)
-        self.main_checkbox_direct_download.setFont(font1)
-        self.main_checkbox_direct_download.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_13.addWidget(self.main_checkbox_direct_download, 0, 0, 1, 1)
-
-        self.main_button_tree_keyboard_shortcuts = QPushButton(self.page_advanced_configuration)
-        self.main_button_tree_keyboard_shortcuts.setObjectName(u"main_button_tree_keyboard_shortcuts")
-        sizePolicy8.setHeightForWidth(self.main_button_tree_keyboard_shortcuts.sizePolicy().hasHeightForWidth())
-        self.main_button_tree_keyboard_shortcuts.setSizePolicy(sizePolicy8)
-        self.main_button_tree_keyboard_shortcuts.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.gridLayout_13.addWidget(self.main_button_tree_keyboard_shortcuts, 4, 1, 1, 1)
-
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.label_tooltip_index_videos = QLabel(self.page_advanced_configuration)
@@ -876,26 +843,80 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addWidget(self.spinbox_index_fetching_start)
 
 
-        self.gridLayout_13.addLayout(self.horizontalLayout_3, 3, 0, 1, 1)
+        self.gridLayout_13.addLayout(self.horizontalLayout_3, 4, 0, 1, 1)
 
-        self.spinbox_index_fetching_end = QSpinBox(self.page_advanced_configuration)
-        self.spinbox_index_fetching_end.setObjectName(u"spinbox_index_fetching_end")
+        self.main_checkbox_tree_do_not_clear_videos = QCheckBox(self.page_advanced_configuration)
+        self.main_checkbox_tree_do_not_clear_videos.setObjectName(u"main_checkbox_tree_do_not_clear_videos")
+        sizePolicy8.setHeightForWidth(self.main_checkbox_tree_do_not_clear_videos.sizePolicy().hasHeightForWidth())
+        self.main_checkbox_tree_do_not_clear_videos.setSizePolicy(sizePolicy8)
+        self.main_checkbox_tree_do_not_clear_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.gridLayout_13.addWidget(self.spinbox_index_fetching_end, 3, 2, 1, 1)
+        self.gridLayout_13.addWidget(self.main_checkbox_tree_do_not_clear_videos, 1, 0, 1, 1)
 
+        self.main_button_tree_automated_selection = QPushButton(self.page_advanced_configuration)
+        self.main_button_tree_automated_selection.setObjectName(u"main_button_tree_automated_selection")
+        sizePolicy8.setHeightForWidth(self.main_button_tree_automated_selection.sizePolicy().hasHeightForWidth())
+        self.main_button_tree_automated_selection.setSizePolicy(sizePolicy8)
+        self.main_button_tree_automated_selection.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout_13.addWidget(self.main_button_tree_automated_selection, 3, 0, 1, 1)
+
+        self.horizontalLayout_7 = QHBoxLayout()
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
         self.label_index_end = QLabel(self.page_advanced_configuration)
         self.label_index_end.setObjectName(u"label_index_end")
         sizePolicy18.setHeightForWidth(self.label_index_end.sizePolicy().hasHeightForWidth())
         self.label_index_end.setSizePolicy(sizePolicy18)
 
-        self.gridLayout_13.addWidget(self.label_index_end, 3, 1, 1, 1)
+        self.horizontalLayout_7.addWidget(self.label_index_end)
+
+        self.spinbox_index_fetching_end = QSpinBox(self.page_advanced_configuration)
+        self.spinbox_index_fetching_end.setObjectName(u"spinbox_index_fetching_end")
+
+        self.horizontalLayout_7.addWidget(self.spinbox_index_fetching_end)
 
 
-        self.gridLayout_32.addLayout(self.gridLayout_13, 0, 0, 1, 1)
+        self.gridLayout_13.addLayout(self.horizontalLayout_7, 4, 1, 1, 1)
+
+        self.checkBox = QCheckBox(self.page_advanced_configuration)
+        self.checkBox.setObjectName(u"checkBox")
+
+        self.gridLayout_13.addWidget(self.checkBox, 1, 1, 1, 1)
+
+        self.main_button_tree_keyboard_shortcuts = QPushButton(self.page_advanced_configuration)
+        self.main_button_tree_keyboard_shortcuts.setObjectName(u"main_button_tree_keyboard_shortcuts")
+        sizePolicy8.setHeightForWidth(self.main_button_tree_keyboard_shortcuts.sizePolicy().hasHeightForWidth())
+        self.main_button_tree_keyboard_shortcuts.setSizePolicy(sizePolicy8)
+        self.main_button_tree_keyboard_shortcuts.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.gridLayout_13.addWidget(self.main_button_tree_keyboard_shortcuts, 3, 1, 1, 1)
+
+        self.horizontalLayout_8 = QHBoxLayout()
+        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
+        self.advanced_label_custom_title = QLabel(self.page_advanced_configuration)
+        self.advanced_label_custom_title.setObjectName(u"advanced_label_custom_title")
+
+        self.horizontalLayout_8.addWidget(self.advanced_label_custom_title)
+
+        self.advanced_lineedit_custom_title = QLineEdit(self.page_advanced_configuration)
+        self.advanced_lineedit_custom_title.setObjectName(u"advanced_lineedit_custom_title")
+
+        self.horizontalLayout_8.addWidget(self.advanced_lineedit_custom_title)
+
+        self.advanced_button_custom_title_options = QPushButton(self.page_advanced_configuration)
+        self.advanced_button_custom_title_options.setObjectName(u"advanced_button_custom_title_options")
+
+        self.horizontalLayout_8.addWidget(self.advanced_button_custom_title_options)
+
+
+        self.gridLayout_13.addLayout(self.horizontalLayout_8, 5, 0, 1, 2)
+
+
+        self.gridLayout_12.addLayout(self.gridLayout_13, 0, 0, 1, 1)
 
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.gridLayout_32.addItem(self.verticalSpacer, 1, 0, 1, 1)
+        self.gridLayout_12.addItem(self.verticalSpacer, 1, 0, 1, 1)
 
         self.stacked_widget_tree.addWidget(self.page_advanced_configuration)
 
@@ -1941,7 +1962,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.CentralStackedWidget.setCurrentIndex(1)
+        self.CentralStackedWidget.setCurrentIndex(0)
         self.main_stacked_widget_top.setCurrentIndex(3)
         self.stacked_widget_tree.setCurrentIndex(1)
         self.settings_stacked_widget_main.setCurrentIndex(1)
@@ -2214,23 +2235,6 @@ class Ui_MainWindow(object):
         ___qtreewidgetitem = self.treeWidget.headerItem()
         ___qtreewidgetitem.setText(2, QCoreApplication.translate("MainWindow", u"Duration (minutes)", None));
         ___qtreewidgetitem.setText(1, QCoreApplication.translate("MainWindow", u"Author", None));
-#if QT_CONFIG(accessibility)
-        self.main_checkbox_tree_do_not_clear_videos.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox do not clear videos", None))
-#endif // QT_CONFIG(accessibility)
-        self.main_checkbox_tree_do_not_clear_videos.setText(QCoreApplication.translate("MainWindow", u"Do not clear videos", None))
-#if QT_CONFIG(accessibility)
-        self.main_button_tree_automated_selection.setAccessibleName(QCoreApplication.translate("MainWindow", u"button automated selection tool", None))
-#endif // QT_CONFIG(accessibility)
-        self.main_button_tree_automated_selection.setText(QCoreApplication.translate("MainWindow", u"Automated selection tool", None))
-#if QT_CONFIG(accessibility)
-        self.main_checkbox_direct_download.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox directly download videos", None))
-#endif // QT_CONFIG(accessibility)
-        self.main_checkbox_direct_download.setText(QCoreApplication.translate("MainWindow", u"Download videos \n"
-"directly ", None))
-#if QT_CONFIG(accessibility)
-        self.main_button_tree_keyboard_shortcuts.setAccessibleName(QCoreApplication.translate("MainWindow", u"button keyboard shortcuts", None))
-#endif // QT_CONFIG(accessibility)
-        self.main_button_tree_keyboard_shortcuts.setText(QCoreApplication.translate("MainWindow", u"Keyboard shortcuts", None))
 #if QT_CONFIG(tooltip)
         self.label_tooltip_index_videos.setToolTip(QCoreApplication.translate("MainWindow", u"This feature allows you to only fetch a specific range of videos when\n"
 "searching, loading models / channels or fetching a playlist.\n"
@@ -2242,7 +2246,23 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(tooltip)
         self.label_tooltip_index_videos.setText("")
         self.label_index_start.setText(QCoreApplication.translate("MainWindow", u"Start:", None))
+#if QT_CONFIG(accessibility)
+        self.main_checkbox_tree_do_not_clear_videos.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox do not clear videos", None))
+#endif // QT_CONFIG(accessibility)
+        self.main_checkbox_tree_do_not_clear_videos.setText(QCoreApplication.translate("MainWindow", u"Do not clear videos", None))
+#if QT_CONFIG(accessibility)
+        self.main_button_tree_automated_selection.setAccessibleName(QCoreApplication.translate("MainWindow", u"button automated selection tool", None))
+#endif // QT_CONFIG(accessibility)
+        self.main_button_tree_automated_selection.setText(QCoreApplication.translate("MainWindow", u"Automated selection tool", None))
         self.label_index_end.setText(QCoreApplication.translate("MainWindow", u"End:", None))
+        self.checkBox.setText(QCoreApplication.translate("MainWindow", u"Cleanup on stop (disables resume feature for HLS) ", None))
+#if QT_CONFIG(accessibility)
+        self.main_button_tree_keyboard_shortcuts.setAccessibleName(QCoreApplication.translate("MainWindow", u"button keyboard shortcuts", None))
+#endif // QT_CONFIG(accessibility)
+        self.main_button_tree_keyboard_shortcuts.setText(QCoreApplication.translate("MainWindow", u"Keyboard shortcuts", None))
+        self.advanced_label_custom_title.setText(QCoreApplication.translate("MainWindow", u"Custom Title formatting:", None))
+        self.advanced_lineedit_custom_title.setPlaceholderText(QCoreApplication.translate("MainWindow", u"$title", None))
+        self.advanced_button_custom_title_options.setText(QCoreApplication.translate("MainWindow", u"Options", None))
 #if QT_CONFIG(accessibility)
         self.settings_button_switch_video.setAccessibleName(QCoreApplication.translate("MainWindow", u"Video page (settings)", None))
 #endif // QT_CONFIG(accessibility)

@@ -538,7 +538,6 @@ endlocal
             f.write(script)
 
         # Launch hidden
-        creationflags = 0
         try:
             creationflags = subprocess.CREATE_NO_WINDOW
         except Exception:

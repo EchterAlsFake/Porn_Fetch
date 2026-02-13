@@ -159,3 +159,36 @@ that are going on into your Terminal and will save VERY detailed log files that 
 
 If you are using only the GUI this will not affect your user experience, but may slow down your system.""")
     ui_popup(text)
+
+
+def available_title_formatting_options():
+    text = QCoreApplication.translate("main",
+"""
+The following options are supported:
+
+$title (The video Title) 
+$video_id
+$author
+$length
+$tags
+$publish_date
+$publish_dt
+$video
+
+Notice: Not every video supports all options. If something is not supported,
+it will be skipped. 
+
+The $publish_dt option supports a literal datetime object e.g.,: 
+${publish_dt:%Y-%m-%d} → 2025-10-27
+
+Same goes for length:
+${length:0.0f}min → 12min
+
+The $video references the literal video object class in the code, which allows
+you to tweak it further e.g., for PornHub you can do:
+${video.author.name}
+
+Please note, that this is intended for advanced users. I will not show general
+examples or ways to use all this. Please ask ChatGPT if you need further information.
+""")
+
