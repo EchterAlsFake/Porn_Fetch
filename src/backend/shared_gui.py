@@ -116,6 +116,7 @@ class Signals(QObject):
 
     # Operations / Reportings
     install_finished = Signal(object)  # Reports if the Porn Fetch installation was finished
+    uninstall_finished = Signal(object)  # Reports if the Porn Fetch uninstallation was finished
     internet_check = Signal(object)  # Reports if the internet checks were successful
     update_check = Signal(bool, dict)
     result = Signal(dict)  # Reports the result of the internet checks if something went wrong

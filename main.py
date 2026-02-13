@@ -179,7 +179,8 @@ class LicenseWidget(QWidget):
 
 
 class InstallThread(QRunnable):
-    def __init__(self, app_name: str, app_id: str = "pornfetch", org_name: str = "EchterAlsFake"):
+    def __init__(self, app_name: str, app_id: str = "pornfetch", org_name: str = "EchterAlsFake",
+                 portable_config_path: str | None = None):
         super().__init__()
         """
         This function installs Porn Fetch for Windows and Linux based systems.
@@ -198,6 +199,7 @@ class InstallThread(QRunnable):
         self.app_name = app_name # Custom app name, otherwise 'Porn Fetch'
         self.app_id = app_id  # used for desktop file name, etc.
         self.org_name = org_name # All handled in config.py
+        self.portable_config_path = portable_config_path
         self.signals = Signals() # Signals for error / progress reporting
 
         # keep your logger setup if you want; using basic logging here
@@ -229,6 +231,31 @@ class InstallThread(QRunnable):
 
         self.signals.stop_undefined_range.emit() # Stop loading animation
         self.signals.install_finished.emit([True, ""]) # Successful install :)
+
+    def _migrate_portable_settings(self, install_dir: str):
+        """
+        Copy current portable config.ini into the installed working directory
+        so the installed run keeps user settings.
+        """
+        try:
+            src = self.portable_config_path
+            if not src:
+                src = str(_resolve_config_path(portable=True, portable_dir=os.getcwd()))
+            dst = str(_resolve_config_path(portable=True, portable_dir=install_dir))
+
+            if src and os.path.exists(src):
+                copy_overwrite_atomic(src, dst)
+                self.logger.info(f"Migrated settings: {src} -> {dst}")
+            else:
+                self.logger.warning(f"No portable config found at {src}; creating defaults at {dst}")
+
+            ensure_config_file(Path(dst))
+            s = QSettings(dst, QSettings.Format.IniFormat)
+            s.setValue("Misc/install_type", "installed")
+            s.setValue("Misc/app_name", self.app_name)
+            s.sync()
+        except Exception as e:
+            self.logger.warning(f"Settings migration failed: {e}")
 
     # ----------------------------
     # Linux (user-local install)
@@ -265,6 +292,8 @@ In short: You can't fix that, please report this!""")
             QFile.copy(":/images/graphics/logo.png", icon_dst) # We get the logo directly from the embedded resources
             # On Linux .png files are typically fine, on Windows this is handled differently
 
+        self._migrate_portable_settings(install_dir)
+
         # Write desktop file atomically
         desktop_path = os.path.join(apps_dir, f"{self.app_id}.desktop")
         entry = f"""[Desktop Entry]
@@ -283,8 +312,7 @@ StartupNotify=true
         # Store “installed” flag using Qt settings
         settings = make_settings(portable=False)
         settings.setValue("Misc/install_type", "installed")
-        settings.sync() # Synchronizes also the values that have been applied in the portable run,
-        # so that the user doesn't have to answer all the dialogs again
+        settings.sync()
 
         self.logger.info(f"Installed to {install_dir}, desktop entry {desktop_path}")
 
@@ -309,6 +337,8 @@ StartupNotify=true
 
         dst_exe = os.path.join(install_dir, filename)
         move_or_copy(src_exe, dst_exe)
+
+        self._migrate_portable_settings(install_dir)
 
         # Settings flag
         settings = make_settings(portable=False)
@@ -439,7 +469,6 @@ class UninstallThread(QRunnable):
         # Now remove install_dir.
         # On Windows you typically cannot delete the running exe, so we spawn a helper bat
         # that waits for this process to exit, then deletes the folder.
-        QCoreApplication.quit() # Hopefully this works
         if install_dir and os.path.isdir(install_dir):
             self._spawn_windows_cleanup_bat(
                 pid=os.getpid(),
@@ -2285,7 +2314,6 @@ Segment State Path: {report["segment_state_path"]}
         """Sets the maximum value for the total progressbar"""
         self.ui.main_progressbar_total.setRange(0, maximum)
         self.ui.main_progressbar_total.setMaximum(maximum)
-
     def update_total_progressbar(self, value):
         """This updates the total progressbar"""
         self.ui.main_progressbar_total.setValue(value)
@@ -2516,6 +2544,9 @@ Thank you for using Porn Fetch ^^
 """))
 
         self.uninstall_thread = UninstallThread()
+        self.uninstall_thread.signals.start_undefined_range.connect(self.start_undefined_range)
+        self.uninstall_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
+        self.uninstall_thread.signals.uninstall_finished.connect(self.uninstall_pornfetch_result)
         self.threadpool.start(self.uninstall_thread)
 
     def install_pornfetch(self):
@@ -2524,7 +2555,7 @@ Thank you for using Porn Fetch ^^
             self.logger.info("You did not provide a custom App name. Using 'Porn Fetch' for the installation.")
             app_name = "Porn Fetch"
 
-        self.install_thread = InstallThread(app_name=app_name)
+        self.install_thread = InstallThread(app_name=app_name, portable_config_path=settings.fileName())
         self.install_thread.signals.start_undefined_range.connect(self.start_undefined_range)
         self.install_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
         self.install_thread.signals.install_finished.connect(self.install_pornfetch_result)
@@ -2544,6 +2575,14 @@ Thank you for using Porn Fetch ^^
 
         else:
             ui_popup(self.tr(f"Porn Fetch installation failed, because of: {result[1]}", disambiguation=None))
+
+    def uninstall_pornfetch_result(self, result):
+        if result[0]:
+            self.logger.info("Uninstall completed. Closing application.")
+            self.close()
+            QCoreApplication.quit()
+        else:
+            ui_popup(self.tr(f"Porn Fetch uninstallation failed, because of: {result[1]}", disambiguation=None))
 
     def check_for_updates_result(self, success: bool, dictionary: dict):
         if success:
