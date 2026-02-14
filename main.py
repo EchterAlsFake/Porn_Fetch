@@ -2362,7 +2362,7 @@ Segment State Path: {report["segment_state_path"]}
 
         try:
             self.logger.debug("Associating a new client object with a logged in session")
-            shared_functions.ph_client = clients.ph_Client(email=username, password=password)
+            clients.ph_client = clients.ph_Client(email=username, password=password)
             self.logger.debug("Login Successful!")
             ui_popup(self.tr("Login Successful!", None))
 

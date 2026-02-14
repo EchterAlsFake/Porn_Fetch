@@ -30,7 +30,7 @@
 - [] Fix thumbnail loading / display
 - [] Write thumbnail in metadata
 - [] Fix custom title not working
-- [] Fix Account login for PH
+- [x] Fix Account login for PH
 
 
 
