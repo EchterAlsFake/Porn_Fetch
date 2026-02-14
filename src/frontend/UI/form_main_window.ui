@@ -10,6 +10,12 @@
     <height>640</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -311,7 +317,7 @@
     <item row="1" column="0">
      <widget class="QStackedWidget" name="CentralStackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page_main">
        <property name="maximumSize">
@@ -2206,13 +2212,13 @@ This can save a lot of time in certain scenarios.
               <item>
                <widget class="QStackedWidget" name="settings_stacked_widget_main">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
                 <property name="currentIndex">
-                 <number>1</number>
+                 <number>3</number>
                 </property>
                 <widget class="QWidget" name="page_video">
                  <property name="sizePolicy">
@@ -2239,198 +2245,6 @@ This can save a lot of time in certain scenarios.
                   </property>
                   <item row="0" column="0">
                    <layout class="QGridLayout" name="settings_gridlayout_video">
-                    <item row="2" column="1">
-                     <widget class="QLabel" name="settings_label_videos_result_limit">
-                      <property name="toolTip">
-                       <string/>
-                      </property>
-                      <property name="accessibleName">
-                       <string>label result limit</string>
-                      </property>
-                      <property name="text">
-                       <string>Result Limit:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="5" column="5">
-                     <widget class="QCheckBox" name="settings_checkbox_videos_use_directory_system">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="toolTip">
-                       <string/>
-                      </property>
-                      <property name="accessibleName">
-                       <string>checkbox use directory system</string>
-                      </property>
-                      <property name="accessibleDescription">
-                       <string>The directory system will automatically create folders for each author of videos</string>
-                      </property>
-                      <property name="text">
-                       <string>Use directory system</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="5" column="1">
-                     <widget class="QCheckBox" name="settings_checkbox_videos_track_downloaded_videos">
-                      <property name="toolTip">
-                       <string/>
-                      </property>
-                      <property name="accessibleName">
-                       <string>checkbox track downloaded videos</string>
-                      </property>
-                      <property name="text">
-                       <string>Track downloaded videos</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="1">
-                     <widget class="QLabel" name="settings_label_videos_quality">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="toolTip">
-                       <string/>
-                      </property>
-                      <property name="accessibleName">
-                       <string>label video quality</string>
-                      </property>
-                      <property name="text">
-                       <string>Quality:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="0">
-                     <widget class="QLabel" name="label_tooltip_model_videos">
-                      <property name="toolTip">
-                       <string/>
-                      </property>
-                      <property name="text">
-                       <string/>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="5">
-                     <widget class="QCheckBox" name="settings_checkbox_videos_skip_existing_files">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="toolTip">
-                       <string/>
-                      </property>
-                      <property name="accessibleName">
-                       <string>checkbox skip existing files</string>
-                      </property>
-                      <property name="text">
-                       <string>Skip existing files</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="1">
-                     <widget class="QLabel" name="settings_label_videos_output_path">
-                      <property name="accessibleName">
-                       <string>label output path</string>
-                      </property>
-                      <property name="text">
-                       <string>Output path:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="3">
-                     <widget class="QCheckBox" name="settings_checkbox_videos_write_metadata">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="toolTip">
-                       <string/>
-                      </property>
-                      <property name="accessibleName">
-                       <string>checkbox write metadata tags</string>
-                      </property>
-                      <property name="text">
-                       <string>Write metadata tags</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="0">
-                     <widget class="QLabel" name="label_tooltip_quality">
-                      <property name="toolTip">
-                       <string>By default, Porn Fetch will select the best available video quality. You can also decide between half and worst above.
-If you instead use the custom integer values (1080p, 720p etc.) then Porn Fetch will try to use these, if available,
-but if they are not available the next best quality will be chosen. Please note that this is experimental and has not
-been that tested very well. (Be honest, why would you not choose the best quality lol)</string>
-                      </property>
-                      <property name="text">
-                       <string/>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="2" colspan="4">
-                     <widget class="QComboBox" name="settings_video_combobox_model_videos">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="accessibleName">
-                       <string>combobox model videos type</string>
-                      </property>
-                      <property name="accessibleDescription">
-                       <string>This decides whether you want to fetch model uploads or featured videos or both of them</string>
-                      </property>
-                      <item>
-                       <property name="text">
-                        <string>Both (recommended)</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>Uploaded</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>Featured</string>
-                       </property>
-                      </item>
-                     </widget>
-                    </item>
-                    <item row="2" column="0">
-                     <widget class="QLabel" name="label_tooltip_result_limit">
-                      <property name="toolTip">
-                       <string>The result limit defines how many videos will be returned when performing a search or doing other operations which
-involves loading multiple videos. This also affects models / channels and your liked videos. The result limit is
-basically the number of videos which can be loaded into the tree widget (this thing where videos are displayed).</string>
-                      </property>
-                      <property name="text">
-                       <string/>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="5" column="0">
-                     <widget class="QLabel" name="label_tooltip_track_videos">
-                      <property name="toolTip">
-                       <string>Videos will be tracked in a SQL database which will save the URL and the metadata. </string>
-                      </property>
-                      <property name="text">
-                       <string/>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="5">
-                     <widget class="QPushButton" name="settings_button_videos_open_output_path">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="accessibleName">
-                       <string>settings open output path</string>
-                      </property>
-                      <property name="text">
-                       <string>Open</string>
-                      </property>
-                     </widget>
-                    </item>
                     <item row="0" column="2" colspan="4">
                      <widget class="QComboBox" name="settings_video_combobox_quality">
                       <property name="cursor">
@@ -2507,16 +2321,98 @@ basically the number of videos which can be loaded into the tree widget (this th
                       </item>
                      </widget>
                     </item>
-                    <item row="5" column="3">
-                     <widget class="QLineEdit" name="settings_lineedit_videos_database_path">
+                    <item row="3" column="5">
+                     <widget class="QPushButton" name="settings_button_videos_open_output_path">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
                       <property name="accessibleName">
-                       <string>lineedit output path of the database</string>
+                       <string>settings open output path</string>
+                      </property>
+                      <property name="text">
+                       <string>Open</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2" colspan="4">
+                     <widget class="QComboBox" name="settings_video_combobox_model_videos">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="accessibleName">
+                       <string>combobox model videos type</string>
                       </property>
                       <property name="accessibleDescription">
-                       <string>the database tracks all downloaded videos in Porn Fetch, optional</string>
+                       <string>This decides whether you want to fetch model uploads or featured videos or both of them</string>
                       </property>
-                      <property name="placeholderText">
-                       <string>Enter the path of the database file here</string>
+                      <item>
+                       <property name="text">
+                        <string>Both (recommended)</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>Uploaded</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>Featured</string>
+                       </property>
+                      </item>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QLabel" name="settings_label_videos_quality">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="accessibleName">
+                       <string>label video quality</string>
+                      </property>
+                      <property name="text">
+                       <string>Quality:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="label_tooltip_model_videos">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_tooltip_quality">
+                      <property name="toolTip">
+                       <string>By default, Porn Fetch will select the best available video quality. You can also decide between half and worst above.
+If you instead use the custom integer values (1080p, 720p etc.) then Porn Fetch will try to use these, if available,
+but if they are not available the next best quality will be chosen. Please note that this is experimental and has not
+been that tested very well. (Be honest, why would you not choose the best quality lol)</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_tooltip_result_limit">
+                      <property name="toolTip">
+                       <string>The result limit defines how many videos will be returned when performing a search or doing other operations which
+involves loading multiple videos. This also affects models / channels and your liked videos. The result limit is
+basically the number of videos which can be loaded into the tree widget (this thing where videos are displayed).</string>
+                      </property>
+                      <property name="text">
+                       <string/>
                       </property>
                      </widget>
                     </item>
@@ -2533,28 +2429,6 @@ basically the number of videos which can be loaded into the tree widget (this th
                       </property>
                       <property name="maximum">
                        <number>5000</number>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="1">
-                     <widget class="QCheckBox" name="settings_checkbox_videos_use_video_id_as_filename">
-                      <property name="accessibleName">
-                       <string>checkbox use video id as filename</string>
-                      </property>
-                      <property name="text">
-                       <string>Use Video ID as filename</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="2">
-                     <widget class="QLabel" name="label_tooltip_write_metadata">
-                      <property name="toolTip">
-                       <string>Metadata tags are saved inside of the file itself. These are tags that video players can read from and provide you information.
-Some folder viewers also give you the ability to search files by specific metadata tags. Those tags can help organize and structure files.
-Porn Fetch will by default save those tags inside of your video files. </string>
-                      </property>
-                      <property name="text">
-                       <string/>
                       </property>
                      </widget>
                     </item>
@@ -2577,7 +2451,172 @@ If you choose &quot;User Uploads&quot;, only self uploaded videos will be fetche
                       </property>
                      </widget>
                     </item>
-                    <item row="3" column="2" colspan="2">
+                    <item row="2" column="1">
+                     <widget class="QLabel" name="settings_label_videos_result_limit">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="accessibleName">
+                       <string>label result limit</string>
+                      </property>
+                      <property name="text">
+                       <string>Result Limit:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="0">
+                     <widget class="QLabel" name="label_tooltip_track_videos">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="toolTip">
+                       <string>Videos will be tracked in a SQL database which will save the URL and the metadata. </string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_videos_track_downloaded_videos">
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox track downloaded videos</string>
+                      </property>
+                      <property name="text">
+                       <string>Track downloaded videos</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_videos_write_metadata">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox write metadata tags</string>
+                      </property>
+                      <property name="text">
+                       <string>Write metadata tags</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="0">
+                     <widget class="QLabel" name="label_tooltip_write_metadata">
+                      <property name="toolTip">
+                       <string>Metadata tags are saved inside of the file itself. These are tags that video players can read from and provide you information.
+Some folder viewers also give you the ability to search files by specific metadata tags. Those tags can help organize and structure files.
+Porn Fetch will by default save those tags inside of your video files. </string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="QLabel" name="settings_label_videos_output_path">
+                      <property name="accessibleName">
+                       <string>label output path</string>
+                      </property>
+                      <property name="text">
+                       <string>Output path:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="2" colspan="4">
+                     <layout class="QHBoxLayout" name="horizontalLayout_6">
+                      <item>
+                       <widget class="QLabel" name="label_tooltip_use_directory_system">
+                        <property name="toolTip">
+                         <string>The directory system will save videos in an intelligent way. If you download 3 videos form one Pornstar and 5 videos 
+from another, Porn Fetch will automatically make folders for it and move the 3 videos into that one folder and the other
+5 into the other. (This will still apply with your selected output path)
+
+This can be helpful for organizing stuff, but is a more advanced feature, so the majority of users won't use it probably</string>
+                        </property>
+                        <property name="text">
+                         <string/>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QCheckBox" name="settings_checkbox_videos_use_directory_system">
+                        <property name="cursor">
+                         <cursorShape>PointingHandCursor</cursorShape>
+                        </property>
+                        <property name="toolTip">
+                         <string/>
+                        </property>
+                        <property name="accessibleName">
+                         <string>checkbox use directory system</string>
+                        </property>
+                        <property name="accessibleDescription">
+                         <string>The directory system will automatically create folders for each author of videos</string>
+                        </property>
+                        <property name="text">
+                         <string>Use directory system</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="label_tooltip_skip_existing_files">
+                        <property name="toolTip">
+                         <string>If you fetch a video and the exact same filename already exists, usually Porn Fetch would just skip this file.
+If you set this option to No, then Porn Fetch instead download the video and append a random number to it.
+
+For example you have downloaded a video called:
+
+Spain_didnt_win_against_Germany.mp4
+
+and you download a video with the same title, then it would append a random number to it:
+
+Spain_didnt_win_against_Germany_118251.mp4</string>
+                        </property>
+                        <property name="text">
+                         <string/>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QCheckBox" name="settings_checkbox_videos_skip_existing_files">
+                        <property name="cursor">
+                         <cursorShape>PointingHandCursor</cursorShape>
+                        </property>
+                        <property name="toolTip">
+                         <string/>
+                        </property>
+                        <property name="accessibleName">
+                         <string>checkbox skip existing files</string>
+                        </property>
+                        <property name="text">
+                         <string>Skip existing files</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item row="5" column="2" colspan="4">
+                     <widget class="QLineEdit" name="settings_lineedit_videos_database_path">
+                      <property name="accessibleName">
+                       <string>lineedit output path of the database</string>
+                      </property>
+                      <property name="accessibleDescription">
+                       <string>the database tracks all downloaded videos in Porn Fetch, optional</string>
+                      </property>
+                      <property name="placeholderText">
+                       <string>Enter the path of the database file here</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="2" colspan="3">
                      <widget class="QLineEdit" name="settings_lineedit_videos_output_path">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -2590,39 +2629,6 @@ If you choose &quot;User Uploads&quot;, only self uploaded videos will be fetche
                       </property>
                       <property name="placeholderText">
                        <string>Enter &quot;./&quot; for current directory</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="5" column="4">
-                     <widget class="QLabel" name="label_tooltip_use_directory_system">
-                      <property name="toolTip">
-                       <string>The directory system will save videos in an intelligent way. If you download 3 videos form one Pornstar and 5 videos 
-from another, Porn Fetch will automatically make folders for it and move the 3 videos into that one folder and the other
-5 into the other. (This will still apply with your selected output path)
-
-This can be helpful for organizing stuff, but is a more advanced feature, so the majority of users won't use it probably</string>
-                      </property>
-                      <property name="text">
-                       <string/>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="4">
-                     <widget class="QLabel" name="label_tooltip_skip_existing_files">
-                      <property name="toolTip">
-                       <string>If you fetch a video and the exact same filename already exists, usually Porn Fetch would just skip this file.
-If you set this option to No, then Porn Fetch instead download the video and append a random number to it.
-
-For example you have downloaded a video called:
-
-Spain_didnt_win_against_Germany.mp4
-
-and you download a video with the same title, then it would append a random number to it:
-
-Spain_didnt_win_against_Germany_118251.mp4</string>
-                      </property>
-                      <property name="text">
-                       <string/>
                       </property>
                      </widget>
                     </item>
@@ -3028,76 +3034,20 @@ a URL for a website there will be &lt;AMOUNT&gt; of attempts until an error is t
                     <property name="spacing">
                      <number>0</number>
                     </property>
-                    <item row="2" column="1">
-                     <widget class="QCheckBox" name="settings_checkbox_system_enable_anonymous_mode">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="label_tooltip_anonymous_mode">
                       <property name="toolTip">
-                       <string/>
-                      </property>
-                      <property name="accessibleName">
-                       <string>checkbox enable anonymous mode</string>
-                      </property>
-                      <property name="text">
-                       <string>Enable Anonymous mode</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="0" colspan="2">
-                     <widget class="QPushButton" name="settings_button_system_install_pornfetch">
-                      <property name="accessibleName">
-                       <string>button install porn fetch (This is optional) </string>
-                      </property>
-                      <property name="text">
-                       <string>Install Porn Fetch</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="0">
-                     <widget class="QLabel" name="label_tooltip_supress_errors">
-                      <property name="toolTip">
-                       <string>If you enable this function, all errors will be suppressed. This does not mean that they will be completely ignored, but
-you won't get a big notification for it. 
+                       <string>The anonymous mode renames all of Porn Fetch's elements to look NOT like a Porn downloader.
+This makes it useful for downloading Porn content if you are in public, or multiple people use your PC / Phone.
 
-If you have activated Network Logging, they will still be reported. If an error happens while iterating through videos,
-the current video will be skipped and Porn Fetch will continue with the next one.  </string>
+This also disables thumbnail preview. All titles will be replaced with: [redacted] as well as all authors.</string>
                       </property>
                       <property name="text">
                        <string/>
                       </property>
                      </widget>
                     </item>
-                    <item row="3" column="1">
-                     <widget class="QCheckBox" name="settings_checkbox_system_supress_errors">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="toolTip">
-                       <string/>
-                      </property>
-                      <property name="accessibleName">
-                       <string>checkbox supress errors silently</string>
-                      </property>
-                      <property name="text">
-                       <string>Supress errors silently</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="1">
-                     <widget class="QCheckBox" name="settings_checkbox_system_update_checks">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="accessibleName">
-                       <string>checkbox enable update checks</string>
-                      </property>
-                      <property name="text">
-                       <string>Update checks</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="2">
+                    <item row="3" column="2">
                      <widget class="QLabel" name="label_tooltip_ssl_context">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
@@ -3113,8 +3063,27 @@ the current video will be skipped and Porn Fetch will continue with the next one
                       </property>
                      </widget>
                     </item>
-                    <item row="4" column="1">
-                     <widget class="QCheckBox" name="settings_checkbox_system_enable_network_logging">
+                    <item row="3" column="3">
+                     <widget class="QCheckBox" name="settings_checkbox_use_truststore">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="text">
+                       <string>Use Truststore</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_system_enable_anonymous_mode">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
                       </property>
@@ -3122,27 +3091,28 @@ the current video will be skipped and Porn Fetch will continue with the next one
                        <string/>
                       </property>
                       <property name="accessibleName">
-                       <string>checkbox enable network logging</string>
+                       <string>checkbox enable anonymous mode</string>
                       </property>
                       <property name="text">
-                       <string>Enable Network Logging</string>
+                       <string>Enable Anonymous mode</string>
                       </property>
                      </widget>
                     </item>
                     <item row="2" column="0">
-                     <widget class="QLabel" name="label_tooltip_anonymous_mode">
+                     <widget class="QLabel" name="label_tooltip_supress_errors">
                       <property name="toolTip">
-                       <string>The anonymous mode renames all of Porn Fetch's elements to look NOT like a Porn downloader.
-This makes it useful for downloading Porn content if you are in public, or multiple people use your PC / Phone.
+                       <string>If you enable this function, all errors will be suppressed. This does not mean that they will be completely ignored, but
+you won't get a big notification for it. 
 
-This also disables thumbnail preview. All titles will be replaced with: [redacted] as well as all authors.</string>
+If you have activated Network Logging, they will still be reported. If an error happens while iterating through videos,
+the current video will be skipped and Porn Fetch will continue with the next one.  </string>
                       </property>
                       <property name="text">
                        <string/>
                       </property>
                      </widget>
                     </item>
-                    <item row="1" column="0">
+                    <item row="0" column="0">
                      <widget class="QLabel" name="label_tooltip_update_checks">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
@@ -3158,7 +3128,7 @@ This also disables thumbnail preview. All titles will be replaced with: [redacte
                       </property>
                      </widget>
                     </item>
-                    <item row="4" column="0">
+                    <item row="3" column="0">
                      <widget class="QLabel" name="label_tooltip_network_logging">
                       <property name="toolTip">
                        <string>I have created my own server that runs 24/7 in my home. Porn Fetch (ONLY if you enable it) logs specific types of errors,
@@ -3183,28 +3153,14 @@ You'd help me a lot by enabling network logging :) </string>
                       </property>
                      </widget>
                     </item>
-                    <item row="4" column="3">
-                     <widget class="QCheckBox" name="settings_checkbox_use_truststore">
-                      <property name="text">
-                       <string>Use Truststore</string>
-                      </property>
-                     </widget>
-                    </item>
                     <item row="1" column="2" colspan="2">
-                     <widget class="QCheckBox" name="settings_checkbox_system_activate_proxy">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="accessibleName">
-                       <string>checkbox activate a proxy</string>
-                      </property>
-                      <property name="text">
-                       <string>Activate Proxy</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="2" colspan="2">
                      <widget class="QCheckBox" name="settings_checkbox_system_proxy_kill_switch">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
                       </property>
@@ -3222,25 +3178,113 @@ My priority on developing this is low. Please do not report errors. Thank you &l
                       </property>
                      </widget>
                     </item>
-                    <item row="3" column="2" colspan="2">
+                    <item row="2" column="2" colspan="2">
                      <widget class="QCheckBox" name="settings_checkbox_system_enable_debug_mode">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
                       <property name="text">
                        <string>Enable Debug Mode (Not recommended) </string>
                       </property>
                      </widget>
                     </item>
-                    <item row="0" column="2" colspan="2">
-                     <widget class="QLineEdit" name="settings_lineedit_system_custom_app_name">
+                    <item row="3" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_system_enable_network_logging">
                       <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
                       </property>
-                      <property name="placeholderText">
-                       <string>Write a custom app name here</string>
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox enable network logging</string>
+                      </property>
+                      <property name="text">
+                       <string>Enable Network Logging</string>
                       </property>
                      </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_system_supress_errors">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="toolTip">
+                       <string/>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox supress errors silently</string>
+                      </property>
+                      <property name="text">
+                       <string>Supress errors silently</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2" colspan="2">
+                     <widget class="QCheckBox" name="settings_checkbox_system_activate_proxy">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox activate a proxy</string>
+                      </property>
+                      <property name="text">
+                       <string>Activate Proxy</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QCheckBox" name="settings_checkbox_system_update_checks">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="accessibleName">
+                       <string>checkbox enable update checks</string>
+                      </property>
+                      <property name="text">
+                       <string>Update checks</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="3">
+                     <spacer name="verticalSpacer_3">
+                      <property name="orientation">
+                       <enum>Qt::Orientation::Vertical</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </spacer>
                     </item>
                    </layout>
                   </item>
@@ -3271,44 +3315,27 @@ My priority on developing this is low. Please do not report errors. Thank you &l
                   </property>
                   <item row="0" column="0">
                    <layout class="QGridLayout" name="settings_gridlayout_ui">
-                    <item row="2" column="0">
-                     <widget class="QLabel" name="settings_label_ui_theme">
-                      <property name="accessibleName">
-                       <string>label porn fetch theme </string>
-                      </property>
-                      <property name="text">
-                       <string>Theme:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="0">
-                     <widget class="QLabel" name="settings_label_ui_language">
+                    <item row="1" column="1">
+                     <widget class="QSpinBox" name="settings_spinbox_ui_font_size">
                       <property name="sizePolicy">
-                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
                       </property>
                       <property name="accessibleName">
-                       <string>label graphical user interface language</string>
-                      </property>
-                      <property name="text">
-                       <string>Graphical User Interface Language:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="0">
-                     <widget class="QLabel" name="settings_label_ui_font_size">
-                      <property name="accessibleName">
-                       <string>label font size</string>
-                      </property>
-                      <property name="text">
-                       <string>Font Size:</string>
+                       <string>spinbox font size</string>
                       </property>
                      </widget>
                     </item>
                     <item row="2" column="1">
                      <widget class="QComboBox" name="settings_combobox_ui_theme">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
                       <property name="accessibleName">
                        <string>combobox porn fetch theme</string>
                       </property>
@@ -3329,15 +3356,30 @@ My priority on developing this is low. Please do not report errors. Thank you &l
                       </item>
                      </widget>
                     </item>
-                    <item row="1" column="1">
-                     <widget class="QSpinBox" name="settings_spinbox_ui_font_size">
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="settings_label_ui_language">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
                       <property name="accessibleName">
-                       <string>spinbox font size</string>
+                       <string>label graphical user interface language</string>
+                      </property>
+                      <property name="text">
+                       <string>Graphical User Interface Language:</string>
                       </property>
                      </widget>
                     </item>
                     <item row="0" column="1">
                      <widget class="QComboBox" name="settings_ui_combobox_language">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
                       </property>
@@ -3376,6 +3418,39 @@ My priority on developing this is low. Please do not report errors. Thank you &l
                       </item>
                      </widget>
                     </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="settings_label_ui_theme">
+                      <property name="accessibleName">
+                       <string>label porn fetch theme </string>
+                      </property>
+                      <property name="text">
+                       <string>Theme:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="settings_label_ui_font_size">
+                      <property name="accessibleName">
+                       <string>label font size</string>
+                      </property>
+                      <property name="text">
+                       <string>Font Size:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <spacer name="verticalSpacer_2">
+                      <property name="orientation">
+                       <enum>Qt::Orientation::Vertical</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>20</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
                    </layout>
                   </item>
                  </layout>
@@ -3383,18 +3458,28 @@ My priority on developing this is low. Please do not report errors. Thank you &l
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="settings_button_uninstall_porn_fetch">
-                <property name="text">
-                 <string>Uninstall Porn Fetch</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="button_settings_clear_temp">
-                <property name="text">
-                 <string>Clear Temporary Files</string>
-                </property>
-               </widget>
+               <layout class="QHBoxLayout" name="horizontalLayout_9">
+                <item>
+                 <widget class="QPushButton" name="settings_button_buy_license">
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="text">
+                   <string>Buy License (5€)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="settings_button_import_license">
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="text">
+                   <string>Import License File</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </item>
               <item>
                <layout class="QHBoxLayout" name="settings_horizontallayout_apply">
@@ -3446,28 +3531,48 @@ QPushButton:pressed {
                </layout>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_4">
+               <layout class="QHBoxLayout" name="horizontalLayout_10">
                 <item>
-                 <widget class="QPushButton" name="settings_button_buy_license">
-                  <property name="styleSheet">
-                   <string notr="true"/>
+                 <widget class="QPushButton" name="settings_button_system_install_pornfetch">
+                  <property name="accessibleName">
+                   <string>button install porn fetch (This is optional) </string>
                   </property>
                   <property name="text">
-                   <string>Buy License (5€)</string>
+                   <string>Install Porn Fetch</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="settings_button_import_license">
-                  <property name="styleSheet">
-                   <string notr="true"/>
+                 <widget class="QLineEdit" name="settings_lineedit_system_custom_app_name">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
                   </property>
+                  <property name="placeholderText">
+                   <string>Write a custom app name here</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="settings_button_uninstall_porn_fetch">
                   <property name="text">
-                   <string>Import License File</string>
+                   <string>Uninstall Porn Fetch</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="button_settings_clear_temp">
+                  <property name="text">
+                   <string>Clear Temporary Files</string>
                   </property>
                  </widget>
                 </item>
                </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_4"/>
               </item>
               <item>
                <spacer name="settings_vertical_spacer_main">
@@ -4448,13 +4553,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
   <tabstop>spinbox_range_end</tabstop>
   <tabstop>button_range_apply_index</tabstop>
   <tabstop>scrollArea</tabstop>
-  <tabstop>settings_button_reset</tabstop>
   <tabstop>textBrowser</tabstop>
   <tabstop>text_browser_keyboard_shortcuts</tabstop>
   <tabstop>text_browser_update_available</tabstop>
   <tabstop>button_update_acknowledged</tabstop>
   <tabstop>textbrowser_install_dialog</tabstop>
-  <tabstop>settings_button_apply</tabstop>
   <tabstop>main_textbrowser_supported_websites</tabstop>
   <tabstop>scrollArea_12</tabstop>
   <tabstop>textbrowser_disclaimer</tabstop>

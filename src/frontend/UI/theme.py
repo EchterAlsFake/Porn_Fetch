@@ -280,7 +280,7 @@ QPushButton {
 }
 QPushButton:hover { background:#F3F4F6; }
 QPushButton[intent="primary"] { background:#2563EB; border-color:#2563EB; color:white; }
-QPushButton[intent="success"] { background:#16A34A; border-color:#16A34A; color:#062b12; }
+QPushButton[intent="success"] { background:#16A34A; border-color:#16A34A; color:white; }
 QPushButton[intent="danger"]  { background:#DC2626; border-color:#DC2626; color:white; }
 QPushButton[appearance="flat"] { background:transparent; border-color:transparent; color:#374151; }
 QPushButton[size="lg"] { padding:10px 16px }
@@ -325,8 +325,19 @@ QComboBox QAbstractItemView::item:hover {
   border-color:#60A5FA; background:rgba(37,99,235,0.06);
 }
 QComboBox QAbstractItemView::item:selected {
-  border:2px solid #2563EB; background:rgba(37,99,235,0.12); color:#0B1220;
+  border:2px solid #c026d3; background:rgba(192,38,211,0.12); color:#0B1220;
+  padding: 5px 7px;
 }
+QComboBox QAbstractItemView::item:disabled {
+  border: 1px solid #fca5a5;
+  background: #fef2f2;
+  color: #9ca3af;
+}
+QComboBox QAbstractItemView::item:disabled:hover {
+  border: 1px solid #fca5a5;
+  background: #fef2f2;
+}
+
 
 /* Cards and highlight helpers */
 *[variant="card"] { background:#FFFFFF; border:1px solid #E5E7EB; border-radius:12px; }
@@ -350,6 +361,41 @@ QSpinBox:focus, QDoubleSpinBox:focus, QAbstractButton:focus {
   border-color: #2563EB;
 }
 *:disabled { border-color:#E5E7EB; color:#9CA3AF; }
+
+/* CheckBox */
+QCheckBox::indicator {
+  width: 22px; height: 22px; border: 2px solid #60a5fa; border-radius: 6px;
+  background: transparent; margin-top: 1px;
+}
+QCheckBox::indicator:unchecked { image: none; }
+QCheckBox::indicator:hover { border-color: #3b82f6; }
+QCheckBox::indicator:pressed { border-color: #2563eb; }
+QCheckBox::indicator:focus { border-color: #3b82f6; }
+QCheckBox::indicator:checked {
+  background: transparent; border-color: #16a34a;
+  image: url(:/images/graphics/done.svg);
+}
+QCheckBox::indicator:indeterminate { background: transparent; border-color: #f59e0b; image: none; }
+QCheckBox:disabled { color: #9ca3af; }
+QCheckBox::indicator:disabled { border-color: #d1d5db; background: transparent; image: none; }
+
+/* Tree CheckBox */
+QTreeView::indicator, QTreeWidget::indicator {
+  width: 20px; height: 20px; border: 2px solid #60a5fa; border-radius: 5px;
+  background: transparent;
+}
+QTreeView::indicator:unchecked, QTreeWidget::indicator:unchecked { image: none; }
+QTreeView::indicator:hover, QTreeWidget::indicator:hover { border-color: #3b82f6; }
+QTreeView::indicator:focus, QTreeWidget::indicator:focus { border-color: #3b82f6; }
+QTreeView::indicator:checked, QTreeWidget::indicator:checked {
+  image: url(:/images/graphics/done.svg); background: transparent; border-color: #16a34a;
+}
+QTreeView::indicator:indeterminate, QTreeWidget::indicator:indeterminate {
+  image: none; background: transparent; border-color: #f59e0b;
+}
+QTreeView::indicator:disabled, QTreeWidget::indicator:disabled {
+  border-color: #d1d5db; image: none;
+}
 """
 
 def apply_theme(app: QApplication):
@@ -435,7 +481,7 @@ QPushButton {{
 }}
 QPushButton:hover {{ background:{g_btn_h}}}
 QPushButton[intent="primary"] {{ background:{g_btn}; color:white; }}
-QPushButton[intent="success"] {{ background:{_lg(_hex(success), _hex(cA))}; color:#06170b; }}
+QPushButton[intent="success"] {{ background:{_lg(_hex(success), _hex(cA))}; color:white; }}
 QPushButton[intent="danger"]  {{ background:{_lg(_hex(danger), _hex(cC))}; color:white; }}
 QPushButton[appearance="flat"] {{ background:transparent; border:2px dashed {_hex(cC)}; color:{_hex(cC)}; }}
 QPushButton[size="lg"] {{ padding:12px 18px; }}
@@ -488,6 +534,16 @@ QComboBox QAbstractItemView::item:hover {{
 }}
 QComboBox QAbstractItemView::item:selected {{
   border:2px solid {_hex(cC)}; background:{g_sel}; color:white;
+  padding: 4px 6px;
+}}
+QComboBox QAbstractItemView::item:disabled {{
+  border: 1px solid {_hex(danger)};
+  background: {_hsl(h-90, 0.95, 0.54).lighter(180).name()};
+  color: {_hsl(h-90, 0.95, 0.54).darker(120).name()};
+}}
+QComboBox QAbstractItemView::item:disabled:hover {{
+  border: 1px solid {_hex(danger)};
+  background: {_hsl(h-90, 0.95, 0.54).lighter(180).name()};
 }}
 
 /* --- Cards & highlights --- */
@@ -507,6 +563,44 @@ QSpinBox:hover, QDoubleSpinBox:hover, QAbstractButton:hover {{
 QLineEdit:focus, QComboBox:focus, QTextEdit:focus, QPlainTextEdit:focus,
 QSpinBox:focus, QDoubleSpinBox:focus, QAbstractButton:focus {{
   border-color: {_hex(cC)};
+}}
+
+/* CheckBox */
+QCheckBox::indicator {{
+  width: 22px; height: 22px; border: 2px solid {_hex(cA)}; border-radius: 6px;
+  background: transparent; margin-top: 1px;
+}}
+QCheckBox::indicator:unchecked {{ image: none; }}
+QCheckBox::indicator:hover {{ border-color: {_hex(cB)}; }}
+QCheckBox::indicator:pressed {{ border-color: {_hex(cC)}; }}
+QCheckBox::indicator:focus {{ border-color: {_hex(cB)}; }}
+QCheckBox::indicator:checked {{
+  background: white;
+  border-color: #a855f7;
+  image: url(:/images/graphics/done.svg);
+}}
+QCheckBox::indicator:indeterminate {{ background: transparent; border-color: {_hex(warning)}; image: none; }}
+QCheckBox:disabled {{ color: #9CA3AF; }}
+QCheckBox::indicator:disabled {{ border-color: #d1d5db; background: transparent; image: none; }}
+
+/* Tree CheckBox */
+QTreeView::indicator, QTreeWidget::indicator {{
+  width: 20px; height: 20px; border: 2px solid {_hex(cA)}; border-radius: 5px;
+  background: transparent;
+}}
+QTreeView::indicator:unchecked, QTreeWidget::indicator:unchecked {{ image: none; }}
+QTreeView::indicator:hover, QTreeWidget::indicator:hover {{ border-color: {_hex(cB)}; }}
+QTreeView::indicator:focus, QTreeWidget::indicator:focus {{ border-color: {_hex(cB)}; }}
+QTreeView::indicator:checked, QTreeWidget::indicator:checked {{
+  background: white;
+  border-color: #a855f7;
+  image: url(:/images/graphics/done.svg);
+}}
+QTreeView::indicator:indeterminate, QTreeWidget::indicator:indeterminate {{
+  image: none; background: transparent; border-color: {_hex(warning)};
+}}
+QTreeView::indicator:disabled, QTreeWidget::indicator:disabled {{
+  border-color: #d1d5db; image: none;
 }}
 
 /* ToolTip for extra spice */

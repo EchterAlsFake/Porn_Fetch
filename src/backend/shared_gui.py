@@ -14,22 +14,22 @@ def ui_popup(text, title="Notice"):
     message_box.setStyleSheet("""
     /* Dialog surface */
     QMessageBox {
-      background: #262628;
-      color: #EAEAEA;
-      border: 1px solid #333437;
+      background: #FFFFFF;
+      color: #111827;
+      border: 1px solid #E5E7EB;
       border-radius: 12px;
     }
 
     /* Main text */
     QMessageBox QLabel#qt_msgbox_label {
-      color: #EAEAEA;
+      color: #111827;
       font-size: 11pt;
       padding: 2px 0px;
     }
 
     /* Optional informative text (if you use setInformativeText) */
     QMessageBox QLabel#qt_msgbox_informativelabel {
-      color: rgba(234,234,234,0.80);
+      color: #374151;
       font-size: 10pt;
       padding-top: 4px;
     }
@@ -46,40 +46,40 @@ def ui_popup(text, title="Notice"):
 
     /* Buttons (mirror your global QPushButton rule) */
     QMessageBox QPushButton {
-      border: 1px solid #3a3b3f;
-      background: #2a2b2e;
-      color: #EAEAEA;
+      border: 1px solid #D1D5DB;
+      background: #FFFFFF;
+      color: #111827;
       border-radius: 8px;
       padding: 6px 12px;
       min-width: 96px;
     }
 
     QMessageBox QPushButton:hover {
-      background: #323338;
-      border-color: #4b8dff;
+      background: #F3F4F6;
+      border-color: #93C5FD;
     }
 
     QMessageBox QPushButton:pressed {
-      background: #262628;
+      background: #E5E7EB;
     }
 
     /* Make the default action look like your primary intent */
     QMessageBox QPushButton:default {
-      background: #3b82f6;
-      border-color: #3b82f6;
+      background: #2563EB;
+      border-color: #2563EB;
       color: white;
     }
 
     QMessageBox QPushButton:default:hover {
-      background: #2563eb;
-      border-color: #2563eb;
+      background: #1D4ED8;
+      border-color: #1D4ED8;
     }
 
     /* Disabled */
     QMessageBox QPushButton:disabled {
-      color: rgba(234,234,234,0.45);
-      background: #242427;
-      border-color: #2c2d31;
+      color: #9CA3AF;
+      background: #F3F4F6;
+      border-color: #E5E7EB;
     }
     """)
 

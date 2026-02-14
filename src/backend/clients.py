@@ -574,7 +574,7 @@ def load_video_attributes(video, name_template: str, *, now: Optional[datetime] 
 
     rendered = render_name_template(name_template, context, missing="")
     rendered = core.strip_title(rendered)
-
+    print(f"Rendered Name: {rendered}")
     return VideoAttributes(
         title=title,
         qualities=qualities,

@@ -21,8 +21,4 @@
         <file>translations/qm/fr.qm</file>
         <file>translations/qm/it.qm</file>
     </qresource>
-
-    <qresource prefix="/style">
-        <file>UI/stylesheet_license_button.qss</file>
-    </qresource>
 </RCC>

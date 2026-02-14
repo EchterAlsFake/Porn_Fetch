@@ -637,28 +637,24 @@ class AddToTreeWidget(QRunnable):
                     video = clients.check_video(url=video)
 
                 self.logger.info(f"[Download (3/10) - Video ID] -->: {video_identifier}")
+                print(f"Custom Options: {self.custom_options}")
                 data = clients.load_video_attributes(video, self.custom_options)
                 self.logger.debug("[Download (4/10) - Fetched Attributes")
                 session_urls.append(video.url)
-                title = data.title
-                video_id = data.video_id
-                stripped_title_1 = clients.core.strip_title(title) # Clears special characters
-                stripped_title_2 = clients.core.strip_title(title)
-
-                if self.consistent_data.get("video_id_as_filename"):
-                    stripped_title_1 = video_id # Only PornHub / EPorner / MissAV
+                title = clients.core.strip_title(data.title)
+                rendered_name = data.output_name
 
                 if self.consistent_data.get(
                         "directory_system"):  # If the directory system is enabled, this will create an additional folder
                     author_path = os.path.join(self.output_path, data.author)
                     os.makedirs(author_path, exist_ok=True)
-                    output_path = os.path.join(str(author_path), stripped_title_1 + ".mp4")
+                    output_path = os.path.join(str(author_path), rendered_name + ".mp4")
 
                 else:
-                    output_path = os.path.join(self.output_path, stripped_title_1 + ".mp4")
+                    output_path = os.path.join(self.output_path, rendered_name + ".mp4")
 
                 # Emit the loaded signal with all the required information
-                data.title = stripped_title_2
+                data.title = title
                 data.output_name = output_path
                 data.index = index
                 data.video = video
@@ -1211,17 +1207,69 @@ class PornFetch(QMainWindow):
         # --- intent & size instead of dozens of QSS files ---
         mark(self.ui.download_button_download, intent="primary", size="lg")
         mark(self.ui.login_button_login, intent="primary")
-        mark(self.ui.settings_button_apply, intent="primary")
-
+        mark(self.ui.settings_button_apply, intent="primary", size="lg")
+        mark(self.ui.button_credits_send_feedback, intent="primary")
+        mark(self.ui.settings_button_system_install_pornfetch, intent="success")
         mark(self.ui.main_button_tree_stop, intent="danger")
+        mark(self.ui.button_treewidget_advanced_configuration, seg=True)
+        mark(self.ui.settings_button_import_license)
+        mark(self.ui.button_settings_clear_temp)
+        mark(self.ui.settings_button_uninstall_porn_fetch, intent="danger")
         mark(self.ui.settings_button_reset, intent="danger")
-
         mark(self.ui.main_progressbar_total, role="total")
 
         mark(self.ui.button_info_enable_all, intent="success")
         mark(self.ui.button_info_disable_all, intent="danger")
         mark(self.ui.button_info_enable_update, intent="primary")
 
+        stylesheet_license_button = """
+QPushButton {
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, 
+                                      stop:0 #2563eb, stop:1 #7c3aed);
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 8px;
+    padding: 10px 20px;
+    border: none;
+}
+
+QPushButton:hover {
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, 
+                                      stop:0 #3b82f6, stop:1 #8b5cf6);
+}
+
+QPushButton:pressed {
+    background-color: #1e40af;
+    padding-top: 12px;
+    padding-left: 22px;
+}
+        """
+
+        stylesheet_import_license = """
+QPushButton {
+    background-color: rgba(0,0,0,0); /* Explicitly transparent */
+    color: #94a3b8;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 8px;
+    padding: 10px 20px;
+    border: 2px solid #475569;
+}
+
+QPushButton:hover {
+    color: #ffffff;
+    border: 2px solid #94a3b8;
+    background-color: rgba(255,255,255,15); /* Removed spaces */
+}
+
+QPushButton:pressed {
+    background-color: rgba(255,255,255,30);
+}
+"""
+
+        self.ui.settings_button_buy_license.setStyleSheet(stylesheet_license_button)
+        self.ui.settings_button_import_license.setStyleSheet(stylesheet_import_license)
 
         # most of these are secondary or flat so they don’t compete visually
         for b in [
@@ -1294,19 +1342,6 @@ class PornFetch(QMainWindow):
         self.ui.settings_video_combobox_quality.installEventFilter(self.filter)
         self.ui.tools_combobox_hqporner_top_porn.installEventFilter(self.filter)
         self.ui.settings_video_combobox_model_videos.installEventFilter(self.filter)
-
-
-        stylesheet_license_buttons = QFile(":/style/UI/stylesheet_license_button.qss")
-        stylesheet_license_buttons.open(QIODevice.OpenModeFlag.ReadOnly | QIODevice.OpenModeFlag.Text)
-        stream = QTextStream(stylesheet_license_buttons)
-        style = stream.readAll()
-
-        self.ui.settings_button_buy_license.setProperty("variant", "primary")
-        self.ui.settings_button_buy_license.setStyleSheet(style)
-
-        self.ui.settings_button_import_license.setProperty("variant", "danger")
-        self.ui.settings_button_import_license.setStyleSheet(style)
-
         self.switch_to_download()
         self.switch_to_treewidget_downloads()
 
@@ -1560,10 +1595,6 @@ You have all paid features unlocked :)
         video_data.consistent_data.update({"output_path": output_path})
         self.ui.settings_lineedit_videos_output_path.setText(output_path)
 
-        video_id_as_filename = settings.value("Video/video_id_as_filename", False, bool)
-        video_data.consistent_data.update({"video_id_as_filename": video_id_as_filename})
-        self.ui.settings_checkbox_videos_use_video_id_as_filename.setChecked(video_id_as_filename)
-
         write_metadata = settings.value("Video/write_metadata", True, bool)
         video_data.consistent_data.update({"write_metadata": write_metadata})
         self.ui.settings_checkbox_videos_write_metadata.setChecked(write_metadata)
@@ -1683,7 +1714,6 @@ You have all paid features unlocked :)
         settings.setValue("model_videos", self.ui.settings_video_combobox_model_videos.currentIndex())
         settings.setValue("result_limit", int(self.ui.settings_spinbox_videos_result_limit.value()))
         settings.setValue("output_path", str(self.ui.settings_lineedit_videos_output_path.text()))
-        settings.setValue("video_id_as_filename", self.ui.settings_checkbox_videos_use_video_id_as_filename.isChecked())
         settings.setValue("write_metadata", self.ui.settings_checkbox_videos_write_metadata.isChecked())
         settings.setValue("skip_existing_files", self.ui.settings_checkbox_videos_skip_existing_files.isChecked())
         settings.setValue("track_videos", self.ui.settings_checkbox_videos_track_downloaded_videos.isChecked())
@@ -2019,7 +2049,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         self.add_to_tree_widget_thread_ = AddToTreeWidget(iterator=iterator,
                                                           is_checked=is_checked,
                                                           last_index=self.last_index,
-                                                          custom_options=self.ui.advanced_button_custom_title_options.text())
+                                                          custom_options=self.ui.advanced_lineedit_custom_title.text())
         self.add_to_tree_widget_thread_.signals.text_data_to_tree_widget.connect(self.add_to_tree_widget_signal)
         self.add_to_tree_widget_thread_.signals.error_signal.connect(show_error)
         self.add_to_tree_widget_thread_.signals.clear_tree_widget_signal.connect(self.clear_tree_widget)
@@ -2364,6 +2394,9 @@ Segment State Path: {report["segment_state_path"]}
             self.logger.debug("Associating a new client object with a logged in session")
             clients.ph_client = clients.ph_Client(email=username, password=password)
             self.logger.debug("Login Successful!")
+            mark(self.ui.login_button_get_recommended_videos, intent="success")
+            mark(self.ui.login_button_get_liked_videos, intent="success")
+            mark(self.ui.login_button_get_watched_videos, intent="success")
             ui_popup(self.tr("Login Successful!", None))
 
         except ph_errors.LoginFailed:
@@ -2814,33 +2847,6 @@ Don't tell anyone, and don't change your language in settings
             logger.debug(f"Failed to load {language_code} translation")
 
     app.installTranslator(translator)
-    ui_popup("""
-Warning!
-
-You are currently using the BETA for v3.8.
-This has been released, because v3.7 is broken and I can't release the full v3.8 yet, as I just can't
-do it right now. 
-
-Too much left to do, and too less time to get it working.
-Please DO NOT report any errors that you encounter during BETA.
-I am probably aware of them and still fix them.
-
-
-This BETA has ALL license features unlocked. Do not use the license system / interface yet.
-It hasn't been tested and will probably not work correctly. You have all features anyways,
-so just ignore it for now.
-
-
-Thank you, and sorry that this release again takes so long. I am trying my best guys. 
-
-
-DISCLAIMER:
-This release has not been tested and might delete your PC if the app feels like it (joke).
-Please also don't use the Proxy feature if you live in a censored country. It hasn't been tested too.
-Nothing has been tested except downloading for all sites. 
-""")
-    global x
-    x = True # Temporary for beta, unlocks source code and stuff
     w = PornFetch()  # This actually starts Porn Fetch
     w.show()  # This shows the main widget
     """

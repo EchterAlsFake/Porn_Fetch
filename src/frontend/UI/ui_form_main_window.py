@@ -28,14 +28,19 @@ class Ui_MainWindow(object):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(1138, 640)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
+        MainWindow.setSizePolicy(sizePolicy)
         MainWindow.setStyleSheet(u"")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
-        self.centralwidget.setSizePolicy(sizePolicy)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
+        self.centralwidget.setSizePolicy(sizePolicy1)
         self.gridLayout_11 = QGridLayout(self.centralwidget)
         self.gridLayout_11.setObjectName(u"gridLayout_11")
         self.main_horizontallayout_menu_buttons = QHBoxLayout()
@@ -43,11 +48,11 @@ class Ui_MainWindow(object):
         self.main_horizontallayout_menu_buttons.setObjectName(u"main_horizontallayout_menu_buttons")
         self.main_button_switch_home = QPushButton(self.centralwidget)
         self.main_button_switch_home.setObjectName(u"main_button_switch_home")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Maximum)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.main_button_switch_home.sizePolicy().hasHeightForWidth())
-        self.main_button_switch_home.setSizePolicy(sizePolicy1)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Maximum)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.main_button_switch_home.sizePolicy().hasHeightForWidth())
+        self.main_button_switch_home.setSizePolicy(sizePolicy2)
         self.main_button_switch_home.setMinimumSize(QSize(50, 35))
         self.main_button_switch_home.setMaximumSize(QSize(16777215, 35))
         self.main_button_switch_home.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -62,8 +67,8 @@ class Ui_MainWindow(object):
 
         self.main_button_switch_account = QPushButton(self.centralwidget)
         self.main_button_switch_account.setObjectName(u"main_button_switch_account")
-        sizePolicy1.setHeightForWidth(self.main_button_switch_account.sizePolicy().hasHeightForWidth())
-        self.main_button_switch_account.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.main_button_switch_account.sizePolicy().hasHeightForWidth())
+        self.main_button_switch_account.setSizePolicy(sizePolicy2)
         self.main_button_switch_account.setMinimumSize(QSize(50, 35))
         self.main_button_switch_account.setMaximumSize(QSize(16777215, 35))
         self.main_button_switch_account.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -79,8 +84,8 @@ class Ui_MainWindow(object):
 
         self.main_button_switch_tools = QPushButton(self.centralwidget)
         self.main_button_switch_tools.setObjectName(u"main_button_switch_tools")
-        sizePolicy1.setHeightForWidth(self.main_button_switch_tools.sizePolicy().hasHeightForWidth())
-        self.main_button_switch_tools.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.main_button_switch_tools.sizePolicy().hasHeightForWidth())
+        self.main_button_switch_tools.setSizePolicy(sizePolicy2)
         self.main_button_switch_tools.setMinimumSize(QSize(50, 35))
         self.main_button_switch_tools.setMaximumSize(QSize(16777215, 35))
         font = QFont()
@@ -98,8 +103,8 @@ class Ui_MainWindow(object):
 
         self.main_button_switch_settings = QPushButton(self.centralwidget)
         self.main_button_switch_settings.setObjectName(u"main_button_switch_settings")
-        sizePolicy1.setHeightForWidth(self.main_button_switch_settings.sizePolicy().hasHeightForWidth())
-        self.main_button_switch_settings.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.main_button_switch_settings.sizePolicy().hasHeightForWidth())
+        self.main_button_switch_settings.setSizePolicy(sizePolicy2)
         self.main_button_switch_settings.setMinimumSize(QSize(50, 35))
         self.main_button_switch_settings.setMaximumSize(QSize(16777215, 35))
         self.main_button_switch_settings.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -115,8 +120,8 @@ class Ui_MainWindow(object):
 
         self.main_button_switch_credits = QPushButton(self.centralwidget)
         self.main_button_switch_credits.setObjectName(u"main_button_switch_credits")
-        sizePolicy1.setHeightForWidth(self.main_button_switch_credits.sizePolicy().hasHeightForWidth())
-        self.main_button_switch_credits.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.main_button_switch_credits.sizePolicy().hasHeightForWidth())
+        self.main_button_switch_credits.setSizePolicy(sizePolicy2)
         self.main_button_switch_credits.setMinimumSize(QSize(50, 35))
         self.main_button_switch_credits.setMaximumSize(QSize(16777215, 35))
         self.main_button_switch_credits.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -132,8 +137,8 @@ class Ui_MainWindow(object):
 
         self.main_button_switch_supported_websites = QPushButton(self.centralwidget)
         self.main_button_switch_supported_websites.setObjectName(u"main_button_switch_supported_websites")
-        sizePolicy1.setHeightForWidth(self.main_button_switch_supported_websites.sizePolicy().hasHeightForWidth())
-        self.main_button_switch_supported_websites.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.main_button_switch_supported_websites.sizePolicy().hasHeightForWidth())
+        self.main_button_switch_supported_websites.setSizePolicy(sizePolicy2)
         self.main_button_switch_supported_websites.setMinimumSize(QSize(50, 35))
         self.main_button_switch_supported_websites.setMaximumSize(QSize(16777215, 35))
         self.main_button_switch_supported_websites.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -162,19 +167,19 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.main_stacked_widget_top = QStackedWidget(self.page_main)
         self.main_stacked_widget_top.setObjectName(u"main_stacked_widget_top")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.main_stacked_widget_top.sizePolicy().hasHeightForWidth())
-        self.main_stacked_widget_top.setSizePolicy(sizePolicy2)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Maximum)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.main_stacked_widget_top.sizePolicy().hasHeightForWidth())
+        self.main_stacked_widget_top.setSizePolicy(sizePolicy3)
         self.main_stacked_widget_top.setMinimumSize(QSize(0, 150))
         self.main_stacked_widget_top.setMaximumSize(QSize(16777215, 150))
         self.main_stacked_widget_top.setStyleSheet(u"")
         self.main_stacked_widget_top.setLineWidth(1)
         self.page_download = QWidget()
         self.page_download.setObjectName(u"page_download")
-        sizePolicy.setHeightForWidth(self.page_download.sizePolicy().hasHeightForWidth())
-        self.page_download.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.page_download.sizePolicy().hasHeightForWidth())
+        self.page_download.setSizePolicy(sizePolicy1)
         self.page_download.setMinimumSize(QSize(0, 150))
         self.page_download.setMaximumSize(QSize(16777215, 180))
         self.gridLayout_5 = QGridLayout(self.page_download)
@@ -188,11 +193,11 @@ class Ui_MainWindow(object):
         self.gridlayout_downloading.setContentsMargins(-1, 0, -1, -1)
         self.download_label_model_url = QLabel(self.page_download)
         self.download_label_model_url.setObjectName(u"download_label_model_url")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Fixed)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.download_label_model_url.sizePolicy().hasHeightForWidth())
-        self.download_label_model_url.setSizePolicy(sizePolicy3)
+        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Fixed)
+        sizePolicy4.setHorizontalStretch(0)
+        sizePolicy4.setVerticalStretch(0)
+        sizePolicy4.setHeightForWidth(self.download_label_model_url.sizePolicy().hasHeightForWidth())
+        self.download_label_model_url.setSizePolicy(sizePolicy4)
         self.download_label_model_url.setMinimumSize(QSize(0, 30))
         font1 = QFont()
         font1.setBold(False)
@@ -202,11 +207,11 @@ class Ui_MainWindow(object):
 
         self.button_search = QPushButton(self.page_download)
         self.button_search.setObjectName(u"button_search")
-        sizePolicy4 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
-        sizePolicy4.setHorizontalStretch(0)
-        sizePolicy4.setVerticalStretch(0)
-        sizePolicy4.setHeightForWidth(self.button_search.sizePolicy().hasHeightForWidth())
-        self.button_search.setSizePolicy(sizePolicy4)
+        sizePolicy5 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
+        sizePolicy5.setHorizontalStretch(0)
+        sizePolicy5.setVerticalStretch(0)
+        sizePolicy5.setHeightForWidth(self.button_search.sizePolicy().hasHeightForWidth())
+        self.button_search.setSizePolicy(sizePolicy5)
         self.button_search.setMinimumSize(QSize(0, 35))
         self.button_search.setFont(font1)
         self.button_search.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -215,8 +220,8 @@ class Ui_MainWindow(object):
 
         self.download_label_playlist_url = QLabel(self.page_download)
         self.download_label_playlist_url.setObjectName(u"download_label_playlist_url")
-        sizePolicy3.setHeightForWidth(self.download_label_playlist_url.sizePolicy().hasHeightForWidth())
-        self.download_label_playlist_url.setSizePolicy(sizePolicy3)
+        sizePolicy4.setHeightForWidth(self.download_label_playlist_url.sizePolicy().hasHeightForWidth())
+        self.download_label_playlist_url.setSizePolicy(sizePolicy4)
         self.download_label_playlist_url.setMinimumSize(QSize(0, 30))
         self.download_label_playlist_url.setFont(font1)
 
@@ -224,11 +229,11 @@ class Ui_MainWindow(object):
 
         self.download_button_model = QPushButton(self.page_download)
         self.download_button_model.setObjectName(u"download_button_model")
-        sizePolicy5 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-        sizePolicy5.setHorizontalStretch(0)
-        sizePolicy5.setVerticalStretch(0)
-        sizePolicy5.setHeightForWidth(self.download_button_model.sizePolicy().hasHeightForWidth())
-        self.download_button_model.setSizePolicy(sizePolicy5)
+        sizePolicy6 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        sizePolicy6.setHorizontalStretch(0)
+        sizePolicy6.setVerticalStretch(0)
+        sizePolicy6.setHeightForWidth(self.download_button_model.sizePolicy().hasHeightForWidth())
+        self.download_button_model.setSizePolicy(sizePolicy6)
         self.download_button_model.setMinimumSize(QSize(60, 30))
         self.download_button_model.setFont(font1)
         self.download_button_model.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -238,11 +243,11 @@ class Ui_MainWindow(object):
 
         self.download_lineedit_playlist_url = QLineEdit(self.page_download)
         self.download_lineedit_playlist_url.setObjectName(u"download_lineedit_playlist_url")
-        sizePolicy6 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        sizePolicy6.setHorizontalStretch(0)
-        sizePolicy6.setVerticalStretch(0)
-        sizePolicy6.setHeightForWidth(self.download_lineedit_playlist_url.sizePolicy().hasHeightForWidth())
-        self.download_lineedit_playlist_url.setSizePolicy(sizePolicy6)
+        sizePolicy7 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        sizePolicy7.setHorizontalStretch(0)
+        sizePolicy7.setVerticalStretch(0)
+        sizePolicy7.setHeightForWidth(self.download_lineedit_playlist_url.sizePolicy().hasHeightForWidth())
+        self.download_lineedit_playlist_url.setSizePolicy(sizePolicy7)
         self.download_lineedit_playlist_url.setMinimumSize(QSize(0, 30))
         font2 = QFont()
         font2.setBold(True)
@@ -252,8 +257,8 @@ class Ui_MainWindow(object):
 
         self.download_button_playlist_get_videos = QPushButton(self.page_download)
         self.download_button_playlist_get_videos.setObjectName(u"download_button_playlist_get_videos")
-        sizePolicy5.setHeightForWidth(self.download_button_playlist_get_videos.sizePolicy().hasHeightForWidth())
-        self.download_button_playlist_get_videos.setSizePolicy(sizePolicy5)
+        sizePolicy6.setHeightForWidth(self.download_button_playlist_get_videos.sizePolicy().hasHeightForWidth())
+        self.download_button_playlist_get_videos.setSizePolicy(sizePolicy6)
         self.download_button_playlist_get_videos.setMinimumSize(QSize(0, 30))
         self.download_button_playlist_get_videos.setFont(font1)
         self.download_button_playlist_get_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -262,11 +267,11 @@ class Ui_MainWindow(object):
 
         self.download_lineedit_model_url = QLineEdit(self.page_download)
         self.download_lineedit_model_url.setObjectName(u"download_lineedit_model_url")
-        sizePolicy7 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Preferred)
-        sizePolicy7.setHorizontalStretch(0)
-        sizePolicy7.setVerticalStretch(0)
-        sizePolicy7.setHeightForWidth(self.download_lineedit_model_url.sizePolicy().hasHeightForWidth())
-        self.download_lineedit_model_url.setSizePolicy(sizePolicy7)
+        sizePolicy8 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Preferred)
+        sizePolicy8.setHorizontalStretch(0)
+        sizePolicy8.setVerticalStretch(0)
+        sizePolicy8.setHeightForWidth(self.download_lineedit_model_url.sizePolicy().hasHeightForWidth())
+        self.download_lineedit_model_url.setSizePolicy(sizePolicy8)
         self.download_lineedit_model_url.setMinimumSize(QSize(300, 35))
         self.download_lineedit_model_url.setFont(font2)
 
@@ -274,8 +279,8 @@ class Ui_MainWindow(object):
 
         self.download_lineedit_search_query = QLineEdit(self.page_download)
         self.download_lineedit_search_query.setObjectName(u"download_lineedit_search_query")
-        sizePolicy7.setHeightForWidth(self.download_lineedit_search_query.sizePolicy().hasHeightForWidth())
-        self.download_lineedit_search_query.setSizePolicy(sizePolicy7)
+        sizePolicy8.setHeightForWidth(self.download_lineedit_search_query.sizePolicy().hasHeightForWidth())
+        self.download_lineedit_search_query.setSizePolicy(sizePolicy8)
         self.download_lineedit_search_query.setMinimumSize(QSize(100, 35))
         self.download_lineedit_search_query.setFont(font2)
 
@@ -283,8 +288,8 @@ class Ui_MainWindow(object):
 
         self.download_label_search = QLabel(self.page_download)
         self.download_label_search.setObjectName(u"download_label_search")
-        sizePolicy3.setHeightForWidth(self.download_label_search.sizePolicy().hasHeightForWidth())
-        self.download_label_search.setSizePolicy(sizePolicy3)
+        sizePolicy4.setHeightForWidth(self.download_label_search.sizePolicy().hasHeightForWidth())
+        self.download_label_search.setSizePolicy(sizePolicy4)
         self.download_label_search.setMinimumSize(QSize(0, 30))
         self.download_label_search.setFont(font1)
 
@@ -292,8 +297,8 @@ class Ui_MainWindow(object):
 
         self.download_button_download = QPushButton(self.page_download)
         self.download_button_download.setObjectName(u"download_button_download")
-        sizePolicy5.setHeightForWidth(self.download_button_download.sizePolicy().hasHeightForWidth())
-        self.download_button_download.setSizePolicy(sizePolicy5)
+        sizePolicy6.setHeightForWidth(self.download_button_download.sizePolicy().hasHeightForWidth())
+        self.download_button_download.setSizePolicy(sizePolicy6)
         self.download_button_download.setMinimumSize(QSize(60, 30))
         font3 = QFont()
         font3.setBold(False)
@@ -316,11 +321,8 @@ class Ui_MainWindow(object):
         self.download_website_combobox.addItem("")
         self.download_website_combobox.addItem("")
         self.download_website_combobox.setObjectName(u"download_website_combobox")
-        sizePolicy8 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
-        sizePolicy8.setHorizontalStretch(0)
-        sizePolicy8.setVerticalStretch(0)
-        sizePolicy8.setHeightForWidth(self.download_website_combobox.sizePolicy().hasHeightForWidth())
-        self.download_website_combobox.setSizePolicy(sizePolicy8)
+        sizePolicy.setHeightForWidth(self.download_website_combobox.sizePolicy().hasHeightForWidth())
+        self.download_website_combobox.setSizePolicy(sizePolicy)
         self.download_website_combobox.setMinimumSize(QSize(0, 35))
         self.download_website_combobox.setMaximumSize(QSize(16777215, 35))
         self.download_website_combobox.setFont(font1)
@@ -330,8 +332,8 @@ class Ui_MainWindow(object):
 
         self.download_label_url = QLabel(self.page_download)
         self.download_label_url.setObjectName(u"download_label_url")
-        sizePolicy3.setHeightForWidth(self.download_label_url.sizePolicy().hasHeightForWidth())
-        self.download_label_url.setSizePolicy(sizePolicy3)
+        sizePolicy4.setHeightForWidth(self.download_label_url.sizePolicy().hasHeightForWidth())
+        self.download_label_url.setSizePolicy(sizePolicy4)
         self.download_label_url.setMinimumSize(QSize(0, 30))
         self.download_label_url.setFont(font1)
 
@@ -548,8 +550,8 @@ class Ui_MainWindow(object):
 
         self.tools_button_top_porn_get_videos = QPushButton(self.groupbox_tools_hqporner)
         self.tools_button_top_porn_get_videos.setObjectName(u"tools_button_top_porn_get_videos")
-        sizePolicy5.setHeightForWidth(self.tools_button_top_porn_get_videos.sizePolicy().hasHeightForWidth())
-        self.tools_button_top_porn_get_videos.setSizePolicy(sizePolicy5)
+        sizePolicy6.setHeightForWidth(self.tools_button_top_porn_get_videos.sizePolicy().hasHeightForWidth())
+        self.tools_button_top_porn_get_videos.setSizePolicy(sizePolicy6)
         self.tools_button_top_porn_get_videos.setMinimumSize(QSize(0, 0))
         self.tools_button_top_porn_get_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
@@ -557,8 +559,8 @@ class Ui_MainWindow(object):
 
         self.tools_button_list_categories = QPushButton(self.groupbox_tools_hqporner)
         self.tools_button_list_categories.setObjectName(u"tools_button_list_categories")
-        sizePolicy5.setHeightForWidth(self.tools_button_list_categories.sizePolicy().hasHeightForWidth())
-        self.tools_button_list_categories.setSizePolicy(sizePolicy5)
+        sizePolicy6.setHeightForWidth(self.tools_button_list_categories.sizePolicy().hasHeightForWidth())
+        self.tools_button_list_categories.setSizePolicy(sizePolicy6)
         self.tools_button_list_categories.setMinimumSize(QSize(0, 0))
         self.tools_button_list_categories.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
@@ -605,8 +607,8 @@ class Ui_MainWindow(object):
 
         self.tools_button_list_categories_eporner = QPushButton(self.groupbox_tools_eporner)
         self.tools_button_list_categories_eporner.setObjectName(u"tools_button_list_categories_eporner")
-        sizePolicy5.setHeightForWidth(self.tools_button_list_categories_eporner.sizePolicy().hasHeightForWidth())
-        self.tools_button_list_categories_eporner.setSizePolicy(sizePolicy5)
+        sizePolicy6.setHeightForWidth(self.tools_button_list_categories_eporner.sizePolicy().hasHeightForWidth())
+        self.tools_button_list_categories_eporner.setSizePolicy(sizePolicy6)
         self.tools_button_list_categories_eporner.setMinimumSize(QSize(0, 0))
         self.tools_button_list_categories_eporner.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
@@ -760,8 +762,8 @@ class Ui_MainWindow(object):
 
         self.main_button_tree_stop = QPushButton(self.page_main)
         self.main_button_tree_stop.setObjectName(u"main_button_tree_stop")
-        sizePolicy8.setHeightForWidth(self.main_button_tree_stop.sizePolicy().hasHeightForWidth())
-        self.main_button_tree_stop.setSizePolicy(sizePolicy8)
+        sizePolicy.setHeightForWidth(self.main_button_tree_stop.sizePolicy().hasHeightForWidth())
+        self.main_button_tree_stop.setSizePolicy(sizePolicy)
         self.main_button_tree_stop.setMinimumSize(QSize(0, 30))
         self.main_button_tree_stop.setFont(font1)
         self.main_button_tree_stop.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -847,16 +849,16 @@ class Ui_MainWindow(object):
 
         self.main_checkbox_tree_do_not_clear_videos = QCheckBox(self.page_advanced_configuration)
         self.main_checkbox_tree_do_not_clear_videos.setObjectName(u"main_checkbox_tree_do_not_clear_videos")
-        sizePolicy8.setHeightForWidth(self.main_checkbox_tree_do_not_clear_videos.sizePolicy().hasHeightForWidth())
-        self.main_checkbox_tree_do_not_clear_videos.setSizePolicy(sizePolicy8)
+        sizePolicy.setHeightForWidth(self.main_checkbox_tree_do_not_clear_videos.sizePolicy().hasHeightForWidth())
+        self.main_checkbox_tree_do_not_clear_videos.setSizePolicy(sizePolicy)
         self.main_checkbox_tree_do_not_clear_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         self.gridLayout_13.addWidget(self.main_checkbox_tree_do_not_clear_videos, 1, 0, 1, 1)
 
         self.main_button_tree_automated_selection = QPushButton(self.page_advanced_configuration)
         self.main_button_tree_automated_selection.setObjectName(u"main_button_tree_automated_selection")
-        sizePolicy8.setHeightForWidth(self.main_button_tree_automated_selection.sizePolicy().hasHeightForWidth())
-        self.main_button_tree_automated_selection.setSizePolicy(sizePolicy8)
+        sizePolicy.setHeightForWidth(self.main_button_tree_automated_selection.sizePolicy().hasHeightForWidth())
+        self.main_button_tree_automated_selection.setSizePolicy(sizePolicy)
         self.main_button_tree_automated_selection.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         self.gridLayout_13.addWidget(self.main_button_tree_automated_selection, 3, 0, 1, 1)
@@ -885,8 +887,8 @@ class Ui_MainWindow(object):
 
         self.main_button_tree_keyboard_shortcuts = QPushButton(self.page_advanced_configuration)
         self.main_button_tree_keyboard_shortcuts.setObjectName(u"main_button_tree_keyboard_shortcuts")
-        sizePolicy8.setHeightForWidth(self.main_button_tree_keyboard_shortcuts.sizePolicy().hasHeightForWidth())
-        self.main_button_tree_keyboard_shortcuts.setSizePolicy(sizePolicy8)
+        sizePolicy.setHeightForWidth(self.main_button_tree_keyboard_shortcuts.sizePolicy().hasHeightForWidth())
+        self.main_button_tree_keyboard_shortcuts.setSizePolicy(sizePolicy)
         self.main_button_tree_keyboard_shortcuts.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         self.gridLayout_13.addWidget(self.main_button_tree_keyboard_shortcuts, 3, 1, 1, 1)
@@ -928,16 +930,16 @@ class Ui_MainWindow(object):
         self.CentralStackedWidget.addWidget(self.page_main)
         self.page_settings = QWidget()
         self.page_settings.setObjectName(u"page_settings")
-        sizePolicy8.setHeightForWidth(self.page_settings.sizePolicy().hasHeightForWidth())
-        self.page_settings.setSizePolicy(sizePolicy8)
+        sizePolicy.setHeightForWidth(self.page_settings.sizePolicy().hasHeightForWidth())
+        self.page_settings.setSizePolicy(sizePolicy)
         self.gridLayout_7 = QGridLayout(self.page_settings)
         self.gridLayout_7.setSpacing(0)
         self.gridLayout_7.setObjectName(u"gridLayout_7")
         self.gridLayout_7.setContentsMargins(0, 0, 0, 0)
         self.settings_scrollarea = QScrollArea(self.page_settings)
         self.settings_scrollarea.setObjectName(u"settings_scrollarea")
-        sizePolicy8.setHeightForWidth(self.settings_scrollarea.sizePolicy().hasHeightForWidth())
-        self.settings_scrollarea.setSizePolicy(sizePolicy8)
+        sizePolicy.setHeightForWidth(self.settings_scrollarea.sizePolicy().hasHeightForWidth())
+        self.settings_scrollarea.setSizePolicy(sizePolicy)
         self.settings_scrollarea.setWidgetResizable(True)
         self.settings_scrollarea_widget_contents = QWidget()
         self.settings_scrollarea_widget_contents.setObjectName(u"settings_scrollarea_widget_contents")
@@ -978,13 +980,13 @@ class Ui_MainWindow(object):
 
         self.settings_stacked_widget_main = QStackedWidget(self.settings_scrollarea_widget_contents)
         self.settings_stacked_widget_main.setObjectName(u"settings_stacked_widget_main")
-        sizePolicy8.setHeightForWidth(self.settings_stacked_widget_main.sizePolicy().hasHeightForWidth())
-        self.settings_stacked_widget_main.setSizePolicy(sizePolicy8)
-        self.page_video = QWidget()
-        self.page_video.setObjectName(u"page_video")
         sizePolicy19 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
         sizePolicy19.setHorizontalStretch(0)
         sizePolicy19.setVerticalStretch(0)
+        sizePolicy19.setHeightForWidth(self.settings_stacked_widget_main.sizePolicy().hasHeightForWidth())
+        self.settings_stacked_widget_main.setSizePolicy(sizePolicy19)
+        self.page_video = QWidget()
+        self.page_video.setObjectName(u"page_video")
         sizePolicy19.setHeightForWidth(self.page_video.sizePolicy().hasHeightForWidth())
         self.page_video.setSizePolicy(sizePolicy19)
         self.gridLayout_14 = QGridLayout(self.page_video)
@@ -993,81 +995,6 @@ class Ui_MainWindow(object):
         self.gridLayout_14.setContentsMargins(0, 0, 0, 0)
         self.settings_gridlayout_video = QGridLayout()
         self.settings_gridlayout_video.setObjectName(u"settings_gridlayout_video")
-        self.settings_label_videos_result_limit = QLabel(self.page_video)
-        self.settings_label_videos_result_limit.setObjectName(u"settings_label_videos_result_limit")
-
-        self.settings_gridlayout_video.addWidget(self.settings_label_videos_result_limit, 2, 1, 1, 1)
-
-        self.settings_checkbox_videos_use_directory_system = QCheckBox(self.page_video)
-        self.settings_checkbox_videos_use_directory_system.setObjectName(u"settings_checkbox_videos_use_directory_system")
-        self.settings_checkbox_videos_use_directory_system.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_use_directory_system, 5, 5, 1, 1)
-
-        self.settings_checkbox_videos_track_downloaded_videos = QCheckBox(self.page_video)
-        self.settings_checkbox_videos_track_downloaded_videos.setObjectName(u"settings_checkbox_videos_track_downloaded_videos")
-
-        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_track_downloaded_videos, 5, 1, 1, 1)
-
-        self.settings_label_videos_quality = QLabel(self.page_video)
-        self.settings_label_videos_quality.setObjectName(u"settings_label_videos_quality")
-        sizePolicy10.setHeightForWidth(self.settings_label_videos_quality.sizePolicy().hasHeightForWidth())
-        self.settings_label_videos_quality.setSizePolicy(sizePolicy10)
-
-        self.settings_gridlayout_video.addWidget(self.settings_label_videos_quality, 0, 1, 1, 1)
-
-        self.label_tooltip_model_videos = QLabel(self.page_video)
-        self.label_tooltip_model_videos.setObjectName(u"label_tooltip_model_videos")
-
-        self.settings_gridlayout_video.addWidget(self.label_tooltip_model_videos, 1, 0, 1, 1)
-
-        self.settings_checkbox_videos_skip_existing_files = QCheckBox(self.page_video)
-        self.settings_checkbox_videos_skip_existing_files.setObjectName(u"settings_checkbox_videos_skip_existing_files")
-        self.settings_checkbox_videos_skip_existing_files.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_skip_existing_files, 4, 5, 1, 1)
-
-        self.settings_label_videos_output_path = QLabel(self.page_video)
-        self.settings_label_videos_output_path.setObjectName(u"settings_label_videos_output_path")
-
-        self.settings_gridlayout_video.addWidget(self.settings_label_videos_output_path, 3, 1, 1, 1)
-
-        self.settings_checkbox_videos_write_metadata = QCheckBox(self.page_video)
-        self.settings_checkbox_videos_write_metadata.setObjectName(u"settings_checkbox_videos_write_metadata")
-        self.settings_checkbox_videos_write_metadata.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_write_metadata, 4, 3, 1, 1)
-
-        self.label_tooltip_quality = QLabel(self.page_video)
-        self.label_tooltip_quality.setObjectName(u"label_tooltip_quality")
-
-        self.settings_gridlayout_video.addWidget(self.label_tooltip_quality, 0, 0, 1, 1)
-
-        self.settings_video_combobox_model_videos = QComboBox(self.page_video)
-        self.settings_video_combobox_model_videos.addItem("")
-        self.settings_video_combobox_model_videos.addItem("")
-        self.settings_video_combobox_model_videos.addItem("")
-        self.settings_video_combobox_model_videos.setObjectName(u"settings_video_combobox_model_videos")
-        self.settings_video_combobox_model_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.settings_gridlayout_video.addWidget(self.settings_video_combobox_model_videos, 1, 2, 1, 4)
-
-        self.label_tooltip_result_limit = QLabel(self.page_video)
-        self.label_tooltip_result_limit.setObjectName(u"label_tooltip_result_limit")
-
-        self.settings_gridlayout_video.addWidget(self.label_tooltip_result_limit, 2, 0, 1, 1)
-
-        self.label_tooltip_track_videos = QLabel(self.page_video)
-        self.label_tooltip_track_videos.setObjectName(u"label_tooltip_track_videos")
-
-        self.settings_gridlayout_video.addWidget(self.label_tooltip_track_videos, 5, 0, 1, 1)
-
-        self.settings_button_videos_open_output_path = QPushButton(self.page_video)
-        self.settings_button_videos_open_output_path.setObjectName(u"settings_button_videos_open_output_path")
-        self.settings_button_videos_open_output_path.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.settings_gridlayout_video.addWidget(self.settings_button_videos_open_output_path, 3, 5, 1, 1)
-
         self.settings_video_combobox_quality = QComboBox(self.page_video)
         self.settings_video_combobox_quality.addItem("")
         self.settings_video_combobox_quality.addItem("")
@@ -1086,10 +1013,42 @@ class Ui_MainWindow(object):
 
         self.settings_gridlayout_video.addWidget(self.settings_video_combobox_quality, 0, 2, 1, 4)
 
-        self.settings_lineedit_videos_database_path = QLineEdit(self.page_video)
-        self.settings_lineedit_videos_database_path.setObjectName(u"settings_lineedit_videos_database_path")
+        self.settings_button_videos_open_output_path = QPushButton(self.page_video)
+        self.settings_button_videos_open_output_path.setObjectName(u"settings_button_videos_open_output_path")
+        self.settings_button_videos_open_output_path.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.settings_gridlayout_video.addWidget(self.settings_lineedit_videos_database_path, 5, 3, 1, 1)
+        self.settings_gridlayout_video.addWidget(self.settings_button_videos_open_output_path, 3, 5, 1, 1)
+
+        self.settings_video_combobox_model_videos = QComboBox(self.page_video)
+        self.settings_video_combobox_model_videos.addItem("")
+        self.settings_video_combobox_model_videos.addItem("")
+        self.settings_video_combobox_model_videos.addItem("")
+        self.settings_video_combobox_model_videos.setObjectName(u"settings_video_combobox_model_videos")
+        self.settings_video_combobox_model_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.settings_gridlayout_video.addWidget(self.settings_video_combobox_model_videos, 1, 2, 1, 4)
+
+        self.settings_label_videos_quality = QLabel(self.page_video)
+        self.settings_label_videos_quality.setObjectName(u"settings_label_videos_quality")
+        sizePolicy10.setHeightForWidth(self.settings_label_videos_quality.sizePolicy().hasHeightForWidth())
+        self.settings_label_videos_quality.setSizePolicy(sizePolicy10)
+
+        self.settings_gridlayout_video.addWidget(self.settings_label_videos_quality, 0, 1, 1, 1)
+
+        self.label_tooltip_model_videos = QLabel(self.page_video)
+        self.label_tooltip_model_videos.setObjectName(u"label_tooltip_model_videos")
+
+        self.settings_gridlayout_video.addWidget(self.label_tooltip_model_videos, 1, 0, 1, 1)
+
+        self.label_tooltip_quality = QLabel(self.page_video)
+        self.label_tooltip_quality.setObjectName(u"label_tooltip_quality")
+
+        self.settings_gridlayout_video.addWidget(self.label_tooltip_quality, 0, 0, 1, 1)
+
+        self.label_tooltip_result_limit = QLabel(self.page_video)
+        self.label_tooltip_result_limit.setObjectName(u"label_tooltip_result_limit")
+
+        self.settings_gridlayout_video.addWidget(self.label_tooltip_result_limit, 2, 0, 1, 1)
 
         self.settings_spinbox_videos_result_limit = QSpinBox(self.page_video)
         self.settings_spinbox_videos_result_limit.setObjectName(u"settings_spinbox_videos_result_limit")
@@ -1098,37 +1057,82 @@ class Ui_MainWindow(object):
 
         self.settings_gridlayout_video.addWidget(self.settings_spinbox_videos_result_limit, 2, 2, 1, 4)
 
-        self.settings_checkbox_videos_use_video_id_as_filename = QCheckBox(self.page_video)
-        self.settings_checkbox_videos_use_video_id_as_filename.setObjectName(u"settings_checkbox_videos_use_video_id_as_filename")
-
-        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_use_video_id_as_filename, 4, 1, 1, 1)
-
-        self.label_tooltip_write_metadata = QLabel(self.page_video)
-        self.label_tooltip_write_metadata.setObjectName(u"label_tooltip_write_metadata")
-
-        self.settings_gridlayout_video.addWidget(self.label_tooltip_write_metadata, 4, 2, 1, 1)
-
         self.settings_label_videos_model_vdeos_type = QLabel(self.page_video)
         self.settings_label_videos_model_vdeos_type.setObjectName(u"settings_label_videos_model_vdeos_type")
 
         self.settings_gridlayout_video.addWidget(self.settings_label_videos_model_vdeos_type, 1, 1, 1, 1)
 
-        self.settings_lineedit_videos_output_path = QLineEdit(self.page_video)
-        self.settings_lineedit_videos_output_path.setObjectName(u"settings_lineedit_videos_output_path")
-        sizePolicy5.setHeightForWidth(self.settings_lineedit_videos_output_path.sizePolicy().hasHeightForWidth())
-        self.settings_lineedit_videos_output_path.setSizePolicy(sizePolicy5)
+        self.settings_label_videos_result_limit = QLabel(self.page_video)
+        self.settings_label_videos_result_limit.setObjectName(u"settings_label_videos_result_limit")
 
-        self.settings_gridlayout_video.addWidget(self.settings_lineedit_videos_output_path, 3, 2, 1, 2)
+        self.settings_gridlayout_video.addWidget(self.settings_label_videos_result_limit, 2, 1, 1, 1)
 
+        self.label_tooltip_track_videos = QLabel(self.page_video)
+        self.label_tooltip_track_videos.setObjectName(u"label_tooltip_track_videos")
+        sizePolicy18.setHeightForWidth(self.label_tooltip_track_videos.sizePolicy().hasHeightForWidth())
+        self.label_tooltip_track_videos.setSizePolicy(sizePolicy18)
+
+        self.settings_gridlayout_video.addWidget(self.label_tooltip_track_videos, 5, 0, 1, 1)
+
+        self.settings_checkbox_videos_track_downloaded_videos = QCheckBox(self.page_video)
+        self.settings_checkbox_videos_track_downloaded_videos.setObjectName(u"settings_checkbox_videos_track_downloaded_videos")
+
+        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_track_downloaded_videos, 5, 1, 1, 1)
+
+        self.settings_checkbox_videos_write_metadata = QCheckBox(self.page_video)
+        self.settings_checkbox_videos_write_metadata.setObjectName(u"settings_checkbox_videos_write_metadata")
+        self.settings_checkbox_videos_write_metadata.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.settings_gridlayout_video.addWidget(self.settings_checkbox_videos_write_metadata, 4, 1, 1, 1)
+
+        self.label_tooltip_write_metadata = QLabel(self.page_video)
+        self.label_tooltip_write_metadata.setObjectName(u"label_tooltip_write_metadata")
+
+        self.settings_gridlayout_video.addWidget(self.label_tooltip_write_metadata, 4, 0, 1, 1)
+
+        self.settings_label_videos_output_path = QLabel(self.page_video)
+        self.settings_label_videos_output_path.setObjectName(u"settings_label_videos_output_path")
+
+        self.settings_gridlayout_video.addWidget(self.settings_label_videos_output_path, 3, 1, 1, 1)
+
+        self.horizontalLayout_6 = QHBoxLayout()
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
         self.label_tooltip_use_directory_system = QLabel(self.page_video)
         self.label_tooltip_use_directory_system.setObjectName(u"label_tooltip_use_directory_system")
 
-        self.settings_gridlayout_video.addWidget(self.label_tooltip_use_directory_system, 5, 4, 1, 1)
+        self.horizontalLayout_6.addWidget(self.label_tooltip_use_directory_system)
+
+        self.settings_checkbox_videos_use_directory_system = QCheckBox(self.page_video)
+        self.settings_checkbox_videos_use_directory_system.setObjectName(u"settings_checkbox_videos_use_directory_system")
+        self.settings_checkbox_videos_use_directory_system.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.horizontalLayout_6.addWidget(self.settings_checkbox_videos_use_directory_system)
 
         self.label_tooltip_skip_existing_files = QLabel(self.page_video)
         self.label_tooltip_skip_existing_files.setObjectName(u"label_tooltip_skip_existing_files")
 
-        self.settings_gridlayout_video.addWidget(self.label_tooltip_skip_existing_files, 4, 4, 1, 1)
+        self.horizontalLayout_6.addWidget(self.label_tooltip_skip_existing_files)
+
+        self.settings_checkbox_videos_skip_existing_files = QCheckBox(self.page_video)
+        self.settings_checkbox_videos_skip_existing_files.setObjectName(u"settings_checkbox_videos_skip_existing_files")
+        self.settings_checkbox_videos_skip_existing_files.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.horizontalLayout_6.addWidget(self.settings_checkbox_videos_skip_existing_files)
+
+
+        self.settings_gridlayout_video.addLayout(self.horizontalLayout_6, 4, 2, 1, 4)
+
+        self.settings_lineedit_videos_database_path = QLineEdit(self.page_video)
+        self.settings_lineedit_videos_database_path.setObjectName(u"settings_lineedit_videos_database_path")
+
+        self.settings_gridlayout_video.addWidget(self.settings_lineedit_videos_database_path, 5, 2, 1, 4)
+
+        self.settings_lineedit_videos_output_path = QLineEdit(self.page_video)
+        self.settings_lineedit_videos_output_path.setObjectName(u"settings_lineedit_videos_output_path")
+        sizePolicy6.setHeightForWidth(self.settings_lineedit_videos_output_path.sizePolicy().hasHeightForWidth())
+        self.settings_lineedit_videos_output_path.setSizePolicy(sizePolicy6)
+
+        self.settings_gridlayout_video.addWidget(self.settings_lineedit_videos_output_path, 3, 2, 1, 3)
 
 
         self.gridLayout_14.addLayout(self.settings_gridlayout_video, 0, 0, 1, 1)
@@ -1317,92 +1321,100 @@ class Ui_MainWindow(object):
         self.settings_gridlayout_system = QGridLayout()
         self.settings_gridlayout_system.setSpacing(0)
         self.settings_gridlayout_system.setObjectName(u"settings_gridlayout_system")
-        self.settings_checkbox_system_enable_anonymous_mode = QCheckBox(self.page_system)
-        self.settings_checkbox_system_enable_anonymous_mode.setObjectName(u"settings_checkbox_system_enable_anonymous_mode")
-        self.settings_checkbox_system_enable_anonymous_mode.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.label_tooltip_anonymous_mode = QLabel(self.page_system)
+        self.label_tooltip_anonymous_mode.setObjectName(u"label_tooltip_anonymous_mode")
 
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_enable_anonymous_mode, 2, 1, 1, 1)
-
-        self.settings_button_system_install_pornfetch = QPushButton(self.page_system)
-        self.settings_button_system_install_pornfetch.setObjectName(u"settings_button_system_install_pornfetch")
-
-        self.settings_gridlayout_system.addWidget(self.settings_button_system_install_pornfetch, 0, 0, 1, 2)
-
-        self.label_tooltip_supress_errors = QLabel(self.page_system)
-        self.label_tooltip_supress_errors.setObjectName(u"label_tooltip_supress_errors")
-
-        self.settings_gridlayout_system.addWidget(self.label_tooltip_supress_errors, 3, 0, 1, 1)
-
-        self.settings_checkbox_system_supress_errors = QCheckBox(self.page_system)
-        self.settings_checkbox_system_supress_errors.setObjectName(u"settings_checkbox_system_supress_errors")
-        self.settings_checkbox_system_supress_errors.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_supress_errors, 3, 1, 1, 1)
-
-        self.settings_checkbox_system_update_checks = QCheckBox(self.page_system)
-        self.settings_checkbox_system_update_checks.setObjectName(u"settings_checkbox_system_update_checks")
-        self.settings_checkbox_system_update_checks.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_update_checks, 1, 1, 1, 1)
+        self.settings_gridlayout_system.addWidget(self.label_tooltip_anonymous_mode, 1, 0, 1, 1)
 
         self.label_tooltip_ssl_context = QLabel(self.page_system)
         self.label_tooltip_ssl_context.setObjectName(u"label_tooltip_ssl_context")
         sizePolicy18.setHeightForWidth(self.label_tooltip_ssl_context.sizePolicy().hasHeightForWidth())
         self.label_tooltip_ssl_context.setSizePolicy(sizePolicy18)
 
-        self.settings_gridlayout_system.addWidget(self.label_tooltip_ssl_context, 4, 2, 1, 1)
+        self.settings_gridlayout_system.addWidget(self.label_tooltip_ssl_context, 3, 2, 1, 1)
 
-        self.settings_checkbox_system_enable_network_logging = QCheckBox(self.page_system)
-        self.settings_checkbox_system_enable_network_logging.setObjectName(u"settings_checkbox_system_enable_network_logging")
-        self.settings_checkbox_system_enable_network_logging.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.settings_checkbox_use_truststore = QCheckBox(self.page_system)
+        self.settings_checkbox_use_truststore.setObjectName(u"settings_checkbox_use_truststore")
+        sizePolicy.setHeightForWidth(self.settings_checkbox_use_truststore.sizePolicy().hasHeightForWidth())
+        self.settings_checkbox_use_truststore.setSizePolicy(sizePolicy)
 
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_enable_network_logging, 4, 1, 1, 1)
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_use_truststore, 3, 3, 1, 1)
 
-        self.label_tooltip_anonymous_mode = QLabel(self.page_system)
-        self.label_tooltip_anonymous_mode.setObjectName(u"label_tooltip_anonymous_mode")
+        self.settings_checkbox_system_enable_anonymous_mode = QCheckBox(self.page_system)
+        self.settings_checkbox_system_enable_anonymous_mode.setObjectName(u"settings_checkbox_system_enable_anonymous_mode")
+        sizePolicy.setHeightForWidth(self.settings_checkbox_system_enable_anonymous_mode.sizePolicy().hasHeightForWidth())
+        self.settings_checkbox_system_enable_anonymous_mode.setSizePolicy(sizePolicy)
+        self.settings_checkbox_system_enable_anonymous_mode.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.settings_gridlayout_system.addWidget(self.label_tooltip_anonymous_mode, 2, 0, 1, 1)
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_enable_anonymous_mode, 1, 1, 1, 1)
+
+        self.label_tooltip_supress_errors = QLabel(self.page_system)
+        self.label_tooltip_supress_errors.setObjectName(u"label_tooltip_supress_errors")
+
+        self.settings_gridlayout_system.addWidget(self.label_tooltip_supress_errors, 2, 0, 1, 1)
 
         self.label_tooltip_update_checks = QLabel(self.page_system)
         self.label_tooltip_update_checks.setObjectName(u"label_tooltip_update_checks")
         sizePolicy18.setHeightForWidth(self.label_tooltip_update_checks.sizePolicy().hasHeightForWidth())
         self.label_tooltip_update_checks.setSizePolicy(sizePolicy18)
 
-        self.settings_gridlayout_system.addWidget(self.label_tooltip_update_checks, 1, 0, 1, 1)
+        self.settings_gridlayout_system.addWidget(self.label_tooltip_update_checks, 0, 0, 1, 1)
 
         self.label_tooltip_network_logging = QLabel(self.page_system)
         self.label_tooltip_network_logging.setObjectName(u"label_tooltip_network_logging")
 
-        self.settings_gridlayout_system.addWidget(self.label_tooltip_network_logging, 4, 0, 1, 1)
-
-        self.settings_checkbox_use_truststore = QCheckBox(self.page_system)
-        self.settings_checkbox_use_truststore.setObjectName(u"settings_checkbox_use_truststore")
-
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_use_truststore, 4, 3, 1, 1)
-
-        self.settings_checkbox_system_activate_proxy = QCheckBox(self.page_system)
-        self.settings_checkbox_system_activate_proxy.setObjectName(u"settings_checkbox_system_activate_proxy")
-        self.settings_checkbox_system_activate_proxy.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_activate_proxy, 1, 2, 1, 2)
+        self.settings_gridlayout_system.addWidget(self.label_tooltip_network_logging, 3, 0, 1, 1)
 
         self.settings_checkbox_system_proxy_kill_switch = QCheckBox(self.page_system)
         self.settings_checkbox_system_proxy_kill_switch.setObjectName(u"settings_checkbox_system_proxy_kill_switch")
+        sizePolicy.setHeightForWidth(self.settings_checkbox_system_proxy_kill_switch.sizePolicy().hasHeightForWidth())
+        self.settings_checkbox_system_proxy_kill_switch.setSizePolicy(sizePolicy)
         self.settings_checkbox_system_proxy_kill_switch.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_proxy_kill_switch, 2, 2, 1, 2)
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_proxy_kill_switch, 1, 2, 1, 2)
 
         self.settings_checkbox_system_enable_debug_mode = QCheckBox(self.page_system)
         self.settings_checkbox_system_enable_debug_mode.setObjectName(u"settings_checkbox_system_enable_debug_mode")
+        sizePolicy.setHeightForWidth(self.settings_checkbox_system_enable_debug_mode.sizePolicy().hasHeightForWidth())
+        self.settings_checkbox_system_enable_debug_mode.setSizePolicy(sizePolicy)
 
-        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_enable_debug_mode, 3, 2, 1, 2)
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_enable_debug_mode, 2, 2, 1, 2)
 
-        self.settings_lineedit_system_custom_app_name = QLineEdit(self.page_system)
-        self.settings_lineedit_system_custom_app_name.setObjectName(u"settings_lineedit_system_custom_app_name")
-        sizePolicy11.setHeightForWidth(self.settings_lineedit_system_custom_app_name.sizePolicy().hasHeightForWidth())
-        self.settings_lineedit_system_custom_app_name.setSizePolicy(sizePolicy11)
+        self.settings_checkbox_system_enable_network_logging = QCheckBox(self.page_system)
+        self.settings_checkbox_system_enable_network_logging.setObjectName(u"settings_checkbox_system_enable_network_logging")
+        sizePolicy.setHeightForWidth(self.settings_checkbox_system_enable_network_logging.sizePolicy().hasHeightForWidth())
+        self.settings_checkbox_system_enable_network_logging.setSizePolicy(sizePolicy)
+        self.settings_checkbox_system_enable_network_logging.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-        self.settings_gridlayout_system.addWidget(self.settings_lineedit_system_custom_app_name, 0, 2, 1, 2)
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_enable_network_logging, 3, 1, 1, 1)
+
+        self.settings_checkbox_system_supress_errors = QCheckBox(self.page_system)
+        self.settings_checkbox_system_supress_errors.setObjectName(u"settings_checkbox_system_supress_errors")
+        sizePolicy.setHeightForWidth(self.settings_checkbox_system_supress_errors.sizePolicy().hasHeightForWidth())
+        self.settings_checkbox_system_supress_errors.setSizePolicy(sizePolicy)
+        self.settings_checkbox_system_supress_errors.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_supress_errors, 2, 1, 1, 1)
+
+        self.settings_checkbox_system_activate_proxy = QCheckBox(self.page_system)
+        self.settings_checkbox_system_activate_proxy.setObjectName(u"settings_checkbox_system_activate_proxy")
+        sizePolicy.setHeightForWidth(self.settings_checkbox_system_activate_proxy.sizePolicy().hasHeightForWidth())
+        self.settings_checkbox_system_activate_proxy.setSizePolicy(sizePolicy)
+        self.settings_checkbox_system_activate_proxy.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_activate_proxy, 0, 2, 1, 2)
+
+        self.settings_checkbox_system_update_checks = QCheckBox(self.page_system)
+        self.settings_checkbox_system_update_checks.setObjectName(u"settings_checkbox_system_update_checks")
+        sizePolicy.setHeightForWidth(self.settings_checkbox_system_update_checks.sizePolicy().hasHeightForWidth())
+        self.settings_checkbox_system_update_checks.setSizePolicy(sizePolicy)
+        self.settings_checkbox_system_update_checks.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.settings_gridlayout_system.addWidget(self.settings_checkbox_system_update_checks, 0, 1, 1, 1)
+
+        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.settings_gridlayout_system.addItem(self.verticalSpacer_3, 4, 3, 1, 1)
 
 
         self.gridLayout_33.addLayout(self.settings_gridlayout_system, 0, 0, 1, 1)
@@ -1418,35 +1430,29 @@ class Ui_MainWindow(object):
         self.gridLayout_34.setContentsMargins(0, 0, 0, 0)
         self.settings_gridlayout_ui = QGridLayout()
         self.settings_gridlayout_ui.setObjectName(u"settings_gridlayout_ui")
-        self.settings_label_ui_theme = QLabel(self.page_ui)
-        self.settings_label_ui_theme.setObjectName(u"settings_label_ui_theme")
+        self.settings_spinbox_ui_font_size = QSpinBox(self.page_ui)
+        self.settings_spinbox_ui_font_size.setObjectName(u"settings_spinbox_ui_font_size")
+        sizePolicy.setHeightForWidth(self.settings_spinbox_ui_font_size.sizePolicy().hasHeightForWidth())
+        self.settings_spinbox_ui_font_size.setSizePolicy(sizePolicy)
 
-        self.settings_gridlayout_ui.addWidget(self.settings_label_ui_theme, 2, 0, 1, 1)
-
-        self.settings_label_ui_language = QLabel(self.page_ui)
-        self.settings_label_ui_language.setObjectName(u"settings_label_ui_language")
-        sizePolicy10.setHeightForWidth(self.settings_label_ui_language.sizePolicy().hasHeightForWidth())
-        self.settings_label_ui_language.setSizePolicy(sizePolicy10)
-
-        self.settings_gridlayout_ui.addWidget(self.settings_label_ui_language, 0, 0, 1, 1)
-
-        self.settings_label_ui_font_size = QLabel(self.page_ui)
-        self.settings_label_ui_font_size.setObjectName(u"settings_label_ui_font_size")
-
-        self.settings_gridlayout_ui.addWidget(self.settings_label_ui_font_size, 1, 0, 1, 1)
+        self.settings_gridlayout_ui.addWidget(self.settings_spinbox_ui_font_size, 1, 1, 1, 1)
 
         self.settings_combobox_ui_theme = QComboBox(self.page_ui)
         self.settings_combobox_ui_theme.addItem("")
         self.settings_combobox_ui_theme.addItem("")
         self.settings_combobox_ui_theme.addItem("")
         self.settings_combobox_ui_theme.setObjectName(u"settings_combobox_ui_theme")
+        sizePolicy.setHeightForWidth(self.settings_combobox_ui_theme.sizePolicy().hasHeightForWidth())
+        self.settings_combobox_ui_theme.setSizePolicy(sizePolicy)
 
         self.settings_gridlayout_ui.addWidget(self.settings_combobox_ui_theme, 2, 1, 1, 1)
 
-        self.settings_spinbox_ui_font_size = QSpinBox(self.page_ui)
-        self.settings_spinbox_ui_font_size.setObjectName(u"settings_spinbox_ui_font_size")
+        self.settings_label_ui_language = QLabel(self.page_ui)
+        self.settings_label_ui_language.setObjectName(u"settings_label_ui_language")
+        sizePolicy4.setHeightForWidth(self.settings_label_ui_language.sizePolicy().hasHeightForWidth())
+        self.settings_label_ui_language.setSizePolicy(sizePolicy4)
 
-        self.settings_gridlayout_ui.addWidget(self.settings_spinbox_ui_font_size, 1, 1, 1, 1)
+        self.settings_gridlayout_ui.addWidget(self.settings_label_ui_language, 0, 0, 1, 1)
 
         self.settings_ui_combobox_language = QComboBox(self.page_ui)
         self.settings_ui_combobox_language.addItem("")
@@ -1456,9 +1462,25 @@ class Ui_MainWindow(object):
         self.settings_ui_combobox_language.addItem("")
         self.settings_ui_combobox_language.addItem("")
         self.settings_ui_combobox_language.setObjectName(u"settings_ui_combobox_language")
+        sizePolicy.setHeightForWidth(self.settings_ui_combobox_language.sizePolicy().hasHeightForWidth())
+        self.settings_ui_combobox_language.setSizePolicy(sizePolicy)
         self.settings_ui_combobox_language.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         self.settings_gridlayout_ui.addWidget(self.settings_ui_combobox_language, 0, 1, 1, 1)
+
+        self.settings_label_ui_theme = QLabel(self.page_ui)
+        self.settings_label_ui_theme.setObjectName(u"settings_label_ui_theme")
+
+        self.settings_gridlayout_ui.addWidget(self.settings_label_ui_theme, 2, 0, 1, 1)
+
+        self.settings_label_ui_font_size = QLabel(self.page_ui)
+        self.settings_label_ui_font_size.setObjectName(u"settings_label_ui_font_size")
+
+        self.settings_gridlayout_ui.addWidget(self.settings_label_ui_font_size, 1, 0, 1, 1)
+
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.settings_gridlayout_ui.addItem(self.verticalSpacer_2, 3, 1, 1, 1)
 
 
         self.gridLayout_34.addLayout(self.settings_gridlayout_ui, 0, 0, 1, 1)
@@ -1467,15 +1489,22 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_4.addWidget(self.settings_stacked_widget_main)
 
-        self.settings_button_uninstall_porn_fetch = QPushButton(self.settings_scrollarea_widget_contents)
-        self.settings_button_uninstall_porn_fetch.setObjectName(u"settings_button_uninstall_porn_fetch")
+        self.horizontalLayout_9 = QHBoxLayout()
+        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
+        self.settings_button_buy_license = QPushButton(self.settings_scrollarea_widget_contents)
+        self.settings_button_buy_license.setObjectName(u"settings_button_buy_license")
+        self.settings_button_buy_license.setStyleSheet(u"")
 
-        self.verticalLayout_4.addWidget(self.settings_button_uninstall_porn_fetch)
+        self.horizontalLayout_9.addWidget(self.settings_button_buy_license)
 
-        self.button_settings_clear_temp = QPushButton(self.settings_scrollarea_widget_contents)
-        self.button_settings_clear_temp.setObjectName(u"button_settings_clear_temp")
+        self.settings_button_import_license = QPushButton(self.settings_scrollarea_widget_contents)
+        self.settings_button_import_license.setObjectName(u"settings_button_import_license")
+        self.settings_button_import_license.setStyleSheet(u"")
 
-        self.verticalLayout_4.addWidget(self.button_settings_clear_temp)
+        self.horizontalLayout_9.addWidget(self.settings_button_import_license)
+
+
+        self.verticalLayout_4.addLayout(self.horizontalLayout_9)
 
         self.settings_horizontallayout_apply = QHBoxLayout()
         self.settings_horizontallayout_apply.setObjectName(u"settings_horizontallayout_apply")
@@ -1511,20 +1540,35 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_4.addLayout(self.settings_horizontallayout_apply)
 
+        self.horizontalLayout_10 = QHBoxLayout()
+        self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
+        self.settings_button_system_install_pornfetch = QPushButton(self.settings_scrollarea_widget_contents)
+        self.settings_button_system_install_pornfetch.setObjectName(u"settings_button_system_install_pornfetch")
+
+        self.horizontalLayout_10.addWidget(self.settings_button_system_install_pornfetch)
+
+        self.settings_lineedit_system_custom_app_name = QLineEdit(self.settings_scrollarea_widget_contents)
+        self.settings_lineedit_system_custom_app_name.setObjectName(u"settings_lineedit_system_custom_app_name")
+        sizePolicy11.setHeightForWidth(self.settings_lineedit_system_custom_app_name.sizePolicy().hasHeightForWidth())
+        self.settings_lineedit_system_custom_app_name.setSizePolicy(sizePolicy11)
+
+        self.horizontalLayout_10.addWidget(self.settings_lineedit_system_custom_app_name)
+
+        self.settings_button_uninstall_porn_fetch = QPushButton(self.settings_scrollarea_widget_contents)
+        self.settings_button_uninstall_porn_fetch.setObjectName(u"settings_button_uninstall_porn_fetch")
+
+        self.horizontalLayout_10.addWidget(self.settings_button_uninstall_porn_fetch)
+
+        self.button_settings_clear_temp = QPushButton(self.settings_scrollarea_widget_contents)
+        self.button_settings_clear_temp.setObjectName(u"button_settings_clear_temp")
+
+        self.horizontalLayout_10.addWidget(self.button_settings_clear_temp)
+
+
+        self.verticalLayout_4.addLayout(self.horizontalLayout_10)
+
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.settings_button_buy_license = QPushButton(self.settings_scrollarea_widget_contents)
-        self.settings_button_buy_license.setObjectName(u"settings_button_buy_license")
-        self.settings_button_buy_license.setStyleSheet(u"")
-
-        self.horizontalLayout_4.addWidget(self.settings_button_buy_license)
-
-        self.settings_button_import_license = QPushButton(self.settings_scrollarea_widget_contents)
-        self.settings_button_import_license.setObjectName(u"settings_button_import_license")
-        self.settings_button_import_license.setStyleSheet(u"")
-
-        self.horizontalLayout_4.addWidget(self.settings_button_import_license)
-
 
         self.verticalLayout_4.addLayout(self.horizontalLayout_4)
 
@@ -1948,24 +1992,22 @@ class Ui_MainWindow(object):
         QWidget.setTabOrder(self.spinbox_range_start, self.spinbox_range_end)
         QWidget.setTabOrder(self.spinbox_range_end, self.button_range_apply_index)
         QWidget.setTabOrder(self.button_range_apply_index, self.scrollArea)
-        QWidget.setTabOrder(self.scrollArea, self.settings_button_reset)
-        QWidget.setTabOrder(self.settings_button_reset, self.textBrowser)
+        QWidget.setTabOrder(self.scrollArea, self.textBrowser)
         QWidget.setTabOrder(self.textBrowser, self.text_browser_keyboard_shortcuts)
         QWidget.setTabOrder(self.text_browser_keyboard_shortcuts, self.text_browser_update_available)
         QWidget.setTabOrder(self.text_browser_update_available, self.button_update_acknowledged)
         QWidget.setTabOrder(self.button_update_acknowledged, self.textbrowser_install_dialog)
-        QWidget.setTabOrder(self.textbrowser_install_dialog, self.settings_button_apply)
-        QWidget.setTabOrder(self.settings_button_apply, self.main_textbrowser_supported_websites)
+        QWidget.setTabOrder(self.textbrowser_install_dialog, self.main_textbrowser_supported_websites)
         QWidget.setTabOrder(self.main_textbrowser_supported_websites, self.scrollArea_12)
         QWidget.setTabOrder(self.scrollArea_12, self.textbrowser_disclaimer)
         QWidget.setTabOrder(self.textbrowser_disclaimer, self.button_disclaimer_accept)
 
         self.retranslateUi(MainWindow)
 
-        self.CentralStackedWidget.setCurrentIndex(0)
+        self.CentralStackedWidget.setCurrentIndex(1)
         self.main_stacked_widget_top.setCurrentIndex(3)
         self.stacked_widget_tree.setCurrentIndex(1)
-        self.settings_stacked_widget_main.setCurrentIndex(1)
+        self.settings_stacked_widget_main.setCurrentIndex(3)
         self.settings_video_combobox_quality.setCurrentIndex(0)
 
 
@@ -2282,90 +2324,6 @@ class Ui_MainWindow(object):
         self.settings_button_switch_ui.setAccessibleName(QCoreApplication.translate("MainWindow", u"button: Supported websites", None))
 #endif // QT_CONFIG(accessibility)
         self.settings_button_switch_ui.setText(QCoreApplication.translate("MainWindow", u"UI", None))
-#if QT_CONFIG(tooltip)
-        self.settings_label_videos_result_limit.setToolTip("")
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(accessibility)
-        self.settings_label_videos_result_limit.setAccessibleName(QCoreApplication.translate("MainWindow", u"label result limit", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_label_videos_result_limit.setText(QCoreApplication.translate("MainWindow", u"Result Limit:", None))
-#if QT_CONFIG(tooltip)
-        self.settings_checkbox_videos_use_directory_system.setToolTip("")
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_use_directory_system.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox use directory system", None))
-#endif // QT_CONFIG(accessibility)
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_use_directory_system.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"The directory system will automatically create folders for each author of videos", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_use_directory_system.setText(QCoreApplication.translate("MainWindow", u"Use directory system", None))
-#if QT_CONFIG(tooltip)
-        self.settings_checkbox_videos_track_downloaded_videos.setToolTip("")
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_track_downloaded_videos.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox track downloaded videos", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_track_downloaded_videos.setText(QCoreApplication.translate("MainWindow", u"Track downloaded videos", None))
-#if QT_CONFIG(tooltip)
-        self.settings_label_videos_quality.setToolTip("")
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(accessibility)
-        self.settings_label_videos_quality.setAccessibleName(QCoreApplication.translate("MainWindow", u"label video quality", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_label_videos_quality.setText(QCoreApplication.translate("MainWindow", u"Quality:", None))
-#if QT_CONFIG(tooltip)
-        self.label_tooltip_model_videos.setToolTip("")
-#endif // QT_CONFIG(tooltip)
-        self.label_tooltip_model_videos.setText("")
-#if QT_CONFIG(tooltip)
-        self.settings_checkbox_videos_skip_existing_files.setToolTip("")
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_skip_existing_files.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox skip existing files", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_skip_existing_files.setText(QCoreApplication.translate("MainWindow", u"Skip existing files", None))
-#if QT_CONFIG(accessibility)
-        self.settings_label_videos_output_path.setAccessibleName(QCoreApplication.translate("MainWindow", u"label output path", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_label_videos_output_path.setText(QCoreApplication.translate("MainWindow", u"Output path:", None))
-#if QT_CONFIG(tooltip)
-        self.settings_checkbox_videos_write_metadata.setToolTip("")
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_write_metadata.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox write metadata tags", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_write_metadata.setText(QCoreApplication.translate("MainWindow", u"Write metadata tags", None))
-#if QT_CONFIG(tooltip)
-        self.label_tooltip_quality.setToolTip(QCoreApplication.translate("MainWindow", u"By default, Porn Fetch will select the best available video quality. You can also decide between half and worst above.\n"
-"If you instead use the custom integer values (1080p, 720p etc.) then Porn Fetch will try to use these, if available,\n"
-"but if they are not available the next best quality will be chosen. Please note that this is experimental and has not\n"
-"been that tested very well. (Be honest, why would you not choose the best quality lol)", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_tooltip_quality.setText("")
-        self.settings_video_combobox_model_videos.setItemText(0, QCoreApplication.translate("MainWindow", u"Both (recommended)", None))
-        self.settings_video_combobox_model_videos.setItemText(1, QCoreApplication.translate("MainWindow", u"Uploaded", None))
-        self.settings_video_combobox_model_videos.setItemText(2, QCoreApplication.translate("MainWindow", u"Featured", None))
-
-#if QT_CONFIG(accessibility)
-        self.settings_video_combobox_model_videos.setAccessibleName(QCoreApplication.translate("MainWindow", u"combobox model videos type", None))
-#endif // QT_CONFIG(accessibility)
-#if QT_CONFIG(accessibility)
-        self.settings_video_combobox_model_videos.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"This decides whether you want to fetch model uploads or featured videos or both of them", None))
-#endif // QT_CONFIG(accessibility)
-#if QT_CONFIG(tooltip)
-        self.label_tooltip_result_limit.setToolTip(QCoreApplication.translate("MainWindow", u"The result limit defines how many videos will be returned when performing a search or doing other operations which\n"
-"involves loading multiple videos. This also affects models / channels and your liked videos. The result limit is\n"
-"basically the number of videos which can be loaded into the tree widget (this thing where videos are displayed).", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_tooltip_result_limit.setText("")
-#if QT_CONFIG(tooltip)
-        self.label_tooltip_track_videos.setToolTip(QCoreApplication.translate("MainWindow", u"Videos will be tracked in a SQL database which will save the URL and the metadata. ", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_tooltip_track_videos.setText("")
-#if QT_CONFIG(accessibility)
-        self.settings_button_videos_open_output_path.setAccessibleName(QCoreApplication.translate("MainWindow", u"settings open output path", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_button_videos_open_output_path.setText(QCoreApplication.translate("MainWindow", u"Open", None))
         self.settings_video_combobox_quality.setItemText(0, QCoreApplication.translate("MainWindow", u"BEST (auto)", None))
         self.settings_video_combobox_quality.setItemText(1, QCoreApplication.translate("MainWindow", u"HALF (auto)", None))
         self.settings_video_combobox_quality.setItemText(2, QCoreApplication.translate("MainWindow", u"WORST (auto)", None))
@@ -2386,28 +2344,49 @@ class Ui_MainWindow(object):
         self.settings_video_combobox_quality.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"Porn Fetch will by default download the best video quality", None))
 #endif // QT_CONFIG(accessibility)
 #if QT_CONFIG(accessibility)
-        self.settings_lineedit_videos_database_path.setAccessibleName(QCoreApplication.translate("MainWindow", u"lineedit output path of the database", None))
+        self.settings_button_videos_open_output_path.setAccessibleName(QCoreApplication.translate("MainWindow", u"settings open output path", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_button_videos_open_output_path.setText(QCoreApplication.translate("MainWindow", u"Open", None))
+        self.settings_video_combobox_model_videos.setItemText(0, QCoreApplication.translate("MainWindow", u"Both (recommended)", None))
+        self.settings_video_combobox_model_videos.setItemText(1, QCoreApplication.translate("MainWindow", u"Uploaded", None))
+        self.settings_video_combobox_model_videos.setItemText(2, QCoreApplication.translate("MainWindow", u"Featured", None))
+
+#if QT_CONFIG(accessibility)
+        self.settings_video_combobox_model_videos.setAccessibleName(QCoreApplication.translate("MainWindow", u"combobox model videos type", None))
 #endif // QT_CONFIG(accessibility)
 #if QT_CONFIG(accessibility)
-        self.settings_lineedit_videos_database_path.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"the database tracks all downloaded videos in Porn Fetch, optional", None))
+        self.settings_video_combobox_model_videos.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"This decides whether you want to fetch model uploads or featured videos or both of them", None))
 #endif // QT_CONFIG(accessibility)
-        self.settings_lineedit_videos_database_path.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter the path of the database file here", None))
+#if QT_CONFIG(tooltip)
+        self.settings_label_videos_quality.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.settings_label_videos_quality.setAccessibleName(QCoreApplication.translate("MainWindow", u"label video quality", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_label_videos_quality.setText(QCoreApplication.translate("MainWindow", u"Quality:", None))
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_model_videos.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_model_videos.setText("")
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_quality.setToolTip(QCoreApplication.translate("MainWindow", u"By default, Porn Fetch will select the best available video quality. You can also decide between half and worst above.\n"
+"If you instead use the custom integer values (1080p, 720p etc.) then Porn Fetch will try to use these, if available,\n"
+"but if they are not available the next best quality will be chosen. Please note that this is experimental and has not\n"
+"been that tested very well. (Be honest, why would you not choose the best quality lol)", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_quality.setText("")
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_result_limit.setToolTip(QCoreApplication.translate("MainWindow", u"The result limit defines how many videos will be returned when performing a search or doing other operations which\n"
+"involves loading multiple videos. This also affects models / channels and your liked videos. The result limit is\n"
+"basically the number of videos which can be loaded into the tree widget (this thing where videos are displayed).", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_result_limit.setText("")
 #if QT_CONFIG(accessibility)
         self.settings_spinbox_videos_result_limit.setAccessibleName(QCoreApplication.translate("MainWindow", u"spinbox resutl limit", None))
 #endif // QT_CONFIG(accessibility)
 #if QT_CONFIG(accessibility)
         self.settings_spinbox_videos_result_limit.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"The result limit limits how many videos will be fetched", None))
 #endif // QT_CONFIG(accessibility)
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_use_video_id_as_filename.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox use video id as filename", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_videos_use_video_id_as_filename.setText(QCoreApplication.translate("MainWindow", u"Use Video ID as filename", None))
-#if QT_CONFIG(tooltip)
-        self.label_tooltip_write_metadata.setToolTip(QCoreApplication.translate("MainWindow", u"Metadata tags are saved inside of the file itself. These are tags that video players can read from and provide you information.\n"
-"Some folder viewers also give you the ability to search files by specific metadata tags. Those tags can help organize and structure files.\n"
-"Porn Fetch will by default save those tags inside of your video files. ", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_tooltip_write_metadata.setText("")
 #if QT_CONFIG(tooltip)
         self.settings_label_videos_model_vdeos_type.setToolTip(QCoreApplication.translate("MainWindow", u"User uploads and featured videos are two different things. User uploads are the videos which were really uploaded\n"
 "by the model and the featured videos are videos the model is part or featured in.\n"
@@ -2421,10 +2400,41 @@ class Ui_MainWindow(object):
         self.settings_label_videos_model_vdeos_type.setAccessibleName(QCoreApplication.translate("MainWindow", u"label model videos type (pornhub)", None))
 #endif // QT_CONFIG(accessibility)
         self.settings_label_videos_model_vdeos_type.setText(QCoreApplication.translate("MainWindow", u"Model videos (PH)", None))
+#if QT_CONFIG(tooltip)
+        self.settings_label_videos_result_limit.setToolTip("")
+#endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(accessibility)
-        self.settings_lineedit_videos_output_path.setAccessibleName(QCoreApplication.translate("MainWindow", u"lineedit video output path", None))
+        self.settings_label_videos_result_limit.setAccessibleName(QCoreApplication.translate("MainWindow", u"label result limit", None))
 #endif // QT_CONFIG(accessibility)
-        self.settings_lineedit_videos_output_path.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter \"./\" for current directory", None))
+        self.settings_label_videos_result_limit.setText(QCoreApplication.translate("MainWindow", u"Result Limit:", None))
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_track_videos.setToolTip(QCoreApplication.translate("MainWindow", u"Videos will be tracked in a SQL database which will save the URL and the metadata. ", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_track_videos.setText("")
+#if QT_CONFIG(tooltip)
+        self.settings_checkbox_videos_track_downloaded_videos.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.settings_checkbox_videos_track_downloaded_videos.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox track downloaded videos", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_checkbox_videos_track_downloaded_videos.setText(QCoreApplication.translate("MainWindow", u"Track downloaded videos", None))
+#if QT_CONFIG(tooltip)
+        self.settings_checkbox_videos_write_metadata.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.settings_checkbox_videos_write_metadata.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox write metadata tags", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_checkbox_videos_write_metadata.setText(QCoreApplication.translate("MainWindow", u"Write metadata tags", None))
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_write_metadata.setToolTip(QCoreApplication.translate("MainWindow", u"Metadata tags are saved inside of the file itself. These are tags that video players can read from and provide you information.\n"
+"Some folder viewers also give you the ability to search files by specific metadata tags. Those tags can help organize and structure files.\n"
+"Porn Fetch will by default save those tags inside of your video files. ", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_write_metadata.setText("")
+#if QT_CONFIG(accessibility)
+        self.settings_label_videos_output_path.setAccessibleName(QCoreApplication.translate("MainWindow", u"label output path", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_label_videos_output_path.setText(QCoreApplication.translate("MainWindow", u"Output path:", None))
 #if QT_CONFIG(tooltip)
         self.label_tooltip_use_directory_system.setToolTip(QCoreApplication.translate("MainWindow", u"The directory system will save videos in an intelligent way. If you download 3 videos form one Pornstar and 5 videos \n"
 "from another, Porn Fetch will automatically make folders for it and move the 3 videos into that one folder and the other\n"
@@ -2433,6 +2443,16 @@ class Ui_MainWindow(object):
 "This can be helpful for organizing stuff, but is a more advanced feature, so the majority of users won't use it probably", None))
 #endif // QT_CONFIG(tooltip)
         self.label_tooltip_use_directory_system.setText("")
+#if QT_CONFIG(tooltip)
+        self.settings_checkbox_videos_use_directory_system.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.settings_checkbox_videos_use_directory_system.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox use directory system", None))
+#endif // QT_CONFIG(accessibility)
+#if QT_CONFIG(accessibility)
+        self.settings_checkbox_videos_use_directory_system.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"The directory system will automatically create folders for each author of videos", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_checkbox_videos_use_directory_system.setText(QCoreApplication.translate("MainWindow", u"Use directory system", None))
 #if QT_CONFIG(tooltip)
         self.label_tooltip_skip_existing_files.setToolTip(QCoreApplication.translate("MainWindow", u"If you fetch a video and the exact same filename already exists, usually Porn Fetch would just skip this file.\n"
 "If you set this option to No, then Porn Fetch instead download the video and append a random number to it.\n"
@@ -2446,6 +2466,24 @@ class Ui_MainWindow(object):
 "Spain_didnt_win_against_Germany_118251.mp4", None))
 #endif // QT_CONFIG(tooltip)
         self.label_tooltip_skip_existing_files.setText("")
+#if QT_CONFIG(tooltip)
+        self.settings_checkbox_videos_skip_existing_files.setToolTip("")
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(accessibility)
+        self.settings_checkbox_videos_skip_existing_files.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox skip existing files", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_checkbox_videos_skip_existing_files.setText(QCoreApplication.translate("MainWindow", u"Skip existing files", None))
+#if QT_CONFIG(accessibility)
+        self.settings_lineedit_videos_database_path.setAccessibleName(QCoreApplication.translate("MainWindow", u"lineedit output path of the database", None))
+#endif // QT_CONFIG(accessibility)
+#if QT_CONFIG(accessibility)
+        self.settings_lineedit_videos_database_path.setAccessibleDescription(QCoreApplication.translate("MainWindow", u"the database tracks all downloaded videos in Porn Fetch, optional", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_lineedit_videos_database_path.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter the path of the database file here", None))
+#if QT_CONFIG(accessibility)
+        self.settings_lineedit_videos_output_path.setAccessibleName(QCoreApplication.translate("MainWindow", u"lineedit video output path", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_lineedit_videos_output_path.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter \"./\" for current directory", None))
 #if QT_CONFIG(tooltip)
         self.settings_label_performance_speed_limit.setToolTip("")
 #endif // QT_CONFIG(tooltip)
@@ -2584,16 +2622,24 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(accessibility)
         self.label_settings_performance_download_workers.setText(QCoreApplication.translate("MainWindow", u"Download workers:", None))
 #if QT_CONFIG(tooltip)
+        self.label_tooltip_anonymous_mode.setToolTip(QCoreApplication.translate("MainWindow", u"The anonymous mode renames all of Porn Fetch's elements to look NOT like a Porn downloader.\n"
+"This makes it useful for downloading Porn content if you are in public, or multiple people use your PC / Phone.\n"
+"\n"
+"This also disables thumbnail preview. All titles will be replaced with: [redacted] as well as all authors.", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_anonymous_mode.setText("")
+#if QT_CONFIG(tooltip)
+        self.label_tooltip_ssl_context.setToolTip(QCoreApplication.translate("MainWindow", u"<html><head/><body><p>If you use truststore as your SSL context, your system's OS will validate whether the HTTPS (SSL)) certificate of the website is valid or not. On newer systems, truststore is the recommended and default way, because again, your system manages everything and makes sure it's up to date.</p><p>However, if your system is too old, e.g., some old legacy WIndows XP build, then you might want to use the pre-shipped CA which is the one that comes with certifi. </p><p><br/></p><p>This is a complex topic, just leave the default options and you'll be good to go. </p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_tooltip_ssl_context.setText("")
+        self.settings_checkbox_use_truststore.setText(QCoreApplication.translate("MainWindow", u"Use Truststore", None))
+#if QT_CONFIG(tooltip)
         self.settings_checkbox_system_enable_anonymous_mode.setToolTip("")
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(accessibility)
         self.settings_checkbox_system_enable_anonymous_mode.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable anonymous mode", None))
 #endif // QT_CONFIG(accessibility)
         self.settings_checkbox_system_enable_anonymous_mode.setText(QCoreApplication.translate("MainWindow", u"Enable Anonymous mode", None))
-#if QT_CONFIG(accessibility)
-        self.settings_button_system_install_pornfetch.setAccessibleName(QCoreApplication.translate("MainWindow", u"button install porn fetch (This is optional) ", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_button_system_install_pornfetch.setText(QCoreApplication.translate("MainWindow", u"Install Porn Fetch", None))
 #if QT_CONFIG(tooltip)
         self.label_tooltip_supress_errors.setToolTip(QCoreApplication.translate("MainWindow", u"If you enable this function, all errors will be suppressed. This does not mean that they will be completely ignored, but\n"
 "you won't get a big notification for it. \n"
@@ -2602,35 +2648,6 @@ class Ui_MainWindow(object):
 "the current video will be skipped and Porn Fetch will continue with the next one.  ", None))
 #endif // QT_CONFIG(tooltip)
         self.label_tooltip_supress_errors.setText("")
-#if QT_CONFIG(tooltip)
-        self.settings_checkbox_system_supress_errors.setToolTip("")
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_system_supress_errors.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox supress errors silently", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_system_supress_errors.setText(QCoreApplication.translate("MainWindow", u"Supress errors silently", None))
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_system_update_checks.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable update checks", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_system_update_checks.setText(QCoreApplication.translate("MainWindow", u"Update checks", None))
-#if QT_CONFIG(tooltip)
-        self.label_tooltip_ssl_context.setToolTip(QCoreApplication.translate("MainWindow", u"<html><head/><body><p>If you use truststore as your SSL context, your system's OS will validate whether the HTTPS (SSL)) certificate of the website is valid or not. On newer systems, truststore is the recommended and default way, because again, your system manages everything and makes sure it's up to date.</p><p>However, if your system is too old, e.g., some old legacy WIndows XP build, then you might want to use the pre-shipped CA which is the one that comes with certifi. </p><p><br/></p><p>This is a complex topic, just leave the default options and you'll be good to go. </p></body></html>", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_tooltip_ssl_context.setText("")
-#if QT_CONFIG(tooltip)
-        self.settings_checkbox_system_enable_network_logging.setToolTip("")
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_system_enable_network_logging.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable network logging", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_system_enable_network_logging.setText(QCoreApplication.translate("MainWindow", u"Enable Network Logging", None))
-#if QT_CONFIG(tooltip)
-        self.label_tooltip_anonymous_mode.setToolTip(QCoreApplication.translate("MainWindow", u"The anonymous mode renames all of Porn Fetch's elements to look NOT like a Porn downloader.\n"
-"This makes it useful for downloading Porn content if you are in public, or multiple people use your PC / Phone.\n"
-"\n"
-"This also disables thumbnail preview. All titles will be replaced with: [redacted] as well as all authors.", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_tooltip_anonymous_mode.setText("")
 #if QT_CONFIG(tooltip)
         self.label_tooltip_update_checks.setToolTip(QCoreApplication.translate("MainWindow", u"Porn Fetch will check for updates each time it starts, using my own server. This will require a working IPv6 connection. No personal data nor any other data is sent during this process.", None))
 #endif // QT_CONFIG(tooltip)
@@ -2655,11 +2672,6 @@ class Ui_MainWindow(object):
 "You'd help me a lot by enabling network logging :) ", None))
 #endif // QT_CONFIG(tooltip)
         self.label_tooltip_network_logging.setText("")
-        self.settings_checkbox_use_truststore.setText(QCoreApplication.translate("MainWindow", u"Use Truststore", None))
-#if QT_CONFIG(accessibility)
-        self.settings_checkbox_system_activate_proxy.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox activate a proxy", None))
-#endif // QT_CONFIG(accessibility)
-        self.settings_checkbox_system_activate_proxy.setText(QCoreApplication.translate("MainWindow", u"Activate Proxy", None))
 #if QT_CONFIG(tooltip)
         self.settings_checkbox_system_proxy_kill_switch.setToolTip(QCoreApplication.translate("MainWindow", u"The proxy kill switch is an additional security layer if you use proxies. It will check your IP each time before making\n"
 "a request and if it's leaked it will immediately exit everything.\n"
@@ -2671,19 +2683,31 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(accessibility)
         self.settings_checkbox_system_proxy_kill_switch.setText(QCoreApplication.translate("MainWindow", u"Proxy Kill Switch", None))
         self.settings_checkbox_system_enable_debug_mode.setText(QCoreApplication.translate("MainWindow", u"Enable Debug Mode (Not recommended) ", None))
-        self.settings_lineedit_system_custom_app_name.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Write a custom app name here", None))
+#if QT_CONFIG(tooltip)
+        self.settings_checkbox_system_enable_network_logging.setToolTip("")
+#endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(accessibility)
-        self.settings_label_ui_theme.setAccessibleName(QCoreApplication.translate("MainWindow", u"label porn fetch theme ", None))
+        self.settings_checkbox_system_enable_network_logging.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable network logging", None))
 #endif // QT_CONFIG(accessibility)
-        self.settings_label_ui_theme.setText(QCoreApplication.translate("MainWindow", u"Theme:", None))
+        self.settings_checkbox_system_enable_network_logging.setText(QCoreApplication.translate("MainWindow", u"Enable Network Logging", None))
+#if QT_CONFIG(tooltip)
+        self.settings_checkbox_system_supress_errors.setToolTip("")
+#endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(accessibility)
-        self.settings_label_ui_language.setAccessibleName(QCoreApplication.translate("MainWindow", u"label graphical user interface language", None))
+        self.settings_checkbox_system_supress_errors.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox supress errors silently", None))
 #endif // QT_CONFIG(accessibility)
-        self.settings_label_ui_language.setText(QCoreApplication.translate("MainWindow", u"Graphical User Interface Language:", None))
+        self.settings_checkbox_system_supress_errors.setText(QCoreApplication.translate("MainWindow", u"Supress errors silently", None))
 #if QT_CONFIG(accessibility)
-        self.settings_label_ui_font_size.setAccessibleName(QCoreApplication.translate("MainWindow", u"label font size", None))
+        self.settings_checkbox_system_activate_proxy.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox activate a proxy", None))
 #endif // QT_CONFIG(accessibility)
-        self.settings_label_ui_font_size.setText(QCoreApplication.translate("MainWindow", u"Font Size:", None))
+        self.settings_checkbox_system_activate_proxy.setText(QCoreApplication.translate("MainWindow", u"Activate Proxy", None))
+#if QT_CONFIG(accessibility)
+        self.settings_checkbox_system_update_checks.setAccessibleName(QCoreApplication.translate("MainWindow", u"checkbox enable update checks", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_checkbox_system_update_checks.setText(QCoreApplication.translate("MainWindow", u"Update checks", None))
+#if QT_CONFIG(accessibility)
+        self.settings_spinbox_ui_font_size.setAccessibleName(QCoreApplication.translate("MainWindow", u"spinbox font size", None))
+#endif // QT_CONFIG(accessibility)
         self.settings_combobox_ui_theme.setItemText(0, QCoreApplication.translate("MainWindow", u"Dark", None))
         self.settings_combobox_ui_theme.setItemText(1, QCoreApplication.translate("MainWindow", u"Light (why would you pick light theme)", None))
         self.settings_combobox_ui_theme.setItemText(2, QCoreApplication.translate("MainWindow", u"LSD (don't activate while you are high) ", None))
@@ -2692,8 +2716,9 @@ class Ui_MainWindow(object):
         self.settings_combobox_ui_theme.setAccessibleName(QCoreApplication.translate("MainWindow", u"combobox porn fetch theme", None))
 #endif // QT_CONFIG(accessibility)
 #if QT_CONFIG(accessibility)
-        self.settings_spinbox_ui_font_size.setAccessibleName(QCoreApplication.translate("MainWindow", u"spinbox font size", None))
+        self.settings_label_ui_language.setAccessibleName(QCoreApplication.translate("MainWindow", u"label graphical user interface language", None))
 #endif // QT_CONFIG(accessibility)
+        self.settings_label_ui_language.setText(QCoreApplication.translate("MainWindow", u"Graphical User Interface Language:", None))
         self.settings_ui_combobox_language.setItemText(0, QCoreApplication.translate("MainWindow", u"System", None))
         self.settings_ui_combobox_language.setItemText(1, QCoreApplication.translate("MainWindow", u"English", None))
         self.settings_ui_combobox_language.setItemText(2, QCoreApplication.translate("MainWindow", u"German", None))
@@ -2704,8 +2729,16 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(accessibility)
         self.settings_ui_combobox_language.setAccessibleName(QCoreApplication.translate("MainWindow", u"combobox porn fetch language", None))
 #endif // QT_CONFIG(accessibility)
-        self.settings_button_uninstall_porn_fetch.setText(QCoreApplication.translate("MainWindow", u"Uninstall Porn Fetch", None))
-        self.button_settings_clear_temp.setText(QCoreApplication.translate("MainWindow", u"Clear Temporary Files", None))
+#if QT_CONFIG(accessibility)
+        self.settings_label_ui_theme.setAccessibleName(QCoreApplication.translate("MainWindow", u"label porn fetch theme ", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_label_ui_theme.setText(QCoreApplication.translate("MainWindow", u"Theme:", None))
+#if QT_CONFIG(accessibility)
+        self.settings_label_ui_font_size.setAccessibleName(QCoreApplication.translate("MainWindow", u"label font size", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_label_ui_font_size.setText(QCoreApplication.translate("MainWindow", u"Font Size:", None))
+        self.settings_button_buy_license.setText(QCoreApplication.translate("MainWindow", u"Buy License (5\u20ac)", None))
+        self.settings_button_import_license.setText(QCoreApplication.translate("MainWindow", u"Import License File", None))
 #if QT_CONFIG(accessibility)
         self.settings_button_apply.setAccessibleName(QCoreApplication.translate("MainWindow", u"button apply the settings", None))
 #endif // QT_CONFIG(accessibility)
@@ -2714,8 +2747,13 @@ class Ui_MainWindow(object):
         self.settings_button_reset.setAccessibleName(QCoreApplication.translate("MainWindow", u"button reset porn fetch to default settings", None))
 #endif // QT_CONFIG(accessibility)
         self.settings_button_reset.setText(QCoreApplication.translate("MainWindow", u"Reset Porn Fetch to default settings", None))
-        self.settings_button_buy_license.setText(QCoreApplication.translate("MainWindow", u"Buy License (5\u20ac)", None))
-        self.settings_button_import_license.setText(QCoreApplication.translate("MainWindow", u"Import License File", None))
+#if QT_CONFIG(accessibility)
+        self.settings_button_system_install_pornfetch.setAccessibleName(QCoreApplication.translate("MainWindow", u"button install porn fetch (This is optional) ", None))
+#endif // QT_CONFIG(accessibility)
+        self.settings_button_system_install_pornfetch.setText(QCoreApplication.translate("MainWindow", u"Install Porn Fetch", None))
+        self.settings_lineedit_system_custom_app_name.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Write a custom app name here", None))
+        self.settings_button_uninstall_porn_fetch.setText(QCoreApplication.translate("MainWindow", u"Uninstall Porn Fetch", None))
+        self.button_settings_clear_temp.setText(QCoreApplication.translate("MainWindow", u"Clear Temporary Files", None))
         self.button_credits_send_feedback.setText(QCoreApplication.translate("MainWindow", u"Send Feedback (Anonymously)", None))
 #if QT_CONFIG(accessibility)
         self.main_textbrowser_credits.setAccessibleName(QCoreApplication.translate("MainWindow", u"Textbrowser for credits / information", None))
