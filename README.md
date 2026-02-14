@@ -1,4 +1,4 @@
-# I HATE WINDOWS HOLY SHIT THIS SYSTEM IS SO FUCKING SLOW AND INCOMPOTENT
+# I HATE WINDOWS HOLY SHIT THIS SYSTEM IS SO FUCKING SLOW AND INCOMPETENT
 
 <div align = center>
 <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
