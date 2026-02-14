@@ -12,28 +12,27 @@ permissions:
 jobs:
   build-gui-macos:
     name: Build macOS ${{ matrix.arch_name }}
-    runs-on: ${{ matrix.os }}
+    runs-on: macos-14  # <--- ALWAYS run on ARM64 hardware (Standard Runner)
     strategy:
       fail-fast: false
       matrix:
         include:
-          # Intel (x86_64) - Uses macOS Ventura
-          - os: macos-13
-            arch_name: x86_64
-            spec_file: src/build/pysidedeploy_macos.spec
+          # Intel (x86_64) - Runs on ARM hardware via Rosetta 2
+          - arch_name: x86_64
+            python_arch: 'x64'  # <--- Forces Intel Python
 
-          # Apple Silicon (ARM64) - Uses macOS Sonoma
-          - os: macos-14
-            arch_name: arm64
-            spec_file: src/build/pysidedeploy_macos.spec
+          # Apple Silicon (ARM64) - Native
+          - arch_name: arm64
+            python_arch: 'arm64' # <--- Native ARM Python
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python 3.13
+      - name: Set up Python 3.13 (${{ matrix.arch_name }})
         uses: actions/setup-python@v6
         with:
           python-version: "3.13"
+          architecture: ${{ matrix.python_arch }} # <--- Installs the correct Python arch
 
       - name: Install uv (with cache)
         uses: astral-sh/setup-uv@v7
@@ -41,57 +40,57 @@ jobs:
           enable-cache: true
 
       - name: Install System Dependencies
-        # Mimics the brew install step from your script
         run: |
           brew update
           brew install git cmake wget curl pkg-config
 
       - name: Sync dependencies (uv)
-        # Your script uses --extra gui for macOS, assuming that's correct
+        # UV will automatically detect the Python architecture (x64 or arm64)
+        # and fetch the matching wheels.
         run: |
           uv sync --extra gui --extra av
 
       - name: Prepare Frontend & Resources
         run: |
           chmod +x src/frontend/update.sh
+          
+          # 1. Run the update script in frontend
           cd src/frontend
           bash update.sh
-          cd ../../
           
-          cd scripts
+          # 2. Navigate to src/scripts (sibling folder)
+          cd ../scripts
+          
+          # 3. Run the patch script
           uv run patch.py
-          cd ../
+          
+          # 4. Return to Project Root for the build step
+          cd ../../
 
       - name: Build GUI (pyside6-deploy)
         run: |
-          # Copy spec file to temp/root to avoid modifying source
-          cp "${{ matrix.spec_file }}" pysidedeploy.spec
+          # Use the generic macOS spec file (it usually auto-detects)
+          # OR ensure your spec file doesn't hardcode the arch
+          cp src/build/pysidedeploy_macos.spec pysidedeploy.spec
           
           # Run the deploy tool
-          # The -f flag forces overwrite, -v is verbose
           uv run -- pyside6-deploy -c pysidedeploy.spec -f -v
 
       - name: Package into DMG
         run: |
-          # Define names
           APP_NAME="Porn Fetch.app"
           VOL_NAME="PornFetch"
           DMG_NAME="PornFetch_macOS_GUI_${{ matrix.arch_name }}.dmg"
           
-          # Check if the app was actually built
           if [ ! -d "$APP_NAME" ]; then
             echo "::error::Build failed! $APP_NAME not found."
             exit 1
           fi
 
-          # Prepare a staging directory for the DMG
           mkdir -p dist_dmg
           cp -r "$APP_NAME" dist_dmg/
-          
-          # Add a symlink to Applications for drag-and-drop install
           ln -s /Applications dist_dmg/Applications
 
-          # Create the DMG using hdiutil (native macOS tool)
           hdiutil create \
             -volname "$VOL_NAME" \
             -srcfolder dist_dmg \
@@ -105,9 +104,9 @@ jobs:
         run: |
           sha256sum "$DMG_OUTPUT" > "${DMG_OUTPUT}.sha256"
 
-      - name: Publish SHA256 to GitHub Actions Summary
+      - name: Publish SHA256 to Summary
         run: |
-          echo "### SHA256 Checksum for ${{ env.DMG_OUTPUT }}" >> $GITHUB_STEP_SUMMARY
+          echo "### SHA256 (${{ matrix.arch_name }})" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
           cat "${DMG_OUTPUT}.sha256" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
