@@ -714,7 +714,7 @@ def write_tags(path: str, data: dict):
     title     = data.title
     artist    = data.author
     date      = data.publish_date  # e.g. "2025-10-26" or "2025"
-    thumbnail = None # For now # TODO
+    thumbnail = data.thumbnail_data
     logging.debug("Tags [1/3]")
 
     audio = MP4(path)

@@ -22,6 +22,8 @@ Discord: echteralsfake (faster response)
 # macOS Setup...
 import sys
 
+from backend.clients import VideoAttributes
+
 if sys.platform == "darwin":
     from src.backend.macos_setup import macos_setup, SparkleUpdater
     macos_setup()
@@ -57,6 +59,7 @@ from src.backend.config import __version__, PUBLIC_KEY_B64, shared_config, IS_SO
 from src.frontend.UI.theme import *
 from src.frontend.UI.ssl_warning import *
 from src.frontend.UI.license import License, Disclaimer
+from src.frontend.UI.thumbnail_viewer import ImageViewer
 from src.frontend.UI.ui_form_main_window import Ui_MainWindow
 from src.frontend.UI.pornfetch_info_dialog import PornFetchInfoWidget
 from src.frontend.UI.custom_combo_box import ComboPopupFitter, make_quality_combobox
@@ -637,7 +640,6 @@ class AddToTreeWidget(QRunnable):
                     video = clients.check_video(url=video)
 
                 self.logger.info(f"[Download (3/10) - Video ID] -->: {video_identifier}")
-                print(f"Custom Options: {self.custom_options}")
                 data = clients.load_video_attributes(video, self.custom_options)
                 self.logger.debug("[Download (4/10) - Fetched Attributes")
                 session_urls.append(video.url)
@@ -825,6 +827,38 @@ class DownloadScheduler(QObject):
         # Releases the semaphore, so that the next video can be downloaded
 
 
+class ThumbnailFetcher(QRunnable):
+    def __init__(self, identifier: int):
+        super().__init__()
+        self.identifier = identifier
+        self.logger = setup_logger(name="Porn Fetch - [ThumbnailFetcher]", level=logging.DEBUG, log_file="PornFetch.log")
+
+    def run(self):
+        data: VideoAttributes = video_data.data_objects.get(self.identifier)
+        title = data.title
+        video = data.video
+        thumbnail = data.thumbnail
+
+        if thumbnail:
+            self.logger.info(f"Trying to fetch thumbnail for Video: {title}")
+            temp_core = clients.core
+
+            if "hqporner" in video.url:
+                temp_core.session.headers["Referer"] = "https://hqporner.com/"
+
+            elif "pornhub" in video.url:
+                temp_core.session.headers["Referer"] = "https://pornhub.com/"
+
+            try:
+                thumbnail_data = temp_core.fetch(thumbnail, get_bytes=True)
+                self.logger.info(f"Successfully fetched thumbnail for: {title}")
+                video_data.data_objects[self.identifier].thumbnail_data = thumbnail_data
+
+            except Exception:
+                error = traceback.format_exc()
+                self.logger.error(f"Couldn't fetch Thumbnail: {thumbnail} for -->: {title} ERROR: {error}")
+
+
 class DownloadThread(QRunnable):
     """Refactored threading class to download videos with improved performance and logic."""
     def __init__(self, video, video_id, quality, stop_event, segment_state_path, segment_dir):
@@ -978,7 +1012,6 @@ class DownloadThread(QRunnable):
                                              return_report=True, segment_state_path=self.segment_state_path,
                                              keep_segment_dir=True, cleanup_on_stop=True, segment_dir=self.segment_dir
                                              )
-                print(f"Got Report from downloading: {report}")
 
         except Exception:
             error = traceback.format_exc()
@@ -1024,6 +1057,7 @@ class PornFetch(QMainWindow):
         self.logger = shared_functions.setup_logger(name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG)
 
         self.last_index = 0  # Keeps track of the last index of videos added to the tree widget
+        self.thumbnail_viewer_window = None
         self.kill_switch = False
         self.ensure_temp()
         self._row = {} # Video ID -> dict of widgets + state
@@ -1268,8 +1302,41 @@ QPushButton:pressed {
 }
 """
 
+        stylesheet_lineedit_custom_title = """
+QLineEdit {
+    /* Basic Layout */
+    background-color: #232323; 
+    border: 2px solid #3A3A3A;
+    border-radius: 15px; /* High radius for a pill shape */
+    padding: 8px 15px; /* Comfortable padding */
+    
+    /* Text Styling */
+    color: #E0E0E0;
+    font-family: "Segoe UI", sans-serif; /* Or your preferred font */
+    font-size: 14px;
+    font-weight: bold;
+    
+    /* Selection Color */
+    selection-background-color: #00DAC6;
+    selection-color: #000000;
+}
+
+/* Hover State - Subtle feedback */
+QLineEdit:hover {
+    background-color: #2C2C2C;
+    border: 2px solid #505050;
+}
+
+/* Focus State - The "Special" moment */
+QLineEdit:focus {
+    border: 2px solid #00DAC6; /* Bright Cyan border */
+    background-color: #1A1A1A; /* Slightly darker to add depth */
+}
+"""
+
         self.ui.settings_button_buy_license.setStyleSheet(stylesheet_license_button)
         self.ui.settings_button_import_license.setStyleSheet(stylesheet_import_license)
+        self.ui.advanced_lineedit_custom_title.setStyleSheet(stylesheet_lineedit_custom_title)
 
         # most of these are secondary or flat so they don’t compete visually
         for b in [
@@ -1446,6 +1513,7 @@ QPushButton:pressed {
         self.ui.settings_checkbox_system_enable_debug_mode.clicked.connect(on_checkbox_clicked)
         self.ui.button_settings_clear_temp.clicked.connect(self.clean_temporary_files)
         self.ui.advanced_button_custom_title_options.clicked.connect(available_title_formatting_options)
+        self.ui.treeWidget.itemDoubleClicked.connect(self.show_thumbnail)
 
         # Stacked Tree Widget
         self.ui.button_treewidget_downloads.clicked.connect(self.switch_to_treewidget_downloads)
@@ -2046,10 +2114,15 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         This makes it possible to only use one network request and use the videos across entire Porn Fetch
         """
         is_checked = self.ui.main_checkbox_tree_do_not_clear_videos.isChecked()
+
+        options = self.ui.advanced_lineedit_custom_title.text()
+        if not options:
+            options = "$title" # Default, otherwise only .mp4 will be the output lol
+
         self.add_to_tree_widget_thread_ = AddToTreeWidget(iterator=iterator,
                                                           is_checked=is_checked,
                                                           last_index=self.last_index,
-                                                          custom_options=self.ui.advanced_lineedit_custom_title.text())
+                                                          custom_options=options)
         self.add_to_tree_widget_thread_.signals.text_data_to_tree_widget.connect(self.add_to_tree_widget_signal)
         self.add_to_tree_widget_thread_.signals.error_signal.connect(show_error)
         self.add_to_tree_widget_thread_.signals.clear_tree_widget_signal.connect(self.clear_tree_widget)
@@ -2186,6 +2259,11 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         download_btn.clicked.connect(lambda _=False, vid=identifier: self.queue_download(vid))
         stop_btn.clicked.connect(lambda _=False, vid=identifier: self.stop_download(vid))
         self.logger.info(f"[Download (6/10) - Created Item]")
+        self.logger.info(f"PornFetch -- Starting Thumbnail Thread!")
+
+        self.thumbnail_thread = ThumbnailFetcher(identifier=identifier)
+        self.threadpool.start(self.thumbnail_thread)
+
 
     def _wire_worker_signals(self, video_id: int, worker):
         # Download progress
@@ -2413,7 +2491,6 @@ Segment State Path: {report["segment_state_path"]}
             return True
 
         elif not clients.ph_client.logged:
-            print(f"Client seems to be not loggeed in")
             self.login()
             if not clients.ph_client.logged:
                 text = self.tr("There's a problem with the login. Please make sure you login first and then "
@@ -2554,6 +2631,42 @@ Segment State Path: {report["segment_state_path"]}
     def auto_update(self):
         """
         """
+
+    def show_thumbnail(self, item, column):
+        identifier = item.data(self.COL_TITLE, Qt.ItemDataRole.UserRole + 1) # Identifier for the video data
+
+        if identifier is None:
+            self.logger.warning("Double-clicked item has no identifier.") # Makes no sense, but don't wanna raise an error
+            return
+
+        # 2. Fetch the Data Object
+        # Assuming video_data is accessible here (e.g., self.video_data or imported)
+        data_obj = video_data.data_objects.get(identifier)
+
+        if not data_obj:
+            self.logger.error(f"No data object found for ID: {identifier}") # Makes also no sense
+            return
+
+        # 3. Get the Thumbnail Bytes
+        # We use getattr to be safe in case 'thumbnail_data' hasn't been set yet
+        image_bytes = getattr(data_obj, "thumbnail_data", None)
+
+        # 4. Open/Update the Viewer
+        if self.thumbnail_viewer_window is None:
+            # Create the window if it doesn't exist
+            self.thumbnail_viewer_window = ImageViewer()
+
+        # Set the image (or the placeholder if image_bytes is None)
+        self.thumbnail_viewer_window.set_image(image_bytes)
+
+        # Set the title to match the video (optional but nice)
+        video_title = item.text(self.COL_TITLE)
+        self.thumbnail_viewer_window.setWindowTitle(f"Preview: {video_title}")
+
+        # Show and bring to front
+        self.thumbnail_viewer_window.show()
+        self.thumbnail_viewer_window.raise_()
+        self.thumbnail_viewer_window.activateWindow()
 
     def clean_temporary_files(self):
         safe_rmtree(TEMP_DIRECTORY_STATES)

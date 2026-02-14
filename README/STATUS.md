@@ -27,9 +27,9 @@
 
 
 # ...
-- [] Fix thumbnail loading / display
-- [] Write thumbnail in metadata
-- [] Fix custom title not working
+- [x] Fix thumbnail loading / display
+- [x] Write thumbnail in metadata
+- [x] Fix custom title not working
 - [x] Fix Account login for PH
 
 
