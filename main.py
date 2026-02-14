@@ -2814,6 +2814,33 @@ Don't tell anyone, and don't change your language in settings
             logger.debug(f"Failed to load {language_code} translation")
 
     app.installTranslator(translator)
+    ui_popup("""
+Warning!
+
+You are currently using the BETA for v3.8.
+This has been released, because v3.7 is broken and I can't release the full v3.8 yet, as I just can't
+do it right now. 
+
+Too much left to do, and too less time to get it working.
+Please DO NOT report any errors that you encounter during BETA.
+I am probably aware of them and still fix them.
+
+
+This BETA has ALL license features unlocked. Do not use the license system / interface yet.
+It hasn't been tested and will probably not work correctly. You have all features anyways,
+so just ignore it for now.
+
+
+Thank you, and sorry that this release again takes so long. I am trying my best guys. 
+
+
+DISCLAIMER:
+This release has not been tested and might delete your PC if the app feels like it (joke).
+Please also don't use the Proxy feature if you live in a censored country. It hasn't been tested too.
+Nothing has been tested except downloading for all sites. 
+""")
+    global x
+    x = True # Temporary for beta, unlocks source code and stuff
     w = PornFetch()  # This actually starts Porn Fetch
     w.show()  # This shows the main widget
     """
