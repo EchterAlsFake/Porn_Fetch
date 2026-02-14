@@ -14,8 +14,12 @@ from hue_shift import return_color
 from rich.markdown import Markdown
 from base_api.modules.progress_bars import *
 from base_api.base import BaseCore, setup_logger
-from base_api.modules.config import RuntimeConfig
-from configparser import ConfigParser
+from src.backend.shared_functions import ensure_config_file, get_int, get_str, get_bool
+from src.backend.clients import (
+    ph_client, hq_client, xv_client, xn_client, ep_client,
+    check_video, load_video_attributes, write_tags, refresh_clients,
+    hq_Video, ep_Video
+)
 from src.backend.CLI_model_feature_addon import *
 import src.backend.shared_functions as shared_functions
 from base_api.modules.errors import (InvalidProxy, ProxySSLError)
@@ -30,13 +34,12 @@ except (ModuleNotFoundError, ImportError):
     remux = False
 
 
-proxy_one_time_config_stuff_please_dont_ask_thank_you_very_mushhh = RuntimeConfig()
 STATE_FILE = "model_database.json"
 
 logger = setup_logger(name="Porn Fetch - [CLI]", log_file="PornFetch_CLI_LOG.log", level=logging.ERROR)
 logger_model_feature = setup_logger(name="Porn Fetch - [ModelBatchDownload]", log_file="PornFetch___ModelDownload___.log", level=logging.INFO)
 init(autoreset=True)
-conf = ConfigParser()
+conf = ensure_config_file()
 logging.disable(level=logging.DEBUG)
 
 
@@ -66,7 +69,7 @@ class CLI:
         self.language = None
         self.ffmpeg_features = True
         self.ffmpeg_path = None
-        shared_functions.refresh_clients()
+        refresh_clients()
 
         self.mappings_quality = {
             0: "best",
@@ -101,20 +104,17 @@ class CLI:
         self.task_total_progress = None
 
     def init(self):
-        shared_functions.setup_config_file()
-        conf.read("config.ini")
         self.license()
         self.load_user_settings()
-        conf.read("config.ini")
 
-        if conf.get("Misc", "first_run_cli") == "true":
+        if get_bool(conf, "Misc", "first_run_cli"):
             self.first_run_cli()
 
         while True:
             self.menu()
 
     def license(self):
-        if not conf["Misc"]["license_accepted"] == "true":
+        if not get_bool(conf, "Misc", "license_accepted"):
             license_text = input(f"""{Fore.WHITE}
 GPL License Agreement for Porn Fetch
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
@@ -167,7 +167,7 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
 
         if options == "1":
             url = input(f"{return_color()}Please the enter video URL -->: {return_color()}")
-            video = [shared_functions.check_video(url)]
+            video = [check_video(url)]
             self.iterate_generator(auto=True, generator=video)
 
         elif options == "2":
@@ -192,7 +192,7 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
             self.set_proxy()
 
         elif options == "1338":
-            shared_functions.refresh_clients(enable_kill_switch=True)
+            refresh_clients(enable_kill_switch=True)
             print("Refreshed Clients with Kill Switch enabled!")
 
         elif options == "98":
@@ -264,7 +264,7 @@ Enter choice: """)
                 print(f"Model has pending videos! Downloading: {len(pending_videos)}")
                 for idx, url in enumerate(pending_videos):
                     print(f"[{idx}|{len(pending_videos)}] Downloading -->: {url}")
-                    videos = [shared_functions.check_video(url)]
+                    videos = [check_video(url)]
                     try:
                         self.iterate_generator(generator=videos, batch=True, auto=True, remove_total_bar=True)
                         record_download(model_url=model_url, video_url=url, path=STATE_FILE)
@@ -344,7 +344,7 @@ Do you accept the risk?
         else:
             print(f"{return_color()}SUCCESS! {Fore.LIGHTWHITE_EX}Your Proxy IP is: {Fore.LIGHTYELLOW_EX}{ip_masked}. {Fore.LIGHTWHITE_EX}Using your Proxy for this session :)")
             shared_functions.config.proxy = proxy
-            shared_functions.refresh_clients()
+            refresh_clients()
             print("Refreshed Clients!")
 
     def first_run_cli(self):
@@ -378,54 +378,54 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
 (Press enter when you've finished reading)
 """)
         with open("config.ini", "w") as config:
-            shared_functions.shared_config.set("Misc", "first_run_cli", "false")
-            shared_functions.shared_config.write(config)
+            conf.set("Misc", "first_run_cli", "false")
+            conf.write(config)
 
     def load_user_settings(self):
-        self.quality = self.mappings_quality.get(int(conf.get("Video", "quality")))
-        self.delay = int(conf.get("Performance", "network_delay"))
-        self.workers = int(conf.get("Performance", "download_workers"))
-        self.timeout = int(conf.get("Performance", "timeout"))
-        self.retries = int(conf.get("Performance", "retries"))
-        self.pages_concurrency = int(conf.get("Performance", "pages_concurrency"))
-        self.videos_concurrency = int(conf.get("Performance", "videos_concurrency"))
+        self.quality = self.mappings_quality.get(get_int(conf, "Video", "quality"))
+        self.delay = get_int(conf, "Performance", "network_delay")
+        self.workers = get_int(conf, "Performance", "download_workers")
+        self.timeout = get_int(conf, "Performance", "timeout")
+        self.retries = get_int(conf, "Performance", "retries")
+        self.pages_concurrency = get_int(conf, "Performance", "pages_concurrency")
+        self.videos_concurrency = get_int(conf, "Performance", "videos_concurrency")
         self.speed_limit = float(conf.get("Performance", "speed_limit"))
-        self.semaphore = threading.Semaphore(int(conf.get("Performance", "semaphore")))
-        self.output_path = conf.get("Video", "output_path")
-        self.directory_system = True if conf.get("Video", "directory_system") == "1" else False
-        self.skip_existing_files = True if conf.get("Video", "skip_existing_files") == "true" else False
-        self.result_limit = int(conf.get("Video", "result_limit"))
-        self.download_mode = self.mappings_download_mode.get(int(conf.get("Performance", "download_mode")))
-        shared_functions.config.request_delay = self.delay # Lmao in all versions past 3.6 these things were never actually applied to the backend LOOOOL
+        self.semaphore = threading.Semaphore(get_int(conf, "Performance", "semaphore"))
+        self.output_path = get_str(conf, "Video", "output_path")
+        self.directory_system = get_bool(conf, "Video", "directory_system")
+        self.skip_existing_files = get_bool(conf, "Video", "skip_existing_files")
+        self.result_limit = get_int(conf, "Video", "result_limit")
+        self.download_mode = self.mappings_download_mode.get(get_int(conf, "Performance", "download_mode"))
+        shared_functions.config.request_delay = self.delay
         shared_functions.config.timeout = self.timeout
         shared_functions.config.max_workers_download = self.workers
         shared_functions.config.videos_concurrency = self.videos_concurrency
         shared_functions.config.pages_concurrency = self.pages_concurrency
         shared_functions.config.max_retries = self.retries
         shared_functions.config.max_bandwidth_mb = self.speed_limit
-        shared_functions.refresh_clients()
+        refresh_clients()
         logger.info("Refreshed Clients with user settings being applied!")
 
 
     def save_user_settings(self):
         while True:
-            quality_color = {  # Highlight the current quality option in yellow
-                "Best": Fore.LIGHTYELLOW_EX if self.quality == "best" else Fore.LIGHTWHITE_EX,
-                "Half": Fore.LIGHTYELLOW_EX if self.quality == "half" else Fore.LIGHTWHITE_EX,
-                "Worst": Fore.LIGHTYELLOW_EX if self.quality == "worst" else Fore.LIGHTWHITE_EX
+            quality_color = {
+                "best": Fore.LIGHTYELLOW_EX if self.quality == "best" else Fore.LIGHTWHITE_EX,
+                "half": Fore.LIGHTYELLOW_EX if self.quality == "half" else Fore.LIGHTWHITE_EX,
+                "worst": Fore.LIGHTYELLOW_EX if self.quality == "worst" else Fore.LIGHTWHITE_EX
             }
-            threading_mode_color = {  # Highlight the current threading mode in yellow
-                "threaded": Fore.LIGHTYELLOW_EX if self.threading_mode == "threaded" else Fore.LIGHTWHITE_EX,
-                "default": Fore.LIGHTYELLOW_EX if self.threading_mode == "default" else Fore.LIGHTWHITE_EX
+            threading_mode_color = {
+                "threaded": Fore.LIGHTYELLOW_EX if self.download_mode == "threaded" else Fore.LIGHTWHITE_EX,
+                "default": Fore.LIGHTYELLOW_EX if self.download_mode == "default" else Fore.LIGHTWHITE_EX
             }
 
             settings_options = input(f"""
 {Fore.LIGHTYELLOW_EX}YELLOW {Fore.LIGHTWHITE_EX} = Currently selected / Current value
             
 {Fore.LIGHTWHITE_EX}--------- {Fore.LIGHTGREEN_EX}Quality {Fore.LIGHTWHITE_EX}----------
-1) {quality_color["Best"]}Best{Fore.LIGHTWHITE_EX}
-2) {quality_color["Half"]}Half{Fore.LIGHTWHITE_EX}
-3) {quality_color["Worst"]}Worst{Fore.LIGHTWHITE_EX}
+1) {quality_color["best"]}Best{Fore.LIGHTWHITE_EX}
+2) {quality_color["half"]}Half{Fore.LIGHTWHITE_EX}
+3) {quality_color["worst"]}Worst{Fore.LIGHTWHITE_EX}
 {Fore.LIGHTWHITE_EX}-------- {Fore.LIGHTCYAN_EX}Performance {Fore.LIGHTWHITE_EX}--------
 4) Change Semaphore {Fore.LIGHTYELLOW_EX}(current: {self.semaphore._value}){Fore.LIGHTWHITE_EX}
 5) Change Delay {Fore.LIGHTYELLOW_EX}(current: {self.delay}){Fore.LIGHTWHITE_EX}
@@ -525,11 +525,11 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
         self.semaphore.acquire()
         if video is None:
             url = url or input("Enter Video URL: ")
-            video = shared_functions.check_video(url=url)
+            video = check_video(url=url)
 
-        attrs = shared_functions.load_video_attributes(video)
-        author = attrs.get('author', '')
-        title = attrs.get('title', 'video')
+        attrs = load_video_attributes(video, "$title")
+        author = attrs.author
+        title = attrs.title
 
         # Determine output path
         out_dir = self.output_path or os.getcwd()
@@ -632,25 +632,25 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
         else:
             model = url
 
-        if shared_functions.eporner_pattern.search(model):
-            model = shared_functions.ep_client.get_pornstar(model, enable_html_scraping=True).videos(pages=10)
+        if "eporner" in model:
+            model = ep_client.get_pornstar(model, enable_html_scraping=True).videos(pages=10)
 
-        elif shared_functions.xnxx_pattern.match(model):
-            model = shared_functions.xn_client.get_user(model).videos
+        elif "xnxx" in model:
+            model = xn_client.get_user(model).videos
 
-        elif shared_functions.pornhub_pattern.match(model):
-            model = itertools.chain(shared_functions.ph_client.get_user(model).videos, shared_functions.ph_client.get_user(model).uploads)
+        elif "pornhub" in model:
+            model = itertools.chain(ph_client.get_user(model).videos, ph_client.get_user(model).uploads)
 
-        elif shared_functions.hqporner_pattern.match(model):
-            model = shared_functions.hq_client.get_videos_by_actress(model)
+        elif "hqporner" in model:
+            model = hq_client.get_videos_by_actress(model)
 
-        elif shared_functions.xvideos_pattern.match(model):
+        elif "xvideos" in model:
             if "/model" in model or "/pornstar" in model:
-                model = shared_functions.xv_client.get_pornstar(model).videos
+                model = xv_client.get_pornstar(model).videos
 
             else:
                 logger.info("Model URL does not contain expected /model or /pornstar. Assuming it's a channel instead...")
-                model = shared_functions.xv_client.get_channel(model).videos
+                model = xv_client.get_channel(model).videos
 
         if do_return:
             return model
@@ -660,7 +660,7 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
     def process_playlist(self, url=None, auto=False, ignore_errors=False, batch=False):
         if url is None:
             url = input(f"{return_color()}Enter the (PornHub) playlist URL -->:")
-        playlist = shared_functions.ph_client.get_playlist(url)
+        playlist = ph_client.get_playlist(url)
         print(f"{return_color()}Processing: {playlist.title}")
         self.iterate_generator(playlist.sample(), auto=auto, ignore_errors=ignore_errors, batch=batch)
 
@@ -677,19 +677,19 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
         query = input(f"{return_color()}Please enter the search query -->:")
 
         if website == "1":
-            self.iterate_generator(shared_functions.ph_client.search(query))
+            self.iterate_generator(ph_client.search(query))
 
         elif website == "2":
-            self.iterate_generator(shared_functions.hq_client.search_videos(query=query))
+            self.iterate_generator(hq_client.search_videos(query=query))
 
         elif website == "3":
-            self.iterate_generator(shared_functions.xv_client.search(query))
+            self.iterate_generator(xv_client.search(query))
 
         elif website == "4":
-            self.iterate_generator(shared_functions.xn_client.search(query).videos)
+            self.iterate_generator(xn_client.search(query).videos)
 
         elif website == "5":
-            self.iterate_generator(shared_functions.ep_client.search_videos(query, per_page=50,
+            self.iterate_generator(ep_client.search_videos(query, per_page=50,
                                                              sorting_order="", sorting_gay="", sorting_low_quality="",
                                                              enable_html_scraping=True, page=20))
 
@@ -705,7 +705,7 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
             if line.startswith("video#"):
                 line = line.split("#")[1]
                 try:
-                    videos.append(shared_functions.check_video(is_url=True, url=line))
+                    videos.append(check_video(is_url=True, url=line))
 
                 except:
                     error = traceback.format_exc()
@@ -720,8 +720,8 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
         try:
             # Detect whether this is a byte-based download
             is_byte_download = (
-                isinstance(video, shared_functions.hq_Video)
-                or isinstance(video, shared_functions.ep_Video)
+                isinstance(video, hq_Video)
+                or isinstance(video, ep_Video)
             )
 
             def callback_wrapper(pos, total):
@@ -743,7 +743,7 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
                         self.progress.update(self.task_total_progress, advance=1)
 
             # Kick off the right download call
-            if isinstance(video, shared_functions.ph_Video):
+            if isinstance(video, ph_Video):
                 video.download(path=output_path,
                     quality=self.quality,
                     downloader=self.download_mode,
@@ -770,11 +770,11 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
 
         finally:
             logger.debug(f"Finished download: {video.title}")
-            if conf["Video"]["write_metadata"] == "true":
+            if get_bool(conf, "Video", "write_metadata"):
                 if remux:
-                    shared_functions.write_tags(
+                    write_tags(
                         path=output_path,
-                        data=shared_functions.load_video_attributes(video))
+                        data=load_video_attributes(video, "$title"))
 
 
             # Release semaphore and log
@@ -811,7 +811,6 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
 class Batch(CLI):
     def __init__(self):
         super().__init__()
-        conf.read("config.ini")
         self.main()
 
     def main(self):
@@ -923,14 +922,12 @@ By using the CLI batch mode you automatically accept the GPLv3 License of Porn F
 
             print("Checking and loading configuration...")
             try:
-                conf.read("config.ini")
                 self.load_user_settings()
 
             except Exception as e:
                 print(f"Error in loading configuration..., creating a new configuration file... Error:")
                 logger.error(e)
-                shared_functions.setup_config_file(force=True)
-                conf.read("config.ini")
+                ensure_config_file(force=True)
                 self.load_user_settings()
 
             # Overriding the values from configuration file with CLI values

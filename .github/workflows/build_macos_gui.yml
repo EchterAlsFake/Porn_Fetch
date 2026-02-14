@@ -1,0 +1,119 @@
+name: Build GUI (macOS Universal)
+
+on:
+  pull_request:
+    branches: [ master ]
+  push:
+    branches: [ master ]
+
+permissions:
+  contents: read
+
+jobs:
+  build-gui-macos:
+    name: Build macOS ${{ matrix.arch_name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Intel (x86_64) - Uses macOS Ventura
+          - os: macos-13
+            arch_name: x86_64
+            spec_file: src/build/pysidedeploy_macos.spec
+
+          # Apple Silicon (ARM64) - Uses macOS Sonoma
+          - os: macos-14
+            arch_name: arm64
+            spec_file: src/build/pysidedeploy_macos.spec
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Install uv (with cache)
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Install System Dependencies
+        # Mimics the brew install step from your script
+        run: |
+          brew update
+          brew install git cmake wget curl pkg-config
+
+      - name: Sync dependencies (uv)
+        # Your script uses --extra gui for macOS, assuming that's correct
+        run: |
+          uv sync --extra gui --extra av
+
+      - name: Prepare Frontend & Resources
+        run: |
+          chmod +x src/frontend/update.sh
+          cd src/frontend
+          bash update.sh
+          cd ../../
+          
+          cd scripts
+          uv run patch.py
+          cd ../
+
+      - name: Build GUI (pyside6-deploy)
+        run: |
+          # Copy spec file to temp/root to avoid modifying source
+          cp "${{ matrix.spec_file }}" pysidedeploy.spec
+          
+          # Run the deploy tool
+          # The -f flag forces overwrite, -v is verbose
+          uv run -- pyside6-deploy -c pysidedeploy.spec -f -v
+
+      - name: Package into DMG
+        run: |
+          # Define names
+          APP_NAME="Porn Fetch.app"
+          VOL_NAME="PornFetch"
+          DMG_NAME="PornFetch_macOS_GUI_${{ matrix.arch_name }}.dmg"
+          
+          # Check if the app was actually built
+          if [ ! -d "$APP_NAME" ]; then
+            echo "::error::Build failed! $APP_NAME not found."
+            exit 1
+          fi
+
+          # Prepare a staging directory for the DMG
+          mkdir -p dist_dmg
+          cp -r "$APP_NAME" dist_dmg/
+          
+          # Add a symlink to Applications for drag-and-drop install
+          ln -s /Applications dist_dmg/Applications
+
+          # Create the DMG using hdiutil (native macOS tool)
+          hdiutil create \
+            -volname "$VOL_NAME" \
+            -srcfolder dist_dmg \
+            -ov -format UDZO \
+            -imagekey zlib-level=9 \
+            "$DMG_NAME"
+
+          echo "DMG_OUTPUT=$DMG_NAME" >> $GITHUB_ENV
+
+      - name: Generate SHA256 Checksum
+        run: |
+          sha256sum "$DMG_OUTPUT" > "${DMG_OUTPUT}.sha256"
+
+      - name: Publish SHA256 to GitHub Actions Summary
+        run: |
+          echo "### SHA256 Checksum for ${{ env.DMG_OUTPUT }}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          cat "${DMG_OUTPUT}.sha256" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Archive DMG build
+        uses: actions/upload-artifact@v4
+        with:
+          name: PornFetch_macOS_GUI_${{ matrix.arch_name }}
+          path: ${{ env.DMG_OUTPUT }}
