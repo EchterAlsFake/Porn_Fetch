@@ -19,16 +19,39 @@ Contact:
 E-Mail: EchterAlsFake@proton.me
 Discord: echteralsfake (faster response)
 """
+
+# Stop Splash Screen
+import os
+import tempfile
+
+if "NUITKA_ONEFILE_PARENT" in os.environ:
+    splash_filename = os.path.join(
+        tempfile.gettempdir(),
+        f"onefile_{int(os.environ['NUITKA_ONEFILE_PARENT'])}_splash_feedback.tmp"
+    )
+    if os.path.exists(splash_filename):
+        os.unlink(splash_filename)
+
 # macOS Setup...
 import sys
-
-from backend.clients import VideoAttributes
-
 if sys.platform == "darwin":
     from src.backend.macos_setup import macos_setup, SparkleUpdater
     macos_setup()
 
+# Necessary imports for splashscreen
+import src.frontend.UI.resources
 
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QApplication
+from src.frontend.UI.splashscreen import ModernSplashScreen
+
+app = QApplication(sys.argv)
+splash_pixmap = QPixmap(":/images/graphics/splashscreen.png")
+splash = ModernSplashScreen(splash_pixmap)
+splash.show()
+
+splash.showMessage("Importing (General).")
+app.processEvents()
 # General imports
 import time
 import os.path
@@ -37,7 +60,6 @@ import markdown
 import tempfile
 import webbrowser
 import subprocess
-import src.frontend.UI.resources
 
 from typing import Callable
 from collections import deque
@@ -45,16 +67,21 @@ from threading import Event, Lock
 from itertools import islice, chain
 
 
+splash.showMessage("Importing (Backend).")
+app.processEvents()
 # Backend imports
 from src.backend import clients # Singleton instance for the client objects (really important)
 from src.backend.database import *
 from src.backend.shared_gui import *
 from src.backend.shared_functions import *
 from src.backend.helper_functions import *
+from src.backend.clients import VideoAttributes
 from src.backend.check_license import LicenseManager
 import src.backend.shared_functions as shared_functions
 from src.backend.config import __version__, PUBLIC_KEY_B64, shared_config, IS_SOURCE_RUN, TEMP_DIRECTORY, TEMP_DIRECTORY_STATES, TEMP_DIRECTORY_SEGMENTS
 
+splash.showMessage("Importing (Frontend).")
+app.processEvents()
 # Frontend imports
 from src.frontend.UI.theme import *
 from src.frontend.UI.ssl_warning import *
@@ -64,13 +91,17 @@ from src.frontend.UI.ui_form_main_window import Ui_MainWindow
 from src.frontend.UI.pornfetch_info_dialog import PornFetchInfoWidget
 from src.frontend.UI.custom_combo_box import ComboPopupFitter, make_quality_combobox
 
+splash.showMessage("Importing (PySide6 - FULL).")
+app.processEvents()
 # Qt / PySide6 related imports
 from PySide6.QtGui import QIcon, QFontDatabase, QPixmap, QShortcut, QKeySequence
 from PySide6.QtCore import (QTextStream, QRunnable, QThreadPool, QSemaphore, Qt, QLocale, QSize,
                             QTranslator, QCoreApplication, QStandardPaths, QSettings, Slot)
-from PySide6.QtWidgets import (QApplication, QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QComboBox, QLabel,
+from PySide6.QtWidgets import (QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QComboBox, QLabel,
                                QInputDialog, QMainWindow, QProgressBar, QVBoxLayout, QSizePolicy, QLayout)
 
+splash.showMessage("Importing (APIs).")
+app.processEvents()
 # Errors from different APIs
 from phub import errors as ph_errors
 from xnxx_api.modules.errors import InvalidResponse
@@ -85,6 +116,8 @@ from hqporner_api.modules.errors import InvalidActress as InvalidActress_HQ, NoV
 from hqporner_api.api import Sort as hq_Sort
 from eporner_api.modules.locals import Category as ep_Category
 
+splash.showMessage("Importing (AV - FFMPEG).")
+app.processEvents()
 try:
     from av import open as av_open  # Don't ask
     from av.audio.resampler import AudioResampler  # Don't ask
@@ -2869,7 +2902,7 @@ Thank you for using Porn Fetch ^^
 
 def main(args: argparse.Namespace):
     global FORCE_PORTABLE_RUN
-
+    global app
     if args.version:
         print(__version__)
         return
@@ -2877,12 +2910,15 @@ def main(args: argparse.Namespace):
     if args.portable:
         FORCE_PORTABLE_RUN = True
 
+    splash.showMessage("Setup (Configuration).")
+    app.processEvents()
     ensure_config_file()
-    app = QApplication(sys.argv)
     app.setStyle("Fusion")
     conf.read("config.ini")
     language = conf["UI"]["language"]
 
+    splash.showMessage("Setup (UI - Theme).")
+    app.processEvents()
     if conf["UI"]["theme"] == "0":
         apply_theme(app)
 
@@ -2898,6 +2934,8 @@ def main(args: argparse.Namespace):
     app.setFont(sys_font)
     app.setWindowIcon(QIcon(":/images/graphics/logo_transparent.png"))
 
+    splash.showMessage("Setup (UI - Language).")
+    app.processEvents()
     if str(language) == "0":
         # Get the system's locale
         locale = QLocale.system()
@@ -2912,8 +2950,6 @@ Don't tell anyone, and don't change your language in settings
 
 🤫
 """)
-
-
             # Not doing this, but I'd like to do it ;)
             '''        
     elif language_code.startswith("ru"):
@@ -2945,7 +2981,6 @@ Don't tell anyone, and don't change your language in settings
             language_code = "it"
 
     # Try loading the specific regional translation
-
     path = f":/translations/translations/qm/{language_code}.qm"
     translator = QTranslator(app)
     if translator.load(path):
@@ -2961,6 +2996,7 @@ Don't tell anyone, and don't change your language in settings
 
     app.installTranslator(translator)
     w = PornFetch()  # This actually starts Porn Fetch
+    splash.finish(w)
     w.show()  # This shows the main widget
     """
     The following exceptions are just general exceptions to handle some basic errors. They are not so relevant for

@@ -66,7 +66,7 @@ plugins =
 macos.permissions = 
 
 # (str) specify any extra nuitka arguments
-extra_args = --noinclude-qt-translations --assume-yes-for-downloads --disable-cache=all --clean-cache=all --remove-output --show-memory --company-name=None --product-name=PornFetch --file-version=3.7 --product-version=3.7 --copyright=JohannesHabel --enable-plugin=data-files --include-package-data=certifi --user-package-configuration-file=src/build/user.nuitka-package.config.yml
+extra_args = --noinclude-qt-translations --assume-yes-for-downloads --disable-cache=all --clean-cache=all --remove-output --show-memory --company-name=None --product-name=PornFetch --file-version=3.8 --product-version=3.8 --copyright=JohannesHabel --enable-plugin=data-files --include-package-data=certifi --user-package-configuration-file=src/build/user.nuitka-package.config.yml --onefile-windows-splash-screen-image=src/frontend/graphics/splashscreen.png
 
 [buildozer]
 

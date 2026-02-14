@@ -11,6 +11,7 @@
         <file>graphics/progressbars.svg</file>
         <file>graphics/tooltip.svg</file>
         <file>graphics/logo.png</file>
+        <file>graphics/splashscreen.png</file>
     </qresource>
     <qresource prefix="/credits">
         <file>../../README/CREDITS.md</file>

@@ -616,6 +616,7 @@ to be refactored.
 - You can now actually stop downloads lol
 - You can now choose quality for each download separately
 - You can now choose between system's CA for SSL or Certifi's CA 
+- Added a splashscreen 
 
 ### Bug Fixes
 - Fixed 403 missav error
@@ -631,6 +632,7 @@ to be refactored.
 - Added an information dialog for the first run basically telling about all useful aspects of Porn Fetch
 - QCombobox items have a correct size and the text isn't hidden anymore
 - Changed UI to be smoother and more modern friendly
+- Thumbnails are now fetched in a separate thread
 
 ### Code Optimizations
 - Refactored `check_video` function to be faster and less redundant

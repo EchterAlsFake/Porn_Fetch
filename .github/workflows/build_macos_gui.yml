@@ -42,7 +42,7 @@ jobs:
       - name: Install System Dependencies
         run: |
           brew update
-          brew install git cmake wget curl pkg-config
+          brew install git cmake wget curl pkg-config coreutils
 
       - name: Sync dependencies (uv)
         # UV will automatically detect the Python architecture (x64 or arm64)
