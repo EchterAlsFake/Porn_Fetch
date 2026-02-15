@@ -1,5 +1,5 @@
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QPixmap, QColor, QPalette
+from PySide6.QtGui import QPixmap, QColor, QPalette, QCursor
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QApplication
 
 
@@ -8,13 +8,10 @@ class ModernSplashScreen(QWidget):
         super().__init__()
 
         # 1. Window Flags
-        # 'SplashScreen' hint tells the OS this is a splash window.
-        # 'Frameless' removes the title bar.
-        # 'StaysOnTop' keeps it visible.
+        # REMOVED: Qt.WindowType.WindowStaysOnTopHint (Fixes "Always visible" issue)
         self.setWindowFlags(
             Qt.WindowType.SplashScreen |
-            Qt.WindowType.FramelessWindowHint |
-            Qt.WindowType.WindowStaysOnTopHint
+            Qt.WindowType.FramelessWindowHint
         )
 
         # 2. Appearance (Dark Theme)
@@ -39,28 +36,46 @@ class ModernSplashScreen(QWidget):
         # 5. Text Widget (Status)
         self._text_label = QLabel("Initializing...")
         self._text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        # Make text slightly larger/bolder
         font = self._text_label.font()
         font.setPointSize(10)
         self._text_label.setFont(font)
         self._layout.addWidget(self._text_label)
 
-        # Optional: Add a simple progress bar if you want
-        # self._progress = QProgressBar()
-        # self._progress.setFixedHeight(2)
-        # self._progress.setTextVisible(False)
-        # self._layout.addWidget(self._progress)
-
-        # Set a fixed size initially (Hyprland might override this, but it's good practice)
-        self.resize(600, 400)
-
-        # Set a specific Title for Hyprland Rules
         self.setWindowTitle("PornFetch-Splash")
 
-    def showMessage(self, message, alignment=Qt.AlignmentFlag.AlignBottom, color=Qt.GlobalColor.white):
+        # 6. Critical Fix: Size and Center
+        # We set the size first, then move it.
+        self.resize(600, 400)
+        self.center_on_screen()
+
+    def center_on_screen(self):
+        """
+        Centers the window on the screen where the cursor currently is.
+        """
+        # PySide6 Fix: Use QCursor.pos() to find the mouse position
+        current_cursor_pos = QCursor.pos()
+
+        # Get the screen where the mouse is
+        screen = QApplication.screenAt(current_cursor_pos)
+
+        # Fallback to primary screen if something goes wrong
+        if not screen:
+            screen = QApplication.primaryScreen()
+
+        # Get available geometry (excludes taskbar)
+        screen_geometry = screen.availableGeometry()
+
+        # Calculate center
+        center_point = screen_geometry.center()
+
+        # Move the window's geometry to that center
+        frame_geometry = self.frameGeometry()
+        frame_geometry.moveCenter(center_point)
+        self.move(frame_geometry.topLeft())
+
+    def showMessage(self, message):
         """Mimics QSplashScreen.showMessage"""
         self._text_label.setText(message)
-        # We process events immediately to ensure text updates on screen
         QApplication.processEvents()
 
     def finish(self, window):

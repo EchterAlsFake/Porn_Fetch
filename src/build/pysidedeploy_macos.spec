@@ -67,7 +67,7 @@ macos.permissions =
 mode = onefile
 
 # (str) specify any extra nuitka arguments
-extra_args = --noinclude-qt-translations --assume-yes-for-downloads --disable-cache=all --clean-cache=all --warn-unusual-code --remove-output --show-memory --windows-console-mode=disable --company-name=None --product-name=PornFetch --file-version=3.7 --product-version=3.7 --copyright=JohannesHabel --user-package-configuration-file=src/build/user.nuitka-package.config.yml
+extra_args = --noinclude-qt-translations --assume-yes-for-downloads --disable-cache=all --clean-cache=all --warn-unusual-code --remove-output --show-memory --windows-console-mode=disable --company-name=None --product-name=PornFetch --file-version=3.8 --product-version=3.8 --copyright=JohannesHabel --user-package-configuration-file=src/build/user.nuitka-package.config.yml
 
 [buildozer]
 
