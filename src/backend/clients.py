@@ -25,6 +25,7 @@ Current APIs:
 10) porntrex      -> https://porntrex.com (pt_client, pt_video)
 11) xfreehd       -> https://xfreehd.com  (xf_client, xf_video)
 12) beeg          -> https://beeg.com (bg_client, bg_video)
+13) porngo        -> https://porngo.com (pg_client, pg_video)
 """
 
 import re
@@ -42,6 +43,7 @@ from typing import Any, List, TypeAlias, Optional, Dict
 from phub import Client as ph_Client, Video as ph_Video
 from xnxx_api import Client as xn_Client, Video as xn_Video
 from beeg_api import Client as bg_Client, Video as bg_Video
+from porngo_api import Client as pg_Client, Video as pg_Video
 from missav_api import Client as mv_Client, Video as mv_Video
 from xvideos_api import Client as xv_Client, Video as xv_Video
 from xfreehd_api import Client as xf_Client, Video as xf_Video
@@ -60,7 +62,7 @@ AllowedVideoType: TypeAlias = (
 )
 
 AllowedVideoType_Legacy: TypeAlias = (
-    type[hq_Video] | type[xf_Video] | type[ep_Video] | type[pt_Video]
+    type[hq_Video] | type[xf_Video] | type[ep_Video] | type[pt_Video] | type[pt_Video]
     # Those are all non HLS streams for now
 )
 
@@ -93,6 +95,7 @@ yp_client = yp_Client()
 bg_client = bg_Client()
 pt_client = pt_Client()
 xf_client = xf_Client()
+pg_client = pg_Client()
 logger.debug("Successfully initialized all clients!")
 
 
@@ -115,7 +118,7 @@ def get_direct_url_legacy(video: AllowedVideoType_Legacy, quality: str | int):
     that uses mp4 streams.
     """
 
-    if isinstance(video, xf_Video):
+    if isinstance(video, xf_Video) or isinstance(video, pg_Video):
         if quality > "480p" or quality > 480 or quality == "best" or quality == "half": # Bro pls don't ask :rose:
             try:
                 return video.cdn_urls[1]
@@ -146,7 +149,7 @@ def refresh_clients(enable_kill_switch: bool = False, debug_mode: bool = False, 
     config.ssl_context = build_ssl_context(use_truststore) # Decides whether to use truststore (OS CA's) or Certifi CA's
 
     global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, \
-        hq_client, xn_client, core, yp_client, bg_client, pt_client, xf_client
+        hq_client, xn_client, core, yp_client, bg_client, pt_client, xf_client, pg_client
 
     if debug_mode:
         level = logging.DEBUG
@@ -168,6 +171,7 @@ def refresh_clients(enable_kill_switch: bool = False, debug_mode: bool = False, 
     log_file_core_bg = "BaseCore_BG.log" if debug_mode else None
     log_file_core_pt = "BaseCore_PT.log" if debug_mode else None
     log_file_core_xf = "BaseCore_XF.log" if debug_mode else None
+    log_file_core_pg = "BaseCore_PG.log" if debug_mode else None
 
     # One BaseCore per site, with its own RuntimeConfig (isolated headers/cookies)
     core_hq    = BaseCore(config=config)
@@ -182,6 +186,7 @@ def refresh_clients(enable_kill_switch: bool = False, debug_mode: bool = False, 
     core_bg    = BaseCore(config=config)
     core_pt    = BaseCore(config=config)
     core_xf    = BaseCore(config=config)
+    core_pg    = BaseCore(config=config)
 
     core.enable_logging(level=level, log_file=log_file_core)
     core_hq.enable_logging(level=level, log_file=log_file_core_hq)
@@ -196,6 +201,7 @@ def refresh_clients(enable_kill_switch: bool = False, debug_mode: bool = False, 
     core_bg.enable_logging(level=level, log_file=log_file_core_bg)
     core_pt.enable_logging(level=level, log_file=log_file_core_pt)
     core_xf.enable_logging(level=level, log_file=log_file_core_xf)
+    core_pg.enable_logging(level=level, log_file=log_file_core_pg)
 
 
     if enable_kill_switch:
@@ -211,6 +217,7 @@ def refresh_clients(enable_kill_switch: bool = False, debug_mode: bool = False, 
         core_bg.enable_kill_switch()
         core_pt.enable_kill_switch()
         core_xf.enable_kill_switch()
+        core_pg.enable_kill_switch()
         core.enable_kill_switch()
 
     # Instantiate clients with their site-specific cores
@@ -225,6 +232,7 @@ def refresh_clients(enable_kill_switch: bool = False, debug_mode: bool = False, 
     bg_client = bg_Client(core=core_bg)
     pt_client = pt_Client(core=core_pt)
     xf_client = xf_Client(core=core_xf)
+    pg_client = pg_Client(core=core_pg)
     ph_client = ph_Client(core=core_ph, use_webmaster_api=True)
     logger.debug("Applied new clients. Configurations should be overridden now e.g., if you have set a proxy.")
 
@@ -236,7 +244,7 @@ def check_video(url):
     """
 
     objects = [hq_Video, ep_Video, xn_Video, xv_Video, mv_Video, xh_Video, sp_Video, yp_Video, bg_Video, pt_Video,
-               xf_Video]
+               xf_Video, pg_Video]
 
     if isinstance(url, tuple(objects)):
         return url
@@ -280,6 +288,9 @@ def check_video(url):
 
         elif "xfreehd" in str(url):
             return xf_client.get_video(url)
+
+        elif "porngo" in str(url):
+            return pg_client.get_video(url)
 
         else:
             return False
@@ -535,6 +546,14 @@ def load_video_attributes(video, name_template: str, *, now: Optional[datetime] 
         tags = video.tags
         thumbnail = video.thumbnail
         publish_date = video.publish_date
+        video_id = video.title
+
+    elif isinstance(video, pg_Video):
+        author = video.author
+        length = "Not available"
+        tags = video.categories
+        thumbnail = video.thumbnail
+        publish_date = "Not available"
         video_id = video.title
 
     else:

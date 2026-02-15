@@ -62,6 +62,7 @@ dependencies = [
     "xnxx_api",
     "xvideos_api",
     "youporn_api",
+    "porngo_api",
 ]
 
 # Note: This dependency list includes ALL dependencies of this project, and the dependencies of the dependencies.

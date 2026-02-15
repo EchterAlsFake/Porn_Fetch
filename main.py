@@ -985,7 +985,15 @@ class DownloadThread(QRunnable):
 
         # We need to specify the sources, so that it knows which individual progressbar to use
         instances_legacy = [clients.hq_Video, clients.ep_Video, clients.pt_Video,
-                            clients.xf_Video]
+                            clients.xf_Video, clients.pg_Video]
+
+        if isinstance(self.video, clients.pg_Video):
+            # Fixing Quality
+            if self.quality <= 480 or self.quality <= "480p" or self.quality == "worst":
+                self.quality = "480p"
+
+            elif self.quality >= 720 or self.quality >= "720p" or self.quality == "half" or self.quality == "best":
+                self.quality = "720" # Improve this later
 
         try:
             do_not_skip = False
