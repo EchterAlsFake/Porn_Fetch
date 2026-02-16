@@ -1382,7 +1382,6 @@ QLineEdit:focus {
         # most of these are secondary or flat so they don’t compete visually
         for b in [
             self.ui.main_button_switch_supported_websites,
-            self.ui.main_button_tree_keyboard_shortcuts,
             self.ui.button_update_acknowledged,
         ]:
             mark(b, flat=True)
@@ -1399,6 +1398,7 @@ QLineEdit:focus {
             self.ui.tools_button_eporner_category_get_videos,
             self.ui.tools_button_hqporner_category_get_videos,
             self.ui.settings_button_system_install_pornfetch,
+            self.ui.main_button_tree_keyboard_shortcuts,
         ]:
             mark(b)  # no intent ⇒ secondary
 
