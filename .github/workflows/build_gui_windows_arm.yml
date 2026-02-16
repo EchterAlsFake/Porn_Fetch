@@ -89,6 +89,11 @@ jobs:
             throw "Build finished but output 'Porn Fetch.exe' was not found!"
           }
 
+      - name: Run application to check if it works
+        shell: pwsh
+        run: |
+          .\PornFetch_Windows_GUI_ARM64.exe --version
+
       - name: Generate SHA256 Checksum
         shell: pwsh
         run: |
