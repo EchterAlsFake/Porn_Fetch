@@ -87,7 +87,7 @@ from src.frontend.UI.theme import *
 from src.frontend.UI.ssl_warning import *
 from src.frontend.UI.license import License, Disclaimer
 from src.frontend.UI.thumbnail_viewer import ImageViewer
-from src.frontend.UI.ui_form_main_window import Ui_MainWindow
+from src.frontend.UI.ui_form_main_window import Ui_PornFetch_UI
 from src.frontend.UI.pornfetch_info_dialog import PornFetchInfoWidget
 from src.frontend.UI.custom_combo_box import ComboPopupFitter, make_quality_combobox
 
@@ -589,13 +589,16 @@ endlocal
 
 
 class AutoUpdatingThread(QRunnable):
-    def __init__(self, asset_path):
+    def __init__(self, assets):
         super(AutoUpdatingThread, self).__init__()
-        self.asset_path = asset_path
+        self.assets: dict = assets
         self.signals = Signals()
 
     def run(self):
-        ""
+        self.signals.start_undefined_range.emit()
+
+        if sys.platform == "win32":
+            asseet_path = self.assets.get("win64_gui")
 
 
 
@@ -1093,7 +1096,7 @@ class PornFetch(QMainWindow):
         global settings
         settings = make_settings(portable=True, portable_dir=os.getcwd())
 
-        self.ui = Ui_MainWindow()
+        self.ui = Ui_PornFetch_UI()
         self.ui.setupUi(self)
         self.logger = shared_functions.setup_logger(name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG)
 
@@ -1165,35 +1168,35 @@ class PornFetch(QMainWindow):
     """Stacked Widget Main:"""
 
     def switch_to_main(self):
-        self.ui.CentralStackedWidget.setCurrentIndex(0)
+        self.ui.main_CentralStackedWidget.setCurrentIndex(0)
 
     def switch_to_settings(self):
-        self.ui.CentralStackedWidget.setCurrentIndex(1)
+        self.ui.main_CentralStackedWidget.setCurrentIndex(1)
 
     def switch_to_credits(self):
         self.show_credits()
-        self.ui.CentralStackedWidget.setCurrentIndex(2)
+        self.ui.main_CentralStackedWidget.setCurrentIndex(2)
 
     def switch_to_license(self):
-        self.ui.CentralStackedWidget.setCurrentIndex(3)
+        self.ui.main_CentralStackedWidget.setCurrentIndex(3)
 
     def switch_to_keyboard_shortcuts(self):
-        self.ui.CentralStackedWidget.setCurrentIndex(4)
+        self.ui.main_CentralStackedWidget.setCurrentIndex(4)
 
     def switch_to_install_dialog(self):
-        self.ui.CentralStackedWidget.setCurrentIndex(5)
+        self.ui.main_CentralStackedWidget.setCurrentIndex(5)
 
     def switch_to_supported_sites(self):
-        self.ui.CentralStackedWidget.setCurrentIndex(6)
+        self.ui.main_CentralStackedWidget.setCurrentIndex(6)
 
     def switch_to_disclaimer(self):
-        self.ui.CentralStackedWidget.setCurrentIndex(7)
+        self.ui.main_CentralStackedWidget.setCurrentIndex(7)
 
     def switch_to_one_time_setup(self):
-        self.ui.CentralStackedWidget.setCurrentIndex(8)
+        self.ui.main_CentralStackedWidget.setCurrentIndex(8)
 
     def switch_to_update_available(self):
-        self.ui.CentralStackedWidget.setCurrentIndex(9)
+        self.ui.main_CentralStackedWidget.setCurrentIndex(9)
 
     """Stacked Widget Top:"""
 
@@ -1211,11 +1214,11 @@ class PornFetch(QMainWindow):
 
     # Stacked Widget Tree
     def switch_to_treewidget_downloads(self):
-        self.ui.stacked_widget_tree.setCurrentIndex(0)
+        self.ui.main_stacked_widget_tree.setCurrentIndex(0)
         self.switch_to_main()
 
     def switch_to_treewidget_advanced_configuration(self):
-        self.ui.stacked_widget_tree.setCurrentIndex(1)
+        self.ui.main_stacked_widget_tree.setCurrentIndex(1)
         self.switch_to_main()
 
     def load_style(self):
@@ -1252,8 +1255,8 @@ class PornFetch(QMainWindow):
         self.ui.main_button_switch_home.setChecked(True)
 
         tree_nav = [
-            self.ui.button_treewidget_downloads,
-            self.ui.button_treewidget_advanced_configuration,
+            self.ui.treewidget_button_downloads,
+            self.ui.treewidget_button_advanced_configuration,
         ]
 
         group_tree_nav = QButtonGroup(self)
@@ -1262,7 +1265,7 @@ class PornFetch(QMainWindow):
             b.setCheckable(True)
             group_tree_nav.addButton(b)
             mark(b, seg=True)
-        self.ui.button_treewidget_downloads.setChecked(True)
+        self.ui.treewidget_button_downloads.setChecked(True)
 
 
         settings_nav = [
@@ -1283,19 +1286,19 @@ class PornFetch(QMainWindow):
         mark(self.ui.download_button_download, intent="primary", size="lg")
         mark(self.ui.login_button_login, intent="primary")
         mark(self.ui.settings_button_apply, intent="primary", size="lg")
-        mark(self.ui.button_credits_send_feedback, intent="primary")
+        mark(self.ui.credits_button_send_feedback, intent="primary")
         mark(self.ui.settings_button_system_install_pornfetch, intent="success")
-        mark(self.ui.main_button_tree_stop, intent="danger")
-        mark(self.ui.button_treewidget_advanced_configuration, seg=True)
+        mark(self.ui.treewidget_button_stop, intent="danger")
+        mark(self.ui.treewidget_button_advanced_configuration, seg=True)
         mark(self.ui.settings_button_import_license)
         mark(self.ui.button_settings_clear_temp)
         mark(self.ui.settings_button_uninstall_porn_fetch, intent="danger")
         mark(self.ui.settings_button_reset, intent="danger")
         mark(self.ui.main_progressbar_total, role="total")
 
-        mark(self.ui.button_info_enable_all, intent="success")
-        mark(self.ui.button_info_disable_all, intent="danger")
-        mark(self.ui.button_info_enable_update, intent="primary")
+        mark(self.ui.one_time_setup_button_info_enable_all, intent="success")
+        mark(self.ui.one_time_setup_button_info_disable_all, intent="danger")
+        mark(self.ui.one_time_setup_button_info_enable_update, intent="primary")
 
         stylesheet_license_button = """
 QPushButton {
@@ -1377,12 +1380,12 @@ QLineEdit:focus {
 
         self.ui.settings_button_buy_license.setStyleSheet(stylesheet_license_button)
         self.ui.settings_button_import_license.setStyleSheet(stylesheet_import_license)
-        self.ui.advanced_lineedit_custom_title.setStyleSheet(stylesheet_lineedit_custom_title)
+        self.ui.tree_advanced_lineedit_custom_title.setStyleSheet(stylesheet_lineedit_custom_title)
 
         # most of these are secondary or flat so they don’t compete visually
         for b in [
             self.ui.main_button_switch_supported_websites,
-            self.ui.button_update_acknowledged,
+            self.ui.update_available_button_acknowledged,
         ]:
             mark(b, flat=True)
 
@@ -1390,7 +1393,7 @@ QLineEdit:focus {
         for b in [
             self.ui.download_button_playlist_get_videos,
             self.ui.download_button_model,
-            self.ui.button_search,
+            self.ui.download_button_search,
             self.ui.tools_button_get_random_videos,
             self.ui.tools_button_get_brazzers_videos,
             self.ui.tools_button_list_categories,
@@ -1398,7 +1401,7 @@ QLineEdit:focus {
             self.ui.tools_button_eporner_category_get_videos,
             self.ui.tools_button_hqporner_category_get_videos,
             self.ui.settings_button_system_install_pornfetch,
-            self.ui.main_button_tree_keyboard_shortcuts,
+            self.ui.tree_advanced_button_keyboard_shortcuts,
         ]:
             mark(b)  # no intent ⇒ secondary
 
@@ -1410,36 +1413,36 @@ QLineEdit:focus {
 
         # --- tree header sizing / behavior ---
 
-        self.ui.treeWidget.setColumnCount(7)
-        self.ui.treeWidget.setHeaderLabels([
+        self.ui.main_tree_widget.setColumnCount(7)
+        self.ui.main_tree_widget.setHeaderLabels([
             "Download", "Title", "Author", "Length", "Quality", "Stop", "Progress"
         ])
-        self.ui.treeWidget.setRootIsDecorated(False)  # looks more like a table
-        self.ui.treeWidget.setAlternatingRowColors(True)
-        self.ui.treeWidget.setSelectionBehavior(self.ui.treeWidget.SelectionBehavior.SelectRows)
+        self.ui.main_tree_widget.setRootIsDecorated(False)  # looks more like a table
+        self.ui.main_tree_widget.setAlternatingRowColors(True)
+        self.ui.main_tree_widget.setSelectionBehavior(self.ui.main_tree_widget.SelectionBehavior.SelectRows)
 
         # Make it look reasonable
-        self.ui.treeWidget.setColumnWidth(self.COL_DOWNLOAD, 110)
-        self.ui.treeWidget.setColumnWidth(self.COL_TITLE, 120)
-        self.ui.treeWidget.setColumnWidth(self.COL_AUTHOR, 180)
-        self.ui.treeWidget.setColumnWidth(self.COL_LENGTH, 120)
-        self.ui.treeWidget.setColumnWidth(self.COL_QUALITY, 120)
-        self.ui.treeWidget.setColumnWidth(self.COL_PROGRESS, 220)
-        self.ui.treeWidget.header().setSectionResizeMode(self.COL_DOWNLOAD, QHeaderView.ResizeMode.ResizeToContents)
-        self.ui.treeWidget.header().setSectionResizeMode(self.COL_QUALITY, QHeaderView.ResizeMode.ResizeToContents)
-        self.ui.treeWidget.header().setSectionResizeMode(self.COL_STOP, QHeaderView.ResizeMode.ResizeToContents)
-        self.ui.treeWidget.header().setSectionResizeMode(self.COL_LENGTH, QHeaderView.ResizeMode.ResizeToContents)
+        self.ui.main_tree_widget.setColumnWidth(self.COL_DOWNLOAD, 110)
+        self.ui.main_tree_widget.setColumnWidth(self.COL_TITLE, 120)
+        self.ui.main_tree_widget.setColumnWidth(self.COL_AUTHOR, 180)
+        self.ui.main_tree_widget.setColumnWidth(self.COL_LENGTH, 120)
+        self.ui.main_tree_widget.setColumnWidth(self.COL_QUALITY, 120)
+        self.ui.main_tree_widget.setColumnWidth(self.COL_PROGRESS, 220)
+        self.ui.main_tree_widget.header().setSectionResizeMode(self.COL_DOWNLOAD, QHeaderView.ResizeMode.ResizeToContents)
+        self.ui.main_tree_widget.header().setSectionResizeMode(self.COL_QUALITY, QHeaderView.ResizeMode.ResizeToContents)
+        self.ui.main_tree_widget.header().setSectionResizeMode(self.COL_STOP, QHeaderView.ResizeMode.ResizeToContents)
+        self.ui.main_tree_widget.header().setSectionResizeMode(self.COL_LENGTH, QHeaderView.ResizeMode.ResizeToContents)
 
         # Let the title take the free space
-        self.ui.treeWidget.header().setSectionResizeMode(self.COL_TITLE, QHeaderView.ResizeMode.Stretch)
+        self.ui.main_tree_widget.header().setSectionResizeMode(self.COL_TITLE, QHeaderView.ResizeMode.Stretch)
 
         # Progress is last: let it stretch too (it will consume remaining space)
-        self.ui.treeWidget.header().setStretchLastSection(True)
+        self.ui.main_tree_widget.header().setStretchLastSection(True)
 
         # --- misc you already had ---
-        self.ui.treeWidget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
+        self.ui.main_tree_widget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
         self.setWindowTitle(f"Porn Fetch v{__version__} Copyright (C) Johannes Habel 2023-2026")
-        self.ui.treeWidget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
+        self.ui.main_tree_widget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
         self.ui.settings_stacked_widget_main.setCurrentIndex(0)
 
         install_focus_outline(self)
@@ -1468,10 +1471,10 @@ QLineEdit:focus {
         self.ui.settings_button_system_install_pornfetch.setText("Install Program")
         self.ui.tools_label_get_top_porn.setText("Get 'Top' videos")
         self.ui.tools_button_get_brazzers_videos.setText("Get BRZ videos")
-        self.ui.main_textbrowser_supported_websites.setText(
+        self.ui.supported_sites_textbrowser.setText(
             "Running in anonymous mode, please deactivate to display...")
-        self.ui.groupbox_tools_hqporner.setTitle("HQ")
-        self.ui.groupbox_tools_eporner.setTitle("EP")
+        self.ui.tools_groupbox_hqporner.setTitle("HQ")
+        self.ui.tools_groupbox_eporner.setTitle("EP")
         self.ui.download_lineedit_playlist_url.setPlaceholderText("Enter playlist URL")
         self.ui.settings_button_reset.setText("Reset PF")
         self.ui.settings_button_uninstall_porn_fetch.setText("Uninstall PF")
@@ -1512,9 +1515,9 @@ QLineEdit:focus {
         self.ui.settings_button_uninstall_porn_fetch.clicked.connect(self.uninstall_porn_fetch)
 
         # Info Dialog
-        self.ui.button_info_enable_all.clicked.connect(self.info_dialog_enable_all)
-        self.ui.button_info_disable_all.clicked.connect(self.info_dialog_disable_all)
-        self.ui.button_info_enable_update.clicked.connect(self.info_dialog_enable_update)
+        self.ui.one_time_setup_button_info_enable_all.clicked.connect(self.info_dialog_enable_all)
+        self.ui.one_time_setup_button_info_disable_all.clicked.connect(self.info_dialog_disable_all)
+        self.ui.one_time_setup_button_info_enable_update.clicked.connect(self.info_dialog_enable_update)
 
         self.ui.settings_button_apply.clicked.connect(self.save_user_settings)
         self.ui.settings_button_reset.clicked.connect(reset_pornfetch)
@@ -1530,7 +1533,7 @@ QLineEdit:focus {
         self.ui.login_button_get_recommended_videos.clicked.connect(self.get_recommended_videos)
 
         # Search
-        self.ui.button_search.clicked.connect(self.search)
+        self.ui.download_button_search.clicked.connect(self.search)
 
         # HQPorner
         self.ui.main_button_switch_tools.clicked.connect(self.switch_to_tools)
@@ -1548,17 +1551,17 @@ QLineEdit:focus {
         self.ui.settings_button_videos_open_output_path.clicked.connect(self.open_output_path_dialog)
 
         # Other stuff IDK
-        self.ui.main_button_tree_stop.clicked.connect(switch_stop_state)
-        self.ui.main_button_tree_keyboard_shortcuts.clicked.connect(self.switch_to_keyboard_shortcuts)
+        self.ui.treewidget_button_stop.clicked.connect(switch_stop_state)
+        self.ui.tree_advanced_button_keyboard_shortcuts.clicked.connect(self.switch_to_keyboard_shortcuts)
         self.ui.settings_checkbox_system_proxy_kill_switch.toggled.connect(self.toggle_killswitch)
         self.ui.settings_checkbox_system_enable_debug_mode.clicked.connect(on_checkbox_clicked)
         self.ui.button_settings_clear_temp.clicked.connect(self.clean_temporary_files)
-        self.ui.advanced_button_custom_title_options.clicked.connect(available_title_formatting_options)
-        self.ui.treeWidget.itemDoubleClicked.connect(self.show_thumbnail)
+        self.ui.tree_advanced_button_custom_title_options.clicked.connect(available_title_formatting_options)
+        self.ui.main_tree_widget.itemDoubleClicked.connect(self.show_thumbnail)
 
         # Stacked Tree Widget
-        self.ui.button_treewidget_downloads.clicked.connect(self.switch_to_treewidget_downloads)
-        self.ui.button_treewidget_advanced_configuration.clicked.connect(self.switch_to_treewidget_advanced_configuration)
+        self.ui.treewidget_button_downloads.clicked.connect(self.switch_to_treewidget_downloads)
+        self.ui.treewidget_button_advanced_configuration.clicked.connect(self.switch_to_treewidget_advanced_configuration)
 
     def initialize_pornfetch(self):
         """
@@ -1602,7 +1605,7 @@ You have all paid features unlocked :)
         self.ui.main_progressbar_total.setValue(3)
         if not FORCE_PORTABLE_RUN:
             if sys.platform == "darwin":
-                self.ui.CentralStackedWidget.setCurrentIndex(0)
+                self.ui.main_CentralStackedWidget.setCurrentIndex(0)
                 return
 
             if settings.value("Misc/install_type") == "unknown":
@@ -1615,7 +1618,7 @@ You have all paid features unlocked :)
         if first:
             self.save_user_settings()
 
-        self.ui.CentralStackedWidget.setCurrentIndex(0)
+        self.ui.main_CentralStackedWidget.setCurrentIndex(0)
 
     def info_dialog_enable_update(self):
         self.ui.settings_checkbox_system_enable_network_logging.setChecked(False)
@@ -2154,9 +2157,9 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         title, author, duration, etc. to it, so that it can be processed and used later.
         This makes it possible to only use one network request and use the videos across entire Porn Fetch
         """
-        is_checked = self.ui.main_checkbox_tree_do_not_clear_videos.isChecked()
+        is_checked = self.ui.tree_advanced_checkbox_do_not_clear_videos.isChecked()
 
-        options = self.ui.advanced_lineedit_custom_title.text()
+        options = self.ui.tree_advanced_lineedit_custom_title.text()
         if not options:
             options = "$title" # Default, otherwise only .mp4 will be the output lol
 
@@ -2203,7 +2206,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         parsed_length = clients.parse_length(raw_length, video) # This unifies the length format
         # because every site uses a different length format
 
-        item = QTreeWidgetItem(self.ui.treeWidget) # Creates a tree widget item where we can store stuff
+        item = QTreeWidgetItem(self.ui.main_tree_widget) # Creates a tree widget item where we can store stuff
 
         if self._anonymous_mode: # Redacts sensitive information
             item.setToolTip(self.COL_TITLE, title)
@@ -2277,10 +2280,10 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         # Simple progressbar :)
 
         # Put widgets into cells
-        self.ui.treeWidget.setItemWidget(item, self.COL_DOWNLOAD, self._cell_widget(download_btn, margins=(1, 1, 1, 1)))
-        self.ui.treeWidget.setItemWidget(item, self.COL_QUALITY, self._cell_widget(quality_box, margins=(1, 1, 1, 1)))
-        self.ui.treeWidget.setItemWidget(item, self.COL_STOP, self._cell_widget(stop_btn, margins=(1, 1, 1, 1)))
-        self.ui.treeWidget.setItemWidget(item, self.COL_PROGRESS, progress)
+        self.ui.main_tree_widget.setItemWidget(item, self.COL_DOWNLOAD, self._cell_widget(download_btn, margins=(1, 1, 1, 1)))
+        self.ui.main_tree_widget.setItemWidget(item, self.COL_QUALITY, self._cell_widget(quality_box, margins=(1, 1, 1, 1)))
+        self.ui.main_tree_widget.setItemWidget(item, self.COL_STOP, self._cell_widget(stop_btn, margins=(1, 1, 1, 1)))
+        self.ui.main_tree_widget.setItemWidget(item, self.COL_PROGRESS, progress)
         # This creates the final widget and so on
 
         self._row[identifier] = {
@@ -2457,8 +2460,8 @@ Segment State Path: {report["segment_state_path"]}
         This (like the name says) clears the tree widget.
         """
         self.logger.debug("Cleared the tree widget")
-        if not self.ui.main_checkbox_tree_do_not_clear_videos.isChecked():
-            self.ui.treeWidget.clear()
+        if not self.ui.tree_advanced_checkbox_do_not_clear_videos.isChecked():
+            self.ui.main_tree_widget.clear()
 
 
     """
@@ -2647,14 +2650,14 @@ Segment State Path: {report["segment_state_path"]}
     def show_credits(self):
         """Loads the credits from the CREDITS.md.  Credits need to be recompiled in the resource file every time"""
         if self.ui.settings_checkbox_system_enable_anonymous_mode.isChecked() or self._anonymous_mode:
-            self.ui.main_textbrowser_credits.setText("Running in anonymous mode...")
+            self.ui.credits_textbrowser.setText("Running in anonymous mode...")
 
         else:
-            self.ui.main_textbrowser_credits.setOpenExternalLinks(True)
+            self.ui.credits_textbrowser.setOpenExternalLinks(True)
             file = QFile(":/credits/README/CREDITS.md")
             file.open(QFile.OpenModeFlag.ReadOnly)
             stream = QTextStream(file)
-            self.ui.main_textbrowser_credits.setHtml(markdown.markdown(stream.readAll()))
+            self.ui.credits_textbrowser.setHtml(markdown.markdown(stream.readAll()))
 
     def check_for_updates(self):
         """Checks for updates in a thread, so that the main UI isn't blocked, until update checks are done"""
@@ -2743,7 +2746,7 @@ Thank you for using Porn Fetch ^^
         self.threadpool.start(self.uninstall_thread)
 
     def install_pornfetch(self):
-        app_name = self.ui.lineedit_custom_app_name.text() or self.ui.settings_lineedit_system_custom_app_name.text()
+        app_name = self.ui.install_dialog_lineedit_custom_app_name.text()
         if app_name == "" or app_name is None:
             self.logger.info("You did not provide a custom App name. Using 'Porn Fetch' for the installation.")
             app_name = "Porn Fetch"
@@ -2855,8 +2858,8 @@ Thank you for using Porn Fetch ^^
             """
 
             self.ui.text_browser_update_available.setHtml(html)
-            self.ui.CentralStackedWidget.setCurrentIndex(6)
-            self.ui.button_update_acknowledged.clicked.connect(self.switch_to_download)
+            self.ui.main_CentralStackedWidget.setCurrentIndex(6)
+            self.ui.update_available_button_acknowledged.clicked.connect(self.switch_to_download)
 
     @staticmethod
     def buy_license():

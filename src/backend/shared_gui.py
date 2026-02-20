@@ -138,7 +138,7 @@ def mark_help_buttons(ui: QMainWindow, pixmap: QPixmap):
               "label_tooltip_network_delay", "label_tooltip_maximum_retries", "label_tooltip_processing_delay",
               "label_tooltip_videos_concurrency", "label_tooltip_download_workers", "label_tooltip_update_checks",
               "label_tooltip_anonymous_mode", "label_tooltip_supress_errors", "label_tooltip_network_logging",
-              "label_tooltip_index_videos", "label_tooltip_ssl_context"
+              "tree_advanced_label_tooltip_index_videos", "label_tooltip_ssl_context"
 
     ]
 
