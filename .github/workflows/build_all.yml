@@ -270,7 +270,7 @@ jobs:
           name: CLI_linux_${{ matrix.arch }}
           path: PornFetch_Linux_CLI_${{ matrix.arch }}
 
-build-android:
+  build-android:
     name: Android (APK)
     runs-on: ubuntu-latest
     steps:
