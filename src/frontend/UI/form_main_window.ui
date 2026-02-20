@@ -410,7 +410,7 @@
              <number>1</number>
             </property>
             <property name="currentIndex">
-             <number>2</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="page_download">
              <property name="sizePolicy">
@@ -1185,7 +1185,7 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>1102</width>
+                   <width>466</width>
                    <height>182</height>
                   </rect>
                  </property>
@@ -1618,196 +1618,6 @@
               </property>
              </layout>
             </widget>
-            <widget class="QWidget" name="page_range">
-             <layout class="QGridLayout" name="gridLayout_10">
-              <property name="leftMargin">
-               <number>0</number>
-              </property>
-              <property name="topMargin">
-               <number>0</number>
-              </property>
-              <property name="rightMargin">
-               <number>0</number>
-              </property>
-              <property name="bottomMargin">
-               <number>0</number>
-              </property>
-              <property name="spacing">
-               <number>0</number>
-              </property>
-              <item row="0" column="0">
-               <layout class="QGridLayout" name="automated_selection_gridlayout">
-                <property name="spacing">
-                 <number>0</number>
-                </property>
-                <item row="8" column="4">
-                 <widget class="QPushButton" name="automated_selection_button_index">
-                  <property name="accessibleName">
-                   <string>button apply automated selection by index</string>
-                  </property>
-                  <property name="text">
-                   <string>Apply</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="1">
-                 <widget class="QLineEdit" name="automated_selection_lineedit_start">
-                  <property name="accessibleName">
-                   <string>spinbox apply by time range start</string>
-                  </property>
-                  <property name="text">
-                   <string>0</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2" colspan="3">
-                 <widget class="QPushButton" name="automated_selection_button_author">
-                  <property name="accessibleName">
-                   <string>button apply automated video selection by author</string>
-                  </property>
-                  <property name="text">
-                   <string>Apply</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="8" column="1">
-                 <widget class="QSpinBox" name="automated_selection_spinbox_start">
-                  <property name="accessibleName">
-                   <string>spinbox apply by index start</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QLineEdit" name="automated_selection_lineedit_author">
-                  <property name="accessibleName">
-                   <string>lineedit author name </string>
-                  </property>
-                  <property name="placeholderText">
-                   <string>Enter the author's name</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="8" column="3">
-                 <widget class="QSpinBox" name="automated_selection_spinbox_end">
-                  <property name="accessibleName">
-                   <string>spinbox apply by index end</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="8" column="0">
-                 <widget class="QLabel" name="automated_selection_label_start">
-                  <property name="accessibleName">
-                   <string>label index range start</string>
-                  </property>
-                  <property name="text">
-                   <string>Start:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="4">
-                 <widget class="QPushButton" name="automated_selection_button_time">
-                  <property name="accessibleName">
-                   <string>button apply automated selection by time</string>
-                  </property>
-                  <property name="text">
-                   <string>Apply</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="3">
-                 <widget class="QLineEdit" name="automated_selection_lineedit_end">
-                  <property name="accessibleName">
-                   <string>spinbox apply by time range end</string>
-                  </property>
-                  <property name="text">
-                   <string>0</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="automated_selection_label_by_author">
-                  <property name="accessibleName">
-                   <string>label apply by author</string>
-                  </property>
-                  <property name="text">
-                   <string>Apply by author:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="8" column="2">
-                 <widget class="QLabel" name="automated_selection_label_end">
-                  <property name="accessibleName">
-                   <string>label index range end</string>
-                  </property>
-                  <property name="text">
-                   <string>End:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0" colspan="4">
-                 <widget class="QLabel" name="automated_selection_label_apply_by_time">
-                  <property name="accessibleName">
-                   <string>label apply by time</string>
-                  </property>
-                  <property name="text">
-                   <string>Apply by time:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="0">
-                 <widget class="QLabel" name="automated_selection_label_time_start">
-                  <property name="accessibleName">
-                   <string>label apply by time start</string>
-                  </property>
-                  <property name="text">
-                   <string>Start:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="2">
-                 <widget class="QLabel" name="automated_selection_label_time_end">
-                  <property name="accessibleName">
-                   <string>label apply by time end</string>
-                  </property>
-                  <property name="text">
-                   <string>End:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="9" column="0" colspan="2">
-                 <widget class="QPushButton" name="automated_selection_button_select_all">
-                  <property name="accessibleName">
-                   <string>button automated selection select all videos</string>
-                  </property>
-                  <property name="text">
-                   <string>Select all videos</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="9" column="3" colspan="2">
-                 <widget class="QPushButton" name="automated_selection_button_unselect_all">
-                  <property name="accessibleName">
-                   <string>button automated selection unselect all videos</string>
-                  </property>
-                  <property name="text">
-                   <string>Unselect all videos</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="0" colspan="4">
-                 <widget class="QLabel" name="automated_selection_label_apply_by_index">
-                  <property name="accessibleName">
-                   <string>label apply by index</string>
-                  </property>
-                  <property name="text">
-                   <string>Apply by Index:</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </widget>
            </widget>
           </item>
           <item>
@@ -1893,8 +1703,8 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>1116</width>
-                   <height>347</height>
+                   <width>300</width>
+                   <height>16</height>
                   </rect>
                  </property>
                  <property name="sizePolicy">
@@ -1955,8 +1765,95 @@
             </widget>
             <widget class="QWidget" name="page_advanced_configuration">
              <layout class="QGridLayout" name="gridLayout_12">
+              <item row="3" column="0">
+               <spacer name="tree_advanced_vertical_spacer">
+                <property name="orientation">
+                 <enum>Qt::Orientation::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
               <item row="0" column="0">
                <layout class="QGridLayout" name="tree_avanced_gridlayout">
+                <item row="4" column="1">
+                 <layout class="QHBoxLayout" name="tree_advanced_hlayout_2">
+                  <item>
+                   <widget class="QLabel" name="tree_advanced_label_index_end">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>End:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QSpinBox" name="tree_advanced_spinbox_index_fetching_end"/>
+                  </item>
+                 </layout>
+                </item>
+                <item row="5" column="0" colspan="2">
+                 <layout class="QHBoxLayout" name="tree_advanced_hlayout_3">
+                  <item>
+                   <widget class="QLabel" name="tree_advanced_label_custom_title">
+                    <property name="text">
+                     <string>Custom Title formatting:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="tree_advanced_lineedit_custom_title">
+                    <property name="placeholderText">
+                     <string>$title</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="tree_advanced_button_custom_title_options">
+                    <property name="text">
+                     <string>Options</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QCheckBox" name="tree_advanced_checkbox_cleanup_on_stop">
+                  <property name="text">
+                   <string>Cleanup on stop (disables resume feature for HLS) </string>
+                  </property>
+                  <property name="checked">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCheckBox" name="tree_advanced_checkbox_do_not_clear_videos">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="accessibleName">
+                   <string>checkbox do not clear videos</string>
+                  </property>
+                  <property name="text">
+                   <string>Do not clear videos</string>
+                  </property>
+                 </widget>
+                </item>
                 <item row="4" column="0">
                  <layout class="QHBoxLayout" name="tree_advanced_hlayout_1">
                   <item>
@@ -1999,72 +1896,7 @@ This can save a lot of time in certain scenarios.
                   </item>
                  </layout>
                 </item>
-                <item row="1" column="0">
-                 <widget class="QCheckBox" name="tree_advanced_checkbox_do_not_clear_videos">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="accessibleName">
-                   <string>checkbox do not clear videos</string>
-                  </property>
-                  <property name="text">
-                   <string>Do not clear videos</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0">
-                 <widget class="QPushButton" name="tree_advanced_button_automated_selection">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="accessibleName">
-                   <string>button automated selection tool</string>
-                  </property>
-                  <property name="text">
-                   <string>Automated selection tool</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="1">
-                 <layout class="QHBoxLayout" name="tree_advanced_hlayout_2">
-                  <item>
-                   <widget class="QLabel" name="tree_advanced_label_index_end">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="text">
-                     <string>End:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QSpinBox" name="tree_advanced_spinbox_index_fetching_end"/>
-                  </item>
-                 </layout>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QCheckBox" name="tree_advanced_checkbox_cleanup_on_stop">
-                  <property name="text">
-                   <string>Cleanup on stop (disables resume feature for HLS) </string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1">
+                <item row="6" column="0" colspan="2">
                  <widget class="QPushButton" name="tree_advanced_button_keyboard_shortcuts">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -2083,45 +1915,7 @@ This can save a lot of time in certain scenarios.
                   </property>
                  </widget>
                 </item>
-                <item row="5" column="0" colspan="2">
-                 <layout class="QHBoxLayout" name="tree_advanced_hlayout_3">
-                  <item>
-                   <widget class="QLabel" name="tree_advanced_label_custom_title">
-                    <property name="text">
-                     <string>Custom Title formatting:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="tree_advanced_lineedit_custom_title">
-                    <property name="placeholderText">
-                     <string>$title</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="tree_advanced_button_custom_title_options">
-                    <property name="text">
-                     <string>Options</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
                </layout>
-              </item>
-              <item row="1" column="0">
-               <spacer name="tree_advanced_vertical_spacer">
-                <property name="orientation">
-                 <enum>Qt::Orientation::Vertical</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>20</width>
-                  <height>40</height>
-                 </size>
-                </property>
-               </spacer>
               </item>
              </layout>
             </widget>
@@ -4139,7 +3933,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
+             <width>84</width>
              <height>70</height>
             </rect>
            </property>
@@ -4448,14 +4242,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
   <tabstop>license_button_accept</tabstop>
   <tabstop>license_button_deny</tabstop>
   <tabstop>scrollarea_license_page</tabstop>
-  <tabstop>automated_selection_lineedit_author</tabstop>
-  <tabstop>automated_selection_button_author</tabstop>
-  <tabstop>automated_selection_lineedit_start</tabstop>
-  <tabstop>automated_selection_lineedit_end</tabstop>
-  <tabstop>automated_selection_button_time</tabstop>
-  <tabstop>automated_selection_spinbox_start</tabstop>
-  <tabstop>automated_selection_spinbox_end</tabstop>
-  <tabstop>automated_selection_button_index</tabstop>
   <tabstop>scrollarea_supported_websites</tabstop>
   <tabstop>license_textbrowser</tabstop>
   <tabstop>keyboard_shortcuts_text_browser</tabstop>

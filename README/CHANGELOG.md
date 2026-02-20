@@ -616,7 +616,8 @@ to be refactored.
 - You can now actually stop downloads lol
 - You can now choose quality for each download separately
 - You can now choose between system's CA for SSL or Certifi's CA 
-- Added a splashscreen 
+- Added a splashscreen for Windows devices
+- Added loading screen
 
 ### Bug Fixes
 - Fixed 403 missav error
@@ -646,10 +647,12 @@ to be refactored.
 - You can now select which tag / commit to build
 - Unified macOS / Linux build into one file
 - Updated build to Python 3.13.11 (All systems)
-- Updated Qt to 6.10.1
+- Updated Qt to 6.10.2
 - Updated Nuitka to 2.8.9
 - Removed Internet checks entirely
 
+### Deprecations
+- Removed automated selection of videos
 
 
 

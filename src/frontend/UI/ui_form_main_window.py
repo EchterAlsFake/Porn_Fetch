@@ -488,7 +488,7 @@ class Ui_PornFetch_UI(object):
         self.scrollarea_tools.setWidgetResizable(True)
         self.scrollarea_tools_widget_contents = QWidget()
         self.scrollarea_tools_widget_contents.setObjectName(u"scrollarea_tools_widget_contents")
-        self.scrollarea_tools_widget_contents.setGeometry(QRect(0, 0, 1102, 182))
+        self.scrollarea_tools_widget_contents.setGeometry(QRect(0, 0, 466, 182))
         self.gridLayout_8 = QGridLayout(self.scrollarea_tools_widget_contents)
         self.gridLayout_8.setSpacing(0)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
@@ -669,104 +669,6 @@ class Ui_PornFetch_UI(object):
         self.gridLayout_6.setObjectName(u"gridLayout_6")
         self.gridLayout_6.setContentsMargins(0, 0, 0, 0)
         self.main_stacked_widget_top.addWidget(self.page_progressbars)
-        self.page_range = QWidget()
-        self.page_range.setObjectName(u"page_range")
-        self.gridLayout_10 = QGridLayout(self.page_range)
-        self.gridLayout_10.setSpacing(0)
-        self.gridLayout_10.setObjectName(u"gridLayout_10")
-        self.gridLayout_10.setContentsMargins(0, 0, 0, 0)
-        self.automated_selection_gridlayout = QGridLayout()
-        self.automated_selection_gridlayout.setSpacing(0)
-        self.automated_selection_gridlayout.setObjectName(u"automated_selection_gridlayout")
-        self.automated_selection_button_index = QPushButton(self.page_range)
-        self.automated_selection_button_index.setObjectName(u"automated_selection_button_index")
-
-        self.automated_selection_gridlayout.addWidget(self.automated_selection_button_index, 8, 4, 1, 1)
-
-        self.automated_selection_lineedit_start = QLineEdit(self.page_range)
-        self.automated_selection_lineedit_start.setObjectName(u"automated_selection_lineedit_start")
-
-        self.automated_selection_gridlayout.addWidget(self.automated_selection_lineedit_start, 4, 1, 1, 1)
-
-        self.automated_selection_button_author = QPushButton(self.page_range)
-        self.automated_selection_button_author.setObjectName(u"automated_selection_button_author")
-
-        self.automated_selection_gridlayout.addWidget(self.automated_selection_button_author, 0, 2, 1, 3)
-
-        self.automated_selection_spinbox_start = QSpinBox(self.page_range)
-        self.automated_selection_spinbox_start.setObjectName(u"automated_selection_spinbox_start")
-
-        self.automated_selection_gridlayout.addWidget(self.automated_selection_spinbox_start, 8, 1, 1, 1)
-
-        self.automated_selection_lineedit_author = QLineEdit(self.page_range)
-        self.automated_selection_lineedit_author.setObjectName(u"automated_selection_lineedit_author")
-
-        self.automated_selection_gridlayout.addWidget(self.automated_selection_lineedit_author, 0, 1, 1, 1)
-
-        self.automated_selection_spinbox_end = QSpinBox(self.page_range)
-        self.automated_selection_spinbox_end.setObjectName(u"automated_selection_spinbox_end")
-
-        self.automated_selection_gridlayout.addWidget(self.automated_selection_spinbox_end, 8, 3, 1, 1)
-
-        self.automated_selection_label_start = QLabel(self.page_range)
-        self.automated_selection_label_start.setObjectName(u"automated_selection_label_start")
-
-        self.automated_selection_gridlayout.addWidget(self.automated_selection_label_start, 8, 0, 1, 1)
-
-        self.automated_selection_button_time = QPushButton(self.page_range)
-        self.automated_selection_button_time.setObjectName(u"automated_selection_button_time")
-
-        self.automated_selection_gridlayout.addWidget(self.automated_selection_button_time, 4, 4, 1, 1)
-
-        self.automated_selection_lineedit_end = QLineEdit(self.page_range)
-        self.automated_selection_lineedit_end.setObjectName(u"automated_selection_lineedit_end")
-
-        self.automated_selection_gridlayout.addWidget(self.automated_selection_lineedit_end, 4, 3, 1, 1)
-
-        self.automated_selection_label_by_author = QLabel(self.page_range)
-        self.automated_selection_label_by_author.setObjectName(u"automated_selection_label_by_author")
-
-        self.automated_selection_gridlayout.addWidget(self.automated_selection_label_by_author, 0, 0, 1, 1)
-
-        self.automated_selection_label_end = QLabel(self.page_range)
-        self.automated_selection_label_end.setObjectName(u"automated_selection_label_end")
-
-        self.automated_selection_gridlayout.addWidget(self.automated_selection_label_end, 8, 2, 1, 1)
-
-        self.automated_selection_label_apply_by_time = QLabel(self.page_range)
-        self.automated_selection_label_apply_by_time.setObjectName(u"automated_selection_label_apply_by_time")
-
-        self.automated_selection_gridlayout.addWidget(self.automated_selection_label_apply_by_time, 3, 0, 1, 4)
-
-        self.automated_selection_label_time_start = QLabel(self.page_range)
-        self.automated_selection_label_time_start.setObjectName(u"automated_selection_label_time_start")
-
-        self.automated_selection_gridlayout.addWidget(self.automated_selection_label_time_start, 4, 0, 1, 1)
-
-        self.automated_selection_label_time_end = QLabel(self.page_range)
-        self.automated_selection_label_time_end.setObjectName(u"automated_selection_label_time_end")
-
-        self.automated_selection_gridlayout.addWidget(self.automated_selection_label_time_end, 4, 2, 1, 1)
-
-        self.automated_selection_button_select_all = QPushButton(self.page_range)
-        self.automated_selection_button_select_all.setObjectName(u"automated_selection_button_select_all")
-
-        self.automated_selection_gridlayout.addWidget(self.automated_selection_button_select_all, 9, 0, 1, 2)
-
-        self.automated_selection_button_unselect_all = QPushButton(self.page_range)
-        self.automated_selection_button_unselect_all.setObjectName(u"automated_selection_button_unselect_all")
-
-        self.automated_selection_gridlayout.addWidget(self.automated_selection_button_unselect_all, 9, 3, 1, 2)
-
-        self.automated_selection_label_apply_by_index = QLabel(self.page_range)
-        self.automated_selection_label_apply_by_index.setObjectName(u"automated_selection_label_apply_by_index")
-
-        self.automated_selection_gridlayout.addWidget(self.automated_selection_label_apply_by_index, 5, 0, 1, 4)
-
-
-        self.gridLayout_10.addLayout(self.automated_selection_gridlayout, 0, 0, 1, 1)
-
-        self.main_stacked_widget_top.addWidget(self.page_range)
 
         self.main_verticallayout.addWidget(self.main_stacked_widget_top)
 
@@ -808,7 +710,7 @@ class Ui_PornFetch_UI(object):
         self.main_scrollarea_treewidget.setWidgetResizable(True)
         self.main_scrollarea_treewidget_content = QWidget()
         self.main_scrollarea_treewidget_content.setObjectName(u"main_scrollarea_treewidget_content")
-        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 1116, 347))
+        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 300, 16))
         sizePolicy16 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
         sizePolicy16.setHorizontalStretch(0)
         sizePolicy16.setVerticalStretch(0)
@@ -840,55 +742,19 @@ class Ui_PornFetch_UI(object):
         self.page_advanced_configuration.setObjectName(u"page_advanced_configuration")
         self.gridLayout_12 = QGridLayout(self.page_advanced_configuration)
         self.gridLayout_12.setObjectName(u"gridLayout_12")
+        self.tree_advanced_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.gridLayout_12.addItem(self.tree_advanced_vertical_spacer, 3, 0, 1, 1)
+
         self.tree_avanced_gridlayout = QGridLayout()
         self.tree_avanced_gridlayout.setObjectName(u"tree_avanced_gridlayout")
-        self.tree_advanced_hlayout_1 = QHBoxLayout()
-        self.tree_advanced_hlayout_1.setObjectName(u"tree_advanced_hlayout_1")
-        self.tree_advanced_label_tooltip_index_videos = QLabel(self.page_advanced_configuration)
-        self.tree_advanced_label_tooltip_index_videos.setObjectName(u"tree_advanced_label_tooltip_index_videos")
-        sizePolicy18 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Preferred)
-        sizePolicy18.setHorizontalStretch(0)
-        sizePolicy18.setVerticalStretch(0)
-        sizePolicy18.setHeightForWidth(self.tree_advanced_label_tooltip_index_videos.sizePolicy().hasHeightForWidth())
-        self.tree_advanced_label_tooltip_index_videos.setSizePolicy(sizePolicy18)
-
-        self.tree_advanced_hlayout_1.addWidget(self.tree_advanced_label_tooltip_index_videos)
-
-        self.tree_advanced_label_index_start = QLabel(self.page_advanced_configuration)
-        self.tree_advanced_label_index_start.setObjectName(u"tree_advanced_label_index_start")
-        sizePolicy18.setHeightForWidth(self.tree_advanced_label_index_start.sizePolicy().hasHeightForWidth())
-        self.tree_advanced_label_index_start.setSizePolicy(sizePolicy18)
-
-        self.tree_advanced_hlayout_1.addWidget(self.tree_advanced_label_index_start)
-
-        self.tree_advanced_spinbox_index_fetching_start = QSpinBox(self.page_advanced_configuration)
-        self.tree_advanced_spinbox_index_fetching_start.setObjectName(u"tree_advanced_spinbox_index_fetching_start")
-
-        self.tree_advanced_hlayout_1.addWidget(self.tree_advanced_spinbox_index_fetching_start)
-
-
-        self.tree_avanced_gridlayout.addLayout(self.tree_advanced_hlayout_1, 4, 0, 1, 1)
-
-        self.tree_advanced_checkbox_do_not_clear_videos = QCheckBox(self.page_advanced_configuration)
-        self.tree_advanced_checkbox_do_not_clear_videos.setObjectName(u"tree_advanced_checkbox_do_not_clear_videos")
-        sizePolicy.setHeightForWidth(self.tree_advanced_checkbox_do_not_clear_videos.sizePolicy().hasHeightForWidth())
-        self.tree_advanced_checkbox_do_not_clear_videos.setSizePolicy(sizePolicy)
-        self.tree_advanced_checkbox_do_not_clear_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.tree_avanced_gridlayout.addWidget(self.tree_advanced_checkbox_do_not_clear_videos, 1, 0, 1, 1)
-
-        self.tree_advanced_button_automated_selection = QPushButton(self.page_advanced_configuration)
-        self.tree_advanced_button_automated_selection.setObjectName(u"tree_advanced_button_automated_selection")
-        sizePolicy.setHeightForWidth(self.tree_advanced_button_automated_selection.sizePolicy().hasHeightForWidth())
-        self.tree_advanced_button_automated_selection.setSizePolicy(sizePolicy)
-        self.tree_advanced_button_automated_selection.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.tree_avanced_gridlayout.addWidget(self.tree_advanced_button_automated_selection, 3, 0, 1, 1)
-
         self.tree_advanced_hlayout_2 = QHBoxLayout()
         self.tree_advanced_hlayout_2.setObjectName(u"tree_advanced_hlayout_2")
         self.tree_advanced_label_index_end = QLabel(self.page_advanced_configuration)
         self.tree_advanced_label_index_end.setObjectName(u"tree_advanced_label_index_end")
+        sizePolicy18 = QSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Preferred)
+        sizePolicy18.setHorizontalStretch(0)
+        sizePolicy18.setVerticalStretch(0)
         sizePolicy18.setHeightForWidth(self.tree_advanced_label_index_end.sizePolicy().hasHeightForWidth())
         self.tree_advanced_label_index_end.setSizePolicy(sizePolicy18)
 
@@ -901,19 +767,6 @@ class Ui_PornFetch_UI(object):
 
 
         self.tree_avanced_gridlayout.addLayout(self.tree_advanced_hlayout_2, 4, 1, 1, 1)
-
-        self.tree_advanced_checkbox_cleanup_on_stop = QCheckBox(self.page_advanced_configuration)
-        self.tree_advanced_checkbox_cleanup_on_stop.setObjectName(u"tree_advanced_checkbox_cleanup_on_stop")
-
-        self.tree_avanced_gridlayout.addWidget(self.tree_advanced_checkbox_cleanup_on_stop, 1, 1, 1, 1)
-
-        self.tree_advanced_button_keyboard_shortcuts = QPushButton(self.page_advanced_configuration)
-        self.tree_advanced_button_keyboard_shortcuts.setObjectName(u"tree_advanced_button_keyboard_shortcuts")
-        sizePolicy.setHeightForWidth(self.tree_advanced_button_keyboard_shortcuts.sizePolicy().hasHeightForWidth())
-        self.tree_advanced_button_keyboard_shortcuts.setSizePolicy(sizePolicy)
-        self.tree_advanced_button_keyboard_shortcuts.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        self.tree_avanced_gridlayout.addWidget(self.tree_advanced_button_keyboard_shortcuts, 3, 1, 1, 1)
 
         self.tree_advanced_hlayout_3 = QHBoxLayout()
         self.tree_advanced_hlayout_3.setObjectName(u"tree_advanced_hlayout_3")
@@ -935,12 +788,53 @@ class Ui_PornFetch_UI(object):
 
         self.tree_avanced_gridlayout.addLayout(self.tree_advanced_hlayout_3, 5, 0, 1, 2)
 
+        self.tree_advanced_checkbox_cleanup_on_stop = QCheckBox(self.page_advanced_configuration)
+        self.tree_advanced_checkbox_cleanup_on_stop.setObjectName(u"tree_advanced_checkbox_cleanup_on_stop")
+
+        self.tree_avanced_gridlayout.addWidget(self.tree_advanced_checkbox_cleanup_on_stop, 1, 1, 1, 1)
+
+        self.tree_advanced_checkbox_do_not_clear_videos = QCheckBox(self.page_advanced_configuration)
+        self.tree_advanced_checkbox_do_not_clear_videos.setObjectName(u"tree_advanced_checkbox_do_not_clear_videos")
+        sizePolicy.setHeightForWidth(self.tree_advanced_checkbox_do_not_clear_videos.sizePolicy().hasHeightForWidth())
+        self.tree_advanced_checkbox_do_not_clear_videos.setSizePolicy(sizePolicy)
+        self.tree_advanced_checkbox_do_not_clear_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.tree_avanced_gridlayout.addWidget(self.tree_advanced_checkbox_do_not_clear_videos, 1, 0, 1, 1)
+
+        self.tree_advanced_hlayout_1 = QHBoxLayout()
+        self.tree_advanced_hlayout_1.setObjectName(u"tree_advanced_hlayout_1")
+        self.tree_advanced_label_tooltip_index_videos = QLabel(self.page_advanced_configuration)
+        self.tree_advanced_label_tooltip_index_videos.setObjectName(u"tree_advanced_label_tooltip_index_videos")
+        sizePolicy18.setHeightForWidth(self.tree_advanced_label_tooltip_index_videos.sizePolicy().hasHeightForWidth())
+        self.tree_advanced_label_tooltip_index_videos.setSizePolicy(sizePolicy18)
+
+        self.tree_advanced_hlayout_1.addWidget(self.tree_advanced_label_tooltip_index_videos)
+
+        self.tree_advanced_label_index_start = QLabel(self.page_advanced_configuration)
+        self.tree_advanced_label_index_start.setObjectName(u"tree_advanced_label_index_start")
+        sizePolicy18.setHeightForWidth(self.tree_advanced_label_index_start.sizePolicy().hasHeightForWidth())
+        self.tree_advanced_label_index_start.setSizePolicy(sizePolicy18)
+
+        self.tree_advanced_hlayout_1.addWidget(self.tree_advanced_label_index_start)
+
+        self.tree_advanced_spinbox_index_fetching_start = QSpinBox(self.page_advanced_configuration)
+        self.tree_advanced_spinbox_index_fetching_start.setObjectName(u"tree_advanced_spinbox_index_fetching_start")
+
+        self.tree_advanced_hlayout_1.addWidget(self.tree_advanced_spinbox_index_fetching_start)
+
+
+        self.tree_avanced_gridlayout.addLayout(self.tree_advanced_hlayout_1, 4, 0, 1, 1)
+
+        self.tree_advanced_button_keyboard_shortcuts = QPushButton(self.page_advanced_configuration)
+        self.tree_advanced_button_keyboard_shortcuts.setObjectName(u"tree_advanced_button_keyboard_shortcuts")
+        sizePolicy.setHeightForWidth(self.tree_advanced_button_keyboard_shortcuts.sizePolicy().hasHeightForWidth())
+        self.tree_advanced_button_keyboard_shortcuts.setSizePolicy(sizePolicy)
+        self.tree_advanced_button_keyboard_shortcuts.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+        self.tree_avanced_gridlayout.addWidget(self.tree_advanced_button_keyboard_shortcuts, 6, 0, 1, 2)
+
 
         self.gridLayout_12.addLayout(self.tree_avanced_gridlayout, 0, 0, 1, 1)
-
-        self.tree_advanced_vertical_spacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.gridLayout_12.addItem(self.tree_advanced_vertical_spacer, 1, 0, 1, 1)
 
         self.main_stacked_widget_tree.addWidget(self.page_advanced_configuration)
 
@@ -1808,7 +1702,7 @@ class Ui_PornFetch_UI(object):
         self.scrollarea_supported_websites.setWidgetResizable(True)
         self.scrollarea_supported_sites_widget_contents = QWidget()
         self.scrollarea_supported_sites_widget_contents.setObjectName(u"scrollarea_supported_sites_widget_contents")
-        self.scrollarea_supported_sites_widget_contents.setGeometry(QRect(0, 0, 98, 70))
+        self.scrollarea_supported_sites_widget_contents.setGeometry(QRect(0, 0, 84, 70))
         self.gridLayout_20 = QGridLayout(self.scrollarea_supported_sites_widget_contents)
         self.gridLayout_20.setSpacing(0)
         self.gridLayout_20.setObjectName(u"gridLayout_20")
@@ -1938,15 +1832,7 @@ class Ui_PornFetch_UI(object):
         QWidget.setTabOrder(self.scrollarea_keyboard_shortcuts, self.license_button_accept)
         QWidget.setTabOrder(self.license_button_accept, self.license_button_deny)
         QWidget.setTabOrder(self.license_button_deny, self.scrollarea_license_page)
-        QWidget.setTabOrder(self.scrollarea_license_page, self.automated_selection_lineedit_author)
-        QWidget.setTabOrder(self.automated_selection_lineedit_author, self.automated_selection_button_author)
-        QWidget.setTabOrder(self.automated_selection_button_author, self.automated_selection_lineedit_start)
-        QWidget.setTabOrder(self.automated_selection_lineedit_start, self.automated_selection_lineedit_end)
-        QWidget.setTabOrder(self.automated_selection_lineedit_end, self.automated_selection_button_time)
-        QWidget.setTabOrder(self.automated_selection_button_time, self.automated_selection_spinbox_start)
-        QWidget.setTabOrder(self.automated_selection_spinbox_start, self.automated_selection_spinbox_end)
-        QWidget.setTabOrder(self.automated_selection_spinbox_end, self.automated_selection_button_index)
-        QWidget.setTabOrder(self.automated_selection_button_index, self.scrollarea_supported_websites)
+        QWidget.setTabOrder(self.scrollarea_license_page, self.scrollarea_supported_websites)
         QWidget.setTabOrder(self.scrollarea_supported_websites, self.license_textbrowser)
         QWidget.setTabOrder(self.license_textbrowser, self.keyboard_shortcuts_text_browser)
         QWidget.setTabOrder(self.keyboard_shortcuts_text_browser, self.text_browser_update_available)
@@ -1960,7 +1846,7 @@ class Ui_PornFetch_UI(object):
         self.retranslateUi(PornFetch_UI)
 
         self.main_CentralStackedWidget.setCurrentIndex(0)
-        self.main_stacked_widget_top.setCurrentIndex(2)
+        self.main_stacked_widget_top.setCurrentIndex(0)
         self.main_stacked_widget_tree.setCurrentIndex(1)
         self.settings_stacked_widget_main.setCurrentIndex(3)
         self.settings_video_combobox_quality.setCurrentIndex(0)
@@ -2155,72 +2041,6 @@ class Ui_PornFetch_UI(object):
         self.tools_label_videos_by_category_eporner.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"label tools eporner get videos by category", None))
 #endif // QT_CONFIG(accessibility)
         self.tools_label_videos_by_category_eporner.setText(QCoreApplication.translate("PornFetch_UI", u"Get videos by category", None))
-#if QT_CONFIG(accessibility)
-        self.automated_selection_button_index.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"button apply automated selection by index", None))
-#endif // QT_CONFIG(accessibility)
-        self.automated_selection_button_index.setText(QCoreApplication.translate("PornFetch_UI", u"Apply", None))
-#if QT_CONFIG(accessibility)
-        self.automated_selection_lineedit_start.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"spinbox apply by time range start", None))
-#endif // QT_CONFIG(accessibility)
-        self.automated_selection_lineedit_start.setText(QCoreApplication.translate("PornFetch_UI", u"0", None))
-#if QT_CONFIG(accessibility)
-        self.automated_selection_button_author.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"button apply automated video selection by author", None))
-#endif // QT_CONFIG(accessibility)
-        self.automated_selection_button_author.setText(QCoreApplication.translate("PornFetch_UI", u"Apply", None))
-#if QT_CONFIG(accessibility)
-        self.automated_selection_spinbox_start.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"spinbox apply by index start", None))
-#endif // QT_CONFIG(accessibility)
-#if QT_CONFIG(accessibility)
-        self.automated_selection_lineedit_author.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"lineedit author name ", None))
-#endif // QT_CONFIG(accessibility)
-        self.automated_selection_lineedit_author.setPlaceholderText(QCoreApplication.translate("PornFetch_UI", u"Enter the author's name", None))
-#if QT_CONFIG(accessibility)
-        self.automated_selection_spinbox_end.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"spinbox apply by index end", None))
-#endif // QT_CONFIG(accessibility)
-#if QT_CONFIG(accessibility)
-        self.automated_selection_label_start.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"label index range start", None))
-#endif // QT_CONFIG(accessibility)
-        self.automated_selection_label_start.setText(QCoreApplication.translate("PornFetch_UI", u"Start:", None))
-#if QT_CONFIG(accessibility)
-        self.automated_selection_button_time.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"button apply automated selection by time", None))
-#endif // QT_CONFIG(accessibility)
-        self.automated_selection_button_time.setText(QCoreApplication.translate("PornFetch_UI", u"Apply", None))
-#if QT_CONFIG(accessibility)
-        self.automated_selection_lineedit_end.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"spinbox apply by time range end", None))
-#endif // QT_CONFIG(accessibility)
-        self.automated_selection_lineedit_end.setText(QCoreApplication.translate("PornFetch_UI", u"0", None))
-#if QT_CONFIG(accessibility)
-        self.automated_selection_label_by_author.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"label apply by author", None))
-#endif // QT_CONFIG(accessibility)
-        self.automated_selection_label_by_author.setText(QCoreApplication.translate("PornFetch_UI", u"Apply by author:", None))
-#if QT_CONFIG(accessibility)
-        self.automated_selection_label_end.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"label index range end", None))
-#endif // QT_CONFIG(accessibility)
-        self.automated_selection_label_end.setText(QCoreApplication.translate("PornFetch_UI", u"End:", None))
-#if QT_CONFIG(accessibility)
-        self.automated_selection_label_apply_by_time.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"label apply by time", None))
-#endif // QT_CONFIG(accessibility)
-        self.automated_selection_label_apply_by_time.setText(QCoreApplication.translate("PornFetch_UI", u"Apply by time:", None))
-#if QT_CONFIG(accessibility)
-        self.automated_selection_label_time_start.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"label apply by time start", None))
-#endif // QT_CONFIG(accessibility)
-        self.automated_selection_label_time_start.setText(QCoreApplication.translate("PornFetch_UI", u"Start:", None))
-#if QT_CONFIG(accessibility)
-        self.automated_selection_label_time_end.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"label apply by time end", None))
-#endif // QT_CONFIG(accessibility)
-        self.automated_selection_label_time_end.setText(QCoreApplication.translate("PornFetch_UI", u"End:", None))
-#if QT_CONFIG(accessibility)
-        self.automated_selection_button_select_all.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"button automated selection select all videos", None))
-#endif // QT_CONFIG(accessibility)
-        self.automated_selection_button_select_all.setText(QCoreApplication.translate("PornFetch_UI", u"Select all videos", None))
-#if QT_CONFIG(accessibility)
-        self.automated_selection_button_unselect_all.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"button automated selection unselect all videos", None))
-#endif // QT_CONFIG(accessibility)
-        self.automated_selection_button_unselect_all.setText(QCoreApplication.translate("PornFetch_UI", u"Unselect all videos", None))
-#if QT_CONFIG(accessibility)
-        self.automated_selection_label_apply_by_index.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"label apply by index", None))
-#endif // QT_CONFIG(accessibility)
-        self.automated_selection_label_apply_by_index.setText(QCoreApplication.translate("PornFetch_UI", u"Apply by Index:", None))
         self.treewidget_button_downloads.setText(QCoreApplication.translate("PornFetch_UI", u"Downloads", None))
         self.treewidget_button_advanced_configuration.setText(QCoreApplication.translate("PornFetch_UI", u"Advanced Configuration", None))
 #if QT_CONFIG(tooltip)
@@ -2233,6 +2053,15 @@ class Ui_PornFetch_UI(object):
         ___qtreewidgetitem = self.main_tree_widget.headerItem()
         ___qtreewidgetitem.setText(2, QCoreApplication.translate("PornFetch_UI", u"Duration (minutes)", None));
         ___qtreewidgetitem.setText(1, QCoreApplication.translate("PornFetch_UI", u"Author", None));
+        self.tree_advanced_label_index_end.setText(QCoreApplication.translate("PornFetch_UI", u"End:", None))
+        self.tree_advanced_label_custom_title.setText(QCoreApplication.translate("PornFetch_UI", u"Custom Title formatting:", None))
+        self.tree_advanced_lineedit_custom_title.setPlaceholderText(QCoreApplication.translate("PornFetch_UI", u"$title", None))
+        self.tree_advanced_button_custom_title_options.setText(QCoreApplication.translate("PornFetch_UI", u"Options", None))
+        self.tree_advanced_checkbox_cleanup_on_stop.setText(QCoreApplication.translate("PornFetch_UI", u"Cleanup on stop (disables resume feature for HLS) ", None))
+#if QT_CONFIG(accessibility)
+        self.tree_advanced_checkbox_do_not_clear_videos.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"checkbox do not clear videos", None))
+#endif // QT_CONFIG(accessibility)
+        self.tree_advanced_checkbox_do_not_clear_videos.setText(QCoreApplication.translate("PornFetch_UI", u"Do not clear videos", None))
 #if QT_CONFIG(tooltip)
         self.tree_advanced_label_tooltip_index_videos.setToolTip(QCoreApplication.translate("PornFetch_UI", u"This feature allows you to only fetch a specific range of videos when\n"
 "searching, loading models / channels or fetching a playlist.\n"
@@ -2245,22 +2074,9 @@ class Ui_PornFetch_UI(object):
         self.tree_advanced_label_tooltip_index_videos.setText("")
         self.tree_advanced_label_index_start.setText(QCoreApplication.translate("PornFetch_UI", u"Start:", None))
 #if QT_CONFIG(accessibility)
-        self.tree_advanced_checkbox_do_not_clear_videos.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"checkbox do not clear videos", None))
-#endif // QT_CONFIG(accessibility)
-        self.tree_advanced_checkbox_do_not_clear_videos.setText(QCoreApplication.translate("PornFetch_UI", u"Do not clear videos", None))
-#if QT_CONFIG(accessibility)
-        self.tree_advanced_button_automated_selection.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"button automated selection tool", None))
-#endif // QT_CONFIG(accessibility)
-        self.tree_advanced_button_automated_selection.setText(QCoreApplication.translate("PornFetch_UI", u"Automated selection tool", None))
-        self.tree_advanced_label_index_end.setText(QCoreApplication.translate("PornFetch_UI", u"End:", None))
-        self.tree_advanced_checkbox_cleanup_on_stop.setText(QCoreApplication.translate("PornFetch_UI", u"Cleanup on stop (disables resume feature for HLS) ", None))
-#if QT_CONFIG(accessibility)
         self.tree_advanced_button_keyboard_shortcuts.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"button keyboard shortcuts", None))
 #endif // QT_CONFIG(accessibility)
         self.tree_advanced_button_keyboard_shortcuts.setText(QCoreApplication.translate("PornFetch_UI", u"Keyboard shortcuts", None))
-        self.tree_advanced_label_custom_title.setText(QCoreApplication.translate("PornFetch_UI", u"Custom Title formatting:", None))
-        self.tree_advanced_lineedit_custom_title.setPlaceholderText(QCoreApplication.translate("PornFetch_UI", u"$title", None))
-        self.tree_advanced_button_custom_title_options.setText(QCoreApplication.translate("PornFetch_UI", u"Options", None))
 #if QT_CONFIG(accessibility)
         self.settings_button_switch_video.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"Video page (settings)", None))
 #endif // QT_CONFIG(accessibility)
