@@ -3028,13 +3028,8 @@ Don't tell anyone, and don't change your language in settings
 
     app.installTranslator(translator)
     w = PornFetch()  # This actually starts Porn Fetch
-    splash.finish(w)
+    splash.finish(w) # Stops splashscreen animation
     w.show()  # This shows the main widget
-    """
-    The following exceptions are just general exceptions to handle some basic errors. They are not so relevant for
-    most cases.
-    """
-
     sys.exit(app.exec())
 
 

@@ -1,0 +1,221 @@
+name: Cross-Platform Build Pipeline
+
+on:
+  pull_request:
+    branches: [ master ]
+  push:
+    branches: [ master ]
+
+permissions:
+  contents: read
+
+env:
+  PYTHONUNBUFFERED: "1"
+
+jobs:
+  # ==========================================
+  # 1. GUI BUILDS (PySide6)
+  # ==========================================
+  build-gui:
+    name: GUI (${{ matrix.platform }}-${{ matrix.arch }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux
+            arch: x64
+            os: ubuntu-24.04
+          - platform: linux
+            arch: arm64
+            os: ubuntu-24.04-arm
+          - platform: windows
+            arch: x64
+            os: windows-latest
+          - platform: windows
+            arch: arm64
+            os: windows-11-arm
+          - platform: macos
+            arch: x64
+            os: macos-13 # Intel
+          - platform: macos
+            arch: arm64
+            os: macos-latest # Apple Silicon
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          architecture: ${{ (matrix.platform == 'windows' && matrix.arch == 'x86') && 'x86' || (matrix.platform == 'macos' && matrix.arch == 'x64') && 'x64' || (matrix.arch) }}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      # --- Platform Specific Setup ---
+      - name: Linux Dependencies
+        if: matrix.platform == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libegl1 libgles2 libxkbcommon-x11-0 libdbus-1-3 libxcb-cursor0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-shape0 libxcb-shm0 libxcb-util1 libxcb-xfixes0 libxcb-xinerama0 libxcb-xkb1 libgl1-mesa-dev xvfb
+
+      - name: Windows ARM64 OpenSSL (vcpkg)
+        if: matrix.platform == 'windows' && matrix.arch == 'arm64'
+        shell: pwsh
+        run: |
+          $vcpkgRoot = Join-Path $env:RUNNER_TEMP "vcpkg"
+          git clone --depth 1 https://github.com/microsoft/vcpkg $vcpkgRoot
+          & "$vcpkgRoot\bootstrap-vcpkg.bat" -disableMetrics
+          & "$vcpkgRoot\vcpkg.exe" install openssl --triplet arm64-windows
+          echo "OPENSSL_DIR=$(Join-Path $vcpkgRoot 'installed\arm64-windows')" >> $env:GITHUB_ENV
+
+      # --- Build Process ---
+      - name: Sync Dependencies
+        run: uv sync --extra dev --extra av
+
+      - name: Frontend Update
+        shell: bash
+        run: |
+          cd src/frontend && (bash update.sh || pwsh update.ps1 || true)
+          cd ../scripts && uv run patch.py
+
+      - name: Build with pyside6-deploy
+        shell: bash
+        run: |
+          SPEC_FILE="src/build/pysidedeploy_${{ matrix.platform }}.spec"
+          uv run -- pyside6-deploy -c $SPEC_FILE -f -v
+          
+          # Universal Rename Logic
+          EXT="${{ matrix.platform == 'windows' && '.exe' || matrix.platform == 'macos' && '.app' || '.bin' }}"
+          OUTPUT_NAME="PornFetch_${{ matrix.platform }}_GUI_${{ matrix.arch }}$EXT"
+          
+          if [ "${{ matrix.platform }}" == "macos" ]; then
+             echo "DMG_OUTPUT=PornFetch_macOS_GUI_${{ matrix.arch }}.dmg" >> $GITHUB_ENV
+          else
+             mv "Porn Fetch$EXT" "$OUTPUT_NAME"
+             echo "BIN_OUTPUT=$OUTPUT_NAME" >> $GITHUB_ENV
+          fi
+
+      # --- Packaging & QA ---
+      - name: macOS DMG Packaging
+        if: matrix.platform == 'macos'
+        run: |
+          mkdir dist_dmg
+          cp -pR "Porn Fetch.app" dist_dmg/
+          ln -s /Applications dist_dmg/Applications
+          hdiutil create -volname "PornFetch" -srcfolder dist_dmg -ov -format UDZO "$DMG_OUTPUT"
+
+      - name: Smoke Test
+        if: matrix.platform != 'macos' # UI tests on Mac CI are notoriously flaky
+        shell: bash
+        run: |
+          if [ "${{ matrix.platform }}" == "linux" ]; then
+            xvfb-run ./"$BIN_OUTPUT" -t
+          else
+            ./"$BIN_OUTPUT" -t
+          fi
+
+      - name: Checksum & Summary
+        shell: bash
+        run: |
+          FILE="${{ env.BIN_OUTPUT || env.DMG_OUTPUT }}"
+          sha256sum "$FILE" > "$FILE.sha256"
+          echo "### SHA256 Checksum ($FILE)" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`$(cat $FILE.sha256)\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PornFetch_${{ matrix.platform }}_GUI_${{ matrix.arch }}
+          path: ${{ env.BIN_OUTPUT || env.DMG_OUTPUT }}
+
+  # ==========================================
+  # 2. CLI BUILDS (Standard x64/x86)
+  # ==========================================
+  build-cli:
+    name: CLI (${{ matrix.platform }}-${{ matrix.arch }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - platform: linux
+            arch: x64
+            os: ubuntu-latest
+          - platform: windows
+            arch: x64
+            os: windows-latest
+          - platform: windows
+            arch: x86
+            os: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          architecture: ${{ matrix.arch }}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Build
+        shell: bash
+        run: |
+          uv sync --extra cli --extra av
+          uv pip install pyinstaller
+          uv run pyinstaller -F Porn_Fetch_CLI.py
+          
+          EXT="${{ matrix.platform == 'windows' && '.exe' || '' }}"
+          OUT="PornFetch_${{ matrix.platform }}_CLI_${{ matrix.arch }}$EXT"
+          mv dist/Porn_Fetch_CLI$EXT "$OUT"
+          sha256sum "$OUT" > "$OUT.sha256"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CLI_${{ matrix.platform }}_${{ matrix.arch }}
+          path: PornFetch_*
+
+  # ==========================================
+  # 3. CLI BUILD (Linux 32-bit - The Special Case)
+  # ==========================================
+  build-cli-linux-x32:
+    name: CLI (linux-x32)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build 32-bit Python & Binary
+        env:
+          PY_VER: "3.13.5"
+          PREFIX: "/opt/python-32"
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install -y build-essential gcc-multilib libffi-dev:i386 zlib1g-dev:i386 libssl-dev:i386
+          
+          wget https://www.python.org/ftp/python/$PY_VER/Python-$PY_VER.tgz
+          tar -xzf Python-$PY_VER.tgz && cd Python-$PY_VER
+          CC="gcc -m32" LDFLAGS="-m32" ./configure --prefix=$PREFIX --enable-shared
+          make -j$(nproc) && sudo make altinstall
+          
+          export PATH="$PREFIX/bin:$PATH"
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          uv venv .venv --python $PREFIX/bin/python3.13
+          source .venv/bin/activate
+          uv pip install --no-binary=:all: pyinstaller
+          uv sync --extra cli
+          python -m PyInstaller -F Porn_Fetch_CLI.py
+          
+          mv dist/Porn_Fetch_CLI PornFetch_Linux_CLI_x32
+          sha256sum PornFetch_Linux_CLI_x32 > checksum.txt
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CLI_linux_x32
+          path: PornFetch_Linux_CLI_x32
