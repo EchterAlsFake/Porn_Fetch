@@ -77,6 +77,22 @@ jobs:
       - name: Sync Dependencies
         run: uv sync --extra dev --extra av
 
+      - name: Fix Cryptography DLLs (Windows ARM64)
+        if: matrix.platform == 'windows' && matrix.arch == 'arm64'
+        shell: pwsh
+        run: |
+          # 1. Dynamically find where uv installed the cryptography package
+          $cryptoPath = uv run python -c "import cryptography, os; print(os.path.dirname(cryptography.__file__))"
+          
+          # 2. Point to the bindings folder where _rust.pyd lives
+          $dllTarget = Join-Path $cryptoPath "hazmat\bindings"
+          
+          # 3. Get the DLLs from our vcpkg OpenSSL installation
+          $dllSource = Join-Path $env:OPENSSL_DIR "bin\*.dll"
+          
+          Write-Host "Injecting OpenSSL DLLs into $dllTarget so PyInstaller bundles them..."
+          Copy-Item -Path $dllSource -Destination $dllTarget -Force
+
       - name: Frontend Update
         shell: bash
         run: |
@@ -306,7 +322,7 @@ jobs:
 
       # 5. Build the APK
       - name: Build APK (Debug)
-        working-directory: Android/app
+        working-directory: Android
         # We build 'assembleDebug' so you get an APK signed with a default key
         # that can be immediately installed on any Android phone.
         run: gradle assembleDebug

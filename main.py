@@ -1170,7 +1170,7 @@ class PornFetch(QMainWindow):
         self.semaphore = QSemaphore(video_data.consistent_data["semaphore"])
         self.logger.debug("Startup: [5/5] OK")
         if FORCE_TEST_RUN:
-            exit(0)
+            sys.exit(0)
 
         self.initialize_pornfetch()
 

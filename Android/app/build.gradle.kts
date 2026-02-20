@@ -7,9 +7,7 @@ plugins {
 
 android {
     namespace = "me.echteralsfake.pornfetch"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "me.echteralsfake.pornfetch"
