@@ -9,6 +9,9 @@ on:
 permissions:
   contents: read
 
+env:
+  PYTHONUNBUFFERED: "1"
+
 jobs:
   build-pornfetch-gui-windows-x64:
     runs-on: windows-latest
@@ -62,7 +65,7 @@ jobs:
 
       - name: UI Test
         run: |
-          .\PornFetch_Windows_GUI_x64.exe -t
+          .\PornFetch_Windows_GUI_x64.exe -t | Out-Host
 
       - name: Generate SHA256 Checksum
         shell: pwsh

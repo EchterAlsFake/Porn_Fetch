@@ -9,6 +9,9 @@ on:
 permissions:
   contents: read
 
+env:
+  PYTHONUNBUFFERED: "1"
+
 jobs:
   build-pornfetch-gui-windows-arm64:
     runs-on: windows-11-arm

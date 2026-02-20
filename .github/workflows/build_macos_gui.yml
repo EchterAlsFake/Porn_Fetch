@@ -9,6 +9,9 @@ on:
 permissions:
   contents: read
 
+env:
+  PYTHONUNBUFFERED: "1"
+
 jobs:
   build-gui-macos:
     name: Build macOS ${{ matrix.arch_name }}
@@ -79,26 +82,34 @@ jobs:
       - name: Package into DMG
         run: |
           APP_NAME="Porn Fetch.app"
-          VOL_NAME="PornFetch"
           DMG_NAME="PornFetch_macOS_GUI_${{ matrix.arch_name }}.dmg"
+          
+          # 1. Wait for filesystem to settle
+          sync
+          sleep 5 
           
           if [ ! -d "$APP_NAME" ]; then
             echo "::error::Build failed! $APP_NAME not found."
             exit 1
           fi
-
+          
+          # 2. Clean up any previous attempts
+          rm -rf dist_dmg
           mkdir -p dist_dmg
-          cp -r "$APP_NAME" dist_dmg/
+          
+          # 3. Use 'cp -pR' to preserve permissions and stay recursive
+          cp -pR "$APP_NAME" dist_dmg/
           ln -s /Applications dist_dmg/Applications
-
-          hdiutil create \
-            -volname "$VOL_NAME" \
-            -srcfolder dist_dmg \
-            -ov -format UDZO \
-            -imagekey zlib-level=9 \
-            "$DMG_NAME"
-
-          echo "DMG_OUTPUT=$DMG_NAME" >> $GITHUB_ENV
+          
+          # 4. Run hdiutil with a retry logic (just in case)
+          for i in {1..3}; do
+            hdiutil create \
+              -volname "PornFetch" \
+              -srcfolder dist_dmg \
+              -ov -format UDZO \
+              -imagekey zlib-level=9 \
+              "$DMG_NAME" && break || sleep 10
+          done
 
       - name: Generate SHA256 Checksum
         run: |
