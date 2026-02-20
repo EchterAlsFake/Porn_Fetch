@@ -219,3 +219,22 @@ jobs:
         with:
           name: CLI_linux_x32
           path: PornFetch_Linux_CLI_x32
+
+  build-exotic:
+      name: CLI (linux-${{ matrix.arch }})
+      runs-on: ubuntu-latest
+      strategy:
+        matrix:
+          arch: [riscv64, s390x, ppc64le]
+      steps:
+        - uses: actions/checkout@v4
+        - name: Build via QEMU
+          uses: uraimo/run-on-arch-action@v3
+          with:
+            arch: ${{ matrix.arch }}
+            distro: ubuntu24.04
+            # This runs INSIDE the emulated environment
+            run: |
+              apt-get update && apt-get install -y python3-pip
+              pip install uv
+              uv run pyinstaller -F Porn_Fetch_CLI.py
