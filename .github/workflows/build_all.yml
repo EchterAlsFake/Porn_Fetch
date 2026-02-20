@@ -37,7 +37,7 @@ jobs:
             os: windows-11-arm
           - platform: macos
             arch: x64
-            os: macos-13 # Intel
+            os: macos-15-intel # Intel
           - platform: macos
             arch: arm64
             os: macos-latest # Apple Silicon
@@ -166,7 +166,7 @@ jobs:
       - name: Build
         shell: bash
         run: |
-          uv sync --extra cli --extra av
+          uv sync --extra cli
           uv pip install pyinstaller
           uv run pyinstaller -F Porn_Fetch_CLI.py
           
@@ -220,21 +220,51 @@ jobs:
           name: CLI_linux_x32
           path: PornFetch_Linux_CLI_x32
 
-  build-exotic:
-      name: CLI (linux-${{ matrix.arch }})
-      runs-on: ubuntu-latest
-      strategy:
-        matrix:
-          arch: [riscv64, s390x, ppc64le]
-      steps:
-        - uses: actions/checkout@v4
-        - name: Build via QEMU
-          uses: uraimo/run-on-arch-action@v3
-          with:
-            arch: ${{ matrix.arch }}
-            distro: ubuntu24.04
-            # This runs INSIDE the emulated environment
-            run: |
-              apt-get update && apt-get install -y python3-pip
-              pip install uv
-              uv run pyinstaller -F Porn_Fetch_CLI.py
+  build-exotic-cli:
+    name: CLI (linux-${{ matrix.arch }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false  # Prevent one failing architecture from killing the others
+      matrix:
+        arch: [riscv64, s390x, ppc64le]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build via QEMU
+        uses: uraimo/run-on-arch-action@v3
+        with:
+          arch: ${{ matrix.arch }}
+          distro: ubuntu24.04
+          run: |
+            # 1. Update and install standard Python tools (No uv needed)
+            apt-get update
+            apt-get install -y python3-venv python3-pip python3-dev build-essential
+            
+            # 2. Create and activate a Virtual Environment to bypass PEP 668
+            python3 -m venv /opt/venv
+            export PATH="/opt/venv/bin:$PATH"
+            
+            # 3. Install your specific CLI dependencies directly
+            # (Matches your pyproject.toml 'cli' array)
+            pip install rich hue_shift pyinstaller
+            
+            # 4. Build the binary
+            pyinstaller -F Porn_Fetch_CLI.py
+            
+            # 5. Rename output so the host runner can easily grab it
+            mv dist/Porn_Fetch_CLI /PornFetch_Linux_CLI_${{ matrix.arch }}
+
+      - name: Checksum & Upload
+        run: |
+          sha256sum PornFetch_Linux_CLI_${{ matrix.arch }} > PornFetch_Linux_CLI_${{ matrix.arch }}.sha256
+          
+          echo "### SHA256 Checksum (${{ matrix.arch }})" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          cat PornFetch_Linux_CLI_${{ matrix.arch }}.sha256 >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CLI_linux_${{ matrix.arch }}
+          path: PornFetch_Linux_CLI_${{ matrix.arch }}
