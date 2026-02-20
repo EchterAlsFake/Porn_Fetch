@@ -23,6 +23,7 @@ Discord: echteralsfake (faster response)
 # Stop Splash Screen
 import os
 import tempfile
+FORCE_TEST_RUN = False
 
 if "NUITKA_ONEFILE_PARENT" in os.environ:
     splash_filename = os.path.join(
@@ -34,7 +35,7 @@ if "NUITKA_ONEFILE_PARENT" in os.environ:
 
 # macOS Setup...
 import sys
-if sys.platform == "darwin":
+if sys.platform == "darwin" and not FORCE_TEST_RUN:
     from src.backend.macos_setup import macos_setup, SparkleUpdater
     macos_setup()
 
@@ -1168,6 +1169,9 @@ class PornFetch(QMainWindow):
 
         self.semaphore = QSemaphore(video_data.consistent_data["semaphore"])
         self.logger.debug("Startup: [5/5] OK")
+        if FORCE_TEST_RUN:
+            exit(0)
+
         self.initialize_pornfetch()
 
     """
@@ -2926,10 +2930,14 @@ Thank you for using Porn Fetch ^^
 
 def main(args: argparse.Namespace):
     global FORCE_PORTABLE_RUN
+    global FORCE_TEST_RUN
     global app
     if args.version:
         print(__version__)
         return
+
+    if args.test_mode:
+        FORCE_TEST_RUN = True
 
     if args.portable:
         FORCE_PORTABLE_RUN = True
@@ -3063,6 +3071,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", "--version", help="Shows the version information", action="store_true")
     parser.add_argument("-p", "--portable", help="Forces a portable run of Porn Fetch (skips install dialog)", action="store_true")
+    parser.add_argument("-t", "--test_mode", help="Runs the gui silently and exists, test's functionality on all systems after build", action="store_true")
     args = parser.parse_args()
     main(args)
 

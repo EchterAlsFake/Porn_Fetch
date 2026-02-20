@@ -23,15 +23,15 @@ class License(QWidget):
             return True
 
     def button_connections(self):
-        self.ui.button_accept.clicked.connect(self.license_accepted)
-        self.ui.button_deny.clicked.connect(self.license_denied)
+        self.ui.license_button_accept.clicked.connect(self.license_accepted)
+        self.ui.license_button_deny.clicked.connect(self.license_denied)
 
     def license_accepted(self):
         conf.set("Misc", "license_accepted", "true")
         with open("config.ini", "w") as config_file:
             conf.write(config_file)
 
-        self.ui.CentralStackedWidget.setCurrentIndex(0)
+        self.ui.main_CentralStackedWidget.setCurrentIndex(0)
         self.license_accepted_trigger()
 
     def license_denied(self):
@@ -59,12 +59,12 @@ class Disclaimer(QWidget):
             return True
 
     def button_connections(self):
-        self.ui.button_disclaimer_accept.clicked.connect(self.disclaimer_accepted)
+        self.ui.disclaimer_button_accept.clicked.connect(self.disclaimer_accepted)
 
     def disclaimer_accepted(self):
         conf.set("Misc", "disclaimer_shown", "true")
         with open("config.ini", "w") as config_file:
             conf.write(config_file)
 
-        self.ui.CentralStackedWidget.setCurrentIndex(0)
+        self.ui.main_CentralStackedWidget.setCurrentIndex(0)
         self.disclaimer_accepted_trigger()

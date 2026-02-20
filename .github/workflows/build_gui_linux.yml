@@ -49,6 +49,11 @@ jobs:
         run: |
           sha256sum "PornFetch_Linux_GUI_x64.bin" > "PornFetch_Linux_GUI_x64.sha256"
 
+      - name: UI Test
+        run: |
+          chmod +x PornFetch_Linux_GUI_x64.bin
+          ./PornFetch_Linux_GUI_x64.bin -t
+
       - name: Publish SHA256 to GitHub Actions Summary
         run: |
           echo "### SHA256 Checksum for PornFetch_Linux_GUI_x64.bin" >> $GITHUB_STEP_SUMMARY

@@ -92,7 +92,7 @@ jobs:
       - name: Run application to check if it works
         shell: pwsh
         run: |
-          .\PornFetch_Windows_GUI_ARM64.exe --version
+          .\PornFetch_Windows_GUI_ARM64.exe -t
 
       - name: Generate SHA256 Checksum
         shell: pwsh
