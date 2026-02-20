@@ -151,6 +151,12 @@ jobs:
           - platform: windows
             arch: x86
             os: windows-latest
+          - platform: macos
+            arch: x64
+            os: macos-15-intel  # The dedicated Intel runner we used earlier
+          - platform: macos
+            arch: arm64
+            os: macos-latest    # The native Apple Silicon runner
 
     steps:
       - uses: actions/checkout@v4
@@ -184,11 +190,6 @@ jobs:
   # ==========================================
   # 3. CLI BUILD (Linux 32-bit - The Special Case)
   # ==========================================
-  build-cli-linux-x32:
-    name: CLI (linux-x32)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
       - name: Build 32-bit Python & Binary
         env:
           PY_VER: "3.13.5"
@@ -203,7 +204,13 @@ jobs:
           CC="gcc -m32" LDFLAGS="-m32" ./configure --prefix=$PREFIX --enable-shared
           make -j$(nproc) && sudo make altinstall
           
+          # FIX: Tell Linux where the shared libraries are, and add python to PATH
+          export LD_LIBRARY_PATH="$PREFIX/lib:$LD_LIBRARY_PATH"
           export PATH="$PREFIX/bin:$PATH"
+          
+          # Return to workspace root
+          cd ${{ github.workspace }}
+          
           curl -LsSf https://astral.sh/uv/install.sh | sh
           uv venv .venv --python $PREFIX/bin/python3.13
           source .venv/bin/activate
@@ -212,13 +219,7 @@ jobs:
           python -m PyInstaller -F Porn_Fetch_CLI.py
           
           mv dist/Porn_Fetch_CLI PornFetch_Linux_CLI_x32
-          sha256sum PornFetch_Linux_CLI_x32 > checksum.txt
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: CLI_linux_x32
-          path: PornFetch_Linux_CLI_x32
+          sha256sum PornFetch_Linux_CLI_x32 > PornFetch_Linux_CLI_x32.sha256
 
   build-exotic-cli:
     name: CLI (linux-${{ matrix.arch }})
@@ -252,7 +253,7 @@ jobs:
             pyinstaller -F Porn_Fetch_CLI.py
             
             # 5. Rename output so the host runner can easily grab it
-            mv dist/Porn_Fetch_CLI /PornFetch_Linux_CLI_${{ matrix.arch }}
+            mv dist/Porn_Fetch_CLI PornFetch_Linux_CLI_${{ matrix.arch }}
 
       - name: Checksum & Upload
         run: |
@@ -268,3 +269,58 @@ jobs:
         with:
           name: CLI_linux_${{ matrix.arch }}
           path: PornFetch_Linux_CLI_${{ matrix.arch }}
+
+build-android:
+    name: Android (APK)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 1. Setup Java 17 (Required by modern Android Gradle Plugin, even if target is 11)
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # 2. Setup Python 3.13 (Required by Chaquopy)
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      # 3. Fix the hardcoded local path in your build.gradle.kts
+      - name: Patch Chaquopy Python Path
+        shell: bash
+        run: |
+          sed -i 's|buildPython("/home/asuna/.local/bin/python3.13")|buildPython("python")|g' Android/app/build.gradle.kts
+
+      # 4. Setup Gradle Caching to speed up future builds
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      # 5. Build the APK
+      - name: Build APK (Debug)
+        working-directory: Android
+        # We build 'assembleDebug' so you get an APK signed with a default key
+        # that can be immediately installed on any Android phone.
+        run: ./gradlew assembleDebug
+
+      # 6. Rename and generate checksum
+      - name: Prepare Output
+        run: |
+          mv Android/app/build/outputs/apk/debug/app-debug.apk PornFetch_Android.apk
+          sha256sum PornFetch_Android.apk > PornFetch_Android.apk.sha256
+
+      - name: Publish Summary
+        run: |
+          echo "### SHA256 Checksum (Android)" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          cat PornFetch_Android.apk.sha256 >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PornFetch_Android
+          path: PornFetch_Android.apk
