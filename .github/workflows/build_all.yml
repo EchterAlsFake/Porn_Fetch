@@ -306,7 +306,7 @@ jobs:
 
       # 5. Build the APK
       - name: Build APK (Debug)
-        working-directory: Android
+        working-directory: Android/app
         # We build 'assembleDebug' so you get an APK signed with a default key
         # that can be immediately installed on any Android phone.
         run: gradle assembleDebug
