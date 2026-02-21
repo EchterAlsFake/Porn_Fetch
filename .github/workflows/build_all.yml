@@ -224,6 +224,7 @@ jobs:
           tar -xzf Python-$PY_VER.tgz && cd Python-$PY_VER
           CC="gcc -m32" LDFLAGS="-m32" ./configure --prefix=$PREFIX --enable-shared
           make -j$(nproc) && sudo make altinstall
+          cd ..
 
           export PATH="$PREFIX/bin:$PATH"
           export LD_LIBRARY_PATH="$PREFIX/lib"
