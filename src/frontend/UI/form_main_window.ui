@@ -35,46 +35,7 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <layout class="QGridLayout" name="gridLayout_11">
-    <item row="2" column="0">
-     <layout class="QFormLayout" name="formlayout_progressbar">
-      <property name="horizontalSpacing">
-       <number>0</number>
-      </property>
-      <property name="verticalSpacing">
-       <number>5</number>
-      </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="main_label_progressbar_total">
-        <property name="text">
-         <string>Total (HLS):</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QProgressBar" name="main_progressbar_total">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>300</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">text-align: center; /* Centered text */</string>
-        </property>
-        <property name="value">
-         <number>0</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
+   <layout class="QGridLayout" name="gridLayout_3">
     <item row="0" column="0">
      <layout class="QHBoxLayout" name="main_horizontallayout_menu_buttons">
       <property name="spacing">
@@ -356,7 +317,7 @@
     <item row="1" column="0">
      <widget class="QStackedWidget" name="main_CentralStackedWidget">
       <property name="currentIndex">
-       <number>4</number>
+       <number>9</number>
       </property>
       <widget class="QWidget" name="page_main">
        <property name="maximumSize">
@@ -1704,7 +1665,7 @@
                    <x>0</x>
                    <y>0</y>
                    <width>300</width>
-                   <height>28</height>
+                   <height>16</height>
                   </rect>
                  </property>
                  <property name="sizePolicy">
@@ -3930,7 +3891,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
+             <width>84</width>
              <height>70</height>
             </rect>
            </property>
@@ -4190,20 +4151,70 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QPushButton" name="update_available_button_acknowledged">
-            <property name="accessibleName">
-             <string>button acknowledge that a new version is out</string>
-            </property>
-            <property name="text">
-             <string>OK</string>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="update_available_hlayout_buttons">
+            <item>
+             <widget class="QPushButton" name="update_available_button_acknowledged">
+              <property name="accessibleName">
+               <string>button acknowledge that a new version is out</string>
+              </property>
+              <property name="text">
+               <string>OK (Update manually)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="update_available_button_automatic_update">
+              <property name="text">
+               <string>Automatic Update</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
        </layout>
       </widget>
      </widget>
+    </item>
+    <item row="2" column="0">
+     <layout class="QFormLayout" name="formlayout_progressbar">
+      <property name="horizontalSpacing">
+       <number>0</number>
+      </property>
+      <property name="verticalSpacing">
+       <number>5</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="main_label_progressbar_total">
+        <property name="text">
+         <string>Total (HLS):</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QProgressBar" name="main_progressbar_total">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>300</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">text-align: center; /* Centered text */</string>
+        </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -4243,7 +4254,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
   <tabstop>license_textbrowser</tabstop>
   <tabstop>keyboard_shortcuts_text_browser</tabstop>
   <tabstop>text_browser_update_available</tabstop>
-  <tabstop>update_available_button_acknowledged</tabstop>
   <tabstop>install_dialog_text_browser</tabstop>
   <tabstop>supported_sites_textbrowser</tabstop>
   <tabstop>scrollarea_disclaimer</tabstop>

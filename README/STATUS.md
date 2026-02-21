@@ -14,7 +14,7 @@
 - [x] Include a License system in Porn Fetch
 - [x] Make truststore optional in settings
 - [x] Include macOS auto updating through sparkle
-- [] auto updating support
+- [x] auto updating support
 - [] Fix translations (once again)
 - [] Rewriting the menu bar in QML (mixing Qt Widgets + QML)
 - [] Fixing error reporting
@@ -23,7 +23,7 @@
 - [] ...
 
 # Android
-- [] Separate Kotlin application
+- [x] Separate Kotlin application
 
 
 # ...

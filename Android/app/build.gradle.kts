@@ -63,6 +63,7 @@ chaquopy {
             install("porntrex_api")
             install("xfreehd_api")
             install("beeg_api")
+            install("python-dateutil")
 
         }
         sourceSets {

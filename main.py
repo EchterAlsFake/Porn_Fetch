@@ -35,6 +35,9 @@ if "NUITKA_ONEFILE_PARENT" in os.environ:
 
 # macOS Setup...
 import sys
+from PySide6.QtWidgets import QApplication
+app = QApplication(sys.argv)
+
 if sys.platform == "darwin" and not FORCE_TEST_RUN:
     from src.backend.macos_setup import macos_setup, SparkleUpdater
     macos_setup()
@@ -43,10 +46,8 @@ if sys.platform == "darwin" and not FORCE_TEST_RUN:
 import src.frontend.UI.resources
 
 from PySide6.QtGui import QPixmap
-from PySide6.QtWidgets import QApplication
 from src.frontend.UI.splashscreen import ModernSplashScreen
 
-app = QApplication(sys.argv)
 splash_pixmap = QPixmap(":/images/graphics/splashscreen.png")
 splash = ModernSplashScreen(splash_pixmap)
 splash.show()
@@ -595,13 +596,28 @@ endlocal
 
 
 class AutoUpdateThread(QRunnable):
-    def __init__(self, assets):
+    def __init__(self):
         super(AutoUpdateThread, self).__init__()
-        self.assets = assets
         self.signals = Signals()
+        self.assets = None
         self.logger = setup_logger(name="Porn Fetch - [AutoUpdateThread]", log_file="PornFetch.log", level=logging.DEBUG)
 
     def run(self):
+        self.signals.start_undefined_range.emit()
+        self.logger.info("Fetching release information...")
+        url = "https://echteralsfake.me/update"
+        response = clients.core.fetch(url=url, get_response=True)
+
+        if response.status_code == 200:
+            self.assets = response.json()
+            self.logger.info(f"Got Update Information for: {self.assets["version"]}")
+
+        elif response.status_code == 502 or response.status_code == 530 or response.status_code == 500:
+            self.logger.error("Server is currently unable to return the update information. Please try again later...")
+            ui_popup("Server is currently unable to return the update information. Please try again later...")
+            return
+
+
         self.logger.info("Starting auto-update process...")
         os_arch = get_os_and_arch()
         download_url = self.assets.get(f"download_{os_arch}")
@@ -2787,8 +2803,8 @@ Segment State Path: {report["segment_state_path"]}
             self.threadpool.start(self.update_thread) # Starts a silent update check that will
             # if a new version is out show the user a dialog with the changelog and allow for auto updating
 
-    def auto_update(self, assets):
-        self.update_thread = AutoUpdateThread(assets)
+    def auto_update(self):
+        self.update_thread = AutoUpdateThread()
         self.update_thread.signals.total_progress.connect(self.update_total_progressbar)
         self.update_thread.signals.total_progress_range.connect(self.update_total_progressbar_range)
         self.update_thread.signals.error_signal.connect(ui_popup)
@@ -2980,11 +2996,9 @@ Thank you for using Porn Fetch ^^
 
             self.ui.text_browser_update_available.setHtml(html)
             self.ui.text_browser_update_available.setOpenExternalLinks(False)
-            self.ui.text_browser_update_available.anchorClicked.connect(
-                lambda link: self.auto_update(dictionary) if link.url() == "autoupdate" else webbrowser.open(link.url())
-            )
             self.ui.main_CentralStackedWidget.setCurrentIndex(9)
             self.ui.update_available_button_acknowledged.clicked.connect(self.switch_to_download)
+            self.ui.update_available_button_automatic_update.clicked.connect(self.auto_update)
 
     @staticmethod
     def buy_license():

@@ -367,6 +367,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Sync Dependencies
+        run: uv sync --extra dev --extra av
+
       # 1. Download the artifacts we just built
       - name: Download macOS x64 DMG
         uses: actions/download-artifact@v4
@@ -419,6 +432,10 @@ jobs:
           # Re-sign the app (lipo modifies binaries, which instantly breaks existing code signatures)
           echo "Signing Universal App..."
           codesign --force --deep --sign - "PornFetch_Universal.app"
+          
+          # Patch the bundle to correctly integrate the Sparkle framework for updates
+          echo "Patching macOS bundle for Sparkle framework..."
+          uv run python src/scripts/patch_macos_bundle.py "PornFetch_Universal.app"
           
           # Package back into a final Universal DMG
           mkdir dist_dmg
