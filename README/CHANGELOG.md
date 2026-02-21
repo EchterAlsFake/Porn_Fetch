@@ -626,6 +626,7 @@ to be refactored.
 - Fixed 403 missav error
 - Fixed PornHub download issue
 - Fixed PornHub thumbnail issue
+- Fixed non utf-8 video titles to cause a crash on Windows CLI
 
 ### User Interface
 - Added Italian translations (Thanks: @FatalPuppet)

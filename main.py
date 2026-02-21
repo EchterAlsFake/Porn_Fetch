@@ -142,6 +142,8 @@ logger = shared_functions.setup_logger("Porn Fetch - [MAIN]", log_file="PornFetc
 license_storage_path = os.path.join(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation), "pornfetch.license")
 x = False # Don't ask (this is a secret ;)
 
+if sys.stdout.encoding != 'utf-8':
+    sys.stdout.reconfigure(encoding='utf-8')
 
 def _resolve_config_path(portable: bool, portable_dir: str | None = None) -> Path:
     """
@@ -592,18 +594,77 @@ endlocal
         )
 
 
-class AutoUpdatingThread(QRunnable):
+class AutoUpdateThread(QRunnable):
     def __init__(self, assets):
-        super(AutoUpdatingThread, self).__init__()
-        self.assets: dict = assets
+        super(AutoUpdateThread, self).__init__()
+        self.assets = assets
         self.signals = Signals()
+        self.logger = setup_logger(name="Porn Fetch - [AutoUpdateThread]", log_file="PornFetch.log", level=logging.DEBUG)
 
     def run(self):
-        self.signals.start_undefined_range.emit()
+        self.logger.info("Starting auto-update process...")
+        os_arch = get_os_and_arch()
+        download_url = self.assets.get(f"download_{os_arch}")
 
+        if not download_url:
+            self.logger.error(f"No download URL found for {os_arch}")
+            self.signals.error_signal.emit(f"Update failed: No download available for your system ({os_arch}).")
+            return
+
+        self.logger.info(f"Downloading update from: {download_url}")
+
+        temp_dir = tempfile.gettempdir()
+        filename = download_url.split("/")[-1]
+        download_path = os.path.join(temp_dir, filename)
+
+        try:
+            clients.core.legacy_download(
+                url=download_url,
+                path=download_path,
+                callback=self.update_progress
+            )
+            self.logger.info("Download complete. Replacing binary.")
+            self.replace_binary(download_path)
+            self.logger.info("Update successful. Please restart the application.")
+            self.signals.error_signal.emit("Update successful! Please restart the application.")
+        except Exception as e:
+            self.logger.error(f"Update failed: {e}")
+            self.signals.error_signal.emit(f"Update failed: {e}")
+
+    def update_progress(self, current, total):
+        self.signals.total_progress.emit(current)
+        self.signals.total_progress_range.emit(total)
+
+    def replace_binary(self, new_binary_path):
+        current_binary_path = get_original_executable_path()
+        if not current_binary_path:
+            raise RuntimeError("Could not determine the path of the current executable.")
+
+        # On Windows, you can't replace a running executable.
+        # A common strategy is to use a helper script.
         if sys.platform == "win32":
-            asseet_path = self.assets.get("win64_gui")
+            self.create_windows_updater(current_binary_path, new_binary_path)
+        else:
+            # On Linux/macOS, you can often replace the binary directly.
+            os.chmod(new_binary_path, 0o755)
+            os.replace(new_binary_path, current_binary_path)
 
+    def create_windows_updater(self, current_path, new_path):
+        updater_script_path = os.path.join(tempfile.gettempdir(), "updater.bat")
+        with open(updater_script_path, "w") as f:
+            f.write(f"""
+@echo off
+echo Waiting for application to close...
+taskkill /F /IM {os.path.basename(current_path)}
+timeout /t 2 /nobreak
+echo Replacing application file...
+move /Y "{new_path}" "{current_path}"
+echo Starting new version...
+start "" "{current_path}"
+del "%~f0"
+            """)
+        subprocess.Popen([updater_script_path], creationflags=subprocess.CREATE_NO_WINDOW)
+        QCoreApplication.quit()
 
 
 class CheckUpdates(QRunnable):
@@ -635,6 +696,9 @@ class CheckUpdates(QRunnable):
             elif response.status_code == 500:
                 self.logger.error("Internal Server error, probably already fixing it :) ")
                 return
+
+            elif response.status_code == 530 or response.status_code == 502:
+                self.logger.error("Server is currently offline. Proobably already fixing it :)")
 
         except (ConnectionError, ConnectionResetError, ConnectionRefusedError, TimeoutError):
             handle_error_gracefully(self, data=video_data.consistent_data, error_message="I could NOT check for updates. The server is either not reachable, or you don't have an IPv6 connection.")
@@ -2723,10 +2787,12 @@ Segment State Path: {report["segment_state_path"]}
             self.threadpool.start(self.update_thread) # Starts a silent update check that will
             # if a new version is out show the user a dialog with the changelog and allow for auto updating
 
-
-    def auto_update(self):
-        """
-        """
+    def auto_update(self, assets):
+        self.update_thread = AutoUpdateThread(assets)
+        self.update_thread.signals.total_progress.connect(self.update_total_progressbar)
+        self.update_thread.signals.total_progress_range.connect(self.update_total_progressbar_range)
+        self.update_thread.signals.error_signal.connect(ui_popup)
+        self.threadpool.start(self.update_thread)
 
     def show_thumbnail(self, item, column):
         identifier = item.data(self.COL_TITLE, Qt.ItemDataRole.UserRole + 1) # Identifier for the video data
@@ -2905,12 +2971,19 @@ Thank you for using Porn Fetch ^^
                         {changelog}
                     </div>
                 </div>
+                <div class="section">
+                    <button onclick="window.location.href='autoupdate'">Auto Update</button>
+                </div>
             </body>
             </html>
             """
 
             self.ui.text_browser_update_available.setHtml(html)
-            self.ui.main_CentralStackedWidget.setCurrentIndex(6)
+            self.ui.text_browser_update_available.setOpenExternalLinks(False)
+            self.ui.text_browser_update_available.anchorClicked.connect(
+                lambda link: self.auto_update(dictionary) if link.url() == "autoupdate" else webbrowser.open(link.url())
+            )
+            self.ui.main_CentralStackedWidget.setCurrentIndex(9)
             self.ui.update_available_button_acknowledged.clicked.connect(self.switch_to_download)
 
     @staticmethod

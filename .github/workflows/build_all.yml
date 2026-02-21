@@ -359,3 +359,84 @@ jobs:
         with:
           name: PornFetch_Android
           path: PornFetch_Android.apk
+
+  build-macos-universal:
+    name: GUI (macos-universal)
+    needs: build-gui  # Wait for the x64 and arm64 builds to finish
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 1. Download the artifacts we just built
+      - name: Download macOS x64 DMG
+        uses: actions/download-artifact@v4
+        with:
+          name: PornFetch_macos_GUI_x64
+          path: dmg_x64
+
+      - name: Download macOS arm64 DMG
+        uses: actions/download-artifact@v4
+        with:
+          name: PornFetch_macos_GUI_arm64
+          path: dmg_arm64
+
+      # 2. Extract, Fuse, and Repackage
+      - name: Create Universal Binary
+        shell: bash
+        run: |
+          # Mount DMGs and extract the .app bundles
+          hdiutil attach dmg_x64/PornFetch_macOS_GUI_x64.dmg -mountpoint /Volumes/x64_dmg
+          cp -pR "/Volumes/x64_dmg/Porn Fetch.app" "PornFetch_x64.app"
+          hdiutil detach /Volumes/x64_dmg
+          
+          hdiutil attach dmg_arm64/PornFetch_macOS_GUI_arm64.dmg -mountpoint /Volumes/arm64_dmg
+          cp -pR "/Volumes/arm64_dmg/Porn Fetch.app" "PornFetch_arm64.app"
+          hdiutil detach /Volumes/arm64_dmg
+          
+          # Use the x64 app as the base framework for our Universal app
+          cp -pR "PornFetch_x64.app" "PornFetch_Universal.app"
+          
+          # Iterate through every file in the arm64 app
+          find "PornFetch_arm64.app" -type f -print0 | while IFS= read -r -d '' arm_file; do
+              rel_path="${arm_file#PornFetch_arm64.app/}"
+              x64_file="PornFetch_Universal.app/$rel_path"
+          
+              # Ensure the file exists in the x64 app too
+              if [ -f "$x64_file" ]; then
+                  # Check if BOTH files are compiled Mach-O binaries
+                  if file "$arm_file" | grep -q "Mach-O" && file "$x64_file" | grep -q "Mach-O"; then
+                      archs=$(lipo -archs "$x64_file")
+          
+                      # If the base file isn't ALREADY a fat binary, fuse them
+                      if ! (echo "$archs" | grep -q "arm64" && echo "$archs" | grep -q "x86_64"); then
+                          echo "Fusing: $rel_path"
+                          lipo -create -output "$x64_file" "$x64_file" "$arm_file"
+                      fi
+                  fi
+              fi
+          done
+          
+          # Re-sign the app (lipo modifies binaries, which instantly breaks existing code signatures)
+          echo "Signing Universal App..."
+          codesign --force --deep --sign - "PornFetch_Universal.app"
+          
+          # Package back into a final Universal DMG
+          mkdir dist_dmg
+          cp -pR "PornFetch_Universal.app" "dist_dmg/Porn Fetch.app"
+          ln -s /Applications dist_dmg/Applications
+          hdiutil create -volname "PornFetch" -srcfolder dist_dmg -ov -format UDZO "PornFetch_macOS_GUI_Universal.dmg"
+
+      # 3. Standard QA and Upload
+      - name: Checksum & Summary
+        run: |
+          sha256sum PornFetch_macOS_GUI_Universal.dmg > PornFetch_macOS_GUI_Universal.dmg.sha256
+          echo "### SHA256 Checksum (macOS Universal)" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat PornFetch_macOS_GUI_Universal.dmg.sha256 >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Universal Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PornFetch_macOS_GUI_Universal
+          path: PornFetch_macOS_GUI_Universal.dmg

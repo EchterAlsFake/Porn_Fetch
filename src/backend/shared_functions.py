@@ -8,6 +8,7 @@ import sys
 import httpx
 import logging
 import datetime
+import platform
 import traceback
 
 from typing import Any
@@ -18,7 +19,6 @@ from src.backend.config import __version__
 
 # which is also affecting all other APIs when the refresh_clients function is called
 # Initialize clients globally, so that we can override them later with a new configuration from BaseCore if needed
-
 logger = setup_logger(name="Porn Fetch - [shared_functions]", log_file="PornFetch.log", level=logging.DEBUG)
 
 
@@ -194,3 +194,31 @@ def get_int(cp: ConfigParser, section: str, key: str) -> int:
 
 def get_str(cp: ConfigParser, section: str, key: str) -> str:
     return cp.get(section, key)
+
+
+def get_os_and_arch():
+    """
+    Detects if the system is Windows/Linux and x64/ARM64.
+    Returns a string identifier or 'unsupported' if no match is found.
+    """
+    os_name = platform.system().lower()
+    machine = platform.machine().lower()
+
+    if os_name == 'windows':
+        # Windows identifies 64-bit x86 as 'amd64'
+        if machine in ['amd64', 'x86_64']:
+            return "windows_x64"
+        # Windows identifies ARM64 as 'arm64'
+        elif machine in ['arm64', 'aarch64']:
+            return "windows_arm64"
+
+    elif os_name == 'linux':
+        # Linux identifies 64-bit x86 as 'x86_64'
+        if machine in ['x86_64', 'amd64']:
+            return "linux_x64"
+        # Linux identifies ARM64 as 'aarch64'
+        elif machine in ['aarch64', 'arm64']:
+            return "linux_arm64"
+
+    # Fallback for Macs (Darwin), 32-bit systems, etc.
+    return f"unsupported ({os_name}_{machine})"

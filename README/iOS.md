@@ -15,6 +15,9 @@ Over the next weeks I will search for ways and try all possible ways to get that
 In version 3.8, maybe we have iOS support for the CLI. Maybe even a native binary you can 
 just run without the Python stuff. We'll see.
 
+Okay Edit:
+I don't know what I changed, but yeah downloading works just fine now :) 
+
 # GUI
 While the above process produces the CLI, but only works on jailbroken iPhones, the GUI
 could maybe even by half of 2026 be running officially on iOS with native support using
@@ -35,7 +38,6 @@ The problem is: **Signing.**
 I don't own an Apple developer account nor will I pay for one. So, maybe you can install
 the app through some unofficial methods if you live in the EU, I don't know, we will see.
 But there's always a way. I will find it. 
-
 
 
 If all this works, Porn Fetch would be running on all major platforms. 
@@ -93,10 +95,11 @@ If your iPhone breaks, buy a Google Pixel instead 🔥
 Now everything wors as usual on Linux
 
 5) Clone the repository, cd into the project, create a virtual environment, install the CLI requirements 
-6) Run Porn Fetch CLI
 
-That's it. (In theory)
-e
+You need to install all the requirements and every API manually. Do NOT try
+to install from pyproject.toml, that won't work. Just run the CLI and install each missing package
+until it works.
+
 
 
 

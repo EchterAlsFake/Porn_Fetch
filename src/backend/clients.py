@@ -79,7 +79,7 @@ _PUBLISHED_ON_RE = re.compile(
 _TEMPLATE_RE = re.compile(r"\$(\w+)|\$\{([^}]+)}")
 
 _NOT_AVAILABLE_RE = re.compile(r"^\s*(not\s+available|n/?a|none|null)?\s*$", re.IGNORECASE)
-logger = setup_logger(name="Porn Fetch - [Clients]", level=logging.DEBUG)
+logger = setup_logger(name="Porn Fetch - [Clients]", level=logging.DEBUG, log_file="PornFetch.log")
 
 # which is also affecting all other APIs when the refresh_clients function is called
 # Initialize clients globally, so that we can override them later with a new configuration from BaseCore if needed

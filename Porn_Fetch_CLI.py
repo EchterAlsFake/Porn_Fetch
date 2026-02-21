@@ -1,3 +1,8 @@
+import sys
+
+if sys.stdout.encoding != 'utf-8':
+    sys.stdout.reconfigure(encoding='utf-8') # Fixing windows charmap issues
+
 import time
 import queue
 import logging
