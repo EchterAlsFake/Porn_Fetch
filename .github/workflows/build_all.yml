@@ -226,6 +226,7 @@ jobs:
           make -j$(nproc) && sudo make altinstall
 
           export PATH="$PREFIX/bin:$PATH"
+          export LD_LIBRARY_PATH="$PREFIX/lib"
           curl -LsSf https://astral.sh/uv/install.sh | sh
           uv venv .venv --python $PREFIX/bin/python3.13
           source .venv/bin/activate
