@@ -6,6 +6,7 @@ import argparse
 import threading
 import traceback
 import itertools
+import src.backend.clients as clients
 
 from colorama import *
 from io import TextIOWrapper
@@ -14,16 +15,10 @@ from hue_shift import return_color
 from rich.markdown import Markdown
 from base_api.modules.progress_bars import *
 from base_api.base import BaseCore, setup_logger
-from src.backend.shared_functions import ensure_config_file, get_int, get_str, get_bool
-from src.backend.clients import (
-    ph_client, hq_client, xv_client, xn_client, ep_client,
-    check_video, load_video_attributes, write_tags, refresh_clients,
-    hq_Video, ep_Video
-)
 from src.backend.CLI_model_feature_addon import *
-import src.backend.shared_functions as shared_functions
-from base_api.modules.errors import (InvalidProxy, ProxySSLError)
+from src.backend.shared_functions import ensure_config_file, get_int, get_str, get_bool
 from rich.progress import Progress, BarColumn, TextColumn, SpinnerColumn, TimeElapsedColumn, TimeRemainingColumn
+from src.backend.config import TEMP_DIRECTORY_SEGMENTS, TEMP_DIRECTORY_STATES, TEMP_DIRECTORY
 
 try:
     import av
@@ -52,7 +47,6 @@ class CLI:
         self.finished_downloading = 0
         self.progress_queue = queue.Queue()
         self.skip_existing_files = None
-        self.download_mode = None
         self.pages_concurrency = None
         self.videos_concurrency = None
         self.result_limit = None
@@ -69,7 +63,8 @@ class CLI:
         self.language = None
         self.ffmpeg_features = True
         self.ffmpeg_path = None
-        refresh_clients()
+        self.custom_title = "$title"
+        clients.refresh_clients()
 
         self.mappings_quality = {
             0: "best",
@@ -80,9 +75,10 @@ class CLI:
             5: 1080,
             6: 720,
             7: 540,
-            8: 360,
-            9: 240,
-            10: 144
+            8: 480,
+            9: 360,
+            10: 240,
+            11: 144
         }
 
         self.mappings_download_mode = {
@@ -154,12 +150,9 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
 {return_color()}2) Get videos from a model
 {return_color()}3) Get videos from a PornHub playlist
 {return_color()}4) Search for videos
-{return_color()}5) Search a file for Video URLs (only Videos)
-{return_color()}6) Settings
-{return_color()}7) Model update / database feature (experimental)
- 
-{return_color()}1337) Enable Proxy (experimental)
-{return_color()}1338) Enable Proxy Kill Switch (very experimental)
+{return_color()}5) Settings
+{return_color()}6) Model update / database feature (experimental)
+{return_color()}7) Set custom title format
 
 {Fore.LIGHTWHITE_EX}98) Credits
 {Fore.LIGHTRED_EX}99) Exit
@@ -167,7 +160,7 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
 
         if options == "1":
             url = input(f"{return_color()}Please the enter video URL -->: {return_color()}")
-            video = [check_video(url)]
+            video = [clients.check_video(url)]
             self.iterate_generator(auto=True, generator=video)
 
         elif options == "2":
@@ -180,20 +173,13 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
             self.search_videos()
 
         elif options == "5":
-            self.process_file()
-
-        elif options == "6":
             self.save_user_settings()
 
-        elif options == "7":
+        elif options == "6":
             self.experimental_model_download()
 
-        elif options == "1337":
-            self.set_proxy()
-
-        elif options == "1338":
-            refresh_clients(enable_kill_switch=True)
-            print("Refreshed Clients with Kill Switch enabled!")
+        elif options == "7":
+            self.set_custom_title()
 
         elif options == "98":
             self.credits()
@@ -201,6 +187,37 @@ Do you accept the license?  [{Fore.LIGHTBLUE_EX}yes{Fore.RESET},{Fore.LIGHTRED_E
 
         elif options == "99":
             sys.exit(0)
+
+    def set_custom_title(self):
+        print("""
+The following options are supported:
+
+$title (The video Title) 
+$video_id
+$author
+$length
+$tags
+$publish_date
+$publish_dt
+$video
+
+Notice: Not every video supports all options. If something is not supported,
+it will be skipped. 
+
+The $publish_dt option supports a literal datetime object e.g.,: 
+${publish_dt:%Y-%m-%d} → 2025-10-27
+
+Same goes for length:
+${length:0.0f}min → 12min
+
+The $video references the literal video object class in the code, which allows
+you to tweak it further e.g., for PornHub you can do:
+${video.author.name}
+
+Please note, that this is intended for advanced users. I will not show general
+examples or ways to use all this. Please ask ChatGPT if you need further information.
+""")
+        self.custom_title = input("Enter custom title format: ")
 
     def experimental_model_download(self, path: str = STATE_FILE):
         """
@@ -264,7 +281,7 @@ Enter choice: """)
                 print(f"Model has pending videos! Downloading: {len(pending_videos)}")
                 for idx, url in enumerate(pending_videos):
                     print(f"[{idx}|{len(pending_videos)}] Downloading -->: {url}")
-                    videos = [check_video(url)]
+                    videos = [clients.check_video(url)]
                     try:
                         self.iterate_generator(generator=videos, batch=True, auto=True, remove_total_bar=True)
                         record_download(model_url=model_url, video_url=url, path=STATE_FILE)
@@ -286,67 +303,6 @@ Enter choice: """)
                 print(f"Model has no pending videos, continuing with the next one!")
                 continue
 
-    def set_proxy(self):
-        proxy = input(f"""
-{Fore.LIGHTWHITE_EX}Please enter your proxy in the format like this:
-<protocol><ip>:<port>
-You can find free socks proxies here: https://spys.one/en/socks-proxy-list/
-Or http[s] proxies here: https://proxyscrape.com/free-proxy-list
-Example:
-
-1) {Fore.LIGHTMAGENTA_EX}socks5://13.37.4.20:1337 {Fore.LIGHTGREEN_EX}(Socks5 is recommended)
-2) {Fore.LIGHTCYAN_EX}https://54.224.25.185:69
-{Fore.LIGHTMAGENTA_EX}
-Disclaimer:
-The Proxy feature was well tested, however there's no guarantee for it to perfectly function and never leaking your IP.
-Also, free proxies are very unreliable in general. Consider using a paid / your own proxy. 
-
-{Fore.LIGHTYELLOW_EX}Your Proxy -->:{Fore.LIGHTWHITE_EX}""")
-        print(f"Testing your Proxy: {proxy}")
-
-        import httpx
-        ip_unmasked = httpx.Client().get("https://httpbin.org/ip").json()["origin"]
-        try:
-            proxy_one_time_config_stuff_please_dont_ask_thank_you_very_mushhh.proxy = proxy
-            proxy_core = BaseCore(proxy_one_time_config_stuff_please_dont_ask_thank_you_very_mushhh)
-            ip_masked = BaseCore(config=proxy_one_time_config_stuff_please_dont_ask_thank_you_very_mushhh).fetch("https://httpbin.org/ip", get_response=True).json()["origin"]
-
-        except InvalidProxy:
-            print("Your Proxy in invalid. Try again!")
-            self.set_proxy()
-
-        except ProxySSLError:
-            ssl_verification = input(f"""
-        {Fore.LIGHTYELLOW_EX}WARNING
-
-{Fore.LIGHTRED_EX}Your Proxy does NOT support proper TLS / SSL verfification. It may use a self-signed certificate or 
-no certificate at all. You can disable SSL verification to get around this, however, this makes you vulnerable to
-man in the middle attacks. Everyone in your network will be able to inject malicious downloads on the fly, intercept 
-your connection, and read all your traffic.
-
-Do you accept the risk? 
--------[Yes|No]--->:
-""")
-
-            if ssl_verification.lower() == "yes":
-                print("Disabling SSL verficiation...")
-                shared_functions.config.verify_ssl = False
-                ip_masked = httpx.Client(proxy=proxy, verify=False).get("https://httpbin.org/ip").json()["origin"]
-
-            else:
-                print("Alright, going back to main menu....")
-                self.menu()
-
-        if ip_unmasked == ip_masked:
-            print(f"{Fore.LIGHTRED_EX}Your Proxy IP is equal to your normal IP! Your Proxy is not working, check your input!{Fore.LIGHTWHITE_EX}")
-            self.set_proxy()
-
-        else:
-            print(f"{return_color()}SUCCESS! {Fore.LIGHTWHITE_EX}Your Proxy IP is: {Fore.LIGHTYELLOW_EX}{ip_masked}. {Fore.LIGHTWHITE_EX}Using your Proxy for this session :)")
-            shared_functions.config.proxy = proxy
-            refresh_clients()
-            print("Refreshed Clients!")
-
     def first_run_cli(self):
         input(f"""
 Hello, thank you for using Porn Fetch. Please read through this real quick, to get a better understanding how everything 
@@ -355,7 +311,7 @@ works.
 Notice: The CLI is for advanced users and has a different / uncompleted feature set compared to the GUI!
 
 # Regarding Video Progress:
-Progressbar for EPorner and HQPorner videos is in MB, for all others it's in segments. 
+Progressbar for EPorner, HQPorner, Porntrex and PornGo videos is in MB, for all others it's in segments. 
 
 # Video post processing:
 Videos are post-processed using pyav by default. Pyav ships the binaries for ffmpeg, and I use that to remux videos. 
@@ -395,15 +351,14 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
         self.directory_system = get_bool(conf, "Video", "directory_system")
         self.skip_existing_files = get_bool(conf, "Video", "skip_existing_files")
         self.result_limit = get_int(conf, "Video", "result_limit")
-        self.download_mode = self.mappings_download_mode.get(get_int(conf, "Performance", "download_mode"))
-        shared_functions.config.request_delay = self.delay
-        shared_functions.config.timeout = self.timeout
-        shared_functions.config.max_workers_download = self.workers
-        shared_functions.config.videos_concurrency = self.videos_concurrency
-        shared_functions.config.pages_concurrency = self.pages_concurrency
-        shared_functions.config.max_retries = self.retries
-        shared_functions.config.max_bandwidth_mb = self.speed_limit
-        refresh_clients()
+        clients.config.request_delay = self.delay
+        clients.config.timeout = self.timeout
+        clients.config.max_workers_download = self.workers
+        clients.config.videos_concurrency = self.videos_concurrency
+        clients.config.pages_concurrency = self.pages_concurrency
+        clients.config.max_retries = self.retries
+        clients.config.max_bandwidth_mb = self.speed_limit
+        clients.refresh_clients()
         logger.info("Refreshed Clients with user settings being applied!")
 
 
@@ -413,10 +368,6 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
                 "best": Fore.LIGHTYELLOW_EX if self.quality == "best" else Fore.LIGHTWHITE_EX,
                 "half": Fore.LIGHTYELLOW_EX if self.quality == "half" else Fore.LIGHTWHITE_EX,
                 "worst": Fore.LIGHTYELLOW_EX if self.quality == "worst" else Fore.LIGHTWHITE_EX
-            }
-            threading_mode_color = {
-                "threaded": Fore.LIGHTYELLOW_EX if self.download_mode == "threaded" else Fore.LIGHTWHITE_EX,
-                "default": Fore.LIGHTYELLOW_EX if self.download_mode == "default" else Fore.LIGHTWHITE_EX
             }
 
             settings_options = input(f"""
@@ -441,9 +392,7 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
 13) Change result limit {Fore.LIGHTYELLOW_EX}(current: {self.result_limit}){Fore.LIGHTWHITE_EX}
 {Fore.LIGHTWHITE_EX}-------- {Fore.LIGHTBLUE_EX}Output Path {Fore.LIGHTWHITE_EX}--------
 14) Change output path {Fore.LIGHTYELLOW_EX}(current: {self.output_path}){Fore.LIGHTWHITE_EX}
-{Fore.LIGHTWHITE_EX}---------{Fore.LIGHTMAGENTA_EX}Threading Mode {Fore.LIGHTWHITE_EX}---------
-15) {threading_mode_color["threaded"]}Change to threaded (Not recommended on Android!){Fore.LIGHTWHITE_EX}
-16) {threading_mode_color["default"]}Change to default (really slow){Fore.LIGHTWHITE_EX}
+15) Set custom quality (integer)
 {Fore.LIGHTRED_EX}99) Exit
 {Fore.WHITE}------------->:""")
 
@@ -509,10 +458,8 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
                     conf.set("Video", "output_path", path)
 
                 elif settings_options == "15":
-                    conf.set("Performance", "threading_mode", "threaded")
-
-                elif settings_options == "16":
-                    conf.set("Performance", "threading_mode", "default")
+                    quality = input(f"Enter a quality -->:")
+                    conf.set("Video", "quality", quality)
 
                 elif settings_options == "99":
                     self.menu()
@@ -525,20 +472,21 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
         self.semaphore.acquire()
         if video is None:
             url = url or input("Enter Video URL: ")
-            video = check_video(url=url)
+            video = clients.check_video(url=url)
 
-        attrs = load_video_attributes(video, "$title")
+        attrs = clients.load_video_attributes(video, self.custom_title)
         author = attrs.author
         title = attrs.title
+        out_title = attrs.output_name
 
         # Determine output path
         out_dir = self.output_path or os.getcwd()
         if self.directory_system:
             author_dir = os.path.join(out_dir, author)
             os.makedirs(author_dir, exist_ok=True)
-            out_file = os.path.join(author_dir, f"{title}.mp4")
+            out_file = os.path.join(author_dir, f"{out_title}.mp4")
         else:
-            out_file = os.path.join(out_dir, f"{title}.mp4")
+            out_file = os.path.join(out_dir, f"{out_title}.mp4")
 
         if os.path.exists(out_file):
             logger.debug(f"File exists, skipping: {out_file}")
@@ -564,12 +512,13 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
     def process_video_with_error_handling(self, video, batch, ignore_errors, remove_total_bar):
         try:
             print(f"Processing video: {video.title}")
-            self.process_video(video, batch=batch, remove_total_bar=remove_total_bar)
+            self.process_video(video=video, batch=batch, remove_total_bar=remove_total_bar)
         except Exception as e:
             if ignore_errors:
                 print(f"{Fore.LIGHTRED_EX}[~]{Fore.RED}Ignoring Error: {e}")
+                self.semaphore.release()
             else:
-                raise f"{Fore.LIGHTRED_EX}[~]{Fore.RED}Error: {e}, please report the full traceback --: {traceback.print_exc()}"
+                raise f"{Fore.LIGHTRED_EX}[~]{Fore.RED}Error: {e}, please report the full traceback --: {traceback.format_exc()}"
 
     def iterate_generator(self, generator, auto=False, ignore_errors=False, batch=False, remove_total_bar=False):
         videos = []
@@ -633,24 +582,24 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
             model = url
 
         if "eporner" in model:
-            model = ep_client.get_pornstar(model, enable_html_scraping=True).videos(pages=10)
+            model = clients.ep_client.get_pornstar(model, enable_html_scraping=True).videos(pages=10)
 
         elif "xnxx" in model:
-            model = xn_client.get_user(model).videos
+            model = clients.xn_client.get_user(model).videos
 
         elif "pornhub" in model:
-            model = itertools.chain(ph_client.get_user(model).videos, ph_client.get_user(model).uploads)
+            model = itertools.chain(clients.ph_client.get_user(model).videos, clients.ph_client.get_user(model).uploads)
 
         elif "hqporner" in model:
-            model = hq_client.get_videos_by_actress(model)
+            model = clients.hq_client.get_videos_by_actress(model)
 
         elif "xvideos" in model:
             if "/model" in model or "/pornstar" in model:
-                model = xv_client.get_pornstar(model).videos
+                model = clients.xv_client.get_pornstar(model).videos
 
             else:
                 logger.info("Model URL does not contain expected /model or /pornstar. Assuming it's a channel instead...")
-                model = xv_client.get_channel(model).videos
+                model = clients.xv_client.get_channel(model).videos
 
         if do_return:
             return model
@@ -660,68 +609,49 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
     def process_playlist(self, url=None, auto=False, ignore_errors=False, batch=False):
         if url is None:
             url = input(f"{return_color()}Enter the (PornHub) playlist URL -->:")
-        playlist = ph_client.get_playlist(url)
+        playlist = clients.ph_client.get_playlist(url)
         print(f"{return_color()}Processing: {playlist.title}")
         self.iterate_generator(playlist.sample(), auto=auto, ignore_errors=ignore_errors, batch=batch)
 
-    def search_videos(self):
-        website = input(f"""
-{return_color()}Please select the website to search on:
+    def search_videos(self, website_index=None, query=None, auto=False):
+        if website_index is None:
+            website_index = input(f"""
+    {return_color()}Please select the website to search on:
 
-{return_color()}1) PornHub
-{return_color()}2) HQPorner
-{return_color()}3) XVideos
-{return_color()}4) XNXX
-{return_color()}5) Eporner
-{return_color()}----------->:""")
-        query = input(f"{return_color()}Please enter the search query -->:")
+    {return_color()}1) PornHub
+    {return_color()}2) HQPorner
+    {return_color()}3) XVideos
+    {return_color()}4) XNXX
+    {return_color()}5) Eporner
+    {return_color()}----------->:""")
+        if query is None:
+            query = input(f"{return_color()}Please enter the search query -->:")
 
-        if website == "1":
-            self.iterate_generator(ph_client.search(query))
+        if website_index == "1":
+            self.iterate_generator(clients.ph_client.search(query), auto=auto)
 
-        elif website == "2":
-            self.iterate_generator(hq_client.search_videos(query=query))
+        elif website_index == "2":
+            self.iterate_generator(clients.hq_client.search_videos(query=query), auto=auto)
 
-        elif website == "3":
-            self.iterate_generator(xv_client.search(query))
+        elif website_index == "3":
+            self.iterate_generator(clients.xv_client.search(query), auto=auto)
 
-        elif website == "4":
-            self.iterate_generator(xn_client.search(query).videos)
+        elif website_index == "4":
+            self.iterate_generator(clients.xn_client.search(query).videos, auto=auto)
 
-        elif website == "5":
-            self.iterate_generator(ep_client.search_videos(query, per_page=50,
-                                                             sorting_order="", sorting_gay="", sorting_low_quality="",
-                                                             enable_html_scraping=True, page=20))
+        elif website_index == "5":
+            self.iterate_generator(clients.ep_client.search_videos(query, per_page=50,
+                                                                    sorting_order="", sorting_gay="",
+                                                                    sorting_low_quality="",
+                                                                    enable_html_scraping=True, page=20), auto=auto)
 
-    def process_file(self):
-        videos = []
-        file = input(f"{return_color()}Please enter the file path -->:")
-
-        with open(file, "r") as file:
-            content = file.read()
-            content = content.splitlines()
-
-        for line in content:
-            if line.startswith("video#"):
-                line = line.split("#")[1]
-                try:
-                    videos.append(check_video(is_url=True, url=line))
-
-                except:
-                    error = traceback.format_exc()
-                    logger.error(f"Error in processing video: {line}, {error}")
-                    print(f"Error in processing video: {line}, {error}")
-                    continue
-
-        logger.debug(f"{return_color()}Done!")
-        self.iterate_generator(videos)
 
     def download(self, video, output_path, task_id, remove_total_bar=False):
         try:
             # Detect whether this is a byte-based download
             is_byte_download = (
-                isinstance(video, hq_Video)
-                or isinstance(video, ep_Video)
+                isinstance(video, clients.hq_Video)
+                or isinstance(video, clients.ep_Video or isinstance(video, clients.pt_Video) or isinstance(video, clients.pg_Video))
             )
 
             def callback_wrapper(pos, total):
@@ -743,13 +673,8 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
                         self.progress.update(self.task_total_progress, advance=1)
 
             # Kick off the right download call
-            if isinstance(video, ph_Video):
-                video.download(path=output_path,
-                    quality=self.quality,
-                    downloader=self.download_mode,
-                    display=callback_wrapper,
-                    remux=remux)
-            elif is_byte_download:
+
+            if is_byte_download:
                 # HQPorner / Eporner
                 video.download(
                     path=output_path,
@@ -757,24 +682,28 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
                     callback=callback_wrapper,
                     no_title=True,
                 )
+
             else:
                 # other types (e.g. ep_Video/hq_Video fall through here if needed)
                 video.download(
                     path=output_path,
                     quality=self.quality,
-                    downloader=self.download_mode,
                     callback=callback_wrapper,
                     remux=remux,
                     no_title=True,
+                    segment_dir=os.path.join(TEMP_DIRECTORY_SEGMENTS, video.title),
+                    segment_state_path=os.path.join(TEMP_DIRECTORY_STATES, video.title)
                 )
 
         finally:
+            data = clients.load_video_attributes(video, "$title")
+            data.thumbnail_data = None
             logger.debug(f"Finished download: {video.title}")
             if get_bool(conf, "Video", "write_metadata"):
                 if remux:
-                    write_tags(
+                    clients.write_tags(
                         path=output_path,
-                        data=load_video_attributes(video, "$title"))
+                        data=data)
 
 
             # Release semaphore and log
@@ -807,14 +736,38 @@ Bugs can be reported at: https://github.com/EchterAlsFake/Porn_Fetch/issues/
         rprint(md)
 
 
-
 class Batch(CLI):
     def __init__(self):
         super().__init__()
         self.main()
 
+    def test_mode(self):
+        """
+        This is the test mode for the CLI. It will test all features of the CLI without needing manual user input.
+        """
+        print("--- Starting Test Mode ---")
+        self.load_user_settings()
+        self.result_limit = 2
+        # Test 1: Download a single video
+        print("\n--- Test 1: Downloading a single video ---")
+        self.process_video(url="https://www.pornhub.com/view_video.php?viewkey=69925d60cef7c", batch=True)
+
+        # Test 2: Process a model
+        print("\n--- Test 2: Processing a model ---")
+        self.process_model(url="https://www.pornhub.com/model/comatozze", auto=True, ignore_errors=True, batch=True)
+
+        # Test 3: Process a playlist
+        print("\n--- Test 3: Processing a playlist ---")
+        self.process_playlist(url="https://www.pornhub.com/playlist/65401972", auto=True, ignore_errors=True, batch=True)
+
+        # Test 4: Search for videos
+        print("\n--- Test 4: Searching for videos ---")
+        self.search_videos(website_index="1", query="testing", auto=True)
+
+        print("\n--- Test Mode Finished ---")
+
     def main(self):
-            description = """
+        description = """
 Porn Fetch CLI - Download Porn from your terminal / batch processing
 
 Disclaimer:
@@ -846,8 +799,6 @@ OPTION            | TYPE  | DESCRIPTION
 --playlist        | (str) | A playlist URL
 --quality         | (str) | The quality of the videos [best, half, worst] > Default: best
 --output          | (str) | The path to a folder where to save the downloaded videos. > Default: current directory (./) 
---threading_mode  | (str) | The threading mode (backend, how to download the videos) [threaded,ffmpeg,default]
-                            Note: The threading mode 'ffmpeg' requires ffmpeg installed in your path!
 
 --auto_process    | (bool) | Whether to automatically download all videos from playlists, files, models or ask you 
                              to select a range of videos
@@ -857,107 +808,105 @@ Note:
 By using the CLI batch mode you automatically accept the GPLv3 License of Porn Fetch!
         """
 
-            parser = argparse.ArgumentParser("Porn Fetch CLI - Batch processing")
-            parser.add_argument("--info", help="A help message. READ THIS ON YOUR FIRST RUN!!!!!!!!!!!!!!!!!!!!!!!!",
-                                action="store_true")
-            parser.add_argument("--batch",
-                                help="Whether to start the interactive CLI or batch processing (Read documentation)",
-                                action="store_true")
-            parser.add_argument("--url", help="a Video URL", type=str)
-            parser.add_argument("--model", help="a model URL", type=str)
-            parser.add_argument("--playlist", help="a Playlist URL", type=str)
-            parser.add_argument("--output", help="the path to a folder where to save the downloaded videos",
-                                type=str, default=os.getcwd())
-            parser.add_argument("--quality", help="The quality of the videos", default="best",
-                                choices=["best", "half", "worst"], type=str)
-            parser.add_argument("--threading_mode", help="the threading mode", default="threaded",
-                                choices=["threaded", "ffmpeg", "default"], type=str)
-            parser.add_argument("--ignore_errors", help="Whether to ignore errors during downloads",
-                                action="store_false")
-            parser.add_argument("--auto_process", help="Whether to automatically download all videos from playlists,"
-                                                       "files, models or ask you to select each videos individually",
-                                action="store_true")
-            parser.add_argument("--add-model-to-database", help="A model URL that should be added to the database")
-            parser.add_argument("--remove-model-from-database", help="A model URL that should be removed from the database")
-            parser.add_argument("--update-models", help="Runs the model update function", action="store_true")
-            parser.add_argument("--update-pending-urls", help="Updates the videos that need to be fetched from a model", action="store_true")
+        parser = argparse.ArgumentParser("Porn Fetch CLI - Batch processing")
+        parser.add_argument("--info", help="A help message. READ THIS ON YOUR FIRST RUN!!!!!!!!!!!!!!!!!!!!!!!!",
+                            action="store_true")
+        parser.add_argument("--batch",
+                            help="Whether to start the interactive CLI or batch processing (Read documentation)",
+                            action="store_true")
+        parser.add_argument("--test-mode", help="Run the CLI in test mode", action="store_true")
+        parser.add_argument("--url", help="a Video URL", type=str)
+        parser.add_argument("--model", help="a model URL", type=str)
+        parser.add_argument("--playlist", help="a Playlist URL", type=str)
+        parser.add_argument("--output", help="the path to a folder where to save the downloaded videos",
+                            type=str, default=os.getcwd())
+        parser.add_argument("--quality", help="The quality of the videos", default="best",
+                            choices=["best", "half", "worst"], type=str)
+        parser.add_argument("--ignore_errors", help="Whether to ignore errors during downloads",
+                            action="store_false")
+        parser.add_argument("--auto_process", help="Whether to automatically download all videos from playlists,"
+                                                   "files, models or ask you to select each videos individually",
+                            action="store_true")
+        parser.add_argument("--add-model-to-database", help="A model URL that should be added to the database")
+        parser.add_argument("--remove-model-from-database",
+                            help="A model URL that should be removed from the database")
+        parser.add_argument("--update-models", help="Runs the model update function", action="store_true")
+        parser.add_argument("--update-pending-urls", help="Updates the videos that need to be fetched from a model",
+                            action="store_true")
 
-            args = parser.parse_args()
+        args = parser.parse_args()
 
-            if args.info:
-                print(description)
-                exit(0)
+        if args.info:
+            print(description)
+            exit(0)
 
-            if args.add_model_to_database:
-                model_url = args.add_model_to_database
-                add_model_url(model_url, path=STATE_FILE)
-                exit(0)
+        if args.test_mode:
+            self.test_mode()
+            exit(0)
 
-            if args.remove_model_from_database:
-                model_url = args.remove_model_from_database
-                remove_model_url(model_url, path=STATE_FILE)
-                exit(0)
+        if args.add_model_to_database:
+            model_url = args.add_model_to_database
+            add_model_url(model_url, path=STATE_FILE)
+            exit(0)
 
-            if args.update_pending_urls:
-                update_pending_for_all_models(self.process_model, STATE_FILE)
-                exit(0)
+        if args.remove_model_from_database:
+            model_url = args.remove_model_from_database
+            remove_model_url(model_url, path=STATE_FILE)
+            exit(0)
 
-            if args.update_models:
-                cli = CLI()
-                cli.load_user_settings()
-                cli.update_models()
-                exit(0)
+        if args.update_pending_urls:
+            update_pending_for_all_models(self.process_model, STATE_FILE)
+            exit(0)
 
-            if args.batch is False:
-                CLI().init()
+        if args.update_models:
+            cli = CLI()
+            cli.load_user_settings()
+            cli.update_models()
+            exit(0)
 
-            url = args.url
-            model = args.model
-            playlist = args.playlist
-            quality = args.quality
-            threading_mode = args.threading_mode
-            output = args.output
-            ignore = args.ignore_errors
-            auto_process = args.auto_process
+        if args.batch is False:
+            CLI().init()
 
-            print("Checking and loading configuration...")
-            try:
-                self.load_user_settings()
+        url = args.url
+        model = args.model
+        playlist = args.playlist
+        quality = args.quality
+        output = args.output
+        ignore = args.ignore_errors
+        auto_process = args.auto_process
 
-            except Exception as e:
-                print(f"Error in loading configuration..., creating a new configuration file... Error:")
-                logger.error(e)
-                ensure_config_file(force=True)
-                self.load_user_settings()
+        print("Checking and loading configuration...")
+        try:
+            self.load_user_settings()
 
-            # Overriding the values from configuration file with CLI values
-            self.quality = quality
-            self.threading_mode = threading_mode
-            self.output_path = output
+        except Exception as e:
+            print(f"Error in loading configuration..., creating a new configuration file... Error:")
+            logger.error(e)
+            ensure_config_file(force=True)
+            self.load_user_settings()
 
-            if url:
-                print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTCYAN_EX}Downloading URL -->: {url}")
-                self.process_video(url=url, batch=True)
+        # Overriding the values from configuration file with CLI values
+        self.quality = quality
+        self.output_path = output
 
-            if model:
-                print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTYELLOW_EX}Processing model -->: {model}")
-                if auto_process:
-                    print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTMAGENTA_EX}! Using auto processing !")
+        if url:
+            print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTCYAN_EX}Downloading URL -->: {url}")
+            self.process_video(url=url, batch=True)
 
-                self.process_model(url=model, auto=auto_process, ignore_errors=ignore, batch=True)
+        if model:
+            print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTYELLOW_EX}Processing model -->: {model}")
+            if auto_process:
+                print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTMAGENTA_EX}! Using auto processing !")
 
-            if playlist:
-                print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTBLUE_EX}Processing Playlist -->: {playlist}")
-                if auto_process:
-                    print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTMAGENTA_EX}! Using auto processing !")
+            self.process_model(url=model, auto=auto_process, ignore_errors=ignore, batch=True)
 
-                self.process_playlist(url=playlist, auto=auto_process, ignore_errors=ignore, batch=True)
+        if playlist:
+            print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTBLUE_EX}Processing Playlist -->: {playlist}")
+            if auto_process:
+                print(f"{Fore.LIGHTGREEN_EX}[+]{Fore.LIGHTMAGENTA_EX}! Using auto processing !")
+
+            self.process_playlist(url=playlist, auto=auto_process, ignore_errors=ignore, batch=True)
 
 
 if __name__ == '__main__':
     Batch()
-
-
-
-
-

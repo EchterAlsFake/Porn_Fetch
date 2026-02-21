@@ -723,7 +723,7 @@ def download_android(url: str, quality="best", path="./", remux=False):
     )
 
 
-def write_tags(path: str, data: dict):
+def write_tags(path: str, data: VideoAttributes):
     """
     Writes the tags of the video into the file. This needs a correct MP4 header either from a remuxed mpeg-ts stream
     through PyAV or the stream is already an mp4 file e.g., from EPorner or HQPorner.

@@ -195,7 +195,13 @@ jobs:
           EXT="${{ matrix.platform == 'windows' && '.exe' || '' }}"
           OUT="PornFetch_${{ matrix.platform }}_CLI_${{ matrix.arch }}$EXT"
           mv dist/Porn_Fetch_CLI$EXT "$OUT"
+          echo "CLI_OUTPUT=$OUT" >> $GITHUB_ENV
           sha256sum "$OUT" > "$OUT.sha256"
+
+      - name: Test CLI
+        shell: bash
+        run: |
+          ./${{ env.CLI_OUTPUT }} --test-mode
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -236,7 +242,13 @@ jobs:
           python -m PyInstaller -F Porn_Fetch_CLI.py
 
           mv dist/Porn_Fetch_CLI PornFetch_Linux_CLI_x32
+          echo "CLI_OUTPUT=PornFetch_Linux_CLI_x32" >> $GITHUB_ENV
           sha256sum PornFetch_Linux_CLI_x32 > checksum.txt
+
+      - name: Test CLI
+        shell: bash
+        run: |
+          ./${{ env.CLI_OUTPUT }} --test-mode
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4

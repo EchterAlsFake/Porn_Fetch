@@ -102,7 +102,6 @@ DEFAULTS: dict[str, dict[str, Any]] = {
         # add this (important for migrations)
     },
     "Performance": {
-        "download_mode": 0,
         "semaphore": 1,
         "videos_concurrency": 10,
         "pages_concurrency": 2,

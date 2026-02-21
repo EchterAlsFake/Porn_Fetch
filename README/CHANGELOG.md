@@ -604,6 +604,9 @@ to be refactored.
 
 # 3.8
 ### New Features
+- [GUI] Support for Linux arm64
+- [CLI] Support for macOS x64, macOS arm64, Linux riscv64, Linux s390x, Linux ppc64le
+- [GUI] Support for Android (native Kotlin App)
 - Added support for xhamster's alternative "xhopen" domain
 - Added Video support for beeg.com
 - Added Video support for porntrex.com
@@ -649,11 +652,10 @@ to be refactored.
 - Updated build to Python 3.13.11 (All systems)
 - Updated Qt to 6.10.2
 - Updated Nuitka to 2.8.9
-- Removed Internet checks entirely
 
 ### Deprecations
 - Removed automated selection of videos
-
+- Removed Internet checks entirely
 
 
 

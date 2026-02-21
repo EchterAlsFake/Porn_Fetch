@@ -300,6 +300,9 @@ class InstallThread(QRunnable):
     def _install_linux_user(self):
         filename = "PornFetch_Linux_GUI_x64.bin" # Typical filename, but needs to be improved # TODO
 
+        if os.path.exists("PornFetch_Windows_GUI_arm64.bin"):
+            filename = "PornFetch_Linux_GUI_arm64.bin" # For ARM based CPUs
+
         # Install “payload” (binary + assets) into local app data:
         install_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
         mkpath(install_dir)
