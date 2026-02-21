@@ -14,22 +14,22 @@ def ui_popup(text, title="Notice"):
     message_box.setStyleSheet("""
     /* Dialog surface */
     QMessageBox {
-      background: #FFFFFF;
-      color: #111827;
-      border: 1px solid #E5E7EB;
+      background: #2B2B2B;
+      color: #FFFFFF;
+      border: 1px solid #4B4B4B;
       border-radius: 12px;
     }
 
     /* Main text */
     QMessageBox QLabel#qt_msgbox_label {
-      color: #111827;
+      color: #FFFFFF;
       font-size: 11pt;
       padding: 2px 0px;
     }
 
     /* Optional informative text (if you use setInformativeText) */
     QMessageBox QLabel#qt_msgbox_informativelabel {
-      color: #374151;
+      color: #BBBBBB;
       font-size: 10pt;
       padding-top: 4px;
     }
@@ -46,40 +46,40 @@ def ui_popup(text, title="Notice"):
 
     /* Buttons (mirror your global QPushButton rule) */
     QMessageBox QPushButton {
-      border: 1px solid #D1D5DB;
-      background: #FFFFFF;
-      color: #111827;
+      border: 1px solid #555555;
+      background: #3C3C3C;
+      color: #FFFFFF;
       border-radius: 8px;
       padding: 6px 12px;
       min-width: 96px;
     }
 
     QMessageBox QPushButton:hover {
-      background: #F3F4F6;
-      border-color: #93C5FD;
+      background: #4C4C4C;
+      border-color: #555555;
     }
 
     QMessageBox QPushButton:pressed {
-      background: #E5E7EB;
+      background: #5C5C5C;
     }
 
     /* Make the default action look like your primary intent */
     QMessageBox QPushButton:default {
-      background: #2563EB;
-      border-color: #2563EB;
+      background: #007ACC;
+      border-color: #007ACC;
       color: white;
     }
 
     QMessageBox QPushButton:default:hover {
-      background: #1D4ED8;
-      border-color: #1D4ED8;
+      background: #005A9E;
+      border-color: #005A9E;
     }
 
     /* Disabled */
     QMessageBox QPushButton:disabled {
-      color: #9CA3AF;
-      background: #F3F4F6;
-      border-color: #E5E7EB;
+      color: #888888;
+      background: #3C3C3C;
+      border-color: #555555;
     }
     """)
 

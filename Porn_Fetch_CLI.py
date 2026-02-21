@@ -842,7 +842,7 @@ By using the CLI batch mode you automatically accept the GPLv3 License of Porn F
 
         if args.test_mode:
             self.test_mode()
-            exit(0)
+            sys.exit(0)
 
         if args.add_model_to_database:
             model_url = args.add_model_to_database

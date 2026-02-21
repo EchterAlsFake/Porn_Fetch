@@ -1605,6 +1605,38 @@ QLineEdit:focus {
         if first:
             settings.setValue("Misc/first_run_gui", False)
             settings.sync()
+            ui_popup("""
+VERY IMPORTANT INFORMATION (must read)
+
+With this release, Porn Fetch gets a license system with paid only features.
+So you need to buy a license for 5€ to get all features, HOWEVER...
+
+Because I live in Germany and in this country you need to create a company even if you want to make one cent,
+and I haven't done that yet, you get the full license FOR FREE!
+
+I am currently using a stripe checkout form which is in test mode. That means that while this looks like a real payment,
+your card will NOT be charged.
+
+To get a license, please go to: 
+https://echteralsfake.me/buy_license
+
+For the E-Mail enter:
+test@test.com
+
+Enter this for the payment information:
+Card Number: 4242 4242 4242 4242
+MM / JJ: 05/28
+CVC: 999
+Name: Max Mustermann
+
+
+This serves as a test environment for the real license system later on.
+Thank you very much for participating :)
+
+If you need help, please write to:
+EchterAlsFake@proton.me
+""")
+
             self.switch_to_one_time_setup()
 
             ui_popup("""

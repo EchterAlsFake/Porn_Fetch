@@ -1,4 +1,4 @@
-# Porn Fetch V3.7
+# Porn Fetch V3.8
 
 Copyright (C) 2023-2026 Johannes Habel (EchterAlsFake)
 
@@ -59,6 +59,7 @@ This font is licensed under SIL Open Font License, Version 1.1
 - [journeym](https://github.com/journeym) Enhancement [#74](https://github.com/EchterAlsFake/Porn_Feetch/74) (Suppressing Errors)
 - [Joly0](https://github.com/Joly0) Enhancement [#78](https://github.com/EchterAlsFake/Porn_Feetch/78) (Model batch downloading)
 - [FatalPuppet](https://github.com/FatalPuppet) Italian Translations [#100](https://github.com/EchterAlsFake/Porn_Fetch/issues/100)
+- [HeathenSkwerl](https://github.com/HeathenSkwerl) Enhancement [#97](https://github.com/EchterAlsFake/Porn_Fetch/issues/97)
 
 # Libraries
 - [PHUB](https://github.com/EchterAlsFake/PHUB) (GPLv3)
@@ -83,17 +84,21 @@ This font is licensed under SIL Open Font License, Version 1.1
 - [httpx](https://github.com/encode/httpx) (BSD-3 Clause)
 - [pywin32](https://github.com/mhammond/pywin32) (PSF-2.0)
 - [pyav](https://github.com/PyAV-Org/PyAV) (BSD-3-Clause)
+- [porntrex_api](https://github.com/EchterAlsFake/porntrex_api) (LGPLv3)
+- [porngo_api](https://github.com/EchterAlsFake/porngo_api) (LGPLv3)
+- [python-dateutil](https://github.com/dateutil/dateutil/) (Apache 2.0)
 
 (This list may not be perfectly accurate)
 
 
-<br>ANDROID:
+# Android
 - [Buildozer](https://github.com/kivy/buildozer) (MIT)
 - [Cython](https://github.com/cython/cython) (Apache 2.0)
+- [Chaquopy](https://github.com/chaquo/chaquopy) (MIT)
 
 # Applications
 - [FFMPEG](https://ffmpeg.org/) (GPL)
-- Porn Fetch doesn't use FFmpeg anymore by itself, but you can integrate it at system level (advanced)
+- Porn Fetch uses FFmpeg through the pyav library
 
 ** All other libraries are built in to Python.
 
@@ -103,4 +108,15 @@ For the fairness to these authors, I will still list them here, although they do
 # macOS Build
 Big shoutout to this project: https://github.com/notAperson535/OneClick-macOS-Simple-KVM
 This makes Porn Fetch on macOS possible thanks to virtualization
+
+# iOS Testing
+iOS Testing is only possible because I can use some old iPhone 7 that is jailbroken to test Porn Fetch's CLI there.
+This is very experimental, but still,
+
+Thanks to: 
+
+- [palera1n](https://palera.in/)  (Jailbreaking)
+- Kitty-XZ for pre-compiled Python 3.12.5 
+
+
 
