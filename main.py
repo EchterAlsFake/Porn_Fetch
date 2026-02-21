@@ -19,9 +19,18 @@ Contact:
 E-Mail: EchterAlsFake@proton.me
 Discord: echteralsfake (faster response)
 """
+import sys
+import os
+from pathlib import Path
+
+# Add 'src' to the Python path
+# This allows 'from backend.clients' instead of 'from src.backend.clients'
+# and makes the code compatible with how Chaquopy sees the source tree.
+SRC_DIR = Path(__file__).parent / "src"
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
 
 # Stop Splash Screen
-import os
 import tempfile
 FORCE_TEST_RUN = False
 
@@ -34,19 +43,18 @@ if "NUITKA_ONEFILE_PARENT" in os.environ:
         os.unlink(splash_filename)
 
 # macOS Setup...
-import sys
 from PySide6.QtWidgets import QApplication
 app = QApplication(sys.argv)
 
 if sys.platform == "darwin" and not FORCE_TEST_RUN:
-    from src.backend.macos_setup import macos_setup, SparkleUpdater
+    from backend.macos_setup import macos_setup, SparkleUpdater
     macos_setup()
 
 # Necessary imports for splashscreen
-import src.frontend.UI.resources
+import frontend.UI.resources
 
 from PySide6.QtGui import QPixmap
-from src.frontend.UI.splashscreen import ModernSplashScreen
+from frontend.UI.splashscreen import ModernSplashScreen
 
 splash_pixmap = QPixmap(":/images/graphics/splashscreen.png")
 splash = ModernSplashScreen(splash_pixmap)
@@ -72,26 +80,26 @@ from itertools import islice, chain
 splash.showMessage("Importing (Backend).")
 app.processEvents()
 # Backend imports
-from src.backend import clients # Singleton instance for the client objects (really important)
-from src.backend.database import *
-from src.backend.shared_gui import *
-from src.backend.shared_functions import *
-from src.backend.helper_functions import *
-from src.backend.clients import VideoAttributes
-from src.backend.check_license import LicenseManager
-import src.backend.shared_functions as shared_functions
-from src.backend.config import __version__, PUBLIC_KEY_B64, shared_config, IS_SOURCE_RUN, TEMP_DIRECTORY, TEMP_DIRECTORY_STATES, TEMP_DIRECTORY_SEGMENTS
+from backend import clients # Singleton instance for the client objects (really important)
+from backend.database import *
+from backend.shared_gui import *
+from backend.shared_functions import *
+from backend.helper_functions import *
+from backend.clients import VideoAttributes
+from backend.check_license import LicenseManager
+import backend.shared_functions as shared_functions
+from backend.config import __version__, PUBLIC_KEY_B64, shared_config, IS_SOURCE_RUN, TEMP_DIRECTORY, TEMP_DIRECTORY_STATES, TEMP_DIRECTORY_SEGMENTS
 
 splash.showMessage("Importing (Frontend).")
 app.processEvents()
 # Frontend imports
-from src.frontend.UI.theme import *
-from src.frontend.UI.ssl_warning import *
-from src.frontend.UI.license import License, Disclaimer
-from src.frontend.UI.thumbnail_viewer import ImageViewer
-from src.frontend.UI.ui_form_main_window import Ui_PornFetch_UI
-from src.frontend.UI.pornfetch_info_dialog import PornFetchInfoWidget
-from src.frontend.UI.custom_combo_box import ComboPopupFitter, make_quality_combobox
+from frontend.UI.theme import *
+from frontend.UI.ssl_warning import *
+from frontend.UI.license import License, Disclaimer
+from frontend.UI.thumbnail_viewer import ImageViewer
+from frontend.UI.ui_form_main_window import Ui_PornFetch_UI
+from frontend.UI.pornfetch_info_dialog import PornFetchInfoWidget
+from frontend.UI.custom_combo_box import ComboPopupFitter, make_quality_combobox
 
 splash.showMessage("Importing (PySide6 - FULL).")
 app.processEvents()

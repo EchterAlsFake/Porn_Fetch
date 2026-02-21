@@ -6,12 +6,17 @@ changes like the public key for sparkle, version and bundle identifier and so on
 I could of course manually copy this each time, but why not using a script to make my life simpler yk
 """
 
+import sys
+from pathlib import Path
+
+# Add the project root to the Python path
+project_root = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, str(project_root))
 
 import shutil
 import argparse
 import plistlib
 import subprocess
-from pathlib import Path
 from src.backend.config import __bundle_id__
 
 
