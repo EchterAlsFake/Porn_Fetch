@@ -1,6 +1,6 @@
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QMainWindow, QMessageBox
-from backend.shared_functions import ensure_config_file
+from src.backend.shared_functions import ensure_config_file
 from PySide6.QtCore import Signal, QObject, QCoreApplication
 
 

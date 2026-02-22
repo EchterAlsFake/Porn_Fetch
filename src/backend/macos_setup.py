@@ -10,7 +10,7 @@ import ctypes
 from pathlib import Path
 from base_api.base import setup_logger
 from PySide6.QtCore import QObject, Slot
-from PySide6.QtWidgets import QApplication, QMessageBox
+from PySide6.QtWidgets import QMessageBox
 
 
 logger = setup_logger("Porn Fetch (macOS) - [Sparkle]")
