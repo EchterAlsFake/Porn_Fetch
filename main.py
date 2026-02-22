@@ -1620,7 +1620,7 @@ QLineEdit:focus {
         self.ui.one_time_setup_button_info_disable_all.clicked.connect(self.info_dialog_disable_all)
         self.ui.one_time_setup_button_info_enable_update.clicked.connect(self.info_dialog_enable_update)
 
-        self.ui.settings_button_apply.clicked.connect(self.save_user_settings)
+        self.ui.settings_button_apply.clicked.connect(lambda: self.save_user_settings())
         self.ui.settings_button_reset.clicked.connect(reset_pornfetch)
         self.ui.settings_button_system_install_pornfetch.clicked.connect(self.switch_to_install_dialog)
         self.ui.settings_checkbox_system_activate_proxy.clicked.connect(self.set_proxies)
