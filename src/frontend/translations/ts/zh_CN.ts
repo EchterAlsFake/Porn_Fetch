@@ -4,17 +4,17 @@
 <context>
     <name>PornFetch</name>
     <message>
-        <location filename="../../../../main.py" line="2893"/>
+        <location filename="../../../../main.py" line="2927"/>
         <source>Porn Fetch installation failed, because of: {result[1]}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1981"/>
+        <location filename="../../../../main.py" line="2005"/>
         <source>Saved User Settings, please restart Porn Fetch!</source>
         <translation type="unfinished">已保存用户设置，请重新启动 Porn Fetch！</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1985"/>
+        <location filename="../../../../main.py" line="2010"/>
         <source>
 Please read this before setting proxies:
 
@@ -56,73 +56,73 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2195"/>
+        <location filename="../../../../main.py" line="2221"/>
         <source>The model URL you entered seems to be invalid. Please check your input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2261"/>
+        <location filename="../../../../main.py" line="2287"/>
         <source>Couldn&apos;t determine which site you want to search on??? Please report this immediately!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2887"/>
+        <location filename="../../../../main.py" line="2921"/>
         <source>Porn Fetch has been installed. The app will now close! Please start Porn Fetch from your context menu again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2055"/>
+        <location filename="../../../../main.py" line="2080"/>
         <source>You did choose to not disable SSL Verifications. Retuning to GUI without applying proxies now...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2059"/>
+        <location filename="../../../../main.py" line="2084"/>
         <source>Your proxy seems to be invalid, please try again...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2066"/>
+        <location filename="../../../../main.py" line="2091"/>
         <source>Proxy IP: {ip_masked} Your IP: {ip} are the same! Please check the proxy you&apos;ve used!, aborting...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2083"/>
+        <location filename="../../../../main.py" line="2108"/>
         <source>Can not enable Kill Switch if you haven&apos;t applied a proxy yet!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2629"/>
+        <location filename="../../../../main.py" line="2663"/>
         <source>Those credentials don&apos;t seem to be valid...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2639"/>
+        <location filename="../../../../main.py" line="2673"/>
         <source>Login Successful!</source>
         <translation type="unfinished">登陆成功！</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2643"/>
+        <location filename="../../../../main.py" line="2677"/>
         <source>Login Failed, please check your credentials and try again!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2647"/>
+        <location filename="../../../../main.py" line="2681"/>
         <source>You are already logged in!</source>
         <translation type="unfinished">您已经登录！</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2657"/>
+        <location filename="../../../../main.py" line="2691"/>
         <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
         <translation type="unfinished">登录有问题。请确保您先登录，然后尝试根据您的帐户获取视频。</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2704"/>
-        <location filename="../../../../main.py" line="2723"/>
+        <location filename="../../../../main.py" line="2738"/>
+        <location filename="../../../../main.py" line="2757"/>
         <source>Invalid Category. Press &apos;list categories&apos; to see all possible ones.</source>
         <translation type="unfinished">类别无效。按“列出类别”查看所有可能的类别。</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2848"/>
+        <location filename="../../../../main.py" line="2882"/>
         <source>
 Important: 
 
@@ -138,7 +138,7 @@ Thank you for using Porn Fetch ^^
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2901"/>
+        <location filename="../../../../main.py" line="2935"/>
         <source>Porn Fetch uninstallation failed, because of: {result[1]}</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1758,7 +1758,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>main</name>
     <message>
-        <location filename="../../../../main.py" line="3173"/>
+        <location filename="../../../../main.py" line="3204"/>
         <source>No URLs in the current session...</source>
         <translation type="unfinished"></translation>
     </message>

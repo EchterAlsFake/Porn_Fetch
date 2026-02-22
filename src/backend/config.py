@@ -14,11 +14,11 @@ __license__ = "GPL 3"
 __version__ = "3.8"
 __author__ = "Johannes Habel"
 __next_release__ = "3.9"
-__type__ = "source"
+__type__ = "release"
 __bundle_id__ = "me.echteralsfake.pornfetch"
 __org__ = "EchterAlsFake"
 PUBLIC_KEY_B64 = 'zGUmG8Z5InvoYIwnIokQi+SysjEodvfP8kLoCur3KjM=' # This is the public key for the license verification
-IS_SOURCE_RUN = True
+IS_SOURCE_RUN = False
 
 TEMP_DIRECTORY = ".temp"
 TEMP_DIRECTORY_STATES = os.path.join(TEMP_DIRECTORY, "states")

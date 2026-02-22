@@ -435,7 +435,7 @@ jobs:
           
           # Patch the bundle to correctly integrate the Sparkle framework for updates
           echo "Patching macOS bundle for Sparkle framework..."
-          uv run python src/scripts/patch_macos_bundle.py "PornFetch_Universal.app" --short-version=3.8
+          uv run python src/scripts/patch_macos_bundle.py --short-version=3.8
           
           # Package back into a final Universal DMG
           mkdir dist_dmg

@@ -55,7 +55,7 @@ def run(cmd: list[str]) -> None:
 
 
 def main() -> None:
-    app = "Porn Fetch.app"
+    app = "PornFetch_Universal.app"
     bundle_id = __bundle_id__
     display_name = "Porn Fetch"
     feed_url = "https://echteralsfake.me/appcast.xml"

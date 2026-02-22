@@ -936,16 +936,16 @@ wheels = [
 
 [[package]]
 name = "porntrex-api"
-version = "1.2"
+version = "1.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "bs4" },
     { name = "eaf-base-api" },
     { name = "json5" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/2f/c6/2a6d49f56fca13af9e83b3978ed514c165c00231ed74d96920907baf280d/porntrex_api-1.2.tar.gz", hash = "sha256:290c2883ca84b6d824f38745f992c222a3f39998003d18b6be448b40143ceb05", size = 8988, upload-time = "2026-02-08T05:09:50.562Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1c/29/dc467a85bf86844c8e1e0f7914e2f7c1d8383ffca293a52ad3f5b172666f/porntrex_api-1.3.tar.gz", hash = "sha256:53d9b65c5ea3dd6eb203913ac77e11f6f064efdb3c6445d548da9ab396d3c1bf", size = 8986, upload-time = "2026-02-22T18:05:10.935Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/6c/7c/ebe9c357c774c6a9f2b02ff6eacb6d4a1d83f9a6f602ec74c675aaa7143c/porntrex_api-1.2-py3-none-any.whl", hash = "sha256:85aa87ea615290978c9e3b81a64d379f7b26d079069b5b3bf8dcb3291f72ab66", size = 12171, upload-time = "2026-02-08T05:09:49Z" },
+    { url = "https://files.pythonhosted.org/packages/4f/5f/552c5e5ce4b54ee511d7c0341d03796d9eef57e206ff15e3ecd4720e553b/porntrex_api-1.3-py3-none-any.whl", hash = "sha256:ca1c68098c2b0a83e261a159231c32ea2550dbc8876913a67971ce01bcc390b2", size = 12176, upload-time = "2026-02-22T18:05:12.126Z" },
 ]
 
 [[package]]
@@ -996,15 +996,15 @@ wheels = [
 
 [[package]]
 name = "pyinstaller-hooks-contrib"
-version = "2026.0"
+version = "2026.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "packaging" },
     { name = "setuptools" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/31/8f/8052ff65067697ee80fde45b9731842e160751c41ac5690ba232c22030e8/pyinstaller_hooks_contrib-2026.0.tar.gz", hash = "sha256:0120893de491a000845470ca9c0b39284731ac6bace26f6849dea9627aaed48e", size = 170311, upload-time = "2026-01-20T00:15:23.922Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/95/eb/e1dd9a5348e4cf348471c0e5fd617d948779bc3199cf4edb134d8fceca91/pyinstaller_hooks_contrib-2026.1.tar.gz", hash = "sha256:a5f0891a1e81e92406ab917d9e76adfd7a2b68415ee2e35c950a7b3910bc361b", size = 171504, upload-time = "2026-02-18T13:01:15.711Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d5/b1/9da6ec3e88696018ee7bb9dc4a7310c2cfaebf32923a19598cd342767c10/pyinstaller_hooks_contrib-2026.0-py3-none-any.whl", hash = "sha256:0590db8edeba3e6c30c8474937021f5cd39c0602b4d10f74a064c73911efaca5", size = 452318, upload-time = "2026-01-20T00:15:21.88Z" },
+    { url = "https://files.pythonhosted.org/packages/7f/69/12bafee3cc485d977f596e0d803d7c6fb147430fc35dfe505730aa3a28dd/pyinstaller_hooks_contrib-2026.1-py3-none-any.whl", hash = "sha256:66ad4888ba67de6f3cfd7ef554f9dd1a4389e2eb19f84d7129a5a6818e3f2180", size = 452841, upload-time = "2026-02-18T13:01:14.471Z" },
 ]
 
 [[package]]
@@ -1097,15 +1097,15 @@ wheels = [
 
 [[package]]
 name = "rich"
-version = "14.3.2"
+version = "14.3.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "markdown-it-py" },
     { name = "pygments" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/74/99/a4cab2acbb884f80e558b0771e97e21e939c5dfb460f488d19df485e8298/rich-14.3.2.tar.gz", hash = "sha256:e712f11c1a562a11843306f5ed999475f09ac31ffb64281f73ab29ffdda8b3b8", size = 230143, upload-time = "2026-02-01T16:20:47.908Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b3/c6/f3b320c27991c46f43ee9d856302c70dc2d0fb2dba4842ff739d5f46b393/rich-14.3.3.tar.gz", hash = "sha256:b8daa0b9e4eef54dd8cf7c86c03713f53241884e814f4e2f5fb342fe520f639b", size = 230582, upload-time = "2026-02-19T17:23:12.474Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ef/45/615f5babd880b4bd7d405cc0dc348234c5ffb6ed1ea33e152ede08b2072d/rich-14.3.2-py3-none-any.whl", hash = "sha256:08e67c3e90884651da3239ea668222d19bea7b589149d8014a21c633420dbb69", size = 309963, upload-time = "2026-02-01T16:20:46.078Z" },
+    { url = "https://files.pythonhosted.org/packages/14/25/b208c5683343959b670dc001595f2f3737e051da617f66c31f7c4fa93abc/rich-14.3.3-py3-none-any.whl", hash = "sha256:793431c1f8619afa7d3b52b2cdec859562b950ea0d4b6b505397612db8d5362d", size = 310458, upload-time = "2026-02-19T17:23:13.732Z" },
 ]
 
 [[package]]
@@ -1235,42 +1235,42 @@ wheels = [
 
 [[package]]
 name = "xnxx-api"
-version = "1.6.3"
+version = "1.6.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "bs4" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/30/70/e82fd7704afb965e97c2b59f7f217a106bf49027c1b37ffdff42c1a042ad/xnxx_api-1.6.3.tar.gz", hash = "sha256:4590da82cdddce8297b536ce8db2a59908889f82cd8c2f3d9c04adcdbf7a07f1", size = 10168, upload-time = "2026-02-06T21:41:41.401Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/eb/bc/9426810369701281f3509ef3b8597712af29f7433d0dda9754635d4fd50c/xnxx_api-1.6.4.tar.gz", hash = "sha256:b2d2cd2818ed5ab508eadd059f94cdb772cb0b68b8142b1f231f56a56c9f57ee", size = 10176, upload-time = "2026-02-22T18:24:21.334Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/3a/82/c2b8fccd13c92ac213a223ffd918f087f7d335a7c30a36bb91902f54447c/xnxx_api-1.6.3-py3-none-any.whl", hash = "sha256:618f723e26d4dd2c0ae5837d5a4bf05abac1846fb4cd70bada30a9625a547877", size = 13615, upload-time = "2026-02-06T21:41:42.221Z" },
+    { url = "https://files.pythonhosted.org/packages/21/0f/6dbcfeb82c9149d6c6ebc92b2316b005c7abc304dcf95933ee34c63c7852/xnxx_api-1.6.4-py3-none-any.whl", hash = "sha256:df3742303ce7fd7a93930b0ded0d05f8d48eeb8935d38f9ed450396f7540db22", size = 13629, upload-time = "2026-02-22T18:24:22.185Z" },
 ]
 
 [[package]]
 name = "xvideos-api"
-version = "1.8.2"
+version = "1.8.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "bs4" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/12/7a/4b66eeb2fc679024ea8f48ebe967ed97388bc3b9932bdc0b73def9825d6c/xvideos_api-1.8.2.tar.gz", hash = "sha256:b70fcdb24957b34d1364d0af29bcf04b31e94e40173508f74ef0e06c4c59e50c", size = 12763, upload-time = "2026-02-06T21:40:47.92Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/89/69/d4ef2ef8f128564fce9970e0eeb5691fd958056822a5e8c48a1d939cfe2b/xvideos_api-1.8.3.tar.gz", hash = "sha256:aefa58b9c4803cb290608b9baef15301f2cb9340e25f218557265644382126c4", size = 12777, upload-time = "2026-02-22T18:50:59.828Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5a/9e/d6a762423986670506a328f3cdcdd7c747cfd14fbe76dea138757cf222d8/xvideos_api-1.8.2-py3-none-any.whl", hash = "sha256:2309f138a6c63947923331bf64733d3ec8c8e9582af9a1118b9477da4bba9c04", size = 16694, upload-time = "2026-02-06T21:40:49.29Z" },
+    { url = "https://files.pythonhosted.org/packages/73/b6/070a0fd8858248f1d7c72d52661bfc61f42c115e80434111a37097508e9d/xvideos_api-1.8.3-py3-none-any.whl", hash = "sha256:b55287bff081e77d2ada493d65945d1e0b82380c37c90f98652f972674a0153e", size = 16702, upload-time = "2026-02-22T18:50:58.713Z" },
 ]
 
 [[package]]
 name = "youporn-api"
-version = "1.3"
+version = "1.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "bs4" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/84/f8/15a2df0c4385cfc3900e576cc9fce796bab95240c71efad6c497f655f1d0/youporn_api-1.3.tar.gz", hash = "sha256:19a0b68883e3430c91730fb135d0662e9ac293c1980664a8d6d1b8053e01389b", size = 9539, upload-time = "2026-02-06T21:42:35.368Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f9/8f/7d205a2dd50e2113c32ffb46c1ad36498b00f35f726ae590cddeec676bfd/youporn_api-1.4.tar.gz", hash = "sha256:6d12d903c72c2e187ec94c0484d1e33159ccda43fed6b59ffcd5049cf296a986", size = 9531, upload-time = "2026-02-22T18:39:01.557Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/37/2b/031162ab48d8785e6175d9af6945de5d77e2f6fdcb34d48c5297d6504317/youporn_api-1.3-py3-none-any.whl", hash = "sha256:a6d804ad9d5b194a5786bca6d008c9f840a71dab4772f1cf155351fed7b4a5e6", size = 12565, upload-time = "2026-02-06T21:42:33.917Z" },
+    { url = "https://files.pythonhosted.org/packages/56/08/fd9eb02503e2b3dd15b12eec375b1aa9b77a8edb144e79a935b8b7d2a6f1/youporn_api-1.4-py3-none-any.whl", hash = "sha256:968ffba76a62204144f11691144c410f47f54f1361833a2c3a136cb851446f0b", size = 12556, upload-time = "2026-02-22T18:39:00.623Z" },
 ]
