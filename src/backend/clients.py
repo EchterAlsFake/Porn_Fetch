@@ -33,12 +33,17 @@ import logging
 import traceback
 
 
+try:
+    from src.backend.handle_ssl import build_ssl_context
+
+except (ModuleNotFoundError, ImportError):
+    from handle_ssl import build_ssl_context
+
 from dataclasses import dataclass
 from base_api.modules.config import config # This is the global configuration instance of base core config
 from mutagen.mp4 import MP4, MP4Cover, MP4Tags
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta, timezone
-from src.backend.handle_ssl import build_ssl_context
 from typing import Any, List, TypeAlias, Optional, Dict
 from phub import Client as ph_Client, Video as ph_Video
 from xnxx_api import Client as xn_Client, Video as xn_Video
@@ -435,7 +440,7 @@ def _public_attr_snapshot(obj: Any) -> Dict[str, Any]:
         out[name] = val
     return out
 
-def load_video_attributes(video, name_template: str, *, now: Optional[datetime] = None) -> VideoAttributes:
+def load_video_attributes(video, name_template: str = "$title", *, now: Optional[datetime] = None) -> VideoAttributes:
     title = video.title
     qualities = get_available_qualities(video)  # [144, 240, 360, ...]
 
@@ -719,7 +724,8 @@ def download_android(url: str, quality="best", path="./", remux=False):
         quality=quality,
         path=path,
         callback=cb,
-        remux=remux
+        remux=remux,
+        no_title=True
     )
 
 

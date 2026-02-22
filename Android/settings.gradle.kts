@@ -10,8 +10,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-         maven { url = uri("https://chaquo.com/maven") }
     }
 }
-rootProject.name = "PornFetch"
+
+rootProject.name = "Porn_Fetch"
 include(":app")

@@ -1,7 +1,7 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("com.chaquo.python")
 }
 
@@ -40,6 +40,9 @@ android {
     buildFeatures {
         compose = true
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
+    }
 }
 
 chaquopy {
@@ -63,6 +66,7 @@ chaquopy {
             install("porntrex_api")
             install("xfreehd_api")
             install("beeg_api")
+            install("porngo_api")
             install("python-dateutil")
 
         }
@@ -86,6 +90,7 @@ dependencies {
     implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
+    implementation(libs.androidx.splashscreen)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
