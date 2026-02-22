@@ -1,13 +1,8 @@
-# I HATE WINDOWS HOLY SHIT THIS SYSTEM IS SO FUCKING SLOW AND INCOMPETENT
-
 <div align = center>
 <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
 <br>
 <h1 align="center">Porn Fetch - The Ultimate Open-Source Porn(Hub) Downloader</h1>
-<a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui_windows.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui_windows.yml/badge.svg" alt="Build GUI Windows Status"/></a>
-<a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui_linux.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_gui_linux.yml/badge.svg" alt="Build GUI Linux Status"/></a>
-<a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_cli_windows.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_cli_windows.yml/badge.svg" alt="Build CLI Windows Status"/></a>
-<a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_cli_linux.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_cli_linux.yml/badge.svg" alt="Build GUI CLI Linux Status"/></a>
+<a href="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_all.yml"><img src="https://github.com/EchterAlsFake/Porn_Fetch/actions/workflows/build_all.yml/badge.svg" alt="Build Status"/></a>
 <a href="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL"><img src="https://github.com/EchterAlsFake/Porn_Fetch/workflows/CodeQL/badge.svg" alt="CodeQL Analysis"/></a>
 <img alt="GitHub all releases" src="https://img.shields.io/github/downloads/EchterAlsFake/Porn_Fetch/total?style=social&logo=github&logoColor=purple">
 
