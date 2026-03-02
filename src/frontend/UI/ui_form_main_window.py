@@ -688,7 +688,7 @@ class Ui_PornFetch_UI(object):
         self.main_scrollarea_treewidget.setWidgetResizable(True)
         self.main_scrollarea_treewidget_content = QWidget()
         self.main_scrollarea_treewidget_content.setObjectName(u"main_scrollarea_treewidget_content")
-        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 300, 16))
+        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 300, 28))
         sizePolicy16 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
         sizePolicy16.setHorizontalStretch(0)
         sizePolicy16.setVerticalStretch(0)
@@ -838,7 +838,7 @@ class Ui_PornFetch_UI(object):
         self.settings_scrollarea.setWidgetResizable(True)
         self.settings_scrollarea_widget_contents = QWidget()
         self.settings_scrollarea_widget_contents.setObjectName(u"settings_scrollarea_widget_contents")
-        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 486, 322))
+        self.settings_scrollarea_widget_contents.setGeometry(QRect(0, 0, 1118, 544))
         self.gridLayout_19 = QGridLayout(self.settings_scrollarea_widget_contents)
         self.gridLayout_19.setObjectName(u"gridLayout_19")
         self.gridLayout_19.setContentsMargins(0, 0, 0, 0)
@@ -1591,7 +1591,7 @@ class Ui_PornFetch_UI(object):
         self.scrollarea_keyboard_shortcuts.setWidgetResizable(True)
         self.scrollarea_keyboard_shortcuts_widget_contents = QWidget()
         self.scrollarea_keyboard_shortcuts_widget_contents.setObjectName(u"scrollarea_keyboard_shortcuts_widget_contents")
-        self.scrollarea_keyboard_shortcuts_widget_contents.setGeometry(QRect(0, 0, 1118, 544))
+        self.scrollarea_keyboard_shortcuts_widget_contents.setGeometry(QRect(0, 0, 256, 192))
         self.gridLayout_54 = QGridLayout(self.scrollarea_keyboard_shortcuts_widget_contents)
         self.gridLayout_54.setSpacing(0)
         self.gridLayout_54.setObjectName(u"gridLayout_54")
@@ -1681,7 +1681,7 @@ class Ui_PornFetch_UI(object):
         self.scrollarea_supported_websites.setWidgetResizable(True)
         self.scrollarea_supported_sites_widget_contents = QWidget()
         self.scrollarea_supported_sites_widget_contents.setObjectName(u"scrollarea_supported_sites_widget_contents")
-        self.scrollarea_supported_sites_widget_contents.setGeometry(QRect(0, 0, 84, 70))
+        self.scrollarea_supported_sites_widget_contents.setGeometry(QRect(0, 0, 1118, 544))
         self.gridLayout_20 = QGridLayout(self.scrollarea_supported_sites_widget_contents)
         self.gridLayout_20.setSpacing(0)
         self.gridLayout_20.setObjectName(u"gridLayout_20")
@@ -1855,10 +1855,10 @@ class Ui_PornFetch_UI(object):
 
         self.retranslateUi(PornFetch_UI)
 
-        self.main_CentralStackedWidget.setCurrentIndex(9)
-        self.main_stacked_widget_top.setCurrentIndex(0)
-        self.main_stacked_widget_tree.setCurrentIndex(1)
-        self.settings_stacked_widget_main.setCurrentIndex(3)
+        self.main_CentralStackedWidget.setCurrentIndex(6)
+        self.main_stacked_widget_top.setCurrentIndex(1)
+        self.main_stacked_widget_tree.setCurrentIndex(0)
+        self.settings_stacked_widget_main.setCurrentIndex(1)
         self.settings_video_combobox_quality.setCurrentIndex(0)
 
 
@@ -1917,7 +1917,7 @@ class Ui_PornFetch_UI(object):
         self.download_lineedit_playlist_url.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"lineedit playlist URL (PornHub, Xvideos)", None))
 #endif // QT_CONFIG(accessibility)
         self.download_lineedit_playlist_url.setText("")
-        self.download_lineedit_playlist_url.setPlaceholderText(QCoreApplication.translate("PornFetch_UI", u"Enter a PornHub / XVideos Playlist URL", None))
+        self.download_lineedit_playlist_url.setPlaceholderText("")
 #if QT_CONFIG(accessibility)
         self.download_button_playlist_get_videos.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"button start fetching videos of a playlist", None))
 #endif // QT_CONFIG(accessibility)
@@ -1926,12 +1926,12 @@ class Ui_PornFetch_UI(object):
         self.download_lineedit_model_url.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"lineedit model / channel, actress, creator URL", None))
 #endif // QT_CONFIG(accessibility)
         self.download_lineedit_model_url.setText("")
-        self.download_lineedit_model_url.setPlaceholderText(QCoreApplication.translate("PornFetch_UI", u"Enter a Model / Channel / Actress / Creator URL ", None))
+        self.download_lineedit_model_url.setPlaceholderText("")
 #if QT_CONFIG(accessibility)
         self.download_lineedit_search_query.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"lineedit search query", None))
 #endif // QT_CONFIG(accessibility)
         self.download_lineedit_search_query.setText("")
-        self.download_lineedit_search_query.setPlaceholderText(QCoreApplication.translate("PornFetch_UI", u"Search for videos on a website", None))
+        self.download_lineedit_search_query.setPlaceholderText("")
 #if QT_CONFIG(accessibility)
         self.download_label_search.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"label search query", None))
 #endif // QT_CONFIG(accessibility)
@@ -1962,7 +1962,7 @@ class Ui_PornFetch_UI(object):
         self.download_lineedit_url.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"lineedit video url", None))
 #endif // QT_CONFIG(accessibility)
         self.download_lineedit_url.setText("")
-        self.download_lineedit_url.setPlaceholderText(QCoreApplication.translate("PornFetch_UI", u"Enter a Video URL or an XHamster Short", None))
+        self.download_lineedit_url.setPlaceholderText("")
 #if QT_CONFIG(accessibility)
         self.login_button_get_watched_videos.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"button get watched videos (requires login) ", None))
 #endif // QT_CONFIG(accessibility)
@@ -1978,11 +1978,11 @@ class Ui_PornFetch_UI(object):
 #if QT_CONFIG(accessibility)
         self.login_lineedit_password.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"lineedit password ", None))
 #endif // QT_CONFIG(accessibility)
-        self.login_lineedit_password.setPlaceholderText(QCoreApplication.translate("PornFetch_UI", u"Enter your PornHub Password (Your account data will never be saved nor shared) ", None))
+        self.login_lineedit_password.setPlaceholderText("")
 #if QT_CONFIG(accessibility)
         self.login_lineedit_username.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"lineedit email", None))
 #endif // QT_CONFIG(accessibility)
-        self.login_lineedit_username.setPlaceholderText(QCoreApplication.translate("PornFetch_UI", u"Enter your PornHub E-Mail address", None))
+        self.login_lineedit_username.setPlaceholderText("")
 #if QT_CONFIG(accessibility)
         self.login_button_login.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"button start login (enter credentials above)", None))
 #endif // QT_CONFIG(accessibility)
@@ -2527,12 +2527,12 @@ class Ui_PornFetch_UI(object):
 #if QT_CONFIG(accessibility)
         self.settings_button_reset.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"button reset porn fetch to default settings", None))
 #endif // QT_CONFIG(accessibility)
-        self.settings_button_reset.setText(QCoreApplication.translate("PornFetch_UI", u"Reset Porn Fetch to default settings", None))
+        self.settings_button_reset.setText("")
 #if QT_CONFIG(accessibility)
         self.settings_button_system_install_pornfetch.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"button install porn fetch (This is optional) ", None))
 #endif // QT_CONFIG(accessibility)
-        self.settings_button_system_install_pornfetch.setText(QCoreApplication.translate("PornFetch_UI", u"Install Porn Fetch", None))
-        self.settings_button_uninstall_porn_fetch.setText(QCoreApplication.translate("PornFetch_UI", u"Uninstall Porn Fetch", None))
+        self.settings_button_system_install_pornfetch.setText("")
+        self.settings_button_uninstall_porn_fetch.setText("")
         self.button_settings_clear_temp.setText(QCoreApplication.translate("PornFetch_UI", u"Clear Temporary Files", None))
         self.credits_button_send_feedback.setText(QCoreApplication.translate("PornFetch_UI", u"Send Feedback (Anonymously)", None))
 #if QT_CONFIG(accessibility)
@@ -2695,89 +2695,7 @@ class Ui_PornFetch_UI(object):
 "li.unchecked::marker { content: \"\\2610\"; }\n"
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<table border=\"0\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;\" cellspacing=\"2\" cellpadding=\"0\"><thead>\n"
-"<tr>\n"
-"<td>\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt; font-weight:700;\">Category</span></p></td>\n"
-"<td>\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt"
-                        "-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt; font-weight:700;\">Websites</span></p></td></tr></thead>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">Videos</span></p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang, YouPorn</span></p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">Searching</span></p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-"
-                        "indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">PornHub, HQporner, Eporner, xnxx, xvideos, missav, Xhamster, Spankbang</span></p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">Models</span></p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">PornHub, HQporner, xnxx</span></p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">Pornstars</span></p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:"
-                        "'Adwaita Sans'; font-size:11pt;\">PornHub, Eporner, xvideos, Xhamster, Spankbang</span></p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">Channels</span></p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">PornHub, Xhamster, Spankbang</span></p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">Creator / Users</span></p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">Xhamster (Creator)"
-                        ", Spankbang (Creator), xnxx (Users)</span></p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">Playlists</span></p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">PornHub, xvideos</span></p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">Downloading</span></p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">xvideos</span></p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px;"
-                        " margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">Shorts</span></p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">Xhamster</span></p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">Account Login</span></p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">PornHub</span></p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-f"
-                        "amily:'Adwaita Sans'; font-size:11pt;\">Videos by Category</span></p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">HQporner, Eporner</span></p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">Random</span></p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">HQporner</span></p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">Brazzers only</span></p></td>\n"
-"<td>\n"
-"<p style=\" margi"
-                        "n-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">HQporner</span></p></td></tr>\n"
-"<tr>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">Top Porn</span></p></td>\n"
-"<td>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Adwaita Sans'; font-size:11pt;\">HQporner</span></p></td></tr></table></body></html>", None))
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
 #if QT_CONFIG(accessibility)
         self.disclaimer_textbrowser.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"textbrowser disclaimer message", None))
 #endif // QT_CONFIG(accessibility)

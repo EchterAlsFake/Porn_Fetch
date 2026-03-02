@@ -1,7 +1,7 @@
 # 3.9
 # Features
 - [] Re-Add downloading all videos that are in the tree widget 
-- [] Allow for toggling anonymous mode 
+- [x] Allow for toggling anonymous mode 
 - [] Asynchronous video fetching (threadpool replacement)
 
 # Bug Fixes

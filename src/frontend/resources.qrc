@@ -22,4 +22,7 @@
         <file>translations/qm/fr.qm</file>
         <file>translations/qm/it.qm</file>
     </qresource>
+    <qresource prefix="/other">
+        <file>UI/supported_websites.html</file>
+    </qresource>
 </RCC>

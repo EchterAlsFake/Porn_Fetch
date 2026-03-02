@@ -88,6 +88,7 @@ app.processEvents()
 # Frontend imports
 from src.frontend.UI.theme import *
 from src.frontend.UI.ssl_warning import *
+from src.frontend.translations.strings import *
 from src.frontend.UI.license import License, Disclaimer
 from src.frontend.UI.thumbnail_viewer import ImageViewer
 from src.frontend.UI.ui_form_main_window import Ui_PornFetch_UI
@@ -1199,6 +1200,7 @@ class PornFetch(QMainWindow):
         self.logger = shared_functions.setup_logger(name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG)
 
         self.last_index = 0  # Keeps track of the last index of videos added to the tree widget
+        self._anonymous_mode = False
         self.thumbnail_viewer_window = None
         self.kill_switch = False
         self.ensure_temp()
@@ -1206,6 +1208,7 @@ class PornFetch(QMainWindow):
         self.threadpool = QThreadPool()
         self.maps()
         self.load_style()
+        self.load_strings()
         self.license = License(self.ui, self.initialize_pornfetch)
         self.disclaimer = Disclaimer(self.ui, self.initialize_pornfetch)
         self.ui.vbox_info.addWidget(PornFetchInfoWidget())
@@ -1288,6 +1291,15 @@ class PornFetch(QMainWindow):
         self.ui.main_CentralStackedWidget.setCurrentIndex(5)
 
     def switch_to_supported_sites(self):
+        if not self._anonymous_mode:
+            file = QFile(":/other/UI/supported_websites.html")
+            file.open(QFile.OpenModeFlag.ReadOnly)
+            file_read = QTextStream(file).readAll()
+            self.ui.supported_sites_textbrowser.setHtml(file_read)
+
+        else:
+            self.ui.supported_sites_textbrowser.setHtml("Running in anonymous mode...")
+
         self.ui.main_CentralStackedWidget.setCurrentIndex(6)
 
     def switch_to_disclaimer(self):
@@ -1545,7 +1557,6 @@ QLineEdit:focus {
         self.setWindowTitle(f"Porn Fetch v{__version__} Copyright (C) Johannes Habel 2023-2026")
         self.ui.main_tree_widget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
         self.ui.settings_stacked_widget_main.setCurrentIndex(0)
-
         install_focus_outline(self)
         self.filter = ComboPopupFitter()
         self.ui.download_website_combobox.installEventFilter(self.filter)
@@ -1557,32 +1568,40 @@ QLineEdit:focus {
         self.switch_to_download()
         self.switch_to_treewidget_downloads()
 
-    def anonymous_mode(self):
+    def load_strings(self):
+        """
+        This loads and applies the strings to the UI from src/frontend/translations/strings.py
+        """
+        self.disable_anonymous_mode()
+
+    def enable_anonymous_mode(self):
         """
         This mode will hide that you are using Porn Fetch by hiding video title names, hiding author names,
         hiding the window title and removing all placeholders from lineedits. May not be the most efficient approach,
          but it works.
         """
+        if self._anonymous_mode:
+            self.logger.info("Already running anonymous, resetting back...")
+            self.disable_anonymous_mode()
+            return
+
         self.setWindowTitle("Running in Anonymous mode...")
         self.ui.download_lineedit_url.setPlaceholderText(" ")
+        self.ui.download_lineedit_model_url.setPlaceholderText(" ")
+        self.ui.download_lineedit_search_query.setPlaceholderText(" ")
+        self.ui.download_lineedit_playlist_url.setPlaceholderText(" ")
         self.ui.login_lineedit_password.setPlaceholderText(" ")
         self.ui.login_lineedit_username.setPlaceholderText(" ")
-        self.ui.settings_label_performance_network_delay.setText("Delay (0 = Disabled) in seconds:")
-        self.ui.settings_label_videos_model_vdeos_type.setText("Actors video types:")
         self.ui.settings_button_system_install_pornfetch.setText("Install Program")
+        self.ui.settings_button_uninstall_porn_fetch.setText("Uninstall Program")
+        self.ui.settings_button_reset.setText("Reset Application")
         self.ui.tools_label_get_top_porn.setText("Get 'Top' videos")
         self.ui.tools_button_get_brazzers_videos.setText("Get BRZ videos")
         self.ui.supported_sites_textbrowser.setText(
             "Running in anonymous mode, please deactivate to display...")
         self.ui.tools_groupbox_hqporner.setTitle("HQ")
         self.ui.tools_groupbox_eporner.setTitle("EP")
-        self.ui.download_lineedit_playlist_url.setPlaceholderText("Enter playlist URL")
-        self.ui.settings_button_reset.setText("Reset PF")
-        self.ui.settings_button_uninstall_porn_fetch.setText("Uninstall PF")
         self._anonymous_mode = True  # Makes sense, trust
-
-        # read all texts
-        texts = [self.ui.download_website_combobox.itemText(i) for i in range(self.ui.download_website_combobox.count())]
 
         # change them (example: prefix each item)
         for i in range(self.ui.download_website_combobox.count()):
@@ -1590,7 +1609,33 @@ QLineEdit:focus {
 
         self.logger.info("Enabled anonymous mode!")
 
+    def disable_anonymous_mode(self):
+        """
+        This loads the UI state back to normal
+        """
+        self.setWindowTitle(TRANSLATE_MAIN.title)
+        self.ui.download_lineedit_url.setPlaceholderText(TRANSLATE_PAGE_DOWNLOAD.download_url_placeholder)
+        self.ui.download_lineedit_playlist_url.setPlaceholderText(TRANSLATE_PAGE_DOWNLOAD.download_playlist_placeholder)
+        self.ui.download_lineedit_search_query.setPlaceholderText(TRANSLATE_PAGE_DOWNLOAD.download_search_videos)
+        self.ui.download_lineedit_model_url.setPlaceholderText(TRANSLATE_PAGE_DOWNLOAD.download_model_placeholder)
+        self.ui.login_lineedit_password.setPlaceholderText(TRANSLATE_PAGE_LOGIN.login_email_password)
+        self.ui.login_lineedit_username.setPlaceholderText(TRANSLATE_PAGE_LOGIN.login_email_password)
+        self.ui.settings_button_system_install_pornfetch.setText(TRANSLATE_PAGE_SETTINGS.settings_button_install_pf)
+        self.ui.tools_label_get_top_porn.setText(TRANSLATE_PAGE_TOOLS.tools_label_get_top_porn)
+        self.ui.tools_button_get_brazzers_videos.setText(TRANSLATE_PAGE_TOOLS.tools_button_brazzers_videos)
+        self.ui.tools_groupbox_hqporner.setTitle(TRANSLATE_PAGE_TOOLS.tools_groupbox_hqporner)
+        self.ui.tools_groupbox_eporner.setTitle(TRANSLATE_PAGE_TOOLS.tools_groupbox_eporner)
+        self.ui.download_lineedit_playlist_url.setPlaceholderText(TRANSLATE_PAGE_DOWNLOAD.download_playlist_placeholder)
+        self.ui.settings_button_reset.setText(TRANSLATE_PAGE_SETTINGS.settings_button_reset_pf)
+        self.ui.settings_button_uninstall_porn_fetch.setText(TRANSLATE_PAGE_SETTINGS.settings_button_uninstall_pf)
+        self._anonymous_mode = False  # Makes sense, trust
 
+        # change them (example: prefix each item)
+        for i in range(self.ui.download_website_combobox.count()):
+            self.ui.download_website_combobox.setItemText(i, TRANSLATE_PAGE_DOWNLOAD.download_combobox_websites_mapping.get(i))
+
+        self.logger.info("Disabled anonymous mode!")
+        self.setWindowTitle(f"Porn Fetch v{__version__} Copyright (C) Johannes Habel 2023-2026")
 
     def button_connections(self):
         """a function to link the buttons to their functions"""
@@ -1775,14 +1820,24 @@ You have all paid features unlocked :)
         quit_shortcut = QShortcut(QKeySequence("Ctrl+Q"), self)
         quit_shortcut.activated.connect(self.close)
 
+        download_all = QShortcut(QKeySequence("Ctrl+T"), self)
+        download_all.activated.connect(self.download_all)
+
         export_urls_shortcut = QShortcut(QKeySequence("Ctrl+E"), self)
         export_urls_shortcut.activated.connect(export_urls)
 
         enable_anonymous_mode = QShortcut(QKeySequence("Ctrl+A"), self)
-        enable_anonymous_mode.activated.connect(self.anonymous_mode)
+        enable_anonymous_mode.activated.connect(self.enable_anonymous_mode)
 
         save_settings = QShortcut(QKeySequence("Ctrl+S"), self)
         save_settings.activated.connect(self.save_user_settings)
+
+    def download_all(self):
+        """Automatically downloads all videos in the tree widget"""
+        for i in range(self.ui.main_tree_widget.topLevelItemCount()):
+            item = self.ui.main_tree_widget.topLevelItem(i)
+            identifier = item.data(self.COL_TITLE, Qt.ItemDataRole.UserRole)
+            self.queue_download(video_id=identifier)
 
     def maps(self):
         self.mappings_hqporner_tools = {
@@ -2097,6 +2152,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
                 self.proxy = proxy_input
                 return None
 
+
     def toggle_killswitch(self):
         if self.kill_switch:
             self.logger.info(f"Disabling Kill Switch for -->: {self.proxy}")
@@ -2375,6 +2431,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         item.setData(self.COL_TITLE, Qt.ItemDataRole.UserRole + 2, formatted_duration)
         item.setData(self.COL_TITLE, Qt.ItemDataRole.UserRole + 3, str(thumbnail))
         item.setData(self.COL_TITLE, Qt.ItemDataRole.UserRole + 4, str(author))
+        item.setData(self.COL_TITLE, Qt.ItemDataRole.UserRole + 5, identifier)
 
         # --- Download button (UI only) ---
         download_btn = QPushButton("Download")
@@ -2830,6 +2887,9 @@ Segment State Path: {report["segment_state_path"]}
         self.threadpool.start(self.update_thread)
 
     def show_thumbnail(self, item, column):
+        if self._anonymous_mode:
+            self.logger.info("Running in anonymous mode, thumbnail won't be shown!")
+
         identifier = item.data(self.COL_TITLE, Qt.ItemDataRole.UserRole + 1) # Identifier for the video data
 
         if identifier is None:
