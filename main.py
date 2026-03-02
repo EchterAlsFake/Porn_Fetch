@@ -19,7 +19,7 @@ Contact:
 E-Mail: EchterAlsFake@proton.me
 Discord: echteralsfake (faster response)
 """
-
+import logging
 # Stop Splash Screen
 import os
 import sys
@@ -1174,6 +1174,40 @@ class DownloadThread(QRunnable):
                     handle_error_gracefully(self, data=video_data.consistent_data, error_message=error, needs_network_log=True)
 
             self.signals.download_completed.emit(self.video_id, report)
+
+
+class LoginThread(QRunnable):
+    def __init__(self, email: str, password: str):
+        super().__init__()
+        self.email = email
+        self.password = password
+        self.signals = Signals()
+        self.logger = setup_logger(name="Porn Fetch - [Login]", level=logging.DEBUG)
+
+    def run(self):
+        self.signals.start_undefined_range.emit()
+        self.logger.info("Trying PornHub Login...")
+        self.logger.debug("Associating a new client object with a logged in session")
+        try:
+            clients.ph_client = clients.ph_Client(email=self.email, password=self.password)
+            self.signals.login_result.emit(True)
+
+        except ph_errors.LoginFailed:
+            self.logger.error("Login Failed, because of invalid credentials")
+            ui_popup(self.tr("Login Failed, please check your credentials and try again!", None))
+
+        except ph_errors.ClientAlreadyLogged:
+            self.logger.warning("Client already logged in?!! wait what??")
+            ui_popup(self.tr("You are already logged in!", None))
+
+        except Exception:
+            error = traceback.format_exc()
+            ui_popup(f"Unknown Error during login -->: {error}")
+
+        finally:
+            self.signals.stop_undefined_range.emit()
+
+        self.logger.debug("Login Successful!")
 
 
 class PornFetch(QMainWindow):
@@ -2720,22 +2754,18 @@ Segment State Path: {report["segment_state_path"]}
             ui_popup(self.tr("Those credentials don't seem to be valid...", None))
             return
 
-        try:
-            self.logger.debug("Associating a new client object with a logged in session")
-            clients.ph_client = clients.ph_Client(email=username, password=password)
-            self.logger.debug("Login Successful!")
+        self.login_thread = LoginThread(email=username, password=password)
+        self.login_thread.signals.start_undefined_range.connect(self.start_undefined_range)
+        self.login_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
+        self.login_thread.signals.login_result.connect(self.login_result)
+        self.threadpool.start(self.login_thread)
+
+    def login_result(self, result: bool):
+        if result:
             mark(self.ui.login_button_get_recommended_videos, intent="success")
             mark(self.ui.login_button_get_liked_videos, intent="success")
             mark(self.ui.login_button_get_watched_videos, intent="success")
             ui_popup(self.tr("Login Successful!", None))
-
-        except ph_errors.LoginFailed:
-            self.logger.error("Login Failed, because of invalid credentials")
-            ui_popup(self.tr("Login Failed, please check your credentials and try again!", None))
-
-        except ph_errors.ClientAlreadyLogged:
-            self.logger.warning("Client already logged in?!! wait what??")
-            ui_popup(self.tr("You are already logged in!", None))
 
     def check_login(self):
         """Checks if the user is logged in, so that no errors are threw if not"""

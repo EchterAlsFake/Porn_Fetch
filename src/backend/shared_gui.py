@@ -109,6 +109,7 @@ class Signals(QObject):
     download_completed = Signal(int, dict)                # video_id
 
     error_signal = Signal(object)
+    login_result = Signal(object)
 
     # Animations
     start_undefined_range = Signal()  # Starts the loading animation progressbar

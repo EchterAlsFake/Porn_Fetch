@@ -23,6 +23,6 @@
 - [] Improve pagination when fetching from iterators
 - [] Improve stopping / resuming downloads (faster)
 - [] Better / more memory efficient
-- [] QThread for Login process (stop freezing UI)
+- [x] QThread for Login process (stop freezing UI)
 - [] Improve the code documentation
 
