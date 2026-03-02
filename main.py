@@ -19,11 +19,15 @@ Contact:
 E-Mail: EchterAlsFake@proton.me
 Discord: echteralsfake (faster response)
 """
+import configparser
 import logging
 # Stop Splash Screen
 import os
 import sys
 import tempfile
+import threading
+
+import httpx
 
 FORCE_TEST_RUN = False
 
@@ -64,7 +68,7 @@ import tempfile
 import webbrowser
 import subprocess
 
-from typing import Callable
+from typing import Callable, Iterable
 from collections import deque
 from threading import Event, Lock
 from itertools import islice, chain
@@ -131,19 +135,19 @@ except Exception:
     FORCE_DISABLE_AV = True
 
 
-FORCE_PORTABLE_RUN = False # Holds a value for argparse later (see main function)
-total_segments = 0 # Total segments kept in a queue (for total progress tracking)
-downloaded_segments = 0 # Amount of segments that have been downloaded (for total progress tracking)
-total_downloaded_videos = 0  # All videos that actually successfully downloaded
-session_urls = []  # This list saves all URls used in the current session. Used for the URL export function (CTRL + E)
-conf = shared_config # Holds the configuration instance (converted to QSettings INI format)
-stop_flag = Event() # Stops loading videos into the tree widget (does not stop any downloads)
-_download_lock = Lock() # I actually don't really know why this is here
-video_data = clients.VideoData() # Stores general video data as long as the data for each loaded video
+FORCE_PORTABLE_RUN: bool = False # Holds a value for argparse later (see main function)
+total_segments: int = 0 # Total segments kept in a queue (for total progress tracking)
+downloaded_segments: int = 0 # Amount of segments that have been downloaded (for total progress tracking)
+total_downloaded_videos: int = 0  # All videos that actually successfully downloaded
+session_urls: list = []  # This list saves all URls used in the current session. Used for the URL export function (CTRL + E)
+conf: configparser.ConfigParser = shared_config # Holds the configuration instance (converted to QSettings INI format)
+stop_flag: threading.Event = Event() # Stops loading videos into the tree widget (does not stop any downloads)
+_download_lock: threading.Lock = Lock() # I actually don't really know why this is here
+video_data: clients.VideoData = clients.VideoData() # Stores general video data as long as the data for each loaded video
 settings: QSettings = QSettings() # Global instance of the settings used in Porn Fetch
 logger = shared_functions.setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG)
-license_storage_path = os.path.join(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation), "pornfetch.license")
-x = False # Don't ask (this is a secret ;)
+license_storage_path: str = os.path.join(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation), "pornfetch.license")
+x: bool = False # Don't ask (this is a secret ;)
 
 
 def _resolve_config_path(portable: bool, portable_dir: str | None = None) -> Path:
@@ -183,7 +187,7 @@ class LicenseWidget(QWidget):
     This is the License Widget which will let a user import the actual license and see if it's valid
     Still in experimental / beta mode, will be improved in v3.9 # TODO
     """
-    def __init__(self, setup_restrictions: Callable, parent=None):
+    def __init__(self, setup_restrictions: Callable, parent=None) -> None:
         super().__init__(parent)
         self.setup_restrictions = setup_restrictions # A function that basically creates the restrictions
 
@@ -203,12 +207,12 @@ class LicenseWidget(QWidget):
 
         self.refresh_status()
 
-    def refresh_status(self):
+    def refresh_status(self) -> None:
         res = self.lic.load_installed() # Checks if a license has already been installed before
         self.status.setText(f"License status: {'✅ Valid' if res.valid else '❌ Not valid'}\n{res.reason}")
         self.setup_restrictions() # Enforces the restrictions
 
-    def import_license(self):
+    def import_license(self) -> None:
         # Opens a Dialog for importing the actual license
         path, _ = QFileDialog.getOpenFileName(self, "Select license file", "", "License (*.license);;All files (*)")
         if not path:
@@ -220,7 +224,7 @@ class LicenseWidget(QWidget):
 
 class InstallThread(QRunnable):
     def __init__(self, app_name: str, app_id: str = "pornfetch", org_name: str = "EchterAlsFake",
-                 portable_config_path: str | None = None):
+                 portable_config_path: str | None = None) -> None:
         super().__init__()
         """
         This function installs Porn Fetch for Windows and Linux based systems.
@@ -234,13 +238,13 @@ class InstallThread(QRunnable):
         """
 
         global settings
-        settings = make_settings(portable=False) # At the first run, I assume the user goes for a portable install-type, however if the installation is called we need to switch that behaviour
+        settings: QSettings = make_settings(portable=False) # At the first run, I assume the user goes for a portable install-type, however if the installation is called we need to switch that behaviour
 
-        self.app_name = app_name # Custom app name, otherwise 'Porn Fetch'
-        self.app_id = app_id  # used for desktop file name, etc.
-        self.org_name = org_name # All handled in config.py
-        self.portable_config_path = portable_config_path
-        self.signals = Signals() # Signals for error / progress reporting
+        self.app_name: str = app_name # Custom app name, otherwise 'Porn Fetch'
+        self.app_id: str = app_id  # used for desktop file name, etc.
+        self.org_name: str = org_name # All handled in config.py
+        self.portable_config_path: str = portable_config_path
+        self.signals: Signals = Signals() # Signals for error / progress reporting
 
         # keep your logger setup if you want; using basic logging here
         self.logger = setup_logger(name="Porn Fetch - [InstallThread]", level=logging.DEBUG)
@@ -272,7 +276,7 @@ class InstallThread(QRunnable):
         self.signals.stop_undefined_range.emit() # Stop loading animation
         self.signals.install_finished.emit([True, ""]) # Successful install :)
 
-    def _migrate_portable_settings(self, install_dir: str):
+    def _migrate_portable_settings(self, install_dir: str) -> None:
         """
         Copy current portable config.ini into the installed working directory
         so the installed run keeps user settings.
@@ -300,7 +304,7 @@ class InstallThread(QRunnable):
     # ----------------------------
     # Linux (user-local install)
     # ----------------------------
-    def _install_linux_user(self):
+    def _install_linux_user(self) -> None:
         filename = "PornFetch_Linux_GUI_x64.bin" # Typical filename, but needs to be improved # TODO
 
         if os.path.exists("PornFetch_Windows_GUI_arm64.bin"):
@@ -362,7 +366,7 @@ StartupNotify=true
     # ----------------------------
     # Windows (user-local install)
     # ----------------------------
-    def _install_windows_user(self):
+    def _install_windows_user(self) -> None:
         import win32com.client  # pywin32; Only available on Windows systems
 
         filename = "PornFetch_Windows_GUI_x64.exe" # Needs to be improved # TODO
@@ -417,17 +421,17 @@ class UninstallThread(QRunnable):
                  uses a .bat helper to delete after app exit (because Windows locks running exe)
     """
 
-    def __init__(self, app_id: str = "pornfetch", org_name: str = "EchterAlsFake"):
+    def __init__(self, app_id: str = "pornfetch", org_name: str = "EchterAlsFake") -> None:
         super().__init__()
         global settings
-        settings = make_settings(portable=False)
-        self.app_name = settings.value("Misc/app_name")
+        settings: QSettings = make_settings(portable=False)
+        self.app_name: str = settings.value("Misc/app_name")
 
-        self.app_id = app_id
-        self.org_name = org_name
-        self.signals = Signals()
+        self.app_id: str = app_id
+        self.org_name: str = org_name
+        self.signals: Signals = Signals()
 
-        self.logger = logging.getLogger("UninstallThread")
+        self.logger = setup_logger(name="PornFetch - [UninstallThread]", level=logging.DEBUG)
 
     def run(self):
         try:
@@ -469,7 +473,7 @@ class UninstallThread(QRunnable):
     # ----------------------------
     # Linux (user-local uninstall)
     # ----------------------------
-    def _uninstall_linux_user(self):
+    def _uninstall_linux_user(self) -> None:
         install_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
         # The directory where stuff is currently installed to
 
@@ -493,7 +497,7 @@ class UninstallThread(QRunnable):
     # ----------------------------
     # Windows (user-local uninstall)
     # ----------------------------
-    def _uninstall_windows_user(self):
+    def _uninstall_windows_user(self) -> None:
         install_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
 
         # Start Menu Programs folder via Qt
@@ -521,7 +525,7 @@ class UninstallThread(QRunnable):
 
         self.logger.info(f"Uninstall scheduled (Windows). Shortcut removed: {shortcut_path}, install_dir: {install_dir}")
 
-    def _clear_qt_settings(self):
+    def _clear_qt_settings(self) -> None:
         """
         Clear the app's Qt settings.
         Works for INI-based settings and registry-based ones.
@@ -545,7 +549,7 @@ class UninstallThread(QRunnable):
             # Don't fail uninstall if settings cleanup fails
             self.logger.warning(f"Settings cleanup failed: {e}")
 
-    def _spawn_windows_cleanup_bat(self, pid: int, install_dir: str, shortcut_path: str):
+    def _spawn_windows_cleanup_bat(self, pid: int, install_dir: str, shortcut_path: str) -> None:
         """
         Creates and runs a .bat that waits until PID exits, then deletes install_dir.
         The .bat deletes itself at the end.
@@ -596,17 +600,17 @@ endlocal
 
 
 class AutoUpdateThread(QRunnable):
-    def __init__(self):
+    def __init__(self) -> None:
         super(AutoUpdateThread, self).__init__()
-        self.signals = Signals()
-        self.assets = None
+        self.signals: Signals = Signals()
+        self.assets: dict = {}
         self.logger = setup_logger(name="Porn Fetch - [AutoUpdateThread]", log_file="PornFetch.log", level=logging.DEBUG)
 
     def run(self):
         self.signals.start_undefined_range.emit()
         self.logger.info("Fetching release information...")
         url = "https://echteralsfake.me/update"
-        response = clients.core.fetch(url=url, get_response=True)
+        response: httpx.Response = clients.core.fetch(url=url, get_response=True)
 
         if response.status_code == 200:
             self.assets = response.json()
@@ -647,11 +651,11 @@ class AutoUpdateThread(QRunnable):
             self.logger.error(f"Update failed: {e}")
             self.signals.error_signal.emit(f"Update failed: {e}")
 
-    def update_progress(self, current, total):
+    def update_progress(self, current: int, total: int) -> None:
         self.signals.total_progress.emit(current)
         self.signals.total_progress_range.emit(total)
 
-    def replace_binary(self, new_binary_path):
+    def replace_binary(self, new_binary_path: str) -> None:
         current_binary_path = get_original_executable_path()
         if not current_binary_path:
             raise RuntimeError("Could not determine the path of the current executable.")
@@ -665,7 +669,7 @@ class AutoUpdateThread(QRunnable):
             os.chmod(new_binary_path, 0o755)
             shutil.move(new_binary_path, current_binary_path)
 
-    def create_windows_updater(self, current_path, new_path):
+    def create_windows_updater(self, current_path: str, new_path: str) -> None:
         updater_script_path = os.path.join(tempfile.gettempdir(), "updater.bat")
         with open(updater_script_path, "w") as f:
             f.write(f"""
@@ -686,13 +690,13 @@ del "%~f0"
 class CheckUpdates(QRunnable):
     def __init__(self):
         super(CheckUpdates, self).__init__()
-        self.signals = Signals()
+        self.signals: Signals = Signals()
         self.logger = shared_functions.setup_logger(name="Porn Fetch - [CheckUpdates]", log_file="PornFetch.log", level=logging.DEBUG,)
 
     def run(self):
         url = f"https://echteralsfake.me/update"
         try:
-            response = clients.core.fetch(url=url, get_response=True)
+            response: httpx.Response = clients.core.fetch(url=url, get_response=True)
             if response.status_code == 200:
                 json_stuff = response.json()
                 version = str(json_stuff["version"]).strip("latest - ")
@@ -721,9 +725,9 @@ class CheckUpdates(QRunnable):
 
 
 class AddToTreeWidget(QRunnable):
-    def __init__(self, iterator, is_checked, last_index, custom_options: str):
+    def __init__(self, iterator: Iterable[clients.AnyVideoClass], is_checked: bool, last_index: int, custom_options: str):
         super(AddToTreeWidget, self).__init__()
-        self.signals = Signals()  # Processing signals for progress and information
+        self.signals: Signals = Signals()  # Processing signals for progress and information
         self.iterator = iterator  # The video iterator (Search or model object yk)
         self.stop_flag = stop_flag  # If the user pressed the stop process button
         self.is_checked = is_checked  # If the "do not clear videos" checkbox is checked

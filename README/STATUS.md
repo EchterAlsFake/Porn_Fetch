@@ -7,6 +7,8 @@
 # Bug Fixes
 - [] Fixing license text
 - [] Stopping downloads when application closes
+- [] Fix total progress when resuming
+- [] Fix attribute error when stopping download
 
 # Dev
 - [] Add extensive fully automated tests

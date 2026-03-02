@@ -71,6 +71,8 @@ AllowedVideoType_Legacy: TypeAlias = (
     # Those are all non HLS streams for now
 )
 
+AnyVideoClass: TypeAlias = AllowedVideoType | AllowedVideoType_Legacy
+
 _RELATIVE_RE = re.compile(
     r"^\s*(?P<num>\d+)\s*(?P<unit>second|minute|hour|day|week|month|year)s?\s+ago\s*$",
     re.IGNORECASE,
