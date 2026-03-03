@@ -1,3 +1,8 @@
+> [!IMPORTANT]
+> Due to a lot of stress in school the next weeks as I write the exams for the second quarter and some **special** (but great) things that happened in my life I
+> will pause development until 15th of May. I will only fix issues and that's it. 
+
+
 <div align = center>
 <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
 <br>
