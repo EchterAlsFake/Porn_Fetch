@@ -81,6 +81,14 @@
 
 **A detailed installation guide for all platforms can be found** [HERE](https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/INSTALLATION.md)
 
+## Licensing / Paid Features
+> [!CAUTION]
+> Porn Fetch is entirely free to use by anyone who uses / compiles Porn Fetch from source. Those who use the release
+> assets from GitHub have the following locked behind a 5€ fee:
+
+- 1080+ downloads
+- parallel downloads
+
 ## General Information
 > [!NOTE]
 > **Supported platforms & architectures (based on current release files)**
