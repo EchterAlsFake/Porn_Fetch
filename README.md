@@ -1,6 +1,6 @@
 > [!IMPORTANT]
 > Due to a lot of stress in school the next weeks as I write the exams for the second quarter and some **special** (but great) things that happened in my life I
-> will pause development until 15th of May. I will only fix issues and that's it. 
+> will pause development until June. I won't fix issues or care about anything.
 
 
 <div align = center>
