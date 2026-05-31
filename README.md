@@ -1,6 +1,5 @@
 > [!IMPORTANT]
-> Due to a lot of stress in school the next weeks as I write the exams for the second quarter and some **special** (but great) things that happened in my life I
-> will pause development until June. I won't fix issues or care about anything.
+> I have successfully registered my company and also got a lot of legal stuff figured out. I am currently doing massive rewrites of Porn Fetch's network backend. I know the repo seems a little dead right now, but don't worry, I push a lot of work here right now, you just don't see it xD
 
 
 <div align = center>
