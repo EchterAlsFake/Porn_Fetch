@@ -9,6 +9,7 @@ where I import stuff from.
 I know this might seem a bit confusing if you read this the first time, but if you look at the `eaf_base_api` module
 and the other Porn APIs and how they are working together, then you will definitely understand why this matters.
 """
+from charset_normalizer.utils import is_arabic_isolated_form
 
 """
 Current APIs:
@@ -30,6 +31,8 @@ Current APIs:
 
 import re
 import logging
+import asyncio
+import inspect
 import traceback
 
 
@@ -58,7 +61,8 @@ from xhamster_api import Client as xh_Client, Video as xh_Video
 from spankbang_api import Client as sp_Client, Video as sp_Video
 from youporn_api.youporn_api import Client as yp_Client, Video as yp_Video
 from hqporner_api import Client as hq_Client, Video as hq_Video, errors as hq_errors
-from base_api.base import BaseCore, setup_logger, _normalize_quality_value, _choose_quality_from_list
+from base_api.base import BaseCore, setup_logger
+from base_api.modules.static_functions import normalize_quality_value, choose_quality_from_list
 # Note, the Video instances are mostly used in `shared_functions.py`
 AllowedVideoType: TypeAlias = (
     type[ph_Video] | type[xn_Video] | type[xv_Video] | type[yp_Video] |
@@ -107,13 +111,13 @@ logger.debug("Successfully initialized all clients!")
 
 
 core = BaseCore() # We need that sometimes in Porn Fetch's main class e.g., thumbnail fetching
-core.config.max_retries = 2 # Only use 2 retries to prevent blocking
-core.config.use_http2 = False # Fallback to http 1 for critical operations
-core.config.timeout = 10 # Medium to low timeout to prevent blocking
+core.configuration.max_retries = 2 # Only use 2 retries to prevent blocking
+core.configuration.use_http2 = False # Fallback to http 1 for critical operations
+core.configuration.timeout = 10 # Medium to low timeout to prevent blocking
 core.initialize_session()
 
 
-def get_direct_url_legacy(video: AllowedVideoType_Legacy, quality: str | int):
+async def get_direct_url_legacy(video: AllowedVideoType_Legacy, quality: str | int):
     """
     Since the non HLS downloads now support resuming by getting the current filesize
     and appending missing bytes, we need a way in Porn Fetch to actually see if a file is incomplete.
@@ -136,10 +140,17 @@ def get_direct_url_legacy(video: AllowedVideoType_Legacy, quality: str | int):
         return video.cdn_urls[0]
 
     elif isinstance(video, hq_Video) or isinstance(video, pt_Video):
-        qn = _normalize_quality_value(quality)
-        chosen_height = _choose_quality_from_list(video.video_qualities, qn)
+        qn = normalize_quality_value(quality)
+        chosen_height = choose_quality_from_list(await video.video_qualities, qn)
 
-        quality_url_map = {int(re.search(r'(\d{3,4})', q).group(1)): url for q, url in zip(video.video_qualities, video.direct_download_urls())}
+        result = video.direct_download_urls()
+        if inspect.iscoroutine(result):
+            direct_urls = await result
+
+        else:
+            direct_urls = result
+
+        quality_url_map = {int(re.search(r'(\d{3,4})', q).group(1)): url for q, url in zip(await video.video_qualities, direct_urls)}
         download_url = f"https://{quality_url_map[chosen_height]}"
         return download_url # Uhhh
 
@@ -181,19 +192,19 @@ def refresh_clients(enable_kill_switch: bool = False, debug_mode: bool = False, 
     log_file_core_pg = "BaseCore_PG.log" if debug_mode else None
 
     # One BaseCore per site, with its own RuntimeConfig (isolated headers/cookies)
-    core_hq    = BaseCore(config=config)
-    core_mv    = BaseCore(config=config)
-    core_ep    = BaseCore(config=config)
-    core_ph    = BaseCore(config=config)
-    core_xv    = BaseCore(config=config)
-    core_xh    = BaseCore(config=config)
-    core_xn    = BaseCore(config=config)
-    core_sp    = BaseCore(config=config)
-    core_yp    = BaseCore(config=config)
-    core_bg    = BaseCore(config=config)
-    core_pt    = BaseCore(config=config)
-    core_xf    = BaseCore(config=config)
-    core_pg    = BaseCore(config=config)
+    core_hq    = BaseCore(configuration=config)
+    core_mv    = BaseCore(configuration=config)
+    core_ep    = BaseCore(configuration=config)
+    core_ph    = BaseCore(configuration=config)
+    core_xv    = BaseCore(configuration=config)
+    core_xh    = BaseCore(configuration=config)
+    core_xn    = BaseCore(configuration=config)
+    core_sp    = BaseCore(configuration=config)
+    core_yp    = BaseCore(configuration=config)
+    core_bg    = BaseCore(configuration=config)
+    core_pt    = BaseCore(configuration=config)
+    core_xf    = BaseCore(configuration=config)
+    core_pg    = BaseCore(configuration=config)
 
     core.enable_logging(level=level, log_file=log_file_core)
     core_hq.enable_logging(level=level, log_file=log_file_core_hq)
@@ -211,22 +222,6 @@ def refresh_clients(enable_kill_switch: bool = False, debug_mode: bool = False, 
     core_pg.enable_logging(level=level, log_file=log_file_core_pg)
 
 
-    if enable_kill_switch:
-        logger.warning("Warning: You have enabled the kill switch, refreshing clients with enabled kill switch")
-        core_hq.enable_kill_switch()
-        core_mv.enable_kill_switch()
-        core_ep.enable_kill_switch()
-        core_ph.enable_kill_switch()
-        core_xv.enable_kill_switch()
-        core_xh.enable_kill_switch()
-        core_xn.enable_kill_switch()
-        core_yp.enable_kill_switch()
-        core_bg.enable_kill_switch()
-        core_pt.enable_kill_switch()
-        core_xf.enable_kill_switch()
-        core_pg.enable_kill_switch()
-        core.enable_kill_switch()
-
     # Instantiate clients with their site-specific cores
     mv_client = mv_Client(core=core_mv)
     ep_client = ep_Client(core=core_ep)
@@ -240,11 +235,11 @@ def refresh_clients(enable_kill_switch: bool = False, debug_mode: bool = False, 
     pt_client = pt_Client(core=core_pt)
     xf_client = xf_Client(core=core_xf)
     pg_client = pg_Client(core=core_pg)
-    ph_client = ph_Client(core=core_ph, use_webmaster_api=True)
+    ph_client = ph_Client(core=core_ph)
     logger.debug("Applied new clients. Configurations should be overridden now e.g., if you have set a proxy.")
 
 
-def check_video(url):
+async def check_video(url):
     """
     This function check the URL and generates the corresponding video object with the correct client.
     If the url is already a video object, the function will simply return it.
@@ -257,47 +252,48 @@ def check_video(url):
         return url
 
     if isinstance(url, str) and len(url) > 0 and url.startswith("http"):
+
         if "pornhub" in url:
-            return ph_client.get(url)
+            return await ph_client.get_video(url)
 
         if "hqporner" in url:
-            return hq_client.get_video(url)
+            return await hq_client.get_video(url)
 
         elif "eporner" in url:
-            return ep_client.get_video(url, enable_html_scraping=True)
+            return await ep_client.get_video(url, enable_html_scraping=True)
 
         elif "xnxx" in url:
-            return xn_client.get_video(url)
+            return await xn_client.get_video(url)
 
         elif "xvideos" in url:
-            return xv_client.get_video(url)
+            return await xv_client.get_video(url)
 
         elif "missav" in url:
-            return mv_client.get_video(url)
+            return await mv_client.get_video(url)
 
         elif "xhamster" in str(url) and "moments" in str(url) and not isinstance(url, xh_Video):
-            return xh_client.get_short(url)
+            return await xh_client.get_short(url)
 
         elif "xhamster" in url or "xhopen" in url:
-            return xh_client.get_video(url)
+            return await xh_client.get_video(url)
 
         elif "spankbang" in url:
-            return sp_client.get_video(url)
+            return await sp_client.get_video(url)
 
         elif "youporn" in url:
-            return yp_client.get_video(url)
+            return await yp_client.get_video(url)
 
         elif "beeg.com" in str(url):
-            return bg_client.get_video(url)
+            return await bg_client.get_video(url)
 
         elif "porntrex" in str(url):
-            return pt_client.get_video(url)
+            return await pt_client.get_video(url)
 
         elif "xfreehd" in str(url):
-            return xf_client.get_video(url)
+            return await xf_client.get_video(url)
 
         elif "porngo" in str(url):
-            return pg_client.get_video(url)
+            return await pg_client.get_video(url)
 
         else:
             return False

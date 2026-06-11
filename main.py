@@ -28,6 +28,7 @@ import tempfile
 import threading
 
 import httpx
+from PySide6 import QtAsyncio
 
 FORCE_TEST_RUN = False
 
@@ -111,11 +112,10 @@ from PySide6.QtWidgets import (QTreeWidgetItem, QButtonGroup, QFileDialog, QHead
 splash.showMessage("Importing (APIs).")
 app.processEvents()
 # Errors from different APIs
-from phub import errors as ph_errors
+from phub.modules import errors as ph_errors
 from xnxx_api.modules.errors import InvalidResponse
-from phub.errors import VideoError as VideoError_PH
 from base_api.modules.errors import ProxySSLError, InvalidProxy
-from xvideos_api.modules.errors import (VideoUnavailable as VideoUnavailable_XV)
+from xvideos_api.modules.errors import (NotFound as VideoUnavailable_XV)
 from eporner_api.modules.errors import NotAvailable as NotAvailable_EP, VideoDisabled as VideoDisabled_EP
 from youporn_api.modules.errors import VideoUnavailable as VideoUnavailable_YP, RegionBlocked as RegionBlocked_YP
 from hqporner_api.modules.errors import InvalidActress as InvalidActress_HQ, NoVideosFound, NotAvailable as NotAvailable_HQ, WeirdError as WeirdError_HQ
@@ -144,7 +144,7 @@ conf: configparser.ConfigParser = shared_config # Holds the configuration instan
 stop_flag: threading.Event = Event() # Stops loading videos into the tree widget (does not stop any downloads)
 _download_lock: threading.Lock = Lock() # I actually don't really know why this is here
 video_data: clients.VideoData = clients.VideoData() # Stores general video data as long as the data for each loaded video
-settings: QSettings = QSettings() # Global instance of the settings used in Porn Fetch
+settings = QSettings() # Global instance of the settings used in Porn Fetch
 logger = shared_functions.setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG)
 license_storage_path: str = os.path.join(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation), "pornfetch.license")
 x: bool = False # Don't ask (this is a secret ;)
@@ -238,7 +238,7 @@ class InstallThread(QRunnable):
         """
 
         global settings
-        settings: QSettings = make_settings(portable=False) # At the first run, I assume the user goes for a portable install-type, however if the installation is called we need to switch that behaviour
+        settings = make_settings(portable=False) # At the first run, I assume the user goes for a portable install-type, however if the installation is called we need to switch that behaviour
 
         self.app_name: str = app_name # Custom app name, otherwise 'Porn Fetch'
         self.app_id: str = app_id  # used for desktop file name, etc.
@@ -424,7 +424,7 @@ class UninstallThread(QRunnable):
     def __init__(self, app_id: str = "pornfetch", org_name: str = "EchterAlsFake") -> None:
         super().__init__()
         global settings
-        settings: QSettings = make_settings(portable=False)
+        settings = make_settings(portable=False)
         self.app_name: str = settings.value("Misc/app_name")
 
         self.app_id: str = app_id
@@ -846,10 +846,6 @@ class AddToTreeWidget(QRunnable):
 
             except VideoDisabled_EP:
                 handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {report} has been disabled by EPorner itself. It will be skippled...")
-                return False
-
-            except VideoError_PH:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {report} has an error. However, in this case it's PornHub's fault. It will be skipped!")
                 return False
 
             except RegionBlocked_YP:
@@ -3265,7 +3261,7 @@ Don't tell anyone, and don't change your language in settings
     w = PornFetch()  # This actually starts Porn Fetch
     splash.finish(w) # Stops splashscreen animation
     w.show()  # This shows the main widget
-    sys.exit(app.exec())
+    QtAsyncio.run()
 
 
 if __name__ == "__main__":
