@@ -20,14 +20,11 @@ E-Mail: EchterAlsFake@proton.me
 Discord: echteralsfake (faster response)
 """
 import configparser
-import logging
 # Stop Splash Screen
 import os
 import sys
 import tempfile
 import threading
-
-import httpx
 from PySide6 import QtAsyncio
 
 FORCE_TEST_RUN = False
@@ -95,7 +92,6 @@ from src.frontend.UI.theme import *
 from src.frontend.UI.ssl_warning import *
 from src.frontend.translations.strings import *
 from src.frontend.UI.license import License, Disclaimer
-from src.frontend.UI.thumbnail_viewer import ImageViewer
 from src.frontend.UI.ui_form_main_window import Ui_PornFetch_UI
 from src.frontend.UI.pornfetch_info_dialog import PornFetchInfoWidget
 from src.frontend.UI.custom_combo_box import ComboPopupFitter, make_quality_combobox
@@ -118,11 +114,6 @@ from base_api.modules.errors import ProxySSLError, InvalidProxy
 from xvideos_api.modules.errors import (NotFound as VideoUnavailable_XV)
 from eporner_api.modules.errors import NotAvailable as NotAvailable_EP, VideoDisabled as VideoDisabled_EP
 from youporn_api.modules.errors import VideoUnavailable as VideoUnavailable_YP, RegionBlocked as RegionBlocked_YP
-from hqporner_api.modules.errors import InvalidActress as InvalidActress_HQ, NoVideosFound, NotAvailable as NotAvailable_HQ, WeirdError as WeirdError_HQ
-
-# Other
-from hqporner_api.api import Sort as hq_Sort
-from eporner_api.modules.locals import Category as ep_Category
 
 splash.showMessage("Importing (AV - FFMPEG).")
 app.processEvents()
@@ -718,7 +709,7 @@ class CheckUpdates(QRunnable):
                 return
 
             elif response.status_code == 530 or response.status_code == 502:
-                self.logger.error("Server is currently offline. Proobably already fixing it :)")
+                self.logger.error("Server is currently offline. Probably already fixing it :)")
 
         except (ConnectionError, ConnectionResetError, ConnectionRefusedError, TimeoutError):
             handle_error_gracefully(self, data=video_data.consistent_data, error_message="I could NOT check for updates. The server is either not reachable, or you don't have an IPv6 connection.")
@@ -840,9 +831,6 @@ class AddToTreeWidget(QRunnable):
                 handle_error_gracefully(self, data=video_data.consistent_data, error_message= f"The video {report} is not available. Do not report this error... Not my fault :)")
                 return False
 
-            except NotAvailable_EP:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {report} is not available on HQPorner. This is not my fault, skipping...")
-                return False
 
             except VideoDisabled_EP:
                 handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {report} has been disabled by EPorner itself. It will be skippled...")
@@ -964,10 +952,7 @@ class ThumbnailFetcher(QRunnable):
             self.logger.info(f"Trying to fetch thumbnail for Video: {title}")
             temp_core = clients.core
 
-            if "hqporner" in video.url:
-                temp_core.session.headers["Referer"] = "https://hqporner.com/"
-
-            elif "pornhub" in video.url:
+            if "pornhub" in video.url:
                 temp_core.session.headers["Referer"] = "https://pornhub.com/"
 
             elif "youporn" in video.url:
@@ -1086,7 +1071,7 @@ class DownloadThread(QRunnable):
             self.segment_dir = None
 
         # We need to specify the sources, so that it knows which individual progressbar to use
-        instances_legacy = [clients.hq_Video, clients.ep_Video, clients.pt_Video,
+        instances_legacy = [clients.ep_Video, clients.pt_Video,
                             clients.xf_Video, clients.pg_Video]
 
         if isinstance(self.video, clients.pg_Video):
@@ -1146,7 +1131,7 @@ class DownloadThread(QRunnable):
 
                 except Exception:
                     error = traceback.format_exc()
-                    handle_error_gracefully(data=self.consistent_data, self=self, error_message=f"An error happened while downloading a video from HQPorner / EPorner: {error}", needs_network_log=True)
+                    handle_error_gracefully(data=self.consistent_data, self=self, error_message=f"An error happened while downloading a video from EPorner: {error}", needs_network_log=True)
 
             else:
                 report = self.video.download(path=self.output_path, callback_remux=self.callback_remux, no_title=True,
@@ -1235,8 +1220,6 @@ class PornFetch(QMainWindow):
 
         self.last_index = 0  # Keeps track of the last index of videos added to the tree widget
         self._anonymous_mode = False
-        self.thumbnail_viewer_window = None
-        self.kill_switch = False
         self.ensure_temp()
         self._row = {} # Video ID -> dict of widgets + state
         self.threadpool = QThreadPool()
@@ -1256,7 +1239,7 @@ class PornFetch(QMainWindow):
         :: Index list for main application ::
         - 0: Download
         - 1: Login
-        - 2: Tools
+        - 2: Tools (removed)
         - 3: Progressbars
         - 4: Range selector
         
@@ -1355,10 +1338,6 @@ class PornFetch(QMainWindow):
         self.ui.main_stacked_widget_top.setCurrentIndex(1)
         self.switch_to_main()
 
-    def switch_to_tools(self):
-        self.ui.main_stacked_widget_top.setCurrentIndex(2)
-        self.switch_to_main()
-
     # Stacked Widget Tree
     def switch_to_treewidget_downloads(self):
         self.ui.main_stacked_widget_tree.setCurrentIndex(0)
@@ -1374,7 +1353,6 @@ class PornFetch(QMainWindow):
             self.ui.main_button_switch_settings: "settings.svg",
             self.ui.main_button_switch_credits: "information.svg",
             self.ui.main_button_switch_account: "account.svg",
-            self.ui.main_button_switch_tools: "tools.svg",
         }
         self.setWindowIcon(QIcon(":/images/graphics/logo_transparent.ico"))
 
@@ -1389,7 +1367,6 @@ class PornFetch(QMainWindow):
         nav = [
             self.ui.main_button_switch_home,
             self.ui.main_button_switch_account,
-            self.ui.main_button_switch_tools,
             self.ui.main_button_switch_settings,
             self.ui.main_button_switch_credits,
         ]
@@ -1540,13 +1517,6 @@ QLineEdit:focus {
         for b in [
             self.ui.download_button_playlist_get_videos,
             self.ui.download_button_model,
-            self.ui.download_button_search,
-            self.ui.tools_button_get_random_videos,
-            self.ui.tools_button_get_brazzers_videos,
-            self.ui.tools_button_list_categories,
-            self.ui.tools_button_list_categories_eporner,
-            self.ui.tools_button_eporner_category_get_videos,
-            self.ui.tools_button_hqporner_category_get_videos,
             self.ui.settings_button_system_install_pornfetch,
             self.ui.tree_advanced_button_keyboard_shortcuts,
         ]:
@@ -1593,11 +1563,9 @@ QLineEdit:focus {
         self.ui.settings_stacked_widget_main.setCurrentIndex(0)
         install_focus_outline(self)
         self.filter = ComboPopupFitter()
-        self.ui.download_website_combobox.installEventFilter(self.filter)
         self.ui.settings_combobox_ui_theme.installEventFilter(self.filter)
         self.ui.settings_ui_combobox_language.installEventFilter(self.filter)
         self.ui.settings_video_combobox_quality.installEventFilter(self.filter)
-        self.ui.tools_combobox_hqporner_top_porn.installEventFilter(self.filter)
         self.ui.settings_video_combobox_model_videos.installEventFilter(self.filter)
         self.switch_to_download()
         self.switch_to_treewidget_downloads()
@@ -1622,25 +1590,15 @@ QLineEdit:focus {
         self.setWindowTitle("Running in Anonymous mode...")
         self.ui.download_lineedit_url.setPlaceholderText(" ")
         self.ui.download_lineedit_model_url.setPlaceholderText(" ")
-        self.ui.download_lineedit_search_query.setPlaceholderText(" ")
         self.ui.download_lineedit_playlist_url.setPlaceholderText(" ")
         self.ui.login_lineedit_password.setPlaceholderText(" ")
         self.ui.login_lineedit_username.setPlaceholderText(" ")
         self.ui.settings_button_system_install_pornfetch.setText("Install Program")
         self.ui.settings_button_uninstall_porn_fetch.setText("Uninstall Program")
         self.ui.settings_button_reset.setText("Reset Application")
-        self.ui.tools_label_get_top_porn.setText("Get 'Top' videos")
-        self.ui.tools_button_get_brazzers_videos.setText("Get BRZ videos")
         self.ui.supported_sites_textbrowser.setText(
             "Running in anonymous mode, please deactivate to display...")
-        self.ui.tools_groupbox_hqporner.setTitle("HQ")
-        self.ui.tools_groupbox_eporner.setTitle("EP")
         self._anonymous_mode = True  # Makes sense, trust
-
-        # change them (example: prefix each item)
-        for i in range(self.ui.download_website_combobox.count()):
-            self.ui.download_website_combobox.setItemText(i, f"{i}")
-
         self.logger.info("Enabled anonymous mode!")
 
     def disable_anonymous_mode(self):
@@ -1650,23 +1608,14 @@ QLineEdit:focus {
         self.setWindowTitle(TRANSLATE_MAIN.title)
         self.ui.download_lineedit_url.setPlaceholderText(TRANSLATE_PAGE_DOWNLOAD.download_url_placeholder)
         self.ui.download_lineedit_playlist_url.setPlaceholderText(TRANSLATE_PAGE_DOWNLOAD.download_playlist_placeholder)
-        self.ui.download_lineedit_search_query.setPlaceholderText(TRANSLATE_PAGE_DOWNLOAD.download_search_videos)
         self.ui.download_lineedit_model_url.setPlaceholderText(TRANSLATE_PAGE_DOWNLOAD.download_model_placeholder)
         self.ui.login_lineedit_password.setPlaceholderText(TRANSLATE_PAGE_LOGIN.login_email_password)
         self.ui.login_lineedit_username.setPlaceholderText(TRANSLATE_PAGE_LOGIN.login_email_password)
         self.ui.settings_button_system_install_pornfetch.setText(TRANSLATE_PAGE_SETTINGS.settings_button_install_pf)
-        self.ui.tools_label_get_top_porn.setText(TRANSLATE_PAGE_TOOLS.tools_label_get_top_porn)
-        self.ui.tools_button_get_brazzers_videos.setText(TRANSLATE_PAGE_TOOLS.tools_button_brazzers_videos)
-        self.ui.tools_groupbox_hqporner.setTitle(TRANSLATE_PAGE_TOOLS.tools_groupbox_hqporner)
-        self.ui.tools_groupbox_eporner.setTitle(TRANSLATE_PAGE_TOOLS.tools_groupbox_eporner)
         self.ui.download_lineedit_playlist_url.setPlaceholderText(TRANSLATE_PAGE_DOWNLOAD.download_playlist_placeholder)
         self.ui.settings_button_reset.setText(TRANSLATE_PAGE_SETTINGS.settings_button_reset_pf)
         self.ui.settings_button_uninstall_porn_fetch.setText(TRANSLATE_PAGE_SETTINGS.settings_button_uninstall_pf)
         self._anonymous_mode = False  # Makes sense, trust
-
-        # change them (example: prefix each item)
-        for i in range(self.ui.download_website_combobox.count()):
-            self.ui.download_website_combobox.setItemText(i, TRANSLATE_PAGE_DOWNLOAD.download_combobox_websites_mapping.get(i))
 
         self.logger.info("Disabled anonymous mode!")
         self.setWindowTitle(f"Porn Fetch v{__version__} Copyright (C) Johannes Habel 2023-2026")
@@ -1712,32 +1661,15 @@ QLineEdit:focus {
         self.ui.login_button_get_liked_videos.clicked.connect(self.get_liked_videos)
         self.ui.login_button_get_recommended_videos.clicked.connect(self.get_recommended_videos)
 
-        # Search
-        self.ui.download_button_search.clicked.connect(self.search)
-
-        # HQPorner
-        self.ui.main_button_switch_tools.clicked.connect(self.switch_to_tools)
-        self.ui.tools_button_hqporner_category_get_videos.clicked.connect(self.get_by_category_hqporner)
-        self.ui.tools_button_top_porn_get_videos.clicked.connect(self.get_top_porn_hqporner)
-        self.ui.tools_button_get_brazzers_videos.clicked.connect(self.get_brazzers_videos)
-        self.ui.tools_button_list_categories.clicked.connect(self.list_categories_hqporner)
-        self.ui.tools_button_get_random_videos.clicked.connect(self.get_random_video)
-
-        # EPorner
-        self.ui.tools_button_list_categories_eporner.clicked.connect(self.list_categories_eporner)
-        self.ui.tools_button_eporner_category_get_videos.clicked.connect(self.get_by_category_eporner)
-
         # File Dialog
         self.ui.settings_button_videos_open_output_path.clicked.connect(self.open_output_path_dialog)
 
         # Other stuff IDK
         self.ui.treewidget_button_stop.clicked.connect(switch_stop_state)
         self.ui.tree_advanced_button_keyboard_shortcuts.clicked.connect(self.switch_to_keyboard_shortcuts)
-        self.ui.settings_checkbox_system_proxy_kill_switch.toggled.connect(self.toggle_killswitch)
         self.ui.settings_checkbox_system_enable_debug_mode.clicked.connect(on_checkbox_clicked)
         self.ui.button_settings_clear_temp.clicked.connect(self.clean_temporary_files)
         self.ui.tree_advanced_button_custom_title_options.clicked.connect(available_title_formatting_options)
-        self.ui.main_tree_widget.itemDoubleClicked.connect(self.show_thumbnail)
 
         # Stacked Tree Widget
         self.ui.treewidget_button_downloads.clicked.connect(self.switch_to_treewidget_downloads)
@@ -1874,11 +1806,6 @@ You have all paid features unlocked :)
             self.queue_download(video_id=identifier)
 
     def maps(self):
-        self.mappings_hqporner_tools = {
-            0: hq_Sort.WEEK,
-            1: hq_Sort.MONTH,
-            2: hq_Sort.ALL_TIME
-        }
         self.mappings_quality = {
             0: "best",
             1: "half",
@@ -2187,22 +2114,6 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
                 return None
 
 
-    def toggle_killswitch(self):
-        if self.kill_switch:
-            self.logger.info(f"Disabling Kill Switch for -->: {self.proxy}")
-            clients.refresh_clients(enable_kill_switch=False)
-            return None
-
-        else:
-            if self.proxy is None:
-                ui_popup(self.tr("Can not enable Kill Switch if you haven't applied a proxy yet!", disambiguation=None))
-                self.ui.settings_checkbox_system_proxy_kill_switch.setChecked(False)
-                return None
-
-            self.logger.info(f"Enabling Kill Switch for -->: {self.proxy}")
-            clients.refresh_clients(enable_kill_switch=True)
-            return None
-
     """
     These are the core functions of Porn Fetch outside of the UI stuff. They are used to process user input.
     """
@@ -2228,7 +2139,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
 
         self.ui.download_lineedit_model_url.clear()
         self.logger.info(f"Checking model: {model}")
-        print(f"Model: {model}")
+
         if "pornhub" in str(model) and ("model" in str(model) or "user" in str(model) or "channels" in str(model) or "pornstar" in str(model)):
             model_object = clients.ph_client.get_user(model)
             videos = model_object.videos
@@ -2242,18 +2153,6 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
 
             elif model_type == 2:
                 videos = uploads
-
-        elif "hqporner" in str(model):
-            try:
-                videos = clients.hq_client.get_videos_by_actress(name=model)
-
-            except InvalidActress_HQ:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message="Invalid Actress URL!")
-                return
-
-            except NoVideosFound:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message="No videos found. This is probably an error and will be reported.", needs_network_log=True)
-                return
 
         elif "eporner" in str(model):
             videos = clients.ep_client.get_pornstar(url=model, enable_html_scraping=True).videos()
@@ -2338,46 +2237,6 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         self.logger.debug("Got playlist videos!")
         self.add_to_tree_widget_thread(iterator=videos)
 
-    def search(self):
-        """Does a simple search for videos without filters on selected website"""
-        query = self.ui.download_lineedit_search_query.text()
-        self.logger.debug(f"Searching with query: {query}")
-        if self.ui.download_website_combobox.currentIndex() == 0:
-            videos = clients.hq_client.search_videos(query, pages=500)
-
-        elif self.ui.download_website_combobox.currentIndex() == 1:
-            videos = clients.ph_client.search(query)
-
-        elif self.ui.download_website_combobox.currentIndex() == 2:
-            videos = clients.ep_client.search_videos(query, sorting_gay="", sorting_order="",
-                                                              sorting_low_quality="", page=20, per_page=200)
-        elif self.ui.download_website_combobox.currentIndex() == 3:
-            videos = clients.xv_client.search(query, pages=500)
-
-        elif self.ui.download_website_combobox.currentIndex() == 4:
-            videos = clients.xh_client.search_videos(query=query, pages=500)
-
-        elif self.ui.download_website_combobox.currentIndex() == 5:
-            videos = clients.xn_client.search(query).videos(pages=500)
-
-        elif self.ui.download_website_combobox.currentIndex() == 6:
-            videos = clients.sp_client.search(query=query, pages=500)
-
-        elif self.ui.download_website_combobox.currentIndex() == 7:
-            videos = clients.mv_client.search(query=query, video_count=500)
-
-        elif self.ui.download_website_combobox.currentIndex() == 8:
-            videos = clients.yp_client.search_videos(query=query, pages=500)
-
-        elif self.ui.download_website_combobox.currentIndex() == 9:
-            videos = clients.pt_client.search(query=query, pages=500)
-
-        else:
-            ui_popup(
-                self.tr("Couldn't determine which site you want to search on??? Please report this immediately!", disambiguation=None))
-            return
-
-        self.add_to_tree_widget_thread(videos)
 
     def add_to_tree_widget_thread(self, iterator):
         """
@@ -2801,83 +2660,6 @@ Segment State Path: {report["segment_state_path"]}
             recommended = clients.ph_client.account.recommended
             self.add_to_tree_widget_thread(recommended)
 
-    """
-    The following functions are related to the search functionality
-    """
-
-
-    def get_top_porn_hqporner(self):
-        try:
-            videos = clients.hq_client.get_top_porn(sort_by=self.mappings_hqporner_tools[self.ui.tools_combobox_hqporner_top_porn.currentIndex()])
-
-        except NoVideosFound:
-            handle_error_gracefully(self, data=video_data.consistent_data, error_message="No videos found. This is likely an issue and will be reported", needs_network_log=True)
-            return
-
-        self.add_to_tree_widget_thread(iterator=videos)
-
-    def get_by_category_hqporner(self):
-        """Returns video by category from HQPorner."""
-        category_name = self.ui.tools_lineedit_hqporner_category.text()
-        all_categories = clients.hq_client.get_all_categories()
-
-        if not category_name in all_categories:
-            ui_popup(self.tr("Invalid Category. Press 'list categories' to see all "
-                             "possible ones.", None))
-
-        else:
-            videos = clients.hq_client.get_videos_by_category(category=category_name)
-            self.add_to_tree_widget_thread(videos)
-
-    def list_categories_hqporner(self):
-        """Get all available categories. I want to also extend that for EPorner (and maybe even more sites)"""
-        categories_ = clients.hq_client.get_all_categories()
-        categories = ",".join(categories_)
-        ui_popup(categories)
-
-    def get_by_category_eporner(self):
-        """Returns video by category from EPorner"""
-        category_name = self.ui.tools_lineedit_videos_by_category_eporner.text()
-        self.logger.info(f"Getting videos by category -->: {category_name}")
-
-        if not category_name in self.all_categories_eporner:
-            ui_popup(self.tr("Invalid Category. Press 'list categories' to see all "
-                             "possible ones.", None))
-
-        else:
-            videos = clients.ep_client.get_videos_by_category(category=category_name, enable_html_scraping=True)
-            self.add_to_tree_widget_thread(iterator=videos)
-
-    def list_categories_eporner(self):
-        """Lists all video categories from EPorner"""
-        all_categories = ",".join([getattr(ep_Category, category) for category in dir(ep_Category) if
-                                   not callable(getattr(ep_Category, category)) and not category.startswith("__")])
-
-        self.all_categories_eporner = all_categories  # Need this list to verify the category later
-        ui_popup(all_categories)
-
-    def get_brazzers_videos(self):
-        """Get brazzers videos from HQPorner"""
-        try:
-            videos = clients.hq_client.get_brazzers_videos()
-
-        except NoVideosFound:
-            handle_error_gracefully(self, data=video_data.consistent_data, error_message="No videos found. This is likely an issue and will be reported", needs_network_log=True)
-            return
-
-        self.add_to_tree_widget_thread(videos)
-
-    def get_random_video(self):
-        """Gets a random video from HQPorner"""
-        try:
-            video = clients.hq_client.get_random_video()
-            some_list = [video]
-
-        except NoVideosFound:
-            handle_error_gracefully(self, data=video_data.consistent_data, error_message="No videos found. This is likely an issue and will be reported", needs_network_log=True)
-            return
-
-        self.add_to_tree_widget_thread(some_list)
 
     """
     These function don't need to be maintained very often or better say I don't need them very often in code,
@@ -2915,45 +2697,6 @@ Segment State Path: {report["segment_state_path"]}
         self.update_thread.signals.total_progress_range.connect(self.update_total_progressbar_range)
         self.update_thread.signals.error_signal.connect(ui_popup)
         self.threadpool.start(self.update_thread)
-
-    def show_thumbnail(self, item, column):
-        if self._anonymous_mode:
-            self.logger.info("Running in anonymous mode, thumbnail won't be shown!")
-
-        identifier = item.data(self.COL_TITLE, Qt.ItemDataRole.UserRole + 1) # Identifier for the video data
-
-        if identifier is None:
-            self.logger.warning("Double-clicked item has no identifier.") # Makes no sense, but don't wanna raise an error
-            return
-
-        # 2. Fetch the Data Object
-        # Assuming video_data is accessible here (e.g., self.video_data or imported)
-        data_obj = video_data.data_objects.get(identifier)
-
-        if not data_obj:
-            self.logger.error(f"No data object found for ID: {identifier}") # Makes also no sense
-            return
-
-        # 3. Get the Thumbnail Bytes
-        # We use getattr to be safe in case 'thumbnail_data' hasn't been set yet
-        image_bytes = getattr(data_obj, "thumbnail_data", None)
-
-        # 4. Open/Update the Viewer
-        if self.thumbnail_viewer_window is None:
-            # Create the window if it doesn't exist
-            self.thumbnail_viewer_window = ImageViewer()
-
-        # Set the image (or the placeholder if image_bytes is None)
-        self.thumbnail_viewer_window.set_image(image_bytes)
-
-        # Set the title to match the video (optional but nice)
-        video_title = item.text(self.COL_TITLE)
-        self.thumbnail_viewer_window.setWindowTitle(f"Preview: {video_title}")
-
-        # Show and bring to front
-        self.thumbnail_viewer_window.show()
-        self.thumbnail_viewer_window.raise_()
-        self.thumbnail_viewer_window.activateWindow()
 
     def clean_temporary_files(self):
         safe_rmtree(TEMP_DIRECTORY_STATES)

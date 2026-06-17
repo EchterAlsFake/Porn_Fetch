@@ -131,54 +131,6 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="main_button_switch_tools">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>50</width>
-          <height>35</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>35</height>
-         </size>
-        </property>
-        <property name="font">
-         <font/>
-        </property>
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="accessibleName">
-         <string>Button Tools section</string>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QPushButton {
-    border-radius: 8px;
-    border: 2px solid #a9a9a9;
-    padding: 8px 10px;
-}
-</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>32</width>
-          <height>32</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="main_button_switch_settings">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
@@ -317,7 +269,7 @@
     <item row="1" column="0">
      <widget class="QStackedWidget" name="main_CentralStackedWidget">
       <property name="currentIndex">
-       <number>6</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="page_main">
        <property name="maximumSize">
@@ -371,7 +323,7 @@
              <number>1</number>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>2</number>
             </property>
             <widget class="QWidget" name="page_download">
              <property name="sizePolicy">
@@ -419,184 +371,7 @@
                 <property name="spacing">
                  <number>2</number>
                 </property>
-                <item row="5" column="0">
-                 <widget class="QLabel" name="download_label_model_url">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <bold>false</bold>
-                   </font>
-                  </property>
-                  <property name="accessibleName">
-                   <string>label model url</string>
-                  </property>
-                  <property name="text">
-                   <string>Model URL:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="4">
-                 <widget class="QPushButton" name="download_button_search">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>35</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <bold>false</bold>
-                   </font>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="accessibleName">
-                   <string>button start video search</string>
-                  </property>
-                  <property name="text">
-                   <string>Search</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="0">
-                 <widget class="QLabel" name="download_label_playlist_url">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <bold>false</bold>
-                   </font>
-                  </property>
-                  <property name="accessibleName">
-                   <string>label playlist url</string>
-                  </property>
-                  <property name="text">
-                   <string>Playlist URL:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="4">
-                 <widget class="QPushButton" name="download_button_model">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>60</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <bold>false</bold>
-                   </font>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="accessibleName">
-                   <string>button start fetching videos from model, channel, actress or creator</string>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true"/>
-                  </property>
-                  <property name="text">
-                   <string>Get Videos</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="1" colspan="3">
-                 <widget class="QLineEdit" name="download_lineedit_playlist_url">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="accessibleName">
-                   <string>lineedit playlist URL (PornHub, Xvideos)</string>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="placeholderText">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="4">
-                 <widget class="QPushButton" name="download_button_playlist_get_videos">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <bold>false</bold>
-                   </font>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="accessibleName">
-                   <string>button start fetching videos of a playlist</string>
-                  </property>
-                  <property name="text">
-                   <string>Get Videos</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="1" colspan="3">
+                <item row="5" column="1" colspan="2">
                  <widget class="QLineEdit" name="download_lineedit_model_url">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -626,40 +401,10 @@
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="1">
-                 <widget class="QLineEdit" name="download_lineedit_search_query">
+                <item row="4" column="3">
+                 <widget class="QPushButton" name="download_button_playlist_get_videos">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>100</width>
-                    <height>35</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="accessibleName">
-                   <string>lineedit search query</string>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="placeholderText">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="0">
-                 <widget class="QLabel" name="download_label_search">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
@@ -675,15 +420,18 @@
                     <bold>false</bold>
                    </font>
                   </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
                   <property name="accessibleName">
-                   <string>label search query</string>
+                   <string>button start fetching videos of a playlist</string>
                   </property>
                   <property name="text">
-                   <string>Search Query:</string>
+                   <string>Get Videos</string>
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="4">
+                <item row="2" column="3">
                  <widget class="QPushButton" name="download_button_download">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -717,10 +465,10 @@
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="2">
-                 <widget class="QComboBox" name="download_website_combobox">
+                <item row="4" column="1" colspan="2">
+                 <widget class="QLineEdit" name="download_lineedit_playlist_url">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
@@ -728,80 +476,27 @@
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
-                    <height>35</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>35</height>
+                    <height>30</height>
                    </size>
                   </property>
                   <property name="font">
                    <font>
-                    <bold>false</bold>
+                    <bold>true</bold>
                    </font>
                   </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
                   <property name="accessibleName">
-                   <string>combobox, select search website here</string>
+                   <string>lineedit playlist URL (PornHub, Xvideos)</string>
                   </property>
-                  <item>
-                   <property name="text">
-                    <string>HQPorner</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>PornHub</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>EPorner</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>XVideos</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>XHamster</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>XNXX</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Spankbang</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Missav</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>YouPorn</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Porntrex</string>
-                   </property>
-                  </item>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="placeholderText">
+                   <string/>
+                  </property>
                  </widget>
                 </item>
-                <item row="2" column="0">
-                 <widget class="QLabel" name="download_label_url">
+                <item row="4" column="0">
+                 <widget class="QLabel" name="download_label_playlist_url">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -820,14 +515,14 @@
                    </font>
                   </property>
                   <property name="accessibleName">
-                   <string>label video url</string>
+                   <string>label playlist url</string>
                   </property>
                   <property name="text">
-                   <string>Video URL:</string>
+                   <string>Playlist URL:</string>
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="1" colspan="3">
+                <item row="2" column="1" colspan="2">
                  <widget class="QLineEdit" name="download_lineedit_url">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -854,6 +549,93 @@
                   </property>
                   <property name="placeholderText">
                    <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QLabel" name="download_label_model_url">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <bold>false</bold>
+                   </font>
+                  </property>
+                  <property name="accessibleName">
+                   <string>label model url</string>
+                  </property>
+                  <property name="text">
+                   <string>Model URL:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="3">
+                 <widget class="QPushButton" name="download_button_model">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>60</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <bold>false</bold>
+                   </font>
+                  </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="accessibleName">
+                   <string>button start fetching videos from model, channel, actress or creator</string>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="text">
+                   <string>Get Videos</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="download_label_url">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <bold>false</bold>
+                   </font>
+                  </property>
+                  <property name="accessibleName">
+                   <string>label video url</string>
+                  </property>
+                  <property name="text">
+                   <string>Video URL:</string>
                   </property>
                  </widget>
                 </item>
@@ -1136,413 +918,6 @@
               <property name="spacing">
                <number>0</number>
               </property>
-              <item row="0" column="0">
-               <widget class="QScrollArea" name="scrollarea_tools">
-                <property name="widgetResizable">
-                 <bool>true</bool>
-                </property>
-                <widget class="QWidget" name="scrollarea_tools_widget_contents">
-                 <property name="geometry">
-                  <rect>
-                   <x>0</x>
-                   <y>0</y>
-                   <width>434</width>
-                   <height>176</height>
-                  </rect>
-                 </property>
-                 <layout class="QGridLayout" name="gridLayout_8">
-                  <property name="leftMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="topMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="rightMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="bottomMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="spacing">
-                   <number>0</number>
-                  </property>
-                  <item row="0" column="0">
-                   <layout class="QVBoxLayout" name="tools_verticallayout">
-                    <item>
-                     <widget class="QGroupBox" name="tools_groupbox_hqporner">
-                      <property name="title">
-                       <string>HQPorner</string>
-                      </property>
-                      <layout class="QGridLayout" name="gridLayout_15">
-                       <property name="leftMargin">
-                        <number>0</number>
-                       </property>
-                       <property name="topMargin">
-                        <number>0</number>
-                       </property>
-                       <property name="rightMargin">
-                        <number>0</number>
-                       </property>
-                       <property name="bottomMargin">
-                        <number>0</number>
-                       </property>
-                       <property name="spacing">
-                        <number>0</number>
-                       </property>
-                       <item row="0" column="0">
-                        <layout class="QGridLayout" name="tools_gridlayout_hqporner">
-                         <item row="3" column="0">
-                          <widget class="QPushButton" name="tools_button_get_random_videos">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                             <horstretch>0</horstretch>
-                             <verstretch>0</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>0</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="cursor">
-                            <cursorShape>PointingHandCursor</cursorShape>
-                           </property>
-                           <property name="accessibleName">
-                            <string>tools button hqporner get random video</string>
-                           </property>
-                           <property name="text">
-                            <string>Get random Video</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="1" column="2">
-                          <widget class="QPushButton" name="tools_button_hqporner_category_get_videos">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                             <horstretch>0</horstretch>
-                             <verstretch>2</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>0</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="cursor">
-                            <cursorShape>PointingHandCursor</cursorShape>
-                           </property>
-                           <property name="acceptDrops">
-                            <bool>false</bool>
-                           </property>
-                           <property name="accessibleName">
-                            <string>tools button hqporner get videos by category</string>
-                           </property>
-                           <property name="text">
-                            <string>Get Videos</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="1" column="0">
-                          <widget class="QLabel" name="tools_label_videos_by_category">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                             <horstretch>0</horstretch>
-                             <verstretch>0</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>0</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="accessibleName">
-                            <string>label tools hqporner get videos by category</string>
-                           </property>
-                           <property name="text">
-                            <string>Get videos by category</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="1" column="1">
-                          <widget class="QLineEdit" name="tools_lineedit_hqporner_category">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                             <horstretch>0</horstretch>
-                             <verstretch>4</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>100</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="accessibleName">
-                            <string>tools lineedit hqporner category (enter the category here)</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="0" column="0">
-                          <widget class="QLabel" name="tools_label_get_top_porn">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                             <horstretch>0</horstretch>
-                             <verstretch>0</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>0</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="accessibleName">
-                            <string>label tools hqporn get top porn</string>
-                           </property>
-                           <property name="text">
-                            <string>Get Top Porn:</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="3" column="1">
-                          <widget class="QPushButton" name="tools_button_get_brazzers_videos">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                             <horstretch>0</horstretch>
-                             <verstretch>0</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>0</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="cursor">
-                            <cursorShape>PointingHandCursor</cursorShape>
-                           </property>
-                           <property name="accessibleName">
-                            <string>tools buttonn get brazzers videos</string>
-                           </property>
-                           <property name="text">
-                            <string>Get Brazzers videos</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="0" column="1">
-                          <widget class="QComboBox" name="tools_combobox_hqporner_top_porn">
-                           <property name="cursor">
-                            <cursorShape>PointingHandCursor</cursorShape>
-                           </property>
-                           <property name="accessibleName">
-                            <string>tools combobox hqporner top porn selection</string>
-                           </property>
-                           <item>
-                            <property name="text">
-                             <string>Week</string>
-                            </property>
-                           </item>
-                           <item>
-                            <property name="text">
-                             <string>Month</string>
-                            </property>
-                           </item>
-                           <item>
-                            <property name="text">
-                             <string>All time</string>
-                            </property>
-                           </item>
-                          </widget>
-                         </item>
-                         <item row="0" column="2">
-                          <widget class="QPushButton" name="tools_button_top_porn_get_videos">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                             <horstretch>0</horstretch>
-                             <verstretch>0</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>0</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="cursor">
-                            <cursorShape>PointingHandCursor</cursorShape>
-                           </property>
-                           <property name="accessibleName">
-                            <string>tools button hqporner get videos by top porn</string>
-                           </property>
-                           <property name="text">
-                            <string>Get Videos</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="3" column="2">
-                          <widget class="QPushButton" name="tools_button_list_categories">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                             <horstretch>0</horstretch>
-                             <verstretch>0</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>0</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="cursor">
-                            <cursorShape>PointingHandCursor</cursorShape>
-                           </property>
-                           <property name="accessibleName">
-                            <string>tools button hqporner list all categories</string>
-                           </property>
-                           <property name="text">
-                            <string>List of all categories</string>
-                           </property>
-                          </widget>
-                         </item>
-                        </layout>
-                       </item>
-                      </layout>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QGroupBox" name="tools_groupbox_eporner">
-                      <property name="title">
-                       <string>EPorner</string>
-                      </property>
-                      <layout class="QGridLayout" name="gridLayout_16">
-                       <property name="leftMargin">
-                        <number>0</number>
-                       </property>
-                       <property name="topMargin">
-                        <number>0</number>
-                       </property>
-                       <property name="rightMargin">
-                        <number>0</number>
-                       </property>
-                       <property name="bottomMargin">
-                        <number>0</number>
-                       </property>
-                       <property name="spacing">
-                        <number>0</number>
-                       </property>
-                       <item row="0" column="0">
-                        <layout class="QGridLayout" name="tools_gridlayout_tools">
-                         <property name="topMargin">
-                          <number>0</number>
-                         </property>
-                         <property name="spacing">
-                          <number>6</number>
-                         </property>
-                         <item row="4" column="1" colspan="2">
-                          <widget class="QLineEdit" name="tools_lineedit_videos_by_category_eporner">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                             <horstretch>0</horstretch>
-                             <verstretch>4</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>100</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="accessibleName">
-                            <string>lineedit tools eporner enter category here</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="4" column="4">
-                          <widget class="QPushButton" name="tools_button_eporner_category_get_videos">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                             <horstretch>0</horstretch>
-                             <verstretch>2</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>0</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="cursor">
-                            <cursorShape>PointingHandCursor</cursorShape>
-                           </property>
-                           <property name="accessibleName">
-                            <string>button tools eporner get videos by category</string>
-                           </property>
-                           <property name="text">
-                            <string>Get Videos</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="4" column="3">
-                          <widget class="QPushButton" name="tools_button_list_categories_eporner">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                             <horstretch>0</horstretch>
-                             <verstretch>0</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>0</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="cursor">
-                            <cursorShape>PointingHandCursor</cursorShape>
-                           </property>
-                           <property name="accessibleName">
-                            <string>button tools eporner list all categories</string>
-                           </property>
-                           <property name="text">
-                            <string>List of all categories</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="4" column="0">
-                          <widget class="QLabel" name="tools_label_videos_by_category_eporner">
-                           <property name="sizePolicy">
-                            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                             <horstretch>0</horstretch>
-                             <verstretch>0</verstretch>
-                            </sizepolicy>
-                           </property>
-                           <property name="minimumSize">
-                            <size>
-                             <width>100</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="accessibleName">
-                            <string>label tools eporner get videos by category</string>
-                           </property>
-                           <property name="text">
-                            <string>Get videos by category</string>
-                           </property>
-                          </widget>
-                         </item>
-                        </layout>
-                       </item>
-                      </layout>
-                     </widget>
-                    </item>
-                   </layout>
-                  </item>
-                 </layout>
-                </widget>
-               </widget>
-              </item>
              </layout>
             </widget>
             <widget class="QWidget" name="page_progressbars">
@@ -1664,8 +1039,8 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>300</width>
-                   <height>28</height>
+                   <width>1116</width>
+                   <height>348</height>
                   </rect>
                  </property>
                  <property name="sizePolicy">
@@ -1925,8 +1300,8 @@ This can save a lot of time in certain scenarios.
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1118</width>
-             <height>544</height>
+             <width>486</width>
+             <height>322</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_19">
@@ -3471,8 +2846,8 @@ QPushButton:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>226</width>
-             <height>112</height>
+             <width>1118</width>
+             <height>544</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_23">
@@ -3596,9 +2971,15 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://eporner.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;eporner.com&lt;/span&gt;&lt;/a&gt; &lt;/li&gt;
 &lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://xnxx.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;xnxx.com&lt;/span&gt;&lt;/a&gt; &lt;/li&gt;
 &lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://xvideos.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;xvideos.com&lt;/span&gt;&lt;/a&gt; &lt;/li&gt;
-&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;spankbang.com&lt;/li&gt;
+&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0055ff;&quot;&gt;spankbang.com&lt;/span&gt;&lt;/li&gt;
 &lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#006fff;&quot;&gt;xhamster.com&lt;/span&gt;&lt;/li&gt;
-&lt;li style=&quot; text-decoration: underline; color:#006fff;&quot; style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;missav.ws&lt;/li&gt;&lt;/ul&gt;
+&lt;li style=&quot; text-decoration: underline; color:#006fff;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;missav.ws&lt;/li&gt;
+&lt;li style=&quot; text-decoration: underline; color:#006fff;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;beeg.com&lt;/li&gt;
+&lt;li style=&quot; text-decoration: underline; color:#006fff;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;porngo.com&lt;/li&gt;
+&lt;li style=&quot; text-decoration: underline; color:#006fff;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;xfreehd.com&lt;/li&gt;
+&lt;li style=&quot; text-decoration: underline; color:#006fff;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;porntrex.com&lt;/li&gt;
+&lt;li style=&quot; text-decoration: underline; color:#006fff;&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;youporn.com&lt;/li&gt;&lt;/ul&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:1; text-indent:0px; text-decoration: underline; color:#006fff;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;Usage Warning&lt;/span&gt;&lt;/h3&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Using &lt;span style=&quot; font-weight:700;&quot;&gt;Porn Fetch&lt;/span&gt; may result in &lt;span style=&quot; font-weight:700;&quot;&gt;legal action&lt;/span&gt; being taken against you. The creator of this software is not liable for any damages or legal consequences resulting from its use.&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Porn Fetch&lt;/span&gt; was created solely for the purpose of enabling offline access to videos in scenarios where internet access is unavailable. &lt;/p&gt;
@@ -3891,8 +3272,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1118</width>
-             <height>544</height>
+             <width>98</width>
+             <height>70</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_20">
@@ -4147,7 +3528,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
  <tabstops>
   <tabstop>main_button_switch_home</tabstop>
   <tabstop>main_button_switch_account</tabstop>
-  <tabstop>main_button_switch_tools</tabstop>
   <tabstop>main_button_switch_settings</tabstop>
   <tabstop>main_button_switch_credits</tabstop>
   <tabstop>main_button_switch_supported_websites</tabstop>
@@ -4158,14 +3538,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
   <tabstop>download_lineedit_model_url</tabstop>
   <tabstop>download_button_model</tabstop>
   <tabstop>login_button_login</tabstop>
-  <tabstop>tools_button_list_categories_eporner</tabstop>
   <tabstop>login_lineedit_username</tabstop>
   <tabstop>login_lineedit_password</tabstop>
-  <tabstop>tools_lineedit_hqporner_category</tabstop>
-  <tabstop>tools_button_hqporner_category_get_videos</tabstop>
-  <tabstop>tools_button_get_brazzers_videos</tabstop>
-  <tabstop>tools_lineedit_videos_by_category_eporner</tabstop>
-  <tabstop>tools_button_eporner_category_get_videos</tabstop>
   <tabstop>scrollarea_credits</tabstop>
   <tabstop>button_install</tabstop>
   <tabstop>install_dialog_lineedit_custom_app_name</tabstop>

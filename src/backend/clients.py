@@ -15,18 +15,14 @@ from charset_normalizer.utils import is_arabic_isolated_form
 Current APIs:
 
 1) PHUB           -> https://pornhub.com (ph_client, ph_video)
-2) hqporner       -> https://hqporner.com (hq_client, hq_video)
-3) xnxx           -> https://xnxx.com (xn_client, xn_video)
-4) xvideos        -> https://xvideos.com (xv_client, xv_video)
-5) eporner        -> https://eporner.com (ep_client, ep_video)
-6) missav         -> https://missav.ws   (mv_client, mv_video)
-7) xhamster       -> https://xhamster.com (xh_client, xh_video)
-8) spankbang      -> https://spankbang.com (sp_client, sp_video)
-9) youporn        -> https://youporn.com (yp_client, yp_video)
-10) porntrex      -> https://porntrex.com (pt_client, pt_video)
-11) xfreehd       -> https://xfreehd.com  (xf_client, xf_video)
-12) beeg          -> https://beeg.com (bg_client, bg_video)
-13) porngo        -> https://porngo.com (pg_client, pg_video)
+2) xnxx           -> https://xnxx.com (xn_client, xn_video)
+3) xvideos        -> https://xvideos.com (xv_client, xv_video)
+4) eporner        -> https://eporner.com (ep_client, ep_video)
+5) xhamster       -> https://xhamster.com (xh_client, xh_video)
+6) spankbang      -> https://spankbang.com (sp_client, sp_video)
+7) youporn        -> https://youporn.com (yp_client, yp_video)
+8) beeg           -> https://beeg.com (bg_client, bg_video)
+9) 
 """
 
 import re
@@ -52,7 +48,6 @@ from phub import Client as ph_Client, Video as ph_Video
 from xnxx_api import Client as xn_Client, Video as xn_Video
 from beeg_api import Client as bg_Client, Video as bg_Video
 from porngo_api import Client as pg_Client, Video as pg_Video
-from missav_api import Client as mv_Client, Video as mv_Video
 from xvideos_api import Client as xv_Client, Video as xv_Video
 from xfreehd_api import Client as xf_Client, Video as xf_Video
 from eporner_api import Client as ep_Client, Video as ep_Video
@@ -60,18 +55,17 @@ from porntrex_api import Client as pt_Client, Video as pt_Video
 from xhamster_api import Client as xh_Client, Video as xh_Video
 from spankbang_api import Client as sp_Client, Video as sp_Video
 from youporn_api.youporn_api import Client as yp_Client, Video as yp_Video
-from hqporner_api import Client as hq_Client, Video as hq_Video, errors as hq_errors
 from base_api.base import BaseCore, setup_logger
 from base_api.modules.static_functions import normalize_quality_value, choose_quality_from_list
 # Note, the Video instances are mostly used in `shared_functions.py`
 AllowedVideoType: TypeAlias = (
     type[ph_Video] | type[xn_Video] | type[xv_Video] | type[yp_Video] |
-    type[xh_Video] | type[sp_Video] | type[bg_Video] | type[mv_Video]
+    type[xh_Video] | type[sp_Video] | type[bg_Video]
     # Those are all HLS streams
 )
 
 AllowedVideoType_Legacy: TypeAlias = (
-    type[hq_Video] | type[xf_Video] | type[ep_Video] | type[pt_Video] | type[pt_Video]
+    type[xf_Video] | type[ep_Video] | type[pt_Video] | type[pt_Video]
     # Those are all non HLS streams for now
 )
 
@@ -94,13 +88,11 @@ logger = setup_logger(name="Porn Fetch - [Clients]", level=logging.DEBUG, log_fi
 
 # which is also affecting all other APIs when the refresh_clients function is called
 # Initialize clients globally, so that we can override them later with a new configuration from BaseCore if needed
-mv_client = mv_Client()
 ep_client = ep_Client()
 ph_client = ph_Client()
 xv_client = xv_Client()
 xh_client = xh_Client()
 sp_client = sp_Client()
-hq_client = hq_Client()
 xn_client = xn_Client()
 yp_client = yp_Client()
 bg_client = bg_Client()
@@ -139,7 +131,7 @@ async def get_direct_url_legacy(video: AllowedVideoType_Legacy, quality: str | i
 
         return video.cdn_urls[0]
 
-    elif isinstance(video, hq_Video) or isinstance(video, pt_Video):
+    elif isinstance(video, pt_Video):
         qn = normalize_quality_value(quality)
         chosen_height = choose_quality_from_list(await video.video_qualities, qn)
 
@@ -162,7 +154,7 @@ async def get_direct_url_legacy(video: AllowedVideoType_Legacy, quality: str | i
     return "MakesNoSense"
 
 
-def refresh_clients(enable_kill_switch: bool = False, debug_mode: bool = False, use_truststore: bool = True) -> None:
+def refresh_clients(debug_mode: bool = False, use_truststore: bool = True) -> None:
     logger.info(f"Refreshing clients!")
     config.ssl_context = build_ssl_context(use_truststore) # Decides whether to use truststore (OS CA's) or Certifi CA's
 
@@ -177,8 +169,6 @@ def refresh_clients(enable_kill_switch: bool = False, debug_mode: bool = False, 
 
 
     log_file_core = "BaseCore.log" if debug_mode else None
-    log_file_core_hq = "BaseCore_HQ.log" if debug_mode else None
-    log_file_core_mv = "BaseCore_MV.log" if debug_mode else None
     log_file_core_ep = "BaseCore_EP.log" if debug_mode else None
     log_file_core_ph = "BaseCore_PH.log" if debug_mode else None
     log_file_core_xv = "BaseCore_XV.log" if debug_mode else None
@@ -192,8 +182,6 @@ def refresh_clients(enable_kill_switch: bool = False, debug_mode: bool = False, 
     log_file_core_pg = "BaseCore_PG.log" if debug_mode else None
 
     # One BaseCore per site, with its own RuntimeConfig (isolated headers/cookies)
-    core_hq    = BaseCore(configuration=config)
-    core_mv    = BaseCore(configuration=config)
     core_ep    = BaseCore(configuration=config)
     core_ph    = BaseCore(configuration=config)
     core_xv    = BaseCore(configuration=config)
@@ -207,8 +195,6 @@ def refresh_clients(enable_kill_switch: bool = False, debug_mode: bool = False, 
     core_pg    = BaseCore(configuration=config)
 
     core.enable_logging(level=level, log_file=log_file_core)
-    core_hq.enable_logging(level=level, log_file=log_file_core_hq)
-    core_mv.enable_logging(level=level, log_file=log_file_core_mv)
     core_ep.enable_logging(level=level, log_file=log_file_core_ep)
     core_ph.enable_logging(level=level, log_file=log_file_core_ph)
     core_xv.enable_logging(level=level, log_file=log_file_core_xv)
@@ -223,12 +209,10 @@ def refresh_clients(enable_kill_switch: bool = False, debug_mode: bool = False, 
 
 
     # Instantiate clients with their site-specific cores
-    mv_client = mv_Client(core=core_mv)
     ep_client = ep_Client(core=core_ep)
     xv_client = xv_Client(core=core_xv)
     xh_client = xh_Client(core=core_xh)
     sp_client = sp_Client(core=core_sp)
-    hq_client = hq_Client(core=core_hq)
     xn_client = xn_Client(core=core_xn)
     yp_client = yp_Client(core=core_yp)
     bg_client = bg_Client(core=core_bg)
@@ -245,7 +229,7 @@ async def check_video(url):
     If the url is already a video object, the function will simply return it.
     """
 
-    objects = [hq_Video, ep_Video, xn_Video, xv_Video, mv_Video, xh_Video, sp_Video, yp_Video, bg_Video, pt_Video,
+    objects = [ep_Video, xn_Video, xv_Video, xh_Video, sp_Video, yp_Video, bg_Video, pt_Video,
                xf_Video, pg_Video]
 
     if isinstance(url, tuple(objects)):
@@ -479,29 +463,6 @@ def load_video_attributes(video, name_template: str = "$title", *, now: Optional
         publish_date = video.publish_date
         thumbnail = video.thumbnail
         video_id = video.video_id
-
-    elif isinstance(video, hq_Video):
-        try:
-            author = video.pornstars[0]
-        except Exception:
-            author = "No pornstars / author"
-
-        length = video.length
-        tags = ",".join([category for category in video.tags])
-        publish_date = video.publish_date
-        video_id = video.title
-        try:
-            thumbnail = video.get_thumbnails()[0]
-        except (TypeError, hq_errors.WeirdError):
-            thumbnail = "Not available"
-
-    elif isinstance(video, mv_Video):
-        author = "Not available"
-        length = "Not available"
-        tags = "Not available"
-        thumbnail = video.thumbnail
-        publish_date = video.publish_date
-        video_id = video.video_code
 
     elif isinstance(video, yp_Video):
         author = video.author.name

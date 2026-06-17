@@ -665,3 +665,37 @@ to be refactored.
 
 
 
+# V 3.9
+
+# Legal changes
+Porn Fetch is now fully legal, and you can SAFELY use it, however, due to specific laws in Germany
+and the fact that I am now acting as a corporate entity I had to remove some features...
+
+#### Deprecations
+- Removed search support (due to §15 JuSchG)
+- Removed tools support for EPorner (due to §15 JuSchG)
+- Removed HQPorner.com support (due to §95a UrhG)
+- Removed displaying of thumbnails (due to §15 JuSchG)
+- Removed MissAV.com (due to §95a UrhG)
+- Removed Kill Switch (it was basically useless and over-engineered)
+
+
+Summary:
+Due to the protection of minors Porn Fetch can not by itself expose or facilitate pornographic content.
+By having a search feature I would (under German law) need to put Porn Fetch behind ID verification either
+for everyone or implement Geo-blocking.
+
+MissAV.ws and HQPorner.com are piracy sites. Since I am now operating commercially, I can not continue 
+to support them.
+
+
+
+# New Features
+- Support for all proxy types
+
+
+# Backend
+- Asynchronous Networking (way faster)
+- HTTP3 / HTTP support
+- Browser impersonation support with curl_cffi
+- 
