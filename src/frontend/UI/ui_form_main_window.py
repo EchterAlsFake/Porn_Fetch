@@ -40,8 +40,8 @@ class Ui_PornFetch_UI(object):
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.main_CentralWidget.sizePolicy().hasHeightForWidth())
         self.main_CentralWidget.setSizePolicy(sizePolicy1)
-        self.gridLayout_3 = QGridLayout(self.main_CentralWidget)
-        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.gridLayout_8 = QGridLayout(self.main_CentralWidget)
+        self.gridLayout_8.setObjectName(u"gridLayout_8")
         self.main_horizontallayout_menu_buttons = QHBoxLayout()
         self.main_horizontallayout_menu_buttons.setSpacing(5)
         self.main_horizontallayout_menu_buttons.setObjectName(u"main_horizontallayout_menu_buttons")
@@ -132,7 +132,7 @@ class Ui_PornFetch_UI(object):
         self.main_horizontallayout_menu_buttons.addWidget(self.main_button_switch_supported_websites)
 
 
-        self.gridLayout_3.addLayout(self.main_horizontallayout_menu_buttons, 0, 0, 1, 1)
+        self.gridLayout_8.addLayout(self.main_horizontallayout_menu_buttons, 0, 0, 1, 1)
 
         self.main_CentralStackedWidget = QStackedWidget(self.main_CentralWidget)
         self.main_CentralStackedWidget.setObjectName(u"main_CentralStackedWidget")
@@ -152,15 +152,15 @@ class Ui_PornFetch_UI(object):
         sizePolicy3.setVerticalStretch(0)
         sizePolicy3.setHeightForWidth(self.main_stacked_widget_top.sizePolicy().hasHeightForWidth())
         self.main_stacked_widget_top.setSizePolicy(sizePolicy3)
-        self.main_stacked_widget_top.setMinimumSize(QSize(0, 150))
-        self.main_stacked_widget_top.setMaximumSize(QSize(16777215, 150))
+        self.main_stacked_widget_top.setMinimumSize(QSize(0, 120))
+        self.main_stacked_widget_top.setMaximumSize(QSize(16777215, 120))
         self.main_stacked_widget_top.setStyleSheet(u"")
         self.main_stacked_widget_top.setLineWidth(1)
         self.page_download = QWidget()
         self.page_download.setObjectName(u"page_download")
         sizePolicy1.setHeightForWidth(self.page_download.sizePolicy().hasHeightForWidth())
         self.page_download.setSizePolicy(sizePolicy1)
-        self.page_download.setMinimumSize(QSize(0, 150))
+        self.page_download.setMinimumSize(QSize(0, 120))
         self.page_download.setMaximumSize(QSize(16777215, 180))
         self.gridLayout_5 = QGridLayout(self.page_download)
         self.gridLayout_5.setSpacing(0)
@@ -290,13 +290,47 @@ class Ui_PornFetch_UI(object):
         self.gridLayout_2.setSpacing(0)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_2 = QVBoxLayout()
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.login_button_switch_pornhub = QPushButton(self.page_login)
+        self.login_button_switch_pornhub.setObjectName(u"login_button_switch_pornhub")
+
+        self.horizontalLayout.addWidget(self.login_button_switch_pornhub)
+
+        self.login_button_switch_xvideos = QPushButton(self.page_login)
+        self.login_button_switch_xvideos.setObjectName(u"login_button_switch_xvideos")
+
+        self.horizontalLayout.addWidget(self.login_button_switch_xvideos)
+
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout)
+
+        self.login_stacked_widget = QStackedWidget(self.page_login)
+        self.login_stacked_widget.setObjectName(u"login_stacked_widget")
+        self.page_pornhub = QWidget()
+        self.page_pornhub.setObjectName(u"page_pornhub")
+        self.gridLayout_3 = QGridLayout(self.page_pornhub)
+        self.gridLayout_3.setSpacing(0)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.gridLayout_3.setContentsMargins(0, 0, 0, 0)
         self.login_gridlayout_login_box = QGridLayout()
         self.login_gridlayout_login_box.setSpacing(6)
         self.login_gridlayout_login_box.setObjectName(u"login_gridlayout_login_box")
-        self.login_gridlayout_login_box.setContentsMargins(-1, 0, -1, -1)
+        self.login_gridlayout_login_box.setContentsMargins(3, 6, 3, 3)
+        self.login_lineedit_username = QLineEdit(self.page_pornhub)
+        self.login_lineedit_username.setObjectName(u"login_lineedit_username")
+        sizePolicy8.setHeightForWidth(self.login_lineedit_username.sizePolicy().hasHeightForWidth())
+        self.login_lineedit_username.setSizePolicy(sizePolicy8)
+        self.login_lineedit_username.setMinimumSize(QSize(150, 35))
+        self.login_lineedit_username.setFont(font)
+
+        self.login_gridlayout_login_box.addWidget(self.login_lineedit_username, 0, 1, 1, 2)
+
         self.login_horizontallayout_ph_account = QHBoxLayout()
         self.login_horizontallayout_ph_account.setObjectName(u"login_horizontallayout_ph_account")
-        self.login_button_get_watched_videos = QPushButton(self.page_login)
+        self.login_button_get_watched_videos = QPushButton(self.page_pornhub)
         self.login_button_get_watched_videos.setObjectName(u"login_button_get_watched_videos")
         self.login_button_get_watched_videos.setMinimumSize(QSize(0, 30))
         self.login_button_get_watched_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -304,7 +338,7 @@ class Ui_PornFetch_UI(object):
 
         self.login_horizontallayout_ph_account.addWidget(self.login_button_get_watched_videos)
 
-        self.login_button_get_recommended_videos = QPushButton(self.page_login)
+        self.login_button_get_recommended_videos = QPushButton(self.page_pornhub)
         self.login_button_get_recommended_videos.setObjectName(u"login_button_get_recommended_videos")
         self.login_button_get_recommended_videos.setMinimumSize(QSize(0, 30))
         self.login_button_get_recommended_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -312,7 +346,7 @@ class Ui_PornFetch_UI(object):
 
         self.login_horizontallayout_ph_account.addWidget(self.login_button_get_recommended_videos)
 
-        self.login_button_get_liked_videos = QPushButton(self.page_login)
+        self.login_button_get_liked_videos = QPushButton(self.page_pornhub)
         self.login_button_get_liked_videos.setObjectName(u"login_button_get_liked_videos")
         self.login_button_get_liked_videos.setMinimumSize(QSize(0, 30))
         self.login_button_get_liked_videos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -321,38 +355,9 @@ class Ui_PornFetch_UI(object):
         self.login_horizontallayout_ph_account.addWidget(self.login_button_get_liked_videos)
 
 
-        self.login_gridlayout_login_box.addLayout(self.login_horizontallayout_ph_account, 3, 0, 1, 4)
+        self.login_gridlayout_login_box.addLayout(self.login_horizontallayout_ph_account, 2, 0, 1, 3)
 
-        self.login_lineedit_password = QLineEdit(self.page_login)
-        self.login_lineedit_password.setObjectName(u"login_lineedit_password")
-        sizePolicy8.setHeightForWidth(self.login_lineedit_password.sizePolicy().hasHeightForWidth())
-        self.login_lineedit_password.setSizePolicy(sizePolicy8)
-        self.login_lineedit_password.setMinimumSize(QSize(0, 35))
-        self.login_lineedit_password.setFont(font)
-        self.login_lineedit_password.setCursor(QCursor(Qt.CursorShape.IBeamCursor))
-        self.login_lineedit_password.setEchoMode(QLineEdit.EchoMode.Password)
-
-        self.login_gridlayout_login_box.addWidget(self.login_lineedit_password, 1, 1, 1, 3)
-
-        self.login_lineedit_username = QLineEdit(self.page_login)
-        self.login_lineedit_username.setObjectName(u"login_lineedit_username")
-        sizePolicy8.setHeightForWidth(self.login_lineedit_username.sizePolicy().hasHeightForWidth())
-        self.login_lineedit_username.setSizePolicy(sizePolicy8)
-        self.login_lineedit_username.setMinimumSize(QSize(150, 35))
-        self.login_lineedit_username.setFont(font)
-
-        self.login_gridlayout_login_box.addWidget(self.login_lineedit_username, 0, 1, 1, 3)
-
-        self.login_button_login = QPushButton(self.page_login)
-        self.login_button_login.setObjectName(u"login_button_login")
-        self.login_button_login.setMinimumSize(QSize(0, 30))
-        self.login_button_login.setFont(font)
-        self.login_button_login.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.login_button_login.setStyleSheet(u"")
-
-        self.login_gridlayout_login_box.addWidget(self.login_button_login, 2, 0, 1, 4)
-
-        self.login_label_password = QLabel(self.page_login)
+        self.login_label_password = QLabel(self.page_pornhub)
         self.login_label_password.setObjectName(u"login_label_password")
         sizePolicy9 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy9.setHorizontalStretch(0)
@@ -364,7 +369,27 @@ class Ui_PornFetch_UI(object):
 
         self.login_gridlayout_login_box.addWidget(self.login_label_password, 1, 0, 1, 1)
 
-        self.login_label_username = QLabel(self.page_login)
+        self.login_lineedit_password = QLineEdit(self.page_pornhub)
+        self.login_lineedit_password.setObjectName(u"login_lineedit_password")
+        sizePolicy8.setHeightForWidth(self.login_lineedit_password.sizePolicy().hasHeightForWidth())
+        self.login_lineedit_password.setSizePolicy(sizePolicy8)
+        self.login_lineedit_password.setMinimumSize(QSize(0, 35))
+        self.login_lineedit_password.setFont(font)
+        self.login_lineedit_password.setCursor(QCursor(Qt.CursorShape.IBeamCursor))
+        self.login_lineedit_password.setEchoMode(QLineEdit.EchoMode.Password)
+
+        self.login_gridlayout_login_box.addWidget(self.login_lineedit_password, 1, 1, 1, 2)
+
+        self.login_button_login = QPushButton(self.page_pornhub)
+        self.login_button_login.setObjectName(u"login_button_login")
+        self.login_button_login.setMinimumSize(QSize(0, 30))
+        self.login_button_login.setFont(font)
+        self.login_button_login.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.login_button_login.setStyleSheet(u"")
+
+        self.login_gridlayout_login_box.addWidget(self.login_button_login, 3, 0, 1, 3)
+
+        self.login_label_username = QLabel(self.page_pornhub)
         self.login_label_username.setObjectName(u"login_label_username")
         sizePolicy9.setHeightForWidth(self.login_label_username.sizePolicy().hasHeightForWidth())
         self.login_label_username.setSizePolicy(sizePolicy9)
@@ -374,7 +399,71 @@ class Ui_PornFetch_UI(object):
         self.login_gridlayout_login_box.addWidget(self.login_label_username, 0, 0, 1, 1)
 
 
-        self.gridLayout_2.addLayout(self.login_gridlayout_login_box, 0, 0, 1, 1)
+        self.gridLayout_3.addLayout(self.login_gridlayout_login_box, 1, 0, 1, 1)
+
+        self.login_stacked_widget.addWidget(self.page_pornhub)
+        self.page_xvideos = QWidget()
+        self.page_xvideos.setObjectName(u"page_xvideos")
+        self.gridLayout_11 = QGridLayout(self.page_xvideos)
+        self.gridLayout_11.setSpacing(0)
+        self.gridLayout_11.setObjectName(u"gridLayout_11")
+        self.gridLayout_11.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_10 = QGridLayout()
+        self.gridLayout_10.setObjectName(u"gridLayout_10")
+        self.login_xvideos_label_session_auth_token = QLabel(self.page_xvideos)
+        self.login_xvideos_label_session_auth_token.setObjectName(u"login_xvideos_label_session_auth_token")
+
+        self.gridLayout_10.addWidget(self.login_xvideos_label_session_auth_token, 1, 1, 1, 1)
+
+        self.login_xvideos_button_login = QPushButton(self.page_xvideos)
+        self.login_xvideos_button_login.setObjectName(u"login_xvideos_button_login")
+
+        self.gridLayout_10.addWidget(self.login_xvideos_button_login, 2, 2, 1, 1)
+
+        self.login_xvideos_label_session_token = QLabel(self.page_xvideos)
+        self.login_xvideos_label_session_token.setObjectName(u"login_xvideos_label_session_token")
+
+        self.gridLayout_10.addWidget(self.login_xvideos_label_session_token, 0, 1, 1, 1)
+
+        self.login_xvideos_button_get_recommended = QPushButton(self.page_xvideos)
+        self.login_xvideos_button_get_recommended.setObjectName(u"login_xvideos_button_get_recommended")
+
+        self.gridLayout_10.addWidget(self.login_xvideos_button_get_recommended, 1, 3, 1, 1)
+
+        self.login_xvideos_button_get_liked = QPushButton(self.page_xvideos)
+        self.login_xvideos_button_get_liked.setObjectName(u"login_xvideos_button_get_liked")
+
+        self.gridLayout_10.addWidget(self.login_xvideos_button_get_liked, 0, 3, 1, 1)
+
+        self.login_xvideos_lineedit_session_auth_token = QLineEdit(self.page_xvideos)
+        self.login_xvideos_lineedit_session_auth_token.setObjectName(u"login_xvideos_lineedit_session_auth_token")
+
+        self.gridLayout_10.addWidget(self.login_xvideos_lineedit_session_auth_token, 1, 2, 1, 1)
+
+        self.login_xvideos_button_help = QPushButton(self.page_xvideos)
+        self.login_xvideos_button_help.setObjectName(u"login_xvideos_button_help")
+
+        self.gridLayout_10.addWidget(self.login_xvideos_button_help, 2, 1, 1, 1)
+
+        self.login_xvideos_button_get_watch_later = QPushButton(self.page_xvideos)
+        self.login_xvideos_button_get_watch_later.setObjectName(u"login_xvideos_button_get_watch_later")
+
+        self.gridLayout_10.addWidget(self.login_xvideos_button_get_watch_later, 2, 3, 1, 1)
+
+        self.login_xvideos_lineedit_session_token = QLineEdit(self.page_xvideos)
+        self.login_xvideos_lineedit_session_token.setObjectName(u"login_xvideos_lineedit_session_token")
+
+        self.gridLayout_10.addWidget(self.login_xvideos_lineedit_session_token, 0, 2, 1, 1)
+
+
+        self.gridLayout_11.addLayout(self.gridLayout_10, 0, 0, 1, 1)
+
+        self.login_stacked_widget.addWidget(self.page_xvideos)
+
+        self.verticalLayout_2.addWidget(self.login_stacked_widget)
+
+
+        self.gridLayout_2.addLayout(self.verticalLayout_2, 0, 0, 1, 1)
 
         self.main_stacked_widget_top.addWidget(self.page_login)
         self.page_tools = QWidget()
@@ -442,7 +531,7 @@ class Ui_PornFetch_UI(object):
         self.main_scrollarea_treewidget.setWidgetResizable(True)
         self.main_scrollarea_treewidget_content = QWidget()
         self.main_scrollarea_treewidget_content.setObjectName(u"main_scrollarea_treewidget_content")
-        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 1116, 348))
+        self.main_scrollarea_treewidget_content.setGeometry(QRect(0, 0, 618, 240))
         sizePolicy11 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
         sizePolicy11.setHorizontalStretch(0)
         sizePolicy11.setVerticalStretch(0)
@@ -1268,7 +1357,7 @@ class Ui_PornFetch_UI(object):
         self.scrollarea_license_page.setWidgetResizable(True)
         self.scrollarea_license_page_widget_contents = QWidget()
         self.scrollarea_license_page_widget_contents.setObjectName(u"scrollarea_license_page_widget_contents")
-        self.scrollarea_license_page_widget_contents.setGeometry(QRect(0, 0, 1118, 544))
+        self.scrollarea_license_page_widget_contents.setGeometry(QRect(0, 0, 226, 112))
         self.gridLayout_23 = QGridLayout(self.scrollarea_license_page_widget_contents)
         self.gridLayout_23.setSpacing(0)
         self.gridLayout_23.setObjectName(u"gridLayout_23")
@@ -1435,7 +1524,7 @@ class Ui_PornFetch_UI(object):
         self.scrollarea_supported_websites.setWidgetResizable(True)
         self.scrollarea_supported_sites_widget_contents = QWidget()
         self.scrollarea_supported_sites_widget_contents.setObjectName(u"scrollarea_supported_sites_widget_contents")
-        self.scrollarea_supported_sites_widget_contents.setGeometry(QRect(0, 0, 98, 70))
+        self.scrollarea_supported_sites_widget_contents.setGeometry(QRect(0, 0, 84, 70))
         self.gridLayout_20 = QGridLayout(self.scrollarea_supported_sites_widget_contents)
         self.gridLayout_20.setSpacing(0)
         self.gridLayout_20.setObjectName(u"gridLayout_20")
@@ -1543,7 +1632,7 @@ class Ui_PornFetch_UI(object):
 
         self.main_CentralStackedWidget.addWidget(self.page_update_available)
 
-        self.gridLayout_3.addWidget(self.main_CentralStackedWidget, 1, 0, 1, 1)
+        self.gridLayout_8.addWidget(self.main_CentralStackedWidget, 1, 0, 1, 1)
 
         self.formlayout_progressbar = QFormLayout()
         self.formlayout_progressbar.setObjectName(u"formlayout_progressbar")
@@ -1565,7 +1654,7 @@ class Ui_PornFetch_UI(object):
         self.formlayout_progressbar.setWidget(0, QFormLayout.ItemRole.FieldRole, self.main_progressbar_total)
 
 
-        self.gridLayout_3.addLayout(self.formlayout_progressbar, 2, 0, 1, 1)
+        self.gridLayout_8.addLayout(self.formlayout_progressbar, 2, 0, 1, 1)
 
         PornFetch_UI.setCentralWidget(self.main_CentralWidget)
         QWidget.setTabOrder(self.main_button_switch_home, self.main_button_switch_account)
@@ -1578,8 +1667,7 @@ class Ui_PornFetch_UI(object):
         QWidget.setTabOrder(self.download_lineedit_playlist_url, self.download_button_playlist_get_videos)
         QWidget.setTabOrder(self.download_button_playlist_get_videos, self.download_lineedit_model_url)
         QWidget.setTabOrder(self.download_lineedit_model_url, self.download_button_model)
-        QWidget.setTabOrder(self.download_button_model, self.login_button_login)
-        QWidget.setTabOrder(self.login_button_login, self.login_lineedit_username)
+        QWidget.setTabOrder(self.download_button_model, self.login_lineedit_username)
         QWidget.setTabOrder(self.login_lineedit_username, self.login_lineedit_password)
         QWidget.setTabOrder(self.login_lineedit_password, self.scrollarea_credits)
         QWidget.setTabOrder(self.scrollarea_credits, self.button_install)
@@ -1603,8 +1691,9 @@ class Ui_PornFetch_UI(object):
         self.retranslateUi(PornFetch_UI)
 
         self.main_CentralStackedWidget.setCurrentIndex(0)
-        self.main_stacked_widget_top.setCurrentIndex(2)
-        self.main_stacked_widget_tree.setCurrentIndex(0)
+        self.main_stacked_widget_top.setCurrentIndex(1)
+        self.login_stacked_widget.setCurrentIndex(0)
+        self.main_stacked_widget_tree.setCurrentIndex(1)
         self.settings_stacked_widget_main.setCurrentIndex(1)
         self.settings_video_combobox_quality.setCurrentIndex(0)
 
@@ -1679,6 +1768,12 @@ class Ui_PornFetch_UI(object):
         self.download_label_url.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"label video url", None))
 #endif // QT_CONFIG(accessibility)
         self.download_label_url.setText(QCoreApplication.translate("PornFetch_UI", u"Video URL:", None))
+        self.login_button_switch_pornhub.setText(QCoreApplication.translate("PornFetch_UI", u"PornHub", None))
+        self.login_button_switch_xvideos.setText(QCoreApplication.translate("PornFetch_UI", u"Xvideos", None))
+#if QT_CONFIG(accessibility)
+        self.login_lineedit_username.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"lineedit email", None))
+#endif // QT_CONFIG(accessibility)
+        self.login_lineedit_username.setPlaceholderText("")
 #if QT_CONFIG(accessibility)
         self.login_button_get_watched_videos.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"button get watched videos (requires login) ", None))
 #endif // QT_CONFIG(accessibility)
@@ -1692,25 +1787,28 @@ class Ui_PornFetch_UI(object):
 #endif // QT_CONFIG(accessibility)
         self.login_button_get_liked_videos.setText(QCoreApplication.translate("PornFetch_UI", u"Get Liked videos", None))
 #if QT_CONFIG(accessibility)
+        self.login_label_password.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"label password", None))
+#endif // QT_CONFIG(accessibility)
+        self.login_label_password.setText(QCoreApplication.translate("PornFetch_UI", u"Password:", None))
+#if QT_CONFIG(accessibility)
         self.login_lineedit_password.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"lineedit password ", None))
 #endif // QT_CONFIG(accessibility)
         self.login_lineedit_password.setPlaceholderText("")
-#if QT_CONFIG(accessibility)
-        self.login_lineedit_username.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"lineedit email", None))
-#endif // QT_CONFIG(accessibility)
-        self.login_lineedit_username.setPlaceholderText("")
 #if QT_CONFIG(accessibility)
         self.login_button_login.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"button start login (enter credentials above)", None))
 #endif // QT_CONFIG(accessibility)
         self.login_button_login.setText(QCoreApplication.translate("PornFetch_UI", u"Login", None))
 #if QT_CONFIG(accessibility)
-        self.login_label_password.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"label password", None))
-#endif // QT_CONFIG(accessibility)
-        self.login_label_password.setText(QCoreApplication.translate("PornFetch_UI", u"Password:", None))
-#if QT_CONFIG(accessibility)
         self.login_label_username.setAccessibleName(QCoreApplication.translate("PornFetch_UI", u"label username", None))
 #endif // QT_CONFIG(accessibility)
         self.login_label_username.setText(QCoreApplication.translate("PornFetch_UI", u"E-Mail:", None))
+        self.login_xvideos_label_session_auth_token.setText(QCoreApplication.translate("PornFetch_UI", u"Session Token Auth:", None))
+        self.login_xvideos_button_login.setText(QCoreApplication.translate("PornFetch_UI", u"Login", None))
+        self.login_xvideos_label_session_token.setText(QCoreApplication.translate("PornFetch_UI", u"Session Token:", None))
+        self.login_xvideos_button_get_recommended.setText(QCoreApplication.translate("PornFetch_UI", u"Get recommended videos", None))
+        self.login_xvideos_button_get_liked.setText(QCoreApplication.translate("PornFetch_UI", u"Get Liked videos", None))
+        self.login_xvideos_button_help.setText(QCoreApplication.translate("PornFetch_UI", u"Help", None))
+        self.login_xvideos_button_get_watch_later.setText(QCoreApplication.translate("PornFetch_UI", u"Get watch later videos", None))
         self.treewidget_button_downloads.setText(QCoreApplication.translate("PornFetch_UI", u"Downloads", None))
         self.treewidget_button_advanced_configuration.setText(QCoreApplication.translate("PornFetch_UI", u"Advanced Configuration", None))
 #if QT_CONFIG(tooltip)

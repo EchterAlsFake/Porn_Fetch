@@ -60,6 +60,7 @@ app.processEvents()
 # General imports
 import time
 import os.path
+import asyncio
 import argparse
 import markdown
 import tempfile
@@ -83,8 +84,8 @@ from src.backend.helper_functions import *
 from src.backend.clients import VideoAttributes
 from src.backend.check_license import LicenseManager
 import src.backend.shared_functions as shared_functions
+from base_api.modules.static_functions import strip_title
 from src.backend.config import __version__, PUBLIC_KEY_B64, shared_config, IS_SOURCE_RUN, TEMP_DIRECTORY, TEMP_DIRECTORY_STATES, TEMP_DIRECTORY_SEGMENTS
-
 splash.showMessage("Importing (Frontend).")
 app.processEvents()
 # Frontend imports
@@ -100,10 +101,11 @@ splash.showMessage("Importing (PySide6 - FULL).")
 app.processEvents()
 # Qt / PySide6 related imports
 from PySide6.QtGui import QIcon, QFontDatabase, QPixmap, QShortcut, QKeySequence
-from PySide6.QtCore import (QTextStream, QRunnable, QThreadPool, QSemaphore, Qt, QLocale, QSize,
+from PySide6.QtCore import (QTextStream, QRunnable, Qt, QLocale, QSize,
                             QTranslator, QCoreApplication, QStandardPaths, QSettings, Slot)
 from PySide6.QtWidgets import (QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QComboBox, QLabel,
                                QInputDialog, QMainWindow, QProgressBar, QVBoxLayout, QSizePolicy, QLayout)
+import PySide6.QtAsyncio as QtAsyncio # Needed because porn fetch's network backend is now async since v3.9
 
 splash.showMessage("Importing (APIs).")
 app.processEvents()
@@ -114,6 +116,7 @@ from base_api.modules.errors import ProxySSLError, InvalidProxy
 from xvideos_api.modules.errors import (NotFound as VideoUnavailable_XV)
 from eporner_api.modules.errors import NotAvailable as NotAvailable_EP, VideoDisabled as VideoDisabled_EP
 from youporn_api.modules.errors import VideoUnavailable as VideoUnavailable_YP, RegionBlocked as RegionBlocked_YP
+
 
 splash.showMessage("Importing (AV - FFMPEG).")
 app.processEvents()
@@ -684,10 +687,10 @@ class CheckUpdates(QRunnable):
         self.signals: Signals = Signals()
         self.logger = shared_functions.setup_logger(name="Porn Fetch - [CheckUpdates]", log_file="PornFetch.log", level=logging.DEBUG,)
 
-    def run(self):
+    async def run(self):
         url = f"https://echteralsfake.me/update"
         try:
-            response: httpx.Response = clients.core.fetch(url=url, get_response=True)
+            response: httpx.Response = await clients.core.fetch(url=url, get_response=True)
             if response.status_code == 200:
                 json_stuff = response.json()
                 version = str(json_stuff["version"]).strip("latest - ")
@@ -715,7 +718,7 @@ class CheckUpdates(QRunnable):
             handle_error_gracefully(self, data=video_data.consistent_data, error_message="I could NOT check for updates. The server is either not reachable, or you don't have an IPv6 connection.")
 
 
-class AddToTreeWidget(QRunnable):
+class AddToTreeWidget:
     def __init__(self, iterator: Iterable[clients.AnyVideoClass], is_checked: bool, last_index: int, custom_options: str):
         super(AddToTreeWidget, self).__init__()
         self.signals: Signals = Signals()  # Processing signals for progress and information
@@ -731,7 +734,7 @@ class AddToTreeWidget(QRunnable):
         self.activate_logging = self.consistent_data.get("activate_logging")
         self.logger = shared_functions.setup_logger(name="Porn Fetch - [AddToTreeWidget]", log_file="PornFetch.log", level=logging.DEBUG)
 
-    def process_video(self, video, index):
+    async def process_video(self, video, index):
         if isinstance(video, str):
             report = video
 
@@ -752,13 +755,13 @@ class AddToTreeWidget(QRunnable):
             try:
                 video_identifier = random.randint(0, 99999999) # Creates a random ID for each video
                 if isinstance(video, str):
-                    video = clients.check_video(url=video)
+                    video = await clients.check_video(url=video)
 
                 self.logger.info(f"[Download (3/10) - Video ID] -->: {video_identifier}")
-                data = clients.load_video_attributes(video, self.custom_options)
+                data = await clients.load_video_attributes(video, self.custom_options)
                 self.logger.debug("[Download (4/10) - Fetched Attributes")
                 session_urls.append(video.url)
-                title = clients.core.strip_title(data.title)
+                title = strip_title(title=data.title, cls=None)
                 rendered_name = data.output_name
 
                 if self.consistent_data.get(
@@ -816,17 +819,6 @@ class AddToTreeWidget(QRunnable):
                                              f"to fetch its content. There is nothing I can do. It will be skipped")
                 return False
 
-            except NotAvailable_HQ:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {report} is not available, because the CDN network has an issue. "
-                                              f"This is not my fault, please do NOT report this error, thank you :)")
-                return False
-
-
-            except WeirdError_HQ:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"An error happened with: {report} this is a weird error i have no fix for yet,"
-                                              f" however this will be reported, to help me fixing it :) ", needs_network_log=True)
-                return False
-
             except VideoUnavailable_XV:
                 handle_error_gracefully(self, data=video_data.consistent_data, error_message= f"The video {report} is not available. Do not report this error... Not my fault :)")
                 return False
@@ -852,7 +844,7 @@ class AddToTreeWidget(QRunnable):
 
         return None
 
-    def run(self):
+    async def run(self):
         self.signals.start_undefined_range.emit()  # Starts the progressbar, but with a loading animation
         is_first = True # see down below for an explanation
 
@@ -880,7 +872,7 @@ class AddToTreeWidget(QRunnable):
             if i >= self.result_limit + 1:
                 break  # Respect search limit
 
-            video_id = self.process_video(video, i)  # Passes video and index object / int
+            video_id = await self.process_video(video, i)  # Passes video and index object / int
 
             if video_id is False:
                 self.logger.warning(f"Skipping Video: {video}")
@@ -900,10 +892,9 @@ class AddToTreeWidget(QRunnable):
 class DownloadScheduler(QObject):
     worker_started = Signal(int, object)  # video_id, worker
 
-    def __init__(self, threadpool, max_concurrent: int, parent=None):
+    def __init__(self, max_concurrent: int, parent=None):
         super().__init__(parent)
-        self.pool = threadpool # Threadpool from the GUI (QThreadPool)
-        self.sem = QSemaphore(max_concurrent) # Creates a semaphore that limits the maximum number of concurrent downloads
+        self.sem = asyncio.Semaphore(max_concurrent) # Creates a semaphore that limits the maximum number of concurrent downloads
         self.queue = deque() # This is a queue, that keeps track of all vidos that are currently being downloaded
 
     def enqueue(self, video_obj, video_id: int, quality, stop_event, segment_dir: str, segment_state_path: str, cleanup_on_stop: bool):
@@ -914,10 +905,10 @@ class DownloadScheduler(QObject):
         # Stop Event -->: This is associated with the stop button. If pressed the event
         # will raise an internal exception in the download process of eaf_base_api which gracefully stops the download
         # and all network requests
-        self._try_start()
+        asyncio.create_task(self._try_start())
 
-    def _try_start(self):
-        while self.queue and self.sem.tryAcquire(1): # Tries to start the download
+    async def _try_start(self):
+        while self.queue:
             video_obj, video_id, quality, stop_event, segment_dir, segment_state_path, cleanup_on_stop = self.queue.popleft()
             # Deletes the video from the queue, gets the data and then starts the download
             worker = DownloadThread(video=video_obj, video_id=video_id, quality=quality, stop_event=stop_event,
@@ -926,49 +917,21 @@ class DownloadScheduler(QObject):
             worker.signals.download_completed.connect(self._on_done)
             # Connects the completed signal to the UI
             self.worker_started.emit(video_id, worker) # Does something idk???
-            self.pool.start(worker) # Starts the actual download
+            asyncio.create_task(self._run_worker_with_semaphore(worker))
             logger.info(f"[Download (9/10) - Started Download]")
+
+    async def _run_worker_with_semaphore(self, worker):
+        # This wrapper handles waiting for a slot safely without freezing your queue loop
+        async with self.sem:
+            logger.info(f"[Download] Semaphore acquired. Starting execution.")
+            # Call your worker's async execution method
+            await worker.run()
 
     @Slot(int)
     def _on_done(self, video_id: int):
-        self.sem.release(1)
+        self.sem.release()
         self._try_start()
         # Releases the semaphore, so that the next video can be downloaded
-
-
-class ThumbnailFetcher(QRunnable):
-    def __init__(self, identifier: int):
-        super().__init__()
-        self.identifier = identifier
-        self.logger = setup_logger(name="Porn Fetch - [ThumbnailFetcher]", level=logging.DEBUG, log_file="PornFetch.log")
-
-    def run(self):
-        data: VideoAttributes = video_data.data_objects.get(self.identifier)
-        title = data.title
-        video = data.video
-        thumbnail = data.thumbnail
-
-        if thumbnail:
-            self.logger.info(f"Trying to fetch thumbnail for Video: {title}")
-            temp_core = clients.core
-
-            if "pornhub" in video.url:
-                temp_core.session.headers["Referer"] = "https://pornhub.com/"
-
-            elif "youporn" in video.url:
-                temp_core.session.headers["Referer"] = "https://youporn.com/"
-
-            if not thumbnail.startswith("http"):
-                thumbnail = f"https://{thumbnail}"
-
-            try:
-                thumbnail_data = temp_core.fetch(thumbnail, get_bytes=True)
-                self.logger.info(f"Successfully fetched thumbnail for: {title}")
-                video_data.data_objects[self.identifier].thumbnail_data = thumbnail_data
-
-            except Exception:
-                error = traceback.format_exc()
-                self.logger.error(f"Couldn't fetch Thumbnail: {thumbnail} for -->: {title} ERROR: {error}")
 
 
 class DownloadThread(QRunnable):
@@ -1034,7 +997,7 @@ class DownloadThread(QRunnable):
             downloaded_segments += 1
             self.signals.total_progress.emit(downloaded_segments)
 
-    def _add_total_segments(self):
+    async def _add_total_segments(self):
         """Fetch segment count off the UI thread and update total progress range."""
         global total_segments
         if self.stop_flag.is_set() or self.stop_event.is_set():
@@ -1042,7 +1005,8 @@ class DownloadThread(QRunnable):
         if not hasattr(self.video, "get_segments"):
             return
         try:
-            segments = self.video.get_segments(quality=self.quality)
+            segments = await self.video.get_segments(quality=self.quality)
+
         except Exception:
             self.logger.debug("Failed to get segments for total progress", exc_info=True)
             return
@@ -1060,7 +1024,7 @@ class DownloadThread(QRunnable):
             current_total = total_segments
         self.signals.total_progress_range.emit(current_total)
 
-    def run(self):
+    async def run(self):
         """Run the download in a thread, optimizing for different video sources and modes."""
         report = None  # Needed for HLS downloads
 
@@ -1087,8 +1051,8 @@ class DownloadThread(QRunnable):
             if os.path.isfile(self.output_path) and isinstance(self.video, tuple(instances_legacy)):
                 self.logger.info("File already exists, checking integrity...")
                 clients.core.session.headers.update({"Accept-Encoding": "identity"}) # Chad told me to do this idk
-                direct_download_url = clients.get_direct_url_legacy(video=self.video, quality=self.quality)
-                response = clients.core.fetch(method="HEAD", url=direct_download_url, get_response=True)
+                direct_download_url = await clients.get_direct_url_legacy(video=self.video, quality=self.quality)
+                response = await clients.core.fetch(method="HEAD", url=direct_download_url, get_response=True)
                 size = int(response.headers.get("Content-Length"))
                 do_not_skip = True
                 size_of_file = os.path.getsize(self.output_path)
@@ -1111,7 +1075,7 @@ class DownloadThread(QRunnable):
                         path = path[0] + str(random.randint(0, 1000)) + ".mp4"
                         self.output_path = path
 
-            self._add_total_segments()
+            await self._add_total_segments()
             if int(self.consistent_data.get("processing_delay")) != 0:
                 time.sleep(int(self.consistent_data.get("processing_delay")))
             self.logger.debug(f"Downloading Video to: {self.output_path}")
@@ -1126,7 +1090,7 @@ class DownloadThread(QRunnable):
                 video_source = "raw"
                 try:
                     self.logger.debug("Starting the Download!")
-                    self.video.download(quality=self.quality, path=self.output_path, no_title=True,
+                    await self.video.download(quality=self.quality, path=self.output_path, no_title=True,
                                     callback=lambda pos, total: self.generic_callback(pos, total, video_source), stop_event=self.stop_event)
 
                 except Exception:
@@ -1134,7 +1098,7 @@ class DownloadThread(QRunnable):
                     handle_error_gracefully(data=self.consistent_data, self=self, error_message=f"An error happened while downloading a video from EPorner: {error}", needs_network_log=True)
 
             else:
-                report = self.video.download(path=self.output_path, callback_remux=self.callback_remux, no_title=True,
+                report = await self.video.download(path=self.output_path, callback_remux=self.callback_remux, no_title=True,
                                     quality=self.quality, remux=remux, stop_event=self.stop_event,
                                     callback=lambda pos, total: self.generic_callback(pos, total),
                                              return_report=True, segment_state_path=self.segment_state_path,
@@ -1207,7 +1171,6 @@ class PornFetch(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.last_update_time = time.time()
-        self.last_thumbnail_change = time.time()
         self.signals = Signals()
         self.signals.error_signal.connect(ui_popup)
 
@@ -1222,7 +1185,6 @@ class PornFetch(QMainWindow):
         self._anonymous_mode = False
         self.ensure_temp()
         self._row = {} # Video ID -> dict of widgets + state
-        self.threadpool = QThreadPool()
         self.maps()
         self.load_style()
         self.load_strings()
@@ -1263,7 +1225,7 @@ class PornFetch(QMainWindow):
         self.load_user_settings()  # Loads the user settings and applies selected values to the UI
         self.logger.debug("Startup: [4/5] Loaded the user settings")
         max_concurrent = int(video_data.consistent_data.get("semaphore", 1))
-        self.download_scheduler = DownloadScheduler(self.threadpool, max_concurrent, self)
+        self.download_scheduler = DownloadScheduler(max_concurrent, self)
         self.download_scheduler.worker_started.connect(self._wire_worker_signals)
         self.progress_widgets = {}  # video_id -> {'label': QLabel, 'progressbar': QProgressBar}
 
@@ -1275,7 +1237,7 @@ class PornFetch(QMainWindow):
             self.logger.info("Enabling anonymous mode")
             self.anonymous_mode()
 
-        self.semaphore = QSemaphore(video_data.consistent_data["semaphore"])
+        self.semaphore = asyncio.Semaphore(video_data.consistent_data["semaphore"])
         self.logger.debug("Startup: [5/5] OK")
         if FORCE_TEST_RUN:
             sys.exit(0)
@@ -1332,11 +1294,20 @@ class PornFetch(QMainWindow):
 
     def switch_to_download(self):
         self.ui.main_stacked_widget_top.setCurrentIndex(0)
+        self.ui.main_stacked_widget_top.setMaximumHeight(120)
         self.switch_to_main()
 
     def switch_to_login(self):
         self.ui.main_stacked_widget_top.setCurrentIndex(1)
+        self.ui.main_stacked_widget_top.setMaximumHeight(180)
+        self.switch_to_login_pornhub()
         self.switch_to_main()
+
+    def switch_to_login_pornhub(self):
+        self.ui.login_stacked_widget.setCurrentIndex(0)
+
+    def switch_to_login_xvideos(self):
+        self.ui.login_stacked_widget.setCurrentIndex(1)
 
     # Stacked Widget Tree
     def switch_to_treewidget_downloads(self):
@@ -1406,9 +1377,24 @@ class PornFetch(QMainWindow):
             mark(b, seg=True)
         self.ui.settings_button_switch_video.setChecked(True)
 
+        login_nav = [
+            self.ui.login_button_switch_pornhub,
+            self.ui.login_button_switch_xvideos
+        ]
+        group_login_bar = QButtonGroup(self)
+        group_login_bar.setExclusive(True)
+        for b in login_nav:
+            b.setCheckable(True)
+            group_login_bar.addButton(b)
+            mark(b, seg=True)
+
+        self.ui.login_button_switch_pornhub.setChecked(True)
+
+
         # --- intent & size instead of dozens of QSS files ---
         mark(self.ui.download_button_download, intent="primary", size="lg")
         mark(self.ui.login_button_login, intent="primary")
+        mark(self.ui.login_xvideos_button_login, intent="primary")
         mark(self.ui.settings_button_apply, intent="primary", size="lg")
         mark(self.ui.credits_button_send_feedback, intent="primary")
         mark(self.ui.settings_button_system_install_pornfetch, intent="success")
@@ -1419,6 +1405,7 @@ class PornFetch(QMainWindow):
         mark(self.ui.settings_button_uninstall_porn_fetch, intent="danger")
         mark(self.ui.settings_button_reset, intent="danger")
         mark(self.ui.main_progressbar_total, role="total")
+        mark(self.ui.login_xvideos_button_help, intent="success")
 
         mark(self.ui.one_time_setup_button_info_enable_all, intent="success")
         mark(self.ui.one_time_setup_button_info_disable_all, intent="danger")
@@ -1501,7 +1488,6 @@ QLineEdit:focus {
     background-color: #1A1A1A; /* Slightly darker to add depth */
 }
 """
-
         self.ui.settings_button_buy_license.setStyleSheet(stylesheet_license_button)
         self.ui.settings_button_import_license.setStyleSheet(stylesheet_import_license)
         self.ui.tree_advanced_lineedit_custom_title.setStyleSheet(stylesheet_lineedit_custom_title)
@@ -1660,6 +1646,9 @@ QLineEdit:focus {
         self.ui.login_button_get_watched_videos.clicked.connect(self.get_watched_videos)
         self.ui.login_button_get_liked_videos.clicked.connect(self.get_liked_videos)
         self.ui.login_button_get_recommended_videos.clicked.connect(self.get_recommended_videos)
+        self.ui.login_button_switch_pornhub.clicked.connect(self.switch_to_login_pornhub)
+        self.ui.login_button_switch_xvideos.clicked.connect(self.switch_to_login_xvideos)
+
 
         # File Dialog
         self.ui.settings_button_videos_open_output_path.clicked.connect(self.open_output_path_dialog)
@@ -2264,7 +2253,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         self.add_to_tree_widget_thread_.signals.tree_widget_finished.connect(self.tree_widget_finished)
         self.add_to_tree_widget_thread_.signals.total_progress_range.connect(self.update_total_progressbar_range)
         self.add_to_tree_widget_thread_.signals.total_progress.connect(self.update_total_progressbar)
-        self.threadpool.start(self.add_to_tree_widget_thread_)
+        asyncio.create_task(self.add_to_tree_widget_thread_.run())
         self.logger.info(f"[Download (2/10) - Started Preparing Thread]")
         self.logger.debug("Started the thread for adding videos...")
 
@@ -2394,10 +2383,7 @@ please open an Issue on GitHub and ask for it. I'll do my best to implement it.
         download_btn.clicked.connect(lambda _=False, vid=identifier: self.queue_download(vid))
         stop_btn.clicked.connect(lambda _=False, vid=identifier: self.stop_download(vid))
         self.logger.info(f"[Download (6/10) - Created Item]")
-        self.logger.info(f"PornFetch -- Starting Thumbnail Thread!")
 
-        self.thumbnail_thread = ThumbnailFetcher(identifier=identifier)
-        self.threadpool.start(self.thumbnail_thread)
 
 
     def _wire_worker_signals(self, video_id: int, worker):

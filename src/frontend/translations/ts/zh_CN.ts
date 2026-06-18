@@ -4,12 +4,12 @@
 <context>
     <name>LoginThread</name>
     <message>
-        <location filename="../../../../main.py" line="1196"/>
+        <location filename="../../../../main.py" line="1182"/>
         <source>Login Failed, please check your credentials and try again!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="1200"/>
+        <location filename="../../../../main.py" line="1186"/>
         <source>You are already logged in!</source>
         <translation type="unfinished">您已经登录！</translation>
     </message>
@@ -17,17 +17,17 @@
 <context>
     <name>PornFetch</name>
     <message>
-        <location filename="../../../../main.py" line="2844"/>
+        <location filename="../../../../main.py" line="2785"/>
         <source>Porn Fetch installation failed, because of: {result[1]}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2077"/>
+        <location filename="../../../../main.py" line="2046"/>
         <source>Saved User Settings, please restart Porn Fetch!</source>
         <translation type="unfinished">已保存用户设置，请重新启动 Porn Fetch！</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2082"/>
+        <location filename="../../../../main.py" line="2051"/>
         <source>
 Please read this before setting proxies:
 
@@ -69,52 +69,47 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2294"/>
+        <location filename="../../../../main.py" line="2235"/>
         <source>The model URL you entered seems to be invalid. Please check your input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2838"/>
+        <location filename="../../../../main.py" line="2779"/>
         <source>Porn Fetch has been installed. The app will now close! Please start Porn Fetch from your context menu again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2152"/>
+        <location filename="../../../../main.py" line="2121"/>
         <source>You did choose to not disable SSL Verifications. Retuning to GUI without applying proxies now...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2156"/>
+        <location filename="../../../../main.py" line="2125"/>
         <source>Your proxy seems to be invalid, please try again...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2163"/>
+        <location filename="../../../../main.py" line="2132"/>
         <source>Proxy IP: {ip_masked} Your IP: {ip} are the same! Please check the proxy you&apos;ve used!, aborting...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2181"/>
-        <source>Can not enable Kill Switch if you haven&apos;t applied a proxy yet!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../main.py" line="2697"/>
+        <location filename="../../../../main.py" line="2638"/>
         <source>Those credentials don&apos;t seem to be valid...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2711"/>
+        <location filename="../../../../main.py" line="2652"/>
         <source>Login Successful!</source>
         <translation type="unfinished">登陆成功！</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2721"/>
+        <location filename="../../../../main.py" line="2662"/>
         <source>There&apos;s a problem with the login. Please make sure you login first and then you try to get videos based on your account.</source>
         <translation type="unfinished">登录有问题。请确保您先登录，然后尝试根据您的帐户获取视频。</translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2799"/>
+        <location filename="../../../../main.py" line="2740"/>
         <source>
 Important: 
 
@@ -130,7 +125,7 @@ Thank you for using Porn Fetch ^^
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../main.py" line="2852"/>
+        <location filename="../../../../main.py" line="2793"/>
         <source>Porn Fetch uninstallation failed, because of: {result[1]}</source>
         <translation type="unfinished"></translation>
     </message>
@@ -148,17 +143,17 @@ Thank you for using Porn Fetch ^^
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3467"/>
+        <location filename="../../UI/form_main_window.ui" line="3602"/>
         <source>OK (Update manually)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3474"/>
+        <location filename="../../UI/form_main_window.ui" line="3609"/>
         <source>Automatic Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3497"/>
+        <location filename="../../UI/form_main_window.ui" line="3632"/>
         <source>Total (HLS):</source>
         <translation type="unfinished"></translation>
     </message>
@@ -184,7 +179,7 @@ Thank you for using Porn Fetch ^^
     </message>
     <message>
         <location filename="../../UI/form_main_window.ui" line="247"/>
-        <location filename="../../UI/form_main_window.ui" line="1372"/>
+        <location filename="../../UI/form_main_window.ui" line="1507"/>
         <source>button: Supported websites</source>
         <translation type="unfinished"></translation>
     </message>
@@ -261,122 +256,125 @@ Thank you for using Porn Fetch ^^
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="691"/>
+        <location filename="../../UI/form_main_window.ui" line="769"/>
         <source>button get watched videos (requires login) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="697"/>
+        <location filename="../../UI/form_main_window.ui" line="775"/>
         <source>Get watched videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="713"/>
+        <location filename="../../UI/form_main_window.ui" line="791"/>
         <source>button get recommended videos (requires login)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="719"/>
+        <location filename="../../UI/form_main_window.ui" line="797"/>
+        <location filename="../../UI/form_main_window.ui" line="986"/>
         <source>Get recommended videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="735"/>
+        <location filename="../../UI/form_main_window.ui" line="813"/>
         <source>button get liked videos (requires login)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="741"/>
+        <location filename="../../UI/form_main_window.ui" line="819"/>
+        <location filename="../../UI/form_main_window.ui" line="993"/>
         <source>Get Liked videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="770"/>
+        <location filename="../../UI/form_main_window.ui" line="875"/>
         <source>lineedit password </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="800"/>
+        <location filename="../../UI/form_main_window.ui" line="748"/>
         <source>lineedit email</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="824"/>
+        <location filename="../../UI/form_main_window.ui" line="902"/>
         <source>button start login (enter credentials above)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="830"/>
+        <location filename="../../UI/form_main_window.ui" line="908"/>
+        <location filename="../../UI/form_main_window.ui" line="972"/>
         <source>Login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="854"/>
+        <location filename="../../UI/form_main_window.ui" line="845"/>
         <source>label password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="857"/>
+        <location filename="../../UI/form_main_window.ui" line="848"/>
         <source>Password:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="881"/>
+        <location filename="../../UI/form_main_window.ui" line="932"/>
         <source>label username</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="884"/>
+        <location filename="../../UI/form_main_window.ui" line="935"/>
         <source>E-Mail:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1226"/>
+        <location filename="../../UI/form_main_window.ui" line="1361"/>
         <source>Start:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1130"/>
+        <location filename="../../UI/form_main_window.ui" line="1265"/>
         <source>End:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="964"/>
+        <location filename="../../UI/form_main_window.ui" line="1099"/>
         <source>Downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="971"/>
+        <location filename="../../UI/form_main_window.ui" line="1106"/>
         <source>Advanced Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="998"/>
+        <location filename="../../UI/form_main_window.ui" line="1133"/>
         <source>Does not stop downloading videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1001"/>
+        <location filename="../../UI/form_main_window.ui" line="1136"/>
         <source>button stop loading videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1004"/>
+        <location filename="../../UI/form_main_window.ui" line="1139"/>
         <source>Stop loading videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1086"/>
+        <location filename="../../UI/form_main_window.ui" line="1221"/>
         <source>Author</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1091"/>
+        <location filename="../../UI/form_main_window.ui" line="1226"/>
         <source>Duration (minutes)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1204"/>
+        <location filename="../../UI/form_main_window.ui" line="1339"/>
         <source>This feature allows you to only fetch a specific range of videos when
 searching, loading models / channels or fetching a playlist.
 
@@ -387,198 +385,228 @@ This can save a lot of time in certain scenarios.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1186"/>
+        <location filename="../../UI/form_main_window.ui" line="1321"/>
         <source>checkbox do not clear videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1189"/>
+        <location filename="../../UI/form_main_window.ui" line="1324"/>
         <source>Do not clear videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1167"/>
+        <location filename="../../UI/form_main_window.ui" line="1302"/>
         <source>Cleanup on stop (disables resume feature for HLS) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1247"/>
+        <location filename="../../UI/form_main_window.ui" line="1382"/>
         <source>button keyboard shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1250"/>
+        <location filename="../../UI/form_main_window.ui" line="1385"/>
         <source>Keyboard shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1144"/>
+        <location filename="../../UI/form_main_window.ui" line="1279"/>
         <source>Custom Title formatting:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1151"/>
+        <location filename="../../UI/form_main_window.ui" line="965"/>
+        <source>Session Token Auth:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="979"/>
+        <source>Session Token:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="1003"/>
+        <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="1010"/>
+        <source>Get watch later videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="676"/>
+        <source>PornHub</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="683"/>
+        <source>Xvideos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../UI/form_main_window.ui" line="1286"/>
         <source>$title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1158"/>
+        <location filename="../../UI/form_main_window.ui" line="1293"/>
         <source>Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1330"/>
+        <location filename="../../UI/form_main_window.ui" line="1465"/>
         <source>Video page (settings)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1333"/>
+        <location filename="../../UI/form_main_window.ui" line="1468"/>
         <source>Video</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1343"/>
+        <location filename="../../UI/form_main_window.ui" line="1478"/>
         <source>Performance page (Settings)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1346"/>
+        <location filename="../../UI/form_main_window.ui" line="1481"/>
         <source>Performance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1356"/>
+        <location filename="../../UI/form_main_window.ui" line="1491"/>
         <source>System page (settings)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1362"/>
-        <location filename="../../UI/form_main_window.ui" line="2560"/>
+        <location filename="../../UI/form_main_window.ui" line="1497"/>
+        <location filename="../../UI/form_main_window.ui" line="2695"/>
         <source>System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1375"/>
+        <location filename="../../UI/form_main_window.ui" line="1510"/>
         <source>UI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1423"/>
+        <location filename="../../UI/form_main_window.ui" line="1558"/>
         <source>combobox settings quality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1426"/>
+        <location filename="../../UI/form_main_window.ui" line="1561"/>
         <source>Porn Fetch will by default download the best video quality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1433"/>
+        <location filename="../../UI/form_main_window.ui" line="1568"/>
         <source>BEST (auto)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1438"/>
+        <location filename="../../UI/form_main_window.ui" line="1573"/>
         <source>HALF (auto)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1443"/>
+        <location filename="../../UI/form_main_window.ui" line="1578"/>
         <source>WORST (auto)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1448"/>
+        <location filename="../../UI/form_main_window.ui" line="1583"/>
         <source>2160p</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1453"/>
+        <location filename="../../UI/form_main_window.ui" line="1588"/>
         <source>1440p</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1458"/>
+        <location filename="../../UI/form_main_window.ui" line="1593"/>
         <source>1080p</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1463"/>
+        <location filename="../../UI/form_main_window.ui" line="1598"/>
         <source>720p</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1468"/>
+        <location filename="../../UI/form_main_window.ui" line="1603"/>
         <source>540p</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1473"/>
+        <location filename="../../UI/form_main_window.ui" line="1608"/>
         <source>480p</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1478"/>
+        <location filename="../../UI/form_main_window.ui" line="1613"/>
         <source>360p</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1483"/>
+        <location filename="../../UI/form_main_window.ui" line="1618"/>
         <source>240p</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1488"/>
+        <location filename="../../UI/form_main_window.ui" line="1623"/>
         <source>144p</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1499"/>
+        <location filename="../../UI/form_main_window.ui" line="1634"/>
         <source>settings open output path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1502"/>
+        <location filename="../../UI/form_main_window.ui" line="1637"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1512"/>
+        <location filename="../../UI/form_main_window.ui" line="1647"/>
         <source>combobox model videos type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1515"/>
+        <location filename="../../UI/form_main_window.ui" line="1650"/>
         <source>This decides whether you want to fetch model uploads or featured videos or both of them</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1519"/>
+        <location filename="../../UI/form_main_window.ui" line="1654"/>
         <source>Both (recommended)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1524"/>
+        <location filename="../../UI/form_main_window.ui" line="1659"/>
         <source>Uploaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1529"/>
+        <location filename="../../UI/form_main_window.ui" line="1664"/>
         <source>Featured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1546"/>
+        <location filename="../../UI/form_main_window.ui" line="1681"/>
         <source>label video quality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1549"/>
+        <location filename="../../UI/form_main_window.ui" line="1684"/>
         <source>Quality:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1566"/>
+        <location filename="../../UI/form_main_window.ui" line="1701"/>
         <source>By default, Porn Fetch will select the best available video quality. You can also decide between half and worst above.
 If you instead use the custom integer values (1080p, 720p etc.) then Porn Fetch will try to use these, if available,
 but if they are not available the next best quality will be chosen. Please note that this is experimental and has not
@@ -586,24 +614,24 @@ been that tested very well. (Be honest, why would you not choose the best qualit
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1579"/>
+        <location filename="../../UI/form_main_window.ui" line="1714"/>
         <source>The result limit defines how many videos will be returned when performing a search or doing other operations which
 involves loading multiple videos. This also affects models / channels and your liked videos. The result limit is
 basically the number of videos which can be loaded into the tree widget (this thing where videos are displayed).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1591"/>
+        <location filename="../../UI/form_main_window.ui" line="1726"/>
         <source>spinbox resutl limit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1594"/>
+        <location filename="../../UI/form_main_window.ui" line="1729"/>
         <source>The result limit limits how many videos will be fetched</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1607"/>
+        <location filename="../../UI/form_main_window.ui" line="1742"/>
         <source>User uploads and featured videos are two different things. User uploads are the videos which were really uploaded
 by the model and the featured videos are videos the model is part or featured in.
 
@@ -614,69 +642,69 @@ If you choose &quot;User Uploads&quot;, only self uploaded videos will be fetche
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1616"/>
+        <location filename="../../UI/form_main_window.ui" line="1751"/>
         <source>label model videos type (pornhub)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1619"/>
+        <location filename="../../UI/form_main_window.ui" line="1754"/>
         <source>Model videos (PH)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1629"/>
+        <location filename="../../UI/form_main_window.ui" line="1764"/>
         <source>label result limit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1632"/>
+        <location filename="../../UI/form_main_window.ui" line="1767"/>
         <source>Result Limit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1645"/>
+        <location filename="../../UI/form_main_window.ui" line="1780"/>
         <source>Videos will be tracked in a SQL database which will save the URL and the metadata. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1658"/>
+        <location filename="../../UI/form_main_window.ui" line="1793"/>
         <source>checkbox track downloaded videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1661"/>
+        <location filename="../../UI/form_main_window.ui" line="1796"/>
         <source>Track downloaded videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1674"/>
+        <location filename="../../UI/form_main_window.ui" line="1809"/>
         <source>checkbox write metadata tags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1677"/>
+        <location filename="../../UI/form_main_window.ui" line="1812"/>
         <source>Write metadata tags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1684"/>
+        <location filename="../../UI/form_main_window.ui" line="1819"/>
         <source>Metadata tags are saved inside of the file itself. These are tags that video players can read from and provide you information.
 Some folder viewers also give you the ability to search files by specific metadata tags. Those tags can help organize and structure files.
 Porn Fetch will by default save those tags inside of your video files. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1696"/>
+        <location filename="../../UI/form_main_window.ui" line="1831"/>
         <source>label output path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1699"/>
+        <location filename="../../UI/form_main_window.ui" line="1834"/>
         <source>Output path:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1708"/>
+        <location filename="../../UI/form_main_window.ui" line="1843"/>
         <source>The directory system will save videos in an intelligent way. If you download 3 videos form one Pornstar and 5 videos 
 from another, Porn Fetch will automatically make folders for it and move the 3 videos into that one folder and the other
 5 into the other. (This will still apply with your selected output path)
@@ -685,22 +713,22 @@ This can be helpful for organizing stuff, but is a more advanced feature, so the
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1728"/>
+        <location filename="../../UI/form_main_window.ui" line="1863"/>
         <source>checkbox use directory system</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1731"/>
+        <location filename="../../UI/form_main_window.ui" line="1866"/>
         <source>The directory system will automatically create folders for each author of videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1734"/>
+        <location filename="../../UI/form_main_window.ui" line="1869"/>
         <source>Use directory system</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1741"/>
+        <location filename="../../UI/form_main_window.ui" line="1876"/>
         <source>If you fetch a video and the exact same filename already exists, usually Porn Fetch would just skip this file.
 If you set this option to No, then Porn Fetch instead download the video and append a random number to it.
 
@@ -714,90 +742,90 @@ Spain_didnt_win_against_Germany_118251.mp4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1766"/>
+        <location filename="../../UI/form_main_window.ui" line="1901"/>
         <source>checkbox skip existing files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1769"/>
+        <location filename="../../UI/form_main_window.ui" line="1904"/>
         <source>Skip existing files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1778"/>
+        <location filename="../../UI/form_main_window.ui" line="1913"/>
         <source>lineedit output path of the database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1781"/>
+        <location filename="../../UI/form_main_window.ui" line="1916"/>
         <source>the database tracks all downloaded videos in Porn Fetch, optional</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1784"/>
+        <location filename="../../UI/form_main_window.ui" line="1919"/>
         <source>Enter the path of the database file here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1797"/>
+        <location filename="../../UI/form_main_window.ui" line="1932"/>
         <source>lineedit video output path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1800"/>
+        <location filename="../../UI/form_main_window.ui" line="1935"/>
         <source>Enter &quot;./&quot; for current directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1839"/>
+        <location filename="../../UI/form_main_window.ui" line="1974"/>
         <source>Speed Limit (MB/s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1842"/>
-        <location filename="../../UI/form_main_window.ui" line="1889"/>
+        <location filename="../../UI/form_main_window.ui" line="1977"/>
+        <location filename="../../UI/form_main_window.ui" line="2024"/>
         <source>Pages concurrency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1845"/>
+        <location filename="../../UI/form_main_window.ui" line="1980"/>
         <source>Speed Limit (MB/s):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1852"/>
+        <location filename="../../UI/form_main_window.ui" line="1987"/>
         <source>The timeout handles the timeout for retrieving segments when using the threaded download mode. If you have a poor 
 internet connection you can set this higher than 10. But this isn&apos;t required for most users!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1863"/>
+        <location filename="../../UI/form_main_window.ui" line="1998"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The pages concurrency defines how many pages will be scraped at the same time,&lt;/p&gt;&lt;p&gt;when searching for videos or fetching models. Lower values are generally recommended,&lt;/p&gt;&lt;p&gt;to avoid getting blocked. Keep it between 1-3.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1876"/>
-        <location filename="../../UI/form_main_window.ui" line="2059"/>
+        <location filename="../../UI/form_main_window.ui" line="2011"/>
+        <location filename="../../UI/form_main_window.ui" line="2194"/>
         <source>Videos Concurrency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1879"/>
+        <location filename="../../UI/form_main_window.ui" line="2014"/>
         <source>Processing Delay (videos/sec):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1892"/>
+        <location filename="../../UI/form_main_window.ui" line="2027"/>
         <source>Pages concurrency:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1919"/>
+        <location filename="../../UI/form_main_window.ui" line="2054"/>
         <source>The Semaphore is a tool to limit the number of simultaneous actions / downloads. For example: If the semaphore is set to 1, only 1 video will be downloaded at the same time.\nIf the semaphore is set to 4, 4 videos will be downloaded at the same time. Changing this is only useful, if you have a really good internet connection and a good system.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1939"/>
+        <location filename="../../UI/form_main_window.ui" line="2074"/>
         <source>The speed limit sets the maximum allowed network speed in megabyte per seconds. However, this doesn&apos;t work perfectly.
 The speed limit also only works for the default download mode, because it wouldn&apos;t make sense downloading multiple
 segments at the same time with a speed limit being in place.
@@ -806,22 +834,22 @@ If you need something more &apos;exact / precise&apos;, use applications like Ne
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1956"/>
+        <location filename="../../UI/form_main_window.ui" line="2091"/>
         <source>Maximum retries</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1959"/>
+        <location filename="../../UI/form_main_window.ui" line="2094"/>
         <source>Maximum retries:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1966"/>
+        <location filename="../../UI/form_main_window.ui" line="2101"/>
         <source>spinbox speed limit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="1986"/>
+        <location filename="../../UI/form_main_window.ui" line="2121"/>
         <source>1) High Performance:  Uses a class of workers to download multiple video segments at a time. Can be really fast if you
 have a very strong internet connection. Maybe not great for low end systems.
 
@@ -834,52 +862,52 @@ With the High Performance method, we can just download other segments while wait
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2004"/>
+        <location filename="../../UI/form_main_window.ui" line="2139"/>
         <source>spinbox pages concurrency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2007"/>
+        <location filename="../../UI/form_main_window.ui" line="2142"/>
         <source>This decides how many pages will be scraped at the same time. Lower values between 1-3 are recommended</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2033"/>
+        <location filename="../../UI/form_main_window.ui" line="2168"/>
         <source>Simultaneous downloads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2036"/>
+        <location filename="../../UI/form_main_window.ui" line="2171"/>
         <source>Simultaneous downloads:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2046"/>
+        <location filename="../../UI/form_main_window.ui" line="2181"/>
         <source>Maximum timeout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2049"/>
+        <location filename="../../UI/form_main_window.ui" line="2184"/>
         <source>Maximum timeout:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2062"/>
+        <location filename="../../UI/form_main_window.ui" line="2197"/>
         <source>Videos Concurrency:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2082"/>
+        <location filename="../../UI/form_main_window.ui" line="2217"/>
         <source>Network delay (requests/sec)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2085"/>
+        <location filename="../../UI/form_main_window.ui" line="2220"/>
         <source>Network delay (requests/sec):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2098"/>
+        <location filename="../../UI/form_main_window.ui" line="2233"/>
         <source>You can set a delay between requests from you and a site. If you are downloading a lot of videos or experiencing 
 errors, you should enable a delay. By default the delay is turned off with the value 0
 
@@ -890,36 +918,36 @@ really affect the high performance download mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2114"/>
+        <location filename="../../UI/form_main_window.ui" line="2249"/>
         <source>The processing delay sets a delay before every video gets downloaded.
 Let&apos;s assume you set a delay of 30 (30 seconds), then it will take 30 seconds between each video downloads.
 This does not apply if you have a value of simultaneous downloads greater than 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2126"/>
+        <location filename="../../UI/form_main_window.ui" line="2261"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The videos concurrency defines how many videos are fetched at the same time when searching or fetching models etc.&lt;/p&gt;&lt;p&gt;For example, let&apos;s say you search for something. Then the first page of the results will be scraped for video URLs. This takes&lt;/p&gt;&lt;p&gt;usually around 1 second. If you set this value to 20, then from all those URLs Porn Fetch will attempt to load 20 videos at&lt;/p&gt;&lt;p&gt;the same time. This can improve speed A LOT, but can also get you blocked from the site. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2136"/>
+        <location filename="../../UI/form_main_window.ui" line="2271"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The download worker setting defines, how many workers / threads will be used at the same time&lt;/p&gt;&lt;p&gt;to fetch video segments at the same time. Usually you don&apos;t need to go over 20, unless you have a higher&lt;/p&gt;&lt;p&gt;internet connection than 1gbit/s. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2146"/>
+        <location filename="../../UI/form_main_window.ui" line="2281"/>
         <source>The maximal retries defines how much attempts will be used for a network request. For example if an API calls
 a URL for a website there will be &lt;AMOUNT&gt; of attempts until an error is thrown.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2160"/>
-        <location filename="../../UI/form_main_window.ui" line="2163"/>
+        <location filename="../../UI/form_main_window.ui" line="2295"/>
+        <location filename="../../UI/form_main_window.ui" line="2298"/>
         <source>Download workers:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2209"/>
+        <location filename="../../UI/form_main_window.ui" line="2344"/>
         <source>The anonymous mode renames all of Porn Fetch&apos;s elements to look NOT like a Porn downloader.
 This makes it useful for downloading Porn content if you are in public, or multiple people use your PC / Phone.
 
@@ -927,27 +955,27 @@ This also disables thumbnail preview. All titles will be replaced with: [redacte
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2228"/>
+        <location filename="../../UI/form_main_window.ui" line="2363"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If you use truststore as your SSL context, your system&apos;s OS will validate whether the HTTPS (SSL)) certificate of the website is valid or not. On newer systems, truststore is the recommended and default way, because again, your system manages everything and makes sure it&apos;s up to date.&lt;/p&gt;&lt;p&gt;However, if your system is too old, e.g., some old legacy WIndows XP build, then you might want to use the pre-shipped CA which is the one that comes with certifi. &lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;This is a complex topic, just leave the default options and you&apos;ll be good to go. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2244"/>
+        <location filename="../../UI/form_main_window.ui" line="2379"/>
         <source>Use Truststore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2263"/>
+        <location filename="../../UI/form_main_window.ui" line="2398"/>
         <source>checkbox enable anonymous mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2266"/>
+        <location filename="../../UI/form_main_window.ui" line="2401"/>
         <source>Enable Anonymous mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2273"/>
+        <location filename="../../UI/form_main_window.ui" line="2408"/>
         <source>If you enable this function, all errors will be suppressed. This does not mean that they will be completely ignored, but
 you won&apos;t get a big notification for it. 
 
@@ -956,12 +984,12 @@ the current video will be skipped and Porn Fetch will continue with the next one
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2293"/>
+        <location filename="../../UI/form_main_window.ui" line="2428"/>
         <source>Porn Fetch will check for updates each time it starts, using my own server. This will require a working IPv6 connection. No personal data nor any other data is sent during this process.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2303"/>
+        <location filename="../../UI/form_main_window.ui" line="2438"/>
         <source>I have created my own server that runs 24/7 in my home. Porn Fetch (ONLY if you enable it) logs specific types of errors,
 that I don&apos;t know of, or that I need your help to fix them, to my server using a simple JSON post request.
 
@@ -981,7 +1009,7 @@ You&apos;d help me a lot by enabling network logging :) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2337"/>
+        <location filename="../../UI/form_main_window.ui" line="2472"/>
         <source>The proxy kill switch is an additional security layer if you use proxies. It will check your IP each time before making
 a request and if it&apos;s leaked it will immediately exit everything.
 
@@ -989,223 +1017,223 @@ My priority on developing this is low. Please do not report errors. Thank you &l
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2343"/>
+        <location filename="../../UI/form_main_window.ui" line="2478"/>
         <source>checkbox enable proxy kill switch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2346"/>
+        <location filename="../../UI/form_main_window.ui" line="2481"/>
         <source>Proxy Kill Switch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2359"/>
+        <location filename="../../UI/form_main_window.ui" line="2494"/>
         <source>Enable Debug Mode (Not recommended) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2378"/>
+        <location filename="../../UI/form_main_window.ui" line="2513"/>
         <source>checkbox enable network logging</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2381"/>
+        <location filename="../../UI/form_main_window.ui" line="2516"/>
         <source>Enable Network Logging</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2400"/>
+        <location filename="../../UI/form_main_window.ui" line="2535"/>
         <source>checkbox supress errors silently</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2403"/>
+        <location filename="../../UI/form_main_window.ui" line="2538"/>
         <source>Supress errors silently</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2419"/>
+        <location filename="../../UI/form_main_window.ui" line="2554"/>
         <source>checkbox activate a proxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2422"/>
+        <location filename="../../UI/form_main_window.ui" line="2557"/>
         <source>Activate Proxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2438"/>
+        <location filename="../../UI/form_main_window.ui" line="2573"/>
         <source>checkbox enable update checks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2441"/>
+        <location filename="../../UI/form_main_window.ui" line="2576"/>
         <source>Update checks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2496"/>
+        <location filename="../../UI/form_main_window.ui" line="2631"/>
         <source>spinbox font size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2509"/>
+        <location filename="../../UI/form_main_window.ui" line="2644"/>
         <source>combobox porn fetch theme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2513"/>
+        <location filename="../../UI/form_main_window.ui" line="2648"/>
         <source>Dark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2518"/>
+        <location filename="../../UI/form_main_window.ui" line="2653"/>
         <source>Light (why would you pick light theme)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2523"/>
+        <location filename="../../UI/form_main_window.ui" line="2658"/>
         <source>LSD (don&apos;t activate while you are high) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2537"/>
+        <location filename="../../UI/form_main_window.ui" line="2672"/>
         <source>label graphical user interface language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2540"/>
+        <location filename="../../UI/form_main_window.ui" line="2675"/>
         <source>Graphical User Interface Language:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2556"/>
+        <location filename="../../UI/form_main_window.ui" line="2691"/>
         <source>combobox porn fetch language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2565"/>
+        <location filename="../../UI/form_main_window.ui" line="2700"/>
         <source>English</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2570"/>
+        <location filename="../../UI/form_main_window.ui" line="2705"/>
         <source>German</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2575"/>
+        <location filename="../../UI/form_main_window.ui" line="2710"/>
         <source>Chinese simplified (outdated)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2580"/>
+        <location filename="../../UI/form_main_window.ui" line="2715"/>
         <source>French (outdated)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2585"/>
+        <location filename="../../UI/form_main_window.ui" line="2720"/>
         <source>Italian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2593"/>
+        <location filename="../../UI/form_main_window.ui" line="2728"/>
         <source>label porn fetch theme </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2596"/>
+        <location filename="../../UI/form_main_window.ui" line="2731"/>
         <source>Theme:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2603"/>
+        <location filename="../../UI/form_main_window.ui" line="2738"/>
         <source>label font size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2606"/>
+        <location filename="../../UI/form_main_window.ui" line="2741"/>
         <source>Font Size:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2637"/>
+        <location filename="../../UI/form_main_window.ui" line="2772"/>
         <source>Buy License (5€)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2647"/>
+        <location filename="../../UI/form_main_window.ui" line="2782"/>
         <source>Import License File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2661"/>
+        <location filename="../../UI/form_main_window.ui" line="2796"/>
         <source>button apply the settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2664"/>
+        <location filename="../../UI/form_main_window.ui" line="2799"/>
         <source>Apply  (needs restart)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2674"/>
+        <location filename="../../UI/form_main_window.ui" line="2809"/>
         <source>button reset porn fetch to default settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2707"/>
+        <location filename="../../UI/form_main_window.ui" line="2842"/>
         <source>button install porn fetch (This is optional) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2724"/>
+        <location filename="../../UI/form_main_window.ui" line="2859"/>
         <source>Clear Temporary Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2803"/>
+        <location filename="../../UI/form_main_window.ui" line="2938"/>
         <source>Send Feedback (Anonymously)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2810"/>
+        <location filename="../../UI/form_main_window.ui" line="2945"/>
         <source>Textbrowser for credits / information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2872"/>
+        <location filename="../../UI/form_main_window.ui" line="3007"/>
         <source>button deny license</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2894"/>
+        <location filename="../../UI/form_main_window.ui" line="3029"/>
         <source>Deny and Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2901"/>
+        <location filename="../../UI/form_main_window.ui" line="3036"/>
         <source>button accept license</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2923"/>
-        <location filename="../../UI/form_main_window.ui" line="3391"/>
+        <location filename="../../UI/form_main_window.ui" line="3058"/>
+        <location filename="../../UI/form_main_window.ui" line="3526"/>
         <source>Accept</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2937"/>
+        <location filename="../../UI/form_main_window.ui" line="3072"/>
         <source>textbrowser license</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3076"/>
+        <location filename="../../UI/form_main_window.ui" line="3211"/>
         <source>textbrowser keyboard shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3079"/>
+        <location filename="../../UI/form_main_window.ui" line="3214"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -1225,7 +1253,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3159"/>
+        <location filename="../../UI/form_main_window.ui" line="3294"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -1256,7 +1284,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3362"/>
+        <location filename="../../UI/form_main_window.ui" line="3497"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -1280,12 +1308,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3156"/>
+        <location filename="../../UI/form_main_window.ui" line="3291"/>
         <source>textbrowser install dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="2940"/>
+        <location filename="../../UI/form_main_window.ui" line="3075"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -1348,52 +1376,52 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3194"/>
+        <location filename="../../UI/form_main_window.ui" line="3329"/>
         <source>label custom app name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3197"/>
+        <location filename="../../UI/form_main_window.ui" line="3332"/>
         <source>Custom App Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3204"/>
+        <location filename="../../UI/form_main_window.ui" line="3339"/>
         <source>lineedit custom app name (enter the custom name here) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3210"/>
+        <location filename="../../UI/form_main_window.ui" line="3345"/>
         <source>Enter your custom App Name here. Leave it empty to keep &quot;Porn Fetch&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3221"/>
+        <location filename="../../UI/form_main_window.ui" line="3356"/>
         <source>buttom instal porn fetch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3224"/>
+        <location filename="../../UI/form_main_window.ui" line="3359"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3231"/>
+        <location filename="../../UI/form_main_window.ui" line="3366"/>
         <source>button portable mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3234"/>
+        <location filename="../../UI/form_main_window.ui" line="3369"/>
         <source>Portable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3298"/>
+        <location filename="../../UI/form_main_window.ui" line="3433"/>
         <source>textbrowser supported websites</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3301"/>
+        <location filename="../../UI/form_main_window.ui" line="3436"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -1405,37 +1433,37 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3356"/>
+        <location filename="../../UI/form_main_window.ui" line="3491"/>
         <source>textbrowser disclaimer message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3388"/>
+        <location filename="../../UI/form_main_window.ui" line="3523"/>
         <source>button accept disclaimer message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3411"/>
+        <location filename="../../UI/form_main_window.ui" line="3546"/>
         <source>Enable Update + Error reports (100% anonymous)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3418"/>
+        <location filename="../../UI/form_main_window.ui" line="3553"/>
         <source>Enable Update checking only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3425"/>
+        <location filename="../../UI/form_main_window.ui" line="3560"/>
         <source>Disable everything</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3455"/>
+        <location filename="../../UI/form_main_window.ui" line="3590"/>
         <source>textbrowser update changelog notification</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../UI/form_main_window.ui" line="3464"/>
+        <location filename="../../UI/form_main_window.ui" line="3599"/>
         <source>button acknowledge that a new version is out</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1443,7 +1471,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>main</name>
     <message>
-        <location filename="../../../../main.py" line="3121"/>
+        <location filename="../../../../main.py" line="3062"/>
         <source>No URLs in the current session...</source>
         <translation type="unfinished"></translation>
     </message>

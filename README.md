@@ -138,6 +138,12 @@ See: https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/FOR_DEVELOPE
 
 
 ## 🔨 Building from Source
+> [!CAUTION]
+> A Python library that I use needs specific Asynchronous features which Qt doesn't support yet. I have custom vibe-coded 
+> these patches into Qt's AsyncIo library. Please run the src/scripts/patch_qtasyncio.py script on your .venv directory
+> to patch the module on the fly. The installer script will do this automatically. 
+
+
 Building will be done through a fully automated script, that lets you select the version / commit to 
 build from and will install all dependencies automatically for you, including Python.
 

@@ -35,7 +35,7 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <layout class="QGridLayout" name="gridLayout_3">
+   <layout class="QGridLayout" name="gridLayout_8">
     <item row="0" column="0">
      <layout class="QHBoxLayout" name="main_horizontallayout_menu_buttons">
       <property name="spacing">
@@ -307,13 +307,13 @@
             <property name="minimumSize">
              <size>
               <width>0</width>
-              <height>150</height>
+              <height>120</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>16777215</width>
-              <height>150</height>
+              <height>120</height>
              </size>
             </property>
             <property name="styleSheet">
@@ -323,7 +323,7 @@
              <number>1</number>
             </property>
             <property name="currentIndex">
-             <number>2</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="page_download">
              <property name="sizePolicy">
@@ -335,7 +335,7 @@
              <property name="minimumSize">
               <size>
                <width>0</width>
-               <height>150</height>
+               <height>120</height>
               </size>
              </property>
              <property name="maximumSize">
@@ -667,222 +667,357 @@
                <number>0</number>
               </property>
               <item row="0" column="0">
-               <layout class="QGridLayout" name="login_gridlayout_login_box">
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="spacing">
-                 <number>6</number>
-                </property>
-                <item row="3" column="0" colspan="4">
-                 <layout class="QHBoxLayout" name="login_horizontallayout_ph_account">
+               <layout class="QVBoxLayout" name="verticalLayout_2">
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout">
                   <item>
-                   <widget class="QPushButton" name="login_button_get_watched_videos">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>30</height>
-                     </size>
-                    </property>
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="accessibleName">
-                     <string>button get watched videos (requires login) </string>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true"/>
-                    </property>
+                   <widget class="QPushButton" name="login_button_switch_pornhub">
                     <property name="text">
-                     <string>Get watched videos</string>
+                     <string>PornHub</string>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="login_button_get_recommended_videos">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>30</height>
-                     </size>
-                    </property>
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="accessibleName">
-                     <string>button get recommended videos (requires login)</string>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true"/>
-                    </property>
+                   <widget class="QPushButton" name="login_button_switch_xvideos">
                     <property name="text">
-                     <string>Get recommended videos</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="login_button_get_liked_videos">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>30</height>
-                     </size>
-                    </property>
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="accessibleName">
-                     <string>button get liked videos (requires login)</string>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true"/>
-                    </property>
-                    <property name="text">
-                     <string>Get Liked videos</string>
+                     <string>Xvideos</string>
                     </property>
                    </widget>
                   </item>
                  </layout>
                 </item>
-                <item row="1" column="1" colspan="3">
-                 <widget class="QLineEdit" name="login_lineedit_password">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
+                <item>
+                 <widget class="QStackedWidget" name="login_stacked_widget">
+                  <property name="currentIndex">
+                   <number>0</number>
                   </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>35</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>IBeamCursor</cursorShape>
-                  </property>
-                  <property name="accessibleName">
-                   <string>lineedit password </string>
-                  </property>
-                  <property name="echoMode">
-                   <enum>QLineEdit::EchoMode::Password</enum>
-                  </property>
-                  <property name="placeholderText">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1" colspan="3">
-                 <widget class="QLineEdit" name="login_lineedit_username">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>150</width>
-                    <height>35</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="accessibleName">
-                   <string>lineedit email</string>
-                  </property>
-                  <property name="placeholderText">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0" colspan="4">
-                 <widget class="QPushButton" name="login_button_login">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="accessibleName">
-                   <string>button start login (enter credentials above)</string>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true"/>
-                  </property>
-                  <property name="text">
-                   <string>Login</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="login_label_password">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="accessibleName">
-                   <string>label password</string>
-                  </property>
-                  <property name="text">
-                   <string>Password:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="login_label_username">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="accessibleName">
-                   <string>label username</string>
-                  </property>
-                  <property name="text">
-                   <string>E-Mail:</string>
-                  </property>
+                  <widget class="QWidget" name="page_pornhub">
+                   <layout class="QGridLayout" name="gridLayout_3">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
+                    <item row="1" column="0">
+                     <layout class="QGridLayout" name="login_gridlayout_login_box">
+                      <property name="leftMargin">
+                       <number>3</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>6</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>3</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>3</number>
+                      </property>
+                      <property name="spacing">
+                       <number>6</number>
+                      </property>
+                      <item row="0" column="1" colspan="2">
+                       <widget class="QLineEdit" name="login_lineedit_username">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>150</width>
+                          <height>35</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="accessibleName">
+                         <string>lineedit email</string>
+                        </property>
+                        <property name="placeholderText">
+                         <string/>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="2" column="0" colspan="3">
+                       <layout class="QHBoxLayout" name="login_horizontallayout_ph_account">
+                        <item>
+                         <widget class="QPushButton" name="login_button_get_watched_videos">
+                          <property name="minimumSize">
+                           <size>
+                            <width>0</width>
+                            <height>30</height>
+                           </size>
+                          </property>
+                          <property name="cursor">
+                           <cursorShape>PointingHandCursor</cursorShape>
+                          </property>
+                          <property name="accessibleName">
+                           <string>button get watched videos (requires login) </string>
+                          </property>
+                          <property name="styleSheet">
+                           <string notr="true"/>
+                          </property>
+                          <property name="text">
+                           <string>Get watched videos</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QPushButton" name="login_button_get_recommended_videos">
+                          <property name="minimumSize">
+                           <size>
+                            <width>0</width>
+                            <height>30</height>
+                           </size>
+                          </property>
+                          <property name="cursor">
+                           <cursorShape>PointingHandCursor</cursorShape>
+                          </property>
+                          <property name="accessibleName">
+                           <string>button get recommended videos (requires login)</string>
+                          </property>
+                          <property name="styleSheet">
+                           <string notr="true"/>
+                          </property>
+                          <property name="text">
+                           <string>Get recommended videos</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QPushButton" name="login_button_get_liked_videos">
+                          <property name="minimumSize">
+                           <size>
+                            <width>0</width>
+                            <height>30</height>
+                           </size>
+                          </property>
+                          <property name="cursor">
+                           <cursorShape>PointingHandCursor</cursorShape>
+                          </property>
+                          <property name="accessibleName">
+                           <string>button get liked videos (requires login)</string>
+                          </property>
+                          <property name="styleSheet">
+                           <string notr="true"/>
+                          </property>
+                          <property name="text">
+                           <string>Get Liked videos</string>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
+                      <item row="1" column="0">
+                       <widget class="QLabel" name="login_label_password">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="accessibleName">
+                         <string>label password</string>
+                        </property>
+                        <property name="text">
+                         <string>Password:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="1" colspan="2">
+                       <widget class="QLineEdit" name="login_lineedit_password">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>35</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="cursor">
+                         <cursorShape>IBeamCursor</cursorShape>
+                        </property>
+                        <property name="accessibleName">
+                         <string>lineedit password </string>
+                        </property>
+                        <property name="echoMode">
+                         <enum>QLineEdit::EchoMode::Password</enum>
+                        </property>
+                        <property name="placeholderText">
+                         <string/>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="3" column="0" colspan="3">
+                       <widget class="QPushButton" name="login_button_login">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="cursor">
+                         <cursorShape>PointingHandCursor</cursorShape>
+                        </property>
+                        <property name="accessibleName">
+                         <string>button start login (enter credentials above)</string>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true"/>
+                        </property>
+                        <property name="text">
+                         <string>Login</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="0">
+                       <widget class="QLabel" name="login_label_username">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="accessibleName">
+                         <string>label username</string>
+                        </property>
+                        <property name="text">
+                         <string>E-Mail:</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                   </layout>
+                  </widget>
+                  <widget class="QWidget" name="page_xvideos">
+                   <layout class="QGridLayout" name="gridLayout_11">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
+                    <item row="0" column="0">
+                     <layout class="QGridLayout" name="gridLayout_10">
+                      <item row="1" column="1">
+                       <widget class="QLabel" name="login_xvideos_label_session_auth_token">
+                        <property name="text">
+                         <string>Session Token Auth:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="2" column="2">
+                       <widget class="QPushButton" name="login_xvideos_button_login">
+                        <property name="text">
+                         <string>Login</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="1">
+                       <widget class="QLabel" name="login_xvideos_label_session_token">
+                        <property name="text">
+                         <string>Session Token:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="3">
+                       <widget class="QPushButton" name="login_xvideos_button_get_recommended">
+                        <property name="text">
+                         <string>Get recommended videos</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="3">
+                       <widget class="QPushButton" name="login_xvideos_button_get_liked">
+                        <property name="text">
+                         <string>Get Liked videos</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="2">
+                       <widget class="QLineEdit" name="login_xvideos_lineedit_session_auth_token"/>
+                      </item>
+                      <item row="2" column="1">
+                       <widget class="QPushButton" name="login_xvideos_button_help">
+                        <property name="text">
+                         <string>Help</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="2" column="3">
+                       <widget class="QPushButton" name="login_xvideos_button_get_watch_later">
+                        <property name="text">
+                         <string>Get watch later videos</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="2">
+                       <widget class="QLineEdit" name="login_xvideos_lineedit_session_token"/>
+                      </item>
+                     </layout>
+                    </item>
+                   </layout>
+                  </widget>
                  </widget>
                 </item>
                </layout>
@@ -1010,7 +1145,7 @@
           <item>
            <widget class="QStackedWidget" name="main_stacked_widget_tree">
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="page_downloads">
              <layout class="QGridLayout" name="gridLayout">
@@ -1039,8 +1174,8 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>1116</width>
-                   <height>348</height>
+                   <width>618</width>
+                   <height>240</height>
                   </rect>
                  </property>
                  <property name="sizePolicy">
@@ -2846,8 +2981,8 @@ QPushButton:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1118</width>
-             <height>544</height>
+             <width>226</width>
+             <height>112</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_23">
@@ -3272,7 +3407,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
+             <width>84</width>
              <height>70</height>
             </rect>
            </property>
@@ -3537,7 +3672,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
   <tabstop>download_button_playlist_get_videos</tabstop>
   <tabstop>download_lineedit_model_url</tabstop>
   <tabstop>download_button_model</tabstop>
-  <tabstop>login_button_login</tabstop>
   <tabstop>login_lineedit_username</tabstop>
   <tabstop>login_lineedit_password</tabstop>
   <tabstop>scrollarea_credits</tabstop>

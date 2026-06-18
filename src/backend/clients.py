@@ -57,7 +57,7 @@ from redtube_api import Client as rt_Client, Video as rt_Video
 from spankbang_api import Client as sp_Client, Video as sp_Video
 from youporn_api.youporn_api import Client as yp_Client, Video as yp_Video
 from base_api.base import BaseCore, setup_logger
-from base_api.modules.static_functions import normalize_quality_value, choose_quality_from_list
+from base_api.modules.static_functions import normalize_quality_value, choose_quality_from_list, strip_title
 # Note, the Video instances are mostly used in `shared_functions.py`
 AllowedVideoType: TypeAlias = (
     type[ph_Video] | type[xn_Video] | type[xv_Video] | type[yp_Video] |
@@ -161,7 +161,7 @@ def refresh_clients(debug_mode: bool = False, use_truststore: bool = True) -> No
     config.ssl_context = build_ssl_context(use_truststore) # Decides whether to use truststore (OS CA's) or Certifi CA's
 
     global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, \
-        hq_client, xn_client, core, yp_client, bg_client, pt_client, xf_client, pg_client
+        hq_client, xn_client, core, yp_client, bg_client, pt_client, xf_client, pg_client, rt_client
 
     if debug_mode:
         level = logging.DEBUG
@@ -285,7 +285,7 @@ async def check_video(url):
         elif "porngo" in str(url):
             return await pg_client.get_video(url)
 
-        elif "redttube" in str(url):
+        elif "redtube" in str(url):
             return await rt_client.get_video(url)
 
         else:
@@ -294,7 +294,7 @@ async def check_video(url):
     return False
 
 
-def get_available_qualities(video: Any) -> List[int]:
+async def get_available_qualities(video: Any) -> List[int]:
     """
     Returns sorted unique qualities worst->best as ints.
     Works for:
@@ -306,10 +306,10 @@ def get_available_qualities(video: Any) -> List[int]:
     if m3u8_url:
         try:
             if hasattr(video, "core"):
-                heights = video.core.list_available_qualities(m3u8_url)  # your existing function
+                heights = await video.core.list_available_qualities(m3u8_url)  # your existing function
 
             else:
-                heights = video.client.core.list_available_qualities(m3u8_url)
+                heights = await video.client.core.list_available_qualities(m3u8_url)
 
             return sorted({int(h) for h in heights if h is not None})
         except Exception:
@@ -431,23 +431,26 @@ def _public_attr_snapshot(obj: Any) -> Dict[str, Any]:
         out[name] = val
     return out
 
-def load_video_attributes(video, name_template: str = "$title", *, now: Optional[datetime] = None) -> VideoAttributes:
+async def load_video_attributes(video, name_template: str = "$title", *, now: Optional[datetime] = None) -> VideoAttributes:
     title = video.title
-    qualities = get_available_qualities(video)  # [144, 240, 360, ...]
 
     # --- your per-site extraction (unchanged logic) ---
     if isinstance(video, ph_Video):
+        await video.init()
+        await video.ensure_html()
+        stuff = await video.author
         try:
-            author = video.author.name
-        except Exception:
-            author = video.pornstars[0]
+            author = stuff.name
 
-        length = video.duration.seconds / 60
-        tags = ",".join([tag.name for tag in video.tags])
-        publish_date = video.date
-        video.refresh()  # as before
-        thumbnail = video.image.url
-        video_id = video.id
+        except AttributeError:
+            author = "Unavailable"
+            # TODO: Bring Pornstar support back for PHUB
+
+        length = video.duration
+        tags = video.tags
+        publish_date = video.publish_date
+        thumbnail = video.thumbnail
+        video_id = video.video_id
 
     elif isinstance(video, xn_Video):
         author = video.author
@@ -474,7 +477,8 @@ def load_video_attributes(video, name_template: str = "$title", *, now: Optional
         video_id = video.video_id
 
     elif isinstance(video, yp_Video):
-        author = video.author.name
+        stuff = await video.author
+        author = stuff.name
         length = round(int(video.length) // 60)
         tags = ",".join(video.categories)
         thumbnail = video.thumbnail
@@ -530,8 +534,11 @@ def load_video_attributes(video, name_template: str = "$title", *, now: Optional
         video_id = video.title
 
     elif isinstance(video, rt_Video):
-        author = video.au
-
+        author = video.author_name
+        length = video.duration
+        tags = video.action_tags
+        thumbnail = video.thumbnail
+        video_id = video.video_id
 
     else:
         # fallback if you ever add a new site and forget to implement it
@@ -541,6 +548,8 @@ def load_video_attributes(video, name_template: str = "$title", *, now: Optional
         publish_date = _safe_getattr(video, "publish_date") or "Not available"
         thumbnail = _safe_getattr(video, "thumbnail") or "Not available"
         video_id = _safe_getattr(video, "id") or title
+
+    qualities = await get_available_qualities(video)  # [144, 240, 360, ...]
 
     # Normalize publish date into UTC datetime (optional extra field)
     publish_dt_utc = parse_publish_date(publish_date, now=now)
@@ -569,8 +578,7 @@ def load_video_attributes(video, name_template: str = "$title", *, now: Optional
     context["video"] = video   # allow ${video.author.name} etc.
 
     rendered = render_name_template(name_template, context, missing="")
-    rendered = core.strip_title(rendered)
-    print(f"Rendered Name: {rendered}")
+    rendered = strip_title(title=rendered, cls=None) # Error because I am stupid
     return VideoAttributes(
         title=title,
         qualities=qualities,
