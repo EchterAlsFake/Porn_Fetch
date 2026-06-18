@@ -96,16 +96,20 @@ from src.frontend.UI.license import License, Disclaimer
 from src.frontend.UI.ui_form_main_window import Ui_PornFetch_UI
 from src.frontend.UI.pornfetch_info_dialog import PornFetchInfoWidget
 from src.frontend.UI.custom_combo_box import ComboPopupFitter, make_quality_combobox
+from src.frontend.UI.license_bridge import LicenseBridge
 
 splash.showMessage("Importing (PySide6 - FULL).")
 app.processEvents()
 # Qt / PySide6 related imports
+import PySide6.QtAsyncio as QtAsyncio # Needed because porn fetch's network backend is now async since v3.9
+
 from PySide6.QtGui import QIcon, QFontDatabase, QPixmap, QShortcut, QKeySequence
-from PySide6.QtCore import (QTextStream, QRunnable, Qt, QLocale, QSize,
+from PySide6.QtCore import (QTextStream, QRunnable, Qt, QLocale, QSize, QUrl,
                             QTranslator, QCoreApplication, QStandardPaths, QSettings, Slot)
 from PySide6.QtWidgets import (QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QComboBox, QLabel,
                                QInputDialog, QMainWindow, QProgressBar, QVBoxLayout, QSizePolicy, QLayout)
-import PySide6.QtAsyncio as QtAsyncio # Needed because porn fetch's network backend is now async since v3.9
+from PySide6.QtQuickWidgets import QQuickWidget
+
 
 splash.showMessage("Importing (APIs).")
 app.processEvents()
@@ -116,7 +120,7 @@ from base_api.modules.errors import ProxySSLError, InvalidProxy
 from xvideos_api.modules.errors import (NotFound as VideoUnavailable_XV)
 from eporner_api.modules.errors import NotAvailable as NotAvailable_EP, VideoDisabled as VideoDisabled_EP
 from youporn_api.modules.errors import VideoUnavailable as VideoUnavailable_YP, RegionBlocked as RegionBlocked_YP
-
+os.environ["QT_QUICK_CONTROLS_STYLE"] = "Fusion"
 
 splash.showMessage("Importing (AV - FFMPEG).")
 app.processEvents()
@@ -181,8 +185,8 @@ class LicenseWidget(QWidget):
     This is the License Widget which will let a user import the actual license and see if it's valid
     Still in experimental / beta mode, will be improved in v3.9 # TODO
     """
-    def __init__(self, setup_restrictions: Callable, parent=None) -> None:
-        super().__init__(parent)
+    def __init__(self, setup_restrictions: Callable):
+        super().__init__(parent=None)
         self.setup_restrictions = setup_restrictions # A function that basically creates the restrictions
 
         self.lic = LicenseManager(
@@ -194,11 +198,18 @@ class LicenseWidget(QWidget):
         self.status = QLabel()
         self.btn_import = QPushButton("Import license…")
         self.btn_import.clicked.connect(self.import_license)
+        self.license_bridge = LicenseBridge(setup_restrictions=setup_restrictions)
+        self.license_qml = QQuickWidget()
+        self.license_qml.setResizeMode(QQuickWidget.ResizeMode.SizeRootObjectToView)
+        self.license_qml.engine().rootContext().setContextProperty("bridge", self.license_bridge)
+        self.license_qml.setSource(QUrl.fromLocalFile(
+            str(Path(__file__).parent /"src" / "frontend" / "UI" / "LicenseWidget.qml")
+        ))
+
+
 
         layout = QVBoxLayout(self)
-        layout.addWidget(self.status)
-        layout.addWidget(self.btn_import)
-
+        layout.addWidget(self.license_qml)
         self.refresh_status()
 
     def refresh_status(self) -> None:
