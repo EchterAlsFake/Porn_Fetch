@@ -22,7 +22,7 @@ Current APIs:
 6) spankbang      -> https://spankbang.com (sp_client, sp_video)
 7) youporn        -> https://youporn.com (yp_client, yp_video)
 8) beeg           -> https://beeg.com (bg_client, bg_video)
-9) 
+9) redtube        -> https://redtube.com (rt_client, rt_video)
 """
 
 import re
@@ -53,6 +53,7 @@ from xfreehd_api import Client as xf_Client, Video as xf_Video
 from eporner_api import Client as ep_Client, Video as ep_Video
 from porntrex_api import Client as pt_Client, Video as pt_Video
 from xhamster_api import Client as xh_Client, Video as xh_Video
+from redtube_api import Client as rt_Client, Video as rt_Video
 from spankbang_api import Client as sp_Client, Video as sp_Video
 from youporn_api.youporn_api import Client as yp_Client, Video as yp_Video
 from base_api.base import BaseCore, setup_logger
@@ -60,7 +61,7 @@ from base_api.modules.static_functions import normalize_quality_value, choose_qu
 # Note, the Video instances are mostly used in `shared_functions.py`
 AllowedVideoType: TypeAlias = (
     type[ph_Video] | type[xn_Video] | type[xv_Video] | type[yp_Video] |
-    type[xh_Video] | type[sp_Video] | type[bg_Video]
+    type[xh_Video] | type[sp_Video] | type[bg_Video] | type[rt_Video]
     # Those are all HLS streams
 )
 
@@ -99,6 +100,7 @@ bg_client = bg_Client()
 pt_client = pt_Client()
 xf_client = xf_Client()
 pg_client = pg_Client()
+rt_client = rt_Client()
 logger.debug("Successfully initialized all clients!")
 
 
@@ -180,19 +182,21 @@ def refresh_clients(debug_mode: bool = False, use_truststore: bool = True) -> No
     log_file_core_pt = "BaseCore_PT.log" if debug_mode else None
     log_file_core_xf = "BaseCore_XF.log" if debug_mode else None
     log_file_core_pg = "BaseCore_PG.log" if debug_mode else None
+    log_file_core_rt = "BaseCore_RT.log" if debug_mode else None
 
     # One BaseCore per site, with its own RuntimeConfig (isolated headers/cookies)
-    core_ep    = BaseCore(configuration=config)
-    core_ph    = BaseCore(configuration=config)
-    core_xv    = BaseCore(configuration=config)
-    core_xh    = BaseCore(configuration=config)
-    core_xn    = BaseCore(configuration=config)
-    core_sp    = BaseCore(configuration=config)
-    core_yp    = BaseCore(configuration=config)
-    core_bg    = BaseCore(configuration=config)
-    core_pt    = BaseCore(configuration=config)
-    core_xf    = BaseCore(configuration=config)
-    core_pg    = BaseCore(configuration=config)
+    core_ep = BaseCore(configuration=config)
+    core_ph = BaseCore(configuration=config)
+    core_xv = BaseCore(configuration=config)
+    core_xh = BaseCore(configuration=config)
+    core_xn = BaseCore(configuration=config)
+    core_sp = BaseCore(configuration=config)
+    core_yp = BaseCore(configuration=config)
+    core_bg = BaseCore(configuration=config)
+    core_pt = BaseCore(configuration=config)
+    core_xf = BaseCore(configuration=config)
+    core_pg = BaseCore(configuration=config)
+    core_rt = BaseCore(configuration=config)
 
     core.enable_logging(level=level, log_file=log_file_core)
     core_ep.enable_logging(level=level, log_file=log_file_core_ep)
@@ -206,6 +210,7 @@ def refresh_clients(debug_mode: bool = False, use_truststore: bool = True) -> No
     core_pt.enable_logging(level=level, log_file=log_file_core_pt)
     core_xf.enable_logging(level=level, log_file=log_file_core_xf)
     core_pg.enable_logging(level=level, log_file=log_file_core_pg)
+    core_rt.enable_logging(level=level, log_file=log_file_core_rt)
 
 
     # Instantiate clients with their site-specific cores
@@ -220,6 +225,7 @@ def refresh_clients(debug_mode: bool = False, use_truststore: bool = True) -> No
     xf_client = xf_Client(core=core_xf)
     pg_client = pg_Client(core=core_pg)
     ph_client = ph_Client(core=core_ph)
+    rt_client = rt_Client(core=core_rt)
     logger.debug("Applied new clients. Configurations should be overridden now e.g., if you have set a proxy.")
 
 
@@ -230,7 +236,7 @@ async def check_video(url):
     """
 
     objects = [ep_Video, xn_Video, xv_Video, xh_Video, sp_Video, yp_Video, bg_Video, pt_Video,
-               xf_Video, pg_Video]
+               xf_Video, pg_Video, rt_Video]
 
     if isinstance(url, tuple(objects)):
         return url
@@ -278,6 +284,9 @@ async def check_video(url):
 
         elif "porngo" in str(url):
             return await pg_client.get_video(url)
+
+        elif "redttube" in str(url):
+            return await rt_client.get_video(url)
 
         else:
             return False
@@ -519,6 +528,10 @@ def load_video_attributes(video, name_template: str = "$title", *, now: Optional
         thumbnail = video.thumbnail
         publish_date = "Not available"
         video_id = video.title
+
+    elif isinstance(video, rt_Video):
+        author = video.au
+
 
     else:
         # fallback if you ever add a new site and forget to implement it

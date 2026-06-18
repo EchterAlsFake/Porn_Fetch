@@ -2,7 +2,7 @@
 # Porn Fetch is NOT published in PyPi!
 
 [project]
-requires-python = ">=3.10,<3.14"
+requires-python = ">=3.12,<3.14"
 # 3.10 is needed due to truststore.
 # You can manually patch it out from main.py and use older Python
 # However, some libraries break due to type hinting!
@@ -10,7 +10,7 @@ requires-python = ">=3.10,<3.14"
 # This is ONLY for the GUI, CLI is different
 
 name = "Porn_Fetch"
-version = "3.8"
+version = "3.9"
 authors = [
     {name = "Johannes Habel", email = "EchterAlsFake@proton.me"}
 ]
@@ -63,6 +63,7 @@ dependencies = [
     "xvideos_api",
     "youporn_api",
     "porngo_api",
+    "redtube_api"
 ]
 
 # Note: This dependency list includes ALL dependencies of this project, and the dependencies of the dependencies.
