@@ -296,15 +296,15 @@ sdist = { url = "https://files.pythonhosted.org/packages/f7/d2/6a81a9b5311d50542
 
 [[package]]
 name = "eaf-base-api"
-version = "3.3"
+version = "3.3.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "tenacity" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f1/e9/875310221c40549b8d4471a847d46e24032aeaa761da863a3bada22ff3f4/eaf_base_api-3.3.tar.gz", hash = "sha256:789a86e5fc53dbbdbc2dd6014f5c4bb091824f462c3de046051d47b417b00ba4", size = 37692, upload-time = "2026-06-17T19:53:48.6Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/d1/a2/3ba82cbf0afe1f83c523e175b1aecde85fef18ab6bdeec36f5de0328c62b/eaf_base_api-3.3.1.tar.gz", hash = "sha256:a2d78274e89e2611c3de7bf97a72508eab43baa677df03d869b8cec6681f43ac", size = 37728, upload-time = "2026-06-20T13:41:55.75Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b3/14/e244f3172b222fc4c9dee91cd90f688a7207215afe2275924a0fefd6e994/eaf_base_api-3.3-py3-none-any.whl", hash = "sha256:4e9dc159c79ad2f9f4d713bb512421a0b0e6ccf48b6f335becb7d8ba4ed8fa00", size = 40712, upload-time = "2026-06-17T19:53:47.575Z" },
+    { url = "https://files.pythonhosted.org/packages/57/bf/167466121031d8e71363fa83e7f50b31235df87734fba47879ef64b540a7/eaf_base_api-3.3.1-py3-none-any.whl", hash = "sha256:0fa49b75cceb2882033c70bbf3a806075e5ceeab0eafb780a9fce32b3595c81c", size = 40770, upload-time = "2026-06-20T13:41:54.61Z" },
 ]
 
 [[package]]
@@ -427,11 +427,11 @@ wheels = [
 
 [[package]]
 name = "json5"
-version = "0.14.0"
+version = "0.15.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/9c/4b/6f8906aaf67d501e259b0adab4d312945bb7211e8b8d4dcc77c92320edaa/json5-0.14.0.tar.gz", hash = "sha256:b3f492fad9f6cdbced8b7d40b28b9b1c9701c5f561bef0d33b81c2ff433fefcb", size = 52656, upload-time = "2026-03-27T22:50:48.108Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e4/7d/05c46a96a78147ae3bf99c2f4169ce144a70220b8d6fcd56f6ec368b8ce9/json5-0.15.0.tar.gz", hash = "sha256:7424d1f1eb1d56da6e3d70643f53619862b4ce81440bdb8ecfd6f875e5ba4a71", size = 53278, upload-time = "2026-06-19T20:08:27.716Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b8/42/cf027b4ac873b076189d935b135397675dac80cb29acb13e1ab86ad6c631/json5-0.14.0-py3-none-any.whl", hash = "sha256:56cf861bab076b1178eb8c92e1311d273a9b9acea2ccc82c276abf839ebaef3a", size = 36271, upload-time = "2026-03-27T22:50:47.073Z" },
+    { url = "https://files.pythonhosted.org/packages/eb/be/59527c99478aade6bb33a68d72e6e18dd4e6ff6eacfc7d01bdb15bc76912/json5-0.15.0-py3-none-any.whl", hash = "sha256:56636a30c0e8a4665fe2179c0212f32eae3796dea89ea6f649b9436ecdb39618", size = 36570, upload-time = "2026-06-19T20:08:26.748Z" },
 ]
 
 [[package]]
@@ -635,6 +635,8 @@ dependencies = [
     { name = "socksio" },
     { name = "soupsieve" },
     { name = "spankbang-api" },
+    { name = "thumbzilla-api" },
+    { name = "tube8-api" },
     { name = "typing-extensions" },
     { name = "urllib3" },
     { name = "xfreehd-api" },
@@ -724,8 +726,10 @@ requires-dist = [
     { name = "socksio" },
     { name = "soupsieve" },
     { name = "spankbang-api" },
+    { name = "thumbzilla-api" },
     { name = "truststore", marker = "extra == 'dev'" },
     { name = "truststore", marker = "extra == 'gui'" },
+    { name = "tube8-api" },
     { name = "typing-extensions" },
     { name = "urllib3" },
     { name = "xfreehd-api" },
@@ -1012,12 +1016,40 @@ wheels = [
 ]
 
 [[package]]
+name = "thumbzilla-api"
+version = "1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "bs4" },
+    { name = "eaf-base-api" },
+    { name = "m3u8" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d7/e9/c6305f4f6082a651e08dac1363b09dfdf7fb0ac82e652605f8f7686620e1/thumbzilla_api-1.0.tar.gz", hash = "sha256:f11f5cbc09f84c77cb589748eea32ea01315447716bea8a6e308e83e49709e09", size = 8781, upload-time = "2026-06-20T12:40:21.491Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f8/15/8332f254c2e3d114714e81630f9746141f8d442a3c3e41f9b7cc4f1c3476/thumbzilla_api-1.0-py3-none-any.whl", hash = "sha256:60a998a6d8a6d4fd3742ab6db1bc62ee62f73b92688fbdd31e4a63a5d7ddfe5a", size = 12910, upload-time = "2026-06-20T12:40:22.705Z" },
+]
+
+[[package]]
 name = "truststore"
 version = "0.10.4"
 source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/53/a3/1585216310e344e8102c22482f6060c7a6ea0322b63e026372e6dcefcfd6/truststore-0.10.4.tar.gz", hash = "sha256:9d91bd436463ad5e4ee4aba766628dd6cd7010cf3e2461756b3303710eebc301", size = 26169, upload-time = "2025-08-12T18:49:02.73Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/19/97/56608b2249fe206a67cd573bc93cd9896e1efb9e98bce9c163bcdc704b88/truststore-0.10.4-py3-none-any.whl", hash = "sha256:adaeaecf1cbb5f4de3b1959b42d41f6fab57b2b1666adb59e89cb0b53361d981", size = 18660, upload-time = "2025-08-12T18:49:01.46Z" },
+]
+
+[[package]]
+name = "tube8-api"
+version = "1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "bs4" },
+    { name = "eaf-base-api" },
+    { name = "m3u8" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/1a/ed/1f03288f6f168c796ea410ad16aa2c3c75f84b36c065c2b75d4ada55e383/tube8_api-1.0.tar.gz", hash = "sha256:a4833668a1a1d890a9c969a8a8b0bf401708d29ab1fd1d6a0f6a9b0d95b4c303", size = 8562, upload-time = "2026-06-20T13:20:26.116Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9f/64/8bd18a5c1b192648bd302be60b7de6d3d67d4018217d1f29a86dea6634d5/tube8_api-1.0-py3-none-any.whl", hash = "sha256:853a41ad57ac9226a5b93dc2d91f24d005385ab4b0c2ee2e540fc869466da636", size = 12484, upload-time = "2026-06-20T13:20:24.738Z" },
 ]
 
 [[package]]

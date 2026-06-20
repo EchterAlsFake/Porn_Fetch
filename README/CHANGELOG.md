@@ -691,8 +691,10 @@ to support them.
 
 
 # New Features
+- Added support for Redtube.com 
+- Added support for Thumbzilla.com
+- Added support for Tube8.com
 - Support for all proxy types
-
 
 # Backend
 - Asynchronous Networking (way faster)

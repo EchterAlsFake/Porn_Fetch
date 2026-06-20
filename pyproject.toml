@@ -63,7 +63,9 @@ dependencies = [
     "xvideos_api",
     "youporn_api",
     "porngo_api",
-    "redtube_api"
+    "redtube_api",
+    "tube8_api",
+    "thumbzilla_api"
 ]
 
 # Note: This dependency list includes ALL dependencies of this project, and the dependencies of the dependencies.

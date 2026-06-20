@@ -23,6 +23,8 @@ Current APIs:
 7) youporn        -> https://youporn.com (yp_client, yp_video)
 8) beeg           -> https://beeg.com (bg_client, bg_video)
 9) redtube        -> https://redtube.com (rt_client, rt_video)
+10) thumbzilla    -> https://thumbzilla.com (th_client, th_video)
+11) tube8         -> https://tube8.com (tu_client, tu_video)
 """
 
 import re
@@ -52,6 +54,8 @@ from xvideos_api import Client as xv_Client, Video as xv_Video
 from xfreehd_api import Client as xf_Client, Video as xf_Video
 from eporner_api import Client as ep_Client, Video as ep_Video
 from porntrex_api import Client as pt_Client, Video as pt_Video
+from tube8_api import Client as tu_Client, Video as tu_Video
+from thumbzilla_api import Client as th_Client, Video as th_Video
 from xhamster_api import Client as xh_Client, Video as xh_Video
 from redtube_api import Client as rt_Client, Video as rt_Video
 from spankbang_api import Client as sp_Client, Video as sp_Video
@@ -60,8 +64,8 @@ from base_api.base import BaseCore, setup_logger
 from base_api.modules.static_functions import normalize_quality_value, choose_quality_from_list, strip_title
 # Note, the Video instances are mostly used in `shared_functions.py`
 AllowedVideoType: TypeAlias = (
-    type[ph_Video] | type[xn_Video] | type[xv_Video] | type[yp_Video] |
-    type[xh_Video] | type[sp_Video] | type[bg_Video] | type[rt_Video]
+    type[ph_Video] | type[xn_Video] | type[xv_Video] | type[yp_Video] | type[tu_Video] |
+    type[xh_Video] | type[sp_Video] | type[bg_Video] | type[rt_Video] | type[th_Video]
     # Those are all HLS streams
 )
 
@@ -101,6 +105,8 @@ pt_client = pt_Client()
 xf_client = xf_Client()
 pg_client = pg_Client()
 rt_client = rt_Client()
+th_client = th_Client()
+tu_client = tu_Client()
 logger.debug("Successfully initialized all clients!")
 
 
@@ -161,7 +167,8 @@ def refresh_clients(debug_mode: bool = False, use_truststore: bool = True) -> No
     config.ssl_context = build_ssl_context(use_truststore) # Decides whether to use truststore (OS CA's) or Certifi CA's
 
     global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, \
-        hq_client, xn_client, core, yp_client, bg_client, pt_client, xf_client, pg_client, rt_client
+        hq_client, xn_client, core, yp_client, bg_client, pt_client, xf_client, pg_client, rt_client, \
+        tu_client, th_client
 
     if debug_mode:
         level = logging.DEBUG
@@ -183,6 +190,8 @@ def refresh_clients(debug_mode: bool = False, use_truststore: bool = True) -> No
     log_file_core_xf = "BaseCore_XF.log" if debug_mode else None
     log_file_core_pg = "BaseCore_PG.log" if debug_mode else None
     log_file_core_rt = "BaseCore_RT.log" if debug_mode else None
+    log_file_core_tu = "BaseCore_Tu.log" if debug_mode else None
+    log_file_core_th = "BaseCore_TH.log" if debug_mode else None
 
     # One BaseCore per site, with its own RuntimeConfig (isolated headers/cookies)
     core_ep = BaseCore(configuration=config)
@@ -197,6 +206,8 @@ def refresh_clients(debug_mode: bool = False, use_truststore: bool = True) -> No
     core_xf = BaseCore(configuration=config)
     core_pg = BaseCore(configuration=config)
     core_rt = BaseCore(configuration=config)
+    core_th = BaseCore(configuration=config)
+    core_tu = BaseCore(configuration=config)
 
     core.enable_logging(level=level, log_file=log_file_core)
     core_ep.enable_logging(level=level, log_file=log_file_core_ep)
@@ -211,7 +222,8 @@ def refresh_clients(debug_mode: bool = False, use_truststore: bool = True) -> No
     core_xf.enable_logging(level=level, log_file=log_file_core_xf)
     core_pg.enable_logging(level=level, log_file=log_file_core_pg)
     core_rt.enable_logging(level=level, log_file=log_file_core_rt)
-
+    core_tu.enable_logging(level=level, log_file=log_file_core_tu)
+    core_th.enable_logging(level=level, log_file=log_file_core_th)
 
     # Instantiate clients with their site-specific cores
     ep_client = ep_Client(core=core_ep)
@@ -226,6 +238,8 @@ def refresh_clients(debug_mode: bool = False, use_truststore: bool = True) -> No
     pg_client = pg_Client(core=core_pg)
     ph_client = ph_Client(core=core_ph)
     rt_client = rt_Client(core=core_rt)
+    th_client = th_Client(core=core_th)
+    tu_client = tu_Client(core=core_tu)
     logger.debug("Applied new clients. Configurations should be overridden now e.g., if you have set a proxy.")
 
 
@@ -287,6 +301,12 @@ async def check_video(url):
 
         elif "redtube" in str(url):
             return await rt_client.get_video(url)
+
+        elif "thumbzilla" in str(url):
+            return await th_client.get_video(url)
+
+        elif "tube8" in str(url):
+            return await tu_client.get_video(url)
 
         else:
             return False
@@ -533,12 +553,18 @@ async def load_video_attributes(video, name_template: str = "$title", *, now: Op
         publish_date = "Not available"
         video_id = video.title
 
-    elif isinstance(video, rt_Video):
+    elif isinstance(video, (rt_Video, tu_Video, th_Video)):
         author = video.author_name
         length = video.duration
-        tags = video.action_tags
+        try:
+            tags = video.action_tags
+
+        except AttributeError:
+            tags = "Not Available"
         thumbnail = video.thumbnail
         video_id = video.video_id
+        publish_date = "Unknown"
+
 
     else:
         # fallback if you ever add a new site and forget to implement it
