@@ -1198,6 +1198,7 @@ class PornFetch(QMainWindow):
         self._row = {} # Video ID -> dict of widgets + state
         self.maps()
         self.load_style()
+        self._setup_modern_tabs()
         self.load_strings()
         self.license = License(self.ui, self.initialize_pornfetch)
         self.disclaimer = Disclaimer(self.ui, self.initialize_pornfetch)
@@ -1268,7 +1269,6 @@ class PornFetch(QMainWindow):
         self.ui.main_CentralStackedWidget.setCurrentIndex(1)
 
     def switch_to_credits(self):
-        self.show_credits()
         self.ui.main_CentralStackedWidget.setCurrentIndex(2)
 
     def switch_to_license(self):
@@ -1281,15 +1281,13 @@ class PornFetch(QMainWindow):
         self.ui.main_CentralStackedWidget.setCurrentIndex(5)
 
     def switch_to_supported_sites(self):
-        if not self._anonymous_mode:
-            file = QFile(":/other/UI/supported_websites.html")
-            file.open(QFile.OpenModeFlag.ReadOnly)
-            file_read = QTextStream(file).readAll()
-            self.ui.supported_sites_textbrowser.setHtml(file_read)
-
-        else:
+        if self._anonymous_mode:
+            self.supported_sites_qml.hide()
+            self.ui.supported_sites_textbrowser.show()
             self.ui.supported_sites_textbrowser.setHtml("Running in anonymous mode...")
-
+        else:
+            self.ui.supported_sites_textbrowser.hide()
+            self.supported_sites_qml.show()
         self.ui.main_CentralStackedWidget.setCurrentIndex(6)
 
     def switch_to_disclaimer(self):
@@ -1328,6 +1326,21 @@ class PornFetch(QMainWindow):
     def switch_to_treewidget_advanced_configuration(self):
         self.ui.main_stacked_widget_tree.setCurrentIndex(1)
         self.switch_to_main()
+
+    def _setup_modern_tabs(self):
+        # Setup Credits QML
+        self.ui.credits_textbrowser.hide()
+        self.credits_qml = QQuickWidget(self)
+        self.credits_qml.setResizeMode(QQuickWidget.ResizeMode.SizeRootObjectToView)
+        self.credits_qml.setSource(QUrl.fromLocalFile(str(Path(__file__).parent / "src" / "frontend" / "UI" / "CreditsWidget.qml")))
+        self.ui.scrollarea_credits_vboxlayout.addWidget(self.credits_qml)
+        
+        # Setup Supported Sites QML
+        self.ui.supported_sites_textbrowser.hide()
+        self.supported_sites_qml = QQuickWidget(self)
+        self.supported_sites_qml.setResizeMode(QQuickWidget.ResizeMode.SizeRootObjectToView)
+        self.supported_sites_qml.setSource(QUrl.fromLocalFile(str(Path(__file__).parent / "src" / "frontend" / "UI" / "SupportedSitesWidget.qml")))
+        self.ui.gridLayout_20.addWidget(self.supported_sites_qml, 0, 0, 1, 1)
 
     def load_style(self):
         icons = {
