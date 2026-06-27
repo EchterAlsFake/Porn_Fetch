@@ -1,6 +1,8 @@
 > [!IMPORTANT]
 > I have successfully registered my company and also got a lot of legal stuff figured out. I am currently doing massive rewrites of Porn Fetch's network backend. I know the repo seems a little dead right now, but don't worry, I push a lot of work here right now, you just don't see it xD
 
+Nevermind I am doing some performance optimization right now and I think we can get Porn Fetch's memory usage (for each video) reduced by 99% lmaoooo
+
 
 <div align = center>
 <img src="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/src/frontend/graphics/logo_transparent.png" alt="Porn Fetch Logo" width="350"/>
