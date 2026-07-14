@@ -25,6 +25,12 @@
 ---
 </div>
 
+# License
+Here's the license key for Porn Fetch:
+<br>https://drive.google.com/file/d/11EVYsHmkMKm121TeuWrcSYkIpITIhZlT/view?usp=sharing
+
+The key genereration on my website currently does not work. Please use the above link to download a valid file :)
+
 ### #FreeHongKong
 
 > [!WARNING]
