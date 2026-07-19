@@ -24,11 +24,11 @@
 ---
 </div>
 
-# License
-Here's the license key for Porn Fetch:
-<br>https://drive.google.com/file/d/11EVYsHmkMKm121TeuWrcSYkIpITIhZlT/view?usp=sharing
+# Project Rewrite
+Please note, that this project is currently ongoing a massive re-write and switching to a commercial project.
+I am putting serious work here, although my commit history doesn't reflect this. Please be patient the next weeks.
 
-The key genereration on my website currently does not work. Please use the above link to download a valid file :)
+PS: Commercial does NOT mean proprietary! (Just let me cook lol) 
 
 ### #FreeHongKong
 

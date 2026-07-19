@@ -3,9 +3,6 @@
 
 [project]
 requires-python = ">=3.12,<3.14"
-# 3.10 is needed due to truststore.
-# You can manually patch it out from main.py and use older Python
-# However, some libraries break due to type hinting!
 # 3.14+ is not supported, due to Qt limitations.
 # This is ONLY for the GUI, CLI is different
 
@@ -22,26 +19,16 @@ license-files = ["LICENSE"]
 
 dependencies = [
     "anyio",
-    "beautifulsoup4",
     "brotli",
-    "bs4",
     "certifi",
     "cffi",
     "charset-normalizer",
     "colorama",
     "fake-useragent",
-    "h11",
-    "h2",
-    "hpack",
-    "httpcore",
-    "httpx",
-    "hyperframe",
     "idna",
     "json5",
-    "lxml",
     "m3u8",
     "markdown",
-    "mutagen",
     "pycparser",
     "sniffio",
     "socksio",
@@ -49,27 +36,22 @@ dependencies = [
     "typing_extensions",
     "python-dateutil",
     "urllib3",
-    "beeg_api",
-    "eaf_base_api",
-    "eporner_api",
-    "hqporner_api",
-    "missav_api",
-    "phub",
-    "porntrex_api",
-    "spankbang_api",
-    "xfreehd_api",
-    "xhamster_api",
-    "xnxx_api",
-    "xvideos_api",
-    "youporn_api",
-    "porngo_api",
-    "redtube_api",
-    "tube8_api",
-    "thumbzilla_api"
+    "unofficial-api-for-beeg @ git+https://github.com/EchterAlsFake/unofficial-api-for-beeg",
+    "unofficial-api-for-eporner @ git+https://github.com/EchterAlsFake/unofficial-api-for-eporner",
+    "unofficial-api-for-pornhub @ git+https://github.com/EchterAlsFake/unofficial-api-for-pornhub",
+    "unofficial-api-for-porntrex @ git+https://github.com/EchterAlsFake/unofficial-api-for-porntrex",
+    "unofficial-api-for-spankbang @ git+https://github.com/EchterAlsFake/unofficial-api-for-spankbang",
+    "unofficial-api-for-xfreehd @ git+https://github.com/EchterAlsFake/unofficial-api-for-xfreehd",
+    "unofficial-api-for-xhamster @ git+https://github.com/EchterAlsFake/unofficial-api-for-xhamster",
+    "unofficial-api-for-xnxx @ git+https://github.com/EchterAlsFake/unofficial-api-for-xnxx",
+    "unofficial-api-for-xvideos @ git+https://github.com/EchterAlsFake/unofficial-api-for-xvideos",
+    "unofficial-api-for-youporn @ git+https://github.com/EchterAlsFake/unofficial-api-for-youporn",
+    "unofficial-api-for-redtube @ git+https://github.com/EchterAlsFake/unofficial-api-for-redtube",
+    "unofficial-api-for-tube8 @ git+https://github.com/EchterAlsFake/unofficial-api-for-tube8",
+    "unofficial-api-for-thumbzilla @ git+https://github.com/EchterAlsFake/unofficial-api-for-thumbzilla",
+    "eaf_base_api @ git+https://github.com/echteralsfake/eaf_base_api"
 ]
 
-# Note: This dependency list includes ALL dependencies of this project, and the dependencies of the dependencies.
-# Usually you would only say: httpx, but httpx also depends on h11, httpcore and so on and I listed them all here.
 
 [project.optional-dependencies]
 gui = ["PySide6", "truststore", "pywin32; sys_platform == 'win32'", "pip", "cryptography"]

@@ -9,8 +9,6 @@ where I import stuff from.
 I know this might seem a bit confusing if you read this the first time, but if you look at the `eaf_base_api` module
 and the other Porn APIs and how they are working together, then you will definitely understand why this matters.
 """
-from charset_normalizer.utils import is_arabic_isolated_form
-
 """
 Current APIs:
 
@@ -27,10 +25,12 @@ Current APIs:
 11) tube8         -> https://tube8.com (tu_client, tu_video)
 """
 
+import os
 import re
 import logging
 import asyncio
 import inspect
+import tempfile
 import traceback
 
 
@@ -42,14 +42,12 @@ except (ModuleNotFoundError, ImportError):
 
 from dataclasses import dataclass
 from base_api.modules.config import config # This is the global configuration instance of base core config
-from mutagen.mp4 import MP4, MP4Cover, MP4Tags
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta, timezone
 from typing import Any, List, TypeAlias, Optional, Dict
-from phub import Client as ph_Client, Video as ph_Video
+from pornhub_api import Client as ph_Client, Video as ph_Video
 from xnxx_api import Client as xn_Client, Video as xn_Video
 from beeg_api import Client as bg_Client, Video as bg_Video
-from porngo_api import Client as pg_Client, Video as pg_Video
 from xvideos_api import Client as xv_Client, Video as xv_Video
 from xfreehd_api import Client as xf_Client, Video as xf_Video
 from eporner_api import Client as ep_Client, Video as ep_Video
@@ -59,8 +57,9 @@ from thumbzilla_api import Client as th_Client, Video as th_Video
 from xhamster_api import Client as xh_Client, Video as xh_Video
 from redtube_api import Client as rt_Client, Video as rt_Video
 from spankbang_api import Client as sp_Client, Video as sp_Video
-from youporn_api.youporn_api import Client as yp_Client, Video as yp_Video
-from base_api.base import BaseCore, setup_logger
+from youporn_api import Client as yp_Client, Video as yp_Video
+from base_api import BaseCore
+from base_api.modules.logger import configure_app_logging
 from base_api.modules.static_functions import normalize_quality_value, choose_quality_from_list, strip_title
 # Note, the Video instances are mostly used in `shared_functions.py`
 AllowedVideoType: TypeAlias = (
@@ -89,7 +88,7 @@ _PUBLISHED_ON_RE = re.compile(
 _TEMPLATE_RE = re.compile(r"\$(\w+)|\$\{([^}]+)}")
 
 _NOT_AVAILABLE_RE = re.compile(r"^\s*(not\s+available|n/?a|none|null)?\s*$", re.IGNORECASE)
-logger = setup_logger(name="Porn Fetch - [Clients]", level=logging.DEBUG, log_file="PornFetch.log")
+logger = configure_app_logging(name="Porn Fetch - [Clients]", level=logging.DEBUG, log_file="PornFetch.log")
 
 # which is also affecting all other APIs when the refresh_clients function is called
 # Initialize clients globally, so that we can override them later with a new configuration from BaseCore if needed
@@ -737,56 +736,89 @@ def download_android(url: str, quality="best", path="./", remux=False):
 
 def write_tags(path: str, data: VideoAttributes):
     """
-    Writes the tags of the video into the file. This needs a correct MP4 header either from a remuxed mpeg-ts stream
-    through PyAV or the stream is already an mp4 file e.g., from EPorner or HQPorner.
+    Writes the tags of the video into the file using PyAV.
     """
-    comment   = "Downloaded with Porn Fetch (GPLv3)"
-    genre     = "Porn"
-    title     = data.title
-    artist    = data.author
-    date      = data.publish_date  # e.g. "2025-10-26" or "2025"
+    try:
+        import av
+
+    except (ModuleNotFoundError, ImportError):
+        return None # Handled in code, don't worry :)
+
+    genre = "Porn"
+    title = data.title
+    artist = data.author
+    date = data.publish_date  # e.g. "2025-10-26" or "2025"
     thumbnail = data.thumbnail_data
-    logging.debug("Tags [1/3]")
 
-    audio = MP4(path)
+    logging.debug("Tags [1/3] - Preparing containers")
 
-    # Ensure an 'ilst' tag container exists
-    if audio.tags is None:
-        try:
-            audio.add_tags()          # preferred; creates empty MP4Tags
-        except Exception:
-            pass
-    if audio.tags is None:
-        audio.tags = MP4Tags()        # fallback for older/env-specific builds
+    # FFmpeg/PyAV cannot update headers safely in-place.
+    # We write to a temporary file in the same directory and perform an atomic swap.
+    temp_dir = os.path.dirname(path)
+    with tempfile.NamedTemporaryFile(dir=temp_dir, delete=False, suffix=".mp4") as tmp:
+        tmp_path = tmp.name
 
-    # Write basic text tags (skip Nones)
-    if title  is not None:  audio.tags["\xa9nam"] = str(title)
-    if artist is not None:  audio.tags["\xa9ART"] = str(artist)
-    if comment is not None: audio.tags["\xa9cmt"] = str(comment)
-    if genre  is not None:  audio.tags["\xa9gen"] = str(genre)
-    if date   is not None:  audio.tags["\xa9day"] = str(date)
+    try:
+        with av.open(path) as in_container, av.open(tmp_path, mode='w', format='mp4') as out_container:
 
-    logging.debug("Tags: [2/3] - Writing Thumbnail")
+            # 1. Setup stream mapping (remux existing video/audio without re-encoding)
+            stream_mapping = {}
+            for stream in in_container.streams:
+                # Skip any existing thumbnail streams so we don't duplicate them
+                if stream.type == 'video' and getattr(stream.disposition, 'attached_pic', False):
+                    continue
 
-    # Optional: embed cover art if it's JPEG/PNG
-    if thumbnail:
-        try:
-            # Heuristically choose cover format
-            if thumbnail.startswith(b"\x89PNG\r\n\x1a\n"):
-                fmt = MP4Cover.FORMAT_PNG
-            else:
-                # JPEG has many possible headers; default to JPEG if not PNG
-                fmt = MP4Cover.FORMAT_JPEG
+                # Clone the stream configuration exactly
+                out_stream = out_container.add_stream(template=stream)
+                stream_mapping[stream] = out_stream
 
-            cover = MP4Cover(thumbnail, imageformat=fmt)
-            audio.tags["covr"] = [cover]  # must be a list
-        except Exception as e:
-            logging.error(
-                "Could not embed thumbnail: %s - Image URL: %s", e, thumbnail
-            )
+            # 2. Write basic text tags
+            # FFmpeg automatically maps these standard keys to the correct MP4 boxes (\xa9nam, \xa9ART, etc.)
+            meta = {}
+            if title is not None:    meta['title'] = str(title)
+            if artist is not None:   meta['artist'] = str(artist)
+            if genre is not None:    meta['genre'] = str(genre)
+            if date is not None:     meta['date'] = str(date)
+            out_container.metadata.update(meta)
 
-    audio.save()
-    logging.debug("Tags: [3/3] ✔")
+            # 3. Setup Thumbnail Stream (MP4 stores cover art as an attached picture video stream)
+            logging.debug("Tags: [2/3] - Processing Thumbnail")
+            thumb_stream = None
+            if thumbnail:
+                # Heuristically choose cover codec format
+                codec_name = 'png' if thumbnail.startswith(b"\x89PNG\r\n\x1a\n") else 'mjpeg'
+                try:
+                    thumb_stream = out_container.add_stream(codec_name, rate=1)
+                    thumb_stream.disposition.attached_pic = True
+                except Exception as e:
+                    logging.error("Could not initialize thumbnail stream: %s", e)
+                    thumb_stream = None
+
+            # 4. Remux packets (Read from original file, write to temp file)
+            for packet in in_container.demux():
+                if packet.stream not in stream_mapping:
+                    continue
+                packet.stream = stream_mapping[packet.stream]
+                out_container.mux(packet)
+
+            # 5. Inject the thumbnail packet at the end
+            if thumbnail and thumb_stream:
+                try:
+                    thumb_packet = av.Packet(thumbnail)
+                    thumb_packet.stream = thumb_stream
+                    out_container.mux(thumb_packet)
+                except Exception as e:
+                    logging.error("Could not embed thumbnail data: %s", e)
+
+        # Replace the original file with the newly tagged file atomically
+        os.replace(tmp_path, path)
+        logging.debug("Tags: [3/3] ✔")
+
+    except Exception as e:
+        logging.error("Failed to write tags: %s", e)
+        if os.path.exists(tmp_path):
+            os.remove(tmp_path)
+        raise e
 
 
 def parse_length(length, video_source=None):
