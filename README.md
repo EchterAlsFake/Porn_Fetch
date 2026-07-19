@@ -12,9 +12,6 @@
   <img src="https://echteralsfake.me/checklist/progress.svg" alt="Version 3.9 Development Progress" width="400"/>
 </a>
 
-# Server down 
-Porn Fetch server is down right now, because the battery in my acer swift 3 is swollen and I can't fix it right now. I'll now try to run this stuff all on my Pixel 7 Pro, but will take some time ASAP 
-
 ---
 
 **[<kbd><strong>&nbsp;<br>&nbsp;Download (v3.8)&nbsp;<br>&nbsp;</strong></kbd>](https://github.com/EchterAlsFake/Porn_Fetch/releases/tag/3.8)** 
