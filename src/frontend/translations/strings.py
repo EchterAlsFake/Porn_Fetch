@@ -27,18 +27,10 @@ class TRANSLATE_PAGE_DOWNLOAD:
     }
 
 
-class TRANSLATE_PAGE_TOOLS:
-    tools_groupbox_hqporner = "HQPorner"
-    tools_groupbox_eporner = "EPorner"
-    tools_label_get_top_porn = "Get Top Porn"
-    tools_button_brazzers_videos = "Brazzers"
-
 class TRANSLATE_PAGE_LOGIN:
     login_email_placeholder = "Enter your PornHub E-Mail address"
     login_email_password = "Enter your PornHub Password (Your account data will never be saved nor shared) "
 
-class TRANSLATE_PAGE_TEXTBROWSER:
-    tools_textbrowser_supported_sites = "Running in anonymous mode, please deactivate to display..."
 
 class TRANSLATE_PAGE_SETTINGS:
     settings_button_reset_pf = "Reset Porn Fetch to default settings"

@@ -13,10 +13,10 @@ can establish a secure https connection.
 import logging
 import os
 import ssl # Main library for handling ssl
-from base_api.base import setup_logger
+from base_api.modules.logger import configure_app_logging
 
 
-logger = setup_logger(name="Porn Fetch - [SSL Handler]", level=logging.DEBUG)
+logger = configure_app_logging(logger_name="Porn Fetch - [SSL Handler]", level=logging.DEBUG)
 
 
 def build_ssl_context(use_truststore: bool = True) -> ssl.SSLContext:

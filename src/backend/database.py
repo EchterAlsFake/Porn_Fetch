@@ -7,10 +7,10 @@ import json
 import sqlite3
 import traceback
 
-from base_api.base import setup_logger
+from base_api.base import configure_app_logging
 
 
-logger = setup_logger("Porn Fetch - [Database]")
+logger = configure_app_logging(logger_name="Porn Fetch - [Database]")
 
 
 def init_db(database_path: str) -> str | bool:

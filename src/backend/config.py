@@ -11,9 +11,9 @@ from configparser import ConfigParser
 shared_config = ConfigParser()
 shared_config.read("config.ini")
 __license__ = "GPL 3"
-__version__ = "3.8"
+__version__ = "3.9"
 __author__ = "Johannes Habel"
-__next_release__ = "3.9"
+__next_release__ = "4.0"
 __type__ = "release"
 __bundle_id__ = "me.echteralsfake.pornfetch"
 __org__ = "EchterAlsFake"

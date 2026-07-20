@@ -8,80 +8,16 @@ import sys
 import ctypes
 
 from pathlib import Path
-from base_api.base import setup_logger
+from base_api.base import configure_app_logging
 from PySide6.QtCore import QObject, Slot
 from PySide6.QtWidgets import QMessageBox
 
 
-logger = setup_logger("Porn Fetch (macOS) - [Sparkle]")
+logger = configure_app_logging(logger_name="Porn Fetch (macOS) - [Sparkle]")
 app_path = Path(sys.argv[0]).resolve()
 
 
-class SparkleUpdater(QObject):
-    """
-    This interacts with the shared library `sparkle_bridge.dylib`, see `sparkle_bridge.m` for source reference.
-    During build, I will place the shared lib into the frameworks folder of the packaged nuitka app.
 
-    Sparkle will periodically check for updates using my own server URL.
-    More information here: https://sparkle-project.org/
-    See also: https://echteralsfake.me/appcast.xml
-    """
-
-    def __init__(self, feed_url: str | None = None):
-        super().__init__()
-        logger.info("Trying to interact with Sparkle!")
-
-        # In a macOS .app:
-        # sys.executable -> .../MyApp.app/Contents/MacOS/MyApp
-        macos_dir = os.path.dirname(os.path.realpath(sys.executable))
-        logger.debug(f"macOS Directory: {macos_dir}")
-        frameworks_dir = os.path.realpath(os.path.join(macos_dir, "..", "Frameworks"))
-        logger.debug(f"Sparkle Framework: {frameworks_dir}")
-        dylib_path = os.path.join(frameworks_dir, "sparkle_bridge.dylib")
-        logger.debug(f"dylib bridge for talking to native code: {dylib_path}")
-
-        self._lib = ctypes.CDLL(dylib_path)
-        logger.info("Loaded dylib bridge, trying to talk to sparkle now...")
-        # Define signatures
-        self._lib.sparkle_start_updater.argtypes = [ctypes.c_char_p]
-        self._lib.sparkle_start_updater.restype = None
-
-        self._lib.sparkle_check_for_updates.argtypes = []
-        self._lib.sparkle_check_for_updates.restype = None
-
-        self._lib.sparkle_check_for_updates_in_background.argtypes = []
-        self._lib.sparkle_check_for_updates_in_background.restype = None
-
-        self._lib.sparkle_can_check_for_updates.argtypes = []
-        self._lib.sparkle_can_check_for_updates.restype = ctypes.c_int
-        logger.debug("Defined the necessary structures")
-
-        # Start Sparkle once (use Info.plist SUFeedURL if feed_url is None)
-        if feed_url:
-            self._lib.sparkle_start_updater(feed_url.encode("utf-8"))
-        else:
-            self._lib.sparkle_start_updater(None)
-
-    @Slot()
-    def check_for_updates(self):
-        # Must be called from Qt main thread (your UI thread)
-        logger.info("Checking for Updates...")
-        self._lib.sparkle_check_for_updates()
-
-    @Slot()
-    def check_for_updates_in_background(self):
-        logger.info("Checking for Updates (background)....")
-        self._lib.sparkle_check_for_updates_in_background()
-
-    def can_check_for_updates(self) -> bool:
-        return bool(self._lib.sparkle_can_check_for_updates())
-
-"""
-The following functions exist, to automatically install Porn Fetch into the users's application directory
-when they execute it the first time over the .dmg container.
-
-This may or may not work idk.
-"""
 
 
 def _is_running_from_dmg(path: Path) -> bool:

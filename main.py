@@ -19,15 +19,30 @@ Contact:
 E-Mail: EchterAlsFake@proton.me
 Discord: echteralsfake (faster response)
 """
-import configparser
-# Stop Splash Screen
 import os
 import sys
 import tempfile
-import threading
-from PySide6 import QtAsyncio
 
-FORCE_TEST_RUN = False
+# Pre-Load PySide6 to show a loading splashscreen
+from PySide6.QtWidgets import QApplication
+app = QApplication(sys.argv)
+
+# macOS Setup...
+if sys.platform == "darwin" and not FORCE_TEST_RUN:
+    from src.backend.macos_setup import macos_setup, SparkleUpdater
+    macos_setup()
+    # Handles Sparkle Updates + macOS Installation
+
+# Necessary imports for splashscreen
+import src.frontend.UI.resources # This may not seem to be used, but it needs to be imported!
+from PySide6.QtGui import QPixmap
+from src.frontend.UI.splashscreen import ModernSplashScreen
+
+os.environ["QT_QUICK_CONTROLS_STYLE"] = "Fusion"
+splash_pixmap = QPixmap(":/images/graphics/splashscreen.png")
+splash = ModernSplashScreen(splash_pixmap)
+splash.show() # Starts showing the actual Splash Screen
+app.processEvents()
 
 if "NUITKA_ONEFILE_PARENT" in os.environ:
     splash_filename = os.path.join(
@@ -36,91 +51,87 @@ if "NUITKA_ONEFILE_PARENT" in os.environ:
     )
     if os.path.exists(splash_filename):
         os.unlink(splash_filename)
-
-from PySide6.QtWidgets import QApplication
-app = QApplication(sys.argv)
-
-# macOS Setup...
-if sys.platform == "darwin" and not FORCE_TEST_RUN:
-    from src.backend.macos_setup import macos_setup, SparkleUpdater
-    macos_setup()
-
-# Necessary imports for splashscreen
-import src.frontend.UI.resources
-
-from PySide6.QtGui import QPixmap
-from src.frontend.UI.splashscreen import ModernSplashScreen
-
-splash_pixmap = QPixmap(":/images/graphics/splashscreen.png")
-splash = ModernSplashScreen(splash_pixmap)
-splash.show()
+        # Stops the Nuitka Splash Screen
 
 splash.showMessage("Importing (General).")
 app.processEvents()
 # General imports
 import time
-import os.path
+import shutil
+import random
+import logging
 import asyncio
+import tempfile
 import argparse
 import markdown
-import tempfile
-import webbrowser
+import traceback
+import threading
 import subprocess
+import webbrowser
+import configparser
 
-from typing import Callable, Iterable
+from pathlib import Path
 from collections import deque
+from curl_cffi import Response
 from threading import Event, Lock
 from itertools import islice, chain
+from typing import Callable, Iterable
+from base_api.modules.static_functions import strip_title
+from base_api.modules.logger import configure_app_logging
+
+
+splash.showMessage("Importing (PySide6).")
+app.processEvents()
+# Qt / PySide6 related imports
+import PySide6.QtAsyncio as QtAsyncio # Needed because porn fetch's network backend is now async since v3.9
+from PySide6.QtQuickWidgets import QQuickWidget
+from PySide6.QtGui import QIcon, QFontDatabase, QPixmap, QShortcut, QKeySequence
+from PySide6.QtCore import (QTextStream, QRunnable, QLocale, QSize, QUrl, Signal, QDir, QFile, Slot,
+                            QTranslator, QCoreApplication, QStandardPaths, QSettings, QObject, Qt)
+from PySide6.QtWidgets import (QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QSizePolicy, QLayout,
+                               QInputDialog, QMainWindow, QProgressBar, QMessageBox, QComboBox, QWidget, QLabel,
+                               QPushButton, QVBoxLayout, QHBoxLayout)
 
 
 splash.showMessage("Importing (Backend).")
 app.processEvents()
 # Backend imports
 from src.backend import clients # Singleton instance for the client objects (really important)
-from src.backend.database import *
-from src.backend.shared_gui import *
-from src.backend.shared_functions import *
-from src.backend.helper_functions import *
-from src.backend.clients import VideoAttributes
 from src.backend.check_license import LicenseManager
 import src.backend.shared_functions as shared_functions
-from base_api.modules.static_functions import strip_title
-from src.backend.config import __version__, PUBLIC_KEY_B64, shared_config, IS_SOURCE_RUN, TEMP_DIRECTORY, TEMP_DIRECTORY_STATES, TEMP_DIRECTORY_SEGMENTS
+from src.backend.database import save_video_metadata, init_db
+from src.backend.config import (__version__, PUBLIC_KEY_B64, shared_config, IS_SOURCE_RUN, TEMP_DIRECTORY,
+                                TEMP_DIRECTORY_STATES, TEMP_DIRECTORY_SEGMENTS)
+from src.backend.shared_functions import ensure_config_file, handle_error_gracefully, get_os_and_arch
+from src.backend.shared_gui import (ui_popup, reset_pornfetch, show_error, mark_help_buttons, Signals,
+                                    available_title_formatting_options, on_checkbox_clicked)
+from src.backend.helper_functions import (default_license_path, chmod_755, get_original_executable_path,
+                                          write_text_atomic, copy_overwrite_atomic, move_or_copy, mkpath,
+                                          safe_unlink, safe_rmtree)
+
+
 splash.showMessage("Importing (Frontend).")
 app.processEvents()
 # Frontend imports
-from src.frontend.UI.theme import *
-from src.frontend.UI.ssl_warning import *
-from src.frontend.translations.strings import *
 from src.frontend.UI.license import License, Disclaimer
+from src.frontend.UI.ssl_warning import SSLWarningDialog
+from src.frontend.UI.license_bridge import LicenseBridge
 from src.frontend.UI.ui_form_main_window import Ui_PornFetch_UI
 from src.frontend.UI.pornfetch_info_dialog import PornFetchInfoWidget
 from src.frontend.UI.custom_combo_box import ComboPopupFitter, make_quality_combobox
-from src.frontend.UI.license_bridge import LicenseBridge
-
-splash.showMessage("Importing (PySide6 - FULL).")
-app.processEvents()
-# Qt / PySide6 related imports
-import PySide6.QtAsyncio as QtAsyncio # Needed because porn fetch's network backend is now async since v3.9
-
-from PySide6.QtGui import QIcon, QFontDatabase, QPixmap, QShortcut, QKeySequence
-from PySide6.QtCore import (QTextStream, QRunnable, Qt, QLocale, QSize, QUrl,
-                            QTranslator, QCoreApplication, QStandardPaths, QSettings, Slot)
-from PySide6.QtWidgets import (QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QComboBox, QLabel,
-                               QInputDialog, QMainWindow, QProgressBar, QVBoxLayout, QSizePolicy, QLayout)
-from PySide6.QtQuickWidgets import QQuickWidget
+from src.frontend.UI.theme import (apply_theme, apply_theme_lsd, apply_theme_light, mark, install_focus_outline,
+                                   pretty_combo)
+from src.frontend.translations.strings import (TRANSLATE_MAIN, TRANSLATE_PAGE_DOWNLOAD, TRANSLATE_PAGE_LOGIN,
+                                              TRANSLATE_PAGE_SETTINGS)
 
 
 splash.showMessage("Importing (APIs).")
 app.processEvents()
 # Errors from different APIs
-from phub.modules import errors as ph_errors
-from xnxx_api.modules.errors import InvalidResponse
+from pornhub_api.modules import errors as ph_errors
 from base_api.modules.errors import ProxySSLError, InvalidProxy
 from xvideos_api.modules.errors import (NotFound as VideoUnavailable_XV)
-from eporner_api.modules.errors import NotAvailable as NotAvailable_EP, VideoDisabled as VideoDisabled_EP
 from youporn_api.modules.errors import VideoUnavailable as VideoUnavailable_YP, RegionBlocked as RegionBlocked_YP
-os.environ["QT_QUICK_CONTROLS_STYLE"] = "Fusion"
 
 splash.showMessage("Importing (AV - FFMPEG).")
 app.processEvents()
@@ -143,7 +154,7 @@ stop_flag: threading.Event = Event() # Stops loading videos into the tree widget
 _download_lock: threading.Lock = Lock() # I actually don't really know why this is here
 video_data: clients.VideoData = clients.VideoData() # Stores general video data as long as the data for each loaded video
 settings = QSettings() # Global instance of the settings used in Porn Fetch
-logger = shared_functions.setup_logger("Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG)
+logger = shared_functions.configure_app_logging(logger_name="Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG)
 license_storage_path: str = os.path.join(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation), "pornfetch.license")
 x: bool = False # Don't ask (this is a secret ;)
 
@@ -252,7 +263,7 @@ class InstallThread(QRunnable):
         self.signals: Signals = Signals() # Signals for error / progress reporting
 
         # keep your logger setup if you want; using basic logging here
-        self.logger = setup_logger(name="Porn Fetch - [InstallThread]", level=logging.DEBUG)
+        self.logger = configure_app_logging(logger_name="Porn Fetch - [InstallThread]", level=logging.DEBUG)
 
     def run(self):
         settings.setValue("Misc/app_name", self.app_name) # Sets app name, because we need that later in PF
@@ -436,7 +447,7 @@ class UninstallThread(QRunnable):
         self.org_name: str = org_name
         self.signals: Signals = Signals()
 
-        self.logger = setup_logger(name="PornFetch - [UninstallThread]", level=logging.DEBUG)
+        self.logger = configure_app_logging(logger_name="PornFetch - [UninstallThread]", level=logging.DEBUG)
 
     def run(self):
         try:
@@ -604,131 +615,6 @@ endlocal
         )
 
 
-class AutoUpdateThread(QRunnable):
-    def __init__(self) -> None:
-        super(AutoUpdateThread, self).__init__()
-        self.signals: Signals = Signals()
-        self.assets: dict = {}
-        self.logger = setup_logger(name="Porn Fetch - [AutoUpdateThread]", log_file="PornFetch.log", level=logging.DEBUG)
-
-    def run(self):
-        self.signals.start_undefined_range.emit()
-        self.logger.info("Fetching release information...")
-        url = "https://echteralsfake.me/update"
-        response: httpx.Response = clients.core.fetch(url=url, get_response=True)
-
-        if response.status_code == 200:
-            self.assets = response.json()
-            self.logger.info(f"Got Update Information for: {self.assets["version"]}")
-
-        elif response.status_code == 502 or response.status_code == 530 or response.status_code == 500:
-            self.logger.error("Server is currently unable to return the update information. Please try again later...")
-            ui_popup("Server is currently unable to return the update information. Please try again later...")
-            return
-
-
-        self.logger.info("Starting auto-update process...")
-        os_arch = get_os_and_arch()
-        download_url = self.assets.get(f"download_{os_arch}")
-
-        if not download_url:
-            self.logger.error(f"No download URL found for {os_arch}")
-            self.signals.error_signal.emit(f"Update failed: No download available for your system ({os_arch}).")
-            return
-
-        self.logger.info(f"Downloading update from: {download_url}")
-
-        temp_dir = tempfile.gettempdir()
-        filename = download_url.split("/")[-1]
-        download_path = os.path.join(temp_dir, filename)
-
-        try:
-            clients.core.legacy_download(
-                url=download_url,
-                path=download_path,
-                callback=self.update_progress
-            )
-            self.logger.info("Download complete. Replacing binary.")
-            self.replace_binary(download_path)
-            self.logger.info("Update successful. Please restart the application.")
-            self.signals.error_signal.emit("Update successful! Please restart the application.")
-        except Exception as e:
-            self.logger.error(f"Update failed: {e}")
-            self.signals.error_signal.emit(f"Update failed: {e}")
-
-    def update_progress(self, current: int, total: int) -> None:
-        self.signals.total_progress.emit(current)
-        self.signals.total_progress_range.emit(total)
-
-    def replace_binary(self, new_binary_path: str) -> None:
-        current_binary_path = get_original_executable_path()
-        if not current_binary_path:
-            raise RuntimeError("Could not determine the path of the current executable.")
-
-        # On Windows, you can't replace a running executable.
-        # A common strategy is to use a helper script.
-        if sys.platform == "win32":
-            self.create_windows_updater(current_binary_path, new_binary_path)
-        else:
-            # On Linux/macOS, you can often replace the binary directly.
-            os.chmod(new_binary_path, 0o755)
-            shutil.move(new_binary_path, current_binary_path)
-
-    def create_windows_updater(self, current_path: str, new_path: str) -> None:
-        updater_script_path = os.path.join(tempfile.gettempdir(), "updater.bat")
-        with open(updater_script_path, "w") as f:
-            f.write(f"""
-@echo off
-echo Waiting for application to close...
-taskkill /F /IM {os.path.basename(current_path)}
-timeout /t 2 /nobreak
-echo Replacing application file...
-move /Y "{new_path}" "{current_path}"
-echo Starting new version...
-start "" "{current_path}"
-del "%~f0"
-            """)
-        subprocess.Popen([updater_script_path], creationflags=subprocess.CREATE_NO_WINDOW)
-        QCoreApplication.quit()
-
-
-class CheckUpdates(QRunnable):
-    def __init__(self):
-        super(CheckUpdates, self).__init__()
-        self.signals: Signals = Signals()
-        self.logger = shared_functions.setup_logger(name="Porn Fetch - [CheckUpdates]", log_file="PornFetch.log", level=logging.DEBUG,)
-
-    async def run(self):
-        url = f"https://echteralsfake.me/update"
-        try:
-            response: httpx.Response = await clients.core.fetch(url=url, get_response=True)
-            if response.status_code == 200:
-                json_stuff = response.json()
-                version = str(json_stuff["version"]).strip("latest - ")
-
-                if float(version) > float(__version__):
-                    self.logger.info(f"A new update is available -->: {version}")
-                    self.signals.update_check.emit(True, json_stuff)
-
-                else:
-                    self.logger.info(f"Checked for updates... You are on the latest version :)")
-                    self.signals.update_check.emit(False, json_stuff)
-
-            elif response.status_code == 404:
-                self.logger.error("Temporary error reaching the server")
-                return
-
-            elif response.status_code == 500:
-                self.logger.error("Internal Server error, probably already fixing it :) ")
-                return
-
-            elif response.status_code == 530 or response.status_code == 502:
-                self.logger.error("Server is currently offline. Probably already fixing it :)")
-
-        except (ConnectionError, ConnectionResetError, ConnectionRefusedError, TimeoutError):
-            handle_error_gracefully(self, data=video_data.consistent_data, error_message="I could NOT check for updates. The server is either not reachable, or you don't have an IPv6 connection.")
-
-
 class AddToTreeWidget:
     def __init__(self, iterator: Iterable[clients.AnyVideoClass], is_checked: bool, last_index: int, custom_options: str):
         super(AddToTreeWidget, self).__init__()
@@ -743,7 +629,7 @@ class AddToTreeWidget:
         self.result_limit = self.consistent_data.get("result_limit")
         self.supress_errors = self.consistent_data.get("supress_errors")
         self.activate_logging = self.consistent_data.get("activate_logging")
-        self.logger = shared_functions.setup_logger(name="Porn Fetch - [AddToTreeWidget]", log_file="PornFetch.log", level=logging.DEBUG)
+        self.logger = configure_app_logging(logger_name="Porn Fetch - [AddToTreeWidget]", log_file="PornFetch.log", level=logging.DEBUG)
 
     async def process_video(self, video, index):
         if isinstance(video, str):
@@ -772,7 +658,7 @@ class AddToTreeWidget:
                 data = await clients.load_video_attributes(video, self.custom_options)
                 self.logger.debug("[Download (4/10) - Fetched Attributes")
                 session_urls.append(video.url)
-                title = strip_title(title=data.title, cls=None)
+                title = strip_title(title=data.title)
                 rendered_name = data.output_name
 
                 if self.consistent_data.get(
@@ -825,18 +711,8 @@ class AddToTreeWidget:
                 handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Warning: The video {report} is pending review. It will be skipped")
                 return False
 
-            except InvalidResponse:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Warning: The video: {report} returned an empty response when trying"
-                                             f"to fetch its content. There is nothing I can do. It will be skipped")
-                return False
-
             except VideoUnavailable_XV:
                 handle_error_gracefully(self, data=video_data.consistent_data, error_message= f"The video {report} is not available. Do not report this error... Not my fault :)")
-                return False
-
-
-            except VideoDisabled_EP:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {report} has been disabled by EPorner itself. It will be skippled...")
                 return False
 
             except RegionBlocked_YP:
@@ -960,7 +836,7 @@ class DownloadThread(QRunnable):
         data_object = video_data.data_objects[self.video_id]
         self.keep_segment_dir = True
         self.output_path = data_object.output_name
-        self.logger = shared_functions.setup_logger(name="Porn Fetch - [DownloadThread]", log_file="PornFetch.log", level=logging.DEBUG)
+        self.logger = shared_functions.configure_app_logging(logger_name="Porn Fetch - [DownloadThread]", log_file="PornFetch.log", level=logging.DEBUG)
         self.signals = Signals()
         self.stop_flag = stop_event
         self.skip_existing_files = self.consistent_data.get("skip_existing_files")
@@ -1142,7 +1018,7 @@ class LoginThread(QRunnable):
         self.email = email
         self.password = password
         self.signals = Signals()
-        self.logger = setup_logger(name="Porn Fetch - [Login]", level=logging.DEBUG)
+        self.logger = configure_app_logging(logger_name="Porn Fetch - [Login]", level=logging.DEBUG)
 
     def run(self):
         self.signals.start_undefined_range.emit()
@@ -1190,7 +1066,7 @@ class PornFetch(QMainWindow):
 
         self.ui = Ui_PornFetch_UI()
         self.ui.setupUi(self)
-        self.logger = shared_functions.setup_logger(name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG)
+        self.logger = shared_functions.configure_app_logging(logger_name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG)
 
         self.last_index = 0  # Keeps track of the last index of videos added to the tree widget
         self._anonymous_mode = False

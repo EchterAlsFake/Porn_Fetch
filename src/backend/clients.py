@@ -23,6 +23,8 @@ Current APIs:
 9) redtube        -> https://redtube.com (rt_client, rt_video)
 10) thumbzilla    -> https://thumbzilla.com (th_client, th_video)
 11) tube8         -> https://tube8.com (tu_client, tu_video)
+12) xfreehd       -> https://xfreehd.com (xf_client, xv_video)
+13) porntrex      -> https://porntrex.com (pt_client, pt_video)
 """
 
 import os
@@ -88,7 +90,7 @@ _PUBLISHED_ON_RE = re.compile(
 _TEMPLATE_RE = re.compile(r"\$(\w+)|\$\{([^}]+)}")
 
 _NOT_AVAILABLE_RE = re.compile(r"^\s*(not\s+available|n/?a|none|null)?\s*$", re.IGNORECASE)
-logger = configure_app_logging(name="Porn Fetch - [Clients]", level=logging.DEBUG, log_file="PornFetch.log")
+logger = configure_app_logging(logger_name="Porn Fetch - [Clients]", level=logging.DEBUG, log_file="PornFetch.log")
 
 # which is also affecting all other APIs when the refresh_clients function is called
 # Initialize clients globally, so that we can override them later with a new configuration from BaseCore if needed
@@ -102,7 +104,6 @@ yp_client = yp_Client()
 bg_client = bg_Client()
 pt_client = pt_Client()
 xf_client = xf_Client()
-pg_client = pg_Client()
 rt_client = rt_Client()
 th_client = th_Client()
 tu_client = tu_Client()
@@ -128,7 +129,7 @@ async def get_direct_url_legacy(video: AllowedVideoType_Legacy, quality: str | i
     that uses mp4 streams.
     """
 
-    if isinstance(video, xf_Video) or isinstance(video, pg_Video):
+    if isinstance(video, xf_Video):
         if quality > "480p" or quality > 480 or quality == "best" or quality == "half": # Bro pls don't ask :rose:
             try:
                 return video.cdn_urls[1]
@@ -140,9 +141,9 @@ async def get_direct_url_legacy(video: AllowedVideoType_Legacy, quality: str | i
 
     elif isinstance(video, pt_Video):
         qn = normalize_quality_value(quality)
-        chosen_height = choose_quality_from_list(await video.video_qualities, qn)
+        chosen_height = choose_quality_from_list(video.video_qualities, qn)
 
-        result = video.direct_download_urls()
+        result = video.direct_download_urls
         if inspect.iscoroutine(result):
             direct_urls = await result
 
@@ -165,9 +166,8 @@ def refresh_clients(debug_mode: bool = False, use_truststore: bool = True) -> No
     logger.info(f"Refreshing clients!")
     config.ssl_context = build_ssl_context(use_truststore) # Decides whether to use truststore (OS CA's) or Certifi CA's
 
-    global mv_client, ep_client, ph_client, xv_client, xh_client, sp_client, \
-        hq_client, xn_client, core, yp_client, bg_client, pt_client, xf_client, pg_client, rt_client, \
-        tu_client, th_client
+    global  ep_client, ph_client, xv_client, xh_client, sp_client, xn_client, core, yp_client, bg_client, pt_client, \
+        xf_client, rt_client, tu_client, th_client
 
     if debug_mode:
         level = logging.DEBUG
@@ -187,7 +187,6 @@ def refresh_clients(debug_mode: bool = False, use_truststore: bool = True) -> No
     log_file_core_bg = "BaseCore_BG.log" if debug_mode else None
     log_file_core_pt = "BaseCore_PT.log" if debug_mode else None
     log_file_core_xf = "BaseCore_XF.log" if debug_mode else None
-    log_file_core_pg = "BaseCore_PG.log" if debug_mode else None
     log_file_core_rt = "BaseCore_RT.log" if debug_mode else None
     log_file_core_tu = "BaseCore_Tu.log" if debug_mode else None
     log_file_core_th = "BaseCore_TH.log" if debug_mode else None
@@ -203,7 +202,6 @@ def refresh_clients(debug_mode: bool = False, use_truststore: bool = True) -> No
     core_bg = BaseCore(configuration=config)
     core_pt = BaseCore(configuration=config)
     core_xf = BaseCore(configuration=config)
-    core_pg = BaseCore(configuration=config)
     core_rt = BaseCore(configuration=config)
     core_th = BaseCore(configuration=config)
     core_tu = BaseCore(configuration=config)
@@ -219,7 +217,6 @@ def refresh_clients(debug_mode: bool = False, use_truststore: bool = True) -> No
     core_bg.enable_logging(level=level, log_file=log_file_core_bg)
     core_pt.enable_logging(level=level, log_file=log_file_core_pt)
     core_xf.enable_logging(level=level, log_file=log_file_core_xf)
-    core_pg.enable_logging(level=level, log_file=log_file_core_pg)
     core_rt.enable_logging(level=level, log_file=log_file_core_rt)
     core_tu.enable_logging(level=level, log_file=log_file_core_tu)
     core_th.enable_logging(level=level, log_file=log_file_core_th)
@@ -234,7 +231,6 @@ def refresh_clients(debug_mode: bool = False, use_truststore: bool = True) -> No
     bg_client = bg_Client(core=core_bg)
     pt_client = pt_Client(core=core_pt)
     xf_client = xf_Client(core=core_xf)
-    pg_client = pg_Client(core=core_pg)
     ph_client = ph_Client(core=core_ph)
     rt_client = rt_Client(core=core_rt)
     th_client = th_Client(core=core_th)
@@ -248,8 +244,8 @@ async def check_video(url):
     If the url is already a video object, the function will simply return it.
     """
 
-    objects = [ep_Video, xn_Video, xv_Video, xh_Video, sp_Video, yp_Video, bg_Video, pt_Video,
-               xf_Video, pg_Video, rt_Video]
+    objects = [ep_Video, xv_Video, xh_Video, sp_Video, xn_Video, yp_Video, bg_Video, pt_Video, xf_Video, ph_Video,
+                rt_Video, th_Video, tu_Video]
 
     if isinstance(url, tuple(objects)):
         return url
@@ -259,20 +255,14 @@ async def check_video(url):
         if "pornhub" in url:
             return await ph_client.get_video(url)
 
-        if "hqporner" in url:
-            return await hq_client.get_video(url)
-
         elif "eporner" in url:
-            return await ep_client.get_video(url, enable_html_scraping=True)
+            return await ep_client.get_video(url, load_html=True)
 
         elif "xnxx" in url:
             return await xn_client.get_video(url)
 
         elif "xvideos" in url:
             return await xv_client.get_video(url)
-
-        elif "missav" in url:
-            return await mv_client.get_video(url)
 
         elif "xhamster" in str(url) and "moments" in str(url) and not isinstance(url, xh_Video):
             return await xh_client.get_short(url)
@@ -294,9 +284,6 @@ async def check_video(url):
 
         elif "xfreehd" in str(url):
             return await xf_client.get_video(url)
-
-        elif "porngo" in str(url):
-            return await pg_client.get_video(url)
 
         elif "redtube" in str(url):
             return await rt_client.get_video(url)
@@ -453,18 +440,9 @@ def _public_attr_snapshot(obj: Any) -> Dict[str, Any]:
 async def load_video_attributes(video, name_template: str = "$title", *, now: Optional[datetime] = None) -> VideoAttributes:
     title = video.title
 
-    # --- your per-site extraction (unchanged logic) ---
     if isinstance(video, ph_Video):
-        await video.init()
-        await video.ensure_html()
         stuff = await video.author
-        try:
-            author = stuff.name
-
-        except AttributeError:
-            author = "Unavailable"
-            # TODO: Bring Pornstar support back for PHUB
-
+        author = stuff.name
         length = video.duration
         tags = video.tags
         publish_date = video.publish_date
@@ -496,7 +474,7 @@ async def load_video_attributes(video, name_template: str = "$title", *, now: Op
         video_id = video.video_id
 
     elif isinstance(video, yp_Video):
-        stuff = await video.author
+        stuff = await video.author(load_html=True)
         author = stuff.name
         length = round(int(video.length) // 60)
         tags = ",".join(video.categories)
@@ -542,14 +520,6 @@ async def load_video_attributes(video, name_template: str = "$title", *, now: Op
         tags = video.tags
         thumbnail = video.thumbnail
         publish_date = video.publish_date
-        video_id = video.title
-
-    elif isinstance(video, pg_Video):
-        author = video.author
-        length = "Not available"
-        tags = video.categories
-        thumbnail = video.thumbnail
-        publish_date = "Not available"
         video_id = video.title
 
     elif isinstance(video, (rt_Video, tu_Video, th_Video)):
@@ -603,7 +573,7 @@ async def load_video_attributes(video, name_template: str = "$title", *, now: Op
     context["video"] = video   # allow ${video.author.name} etc.
 
     rendered = render_name_template(name_template, context, missing="")
-    rendered = strip_title(title=rendered, cls=None) # Error because I am stupid
+    rendered = strip_title(title=rendered) # Error because I am stupid
     return VideoAttributes(
         title=title,
         qualities=qualities,

@@ -5,7 +5,6 @@ If you know what you do, you can change a few things here :)
 
 import os
 import sys
-import httpx
 import logging
 import datetime
 import platform
@@ -14,17 +13,18 @@ import traceback
 from typing import Any
 from pathlib import Path
 from configparser import ConfigParser
-from base_api.base import setup_logger
+from curl_cffi import post
+from base_api.base import configure_app_logging
 from src.backend.config import __version__
 
 # which is also affecting all other APIs when the refresh_clients function is called
 # Initialize clients globally, so that we can override them later with a new configuration from BaseCore if needed
-logger = setup_logger(name="Porn Fetch - [shared_functions]", log_file="PornFetch.log", level=logging.DEBUG)
+logger = configure_app_logging(logger_name="Porn Fetch - [shared_functions]", log_file="PornFetch.log", level=logging.DEBUG)
 
 
 def send_to_server(message: dict):
     try:
-        response = httpx.post(
+        response = post(
             url="https://echteralsfake.me/report",
             json=message,
             timeout=20)

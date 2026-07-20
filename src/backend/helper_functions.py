@@ -1,14 +1,13 @@
 import os
 import sys
 import shutil
-import platform
 
 from pathlib import Path
-from base_api.base import setup_logger
+from base_api.base import configure_app_logging
 from PySide6.QtCore import QFile, QFileDevice, QIODevice, QDir, QSaveFile, QStandardPaths
 
 
-logger = setup_logger(name=".ff")
+logger = configure_app_logging(logger_name="Helper Functions")
 
 
 def get_original_executable_path() -> str:
@@ -140,17 +139,3 @@ def safe_rmtree(path: str):
             logger.info(f"Deleted directory: {path}")
     except FileNotFoundError:
         pass
-
-
-def normalized_arch() -> str:
-    m = platform.machine().lower()
-    if m in ("x86_64", "amd64"):
-        return "x86_64"
-    if m in ("arm64", "aarch64"):
-        return "arm64"
-
-    else:
-        logger.warning(f"Couldn't normalize platform: {m}, please report this")
-        return m
-
-# EOF
