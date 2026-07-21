@@ -42,6 +42,8 @@ try:
 except (ModuleNotFoundError, ImportError):
     from handle_ssl import build_ssl_context
 
+from errors import InvalidInput
+from urllib.parse import urlparse
 from dataclasses import dataclass
 from base_api.modules.config import config # This is the global configuration instance of base core config
 from dateutil.relativedelta import relativedelta
@@ -92,29 +94,154 @@ _TEMPLATE_RE = re.compile(r"\$(\w+)|\$\{([^}]+)}")
 _NOT_AVAILABLE_RE = re.compile(r"^\s*(not\s+available|n/?a|none|null)?\s*$", re.IGNORECASE)
 logger = configure_app_logging(logger_name="Porn Fetch - [Clients]", level=logging.DEBUG, log_file="PornFetch.log")
 
+SITE_PATTERNS = [
+    ("pornhub", re.compile(r"(?:^|\.)pornhub(?:premium)?\.[a-z.]{2,}$", re.IGNORECASE)),
+    ("xnxx", re.compile(r"(?:^|\.)xnxx\d*\.[a-z.]{2,}$", re.IGNORECASE)),
+    ("xvideos", re.compile(r"(?:^|\.)xvideos\d*\.[a-z.]{2,}$", re.IGNORECASE)),
+    ("eporner", re.compile(r"(?:^|\.)eporner\.[a-z.]{2,}$", re.IGNORECASE)),
+    ("xhamster", re.compile(r"(?:^|\.)xhamster(?:live)?\d*\.[a-z.]{2,}$", re.IGNORECASE)),
+    ("spankbang", re.compile(r"(?:^|\.)spankbang\.[a-z.]{2,}$", re.IGNORECASE)),
+    ("youporn", re.compile(r"(?:^|\.)youporn\.[a-z.]{2,}$", re.IGNORECASE)),
+    ("beeg", re.compile(r"(?:^|\.)beeg\.[a-z.]{2,}$", re.IGNORECASE)),
+    ("redtube", re.compile(r"(?:^|\.)redtube\.[a-z.]{2,}$", re.IGNORECASE)),
+    ("thumbzilla", re.compile(r"(?:^|\.)thumbzilla\.[a-z.]{2,}$", re.IGNORECASE)),
+    ("tube8", re.compile(r"(?:^|\.)tube8\.[a-z.]{2,}$", re.IGNORECASE)),
+    ("xfreehd", re.compile(r"(?:^|\.)xfreehd\.[a-z.]{2,}$", re.IGNORECASE)),
+    ("porntrex", re.compile(r"(?:^|\.)porntrex\.[a-z.]{2,}$", re.IGNORECASE)),
+    ("xhamster_shorts", re.compile(r"(?=.*xhamster)(?=.*moments)", re.IGNORECASE))
+]
+
 # which is also affecting all other APIs when the refresh_clients function is called
 # Initialize clients globally, so that we can override them later with a new configuration from BaseCore if needed
-ep_client = ep_Client()
-ph_client = ph_Client()
-xv_client = xv_Client()
-xh_client = xh_Client()
-sp_client = sp_Client()
-xn_client = xn_Client()
-yp_client = yp_Client()
-bg_client = bg_Client()
-pt_client = pt_Client()
-xf_client = xf_Client()
-rt_client = rt_Client()
-th_client = th_Client()
-tu_client = tu_Client()
-logger.debug("Successfully initialized all clients!")
+core = BaseCore(configuration=config)
+core_ep = BaseCore(configuration=config)
+core_ph = BaseCore(configuration=config)
+core_xv = BaseCore(configuration=config)
+core_xh = BaseCore(configuration=config)
+core_xn = BaseCore(configuration=config)
+core_sp = BaseCore(configuration=config)
+core_yp = BaseCore(configuration=config)
+core_bg = BaseCore(configuration=config)
+core_pt = BaseCore(configuration=config)
+core_xf = BaseCore(configuration=config)
+core_rt = BaseCore(configuration=config)
+core_th = BaseCore(configuration=config)
+core_tu = BaseCore(configuration=config)
+
+ep_client = ep_Client(core=core_ep)
+xv_client = xv_Client(core=core_xv)
+xh_client = xh_Client(core=core_xh)
+sp_client = sp_Client(core=core_sp)
+xn_client = xn_Client(core=core_xn)
+yp_client = yp_Client(core=core_yp)
+bg_client = bg_Client(core=core_bg)
+pt_client = pt_Client(core=core_pt)
+xf_client = xf_Client(core=core_xf)
+ph_client = ph_Client(core=core_ph)
+rt_client = rt_Client(core=core_rt)
+th_client = th_Client(core=core_th)
+tu_client = tu_Client(core=core_tu)
+
+cores = [
+    core_ep, core_ph, core_xv, core_xh, core_xn, core_sp, core_yp, core_bg, core_pt, core_xf, core_rt, core_th,
+    core_tu,
+]
+
+video_objects = [ep_Video, xv_Video, xh_Video, sp_Video, xn_Video, yp_Video, bg_Video, pt_Video, xf_Video, ph_Video,
+           rt_Video, th_Video, tu_Video]
+
+for _core in cores:
+    _core.initialize_session()
+
+logger.debug("Successfully initialized all clients and!")
 
 
-core = BaseCore() # We need that sometimes in Porn Fetch's main class e.g., thumbnail fetching
-core.configuration.max_retries = 2 # Only use 2 retries to prevent blocking
-core.configuration.use_http2 = False # Fallback to http 1 for critical operations
-core.configuration.timeout = 10 # Medium to low timeout to prevent blocking
-core.initialize_session()
+def refresh_clients(debug_mode: bool = False, use_truststore: bool = True) -> None:
+    logger.info("Refreshing all clients!")
+    level = logging.DEBUG if debug_mode else logging.INFO
+    core.enable_logging(level=level, log_file="BaseCore.log" if debug_mode else None)
+    core_ep.enable_logging(level=level, log_file="BaseCore_EP.log" if debug_mode else None)
+    core_ph.enable_logging(level=level, log_file="BaseCore_PH.log" if debug_mode else None)
+    core_xv.enable_logging(level=level, log_file="BaseCore_XV.log" if debug_mode else None)
+    core_xh.enable_logging(level=level, log_file="BaseCore_XH.log" if debug_mode else None)
+    core_xn.enable_logging(level=level, log_file="BaseCore_XN.log" if debug_mode else None)
+    core_sp.enable_logging(level=level, log_file="BaseCore_SP.log" if debug_mode else None)
+    core_yp.enable_logging(level=level, log_file="BaseCore_YP.log" if debug_mode else None)
+    core_bg.enable_logging(level=level, log_file="BaseCore_BG.log" if debug_mode else None)
+    core_pt.enable_logging(level=level, log_file="BaseCore_PT.log" if debug_mode else None)
+    core_xf.enable_logging(level=level, log_file="BaseCore_XF.log" if debug_mode else None)
+    core_rt.enable_logging(level=level, log_file="BaseCore_RT.log" if debug_mode else None)
+    core_tu.enable_logging(level=level, log_file="BaseCore_Tu.log" if debug_mode else None)
+    core_th.enable_logging(level=level, log_file="BaseCore_TH.log" if debug_mode else None)
+
+    cores_to_update = {
+        core, core_ep, core_ph, core_xv, core_xh, core_xn, core_sp,
+        core_yp, core_bg, core_pt, core_xf, core_rt, core_th, core_tu
+    }
+
+    clients_list = [
+        ep_client, ph_client, xv_client, xh_client, sp_client, xn_client,
+        yp_client, bg_client, pt_client, xf_client, rt_client, th_client, tu_client
+    ]
+
+    for client in clients_list:
+        cores_to_update.add(client.core)
+
+    for c in cores_to_update:
+        old_session = c.session
+        c.initialize_session()
+        if old_session is not None and c.session is not None:
+            try:
+                c.session.cookies.update(old_session.cookies)
+
+            except Exception as e:
+                logger.warning(f"Couldn't copy cookies during session refresh: {e}")
+
+    logger.debug("Applied in-place clients!")
+
+
+async def get_video(url: str | AllowedVideoType) -> AllowedVideoType:
+    """
+    This function check the URL and generates the corresponding video object with the correct client.
+    If the url is already a video object, the function will simply return it.
+    """
+
+
+    if isinstance(url, tuple(video_objects)):
+        return url
+
+    assert isinstance(url, str)
+
+    if not url.startswith("http"):
+        raise InvalidInput
+
+    mapping = {
+        "pornhub": await ph_client.get_video(url=url, load_html=True, load_api=True),
+        "eporner": await ep_client.get_video(url=url, load_html=True, load_api=True),
+        "xnxx": await xn_client.get_video(url=url, load_html=True),
+        "xvideos": await xv_client.get_video(url=url, load_html=True),
+        "xhamster": await xh_client.get_video(url=url, load_html=True),
+        "xhamter_short": await xh_client.get_short(url=url, load_html=True),
+        "spankbang": await sp_client.get_video(url=url, load_html=True),
+        "youporn": await yp_client.get_video(url=url, load_html=True),
+        "beeg": await bg_client.get_video(url=url),
+        "porntrex": await pt_client.get_video(url=url),
+        "xfreehd": await xf_client.get_video(url=url),
+        "redtube": await rt_client.get_video(url=url),
+        "thumbzilla": await th_client.get_video(url=url),
+        "tube8": await tu_client.get_video(url=url),
+    }
+
+    final_website = None
+    hostname = urlparse(url).hostname
+    for website, pattern in SITE_PATTERNS:
+        if pattern.search(hostname):
+            final_website = website
+
+    if not final_website:
+        raise InvalidInput
+
+    return mapping[final_website]
 
 
 async def get_direct_url_legacy(video: AllowedVideoType_Legacy, quality: str | int):
@@ -160,144 +287,6 @@ async def get_direct_url_legacy(video: AllowedVideoType_Legacy, quality: str | i
         # A h264 stream bro
 
     return "MakesNoSense"
-
-
-def refresh_clients(debug_mode: bool = False, use_truststore: bool = True) -> None:
-    logger.info(f"Refreshing clients!")
-    config.ssl_context = build_ssl_context(use_truststore) # Decides whether to use truststore (OS CA's) or Certifi CA's
-
-    global  ep_client, ph_client, xv_client, xh_client, sp_client, xn_client, core, yp_client, bg_client, pt_client, \
-        xf_client, rt_client, tu_client, th_client
-
-    if debug_mode:
-        level = logging.DEBUG
-
-    else:
-        level = logging.ERROR
-
-
-    log_file_core = "BaseCore.log" if debug_mode else None
-    log_file_core_ep = "BaseCore_EP.log" if debug_mode else None
-    log_file_core_ph = "BaseCore_PH.log" if debug_mode else None
-    log_file_core_xv = "BaseCore_XV.log" if debug_mode else None
-    log_file_core_xh = "BaseCore_XH.log" if debug_mode else None
-    log_file_core_xn = "BaseCore_XN.log" if debug_mode else None
-    log_file_core_sp = "BaseCore_SP.log" if debug_mode else None
-    log_file_core_yp = "BaseCore_YP.log" if debug_mode else None
-    log_file_core_bg = "BaseCore_BG.log" if debug_mode else None
-    log_file_core_pt = "BaseCore_PT.log" if debug_mode else None
-    log_file_core_xf = "BaseCore_XF.log" if debug_mode else None
-    log_file_core_rt = "BaseCore_RT.log" if debug_mode else None
-    log_file_core_tu = "BaseCore_Tu.log" if debug_mode else None
-    log_file_core_th = "BaseCore_TH.log" if debug_mode else None
-
-    # One BaseCore per site, with its own RuntimeConfig (isolated headers/cookies)
-    core_ep = BaseCore(configuration=config)
-    core_ph = BaseCore(configuration=config)
-    core_xv = BaseCore(configuration=config)
-    core_xh = BaseCore(configuration=config)
-    core_xn = BaseCore(configuration=config)
-    core_sp = BaseCore(configuration=config)
-    core_yp = BaseCore(configuration=config)
-    core_bg = BaseCore(configuration=config)
-    core_pt = BaseCore(configuration=config)
-    core_xf = BaseCore(configuration=config)
-    core_rt = BaseCore(configuration=config)
-    core_th = BaseCore(configuration=config)
-    core_tu = BaseCore(configuration=config)
-
-    core.enable_logging(level=level, log_file=log_file_core)
-    core_ep.enable_logging(level=level, log_file=log_file_core_ep)
-    core_ph.enable_logging(level=level, log_file=log_file_core_ph)
-    core_xv.enable_logging(level=level, log_file=log_file_core_xv)
-    core_xh.enable_logging(level=level, log_file=log_file_core_xh)
-    core_xn.enable_logging(level=level, log_file=log_file_core_xn)
-    core_sp.enable_logging(level=level, log_file=log_file_core_sp)
-    core_yp.enable_logging(level=level, log_file=log_file_core_yp)
-    core_bg.enable_logging(level=level, log_file=log_file_core_bg)
-    core_pt.enable_logging(level=level, log_file=log_file_core_pt)
-    core_xf.enable_logging(level=level, log_file=log_file_core_xf)
-    core_rt.enable_logging(level=level, log_file=log_file_core_rt)
-    core_tu.enable_logging(level=level, log_file=log_file_core_tu)
-    core_th.enable_logging(level=level, log_file=log_file_core_th)
-
-    # Instantiate clients with their site-specific cores
-    ep_client = ep_Client(core=core_ep)
-    xv_client = xv_Client(core=core_xv)
-    xh_client = xh_Client(core=core_xh)
-    sp_client = sp_Client(core=core_sp)
-    xn_client = xn_Client(core=core_xn)
-    yp_client = yp_Client(core=core_yp)
-    bg_client = bg_Client(core=core_bg)
-    pt_client = pt_Client(core=core_pt)
-    xf_client = xf_Client(core=core_xf)
-    ph_client = ph_Client(core=core_ph)
-    rt_client = rt_Client(core=core_rt)
-    th_client = th_Client(core=core_th)
-    tu_client = tu_Client(core=core_tu)
-    logger.debug("Applied new clients. Configurations should be overridden now e.g., if you have set a proxy.")
-
-
-async def check_video(url):
-    """
-    This function check the URL and generates the corresponding video object with the correct client.
-    If the url is already a video object, the function will simply return it.
-    """
-
-    objects = [ep_Video, xv_Video, xh_Video, sp_Video, xn_Video, yp_Video, bg_Video, pt_Video, xf_Video, ph_Video,
-                rt_Video, th_Video, tu_Video]
-
-    if isinstance(url, tuple(objects)):
-        return url
-
-    if isinstance(url, str) and len(url) > 0 and url.startswith("http"):
-
-        if "pornhub" in url:
-            return await ph_client.get_video(url)
-
-        elif "eporner" in url:
-            return await ep_client.get_video(url, load_html=True)
-
-        elif "xnxx" in url:
-            return await xn_client.get_video(url)
-
-        elif "xvideos" in url:
-            return await xv_client.get_video(url)
-
-        elif "xhamster" in str(url) and "moments" in str(url) and not isinstance(url, xh_Video):
-            return await xh_client.get_short(url)
-
-        elif "xhamster" in url or "xhopen" in url:
-            return await xh_client.get_video(url)
-
-        elif "spankbang" in url:
-            return await sp_client.get_video(url)
-
-        elif "youporn" in url:
-            return await yp_client.get_video(url)
-
-        elif "beeg.com" in str(url):
-            return await bg_client.get_video(url)
-
-        elif "porntrex" in str(url):
-            return await pt_client.get_video(url)
-
-        elif "xfreehd" in str(url):
-            return await xf_client.get_video(url)
-
-        elif "redtube" in str(url):
-            return await rt_client.get_video(url)
-
-        elif "thumbzilla" in str(url):
-            return await th_client.get_video(url)
-
-        elif "tube8" in str(url):
-            return await tu_client.get_video(url)
-
-        else:
-            return False
-
-    return False
 
 
 async def get_available_qualities(video: Any) -> List[int]:
@@ -967,31 +956,3 @@ def parse_length(length, video_source=None):
         return 0
 
 
-class VideoData:
-    """
-    This class stores the video objects and their loaded data across Porn Fetch.
-    It allows for re-fetching data if needed, update data if needed and handles caching thanks to
-    a dictionary.
-
-    (Okay, I am overhyping it a bit, but yeah, let's put that away xD)
-    """
-
-    data_objects = {}
-    consistent_data = {}  # This dictionary stores other important data which will be re-used for the entire
-    # run of Porn Fetch
-
-    """
-    If a video object isn't used anymore e.g., the video finished downloading or the tree widget was loaded with other
-    videos, than those videos will be cleaned up in the dictionary, to be as memory and performance efficient as
-    possible.
-    """
-
-    def clean_dict(self, video_titles):
-        if not isinstance(video_titles, list):  # In case we only have one video title to delete
-            video_titles = [video_titles]
-
-        for video_title in video_titles:
-            del self.data_objects[video_title]  # Del is faster than pop :)
-
-
-# EOF

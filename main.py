@@ -25,6 +25,9 @@ import tempfile
 
 # Pre-Load PySide6 to show a loading splashscreen
 from PySide6.QtWidgets import QApplication
+
+from backend.errors import UnsupportedPlatform
+
 app = QApplication(sys.argv)
 
 # macOS Setup...
@@ -87,7 +90,7 @@ import PySide6.QtAsyncio as QtAsyncio # Needed because porn fetch's network back
 from PySide6.QtQuickWidgets import QQuickWidget
 from PySide6.QtGui import QIcon, QFontDatabase, QPixmap, QShortcut, QKeySequence
 from PySide6.QtCore import (QTextStream, QRunnable, QLocale, QSize, QUrl, Signal, QDir, QFile, Slot,
-                            QTranslator, QCoreApplication, QStandardPaths, QSettings, QObject, Qt)
+                            QTranslator, QCoreApplication, QStandardPaths, QObject, Qt)
 from PySide6.QtWidgets import (QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QSizePolicy, QLayout,
                                QInputDialog, QMainWindow, QProgressBar, QMessageBox, QComboBox, QWidget, QLabel,
                                QPushButton, QVBoxLayout, QHBoxLayout)
@@ -97,6 +100,7 @@ splash.showMessage("Importing (Backend).")
 app.processEvents()
 # Backend imports
 from src.backend import clients # Singleton instance for the client objects (really important)
+import src.backend.config as config
 from src.backend.check_license import LicenseManager
 import src.backend.shared_functions as shared_functions
 from src.backend.database import save_video_metadata, init_db
@@ -105,10 +109,10 @@ from src.backend.config import (__version__, PUBLIC_KEY_B64, shared_config, IS_S
 from src.backend.shared_functions import ensure_config_file, handle_error_gracefully, get_os_and_arch
 from src.backend.shared_gui import (ui_popup, reset_pornfetch, show_error, mark_help_buttons, Signals,
                                     available_title_formatting_options, on_checkbox_clicked)
-from src.backend.helper_functions import (default_license_path, chmod_755, get_original_executable_path,
-                                          write_text_atomic, copy_overwrite_atomic, move_or_copy, mkpath,
-                                          safe_unlink, safe_rmtree)
+from src.backend.helper_functions import default_license_path, safe_unlink, safe_rmtree
 
+from src.backend.installation import InstallPornFetch
+from src.backend.uninstallation import UninstallPornFetch
 
 splash.showMessage("Importing (Frontend).")
 app.processEvents()
@@ -122,7 +126,7 @@ from src.frontend.UI.custom_combo_box import ComboPopupFitter, make_quality_comb
 from src.frontend.UI.theme import (apply_theme, apply_theme_lsd, apply_theme_light, mark, install_focus_outline,
                                    pretty_combo)
 from src.frontend.translations.strings import (TRANSLATE_MAIN, TRANSLATE_PAGE_DOWNLOAD, TRANSLATE_PAGE_LOGIN,
-                                              TRANSLATE_PAGE_SETTINGS)
+                                              TRANSLATE_PAGE_SETTINGS, TRANSLATE_ERRORS)
 
 
 splash.showMessage("Importing (APIs).")
@@ -157,38 +161,6 @@ settings = QSettings() # Global instance of the settings used in Porn Fetch
 logger = shared_functions.configure_app_logging(logger_name="Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG)
 license_storage_path: str = os.path.join(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation), "pornfetch.license")
 x: bool = False # Don't ask (this is a secret ;)
-
-
-def _resolve_config_path(portable: bool, portable_dir: str | None = None) -> Path:
-    """
-    Portable  -> ./config.ini (portable_dir or CWD)
-    Installed -> config.ini in AppConfigLocation (per-user standard location)
-    """
-    if portable:
-        base = Path(portable_dir) if portable_dir else Path.cwd()
-        return base / "config.ini"
-
-    cfg_dir = Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation))
-    QDir().mkpath(str(cfg_dir))
-    return cfg_dir / "config.ini"
-    # We need this, because the configuration path is different whether used portably or if installed.
-
-
-def make_settings(portable: bool, portable_dir: str | None = None) -> QSettings:
-    """
-    Returns QSettings bound to a real INI file (portable or installed).
-    Also ensures the INI exists and contains merged defaults (no overwriting user values).
-
-    This is needed, because the CLI can't use QSettings, but I want to use it in the GUI, so we keep both
-    compatible.
-    """
-    ini_path = _resolve_config_path(portable, portable_dir)
-    ensure_config_file(ini_path)
-
-    return QSettings(str(ini_path), QSettings.Format.IniFormat)
-    # This ensures the configuration fil exists, will get the current path and convert the ini format
-    # Into an actual QSettings object that I can work with.
-    # I wouldn't really need to use QSettings here, but if Qt provides a method, why not use it
 
 
 class LicenseWidget(QWidget):
@@ -236,383 +208,6 @@ class LicenseWidget(QWidget):
         res = self.lic.install_from_file(Path(path))
         QMessageBox.information(self, "License", res.reason)
         self.refresh_status()
-
-
-class InstallThread(QRunnable):
-    def __init__(self, app_name: str, app_id: str = "pornfetch", org_name: str = "EchterAlsFake",
-                 portable_config_path: str | None = None) -> None:
-        super().__init__()
-        """
-        This function installs Porn Fetch for Windows and Linux based systems.
-        macOS has its own method and is not handled here.
-        
-        The installation works as simple as we take the install directory from a Qt provided default path, on 
-        Linux typically somewhere in the user directory, and on Windows in the APPDATA directory.
-        We will take the main executable of Porn Fetch + settings, write those into the new directory
-        and write a desktop entry file / Shortcut with the executable path + Logo, 
-        so that the user can run Porn Fetch from their start menu.
-        """
-
-        global settings
-        settings = make_settings(portable=False) # At the first run, I assume the user goes for a portable install-type, however if the installation is called we need to switch that behaviour
-
-        self.app_name: str = app_name # Custom app name, otherwise 'Porn Fetch'
-        self.app_id: str = app_id  # used for desktop file name, etc.
-        self.org_name: str = org_name # All handled in config.py
-        self.portable_config_path: str = portable_config_path
-        self.signals: Signals = Signals() # Signals for error / progress reporting
-
-        # keep your logger setup if you want; using basic logging here
-        self.logger = configure_app_logging(logger_name="Porn Fetch - [InstallThread]", level=logging.DEBUG)
-
-    def run(self):
-        settings.setValue("Misc/app_name", self.app_name) # Sets app name, because we need that later in PF
-
-        try:
-            self.signals.start_undefined_range.emit() # Starts a loading animation until we have more information
-
-            # These matter for QSettings() “installed” mode:
-            QCoreApplication.setOrganizationName(self.org_name)
-            QCoreApplication.setApplicationName(self.app_name)
-
-            if sys.platform.startswith("linux"):
-                self._install_linux_user() # Starts Linux install
-            elif sys.platform == "win32":
-                self._install_windows_user() # Starts Windows install
-            else:
-                raise RuntimeError(f"Unsupported platform: {sys.platform}") # lol
-
-        except Exception: # Some error happened during installation
-            error = traceback.format_exc()
-            self.logger.error(error) # Log the error
-            self.signals.install_finished.emit([False, error]) # Report the error (shows GUI message)
-            self.signals.stop_undefined_range.emit() # Stop loading animation
-            return
-
-        self.signals.stop_undefined_range.emit() # Stop loading animation
-        self.signals.install_finished.emit([True, ""]) # Successful install :)
-
-    def _migrate_portable_settings(self, install_dir: str) -> None:
-        """
-        Copy current portable config.ini into the installed working directory
-        so the installed run keeps user settings.
-        """
-        try:
-            src = self.portable_config_path
-            if not src:
-                src = str(_resolve_config_path(portable=True, portable_dir=os.getcwd()))
-            dst = str(_resolve_config_path(portable=True, portable_dir=install_dir))
-
-            if src and os.path.exists(src):
-                copy_overwrite_atomic(src, dst)
-                self.logger.info(f"Migrated settings: {src} -> {dst}")
-            else:
-                self.logger.warning(f"No portable config found at {src}; creating defaults at {dst}")
-
-            ensure_config_file(Path(dst))
-            s = QSettings(dst, QSettings.Format.IniFormat)
-            s.setValue("Misc/install_type", "installed")
-            s.setValue("Misc/app_name", self.app_name)
-            s.sync()
-        except Exception as e:
-            self.logger.warning(f"Settings migration failed: {e}")
-
-    # ----------------------------
-    # Linux (user-local install)
-    # ----------------------------
-    def _install_linux_user(self) -> None:
-        filename = "PornFetch_Linux_GUI_x64.bin" # Typical filename, but needs to be improved # TODO
-
-        if os.path.exists("PornFetch_Windows_GUI_arm64.bin"):
-            filename = "PornFetch_Linux_GUI_arm64.bin" # For ARM based CPUs
-
-        # Install “payload” (binary + assets) into local app data:
-        install_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
-        mkpath(install_dir)
-        # We use the provided path by Qt as this is the most stable option for this
-
-        apps_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.ApplicationsLocation)
-        if not apps_dir:
-            # Rare, but some environments can return empty; keep a safe fallback.
-            apps_dir = os.path.expanduser("~/.local/share/applications")
-        mkpath(apps_dir)
-
-        src_exe = get_original_executable_path() # Gets source executable path
-        dst_exe = os.path.join(install_dir, filename) # Creates the final path for the destination executable
-        try:
-            copy_overwrite_atomic(src=src_exe, dst=dst_exe) # Copies the actual file
-
-        except RuntimeError:
-            self.signals.error_signal.emit(f"""
-A Runtime error occurred during the installation process. This typically occurs, because I couldn't
-find the real path of the extracted file from the main application.
-
-In short: You can't fix that, please report this!""")
-
-        chmod_755(dst_exe) # Grant execute permission (should be something like chmod +x I guess)
-        icon_dst = os.path.join(install_dir, "logo.png") # Creates the destination for the logo
-        if not QFile.exists(icon_dst):
-            QFile.copy(":/images/graphics/logo.png", icon_dst) # We get the logo directly from the embedded resources
-            # On Linux .png files are typically fine, on Windows this is handled differently
-
-        self._migrate_portable_settings(install_dir)
-
-        # Write desktop file atomically
-        desktop_path = os.path.join(apps_dir, f"{self.app_id}.desktop")
-        entry = f"""[Desktop Entry]
-Version={__version__}
-Type=Application
-Name={self.app_name}
-Exec="{dst_exe}" %F
-Icon={icon_dst}
-Path={install_dir}
-Terminal=false
-Categories=Utility;
-StartupNotify=true
-"""
-        write_text_atomic(desktop_path, entry) # Creates the desktop entry for running PF from start menu
-
-        # Store “installed” flag using Qt settings
-        settings = make_settings(portable=False)
-        settings.setValue("Misc/install_type", "installed")
-        settings.sync()
-
-        self.logger.info(f"Installed to {install_dir}, desktop entry {desktop_path}")
-
-    # ----------------------------
-    # Windows (user-local install)
-    # ----------------------------
-    def _install_windows_user(self) -> None:
-        import win32com.client  # pywin32; Only available on Windows systems
-
-        filename = "PornFetch_Windows_GUI_x64.exe" # Needs to be improved # TODO
-
-        if os.path.exists("PornFetch_Windows_GUI_arm64.bin"):
-            filename = "PornFetch_Windows_GUI_arm64.bin" # For ARM based CPUs
-
-        # Every comment that hasn't been done here, see Linux install as it's the same
-        install_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
-        mkpath(install_dir)
-
-        src_exe = filename
-        if not os.path.exists(src_exe):
-            raise RuntimeError(f"Missing installer payload: {src_exe}")
-
-        dst_exe = os.path.join(install_dir, filename)
-        move_or_copy(src_exe, dst_exe)
-
-        self._migrate_portable_settings(install_dir)
-
-        # Settings flag
-        settings = make_settings(portable=False)
-        settings.setValue("Misc/install_type", "installed")
-        settings.sync()
-
-        # Start Menu Programs folder via Qt
-        start_menu_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.ApplicationsLocation)
-        if not start_menu_dir:
-            # Fallback (usually not needed)
-            start_menu_dir = os.path.join(os.getenv("APPDATA"), "Microsoft", "Windows", "Start Menu", "Programs")
-        mkpath(start_menu_dir)
-
-        shortcut_path = os.path.join(start_menu_dir, f"{self.app_name}.lnk")
-
-        shell = win32com.client.Dispatch("WScript.Shell")
-        shortcut = shell.CreateShortcut(shortcut_path)
-        shortcut.TargetPath = dst_exe
-        shortcut.WorkingDirectory = install_dir
-        shortcut.IconLocation = dst_exe
-        shortcut.Save()
-
-        self.logger.info(f"Installed to {install_dir}, shortcut {shortcut_path}")
-
-
-class UninstallThread(QRunnable):
-    """
-    Uninstalls the *user-local installed* version:
-      - Linux: removes ~/.local/share/applications/<app_id>.desktop
-               removes AppLocalDataLocation payload folder (binary/icon)
-      - Windows: removes Start Menu shortcut
-                 removes AppLocalDataLocation payload folder
-                 uses a .bat helper to delete after app exit (because Windows locks running exe)
-    """
-
-    def __init__(self, app_id: str = "pornfetch", org_name: str = "EchterAlsFake") -> None:
-        super().__init__()
-        global settings
-        settings = make_settings(portable=False)
-        self.app_name: str = settings.value("Misc/app_name")
-
-        self.app_id: str = app_id
-        self.org_name: str = org_name
-        self.signals: Signals = Signals()
-
-        self.logger = configure_app_logging(logger_name="PornFetch - [UninstallThread]", level=logging.DEBUG)
-
-    def run(self):
-        try:
-            self.signals.start_undefined_range.emit()
-
-            # Match the settings identity of installed mode
-            QCoreApplication.setOrganizationName(self.org_name)
-            QCoreApplication.setApplicationName(self.app_name)
-            # This is the reason why we need to save the app name in config, so that we later know
-            # where it's actually installed
-
-            if sys.platform.startswith("linux"):
-                self._uninstall_linux_user() # Linux uninstall
-            elif sys.platform == "win32":
-                self._uninstall_windows_user() # Windows uninstall
-            else:
-                raise RuntimeError(f"Unsupported platform: {sys.platform}")
-
-        except Exception:
-            error = traceback.format_exc()
-            self.logger.error(error)
-
-            # You can reuse install_finished if you want, but it's nicer to add uninstall_finished
-            if hasattr(self.signals, "uninstall_finished"):
-                self.signals.uninstall_finished.emit([False, error])
-            else:
-                self.signals.install_finished.emit([False, error])
-
-            self.signals.stop_undefined_range.emit()
-            return
-
-        self.signals.stop_undefined_range.emit()
-
-        if hasattr(self.signals, "uninstall_finished"):
-            self.signals.uninstall_finished.emit([True, ""])
-        else:
-            self.signals.install_finished.emit([True, ""])
-
-    # ----------------------------
-    # Linux (user-local uninstall)
-    # ----------------------------
-    def _uninstall_linux_user(self) -> None:
-        install_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
-        # The directory where stuff is currently installed to
-
-        apps_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.ApplicationsLocation)
-        if not apps_dir:
-            apps_dir = os.path.expanduser("~/.local/share/applications")
-
-        desktop_path = os.path.join(apps_dir, f"{self.app_id}.desktop")
-
-        # Remove desktop entry
-        safe_unlink(desktop_path)
-
-        # Remove payload files (best effort)
-        if install_dir and os.path.isdir(install_dir):
-            safe_rmtree(install_dir) # Delete the entire directory
-
-        # Clear settings keys / file
-        self._clear_qt_settings()
-        self.logger.info(f"Uninstalled (Linux). Removed: {desktop_path} and {install_dir}")
-
-    # ----------------------------
-    # Windows (user-local uninstall)
-    # ----------------------------
-    def _uninstall_windows_user(self) -> None:
-        install_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
-
-        # Start Menu Programs folder via Qt
-        start_menu_dir = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.ApplicationsLocation)
-        if not start_menu_dir:
-            start_menu_dir = os.path.join(os.getenv("APPDATA", ""), "Microsoft", "Windows", "Start Menu", "Programs")
-
-        shortcut_path = os.path.join(start_menu_dir, f"{self.app_name}.lnk")
-
-        # Remove shortcut now (usually possible even while app runs)
-        safe_unlink(shortcut_path)
-
-        # Clear settings first
-        self._clear_qt_settings()
-
-        # Now remove install_dir.
-        # On Windows you typically cannot delete the running exe, so we spawn a helper bat
-        # that waits for this process to exit, then deletes the folder.
-        if install_dir and os.path.isdir(install_dir):
-            self._spawn_windows_cleanup_bat(
-                pid=os.getpid(),
-                install_dir=install_dir,
-                shortcut_path=shortcut_path,
-            )
-
-        self.logger.info(f"Uninstall scheduled (Windows). Shortcut removed: {shortcut_path}, install_dir: {install_dir}")
-
-    def _clear_qt_settings(self) -> None:
-        """
-        Clear the app's Qt settings.
-        Works for INI-based settings and registry-based ones.
-        """
-        try:
-            s = make_settings(portable=False)
-            s.clear()
-            s.sync()
-
-            # If this is an ini file, you can also delete it for a "clean uninstall"
-            fname = ""
-            try:
-                fname = s.fileName()
-            except Exception:
-                fname = "config.ini" # What could go wrong?
-
-            if fname and os.path.exists(fname):
-                safe_unlink(fname)
-
-        except Exception as e:
-            # Don't fail uninstall if settings cleanup fails
-            self.logger.warning(f"Settings cleanup failed: {e}")
-
-    def _spawn_windows_cleanup_bat(self, pid: int, install_dir: str, shortcut_path: str) -> None:
-        """
-        Creates and runs a .bat that waits until PID exits, then deletes install_dir.
-        The .bat deletes itself at the end.
-        """
-        bat_path = os.path.join(tempfile.gettempdir(), f"{self.app_id}_uninstall_cleanup.bat")
-
-        # Use rmdir /s /q for full folder wipe
-        # Hopefully this doesn't delete your PC LMAO
-        # "tasklist /FI" loop waits until PID is gone
-        script = rf"""@echo off
-setlocal ENABLEDELAYEDEXPANSION
-
-REM Wait for the app process to exit
-:loop
-tasklist /FI "PID eq {pid}" 2>NUL | find /I "{pid}" >NUL
-if "%ERRORLEVEL%"=="0" (
-    timeout /t 1 /nobreak >NUL
-    goto loop
-)
-
-REM Remove shortcut (best effort)
-del /f /q "{shortcut_path}" >NUL 2>&1
-
-REM Remove install folder
-rmdir /s /q "{install_dir}" >NUL 2>&1
-
-REM Self-delete
-del /f /q "%~f0" >NUL 2>&1
-endlocal
-"""
-
-        with open(bat_path, "w", encoding="utf-8") as f:
-            f.write(script)
-
-        # Launch hidden
-        try:
-            creationflags = subprocess.CREATE_NO_WINDOW
-        except Exception:
-            creationflags = 0
-
-        subprocess.Popen(
-            ["cmd.exe", "/c", bat_path],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            creationflags=creationflags,
-            close_fds=True,
-        )
 
 
 class AddToTreeWidget:
@@ -1012,38 +607,7 @@ class DownloadThread(QRunnable):
             self.signals.download_completed.emit(self.video_id, report)
 
 
-class LoginThread(QRunnable):
-    def __init__(self, email: str, password: str):
-        super().__init__()
-        self.email = email
-        self.password = password
-        self.signals = Signals()
-        self.logger = configure_app_logging(logger_name="Porn Fetch - [Login]", level=logging.DEBUG)
 
-    def run(self):
-        self.signals.start_undefined_range.emit()
-        self.logger.info("Trying PornHub Login...")
-        self.logger.debug("Associating a new client object with a logged in session")
-        try:
-            clients.ph_client = clients.ph_Client(email=self.email, password=self.password)
-            self.signals.login_result.emit(True)
-
-        except ph_errors.LoginFailed:
-            self.logger.error("Login Failed, because of invalid credentials")
-            ui_popup(self.tr("Login Failed, please check your credentials and try again!", None))
-
-        except ph_errors.ClientAlreadyLogged:
-            self.logger.warning("Client already logged in?!! wait what??")
-            ui_popup(self.tr("You are already logged in!", None))
-
-        except Exception:
-            error = traceback.format_exc()
-            ui_popup(f"Unknown Error during login -->: {error}")
-
-        finally:
-            self.signals.stop_undefined_range.emit()
-
-        self.logger.debug("Login Successful!")
 
 
 class PornFetch(QMainWindow):
@@ -2597,7 +2161,7 @@ Segment State Path: {report["segment_state_path"]}
         os.makedirs(TEMP_DIRECTORY_STATES, exist_ok=True)
         os.makedirs(TEMP_DIRECTORY_SEGMENTS, exist_ok=True)
 
-    def uninstall_porn_fetch(self):
+    async def uninstall_porn_fetch(self):
         ui_popup(self.tr("""
 Important: 
 
@@ -2611,23 +2175,49 @@ If you still find any traces of Porn Fetch left, please open an Issue on Github 
 Thank you for using Porn Fetch ^^
 """))
 
-        self.uninstall_thread = UninstallThread()
-        self.uninstall_thread.signals.start_undefined_range.connect(self.start_undefined_range)
-        self.uninstall_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
-        self.uninstall_thread.signals.uninstall_finished.connect(self.uninstall_pornfetch_result)
-        self.threadpool.start(self.uninstall_thread)
+        uninstaller = UninstallPornFetch()
+        try:
+            await asyncio.to_thread(uninstaller.uninstall)
+            ui_popup("""
+Porn Fetch has been successfully uninstalled, it will close itself now and after that no traces should be left.
+This does NOT include:
+- The database feature (if you enabled it) 
+- Downloaded videos
+- Temporary files from the extraction (restart PC / delete /tmp for this)
 
-    def install_pornfetch(self):
+Thank you for using Porn Fetch :)
+If you have Feedback, you can write an E-Mail to:
+EchterAlsFake@proton.me <3""")
+            self.close()
+
+        except UnsupportedPlatform:
+            ui_popup(TRANSLATE_ERRORS.installation_unsupported)
+
+    async def install_pornfetch(self):
         app_name = self.ui.install_dialog_lineedit_custom_app_name.text()
-        if app_name == "" or app_name is None:
-            self.logger.info("You did not provide a custom App name. Using 'Porn Fetch' for the installation.")
-            app_name = "Porn Fetch"
+        if app_name:
+            config.__app_name__ = app_name
 
-        self.install_thread = InstallThread(app_name=app_name, portable_config_path=settings.fileName())
-        self.install_thread.signals.start_undefined_range.connect(self.start_undefined_range)
-        self.install_thread.signals.stop_undefined_range.connect(self.stop_undefined_range)
-        self.install_thread.signals.install_finished.connect(self.install_pornfetch_result)
-        self.threadpool.start(self.install_thread)
+        installer = InstallPornFetch()
+        try:
+            await asyncio.to_thread(installer.install)
+            ui_popup("Installation Successful!")
+
+        except UnsupportedPlatform:
+            ui_popup(TRANSLATE_ERRORS.installation_unsupported)
+
+        except FileNotFoundError as e:
+            ui_popup(f"{TRANSLATE_ERRORS.installation_file_not_found} ->: {e}")
+
+        except RuntimeError as e:
+            ui_popup(f"{TRANSLATE_ERRORS.installation_copy_failed} ->: {e}")
+
+        except Exception as e:
+            error = traceback.format_exc()
+            ui_popup(f"""
+During installation an unknown error happened, please report this!
+ERROR: {error}""")
+
 
     def install_porn_fetch_portable(self):
         settings.setValue("Misc/install_type", "portable")

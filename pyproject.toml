@@ -49,7 +49,8 @@ dependencies = [
     "unofficial-api-for-redtube @ git+https://github.com/EchterAlsFake/unofficial-api-for-redtube",
     "unofficial-api-for-tube8 @ git+https://github.com/EchterAlsFake/unofficial-api-for-tube8",
     "unofficial-api-for-thumbzilla @ git+https://github.com/EchterAlsFake/unofficial-api-for-thumbzilla",
-    "eaf_base_api @ git+https://github.com/echteralsfake/eaf_base_api"
+    "eaf_base_api @ git+https://github.com/echteralsfake/eaf_base_api",
+    "browser-cookie3>=0.20.1",
 ]
 
 

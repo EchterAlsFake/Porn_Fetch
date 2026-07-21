@@ -1,11 +1,13 @@
 import os
 import sys
+import shutil
 import ctypes
+import clients as clients
 
 from config import __version__
 from curl_cffi import Response
 from PySide6.QtCore import Slot, QObject
-from shared_functions import configure_app_logging
+from shared_functions import configure_app_logging, handle_error_gracefully
 
 
 logger = configure_app_logging(logger_name="PornFetch - [Update]")
@@ -88,23 +90,21 @@ class CheckUpdates:
                 version = str(json_stuff["version"]).strip("latest - ")
 
                 if float(version) > float(__version__):
-                    self.logger.info(f"A new update is available -->: {version}")
-                    self.signals.update_check.emit(True, json_stuff)
+                    logger.info(f"A new update is available -->: {version}")
 
                 else:
-                    self.logger.info(f"Checked for updates... You are on the latest version :)")
-                    self.signals.update_check.emit(False, json_stuff)
+                    logger.info(f"Checked for updates... You are on the latest version :)")
 
             elif response.status_code == 404:
-                self.logger.error("Temporary error reaching the server")
+                logger.error("Temporary error reaching the server")
                 return
 
             elif response.status_code == 500:
-                self.logger.error("Internal Server error, probably already fixing it :) ")
+                logger.error("Internal Server error, probably already fixing it :) ")
                 return
 
             elif response.status_code == 530 or response.status_code == 502:
-                self.logger.error("Server is currently offline. Probably already fixing it :)")
+                logger.error("Server is currently offline. Probably already fixing it :)")
 
         except (ConnectionError, ConnectionResetError, ConnectionRefusedError, TimeoutError):
             handle_error_gracefully(self, data=video_data.consistent_data, error_message="I could NOT check for updates. The server is either not reachable, or you don't have an IPv6 connection.")
@@ -112,16 +112,12 @@ class CheckUpdates:
 
 
 
-class AutoUpdateThread(QRunnable):
+class AutoUpdateThread:
     def __init__(self) -> None:
-        super(AutoUpdateThread, self).__init__()
-        self.signals: Signals = Signals()
         self.assets: dict = {}
-        self.logger = configure_app_logging(logger_name="Porn Fetch - [AutoUpdateThread]", log_file="PornFetch.log", level=logging.DEBUG)
 
     def run(self):
-        self.signals.start_undefined_range.emit()
-        self.logger.info("Fetching release information...")
+        logger.info("Fetching release information...")
         url = "https://echteralsfake.me/update"
         response: Response = clients.core.fetch(url=url, get_response=True)
 

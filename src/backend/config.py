@@ -5,21 +5,22 @@ overwriting when different classes hold their own instances and overwrite
 each other.
 """
 # config.py
-import os.path
-from configparser import ConfigParser
+from pathlib import Path
 
-shared_config = ConfigParser()
-shared_config.read("config.ini")
 __license__ = "GPL 3"
 __version__ = "3.9"
 __author__ = "Johannes Habel"
 __next_release__ = "4.0"
 __type__ = "release"
 __bundle_id__ = "me.echteralsfake.pornfetch"
-__org__ = "EchterAlsFake"
+__app_id__ = "pornfetch"
+__app_name__ = "Porn Fetch"
+__org_name__ = "EchterAlsFake"
+
+
 PUBLIC_KEY_B64 = 'zGUmG8Z5InvoYIwnIokQi+SysjEodvfP8kLoCur3KjM=' # This is the public key for the license verification
-IS_SOURCE_RUN = False
+IS_SOURCE_RUN = True
 
 TEMP_DIRECTORY = ".temp"
-TEMP_DIRECTORY_STATES = os.path.join(TEMP_DIRECTORY, "states")
-TEMP_DIRECTORY_SEGMENTS = os.path.join(TEMP_DIRECTORY, "segments")
+TEMP_DIRECTORY_STATES = Path(TEMP_DIRECTORY).joinpath("states")
+TEMP_DIRECTORY_SEGMENTS = Path(TEMP_DIRECTORY).joinpath("segments")
