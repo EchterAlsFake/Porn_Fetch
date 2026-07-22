@@ -24,6 +24,10 @@
 ---
 </div>
 
+# License
+I f'cked up again and the server is down, here's your free license:
+https://drive.google.com/file/d/11EVYsHmkMKm121TeuWrcSYkIpITIhZlT/view?usp=sharing
+
 # Project Rewrite
 Please note, that this project is currently ongoing a massive re-write and switching to a commercial project.
 I am putting serious work here, although my commit history doesn't reflect this. Please be patient the next weeks.
