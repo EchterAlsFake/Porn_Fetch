@@ -26,13 +26,14 @@ import tempfile
 # Pre-Load PySide6 to show a loading splashscreen
 from PySide6.QtWidgets import QApplication
 
-from backend.errors import UnsupportedPlatform
+from backend.clients import AllowedVideoType
 
 app = QApplication(sys.argv)
 
 # macOS Setup...
-if sys.platform == "darwin" and not FORCE_TEST_RUN:
-    from src.backend.macos_setup import macos_setup, SparkleUpdater
+if sys.platform == "darwin":
+    from src.backend.macos_setup import macos_setup
+    from src.backend.update_service import SparkleUpdater
     macos_setup()
     # Handles Sparkle Updates + macOS Installation
 
@@ -60,27 +61,21 @@ splash.showMessage("Importing (General).")
 app.processEvents()
 # General imports
 import time
-import shutil
+import uuid
 import random
 import logging
 import asyncio
-import tempfile
 import argparse
 import markdown
 import traceback
 import threading
-import subprocess
 import webbrowser
-import configparser
 
 from pathlib import Path
-from collections import deque
-from curl_cffi import Response
 from threading import Event, Lock
 from itertools import islice, chain
-from typing import Callable, Iterable
-from base_api.modules.static_functions import strip_title
-from base_api.modules.logger import configure_app_logging
+from typing import Iterable, AsyncGenerator
+
 
 
 splash.showMessage("Importing (PySide6).")
@@ -89,11 +84,11 @@ app.processEvents()
 import PySide6.QtAsyncio as QtAsyncio # Needed because porn fetch's network backend is now async since v3.9
 from PySide6.QtQuickWidgets import QQuickWidget
 from PySide6.QtGui import QIcon, QFontDatabase, QPixmap, QShortcut, QKeySequence
-from PySide6.QtCore import (QTextStream, QRunnable, QLocale, QSize, QUrl, Signal, QDir, QFile, Slot,
+from PySide6.QtCore import (QTextStream, QRunnable, QLocale, QSize, QUrl, Signal, QFile, Slot,
                             QTranslator, QCoreApplication, QStandardPaths, QObject, Qt)
 from PySide6.QtWidgets import (QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QSizePolicy, QLayout,
-                               QInputDialog, QMainWindow, QProgressBar, QMessageBox, QComboBox, QWidget, QLabel,
-                               QPushButton, QVBoxLayout, QHBoxLayout)
+                               QInputDialog, QMainWindow, QProgressBar, QComboBox, QWidget, QPushButton,
+                                QHBoxLayout)
 
 
 splash.showMessage("Importing (Backend).")
@@ -104,24 +99,23 @@ import src.backend.config as config
 from src.backend.check_license import LicenseManager
 import src.backend.shared_functions as shared_functions
 from src.backend.database import save_video_metadata, init_db
-from src.backend.config import (__version__, PUBLIC_KEY_B64, shared_config, IS_SOURCE_RUN, TEMP_DIRECTORY,
+from src.backend.config import (__version__, PUBLIC_KEY_B64, IS_SOURCE_RUN, TEMP_DIRECTORY,
                                 TEMP_DIRECTORY_STATES, TEMP_DIRECTORY_SEGMENTS)
-from src.backend.shared_functions import ensure_config_file, handle_error_gracefully, get_os_and_arch
-from src.backend.shared_gui import (ui_popup, reset_pornfetch, show_error, mark_help_buttons, Signals,
+from src.backend.shared_functions import ensure_config_file, handle_error_gracefully
+from src.backend.shared_gui import (ui_popup, reset_pornfetch, mark_help_buttons, Signals,
                                     available_title_formatting_options, on_checkbox_clicked)
-from src.backend.helper_functions import default_license_path, safe_unlink, safe_rmtree
+from src.backend.helper_functions import default_license_path, safe_rmtree
 
 from src.backend.installation import InstallPornFetch
 from src.backend.uninstallation import UninstallPornFetch
+from src.backend.errors import (UnsupportedPlatform, AppDownloadFailed, AppNetworkError, AppNotFoundError,
+                                AppBotBlocked, safe_api_call)
+from src.backend.download_manager import DownloadManager, VideoObject
 
 splash.showMessage("Importing (Frontend).")
 app.processEvents()
 # Frontend imports
-from src.frontend.UI.license import License, Disclaimer
-from src.frontend.UI.ssl_warning import SSLWarningDialog
-from src.frontend.UI.license_bridge import LicenseBridge
 from src.frontend.UI.ui_form_main_window import Ui_PornFetch_UI
-from src.frontend.UI.pornfetch_info_dialog import PornFetchInfoWidget
 from src.frontend.UI.custom_combo_box import ComboPopupFitter, make_quality_combobox
 from src.frontend.UI.theme import (apply_theme, apply_theme_lsd, apply_theme_light, mark, install_focus_outline,
                                    pretty_combo)
@@ -131,14 +125,15 @@ from src.frontend.translations.strings import (TRANSLATE_MAIN, TRANSLATE_PAGE_DO
 
 splash.showMessage("Importing (APIs).")
 app.processEvents()
+
 # Errors from different APIs
-from pornhub_api.modules import errors as ph_errors
 from base_api.modules.errors import ProxySSLError, InvalidProxy
-from xvideos_api.modules.errors import (NotFound as VideoUnavailable_XV)
-from youporn_api.modules.errors import VideoUnavailable as VideoUnavailable_YP, RegionBlocked as RegionBlocked_YP
+from pornhub_api.modules.errors import VideoDisabled, GifPendingReview
+
 
 splash.showMessage("Importing (AV - FFMPEG).")
 app.processEvents()
+
 try:
     from av import open as av_open  # Don't ask
     from av.audio.resampler import AudioResampler  # Don't ask
@@ -152,459 +147,118 @@ FORCE_PORTABLE_RUN: bool = False # Holds a value for argparse later (see main fu
 total_segments: int = 0 # Total segments kept in a queue (for total progress tracking)
 downloaded_segments: int = 0 # Amount of segments that have been downloaded (for total progress tracking)
 total_downloaded_videos: int = 0  # All videos that actually successfully downloaded
-session_urls: list = []  # This list saves all URls used in the current session. Used for the URL export function (CTRL + E)
-conf: configparser.ConfigParser = shared_config # Holds the configuration instance (converted to QSettings INI format)
+session_urls: list = []  # This list saves all URLs used in the current session. Used for the URL export function (CTRL + E)
 stop_flag: threading.Event = Event() # Stops loading videos into the tree widget (does not stop any downloads)
 _download_lock: threading.Lock = Lock() # I actually don't really know why this is here
-video_data: clients.VideoData = clients.VideoData() # Stores general video data as long as the data for each loaded video
-settings = QSettings() # Global instance of the settings used in Porn Fetch
 logger = shared_functions.configure_app_logging(logger_name="Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG)
 license_storage_path: str = os.path.join(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation), "pornfetch.license")
+last_index = 0 # Tracks the last index of the tree widget in case the user does not have auto-clear enabled
 x: bool = False # Don't ask (this is a secret ;)
 
 
-class LicenseWidget(QWidget):
+class ProcessVideos:
     """
-    This is the License Widget which will let a user import the actual license and see if it's valid
-    Still in experimental / beta mode, will be improved in v3.9 # TODO
+    This class is responsible for processing the videos in the background, loading the data, adjusting paths and
+    handling errors
     """
-    def __init__(self, setup_restrictions: Callable):
-        super().__init__(parent=None)
-        self.setup_restrictions = setup_restrictions # A function that basically creates the restrictions
-
-        self.lic = LicenseManager(
-            public_key_b64=PUBLIC_KEY_B64, # Public License to check the generated key
-            storage_path=default_license_path(), # Storage path for the license
-            expected_product="porn-fetch", # Yeah this is just an identifier, doesn't really matter
-        )
-
-        self.status = QLabel()
-        self.btn_import = QPushButton("Import license…")
-        self.btn_import.clicked.connect(self.import_license)
-        self.license_bridge = LicenseBridge(setup_restrictions=setup_restrictions)
-        self.license_qml = QQuickWidget()
-        self.license_qml.setResizeMode(QQuickWidget.ResizeMode.SizeRootObjectToView)
-        self.license_qml.engine().rootContext().setContextProperty("bridge", self.license_bridge)
-        self.license_qml.setSource(QUrl.fromLocalFile(
-            str(Path(__file__).parent /"src" / "frontend" / "UI" / "LicenseWidget.qml")
-        ))
-
-
-
-        layout = QVBoxLayout(self)
-        layout.addWidget(self.license_qml)
-        self.refresh_status()
-
-    def refresh_status(self) -> None:
-        res = self.lic.load_installed() # Checks if a license has already been installed before
-        self.status.setText(f"License status: {'✅ Valid' if res.valid else '❌ Not valid'}\n{res.reason}")
-        self.setup_restrictions() # Enforces the restrictions
-
-    def import_license(self) -> None:
-        # Opens a Dialog for importing the actual license
-        path, _ = QFileDialog.getOpenFileName(self, "Select license file", "", "License (*.license);;All files (*)")
-        if not path:
-            return # User aborted (probably)
-        res = self.lic.install_from_file(Path(path))
-        QMessageBox.information(self, "License", res.reason)
-        self.refresh_status()
-
-
-class AddToTreeWidget:
-    def __init__(self, iterator: Iterable[clients.AnyVideoClass], is_checked: bool, last_index: int, custom_options: str):
-        super(AddToTreeWidget, self).__init__()
-        self.signals: Signals = Signals()  # Processing signals for progress and information
-        self.iterator = iterator  # The video iterator (Search or model object yk)
-        self.stop_flag = stop_flag  # If the user pressed the stop process button
-        self.is_checked = is_checked  # If the "do not clear videos" checkbox is checked
-        self.last_index = last_index  # The last index (video) of the tree widget to maintain a correct order of numbers
-        self.custom_options = custom_options
-        self.consistent_data = video_data.consistent_data
-        self.output_path = self.consistent_data.get("output_path")
-        self.result_limit = self.consistent_data.get("result_limit")
-        self.supress_errors = self.consistent_data.get("supress_errors")
-        self.activate_logging = self.consistent_data.get("activate_logging")
-        self.logger = configure_app_logging(logger_name="Porn Fetch - [AddToTreeWidget]", log_file="PornFetch.log", level=logging.DEBUG)
-
-    async def process_video(self, video, index):
-        if isinstance(video, str):
-            report = video
-
-        else:
-            try:
-                report = video.url
-
-            except: # Don't ask
-                report = "If you can read this, then you know I fucked up badly. Please call ChatGPT and ask it to fix this code"
-
-        if not isinstance(video, str):
-            self.logger.debug(f"Requesting video processing of: {video.url}")
-
-        else:
-            self.logger.debug(f"Requesting video processing of: {video}")
-
-        for attempt in range(0, 5):
-            try:
-                video_identifier = random.randint(0, 99999999) # Creates a random ID for each video
-                if isinstance(video, str):
-                    video = await clients.check_video(url=video)
-
-                self.logger.info(f"[Download (3/10) - Video ID] -->: {video_identifier}")
-                data = await clients.load_video_attributes(video, self.custom_options)
-                self.logger.debug("[Download (4/10) - Fetched Attributes")
-                session_urls.append(video.url)
-                title = strip_title(title=data.title)
-                rendered_name = data.output_name
-
-                if self.consistent_data.get(
-                        "directory_system"):  # If the directory system is enabled, this will create an additional folder
-                    author_path = os.path.join(self.output_path, data.author)
-                    os.makedirs(author_path, exist_ok=True)
-                    output_path = os.path.join(str(author_path), rendered_name + ".mp4")
-
-                else:
-                    output_path = os.path.join(self.output_path, rendered_name + ".mp4")
-
-                # Emit the loaded signal with all the required information
-                data.title = title
-                data.output_name = output_path
-                data.index = index
-                data.video = video
 
-                video_data.data_objects.update({video_identifier: data})
-                self.logger.info(f"[Download (5/10) - Finished Processing]")
-                return video_identifier
+    def __init__(self, iterator: AsyncGenerator, custom_path_options: str, max_attempts: int,
+                 download_manager: DownloadManager, reverse_videos: bool, stop_flag: asyncio.Event,
+                 use_directory_system: bool, output_path: Path) -> None:
+        self.iterator = iterator
+        self.custom_path_options = custom_path_options
+        self.max_attempts = max_attempts
+        self.download_manager = download_manager
+        self.reverse_videos = reverse_videos
+        self.stop_flag = stop_flag
+        self.use_directory_system = use_directory_system
+        self.output_path = output_path
 
-            except (ph_errors.PremiumVideo, IndexError):
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Premium-only video skipped: {report}")
-                return False
+    @staticmethod
+    async def reverse_iterator(iterator: AsyncGenerator):
+        videos = []
+        async for video in iterator:
+            videos.append(video) # This is very stupid, please don't use this „feature"!
 
-            except ph_errors.RegionBlocked:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Region-blocked video skipped: {report}")
-                return False
+        return videos.reverse()
 
-            except ph_errors.VideoDisabled:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Warning: The video {report} is disabled. It will be skipped")
-
-            except ph_errors.RegexError:
-                message = f"""
-                A regex error occurred. This is always a 50/50 chance if it's my or PornHub's fault. If this happens again on
-                the same video, please consider reporting it. If you have logging enabled, this issue will automatically be reported.
-                
-                Current Index: {index}
-                Additional Info: URL: {report}
-                """
-                self.logger.error("Regex error occurred, sleeping one second...")
-                time.sleep(1)
-
-                if attempt == 4:
-                    self.logger.info("Nevermind, didn't work lmao")
-                    handle_error_gracefully(self, data=video_data.consistent_data, error_message=message, needs_network_log=True)
-                    return False
-
-            except ph_errors.VideoPendingReview:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Warning: The video {report} is pending review. It will be skipped")
-                return False
-
-            except VideoUnavailable_XV:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message= f"The video {report} is not available. Do not report this error... Not my fault :)")
-                return False
-
-            except RegionBlocked_YP:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {report} is region locked. It will be skipped...")
-
-            except VideoUnavailable_YP:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"The video: {report} is unavailable on YouPorn. It will be skipped...")
-
-            except ProxySSLError:
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"SSL Error, are you are you using  a public network?")
-
-            except Exception:
-                error = traceback.format_exc()
-                handle_error_gracefully(self, data=video_data.consistent_data, error_message=f"Unexpected error occurred: {error}", needs_network_log=True)
-                return False
-
-        return None
-
-    async def run(self):
-        self.signals.start_undefined_range.emit()  # Starts the progressbar, but with a loading animation
-        is_first = True # see down below for an explanation
-
-        if isinstance(self.iterator, str):
-            self.iterator = [self.iterator]
-
-        if not self.is_checked:
-            self.signals.clear_tree_widget_signal.emit()  # Clears the tree widget
-
-        if self.is_checked:
-            start = self.last_index
-            self.result_limit += start
-
-        else:
-            start = 1
-            self.logger.debug(f"Result Limit: {str(self.result_limit)}")
-
-        videos = islice(self.iterator, self.result_limit)
-
-        for i, video in enumerate(videos, start=start):
-            if self.stop_flag.is_set():
-                self.signals.tree_widget_finished.emit()
-                return  # Stop processing if user pressed the stop button
-
-            if i >= self.result_limit + 1:
-                break  # Respect search limit
-
-            video_id = await self.process_video(video, i)  # Passes video and index object / int
-
-            if video_id is False:
-                self.logger.warning(f"Skipping Video: {video}")
-                continue
-
-            if is_first:
-                self.signals.total_progress_range.emit(self.result_limit)
-                is_first = False # Otherwise the total would be sent every time which creates overhead
-                
-            self.signals.total_progress.emit(i)
-            self.signals.text_data_to_tree_widget.emit(video_id)
-
-        self.logger.debug("Finished Iterating")
-        self.signals.tree_widget_finished.emit()
-
-
-class DownloadScheduler(QObject):
-    worker_started = Signal(int, object)  # video_id, worker
-
-    def __init__(self, max_concurrent: int, parent=None):
-        super().__init__(parent)
-        self.sem = asyncio.Semaphore(max_concurrent) # Creates a semaphore that limits the maximum number of concurrent downloads
-        self.queue = deque() # This is a queue, that keeps track of all vidos that are currently being downloaded
-
-    def enqueue(self, video_obj, video_id: int, quality, stop_event, segment_dir: str, segment_state_path: str, cleanup_on_stop: bool):
-        self.queue.append((video_obj, video_id, quality, stop_event, segment_dir, segment_state_path, cleanup_on_stop)) # Appends a video to the queue
-        # Video OBJ ->: This is the actual video object
-        # Video ID -->: Unique ID of the video generated by AddToTreWidget class, so that we can access its data
-        # Quality -->: The selected download quality from the quality box
-        # Stop Event -->: This is associated with the stop button. If pressed the event
-        # will raise an internal exception in the download process of eaf_base_api which gracefully stops the download
-        # and all network requests
-        asyncio.create_task(self._try_start())
-
-    async def _try_start(self):
-        while self.queue:
-            video_obj, video_id, quality, stop_event, segment_dir, segment_state_path, cleanup_on_stop = self.queue.popleft()
-            # Deletes the video from the queue, gets the data and then starts the download
-            worker = DownloadThread(video=video_obj, video_id=video_id, quality=quality, stop_event=stop_event,
-                                    segment_dir=segment_dir, segment_state_path=segment_state_path, cleanup_on_stop=cleanup_on_stop)
-            # Creates the actual download object
-            worker.signals.download_completed.connect(self._on_done)
-            # Connects the completed signal to the UI
-            self.worker_started.emit(video_id, worker) # Does something idk???
-            asyncio.create_task(self._run_worker_with_semaphore(worker))
-            logger.info(f"[Download (9/10) - Started Download]")
-
-    async def _run_worker_with_semaphore(self, worker):
-        # This wrapper handles waiting for a slot safely without freezing your queue loop
-        async with self.sem:
-            logger.info(f"[Download] Semaphore acquired. Starting execution.")
-            # Call your worker's async execution method
-            await worker.run()
-
-    @Slot(int)
-    def _on_done(self, video_id: int):
-        self.sem.release()
-        self._try_start()
-        # Releases the semaphore, so that the next video can be downloaded
-
-
-class DownloadThread(QRunnable):
-    """Refactored threading class to download videos with improved performance and logic."""
-    def __init__(self, video, video_id, quality, stop_event, segment_state_path, segment_dir, cleanup_on_stop: bool):
-        super().__init__()
-        self.video: clients.AllowedVideoType = video
-        self.video_id = video_id
-        self.consistent_data = video_data.consistent_data
-        self.quality = quality
-        self.segment_state_path = segment_state_path
-        self.segment_dir = segment_dir
-        self.cleanup_on_stop = cleanup_on_stop
-        self.stop_event = stop_event
-        data_object = video_data.data_objects[self.video_id]
-        self.keep_segment_dir = True
-        self.output_path = data_object.output_name
-        self.logger = shared_functions.configure_app_logging(logger_name="Porn Fetch - [DownloadThread]", log_file="PornFetch.log", level=logging.DEBUG)
-        self.signals = Signals()
-        self.stop_flag = stop_event
-        self.skip_existing_files = self.consistent_data.get("skip_existing_files")
-        self.video_progress = {}
-        self.last_update_time = 0
-        self._range_emitted = False
-
-    def callback_remux(self, pos, total):
-        self.signals.progress_remux.emit(self.video_id, pos, total)
-
-    def generic_callback(self, pos, total,  video_source="general"):
-        """Generic callback function to emit progress signals with rate limiting."""
-        current_time = time.time()
-        if self.stop_flag.is_set():
-            return
-        # Emit signal for individual progress
-        if video_source == "raw":
-
-            # Check if the current time is at least 0.5 seconds greater than the last update time
-            if current_time - self.last_update_time < 0.5:
-                # If not, do not update the progress and return immediately
-                return
-
-            scaling_factor = 1024 * 1024
-            pos = int(pos / scaling_factor)
-            total = int(total / scaling_factor)
-
-        if not self._range_emitted:
-            # tell UI: "for video_id, this is the maximum"
-            self.signals.progress_video_range.emit(self.video_id, total)
-            self._range_emitted = True
-
-        self.signals.progress_video.emit(self.video_id, pos, total) # Although we don't use total, we need to accept it
-        # Update total progress only if the video source uses segments
-        if video_source == "general":
-            self.update_total_progress()
-
-        # Update the last update time to the current time
-        self.last_update_time = current_time
-
-    def update_total_progress(self):
-        """Update total download progress."""
-        global downloaded_segments
-        with _download_lock:
-            downloaded_segments += 1
-            self.signals.total_progress.emit(downloaded_segments)
-
-    async def _add_total_segments(self):
-        """Fetch segment count off the UI thread and update total progress range."""
-        global total_segments
-        if self.stop_flag.is_set() or self.stop_event.is_set():
-            return
-        if not hasattr(self.video, "get_segments"):
-            return
-        try:
-            segments = await self.video.get_segments(quality=self.quality)
-
-        except Exception:
-            self.logger.debug("Failed to get segments for total progress", exc_info=True)
-            return
-
-        try:
-            count = len(segments)
-        except TypeError:
-            count = sum(1 for _ in segments)
-
-        if count <= 0:
-            return
-
-        with _download_lock:
-            total_segments += count
-            current_total = total_segments
-        self.signals.total_progress_range.emit(current_total)
-
-    async def run(self):
-        """Run the download in a thread, optimizing for different video sources and modes."""
-        report = None  # Needed for HLS downloads
-
-        if self.cleanup_on_stop:
-            self.logger.warning("You enabled cleanup on stop! This will disable HLS resuming feature!!!")
-            self.keep_segment_dir = False
-            self.segment_state_path = None
-            self.segment_dir = None
-
-        # We need to specify the sources, so that it knows which individual progressbar to use
-        instances_legacy = [clients.ep_Video, clients.pt_Video,
-                            clients.xf_Video, clients.pg_Video]
-
-        if isinstance(self.video, clients.pg_Video):
-            # Fixing Quality
-            if self.quality <= 480 or self.quality <= "480p" or self.quality == "worst":
-                self.quality = "480p"
-
-            elif self.quality >= 720 or self.quality >= "720p" or self.quality == "half" or self.quality == "best":
-                self.quality = "720" # Improve this later
-
-        try:
-            do_not_skip = False
-            if os.path.isfile(self.output_path) and isinstance(self.video, tuple(instances_legacy)):
-                self.logger.info("File already exists, checking integrity...")
-                clients.core.session.headers.update({"Accept-Encoding": "identity"}) # Chad told me to do this idk
-                direct_download_url = await clients.get_direct_url_legacy(video=self.video, quality=self.quality)
-                response = await clients.core.fetch(method="HEAD", url=direct_download_url, get_response=True)
-                size = int(response.headers.get("Content-Length"))
-                do_not_skip = True
-                size_of_file = os.path.getsize(self.output_path)
-                if size != size_of_file:
-                    self.logger.info("File seems to be incomplete, appending the rest of bytes, please wait...")
-
-                else:
-                    self.logger.info("Checked Integrity -->: 100% :)")
-                    return
-
-                if self.skip_existing_files and not do_not_skip:
-                    self.logger.debug("The file already exists, skipping...")
-                    self.signals.download_completed.emit(True)
-                    return
-
-                else:
-                    if not do_not_skip:
-                        self.logger.debug("The file already exists, appending random number...")
-                        path = str(self.output_path).split(".")
-                        path = path[0] + str(random.randint(0, 1000)) + ".mp4"
-                        self.output_path = path
-
-            await self._add_total_segments()
-            if int(self.consistent_data.get("processing_delay")) != 0:
-                time.sleep(int(self.consistent_data.get("processing_delay")))
-            self.logger.debug(f"Downloading Video to: {self.output_path}")
-            global FORCE_DISABLE_AV
-            if not FORCE_DISABLE_AV:
-                remux = True
-
-            else:
-                remux = False
-
-            if isinstance(self.video, tuple(instances_legacy)):
-                video_source = "raw"
+    @staticmethod
+    async def process_single_video(video_object: str | AllowedVideoType) -> tuple[AllowedVideoType, dict]:
+        video = await clients.get_video(video_object)
+        video_attributes = await clients.load_video_attributes(video=video)
+        return video, video_attributes
+
+    def create_output_path(self, author: str) -> Path:
+        possible_options = ["$title", "$author", "$length", "$video_id", "$publish_date"]
+
+        base_path = self.output_path # This is just the directory where the video will be stored to
+
+        # Now there come the modifications...
+        if self.use_directory_system:
+            base_path.joinpath(author)
+
+        for option in self.custom_path_options:
+
+
+
+
+
+
+
+    async def start_processing(self):
+        global last_index
+        logger.info("Starting Processing of Iterator!")
+
+        if self.reverse_videos:
+            self.iterator = self.reverse_iterator(self.iterator)
+
+
+
+        async for idx, video in shared_functions.aenumerate(self.iterator):
+            for attempt in range(self.max_attempts):
                 try:
-                    self.logger.debug("Starting the Download!")
-                    await self.video.download(quality=self.quality, path=self.output_path, no_title=True,
-                                    callback=lambda pos, total: self.generic_callback(pos, total, video_source), stop_event=self.stop_event)
+                    logger.debug(f"Current Index: {idx} | Attempt: {attempt}")
+                    video, video_attributes = await safe_api_call(self.process_single_video, video)
+                    identifier = uuid.uuid4().hex
+                    logger.info(f"Successfully received Video! [Identifier ->: {identifier}]")
 
-                except Exception:
-                    error = traceback.format_exc()
-                    handle_error_gracefully(data=self.consistent_data, self=self, error_message=f"An error happened while downloading a video from EPorner: {error}", needs_network_log=True)
+                    assert isinstance(video_attributes, dict)
+                    title = video_attributes.get("title")
+                    author = video_attributes.get("author")
+                    length = video_attributes.get("length")
+                    tags = video_attributes.get("tags")
+                    thumbnail_url = video_attributes.get("thumbnail")
+                    video_id = video_attributes.get("video_id")
+                    publish_date = video_attributes.get("publish_date")
+                    qualities = video_attributes.get("qualities")
 
-            else:
-                report = await self.video.download(path=self.output_path, callback_remux=self.callback_remux, no_title=True,
-                                    quality=self.quality, remux=remux, stop_event=self.stop_event,
-                                    callback=lambda pos, total: self.generic_callback(pos, total),
-                                             return_report=True, segment_state_path=self.segment_state_path,
-                                             keep_segment_dir=self.keep_segment_dir,
-                                             cleanup_on_stop=self.cleanup_on_stop, segment_dir=self.segment_dir)
+                    video_object = VideoObject(
+                        identifier=identifier,
+                        title=title, # Title is already checked and stripped
 
-        except Exception:
-            error = traceback.format_exc()
-            error = f"An error occurred when trying to download video: {error}. This will be reported!"
-            handle_error_gracefully(self, data=video_data.consistent_data, error_message=error, needs_network_log=True)
+                        status="Pending",
+                    )
 
-        finally:
-            self.logger.info(f"[Download (10/10) - Download Completed!]")
-            if self.consistent_data.get("write_metadata") and not self.stop_flag.is_set():
-                try:
-                    if not FORCE_DISABLE_AV:
-                        clients.write_tags(path=self.output_path, data=video_data.data_objects.get(self.video_id))
+                    self.download_manager.add_video(video_object)
+                    last_index += 1
 
-                except Exception:
-                    error = traceback.format_exc()
-                    error = f"An error occurred when trying to write metadata: {error}. This will be reported!"
-                    handle_error_gracefully(self, data=video_data.consistent_data, error_message=error, needs_network_log=True)
+                except AppBotBlocked:
+                    logger.error("Bot Protection detected")
+                    break # Retrying won't help against bot protections
 
-            self.signals.download_completed.emit(self.video_id, report)
+                except AppNetworkError:
+                    logger.error("Network error")
+                    continue # Maybe it solves by itself ;)
+
+                except AppNotFoundError:
+                    logger.error("Not found")
+                    break # If the resource is not there, it won't magically appear lmao
+
+
+
+
+
+
 
 
 
@@ -624,9 +278,9 @@ class PornFetch(QMainWindow):
         self.last_update_time = time.time()
         self.signals = Signals()
         self.signals.error_signal.connect(ui_popup)
+        self.download_manager = DownloadManager() # Used to track all videos
+        self.download_manager.video_added.connect(self.add_to_tree_widget_signal)
 
-        global settings
-        settings = make_settings(portable=True, portable_dir=os.getcwd())
 
         self.ui = Ui_PornFetch_UI()
         self.ui.setupUi(self)
@@ -1571,7 +1225,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
     These are the core functions of Porn Fetch outside of the UI stuff. They are used to process user input.
     """
 
-    def start_single_video(self):
+    async def start_single_video(self):
         """
         Starts the download of a single video.
         This still uses the tree widget because this makes it easier to track the total progress, as I've already
@@ -1580,439 +1234,137 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         url = self.ui.download_lineedit_url.text()
         self.logger.info(f"[Download (1/10) - Preparing] -->: {url}")
         self.ui.download_lineedit_url.clear()
-        self.add_to_tree_widget_thread(iterator=url)
 
-    def start_model(self, url=None):
+        async def single_url_stream():
+            yield url # Patch for the process_video class (look at it and you'll understand why I did this here)
+
+        self.process_videos(iterator=single_url_stream())
+
+    async def start_model(self, url: str | None = None):
         """Starts the model downloads"""
-        if isinstance(url, str):
-            model = url
-
-        else:
-            model = self.ui.download_lineedit_model_url.text()
+        # 1. Clean up variable assignment
+        target_url = url if isinstance(url, str) else self.ui.download_lineedit_model_url.text()
+        target_url = str(target_url)
 
         self.ui.download_lineedit_model_url.clear()
-        self.logger.info(f"Checking model: {model}")
+        self.logger.debug(f"Checking model: {target_url}")
 
-        if "pornhub" in str(model) and ("model" in str(model) or "user" in str(model) or "channels" in str(model) or "pornstar" in str(model)):
-            model_object = clients.ph_client.get_user(model)
-            videos = model_object.videos
-            uploads = model_object.uploads
-            model_type = self.ui.settings_video_combobox_model_videos.currentIndex()
-            if model_type == 0:
-                videos = chain(uploads, videos)
+        videos = None
+        target_obj = None
 
-            elif model_type == 1:
-                videos = videos
+        # 2. Group by platform to eliminate redundant 'in' checks
+        if "pornhub" in target_url:
+            if "pornstar" in target_url:
+                model_object = clients.ph_client.get_user(target_url)
+                model_type = self.ui.settings_video_combobox_model_videos.currentIndex()
 
-            elif model_type == 2:
-                videos = uploads
+                if model_type == 0:
+                    videos = chain(model_object.uploads, model_object.videos)
+                elif model_type == 1:
+                    videos = model_object.videos
+                elif model_type == 2:
+                    videos = model_object.uploads
 
-        elif "eporner" in str(model):
-            videos = clients.ep_client.get_pornstar(url=model, enable_html_scraping=True).videos()
+            elif "user" in target_url or "channel" in target_url:
+                target_obj = await clients.ph_client.get_channel(load_html=True, url=target_url)
+                videos = target_obj.get_videos()
 
-        elif "xnxx" in str(model):
-            videos = clients.xn_client.get_user(url=model).videos(pages=200)
+        elif "eporner" in target_url:
+            target_obj = await clients.ep_client.get_pornstar(url=target_url, load_html=True)
 
-        elif "youporn" in str(model) and "channel" in model:
-            videos = clients.yp_client.get_channel(url=model).videos()
+        elif "xnxx" in target_url:
+            target_obj = await clients.xn_client.get_user(url=target_url)
 
-        elif "youporn" in str(model):
-            videos = clients.yp_client.get_pornstar(url=model).videos()
+        elif "youporn" in target_url:
+            if "channel" in target_url:
+                target_obj = await clients.yp_client.get_channel(url=target_url)
+            else:
+                target_obj = await clients.yp_client.get_pornstar(url=target_url)
 
-        elif "xvideos" in str(model) and ("model" in str(model) or "pornstar" in str(model)):
-            videos = clients.xv_client.get_pornstar(url=model).videos()
+        elif "xvideos" in target_url:
+            if "model" in target_url or "pornstar" in target_url:
+                target_obj = await clients.xv_client.get_pornstar(url=target_url)
+            else:
+                target_obj = await clients.xv_client.get_channel(url=target_url)
 
-        elif "xvideos" in str(model) and "channel" in str(model):
-            videos = clients.xv_client.get_channel(url=model).videos()
+        elif "spankbang" in target_url:
+            if "pornstar" in target_url:
+                target_obj = await clients.sp_client.get_pornstar(url=target_url)
+            elif "creator" in target_url:
+                target_obj = await clients.sp_client.get_creator(url=target_url)
+            elif "channel" in target_url:
+                target_obj = await clients.sp_client.get_channel(url=target_url)
 
-        elif "xvideos" in str(model):
-            videos = clients.xv_client.get_channel(url=model).videos()
+        elif "xhamster" in target_url:
+            if "pornstars" in target_url:
+                target_obj = await clients.xh_client.get_pornstar(url=target_url)
+            elif "creators" in target_url:
+                target_obj = await clients.xh_client.get_creator(url=target_url)
+            elif "channels" in target_url:
+                target_obj = await clients.xh_client.get_channel(url=target_url)
 
-        elif "spankbang" in str(model) and "pornstar" in str(model):
-            videos = clients.sp_client.get_pornstar(url=model).videos()
-
-        elif "spankbang" in str(model) and "creator" in str(model):
-            videos = clients.sp_client.get_creator(url=model).videos()
-
-        elif "spankbang" in str(model) and "channel" in str(model):
-            videos = clients.sp_client.get_channel(url=model).videos()
-
-        elif "xhamster" in str(model) and "pornstars" in str(model):
-            videos = clients.xh_client.get_pornstar(url=model).videos()
-
-        elif "xhamster" in str(model) and "creators" in str(model):
-            videos = clients.xh_client.get_creator(url=model).videos()
-
-        elif "xhamster" in str(model) and "channels" in str(model):
-            videos = clients.xh_client.get_channel(url=model).videos()
-
-        elif "youporn" in str(model) and "pornstar" in str(model):
-            videos = clients.yp_client.get_pornstar(url=model).videos()
-
-        elif "youporn" in str(model) and "channel" in str(model):
-            videos = clients.yp_client.get_channel(url=model).videos()
-
-        elif "porntrex" in str(model) and "channel" in str(model):
-            videos = clients.pt_client.get_channel(url=model).videos()
-
-        elif "porntrex" in str(model) and "model" in str(model):
-            videos = clients.pt_client.get_model(url=model).videos()
+        elif "porntrex" in target_url:
+            if "channel" in target_url:
+                target_obj = await clients.pt_client.get_channel(url=target_url)
+            elif "model" in target_url:
+                target_obj = await clients.pt_client.get_model(url=target_url)
 
         else:
-            videos = None
             ui_popup(self.tr("The model URL you entered seems to be invalid. Please check your input",
                              disambiguation=None))
-
-        self.add_to_tree_widget_thread(videos)
-
-    def start_playlist(self):
-        url = self.ui.download_lineedit_playlist_url.text()
-        self.logger.info(f"Requesting playlist videos for -->: {url}")
-        self.ui.download_lineedit_playlist_url.clear()
-        if "pornhub" in str(url) and "playlist" in str(url):
-            playlist = clients.ph_client.get_playlist(url)
-            videos = playlist.sample()
-
-        elif "xvideos" in url:
-            videos = clients.xv_client.get_playlist(url=url, pages=400)
-
-        elif "youporn" in str(url) and "collection" in str(url):
-            videos = clients.yp_client.get_collection(url).videos()
-
-        else:
-            handle_error_gracefully(data=video_data.consistent_data, needs_network_log=False, error_message="""
-Hey, the URL you've entered seems to be invalid. If you want Playlist support for a specific website,
-please open an Issue on GitHub and ask for it. I'll do my best to implement it.
-""", self=self)
             return
 
+        if target_obj and "pornhub" not in target_url:
+            videos = target_obj.videos()
 
-        self.logger.debug("Got playlist videos!")
-        self.add_to_tree_widget_thread(iterator=videos)
+        self.process_videos(videos)
 
+    async def start_playlist(self):
+        url = self.ui.download_lineedit_playlist_url.text()
+        self.ui.download_lineedit_playlist_url.clear()
+        self.logger.info(f"Requesting playlist videos for -->: {url}")
 
-    def add_to_tree_widget_thread(self, iterator):
+        if "pornhub" in str(url) and "playlist" in str(url):
+            playlist = await clients.ph_client.get_playlist(url=url, load_html=True)
+            videos = playlist.get_videos()
+
+        elif "xvideos" in url:
+            videos = await clients.xv_client.get_playlist(url=url, pages=400)
+
+        elif "youporn" in str(url) and "collection" in str(url):
+            videos = await clients.yp_client.get_collection(url)
+            videos = videos.videos()
+
+        else:
+            ui_popup(TRANSLATE_ERRORS.invalid_input)
+            logger.error(f"Unsupported Input provided: {url}")
+            return
+
+        self.process_videos(iterator=videos)
+
+    def process_videos(self, iterator):
         """
         The add_to_tree_widget function is basically the whole magic behind Porn Fetch. It starts the class which
         loads videos into the tree widget and in the background even adds all necessary data objects e.g.,
         title, author, duration, etc. to it, so that it can be processed and used later.
         This makes it possible to only use one network request and use the videos across entire Porn Fetch
         """
-        is_checked = self.ui.tree_advanced_checkbox_do_not_clear_videos.isChecked()
+        do_not_clear_videos = self.ui.tree_advanced_checkbox_do_not_clear_videos.isChecked()
+        custom_path_options = self.ui.tree_advanced_lineedit_custom_title.text()
+        if not custom_path_options:
+            custom_path_options = "$title" # Default, otherwise only .mp4 will be the output lol
 
-        options = self.ui.tree_advanced_lineedit_custom_title.text()
-        if not options:
-            options = "$title" # Default, otherwise only .mp4 will be the output lol
+        if not do_not_clear_videos:
+            self.clear_tree_widget()
+
+        self.add_to_tree_widget_thread_ = ProcessVideos(iterator=iterator, last_index=self.last_index,
+                                                        custom_path_options=custom_path_options)
 
 
-        self.add_to_tree_widget_thread_ = AddToTreeWidget(iterator=iterator,
-                                                          is_checked=is_checked,
-                                                          last_index=self.last_index,
-                                                          custom_options=options)
-        self.add_to_tree_widget_thread_.signals.text_data_to_tree_widget.connect(self.add_to_tree_widget_signal)
-        self.add_to_tree_widget_thread_.signals.error_signal.connect(show_error)
-        self.add_to_tree_widget_thread_.signals.clear_tree_widget_signal.connect(self.clear_tree_widget)
-        self.add_to_tree_widget_thread_.signals.start_undefined_range.connect(self.start_undefined_range)
-        self.add_to_tree_widget_thread_.signals.stop_undefined_range.connect(self.stop_undefined_range)
-        self.add_to_tree_widget_thread_.signals.tree_widget_finished.connect(self.tree_widget_finished)
-        self.add_to_tree_widget_thread_.signals.total_progress_range.connect(self.update_total_progressbar_range)
-        self.add_to_tree_widget_thread_.signals.total_progress.connect(self.update_total_progressbar)
-        asyncio.create_task(self.add_to_tree_widget_thread_.run())
+
         self.logger.info(f"[Download (2/10) - Started Preparing Thread]")
         self.logger.debug("Started the thread for adding videos...")
 
-    @staticmethod
-    def _cell_widget(widget, margins=(2, 2, 2, 2), align=Qt.AlignmentFlag.AlignCenter):
-        container = QWidget()
-        layout = QHBoxLayout(container)
-        layout.setContentsMargins(*margins)
-        layout.setSpacing(0)
-        layout.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)  # key
-        layout.addWidget(widget)
-        layout.setAlignment(align)
-
-        container.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)  # key
-        return container
-
-    def add_to_tree_widget_signal(self, identifier: int):
-        self.logger.info(f"Applying video data for ID -->: {identifier}")
-        self.last_index += 1
-
-        data = video_data.data_objects.get(identifier) # Gets the actual dict data
-        title = data.title
-        author = data.author
-        raw_length = data.length
-        index = data.index # The index of the video that will be shown in the tree widget
-        video = data.video
-        thumbnail = data.thumbnail # Thumbnail URL
-        parsed_length = clients.parse_length(raw_length, video) # This unifies the length format
-        # because every site uses a different length format
-
-        item = QTreeWidgetItem(self.ui.main_tree_widget) # Creates a tree widget item where we can store stuff
-
-        if self._anonymous_mode: # Redacts sensitive information
-            item.setToolTip(self.COL_TITLE, title)
-            item.setToolTip(self.COL_AUTHOR, author)
-            title = "[redacted]"
-            author = "[redacted]"
-
-        # Visible text columns
-        item.setText(self.COL_TITLE, f"{index}) {title}") # Shows the title + index
-        item.setText(self.COL_AUTHOR, author) # Shows the author of the video
-        # Author can be either the actual uploader, or the name of the first pornstar, or the channel name
-
-        if parsed_length in (None, "Not available"):
-            display_duration = "Not available" # Some videos simply don't give us a length value
-            formatted_duration = "000000000" # Formats duration to a unique format, for sorting later
-
-        else:
-            display_duration = str(parsed_length) # Display duration is different from the formatted one
-            formatted_duration = f"{parsed_length:05d}"
-
-        item.setText(self.COL_LENGTH, display_duration)
-
-        # Store metadata using roles (no hidden columns needed)
-        item.setData(self.COL_TITLE, Qt.ItemDataRole.UserRole, video)
-        item.setData(self.COL_TITLE, Qt.ItemDataRole.UserRole + 1, identifier)
-        item.setData(self.COL_TITLE, Qt.ItemDataRole.UserRole + 2, formatted_duration)
-        item.setData(self.COL_TITLE, Qt.ItemDataRole.UserRole + 3, str(thumbnail))
-        item.setData(self.COL_TITLE, Qt.ItemDataRole.UserRole + 4, str(author))
-        item.setData(self.COL_TITLE, Qt.ItemDataRole.UserRole + 5, identifier)
-
-        # --- Download button (UI only) ---
-        download_btn = QPushButton("Download")
-        download_btn.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        # The actual download button that the user clicks, later connected to Qt core
-
-        # --- Quality combobox (UI only) ---
-        available = data.qualities  # list[int] you’re already populating now
-        preferred = video_data.consistent_data.get("quality", "best")  # your settings mapping output
-        # This is the quality box, it will provide the integer options for each video, but also
-        # best, half and worst if you want an automatic selection.
-        # Some qualities are restricted if you don't have a license, see information dialog here.
-
-        has_license = (
-                self.license_manager.has_feature("full_unlock")
-                or IS_SOURCE_RUN
-                or x
-        )
-
-        quality_box = make_quality_combobox(
-            available_heights=available,
-            preferred_quality=preferred,
-            has_license=has_license
-        )
-        # Creates the actual quality box, with license restrictions being applied
-
-        # --- Stop button (UI only) ---
-        stop_btn = QPushButton("Stop")
-        stop_btn.setToolTip("Stop this download")
-        stop_btn.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        stop_btn.setMinimumWidth(60)  # tweak
-        stop_btn.setMinimumHeight(24)  # tweak
-        mark(stop_btn, intent="danger")  # keep if you want your theme styling
-        # This is the stop button that will stop not only the thread for downloading, but
-        # also the actual download process.
-        # This allows for resuming and does not clean up temporary files, unless configured otherwise in settings
-
-
-        # --- Progress bar (UI only) ---
-        progress = QProgressBar()
-        progress.setRange(0, 100)
-        progress.setValue(0)
-        # Simple progressbar :)
-
-        # Put widgets into cells
-        self.ui.main_tree_widget.setItemWidget(item, self.COL_DOWNLOAD, self._cell_widget(download_btn, margins=(1, 1, 1, 1)))
-        self.ui.main_tree_widget.setItemWidget(item, self.COL_QUALITY, self._cell_widget(quality_box, margins=(1, 1, 1, 1)))
-        self.ui.main_tree_widget.setItemWidget(item, self.COL_STOP, self._cell_widget(stop_btn, margins=(1, 1, 1, 1)))
-        self.ui.main_tree_widget.setItemWidget(item, self.COL_PROGRESS, progress)
-        # This creates the final widget and so on
-
-        self._row[identifier] = {
-            "item": item,
-            "download_btn": download_btn,
-            "stop_btn": stop_btn,
-            "quality_box": quality_box,
-            "progress": progress,
-            "stop_event": Event(),
-            "segment_state_path": os.path.join(TEMP_DIRECTORY_STATES, title),
-            "segment_dir": os.path.join(TEMP_DIRECTORY_SEGMENTS, title),
-            "cleanup_on_stop": self.ui.tree_advanced_checkbox_cleanup_on_stop.isChecked()
-        }
-        # This creates the final row, using the video as an identifier.
-        # This will be given and connected to in the QRunnable class, so that
-        # we can send signals and events later
-
-        download_btn.clicked.connect(lambda _=False, vid=identifier: self.queue_download(vid))
-        stop_btn.clicked.connect(lambda _=False, vid=identifier: self.stop_download(vid))
-        self.logger.info(f"[Download (6/10) - Created Item]")
-
-
-
-    def _wire_worker_signals(self, video_id: int, worker):
-        # Download progress
-        worker.signals.progress_video_range.connect(self.on_row_download_range)
-        worker.signals.progress_video.connect(self.on_row_download_progress)
-
-        # Total progress (HLS/segmented downloads)
-        worker.signals.total_progress_range.connect(self.update_total_progressbar_range)
-        worker.signals.total_progress.connect(self.update_total_progressbar)
-
-        # Remux progress
-        worker.signals.progress_remux.connect(self.on_row_remux_progress)
-
-        # Completed
-        worker.signals.download_completed.connect(self.on_row_download_done)
-
-    def on_row_download_range(self, video_id: int, total: int):
-        row = self._row.get(video_id)
-        if not row:
-            return
-        pb = row["progress"]
-        pb.setRange(0, max(1, int(total)))
-        pb.setValue(0)
-        pb.setFormat("Downloading… %p%")
-
-    def on_row_download_progress(self, video_id: int, pos: int, total: int):
-        row = self._row.get(video_id)
-        if not row:
-            return
-        row["progress"].setValue(int(pos))
-
-    def on_row_remux_progress(self, video_id: int, pos: int, total: int):
-        row = self._row.get(video_id)
-        if not row:
-            return
-
-        pb = row["progress"]
-        pb.setRange(0, max(1, int(total)))
-        pb.setValue(int(pos))
-        pb.setFormat("Remuxing… %p%")
-
-    def on_row_download_done(self, video_id: int, report: dict | None):
-        row = self._row.get(video_id)
-        if not row:
-            return
-        row["progress"].setRange(0, 100)
-        row["progress"].setValue(100)
-        row["progress"].setFormat("Done")
-        row["download_btn"].setEnabled(True)
-        row["stop_btn"].setEnabled(False)
-
-        global total_downloaded_videos
-        total_downloaded_videos += 1
-        self.ui.main_progressbar_total.setMaximum(100)
-        self.ui.main_progressbar_total.setValue(0)
-
-        downloaded_videos = int(settings.value("Misc/downloaded_videos"))
-        downloaded_videos += 1
-        settings.setValue("Misc/downloaded_videos", str(downloaded_videos))
-        settings.sync()
-
-        if video_data.consistent_data.get("track_videos"):
-            self.logger.info(f"Tracking video: {video_id}")
-            init_db(video_data.consistent_data.get("database_path"))
-            data = video_data.data_objects.get(video_id)
-            save_video_metadata(video_id, data, video_data.consistent_data.get("database_path"))
-
-        if report:
-            self.logger.debug("Checking report...")
-
-            if report["status"] == "cancelled" or report["status"] == "missing":
-                if not settings.value("Misc/failed_dialog", False, type=bool):
-                    ui_popup(f"""
-Information: 
-
-The video: {video_data.data_objects.get(video_id).get("title")} was cancelled or failed to download.
-If you download the video again with the same quality e.g., by clicking download again, or at another day
-loading the video again, you'll be able to continue downloading where you left off.
-
-This is an experimental feature and is supposed to work on all videos. This is done by keeping the segments in a local
-temporary folder. This only works unless the segment URLs are invalidated OR you clean the temporary directory.
-
-You can clean the temporary directory in the settings and you SHOULD do this from time to time.
-This message won't be shown again!
-""")
-                    settings.setValue("Misc/failed_dialog", True)
-                    settings.sync()
-
-                logger.info(f"""
-Warning, download cancelled / failed for: {video_data.data_objects.get(video_id).get("title")}
-
-Successfully downloaded: {report["downloaded"]}
-Missing Segments: {report["missing"]}
-Quality: {report["quality"]}
-Segment State Path: {report["segment_state_path"]}
-            """)
-
-
-            elif report["status"] == "completed":
-                self.logger.debug("Cleaning up temporary files...")
-                safe_rmtree(row["segment_dir"])
-                safe_unlink(row["segment_state_path"])
-
-
-        if not row["stop_event"].is_set():
-            try:
-                video_data.clean_dict(video_id)
-
-            except KeyError:
-                pass  # Doesn't matter
-
-        self.logger.debug("Download Completed!")
-        try:
-            index = self.ui.main_tree_widget.indexOfTopLevelItem(row["item"])
-            self.ui.main_tree_widget.takeTopLevelItem(index)
-            del row["item"]
-
-        except:
-            error = traceback.format_exc()
-            self.logger.error(f"Couldn't delete tree widget item???: {error}")
-
-    def queue_download(self, video_id: int):
-        row = self._row[video_id]
-        item = row["item"]
-
-        # video object was stored in UserRole in your function:
-        video_obj = item.data(self.COL_TITLE, Qt.ItemDataRole.UserRole)
-        quality = row["quality_box"].currentData()  # "best"/720/etc.
-
-        # reset stop flag for this run
-        row["stop_event"].clear()
-
-        # UI: show queued/busy indicator
-        pb = row["progress"]
-        pb.setRange(0, 0)  # busy indicator
-        pb.setFormat("Queued…")
-        row["download_btn"].setEnabled(False)
-        row["stop_btn"].setEnabled(True)
-        cleanup_on_stop = row["cleanup_on_stop"]
-
-        self.download_scheduler.enqueue(video_obj, video_id, quality, row["stop_event"], row["segment_dir"],
-                                        row["segment_state_path"], cleanup_on_stop=cleanup_on_stop)
-        self.logger.info(f"[Download (8/10) - Added Video to queue]")
-
-    def stop_download(self, video_id: int):
-        row = self._row.get(video_id)
-        if not row:
-            return
-        row["stop_event"].set()
-        # UI hint (actual cancel depends on downloader honoring cancellation)
-        pb = row["progress"]
-        pb.setFormat("Stopping…")
-
-    def tree_widget_finished(self):
-        self.update_total_progressbar_range(1)
-        self.update_total_progressbar(1)
-
-    def clear_tree_widget(self):
-        """
-        This (like the name says) clears the tree widget.
-        """
-        self.logger.debug("Cleared the tree widget")
-        if not self.ui.tree_advanced_checkbox_do_not_clear_videos.isChecked():
-            self.ui.main_tree_widget.clear()
 
 
     """

@@ -52,3 +52,8 @@ This should not happen, please report it!"""
 You are likely trying to install Porn Fetch on an unsupported platform e.g., macOS / Android! 
 If you think this is an error, please report it!
 """
+    something_stupid_happened = """
+If you see this error, then you somehow managed to trigger an error that should logically be impossible
+to happen.
+
+Please report this with the exact things you did to trigger this on GitHub!"""

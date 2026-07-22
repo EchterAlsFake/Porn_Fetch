@@ -63,6 +63,7 @@ from redtube_api import Client as rt_Client, Video as rt_Video
 from spankbang_api import Client as sp_Client, Video as sp_Video
 from youporn_api import Client as yp_Client, Video as yp_Video
 from base_api import BaseCore
+from src.backend.errors import SomethingStupidHappened
 from base_api.modules.logger import configure_app_logging
 from base_api.modules.static_functions import normalize_quality_value, choose_quality_from_list, strip_title
 # Note, the Video instances are mostly used in `shared_functions.py`
@@ -156,7 +157,7 @@ for _core in cores:
 logger.debug("Successfully initialized all clients and!")
 
 
-def refresh_clients(debug_mode: bool = False, use_truststore: bool = True) -> None:
+def refresh_clients(debug_mode: bool = False) -> None:
     logger.info("Refreshing all clients!")
     level = logging.DEBUG if debug_mode else logging.INFO
     core.enable_logging(level=level, log_file="BaseCore.log" if debug_mode else None)
@@ -200,17 +201,16 @@ def refresh_clients(debug_mode: bool = False, use_truststore: bool = True) -> No
     logger.debug("Applied in-place clients!")
 
 
-async def get_video(url: str | AllowedVideoType) -> AllowedVideoType:
+async def get_video(url: str | AnyVideoClass) -> AnyVideoClass:
     """
     This function check the URL and generates the corresponding video object with the correct client.
     If the url is already a video object, the function will simply return it.
     """
-
-
     if isinstance(url, tuple(video_objects)):
         return url
 
-    assert isinstance(url, str)
+    if not isinstance(url, str):
+        raise SomethingStupidHappened
 
     if not url.startswith("http"):
         raise InvalidInput
@@ -242,6 +242,124 @@ async def get_video(url: str | AllowedVideoType) -> AllowedVideoType:
         raise InvalidInput
 
     return mapping[final_website]
+
+
+async def load_video_attributes(video: AnyVideoClass) -> dict:
+    title = video.title
+
+    if isinstance(video, ph_Video):
+        stuff = await video.author
+        author = stuff.name
+        length = video.duration
+        tags = video.tags
+        publish_date = video.publish_date
+        thumbnail = video.thumbnail
+        video_id = video.video_id
+
+    elif isinstance(video, xn_Video):
+        author = video.author
+        length = video.length
+        tags = video.tags
+        publish_date = video.publish_date
+        thumbnail = video.thumbnail_url[0]
+        video_id = video.title
+
+    elif isinstance(video, xv_Video):
+        author = video.author.name
+        length = video.length
+        tags = video.tags
+        publish_date = video.publish_date
+        thumbnail = video.thumbnail_url
+        video_id = video.title
+
+    elif isinstance(video, ep_Video):
+        author = video.author
+        length = video.length_minutes
+        tags = ",".join([tag for tag in video.tags])
+        publish_date = video.publish_date
+        thumbnail = video.thumbnail
+        video_id = video.video_id
+
+    elif isinstance(video, yp_Video):
+        stuff = await video.author(load_html=True)
+        author = stuff.name
+        length = round(int(video.length) // 60)
+        tags = ",".join(video.categories)
+        thumbnail = video.thumbnail
+        publish_date = video.publish_date
+        video_id = video.title
+
+    elif isinstance(video, xh_Video):
+        author = ",".join(video.pornstars)
+        length = "Not available"
+        tags = "Not available"
+        thumbnail = video.thumbnail
+        publish_date = "Not available"
+        video_id = video.title
+
+    elif isinstance(video, sp_Video):
+        author = video.author
+        length = round(int(video.length) // 60)
+        tags = ",".join(video.tags)
+        thumbnail = video.thumbnail
+        publish_date = "Not available"
+        video_id = video.title
+
+    elif isinstance(video, bg_Video):
+        author = "Not available"
+        length = round(int(video.duration // 60))
+        tags = "Not available"
+        thumbnail = "Not available"
+        publish_date = "Not available"
+        video_id = video.video_id
+
+    elif isinstance(video, pt_Video):
+        author = video.author
+        length = video.duration
+        tags = video.tags
+        thumbnail = video.thumbnail
+        publish_date = video.publish_date
+        video_id = video.video_id
+
+    elif isinstance(video, xf_Video):
+        author = video.author
+        length = video.length
+        tags = video.tags
+        thumbnail = video.thumbnail
+        publish_date = video.publish_date
+        video_id = video.title
+
+    elif isinstance(video, (rt_Video, tu_Video, th_Video)):
+        author = video.author_name
+        length = video.duration
+        try:
+            tags = video.action_tags
+
+        except AttributeError:
+            tags = "Not Available"
+        thumbnail = video.thumbnail
+        video_id = video.video_id
+        publish_date = "Unknown"
+
+    else:
+        raise SomethingStupidHappened
+
+    qualities = await get_available_qualities(video)  # [144, 240, 360, ...]
+
+    # Normalize publish date into UTC datetime (optional extra field)
+    publish_dt_utc = parse_publish_date(publish_date)
+    title = strip_title(title)
+
+    return {
+        "title": title,
+        "author": author,
+        "length": length,
+        "tags": tags,
+        "thumbnail": thumbnail,
+        "video_id": video_id,
+        "publish_date": publish_dt_utc,
+        "qualities": qualities
+    }
 
 
 async def get_direct_url_legacy(video: AllowedVideoType_Legacy, quality: str | int):
@@ -348,255 +466,8 @@ def resolve_path(context: Dict[str, Any], path: str) -> Any:
             return None
     return cur
 
-def render_name_template(
-    template: str,
-    context: Dict[str, Any],
-    *,
-    missing: str = "",
-) -> str:
-    """
-    Supports:
-      $title
-      ${author.name}
-      ${publish_date:%Y-%m-%d}
-      ${length:0.1f}  (uses Python's format())
-    """
-    def repl(m: re.Match) -> str:
-        simple = m.group(1)
-        braced = m.group(2)
 
-        if simple:
-            value = resolve_path(context, simple)
-            return missing if value is None else str(value)
-
-        expr = (braced or "").strip()
-
-        # optional format: path:format_spec
-        path, fmt = expr, None
-        if ":" in expr:
-            # split on first ':' (good enough for your use-case)
-            path, fmt = expr.split(":", 1)
-            path, fmt = path.strip(), fmt.strip()
-
-        value = resolve_path(context, path)
-        if value is None:
-            return missing
-
-        if fmt:
-            if isinstance(value, datetime):
-                return value.strftime(fmt)
-            try:
-                return format(value, fmt)
-            except Exception:
-                return str(value)
-
-        return str(value)
-
-    return _TEMPLATE_RE.sub(repl, template)
-
-@dataclass
-class VideoAttributes:
-    title: str
-    qualities: list[int]
-    author: str
-    length: Any
-    tags: str
-    publish_date: Any
-    publish_dt_utc: Optional[datetime]
-    thumbnail: str
-    video_id: str
-    # rendered output
-    output_name: str
-    index: int
-    video: object
-
-def _public_attr_snapshot(obj: Any) -> Dict[str, Any]:
-    """
-    Best-effort map of public attrs without calling methods.
-    WARNING: some properties may still perform I/O when accessed.
-    """
-    out: Dict[str, Any] = {}
-    for name in dir(obj):
-        if name.startswith("_"):
-            continue
-        # skip obvious methods/iterables by type check after getattr
-        val = _safe_getattr(obj, name)
-        if callable(val):
-            continue
-        out[name] = val
-    return out
-
-async def load_video_attributes(video, name_template: str = "$title", *, now: Optional[datetime] = None) -> VideoAttributes:
-    title = video.title
-
-    if isinstance(video, ph_Video):
-        stuff = await video.author
-        author = stuff.name
-        length = video.duration
-        tags = video.tags
-        publish_date = video.publish_date
-        thumbnail = video.thumbnail
-        video_id = video.video_id
-
-    elif isinstance(video, xn_Video):
-        author = video.author
-        length = video.length
-        tags = video.tags
-        publish_date = video.publish_date
-        thumbnail = video.thumbnail_url[0]
-        video_id = video.title
-
-    elif isinstance(video, xv_Video):
-        author = video.author.name
-        length = video.length
-        tags = video.tags
-        publish_date = video.publish_date
-        thumbnail = video.thumbnail_url
-        video_id = video.title
-
-    elif isinstance(video, ep_Video):
-        author = video.author
-        length = video.length_minutes
-        tags = ",".join([tag for tag in video.tags])
-        publish_date = video.publish_date
-        thumbnail = video.thumbnail
-        video_id = video.video_id
-
-    elif isinstance(video, yp_Video):
-        stuff = await video.author(load_html=True)
-        author = stuff.name
-        length = round(int(video.length) // 60)
-        tags = ",".join(video.categories)
-        thumbnail = video.thumbnail
-        publish_date = video.publish_date
-        video_id = video.title
-
-    elif isinstance(video, xh_Video):
-        author = ",".join(video.pornstars)
-        length = "Not available"
-        tags = "Not available"
-        thumbnail = video.thumbnail
-        publish_date = "Not available"
-        video_id = video.title
-
-    elif isinstance(video, sp_Video):
-        author = video.author
-        length = round(int(video.length) // 60)
-        tags = ",".join(video.tags)
-        thumbnail = video.thumbnail
-        publish_date = "Not available"
-        video_id = video.title
-
-    elif isinstance(video, bg_Video):
-        author = "Not available"
-        length = round(int(video.duration // 60))
-        tags = "Not available"
-        thumbnail = "Not available"
-        publish_date = "Not available"
-        video_id = video.video_id
-
-    elif isinstance(video, pt_Video):
-        author = video.author
-        length = video.duration
-        tags = video.tags
-        thumbnail = video.thumbnail
-        publish_date = video.publish_date
-        video_id = video.video_id
-
-    elif isinstance(video, xf_Video):
-        author = video.author
-        length = video.length
-        tags = video.tags
-        thumbnail = video.thumbnail
-        publish_date = video.publish_date
-        video_id = video.title
-
-    elif isinstance(video, (rt_Video, tu_Video, th_Video)):
-        author = video.author_name
-        length = video.duration
-        try:
-            tags = video.action_tags
-
-        except AttributeError:
-            tags = "Not Available"
-        thumbnail = video.thumbnail
-        video_id = video.video_id
-        publish_date = "Unknown"
-
-
-    else:
-        # fallback if you ever add a new site and forget to implement it
-        author = _safe_getattr(video, "author") or "Not available"
-        length = _safe_getattr(video, "length") or "Not available"
-        tags = _safe_getattr(video, "tags") or "Not available"
-        publish_date = _safe_getattr(video, "publish_date") or "Not available"
-        thumbnail = _safe_getattr(video, "thumbnail") or "Not available"
-        video_id = _safe_getattr(video, "id") or title
-
-    qualities = await get_available_qualities(video)  # [144, 240, 360, ...]
-
-    # Normalize publish date into UTC datetime (optional extra field)
-    publish_dt_utc = parse_publish_date(publish_date, now=now)
-
-    # Build template context:
-    # - normalized keys (stable)
-    # - "video" for deep access: ${video.some_attr}
-    # - raw snapshot so users can also do $some_attr if it exists
-    normalized = {
-        "title": title,
-        "qualities": qualities,
-        "qualities_csv": ",".join(map(str, qualities)),
-        "author": author,
-        "length": length,
-        "tags": tags,
-        "publish_date": publish_date,         # original
-        "publish_dt": publish_dt_utc,         # parsed datetime (UTC)
-        "thumbnail": thumbnail,
-        "video_id": video_id,
-    }
-    raw = _public_attr_snapshot(video)
-
-    context: Dict[str, Any] = {}
-    context.update(raw)        # allow $publish_date if the object has it, etc.
-    context.update(normalized) # normalized wins if same name
-    context["video"] = video   # allow ${video.author.name} etc.
-
-    rendered = render_name_template(name_template, context, missing="")
-    rendered = strip_title(title=rendered) # Error because I am stupid
-    return VideoAttributes(
-        title=title,
-        qualities=qualities,
-        author=str(author),
-        length=length,
-        tags=str(tags),
-        publish_date=publish_date,
-        publish_dt_utc=publish_dt_utc,
-        thumbnail=str(thumbnail),
-        video_id=str(video_id),
-        output_name=rendered,
-        index=0,
-        video=video
-    )
-
-
-
-def parse_publish_date(value: str, *, now: Optional[datetime] = None) -> Optional[datetime]:
-    """
-    Parse a publish-date string from various sites and return a timezone-aware datetime in UTC.
-
-    Parameters
-    ----------
-    value : str
-        Raw publish date text.
-    now : datetime | None
-        Reference time for relative strings like "7 days ago".
-        Defaults to current time in UTC.
-
-    Returns
-    -------
-    datetime | None
-        A timezone-aware datetime in UTC, or None if not parseable / not available.
-    """
+def parse_publish_date(value: str) -> Optional[datetime]:
     if value is None:
         return None
 
@@ -604,7 +475,7 @@ def parse_publish_date(value: str, *, now: Optional[datetime] = None) -> Optiona
     if _NOT_AVAILABLE_RE.match(s):
         return None
 
-    now_utc = (now or datetime.now(timezone.utc))
+    now_utc = datetime.now(timezone.utc)
     if now_utc.tzinfo is None:
         now_utc = now_utc.replace(tzinfo=timezone.utc)
     else:
@@ -664,33 +535,6 @@ def parse_publish_date(value: str, *, now: Optional[datetime] = None) -> Optiona
             continue
 
     return None
-
-
-def download_android(url: str, quality="best", path="./", remux=False):
-    """
-    Downloads a video and reports progress back to Kotlin ProgressBridge.
-    Note: This is intended to be used by the Android App, NOT the main gui in `main.py` nor the CLI!
-    """
-    video = check_video(url)
-    if not video:
-        return False
-
-    from java import jclass
-    ProgressBridge = jclass("me.echteralsfake.pornfetch.ProgressBridge")
-
-    def cb(current, total):
-        try:
-            ProgressBridge.onProgress(int(current), int(total))
-        except Exception:
-            pass
-
-    return video.download(
-        quality=quality,
-        path=path,
-        callback=cb,
-        remux=remux,
-        no_title=True
-    )
 
 
 def write_tags(path: str, data: VideoAttributes):
@@ -780,7 +624,7 @@ def write_tags(path: str, data: VideoAttributes):
         raise e
 
 
-def parse_length(length, video_source=None):
+def parse_length(length: str | int, video_source: str | None = None) -> int | None | str:
     # DO NOT TOUCH THIS!!!!!!!!!!!!!!!!!!!!!!
 
     "Entirely written and copied from ChatGPT. My brain is not ready to fix that myself now, seriously..."

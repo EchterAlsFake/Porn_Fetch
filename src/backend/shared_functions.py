@@ -22,6 +22,14 @@ from src.backend.config import __version__
 logger = configure_app_logging(logger_name="Porn Fetch - [shared_functions]", log_file="PornFetch.log", level=logging.DEBUG)
 
 
+async def aenumerate(async_iterable, start=0):
+    """Async equivalent of enumerate()."""
+    n = start
+    async for item in async_iterable:
+        yield n, item
+        n += 1
+
+
 def send_to_server(message: dict):
     try:
         response = post(
