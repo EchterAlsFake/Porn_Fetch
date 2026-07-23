@@ -2,7 +2,7 @@
 # Porn Fetch is NOT published in PyPi!
 
 [project]
-requires-python = ">=3.12,<3.14"
+requires-python = ">=3.14"
 # 3.14+ is not supported, due to Qt limitations.
 # This is ONLY for the GUI, CLI is different
 

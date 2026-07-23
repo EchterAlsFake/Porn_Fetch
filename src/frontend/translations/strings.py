@@ -57,3 +57,4 @@ If you see this error, then you somehow managed to trigger an error that should 
 to happen.
 
 Please report this with the exact things you did to trigger this on GitHub!"""
+    metadata_write_error = "Couldn't write metadata into the file. Please report this error!"

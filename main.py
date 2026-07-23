@@ -22,6 +22,7 @@ Discord: echteralsfake (faster response)
 import os
 import sys
 import tempfile
+from string import Template
 
 # Pre-Load PySide6 to show a loading splashscreen
 from PySide6.QtWidgets import QApplication
@@ -104,7 +105,7 @@ from src.backend.config import (__version__, PUBLIC_KEY_B64, IS_SOURCE_RUN, TEMP
 from src.backend.shared_functions import ensure_config_file, handle_error_gracefully
 from src.backend.shared_gui import (ui_popup, reset_pornfetch, mark_help_buttons, Signals,
                                     available_title_formatting_options, on_checkbox_clicked)
-from src.backend.helper_functions import default_license_path, safe_rmtree
+from src.backend.helper_functions import default_license_path, safe_rmtree, make_debug_log
 
 from src.backend.installation import InstallPornFetch
 from src.backend.uninstallation import UninstallPornFetch
@@ -127,7 +128,8 @@ splash.showMessage("Importing (APIs).")
 app.processEvents()
 
 # Errors from different APIs
-from base_api.modules.errors import ProxySSLError, InvalidProxy
+from base_api.modules.errors import (ProxySSLError, InvalidProxy, AccessDeniedError, BotProtectionDetected,
+                                     SecurityAbort, RateLimitError, ChallengeMathError, DataNotLoadedError)
 from pornhub_api.modules.errors import VideoDisabled, GifPendingReview
 
 
@@ -156,22 +158,23 @@ last_index = 0 # Tracks the last index of the tree widget in case the user does 
 x: bool = False # Don't ask (this is a secret ;)
 
 
-class ProcessVideos:
+class ProcessVideos(QObject):
+    error_signal = Signal(str)
+
     """
     This class is responsible for processing the videos in the background, loading the data, adjusting paths and
     handling errors
     """
 
     def __init__(self, iterator: AsyncGenerator, custom_path_options: str, max_attempts: int,
-                 download_manager: DownloadManager, reverse_videos: bool, stop_flag: asyncio.Event,
-                 use_directory_system: bool, output_path: Path) -> None:
+                 download_manager: DownloadManager, reverse_videos: bool, stop_flag: asyncio.Event, output_path: Path) -> None:
+        super().__init__()
         self.iterator = iterator
         self.custom_path_options = custom_path_options
         self.max_attempts = max_attempts
         self.download_manager = download_manager
         self.reverse_videos = reverse_videos
         self.stop_flag = stop_flag
-        self.use_directory_system = use_directory_system
         self.output_path = output_path
 
     @staticmethod
@@ -183,27 +186,26 @@ class ProcessVideos:
         return videos.reverse()
 
     @staticmethod
-    async def process_single_video(video_object: str | AllowedVideoType) -> tuple[AllowedVideoType, dict]:
+    async def process_single_video(video_object: str | AllowedVideoType) -> tuple[AllowedVideoType, VideoObject]:
         video = await clients.get_video(video_object)
         video_attributes = await clients.load_video_attributes(video=video)
         return video, video_attributes
 
-    def create_output_path(self, author: str) -> Path:
-        possible_options = ["$title", "$author", "$length", "$video_id", "$publish_date"]
+    def create_output_path(self, video_attributes: VideoObject, index: int, user_pattern: str) -> Path:
+        base_path = self.output_path
+        context = {
+            "output_path": base_path,
+            "author": video_attributes.author,
+            "title": video_attributes.title,
+            "video_id": video_attributes.video_id,
+            "index": f"{index:02d}",  # Zero-padded index (01, 02, etc.)
+            "publish_date": video_attributes.publish_date,
+            "length": video_attributes.length,
+        }
 
-        base_path = self.output_path # This is just the directory where the video will be stored to
-
-        # Now there come the modifications...
-        if self.use_directory_system:
-            base_path.joinpath(author)
-
-        for option in self.custom_path_options:
-
-
-
-
-
-
+        template = Template(user_pattern)
+        resolved_string = template.safe_substitute(context)
+        return Path(resolved_string).expanduser()
 
     async def start_processing(self):
         global last_index
@@ -212,47 +214,65 @@ class ProcessVideos:
         if self.reverse_videos:
             self.iterator = self.reverse_iterator(self.iterator)
 
-
-
         async for idx, video in shared_functions.aenumerate(self.iterator):
+            last_error = None # Keeps track of the
+
             for attempt in range(self.max_attempts):
+                if self.stop_flag.is_set():
+                    return # User hit the abort button
+
                 try:
                     logger.debug(f"Current Index: {idx} | Attempt: {attempt}")
-                    video, video_attributes = await safe_api_call(self.process_single_video, video)
+                    video, video_object = await safe_api_call(self.process_single_video, video)
                     identifier = uuid.uuid4().hex
                     logger.info(f"Successfully received Video! [Identifier ->: {identifier}]")
-
-                    assert isinstance(video_attributes, dict)
-                    title = video_attributes.get("title")
-                    author = video_attributes.get("author")
-                    length = video_attributes.get("length")
-                    tags = video_attributes.get("tags")
-                    thumbnail_url = video_attributes.get("thumbnail")
-                    video_id = video_attributes.get("video_id")
-                    publish_date = video_attributes.get("publish_date")
-                    qualities = video_attributes.get("qualities")
-
-                    video_object = VideoObject(
-                        identifier=identifier,
-                        title=title, # Title is already checked and stripped
-
-                        status="Pending",
-                    )
+                    output_path = self.create_output_path(video_object, idx, self.custom_path_options)
+                    video_object.output_path = output_path
+                    video_object.identifier = identifier
 
                     self.download_manager.add_video(video_object)
                     last_index += 1
 
-                except AppBotBlocked:
-                    logger.error("Bot Protection detected")
-                    break # Retrying won't help against bot protections
-
-                except AppNetworkError:
-                    logger.error("Network error")
+                # General Errors
+                except AppNetworkError as e:
+                    last_error = e
+                    self.error_signal.emit(e)
                     continue # Maybe it solves by itself ;)
 
-                except AppNotFoundError:
-                    logger.error("Not found")
+                except AppNotFoundError as e:
+                    error = traceback.format_exc()
+                    last_error = f"""
+The video you entered does not exist. Are you sure that's the correct link?
+PS: If you are, please report this!
+
+Debug for GitHub
+--AppNotFoundError: [start_procesing] -> {video.url}
+DEBUG: {error}
+System: {sys.platform}
+"""
                     break # If the resource is not there, it won't magically appear lmao
+
+                except (VideoDisabled, GifPendingReview) as e:
+                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                    The Video / GIF seems to be disabled or pending a review! It can't be downloaded (yet) :(
+                    """)
+                    break
+
+                except (SecurityAbort, ChallengeMathError, ChallengeMathError) as e:
+                    last_error = e
+                    break
+
+                except RateLimitError as e:
+                    last_error = e
+                    break
+
+                except DataNotLoadedError:
+                    last_error = f"If you see this I fucked up developing my API packages and you should immediately open an issue on GitHub lol"
+
+                finally:
+                    self.error_signal.emit(last_error)
+
+ 
 
 
 
@@ -982,10 +1002,6 @@ You have all paid features unlocked :)
         video_data.consistent_data.update({"database_path": database_path})
         self.ui.settings_lineedit_videos_database_path.setText(database_path)
 
-        directory_system = settings.value("Video/directory_system", False, bool)
-        video_data.consistent_data.update({"directory_system": directory_system})
-        self.ui.settings_checkbox_videos_use_directory_system.setChecked(directory_system)
-
         # --- Performance ---
         simultaneous_downloads = settings.value("Performance/semaphore", 2, int)
 
@@ -1089,7 +1105,6 @@ You have all paid features unlocked :)
         settings.setValue("skip_existing_files", self.ui.settings_checkbox_videos_skip_existing_files.isChecked())
         settings.setValue("track_videos", self.ui.settings_checkbox_videos_track_downloaded_videos.isChecked())
         settings.setValue("database_path", str(self.ui.settings_lineedit_videos_database_path.text()))
-        settings.setValue("directory_system", self.ui.settings_checkbox_videos_use_directory_system.isChecked())
         settings.endGroup()
 
         # --- Performance ---
@@ -1360,6 +1375,7 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
         self.add_to_tree_widget_thread_ = ProcessVideos(iterator=iterator, last_index=self.last_index,
                                                         custom_path_options=custom_path_options)
 
+        self.add_to_tree_widget_thread_.error_signal.connect(self.on_error_message)
 
 
         self.logger.info(f"[Download (2/10) - Started Preparing Thread]")
@@ -1370,6 +1386,10 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
     """
     The following functions are used to connect data between Threads and the Main UI
     """
+
+    @Slot
+    def on_error_message(self, message: str) -> None:
+        ui_popup(message)
 
     def update_total_progressbar_range(self, maximum):
         """Sets the maximum value for the total progressbar"""

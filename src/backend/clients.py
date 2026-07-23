@@ -63,8 +63,9 @@ from redtube_api import Client as rt_Client, Video as rt_Video
 from spankbang_api import Client as sp_Client, Video as sp_Video
 from youporn_api import Client as yp_Client, Video as yp_Video
 from base_api import BaseCore
-from src.backend.errors import SomethingStupidHappened
+from src.backend.errors import SomethingStupidHappened, MetadataWriteError
 from base_api.modules.logger import configure_app_logging
+from src.backend.download_manager import VideoObject
 from base_api.modules.static_functions import normalize_quality_value, choose_quality_from_list, strip_title
 # Note, the Video instances are mostly used in `shared_functions.py`
 AllowedVideoType: TypeAlias = (
@@ -244,7 +245,7 @@ async def get_video(url: str | AnyVideoClass) -> AnyVideoClass:
     return mapping[final_website]
 
 
-async def load_video_attributes(video: AnyVideoClass) -> dict:
+async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
     title = video.title
 
     if isinstance(video, ph_Video):
@@ -349,17 +350,19 @@ async def load_video_attributes(video: AnyVideoClass) -> dict:
     # Normalize publish date into UTC datetime (optional extra field)
     publish_dt_utc = parse_publish_date(publish_date)
     title = strip_title(title)
+    video_object = VideoObject(
+        thumbnail_url=thumbnail,
+        video_id=video_id,
+        length=length,
+        author=author,
+        title=title,
+        publish_date=publish_dt_utc,
+        status="Pending",
+        qualities=qualities,
+        tags=tags
+    )
 
-    return {
-        "title": title,
-        "author": author,
-        "length": length,
-        "tags": tags,
-        "thumbnail": thumbnail,
-        "video_id": video_id,
-        "publish_date": publish_dt_utc,
-        "qualities": qualities
-    }
+    return video_object
 
 
 async def get_direct_url_legacy(video: AllowedVideoType_Legacy, quality: str | int):
@@ -537,7 +540,7 @@ def parse_publish_date(value: str) -> Optional[datetime]:
     return None
 
 
-def write_tags(path: str, data: VideoAttributes):
+def write_tags(path: str, data: VideoObject) -> bool:
     """
     Writes the tags of the video into the file using PyAV.
     """
@@ -547,7 +550,7 @@ def write_tags(path: str, data: VideoAttributes):
     except (ModuleNotFoundError, ImportError):
         return None # Handled in code, don't worry :)
 
-    genre = "Porn"
+    genre = "XXX"
     title = data.title
     artist = data.author
     date = data.publish_date  # e.g. "2025-10-26" or "2025"
@@ -618,11 +621,7 @@ def write_tags(path: str, data: VideoAttributes):
         logging.debug("Tags: [3/3] ✔")
 
     except Exception as e:
-        logging.error("Failed to write tags: %s", e)
-        if os.path.exists(tmp_path):
-            os.remove(tmp_path)
-        raise e
-
+        raise MetadataWriteError(str(e))
 
 def parse_length(length: str | int, video_source: str | None = None) -> int | None | str:
     # DO NOT TOUCH THIS!!!!!!!!!!!!!!!!!!!!!!

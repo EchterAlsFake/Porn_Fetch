@@ -6,7 +6,6 @@ from PySide6.QtCore import QObject, Signal
 
 @dataclass(slots=True)
 class VideoObject:
-    identifier: str
     title: str
     author: str
     length: str
@@ -15,8 +14,9 @@ class VideoObject:
     video_id: str
     publish_date: datetime
     qualities: list[str]
-    output_path: Path
     status: str
+    identifier: str | None = None
+    output_path: Path | None = None
 
 
 class DownloadManager(QObject): # Inherit from QObject so we can work with Slots and Signals
@@ -27,7 +27,6 @@ class DownloadManager(QObject): # Inherit from QObject so we can work with Slots
     def __init__(self):
         super().__init__()
         self._videos: dict[str, VideoObject] = {}
-
 
     def add_video(self, video: VideoObject) -> None:
         self._videos[video.identifier] = video

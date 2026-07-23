@@ -1,14 +1,25 @@
 import os
 import sys
 import shutil
+import traceback
 
 from pathlib import Path
 from base_api.base import configure_app_logging
-from PySide6.QtCore import QFile, QFileDevice, QIODevice, QDir, QSaveFile, QStandardPaths
+from PySide6.QtCore import QIODevice, QSaveFile, QStandardPaths
 
 
 logger = configure_app_logging(logger_name="Helper Functions")
 
+
+def make_debug_log(e: Exception, video_url: str, user_message: str, function: str) -> str:
+    return f"""
+    {user_message}
+
+    Debug for GitHub
+    --{type(e).__name__}: [{function}] -> {video_url}
+    DEBUG: {traceback.format_exc()}
+    System: {sys.platform}
+    """
 
 def get_original_executable_path() -> Path:
     """Returns the true source executable path, ignoring onefile extraction paths."""

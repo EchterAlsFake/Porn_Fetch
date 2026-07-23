@@ -1,4 +1,9 @@
+from backend.download_manager import VideoObject
 from frontend.translations.strings import TRANSLATE_ERRORS
+from typing import Callable, Awaitable, ParamSpec, TypeVar
+P = ParamSpec("P") # Needed for safe_api_call function
+R = TypeVar("R")
+
 
 class InvalidInput(Exception):
     def __init__(self, msg=TRANSLATE_ERRORS.invalid_input):
@@ -30,13 +35,19 @@ class SomethingStupidHappened(Exception):
         self.msg = msg
 
 
+class MetadataWriteError(Exception):
+    def __init__(self, msg: str = TRANSLATE_ERRORS.metadata_write_error):
+        super().__init__(msg)
+        self.msg = msg
+
+
 class AppNetworkError(Exception): pass
 class AppNotFoundError(Exception): pass
 class AppBotBlocked(Exception): pass
 class AppDownloadFailed(Exception): pass
 
 
-async def safe_api_call(func, *args, **kwargs):
+async def safe_api_call(func: Callable[P, Awaitable[R]], *args: P.args, **kwargs: P.kwargs) -> R: # Most likely this return type
     """A wrapper that translates any provider's error into your app's standard error."""
     try:
         return await func(*args, **kwargs)
