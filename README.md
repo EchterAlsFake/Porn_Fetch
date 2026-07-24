@@ -8,7 +8,7 @@
 
 <br>
 
-<a href="https://github.com/EchterAlsFake/Porn_Fetch/blob/master/README/STATUS.md">
+<a href="https://echteralsfake.me/checklist">
   <img src="https://echteralsfake.me/checklist/progress.svg" alt="Version 3.9 Development Progress" width="400"/>
 </a>
 
