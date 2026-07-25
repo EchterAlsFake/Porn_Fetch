@@ -4,6 +4,14 @@ from dataclasses import dataclass
 from PySide6.QtCore import QObject, Signal
 
 
+class VideoFilters:
+    duration_minimum: int
+    duration_maximum: int
+    author_regex: str
+    tags_regex: str
+    title_regex: str
+    
+
 @dataclass(slots=True)
 class VideoObject:
     title: str

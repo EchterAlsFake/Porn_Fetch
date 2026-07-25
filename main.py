@@ -185,6 +185,8 @@ class ProcessVideos(QObject):
 
         return videos.reverse()
 
+    def process_filter(self, filters: VideoFilters):
+
     @staticmethod
     async def process_single_video(video_object: str | AllowedVideoType) -> tuple[AllowedVideoType, VideoObject]:
         video = await clients.get_video(video_object)
@@ -217,60 +219,69 @@ class ProcessVideos(QObject):
         async for idx, video in shared_functions.aenumerate(self.iterator):
             last_error = None # Keeps track of the
 
-            for attempt in range(self.max_attempts):
-                if self.stop_flag.is_set():
-                    return # User hit the abort button
+            if self.stop_flag.is_set():
+                return # User hit the abort button
 
-                try:
-                    logger.debug(f"Current Index: {idx} | Attempt: {attempt}")
-                    video, video_object = await safe_api_call(self.process_single_video, video)
-                    identifier = uuid.uuid4().hex
-                    logger.info(f"Successfully received Video! [Identifier ->: {identifier}]")
-                    output_path = self.create_output_path(video_object, idx, self.custom_path_options)
-                    video_object.output_path = output_path
-                    video_object.identifier = identifier
+            try:
+                logger.debug(f"Current Index: {idx}")
+                video, video_object = await safe_api_call(self.process_single_video, video)
+                identifier = uuid.uuid4().hex
+                logger.info(f"Successfully received Video! [Identifier ->: {identifier}]")
+                output_path = self.create_output_path(video_object, idx, self.custom_path_options)
+                video_object.output_path = output_path
+                video_object.identifier = identifier
 
-                    self.download_manager.add_video(video_object)
-                    last_index += 1
+                self.download_manager.add_video(video_object)
+                last_index += 1
 
-                # General Errors
-                except AppNetworkError as e:
-                    last_error = e
-                    self.error_signal.emit(e)
-                    continue # Maybe it solves by itself ;)
+            # General Errors
+            except AppNetworkError as e:
+                last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                A network error happened, I'll try retrying...""")
+                continue # Maybe it solves by itself ;)
 
-                except AppNotFoundError as e:
-                    error = traceback.format_exc()
-                    last_error = f"""
-The video you entered does not exist. Are you sure that's the correct link?
-PS: If you are, please report this!
+            except AppNotFoundError as e:
+                last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                I was trying to access a website, but turns out, it doesn't exist. Please verify if you entered
+                the correct URL.
+                
+                If you are sure you did, please report this issue
+                """)
 
-Debug for GitHub
---AppNotFoundError: [start_procesing] -> {video.url}
-DEBUG: {error}
-System: {sys.platform}
-"""
-                    break # If the resource is not there, it won't magically appear lmao
+                break # If the resource is not there, it won't magically appear lmao
 
-                except (VideoDisabled, GifPendingReview) as e:
-                    last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
-                    The Video / GIF seems to be disabled or pending a review! It can't be downloaded (yet) :(
-                    """)
-                    break
+            except (VideoDisabled, GifPendingReview) as e:
+                last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                The Video / GIF seems to be disabled or pending a review! It can't be downloaded (yet) :(
+                """)
+                break
 
-                except (SecurityAbort, ChallengeMathError, ChallengeMathError) as e:
-                    last_error = e
-                    break
+            except (SecurityAbort, ChallengeMathError, ChallengeMathError) as e:
+                last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                An error occurred while solving a challenge from PornHub, please report this immediately, I need to 
+                fix this quickly!""")
+                break
 
-                except RateLimitError as e:
-                    last_error = e
-                    break
+            except RateLimitError as e:
+                last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                You got rate limited by the server. I have alredy tried solving this, which didn't work. 
+                Please use a (different) proxy or VPN.""")
+                break
 
-                except DataNotLoadedError:
-                    last_error = f"If you see this I fucked up developing my API packages and you should immediately open an issue on GitHub lol"
+            except DataNotLoadedError as e:
+                last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message=f"""
+                If you see this I fucked up developing my API packages and you should immediately open an issue on 
+                GitHub lol""")
+                break
 
-                finally:
-                    self.error_signal.emit(last_error)
+            except (AccessDeniedError, BotProtectionDetected, AppBotBlocked) as e:
+                last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
+                The website denied access, probably because it detected you as a bot. Please report this, as I probably
+                need to update the headers. 
+                """)
+
+            finally:
+                self.error_signal.emit(last_error)
 
  
 

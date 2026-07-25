@@ -292,8 +292,8 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
 
     elif isinstance(video, xh_Video):
         author = ",".join(video.pornstars)
-        length = "Not available"
-        tags = "Not available"
+        length = video.length
+        tags = video.tags
         thumbnail = video.thumbnail
         publish_date = "Not available"
         video_id = video.title
@@ -303,7 +303,7 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
         length = round(int(video.length) // 60)
         tags = ",".join(video.tags)
         thumbnail = video.thumbnail
-        publish_date = "Not available"
+        publish_date = video.length
         video_id = video.title
 
     elif isinstance(video, bg_Video):
@@ -340,7 +340,7 @@ async def load_video_attributes(video: AnyVideoClass) -> VideoObject:
             tags = "Not Available"
         thumbnail = video.thumbnail
         video_id = video.video_id
-        publish_date = "Unknown"
+        publish_date = video.publish_date
 
     else:
         raise SomethingStupidHappened

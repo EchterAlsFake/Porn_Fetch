@@ -928,7 +928,7 @@ dependencies = [
 [[package]]
 name = "unofficial-api-for-redtube"
 version = "1.2"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-redtube#8ba4c95f29159a4388a60a12a621cfbfefde3200" }
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-redtube#0ee251eb25f9c6eae6d2813ec08d4d811e51911a" }
 dependencies = [
     { name = "chompjs" },
     { name = "eaf-base-api" },
