@@ -103,7 +103,7 @@ from src.backend.check_license import LicenseManager
 import src.backend.shared_functions as shared_functions
 from src.backend.database import save_video_metadata, init_db
 from src.backend.config import (__version__, PUBLIC_KEY_B64, IS_SOURCE_RUN, TEMP_DIRECTORY,
-                                TEMP_DIRECTORY_STATES, TEMP_DIRECTORY_SEGMENTS)
+                                TEMP_DIRECTORY_STATES, TEMP_DIRECTORY_SEGMENTS, app_settings)
 from src.backend.shared_functions import ensure_config_file, handle_error_gracefully
 from src.backend.shared_gui import (ui_popup, reset_pornfetch, mark_help_buttons, Signals,
                                     available_title_formatting_options, on_checkbox_clicked)
@@ -347,7 +347,7 @@ class ProcessVideos(QObject):
 
             except RateLimitError as e:
                 last_error = make_debug_log(e=e, video_url=video.url, function="start_processing", user_message="""
-                You got rate limited by the server. I have alredy tried solving this, which didn't work. 
+                You got rate limited by the server. I have already tried solving this, which didn't work. 
                 Please use a (different) proxy or VPN.""")
                 break
 
@@ -375,7 +375,7 @@ class PornFetch(QMainWindow):
         self.signals = Signals()
         self.signals.error_signal.connect(ui_popup)
         self.download_manager = DownloadManager() # Used to track all videos
-        self.download_manager.video_added.connect(self.add_to_tree_widget_signal)
+        self.download_manager.video_added.connect() # TODO
 
 
         self.ui = Ui_PornFetch_UI()
@@ -386,7 +386,6 @@ class PornFetch(QMainWindow):
         self._anonymous_mode = False
         self.ensure_temp()
         self._row = {} # Video ID -> dict of widgets + state
-        self.maps()
         self.load_style()
         self._setup_modern_tabs()
         self.load_strings()
@@ -425,9 +424,9 @@ class PornFetch(QMainWindow):
         self.shortcuts()  # Activates the keyboard shortcuts
         self.logger.debug("Startup: [3/5] Initialized the User Interface")
         self.load_user_settings()  # Loads the user settings and applies selected values to the UI
+        self.app_config = config.SettingsManager()
         self.logger.debug("Startup: [4/5] Loaded the user settings")
-        max_concurrent = int(video_data.consistent_data.get("semaphore", 1))
-        self.download_scheduler = DownloadScheduler(max_concurrent, self)
+        self.download_scheduler = DownloadScheduler(self.app_config, self)
         self.download_scheduler.worker_started.connect(self._wire_worker_signals)
         self.progress_widgets = {}  # video_id -> {'label': QLabel, 'progressbar': QProgressBar}
 

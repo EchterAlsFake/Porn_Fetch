@@ -333,3 +333,6 @@ class SettingsManager(QObject):
     def theme(self, val):
         if val != self.theme:
             self._settings.setValue("UI/theme", val)
+
+
+app_settings = SettingsManager() # Singleton instance shared globally :)

@@ -299,8 +299,8 @@ wheels = [
 
 [[package]]
 name = "eaf-base-api"
-version = "3.3.3"
-source = { git = "https://github.com/echteralsfake/eaf_base_api#3ee47f7d4861d12b1fcfa216a279b1ca133426aa" }
+version = "3.3.4"
+source = { git = "https://github.com/echteralsfake/eaf_base_api#eec47e3389c188a91c4052f06e8be71c1ac3ae61" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "tenacity" },
@@ -882,7 +882,7 @@ dependencies = [
 [[package]]
 name = "unofficial-api-for-pornhub"
 version = "5.3"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-pornhub#6d95c556054b52a9724c174723131002505c0709" }
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-pornhub#fe6c84e7d377fd90c8d967e33a557f04f0a08a9e" }
 dependencies = [
     { name = "chompjs" },
     { name = "eaf-base-api" },
