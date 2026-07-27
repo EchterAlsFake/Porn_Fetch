@@ -107,7 +107,8 @@ from src.backend.config import (__version__, PUBLIC_KEY_B64, IS_SOURCE_RUN, TEMP
 from src.backend.shared_functions import ensure_config_file, handle_error_gracefully
 from src.backend.shared_gui import (ui_popup, reset_pornfetch, mark_help_buttons, Signals,
                                     available_title_formatting_options, on_checkbox_clicked)
-from src.backend.helper_functions import default_license_path, safe_rmtree, make_debug_log
+from src.backend.helper_functions import (default_license_path, safe_rmtree, make_debug_log, get_widget_value,
+                                          set_widget_value)
 
 from src.backend.installation import InstallPornFetch
 from src.backend.uninstallation import UninstallPornFetch
@@ -1007,102 +1008,88 @@ You have all paid features unlocked :)
             identifier = item.data(self.COL_TITLE, Qt.ItemDataRole.UserRole)
             self.queue_download(video_id=identifier)
 
+
+    def get_settings_schema(self):
+        """Single source of truth for all UI settings bindings."""
+        return [
+            # --- Video ---
+            (self.ui.settings_video_combobox_quality, "Video", "quality", 0, int),
+            (self.ui.settings_video_combobox_model_videos, "Video", "model_videos", 0, int),
+            (self.ui.settings_spinbox_videos_result_limit, "Video", "result_limit", 100, int),
+            (self.ui.settings_lineedit_videos_output_path, "Video", "output_path", "", str),
+            (self.ui.settings_checkbox_videos_write_metadata, "Video", "write_metadata", True, bool),
+            (self.ui.settings_checkbox_videos_skip_existing_files, "Video", "skip_existing_files", True, bool),
+            (self.ui.settings_checkbox_videos_track_downloaded_videos, "Video", "track_videos", True, bool),
+            (self.ui.settings_lineedit_videos_database_path, "Video", "database_path", "", str),
+
+            # --- Performance ---
+            (self.ui.settings_spinbox_performance_simultaneous_downloads, "Performance", "semaphore", 3, int),
+            (self.ui.settings_spinbox_performance_network_delay, "Performance", "network_delay", 0, int),
+            (self.ui.settings_spinbox_performance_videos_concurrency, "Performance", "videos_concurrency", 5, int),
+            (self.ui.settings_spinbox_performance_pages_concurrency, "Performance", "pages_concurrency", 5, int),
+            (self.ui.settings_spinbox_performance_download_workers, "Performance", "download_workers", 4, int),
+            (self.ui.settings_spinbox_performance_maximal_timeout, "Performance", "timeout", 30, int),
+            (self.ui.settings_spinbox_performance_maximal_retries, "Performance", "retries", 3, int),
+            (self.ui.settings_doublespinbox_performance_speed_limit, "Performance", "speed_limit", 0.0, float),
+            (self.ui.settings_spinbox_performance_processing_delay, "Performance", "processing_delay", 0, int),
+
+            # --- Misc / System ---
+            (self.ui.settings_checkbox_system_update_checks, "Misc", "update_checks", True, bool),
+            (self.ui.settings_checkbox_system_enable_anonymous_mode, "Misc", "anonymous_mode", False, bool),
+            (self.ui.settings_checkbox_system_supress_errors, "Misc", "supress_errors", False, bool),
+            (self.ui.settings_checkbox_system_enable_network_logging, "Misc", "network_logging", False, bool),
+            (self.ui.settings_checkbox_system_enable_debug_mode, "Misc", "debug_mode", False, bool),
+            (self.ui.settings_checkbox_use_truststore, "Misc", "use_truststore", False, bool),
+
+            # --- UI ---
+            (self.ui.settings_ui_combobox_language, "UI", "language", 0, int),
+            (self.ui.settings_combobox_ui_theme, "UI", "theme", 0, int),
+            (self.ui.settings_spinbox_ui_font_size, "UI", "font_size", 10, int),
+        ]
+
     def load_user_settings(self):
-        self.ui.settings_video_combobox_quality.setCurrentIndex(_quality)
-        self.ui.settings_video_combobox_model_videos.setCurrentIndex(_model_videos)
-        self.ui.settings_spinbox_videos_result_limit.setValue(result_limit)
-        self.ui.settings_lineedit_videos_output_path.setText(output_path)
-        self.ui.settings_checkbox_videos_write_metadata.setChecked(write_metadata)
-        self.ui.settings_checkbox_videos_skip_existing_files.setChecked(skip_existing_files)
-        self.ui.settings_checkbox_videos_track_downloaded_videos.setChecked(track_videos)
-        self.ui.settings_lineedit_videos_database_path.setText(database_path)
+        """Loads all settings from disk and populates the UI controls."""
+        settings = QSettings()
 
-        # --- Performance ---
-        self.ui.settings_spinbox_performance_simultaneous_downloads.setValue(simultaneous_downloads)
-        self.ui.settings_spinbox_performance_network_delay.setValue(network_delay)
-        self.ui.settings_spinbox_performance_videos_concurrency.setValue(videos_concurrency)
-        self.ui.settings_spinbox_performance_pages_concurrency.setValue(pages_concurrency)
-        self.ui.settings_spinbox_performance_download_workers.setValue(download_workers)
-        self.ui.settings_spinbox_performance_maximal_timeout.setValue(timeout)
-        self.ui.settings_spinbox_performance_maximal_retries.setValue(retries)
-        self.ui.settings_doublespinbox_performance_speed_limit.setValue(speed_limit)
-        self.ui.settings_spinbox_performance_processing_delay.setValue(processing_delay)
+        # 1. Loop over schema and populate UI widgets automatically
+        for widget, group, key, default, data_type in self.get_settings_schema():
+            settings.beginGroup(group)
+            value = settings.value(key, defaultValue=default, type=data_type)
+            settings.endGroup()
+            set_widget_value(widget, value)
 
-
-        self.ui.settings_checkbox_system_update_checks.setChecked(update_checks)
-        self.ui.settings_checkbox_system_enable_anonymous_mode.setChecked(anonymous_mode)
-        self.ui.settings_checkbox_system_supress_errors.setChecked(supress_errors)
-        self.ui.settings_checkbox_system_enable_network_logging.setChecked(network_logging)
-        self.ui.settings_checkbox_system_enable_debug_mode.setChecked(debug_mode)
-        self.ui.settings_checkbox_use_truststore.setChecked(use_truststore)
-
-        self.ui.settings_ui_combobox_language.setCurrentIndex(ui_language_idx)
-        self.ui.settings_spinbox_ui_font_size.setValue(font_size)
-        self.ui.settings_combobox_ui_theme.setCurrentIndex(ui_theme_idx)
-
-        # Apply to your core_conf
-        clients.config.timeout = timeout
-        clients.config.max_retries = retries
-        clients.config.max_bandwidth_mb = speed_limit
-        clients.config.raise_bot_protection = False
-        clients.config.request_delay = network_delay
-        clients.config.videos_concurrency = videos_concurrency
-        clients.config.pages_concurrency = pages_concurrency
-        clients.config.max_workers_download = download_workers
-        clients.refresh_clients(debug_mode=bool(debug_mode), use_truststore=bool(use_truststore))
+        # 2. Apply the loaded values to your core background clients
+        self.apply_client_configuration()
 
     def save_user_settings(self, show_dialog=True):
-        settings.sync()
+        """Saves the current UI control states to disk."""
+        settings = QSettings()
 
-        """Saves the user settings to the configuration file based on the UI state."""
-        # --- Video ---
-        settings.beginGroup("Video")
-        settings.setValue("quality", self.ui.settings_video_combobox_quality.currentIndex())
-        settings.setValue("model_videos", self.ui.settings_video_combobox_model_videos.currentIndex())
-        settings.setValue("result_limit", int(self.ui.settings_spinbox_videos_result_limit.value()))
-        settings.setValue("output_path", str(self.ui.settings_lineedit_videos_output_path.text()))
-        settings.setValue("write_metadata", self.ui.settings_checkbox_videos_write_metadata.isChecked())
-        settings.setValue("skip_existing_files", self.ui.settings_checkbox_videos_skip_existing_files.isChecked())
-        settings.setValue("track_videos", self.ui.settings_checkbox_videos_track_downloaded_videos.isChecked())
-        settings.setValue("database_path", str(self.ui.settings_lineedit_videos_database_path.text()))
-        settings.endGroup()
+        # Loop over schema and extract UI widget values automatically
+        for widget, group, key, _, _ in self.get_settings_schema():
+            settings.beginGroup(group)
+            settings.setValue(key, get_widget_value(widget))
+            settings.endGroup()
 
-        # --- Performance ---
-        settings.beginGroup("Performance")
-        settings.setValue("semaphore", int(self.ui.settings_spinbox_performance_simultaneous_downloads.value()))
-        settings.setValue("network_delay", int(self.ui.settings_spinbox_performance_network_delay.value()))
-        settings.setValue("videos_concurrency", int(self.ui.settings_spinbox_performance_videos_concurrency.value()))
-        settings.setValue("pages_concurrency", int(self.ui.settings_spinbox_performance_pages_concurrency.value()))
-        settings.setValue("download_workers", int(self.ui.settings_spinbox_performance_download_workers.value()))
-        settings.setValue("timeout", int(self.ui.settings_spinbox_performance_maximal_timeout.value()))  # <-- fixed key
-        settings.setValue("retries", int(self.ui.settings_spinbox_performance_maximal_retries.value()))  # <-- fixed key
-        settings.setValue("speed_limit", float(self.ui.settings_doublespinbox_performance_speed_limit.value()))
-        settings.setValue("processing_delay", int(self.ui.settings_spinbox_performance_processing_delay.value()))
-        settings.endGroup()
-
-        # --- Misc/System ---
-        settings.beginGroup("Misc")
-        settings.setValue("update_checks", self.ui.settings_checkbox_system_update_checks.isChecked())
-        settings.setValue("anonymous_mode", self.ui.settings_checkbox_system_enable_anonymous_mode.isChecked())
-        settings.setValue("supress_errors", self.ui.settings_checkbox_system_supress_errors.isChecked())
-        settings.setValue("network_logging", self.ui.settings_checkbox_system_enable_network_logging.isChecked())
-        settings.setValue("debug_mode", self.ui.settings_checkbox_system_enable_debug_mode.isChecked())
-        settings.setValue("use_truststore", self.ui.settings_checkbox_use_truststore.isChecked())
-        settings.endGroup()
-
-        # --- UI ---
-        settings.beginGroup("UI")
-        settings.setValue("language", self.ui.settings_ui_combobox_language.currentIndex())
-        settings.setValue("theme", self.ui.settings_combobox_ui_theme.currentIndex())
-        settings.setValue("font_size", int(self.ui.settings_spinbox_ui_font_size.value()))
-        settings.endGroup()
-
-        settings.sync()  # write to disk now
+        settings.sync()  # Ensure disk write
 
         if show_dialog:
             ui_popup(self.tr("Saved User Settings, please restart Porn Fetch!", None))
 
-        self.logger.debug("Saved User Settings, please restart Porn Fetch.")
+        self.logger.debug("Saved User Settings.")
+
+    def apply_client_configuration(self):
+        clients.config.timeout = self.ui.settings_spinbox_performance_maximal_timeout.value()
+        clients.config.max_retries = self.ui.settings_spinbox_performance_maximal_retries.value()
+        clients.config.max_bandwidth_mb = self.ui.settings_doublespinbox_performance_speed_limit.value()
+        clients.config.raise_bot_protection = False
+        clients.config.request_delay = self.ui.settings_spinbox_performance_network_delay.value()
+        clients.config.videos_concurrency = self.ui.settings_spinbox_performance_videos_concurrency.value()
+        clients.config.pages_concurrency = self.ui.settings_spinbox_performance_pages_concurrency.value()
+        clients.config.max_workers_download = self.ui.settings_spinbox_performance_download_workers.value()
+
+        debug_mode = self.ui.settings_checkbox_system_enable_debug_mode.isChecked()
+        clients.refresh_clients(debug_mode=debug_mode)
 
     def set_proxies(self):
         message = self.tr("""

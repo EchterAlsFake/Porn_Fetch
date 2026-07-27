@@ -6,7 +6,7 @@ import traceback
 from pathlib import Path
 from base_api.base import configure_app_logging
 from PySide6.QtCore import QIODevice, QSaveFile, QStandardPaths
-
+from PySide6.QtWidgets import QSpinBox, QCheckBox, QDoubleSpinBox, QLineEdit, QComboBox
 
 logger = configure_app_logging(logger_name="Helper Functions")
 
@@ -103,3 +103,28 @@ def safe_rmtree(path: str):
             logger.info(f"Deleted directory: {path}")
     except FileNotFoundError:
         pass
+
+@staticmethod
+def get_widget_value(widget):
+    """Extracts the value from a Qt widget based on its type."""
+    if isinstance(widget, (QSpinBox, QDoubleSpinBox)):
+        return widget.value()
+    elif isinstance(widget, QCheckBox):
+        return widget.isChecked()
+    elif isinstance(widget, QLineEdit):
+        return widget.text()
+    elif isinstance(widget, QComboBox):
+        return widget.currentIndex()
+    return None
+
+@staticmethod
+def set_widget_value(widget, value):
+    """Sets the value on a Qt widget based on its type."""
+    if isinstance(widget, (QSpinBox, QDoubleSpinBox)):
+        widget.setValue(value)
+    elif isinstance(widget, QCheckBox):
+        widget.setChecked(bool(value))
+    elif isinstance(widget, QLineEdit):
+        widget.setText(str(value))
+    elif isinstance(widget, QComboBox):
+        widget.setCurrentIndex(int(value))
