@@ -4,19 +4,24 @@ from dataclasses import dataclass
 from PySide6.QtCore import QObject, Signal
 
 
+@dataclass(slots=True)
 class VideoFilters:
-    duration_minimum: int
-    duration_maximum: int
-    author_regex: str
-    tags_regex: str
-    title_regex: str
-    
+    duration_minimum: int | None = None
+    duration_maximum: int | None = None
+    author_regex: str | None = None
+    tags_regex: str | None = None
+    title_regex: str | None = None
+    quality_minimum: str | None = None
+    quality_maximum: str | None = None
+    published_before: str | None = None
+    published_after: str | None = None
+
 
 @dataclass(slots=True)
 class VideoObject:
     title: str
     author: str
-    length: str
+    length: int
     tags: list[str] | None
     thumbnail_url: str
     video_id: str

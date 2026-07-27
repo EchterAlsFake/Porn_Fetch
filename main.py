@@ -61,6 +61,7 @@ if "NUITKA_ONEFILE_PARENT" in os.environ:
 splash.showMessage("Importing (General).")
 app.processEvents()
 # General imports
+import re
 import time
 import uuid
 import random
@@ -73,6 +74,7 @@ import threading
 import webbrowser
 
 from pathlib import Path
+from datetime import datetime
 from threading import Event, Lock
 from itertools import islice, chain
 from typing import Iterable, AsyncGenerator
@@ -86,7 +88,7 @@ import PySide6.QtAsyncio as QtAsyncio # Needed because porn fetch's network back
 from PySide6.QtQuickWidgets import QQuickWidget
 from PySide6.QtGui import QIcon, QFontDatabase, QPixmap, QShortcut, QKeySequence
 from PySide6.QtCore import (QTextStream, QRunnable, QLocale, QSize, QUrl, Signal, QFile, Slot,
-                            QTranslator, QCoreApplication, QStandardPaths, QObject, Qt)
+                            QTranslator, QCoreApplication, QStandardPaths, QObject, Qt, QSettings)
 from PySide6.QtWidgets import (QTreeWidgetItem, QButtonGroup, QFileDialog, QHeaderView, QSizePolicy, QLayout,
                                QInputDialog, QMainWindow, QProgressBar, QComboBox, QWidget, QPushButton,
                                 QHBoxLayout)
@@ -111,7 +113,7 @@ from src.backend.installation import InstallPornFetch
 from src.backend.uninstallation import UninstallPornFetch
 from src.backend.errors import (UnsupportedPlatform, AppDownloadFailed, AppNetworkError, AppNotFoundError,
                                 AppBotBlocked, safe_api_call)
-from src.backend.download_manager import DownloadManager, VideoObject
+from src.backend.download_manager import DownloadManager, VideoObject, VideoFilters
 
 splash.showMessage("Importing (Frontend).")
 app.processEvents()
@@ -150,8 +152,6 @@ total_segments: int = 0 # Total segments kept in a queue (for total progress tra
 downloaded_segments: int = 0 # Amount of segments that have been downloaded (for total progress tracking)
 total_downloaded_videos: int = 0  # All videos that actually successfully downloaded
 session_urls: list = []  # This list saves all URLs used in the current session. Used for the URL export function (CTRL + E)
-stop_flag: threading.Event = Event() # Stops loading videos into the tree widget (does not stop any downloads)
-_download_lock: threading.Lock = Lock() # I actually don't really know why this is here
 logger = shared_functions.configure_app_logging(logger_name="Porn Fetch - [MAIN]", log_file="PornFetch.log", level=logging.DEBUG)
 license_storage_path: str = os.path.join(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation), "pornfetch.license")
 last_index = 0 # Tracks the last index of the tree widget in case the user does not have auto-clear enabled
@@ -167,7 +167,8 @@ class ProcessVideos(QObject):
     """
 
     def __init__(self, iterator: AsyncGenerator, custom_path_options: str, max_attempts: int,
-                 download_manager: DownloadManager, reverse_videos: bool, stop_flag: asyncio.Event, output_path: Path) -> None:
+                 download_manager: DownloadManager, reverse_videos: bool, stop_flag: asyncio.Event, output_path: Path,
+                 video_filters: VideoFilters) -> None:
         super().__init__()
         self.iterator = iterator
         self.custom_path_options = custom_path_options
@@ -176,6 +177,7 @@ class ProcessVideos(QObject):
         self.reverse_videos = reverse_videos
         self.stop_flag = stop_flag
         self.output_path = output_path
+        self.video_filters = video_filters
 
     @staticmethod
     async def reverse_iterator(iterator: AsyncGenerator):
@@ -185,7 +187,84 @@ class ProcessVideos(QObject):
 
         return videos.reverse()
 
-    def process_filter(self, filters: VideoFilters):
+    def process_filter(self, filters: VideoFilters, attributes: VideoObject) -> bool:
+        # 1. Duration Filters
+        if filters.duration_minimum is not None or filters.duration_maximum is not None:
+            if filters.duration_minimum is not None and attributes.length < filters.duration_minimum:
+                return False
+            if filters.duration_maximum is not None and attributes.length > filters.duration_maximum:
+                return False
+
+        # 2. Regex Filters
+        if filters.author_regex:
+            if not re.search(filters.author_regex, attributes.author, re.IGNORECASE):
+                return False
+
+        if filters.title_regex:
+            if not re.search(filters.title_regex, attributes.title, re.IGNORECASE):
+                return False
+
+        if filters.tags_regex:
+            # Fails immediately if the video has no tags to match against
+            if not attributes.tags:
+                return False
+            pattern = re.compile(filters.tags_regex, re.IGNORECASE)
+            # Passes if at least one tag matches the regex
+            if not any(pattern.search(tag) for tag in attributes.tags):
+                return False
+
+        # 3. Quality Filters (Evaluated based on the highest available quality)
+        if filters.quality_minimum or filters.quality_maximum:
+            max_quality = self._get_max_quality(attributes.qualities)
+
+            if filters.quality_minimum:
+                min_q = self._parse_quality(filters.quality_minimum)
+                if max_quality < min_q:
+                    return False
+
+            if filters.quality_maximum:
+                max_q = self._parse_quality(filters.quality_maximum)
+                if max_quality > max_q:
+                    return False
+
+        # 4. Date Filters
+        if filters.published_after:
+            # .replace(tzinfo=None) safely handles timezone-aware datetimes for comparison
+            after_date = datetime.fromisoformat(filters.published_after).replace(tzinfo=None)
+            pub_date = attributes.publish_date.replace(tzinfo=None)
+            if pub_date < after_date:
+                return False
+
+        if filters.published_before:
+            before_date = datetime.fromisoformat(filters.published_before).replace(tzinfo=None)
+            pub_date = attributes.publish_date.replace(tzinfo=None)
+            if pub_date > before_date:
+                return False
+
+        # If it survives all the checks, all applied filters are True!
+        return True
+
+    @staticmethod
+    def _parse_quality(quality_str: str) -> int:
+        """Extracts the integer resolution from strings like '1080p', '720', '4K'."""
+        if not quality_str:
+            return 0
+
+        # Simple handler for "4k" edge cases
+        if quality_str.lower() == "4k":
+            return 2160
+
+        # Strips all non-digit characters (e.g., "1080p60" -> 108060, so we just grab the resolution part safely)
+        # Assuming typical formats like "1080p", "720p"
+        match = re.search(r'\d+', quality_str)
+        return int(match.group()) if match else 0
+
+    def _get_max_quality(self, qualities: list[str]) -> int:
+        """Finds the highest resolution available in the list of qualities."""
+        if not qualities:
+            return 0
+        parsed_qualities = [self._parse_quality(q) for q in qualities]
+        return max(parsed_qualities)
 
     @staticmethod
     async def process_single_video(video_object: str | AllowedVideoType) -> tuple[AllowedVideoType, VideoObject]:
@@ -225,14 +304,17 @@ class ProcessVideos(QObject):
             try:
                 logger.debug(f"Current Index: {idx}")
                 video, video_object = await safe_api_call(self.process_single_video, video)
-                identifier = uuid.uuid4().hex
-                logger.info(f"Successfully received Video! [Identifier ->: {identifier}]")
-                output_path = self.create_output_path(video_object, idx, self.custom_path_options)
-                video_object.output_path = output_path
-                video_object.identifier = identifier
 
-                self.download_manager.add_video(video_object)
-                last_index += 1
+                logger.info("Checking Filters...")
+                if self.process_filter(self.video_filters, video_object):
+                    identifier = uuid.uuid4().hex
+                    logger.info(f"Successfully received Video! [Identifier ->: {identifier}]")
+                    output_path = self.create_output_path(video_object, idx, self.custom_path_options)
+                    video_object.output_path = output_path
+                    video_object.identifier = identifier
+
+                    self.download_manager.add_video(video_object)
+                    last_index += 1
 
             # General Errors
             except AppNetworkError as e:
@@ -283,29 +365,11 @@ class ProcessVideos(QObject):
             finally:
                 self.error_signal.emit(last_error)
 
- 
-
-
-
-
-
-
-
-
-
-
 
 class PornFetch(QMainWindow):
-    COL_DOWNLOAD = 0
-    COL_TITLE = 1
-    COL_AUTHOR = 2
-    COL_LENGTH = 3
-    COL_QUALITY = 4
-    COL_STOP = 5
-    COL_PROGRESS = 6
-
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.settings = None
         self.last_update_time = time.time()
         self.signals = Signals()
         self.signals.error_signal.connect(ui_popup)
@@ -943,152 +1007,37 @@ You have all paid features unlocked :)
             identifier = item.data(self.COL_TITLE, Qt.ItemDataRole.UserRole)
             self.queue_download(video_id=identifier)
 
-    def maps(self):
-        self.mappings_quality = {
-            0: "best",
-            1: "half",
-            2: "worst",
-            3: 2160,
-            4: 1440,
-            5: 1080,
-            6: 720,
-            7: 540,
-            8: 480,
-            9: 360,
-            10: 240,
-            11: 144
-        }
-        self.mappings_ui_theme = {
-            0: "dark",
-            1: "light",
-            2: "lsd",
-        }
-        self.mappings_ui_language = {
-            0: "system",
-            1: "english",
-            2: "german",
-            3: "chinese",
-            4: "french"
-        }
-
     def load_user_settings(self):
-        global x
-        settings.sync()
-        license_ok = self.license_manager.has_feature("full_unlock") or x
-
-        # --- Video ---
-        _quality = settings.value("Video/quality", 0, int)
-        if _quality <= 5 and not (license_ok or IS_SOURCE_RUN):
-            ui_popup("Warning! You have selected (somehow) a higher quality than 720p. You need a license to unlock it. Please go into the settings to get and import one...")
-            _quality = 6 # Correcting back to 720p
-
-        video_data.consistent_data.update({"quality": self.mappings_quality.get(_quality)})
         self.ui.settings_video_combobox_quality.setCurrentIndex(_quality)
-
-        _model_videos = settings.value("Video/model_videos", 0, int)
-        video_data.consistent_data.update({"model_videos": _model_videos})
         self.ui.settings_video_combobox_model_videos.setCurrentIndex(_model_videos)
-
-        result_limit = settings.value("Video/result_limit", 50, int)
-        video_data.consistent_data.update({"result_limit": result_limit})
         self.ui.settings_spinbox_videos_result_limit.setValue(result_limit)
-
-        output_path = settings.value("Video/output_path", "./", str)
-        video_data.consistent_data.update({"output_path": output_path})
         self.ui.settings_lineedit_videos_output_path.setText(output_path)
-
-        write_metadata = settings.value("Video/write_metadata", True, bool)
-        video_data.consistent_data.update({"write_metadata": write_metadata})
         self.ui.settings_checkbox_videos_write_metadata.setChecked(write_metadata)
-
-        skip_existing_files = settings.value("Video/skip_existing_files", True, bool)
-        video_data.consistent_data.update({"skip_existing_files": skip_existing_files})
         self.ui.settings_checkbox_videos_skip_existing_files.setChecked(skip_existing_files)
-
-        track_videos = settings.value("Video/track_videos", False, bool)
-        video_data.consistent_data.update({"track_videos": track_videos})
         self.ui.settings_checkbox_videos_track_downloaded_videos.setChecked(track_videos)
-
-        database_path = settings.value("Video/database_path", "./downloads.db", str)
-        video_data.consistent_data.update({"database_path": database_path})
         self.ui.settings_lineedit_videos_database_path.setText(database_path)
 
         # --- Performance ---
-        simultaneous_downloads = settings.value("Performance/semaphore", 2, int)
-
-        if int(simultaneous_downloads) > 1 and not (license_ok or IS_SOURCE_RUN):
-            ui_popup("Warning! You have selected (somehow) a higher amount of parallel downloads than you are supposed to. You need a license to unlock it. Please go into the settings to get and import one...")
-            simultaneous_downloads = 1 # Correcting back to 720p
-
-        video_data.consistent_data.update({"semaphore": simultaneous_downloads})
         self.ui.settings_spinbox_performance_simultaneous_downloads.setValue(simultaneous_downloads)
-
-        network_delay = settings.value("Performance/network_delay", 0, int)
-        video_data.consistent_data.update({"network_delay": network_delay})
         self.ui.settings_spinbox_performance_network_delay.setValue(network_delay)
-
-        videos_concurrency = settings.value("Performance/videos_concurrency", 10, int)
-        video_data.consistent_data.update({"videos_concurrency": videos_concurrency})
         self.ui.settings_spinbox_performance_videos_concurrency.setValue(videos_concurrency)
-
-        pages_concurrency = settings.value("Performance/pages_concurrency", 2, int)
-        video_data.consistent_data.update({"pages_concurrency": pages_concurrency})
         self.ui.settings_spinbox_performance_pages_concurrency.setValue(pages_concurrency)
-
-        download_workers = settings.value("Performance/download_workers", 20, int)
-        video_data.consistent_data.update({"download_workers": download_workers})
         self.ui.settings_spinbox_performance_download_workers.setValue(download_workers)
-
-        timeout = settings.value("Performance/timeout", 10, int)
-        video_data.consistent_data.update({"timeout": timeout})
         self.ui.settings_spinbox_performance_maximal_timeout.setValue(timeout)
-
-        retries = settings.value("Performance/retries", 4, int)
-        video_data.consistent_data.update({"retries": retries})
         self.ui.settings_spinbox_performance_maximal_retries.setValue(retries)
-
-        speed_limit = settings.value("Performance/speed_limit", 0.0, float)
-        video_data.consistent_data.update({"speed_limit": speed_limit})
         self.ui.settings_doublespinbox_performance_speed_limit.setValue(speed_limit)
-
-        processing_delay = settings.value("Performance/processing_delay", 0, int)
-        video_data.consistent_data.update({"processing_delay": processing_delay})
         self.ui.settings_spinbox_performance_processing_delay.setValue(processing_delay)
 
-        # --- System/Misc ---
-        update_checks = settings.value("Misc/update_checks", True, bool)
-        video_data.consistent_data.update({"update_checks": update_checks})
+
         self.ui.settings_checkbox_system_update_checks.setChecked(update_checks)
-
-        anonymous_mode = settings.value("Misc/anonymous_mode", False, bool)
-        self._anonymous_mode = anonymous_mode
-        video_data.consistent_data.update({"anonymous_mode": anonymous_mode})
         self.ui.settings_checkbox_system_enable_anonymous_mode.setChecked(anonymous_mode)
-
-        supress_errors = settings.value("Misc/supress_errors", False, bool)
-        video_data.consistent_data.update({"supress_errors": supress_errors})
         self.ui.settings_checkbox_system_supress_errors.setChecked(supress_errors)
-
-        network_logging = settings.value("Misc/network_logging", False, bool)
-        video_data.consistent_data.update({"network_logging": network_logging})
         self.ui.settings_checkbox_system_enable_network_logging.setChecked(network_logging)
-
-        debug_mode = settings.value("Misc/debug_mode", False, bool)
-        video_data.consistent_data.update({"debug_mode": debug_mode})
         self.ui.settings_checkbox_system_enable_debug_mode.setChecked(debug_mode)
-
-        use_truststore = settings.value("Misc/use_truststore", False, type=bool)
-        video_data.consistent_data.update({"use_truststore": use_truststore})
         self.ui.settings_checkbox_use_truststore.setChecked(use_truststore)
 
-        # --- UI ---
-        ui_language_idx = settings.value("UI/language", 0, int)
         self.ui.settings_ui_combobox_language.setCurrentIndex(ui_language_idx)
-
-        font_size = settings.value("UI/font_size", 10, int)
         self.ui.settings_spinbox_ui_font_size.setValue(font_size)
-
-        ui_theme_idx = settings.value("UI/theme", 0, int)
         self.ui.settings_combobox_ui_theme.setCurrentIndex(ui_theme_idx)
 
         # Apply to your core_conf

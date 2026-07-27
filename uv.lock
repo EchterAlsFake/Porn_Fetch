@@ -52,19 +52,6 @@ wheels = [
 ]
 
 [[package]]
-name = "beautifulsoup4"
-version = "4.15.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "soupsieve" },
-    { name = "typing-extensions" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/43/65/318323f98dbee45d42dff61d8f047181bc6f2268a9068cfad035a46be5af/beautifulsoup4-4.15.0.tar.gz", hash = "sha256:288e3ca7d54b06f2ac191970bc275c1939cb46d450b255bf6718b04aa37ab4f7", size = 632571, upload-time = "2026-06-07T16:44:20.453Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/88/c6/92fcd42f1ba33e1184263f25bfabf3d27c383410470f169e4b8163bf9c17/beautifulsoup4-4.15.0-py3-none-any.whl", hash = "sha256:d6f88de62e1d4e38ecb1077eb9724cd0eff29d2a08ca16a401e9b9e93f117cf9", size = 109924, upload-time = "2026-06-07T16:44:21.566Z" },
-]
-
-[[package]]
 name = "brotli"
 version = "1.2.0"
 source = { registry = "https://pypi.org/simple" }
@@ -95,18 +82,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/e0/e1/652adea0ce25948e613ef78294c8ceaf4b32844aae00680d3a1712dde444/browser_cookie3-0.20.1.tar.gz", hash = "sha256:6d8d0744bf42a5327c951bdbcf77741db3455b8b4e840e18bab266d598368a12", size = 22665, upload-time = "2024-12-20T00:31:30.144Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/4e/57/2a716f4ecf6c50b2dbe27439507c480bb7ca5725edef82349ecdcfcdd084/browser_cookie3-0.20.1-py3-none-any.whl", hash = "sha256:4b38bf669d386250733c8339f0036e1cf09c3d8e4d326fd507b9afb84def13d6", size = 17229, upload-time = "2025-01-04T14:46:14.753Z" },
-]
-
-[[package]]
-name = "bs4"
-version = "0.0.2"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "beautifulsoup4" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/c9/aa/4acaf814ff901145da37332e05bb510452ebed97bc9602695059dd46ef39/bs4-0.0.2.tar.gz", hash = "sha256:a48685c58f50fe127722417bae83fe6badf500d54b55f7e39ffe43b798653925", size = 698, upload-time = "2024-01-17T18:15:47.371Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/51/bb/bf7aab772a159614954d84aa832c129624ba6c32faa559dfb200a534e50b/bs4-0.0.2-py2.py3-none-any.whl", hash = "sha256:abf8742c0805ef7f662dce4b51cca104cffe52b835238afc169142ab9b3fbccc", size = 1189, upload-time = "2024-01-17T18:15:48.613Z" },
 ]
 
 [[package]]
@@ -325,7 +300,7 @@ wheels = [
 [[package]]
 name = "eaf-base-api"
 version = "3.3.3"
-source = { git = "https://github.com/echteralsfake/eaf_base_api#094d3f93fa006d2aba627e92622442b41f1fb6e1" }
+source = { git = "https://github.com/echteralsfake/eaf_base_api#3ee47f7d4861d12b1fcfa216a279b1ca133426aa" }
 dependencies = [
     { name = "curl-cffi" },
     { name = "tenacity" },
@@ -888,8 +863,8 @@ wheels = [
 
 [[package]]
 name = "unofficial-api-for-beeg"
-version = "1.5"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-beeg#8a86c520e886b8f2868588cb1b1a545251935b61" }
+version = "1.6"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-beeg#a8464998c15b16b9b156c6722cd9be858aefdab3" }
 dependencies = [
     { name = "eaf-base-api" },
     { name = "m3u8" },
@@ -897,8 +872,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-eporner"
-version = "2.3"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-eporner#ada6a4056393856d9515451303a5b3279127155e" }
+version = "2.4"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-eporner#faffbdd5bad31d3cc86b9a4890ae21f0eba852a5" }
 dependencies = [
     { name = "eaf-base-api" },
     { name = "selectolax" },
@@ -906,8 +881,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-pornhub"
-version = "5.2"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-pornhub#8ab6cbf2227079b8de97234ff14193382cf84c5f" }
+version = "5.3"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-pornhub#6d95c556054b52a9724c174723131002505c0709" }
 dependencies = [
     { name = "chompjs" },
     { name = "eaf-base-api" },
@@ -917,8 +892,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-porntrex"
-version = "1.6"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-porntrex#2a29b37d39670dfa26d9ad02d4ee64cfeca2b247" }
+version = "1.7"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-porntrex#b75913e498b32635d0d755a6b5fafde61b13f494" }
 dependencies = [
     { name = "eaf-base-api" },
     { name = "json5" },
@@ -927,8 +902,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-redtube"
-version = "1.2"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-redtube#0ee251eb25f9c6eae6d2813ec08d4d811e51911a" }
+version = "1.3"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-redtube#09c5ae339add705bf428a8d08197c9df2e0cca35" }
 dependencies = [
     { name = "chompjs" },
     { name = "eaf-base-api" },
@@ -938,8 +913,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-spankbang"
-version = "2.2.2"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-spankbang#ec33815b833b384574af77cb817fa39bec60bba3" }
+version = "2.3"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-spankbang#1486c7ae3c523b6d8e0c7be26893571a0d35eec8" }
 dependencies = [
     { name = "eaf-base-api" },
     { name = "m3u8" },
@@ -948,8 +923,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-thumbzilla"
-version = "1.1"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-thumbzilla#5275aed234417ddfb8eb118b2a28a3a75bae8b79" }
+version = "1.2"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-thumbzilla#e27e1ccd50275f100505a65ea971f4e397320ad9" }
 dependencies = [
     { name = "eaf-base-api" },
     { name = "m3u8" },
@@ -958,8 +933,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-tube8"
-version = "1.1"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-tube8#22aa8eb9fff1ef602c9dd48c68fb921427622e84" }
+version = "1.2"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-tube8#0d48878cbdbf4d16ce590fff5fba463bd579e8c4" }
 dependencies = [
     { name = "eaf-base-api" },
     { name = "m3u8" },
@@ -968,8 +943,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-xfreehd"
-version = "1.5"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xfreehd#566c49710a0d3138b904f12cd165836adb2caecf" }
+version = "1.6"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xfreehd#468e0878dd33128357c0db276a8f592e32bb358e" }
 dependencies = [
     { name = "eaf-base-api" },
     { name = "selectolax" },
@@ -977,8 +952,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-xhamster"
-version = "2.3"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xhamster#ae43ffcd140e01d49ab69f6be6a9932db575049f" }
+version = "2.4"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xhamster#db5a0f648531f18a194ccc84b30815e09d21996a" }
 dependencies = [
     { name = "chompjs" },
     { name = "curl-cffi" },
@@ -989,8 +964,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-xnxx"
-version = "2.2"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xnxx#b4253bdf4270a9c7d702c0c6c6851024cfc0fcda" }
+version = "2.3"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xnxx#4ea29e9e4fb5b69fd7a2408615a0637be56e67e7" }
 dependencies = [
     { name = "eaf-base-api" },
     { name = "m3u8" },
@@ -999,8 +974,8 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-xvideos"
-version = "2.3"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xvideos#3f3d91e8cde94723fd7f25e7f05f60bb4c28e2d5" }
+version = "2.4"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-xvideos#9b31a3f83b2a7a25bbacc0daa788c0b27d90c216" }
 dependencies = [
     { name = "eaf-base-api" },
     { name = "m3u8" },
@@ -1009,10 +984,9 @@ dependencies = [
 
 [[package]]
 name = "unofficial-api-for-youporn"
-version = "1.6"
-source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-youporn#5c2719278e39a28e47a6a6e4e64139398ef6ad7c" }
+version = "1.7"
+source = { git = "https://github.com/EchterAlsFake/unofficial-api-for-youporn#7330f09c89b0064acfae29b1e8ca337b9f105964" }
 dependencies = [
-    { name = "bs4" },
     { name = "eaf-base-api" },
     { name = "m3u8" },
     { name = "selectolax" },
