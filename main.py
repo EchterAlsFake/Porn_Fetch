@@ -1007,88 +1007,10 @@ You have all paid features unlocked :)
             identifier = item.data(self.COL_TITLE, Qt.ItemDataRole.UserRole)
             self.queue_download(video_id=identifier)
 
-
-    def get_settings_schema(self):
-        """Single source of truth for all UI settings bindings."""
-        return [
-            # --- Video ---
-            (self.ui.settings_video_combobox_quality, "Video", "quality", 0, int),
-            (self.ui.settings_video_combobox_model_videos, "Video", "model_videos", 0, int),
-            (self.ui.settings_spinbox_videos_result_limit, "Video", "result_limit", 100, int),
-            (self.ui.settings_lineedit_videos_output_path, "Video", "output_path", "", str),
-            (self.ui.settings_checkbox_videos_write_metadata, "Video", "write_metadata", True, bool),
-            (self.ui.settings_checkbox_videos_skip_existing_files, "Video", "skip_existing_files", True, bool),
-            (self.ui.settings_checkbox_videos_track_downloaded_videos, "Video", "track_videos", True, bool),
-            (self.ui.settings_lineedit_videos_database_path, "Video", "database_path", "", str),
-
-            # --- Performance ---
-            (self.ui.settings_spinbox_performance_simultaneous_downloads, "Performance", "semaphore", 3, int),
-            (self.ui.settings_spinbox_performance_network_delay, "Performance", "network_delay", 0, int),
-            (self.ui.settings_spinbox_performance_videos_concurrency, "Performance", "videos_concurrency", 5, int),
-            (self.ui.settings_spinbox_performance_pages_concurrency, "Performance", "pages_concurrency", 5, int),
-            (self.ui.settings_spinbox_performance_download_workers, "Performance", "download_workers", 4, int),
-            (self.ui.settings_spinbox_performance_maximal_timeout, "Performance", "timeout", 30, int),
-            (self.ui.settings_spinbox_performance_maximal_retries, "Performance", "retries", 3, int),
-            (self.ui.settings_doublespinbox_performance_speed_limit, "Performance", "speed_limit", 0.0, float),
-            (self.ui.settings_spinbox_performance_processing_delay, "Performance", "processing_delay", 0, int),
-
-            # --- Misc / System ---
-            (self.ui.settings_checkbox_system_update_checks, "Misc", "update_checks", True, bool),
-            (self.ui.settings_checkbox_system_enable_anonymous_mode, "Misc", "anonymous_mode", False, bool),
-            (self.ui.settings_checkbox_system_supress_errors, "Misc", "supress_errors", False, bool),
-            (self.ui.settings_checkbox_system_enable_network_logging, "Misc", "network_logging", False, bool),
-            (self.ui.settings_checkbox_system_enable_debug_mode, "Misc", "debug_mode", False, bool),
-            (self.ui.settings_checkbox_use_truststore, "Misc", "use_truststore", False, bool),
-
-            # --- UI ---
-            (self.ui.settings_ui_combobox_language, "UI", "language", 0, int),
-            (self.ui.settings_combobox_ui_theme, "UI", "theme", 0, int),
-            (self.ui.settings_spinbox_ui_font_size, "UI", "font_size", 10, int),
-        ]
-
     def load_user_settings(self):
-        """Loads all settings from disk and populates the UI controls."""
-        settings = QSettings()
+        
 
-        # 1. Loop over schema and populate UI widgets automatically
-        for widget, group, key, default, data_type in self.get_settings_schema():
-            settings.beginGroup(group)
-            value = settings.value(key, defaultValue=default, type=data_type)
-            settings.endGroup()
-            set_widget_value(widget, value)
 
-        # 2. Apply the loaded values to your core background clients
-        self.apply_client_configuration()
-
-    def save_user_settings(self, show_dialog=True):
-        """Saves the current UI control states to disk."""
-        settings = QSettings()
-
-        # Loop over schema and extract UI widget values automatically
-        for widget, group, key, _, _ in self.get_settings_schema():
-            settings.beginGroup(group)
-            settings.setValue(key, get_widget_value(widget))
-            settings.endGroup()
-
-        settings.sync()  # Ensure disk write
-
-        if show_dialog:
-            ui_popup(self.tr("Saved User Settings, please restart Porn Fetch!", None))
-
-        self.logger.debug("Saved User Settings.")
-
-    def apply_client_configuration(self):
-        clients.config.timeout = self.ui.settings_spinbox_performance_maximal_timeout.value()
-        clients.config.max_retries = self.ui.settings_spinbox_performance_maximal_retries.value()
-        clients.config.max_bandwidth_mb = self.ui.settings_doublespinbox_performance_speed_limit.value()
-        clients.config.raise_bot_protection = False
-        clients.config.request_delay = self.ui.settings_spinbox_performance_network_delay.value()
-        clients.config.videos_concurrency = self.ui.settings_spinbox_performance_videos_concurrency.value()
-        clients.config.pages_concurrency = self.ui.settings_spinbox_performance_pages_concurrency.value()
-        clients.config.max_workers_download = self.ui.settings_spinbox_performance_download_workers.value()
-
-        debug_mode = self.ui.settings_checkbox_system_enable_debug_mode.isChecked()
-        clients.refresh_clients(debug_mode=debug_mode)
 
     def set_proxies(self):
         message = self.tr("""
