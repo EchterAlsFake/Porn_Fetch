@@ -1008,7 +1008,45 @@ You have all paid features unlocked :)
             self.queue_download(video_id=identifier)
 
     def load_user_settings(self):
-        
+        # Video related
+        quality = config.app_settings.quality
+        key = next((k for k, v in config.app_settings.mappings_quality.items() if v == quality), None)
+        self.ui.settings_video_combobox_quality.setCurrentIndex(key)
+
+        self.ui.settings_video_combobox_model_videos.setCurrentIndex(config.app_settings.model_videos)
+        self.ui.settings_spinbox_videos_result_limit.setValue(config.app_settings.result_limit)
+        self.ui.settings_lineedit_videos_output_path.setText(config.app_settings.output_path)
+        self.ui.settings_checkbox_videos_write_metadata.setChecked(config.app_settings.write_metadata)
+        self.ui.settings_checkbox_videos_skip_existing_files.setChecked(config.app_settings.skip_existing_files)
+        self.ui.settings_checkbox_videos_track_downloaded_videos.setChecked(config.app_settings.track_videos)
+        self.ui.settings_lineedit_videos_database_path.setText(config.app_settings.database_path)
+
+        # Performance related
+        self.ui.settings_spinbox_performance_simultaneous_downloads.setValue(config.app_settings.parallel_downloads)
+        self.ui.settings_spinbox_performance_network_delay.setValue(config.app_settings.network_delay)
+        self.ui.settings_spinbox_performance_videos_concurrency.setValue(config.app_settings.videos_concurrency)
+        self.ui.settings_spinbox_performance_pages_concurrency.setValue(config.app_settings.pages_concurrency)
+        self.ui.settings_spinbox_performance_download_workers.setValue(config.app_settings.download_workers)
+        self.ui.settings_spinbox_performance_maximal_timeout.setValue(config.app_settings.maximal_timeout)
+        self.ui.settings_spinbox_performance_maximal_retries.setValue(config.app_settings.retries)
+        self.ui.settings_doublespinbox_performance_speed_limit.setValue(config.app_settings.speed_limit)
+        self.ui.settings_spinbox_performance_processing_delay.setValue(config.app_settings.processing_delay)
+
+        # System / Misc related
+        self.ui.settings_checkbox_system_update_checks.setChecked(config.app_settings.update_checks)
+        self.ui.settings_checkbox_system_enable_anonymous_mode.setChecked(config.app_settings.enable_anonymous_mode)
+        self.ui.settings_checkbox_system_supress_errors.setChecked(config.app_settings.supress_errors)
+        self.ui.settings_checkbox_system_enable_network_logging.setChecked(config.app_settings.enable_logging)
+        self.ui.settings_checkbox_system_enable_debug_mode.setChecked(config.app_settings.debug_mode)
+        self.ui.settings_checkbox_use_truststore.setChecked(config.app_settings.use_truststore)
+
+        # UI
+        language = config.app_settings.language
+        key = next((key for key, value in config.app_settings.mappings_ui_language.items() if value == language), None)
+        self.ui.settings_ui_combobox_language.setCurrentIndex(language)
+
+
+
 
 
 
