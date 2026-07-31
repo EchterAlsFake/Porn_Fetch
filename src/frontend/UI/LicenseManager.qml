@@ -13,9 +13,9 @@ ApplicationWindow {
     title: "License Manager"
 
     // Enable Material Dark Theme natively
-    Material.theme: Material.Dark
-    Material.accent: Material.Blue
-    Material.primary: Material.BlueGrey
+    Material.theme: (typeof appSettings !== "undefined" && appSettings) ? (appSettings.theme_is_dark ? Material.Dark : Material.Light) : Material.Dark
+    Material.accent: (typeof appSettings !== "undefined" && appSettings) ? appSettings.theme_primary_color : Material.Blue
+    Material.primary: (typeof appSettings !== "undefined" && appSettings) ? appSettings.theme_primary_color : Material.BlueGrey
 
     // Deep dark background for the main window
     color: "#121212"

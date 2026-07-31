@@ -1,6 +1,6 @@
 import sys
 import logging
-import config as config
+import src.backend.config as config
 
 from pathlib import Path
 from src.backend.errors import UnsupportedPlatform

@@ -3,7 +3,7 @@ import sys
 import tempfile
 import subprocess
 import logging
-import config as config
+import src.backend.config as config
 
 from pathlib import Path
 

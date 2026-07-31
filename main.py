@@ -43,7 +43,8 @@ import src.frontend.UI.resources # This may not seem to be used, but it needs to
 from PySide6.QtGui import QPixmap
 from src.frontend.UI.splashscreen import ModernSplashScreen
 
-os.environ["QT_QUICK_CONTROLS_STYLE"] = "Fusion"
+os.environ["QT_QUICK_CONTROLS_STYLE"] = "Material"
+os.environ["QT_QUICK_CONTROLS_MATERIAL_THEME"] = "Dark"
 splash_pixmap = QPixmap(":/images/graphics/splashscreen.png")
 splash = ModernSplashScreen(splash_pixmap)
 splash.show() # Starts showing the actual Splash Screen
@@ -64,20 +65,18 @@ app.processEvents()
 import re
 import time
 import uuid
-import random
 import logging
 import asyncio
 import argparse
 import markdown
 import traceback
-import threading
 import webbrowser
 
 from pathlib import Path
 from datetime import datetime
 from threading import Event, Lock
-from itertools import islice, chain
-from typing import Iterable, AsyncGenerator
+from asyncstdlib import islice, chain
+from typing import AsyncGenerator, AsyncIterator
 
 
 
@@ -86,6 +85,7 @@ app.processEvents()
 # Qt / PySide6 related imports
 import PySide6.QtAsyncio as QtAsyncio # Needed because porn fetch's network backend is now async since v3.9
 from PySide6.QtQuickWidgets import QQuickWidget
+from PySide6.QtQml import QQmlEngine
 from PySide6.QtGui import QIcon, QFontDatabase, QPixmap, QShortcut, QKeySequence
 from PySide6.QtCore import (QTextStream, QRunnable, QLocale, QSize, QUrl, Signal, QFile, Slot,
                             QTranslator, QCoreApplication, QStandardPaths, QObject, Qt, QSettings)
@@ -104,8 +104,8 @@ import src.backend.shared_functions as shared_functions
 from src.backend.database import save_video_metadata, init_db
 from src.backend.config import (__version__, PUBLIC_KEY_B64, IS_SOURCE_RUN, TEMP_DIRECTORY,
                                 TEMP_DIRECTORY_STATES, TEMP_DIRECTORY_SEGMENTS, app_settings)
-from src.backend.shared_functions import ensure_config_file, handle_error_gracefully
-from src.backend.shared_gui import (ui_popup, reset_pornfetch, mark_help_buttons, Signals,
+from src.backend.shared_functions import handle_error_gracefully
+from src.backend.shared_gui import (ui_popup, reset_pornfetch, Signals,
                                     available_title_formatting_options, on_checkbox_clicked)
 from src.backend.helper_functions import (default_license_path, safe_rmtree, make_debug_log, get_widget_value,
                                           set_widget_value)
@@ -121,7 +121,7 @@ app.processEvents()
 # Frontend imports
 from src.frontend.UI.ui_form_main_window import Ui_PornFetch_UI
 from src.frontend.UI.custom_combo_box import ComboPopupFitter, make_quality_combobox
-from src.frontend.UI.theme import (apply_theme, apply_theme_lsd, apply_theme_light, mark, install_focus_outline,
+from src.frontend.UI.theme import (apply_theme, apply_theme_light, mark, install_focus_outline,
                                    pretty_combo)
 from src.frontend.translations.strings import (TRANSLATE_MAIN, TRANSLATE_PAGE_DOWNLOAD, TRANSLATE_PAGE_LOGIN,
                                               TRANSLATE_PAGE_SETTINGS, TRANSLATE_ERRORS)
@@ -147,7 +147,8 @@ try:
 except Exception:
     FORCE_DISABLE_AV = True
 
-
+qml_engine = QQmlEngine()
+qml_engine.rootContext().setContextProperty("appSettings", app_settings)
 FORCE_PORTABLE_RUN: bool = False # Holds a value for argparse later (see main function)
 total_segments: int = 0 # Total segments kept in a queue (for total progress tracking)
 downloaded_segments: int = 0 # Amount of segments that have been downloaded (for total progress tracking)
@@ -157,7 +158,7 @@ logger = shared_functions.configure_app_logging(logger_name="Porn Fetch - [MAIN]
 license_storage_path: str = os.path.join(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppConfigLocation), "pornfetch.license")
 last_index = 0 # Tracks the last index of the tree widget in case the user does not have auto-clear enabled
 x: bool = False # Don't ask (this is a secret ;)
-
+w = None
 
 class ProcessVideos(QObject):
     error_signal = Signal(str)
@@ -169,7 +170,7 @@ class ProcessVideos(QObject):
 
     def __init__(self, iterator: AsyncGenerator, custom_path_options: str, max_attempts: int,
                  download_manager: DownloadManager, reverse_videos: bool, stop_flag: asyncio.Event, output_path: Path,
-                 video_filters: VideoFilters) -> None:
+                 video_filters: VideoFilters, result_limit: int) -> None:
         super().__init__()
         self.iterator = iterator
         self.custom_path_options = custom_path_options
@@ -179,9 +180,10 @@ class ProcessVideos(QObject):
         self.stop_flag = stop_flag
         self.output_path = output_path
         self.video_filters = video_filters
+        self.result_limit = result_limit
 
     @staticmethod
-    async def reverse_iterator(iterator: AsyncGenerator):
+    async def reverse_iterator(iterator: AsyncIterator):
         videos = []
         async for video in iterator:
             videos.append(video) # This is very stupid, please don't use this „feature"!
@@ -292,6 +294,7 @@ class ProcessVideos(QObject):
     async def start_processing(self):
         global last_index
         logger.info("Starting Processing of Iterator!")
+        self.iterator = islice(self.iterator, self.result_limit)
 
         if self.reverse_videos:
             self.iterator = self.reverse_iterator(self.iterator)
@@ -368,6 +371,14 @@ class ProcessVideos(QObject):
 
 
 class PornFetch(QMainWindow):
+    COL_DOWNLOAD = 0
+    COL_TITLE = 1
+    COL_AUTHOR = 2
+    COL_LENGTH = 3
+    COL_QUALITY = 4
+    COL_STOP = 5
+    COL_PROGRESS = 6
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.settings = None
@@ -375,25 +386,33 @@ class PornFetch(QMainWindow):
         self.signals = Signals()
         self.signals.error_signal.connect(ui_popup)
         self.download_manager = DownloadManager() # Used to track all videos
-        self.download_manager.video_added.connect() # TODO
+        #self.download_manager.video_added.connect() # TODO
 
-
+        self.update_app_font(app_settings.font_size)
+        app_settings.fontSizeChanged.connect(self.update_app_font)
+        app_settings.themeChanged.connect(self.theme_changed)
         self.ui = Ui_PornFetch_UI()
         self.ui.setupUi(self)
         self.logger = shared_functions.configure_app_logging(logger_name="Porn Fetch - [PornFetch]", log_file="PornFetch.log", level=logging.DEBUG)
 
+        # Inject the Settings QML Widget
+        settings_widget = QQuickWidget(qml_engine, self)
+        settings_widget.rootContext().setContextProperty("appSettings", app_settings)
+        settings_widget.setClearColor(Qt.GlobalColor.transparent)
+        settings_widget.setResizeMode(QQuickWidget.ResizeMode.SizeRootObjectToView)
+        settings_widget.setSource(QUrl.fromLocalFile("src/frontend/UI/Settings.qml"))
+        self.ui.settings_vlayout_1.addWidget(settings_widget)
+
+
         self.last_index = 0  # Keeps track of the last index of videos added to the tree widget
         self._anonymous_mode = False
-        self.ensure_temp()
-        self._row = {} # Video ID -> dict of widgets + state
+        #self.ensure_temp()
+        #self._row = {} # Video ID -> dict of widgets + state
         self.load_style()
-        self._setup_modern_tabs()
-        self.load_strings()
-        self.license = License(self.ui, self.initialize_pornfetch)
-        self.disclaimer = Disclaimer(self.ui, self.initialize_pornfetch)
-        self.ui.vbox_info.addWidget(PornFetchInfoWidget())
-        self.license_manager = LicenseManager(storage_path=default_license_path(), public_key_b64=PUBLIC_KEY_B64)
-        self.setup_license_restrictions()
+        #self._setup_modern_tabs()
+        #self.load_strings()
+        #self.license_manager = LicenseManager(storage_path=default_license_path(), public_key_b64=PUBLIC_KEY_B64)
+        #self.setup_license_restrictions()
 
         """
                              ! INDEX LIST !
@@ -419,31 +438,30 @@ class PornFetch(QMainWindow):
         This may look a little bit confusing, but once you understand it, it makes sense, trust me :)
         """
 
-        self.default_max_height = self.ui.main_stacked_widget_top.maximumHeight()
+        #self.default_max_height = self.ui.main_stacked_widget_top.maximumHeight()
         self.button_connections()  # Connects the buttons to their functions
-        self.shortcuts()  # Activates the keyboard shortcuts
-        self.logger.debug("Startup: [3/5] Initialized the User Interface")
-        self.load_user_settings()  # Loads the user settings and applies selected values to the UI
-        self.app_config = config.SettingsManager()
-        self.logger.debug("Startup: [4/5] Loaded the user settings")
-        self.download_scheduler = DownloadScheduler(self.app_config, self)
-        self.download_scheduler.worker_started.connect(self._wire_worker_signals)
-        self.progress_widgets = {}  # video_id -> {'label': QLabel, 'progressbar': QProgressBar}
+        #self.shortcuts()  # Activates the keyboard shortcuts
+        #self.logger.debug("Startup: [3/5] Initialized the User Interface")
+        #self.load_user_settings()  # Loads the user settings and applies selected values to the UI
+        #self.app_config = config.SettingsManager()
+        #self.logger.debug("Startup: [4/5] Loaded the user settings")
+        #self.download_scheduler = DownloadScheduler(self.app_config, self)
+        #self.download_scheduler.worker_started.connect(self._wire_worker_signals)
+        #self.progress_widgets = {}  # video_id -> {'label': QLabel, 'progressbar': QProgressBar}
 
-        if video_data.consistent_data.get("update_checks"):
-            self.logger.info("Running update checks")
-            self.check_for_updates()
+        #if config.app_settings.update_checks:
+        #    self.logger.info("Running update checks")
+        #    self.check_for_updates()
 
-        if video_data.consistent_data.get("anonymous_mode"):
-            self.logger.info("Enabling anonymous mode")
-            self.anonymous_mode()
+        #if config.app_settings.anonymous_mode:
+        #    self.logger.info("Enabling anonymous mode")
+        #    self.anonymous_mode()
 
-        self.semaphore = asyncio.Semaphore(video_data.consistent_data["semaphore"])
-        self.logger.debug("Startup: [5/5] OK")
-        if FORCE_TEST_RUN:
-            sys.exit(0)
+        #self.semaphore = asyncio.Semaphore(config.app_settings.parallel_downloads)
+        #self.logger.debug("Startup: [5/5] OK")
 
-        self.initialize_pornfetch()
+
+        #self.initialize_pornfetch()
 
     """
     The following functions just switch the Stacked Widget to the different widgets
@@ -519,14 +537,14 @@ class PornFetch(QMainWindow):
     def _setup_modern_tabs(self):
         # Setup Credits QML
         self.ui.credits_textbrowser.hide()
-        self.credits_qml = QQuickWidget(self)
+        self.credits_qml = QQuickWidget(qml_engine, self)
         self.credits_qml.setResizeMode(QQuickWidget.ResizeMode.SizeRootObjectToView)
         self.credits_qml.setSource(QUrl.fromLocalFile(str(Path(__file__).parent / "src" / "frontend" / "UI" / "CreditsWidget.qml")))
         self.ui.scrollarea_credits_vboxlayout.addWidget(self.credits_qml)
         
         # Setup Supported Sites QML
         self.ui.supported_sites_textbrowser.hide()
-        self.supported_sites_qml = QQuickWidget(self)
+        self.supported_sites_qml = QQuickWidget(qml_engine, self)
         self.supported_sites_qml.setResizeMode(QQuickWidget.ResizeMode.SizeRootObjectToView)
         self.supported_sites_qml.setSource(QUrl.fromLocalFile(str(Path(__file__).parent / "src" / "frontend" / "UI" / "SupportedSitesWidget.qml")))
         self.ui.gridLayout_20.addWidget(self.supported_sites_qml, 0, 0, 1, 1)
@@ -543,9 +561,6 @@ class PornFetch(QMainWindow):
         for btn, name in icons.items():
             btn.setIcon(QIcon(f":/images/graphics/{name}"))
             btn.setIconSize(QSize(24, 24))  # consistent size for all
-
-        pixmap_tooltip = QPixmap(":/images/graphics/tooltip.svg")
-        mark_help_buttons(ui=self.ui, pixmap=pixmap_tooltip)
 
         # --- top nav becomes segmented & exclusive ---
         nav = [
@@ -575,21 +590,6 @@ class PornFetch(QMainWindow):
             mark(b, seg=True)
         self.ui.treewidget_button_downloads.setChecked(True)
 
-
-        settings_nav = [
-            self.ui.settings_button_switch_video,
-            self.ui.settings_button_switch_performance,
-            self.ui.settings_button_switch_system,
-            self.ui.settings_button_switch_ui
-        ]
-        group_settings_bar = QButtonGroup(self)
-        group_settings_bar.setExclusive(True)
-        for b in settings_nav:
-            b.setCheckable(True)
-            group_settings_bar.addButton(b)
-            mark(b, seg=True)
-        self.ui.settings_button_switch_video.setChecked(True)
-
         login_nav = [
             self.ui.login_button_switch_pornhub,
             self.ui.login_button_switch_xvideos
@@ -608,102 +608,15 @@ class PornFetch(QMainWindow):
         mark(self.ui.download_button_download, intent="primary", size="lg")
         mark(self.ui.login_button_login, intent="primary")
         mark(self.ui.login_xvideos_button_login, intent="primary")
-        mark(self.ui.settings_button_apply, intent="primary", size="lg")
         mark(self.ui.credits_button_send_feedback, intent="primary")
-        mark(self.ui.settings_button_system_install_pornfetch, intent="success")
         mark(self.ui.treewidget_button_stop, intent="danger")
         mark(self.ui.treewidget_button_advanced_configuration, seg=True)
-        mark(self.ui.settings_button_import_license)
-        mark(self.ui.button_settings_clear_temp)
-        mark(self.ui.settings_button_uninstall_porn_fetch, intent="danger")
-        mark(self.ui.settings_button_reset, intent="danger")
         mark(self.ui.main_progressbar_total, role="total")
         mark(self.ui.login_xvideos_button_help, intent="success")
 
         mark(self.ui.one_time_setup_button_info_enable_all, intent="success")
         mark(self.ui.one_time_setup_button_info_disable_all, intent="danger")
         mark(self.ui.one_time_setup_button_info_enable_update, intent="primary")
-
-        stylesheet_license_button = """
-QPushButton {
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, 
-                                      stop:0 #2563eb, stop:1 #7c3aed);
-    color: white;
-    font-weight: bold;
-    font-size: 14px;
-    border-radius: 8px;
-    padding: 10px 20px;
-    border: none;
-}
-
-QPushButton:hover {
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, 
-                                      stop:0 #3b82f6, stop:1 #8b5cf6);
-}
-
-QPushButton:pressed {
-    background-color: #1e40af;
-    padding-top: 12px;
-    padding-left: 22px;
-}
-        """
-
-        stylesheet_import_license = """
-QPushButton {
-    background-color: rgba(0,0,0,0); /* Explicitly transparent */
-    color: #94a3b8;
-    font-weight: bold;
-    font-size: 14px;
-    border-radius: 8px;
-    padding: 10px 20px;
-    border: 2px solid #475569;
-}
-
-QPushButton:hover {
-    color: #ffffff;
-    border: 2px solid #94a3b8;
-    background-color: rgba(255,255,255,15); /* Removed spaces */
-}
-
-QPushButton:pressed {
-    background-color: rgba(255,255,255,30);
-}
-"""
-
-        stylesheet_lineedit_custom_title = """
-QLineEdit {
-    /* Basic Layout */
-    background-color: #232323; 
-    border: 2px solid #3A3A3A;
-    border-radius: 15px; /* High radius for a pill shape */
-    padding: 8px 15px; /* Comfortable padding */
-    
-    /* Text Styling */
-    color: #E0E0E0;
-    font-family: "Segoe UI", sans-serif; /* Or your preferred font */
-    font-size: 14px;
-    font-weight: bold;
-    
-    /* Selection Color */
-    selection-background-color: #00DAC6;
-    selection-color: #000000;
-}
-
-/* Hover State - Subtle feedback */
-QLineEdit:hover {
-    background-color: #2C2C2C;
-    border: 2px solid #505050;
-}
-
-/* Focus State - The "Special" moment */
-QLineEdit:focus {
-    border: 2px solid #00DAC6; /* Bright Cyan border */
-    background-color: #1A1A1A; /* Slightly darker to add depth */
-}
-"""
-        self.ui.settings_button_buy_license.setStyleSheet(stylesheet_license_button)
-        self.ui.settings_button_import_license.setStyleSheet(stylesheet_import_license)
-        self.ui.tree_advanced_lineedit_custom_title.setStyleSheet(stylesheet_lineedit_custom_title)
 
         # most of these are secondary or flat so they don’t compete visually
         for b in [
@@ -716,7 +629,6 @@ QLineEdit:focus {
         for b in [
             self.ui.download_button_playlist_get_videos,
             self.ui.download_button_model,
-            self.ui.settings_button_system_install_pornfetch,
             self.ui.tree_advanced_button_keyboard_shortcuts,
         ]:
             mark(b)  # no intent ⇒ secondary
@@ -759,13 +671,8 @@ QLineEdit:focus {
         self.ui.main_tree_widget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
         self.setWindowTitle(f"Porn Fetch v{__version__} Copyright (C) Johannes Habel 2023-2026")
         self.ui.main_tree_widget.sortByColumn(2, Qt.SortOrder.AscendingOrder)
-        self.ui.settings_stacked_widget_main.setCurrentIndex(0)
         install_focus_outline(self)
         self.filter = ComboPopupFitter()
-        self.ui.settings_combobox_ui_theme.installEventFilter(self.filter)
-        self.ui.settings_ui_combobox_language.installEventFilter(self.filter)
-        self.ui.settings_video_combobox_quality.installEventFilter(self.filter)
-        self.ui.settings_video_combobox_model_videos.installEventFilter(self.filter)
         self.switch_to_download()
         self.switch_to_treewidget_downloads()
 
@@ -833,26 +740,13 @@ QLineEdit:focus {
         self.ui.download_button_model.clicked.connect(self.start_model)
         self.ui.download_button_playlist_get_videos.clicked.connect(self.start_playlist)
 
-        # Settings
-        self.ui.settings_button_switch_video.clicked.connect((lambda _=False, i=0: self.ui.settings_stacked_widget_main.setCurrentIndex(i)))
-        self.ui.settings_button_switch_performance.clicked.connect(lambda _=False, i=1: self.ui.settings_stacked_widget_main.setCurrentIndex(i))
-        self.ui.settings_button_switch_system.clicked.connect(lambda _=False, i=2: self.ui.settings_stacked_widget_main.setCurrentIndex(i))
-        self.ui.settings_button_switch_ui.clicked.connect(lambda _=False, i=3: self.ui.settings_stacked_widget_main.setCurrentIndex(i))
-        self.ui.settings_button_buy_license.clicked.connect(self.buy_license)
-        self.ui.settings_button_import_license.clicked.connect(self.import_license)
-        self.ui.settings_button_uninstall_porn_fetch.clicked.connect(self.uninstall_porn_fetch)
 
         # Info Dialog
         self.ui.one_time_setup_button_info_enable_all.clicked.connect(self.info_dialog_enable_all)
         self.ui.one_time_setup_button_info_disable_all.clicked.connect(self.info_dialog_disable_all)
         self.ui.one_time_setup_button_info_enable_update.clicked.connect(self.info_dialog_enable_update)
 
-        self.ui.settings_button_apply.clicked.connect(lambda: self.save_user_settings())
-        self.ui.settings_button_reset.clicked.connect(reset_pornfetch)
-        self.ui.settings_button_system_install_pornfetch.clicked.connect(self.switch_to_install_dialog)
-        self.ui.settings_checkbox_system_activate_proxy.clicked.connect(self.set_proxies)
         self.ui.button_install.clicked.connect(self.install_pornfetch)
-        self.ui.button_portable.clicked.connect(self.install_porn_fetch_portable)
 
         # Account
         self.ui.login_button_login.clicked.connect(self.login)
@@ -863,14 +757,10 @@ QLineEdit:focus {
         self.ui.login_button_switch_xvideos.clicked.connect(self.switch_to_login_xvideos)
 
 
-        # File Dialog
-        self.ui.settings_button_videos_open_output_path.clicked.connect(self.open_output_path_dialog)
 
         # Other stuff IDK
         self.ui.treewidget_button_stop.clicked.connect(switch_stop_state)
         self.ui.tree_advanced_button_keyboard_shortcuts.clicked.connect(self.switch_to_keyboard_shortcuts)
-        self.ui.settings_checkbox_system_enable_debug_mode.clicked.connect(on_checkbox_clicked)
-        self.ui.button_settings_clear_temp.clicked.connect(self.clean_temporary_files)
         self.ui.tree_advanced_button_custom_title_options.clicked.connect(available_title_formatting_options)
 
         # Stacked Tree Widget
@@ -884,8 +774,6 @@ QLineEdit:focus {
         of videos to show the sponsoring dialog and after all that switch to the main widget.
         """
         global FORCE_PORTABLE_RUN
-        settings.sync()
-
         self.ui.main_progressbar_total.setMaximum(4)
 
         if not self.license.check_license():
@@ -1043,11 +931,44 @@ You have all paid features unlocked :)
         # UI
         language = config.app_settings.language
         key = next((key for key, value in config.app_settings.mappings_ui_language.items() if value == language), None)
-        self.ui.settings_ui_combobox_language.setCurrentIndex(language)
+        self.ui.settings_ui_combobox_language.setCurrentIndex(key)
+
+        theme = config.app_settings.theme
+        if hasattr(self.ui, "settings_combobox_ui_theme"):
+            self.ui.settings_combobox_ui_theme.setCurrentIndex(theme)
+
+        self.ui.settings_spinbox_ui_font_size.setValue(config.app_settings.font_size)
 
 
+    def save_user_settings(self):
+        config.app_settings.quality = self.ui.settings_video_combobox_quality.currentIndex()
+        config.app_settings.model_videos = self.ui.settings_video_combobox_model_videos.currentIndex()
+        config.app_settings.result_limit = self.ui.settings_spinbox_videos_result_limit.value()
+        config.app_settings.output_path = self.ui.settings_lineedit_videos_output_path.text()
+        config.app_settings.write_metadata = self.ui.settings_checkbox_videos_write_metadata.isChecked()
+        config.app_settings.skip_existing_files = self.ui.settings_checkbox_videos_skip_existing_files.isChecked()
+        config.app_settings.track_videos = self.ui.settings_checkbox_videos_track_downloaded_videos.isChecked()
+        config.app_settings.database_path = self.ui.settings_lineedit_videos_database_path.text()
+        config.app_settings.parallel_downloads = self.ui.settings_spinbox_performance_simultaneous_downloads.value()
+        config.app_settings.network_delay = self.ui.settings_spinbox_performance_network_delay.value()
+        config.app_settings.videos_concurrency = self.ui.settings_spinbox_performance_videos_concurrency.value()
+        config.app_settings.pages_concurrency = self.ui.settings_spinbox_performance_pages_concurrency.value()
+        config.app_settings.download_workers = self.ui.settings_spinbox_performance_download_workers.value()
+        config.app_settings.timeout = self.ui.settings_spinbox_performance_maximal_timeout.value()
+        config.app_settings.retries = self.ui.settings_spinbox_performance_maximal_retries.value()
+        config.app_settings.speed_limit = self.ui.settings_doublespinbox_performance_speed_limit.value()
+        config.app_settings.processing_delay = self.ui.settings_spinbox_performance_processing_delay.value()
 
-
+        config.app_settings.update_checks = self.ui.settings_checkbox_system_update_checks.isChecked()
+        config.app_settings.anonymous_mode = self.ui.settings_checkbox_system_enable_anonymous_mode.isChecked()
+        config.app_settings.suppress_errors = self.ui.settings_checkbox_system_supress_errors.isChecked()
+        config.app_settings.enable_logging = self.ui.settings_checkbox_system_enable_network_logging.isChecked()
+        config.app_settings.debug_mode = self.ui.settings_checkbox_system_enable_debug_mode.isChecked()
+        config.app_settings.use_truststore = self.ui.settings_checkbox_use_truststore.isChecked()
+        config.app_settings.language = self.ui.settings_ui_combobox_language.currentIndex()
+        config.app_settings.font_size = self.ui.settings_spinbox_ui_font_size.value()
+        if hasattr(self.ui, "settings_combobox_ui_theme"):
+            config.app_settings.theme = self.ui.settings_combobox_ui_theme.currentIndex()
 
 
     def set_proxies(self):
@@ -1293,7 +1214,6 @@ Unless you use your own ELITE proxy, DO NOT REPORT ANY ERRORS THAT OCCUR WHEN YO
     The following functions are used to connect data between Threads and the Main UI
     """
 
-    @Slot
     def on_error_message(self, message: str) -> None:
         ui_popup(message)
 
@@ -1497,30 +1417,6 @@ During installation an unknown error happened, please report this!
 ERROR: {error}""")
 
 
-    def install_porn_fetch_portable(self):
-        settings.setValue("Misc/install_type", "portable")
-        settings.sync()
-        # Resume normal startup flow so the progress bar reset and final init run.
-        self.initialize_pornfetch()
-
-    def install_pornfetch_result(self, result):
-        if result[0]:
-            ui_popup(self.tr("Porn Fetch has been installed. The app will now close! Please start Porn Fetch from"
-                             " your context menu again.", disambiguation=None))
-
-            self.close()
-
-        else:
-            ui_popup(self.tr(f"Porn Fetch installation failed, because of: {result[1]}", disambiguation=None))
-
-    def uninstall_pornfetch_result(self, result):
-        if result[0]:
-            self.logger.info("Uninstall completed. Closing application.")
-            self.close()
-            QCoreApplication.quit()
-        else:
-            ui_popup(self.tr(f"Porn Fetch uninstallation failed, because of: {result[1]}", disambiguation=None))
-
     def check_for_updates_result(self, success: bool, dictionary: dict):
         if success:
             self.logger.info("New Update found!")
@@ -1656,10 +1552,51 @@ ERROR: {error}""")
         self.apply_license_state(combo = self.ui.settings_video_combobox_quality, has_license=has_license)
 
 
+    @staticmethod
+    def update_app_font(size: int):
+        """Updates the global application font size."""
+        font = app.font()
+        font.setPointSize(size)
+        app.setFont(font)
+
+        for widget in app.allWidgets():
+            widget.setFont(font)
+            widget.update()
+
+    @Slot(bool)
+    def anonymous_mode_changed(self, val):
+        ...
+
+    @Slot(bool)
+    def update_checks_changed(self, val):
+        if val is True:
+            self.check_for_updates() # Start an immediate update check, once user enabled it
+
+    @Slot(float)
+    def speed_limit_changed(self, val):
+        clients.config.max_bandwidth_mb = val
+        clients.refresh_clients(debug_mode=app_settings.debug_mode)
+
+
+    @Slot(bool)
+    def debug_mode_changed(self, val):
+        if val:
+            clients.refresh_clients(debug_mode=val)
+
+
+    @Slot(int)
+    def language_changed(self, val):
+        ...
+
+    @Slot(int)
+    def theme_changed(self, val):
+        apply_theme(app, val)
+
+
 def main(args: argparse.Namespace):
     global FORCE_PORTABLE_RUN
     global FORCE_TEST_RUN
-    global app
+    global app, w
     if args.version:
         print(__version__)
         return
@@ -1672,23 +1609,15 @@ def main(args: argparse.Namespace):
 
     splash.showMessage("Setup (Configuration).")
     app.processEvents()
-    ensure_config_file()
     app.setStyle("Fusion")
-    conf.read("config.ini")
-    language = conf["UI"]["language"]
+    language = config.app_settings.language
 
     splash.showMessage("Setup (UI - Theme).")
     app.processEvents()
-    if conf["UI"]["theme"] == "0":
-        apply_theme(app)
+    theme = config.app_settings.theme
+    apply_theme(app, theme)
 
-    elif conf["UI"]["theme"] == "1":
-        apply_theme_light(app)
-
-    elif conf["UI"]["theme"] == "2":
-        apply_theme_lsd(app)
-
-    font_size = conf["UI"]["font_size"]
+    font_size = config.app_settings.font_size
     sys_font = QFontDatabase.systemFont(QFontDatabase.SystemFont.GeneralFont)
     sys_font.setPointSize(int(font_size))
     app.setFont(sys_font)
@@ -1696,6 +1625,9 @@ def main(args: argparse.Namespace):
 
     splash.showMessage("Setup (UI - Language).")
     app.processEvents()
+
+    language_code = "en"
+
     if str(language) == "0":
         # Get the system's locale
         locale = QLocale.system()

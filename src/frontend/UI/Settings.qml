@@ -3,22 +3,19 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
 import QtQuick.Controls.impl
+import QtQuick.Controls.Material
 
 // ApplicationWindow is the root element for our main window.
 // It provides a standard top-level window with background color and basic properties.
-ApplicationWindow {
+Pane {
+    font.pointSize: appSettings.font_size
     id: window // 'id' allows us to reference this window from other parts of the code
-
+    Material.theme: appSettings ? (appSettings.theme_is_dark ? Material.Dark : Material.Light) : Material.Dark
+    Material.accent: appSettings ? appSettings.theme_primary_color : "#6366f1"
+    Material.primary: appSettings ? appSettings.theme_primary_color : "#6366f1"
     // We set a slightly custom background color.
     // Since we enabled Material Dark theme in Python, most things will automatically be dark,
     // but setting a specific background ensures a clean, cohesive look.
-    color: "#121212"
-    height: 700 // Initial height of the window
-    title: "Porn Fetch Settings" // Window title
-
-    visible: true // Ensure the window is shown when the app starts
-    width: 900 // Initial width of the window
-
     // ColumnLayout arranges its children vertically.
     // This is the main structure: Main Content Area on top, Action Buttons on the bottom.
     ColumnLayout {
@@ -118,7 +115,9 @@ ApplicationWindow {
                                 Label {Layout.fillWidth: false; text: "Quality"}
                                 ComboBox {
                                     Layout.fillWidth: true
-                                    model: ["144p", "240p", "360p", "480p", "720p", "1080p", "Worst", "Middle", "Best Available"]
+                                    model: ["best", "half", "worst", "2160p", "1440p", "1080p", "720p", "540p", "480p", "360p", "240p", "144p"]
+                                    currentIndex: appSettings.quality
+                                    onCurrentIndexChanged: appSettings.quality = currentIndex
                                 }
 
                                 HelpButton {Layout.fillWidth: false}
@@ -126,6 +125,8 @@ ApplicationWindow {
                                 ComboBox {
                                     Layout.fillWidth: true
                                     model: ["Both", "Uploaded Videos", "Featured Videos"]
+                                    currentIndex: appSettings.model_videos
+                                    onCurrentIndexChanged: appSettings.model_videos = currentIndex
                                 }
 
                                 HelpButton {Layout.fillWidth: false}
@@ -133,8 +134,9 @@ ApplicationWindow {
                                 SpinBox {
                                     Layout.fillWidth: true
                                     editable: true
-                                    from: 1
                                     to: 5000
+                                    value: appSettings.result_limit
+                                    onValueModified: appSettings.result_limit = value
 
                                 }
                             }
@@ -150,6 +152,8 @@ ApplicationWindow {
                                     id: "outputPathInput"
                                     placeholderText: "Enter the output path for the videos..."
                                     Layout.fillWidth: true
+                                    text: appSettings.output_path
+                                    onEditingFinished: appSettings.output_path = text
                                     }
                                 Button {
                                     Layout.fillWidth: false
@@ -170,19 +174,17 @@ ApplicationWindow {
                                 CheckBox {
                                     Layout.fillWidth: true
                                     text: "Write metadata"
+                                    checked: appSettings.write_metadata
+                                    onCheckedChanged: appSettings.write_metadata = checked
 
-                                }
-
-                                HelpButton {Layout.fillWidth: false}
-                                CheckBox {
-                                    Layout.fillWidth: true
-                                    text: "Use directory system"
                                 }
 
                                 HelpButton {Layout.fillWidth: false}
                                 CheckBox {
                                     Layout.fillWidth: true
                                     text: "Skip existing files"
+                                    checked: appSettings.skip_existing_files
+                                    onCheckedChanged: appSettings.skip_existing_files = checked
                                 }
 
                             }
@@ -219,8 +221,9 @@ ApplicationWindow {
                             SpinBox {
                                 Layout.fillWidth: true
                                 editable: true
-                                to: 10
-                                value: 20
+                                to: 100
+                                value: appSettings.download_workers
+                                onValueModified: appSettings.download_workers = value
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -232,7 +235,8 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 editable: true
                                 to: 100
-                                value: 0
+                                value: appSettings.network_delay
+                                onValueModified: appSettings.network_delay = value
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -244,7 +248,8 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 editable: true
                                 to: 100
-                                value: 1
+                                value: appSettings.parallel_downloads
+                                onValueModified: appSettings.parallel_downloads = value
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -256,7 +261,8 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 editable: true
                                 to: 100
-                                value: 5
+                                value: appSettings.retries
+                                onValueModified: appSettings.retries = value
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -268,7 +274,8 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 editable: true
                                 to: 100
-                                value: 10
+                                value: appSettings.timeout
+                                onValueModified: appSettings.timeout = value
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -280,7 +287,8 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 editable: true
                                 to: 100
-                                value: 1
+                                value: appSettings.processing_delay
+                                onValueModified: appSettings.processing_delay = value
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -292,7 +300,8 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 editable: true
                                 to: 100
-                                value: 0
+                                value: appSettings.speed_limit
+                                onValueModified: appSettings.speed_limit = value
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -304,7 +313,8 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 editable: true
                                 to: 100
-                                value: 10
+                                value: appSettings.videos_concurrency
+                                onValueModified: appSettings.videos_concurrency = value
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -316,7 +326,8 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 editable: true
                                 to: 100
-                                value: 2
+                                value: appSettings.pages_concurrency
+                                onValueModified: appSettings.pages_concurrency = value
                             }
 
                             // Empty spaces for layout balance where the right side has no items
@@ -350,6 +361,8 @@ ApplicationWindow {
                             CheckBox {
                                 text: "Search for Updates (On startup)"
                                 Layout.fillWidth: true
+                                checked: appSettings.update_checks
+                                onCheckedChanged: appSettings.update_checks = checked
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -357,6 +370,8 @@ ApplicationWindow {
                             CheckBox {
                                 text: "Anonymous mode"
                                 Layout.fillWidth: true
+                                checked: appSettings.anonymous_mode
+                                onCheckedChanged: appSettings.anonymous_mode = checked
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -364,6 +379,8 @@ ApplicationWindow {
                             CheckBox {
                                 text: "Ignore Errors"
                                 Layout.fillWidth: true
+                                checked: appSettings.supress_errors
+                                onCheckedChanged: appSettings.supress_errors = checked
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -372,6 +389,8 @@ ApplicationWindow {
                                 // Use \n for multi-line text
                                 text: "Allow error reports (100% anonymous)"
                                 Layout.fillWidth: true
+                                checked: appSettings.enable_logging
+                                onCheckedChanged: appSettings.enable_logging  = checked
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -379,6 +398,7 @@ ApplicationWindow {
                             CheckBox {
                                 text: "Enable Proxy"
                                 Layout.fillWidth: true
+                                // TODO
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -386,13 +406,16 @@ ApplicationWindow {
                             CheckBox {
                                 text: "Enable Debug Mode (Not recommended)"
                                 Layout.fillWidth: true
+                                checked: appSettings.debug_mode
+                                onCheckedChanged: appSettings.debug_mode = checked
                             }
                             HelpButton {
                                 Layout.fillWidth: false
                             }
                             CheckBox {
-                                checked: true
                                 text: "Use Truststore"
+                                checked: appSettings.use_truststore
+                                onCheckedChanged: appSettings.use_truststore = checked
                                 Layout.fillWidth: true
                             }
                         }
@@ -420,7 +443,9 @@ ApplicationWindow {
                             }
                             ComboBox {
                                 Layout.fillWidth: true
-                                model: ["System", "English", "German", "French", "Italian"]
+                                model: ["System", "English", "German", "Chinese", "French"]
+                                currentIndex: appSettings.language
+                                onCurrentIndexChanged: appSettings.language = currentIndex
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -430,9 +455,9 @@ ApplicationWindow {
                             }
                             SpinBox {
                                 Layout.fillWidth: true
-                                from: 8
                                 to: 72
-                                value: 10
+                                value: appSettings.font_size
+                                onValueModified: appSettings.font_size = value
                             }
                             HelpButton {
                                 Layout.fillWidth: false
@@ -442,7 +467,13 @@ ApplicationWindow {
                             }
                             ComboBox {
                                 Layout.fillWidth: true
-                                model: ["Dark", "Light", "System"]
+                                model: appSettings ? appSettings.theme_names : []
+                                currentIndex: appSettings ? appSettings.theme : 0
+                                onCurrentIndexChanged: {
+                                    if (appSettings && currentIndex >= 0 && currentIndex !== appSettings.theme) {
+                                        appSettings.theme = currentIndex
+                                    }
+                                }
                             }
 
                         }
@@ -480,7 +511,7 @@ ApplicationWindow {
                     Material.background: "#6366f1" // Premium Indigo color
                     Material.foreground: "white"   // White text
                     font.bold: true // Make text bold
-                    text: "Buy License (11.99€)"
+                    text: "Buy License (19.99€)"
                 }
                 Button {
                     Layout.fillWidth: true
@@ -496,9 +527,10 @@ ApplicationWindow {
 
                 Button {
                     Layout.fillWidth: true
-                    Material.background: "#3b82f6" // Primary Blue color
+                    Material.background: appSettings ? appSettings.theme_primary_color : "#3b82f6" // Dynamic accent color
                     Material.foreground: "white"
                     text: "Apply (requires restart)"
+                    onClicked: {appSettings.sync()}
                 }
                 Button {
                     Layout.fillWidth: true

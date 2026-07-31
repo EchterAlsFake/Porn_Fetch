@@ -1,6 +1,5 @@
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QMainWindow, QMessageBox
-from src.backend.shared_functions import ensure_config_file
 from PySide6.QtCore import Signal, QObject, QCoreApplication
 
 
@@ -88,7 +87,7 @@ def ui_popup(text, title="Notice"):
 
 
 def reset_pornfetch():
-    ensure_config_file(force=True)
+    # TODO
     ui_popup(QCoreApplication.translate("main", "Done! Please restart.", None))
 
 
@@ -129,22 +128,6 @@ class Signals(QObject):
     # to download them
     url_iterators = Signal(object, object)  # Sends the processed URLs from the file to Porn Fetch
 
-
-def mark_help_buttons(ui: QMainWindow, pixmap: QPixmap):
-    """Applies a little notification icon to buttons with a tooltip"""
-    labels = ["label_tooltip_quality", "label_tooltip_model_videos", "label_tooltip_result_limit",
-              "label_tooltip_track_videos", "label_tooltip_write_metadata", "label_tooltip_skip_existing_files",
-              "label_tooltip_use_directory_system", "label_tooltip_download_mode", "label_tooltip_simultaneous_downloads",
-              "label_tooltip_maximum_timeout", "label_tooltip_speed_limit", "label_tooltip_pages_concurrency",
-              "label_tooltip_network_delay", "label_tooltip_maximum_retries", "label_tooltip_processing_delay",
-              "label_tooltip_videos_concurrency", "label_tooltip_download_workers", "label_tooltip_update_checks",
-              "label_tooltip_anonymous_mode", "label_tooltip_supress_errors", "label_tooltip_network_logging",
-              "tree_advanced_label_tooltip_index_videos", "label_tooltip_ssl_context"
-
-    ]
-
-    for label in labels:
-        ui.__getattribute__(label).setPixmap(pixmap)
 
 
 def on_checkbox_clicked(checked: bool):

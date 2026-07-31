@@ -51,6 +51,8 @@ dependencies = [
     "unofficial-api-for-thumbzilla @ git+https://github.com/EchterAlsFake/unofficial-api-for-thumbzilla",
     "eaf_base_api @ git+https://github.com/echteralsfake/eaf_base_api",
     "browser-cookie3>=0.20.1",
+    "asyncstdlib>=3.14.0",
+    "qt-material>=2.17",
 ]
 
 

@@ -42,7 +42,7 @@ try:
 except (ModuleNotFoundError, ImportError):
     from handle_ssl import build_ssl_context
 
-from errors import InvalidInput
+from src.backend.errors import InvalidInput
 from urllib.parse import urlparse
 from dataclasses import dataclass
 from base_api.modules.config import config # This is the global configuration instance of base core config
